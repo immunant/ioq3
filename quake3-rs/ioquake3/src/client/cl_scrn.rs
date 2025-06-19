@@ -190,10 +190,10 @@ Coordinates are 640*480 virtual values
 #[no_mangle]
 
 pub unsafe extern "C" fn SCR_DrawNamedPic(
-    mut x: libc::c_float,
-    mut y: libc::c_float,
-    mut width: libc::c_float,
-    mut height: libc::c_float,
+    mut x: f32,
+    mut y: f32,
+    mut width: f32,
+    mut height: f32,
     mut picname: *const libc::c_char,
 ) {
     let mut hShader: crate::src::qcommon::q_shared::qhandle_t = 0;
@@ -208,10 +208,10 @@ pub unsafe extern "C" fn SCR_DrawNamedPic(
         y,
         width,
         height,
-        0 as libc::c_int as libc::c_float,
-        0 as libc::c_int as libc::c_float,
-        1 as libc::c_int as libc::c_float,
-        1 as libc::c_int as libc::c_float,
+        0 as i32 as f32,
+        0 as i32 as f32,
+        1 as i32 as f32,
+        1 as i32 as f32,
         hShader,
     );
 }
@@ -225,18 +225,18 @@ Adjusted for resolution and screen aspect ratio
 #[no_mangle]
 
 pub unsafe extern "C" fn SCR_AdjustFrom640(
-    mut x: *mut libc::c_float,
-    mut y: *mut libc::c_float,
-    mut w: *mut libc::c_float,
-    mut h: *mut libc::c_float,
+    mut x: *mut f32,
+    mut y: *mut f32,
+    mut w: *mut f32,
+    mut h: *mut f32,
 ) {
-    let mut xscale: libc::c_float = 0.;
-    let mut yscale: libc::c_float = 0.;
+    let mut xscale: f32 = 0.;
+    let mut yscale: f32 = 0.;
     // scale for screen sizes
-    xscale = (crate::src::client::cl_main::cls.glconfig.vidWidth as libc::c_double / 640.0f64)
-        as libc::c_float;
-    yscale = (crate::src::client::cl_main::cls.glconfig.vidHeight as libc::c_double / 480.0f64)
-        as libc::c_float;
+    xscale = (crate::src::client::cl_main::cls.glconfig.vidWidth as f64 / 640.0f64)
+        as f32;
+    yscale = (crate::src::client::cl_main::cls.glconfig.vidHeight as f64 / 480.0f64)
+        as f32;
     if !x.is_null() {
         *x *= xscale
     }
@@ -260,11 +260,11 @@ Coordinates are 640*480 virtual values
 #[no_mangle]
 
 pub unsafe extern "C" fn SCR_FillRect(
-    mut x: libc::c_float,
-    mut y: libc::c_float,
-    mut width: libc::c_float,
-    mut height: libc::c_float,
-    mut color: *const libc::c_float,
+    mut x: f32,
+    mut y: f32,
+    mut width: f32,
+    mut height: f32,
+    mut color: *const f32,
 ) {
     crate::src::client::cl_main::re
         .SetColor
@@ -277,15 +277,15 @@ pub unsafe extern "C" fn SCR_FillRect(
         y,
         width,
         height,
-        0 as libc::c_int as libc::c_float,
-        0 as libc::c_int as libc::c_float,
-        0 as libc::c_int as libc::c_float,
-        0 as libc::c_int as libc::c_float,
+        0 as i32 as f32,
+        0 as i32 as f32,
+        0 as i32 as f32,
+        0 as i32 as f32,
         crate::src::client::cl_main::cls.whiteShader,
     );
     crate::src::client::cl_main::re
         .SetColor
-        .expect("non-null function pointer")(0 as *const libc::c_float);
+        .expect("non-null function pointer")(0 as *const f32);
 }
 /*
 ================
@@ -297,10 +297,10 @@ Coordinates are 640*480 virtual values
 #[no_mangle]
 
 pub unsafe extern "C" fn SCR_DrawPic(
-    mut x: libc::c_float,
-    mut y: libc::c_float,
-    mut width: libc::c_float,
-    mut height: libc::c_float,
+    mut x: f32,
+    mut y: f32,
+    mut width: f32,
+    mut height: f32,
     mut hShader: crate::src::qcommon::q_shared::qhandle_t,
 ) {
     SCR_AdjustFrom640(&mut x, &mut y, &mut width, &mut height);
@@ -311,10 +311,10 @@ pub unsafe extern "C" fn SCR_DrawPic(
         y,
         width,
         height,
-        0 as libc::c_int as libc::c_float,
-        0 as libc::c_int as libc::c_float,
-        1 as libc::c_int as libc::c_float,
-        1 as libc::c_int as libc::c_float,
+        0 as i32 as f32,
+        0 as i32 as f32,
+        1 as i32 as f32,
+        1 as i32 as f32,
         hShader,
     );
 }
@@ -324,36 +324,36 @@ pub unsafe extern "C" fn SCR_DrawPic(
 */
 
 unsafe extern "C" fn SCR_DrawChar(
-    mut x: libc::c_int,
-    mut y: libc::c_int,
-    mut size: libc::c_float,
-    mut ch: libc::c_int,
+    mut x: i32,
+    mut y: i32,
+    mut size: f32,
+    mut ch: i32,
 ) {
-    let mut row: libc::c_int = 0;
-    let mut col: libc::c_int = 0;
-    let mut frow: libc::c_float = 0.;
-    let mut fcol: libc::c_float = 0.;
-    let mut ax: libc::c_float = 0.;
-    let mut ay: libc::c_float = 0.;
-    let mut aw: libc::c_float = 0.;
-    let mut ah: libc::c_float = 0.;
-    ch &= 255 as libc::c_int;
+    let mut row: i32 = 0;
+    let mut col: i32 = 0;
+    let mut frow: f32 = 0.;
+    let mut fcol: f32 = 0.;
+    let mut ax: f32 = 0.;
+    let mut ay: f32 = 0.;
+    let mut aw: f32 = 0.;
+    let mut ah: f32 = 0.;
+    ch &= 255 as i32;
     if ch == ' ' as i32 {
         return;
     }
-    if (y as libc::c_float) < -size {
+    if (y as f32) < -size {
         return;
     }
-    ax = x as libc::c_float;
-    ay = y as libc::c_float;
+    ax = x as f32;
+    ay = y as f32;
     aw = size;
     ah = size;
     SCR_AdjustFrom640(&mut ax, &mut ay, &mut aw, &mut ah);
-    row = ch >> 4 as libc::c_int;
-    col = ch & 15 as libc::c_int;
-    frow = (row as libc::c_double * 0.0625f64) as libc::c_float;
-    fcol = (col as libc::c_double * 0.0625f64) as libc::c_float;
-    size = 0.0625f64 as libc::c_float;
+    row = ch >> 4 as i32;
+    col = ch & 15 as i32;
+    frow = (row as f64 * 0.0625f64) as f32;
+    fcol = (col as f64 * 0.0625f64) as f32;
+    size = 0.0625f64 as f32;
     crate::src::client::cl_main::re
         .DrawStretchPic
         .expect("non-null function pointer")(
@@ -375,34 +375,34 @@ unsafe extern "C" fn SCR_DrawChar(
 #[no_mangle]
 
 pub unsafe extern "C" fn SCR_DrawSmallChar(
-    mut x: libc::c_int,
-    mut y: libc::c_int,
-    mut ch: libc::c_int,
+    mut x: i32,
+    mut y: i32,
+    mut ch: i32,
 ) {
-    let mut row: libc::c_int = 0;
-    let mut col: libc::c_int = 0;
-    let mut frow: libc::c_float = 0.;
-    let mut fcol: libc::c_float = 0.;
-    let mut size: libc::c_float = 0.;
-    ch &= 255 as libc::c_int;
+    let mut row: i32 = 0;
+    let mut col: i32 = 0;
+    let mut frow: f32 = 0.;
+    let mut fcol: f32 = 0.;
+    let mut size: f32 = 0.;
+    ch &= 255 as i32;
     if ch == ' ' as i32 {
         return;
     }
-    if y < -(16 as libc::c_int) {
+    if y < -(16 as i32) {
         return;
     }
-    row = ch >> 4 as libc::c_int;
-    col = ch & 15 as libc::c_int;
-    frow = (row as libc::c_double * 0.0625f64) as libc::c_float;
-    fcol = (col as libc::c_double * 0.0625f64) as libc::c_float;
-    size = 0.0625f64 as libc::c_float;
+    row = ch >> 4 as i32;
+    col = ch & 15 as i32;
+    frow = (row as f64 * 0.0625f64) as f32;
+    fcol = (col as f64 * 0.0625f64) as f32;
+    size = 0.0625f64 as f32;
     crate::src::client::cl_main::re
         .DrawStretchPic
         .expect("non-null function pointer")(
-        x as libc::c_float,
-        y as libc::c_float,
-        8 as libc::c_int as libc::c_float,
-        16 as libc::c_int as libc::c_float,
+        x as f32,
+        y as f32,
+        8 as i32 as f32,
+        16 as i32 as f32,
         fcol,
         frow,
         fcol + size,
@@ -423,22 +423,22 @@ Coordinates are at 640 by 480 virtual resolution
 #[no_mangle]
 
 pub unsafe extern "C" fn SCR_DrawStringExt(
-    mut x: libc::c_int,
-    mut y: libc::c_int,
-    mut size: libc::c_float,
+    mut x: i32,
+    mut y: i32,
+    mut size: f32,
     mut string: *const libc::c_char,
-    mut setColor: *mut libc::c_float,
+    mut setColor: *mut f32,
     mut forceColor: crate::src::qcommon::q_shared::qboolean,
     mut noColorEscape: crate::src::qcommon::q_shared::qboolean,
 ) {
     let mut color: crate::src::qcommon::q_shared::vec4_t = [0.; 4];
     let mut s: *const libc::c_char = 0 as *const libc::c_char;
-    let mut xx: libc::c_int = 0;
+    let mut xx: i32 = 0;
     // draw the drop shadow
-    color[2 as libc::c_int as usize] = 0 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-    color[1 as libc::c_int as usize] = color[2 as libc::c_int as usize];
-    color[0 as libc::c_int as usize] = color[1 as libc::c_int as usize];
-    color[3 as libc::c_int as usize] = *setColor.offset(3 as libc::c_int as isize);
+    color[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    color[1 as i32 as usize] = color[2 as i32 as usize];
+    color[0 as i32 as usize] = color[1 as i32 as usize];
+    color[3 as i32 as usize] = *setColor.offset(3 as i32 as isize);
     crate::src::client::cl_main::re
         .SetColor
         .expect("non-null function pointer")(color.as_mut_ptr());
@@ -446,17 +446,17 @@ pub unsafe extern "C" fn SCR_DrawStringExt(
     xx = x;
     while *s != 0 {
         if noColorEscape as u64 == 0
-            && crate::src::qcommon::q_shared::Q_IsColorString(s) as libc::c_uint != 0
+            && crate::src::qcommon::q_shared::Q_IsColorString(s) as u32 != 0
         {
-            s = s.offset(2 as libc::c_int as isize)
+            s = s.offset(2 as i32 as isize)
         } else {
             SCR_DrawChar(
-                xx + 2 as libc::c_int,
-                y + 2 as libc::c_int,
+                xx + 2 as i32,
+                y + 2 as i32,
                 size,
-                *s as libc::c_int,
+                *s as i32,
             );
-            xx = (xx as libc::c_float + size) as libc::c_int;
+            xx = (xx as f32 + size) as i32;
             s = s.offset(1)
         }
     }
@@ -471,50 +471,50 @@ pub unsafe extern "C" fn SCR_DrawStringExt(
             if forceColor as u64 == 0 {
                 crate::stdlib::memcpy(
                     color.as_mut_ptr() as *mut libc::c_void,
-                    crate::src::qcommon::q_math::g_color_table[(*s.offset(1 as libc::c_int as isize)
-                        as libc::c_int
+                    crate::src::qcommon::q_math::g_color_table[(*s.offset(1 as i32 as isize)
+                        as i32
                         - '0' as i32
-                        & 0x7 as libc::c_int)
+                        & 0x7 as i32)
                         as usize]
                         .as_mut_ptr() as *const libc::c_void,
                     ::std::mem::size_of::<crate::src::qcommon::q_shared::vec4_t>() as libc::c_ulong,
                 );
-                color[3 as libc::c_int as usize] = *setColor.offset(3 as libc::c_int as isize);
+                color[3 as i32 as usize] = *setColor.offset(3 as i32 as isize);
                 crate::src::client::cl_main::re
                     .SetColor
                     .expect("non-null function pointer")(color.as_mut_ptr());
             }
             if noColorEscape as u64 == 0 {
-                s = s.offset(2 as libc::c_int as isize);
+                s = s.offset(2 as i32 as isize);
                 continue;
             }
         }
-        SCR_DrawChar(xx, y, size, *s as libc::c_int);
-        xx = (xx as libc::c_float + size) as libc::c_int;
+        SCR_DrawChar(xx, y, size, *s as i32);
+        xx = (xx as f32 + size) as i32;
         s = s.offset(1)
     }
     crate::src::client::cl_main::re
         .SetColor
-        .expect("non-null function pointer")(0 as *const libc::c_float);
+        .expect("non-null function pointer")(0 as *const f32);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn SCR_DrawBigString(
-    mut x: libc::c_int,
-    mut y: libc::c_int,
+    mut x: i32,
+    mut y: i32,
     mut s: *const libc::c_char,
-    mut alpha: libc::c_float,
+    mut alpha: f32,
     mut noColorEscape: crate::src::qcommon::q_shared::qboolean,
 ) {
-    let mut color: [libc::c_float; 4] = [0.; 4];
-    color[2 as libc::c_int as usize] = 1.0f64 as libc::c_float;
-    color[1 as libc::c_int as usize] = color[2 as libc::c_int as usize];
-    color[0 as libc::c_int as usize] = color[1 as libc::c_int as usize];
-    color[3 as libc::c_int as usize] = alpha;
+    let mut color: [f32; 4] = [0.; 4];
+    color[2 as i32 as usize] = 1.0f64 as f32;
+    color[1 as i32 as usize] = color[2 as i32 as usize];
+    color[0 as i32 as usize] = color[1 as i32 as usize];
+    color[3 as i32 as usize] = alpha;
     SCR_DrawStringExt(
         x,
         y,
-        16 as libc::c_int as libc::c_float,
+        16 as i32 as f32,
         s,
         color.as_mut_ptr(),
         crate::src::qcommon::q_shared::qfalse,
@@ -524,8 +524,8 @@ pub unsafe extern "C" fn SCR_DrawBigString(
 #[no_mangle]
 
 pub unsafe extern "C" fn SCR_DrawBigStringColor(
-    mut x: libc::c_int,
-    mut y: libc::c_int,
+    mut x: i32,
+    mut y: i32,
     mut s: *const libc::c_char,
     mut color: *mut crate::src::qcommon::q_shared::vec_t,
     mut noColorEscape: crate::src::qcommon::q_shared::qboolean,
@@ -533,7 +533,7 @@ pub unsafe extern "C" fn SCR_DrawBigStringColor(
     SCR_DrawStringExt(
         x,
         y,
-        16 as libc::c_int as libc::c_float,
+        16 as i32 as f32,
         s,
         color,
         crate::src::qcommon::q_shared::qtrue,
@@ -554,16 +554,16 @@ to a fixed color.
 #[no_mangle]
 
 pub unsafe extern "C" fn SCR_DrawSmallStringExt(
-    mut x: libc::c_int,
-    mut y: libc::c_int,
+    mut x: i32,
+    mut y: i32,
     mut string: *const libc::c_char,
-    mut setColor: *mut libc::c_float,
+    mut setColor: *mut f32,
     mut forceColor: crate::src::qcommon::q_shared::qboolean,
     mut noColorEscape: crate::src::qcommon::q_shared::qboolean,
 ) {
     let mut color: crate::src::qcommon::q_shared::vec4_t = [0.; 4];
     let mut s: *const libc::c_char = 0 as *const libc::c_char;
-    let mut xx: libc::c_int = 0;
+    let mut xx: i32 = 0;
     // draw the colored text
     s = string;
     xx = x;
@@ -575,42 +575,42 @@ pub unsafe extern "C" fn SCR_DrawSmallStringExt(
             if forceColor as u64 == 0 {
                 crate::stdlib::memcpy(
                     color.as_mut_ptr() as *mut libc::c_void,
-                    crate::src::qcommon::q_math::g_color_table[(*s.offset(1 as libc::c_int as isize)
-                        as libc::c_int
+                    crate::src::qcommon::q_math::g_color_table[(*s.offset(1 as i32 as isize)
+                        as i32
                         - '0' as i32
-                        & 0x7 as libc::c_int)
+                        & 0x7 as i32)
                         as usize]
                         .as_mut_ptr() as *const libc::c_void,
                     ::std::mem::size_of::<crate::src::qcommon::q_shared::vec4_t>() as libc::c_ulong,
                 );
-                color[3 as libc::c_int as usize] = *setColor.offset(3 as libc::c_int as isize);
+                color[3 as i32 as usize] = *setColor.offset(3 as i32 as isize);
                 crate::src::client::cl_main::re
                     .SetColor
                     .expect("non-null function pointer")(color.as_mut_ptr());
             }
             if noColorEscape as u64 == 0 {
-                s = s.offset(2 as libc::c_int as isize);
+                s = s.offset(2 as i32 as isize);
                 continue;
             }
         }
-        SCR_DrawSmallChar(xx, y, *s as libc::c_int);
-        xx += 8 as libc::c_int;
+        SCR_DrawSmallChar(xx, y, *s as i32);
+        xx += 8 as i32;
         s = s.offset(1)
     }
     crate::src::client::cl_main::re
         .SetColor
-        .expect("non-null function pointer")(0 as *const libc::c_float);
+        .expect("non-null function pointer")(0 as *const f32);
 }
 /*
 ** SCR_Strlen -- skips color escape codes
 */
 
-unsafe extern "C" fn SCR_Strlen(mut str: *const libc::c_char) -> libc::c_int {
+unsafe extern "C" fn SCR_Strlen(mut str: *const libc::c_char) -> i32 {
     let mut s: *const libc::c_char = str;
-    let mut count: libc::c_int = 0 as libc::c_int;
+    let mut count: i32 = 0 as i32;
     while *s != 0 {
         if crate::src::qcommon::q_shared::Q_IsColorString(s) as u64 != 0 {
-            s = s.offset(2 as libc::c_int as isize)
+            s = s.offset(2 as i32 as isize)
         } else {
             count += 1;
             s = s.offset(1)
@@ -623,8 +623,8 @@ unsafe extern "C" fn SCR_Strlen(mut str: *const libc::c_char) -> libc::c_int {
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SCR_GetBigStringWidth(mut str: *const libc::c_char) -> libc::c_int {
-    return SCR_Strlen(str) * 16 as libc::c_int;
+pub unsafe extern "C" fn SCR_GetBigStringWidth(mut str: *const libc::c_char) -> i32 {
+    return SCR_Strlen(str) * 16 as i32;
 }
 //===============================================================================
 /*
@@ -636,7 +636,7 @@ SCR_DrawDemoRecording
 
 pub unsafe extern "C" fn SCR_DrawDemoRecording() {
     let mut string: [libc::c_char; 1024] = [0; 1024];
-    let mut pos: libc::c_int = 0;
+    let mut pos: i32 = 0;
     if crate::src::client::cl_main::clc.demorecording as u64 == 0 {
         return;
     }
@@ -648,17 +648,17 @@ pub unsafe extern "C" fn SCR_DrawDemoRecording() {
         string.as_mut_ptr(),
         b"RECORDING %s: %ik\x00" as *const u8 as *const libc::c_char,
         crate::src::client::cl_main::clc.demoName.as_mut_ptr(),
-        pos / 1024 as libc::c_int,
+        pos / 1024 as i32,
     );
     SCR_DrawStringExt(
-        (320 as libc::c_int as libc::c_ulong).wrapping_sub(
+        (320 as i32 as libc::c_ulong).wrapping_sub(
             crate::stdlib::strlen(string.as_mut_ptr())
-                .wrapping_mul(4 as libc::c_int as libc::c_ulong),
-        ) as libc::c_int,
-        20 as libc::c_int,
-        8 as libc::c_int as libc::c_float,
+                .wrapping_mul(4 as i32 as libc::c_ulong),
+        ) as i32,
+        20 as i32,
+        8 as i32 as f32,
         string.as_mut_ptr(),
-        crate::src::qcommon::q_math::g_color_table[7 as libc::c_int as usize].as_mut_ptr(),
+        crate::src::qcommon::q_math::g_color_table[7 as i32 as usize].as_mut_ptr(),
         crate::src::qcommon::q_shared::qtrue,
         crate::src::qcommon::q_shared::qfalse,
     );
@@ -673,16 +673,16 @@ SCR_DrawVoipMeter
 pub unsafe extern "C" fn SCR_DrawVoipMeter() {
     let mut buffer: [libc::c_char; 16] = [0; 16]; // client has VoIP support disabled.
     let mut string: [libc::c_char; 256] = [0; 256]; // player doesn't want to show meter at all.
-    let mut limit: libc::c_int = 0; // not recording at the moment.
-    let mut i: libc::c_int = 0; // not connected to a server.
+    let mut limit: i32 = 0; // not recording at the moment.
+    let mut i: i32 = 0; // not connected to a server.
     if (*crate::src::client::cl_main::cl_voipShowMeter).integer == 0 {
         return;
     } else {
         if (*crate::src::client::cl_main::cl_voipSend).integer == 0 {
             return;
         } else {
-            if crate::src::client::cl_main::clc.state as libc::c_uint
-                != crate::src::qcommon::q_shared::CA_ACTIVE as libc::c_int as libc::c_uint
+            if crate::src::client::cl_main::clc.state as u32
+                != crate::src::qcommon::q_shared::CA_ACTIVE as i32 as u32
             {
                 return;
             } else {
@@ -701,16 +701,16 @@ pub unsafe extern "C" fn SCR_DrawVoipMeter() {
             }
         }
     } // playing back a demo.
-    limit = (crate::src::client::cl_main::clc.voipPower * 10.0f32) as libc::c_int;
-    if limit > 10 as libc::c_int {
-        limit = 10 as libc::c_int
+    limit = (crate::src::client::cl_main::clc.voipPower * 10.0f32) as i32;
+    if limit > 10 as i32 {
+        limit = 10 as i32
     }
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < limit {
         buffer[i as usize] = '*' as i32 as libc::c_char;
         i += 1
     }
-    while i < 10 as libc::c_int {
+    while i < 10 as i32 {
         let fresh0 = i;
         i = i + 1;
         buffer[fresh0 as usize] = ' ' as i32 as libc::c_char
@@ -722,14 +722,14 @@ pub unsafe extern "C" fn SCR_DrawVoipMeter() {
         buffer.as_mut_ptr(),
     );
     SCR_DrawStringExt(
-        (320 as libc::c_int as libc::c_ulong).wrapping_sub(
+        (320 as i32 as libc::c_ulong).wrapping_sub(
             crate::stdlib::strlen(string.as_mut_ptr())
-                .wrapping_mul(4 as libc::c_int as libc::c_ulong),
-        ) as libc::c_int,
-        10 as libc::c_int,
-        8 as libc::c_int as libc::c_float,
+                .wrapping_mul(4 as i32 as libc::c_ulong),
+        ) as i32,
+        10 as i32,
+        8 as i32 as f32,
         string.as_mut_ptr(),
-        crate::src::qcommon::q_math::g_color_table[7 as libc::c_int as usize].as_mut_ptr(),
+        crate::src::qcommon::q_math::g_color_table[7 as i32 as usize].as_mut_ptr(),
         crate::src::qcommon::q_shared::qtrue,
         crate::src::qcommon::q_shared::qfalse,
     );
@@ -742,9 +742,9 @@ DEBUG GRAPH
 ===============================================================================
 */
 
-static mut current: libc::c_int = 0;
+static mut current: i32 = 0;
 
-static mut values: [libc::c_float; 1024] = [0.; 1024];
+static mut values: [f32; 1024] = [0.; 1024];
 /*
 ===========================================================================
 Copyright (C) 1999-2005 Id Software, Inc.
@@ -1093,12 +1093,12 @@ SCR_DebugGraph
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SCR_DebugGraph(mut value: libc::c_float) {
+pub unsafe extern "C" fn SCR_DebugGraph(mut value: f32) {
     values[current as usize] = value;
-    current = ((current + 1 as libc::c_int) as libc::c_ulong).wrapping_rem(
-        (::std::mem::size_of::<[libc::c_float; 1024]>() as libc::c_ulong)
-            .wrapping_div(::std::mem::size_of::<libc::c_float>() as libc::c_ulong),
-    ) as libc::c_int;
+    current = ((current + 1 as i32) as libc::c_ulong).wrapping_rem(
+        (::std::mem::size_of::<[f32; 1024]>() as libc::c_ulong)
+            .wrapping_div(::std::mem::size_of::<f32>() as libc::c_ulong),
+    ) as i32;
 }
 /*
 ==============
@@ -1108,77 +1108,77 @@ SCR_DrawDebugGraph
 #[no_mangle]
 
 pub unsafe extern "C" fn SCR_DrawDebugGraph() {
-    let mut a: libc::c_int = 0;
-    let mut x: libc::c_int = 0;
-    let mut y: libc::c_int = 0;
-    let mut w: libc::c_int = 0;
-    let mut i: libc::c_int = 0;
-    let mut h: libc::c_int = 0;
-    let mut v: libc::c_float = 0.;
+    let mut a: i32 = 0;
+    let mut x: i32 = 0;
+    let mut y: i32 = 0;
+    let mut w: i32 = 0;
+    let mut i: i32 = 0;
+    let mut h: i32 = 0;
+    let mut v: f32 = 0.;
     //
     // draw the graph
     //
     w = crate::src::client::cl_main::cls.glconfig.vidWidth;
-    x = 0 as libc::c_int;
+    x = 0 as i32;
     y = crate::src::client::cl_main::cls.glconfig.vidHeight;
     crate::src::client::cl_main::re
         .SetColor
         .expect("non-null function pointer")(
-        crate::src::qcommon::q_math::g_color_table[0 as libc::c_int as usize].as_mut_ptr(),
+        crate::src::qcommon::q_math::g_color_table[0 as i32 as usize].as_mut_ptr(),
     );
     crate::src::client::cl_main::re
         .DrawStretchPic
         .expect("non-null function pointer")(
-        x as libc::c_float,
-        (y - (*cl_graphheight).integer) as libc::c_float,
-        w as libc::c_float,
-        (*cl_graphheight).integer as libc::c_float,
-        0 as libc::c_int as libc::c_float,
-        0 as libc::c_int as libc::c_float,
-        0 as libc::c_int as libc::c_float,
-        0 as libc::c_int as libc::c_float,
+        x as f32,
+        (y - (*cl_graphheight).integer) as f32,
+        w as f32,
+        (*cl_graphheight).integer as f32,
+        0 as i32 as f32,
+        0 as i32 as f32,
+        0 as i32 as f32,
+        0 as i32 as f32,
         crate::src::client::cl_main::cls.whiteShader,
     );
     crate::src::client::cl_main::re
         .SetColor
-        .expect("non-null function pointer")(0 as *const libc::c_float);
-    a = 0 as libc::c_int;
+        .expect("non-null function pointer")(0 as *const f32);
+    a = 0 as i32;
     while a < w {
-        i = (::std::mem::size_of::<[libc::c_float; 1024]>() as libc::c_ulong)
-            .wrapping_div(::std::mem::size_of::<libc::c_float>() as libc::c_ulong)
+        i = (::std::mem::size_of::<[f32; 1024]>() as libc::c_ulong)
+            .wrapping_div(::std::mem::size_of::<f32>() as libc::c_ulong)
             .wrapping_add(current as libc::c_ulong)
-            .wrapping_sub(1 as libc::c_int as libc::c_ulong)
+            .wrapping_sub(1 as i32 as libc::c_ulong)
             .wrapping_sub(
                 (a as libc::c_ulong).wrapping_rem(
-                    (::std::mem::size_of::<[libc::c_float; 1024]>() as libc::c_ulong)
-                        .wrapping_div(::std::mem::size_of::<libc::c_float>() as libc::c_ulong),
+                    (::std::mem::size_of::<[f32; 1024]>() as libc::c_ulong)
+                        .wrapping_div(::std::mem::size_of::<f32>() as libc::c_ulong),
                 ),
             )
             .wrapping_rem(
-                (::std::mem::size_of::<[libc::c_float; 1024]>() as libc::c_ulong)
-                    .wrapping_div(::std::mem::size_of::<libc::c_float>() as libc::c_ulong),
-            ) as libc::c_int;
+                (::std::mem::size_of::<[f32; 1024]>() as libc::c_ulong)
+                    .wrapping_div(::std::mem::size_of::<f32>() as libc::c_ulong),
+            ) as i32;
         v = values[i as usize];
-        v = v * (*cl_graphscale).integer as libc::c_float
-            + (*cl_graphshift).integer as libc::c_float;
-        if v < 0 as libc::c_int as libc::c_float {
+        v = v * (*cl_graphscale).integer as f32
+            + (*cl_graphshift).integer as f32;
+        if v < 0 as i32 as f32 {
             v += ((*cl_graphheight).integer
-                * (1 as libc::c_int
-                    + (-v / (*cl_graphheight).integer as libc::c_float) as libc::c_int))
-                as libc::c_float
+                * (1 as i32
+                    + (-v / (*cl_graphheight).integer as f32) as i32))
+                as f32
         }
-        h = v as libc::c_int % (*cl_graphheight).integer;
+        h = v as i32 % (*cl_graphheight).integer;
         crate::src::client::cl_main::re
             .DrawStretchPic
             .expect("non-null function pointer")(
-            (x + w - 1 as libc::c_int - a) as libc::c_float,
-            (y - h) as libc::c_float,
-            1 as libc::c_int as libc::c_float,
-            h as libc::c_float,
-            0 as libc::c_int as libc::c_float,
-            0 as libc::c_int as libc::c_float,
-            0 as libc::c_int as libc::c_float,
-            0 as libc::c_int as libc::c_float,
+            (x + w - 1 as i32 - a) as f32,
+            (y - h) as f32,
+            1 as i32 as f32,
+            h as f32,
+            0 as i32 as f32,
+            0 as i32 as f32,
+            0 as i32 as f32,
+            0 as i32 as f32,
             crate::src::client::cl_main::cls.whiteShader,
         );
         a += 1
@@ -1196,27 +1196,27 @@ pub unsafe extern "C" fn SCR_Init() {
     cl_timegraph = crate::src::qcommon::cvar::Cvar_Get(
         b"timegraph\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
-        0x200 as libc::c_int,
+        0x200 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s;
     cl_debuggraph = crate::src::qcommon::cvar::Cvar_Get(
         b"debuggraph\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
-        0x200 as libc::c_int,
+        0x200 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s;
     cl_graphheight = crate::src::qcommon::cvar::Cvar_Get(
         b"graphheight\x00" as *const u8 as *const libc::c_char,
         b"32\x00" as *const u8 as *const libc::c_char,
-        0x200 as libc::c_int,
+        0x200 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s;
     cl_graphscale = crate::src::qcommon::cvar::Cvar_Get(
         b"graphscale\x00" as *const u8 as *const libc::c_char,
         b"1\x00" as *const u8 as *const libc::c_char,
-        0x200 as libc::c_int,
+        0x200 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s;
     cl_graphshift = crate::src::qcommon::cvar::Cvar_Get(
         b"graphshift\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
-        0x200 as libc::c_int,
+        0x200 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s;
     scr_initialized = crate::src::qcommon::q_shared::qtrue;
 }
@@ -1239,44 +1239,44 @@ pub unsafe extern "C" fn SCR_DrawScreenField(mut stereoFrame: crate::tr_types_h:
     uiFullscreen = (!crate::src::client::cl_ui::uivm.is_null()
         && crate::src::qcommon::vm::VM_Call(
             crate::src::client::cl_ui::uivm,
-            crate::ui_public_h::UI_IS_FULLSCREEN as libc::c_int,
-        ) != 0) as libc::c_int as crate::src::qcommon::q_shared::qboolean;
+            crate::ui_public_h::UI_IS_FULLSCREEN as i32,
+        ) != 0) as i32 as crate::src::qcommon::q_shared::qboolean;
     // wide aspect ratio screens need to have the sides cleared
     // unless they are displaying game renderings
-    if uiFullscreen as libc::c_uint != 0
-        || (crate::src::client::cl_main::clc.state as libc::c_uint)
-            < crate::src::qcommon::q_shared::CA_LOADING as libc::c_int as libc::c_uint
+    if uiFullscreen as u32 != 0
+        || (crate::src::client::cl_main::clc.state as u32)
+            < crate::src::qcommon::q_shared::CA_LOADING as i32 as u32
     {
-        if crate::src::client::cl_main::cls.glconfig.vidWidth * 480 as libc::c_int
-            > crate::src::client::cl_main::cls.glconfig.vidHeight * 640 as libc::c_int
+        if crate::src::client::cl_main::cls.glconfig.vidWidth * 480 as i32
+            > crate::src::client::cl_main::cls.glconfig.vidHeight * 640 as i32
         {
             crate::src::client::cl_main::re
                 .SetColor
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_math::g_color_table[0 as libc::c_int as usize].as_mut_ptr(),
+                crate::src::qcommon::q_math::g_color_table[0 as i32 as usize].as_mut_ptr(),
             );
             crate::src::client::cl_main::re
                 .DrawStretchPic
                 .expect("non-null function pointer")(
-                0 as libc::c_int as libc::c_float,
-                0 as libc::c_int as libc::c_float,
-                crate::src::client::cl_main::cls.glconfig.vidWidth as libc::c_float,
-                crate::src::client::cl_main::cls.glconfig.vidHeight as libc::c_float,
-                0 as libc::c_int as libc::c_float,
-                0 as libc::c_int as libc::c_float,
-                0 as libc::c_int as libc::c_float,
-                0 as libc::c_int as libc::c_float,
+                0 as i32 as f32,
+                0 as i32 as f32,
+                crate::src::client::cl_main::cls.glconfig.vidWidth as f32,
+                crate::src::client::cl_main::cls.glconfig.vidHeight as f32,
+                0 as i32 as f32,
+                0 as i32 as f32,
+                0 as i32 as f32,
+                0 as i32 as f32,
                 crate::src::client::cl_main::cls.whiteShader,
             );
             crate::src::client::cl_main::re
                 .SetColor
-                .expect("non-null function pointer")(0 as *const libc::c_float);
+                .expect("non-null function pointer")(0 as *const f32);
         }
     }
     // if the menu is going to cover the entire screen, we
     // don't need to render anything under it
     if !crate::src::client::cl_ui::uivm.is_null() && uiFullscreen as u64 == 0 {
-        match crate::src::client::cl_main::clc.state as libc::c_uint {
+        match crate::src::client::cl_main::clc.state as u32 {
             9 => {
                 crate::src::client::cl_cin::SCR_DrawCinematic();
             }
@@ -1285,8 +1285,8 @@ pub unsafe extern "C" fn SCR_DrawScreenField(mut stereoFrame: crate::tr_types_h:
                 crate::src::client::snd_main::S_StopAllSounds();
                 crate::src::qcommon::vm::VM_Call(
                     crate::src::client::cl_ui::uivm,
-                    crate::ui_public_h::UI_SET_ACTIVE_MENU as libc::c_int,
-                    crate::ui_public_h::UIMENU_MAIN as libc::c_int,
+                    crate::ui_public_h::UI_SET_ACTIVE_MENU as i32,
+                    crate::ui_public_h::UIMENU_MAIN as i32,
                 );
             }
             3 | 4 | 5 => {
@@ -1294,13 +1294,13 @@ pub unsafe extern "C" fn SCR_DrawScreenField(mut stereoFrame: crate::tr_types_h:
                 // refresh to update the time
                 crate::src::qcommon::vm::VM_Call(
                     crate::src::client::cl_ui::uivm,
-                    crate::ui_public_h::UI_REFRESH as libc::c_int,
+                    crate::ui_public_h::UI_REFRESH as i32,
                     crate::src::client::cl_main::cls.realtime,
                 );
                 crate::src::qcommon::vm::VM_Call(
                     crate::src::client::cl_ui::uivm,
-                    crate::ui_public_h::UI_DRAW_CONNECT_SCREEN as libc::c_int,
-                    crate::src::qcommon::q_shared::qfalse as libc::c_int,
+                    crate::ui_public_h::UI_DRAW_CONNECT_SCREEN as i32,
+                    crate::src::qcommon::q_shared::qfalse as i32,
                 );
             }
             6 | 7 => {
@@ -1311,13 +1311,13 @@ pub unsafe extern "C" fn SCR_DrawScreenField(mut stereoFrame: crate::tr_types_h:
                 // refresh to update the time
                 crate::src::qcommon::vm::VM_Call(
                     crate::src::client::cl_ui::uivm,
-                    crate::ui_public_h::UI_REFRESH as libc::c_int,
+                    crate::ui_public_h::UI_REFRESH as i32,
                     crate::src::client::cl_main::cls.realtime,
                 );
                 crate::src::qcommon::vm::VM_Call(
                     crate::src::client::cl_ui::uivm,
-                    crate::ui_public_h::UI_DRAW_CONNECT_SCREEN as libc::c_int,
-                    crate::src::qcommon::q_shared::qtrue as libc::c_int,
+                    crate::ui_public_h::UI_DRAW_CONNECT_SCREEN as i32,
+                    crate::src::qcommon::q_shared::qtrue as i32,
                 );
             }
             8 => {
@@ -1328,19 +1328,19 @@ pub unsafe extern "C" fn SCR_DrawScreenField(mut stereoFrame: crate::tr_types_h:
             }
             _ => {
                 crate::src::qcommon::common::Com_Error(
-                    crate::src::qcommon::q_shared::ERR_FATAL as libc::c_int,
+                    crate::src::qcommon::q_shared::ERR_FATAL as i32,
                     b"SCR_DrawScreenField: bad clc.state\x00" as *const u8 as *const libc::c_char,
                 );
             }
         }
     }
     // the menu draws next
-    if crate::src::client::cl_keys::Key_GetCatcher() & 0x2 as libc::c_int != 0
+    if crate::src::client::cl_keys::Key_GetCatcher() & 0x2 as i32 != 0
         && !crate::src::client::cl_ui::uivm.is_null()
     {
         crate::src::qcommon::vm::VM_Call(
             crate::src::client::cl_ui::uivm,
-            crate::ui_public_h::UI_REFRESH as libc::c_int,
+            crate::ui_public_h::UI_REFRESH as i32,
             crate::src::client::cl_main::cls.realtime,
         );
     }
@@ -1555,30 +1555,30 @@ text to the screen.
 #[no_mangle]
 
 pub unsafe extern "C" fn SCR_UpdateScreen() {
-    static mut recursive: libc::c_int = 0;
+    static mut recursive: i32 = 0;
     if scr_initialized as u64 == 0 {
         return;
         // not initialized yet
     }
     recursive += 1;
-    if recursive > 2 as libc::c_int {
+    if recursive > 2 as i32 {
         crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_FATAL as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_FATAL as i32,
             b"SCR_UpdateScreen: recursively called\x00" as *const u8 as *const libc::c_char,
         );
     }
-    recursive = 1 as libc::c_int;
+    recursive = 1 as i32;
     // If there is no VM, there are also no rendering commands issued. Stop the renderer in
     // that case.
     if !crate::src::client::cl_ui::uivm.is_null()
         || (*crate::src::qcommon::common::com_dedicated).integer != 0
     {
         // XXX
-        let mut in_anaglyphMode: libc::c_int = crate::src::qcommon::cvar::Cvar_VariableIntegerValue(
+        let mut in_anaglyphMode: i32 = crate::src::qcommon::cvar::Cvar_VariableIntegerValue(
             b"r_anaglyphMode\x00" as *const u8 as *const libc::c_char,
         );
         // if running in stereo, we need to draw the frame twice
-        if crate::src::client::cl_main::cls.glconfig.stereoEnabled as libc::c_uint != 0
+        if crate::src::client::cl_main::cls.glconfig.stereoEnabled as u32 != 0
             || in_anaglyphMode != 0
         {
             SCR_DrawScreenField(crate::tr_types_h::STEREO_LEFT);
@@ -1597,9 +1597,9 @@ pub unsafe extern "C" fn SCR_UpdateScreen() {
             crate::src::client::cl_main::re
                 .EndFrame
                 .expect("non-null function pointer")(
-                0 as *mut libc::c_int, 0 as *mut libc::c_int
+                0 as *mut i32, 0 as *mut i32
             );
         }
     }
-    recursive = 0 as libc::c_int;
+    recursive = 0 as i32;
 }

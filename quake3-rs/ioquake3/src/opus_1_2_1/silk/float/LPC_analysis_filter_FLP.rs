@@ -36,54 +36,54 @@ POSSIBILITY OF SUCH DAMAGE.
 #[inline]
 
 unsafe extern "C" fn silk_LPC_analysis_filter16_FLP(
-    mut r_LPC: *mut libc::c_float,
-    mut PredCoef: *const libc::c_float,
-    mut s: *const libc::c_float,
-    length: libc::c_int,
+    mut r_LPC: *mut f32,
+    mut PredCoef: *const f32,
+    mut s: *const f32,
+    length: i32,
 )
 /* I    Length of input signal                  */
 {
-    let mut ix: libc::c_int = 0;
-    let mut LPC_pred: libc::c_float = 0.;
-    let mut s_ptr: *const libc::c_float = 0 as *const libc::c_float;
-    ix = 16 as libc::c_int;
+    let mut ix: i32 = 0;
+    let mut LPC_pred: f32 = 0.;
+    let mut s_ptr: *const f32 = 0 as *const f32;
+    ix = 16 as i32;
     while ix < length {
-        s_ptr = &*s.offset((ix - 1 as libc::c_int) as isize) as *const libc::c_float;
+        s_ptr = &*s.offset((ix - 1 as i32) as isize) as *const f32;
         /* short-term prediction */
-        LPC_pred = *s_ptr.offset(0 as libc::c_int as isize)
-            * *PredCoef.offset(0 as libc::c_int as isize)
-            + *s_ptr.offset(-(1 as libc::c_int) as isize)
-                * *PredCoef.offset(1 as libc::c_int as isize)
-            + *s_ptr.offset(-(2 as libc::c_int) as isize)
-                * *PredCoef.offset(2 as libc::c_int as isize)
-            + *s_ptr.offset(-(3 as libc::c_int) as isize)
-                * *PredCoef.offset(3 as libc::c_int as isize)
-            + *s_ptr.offset(-(4 as libc::c_int) as isize)
-                * *PredCoef.offset(4 as libc::c_int as isize)
-            + *s_ptr.offset(-(5 as libc::c_int) as isize)
-                * *PredCoef.offset(5 as libc::c_int as isize)
-            + *s_ptr.offset(-(6 as libc::c_int) as isize)
-                * *PredCoef.offset(6 as libc::c_int as isize)
-            + *s_ptr.offset(-(7 as libc::c_int) as isize)
-                * *PredCoef.offset(7 as libc::c_int as isize)
-            + *s_ptr.offset(-(8 as libc::c_int) as isize)
-                * *PredCoef.offset(8 as libc::c_int as isize)
-            + *s_ptr.offset(-(9 as libc::c_int) as isize)
-                * *PredCoef.offset(9 as libc::c_int as isize)
-            + *s_ptr.offset(-(10 as libc::c_int) as isize)
-                * *PredCoef.offset(10 as libc::c_int as isize)
-            + *s_ptr.offset(-(11 as libc::c_int) as isize)
-                * *PredCoef.offset(11 as libc::c_int as isize)
-            + *s_ptr.offset(-(12 as libc::c_int) as isize)
-                * *PredCoef.offset(12 as libc::c_int as isize)
-            + *s_ptr.offset(-(13 as libc::c_int) as isize)
-                * *PredCoef.offset(13 as libc::c_int as isize)
-            + *s_ptr.offset(-(14 as libc::c_int) as isize)
-                * *PredCoef.offset(14 as libc::c_int as isize)
-            + *s_ptr.offset(-(15 as libc::c_int) as isize)
-                * *PredCoef.offset(15 as libc::c_int as isize);
+        LPC_pred = *s_ptr.offset(0 as i32 as isize)
+            * *PredCoef.offset(0 as i32 as isize)
+            + *s_ptr.offset(-(1 as i32) as isize)
+                * *PredCoef.offset(1 as i32 as isize)
+            + *s_ptr.offset(-(2 as i32) as isize)
+                * *PredCoef.offset(2 as i32 as isize)
+            + *s_ptr.offset(-(3 as i32) as isize)
+                * *PredCoef.offset(3 as i32 as isize)
+            + *s_ptr.offset(-(4 as i32) as isize)
+                * *PredCoef.offset(4 as i32 as isize)
+            + *s_ptr.offset(-(5 as i32) as isize)
+                * *PredCoef.offset(5 as i32 as isize)
+            + *s_ptr.offset(-(6 as i32) as isize)
+                * *PredCoef.offset(6 as i32 as isize)
+            + *s_ptr.offset(-(7 as i32) as isize)
+                * *PredCoef.offset(7 as i32 as isize)
+            + *s_ptr.offset(-(8 as i32) as isize)
+                * *PredCoef.offset(8 as i32 as isize)
+            + *s_ptr.offset(-(9 as i32) as isize)
+                * *PredCoef.offset(9 as i32 as isize)
+            + *s_ptr.offset(-(10 as i32) as isize)
+                * *PredCoef.offset(10 as i32 as isize)
+            + *s_ptr.offset(-(11 as i32) as isize)
+                * *PredCoef.offset(11 as i32 as isize)
+            + *s_ptr.offset(-(12 as i32) as isize)
+                * *PredCoef.offset(12 as i32 as isize)
+            + *s_ptr.offset(-(13 as i32) as isize)
+                * *PredCoef.offset(13 as i32 as isize)
+            + *s_ptr.offset(-(14 as i32) as isize)
+                * *PredCoef.offset(14 as i32 as isize)
+            + *s_ptr.offset(-(15 as i32) as isize)
+                * *PredCoef.offset(15 as i32 as isize);
         /* prediction error */
-        *r_LPC.offset(ix as isize) = *s_ptr.offset(1 as libc::c_int as isize) - LPC_pred;
+        *r_LPC.offset(ix as isize) = *s_ptr.offset(1 as i32 as isize) - LPC_pred;
         ix += 1
     }
 }
@@ -91,46 +91,46 @@ unsafe extern "C" fn silk_LPC_analysis_filter16_FLP(
 #[inline]
 
 unsafe extern "C" fn silk_LPC_analysis_filter12_FLP(
-    mut r_LPC: *mut libc::c_float,
-    mut PredCoef: *const libc::c_float,
-    mut s: *const libc::c_float,
-    length: libc::c_int,
+    mut r_LPC: *mut f32,
+    mut PredCoef: *const f32,
+    mut s: *const f32,
+    length: i32,
 )
 /* I    Length of input signal                  */
 {
-    let mut ix: libc::c_int = 0;
-    let mut LPC_pred: libc::c_float = 0.;
-    let mut s_ptr: *const libc::c_float = 0 as *const libc::c_float;
-    ix = 12 as libc::c_int;
+    let mut ix: i32 = 0;
+    let mut LPC_pred: f32 = 0.;
+    let mut s_ptr: *const f32 = 0 as *const f32;
+    ix = 12 as i32;
     while ix < length {
-        s_ptr = &*s.offset((ix - 1 as libc::c_int) as isize) as *const libc::c_float;
+        s_ptr = &*s.offset((ix - 1 as i32) as isize) as *const f32;
         /* short-term prediction */
-        LPC_pred = *s_ptr.offset(0 as libc::c_int as isize)
-            * *PredCoef.offset(0 as libc::c_int as isize)
-            + *s_ptr.offset(-(1 as libc::c_int) as isize)
-                * *PredCoef.offset(1 as libc::c_int as isize)
-            + *s_ptr.offset(-(2 as libc::c_int) as isize)
-                * *PredCoef.offset(2 as libc::c_int as isize)
-            + *s_ptr.offset(-(3 as libc::c_int) as isize)
-                * *PredCoef.offset(3 as libc::c_int as isize)
-            + *s_ptr.offset(-(4 as libc::c_int) as isize)
-                * *PredCoef.offset(4 as libc::c_int as isize)
-            + *s_ptr.offset(-(5 as libc::c_int) as isize)
-                * *PredCoef.offset(5 as libc::c_int as isize)
-            + *s_ptr.offset(-(6 as libc::c_int) as isize)
-                * *PredCoef.offset(6 as libc::c_int as isize)
-            + *s_ptr.offset(-(7 as libc::c_int) as isize)
-                * *PredCoef.offset(7 as libc::c_int as isize)
-            + *s_ptr.offset(-(8 as libc::c_int) as isize)
-                * *PredCoef.offset(8 as libc::c_int as isize)
-            + *s_ptr.offset(-(9 as libc::c_int) as isize)
-                * *PredCoef.offset(9 as libc::c_int as isize)
-            + *s_ptr.offset(-(10 as libc::c_int) as isize)
-                * *PredCoef.offset(10 as libc::c_int as isize)
-            + *s_ptr.offset(-(11 as libc::c_int) as isize)
-                * *PredCoef.offset(11 as libc::c_int as isize);
+        LPC_pred = *s_ptr.offset(0 as i32 as isize)
+            * *PredCoef.offset(0 as i32 as isize)
+            + *s_ptr.offset(-(1 as i32) as isize)
+                * *PredCoef.offset(1 as i32 as isize)
+            + *s_ptr.offset(-(2 as i32) as isize)
+                * *PredCoef.offset(2 as i32 as isize)
+            + *s_ptr.offset(-(3 as i32) as isize)
+                * *PredCoef.offset(3 as i32 as isize)
+            + *s_ptr.offset(-(4 as i32) as isize)
+                * *PredCoef.offset(4 as i32 as isize)
+            + *s_ptr.offset(-(5 as i32) as isize)
+                * *PredCoef.offset(5 as i32 as isize)
+            + *s_ptr.offset(-(6 as i32) as isize)
+                * *PredCoef.offset(6 as i32 as isize)
+            + *s_ptr.offset(-(7 as i32) as isize)
+                * *PredCoef.offset(7 as i32 as isize)
+            + *s_ptr.offset(-(8 as i32) as isize)
+                * *PredCoef.offset(8 as i32 as isize)
+            + *s_ptr.offset(-(9 as i32) as isize)
+                * *PredCoef.offset(9 as i32 as isize)
+            + *s_ptr.offset(-(10 as i32) as isize)
+                * *PredCoef.offset(10 as i32 as isize)
+            + *s_ptr.offset(-(11 as i32) as isize)
+                * *PredCoef.offset(11 as i32 as isize);
         /* prediction error */
-        *r_LPC.offset(ix as isize) = *s_ptr.offset(1 as libc::c_int as isize) - LPC_pred;
+        *r_LPC.offset(ix as isize) = *s_ptr.offset(1 as i32 as isize) - LPC_pred;
         ix += 1
     }
 }
@@ -138,42 +138,42 @@ unsafe extern "C" fn silk_LPC_analysis_filter12_FLP(
 #[inline]
 
 unsafe extern "C" fn silk_LPC_analysis_filter10_FLP(
-    mut r_LPC: *mut libc::c_float,
-    mut PredCoef: *const libc::c_float,
-    mut s: *const libc::c_float,
-    length: libc::c_int,
+    mut r_LPC: *mut f32,
+    mut PredCoef: *const f32,
+    mut s: *const f32,
+    length: i32,
 )
 /* I    Length of input signal                  */
 {
-    let mut ix: libc::c_int = 0;
-    let mut LPC_pred: libc::c_float = 0.;
-    let mut s_ptr: *const libc::c_float = 0 as *const libc::c_float;
-    ix = 10 as libc::c_int;
+    let mut ix: i32 = 0;
+    let mut LPC_pred: f32 = 0.;
+    let mut s_ptr: *const f32 = 0 as *const f32;
+    ix = 10 as i32;
     while ix < length {
-        s_ptr = &*s.offset((ix - 1 as libc::c_int) as isize) as *const libc::c_float;
+        s_ptr = &*s.offset((ix - 1 as i32) as isize) as *const f32;
         /* short-term prediction */
-        LPC_pred = *s_ptr.offset(0 as libc::c_int as isize)
-            * *PredCoef.offset(0 as libc::c_int as isize)
-            + *s_ptr.offset(-(1 as libc::c_int) as isize)
-                * *PredCoef.offset(1 as libc::c_int as isize)
-            + *s_ptr.offset(-(2 as libc::c_int) as isize)
-                * *PredCoef.offset(2 as libc::c_int as isize)
-            + *s_ptr.offset(-(3 as libc::c_int) as isize)
-                * *PredCoef.offset(3 as libc::c_int as isize)
-            + *s_ptr.offset(-(4 as libc::c_int) as isize)
-                * *PredCoef.offset(4 as libc::c_int as isize)
-            + *s_ptr.offset(-(5 as libc::c_int) as isize)
-                * *PredCoef.offset(5 as libc::c_int as isize)
-            + *s_ptr.offset(-(6 as libc::c_int) as isize)
-                * *PredCoef.offset(6 as libc::c_int as isize)
-            + *s_ptr.offset(-(7 as libc::c_int) as isize)
-                * *PredCoef.offset(7 as libc::c_int as isize)
-            + *s_ptr.offset(-(8 as libc::c_int) as isize)
-                * *PredCoef.offset(8 as libc::c_int as isize)
-            + *s_ptr.offset(-(9 as libc::c_int) as isize)
-                * *PredCoef.offset(9 as libc::c_int as isize);
+        LPC_pred = *s_ptr.offset(0 as i32 as isize)
+            * *PredCoef.offset(0 as i32 as isize)
+            + *s_ptr.offset(-(1 as i32) as isize)
+                * *PredCoef.offset(1 as i32 as isize)
+            + *s_ptr.offset(-(2 as i32) as isize)
+                * *PredCoef.offset(2 as i32 as isize)
+            + *s_ptr.offset(-(3 as i32) as isize)
+                * *PredCoef.offset(3 as i32 as isize)
+            + *s_ptr.offset(-(4 as i32) as isize)
+                * *PredCoef.offset(4 as i32 as isize)
+            + *s_ptr.offset(-(5 as i32) as isize)
+                * *PredCoef.offset(5 as i32 as isize)
+            + *s_ptr.offset(-(6 as i32) as isize)
+                * *PredCoef.offset(6 as i32 as isize)
+            + *s_ptr.offset(-(7 as i32) as isize)
+                * *PredCoef.offset(7 as i32 as isize)
+            + *s_ptr.offset(-(8 as i32) as isize)
+                * *PredCoef.offset(8 as i32 as isize)
+            + *s_ptr.offset(-(9 as i32) as isize)
+                * *PredCoef.offset(9 as i32 as isize);
         /* prediction error */
-        *r_LPC.offset(ix as isize) = *s_ptr.offset(1 as libc::c_int as isize) - LPC_pred;
+        *r_LPC.offset(ix as isize) = *s_ptr.offset(1 as i32 as isize) - LPC_pred;
         ix += 1
     }
 }
@@ -181,38 +181,38 @@ unsafe extern "C" fn silk_LPC_analysis_filter10_FLP(
 #[inline]
 
 unsafe extern "C" fn silk_LPC_analysis_filter8_FLP(
-    mut r_LPC: *mut libc::c_float,
-    mut PredCoef: *const libc::c_float,
-    mut s: *const libc::c_float,
-    length: libc::c_int,
+    mut r_LPC: *mut f32,
+    mut PredCoef: *const f32,
+    mut s: *const f32,
+    length: i32,
 )
 /* I    Length of input signal                  */
 {
-    let mut ix: libc::c_int = 0;
-    let mut LPC_pred: libc::c_float = 0.;
-    let mut s_ptr: *const libc::c_float = 0 as *const libc::c_float;
-    ix = 8 as libc::c_int;
+    let mut ix: i32 = 0;
+    let mut LPC_pred: f32 = 0.;
+    let mut s_ptr: *const f32 = 0 as *const f32;
+    ix = 8 as i32;
     while ix < length {
-        s_ptr = &*s.offset((ix - 1 as libc::c_int) as isize) as *const libc::c_float;
+        s_ptr = &*s.offset((ix - 1 as i32) as isize) as *const f32;
         /* short-term prediction */
-        LPC_pred = *s_ptr.offset(0 as libc::c_int as isize)
-            * *PredCoef.offset(0 as libc::c_int as isize)
-            + *s_ptr.offset(-(1 as libc::c_int) as isize)
-                * *PredCoef.offset(1 as libc::c_int as isize)
-            + *s_ptr.offset(-(2 as libc::c_int) as isize)
-                * *PredCoef.offset(2 as libc::c_int as isize)
-            + *s_ptr.offset(-(3 as libc::c_int) as isize)
-                * *PredCoef.offset(3 as libc::c_int as isize)
-            + *s_ptr.offset(-(4 as libc::c_int) as isize)
-                * *PredCoef.offset(4 as libc::c_int as isize)
-            + *s_ptr.offset(-(5 as libc::c_int) as isize)
-                * *PredCoef.offset(5 as libc::c_int as isize)
-            + *s_ptr.offset(-(6 as libc::c_int) as isize)
-                * *PredCoef.offset(6 as libc::c_int as isize)
-            + *s_ptr.offset(-(7 as libc::c_int) as isize)
-                * *PredCoef.offset(7 as libc::c_int as isize);
+        LPC_pred = *s_ptr.offset(0 as i32 as isize)
+            * *PredCoef.offset(0 as i32 as isize)
+            + *s_ptr.offset(-(1 as i32) as isize)
+                * *PredCoef.offset(1 as i32 as isize)
+            + *s_ptr.offset(-(2 as i32) as isize)
+                * *PredCoef.offset(2 as i32 as isize)
+            + *s_ptr.offset(-(3 as i32) as isize)
+                * *PredCoef.offset(3 as i32 as isize)
+            + *s_ptr.offset(-(4 as i32) as isize)
+                * *PredCoef.offset(4 as i32 as isize)
+            + *s_ptr.offset(-(5 as i32) as isize)
+                * *PredCoef.offset(5 as i32 as isize)
+            + *s_ptr.offset(-(6 as i32) as isize)
+                * *PredCoef.offset(6 as i32 as isize)
+            + *s_ptr.offset(-(7 as i32) as isize)
+                * *PredCoef.offset(7 as i32 as isize);
         /* prediction error */
-        *r_LPC.offset(ix as isize) = *s_ptr.offset(1 as libc::c_int as isize) - LPC_pred;
+        *r_LPC.offset(ix as isize) = *s_ptr.offset(1 as i32 as isize) - LPC_pred;
         ix += 1
     }
 }
@@ -220,34 +220,34 @@ unsafe extern "C" fn silk_LPC_analysis_filter8_FLP(
 #[inline]
 
 unsafe extern "C" fn silk_LPC_analysis_filter6_FLP(
-    mut r_LPC: *mut libc::c_float,
-    mut PredCoef: *const libc::c_float,
-    mut s: *const libc::c_float,
-    length: libc::c_int,
+    mut r_LPC: *mut f32,
+    mut PredCoef: *const f32,
+    mut s: *const f32,
+    length: i32,
 )
 /* I    Length of input signal                  */
 {
-    let mut ix: libc::c_int = 0;
-    let mut LPC_pred: libc::c_float = 0.;
-    let mut s_ptr: *const libc::c_float = 0 as *const libc::c_float;
-    ix = 6 as libc::c_int;
+    let mut ix: i32 = 0;
+    let mut LPC_pred: f32 = 0.;
+    let mut s_ptr: *const f32 = 0 as *const f32;
+    ix = 6 as i32;
     while ix < length {
-        s_ptr = &*s.offset((ix - 1 as libc::c_int) as isize) as *const libc::c_float;
+        s_ptr = &*s.offset((ix - 1 as i32) as isize) as *const f32;
         /* short-term prediction */
-        LPC_pred = *s_ptr.offset(0 as libc::c_int as isize)
-            * *PredCoef.offset(0 as libc::c_int as isize)
-            + *s_ptr.offset(-(1 as libc::c_int) as isize)
-                * *PredCoef.offset(1 as libc::c_int as isize)
-            + *s_ptr.offset(-(2 as libc::c_int) as isize)
-                * *PredCoef.offset(2 as libc::c_int as isize)
-            + *s_ptr.offset(-(3 as libc::c_int) as isize)
-                * *PredCoef.offset(3 as libc::c_int as isize)
-            + *s_ptr.offset(-(4 as libc::c_int) as isize)
-                * *PredCoef.offset(4 as libc::c_int as isize)
-            + *s_ptr.offset(-(5 as libc::c_int) as isize)
-                * *PredCoef.offset(5 as libc::c_int as isize);
+        LPC_pred = *s_ptr.offset(0 as i32 as isize)
+            * *PredCoef.offset(0 as i32 as isize)
+            + *s_ptr.offset(-(1 as i32) as isize)
+                * *PredCoef.offset(1 as i32 as isize)
+            + *s_ptr.offset(-(2 as i32) as isize)
+                * *PredCoef.offset(2 as i32 as isize)
+            + *s_ptr.offset(-(3 as i32) as isize)
+                * *PredCoef.offset(3 as i32 as isize)
+            + *s_ptr.offset(-(4 as i32) as isize)
+                * *PredCoef.offset(4 as i32 as isize)
+            + *s_ptr.offset(-(5 as i32) as isize)
+                * *PredCoef.offset(5 as i32 as isize);
         /* prediction error */
-        *r_LPC.offset(ix as isize) = *s_ptr.offset(1 as libc::c_int as isize) - LPC_pred;
+        *r_LPC.offset(ix as isize) = *s_ptr.offset(1 as i32 as isize) - LPC_pred;
         ix += 1
     }
 }
@@ -371,11 +371,11 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_LPC_analysis_filter_FLP(
-    mut r_LPC: *mut libc::c_float,
-    mut PredCoef: *const libc::c_float,
-    mut s: *const libc::c_float,
-    length: libc::c_int,
-    Order: libc::c_int,
+    mut r_LPC: *mut f32,
+    mut PredCoef: *const f32,
+    mut s: *const f32,
+    length: i32,
+    Order: i32,
 )
 /* I    LPC order                                   */
 {
@@ -400,8 +400,8 @@ pub unsafe extern "C" fn silk_LPC_analysis_filter_FLP(
     /* Set first Order output samples to zero */
     crate::stdlib::memset(
         r_LPC as *mut libc::c_void,
-        0 as libc::c_int,
+        0 as i32,
         (Order as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<libc::c_float>() as libc::c_ulong),
+            .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
     );
 }

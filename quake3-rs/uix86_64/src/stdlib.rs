@@ -1,6 +1,6 @@
 extern "C" {
     #[no_mangle]
-    pub fn __ctype_b_loc() -> *mut *const libc::c_ushort;
+    pub fn __ctype_b_loc() -> *mut *const u16;
 
     #[no_mangle]
     pub fn __ctype_tolower_loc() -> *mut *const __int32_t;
@@ -8,32 +8,32 @@ extern "C" {
     #[no_mangle]
     pub fn __ctype_toupper_loc() -> *mut *const __int32_t;
     #[no_mangle]
-    pub fn acos(_: libc::c_double) -> libc::c_double;
+    pub fn acos(_: f64) -> f64;
 
     #[no_mangle]
-    pub fn atan2(_: libc::c_double, _: libc::c_double) -> libc::c_double;
+    pub fn atan2(_: f64, _: f64) -> f64;
 
     #[no_mangle]
-    pub fn cos(_: libc::c_double) -> libc::c_double;
+    pub fn cos(_: f64) -> f64;
 
     #[no_mangle]
-    pub fn sin(_: libc::c_double) -> libc::c_double;
+    pub fn sin(_: f64) -> f64;
 
     #[no_mangle]
-    pub fn tan(_: libc::c_double) -> libc::c_double;
+    pub fn tan(_: f64) -> f64;
 
     #[no_mangle]
-    pub fn sqrt(_: libc::c_double) -> libc::c_double;
+    pub fn sqrt(_: f64) -> f64;
 
     #[no_mangle]
-    pub fn fabs(_: libc::c_double) -> libc::c_double;
+    pub fn fabs(_: f64) -> f64;
     #[no_mangle]
     pub fn vsnprintf(
         _: *mut libc::c_char,
         _: libc::c_ulong,
         _: *const libc::c_char,
         _: ::std::ffi::VaList,
-    ) -> libc::c_int;
+    ) -> i32;
     #[no_mangle]
     pub fn qsort(
         __base: *mut libc::c_void,
@@ -56,7 +56,7 @@ extern "C" {
     ) -> *mut libc::c_void;
 
     #[no_mangle]
-    pub fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
+    pub fn memset(_: *mut libc::c_void, _: i32, _: libc::c_ulong) -> *mut libc::c_void;
 
     #[no_mangle]
     pub fn strncpy(
@@ -87,7 +87,7 @@ pub type intptr_t = libc::c_long;
 // ================ END stdint_h ================
 // =============== BEGIN stdlib_h ================
 pub type __compar_fn_t =
-    Option<unsafe extern "C" fn(_: *const libc::c_void, _: *const libc::c_void) -> libc::c_int>;
+    Option<unsafe extern "C" fn(_: *const libc::c_void, _: *const libc::c_void) -> i32>;
 // ================ END stdlib_h ================
 // =============== BEGIN types_h ================
-pub type __int32_t = libc::c_int;
+pub type __int32_t = i32;

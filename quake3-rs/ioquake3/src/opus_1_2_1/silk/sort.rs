@@ -41,36 +41,36 @@ POSSIBILITY OF SUCH DAMAGE.
 
 pub unsafe extern "C" fn silk_insertion_sort_increasing(
     mut a: *mut crate::opus_types_h::opus_int32,
-    mut idx: *mut libc::c_int,
-    L: libc::c_int,
-    K: libc::c_int,
+    mut idx: *mut i32,
+    L: i32,
+    K: i32,
 )
 /* I     Number of correctly sorted positions   */
 {
     let mut value: crate::opus_types_h::opus_int32 = 0;
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
     /* Safety checks */
     /* Write start indices in index vector */
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < K {
         *idx.offset(i as isize) = i;
         i += 1
     }
     /* Sort vector elements by value, increasing order */
-    i = 1 as libc::c_int;
+    i = 1 as i32;
     while i < K {
         value = *a.offset(i as isize);
-        j = i - 1 as libc::c_int;
-        while j >= 0 as libc::c_int && value < *a.offset(j as isize) {
+        j = i - 1 as i32;
+        while j >= 0 as i32 && value < *a.offset(j as isize) {
             /* Write index */
-            *a.offset((j + 1 as libc::c_int) as isize) = *a.offset(j as isize);
-            *idx.offset((j + 1 as libc::c_int) as isize) = *idx.offset(j as isize);
+            *a.offset((j + 1 as i32) as isize) = *a.offset(j as isize);
+            *idx.offset((j + 1 as i32) as isize) = *idx.offset(j as isize);
             j -= 1 /* Shift value */
             /* Shift index */
         } /* Write value */
-        *a.offset((j + 1 as libc::c_int) as isize) = value;
-        *idx.offset((j + 1 as libc::c_int) as isize) = i;
+        *a.offset((j + 1 as i32) as isize) = value;
+        *idx.offset((j + 1 as i32) as isize) = i;
         i += 1
     }
     /* If less than L values are asked for, check the remaining values, */
@@ -78,17 +78,17 @@ pub unsafe extern "C" fn silk_insertion_sort_increasing(
     i = K; /* Shift value */
     while i < L {
         value = *a.offset(i as isize);
-        if value < *a.offset((K - 1 as libc::c_int) as isize) {
-            j = K - 2 as libc::c_int;
-            while j >= 0 as libc::c_int && value < *a.offset(j as isize) {
-                *a.offset((j + 1 as libc::c_int) as isize) = *a.offset(j as isize);
-                *idx.offset((j + 1 as libc::c_int) as isize) = *idx.offset(j as isize);
+        if value < *a.offset((K - 1 as i32) as isize) {
+            j = K - 2 as i32;
+            while j >= 0 as i32 && value < *a.offset(j as isize) {
+                *a.offset((j + 1 as i32) as isize) = *a.offset(j as isize);
+                *idx.offset((j + 1 as i32) as isize) = *idx.offset(j as isize);
                 j -= 1
                 /* Shift index */
             }
             /* Write index */
-            *a.offset((j + 1 as libc::c_int) as isize) = value; /* Write value */
-            *idx.offset((j + 1 as libc::c_int) as isize) = i
+            *a.offset((j + 1 as i32) as isize) = value; /* Write value */
+            *idx.offset((j + 1 as i32) as isize) = i
         }
         i += 1
     }
@@ -97,26 +97,26 @@ pub unsafe extern "C" fn silk_insertion_sort_increasing(
 
 pub unsafe extern "C" fn silk_insertion_sort_increasing_all_values_int16(
     mut a: *mut crate::opus_types_h::opus_int16,
-    L: libc::c_int,
+    L: i32,
 )
 /* I     Vector length                                              */
 {
-    let mut value: libc::c_int = 0;
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
+    let mut value: i32 = 0;
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
     /* Safety checks */
     /* Sort vector elements by value, increasing order */
-    i = 1 as libc::c_int;
+    i = 1 as i32;
     while i < L {
-        value = *a.offset(i as isize) as libc::c_int;
-        j = i - 1 as libc::c_int;
-        while j >= 0 as libc::c_int && value < *a.offset(j as isize) as libc::c_int {
-            *a.offset((j + 1 as libc::c_int) as isize) = *a.offset(j as isize);
+        value = *a.offset(i as isize) as i32;
+        j = i - 1 as i32;
+        while j >= 0 as i32 && value < *a.offset(j as isize) as i32 {
+            *a.offset((j + 1 as i32) as isize) = *a.offset(j as isize);
             j -= 1
             /* Write value */
             /* Shift value */
         }
-        *a.offset((j + 1 as libc::c_int) as isize) = value as crate::opus_types_h::opus_int16;
+        *a.offset((j + 1 as i32) as isize) = value as crate::opus_types_h::opus_int16;
         i += 1
     }
 }

@@ -255,15 +255,15 @@ pub mod q_shared_h {
         mut v2: *const crate::src::qcommon::q_shared::vec_t,
         mut cross: *mut crate::src::qcommon::q_shared::vec_t,
     ) {
-        *cross.offset(0 as libc::c_int as isize) = *v1.offset(1 as libc::c_int as isize)
-            * *v2.offset(2 as libc::c_int as isize)
-            - *v1.offset(2 as libc::c_int as isize) * *v2.offset(1 as libc::c_int as isize);
-        *cross.offset(1 as libc::c_int as isize) = *v1.offset(2 as libc::c_int as isize)
-            * *v2.offset(0 as libc::c_int as isize)
-            - *v1.offset(0 as libc::c_int as isize) * *v2.offset(2 as libc::c_int as isize);
-        *cross.offset(2 as libc::c_int as isize) = *v1.offset(0 as libc::c_int as isize)
-            * *v2.offset(1 as libc::c_int as isize)
-            - *v1.offset(1 as libc::c_int as isize) * *v2.offset(0 as libc::c_int as isize);
+        *cross.offset(0 as i32 as isize) = *v1.offset(1 as i32 as isize)
+            * *v2.offset(2 as i32 as isize)
+            - *v1.offset(2 as i32 as isize) * *v2.offset(1 as i32 as isize);
+        *cross.offset(1 as i32 as isize) = *v1.offset(2 as i32 as isize)
+            * *v2.offset(0 as i32 as isize)
+            - *v1.offset(0 as i32 as isize) * *v2.offset(2 as i32 as isize);
+        *cross.offset(2 as i32 as isize) = *v1.offset(0 as i32 as isize)
+            * *v2.offset(1 as i32 as isize)
+            - *v1.offset(1 as i32 as isize) * *v2.offset(0 as i32 as isize);
     }
 
     // __Q_SHARED_H
@@ -463,9 +463,9 @@ pub type bot_debugpoly_t = bot_debugpoly_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct bot_debugpoly_s {
-    pub inuse: libc::c_int,
-    pub color: libc::c_int,
-    pub numPoints: libc::c_int,
+    pub inuse: i32,
+    pub color: i32,
+    pub numPoints: i32,
     pub points: [crate::src::qcommon::q_shared::vec3_t; 128],
 }
 
@@ -473,10 +473,10 @@ static mut debugpolygons: *mut bot_debugpoly_t =
     0 as *const bot_debugpoly_t as *mut bot_debugpoly_t;
 #[no_mangle]
 
-pub static mut bot_maxdebugpolys: libc::c_int = 0;
+pub static mut bot_maxdebugpolys: i32 = 0;
 #[no_mangle]
 
-pub static mut bot_enable: libc::c_int = 0;
+pub static mut bot_enable: i32 = 0;
 /*
 ==================
 SV_BotAllocateClient
@@ -484,21 +484,21 @@ SV_BotAllocateClient
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SV_BotAllocateClient() -> libc::c_int {
-    let mut i: libc::c_int = 0;
+pub unsafe extern "C" fn SV_BotAllocateClient() -> i32 {
+    let mut i: i32 = 0;
     let mut cl: *mut crate::server_h::client_t = 0 as *mut crate::server_h::client_t;
     // find a client slot
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     cl = crate::src::server::sv_main::svs.clients;
     while i < (*crate::src::server::sv_main::sv_maxclients).integer {
-        if (*cl).state as libc::c_uint == crate::server_h::CS_FREE as libc::c_int as libc::c_uint {
+        if (*cl).state as u32 == crate::server_h::CS_FREE as i32 as u32 {
             break;
         }
         i += 1;
         cl = cl.offset(1)
     }
     if i == (*crate::src::server::sv_main::sv_maxclients).integer {
-        return -(1 as libc::c_int);
+        return -(1 as i32);
     }
     (*cl).gentity =
         crate::src::server::sv_game::SV_GentityNum(i) as *mut crate::g_public_h::sharedEntity_t;
@@ -506,7 +506,7 @@ pub unsafe extern "C" fn SV_BotAllocateClient() -> libc::c_int {
     (*cl).state = crate::server_h::CS_ACTIVE;
     (*cl).lastPacketTime = crate::src::server::sv_main::svs.time;
     (*cl).netchan.remoteAddress.type_0 = crate::qcommon_h::NA_BOT;
-    (*cl).rate = 16384 as libc::c_int;
+    (*cl).rate = 16384 as i32;
     return i;
 }
 /*
@@ -516,13 +516,13 @@ SV_BotFreeClient
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SV_BotFreeClient(mut clientNum: libc::c_int) {
+pub unsafe extern "C" fn SV_BotFreeClient(mut clientNum: i32) {
     let mut cl: *mut crate::server_h::client_t = 0 as *mut crate::server_h::client_t;
-    if clientNum < 0 as libc::c_int
+    if clientNum < 0 as i32
         || clientNum >= (*crate::src::server::sv_main::sv_maxclients).integer
     {
         crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"SV_BotFreeClient: bad clientNum: %i\x00" as *const u8 as *const libc::c_char,
             clientNum,
         );
@@ -531,9 +531,9 @@ pub unsafe extern "C" fn SV_BotFreeClient(mut clientNum: libc::c_int) {
         .clients
         .offset(clientNum as isize) as *mut crate::server_h::client_t;
     (*cl).state = crate::server_h::CS_FREE;
-    (*cl).name[0 as libc::c_int as usize] = 0 as libc::c_int as libc::c_char;
+    (*cl).name[0 as i32 as usize] = 0 as i32 as libc::c_char;
     if !(*cl).gentity.is_null() {
-        (*(*cl).gentity).r.svFlags &= !(0x8 as libc::c_int)
+        (*(*cl).gentity).r.svFlags &= !(0x8 as i32)
     };
 }
 /*
@@ -545,9 +545,9 @@ BotDrawDebugPolygons
 
 pub unsafe extern "C" fn BotDrawDebugPolygons(
     mut drawPoly: Option<
-        unsafe extern "C" fn(_: libc::c_int, _: libc::c_int, _: *mut libc::c_float) -> (),
+        unsafe extern "C" fn(_: i32, _: i32, _: *mut f32) -> (),
     >,
-    mut _value: libc::c_int,
+    mut _value: i32,
 ) {
     static mut bot_debug: *mut crate::src::qcommon::q_shared::cvar_t = 0
         as *const crate::src::qcommon::q_shared::cvar_t
@@ -562,8 +562,8 @@ pub unsafe extern "C" fn BotDrawDebugPolygons(
         as *const crate::src::qcommon::q_shared::cvar_t
         as *mut crate::src::qcommon::q_shared::cvar_t;
     let mut poly: *mut bot_debugpoly_t = 0 as *mut bot_debugpoly_t;
-    let mut i: libc::c_int = 0;
-    let mut parm0: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut parm0: i32 = 0;
     if debugpolygons.is_null() {
         return;
     }
@@ -572,7 +572,7 @@ pub unsafe extern "C" fn BotDrawDebugPolygons(
         bot_debug = crate::src::qcommon::cvar::Cvar_Get(
             b"bot_debug\x00" as *const u8 as *const libc::c_char,
             b"0\x00" as *const u8 as *const libc::c_char,
-            0 as libc::c_int,
+            0 as i32,
         ) as *mut crate::src::qcommon::q_shared::cvar_s
     }
     //
@@ -583,7 +583,7 @@ pub unsafe extern "C" fn BotDrawDebugPolygons(
             bot_reachability = crate::src::qcommon::cvar::Cvar_Get(
                 b"bot_reachability\x00" as *const u8 as *const libc::c_char,
                 b"0\x00" as *const u8 as *const libc::c_char,
-                0 as libc::c_int,
+                0 as i32,
             ) as *mut crate::src::qcommon::q_shared::cvar_s
         }
         //show ground faces only
@@ -591,7 +591,7 @@ pub unsafe extern "C" fn BotDrawDebugPolygons(
             bot_groundonly = crate::src::qcommon::cvar::Cvar_Get(
                 b"bot_groundonly\x00" as *const u8 as *const libc::c_char,
                 b"1\x00" as *const u8 as *const libc::c_char,
-                0 as libc::c_int,
+                0 as i32,
             ) as *mut crate::src::qcommon::q_shared::cvar_s
         }
         //get the hightlight area
@@ -599,26 +599,26 @@ pub unsafe extern "C" fn BotDrawDebugPolygons(
             bot_highlightarea = crate::src::qcommon::cvar::Cvar_Get(
                 b"bot_highlightarea\x00" as *const u8 as *const libc::c_char,
                 b"0\x00" as *const u8 as *const libc::c_char,
-                0 as libc::c_int,
+                0 as i32,
             ) as *mut crate::src::qcommon::q_shared::cvar_s
         }
         //
-        parm0 = 0 as libc::c_int;
+        parm0 = 0 as i32;
         if (*crate::src::server::sv_main::svs
             .clients
-            .offset(0 as libc::c_int as isize))
+            .offset(0 as i32 as isize))
         .lastUsercmd
         .buttons
-            & 1 as libc::c_int
+            & 1 as i32
             != 0
         {
-            parm0 |= 1 as libc::c_int
+            parm0 |= 1 as i32
         }
         if (*bot_reachability).integer != 0 {
-            parm0 |= 2 as libc::c_int
+            parm0 |= 2 as i32
         }
         if (*bot_groundonly).integer != 0 {
-            parm0 |= 4 as libc::c_int
+            parm0 |= 4 as i32
         }
         (*botlib_export)
             .BotLibVarSet
@@ -631,14 +631,14 @@ pub unsafe extern "C" fn BotDrawDebugPolygons(
             0 as *mut libc::c_char,
             (*(*crate::src::server::sv_main::svs
                 .clients
-                .offset(0 as libc::c_int as isize))
+                .offset(0 as i32 as isize))
             .gentity)
                 .r
                 .currentOrigin
                 .as_mut_ptr(),
             (*(*crate::src::server::sv_main::svs
                 .clients
-                .offset(0 as libc::c_int as isize))
+                .offset(0 as i32 as isize))
             .gentity)
                 .r
                 .currentAngles
@@ -646,14 +646,14 @@ pub unsafe extern "C" fn BotDrawDebugPolygons(
         );
     }
     //draw all debug polys
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < bot_maxdebugpolys {
         poly = &mut *debugpolygons.offset(i as isize) as *mut bot_debugpoly_t;
         if !((*poly).inuse == 0) {
             drawPoly.expect("non-null function pointer")(
                 (*poly).color,
                 (*poly).numPoints,
-                (*poly).points.as_mut_ptr() as *mut libc::c_float,
+                (*poly).points.as_mut_ptr() as *mut f32,
             );
         }
         i += 1
@@ -667,7 +667,7 @@ BotImport_Print
 */
 
 unsafe extern "C" fn BotImport_Print(
-    mut type_0: libc::c_int,
+    mut type_0: i32,
     mut fmt: *mut libc::c_char,
     mut args: ...
 ) {
@@ -707,7 +707,7 @@ unsafe extern "C" fn BotImport_Print(
         }
         5 => {
             crate::src::qcommon::common::Com_Error(
-                crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+                crate::src::qcommon::q_shared::ERR_DROP as i32,
                 b"^1Exit: %s\x00" as *const u8 as *const libc::c_char,
                 str.as_mut_ptr(),
             );
@@ -731,8 +731,8 @@ unsafe extern "C" fn BotImport_Trace(
     mut mins: *mut crate::src::qcommon::q_shared::vec_t,
     mut maxs: *mut crate::src::qcommon::q_shared::vec_t,
     mut end: *mut crate::src::qcommon::q_shared::vec_t,
-    mut passent: libc::c_int,
-    mut contentmask: libc::c_int,
+    mut passent: i32,
+    mut contentmask: i32,
 ) {
     let mut trace: crate::src::qcommon::q_shared::trace_t =
         crate::src::qcommon::q_shared::trace_t {
@@ -759,30 +759,30 @@ unsafe extern "C" fn BotImport_Trace(
         end as *const crate::src::qcommon::q_shared::vec_t,
         passent,
         contentmask,
-        crate::src::qcommon::q_shared::qfalse as libc::c_int,
+        crate::src::qcommon::q_shared::qfalse as i32,
     );
     //copy the trace information
     (*bsptrace).allsolid = trace.allsolid;
     (*bsptrace).startsolid = trace.startsolid;
     (*bsptrace).fraction = trace.fraction;
-    (*bsptrace).endpos[0 as libc::c_int as usize] = trace.endpos[0 as libc::c_int as usize];
-    (*bsptrace).endpos[1 as libc::c_int as usize] = trace.endpos[1 as libc::c_int as usize];
-    (*bsptrace).endpos[2 as libc::c_int as usize] = trace.endpos[2 as libc::c_int as usize];
+    (*bsptrace).endpos[0 as i32 as usize] = trace.endpos[0 as i32 as usize];
+    (*bsptrace).endpos[1 as i32 as usize] = trace.endpos[1 as i32 as usize];
+    (*bsptrace).endpos[2 as i32 as usize] = trace.endpos[2 as i32 as usize];
     (*bsptrace).plane.dist = trace.plane.dist;
-    (*bsptrace).plane.normal[0 as libc::c_int as usize] =
-        trace.plane.normal[0 as libc::c_int as usize];
-    (*bsptrace).plane.normal[1 as libc::c_int as usize] =
-        trace.plane.normal[1 as libc::c_int as usize];
-    (*bsptrace).plane.normal[2 as libc::c_int as usize] =
-        trace.plane.normal[2 as libc::c_int as usize];
+    (*bsptrace).plane.normal[0 as i32 as usize] =
+        trace.plane.normal[0 as i32 as usize];
+    (*bsptrace).plane.normal[1 as i32 as usize] =
+        trace.plane.normal[1 as i32 as usize];
+    (*bsptrace).plane.normal[2 as i32 as usize] =
+        trace.plane.normal[2 as i32 as usize];
     (*bsptrace).plane.signbits = trace.plane.signbits;
     (*bsptrace).plane.type_0 = trace.plane.type_0;
-    (*bsptrace).surface.value = 0 as libc::c_int;
+    (*bsptrace).surface.value = 0 as i32;
     (*bsptrace).surface.flags = trace.surfaceFlags;
     (*bsptrace).ent = trace.entityNum;
-    (*bsptrace).exp_dist = 0 as libc::c_int as libc::c_float;
-    (*bsptrace).sidenum = 0 as libc::c_int;
-    (*bsptrace).contents = 0 as libc::c_int;
+    (*bsptrace).exp_dist = 0 as i32 as f32;
+    (*bsptrace).sidenum = 0 as i32;
+    (*bsptrace).contents = 0 as i32;
 }
 /*
 ==================
@@ -796,8 +796,8 @@ unsafe extern "C" fn BotImport_EntityTrace(
     mut mins: *mut crate::src::qcommon::q_shared::vec_t,
     mut maxs: *mut crate::src::qcommon::q_shared::vec_t,
     mut end: *mut crate::src::qcommon::q_shared::vec_t,
-    mut entnum: libc::c_int,
-    mut contentmask: libc::c_int,
+    mut entnum: i32,
+    mut contentmask: i32,
 ) {
     let mut trace: crate::src::qcommon::q_shared::trace_t =
         crate::src::qcommon::q_shared::trace_t {
@@ -824,30 +824,30 @@ unsafe extern "C" fn BotImport_EntityTrace(
         end as *const crate::src::qcommon::q_shared::vec_t,
         entnum,
         contentmask,
-        crate::src::qcommon::q_shared::qfalse as libc::c_int,
+        crate::src::qcommon::q_shared::qfalse as i32,
     );
     //copy the trace information
     (*bsptrace).allsolid = trace.allsolid;
     (*bsptrace).startsolid = trace.startsolid;
     (*bsptrace).fraction = trace.fraction;
-    (*bsptrace).endpos[0 as libc::c_int as usize] = trace.endpos[0 as libc::c_int as usize];
-    (*bsptrace).endpos[1 as libc::c_int as usize] = trace.endpos[1 as libc::c_int as usize];
-    (*bsptrace).endpos[2 as libc::c_int as usize] = trace.endpos[2 as libc::c_int as usize];
+    (*bsptrace).endpos[0 as i32 as usize] = trace.endpos[0 as i32 as usize];
+    (*bsptrace).endpos[1 as i32 as usize] = trace.endpos[1 as i32 as usize];
+    (*bsptrace).endpos[2 as i32 as usize] = trace.endpos[2 as i32 as usize];
     (*bsptrace).plane.dist = trace.plane.dist;
-    (*bsptrace).plane.normal[0 as libc::c_int as usize] =
-        trace.plane.normal[0 as libc::c_int as usize];
-    (*bsptrace).plane.normal[1 as libc::c_int as usize] =
-        trace.plane.normal[1 as libc::c_int as usize];
-    (*bsptrace).plane.normal[2 as libc::c_int as usize] =
-        trace.plane.normal[2 as libc::c_int as usize];
+    (*bsptrace).plane.normal[0 as i32 as usize] =
+        trace.plane.normal[0 as i32 as usize];
+    (*bsptrace).plane.normal[1 as i32 as usize] =
+        trace.plane.normal[1 as i32 as usize];
+    (*bsptrace).plane.normal[2 as i32 as usize] =
+        trace.plane.normal[2 as i32 as usize];
     (*bsptrace).plane.signbits = trace.plane.signbits;
     (*bsptrace).plane.type_0 = trace.plane.type_0;
-    (*bsptrace).surface.value = 0 as libc::c_int;
+    (*bsptrace).surface.value = 0 as i32;
     (*bsptrace).surface.flags = trace.surfaceFlags;
     (*bsptrace).ent = trace.entityNum;
-    (*bsptrace).exp_dist = 0 as libc::c_int as libc::c_float;
-    (*bsptrace).sidenum = 0 as libc::c_int;
-    (*bsptrace).contents = 0 as libc::c_int;
+    (*bsptrace).exp_dist = 0 as i32 as f32;
+    (*bsptrace).sidenum = 0 as i32;
+    (*bsptrace).contents = 0 as i32;
 }
 /*
 ==================
@@ -857,10 +857,10 @@ BotImport_PointContents
 
 unsafe extern "C" fn BotImport_PointContents(
     mut point: *mut crate::src::qcommon::q_shared::vec_t,
-) -> libc::c_int {
+) -> i32 {
     return crate::src::server::sv_world::SV_PointContents(
         point as *const crate::src::qcommon::q_shared::vec_t,
-        -(1 as libc::c_int),
+        -(1 as i32),
     );
 }
 /*
@@ -872,11 +872,11 @@ BotImport_inPVS
 unsafe extern "C" fn BotImport_inPVS(
     mut p1: *mut crate::src::qcommon::q_shared::vec_t,
     mut p2: *mut crate::src::qcommon::q_shared::vec_t,
-) -> libc::c_int {
+) -> i32 {
     return crate::src::server::sv_game::SV_inPVS(
         p1 as *const crate::src::qcommon::q_shared::vec_t,
         p2 as *const crate::src::qcommon::q_shared::vec_t,
-    ) as libc::c_int;
+    ) as i32;
 }
 /*
 ==================
@@ -894,7 +894,7 @@ BotImport_BSPModelMinsMaxsOrigin
 */
 
 unsafe extern "C" fn BotImport_BSPModelMinsMaxsOrigin(
-    mut modelnum: libc::c_int,
+    mut modelnum: i32,
     mut angles: *mut crate::src::qcommon::q_shared::vec_t,
     mut outmins: *mut crate::src::qcommon::q_shared::vec_t,
     mut outmaxs: *mut crate::src::qcommon::q_shared::vec_t,
@@ -903,43 +903,43 @@ unsafe extern "C" fn BotImport_BSPModelMinsMaxsOrigin(
     let mut h: crate::src::qcommon::q_shared::clipHandle_t = 0;
     let mut mins: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut maxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut max: libc::c_float = 0.;
-    let mut i: libc::c_int = 0;
+    let mut max: f32 = 0.;
+    let mut i: i32 = 0;
     h = crate::src::qcommon::cm_load::CM_InlineModel(modelnum);
     crate::src::qcommon::cm_load::CM_ModelBounds(h, mins.as_mut_ptr(), maxs.as_mut_ptr());
     //if the model is rotated
-    if *angles.offset(0 as libc::c_int as isize) != 0.
-        || *angles.offset(1 as libc::c_int as isize) != 0.
-        || *angles.offset(2 as libc::c_int as isize) != 0.
+    if *angles.offset(0 as i32 as isize) != 0.
+        || *angles.offset(1 as i32 as isize) != 0.
+        || *angles.offset(2 as i32 as isize) != 0.
     {
         // expand for rotation
         max = crate::src::qcommon::q_math::RadiusFromBounds(
             mins.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
             maxs.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
         );
-        i = 0 as libc::c_int;
-        while i < 3 as libc::c_int {
+        i = 0 as i32;
+        while i < 3 as i32 {
             mins[i as usize] = -max;
             maxs[i as usize] = max;
             i += 1
         }
     }
     if !outmins.is_null() {
-        *outmins.offset(0 as libc::c_int as isize) = mins[0 as libc::c_int as usize];
-        *outmins.offset(1 as libc::c_int as isize) = mins[1 as libc::c_int as usize];
-        *outmins.offset(2 as libc::c_int as isize) = mins[2 as libc::c_int as usize]
+        *outmins.offset(0 as i32 as isize) = mins[0 as i32 as usize];
+        *outmins.offset(1 as i32 as isize) = mins[1 as i32 as usize];
+        *outmins.offset(2 as i32 as isize) = mins[2 as i32 as usize]
     }
     if !outmaxs.is_null() {
-        *outmaxs.offset(0 as libc::c_int as isize) = maxs[0 as libc::c_int as usize];
-        *outmaxs.offset(1 as libc::c_int as isize) = maxs[1 as libc::c_int as usize];
-        *outmaxs.offset(2 as libc::c_int as isize) = maxs[2 as libc::c_int as usize]
+        *outmaxs.offset(0 as i32 as isize) = maxs[0 as i32 as usize];
+        *outmaxs.offset(1 as i32 as isize) = maxs[1 as i32 as usize];
+        *outmaxs.offset(2 as i32 as isize) = maxs[2 as i32 as usize]
     }
     if !origin.is_null() {
-        let ref mut fresh0 = *origin.offset(2 as libc::c_int as isize);
-        *fresh0 = 0 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-        let ref mut fresh1 = *origin.offset(1 as libc::c_int as isize);
+        let ref mut fresh0 = *origin.offset(2 as i32 as isize);
+        *fresh0 = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        let ref mut fresh1 = *origin.offset(1 as i32 as isize);
         *fresh1 = *fresh0;
-        *origin.offset(0 as libc::c_int as isize) = *fresh1
+        *origin.offset(0 as i32 as isize) = *fresh1
     };
 }
 /*
@@ -948,10 +948,10 @@ BotImport_GetMemory
 ==================
 */
 
-unsafe extern "C" fn BotImport_GetMemory(mut size: libc::c_int) -> *mut libc::c_void {
+unsafe extern "C" fn BotImport_GetMemory(mut size: i32) -> *mut libc::c_void {
     let mut ptr: *mut libc::c_void = 0 as *mut libc::c_void;
     ptr =
-        crate::src::qcommon::common::Z_TagMalloc(size, crate::qcommon_h::TAG_BOTLIB as libc::c_int);
+        crate::src::qcommon::common::Z_TagMalloc(size, crate::qcommon_h::TAG_BOTLIB as i32);
     return ptr;
 }
 /*
@@ -969,10 +969,10 @@ BotImport_HunkAlloc
 =================
 */
 
-unsafe extern "C" fn BotImport_HunkAlloc(mut size: libc::c_int) -> *mut libc::c_void {
+unsafe extern "C" fn BotImport_HunkAlloc(mut size: i32) -> *mut libc::c_void {
     if crate::src::qcommon::common::Hunk_CheckMark() as u64 != 0 {
         crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"SV_Bot_HunkAlloc: Alloc with marks already set\x00" as *const u8
                 as *const libc::c_char,
         );
@@ -987,16 +987,16 @@ BotImport_DebugPolygonCreate
 #[no_mangle]
 
 pub unsafe extern "C" fn BotImport_DebugPolygonCreate(
-    mut color: libc::c_int,
-    mut numPoints: libc::c_int,
+    mut color: i32,
+    mut numPoints: i32,
     mut points: *mut crate::src::qcommon::q_shared::vec3_t,
-) -> libc::c_int {
+) -> i32 {
     let mut poly: *mut bot_debugpoly_t = 0 as *mut bot_debugpoly_t;
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     if debugpolygons.is_null() {
-        return 0 as libc::c_int;
+        return 0 as i32;
     }
-    i = 1 as libc::c_int;
+    i = 1 as i32;
     while i < bot_maxdebugpolys {
         if (*debugpolygons.offset(i as isize)).inuse == 0 {
             break;
@@ -1004,10 +1004,10 @@ pub unsafe extern "C" fn BotImport_DebugPolygonCreate(
         i += 1
     }
     if i >= bot_maxdebugpolys {
-        return 0 as libc::c_int;
+        return 0 as i32;
     }
     poly = &mut *debugpolygons.offset(i as isize) as *mut bot_debugpoly_t;
-    (*poly).inuse = crate::src::qcommon::q_shared::qtrue as libc::c_int;
+    (*poly).inuse = crate::src::qcommon::q_shared::qtrue as i32;
     (*poly).color = color;
     (*poly).numPoints = numPoints;
     crate::stdlib::memcpy(
@@ -1027,9 +1027,9 @@ BotImport_DebugPolygonShow
 */
 
 unsafe extern "C" fn BotImport_DebugPolygonShow(
-    mut id: libc::c_int,
-    mut color: libc::c_int,
-    mut numPoints: libc::c_int,
+    mut id: i32,
+    mut color: i32,
+    mut numPoints: i32,
     mut points: *mut crate::src::qcommon::q_shared::vec3_t,
 ) {
     let mut poly: *mut bot_debugpoly_t = 0 as *mut bot_debugpoly_t;
@@ -1037,7 +1037,7 @@ unsafe extern "C" fn BotImport_DebugPolygonShow(
         return;
     }
     poly = &mut *debugpolygons.offset(id as isize) as *mut bot_debugpoly_t;
-    (*poly).inuse = crate::src::qcommon::q_shared::qtrue as libc::c_int;
+    (*poly).inuse = crate::src::qcommon::q_shared::qtrue as i32;
     (*poly).color = color;
     (*poly).numPoints = numPoints;
     crate::stdlib::memcpy(
@@ -1055,12 +1055,12 @@ BotImport_DebugPolygonDelete
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn BotImport_DebugPolygonDelete(mut id: libc::c_int) {
+pub unsafe extern "C" fn BotImport_DebugPolygonDelete(mut id: i32) {
     if debugpolygons.is_null() {
         return;
     }
     (*debugpolygons.offset(id as isize)).inuse =
-        crate::src::qcommon::q_shared::qfalse as libc::c_int;
+        crate::src::qcommon::q_shared::qfalse as i32;
 }
 /*
 ==================
@@ -1068,9 +1068,9 @@ BotImport_DebugLineCreate
 ==================
 */
 
-unsafe extern "C" fn BotImport_DebugLineCreate() -> libc::c_int {
+unsafe extern "C" fn BotImport_DebugLineCreate() -> i32 {
     let mut points: [crate::src::qcommon::q_shared::vec3_t; 1] = [[0.; 3]; 1];
-    return BotImport_DebugPolygonCreate(0 as libc::c_int, 0 as libc::c_int, points.as_mut_ptr());
+    return BotImport_DebugPolygonCreate(0 as i32, 0 as i32, points.as_mut_ptr());
 }
 /*
 ==================
@@ -1078,7 +1078,7 @@ BotImport_DebugLineDelete
 ==================
 */
 
-unsafe extern "C" fn BotImport_DebugLineDelete(mut line: libc::c_int) {
+unsafe extern "C" fn BotImport_DebugLineDelete(mut line: i32) {
     BotImport_DebugPolygonDelete(line);
 }
 /*
@@ -1088,60 +1088,60 @@ BotImport_DebugLineShow
 */
 
 unsafe extern "C" fn BotImport_DebugLineShow(
-    mut line: libc::c_int,
+    mut line: i32,
     mut start: *mut crate::src::qcommon::q_shared::vec_t,
     mut end: *mut crate::src::qcommon::q_shared::vec_t,
-    mut color: libc::c_int,
+    mut color: i32,
 ) {
     let mut points: [crate::src::qcommon::q_shared::vec3_t; 4] = [[0.; 3]; 4];
     let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut cross: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut up: crate::src::qcommon::q_shared::vec3_t = [
-        0 as libc::c_int as crate::src::qcommon::q_shared::vec_t,
-        0 as libc::c_int as crate::src::qcommon::q_shared::vec_t,
-        1 as libc::c_int as crate::src::qcommon::q_shared::vec_t,
+        0 as i32 as crate::src::qcommon::q_shared::vec_t,
+        0 as i32 as crate::src::qcommon::q_shared::vec_t,
+        1 as i32 as crate::src::qcommon::q_shared::vec_t,
     ];
-    let mut dot: libc::c_float = 0.;
-    points[0 as libc::c_int as usize][0 as libc::c_int as usize] =
-        *start.offset(0 as libc::c_int as isize);
-    points[0 as libc::c_int as usize][1 as libc::c_int as usize] =
-        *start.offset(1 as libc::c_int as isize);
-    points[0 as libc::c_int as usize][2 as libc::c_int as usize] =
-        *start.offset(2 as libc::c_int as isize);
-    points[1 as libc::c_int as usize][0 as libc::c_int as usize] =
-        *start.offset(0 as libc::c_int as isize);
-    points[1 as libc::c_int as usize][1 as libc::c_int as usize] =
-        *start.offset(1 as libc::c_int as isize);
-    points[1 as libc::c_int as usize][2 as libc::c_int as usize] =
-        *start.offset(2 as libc::c_int as isize);
+    let mut dot: f32 = 0.;
+    points[0 as i32 as usize][0 as i32 as usize] =
+        *start.offset(0 as i32 as isize);
+    points[0 as i32 as usize][1 as i32 as usize] =
+        *start.offset(1 as i32 as isize);
+    points[0 as i32 as usize][2 as i32 as usize] =
+        *start.offset(2 as i32 as isize);
+    points[1 as i32 as usize][0 as i32 as usize] =
+        *start.offset(0 as i32 as isize);
+    points[1 as i32 as usize][1 as i32 as usize] =
+        *start.offset(1 as i32 as isize);
+    points[1 as i32 as usize][2 as i32 as usize] =
+        *start.offset(2 as i32 as isize);
     //points[1][2] -= 2;
-    points[2 as libc::c_int as usize][0 as libc::c_int as usize] =
-        *end.offset(0 as libc::c_int as isize);
-    points[2 as libc::c_int as usize][1 as libc::c_int as usize] =
-        *end.offset(1 as libc::c_int as isize);
-    points[2 as libc::c_int as usize][2 as libc::c_int as usize] =
-        *end.offset(2 as libc::c_int as isize);
+    points[2 as i32 as usize][0 as i32 as usize] =
+        *end.offset(0 as i32 as isize);
+    points[2 as i32 as usize][1 as i32 as usize] =
+        *end.offset(1 as i32 as isize);
+    points[2 as i32 as usize][2 as i32 as usize] =
+        *end.offset(2 as i32 as isize);
     //points[2][2] -= 2;
-    points[3 as libc::c_int as usize][0 as libc::c_int as usize] =
-        *end.offset(0 as libc::c_int as isize);
-    points[3 as libc::c_int as usize][1 as libc::c_int as usize] =
-        *end.offset(1 as libc::c_int as isize);
-    points[3 as libc::c_int as usize][2 as libc::c_int as usize] =
-        *end.offset(2 as libc::c_int as isize);
-    dir[0 as libc::c_int as usize] =
-        *end.offset(0 as libc::c_int as isize) - *start.offset(0 as libc::c_int as isize);
-    dir[1 as libc::c_int as usize] =
-        *end.offset(1 as libc::c_int as isize) - *start.offset(1 as libc::c_int as isize);
-    dir[2 as libc::c_int as usize] =
-        *end.offset(2 as libc::c_int as isize) - *start.offset(2 as libc::c_int as isize);
+    points[3 as i32 as usize][0 as i32 as usize] =
+        *end.offset(0 as i32 as isize);
+    points[3 as i32 as usize][1 as i32 as usize] =
+        *end.offset(1 as i32 as isize);
+    points[3 as i32 as usize][2 as i32 as usize] =
+        *end.offset(2 as i32 as isize);
+    dir[0 as i32 as usize] =
+        *end.offset(0 as i32 as isize) - *start.offset(0 as i32 as isize);
+    dir[1 as i32 as usize] =
+        *end.offset(1 as i32 as isize) - *start.offset(1 as i32 as isize);
+    dir[2 as i32 as usize] =
+        *end.offset(2 as i32 as isize) - *start.offset(2 as i32 as isize);
     crate::src::qcommon::q_math::VectorNormalize(dir.as_mut_ptr());
-    dot = dir[0 as libc::c_int as usize] * up[0 as libc::c_int as usize]
-        + dir[1 as libc::c_int as usize] * up[1 as libc::c_int as usize]
-        + dir[2 as libc::c_int as usize] * up[2 as libc::c_int as usize];
-    if dot as libc::c_double > 0.99f64 || (dot as libc::c_double) < -0.99f64 {
-        cross[0 as libc::c_int as usize] = 1 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-        cross[1 as libc::c_int as usize] = 0 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-        cross[2 as libc::c_int as usize] = 0 as libc::c_int as crate::src::qcommon::q_shared::vec_t
+    dot = dir[0 as i32 as usize] * up[0 as i32 as usize]
+        + dir[1 as i32 as usize] * up[1 as i32 as usize]
+        + dir[2 as i32 as usize] * up[2 as i32 as usize];
+    if dot as f64 > 0.99f64 || (dot as f64) < -0.99f64 {
+        cross[0 as i32 as usize] = 1 as i32 as crate::src::qcommon::q_shared::vec_t;
+        cross[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        cross[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t
     } else {
         CrossProduct(
             dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
@@ -1150,43 +1150,43 @@ unsafe extern "C" fn BotImport_DebugLineShow(
         );
     }
     crate::src::qcommon::q_math::VectorNormalize(cross.as_mut_ptr());
-    points[0 as libc::c_int as usize][0 as libc::c_int as usize] = points
-        [0 as libc::c_int as usize][0 as libc::c_int as usize]
-        + cross[0 as libc::c_int as usize] * 2 as libc::c_int as libc::c_float;
-    points[0 as libc::c_int as usize][1 as libc::c_int as usize] = points
-        [0 as libc::c_int as usize][1 as libc::c_int as usize]
-        + cross[1 as libc::c_int as usize] * 2 as libc::c_int as libc::c_float;
-    points[0 as libc::c_int as usize][2 as libc::c_int as usize] = points
-        [0 as libc::c_int as usize][2 as libc::c_int as usize]
-        + cross[2 as libc::c_int as usize] * 2 as libc::c_int as libc::c_float;
-    points[1 as libc::c_int as usize][0 as libc::c_int as usize] = points
-        [1 as libc::c_int as usize][0 as libc::c_int as usize]
-        + cross[0 as libc::c_int as usize] * -(2 as libc::c_int) as libc::c_float;
-    points[1 as libc::c_int as usize][1 as libc::c_int as usize] = points
-        [1 as libc::c_int as usize][1 as libc::c_int as usize]
-        + cross[1 as libc::c_int as usize] * -(2 as libc::c_int) as libc::c_float;
-    points[1 as libc::c_int as usize][2 as libc::c_int as usize] = points
-        [1 as libc::c_int as usize][2 as libc::c_int as usize]
-        + cross[2 as libc::c_int as usize] * -(2 as libc::c_int) as libc::c_float;
-    points[2 as libc::c_int as usize][0 as libc::c_int as usize] = points
-        [2 as libc::c_int as usize][0 as libc::c_int as usize]
-        + cross[0 as libc::c_int as usize] * -(2 as libc::c_int) as libc::c_float;
-    points[2 as libc::c_int as usize][1 as libc::c_int as usize] = points
-        [2 as libc::c_int as usize][1 as libc::c_int as usize]
-        + cross[1 as libc::c_int as usize] * -(2 as libc::c_int) as libc::c_float;
-    points[2 as libc::c_int as usize][2 as libc::c_int as usize] = points
-        [2 as libc::c_int as usize][2 as libc::c_int as usize]
-        + cross[2 as libc::c_int as usize] * -(2 as libc::c_int) as libc::c_float;
-    points[3 as libc::c_int as usize][0 as libc::c_int as usize] = points
-        [3 as libc::c_int as usize][0 as libc::c_int as usize]
-        + cross[0 as libc::c_int as usize] * 2 as libc::c_int as libc::c_float;
-    points[3 as libc::c_int as usize][1 as libc::c_int as usize] = points
-        [3 as libc::c_int as usize][1 as libc::c_int as usize]
-        + cross[1 as libc::c_int as usize] * 2 as libc::c_int as libc::c_float;
-    points[3 as libc::c_int as usize][2 as libc::c_int as usize] = points
-        [3 as libc::c_int as usize][2 as libc::c_int as usize]
-        + cross[2 as libc::c_int as usize] * 2 as libc::c_int as libc::c_float;
-    BotImport_DebugPolygonShow(line, color, 4 as libc::c_int, points.as_mut_ptr());
+    points[0 as i32 as usize][0 as i32 as usize] = points
+        [0 as i32 as usize][0 as i32 as usize]
+        + cross[0 as i32 as usize] * 2 as i32 as f32;
+    points[0 as i32 as usize][1 as i32 as usize] = points
+        [0 as i32 as usize][1 as i32 as usize]
+        + cross[1 as i32 as usize] * 2 as i32 as f32;
+    points[0 as i32 as usize][2 as i32 as usize] = points
+        [0 as i32 as usize][2 as i32 as usize]
+        + cross[2 as i32 as usize] * 2 as i32 as f32;
+    points[1 as i32 as usize][0 as i32 as usize] = points
+        [1 as i32 as usize][0 as i32 as usize]
+        + cross[0 as i32 as usize] * -(2 as i32) as f32;
+    points[1 as i32 as usize][1 as i32 as usize] = points
+        [1 as i32 as usize][1 as i32 as usize]
+        + cross[1 as i32 as usize] * -(2 as i32) as f32;
+    points[1 as i32 as usize][2 as i32 as usize] = points
+        [1 as i32 as usize][2 as i32 as usize]
+        + cross[2 as i32 as usize] * -(2 as i32) as f32;
+    points[2 as i32 as usize][0 as i32 as usize] = points
+        [2 as i32 as usize][0 as i32 as usize]
+        + cross[0 as i32 as usize] * -(2 as i32) as f32;
+    points[2 as i32 as usize][1 as i32 as usize] = points
+        [2 as i32 as usize][1 as i32 as usize]
+        + cross[1 as i32 as usize] * -(2 as i32) as f32;
+    points[2 as i32 as usize][2 as i32 as usize] = points
+        [2 as i32 as usize][2 as i32 as usize]
+        + cross[2 as i32 as usize] * -(2 as i32) as f32;
+    points[3 as i32 as usize][0 as i32 as usize] = points
+        [3 as i32 as usize][0 as i32 as usize]
+        + cross[0 as i32 as usize] * 2 as i32 as f32;
+    points[3 as i32 as usize][1 as i32 as usize] = points
+        [3 as i32 as usize][1 as i32 as usize]
+        + cross[1 as i32 as usize] * 2 as i32 as f32;
+    points[3 as i32 as usize][2 as i32 as usize] = points
+        [3 as i32 as usize][2 as i32 as usize]
+        + cross[2 as i32 as usize] * 2 as i32 as f32;
+    BotImport_DebugPolygonShow(line, color, 4 as i32, points.as_mut_ptr());
 }
 /*
 ==================
@@ -1194,7 +1194,7 @@ SV_BotClientCommand
 ==================
 */
 
-unsafe extern "C" fn BotClientCommand(mut client: libc::c_int, mut command: *mut libc::c_char) {
+unsafe extern "C" fn BotClientCommand(mut client: i32, mut command: *mut libc::c_char) {
     crate::src::server::sv_client::SV_ExecuteClientCommand(
         &mut *crate::src::server::sv_main::svs
             .clients
@@ -1210,7 +1210,7 @@ SV_BotFrame
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SV_BotFrame(mut time: libc::c_int) {
+pub unsafe extern "C" fn SV_BotFrame(mut time: i32) {
     if bot_enable == 0 {
         return;
     }
@@ -1220,7 +1220,7 @@ pub unsafe extern "C" fn SV_BotFrame(mut time: libc::c_int) {
     }
     crate::src::qcommon::vm::VM_Call(
         crate::src::server::sv_main::gvm,
-        crate::g_public_h::BOTAI_START_FRAME as libc::c_int,
+        crate::g_public_h::BOTAI_START_FRAME as i32,
         time,
     );
 }
@@ -1231,16 +1231,16 @@ SV_BotLibSetup
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SV_BotLibSetup() -> libc::c_int {
+pub unsafe extern "C" fn SV_BotLibSetup() -> i32 {
     if bot_enable == 0 {
-        return 0 as libc::c_int;
+        return 0 as i32;
     }
     if botlib_export.is_null() {
         crate::src::qcommon::common::Com_Printf(
             b"^1Error: SV_BotLibSetup without SV_BotInitBotLib\n\x00" as *const u8
                 as *const libc::c_char,
         );
-        return -(1 as libc::c_int);
+        return -(1 as i32);
     }
     (*botlib_export)
         .BotLibVarSet
@@ -1262,9 +1262,9 @@ it is changing to a different game directory.
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SV_BotLibShutdown() -> libc::c_int {
+pub unsafe extern "C" fn SV_BotLibShutdown() -> i32 {
     if botlib_export.is_null() {
-        return -(1 as libc::c_int);
+        return -(1 as i32);
     }
     return (*botlib_export)
         .BotLibShutdown
@@ -1281,181 +1281,181 @@ pub unsafe extern "C" fn SV_BotInitCvars() {
     crate::src::qcommon::cvar::Cvar_Get(
         b"bot_enable\x00" as *const u8 as *const libc::c_char,
         b"1\x00" as *const u8 as *const libc::c_char,
-        0 as libc::c_int,
+        0 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s; //enable the bot
 
     crate::src::qcommon::cvar::Cvar_Get(
         b"bot_developer\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
-        0x200 as libc::c_int,
+        0x200 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s; //bot developer mode
 
     crate::src::qcommon::cvar::Cvar_Get(
         b"bot_debug\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
-        0x200 as libc::c_int,
+        0x200 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s; //enable bot debugging
 
     crate::src::qcommon::cvar::Cvar_Get(
         b"bot_maxdebugpolys\x00" as *const u8 as *const libc::c_char,
         b"2\x00" as *const u8 as *const libc::c_char,
-        0 as libc::c_int,
+        0 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s; //maximum number of debug polys
 
     crate::src::qcommon::cvar::Cvar_Get(
         b"bot_groundonly\x00" as *const u8 as *const libc::c_char,
         b"1\x00" as *const u8 as *const libc::c_char,
-        0 as libc::c_int,
+        0 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s; //only show ground faces of areas
 
     crate::src::qcommon::cvar::Cvar_Get(
         b"bot_reachability\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
-        0 as libc::c_int,
+        0 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s; //show all reachabilities to other areas
 
     crate::src::qcommon::cvar::Cvar_Get(
         b"bot_visualizejumppads\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
-        0x200 as libc::c_int,
+        0x200 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s; //show jumppads
 
     crate::src::qcommon::cvar::Cvar_Get(
         b"bot_forceclustering\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
-        0 as libc::c_int,
+        0 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s; //force cluster calculations
 
     crate::src::qcommon::cvar::Cvar_Get(
         b"bot_forcereachability\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
-        0 as libc::c_int,
+        0 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s; //force reachability calculations
 
     crate::src::qcommon::cvar::Cvar_Get(
         b"bot_forcewrite\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
-        0 as libc::c_int,
+        0 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s; //force writing aas file
 
     crate::src::qcommon::cvar::Cvar_Get(
         b"bot_aasoptimize\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
-        0 as libc::c_int,
+        0 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s; //no aas file optimisation
 
     crate::src::qcommon::cvar::Cvar_Get(
         b"bot_saveroutingcache\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
-        0 as libc::c_int,
+        0 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s; //save routing cache
 
     crate::src::qcommon::cvar::Cvar_Get(
         b"bot_thinktime\x00" as *const u8 as *const libc::c_char,
         b"100\x00" as *const u8 as *const libc::c_char,
-        0x200 as libc::c_int,
+        0x200 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s; //msec the bots thinks
 
     crate::src::qcommon::cvar::Cvar_Get(
         b"bot_reloadcharacters\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
-        0 as libc::c_int,
+        0 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s; //reload the bot characters each time
 
     crate::src::qcommon::cvar::Cvar_Get(
         b"bot_testichat\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
-        0 as libc::c_int,
+        0 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s; //test ichats
 
     crate::src::qcommon::cvar::Cvar_Get(
         b"bot_testrchat\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
-        0 as libc::c_int,
+        0 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s; //test rchats
 
     crate::src::qcommon::cvar::Cvar_Get(
         b"bot_testsolid\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
-        0x200 as libc::c_int,
+        0x200 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s; //test for solid areas
 
     crate::src::qcommon::cvar::Cvar_Get(
         b"bot_testclusters\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
-        0x200 as libc::c_int,
+        0x200 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s; //test the AAS clusters
 
     crate::src::qcommon::cvar::Cvar_Get(
         b"bot_fastchat\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
-        0 as libc::c_int,
+        0 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s; //fast chatting bots
 
     crate::src::qcommon::cvar::Cvar_Get(
         b"bot_nochat\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
-        0 as libc::c_int,
+        0 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s; //disable chats
 
     crate::src::qcommon::cvar::Cvar_Get(
         b"bot_pause\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
-        0x200 as libc::c_int,
+        0x200 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s; //pause the bots thinking
 
     crate::src::qcommon::cvar::Cvar_Get(
         b"bot_report\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
-        0x200 as libc::c_int,
+        0x200 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s; //get a full report in ctf
 
     crate::src::qcommon::cvar::Cvar_Get(
         b"bot_grapple\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
-        0 as libc::c_int,
+        0 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s; //enable grapple
 
     crate::src::qcommon::cvar::Cvar_Get(
         b"bot_rocketjump\x00" as *const u8 as *const libc::c_char,
         b"1\x00" as *const u8 as *const libc::c_char,
-        0 as libc::c_int,
+        0 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s; //enable rocket jumping
 
     crate::src::qcommon::cvar::Cvar_Get(
         b"bot_challenge\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
-        0 as libc::c_int,
+        0 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s; //challenging bot
 
     crate::src::qcommon::cvar::Cvar_Get(
         b"bot_minplayers\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
-        0 as libc::c_int,
+        0 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s; //minimum players in a team or the game
 
     crate::src::qcommon::cvar::Cvar_Get(
         b"bot_interbreedchar\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
-        0x200 as libc::c_int,
+        0x200 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s; //bot character used for interbreeding
 
     crate::src::qcommon::cvar::Cvar_Get(
         b"bot_interbreedbots\x00" as *const u8 as *const libc::c_char,
         b"10\x00" as *const u8 as *const libc::c_char,
-        0x200 as libc::c_int,
+        0x200 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s; //number of bots used for interbreeding
 
     crate::src::qcommon::cvar::Cvar_Get(
         b"bot_interbreedcycle\x00" as *const u8 as *const libc::c_char,
         b"20\x00" as *const u8 as *const libc::c_char,
-        0x200 as libc::c_int,
+        0x200 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s; //bot interbreeding cycle
 
     crate::src::qcommon::cvar::Cvar_Get(
         b"bot_interbreedwrite\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
-        0x200 as libc::c_int,
+        0x200 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s;
     //write interbreeded bots to this file
 }
@@ -1499,10 +1499,10 @@ pub unsafe extern "C" fn SV_BotInitBotLib() {
     );
     debugpolygons = crate::src::qcommon::common::Z_Malloc(
         (::std::mem::size_of::<bot_debugpoly_t>() as libc::c_ulong)
-            .wrapping_mul(bot_maxdebugpolys as libc::c_ulong) as libc::c_int,
+            .wrapping_mul(bot_maxdebugpolys as libc::c_ulong) as i32,
     ) as *mut bot_debugpoly_t;
     botlib_import.Print = Some(
-        BotImport_Print as unsafe extern "C" fn(_: libc::c_int, _: *mut libc::c_char, _: ...) -> (),
+        BotImport_Print as unsafe extern "C" fn(_: i32, _: *mut libc::c_char, _: ...) -> (),
     );
     botlib_import.Trace = Some(
         BotImport_Trace
@@ -1512,8 +1512,8 @@ pub unsafe extern "C" fn SV_BotInitBotLib() {
                 _: *mut crate::src::qcommon::q_shared::vec_t,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
-                _: libc::c_int,
-                _: libc::c_int,
+                _: i32,
+                _: i32,
             ) -> (),
     );
     botlib_import.EntityTrace = Some(
@@ -1524,27 +1524,27 @@ pub unsafe extern "C" fn SV_BotInitBotLib() {
                 _: *mut crate::src::qcommon::q_shared::vec_t,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
-                _: libc::c_int,
-                _: libc::c_int,
+                _: i32,
+                _: i32,
             ) -> (),
     );
     botlib_import.PointContents = Some(
         BotImport_PointContents
-            as unsafe extern "C" fn(_: *mut crate::src::qcommon::q_shared::vec_t) -> libc::c_int,
+            as unsafe extern "C" fn(_: *mut crate::src::qcommon::q_shared::vec_t) -> i32,
     );
     botlib_import.inPVS = Some(
         BotImport_inPVS
             as unsafe extern "C" fn(
                 _: *mut crate::src::qcommon::q_shared::vec_t,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
-            ) -> libc::c_int,
+            ) -> i32,
     );
     botlib_import.BSPEntityData =
         Some(BotImport_BSPEntityData as unsafe extern "C" fn() -> *mut libc::c_char);
     botlib_import.BSPModelMinsMaxsOrigin = Some(
         BotImport_BSPModelMinsMaxsOrigin
             as unsafe extern "C" fn(
-                _: libc::c_int,
+                _: i32,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
@@ -1552,17 +1552,17 @@ pub unsafe extern "C" fn SV_BotInitBotLib() {
             ) -> (),
     );
     botlib_import.BotClientCommand =
-        Some(BotClientCommand as unsafe extern "C" fn(_: libc::c_int, _: *mut libc::c_char) -> ());
+        Some(BotClientCommand as unsafe extern "C" fn(_: i32, _: *mut libc::c_char) -> ());
     //memory management
     botlib_import.GetMemory =
-        Some(BotImport_GetMemory as unsafe extern "C" fn(_: libc::c_int) -> *mut libc::c_void);
+        Some(BotImport_GetMemory as unsafe extern "C" fn(_: i32) -> *mut libc::c_void);
     botlib_import.FreeMemory =
         Some(BotImport_FreeMemory as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     botlib_import.AvailableMemory = Some(
-        crate::src::qcommon::common::Z_AvailableMemory as unsafe extern "C" fn() -> libc::c_int,
+        crate::src::qcommon::common::Z_AvailableMemory as unsafe extern "C" fn() -> i32,
     );
     botlib_import.HunkAlloc =
-        Some(BotImport_HunkAlloc as unsafe extern "C" fn(_: libc::c_int) -> *mut libc::c_void);
+        Some(BotImport_HunkAlloc as unsafe extern "C" fn(_: i32) -> *mut libc::c_void);
     // file system access
     botlib_import.FS_FOpenFile = Some(
         crate::src::qcommon::files::FS_FOpenFileByMode
@@ -1570,23 +1570,23 @@ pub unsafe extern "C" fn SV_BotInitBotLib() {
                 _: *const libc::c_char,
                 _: *mut crate::src::qcommon::q_shared::fileHandle_t,
                 _: crate::src::qcommon::q_shared::fsMode_t,
-            ) -> libc::c_int,
+            ) -> i32,
     );
     botlib_import.FS_Read = Some(
         crate::src::qcommon::files::FS_Read
             as unsafe extern "C" fn(
                 _: *mut libc::c_void,
-                _: libc::c_int,
+                _: i32,
                 _: crate::src::qcommon::q_shared::fileHandle_t,
-            ) -> libc::c_int,
+            ) -> i32,
     );
     botlib_import.FS_Write = Some(
         crate::src::qcommon::files::FS_Write
             as unsafe extern "C" fn(
                 _: *const libc::c_void,
-                _: libc::c_int,
+                _: i32,
                 _: crate::src::qcommon::q_shared::fileHandle_t,
-            ) -> libc::c_int,
+            ) -> i32,
     );
     botlib_import.FS_FCloseFile = Some(
         crate::src::qcommon::files::FS_FCloseFile
@@ -1597,36 +1597,36 @@ pub unsafe extern "C" fn SV_BotInitBotLib() {
             as unsafe extern "C" fn(
                 _: crate::src::qcommon::q_shared::fileHandle_t,
                 _: libc::c_long,
-                _: libc::c_int,
-            ) -> libc::c_int,
+                _: i32,
+            ) -> i32,
     );
     //debug lines
     botlib_import.DebugLineCreate =
-        Some(BotImport_DebugLineCreate as unsafe extern "C" fn() -> libc::c_int);
+        Some(BotImport_DebugLineCreate as unsafe extern "C" fn() -> i32);
     botlib_import.DebugLineDelete =
-        Some(BotImport_DebugLineDelete as unsafe extern "C" fn(_: libc::c_int) -> ());
+        Some(BotImport_DebugLineDelete as unsafe extern "C" fn(_: i32) -> ());
     botlib_import.DebugLineShow = Some(
         BotImport_DebugLineShow
             as unsafe extern "C" fn(
-                _: libc::c_int,
+                _: i32,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
-                _: libc::c_int,
+                _: i32,
             ) -> (),
     );
     //debug polygons
     botlib_import.DebugPolygonCreate = Some(
         BotImport_DebugPolygonCreate
             as unsafe extern "C" fn(
-                _: libc::c_int,
-                _: libc::c_int,
+                _: i32,
+                _: i32,
                 _: *mut crate::src::qcommon::q_shared::vec3_t,
-            ) -> libc::c_int,
+            ) -> i32,
     );
     botlib_import.DebugPolygonDelete =
-        Some(BotImport_DebugPolygonDelete as unsafe extern "C" fn(_: libc::c_int) -> ());
+        Some(BotImport_DebugPolygonDelete as unsafe extern "C" fn(_: i32) -> ());
     botlib_export = crate::src::botlib::be_interface::GetBotLibAPI(
-        2 as libc::c_int,
+        2 as i32,
         &mut botlib_import as *mut _ as *mut crate::botlib_h::botlib_import_s,
     ) as *mut crate::botlib_h::botlib_export_s;
     // somehow we end up with a zero import.
@@ -1642,30 +1642,30 @@ SV_BotGetConsoleMessage
 #[no_mangle]
 
 pub unsafe extern "C" fn SV_BotGetConsoleMessage(
-    mut client: libc::c_int,
+    mut client: i32,
     mut buf: *mut libc::c_char,
-    mut size: libc::c_int,
-) -> libc::c_int {
+    mut size: i32,
+) -> i32 {
     let mut cl: *mut crate::server_h::client_t = 0 as *mut crate::server_h::client_t;
-    let mut index: libc::c_int = 0;
+    let mut index: i32 = 0;
     cl = &mut *crate::src::server::sv_main::svs
         .clients
         .offset(client as isize) as *mut crate::server_h::client_t;
     (*cl).lastPacketTime = crate::src::server::sv_main::svs.time;
     if (*cl).reliableAcknowledge == (*cl).reliableSequence {
-        return crate::src::qcommon::q_shared::qfalse as libc::c_int;
+        return crate::src::qcommon::q_shared::qfalse as i32;
     }
     (*cl).reliableAcknowledge += 1;
-    index = (*cl).reliableAcknowledge & 64 as libc::c_int - 1 as libc::c_int;
-    if (*cl).reliableCommands[index as usize][0 as libc::c_int as usize] == 0 {
-        return crate::src::qcommon::q_shared::qfalse as libc::c_int;
+    index = (*cl).reliableAcknowledge & 64 as i32 - 1 as i32;
+    if (*cl).reliableCommands[index as usize][0 as i32 as usize] == 0 {
+        return crate::src::qcommon::q_shared::qfalse as i32;
     }
     crate::src::qcommon::q_shared::Q_strncpyz(
         buf,
         (*cl).reliableCommands[index as usize].as_mut_ptr(),
         size,
     );
-    return crate::src::qcommon::q_shared::qtrue as libc::c_int;
+    return crate::src::qcommon::q_shared::qtrue as i32;
 }
 /*
 ===========================================================================
@@ -1820,9 +1820,9 @@ SV_BotGetSnapshotEntity
 #[no_mangle]
 
 pub unsafe extern "C" fn SV_BotGetSnapshotEntity(
-    mut client: libc::c_int,
-    mut sequence: libc::c_int,
-) -> libc::c_int {
+    mut client: i32,
+    mut sequence: i32,
+) -> i32 {
     let mut cl: *mut crate::server_h::client_t = 0 as *mut crate::server_h::client_t;
     let mut frame: *mut crate::server_h::clientSnapshot_t =
         0 as *mut crate::server_h::clientSnapshot_t;
@@ -1831,10 +1831,10 @@ pub unsafe extern "C" fn SV_BotGetSnapshotEntity(
         .offset(client as isize) as *mut crate::server_h::client_t;
     frame =
         &mut *(*cl).frames.as_mut_ptr().offset(
-            ((*cl).netchan.outgoingSequence & 32 as libc::c_int - 1 as libc::c_int) as isize,
+            ((*cl).netchan.outgoingSequence & 32 as i32 - 1 as i32) as isize,
         ) as *mut crate::server_h::clientSnapshot_t;
-    if sequence < 0 as libc::c_int || sequence >= (*frame).num_entities {
-        return -(1 as libc::c_int);
+    if sequence < 0 as i32 || sequence >= (*frame).num_entities {
+        return -(1 as i32);
     }
     return (*crate::src::server::sv_main::svs.snapshotEntities.offset(
         (((*frame).first_entity + sequence) % crate::src::server::sv_main::svs.numSnapshotEntities)

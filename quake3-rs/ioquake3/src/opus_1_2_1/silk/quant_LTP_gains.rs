@@ -170,25 +170,25 @@ POSSIBILITY OF SUCH DAMAGE.
 
 pub unsafe extern "C" fn silk_quant_LTP_gains(
     mut B_Q14: *mut crate::opus_types_h::opus_int16,
-    mut cbk_index: *mut libc::c_schar,
-    mut periodicity_index: *mut libc::c_schar,
+    mut cbk_index: *mut i8,
+    mut periodicity_index: *mut i8,
     mut sum_log_gain_Q7: *mut crate::opus_types_h::opus_int32,
-    mut pred_gain_dB_Q7: *mut libc::c_int,
+    mut pred_gain_dB_Q7: *mut i32,
     mut XX_Q17: *const crate::opus_types_h::opus_int32,
     mut xX_Q17: *const crate::opus_types_h::opus_int32,
-    subfr_len: libc::c_int,
-    nb_subfr: libc::c_int,
-    mut _arch: libc::c_int,
+    subfr_len: i32,
+    nb_subfr: i32,
+    mut _arch: i32,
 )
 /* I    Run-time architecture           */
 {
-    let mut j: libc::c_int = 0;
-    let mut k: libc::c_int = 0;
-    let mut cbk_size: libc::c_int = 0;
-    let mut temp_idx: [libc::c_schar; 4] = [0; 4];
-    let mut cl_ptr_Q5: *const libc::c_uchar = 0 as *const libc::c_uchar;
-    let mut cbk_ptr_Q7: *const libc::c_schar = 0 as *const libc::c_schar;
-    let mut cbk_gain_ptr_Q7: *const libc::c_uchar = 0 as *const libc::c_uchar;
+    let mut j: i32 = 0;
+    let mut k: i32 = 0;
+    let mut cbk_size: i32 = 0;
+    let mut temp_idx: [i8; 4] = [0; 4];
+    let mut cl_ptr_Q5: *const u8 = 0 as *const u8;
+    let mut cbk_ptr_Q7: *const i8 = 0 as *const i8;
+    let mut cbk_gain_ptr_Q7: *const u8 = 0 as *const u8;
     let mut XX_Q17_ptr: *const crate::opus_types_h::opus_int32 =
         0 as *const crate::opus_types_h::opus_int32;
     let mut xX_Q17_ptr: *const crate::opus_types_h::opus_int32 =
@@ -201,19 +201,19 @@ pub unsafe extern "C" fn silk_quant_LTP_gains(
     let mut sum_log_gain_tmp_Q7: crate::opus_types_h::opus_int32 = 0;
     let mut best_sum_log_gain_Q7: crate::opus_types_h::opus_int32 = 0;
     let mut max_gain_Q7: crate::opus_types_h::opus_int32 = 0;
-    let mut gain_Q7: libc::c_int = 0;
+    let mut gain_Q7: i32 = 0;
     /* **************************************************/
     /* iterate over different codebooks with different */
     /* rates/distortions, and choose best */
     /* **************************************************/
-    min_rate_dist_Q7 = 0x7fffffff as libc::c_int;
-    best_sum_log_gain_Q7 = 0 as libc::c_int;
-    k = 0 as libc::c_int;
-    while k < 3 as libc::c_int {
+    min_rate_dist_Q7 = 0x7fffffff as i32;
+    best_sum_log_gain_Q7 = 0 as i32;
+    k = 0 as i32;
+    while k < 3 as i32 {
         /* Safety margin for pitch gain control, to take into account factors
         such as state rescaling/rewhitening. */
         let mut gain_safety: crate::opus_types_h::opus_int32 = (0.4f64
-            * ((1 as libc::c_int as libc::c_longlong) << 7 as libc::c_int) as libc::c_double
+            * ((1 as i32 as i64) << 7 as i32) as f64
             + 0.5f64)
             as crate::opus_types_h::opus_int32;
         cl_ptr_Q5 =
@@ -222,24 +222,24 @@ pub unsafe extern "C" fn silk_quant_LTP_gains(
         cbk_gain_ptr_Q7 =
             crate::src::opus_1_2_1::silk::tables_LTP::silk_LTP_vq_gain_ptrs_Q7[k as usize];
         cbk_size =
-            crate::src::opus_1_2_1::silk::tables_LTP::silk_LTP_vq_sizes[k as usize] as libc::c_int;
+            crate::src::opus_1_2_1::silk::tables_LTP::silk_LTP_vq_sizes[k as usize] as i32;
         /* Set up pointers to first subframe */
         XX_Q17_ptr = XX_Q17;
         xX_Q17_ptr = xX_Q17;
-        res_nrg_Q15 = 0 as libc::c_int;
-        rate_dist_Q7 = 0 as libc::c_int;
+        res_nrg_Q15 = 0 as i32;
+        rate_dist_Q7 = 0 as i32;
         sum_log_gain_tmp_Q7 = *sum_log_gain_Q7;
-        j = 0 as libc::c_int;
+        j = 0 as i32;
         while j < nb_subfr {
             max_gain_Q7 = crate::src::opus_1_2_1::silk::log2lin::silk_log2lin(
-                (250.0f32 as libc::c_double / 6.0f64
-                    * ((1 as libc::c_int as libc::c_longlong) << 7 as libc::c_int)
-                        as libc::c_double
+                (250.0f32 as f64 / 6.0f64
+                    * ((1 as i32 as i64) << 7 as i32)
+                        as f64
                     + 0.5f64) as crate::opus_types_h::opus_int32
                     - sum_log_gain_tmp_Q7
-                    + ((7 as libc::c_int as libc::c_longlong
-                        * ((1 as libc::c_int as libc::c_longlong) << 7 as libc::c_int))
-                        as libc::c_double
+                    + ((7 as i32 as i64
+                        * ((1 as i32 as i64) << 7 as i32))
+                        as f64
                         + 0.5f64) as crate::opus_types_h::opus_int32,
             ) - gain_safety;
             crate::src::opus_1_2_1::silk::VQ_WMat_EC::silk_VQ_WMat_EC_c(
@@ -259,51 +259,51 @@ pub unsafe extern "C" fn silk_quant_LTP_gains(
             /* I    Run-time architecture                                   */
             res_nrg_Q15 = if (res_nrg_Q15 as crate::opus_types_h::opus_uint32)
                 .wrapping_add(res_nrg_Q15_subfr as crate::opus_types_h::opus_uint32)
-                & 0x80000000 as libc::c_uint
+                & 0x80000000 as u32
                 != 0
             {
-                0x7fffffff as libc::c_int
+                0x7fffffff as i32
             } else {
                 (res_nrg_Q15) + res_nrg_Q15_subfr
             };
             rate_dist_Q7 = if (rate_dist_Q7 as crate::opus_types_h::opus_uint32)
                 .wrapping_add(rate_dist_Q7_subfr as crate::opus_types_h::opus_uint32)
-                & 0x80000000 as libc::c_uint
+                & 0x80000000 as u32
                 != 0
             {
-                0x7fffffff as libc::c_int
+                0x7fffffff as i32
             } else {
                 (rate_dist_Q7) + rate_dist_Q7_subfr
             };
-            sum_log_gain_tmp_Q7 = if 0 as libc::c_int
+            sum_log_gain_tmp_Q7 = if 0 as i32
                 > sum_log_gain_tmp_Q7
                     + crate::src::opus_1_2_1::silk::lin2log::silk_lin2log(gain_safety + gain_Q7)
-                    - ((7 as libc::c_int as libc::c_longlong
-                        * ((1 as libc::c_int as libc::c_longlong) << 7 as libc::c_int))
-                        as libc::c_double
+                    - ((7 as i32 as i64
+                        * ((1 as i32 as i64) << 7 as i32))
+                        as f64
                         + 0.5f64) as crate::opus_types_h::opus_int32
             {
-                0 as libc::c_int
+                0 as i32
             } else {
                 (sum_log_gain_tmp_Q7
                     + crate::src::opus_1_2_1::silk::lin2log::silk_lin2log(gain_safety + gain_Q7))
-                    - ((7 as libc::c_int as libc::c_longlong
-                        * ((1 as libc::c_int as libc::c_longlong) << 7 as libc::c_int))
-                        as libc::c_double
+                    - ((7 as i32 as i64
+                        * ((1 as i32 as i64) << 7 as i32))
+                        as f64
                         + 0.5f64) as crate::opus_types_h::opus_int32
             };
-            XX_Q17_ptr = XX_Q17_ptr.offset((5 as libc::c_int * 5 as libc::c_int) as isize);
-            xX_Q17_ptr = xX_Q17_ptr.offset(5 as libc::c_int as isize);
+            XX_Q17_ptr = XX_Q17_ptr.offset((5 as i32 * 5 as i32) as isize);
+            xX_Q17_ptr = xX_Q17_ptr.offset(5 as i32 as isize);
             j += 1
         }
         if rate_dist_Q7 <= min_rate_dist_Q7 {
             min_rate_dist_Q7 = rate_dist_Q7;
-            *periodicity_index = k as libc::c_schar;
+            *periodicity_index = k as i8;
             crate::stdlib::memcpy(
                 cbk_index as *mut libc::c_void,
                 temp_idx.as_mut_ptr() as *const libc::c_void,
                 (nb_subfr as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<libc::c_schar>() as libc::c_ulong),
+                    .wrapping_mul(::std::mem::size_of::<i8>() as libc::c_ulong),
             );
             best_sum_log_gain_Q7 = sum_log_gain_tmp_Q7
         }
@@ -311,29 +311,29 @@ pub unsafe extern "C" fn silk_quant_LTP_gains(
     }
     cbk_ptr_Q7 =
         crate::src::opus_1_2_1::silk::tables_LTP::silk_LTP_vq_ptrs_Q7[*periodicity_index as usize];
-    j = 0 as libc::c_int;
+    j = 0 as i32;
     while j < nb_subfr {
-        k = 0 as libc::c_int;
-        while k < 5 as libc::c_int {
-            *B_Q14.offset((j * 5 as libc::c_int + k) as isize) =
+        k = 0 as i32;
+        while k < 5 as i32 {
+            *B_Q14.offset((j * 5 as i32 + k) as isize) =
                 ((*cbk_ptr_Q7.offset(
-                    (*cbk_index.offset(j as isize) as libc::c_int * 5 as libc::c_int + k) as isize,
+                    (*cbk_index.offset(j as isize) as i32 * 5 as i32 + k) as isize,
                 ) as crate::opus_types_h::opus_uint32)
-                    << 7 as libc::c_int) as crate::opus_types_h::opus_int32
+                    << 7 as i32) as crate::opus_types_h::opus_int32
                     as crate::opus_types_h::opus_int16;
             k += 1
         }
         j += 1
     }
-    if nb_subfr == 2 as libc::c_int {
-        res_nrg_Q15 = res_nrg_Q15 >> 1 as libc::c_int
+    if nb_subfr == 2 as i32 {
+        res_nrg_Q15 = res_nrg_Q15 >> 1 as i32
     } else {
-        res_nrg_Q15 = res_nrg_Q15 >> 2 as libc::c_int
+        res_nrg_Q15 = res_nrg_Q15 >> 2 as i32
     }
     *sum_log_gain_Q7 = best_sum_log_gain_Q7;
-    *pred_gain_dB_Q7 = -(3 as libc::c_int) as crate::opus_types_h::opus_int16
+    *pred_gain_dB_Q7 = -(3 as i32) as crate::opus_types_h::opus_int16
         as crate::opus_types_h::opus_int32
         * (crate::src::opus_1_2_1::silk::lin2log::silk_lin2log(res_nrg_Q15)
-            - ((15 as libc::c_int) << 7 as libc::c_int))
+            - ((15 as i32) << 7 as i32))
             as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32;
 }

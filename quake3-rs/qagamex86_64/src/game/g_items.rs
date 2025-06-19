@@ -262,28 +262,28 @@ pub use crate::src::qcommon::q_shared::TR_STATIONARY;
 pub unsafe extern "C" fn Pickup_Powerup(
     mut ent: *mut crate::g_local_h::gentity_t,
     mut other: *mut crate::g_local_h::gentity_t,
-) -> libc::c_int {
-    let mut quantity: libc::c_int = 0;
-    let mut i: libc::c_int = 0;
+) -> i32 {
+    let mut quantity: i32 = 0;
+    let mut i: i32 = 0;
     let mut client: *mut crate::g_local_h::gclient_t = 0 as *mut crate::g_local_h::gclient_t;
     if (*(*other).client).ps.powerups[(*(*ent).item).giTag as usize] == 0 {
         // round timing to seconds to make multiple powerup timers
         // count in sync
         (*(*other).client).ps.powerups[(*(*ent).item).giTag as usize] =
             crate::src::game::g_main::level.time
-                - crate::src::game::g_main::level.time % 1000 as libc::c_int
+                - crate::src::game::g_main::level.time % 1000 as i32
     }
     if (*ent).count != 0 {
         quantity = (*ent).count
     } else {
         quantity = (*(*ent).item).quantity
     }
-    (*(*other).client).ps.powerups[(*(*ent).item).giTag as usize] += quantity * 1000 as libc::c_int;
+    (*(*other).client).ps.powerups[(*(*ent).item).giTag as usize] += quantity * 1000 as i32;
     // give any nearby players a "denied" anti-reward
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < crate::src::game::g_main::level.maxclients {
         let mut delta: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-        let mut len: libc::c_float = 0.;
+        let mut len: f32 = 0.;
         let mut forward: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
         let mut tr: crate::src::qcommon::q_shared::trace_t =
             crate::src::qcommon::q_shared::trace_t {
@@ -305,31 +305,31 @@ pub unsafe extern "C" fn Pickup_Powerup(
         client = &mut *crate::src::game::g_main::level.clients.offset(i as isize)
             as *mut crate::g_local_h::gclient_s;
         if !(client == (*other).client) {
-            if !((*client).pers.connected as libc::c_uint
-                == crate::g_local_h::CON_DISCONNECTED as libc::c_int as libc::c_uint)
+            if !((*client).pers.connected as u32
+                == crate::g_local_h::CON_DISCONNECTED as i32 as u32)
             {
-                if !((*client).ps.stats[crate::bg_public_h::STAT_HEALTH as libc::c_int as usize]
-                    <= 0 as libc::c_int)
+                if !((*client).ps.stats[crate::bg_public_h::STAT_HEALTH as i32 as usize]
+                    <= 0 as i32)
                 {
                     // if same team in team game, no sound
                     // cannot use OnSameTeam as it expects to g_entities, not clients
                     if !(crate::src::game::g_main::g_gametype.integer
-                        >= crate::bg_public_h::GT_TEAM as libc::c_int
-                        && (*(*other).client).sess.sessionTeam as libc::c_uint
-                            == (*client).sess.sessionTeam as libc::c_uint)
+                        >= crate::bg_public_h::GT_TEAM as i32
+                        && (*(*other).client).sess.sessionTeam as u32
+                            == (*client).sess.sessionTeam as u32)
                     {
                         // if too far away, no sound
-                        delta[0 as libc::c_int as usize] = (*ent).s.pos.trBase
-                            [0 as libc::c_int as usize]
-                            - (*client).ps.origin[0 as libc::c_int as usize];
-                        delta[1 as libc::c_int as usize] = (*ent).s.pos.trBase
-                            [1 as libc::c_int as usize]
-                            - (*client).ps.origin[1 as libc::c_int as usize];
-                        delta[2 as libc::c_int as usize] = (*ent).s.pos.trBase
-                            [2 as libc::c_int as usize]
-                            - (*client).ps.origin[2 as libc::c_int as usize];
+                        delta[0 as i32 as usize] = (*ent).s.pos.trBase
+                            [0 as i32 as usize]
+                            - (*client).ps.origin[0 as i32 as usize];
+                        delta[1 as i32 as usize] = (*ent).s.pos.trBase
+                            [1 as i32 as usize]
+                            - (*client).ps.origin[1 as i32 as usize];
+                        delta[2 as i32 as usize] = (*ent).s.pos.trBase
+                            [2 as i32 as usize]
+                            - (*client).ps.origin[2 as i32 as usize];
                         len = crate::src::qcommon::q_math::VectorNormalize(delta.as_mut_ptr());
-                        if !(len > 192 as libc::c_int as libc::c_float) {
+                        if !(len > 192 as i32 as f32) {
                             // if not facing, no sound
                             crate::src::qcommon::q_math::AngleVectors(
                                 (*client).ps.viewangles.as_mut_ptr()
@@ -338,13 +338,13 @@ pub unsafe extern "C" fn Pickup_Powerup(
                                 0 as *mut crate::src::qcommon::q_shared::vec_t,
                                 0 as *mut crate::src::qcommon::q_shared::vec_t,
                             );
-                            if !(((delta[0 as libc::c_int as usize]
-                                * forward[0 as libc::c_int as usize]
-                                + delta[1 as libc::c_int as usize]
-                                    * forward[1 as libc::c_int as usize]
-                                + delta[2 as libc::c_int as usize]
-                                    * forward[2 as libc::c_int as usize])
-                                as libc::c_double)
+                            if !(((delta[0 as i32 as usize]
+                                * forward[0 as i32 as usize]
+                                + delta[1 as i32 as usize]
+                                    * forward[1 as i32 as usize]
+                                + delta[2 as i32 as usize]
+                                    * forward[2 as i32 as usize])
+                                as f64)
                                 < 0.4f64)
                             {
                                 // if not line of sight, no sound
@@ -357,14 +357,14 @@ pub unsafe extern "C" fn Pickup_Powerup(
                                     0 as *const crate::src::qcommon::q_shared::vec_t,
                                     (*ent).s.pos.trBase.as_mut_ptr()
                                         as *const crate::src::qcommon::q_shared::vec_t,
-                                    ((1 as libc::c_int) << 10 as libc::c_int) - 1 as libc::c_int,
-                                    1 as libc::c_int,
+                                    ((1 as i32) << 10 as i32) - 1 as i32,
+                                    1 as i32,
                                 );
-                                if !(tr.fraction as libc::c_double != 1.0f64) {
+                                if !(tr.fraction as f64 != 1.0f64) {
                                     // anti-reward
                                     (*client).ps.persistant[crate::bg_public_h::PERS_PLAYEREVENTS
-                                        as libc::c_int
-                                        as usize] ^= 0x1 as libc::c_int
+                                        as i32
+                                        as usize] ^= 0x1 as i32
                                 }
                             }
                         }
@@ -374,7 +374,7 @@ pub unsafe extern "C" fn Pickup_Powerup(
         }
         i += 1
     }
-    return 120 as libc::c_int;
+    return 120 as i32;
 }
 //======================================================================
 #[no_mangle]
@@ -382,28 +382,28 @@ pub unsafe extern "C" fn Pickup_Powerup(
 pub unsafe extern "C" fn Pickup_Holdable(
     mut ent: *mut crate::g_local_h::gentity_t,
     mut other: *mut crate::g_local_h::gentity_t,
-) -> libc::c_int {
-    (*(*other).client).ps.stats[crate::bg_public_h::STAT_HOLDABLE_ITEM as libc::c_int as usize] =
+) -> i32 {
+    (*(*other).client).ps.stats[crate::bg_public_h::STAT_HOLDABLE_ITEM as i32 as usize] =
         (*ent)
             .item
             .offset_from(crate::src::game::bg_misc::bg_itemlist.as_mut_ptr())
-            as libc::c_long as libc::c_int;
-    if (*(*ent).item).giTag == crate::bg_public_h::HI_KAMIKAZE as libc::c_int {
-        (*(*other).client).ps.eFlags |= 0x200 as libc::c_int
+            as libc::c_long as i32;
+    if (*(*ent).item).giTag == crate::bg_public_h::HI_KAMIKAZE as i32 {
+        (*(*other).client).ps.eFlags |= 0x200 as i32
     }
-    return 60 as libc::c_int;
+    return 60 as i32;
 }
 //======================================================================
 #[no_mangle]
 
 pub unsafe extern "C" fn Add_Ammo(
     mut ent: *mut crate::g_local_h::gentity_t,
-    mut weapon: libc::c_int,
-    mut count: libc::c_int,
+    mut weapon: i32,
+    mut count: i32,
 ) {
     (*(*ent).client).ps.ammo[weapon as usize] += count;
-    if (*(*ent).client).ps.ammo[weapon as usize] > 200 as libc::c_int {
-        (*(*ent).client).ps.ammo[weapon as usize] = 200 as libc::c_int
+    if (*(*ent).client).ps.ammo[weapon as usize] > 200 as i32 {
+        (*(*ent).client).ps.ammo[weapon as usize] = 200 as i32
     };
 }
 #[no_mangle]
@@ -411,15 +411,15 @@ pub unsafe extern "C" fn Add_Ammo(
 pub unsafe extern "C" fn Pickup_Ammo(
     mut ent: *mut crate::g_local_h::gentity_t,
     mut other: *mut crate::g_local_h::gentity_t,
-) -> libc::c_int {
-    let mut quantity: libc::c_int = 0;
+) -> i32 {
+    let mut quantity: i32 = 0;
     if (*ent).count != 0 {
         quantity = (*ent).count
     } else {
         quantity = (*(*ent).item).quantity
     }
     Add_Ammo(other, (*(*ent).item).giTag, quantity);
-    return 40 as libc::c_int;
+    return 40 as i32;
 }
 //======================================================================
 #[no_mangle]
@@ -427,10 +427,10 @@ pub unsafe extern "C" fn Pickup_Ammo(
 pub unsafe extern "C" fn Pickup_Weapon(
     mut ent: *mut crate::g_local_h::gentity_t,
     mut other: *mut crate::g_local_h::gentity_t,
-) -> libc::c_int {
-    let mut quantity: libc::c_int = 0;
-    if (*ent).count < 0 as libc::c_int {
-        quantity = 0 as libc::c_int
+) -> i32 {
+    let mut quantity: i32 = 0;
+    if (*ent).count < 0 as i32 {
+        quantity = 0 as i32
     // None for you, sir!
     } else {
         if (*ent).count != 0 {
@@ -439,29 +439,29 @@ pub unsafe extern "C" fn Pickup_Weapon(
             quantity = (*(*ent).item).quantity
         }
         // dropped items and teamplay weapons always have full ammo
-        if (*ent).flags & 0x1000 as libc::c_int == 0
+        if (*ent).flags & 0x1000 as i32 == 0
             && crate::src::game::g_main::g_gametype.integer
-                != crate::bg_public_h::GT_TEAM as libc::c_int
+                != crate::bg_public_h::GT_TEAM as i32
         {
             // respawning rules
             // drop the quantity if the already have over the minimum
             if (*(*other).client).ps.ammo[(*(*ent).item).giTag as usize] < quantity {
                 quantity = quantity - (*(*other).client).ps.ammo[(*(*ent).item).giTag as usize]
             } else {
-                quantity = 1 as libc::c_int
+                quantity = 1 as i32
                 // only add a single shot
             }
         }
     }
     // add the weapon
-    (*(*other).client).ps.stats[crate::bg_public_h::STAT_WEAPONS as libc::c_int as usize] |=
-        (1 as libc::c_int) << (*(*ent).item).giTag; // unlimited ammo
+    (*(*other).client).ps.stats[crate::bg_public_h::STAT_WEAPONS as i32 as usize] |=
+        (1 as i32) << (*(*ent).item).giTag; // unlimited ammo
     Add_Ammo(other, (*(*ent).item).giTag, quantity);
-    if (*(*ent).item).giTag == crate::bg_public_h::WP_GRAPPLING_HOOK as libc::c_int {
-        (*(*other).client).ps.ammo[(*(*ent).item).giTag as usize] = -(1 as libc::c_int)
+    if (*(*ent).item).giTag == crate::bg_public_h::WP_GRAPPLING_HOOK as i32 {
+        (*(*other).client).ps.ammo[(*(*ent).item).giTag as usize] = -(1 as i32)
     }
     // team deathmatch has slow weapon respawns
-    if crate::src::game::g_main::g_gametype.integer == crate::bg_public_h::GT_TEAM as libc::c_int {
+    if crate::src::game::g_main::g_gametype.integer == crate::bg_public_h::GT_TEAM as i32 {
         return crate::src::game::g_main::g_weaponTeamRespawn.integer;
     }
     return crate::src::game::g_main::g_weaponRespawn.integer;
@@ -472,18 +472,18 @@ pub unsafe extern "C" fn Pickup_Weapon(
 pub unsafe extern "C" fn Pickup_Health(
     mut ent: *mut crate::g_local_h::gentity_t,
     mut other: *mut crate::g_local_h::gentity_t,
-) -> libc::c_int {
-    let mut max: libc::c_int = 0;
-    let mut quantity: libc::c_int = 0;
+) -> i32 {
+    let mut max: i32 = 0;
+    let mut quantity: i32 = 0;
     // small and mega healths will go over the max
-    if (*(*ent).item).quantity != 5 as libc::c_int && (*(*ent).item).quantity != 100 as libc::c_int
+    if (*(*ent).item).quantity != 5 as i32 && (*(*ent).item).quantity != 100 as i32
     {
         max =
-            (*(*other).client).ps.stats[crate::bg_public_h::STAT_MAX_HEALTH as libc::c_int as usize]
+            (*(*other).client).ps.stats[crate::bg_public_h::STAT_MAX_HEALTH as i32 as usize]
     } else {
         max = (*(*other).client).ps.stats
-            [crate::bg_public_h::STAT_MAX_HEALTH as libc::c_int as usize]
-            * 2 as libc::c_int
+            [crate::bg_public_h::STAT_MAX_HEALTH as i32 as usize]
+            * 2 as i32
     }
     if (*ent).count != 0 {
         quantity = (*ent).count
@@ -494,13 +494,13 @@ pub unsafe extern "C" fn Pickup_Health(
     if (*other).health > max {
         (*other).health = max
     }
-    (*(*other).client).ps.stats[crate::bg_public_h::STAT_HEALTH as libc::c_int as usize] =
+    (*(*other).client).ps.stats[crate::bg_public_h::STAT_HEALTH as i32 as usize] =
         (*other).health;
-    if (*(*ent).item).quantity == 100 as libc::c_int {
+    if (*(*ent).item).quantity == 100 as i32 {
         // mega health respawns slow
-        return 35 as libc::c_int;
+        return 35 as i32;
     }
-    return 35 as libc::c_int;
+    return 35 as i32;
 }
 //======================================================================
 #[no_mangle]
@@ -508,18 +508,18 @@ pub unsafe extern "C" fn Pickup_Health(
 pub unsafe extern "C" fn Pickup_Armor(
     mut ent: *mut crate::g_local_h::gentity_t,
     mut other: *mut crate::g_local_h::gentity_t,
-) -> libc::c_int {
-    (*(*other).client).ps.stats[crate::bg_public_h::STAT_ARMOR as libc::c_int as usize] +=
+) -> i32 {
+    (*(*other).client).ps.stats[crate::bg_public_h::STAT_ARMOR as i32 as usize] +=
         (*(*ent).item).quantity;
-    if (*(*other).client).ps.stats[crate::bg_public_h::STAT_ARMOR as libc::c_int as usize]
-        > (*(*other).client).ps.stats[crate::bg_public_h::STAT_MAX_HEALTH as libc::c_int as usize]
-            * 2 as libc::c_int
+    if (*(*other).client).ps.stats[crate::bg_public_h::STAT_ARMOR as i32 as usize]
+        > (*(*other).client).ps.stats[crate::bg_public_h::STAT_MAX_HEALTH as i32 as usize]
+            * 2 as i32
     {
-        (*(*other).client).ps.stats[crate::bg_public_h::STAT_ARMOR as libc::c_int as usize] =
-            (*(*other).client).ps.stats[crate::bg_public_h::STAT_MAX_HEALTH as libc::c_int as usize]
-                * 2 as libc::c_int
+        (*(*other).client).ps.stats[crate::bg_public_h::STAT_ARMOR as i32 as usize] =
+            (*(*other).client).ps.stats[crate::bg_public_h::STAT_MAX_HEALTH as i32 as usize]
+                * 2 as i32
     }
-    return 25 as libc::c_int;
+    return 25 as i32;
 }
 //======================================================================
 /*
@@ -536,22 +536,22 @@ pub unsafe extern "C" fn RespawnItem(mut ent: *mut crate::g_local_h::gentity_t) 
     // randomly select from teamed entities
     if !(*ent).team.is_null() {
         let mut master: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
-        let mut count: libc::c_int = 0;
-        let mut choice: libc::c_int = 0;
+        let mut count: i32 = 0;
+        let mut choice: i32 = 0;
         if (*ent).teammaster.is_null() {
             crate::src::game::g_main::G_Error(
                 b"RespawnItem: bad teammaster\x00" as *const u8 as *const libc::c_char,
             );
         }
         master = (*ent).teammaster;
-        count = 0 as libc::c_int;
+        count = 0 as i32;
         ent = master;
         while !ent.is_null() {
             ent = (*ent).teamchain;
             count += 1
         }
         choice = ::libc::rand() % count;
-        count = 0 as libc::c_int;
+        count = 0 as i32;
         ent = master;
         while !ent.is_null() && count < choice {
             ent = (*ent).teamchain;
@@ -561,12 +561,12 @@ pub unsafe extern "C" fn RespawnItem(mut ent: *mut crate::g_local_h::gentity_t) 
     if ent.is_null() {
         return;
     }
-    (*ent).r.contents = 0x40000000 as libc::c_int;
-    (*ent).s.eFlags &= !(0x80 as libc::c_int);
-    (*ent).r.svFlags &= !(0x1 as libc::c_int);
+    (*ent).r.contents = 0x40000000 as i32;
+    (*ent).s.eFlags &= !(0x80 as i32);
+    (*ent).r.svFlags &= !(0x1 as i32);
     crate::src::game::g_syscalls::trap_LinkEntity(ent as *mut crate::g_local_h::gentity_s);
-    if (*(*ent).item).giType as libc::c_uint
-        == crate::bg_public_h::IT_POWERUP as libc::c_int as libc::c_uint
+    if (*(*ent).item).giType as u32
+        == crate::bg_public_h::IT_POWERUP as i32 as u32
     {
         // play powerup spawn sound to all clients
         let mut te: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
@@ -574,23 +574,23 @@ pub unsafe extern "C" fn RespawnItem(mut ent: *mut crate::g_local_h::gentity_t) 
         if (*ent).speed != 0. {
             te = crate::src::game::g_utils::G_TempEntity(
                 (*ent).s.pos.trBase.as_mut_ptr(),
-                crate::bg_public_h::EV_GENERAL_SOUND as libc::c_int,
+                crate::bg_public_h::EV_GENERAL_SOUND as i32,
             ) as *mut crate::g_local_h::gentity_s
         } else {
             te = crate::src::game::g_utils::G_TempEntity(
                 (*ent).s.pos.trBase.as_mut_ptr(),
-                crate::bg_public_h::EV_GLOBAL_SOUND as libc::c_int,
+                crate::bg_public_h::EV_GLOBAL_SOUND as i32,
             ) as *mut crate::g_local_h::gentity_s
         }
         (*te).s.eventParm = crate::src::game::g_utils::G_SoundIndex(
             b"sound/items/poweruprespawn.wav\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
         );
-        (*te).r.svFlags |= 0x20 as libc::c_int
+        (*te).r.svFlags |= 0x20 as i32
     }
-    if (*(*ent).item).giType as libc::c_uint
-        == crate::bg_public_h::IT_HOLDABLE as libc::c_int as libc::c_uint
-        && (*(*ent).item).giTag == crate::bg_public_h::HI_KAMIKAZE as libc::c_int
+    if (*(*ent).item).giType as u32
+        == crate::bg_public_h::IT_HOLDABLE as i32 as u32
+        && (*(*ent).item).giTag == crate::bg_public_h::HI_KAMIKAZE as i32
     {
         // play powerup spawn sound to all clients
         let mut te_0: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
@@ -598,27 +598,27 @@ pub unsafe extern "C" fn RespawnItem(mut ent: *mut crate::g_local_h::gentity_t) 
         if (*ent).speed != 0. {
             te_0 = crate::src::game::g_utils::G_TempEntity(
                 (*ent).s.pos.trBase.as_mut_ptr(),
-                crate::bg_public_h::EV_GENERAL_SOUND as libc::c_int,
+                crate::bg_public_h::EV_GENERAL_SOUND as i32,
             ) as *mut crate::g_local_h::gentity_s
         } else {
             te_0 = crate::src::game::g_utils::G_TempEntity(
                 (*ent).s.pos.trBase.as_mut_ptr(),
-                crate::bg_public_h::EV_GLOBAL_SOUND as libc::c_int,
+                crate::bg_public_h::EV_GLOBAL_SOUND as i32,
             ) as *mut crate::g_local_h::gentity_s
         }
         (*te_0).s.eventParm = crate::src::game::g_utils::G_SoundIndex(
             b"sound/items/kamikazerespawn.wav\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
         );
-        (*te_0).r.svFlags |= 0x20 as libc::c_int
+        (*te_0).r.svFlags |= 0x20 as i32
     }
     // play the normal respawn sound only to nearby clients
     crate::src::game::g_utils::G_AddEvent(
         ent as *mut crate::g_local_h::gentity_s,
-        crate::bg_public_h::EV_ITEM_RESPAWN as libc::c_int,
-        0 as libc::c_int,
+        crate::bg_public_h::EV_ITEM_RESPAWN as i32,
+        0 as i32,
     );
-    (*ent).nextthink = 0 as libc::c_int;
+    (*ent).nextthink = 0 as i32;
 }
 /*
 ===============
@@ -632,13 +632,13 @@ pub unsafe extern "C" fn Touch_Item(
     mut other: *mut crate::g_local_h::gentity_t,
     mut _trace: *mut crate::src::qcommon::q_shared::trace_t,
 ) {
-    let mut respawn: libc::c_int = 0; // dead people can't pickup
+    let mut respawn: i32 = 0; // dead people can't pickup
     let mut predict: crate::src::qcommon::q_shared::qboolean =
         crate::src::qcommon::q_shared::qfalse;
     if (*other).client.is_null() {
         return;
     }
-    if (*other).health < 1 as libc::c_int {
+    if (*other).health < 1 as i32 {
         return;
     }
     // the same pickup rules are used for client side and server side
@@ -658,7 +658,7 @@ pub unsafe extern "C" fn Touch_Item(
     );
     predict = (*(*other).client).pers.predictItemPickup;
     // call the item-specific pickup function
-    match (*(*ent).item).giType as libc::c_uint {
+    match (*(*ent).item).giType as u32 {
         1 => respawn = Pickup_Weapon(ent, other),
         2 => respawn = Pickup_Ammo(ent, other),
         3 => respawn = Pickup_Armor(ent, other),
@@ -683,40 +683,40 @@ pub unsafe extern "C" fn Touch_Item(
     if predict as u64 != 0 {
         crate::src::game::g_utils::G_AddPredictableEvent(
             other as *mut crate::g_local_h::gentity_s,
-            crate::bg_public_h::EV_ITEM_PICKUP as libc::c_int,
+            crate::bg_public_h::EV_ITEM_PICKUP as i32,
             (*ent).s.modelindex,
         );
     } else {
         crate::src::game::g_utils::G_AddEvent(
             other as *mut crate::g_local_h::gentity_s,
-            crate::bg_public_h::EV_ITEM_PICKUP as libc::c_int,
+            crate::bg_public_h::EV_ITEM_PICKUP as i32,
             (*ent).s.modelindex,
         );
     }
     // powerup pickups are global broadcasts
-    if (*(*ent).item).giType as libc::c_uint
-        == crate::bg_public_h::IT_POWERUP as libc::c_int as libc::c_uint
-        || (*(*ent).item).giType as libc::c_uint
-            == crate::bg_public_h::IT_TEAM as libc::c_int as libc::c_uint
+    if (*(*ent).item).giType as u32
+        == crate::bg_public_h::IT_POWERUP as i32 as u32
+        || (*(*ent).item).giType as u32
+            == crate::bg_public_h::IT_TEAM as i32 as u32
     {
         // if we want the global sound to play
         if (*ent).speed == 0. {
             let mut te: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
             te = crate::src::game::g_utils::G_TempEntity(
                 (*ent).s.pos.trBase.as_mut_ptr(),
-                crate::bg_public_h::EV_GLOBAL_ITEM_PICKUP as libc::c_int,
+                crate::bg_public_h::EV_GLOBAL_ITEM_PICKUP as i32,
             ) as *mut crate::g_local_h::gentity_s;
             (*te).s.eventParm = (*ent).s.modelindex;
-            (*te).r.svFlags |= 0x20 as libc::c_int
+            (*te).r.svFlags |= 0x20 as i32
         } else {
             let mut te_0: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
             te_0 = crate::src::game::g_utils::G_TempEntity(
                 (*ent).s.pos.trBase.as_mut_ptr(),
-                crate::bg_public_h::EV_GLOBAL_ITEM_PICKUP as libc::c_int,
+                crate::bg_public_h::EV_GLOBAL_ITEM_PICKUP as i32,
             ) as *mut crate::g_local_h::gentity_s;
             (*te_0).s.eventParm = (*ent).s.modelindex;
             // only send this temp entity to a single client
-            (*te_0).r.svFlags |= 0x100 as libc::c_int;
+            (*te_0).r.svFlags |= 0x100 as i32;
             (*te_0).r.singleClient = (*other).s.number
         }
     }
@@ -726,48 +726,48 @@ pub unsafe extern "C" fn Touch_Item(
         other as *mut crate::g_local_h::gentity_s,
     );
     // wait of -1 will not respawn
-    if (*ent).wait == -(1 as libc::c_int) as libc::c_float {
-        (*ent).r.svFlags |= 0x1 as libc::c_int;
-        (*ent).s.eFlags |= 0x80 as libc::c_int;
-        (*ent).r.contents = 0 as libc::c_int;
+    if (*ent).wait == -(1 as i32) as f32 {
+        (*ent).r.svFlags |= 0x1 as i32;
+        (*ent).s.eFlags |= 0x80 as i32;
+        (*ent).r.contents = 0 as i32;
         (*ent).unlinkAfterEvent = crate::src::qcommon::q_shared::qtrue;
         return;
     }
     // non zero wait overrides respawn time
     if (*ent).wait != 0. {
-        respawn = (*ent).wait as libc::c_int
+        respawn = (*ent).wait as i32
     }
     // random can be used to vary the respawn time
     if (*ent).random != 0. {
-        respawn = (respawn as libc::c_double
+        respawn = (respawn as f64
             + 2.0f64
-                * (((::libc::rand() & 0x7fff as libc::c_int) as libc::c_float
-                    / 0x7fff as libc::c_int as libc::c_float) as libc::c_double
+                * (((::libc::rand() & 0x7fff as i32) as f32
+                    / 0x7fff as i32 as f32) as f64
                     - 0.5f64)
-                * (*ent).random as libc::c_double) as libc::c_int;
-        if respawn < 1 as libc::c_int {
-            respawn = 1 as libc::c_int
+                * (*ent).random as f64) as i32;
+        if respawn < 1 as i32 {
+            respawn = 1 as i32
         }
     }
     // dropped items will not respawn
-    if (*ent).flags & 0x1000 as libc::c_int != 0 {
+    if (*ent).flags & 0x1000 as i32 != 0 {
         (*ent).freeAfterEvent = crate::src::qcommon::q_shared::qtrue
     }
     // picked up items still stay around, they just don't
     // draw anything.  This allows respawnable items
     // to be placed on movers.
-    (*ent).r.svFlags |= 0x1 as libc::c_int;
-    (*ent).s.eFlags |= 0x80 as libc::c_int;
-    (*ent).r.contents = 0 as libc::c_int;
+    (*ent).r.svFlags |= 0x1 as i32;
+    (*ent).s.eFlags |= 0x80 as i32;
+    (*ent).r.contents = 0 as i32;
     // ZOID
     // A negative respawn times means to never respawn this item (but don't
     // delete it).  This is used by items that are respawned by third party
     // events such as ctf flags
-    if respawn <= 0 as libc::c_int {
-        (*ent).nextthink = 0 as libc::c_int;
+    if respawn <= 0 as i32 {
+        (*ent).nextthink = 0 as i32;
         (*ent).think = None
     } else {
-        (*ent).nextthink = crate::src::game::g_main::level.time + respawn * 1000 as libc::c_int;
+        (*ent).nextthink = crate::src::game::g_main::level.time + respawn * 1000 as i32;
         (*ent).think =
             Some(RespawnItem as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> ())
     }
@@ -790,25 +790,25 @@ pub unsafe extern "C" fn LaunchItem(
 ) -> *mut crate::g_local_h::gentity_t {
     let mut dropped: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t; // store item number in modelindex
     dropped = crate::src::game::g_utils::G_Spawn() as *mut crate::g_local_h::gentity_s; // This is non-zero is it's a dropped item
-    (*dropped).s.eType = crate::bg_public_h::ET_ITEM as libc::c_int; // auto-remove after 30 seconds
+    (*dropped).s.eType = crate::bg_public_h::ET_ITEM as i32; // auto-remove after 30 seconds
     (*dropped).s.modelindex = item.offset_from(crate::src::game::bg_misc::bg_itemlist.as_mut_ptr())
-        as libc::c_long as libc::c_int;
-    (*dropped).s.modelindex2 = 1 as libc::c_int;
+        as libc::c_long as i32;
+    (*dropped).s.modelindex2 = 1 as i32;
     (*dropped).classname = (*item).classname;
     (*dropped).item = item;
-    (*dropped).r.mins[0 as libc::c_int as usize] =
-        -(15 as libc::c_int) as crate::src::qcommon::q_shared::vec_t;
-    (*dropped).r.mins[1 as libc::c_int as usize] =
-        -(15 as libc::c_int) as crate::src::qcommon::q_shared::vec_t;
-    (*dropped).r.mins[2 as libc::c_int as usize] =
-        -(15 as libc::c_int) as crate::src::qcommon::q_shared::vec_t;
-    (*dropped).r.maxs[0 as libc::c_int as usize] =
-        15 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-    (*dropped).r.maxs[1 as libc::c_int as usize] =
-        15 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-    (*dropped).r.maxs[2 as libc::c_int as usize] =
-        15 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-    (*dropped).r.contents = 0x40000000 as libc::c_int;
+    (*dropped).r.mins[0 as i32 as usize] =
+        -(15 as i32) as crate::src::qcommon::q_shared::vec_t;
+    (*dropped).r.mins[1 as i32 as usize] =
+        -(15 as i32) as crate::src::qcommon::q_shared::vec_t;
+    (*dropped).r.mins[2 as i32 as usize] =
+        -(15 as i32) as crate::src::qcommon::q_shared::vec_t;
+    (*dropped).r.maxs[0 as i32 as usize] =
+        15 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*dropped).r.maxs[1 as i32 as usize] =
+        15 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*dropped).r.maxs[2 as i32 as usize] =
+        15 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*dropped).r.contents = 0x40000000 as i32;
     (*dropped).touch = Some(
         Touch_Item
             as unsafe extern "C" fn(
@@ -820,23 +820,23 @@ pub unsafe extern "C" fn LaunchItem(
     crate::src::game::g_utils::G_SetOrigin(dropped as *mut crate::g_local_h::gentity_s, origin);
     (*dropped).s.pos.trType = crate::src::qcommon::q_shared::TR_GRAVITY;
     (*dropped).s.pos.trTime = crate::src::game::g_main::level.time;
-    (*dropped).s.pos.trDelta[0 as libc::c_int as usize] =
-        *velocity.offset(0 as libc::c_int as isize);
-    (*dropped).s.pos.trDelta[1 as libc::c_int as usize] =
-        *velocity.offset(1 as libc::c_int as isize);
-    (*dropped).s.pos.trDelta[2 as libc::c_int as usize] =
-        *velocity.offset(2 as libc::c_int as isize);
-    (*dropped).s.eFlags |= 0x20 as libc::c_int;
-    if crate::src::game::g_main::g_gametype.integer == crate::bg_public_h::GT_CTF as libc::c_int
-        && (*item).giType as libc::c_uint
-            == crate::bg_public_h::IT_TEAM as libc::c_int as libc::c_uint
+    (*dropped).s.pos.trDelta[0 as i32 as usize] =
+        *velocity.offset(0 as i32 as isize);
+    (*dropped).s.pos.trDelta[1 as i32 as usize] =
+        *velocity.offset(1 as i32 as isize);
+    (*dropped).s.pos.trDelta[2 as i32 as usize] =
+        *velocity.offset(2 as i32 as isize);
+    (*dropped).s.eFlags |= 0x20 as i32;
+    if crate::src::game::g_main::g_gametype.integer == crate::bg_public_h::GT_CTF as i32
+        && (*item).giType as u32
+            == crate::bg_public_h::IT_TEAM as i32 as u32
     {
         // Special case for CTF flags
         (*dropped).think = Some(
             crate::src::game::g_team::Team_DroppedFlagThink
                 as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
         );
-        (*dropped).nextthink = crate::src::game::g_main::level.time + 30000 as libc::c_int;
+        (*dropped).nextthink = crate::src::game::g_main::level.time + 30000 as i32;
         crate::src::game::g_team::Team_CheckDroppedItem(
             dropped as *mut crate::g_local_h::gentity_s,
         );
@@ -845,9 +845,9 @@ pub unsafe extern "C" fn LaunchItem(
             crate::src::game::g_utils::G_FreeEntity
                 as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
         );
-        (*dropped).nextthink = crate::src::game::g_main::level.time + 30000 as libc::c_int
+        (*dropped).nextthink = crate::src::game::g_main::level.time + 30000 as i32
     }
-    (*dropped).flags = 0x1000 as libc::c_int;
+    (*dropped).flags = 0x1000 as i32;
     crate::src::game::g_syscalls::trap_LinkEntity(dropped as *mut crate::g_local_h::gentity_s);
     return dropped;
 }
@@ -863,35 +863,35 @@ Spawns an item and tosses it forward
 pub unsafe extern "C" fn Drop_Item(
     mut ent: *mut crate::g_local_h::gentity_t,
     mut item: *mut crate::bg_public_h::gitem_t,
-    mut angle: libc::c_float,
+    mut angle: f32,
 ) -> *mut crate::g_local_h::gentity_t {
     let mut velocity: crate::src::qcommon::q_shared::vec3_t = [0.; 3]; // always forward
     let mut angles: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    angles[0 as libc::c_int as usize] = (*ent).s.apos.trBase[0 as libc::c_int as usize];
-    angles[1 as libc::c_int as usize] = (*ent).s.apos.trBase[1 as libc::c_int as usize];
-    angles[2 as libc::c_int as usize] = (*ent).s.apos.trBase[2 as libc::c_int as usize];
-    angles[1 as libc::c_int as usize] += angle;
-    angles[0 as libc::c_int as usize] = 0 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
+    angles[0 as i32 as usize] = (*ent).s.apos.trBase[0 as i32 as usize];
+    angles[1 as i32 as usize] = (*ent).s.apos.trBase[1 as i32 as usize];
+    angles[2 as i32 as usize] = (*ent).s.apos.trBase[2 as i32 as usize];
+    angles[1 as i32 as usize] += angle;
+    angles[0 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     crate::src::qcommon::q_math::AngleVectors(
         angles.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
         velocity.as_mut_ptr(),
         0 as *mut crate::src::qcommon::q_shared::vec_t,
         0 as *mut crate::src::qcommon::q_shared::vec_t,
     );
-    velocity[0 as libc::c_int as usize] =
-        velocity[0 as libc::c_int as usize] * 150 as libc::c_int as libc::c_float;
-    velocity[1 as libc::c_int as usize] =
-        velocity[1 as libc::c_int as usize] * 150 as libc::c_int as libc::c_float;
-    velocity[2 as libc::c_int as usize] =
-        velocity[2 as libc::c_int as usize] * 150 as libc::c_int as libc::c_float;
-    velocity[2 as libc::c_int as usize] = (velocity[2 as libc::c_int as usize] as libc::c_double
-        + (200 as libc::c_int as libc::c_double
+    velocity[0 as i32 as usize] =
+        velocity[0 as i32 as usize] * 150 as i32 as f32;
+    velocity[1 as i32 as usize] =
+        velocity[1 as i32 as usize] * 150 as i32 as f32;
+    velocity[2 as i32 as usize] =
+        velocity[2 as i32 as usize] * 150 as i32 as f32;
+    velocity[2 as i32 as usize] = (velocity[2 as i32 as usize] as f64
+        + (200 as i32 as f64
             + 2.0f64
-                * (((::libc::rand() & 0x7fff as libc::c_int) as libc::c_float
-                    / 0x7fff as libc::c_int as libc::c_float)
-                    as libc::c_double
+                * (((::libc::rand() & 0x7fff as i32) as f32
+                    / 0x7fff as i32 as f32)
+                    as f64
                     - 0.5f64)
-                * 50 as libc::c_int as libc::c_double))
+                * 50 as i32 as f64))
         as crate::src::qcommon::q_shared::vec_t;
     return LaunchItem(
         item,
@@ -944,25 +944,25 @@ pub unsafe extern "C" fn FinishSpawningItem(mut ent: *mut crate::g_local_h::gent
         entityNum: 0,
     }; // store item number in modelindex
     let mut dest: crate::src::qcommon::q_shared::vec3_t = [0.; 3]; // zero indicates this isn't a dropped item
-    (*ent).r.mins[0 as libc::c_int as usize] =
-        -(15 as libc::c_int) as crate::src::qcommon::q_shared::vec_t;
-    (*ent).r.mins[1 as libc::c_int as usize] =
-        -(15 as libc::c_int) as crate::src::qcommon::q_shared::vec_t;
-    (*ent).r.mins[2 as libc::c_int as usize] =
-        -(15 as libc::c_int) as crate::src::qcommon::q_shared::vec_t;
-    (*ent).r.maxs[0 as libc::c_int as usize] =
-        15 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-    (*ent).r.maxs[1 as libc::c_int as usize] =
-        15 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-    (*ent).r.maxs[2 as libc::c_int as usize] =
-        15 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-    (*ent).s.eType = crate::bg_public_h::ET_ITEM as libc::c_int;
+    (*ent).r.mins[0 as i32 as usize] =
+        -(15 as i32) as crate::src::qcommon::q_shared::vec_t;
+    (*ent).r.mins[1 as i32 as usize] =
+        -(15 as i32) as crate::src::qcommon::q_shared::vec_t;
+    (*ent).r.mins[2 as i32 as usize] =
+        -(15 as i32) as crate::src::qcommon::q_shared::vec_t;
+    (*ent).r.maxs[0 as i32 as usize] =
+        15 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*ent).r.maxs[1 as i32 as usize] =
+        15 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*ent).r.maxs[2 as i32 as usize] =
+        15 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*ent).s.eType = crate::bg_public_h::ET_ITEM as i32;
     (*ent).s.modelindex = (*ent)
         .item
         .offset_from(crate::src::game::bg_misc::bg_itemlist.as_mut_ptr())
-        as libc::c_long as libc::c_int;
-    (*ent).s.modelindex2 = 0 as libc::c_int;
-    (*ent).r.contents = 0x40000000 as libc::c_int;
+        as libc::c_long as i32;
+    (*ent).s.modelindex2 = 0 as i32;
+    (*ent).r.contents = 0x40000000 as i32;
     (*ent).touch = Some(
         Touch_Item
             as unsafe extern "C" fn(
@@ -980,7 +980,7 @@ pub unsafe extern "C" fn FinishSpawningItem(mut ent: *mut crate::g_local_h::gent
                 _: *mut crate::g_local_h::gentity_t,
             ) -> (),
     );
-    if (*ent).spawnflags & 1 as libc::c_int != 0 {
+    if (*ent).spawnflags & 1 as i32 != 0 {
         // suspended
         crate::src::game::g_utils::G_SetOrigin(
             ent as *mut crate::g_local_h::gentity_s,
@@ -988,10 +988,10 @@ pub unsafe extern "C" fn FinishSpawningItem(mut ent: *mut crate::g_local_h::gent
         );
     } else {
         // drop to floor
-        dest[0 as libc::c_int as usize] = (*ent).s.origin[0 as libc::c_int as usize];
-        dest[1 as libc::c_int as usize] = (*ent).s.origin[1 as libc::c_int as usize];
-        dest[2 as libc::c_int as usize] =
-            (*ent).s.origin[2 as libc::c_int as usize] - 4096 as libc::c_int as libc::c_float;
+        dest[0 as i32 as usize] = (*ent).s.origin[0 as i32 as usize];
+        dest[1 as i32 as usize] = (*ent).s.origin[1 as i32 as usize];
+        dest[2 as i32 as usize] =
+            (*ent).s.origin[2 as i32 as usize] - 4096 as i32 as f32;
         crate::src::game::g_syscalls::trap_Trace(
             &mut tr as *mut _ as *mut crate::src::qcommon::q_shared::trace_t,
             (*ent).s.origin.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
@@ -999,7 +999,7 @@ pub unsafe extern "C" fn FinishSpawningItem(mut ent: *mut crate::g_local_h::gent
             (*ent).r.maxs.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
             dest.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
             (*ent).s.number,
-            1 as libc::c_int,
+            1 as i32,
         );
         if tr.startsolid as u64 != 0 {
             crate::src::game::g_main::G_Printf(
@@ -1021,27 +1021,27 @@ pub unsafe extern "C" fn FinishSpawningItem(mut ent: *mut crate::g_local_h::gent
         );
     }
     // team slaves and targeted items aren't present at start
-    if (*ent).flags & 0x400 as libc::c_int != 0 || !(*ent).targetname.is_null() {
-        (*ent).s.eFlags |= 0x80 as libc::c_int;
-        (*ent).r.contents = 0 as libc::c_int;
+    if (*ent).flags & 0x400 as i32 != 0 || !(*ent).targetname.is_null() {
+        (*ent).s.eFlags |= 0x80 as i32;
+        (*ent).r.contents = 0 as i32;
         return;
     }
     // powerups don't spawn in for a while
-    if (*(*ent).item).giType as libc::c_uint
-        == crate::bg_public_h::IT_POWERUP as libc::c_int as libc::c_uint
+    if (*(*ent).item).giType as u32
+        == crate::bg_public_h::IT_POWERUP as i32 as u32
     {
-        let mut respawn: libc::c_float = 0.;
-        respawn = (45 as libc::c_int as libc::c_double
+        let mut respawn: f32 = 0.;
+        respawn = (45 as i32 as f64
             + 2.0f64
-                * (((::libc::rand() & 0x7fff as libc::c_int) as libc::c_float
-                    / 0x7fff as libc::c_int as libc::c_float) as libc::c_double
+                * (((::libc::rand() & 0x7fff as i32) as f32
+                    / 0x7fff as i32 as f32) as f64
                     - 0.5f64)
-                * 15 as libc::c_int as libc::c_double) as libc::c_float;
-        (*ent).s.eFlags |= 0x80 as libc::c_int;
-        (*ent).r.contents = 0 as libc::c_int;
-        (*ent).nextthink = (crate::src::game::g_main::level.time as libc::c_float
-            + respawn * 1000 as libc::c_int as libc::c_float)
-            as libc::c_int;
+                * 15 as i32 as f64) as f32;
+        (*ent).s.eFlags |= 0x80 as i32;
+        (*ent).r.contents = 0 as i32;
+        (*ent).nextthink = (crate::src::game::g_main::level.time as f32
+            + respawn * 1000 as i32 as f32)
+            as i32;
         (*ent).think =
             Some(RespawnItem as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> ());
         return;
@@ -1062,7 +1062,7 @@ G_CheckTeamItems
 pub unsafe extern "C" fn G_CheckTeamItems() {
     // Set up team stuff
     crate::src::game::g_team::Team_InitGame();
-    if crate::src::game::g_main::g_gametype.integer == crate::bg_public_h::GT_CTF as libc::c_int {
+    if crate::src::game::g_main::g_gametype.integer == crate::bg_public_h::GT_CTF as i32 {
         let mut item: *mut crate::bg_public_h::gitem_t = 0 as *mut crate::bg_public_h::gitem_t;
         // check for the two flags
         item = crate::src::game::bg_misc::BG_FindItem(
@@ -1101,7 +1101,7 @@ ClearRegisteredItems
 pub unsafe extern "C" fn ClearRegisteredItems() {
     crate::stdlib::memset(
         itemRegistered.as_mut_ptr() as *mut libc::c_void,
-        0 as libc::c_int,
+        0 as i32,
         ::std::mem::size_of::<[crate::src::qcommon::q_shared::qboolean; 256]>() as libc::c_ulong,
     );
     // players always start with the base weapon
@@ -1144,10 +1144,10 @@ so the client will know which ones to precache
 
 pub unsafe extern "C" fn SaveRegisteredItems() {
     let mut string: [libc::c_char; 257] = [0; 257];
-    let mut i: libc::c_int = 0;
-    let mut count: libc::c_int = 0;
-    count = 0 as libc::c_int;
-    i = 0 as libc::c_int;
+    let mut i: i32 = 0;
+    let mut count: i32 = 0;
+    count = 0 as i32;
+    i = 0 as i32;
     while i < crate::src::game::bg_misc::bg_numItems {
         if itemRegistered[i as usize] as u64 != 0 {
             count += 1;
@@ -1157,12 +1157,12 @@ pub unsafe extern "C" fn SaveRegisteredItems() {
         }
         i += 1
     }
-    string[crate::src::game::bg_misc::bg_numItems as usize] = 0 as libc::c_int as libc::c_char;
+    string[crate::src::game::bg_misc::bg_numItems as usize] = 0 as i32 as libc::c_char;
     crate::src::game::g_main::G_Printf(
         b"%i items registered\n\x00" as *const u8 as *const libc::c_char,
         count,
     );
-    crate::src::game::g_syscalls::trap_SetConfigstring(27 as libc::c_int, string.as_mut_ptr());
+    crate::src::game::g_syscalls::trap_SetConfigstring(27 as i32, string.as_mut_ptr());
 }
 /*
 ============
@@ -1171,11 +1171,11 @@ G_ItemDisabled
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn G_ItemDisabled(mut item: *mut crate::bg_public_h::gitem_t) -> libc::c_int {
+pub unsafe extern "C" fn G_ItemDisabled(mut item: *mut crate::bg_public_h::gitem_t) -> i32 {
     let mut name: [libc::c_char; 128] = [0; 128];
     crate::src::qcommon::q_shared::Com_sprintf(
         name.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong as i32,
         b"disable_%s\x00" as *const u8 as *const libc::c_char,
         (*item).classname,
     );
@@ -1214,12 +1214,12 @@ pub unsafe extern "C" fn G_SpawnItem(
     (*ent).item = item;
     // some movers spawn on the second frame, so delay item
     // spawns until the third frame so they can ride trains
-    (*ent).nextthink = crate::src::game::g_main::level.time + 100 as libc::c_int * 2 as libc::c_int; // items are bouncy
+    (*ent).nextthink = crate::src::game::g_main::level.time + 100 as i32 * 2 as i32; // items are bouncy
     (*ent).think =
         Some(FinishSpawningItem as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> ());
-    (*ent).physicsBounce = 0.50f64 as libc::c_float;
-    if (*item).giType as libc::c_uint
-        == crate::bg_public_h::IT_POWERUP as libc::c_int as libc::c_uint
+    (*ent).physicsBounce = 0.50f64 as f32;
+    if (*item).giType as u32
+        == crate::bg_public_h::IT_POWERUP as i32 as u32
     {
         crate::src::game::g_utils::G_SoundIndex(
             b"sound/items/poweruprespawn.wav\x00" as *const u8 as *const libc::c_char
@@ -1245,52 +1245,52 @@ pub unsafe extern "C" fn G_BounceItem(
     mut trace: *mut crate::src::qcommon::q_shared::trace_t,
 ) {
     let mut velocity: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut dot: libc::c_float = 0.;
-    let mut hitTime: libc::c_int = 0;
+    let mut dot: f32 = 0.;
+    let mut hitTime: i32 = 0;
     // reflect the velocity on the trace plane
-    hitTime = (crate::src::game::g_main::level.previousTime as libc::c_float
+    hitTime = (crate::src::game::g_main::level.previousTime as f32
         + (crate::src::game::g_main::level.time - crate::src::game::g_main::level.previousTime)
-            as libc::c_float
-            * (*trace).fraction) as libc::c_int;
+            as f32
+            * (*trace).fraction) as i32;
     crate::src::game::bg_misc::BG_EvaluateTrajectoryDelta(
         &mut (*ent).s.pos as *mut _ as *const crate::src::qcommon::q_shared::trajectory_t,
         hitTime,
         velocity.as_mut_ptr(),
     );
-    dot = velocity[0 as libc::c_int as usize] * (*trace).plane.normal[0 as libc::c_int as usize]
-        + velocity[1 as libc::c_int as usize] * (*trace).plane.normal[1 as libc::c_int as usize]
-        + velocity[2 as libc::c_int as usize] * (*trace).plane.normal[2 as libc::c_int as usize];
-    (*ent).s.pos.trDelta[0 as libc::c_int as usize] = velocity[0 as libc::c_int as usize]
-        + (*trace).plane.normal[0 as libc::c_int as usize]
-            * (-(2 as libc::c_int) as libc::c_float * dot);
-    (*ent).s.pos.trDelta[1 as libc::c_int as usize] = velocity[1 as libc::c_int as usize]
-        + (*trace).plane.normal[1 as libc::c_int as usize]
-            * (-(2 as libc::c_int) as libc::c_float * dot);
-    (*ent).s.pos.trDelta[2 as libc::c_int as usize] = velocity[2 as libc::c_int as usize]
-        + (*trace).plane.normal[2 as libc::c_int as usize]
-            * (-(2 as libc::c_int) as libc::c_float * dot);
+    dot = velocity[0 as i32 as usize] * (*trace).plane.normal[0 as i32 as usize]
+        + velocity[1 as i32 as usize] * (*trace).plane.normal[1 as i32 as usize]
+        + velocity[2 as i32 as usize] * (*trace).plane.normal[2 as i32 as usize];
+    (*ent).s.pos.trDelta[0 as i32 as usize] = velocity[0 as i32 as usize]
+        + (*trace).plane.normal[0 as i32 as usize]
+            * (-(2 as i32) as f32 * dot);
+    (*ent).s.pos.trDelta[1 as i32 as usize] = velocity[1 as i32 as usize]
+        + (*trace).plane.normal[1 as i32 as usize]
+            * (-(2 as i32) as f32 * dot);
+    (*ent).s.pos.trDelta[2 as i32 as usize] = velocity[2 as i32 as usize]
+        + (*trace).plane.normal[2 as i32 as usize]
+            * (-(2 as i32) as f32 * dot);
     // cut the velocity to keep from bouncing forever
-    (*ent).s.pos.trDelta[0 as libc::c_int as usize] =
-        (*ent).s.pos.trDelta[0 as libc::c_int as usize] * (*ent).physicsBounce;
-    (*ent).s.pos.trDelta[1 as libc::c_int as usize] =
-        (*ent).s.pos.trDelta[1 as libc::c_int as usize] * (*ent).physicsBounce;
-    (*ent).s.pos.trDelta[2 as libc::c_int as usize] =
-        (*ent).s.pos.trDelta[2 as libc::c_int as usize] * (*ent).physicsBounce;
+    (*ent).s.pos.trDelta[0 as i32 as usize] =
+        (*ent).s.pos.trDelta[0 as i32 as usize] * (*ent).physicsBounce;
+    (*ent).s.pos.trDelta[1 as i32 as usize] =
+        (*ent).s.pos.trDelta[1 as i32 as usize] * (*ent).physicsBounce;
+    (*ent).s.pos.trDelta[2 as i32 as usize] =
+        (*ent).s.pos.trDelta[2 as i32 as usize] * (*ent).physicsBounce;
     // check for stop
-    if (*trace).plane.normal[2 as libc::c_int as usize] > 0 as libc::c_int as libc::c_float
-        && (*ent).s.pos.trDelta[2 as libc::c_int as usize] < 40 as libc::c_int as libc::c_float
+    if (*trace).plane.normal[2 as i32 as usize] > 0 as i32 as f32
+        && (*ent).s.pos.trDelta[2 as i32 as usize] < 40 as i32 as f32
     {
-        (*trace).endpos[2 as libc::c_int as usize] =
-            ((*trace).endpos[2 as libc::c_int as usize] as libc::c_double + 1.0f64)
+        (*trace).endpos[2 as i32 as usize] =
+            ((*trace).endpos[2 as i32 as usize] as f64 + 1.0f64)
                 as crate::src::qcommon::q_shared::vec_t; // make sure it is off ground
-        (*trace).endpos[0 as libc::c_int as usize] = (*trace).endpos[0 as libc::c_int as usize]
-            as libc::c_int
+        (*trace).endpos[0 as i32 as usize] = (*trace).endpos[0 as i32 as usize]
+            as i32
             as crate::src::qcommon::q_shared::vec_t;
-        (*trace).endpos[1 as libc::c_int as usize] = (*trace).endpos[1 as libc::c_int as usize]
-            as libc::c_int
+        (*trace).endpos[1 as i32 as usize] = (*trace).endpos[1 as i32 as usize]
+            as i32
             as crate::src::qcommon::q_shared::vec_t;
-        (*trace).endpos[2 as libc::c_int as usize] = (*trace).endpos[2 as libc::c_int as usize]
-            as libc::c_int
+        (*trace).endpos[2 as i32 as usize] = (*trace).endpos[2 as i32 as usize]
+            as i32
             as crate::src::qcommon::q_shared::vec_t;
         crate::src::game::g_utils::G_SetOrigin(
             ent as *mut crate::g_local_h::gentity_s,
@@ -1299,21 +1299,21 @@ pub unsafe extern "C" fn G_BounceItem(
         (*ent).s.groundEntityNum = (*trace).entityNum;
         return;
     }
-    (*ent).r.currentOrigin[0 as libc::c_int as usize] = (*ent).r.currentOrigin
-        [0 as libc::c_int as usize]
-        + (*trace).plane.normal[0 as libc::c_int as usize];
-    (*ent).r.currentOrigin[1 as libc::c_int as usize] = (*ent).r.currentOrigin
-        [1 as libc::c_int as usize]
-        + (*trace).plane.normal[1 as libc::c_int as usize];
-    (*ent).r.currentOrigin[2 as libc::c_int as usize] = (*ent).r.currentOrigin
-        [2 as libc::c_int as usize]
-        + (*trace).plane.normal[2 as libc::c_int as usize];
-    (*ent).s.pos.trBase[0 as libc::c_int as usize] =
-        (*ent).r.currentOrigin[0 as libc::c_int as usize];
-    (*ent).s.pos.trBase[1 as libc::c_int as usize] =
-        (*ent).r.currentOrigin[1 as libc::c_int as usize];
-    (*ent).s.pos.trBase[2 as libc::c_int as usize] =
-        (*ent).r.currentOrigin[2 as libc::c_int as usize];
+    (*ent).r.currentOrigin[0 as i32 as usize] = (*ent).r.currentOrigin
+        [0 as i32 as usize]
+        + (*trace).plane.normal[0 as i32 as usize];
+    (*ent).r.currentOrigin[1 as i32 as usize] = (*ent).r.currentOrigin
+        [1 as i32 as usize]
+        + (*trace).plane.normal[1 as i32 as usize];
+    (*ent).r.currentOrigin[2 as i32 as usize] = (*ent).r.currentOrigin
+        [2 as i32 as usize]
+        + (*trace).plane.normal[2 as i32 as usize];
+    (*ent).s.pos.trBase[0 as i32 as usize] =
+        (*ent).r.currentOrigin[0 as i32 as usize];
+    (*ent).s.pos.trBase[1 as i32 as usize] =
+        (*ent).r.currentOrigin[1 as i32 as usize];
+    (*ent).s.pos.trBase[2 as i32 as usize] =
+        (*ent).r.currentOrigin[2 as i32 as usize];
     (*ent).s.pos.trTime = crate::src::game::g_main::level.time;
 }
 /*
@@ -1342,19 +1342,19 @@ pub unsafe extern "C" fn G_RunItem(mut ent: *mut crate::g_local_h::gentity_t) {
         contents: 0,
         entityNum: 0,
     };
-    let mut contents: libc::c_int = 0;
-    let mut mask: libc::c_int = 0;
+    let mut contents: i32 = 0;
+    let mut mask: i32 = 0;
     // if its groundentity has been set to none, it may have been pushed off an edge
-    if (*ent).s.groundEntityNum == ((1 as libc::c_int) << 10 as libc::c_int) - 1 as libc::c_int {
-        if (*ent).s.pos.trType as libc::c_uint
-            != crate::src::qcommon::q_shared::TR_GRAVITY as libc::c_int as libc::c_uint
+    if (*ent).s.groundEntityNum == ((1 as i32) << 10 as i32) - 1 as i32 {
+        if (*ent).s.pos.trType as u32
+            != crate::src::qcommon::q_shared::TR_GRAVITY as i32 as u32
         {
             (*ent).s.pos.trType = crate::src::qcommon::q_shared::TR_GRAVITY;
             (*ent).s.pos.trTime = crate::src::game::g_main::level.time
         }
     }
-    if (*ent).s.pos.trType as libc::c_uint
-        == crate::src::qcommon::q_shared::TR_STATIONARY as libc::c_int as libc::c_uint
+    if (*ent).s.pos.trType as u32
+        == crate::src::qcommon::q_shared::TR_STATIONARY as i32 as u32
     {
         // check think function
         crate::src::game::g_main::G_RunThink(ent as *mut crate::g_local_h::gentity_s);
@@ -1370,8 +1370,8 @@ pub unsafe extern "C" fn G_RunItem(mut ent: *mut crate::g_local_h::gentity_t) {
     if (*ent).clipmask != 0 {
         mask = (*ent).clipmask
     } else {
-        mask = (1 as libc::c_int | 0x10000 as libc::c_int | 0x2000000 as libc::c_int)
-            & !(0x2000000 as libc::c_int)
+        mask = (1 as i32 | 0x10000 as i32 | 0x2000000 as i32)
+            & !(0x2000000 as i32)
         //MASK_SOLID;
     } // FIXME: avoid this for stationary?
     crate::src::game::g_syscalls::trap_Trace(
@@ -1383,27 +1383,27 @@ pub unsafe extern "C" fn G_RunItem(mut ent: *mut crate::g_local_h::gentity_t) {
         (*ent).r.ownerNum,
         mask,
     );
-    (*ent).r.currentOrigin[0 as libc::c_int as usize] = tr.endpos[0 as libc::c_int as usize];
-    (*ent).r.currentOrigin[1 as libc::c_int as usize] = tr.endpos[1 as libc::c_int as usize];
-    (*ent).r.currentOrigin[2 as libc::c_int as usize] = tr.endpos[2 as libc::c_int as usize];
+    (*ent).r.currentOrigin[0 as i32 as usize] = tr.endpos[0 as i32 as usize];
+    (*ent).r.currentOrigin[1 as i32 as usize] = tr.endpos[1 as i32 as usize];
+    (*ent).r.currentOrigin[2 as i32 as usize] = tr.endpos[2 as i32 as usize];
     if tr.startsolid as u64 != 0 {
-        tr.fraction = 0 as libc::c_int as libc::c_float
+        tr.fraction = 0 as i32 as f32
     }
     crate::src::game::g_syscalls::trap_LinkEntity(ent as *mut crate::g_local_h::gentity_s);
     // check think function
     crate::src::game::g_main::G_RunThink(ent as *mut crate::g_local_h::gentity_s);
-    if tr.fraction == 1 as libc::c_int as libc::c_float {
+    if tr.fraction == 1 as i32 as f32 {
         return;
     }
     // if it is in a nodrop volume, remove it
     contents = crate::src::game::g_syscalls::trap_PointContents(
         (*ent).r.currentOrigin.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-        -(1 as libc::c_int),
+        -(1 as i32),
     );
-    if contents as libc::c_uint & 0x80000000 as libc::c_uint != 0 {
+    if contents as u32 & 0x80000000 as u32 != 0 {
         if !(*ent).item.is_null()
-            && (*(*ent).item).giType as libc::c_uint
-                == crate::bg_public_h::IT_TEAM as libc::c_int as libc::c_uint
+            && (*(*ent).item).giType as u32
+                == crate::bg_public_h::IT_TEAM as i32 as u32
         {
             crate::src::game::g_team::Team_FreeEntity(ent as *mut crate::g_local_h::gentity_s);
         } else {

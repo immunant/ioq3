@@ -89,25 +89,25 @@ CL_Netchan_Encode
 */
 
 unsafe extern "C" fn CL_Netchan_Encode(mut msg: *mut crate::qcommon_h::msg_t) {
-    let mut serverId: libc::c_int = 0;
-    let mut messageAcknowledge: libc::c_int = 0;
-    let mut reliableAcknowledge: libc::c_int = 0;
-    let mut i: libc::c_int = 0;
-    let mut index: libc::c_int = 0;
-    let mut srdc: libc::c_int = 0;
-    let mut sbit: libc::c_int = 0;
-    let mut soob: libc::c_int = 0;
+    let mut serverId: i32 = 0;
+    let mut messageAcknowledge: i32 = 0;
+    let mut reliableAcknowledge: i32 = 0;
+    let mut i: i32 = 0;
+    let mut index: i32 = 0;
+    let mut srdc: i32 = 0;
+    let mut sbit: i32 = 0;
+    let mut soob: i32 = 0;
     let mut key: crate::src::qcommon::q_shared::byte = 0;
     let mut string: *mut crate::src::qcommon::q_shared::byte =
         0 as *mut crate::src::qcommon::q_shared::byte;
-    if (*msg).cursize <= 12 as libc::c_int {
+    if (*msg).cursize <= 12 as i32 {
         return;
     }
     srdc = (*msg).readcount;
     sbit = (*msg).bit;
-    soob = (*msg).oob as libc::c_int;
-    (*msg).bit = 0 as libc::c_int;
-    (*msg).readcount = 0 as libc::c_int;
+    soob = (*msg).oob as i32;
+    (*msg).bit = 0 as i32;
+    (*msg).readcount = 0 as i32;
     (*msg).oob = crate::src::qcommon::q_shared::qfalse;
     serverId = crate::src::qcommon::msg::MSG_ReadLong(msg as *mut crate::qcommon_h::msg_t);
     messageAcknowledge =
@@ -118,32 +118,32 @@ unsafe extern "C" fn CL_Netchan_Encode(mut msg: *mut crate::qcommon_h::msg_t) {
     (*msg).bit = sbit;
     (*msg).readcount = srdc;
     string = crate::src::client::cl_main::clc.serverCommands
-        [(reliableAcknowledge & 64 as libc::c_int - 1 as libc::c_int) as usize]
+        [(reliableAcknowledge & 64 as i32 - 1 as i32) as usize]
         .as_mut_ptr() as *mut crate::src::qcommon::q_shared::byte;
-    index = 0 as libc::c_int;
+    index = 0 as i32;
     //
     key = (crate::src::client::cl_main::clc.challenge ^ serverId ^ messageAcknowledge)
         as crate::src::qcommon::q_shared::byte;
-    i = 12 as libc::c_int;
+    i = 12 as i32;
     while i < (*msg).cursize {
         // modify the key with the last received now acknowledged server command
         if *string.offset(index as isize) == 0 {
-            index = 0 as libc::c_int
+            index = 0 as i32
         }
-        if *string.offset(index as isize) as libc::c_int > 127 as libc::c_int
-            || *string.offset(index as isize) as libc::c_int == '%' as i32
+        if *string.offset(index as isize) as i32 > 127 as i32
+            || *string.offset(index as isize) as i32 == '%' as i32
         {
-            key = (key as libc::c_int ^ ('.' as i32) << (i & 1 as libc::c_int))
+            key = (key as i32 ^ ('.' as i32) << (i & 1 as i32))
                 as crate::src::qcommon::q_shared::byte
         } else {
-            key = (key as libc::c_int
-                ^ (*string.offset(index as isize) as libc::c_int) << (i & 1 as libc::c_int))
+            key = (key as i32
+                ^ (*string.offset(index as isize) as i32) << (i & 1 as i32))
                 as crate::src::qcommon::q_shared::byte
         }
         index += 1;
         // encode the data with this key
-        *(*msg).data.offset(i as isize) = (*(*msg).data.offset(i as isize) as libc::c_int
-            ^ key as libc::c_int)
+        *(*msg).data.offset(i as isize) = (*(*msg).data.offset(i as isize) as i32
+            ^ key as i32)
             as crate::src::qcommon::q_shared::byte;
         i += 1
     }
@@ -165,12 +165,12 @@ unsafe extern "C" fn CL_Netchan_Decode(mut msg: *mut crate::qcommon_h::msg_t) {
     let mut key: crate::src::qcommon::q_shared::byte = 0;
     let mut string: *mut crate::src::qcommon::q_shared::byte =
         0 as *mut crate::src::qcommon::q_shared::byte;
-    let mut srdc: libc::c_int = 0;
-    let mut sbit: libc::c_int = 0;
-    let mut soob: libc::c_int = 0;
+    let mut srdc: i32 = 0;
+    let mut sbit: i32 = 0;
+    let mut soob: i32 = 0;
     srdc = (*msg).readcount;
     sbit = (*msg).bit;
-    soob = (*msg).oob as libc::c_int;
+    soob = (*msg).oob as i32;
     (*msg).oob = crate::src::qcommon::q_shared::qfalse;
     reliableAcknowledge =
         crate::src::qcommon::msg::MSG_ReadLong(msg as *mut crate::qcommon_h::msg_t) as libc::c_long;
@@ -178,33 +178,33 @@ unsafe extern "C" fn CL_Netchan_Decode(mut msg: *mut crate::qcommon_h::msg_t) {
     (*msg).bit = sbit;
     (*msg).readcount = srdc;
     string = crate::src::client::cl_main::clc.reliableCommands
-        [(reliableAcknowledge & (64 as libc::c_int - 1 as libc::c_int) as libc::c_long) as usize]
+        [(reliableAcknowledge & (64 as i32 - 1 as i32) as libc::c_long) as usize]
         .as_mut_ptr() as *mut crate::src::qcommon::q_shared::byte;
-    index = 0 as libc::c_int as libc::c_long;
+    index = 0 as i32 as libc::c_long;
     // xor the client challenge with the netchan sequence number (need something that changes every message)
-    key = (crate::src::client::cl_main::clc.challenge as libc::c_uint
-        ^ *((*msg).data as *mut libc::c_uint)) as crate::src::qcommon::q_shared::byte;
-    i = ((*msg).readcount + 4 as libc::c_int) as libc::c_long;
+    key = (crate::src::client::cl_main::clc.challenge as u32
+        ^ *((*msg).data as *mut u32)) as crate::src::qcommon::q_shared::byte;
+    i = ((*msg).readcount + 4 as i32) as libc::c_long;
     while i < (*msg).cursize as libc::c_long {
         // modify the key with the last sent and with this message acknowledged client command
         if *string.offset(index as isize) == 0 {
-            index = 0 as libc::c_int as libc::c_long
+            index = 0 as i32 as libc::c_long
         }
-        if *string.offset(index as isize) as libc::c_int > 127 as libc::c_int
-            || *string.offset(index as isize) as libc::c_int == '%' as i32
+        if *string.offset(index as isize) as i32 > 127 as i32
+            || *string.offset(index as isize) as i32 == '%' as i32
         {
-            key = (key as libc::c_int ^ ('.' as i32) << (i & 1 as libc::c_int as libc::c_long))
+            key = (key as i32 ^ ('.' as i32) << (i & 1 as i32 as libc::c_long))
                 as crate::src::qcommon::q_shared::byte
         } else {
-            key = (key as libc::c_int
-                ^ (*string.offset(index as isize) as libc::c_int)
-                    << (i & 1 as libc::c_int as libc::c_long))
+            key = (key as i32
+                ^ (*string.offset(index as isize) as i32)
+                    << (i & 1 as i32 as libc::c_long))
                 as crate::src::qcommon::q_shared::byte
         }
         index += 1;
         // decode the data with this key
-        *(*msg).data.offset(i as isize) = (*(*msg).data.offset(i as isize) as libc::c_int
-            ^ key as libc::c_int)
+        *(*msg).data.offset(i as isize) = (*(*msg).data.offset(i as isize) as i32
+            ^ key as i32)
             as crate::src::qcommon::q_shared::byte;
         i += 1
     }
@@ -240,7 +240,7 @@ pub unsafe extern "C" fn CL_Netchan_Transmit(
 ) {
     crate::src::qcommon::msg::MSG_WriteByte(
         msg as *mut crate::qcommon_h::msg_t,
-        crate::qcommon_h::clc_EOF as libc::c_int,
+        crate::qcommon_h::clc_EOF as i32,
     );
     if (*chan).compat as u64 != 0 {
         CL_Netchan_Encode(msg);
@@ -475,11 +475,11 @@ pub unsafe extern "C" fn CL_Netchan_Process(
     mut chan: *mut crate::qcommon_h::netchan_t,
     mut msg: *mut crate::qcommon_h::msg_t,
 ) -> crate::src::qcommon::q_shared::qboolean {
-    let mut ret: libc::c_int = 0;
+    let mut ret: i32 = 0;
     ret = crate::src::qcommon::net_chan::Netchan_Process(
         chan as *mut crate::qcommon_h::netchan_t,
         msg as *mut crate::qcommon_h::msg_t,
-    ) as libc::c_int;
+    ) as i32;
     if ret == 0 {
         return crate::src::qcommon::q_shared::qfalse;
     }

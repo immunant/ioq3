@@ -95,7 +95,7 @@ static mut cdkeyMenuInfo: cdkeyMenuInfo_t = cdkeyMenuInfo_t {
         },
         string: 0 as *const libc::c_char as *mut libc::c_char,
         style: 0,
-        color: 0 as *const libc::c_float as *mut libc::c_float,
+        color: 0 as *const f32 as *mut f32,
     },
     frame: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -122,7 +122,7 @@ static mut cdkeyMenuInfo: cdkeyMenuInfo_t = cdkeyMenuInfo_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     cdkey: crate::ui_local_h::menufield_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -176,7 +176,7 @@ static mut cdkeyMenuInfo: cdkeyMenuInfo_t = cdkeyMenuInfo_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     back: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -203,7 +203,7 @@ static mut cdkeyMenuInfo: cdkeyMenuInfo_t = cdkeyMenuInfo_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
 };
 /*
@@ -212,13 +212,13 @@ UI_CDKeyMenu_Event
 ===============
 */
 
-unsafe extern "C" fn UI_CDKeyMenu_Event(mut ptr: *mut libc::c_void, mut event: libc::c_int) {
-    if event != 3 as libc::c_int {
+unsafe extern "C" fn UI_CDKeyMenu_Event(mut ptr: *mut libc::c_void, mut event: i32) {
+    if event != 3 as i32 {
         return;
     }
     match (*(ptr as *mut crate::ui_local_h::menucommon_s)).id {
         11 => {
-            if cdkeyMenuInfo.cdkey.field.buffer[0 as libc::c_int as usize] != 0 {
+            if cdkeyMenuInfo.cdkey.field.buffer[0 as i32 as usize] != 0 {
                 crate::src::ui::ui_syscalls::trap_SetCDKey(
                     cdkeyMenuInfo.cdkey.field.buffer.as_mut_ptr(),
                 );
@@ -237,10 +237,10 @@ UI_CDKeyMenu_PreValidateKey
 =================
 */
 
-unsafe extern "C" fn UI_CDKeyMenu_PreValidateKey(mut key: *const libc::c_char) -> libc::c_int {
+unsafe extern "C" fn UI_CDKeyMenu_PreValidateKey(mut key: *const libc::c_char) -> i32 {
     let mut ch: libc::c_char = 0;
-    if crate::stdlib::strlen(key) != 16 as libc::c_int as libc::c_ulong {
-        return 1 as libc::c_int;
+    if crate::stdlib::strlen(key) != 16 as i32 as libc::c_ulong {
+        return 1 as i32;
     }
     loop {
         let fresh0 = key;
@@ -249,16 +249,16 @@ unsafe extern "C" fn UI_CDKeyMenu_PreValidateKey(mut key: *const libc::c_char) -
         if !(ch != 0) {
             break;
         }
-        match ch as libc::c_int {
+        match ch as i32 {
             50 | 51 | 55 | 97 | 98 | 99 | 100 | 103 | 104 | 106 | 108 | 112 | 114 | 115 | 116
             | 119 => {
                 continue;
             }
             _ => {}
         }
-        return -(1 as libc::c_int);
+        return -(1 as i32);
     }
-    return 0 as libc::c_int;
+    return 0 as i32;
 }
 /*
 =================
@@ -269,71 +269,71 @@ UI_CDKeyMenu_DrawKey
 unsafe extern "C" fn UI_CDKeyMenu_DrawKey(mut self_0: *mut libc::c_void) {
     let mut f: *mut crate::ui_local_h::menufield_s = 0 as *mut crate::ui_local_h::menufield_s;
     let mut focus: crate::src::qcommon::q_shared::qboolean = crate::src::qcommon::q_shared::qfalse;
-    let mut style: libc::c_int = 0;
+    let mut style: i32 = 0;
     let mut c: libc::c_char = 0;
-    let mut color: *mut libc::c_float = 0 as *mut libc::c_float;
-    let mut x: libc::c_int = 0;
-    let mut y: libc::c_int = 0;
-    let mut val: libc::c_int = 0;
+    let mut color: *mut f32 = 0 as *mut f32;
+    let mut x: i32 = 0;
+    let mut y: i32 = 0;
+    let mut val: i32 = 0;
     f = self_0 as *mut crate::ui_local_h::menufield_s;
-    focus = ((*(*f).generic.parent).cursor == (*f).generic.menuPosition) as libc::c_int
+    focus = ((*(*f).generic.parent).cursor == (*f).generic.menuPosition) as i32
         as crate::src::qcommon::q_shared::qboolean;
-    style = 0 as libc::c_int;
+    style = 0 as i32;
     if focus as u64 != 0 {
         color = crate::src::q3_ui::ui_qmenu::color_yellow.as_mut_ptr()
     } else {
         color = crate::src::q3_ui::ui_qmenu::color_orange.as_mut_ptr()
     }
-    x = 320 as libc::c_int - 8 as libc::c_int * 16 as libc::c_int;
-    y = 240 as libc::c_int - 16 as libc::c_int / 2 as libc::c_int;
+    x = 320 as i32 - 8 as i32 * 16 as i32;
+    y = 240 as i32 - 16 as i32 / 2 as i32;
     crate::src::q3_ui::ui_atoms::UI_FillRect(
-        x as libc::c_float,
-        y as libc::c_float,
-        (16 as libc::c_int * 16 as libc::c_int) as libc::c_float,
-        16 as libc::c_int as libc::c_float,
+        x as f32,
+        y as f32,
+        (16 as i32 * 16 as i32) as f32,
+        16 as i32 as f32,
         crate::src::q3_ui::ui_qmenu::listbar_color.as_mut_ptr(),
     );
     crate::src::q3_ui::ui_atoms::UI_DrawString(x, y, (*f).field.buffer.as_mut_ptr(), style, color);
     // draw cursor if we have focus
     if focus as u64 != 0 {
         if crate::src::ui::ui_syscalls::trap_Key_GetOverstrikeMode() as u64 != 0 {
-            c = 11 as libc::c_int as libc::c_char
+            c = 11 as i32 as libc::c_char
         } else {
-            c = 10 as libc::c_int as libc::c_char
+            c = 10 as i32 as libc::c_char
         }
-        style &= !(0x4000 as libc::c_int);
-        style |= 0x1000 as libc::c_int;
+        style &= !(0x4000 as i32);
+        style |= 0x1000 as i32;
         crate::src::q3_ui::ui_atoms::UI_DrawChar(
-            x + (*f).field.cursor * 16 as libc::c_int,
+            x + (*f).field.cursor * 16 as i32,
             y,
-            c as libc::c_int,
+            c as i32,
             style,
             crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
         );
     }
     val = UI_CDKeyMenu_PreValidateKey((*f).field.buffer.as_mut_ptr());
-    if val == 1 as libc::c_int {
+    if val == 1 as i32 {
         crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
-            320 as libc::c_int,
-            376 as libc::c_int,
+            320 as i32,
+            376 as i32,
             b"Please enter your CD Key\x00" as *const u8 as *const libc::c_char,
-            0x1 as libc::c_int | 0x10 as libc::c_int,
+            0x1 as i32 | 0x10 as i32,
             crate::src::q3_ui::ui_qmenu::color_yellow.as_mut_ptr(),
         );
-    } else if val == 0 as libc::c_int {
+    } else if val == 0 as i32 {
         crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
-            320 as libc::c_int,
-            376 as libc::c_int,
+            320 as i32,
+            376 as i32,
             b"The CD Key appears to be valid, thank you\x00" as *const u8 as *const libc::c_char,
-            0x1 as libc::c_int | 0x10 as libc::c_int,
+            0x1 as i32 | 0x10 as i32,
             crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
         );
     } else {
         crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
-            320 as libc::c_int,
-            376 as libc::c_int,
+            320 as i32,
+            376 as i32,
             b"The CD Key is not valid\x00" as *const u8 as *const libc::c_char,
-            0x1 as libc::c_int | 0x10 as libc::c_int,
+            0x1 as i32 | 0x10 as i32,
             crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr(),
         );
     };
@@ -352,64 +352,64 @@ unsafe extern "C" fn UI_CDKeyMenu_Init() {
     UI_CDKeyMenu_Cache();
     crate::stdlib::memset(
         &mut cdkeyMenuInfo as *mut cdkeyMenuInfo_t as *mut libc::c_void,
-        0 as libc::c_int,
+        0 as i32,
         ::std::mem::size_of::<cdkeyMenuInfo_t>() as libc::c_ulong,
     );
     cdkeyMenuInfo.menu.wrapAround = crate::src::qcommon::q_shared::qtrue;
     cdkeyMenuInfo.menu.fullscreen = crate::src::qcommon::q_shared::qtrue;
-    cdkeyMenuInfo.banner.generic.type_0 = 10 as libc::c_int;
-    cdkeyMenuInfo.banner.generic.x = 320 as libc::c_int;
-    cdkeyMenuInfo.banner.generic.y = 16 as libc::c_int;
+    cdkeyMenuInfo.banner.generic.type_0 = 10 as i32;
+    cdkeyMenuInfo.banner.generic.x = 320 as i32;
+    cdkeyMenuInfo.banner.generic.y = 16 as i32;
     cdkeyMenuInfo.banner.string =
         b"CD KEY\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     cdkeyMenuInfo.banner.color = crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr();
-    cdkeyMenuInfo.banner.style = 0x1 as libc::c_int;
-    cdkeyMenuInfo.frame.generic.type_0 = 6 as libc::c_int;
+    cdkeyMenuInfo.banner.style = 0x1 as i32;
+    cdkeyMenuInfo.frame.generic.type_0 = 6 as i32;
     cdkeyMenuInfo.frame.generic.name =
         b"menu/art/cut_frame\x00" as *const u8 as *const libc::c_char;
-    cdkeyMenuInfo.frame.generic.flags = 0x4000 as libc::c_int as libc::c_uint;
-    cdkeyMenuInfo.frame.generic.x = 142 as libc::c_int;
-    cdkeyMenuInfo.frame.generic.y = 118 as libc::c_int;
-    cdkeyMenuInfo.frame.width = 359 as libc::c_int;
-    cdkeyMenuInfo.frame.height = 256 as libc::c_int;
-    cdkeyMenuInfo.cdkey.generic.type_0 = 4 as libc::c_int;
+    cdkeyMenuInfo.frame.generic.flags = 0x4000 as i32 as u32;
+    cdkeyMenuInfo.frame.generic.x = 142 as i32;
+    cdkeyMenuInfo.frame.generic.y = 118 as i32;
+    cdkeyMenuInfo.frame.width = 359 as i32;
+    cdkeyMenuInfo.frame.height = 256 as i32;
+    cdkeyMenuInfo.cdkey.generic.type_0 = 4 as i32;
     cdkeyMenuInfo.cdkey.generic.name = b"CD Key:\x00" as *const u8 as *const libc::c_char;
-    cdkeyMenuInfo.cdkey.generic.flags = 0x40000 as libc::c_int as libc::c_uint;
-    cdkeyMenuInfo.cdkey.generic.x = (320 as libc::c_int as libc::c_double
-        - 16 as libc::c_int as libc::c_double * 2.5f64)
-        as libc::c_int;
-    cdkeyMenuInfo.cdkey.generic.y = 240 as libc::c_int - 16 as libc::c_int / 2 as libc::c_int;
-    cdkeyMenuInfo.cdkey.field.widthInChars = 16 as libc::c_int;
-    cdkeyMenuInfo.cdkey.field.maxchars = 16 as libc::c_int;
+    cdkeyMenuInfo.cdkey.generic.flags = 0x40000 as i32 as u32;
+    cdkeyMenuInfo.cdkey.generic.x = (320 as i32 as f64
+        - 16 as i32 as f64 * 2.5f64)
+        as i32;
+    cdkeyMenuInfo.cdkey.generic.y = 240 as i32 - 16 as i32 / 2 as i32;
+    cdkeyMenuInfo.cdkey.field.widthInChars = 16 as i32;
+    cdkeyMenuInfo.cdkey.field.maxchars = 16 as i32;
     cdkeyMenuInfo.cdkey.generic.ownerdraw =
         Some(UI_CDKeyMenu_DrawKey as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    cdkeyMenuInfo.accept.generic.type_0 = 6 as libc::c_int;
+    cdkeyMenuInfo.accept.generic.type_0 = 6 as i32;
     cdkeyMenuInfo.accept.generic.name =
         b"menu/art/accept_0\x00" as *const u8 as *const libc::c_char;
     cdkeyMenuInfo.accept.generic.flags =
-        0x10 as libc::c_int as libc::c_uint | 0x100 as libc::c_int as libc::c_uint;
-    cdkeyMenuInfo.accept.generic.id = 11 as libc::c_int;
+        0x10 as i32 as u32 | 0x100 as i32 as u32;
+    cdkeyMenuInfo.accept.generic.id = 11 as i32;
     cdkeyMenuInfo.accept.generic.callback = Some(
-        UI_CDKeyMenu_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        UI_CDKeyMenu_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    cdkeyMenuInfo.accept.generic.x = 640 as libc::c_int;
-    cdkeyMenuInfo.accept.generic.y = 480 as libc::c_int - 64 as libc::c_int;
-    cdkeyMenuInfo.accept.width = 128 as libc::c_int;
-    cdkeyMenuInfo.accept.height = 64 as libc::c_int;
+    cdkeyMenuInfo.accept.generic.x = 640 as i32;
+    cdkeyMenuInfo.accept.generic.y = 480 as i32 - 64 as i32;
+    cdkeyMenuInfo.accept.width = 128 as i32;
+    cdkeyMenuInfo.accept.height = 64 as i32;
     cdkeyMenuInfo.accept.focuspic =
         b"menu/art/accept_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    cdkeyMenuInfo.back.generic.type_0 = 6 as libc::c_int;
+    cdkeyMenuInfo.back.generic.type_0 = 6 as i32;
     cdkeyMenuInfo.back.generic.name = b"menu/art/back_0\x00" as *const u8 as *const libc::c_char;
     cdkeyMenuInfo.back.generic.flags =
-        0x4 as libc::c_int as libc::c_uint | 0x100 as libc::c_int as libc::c_uint;
-    cdkeyMenuInfo.back.generic.id = 12 as libc::c_int;
+        0x4 as i32 as u32 | 0x100 as i32 as u32;
+    cdkeyMenuInfo.back.generic.id = 12 as i32;
     cdkeyMenuInfo.back.generic.callback = Some(
-        UI_CDKeyMenu_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        UI_CDKeyMenu_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    cdkeyMenuInfo.back.generic.x = 0 as libc::c_int;
-    cdkeyMenuInfo.back.generic.y = 480 as libc::c_int - 64 as libc::c_int;
-    cdkeyMenuInfo.back.width = 128 as libc::c_int;
-    cdkeyMenuInfo.back.height = 64 as libc::c_int;
+    cdkeyMenuInfo.back.generic.x = 0 as i32;
+    cdkeyMenuInfo.back.generic.y = 480 as i32 - 64 as i32;
+    cdkeyMenuInfo.back.width = 128 as i32;
+    cdkeyMenuInfo.back.height = 64 as i32;
     cdkeyMenuInfo.back.focuspic =
         b"menu/art/back_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     crate::src::q3_ui::ui_qmenu::Menu_AddItem(
@@ -436,16 +436,16 @@ unsafe extern "C" fn UI_CDKeyMenu_Init() {
     }
     crate::src::ui::ui_syscalls::trap_GetCDKey(
         cdkeyMenuInfo.cdkey.field.buffer.as_mut_ptr(),
-        cdkeyMenuInfo.cdkey.field.maxchars + 1 as libc::c_int,
+        cdkeyMenuInfo.cdkey.field.maxchars + 1 as i32,
     );
     if crate::src::ui::ui_syscalls::trap_VerifyCDKey(
         cdkeyMenuInfo.cdkey.field.buffer.as_mut_ptr(),
         0 as *const libc::c_char,
-    ) as libc::c_uint
-        == crate::src::qcommon::q_shared::qfalse as libc::c_int as libc::c_uint
+    ) as u32
+        == crate::src::qcommon::q_shared::qfalse as i32 as u32
     {
-        cdkeyMenuInfo.cdkey.field.buffer[0 as libc::c_int as usize] =
-            0 as libc::c_int as libc::c_char
+        cdkeyMenuInfo.cdkey.field.buffer[0 as i32 as usize] =
+            0 as i32 as libc::c_char
     };
 }
 /*

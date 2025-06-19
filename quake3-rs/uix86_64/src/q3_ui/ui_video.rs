@@ -3,12 +3,12 @@ use ::libc;
 pub mod stdlib_h {
     #[inline]
 
-    pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> libc::c_int {
+    pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return ::libc::strtol(
             __nptr,
             0 as *mut libc::c_void as *mut *mut libc::c_char,
-            10 as libc::c_int,
-        ) as libc::c_int;
+            10 as i32,
+        ) as i32;
     }
 }
 
@@ -107,15 +107,15 @@ pub struct graphicsoptions_t {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct InitialVideoOptions_s {
-    pub mode: libc::c_int,
+    pub mode: i32,
     pub fullscreen: crate::src::qcommon::q_shared::qboolean,
-    pub tq: libc::c_int,
-    pub lighting: libc::c_int,
-    pub colordepth: libc::c_int,
-    pub texturebits: libc::c_int,
-    pub geometry: libc::c_int,
-    pub filter: libc::c_int,
-    pub driver: libc::c_int,
+    pub tq: i32,
+    pub lighting: i32,
+    pub colordepth: i32,
+    pub texturebits: i32,
+    pub geometry: i32,
+    pub filter: i32,
+    pub driver: i32,
     pub extensions: crate::src::qcommon::q_shared::qboolean,
 }
 
@@ -129,7 +129,7 @@ pub struct driverinfo_t {
     pub framer: crate::ui_local_h::menubitmap_s,
     pub stringbuff: [libc::c_char; 1024],
     pub strings: [*mut libc::c_char; 64],
-    pub numstrings: libc::c_int,
+    pub numstrings: i32,
 }
 
 static mut driverinfo_artlist: [*mut libc::c_char; 5] = [
@@ -173,7 +173,7 @@ static mut s_driverinfo: driverinfo_t = driverinfo_t {
         },
         string: 0 as *const libc::c_char as *mut libc::c_char,
         style: 0,
-        color: 0 as *const libc::c_float as *mut libc::c_float,
+        color: 0 as *const f32 as *mut f32,
     },
     back: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -200,7 +200,7 @@ static mut s_driverinfo: driverinfo_t = driverinfo_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     framel: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -227,7 +227,7 @@ static mut s_driverinfo: driverinfo_t = driverinfo_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     framer: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -254,7 +254,7 @@ static mut s_driverinfo: driverinfo_t = driverinfo_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     stringbuff: [0; 1024],
     strings: [0 as *const libc::c_char as *mut libc::c_char; 64],
@@ -266,8 +266,8 @@ DriverInfo_Event
 =================
 */
 
-unsafe extern "C" fn DriverInfo_Event(mut ptr: *mut libc::c_void, mut event: libc::c_int) {
-    if event != 3 as libc::c_int {
+unsafe extern "C" fn DriverInfo_Event(mut ptr: *mut libc::c_void, mut event: i32) {
+    if event != 3 as i32 {
         return;
     }
     match (*(ptr as *mut crate::ui_local_h::menucommon_s)).id {
@@ -284,65 +284,65 @@ DriverInfo_MenuDraw
 */
 
 unsafe extern "C" fn DriverInfo_MenuDraw() {
-    let mut i: libc::c_int = 0;
-    let mut y: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut y: i32 = 0;
     crate::src::q3_ui::ui_qmenu::Menu_Draw(
         &mut s_driverinfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
     );
     crate::src::q3_ui::ui_atoms::UI_DrawString(
-        320 as libc::c_int,
-        80 as libc::c_int,
+        320 as i32,
+        80 as i32,
         b"VENDOR\x00" as *const u8 as *const libc::c_char,
-        0x1 as libc::c_int | 0x10 as libc::c_int,
+        0x1 as i32 | 0x10 as i32,
         crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr(),
     );
     crate::src::q3_ui::ui_atoms::UI_DrawString(
-        320 as libc::c_int,
-        152 as libc::c_int,
+        320 as i32,
+        152 as i32,
         b"PIXELFORMAT\x00" as *const u8 as *const libc::c_char,
-        0x1 as libc::c_int | 0x10 as libc::c_int,
+        0x1 as i32 | 0x10 as i32,
         crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr(),
     );
     crate::src::q3_ui::ui_atoms::UI_DrawString(
-        320 as libc::c_int,
-        192 as libc::c_int,
+        320 as i32,
+        192 as i32,
         b"EXTENSIONS\x00" as *const u8 as *const libc::c_char,
-        0x1 as libc::c_int | 0x10 as libc::c_int,
+        0x1 as i32 | 0x10 as i32,
         crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr(),
     );
     crate::src::q3_ui::ui_atoms::UI_DrawString(
-        320 as libc::c_int,
-        80 as libc::c_int + 16 as libc::c_int,
+        320 as i32,
+        80 as i32 + 16 as i32,
         crate::src::q3_ui::ui_atoms::uis
             .glconfig
             .vendor_string
             .as_mut_ptr(),
-        0x1 as libc::c_int | 0x10 as libc::c_int,
+        0x1 as i32 | 0x10 as i32,
         crate::src::q3_ui::ui_qmenu::text_color_normal.as_mut_ptr(),
     );
     crate::src::q3_ui::ui_atoms::UI_DrawString(
-        320 as libc::c_int,
-        96 as libc::c_int + 16 as libc::c_int,
+        320 as i32,
+        96 as i32 + 16 as i32,
         crate::src::q3_ui::ui_atoms::uis
             .glconfig
             .version_string
             .as_mut_ptr(),
-        0x1 as libc::c_int | 0x10 as libc::c_int,
+        0x1 as i32 | 0x10 as i32,
         crate::src::q3_ui::ui_qmenu::text_color_normal.as_mut_ptr(),
     );
     crate::src::q3_ui::ui_atoms::UI_DrawString(
-        320 as libc::c_int,
-        112 as libc::c_int + 16 as libc::c_int,
+        320 as i32,
+        112 as i32 + 16 as i32,
         crate::src::q3_ui::ui_atoms::uis
             .glconfig
             .renderer_string
             .as_mut_ptr(),
-        0x1 as libc::c_int | 0x10 as libc::c_int,
+        0x1 as i32 | 0x10 as i32,
         crate::src::q3_ui::ui_qmenu::text_color_normal.as_mut_ptr(),
     );
     crate::src::q3_ui::ui_atoms::UI_DrawString(
-        320 as libc::c_int,
-        152 as libc::c_int + 16 as libc::c_int,
+        320 as i32,
+        152 as i32 + 16 as i32,
         crate::src::qcommon::q_shared::va(
             b"color(%d-bits) Z(%d-bits) stencil(%d-bits)\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
@@ -350,36 +350,36 @@ unsafe extern "C" fn DriverInfo_MenuDraw() {
             crate::src::q3_ui::ui_atoms::uis.glconfig.depthBits,
             crate::src::q3_ui::ui_atoms::uis.glconfig.stencilBits,
         ),
-        0x1 as libc::c_int | 0x10 as libc::c_int,
+        0x1 as i32 | 0x10 as i32,
         crate::src::q3_ui::ui_qmenu::text_color_normal.as_mut_ptr(),
     );
     // double column
-    y = 192 as libc::c_int + 16 as libc::c_int;
-    i = 0 as libc::c_int;
-    while i < s_driverinfo.numstrings / 2 as libc::c_int {
+    y = 192 as i32 + 16 as i32;
+    i = 0 as i32;
+    while i < s_driverinfo.numstrings / 2 as i32 {
         crate::src::q3_ui::ui_atoms::UI_DrawString(
-            320 as libc::c_int - 4 as libc::c_int,
+            320 as i32 - 4 as i32,
             y,
-            s_driverinfo.strings[(i * 2 as libc::c_int) as usize],
-            0x2 as libc::c_int | 0x10 as libc::c_int,
+            s_driverinfo.strings[(i * 2 as i32) as usize],
+            0x2 as i32 | 0x10 as i32,
             crate::src::q3_ui::ui_qmenu::text_color_normal.as_mut_ptr(),
         );
         crate::src::q3_ui::ui_atoms::UI_DrawString(
-            320 as libc::c_int + 4 as libc::c_int,
+            320 as i32 + 4 as i32,
             y,
-            s_driverinfo.strings[(i * 2 as libc::c_int + 1 as libc::c_int) as usize],
-            0 as libc::c_int | 0x10 as libc::c_int,
+            s_driverinfo.strings[(i * 2 as i32 + 1 as i32) as usize],
+            0 as i32 | 0x10 as i32,
             crate::src::q3_ui::ui_qmenu::text_color_normal.as_mut_ptr(),
         );
-        y += 16 as libc::c_int;
+        y += 16 as i32;
         i += 1
     }
-    if s_driverinfo.numstrings & 1 as libc::c_int != 0 {
+    if s_driverinfo.numstrings & 1 as i32 != 0 {
         crate::src::q3_ui::ui_atoms::UI_DrawString(
-            320 as libc::c_int,
+            320 as i32,
             y,
-            s_driverinfo.strings[(s_driverinfo.numstrings - 1 as libc::c_int) as usize],
-            0x1 as libc::c_int | 0x10 as libc::c_int,
+            s_driverinfo.strings[(s_driverinfo.numstrings - 1 as i32) as usize],
+            0x1 as i32 | 0x10 as i32,
             crate::src::q3_ui::ui_qmenu::text_color_normal.as_mut_ptr(),
         );
     };
@@ -392,9 +392,9 @@ DriverInfo_Cache
 #[no_mangle]
 
 pub unsafe extern "C" fn DriverInfo_Cache() {
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     // touch all our pics
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while !driverinfo_artlist[i as usize].is_null() {
         crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(driverinfo_artlist[i as usize]);
         i += 1
@@ -408,49 +408,49 @@ UI_DriverInfo_Menu
 
 unsafe extern "C" fn UI_DriverInfo_Menu() {
     let mut eptr: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut i: libc::c_int = 0;
-    let mut len: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut len: i32 = 0;
     // zero set all our globals
     crate::stdlib::memset(
         &mut s_driverinfo as *mut driverinfo_t as *mut libc::c_void,
-        0 as libc::c_int,
+        0 as i32,
         ::std::mem::size_of::<driverinfo_t>() as libc::c_ulong,
     );
     DriverInfo_Cache();
     s_driverinfo.menu.fullscreen = crate::src::qcommon::q_shared::qtrue;
     s_driverinfo.menu.draw = Some(DriverInfo_MenuDraw as unsafe extern "C" fn() -> ());
-    s_driverinfo.banner.generic.type_0 = 10 as libc::c_int;
-    s_driverinfo.banner.generic.x = 320 as libc::c_int;
-    s_driverinfo.banner.generic.y = 16 as libc::c_int;
+    s_driverinfo.banner.generic.type_0 = 10 as i32;
+    s_driverinfo.banner.generic.x = 320 as i32;
+    s_driverinfo.banner.generic.y = 16 as i32;
     s_driverinfo.banner.string =
         b"DRIVER INFO\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     s_driverinfo.banner.color = crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr();
-    s_driverinfo.banner.style = 0x1 as libc::c_int;
-    s_driverinfo.framel.generic.type_0 = 6 as libc::c_int;
+    s_driverinfo.banner.style = 0x1 as i32;
+    s_driverinfo.framel.generic.type_0 = 6 as i32;
     s_driverinfo.framel.generic.name = b"menu/art/frame2_l\x00" as *const u8 as *const libc::c_char;
-    s_driverinfo.framel.generic.flags = 0x4000 as libc::c_int as libc::c_uint;
-    s_driverinfo.framel.generic.x = 0 as libc::c_int;
-    s_driverinfo.framel.generic.y = 78 as libc::c_int;
-    s_driverinfo.framel.width = 256 as libc::c_int;
-    s_driverinfo.framel.height = 329 as libc::c_int;
-    s_driverinfo.framer.generic.type_0 = 6 as libc::c_int;
+    s_driverinfo.framel.generic.flags = 0x4000 as i32 as u32;
+    s_driverinfo.framel.generic.x = 0 as i32;
+    s_driverinfo.framel.generic.y = 78 as i32;
+    s_driverinfo.framel.width = 256 as i32;
+    s_driverinfo.framel.height = 329 as i32;
+    s_driverinfo.framer.generic.type_0 = 6 as i32;
     s_driverinfo.framer.generic.name = b"menu/art/frame1_r\x00" as *const u8 as *const libc::c_char;
-    s_driverinfo.framer.generic.flags = 0x4000 as libc::c_int as libc::c_uint;
-    s_driverinfo.framer.generic.x = 376 as libc::c_int;
-    s_driverinfo.framer.generic.y = 76 as libc::c_int;
-    s_driverinfo.framer.width = 256 as libc::c_int;
-    s_driverinfo.framer.height = 334 as libc::c_int;
-    s_driverinfo.back.generic.type_0 = 6 as libc::c_int;
+    s_driverinfo.framer.generic.flags = 0x4000 as i32 as u32;
+    s_driverinfo.framer.generic.x = 376 as i32;
+    s_driverinfo.framer.generic.y = 76 as i32;
+    s_driverinfo.framer.width = 256 as i32;
+    s_driverinfo.framer.height = 334 as i32;
+    s_driverinfo.back.generic.type_0 = 6 as i32;
     s_driverinfo.back.generic.name = b"menu/art/back_0\x00" as *const u8 as *const libc::c_char;
     s_driverinfo.back.generic.flags =
-        0x4 as libc::c_int as libc::c_uint | 0x100 as libc::c_int as libc::c_uint;
+        0x4 as i32 as u32 | 0x100 as i32 as u32;
     s_driverinfo.back.generic.callback =
-        Some(DriverInfo_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> ());
-    s_driverinfo.back.generic.id = 100 as libc::c_int;
-    s_driverinfo.back.generic.x = 0 as libc::c_int;
-    s_driverinfo.back.generic.y = 480 as libc::c_int - 64 as libc::c_int;
-    s_driverinfo.back.width = 128 as libc::c_int;
-    s_driverinfo.back.height = 64 as libc::c_int;
+        Some(DriverInfo_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
+    s_driverinfo.back.generic.id = 100 as i32;
+    s_driverinfo.back.generic.x = 0 as i32;
+    s_driverinfo.back.generic.y = 480 as i32 - 64 as i32;
+    s_driverinfo.back.width = 128 as i32;
+    s_driverinfo.back.height = 64 as i32;
     s_driverinfo.back.focuspic =
         b"menu/art/back_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     // TTimo: overflow with particularly long GL extensions (such as the gf3)
@@ -463,32 +463,32 @@ unsafe extern "C" fn UI_DriverInfo_Menu() {
             .glconfig
             .extensions_string
             .as_mut_ptr(),
-        1024 as libc::c_int,
+        1024 as i32,
     );
     // build null terminated extension strings
     eptr = s_driverinfo.stringbuff.as_mut_ptr();
-    while s_driverinfo.numstrings < 40 as libc::c_int && *eptr as libc::c_int != 0 {
-        while *eptr as libc::c_int != 0 && *eptr as libc::c_int == ' ' as i32 {
+    while s_driverinfo.numstrings < 40 as i32 && *eptr as i32 != 0 {
+        while *eptr as i32 != 0 && *eptr as i32 == ' ' as i32 {
             let fresh0 = eptr;
             eptr = eptr.offset(1);
             *fresh0 = '\u{0}' as i32 as libc::c_char
         }
         // track start of valid string
-        if *eptr as libc::c_int != 0 && *eptr as libc::c_int != ' ' as i32 {
+        if *eptr as i32 != 0 && *eptr as i32 != ' ' as i32 {
             let fresh1 = s_driverinfo.numstrings;
             s_driverinfo.numstrings = s_driverinfo.numstrings + 1;
             s_driverinfo.strings[fresh1 as usize] = eptr
         }
-        while *eptr as libc::c_int != 0 && *eptr as libc::c_int != ' ' as i32 {
+        while *eptr as i32 != 0 && *eptr as i32 != ' ' as i32 {
             eptr = eptr.offset(1)
         }
     }
     // safety length strings for display
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < s_driverinfo.numstrings {
-        len = crate::stdlib::strlen(s_driverinfo.strings[i as usize]) as libc::c_int;
-        if len > 32 as libc::c_int {
-            *s_driverinfo.strings[i as usize].offset((len - 1 as libc::c_int) as isize) =
+        len = crate::stdlib::strlen(s_driverinfo.strings[i as usize]) as i32;
+        if len > 32 as i32 {
+            *s_driverinfo.strings[i as usize].offset((len - 1 as i32) as isize) =
                 '>' as i32 as libc::c_char;
             *s_driverinfo.strings[i as usize].offset(len as isize) = '\u{0}' as i32 as libc::c_char
         }
@@ -561,7 +561,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
         },
         string: 0 as *const libc::c_char as *mut libc::c_char,
         style: 0,
-        color: 0 as *const libc::c_float as *mut libc::c_float,
+        color: 0 as *const f32 as *mut f32,
     },
     framel: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -588,7 +588,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     framer: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -615,7 +615,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     graphics: crate::ui_local_h::menutext_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -638,7 +638,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
         },
         string: 0 as *const libc::c_char as *mut libc::c_char,
         style: 0,
-        color: 0 as *const libc::c_float as *mut libc::c_float,
+        color: 0 as *const f32 as *mut f32,
     },
     display: crate::ui_local_h::menutext_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -661,7 +661,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
         },
         string: 0 as *const libc::c_char as *mut libc::c_char,
         style: 0,
-        color: 0 as *const libc::c_float as *mut libc::c_float,
+        color: 0 as *const f32 as *mut f32,
     },
     sound: crate::ui_local_h::menutext_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -684,7 +684,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
         },
         string: 0 as *const libc::c_char as *mut libc::c_char,
         style: 0,
-        color: 0 as *const libc::c_float as *mut libc::c_float,
+        color: 0 as *const f32 as *mut f32,
     },
     network: crate::ui_local_h::menutext_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -707,7 +707,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
         },
         string: 0 as *const libc::c_char as *mut libc::c_char,
         style: 0,
-        color: 0 as *const libc::c_float as *mut libc::c_float,
+        color: 0 as *const f32 as *mut f32,
     },
     list: crate::ui_local_h::menulist_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -1073,7 +1073,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
         },
         string: 0 as *const libc::c_char as *mut libc::c_char,
         style: 0,
-        color: 0 as *const libc::c_float as *mut libc::c_float,
+        color: 0 as *const f32 as *mut f32,
     },
     apply: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -1100,7 +1100,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     back: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -1127,97 +1127,97 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
 };
 
 static mut s_ivo_templates: [InitialVideoOptions_s; 6] = [
     {
         let mut init = InitialVideoOptions_s {
-            mode: 6 as libc::c_int,
+            mode: 6 as i32,
             fullscreen: crate::src::qcommon::q_shared::qtrue,
-            tq: 3 as libc::c_int,
-            lighting: 0 as libc::c_int,
-            colordepth: 2 as libc::c_int,
-            texturebits: 2 as libc::c_int,
-            geometry: 2 as libc::c_int,
-            filter: 1 as libc::c_int,
-            driver: 0 as libc::c_int,
+            tq: 3 as i32,
+            lighting: 0 as i32,
+            colordepth: 2 as i32,
+            texturebits: 2 as i32,
+            geometry: 2 as i32,
+            filter: 1 as i32,
+            driver: 0 as i32,
             extensions: crate::src::qcommon::q_shared::qtrue,
         };
         init
     },
     {
         let mut init = InitialVideoOptions_s {
-            mode: 4 as libc::c_int,
+            mode: 4 as i32,
             fullscreen: crate::src::qcommon::q_shared::qtrue,
-            tq: 2 as libc::c_int,
-            lighting: 0 as libc::c_int,
-            colordepth: 2 as libc::c_int,
-            texturebits: 2 as libc::c_int,
-            geometry: 1 as libc::c_int,
-            filter: 1 as libc::c_int,
-            driver: 0 as libc::c_int,
+            tq: 2 as i32,
+            lighting: 0 as i32,
+            colordepth: 2 as i32,
+            texturebits: 2 as i32,
+            geometry: 1 as i32,
+            filter: 1 as i32,
+            driver: 0 as i32,
             extensions: crate::src::qcommon::q_shared::qtrue,
         };
         init
     },
     {
         let mut init = InitialVideoOptions_s {
-            mode: 3 as libc::c_int,
+            mode: 3 as i32,
             fullscreen: crate::src::qcommon::q_shared::qtrue,
-            tq: 2 as libc::c_int,
-            lighting: 0 as libc::c_int,
-            colordepth: 0 as libc::c_int,
-            texturebits: 0 as libc::c_int,
-            geometry: 1 as libc::c_int,
-            filter: 0 as libc::c_int,
-            driver: 0 as libc::c_int,
+            tq: 2 as i32,
+            lighting: 0 as i32,
+            colordepth: 0 as i32,
+            texturebits: 0 as i32,
+            geometry: 1 as i32,
+            filter: 0 as i32,
+            driver: 0 as i32,
             extensions: crate::src::qcommon::q_shared::qtrue,
         };
         init
     },
     {
         let mut init = InitialVideoOptions_s {
-            mode: 2 as libc::c_int,
+            mode: 2 as i32,
             fullscreen: crate::src::qcommon::q_shared::qtrue,
-            tq: 1 as libc::c_int,
-            lighting: 0 as libc::c_int,
-            colordepth: 1 as libc::c_int,
-            texturebits: 0 as libc::c_int,
-            geometry: 0 as libc::c_int,
-            filter: 0 as libc::c_int,
-            driver: 0 as libc::c_int,
+            tq: 1 as i32,
+            lighting: 0 as i32,
+            colordepth: 1 as i32,
+            texturebits: 0 as i32,
+            geometry: 0 as i32,
+            filter: 0 as i32,
+            driver: 0 as i32,
             extensions: crate::src::qcommon::q_shared::qtrue,
         };
         init
     },
     {
         let mut init = InitialVideoOptions_s {
-            mode: 2 as libc::c_int,
+            mode: 2 as i32,
             fullscreen: crate::src::qcommon::q_shared::qtrue,
-            tq: 1 as libc::c_int,
-            lighting: 1 as libc::c_int,
-            colordepth: 1 as libc::c_int,
-            texturebits: 0 as libc::c_int,
-            geometry: 0 as libc::c_int,
-            filter: 0 as libc::c_int,
-            driver: 0 as libc::c_int,
+            tq: 1 as i32,
+            lighting: 1 as i32,
+            colordepth: 1 as i32,
+            texturebits: 0 as i32,
+            geometry: 0 as i32,
+            filter: 0 as i32,
+            driver: 0 as i32,
             extensions: crate::src::qcommon::q_shared::qtrue,
         };
         init
     },
     {
         let mut init = InitialVideoOptions_s {
-            mode: 3 as libc::c_int,
+            mode: 3 as i32,
             fullscreen: crate::src::qcommon::q_shared::qtrue,
-            tq: 1 as libc::c_int,
-            lighting: 0 as libc::c_int,
-            colordepth: 0 as libc::c_int,
-            texturebits: 0 as libc::c_int,
-            geometry: 1 as libc::c_int,
-            filter: 0 as libc::c_int,
-            driver: 0 as libc::c_int,
+            tq: 1 as i32,
+            lighting: 0 as i32,
+            colordepth: 0 as i32,
+            texturebits: 0 as i32,
+            geometry: 1 as i32,
+            filter: 0 as i32,
+            driver: 0 as i32,
             extensions: crate::src::qcommon::q_shared::qtrue,
         };
         init
@@ -1276,9 +1276,9 @@ static mut ratios: [*const libc::c_char; 32] = [0 as *const libc::c_char; 32];
 
 static mut ratioBuf: [[libc::c_char; 8]; 32] = [[0; 8]; 32];
 
-static mut ratioToRes: [libc::c_int; 32] = [0; 32];
+static mut ratioToRes: [i32; 32] = [0; 32];
 
-static mut resToRatio: [libc::c_int; 32] = [0; 32];
+static mut resToRatio: [i32; 32] = [0; 32];
 
 static mut resbuf: [libc::c_char; 1024] = [0; 1024];
 
@@ -1294,15 +1294,15 @@ GraphicsOptions_FindBuiltinResolution
 =================
 */
 
-unsafe extern "C" fn GraphicsOptions_FindBuiltinResolution(mut mode: libc::c_int) -> libc::c_int {
-    let mut i: libc::c_int = 0;
+unsafe extern "C" fn GraphicsOptions_FindBuiltinResolution(mut mode: i32) -> i32 {
+    let mut i: i32 = 0;
     if resolutionsDetected as u64 == 0 {
         return mode;
     }
-    if mode < 0 as libc::c_int {
-        return -(1 as libc::c_int);
+    if mode < 0 as i32 {
+        return -(1 as i32);
     }
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while !builtinResolutions[i as usize].is_null() {
         if crate::src::qcommon::q_shared::Q_stricmp(
             builtinResolutions[i as usize],
@@ -1313,7 +1313,7 @@ unsafe extern "C" fn GraphicsOptions_FindBuiltinResolution(mut mode: libc::c_int
         }
         i += 1
     }
-    return -(1 as libc::c_int);
+    return -(1 as i32);
 }
 /*
 =================
@@ -1321,15 +1321,15 @@ GraphicsOptions_FindDetectedResolution
 =================
 */
 
-unsafe extern "C" fn GraphicsOptions_FindDetectedResolution(mut mode: libc::c_int) -> libc::c_int {
-    let mut i: libc::c_int = 0;
+unsafe extern "C" fn GraphicsOptions_FindDetectedResolution(mut mode: i32) -> i32 {
+    let mut i: i32 = 0;
     if resolutionsDetected as u64 == 0 {
         return mode;
     }
-    if mode < 0 as libc::c_int {
-        return -(1 as libc::c_int);
+    if mode < 0 as i32 {
+        return -(1 as i32);
     }
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while !detectedResolutions[i as usize].is_null() {
         if crate::src::qcommon::q_shared::Q_stricmp(
             builtinResolutions[mode as usize],
@@ -1340,7 +1340,7 @@ unsafe extern "C" fn GraphicsOptions_FindDetectedResolution(mut mode: libc::c_in
         }
         i += 1
     }
-    return -(1 as libc::c_int);
+    return -(1 as i32);
 }
 /*
 =================
@@ -1349,43 +1349,43 @@ GraphicsOptions_GetAspectRatios
 */
 
 unsafe extern "C" fn GraphicsOptions_GetAspectRatios() {
-    let mut i: libc::c_int = 0;
-    let mut r: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut r: i32 = 0;
     // build ratio list from resolutions
-    r = 0 as libc::c_int;
+    r = 0 as i32;
     while !(*resolutions.offset(r as isize)).is_null() {
-        let mut w: libc::c_int = 0;
-        let mut h: libc::c_int = 0;
+        let mut w: i32 = 0;
+        let mut h: i32 = 0;
         let mut x: *mut libc::c_char = 0 as *mut libc::c_char;
         let mut str: [libc::c_char; 8] = [0; 8];
         // calculate resolution's aspect ratio
         x = ::libc::strchr(*resolutions.offset(r as isize), 'x' as i32)
-            .offset(1 as libc::c_int as isize);
+            .offset(1 as i32 as isize);
         crate::src::qcommon::q_shared::Q_strncpyz(
             str.as_mut_ptr(),
             *resolutions.offset(r as isize),
-            x.offset_from(*resolutions.offset(r as isize)) as libc::c_long as libc::c_int,
+            x.offset_from(*resolutions.offset(r as isize)) as libc::c_long as i32,
         );
         w = atoi(str.as_mut_ptr());
         h = atoi(x);
         crate::src::qcommon::q_shared::Com_sprintf(
             str.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 8]>() as libc::c_ulong as libc::c_int,
+            ::std::mem::size_of::<[libc::c_char; 8]>() as libc::c_ulong as i32,
             b"%.2f:1\x00" as *const u8 as *const libc::c_char,
-            (w as libc::c_float / h as libc::c_float) as libc::c_double,
+            (w as f32 / h as f32) as f64,
         );
         // rename common ratios ("1.33:1" -> "4:3")
-        i = 0 as libc::c_int;
-        while !knownRatios[i as usize][0 as libc::c_int as usize].is_null() {
+        i = 0 as i32;
+        while !knownRatios[i as usize][0 as i32 as usize].is_null() {
             if crate::src::qcommon::q_shared::Q_stricmp(
                 str.as_mut_ptr(),
-                knownRatios[i as usize][0 as libc::c_int as usize],
+                knownRatios[i as usize][0 as i32 as usize],
             ) == 0
             {
                 crate::src::qcommon::q_shared::Q_strncpyz(
                     str.as_mut_ptr(),
-                    knownRatios[i as usize][1 as libc::c_int as usize],
-                    ::std::mem::size_of::<[libc::c_char; 8]>() as libc::c_ulong as libc::c_int,
+                    knownRatios[i as usize][1 as i32 as usize],
+                    ::std::mem::size_of::<[libc::c_char; 8]>() as libc::c_ulong as i32,
                 );
                 break;
             } else {
@@ -1394,8 +1394,8 @@ unsafe extern "C" fn GraphicsOptions_GetAspectRatios() {
         }
         // add ratio to list if it is new
         // establish res/ratio relationship
-        i = 0 as libc::c_int;
-        while ratioBuf[i as usize][0 as libc::c_int as usize] != 0 {
+        i = 0 as i32;
+        while ratioBuf[i as usize][0 as i32 as usize] != 0 {
             if crate::src::qcommon::q_shared::Q_stricmp(
                 str.as_mut_ptr(),
                 ratioBuf[i as usize].as_mut_ptr(),
@@ -1405,11 +1405,11 @@ unsafe extern "C" fn GraphicsOptions_GetAspectRatios() {
             }
             i += 1
         }
-        if ratioBuf[i as usize][0 as libc::c_int as usize] == 0 {
+        if ratioBuf[i as usize][0 as i32 as usize] == 0 {
             crate::src::qcommon::q_shared::Q_strncpyz(
                 ratioBuf[i as usize].as_mut_ptr(),
                 str.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 8]>() as libc::c_ulong as libc::c_int,
+                ::std::mem::size_of::<[libc::c_char; 8]>() as libc::c_ulong as i32,
             );
             ratioToRes[i as usize] = r
         }
@@ -1432,7 +1432,7 @@ unsafe extern "C" fn GraphicsOptions_GetInitialVideo() {
     s_ivo.fullscreen = s_graphicsoptions.fs.curvalue as crate::src::qcommon::q_shared::qboolean;
     s_ivo.extensions =
         s_graphicsoptions.allow_extensions.curvalue as crate::src::qcommon::q_shared::qboolean;
-    s_ivo.tq = s_graphicsoptions.tq.curvalue as libc::c_int;
+    s_ivo.tq = s_graphicsoptions.tq.curvalue as i32;
     s_ivo.lighting = s_graphicsoptions.lighting.curvalue;
     s_ivo.geometry = s_graphicsoptions.geometry.curvalue;
     s_ivo.filter = s_graphicsoptions.filter.curvalue;
@@ -1450,16 +1450,16 @@ unsafe extern "C" fn GraphicsOptions_GetResolutions() {
         crate::src::q3_ui::ui_atoms::UI_Cvar_VariableString(
             b"r_availableModes\x00" as *const u8 as *const libc::c_char,
         ),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
     if *resbuf.as_mut_ptr() != 0 {
         let mut s: *mut libc::c_char = resbuf.as_mut_ptr();
-        let mut i: libc::c_uint = 0 as libc::c_int as libc::c_uint;
+        let mut i: u32 = 0 as i32 as u32;
         while !s.is_null()
             && (i as libc::c_ulong)
                 < (::std::mem::size_of::<[*const libc::c_char; 32]>() as libc::c_ulong)
                     .wrapping_div(::std::mem::size_of::<*const libc::c_char>() as libc::c_ulong)
-                    .wrapping_sub(1 as libc::c_int as libc::c_ulong)
+                    .wrapping_sub(1 as i32 as libc::c_ulong)
         {
             let fresh2 = i;
             i = i.wrapping_add(1);
@@ -1472,7 +1472,7 @@ unsafe extern "C" fn GraphicsOptions_GetResolutions() {
             }
         }
         detectedResolutions[i as usize] = 0 as *const libc::c_char;
-        if i > 0 as libc::c_int as libc::c_uint {
+        if i > 0 as i32 as u32 {
             resolutions = detectedResolutions.as_mut_ptr();
             resolutionsDetected = crate::src::qcommon::q_shared::qtrue
         }
@@ -1485,22 +1485,22 @@ GraphicsOptions_CheckConfig
 */
 
 unsafe extern "C" fn GraphicsOptions_CheckConfig() {
-    let mut i: libc::c_int = 0;
-    i = 0 as libc::c_int;
+    let mut i: i32 = 0;
+    i = 0 as i32;
     while (i as libc::c_ulong)
         < (::std::mem::size_of::<[InitialVideoOptions_s; 6]>() as libc::c_ulong)
             .wrapping_div(::std::mem::size_of::<InitialVideoOptions_s>() as libc::c_ulong)
-            .wrapping_sub(1 as libc::c_int as libc::c_ulong)
+            .wrapping_sub(1 as i32 as libc::c_ulong)
     {
         if !(s_ivo_templates[i as usize].colordepth != s_graphicsoptions.colordepth.curvalue) {
             if !(s_ivo_templates[i as usize].driver != s_graphicsoptions.driver.curvalue) {
                 if !(GraphicsOptions_FindDetectedResolution(s_ivo_templates[i as usize].mode)
                     != s_graphicsoptions.mode.curvalue)
                 {
-                    if !(s_ivo_templates[i as usize].fullscreen as libc::c_uint
-                        != s_graphicsoptions.fs.curvalue as libc::c_uint)
+                    if !(s_ivo_templates[i as usize].fullscreen as u32
+                        != s_graphicsoptions.fs.curvalue as u32)
                     {
-                        if !(s_ivo_templates[i as usize].tq as libc::c_float
+                        if !(s_ivo_templates[i as usize].tq as f32
                             != s_graphicsoptions.tq.curvalue)
                         {
                             if !(s_ivo_templates[i as usize].lighting
@@ -1530,7 +1530,7 @@ unsafe extern "C" fn GraphicsOptions_CheckConfig() {
     s_graphicsoptions.list.curvalue =
         (::std::mem::size_of::<[InitialVideoOptions_s; 6]>() as libc::c_ulong)
             .wrapping_div(::std::mem::size_of::<InitialVideoOptions_s>() as libc::c_ulong)
-            .wrapping_sub(1 as libc::c_int as libc::c_ulong) as libc::c_int;
+            .wrapping_sub(1 as i32 as libc::c_ulong) as i32;
 }
 /*
 =================
@@ -1539,69 +1539,69 @@ GraphicsOptions_UpdateMenuItems
 */
 
 unsafe extern "C" fn GraphicsOptions_UpdateMenuItems() {
-    if s_graphicsoptions.driver.curvalue == 1 as libc::c_int {
-        s_graphicsoptions.fs.curvalue = 1 as libc::c_int;
-        s_graphicsoptions.fs.generic.flags |= 0x2000 as libc::c_int as libc::c_uint;
-        s_graphicsoptions.colordepth.curvalue = 1 as libc::c_int
+    if s_graphicsoptions.driver.curvalue == 1 as i32 {
+        s_graphicsoptions.fs.curvalue = 1 as i32;
+        s_graphicsoptions.fs.generic.flags |= 0x2000 as i32 as u32;
+        s_graphicsoptions.colordepth.curvalue = 1 as i32
     } else {
-        s_graphicsoptions.fs.generic.flags &= !(0x2000 as libc::c_int as libc::c_uint)
+        s_graphicsoptions.fs.generic.flags &= !(0x2000 as i32 as u32)
     }
-    if s_graphicsoptions.fs.curvalue == 0 as libc::c_int
-        || s_graphicsoptions.driver.curvalue == 1 as libc::c_int
+    if s_graphicsoptions.fs.curvalue == 0 as i32
+        || s_graphicsoptions.driver.curvalue == 1 as i32
     {
-        s_graphicsoptions.colordepth.curvalue = 0 as libc::c_int;
-        s_graphicsoptions.colordepth.generic.flags |= 0x2000 as libc::c_int as libc::c_uint
+        s_graphicsoptions.colordepth.curvalue = 0 as i32;
+        s_graphicsoptions.colordepth.generic.flags |= 0x2000 as i32 as u32
     } else {
-        s_graphicsoptions.colordepth.generic.flags &= !(0x2000 as libc::c_int as libc::c_uint)
+        s_graphicsoptions.colordepth.generic.flags &= !(0x2000 as i32 as u32)
     }
-    if s_graphicsoptions.allow_extensions.curvalue == 0 as libc::c_int {
-        if s_graphicsoptions.texturebits.curvalue == 0 as libc::c_int {
-            s_graphicsoptions.texturebits.curvalue = 1 as libc::c_int
+    if s_graphicsoptions.allow_extensions.curvalue == 0 as i32 {
+        if s_graphicsoptions.texturebits.curvalue == 0 as i32 {
+            s_graphicsoptions.texturebits.curvalue = 1 as i32
         }
     }
     s_graphicsoptions.apply.generic.flags |=
-        0x1000 as libc::c_int as libc::c_uint | 0x4000 as libc::c_int as libc::c_uint;
+        0x1000 as i32 as u32 | 0x4000 as i32 as u32;
     if s_ivo.mode != s_graphicsoptions.mode.curvalue {
         s_graphicsoptions.apply.generic.flags &=
-            !(0x1000 as libc::c_int as libc::c_uint | 0x4000 as libc::c_int as libc::c_uint)
+            !(0x1000 as i32 as u32 | 0x4000 as i32 as u32)
     }
-    if s_ivo.fullscreen as libc::c_uint != s_graphicsoptions.fs.curvalue as libc::c_uint {
+    if s_ivo.fullscreen as u32 != s_graphicsoptions.fs.curvalue as u32 {
         s_graphicsoptions.apply.generic.flags &=
-            !(0x1000 as libc::c_int as libc::c_uint | 0x4000 as libc::c_int as libc::c_uint)
+            !(0x1000 as i32 as u32 | 0x4000 as i32 as u32)
     }
-    if s_ivo.extensions as libc::c_uint
-        != s_graphicsoptions.allow_extensions.curvalue as libc::c_uint
+    if s_ivo.extensions as u32
+        != s_graphicsoptions.allow_extensions.curvalue as u32
     {
         s_graphicsoptions.apply.generic.flags &=
-            !(0x1000 as libc::c_int as libc::c_uint | 0x4000 as libc::c_int as libc::c_uint)
+            !(0x1000 as i32 as u32 | 0x4000 as i32 as u32)
     }
-    if s_ivo.tq as libc::c_float != s_graphicsoptions.tq.curvalue {
+    if s_ivo.tq as f32 != s_graphicsoptions.tq.curvalue {
         s_graphicsoptions.apply.generic.flags &=
-            !(0x1000 as libc::c_int as libc::c_uint | 0x4000 as libc::c_int as libc::c_uint)
+            !(0x1000 as i32 as u32 | 0x4000 as i32 as u32)
     }
     if s_ivo.lighting != s_graphicsoptions.lighting.curvalue {
         s_graphicsoptions.apply.generic.flags &=
-            !(0x1000 as libc::c_int as libc::c_uint | 0x4000 as libc::c_int as libc::c_uint)
+            !(0x1000 as i32 as u32 | 0x4000 as i32 as u32)
     }
     if s_ivo.colordepth != s_graphicsoptions.colordepth.curvalue {
         s_graphicsoptions.apply.generic.flags &=
-            !(0x1000 as libc::c_int as libc::c_uint | 0x4000 as libc::c_int as libc::c_uint)
+            !(0x1000 as i32 as u32 | 0x4000 as i32 as u32)
     }
     if s_ivo.driver != s_graphicsoptions.driver.curvalue {
         s_graphicsoptions.apply.generic.flags &=
-            !(0x1000 as libc::c_int as libc::c_uint | 0x4000 as libc::c_int as libc::c_uint)
+            !(0x1000 as i32 as u32 | 0x4000 as i32 as u32)
     }
     if s_ivo.texturebits != s_graphicsoptions.texturebits.curvalue {
         s_graphicsoptions.apply.generic.flags &=
-            !(0x1000 as libc::c_int as libc::c_uint | 0x4000 as libc::c_int as libc::c_uint)
+            !(0x1000 as i32 as u32 | 0x4000 as i32 as u32)
     }
     if s_ivo.geometry != s_graphicsoptions.geometry.curvalue {
         s_graphicsoptions.apply.generic.flags &=
-            !(0x1000 as libc::c_int as libc::c_uint | 0x4000 as libc::c_int as libc::c_uint)
+            !(0x1000 as i32 as u32 | 0x4000 as i32 as u32)
     }
     if s_ivo.filter != s_graphicsoptions.filter.curvalue {
         s_graphicsoptions.apply.generic.flags &=
-            !(0x1000 as libc::c_int as libc::c_uint | 0x4000 as libc::c_int as libc::c_uint)
+            !(0x1000 as i32 as u32 | 0x4000 as i32 as u32)
     }
     GraphicsOptions_CheckConfig();
 }
@@ -1613,68 +1613,68 @@ GraphicsOptions_ApplyChanges
 
 unsafe extern "C" fn GraphicsOptions_ApplyChanges(
     mut _unused: *mut libc::c_void,
-    mut notification: libc::c_int,
+    mut notification: i32,
 ) {
-    if notification != 3 as libc::c_int {
+    if notification != 3 as i32 {
         return;
     }
     match s_graphicsoptions.texturebits.curvalue {
         0 => {
             crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
                 b"r_texturebits\x00" as *const u8 as *const libc::c_char,
-                0 as libc::c_int as libc::c_float,
+                0 as i32 as f32,
             );
         }
         1 => {
             crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
                 b"r_texturebits\x00" as *const u8 as *const libc::c_char,
-                16 as libc::c_int as libc::c_float,
+                16 as i32 as f32,
             );
         }
         2 => {
             crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
                 b"r_texturebits\x00" as *const u8 as *const libc::c_char,
-                32 as libc::c_int as libc::c_float,
+                32 as i32 as f32,
             );
         }
         _ => {}
     }
     crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
         b"r_picmip\x00" as *const u8 as *const libc::c_char,
-        3 as libc::c_int as libc::c_float - s_graphicsoptions.tq.curvalue,
+        3 as i32 as f32 - s_graphicsoptions.tq.curvalue,
     );
     crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
         b"r_allowExtensions\x00" as *const u8 as *const libc::c_char,
-        s_graphicsoptions.allow_extensions.curvalue as libc::c_float,
+        s_graphicsoptions.allow_extensions.curvalue as f32,
     );
     if resolutionsDetected as u64 != 0 {
         // search for builtin mode that matches the detected mode
-        let mut mode: libc::c_int = 0;
-        if s_graphicsoptions.mode.curvalue == -(1 as libc::c_int)
+        let mut mode: i32 = 0;
+        if s_graphicsoptions.mode.curvalue == -(1 as i32)
             || s_graphicsoptions.mode.curvalue as libc::c_ulong
                 >= (::std::mem::size_of::<[*const libc::c_char; 32]>() as libc::c_ulong)
                     .wrapping_div(::std::mem::size_of::<*const libc::c_char>() as libc::c_ulong)
         {
-            s_graphicsoptions.mode.curvalue = 0 as libc::c_int
+            s_graphicsoptions.mode.curvalue = 0 as i32
         }
         mode = GraphicsOptions_FindBuiltinResolution(s_graphicsoptions.mode.curvalue);
-        if mode == -(1 as libc::c_int) {
+        if mode == -(1 as i32) {
             let mut w: [libc::c_char; 16] = [0; 16];
             let mut h: [libc::c_char; 16] = [0; 16];
             crate::src::qcommon::q_shared::Q_strncpyz(
                 w.as_mut_ptr(),
                 detectedResolutions[s_graphicsoptions.mode.curvalue as usize],
-                ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as libc::c_int,
+                ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as i32,
             );
-            *::libc::strchr(w.as_mut_ptr(), 'x' as i32) = 0 as libc::c_int as libc::c_char;
+            *::libc::strchr(w.as_mut_ptr(), 'x' as i32) = 0 as i32 as libc::c_char;
             crate::src::qcommon::q_shared::Q_strncpyz(
                 h.as_mut_ptr(),
                 ::libc::strchr(
                     detectedResolutions[s_graphicsoptions.mode.curvalue as usize],
                     'x' as i32,
                 )
-                .offset(1 as libc::c_int as isize),
-                ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as libc::c_int,
+                .offset(1 as i32 as isize),
+                ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as i32,
             );
             crate::src::ui::ui_syscalls::trap_Cvar_Set(
                 b"r_customwidth\x00" as *const u8 as *const libc::c_char,
@@ -1687,27 +1687,27 @@ unsafe extern "C" fn GraphicsOptions_ApplyChanges(
         }
         crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
             b"r_mode\x00" as *const u8 as *const libc::c_char,
-            mode as libc::c_float,
+            mode as f32,
         );
     } else {
         crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
             b"r_mode\x00" as *const u8 as *const libc::c_char,
-            s_graphicsoptions.mode.curvalue as libc::c_float,
+            s_graphicsoptions.mode.curvalue as f32,
         );
     }
     crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
         b"r_fullscreen\x00" as *const u8 as *const libc::c_char,
-        s_graphicsoptions.fs.curvalue as libc::c_float,
+        s_graphicsoptions.fs.curvalue as f32,
     );
     match s_graphicsoptions.colordepth.curvalue {
         0 => {
             crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
                 b"r_colorbits\x00" as *const u8 as *const libc::c_char,
-                0 as libc::c_int as libc::c_float,
+                0 as i32 as f32,
             );
             crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
                 b"r_depthbits\x00" as *const u8 as *const libc::c_char,
-                0 as libc::c_int as libc::c_float,
+                0 as i32 as f32,
             );
             crate::src::ui::ui_syscalls::trap_Cvar_Reset(
                 b"r_stencilbits\x00" as *const u8 as *const libc::c_char,
@@ -1716,63 +1716,63 @@ unsafe extern "C" fn GraphicsOptions_ApplyChanges(
         1 => {
             crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
                 b"r_colorbits\x00" as *const u8 as *const libc::c_char,
-                16 as libc::c_int as libc::c_float,
+                16 as i32 as f32,
             );
             crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
                 b"r_depthbits\x00" as *const u8 as *const libc::c_char,
-                16 as libc::c_int as libc::c_float,
+                16 as i32 as f32,
             );
             crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
                 b"r_stencilbits\x00" as *const u8 as *const libc::c_char,
-                0 as libc::c_int as libc::c_float,
+                0 as i32 as f32,
             );
         }
         2 => {
             crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
                 b"r_colorbits\x00" as *const u8 as *const libc::c_char,
-                32 as libc::c_int as libc::c_float,
+                32 as i32 as f32,
             );
             crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
                 b"r_depthbits\x00" as *const u8 as *const libc::c_char,
-                24 as libc::c_int as libc::c_float,
+                24 as i32 as f32,
             );
             crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
                 b"r_stencilbits\x00" as *const u8 as *const libc::c_char,
-                8 as libc::c_int as libc::c_float,
+                8 as i32 as f32,
             );
         }
         _ => {}
     }
     crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
         b"r_vertexLight\x00" as *const u8 as *const libc::c_char,
-        s_graphicsoptions.lighting.curvalue as libc::c_float,
+        s_graphicsoptions.lighting.curvalue as f32,
     );
-    if s_graphicsoptions.geometry.curvalue == 2 as libc::c_int {
+    if s_graphicsoptions.geometry.curvalue == 2 as i32 {
         crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
             b"r_lodBias\x00" as *const u8 as *const libc::c_char,
-            0 as libc::c_int as libc::c_float,
+            0 as i32 as f32,
         );
         crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
             b"r_subdivisions\x00" as *const u8 as *const libc::c_char,
-            4 as libc::c_int as libc::c_float,
+            4 as i32 as f32,
         );
-    } else if s_graphicsoptions.geometry.curvalue == 1 as libc::c_int {
+    } else if s_graphicsoptions.geometry.curvalue == 1 as i32 {
         crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
             b"r_lodBias\x00" as *const u8 as *const libc::c_char,
-            1 as libc::c_int as libc::c_float,
+            1 as i32 as f32,
         );
         crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
             b"r_subdivisions\x00" as *const u8 as *const libc::c_char,
-            12 as libc::c_int as libc::c_float,
+            12 as i32 as f32,
         );
     } else {
         crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
             b"r_lodBias\x00" as *const u8 as *const libc::c_char,
-            1 as libc::c_int as libc::c_float,
+            1 as i32 as f32,
         );
         crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
             b"r_subdivisions\x00" as *const u8 as *const libc::c_char,
-            20 as libc::c_int as libc::c_float,
+            20 as i32 as f32,
         );
     }
     if s_graphicsoptions.filter.curvalue != 0 {
@@ -1787,7 +1787,7 @@ unsafe extern "C" fn GraphicsOptions_ApplyChanges(
         );
     }
     crate::src::ui::ui_syscalls::trap_Cmd_ExecuteText(
-        crate::src::qcommon::q_shared::EXEC_APPEND as libc::c_int,
+        crate::src::qcommon::q_shared::EXEC_APPEND as i32,
         b"vid_restart\n\x00" as *const u8 as *const libc::c_char,
     );
 }
@@ -1797,9 +1797,9 @@ GraphicsOptions_Event
 =================
 */
 
-unsafe extern "C" fn GraphicsOptions_Event(mut ptr: *mut libc::c_void, mut event: libc::c_int) {
+unsafe extern "C" fn GraphicsOptions_Event(mut ptr: *mut libc::c_void, mut event: i32) {
     let mut ivo: *mut InitialVideoOptions_s = 0 as *mut InitialVideoOptions_s;
-    if event != 3 as libc::c_int {
+    if event != 3 as i32 {
         return;
     }
     let mut current_block_28: u64;
@@ -1818,13 +1818,13 @@ unsafe extern "C" fn GraphicsOptions_Event(mut ptr: *mut libc::c_void, mut event
                 as *mut InitialVideoOptions_s;
             s_graphicsoptions.mode.curvalue = GraphicsOptions_FindDetectedResolution((*ivo).mode);
             s_graphicsoptions.ratio.curvalue = resToRatio[s_graphicsoptions.mode.curvalue as usize];
-            s_graphicsoptions.tq.curvalue = (*ivo).tq as libc::c_float;
+            s_graphicsoptions.tq.curvalue = (*ivo).tq as f32;
             s_graphicsoptions.lighting.curvalue = (*ivo).lighting;
             s_graphicsoptions.colordepth.curvalue = (*ivo).colordepth;
             s_graphicsoptions.texturebits.curvalue = (*ivo).texturebits;
             s_graphicsoptions.geometry.curvalue = (*ivo).geometry;
             s_graphicsoptions.filter.curvalue = (*ivo).filter;
-            s_graphicsoptions.fs.curvalue = (*ivo).fullscreen as libc::c_int;
+            s_graphicsoptions.fs.curvalue = (*ivo).fullscreen as i32;
             current_block_28 = 652864300344834934;
         }
         105 => {
@@ -1859,11 +1859,11 @@ unsafe extern "C" fn GraphicsOptions_Event(mut ptr: *mut libc::c_void, mut event
         // fall through to apply mode constraints
         // clamp 3dfx video modes
         {
-            if s_graphicsoptions.driver.curvalue == 1 as libc::c_int {
-                if s_graphicsoptions.mode.curvalue < 2 as libc::c_int {
-                    s_graphicsoptions.mode.curvalue = 2 as libc::c_int
-                } else if s_graphicsoptions.mode.curvalue > 6 as libc::c_int {
-                    s_graphicsoptions.mode.curvalue = 6 as libc::c_int
+            if s_graphicsoptions.driver.curvalue == 1 as i32 {
+                if s_graphicsoptions.mode.curvalue < 2 as i32 {
+                    s_graphicsoptions.mode.curvalue = 2 as i32
+                } else if s_graphicsoptions.mode.curvalue > 6 as i32 {
+                    s_graphicsoptions.mode.curvalue = 6 as i32
                 }
             }
             s_graphicsoptions.ratio.curvalue = resToRatio[s_graphicsoptions.mode.curvalue as usize]
@@ -1877,12 +1877,12 @@ GraphicsOptions_TQEvent
 ================
 */
 
-unsafe extern "C" fn GraphicsOptions_TQEvent(mut _ptr: *mut libc::c_void, mut event: libc::c_int) {
-    if event != 3 as libc::c_int {
+unsafe extern "C" fn GraphicsOptions_TQEvent(mut _ptr: *mut libc::c_void, mut event: i32) {
+    if event != 3 as i32 {
         return;
     }
     s_graphicsoptions.tq.curvalue =
-        (s_graphicsoptions.tq.curvalue as libc::c_double + 0.5f64) as libc::c_int as libc::c_float;
+        (s_graphicsoptions.tq.curvalue as f64 + 0.5f64) as i32 as f32;
 }
 /*
 ================
@@ -1908,21 +1908,21 @@ unsafe extern "C" fn GraphicsOptions_SetMenuItems() {
     s_graphicsoptions.mode.curvalue = GraphicsOptions_FindDetectedResolution(
         crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
             b"r_mode\x00" as *const u8 as *const libc::c_char,
-        ) as libc::c_int,
+        ) as i32,
     );
-    if s_graphicsoptions.mode.curvalue < 0 as libc::c_int {
+    if s_graphicsoptions.mode.curvalue < 0 as i32 {
         if resolutionsDetected as u64 != 0 {
-            let mut i: libc::c_int = 0;
+            let mut i: i32 = 0;
             let mut buf: [libc::c_char; 1024] = [0; 1024];
             crate::src::ui::ui_syscalls::trap_Cvar_VariableStringBuffer(
                 b"r_customwidth\x00" as *const u8 as *const libc::c_char,
                 buf.as_mut_ptr(),
                 (::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong)
-                    .wrapping_sub(2 as libc::c_int as libc::c_ulong) as libc::c_int,
+                    .wrapping_sub(2 as i32 as libc::c_ulong) as i32,
             );
             buf[crate::stdlib::strlen(buf.as_mut_ptr())
-                .wrapping_add(1 as libc::c_int as libc::c_ulong) as usize] =
-                0 as libc::c_int as libc::c_char;
+                .wrapping_add(1 as i32 as libc::c_ulong) as usize] =
+                0 as i32 as libc::c_char;
             buf[crate::stdlib::strlen(buf.as_mut_ptr()) as usize] = 'x' as i32 as libc::c_char;
             crate::src::ui::ui_syscalls::trap_Cvar_VariableStringBuffer(
                 b"r_customheight\x00" as *const u8 as *const libc::c_char,
@@ -1930,9 +1930,9 @@ unsafe extern "C" fn GraphicsOptions_SetMenuItems() {
                     .offset(crate::stdlib::strlen(buf.as_mut_ptr()) as isize),
                 (::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong)
                     .wrapping_sub(crate::stdlib::strlen(buf.as_mut_ptr()))
-                    as libc::c_int,
+                    as i32,
             );
-            i = 0 as libc::c_int;
+            i = 0 as i32;
             while !detectedResolutions[i as usize].is_null() {
                 if crate::src::qcommon::q_shared::Q_stricmp(
                     buf.as_mut_ptr(),
@@ -1945,41 +1945,41 @@ unsafe extern "C" fn GraphicsOptions_SetMenuItems() {
                     i += 1
                 }
             }
-            if s_graphicsoptions.mode.curvalue < 0 as libc::c_int {
-                s_graphicsoptions.mode.curvalue = 0 as libc::c_int
+            if s_graphicsoptions.mode.curvalue < 0 as i32 {
+                s_graphicsoptions.mode.curvalue = 0 as i32
             }
         } else {
-            s_graphicsoptions.mode.curvalue = 3 as libc::c_int
+            s_graphicsoptions.mode.curvalue = 3 as i32
         }
     }
     s_graphicsoptions.ratio.curvalue = resToRatio[s_graphicsoptions.mode.curvalue as usize];
     s_graphicsoptions.fs.curvalue = crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
         b"r_fullscreen\x00" as *const u8 as *const libc::c_char,
-    ) as libc::c_int;
+    ) as i32;
     s_graphicsoptions.allow_extensions.curvalue =
         crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
             b"r_allowExtensions\x00" as *const u8 as *const libc::c_char,
-        ) as libc::c_int;
-    s_graphicsoptions.tq.curvalue = 3 as libc::c_int as libc::c_float
+        ) as i32;
+    s_graphicsoptions.tq.curvalue = 3 as i32 as f32
         - crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
             b"r_picmip\x00" as *const u8 as *const libc::c_char,
         );
-    if s_graphicsoptions.tq.curvalue < 0 as libc::c_int as libc::c_float {
-        s_graphicsoptions.tq.curvalue = 0 as libc::c_int as libc::c_float
-    } else if s_graphicsoptions.tq.curvalue > 3 as libc::c_int as libc::c_float {
-        s_graphicsoptions.tq.curvalue = 3 as libc::c_int as libc::c_float
+    if s_graphicsoptions.tq.curvalue < 0 as i32 as f32 {
+        s_graphicsoptions.tq.curvalue = 0 as i32 as f32
+    } else if s_graphicsoptions.tq.curvalue > 3 as i32 as f32 {
+        s_graphicsoptions.tq.curvalue = 3 as i32 as f32
     }
     s_graphicsoptions.lighting.curvalue = (crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
         b"r_vertexLight\x00" as *const u8 as *const libc::c_char,
-    ) != 0 as libc::c_int as libc::c_float)
-        as libc::c_int;
+    ) != 0 as i32 as f32)
+        as i32;
     match crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
         b"r_texturebits\x00" as *const u8 as *const libc::c_char,
-    ) as libc::c_int
+    ) as i32
     {
-        16 => s_graphicsoptions.texturebits.curvalue = 1 as libc::c_int,
-        32 => s_graphicsoptions.texturebits.curvalue = 2 as libc::c_int,
-        0 | _ => s_graphicsoptions.texturebits.curvalue = 0 as libc::c_int,
+        16 => s_graphicsoptions.texturebits.curvalue = 1 as i32,
+        32 => s_graphicsoptions.texturebits.curvalue = 2 as i32,
+        0 | _ => s_graphicsoptions.texturebits.curvalue = 0 as i32,
     }
     if crate::src::qcommon::q_shared::Q_stricmp(
         crate::src::q3_ui::ui_atoms::UI_Cvar_VariableString(
@@ -1988,38 +1988,38 @@ unsafe extern "C" fn GraphicsOptions_SetMenuItems() {
         b"GL_LINEAR_MIPMAP_NEAREST\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
-        s_graphicsoptions.filter.curvalue = 0 as libc::c_int
+        s_graphicsoptions.filter.curvalue = 0 as i32
     } else {
-        s_graphicsoptions.filter.curvalue = 1 as libc::c_int
+        s_graphicsoptions.filter.curvalue = 1 as i32
     }
     if crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
         b"r_lodBias\x00" as *const u8 as *const libc::c_char,
-    ) > 0 as libc::c_int as libc::c_float
+    ) > 0 as i32 as f32
     {
         if crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
             b"r_subdivisions\x00" as *const u8 as *const libc::c_char,
-        ) >= 20 as libc::c_int as libc::c_float
+        ) >= 20 as i32 as f32
         {
-            s_graphicsoptions.geometry.curvalue = 0 as libc::c_int
+            s_graphicsoptions.geometry.curvalue = 0 as i32
         } else {
-            s_graphicsoptions.geometry.curvalue = 1 as libc::c_int
+            s_graphicsoptions.geometry.curvalue = 1 as i32
         }
     } else {
-        s_graphicsoptions.geometry.curvalue = 2 as libc::c_int
+        s_graphicsoptions.geometry.curvalue = 2 as i32
     }
     match crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
         b"r_colorbits\x00" as *const u8 as *const libc::c_char,
-    ) as libc::c_int
+    ) as i32
     {
-        16 => s_graphicsoptions.colordepth.curvalue = 1 as libc::c_int,
-        32 => s_graphicsoptions.colordepth.curvalue = 2 as libc::c_int,
-        0 | _ => s_graphicsoptions.colordepth.curvalue = 0 as libc::c_int,
+        16 => s_graphicsoptions.colordepth.curvalue = 1 as i32,
+        32 => s_graphicsoptions.colordepth.curvalue = 2 as i32,
+        0 | _ => s_graphicsoptions.colordepth.curvalue = 0 as i32,
     }
-    if s_graphicsoptions.fs.curvalue == 0 as libc::c_int {
-        s_graphicsoptions.colordepth.curvalue = 0 as libc::c_int
+    if s_graphicsoptions.fs.curvalue == 0 as i32 {
+        s_graphicsoptions.colordepth.curvalue = 0 as i32
     }
-    if s_graphicsoptions.driver.curvalue == 1 as libc::c_int {
-        s_graphicsoptions.colordepth.curvalue = 1 as libc::c_int
+    if s_graphicsoptions.driver.curvalue == 1 as i32 {
+        s_graphicsoptions.colordepth.curvalue = 1 as i32
     };
 }
 /*
@@ -2099,11 +2099,11 @@ pub unsafe extern "C" fn GraphicsOptions_MenuInit() {
         b"On\x00" as *const u8 as *const libc::c_char,
         0 as *const libc::c_char,
     ];
-    let mut y: libc::c_int = 0;
+    let mut y: i32 = 0;
     // zero set all our globals
     crate::stdlib::memset(
         &mut s_graphicsoptions as *mut graphicsoptions_t as *mut libc::c_void,
-        0 as libc::c_int,
+        0 as i32,
         ::std::mem::size_of::<graphicsoptions_t>() as libc::c_ulong,
     );
     GraphicsOptions_GetResolutions();
@@ -2112,256 +2112,256 @@ pub unsafe extern "C" fn GraphicsOptions_MenuInit() {
     s_graphicsoptions.menu.wrapAround = crate::src::qcommon::q_shared::qtrue;
     s_graphicsoptions.menu.fullscreen = crate::src::qcommon::q_shared::qtrue;
     s_graphicsoptions.menu.draw = Some(GraphicsOptions_MenuDraw as unsafe extern "C" fn() -> ());
-    s_graphicsoptions.banner.generic.type_0 = 10 as libc::c_int;
-    s_graphicsoptions.banner.generic.x = 320 as libc::c_int;
-    s_graphicsoptions.banner.generic.y = 16 as libc::c_int;
+    s_graphicsoptions.banner.generic.type_0 = 10 as i32;
+    s_graphicsoptions.banner.generic.x = 320 as i32;
+    s_graphicsoptions.banner.generic.y = 16 as i32;
     s_graphicsoptions.banner.string =
         b"SYSTEM SETUP\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     s_graphicsoptions.banner.color = crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr();
-    s_graphicsoptions.banner.style = 0x1 as libc::c_int;
-    s_graphicsoptions.framel.generic.type_0 = 6 as libc::c_int;
+    s_graphicsoptions.banner.style = 0x1 as i32;
+    s_graphicsoptions.framel.generic.type_0 = 6 as i32;
     s_graphicsoptions.framel.generic.name =
         b"menu/art/frame2_l\x00" as *const u8 as *const libc::c_char;
-    s_graphicsoptions.framel.generic.flags = 0x4000 as libc::c_int as libc::c_uint;
-    s_graphicsoptions.framel.generic.x = 0 as libc::c_int;
-    s_graphicsoptions.framel.generic.y = 78 as libc::c_int;
-    s_graphicsoptions.framel.width = 256 as libc::c_int;
-    s_graphicsoptions.framel.height = 329 as libc::c_int;
-    s_graphicsoptions.framer.generic.type_0 = 6 as libc::c_int;
+    s_graphicsoptions.framel.generic.flags = 0x4000 as i32 as u32;
+    s_graphicsoptions.framel.generic.x = 0 as i32;
+    s_graphicsoptions.framel.generic.y = 78 as i32;
+    s_graphicsoptions.framel.width = 256 as i32;
+    s_graphicsoptions.framel.height = 329 as i32;
+    s_graphicsoptions.framer.generic.type_0 = 6 as i32;
     s_graphicsoptions.framer.generic.name =
         b"menu/art/frame1_r\x00" as *const u8 as *const libc::c_char;
-    s_graphicsoptions.framer.generic.flags = 0x4000 as libc::c_int as libc::c_uint;
-    s_graphicsoptions.framer.generic.x = 376 as libc::c_int;
-    s_graphicsoptions.framer.generic.y = 76 as libc::c_int;
-    s_graphicsoptions.framer.width = 256 as libc::c_int;
-    s_graphicsoptions.framer.height = 334 as libc::c_int;
-    s_graphicsoptions.graphics.generic.type_0 = 9 as libc::c_int;
-    s_graphicsoptions.graphics.generic.flags = 0x10 as libc::c_int as libc::c_uint;
-    s_graphicsoptions.graphics.generic.id = 106 as libc::c_int;
+    s_graphicsoptions.framer.generic.flags = 0x4000 as i32 as u32;
+    s_graphicsoptions.framer.generic.x = 376 as i32;
+    s_graphicsoptions.framer.generic.y = 76 as i32;
+    s_graphicsoptions.framer.width = 256 as i32;
+    s_graphicsoptions.framer.height = 334 as i32;
+    s_graphicsoptions.graphics.generic.type_0 = 9 as i32;
+    s_graphicsoptions.graphics.generic.flags = 0x10 as i32 as u32;
+    s_graphicsoptions.graphics.generic.id = 106 as i32;
     s_graphicsoptions.graphics.generic.callback = Some(
-        GraphicsOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        GraphicsOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    s_graphicsoptions.graphics.generic.x = 216 as libc::c_int;
+    s_graphicsoptions.graphics.generic.x = 216 as i32;
     s_graphicsoptions.graphics.generic.y =
-        240 as libc::c_int - 2 as libc::c_int * 27 as libc::c_int;
+        240 as i32 - 2 as i32 * 27 as i32;
     s_graphicsoptions.graphics.string =
         b"GRAPHICS\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    s_graphicsoptions.graphics.style = 0x2 as libc::c_int;
+    s_graphicsoptions.graphics.style = 0x2 as i32;
     s_graphicsoptions.graphics.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
-    s_graphicsoptions.display.generic.type_0 = 9 as libc::c_int;
+    s_graphicsoptions.display.generic.type_0 = 9 as i32;
     s_graphicsoptions.display.generic.flags =
-        0x10 as libc::c_int as libc::c_uint | 0x100 as libc::c_int as libc::c_uint;
-    s_graphicsoptions.display.generic.id = 107 as libc::c_int;
+        0x10 as i32 as u32 | 0x100 as i32 as u32;
+    s_graphicsoptions.display.generic.id = 107 as i32;
     s_graphicsoptions.display.generic.callback = Some(
-        GraphicsOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        GraphicsOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    s_graphicsoptions.display.generic.x = 216 as libc::c_int;
-    s_graphicsoptions.display.generic.y = 240 as libc::c_int - 27 as libc::c_int;
+    s_graphicsoptions.display.generic.x = 216 as i32;
+    s_graphicsoptions.display.generic.y = 240 as i32 - 27 as i32;
     s_graphicsoptions.display.string =
         b"DISPLAY\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    s_graphicsoptions.display.style = 0x2 as libc::c_int;
+    s_graphicsoptions.display.style = 0x2 as i32;
     s_graphicsoptions.display.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
-    s_graphicsoptions.sound.generic.type_0 = 9 as libc::c_int;
+    s_graphicsoptions.sound.generic.type_0 = 9 as i32;
     s_graphicsoptions.sound.generic.flags =
-        0x10 as libc::c_int as libc::c_uint | 0x100 as libc::c_int as libc::c_uint;
-    s_graphicsoptions.sound.generic.id = 108 as libc::c_int;
+        0x10 as i32 as u32 | 0x100 as i32 as u32;
+    s_graphicsoptions.sound.generic.id = 108 as i32;
     s_graphicsoptions.sound.generic.callback = Some(
-        GraphicsOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        GraphicsOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    s_graphicsoptions.sound.generic.x = 216 as libc::c_int;
-    s_graphicsoptions.sound.generic.y = 240 as libc::c_int;
+    s_graphicsoptions.sound.generic.x = 216 as i32;
+    s_graphicsoptions.sound.generic.y = 240 as i32;
     s_graphicsoptions.sound.string =
         b"SOUND\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    s_graphicsoptions.sound.style = 0x2 as libc::c_int;
+    s_graphicsoptions.sound.style = 0x2 as i32;
     s_graphicsoptions.sound.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
-    s_graphicsoptions.network.generic.type_0 = 9 as libc::c_int;
+    s_graphicsoptions.network.generic.type_0 = 9 as i32;
     s_graphicsoptions.network.generic.flags =
-        0x10 as libc::c_int as libc::c_uint | 0x100 as libc::c_int as libc::c_uint;
-    s_graphicsoptions.network.generic.id = 109 as libc::c_int;
+        0x10 as i32 as u32 | 0x100 as i32 as u32;
+    s_graphicsoptions.network.generic.id = 109 as i32;
     s_graphicsoptions.network.generic.callback = Some(
-        GraphicsOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        GraphicsOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    s_graphicsoptions.network.generic.x = 216 as libc::c_int;
-    s_graphicsoptions.network.generic.y = 240 as libc::c_int + 27 as libc::c_int;
+    s_graphicsoptions.network.generic.x = 216 as i32;
+    s_graphicsoptions.network.generic.y = 240 as i32 + 27 as i32;
     s_graphicsoptions.network.string =
         b"NETWORK\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    s_graphicsoptions.network.style = 0x2 as libc::c_int;
+    s_graphicsoptions.network.style = 0x2 as i32;
     s_graphicsoptions.network.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
-    y = 240 as libc::c_int - 7 as libc::c_int * (16 as libc::c_int + 2 as libc::c_int);
-    s_graphicsoptions.list.generic.type_0 = 3 as libc::c_int;
+    y = 240 as i32 - 7 as i32 * (16 as i32 + 2 as i32);
+    s_graphicsoptions.list.generic.type_0 = 3 as i32;
     s_graphicsoptions.list.generic.name =
         b"Graphics Settings:\x00" as *const u8 as *const libc::c_char;
     s_graphicsoptions.list.generic.flags =
-        0x100 as libc::c_int as libc::c_uint | 0x2 as libc::c_int as libc::c_uint;
-    s_graphicsoptions.list.generic.x = 400 as libc::c_int;
+        0x100 as i32 as u32 | 0x2 as i32 as u32;
+    s_graphicsoptions.list.generic.x = 400 as i32;
     s_graphicsoptions.list.generic.y = y;
     s_graphicsoptions.list.generic.callback = Some(
-        GraphicsOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        GraphicsOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    s_graphicsoptions.list.generic.id = 103 as libc::c_int;
+    s_graphicsoptions.list.generic.id = 103 as i32;
     s_graphicsoptions.list.itemnames = s_graphics_options_names.as_mut_ptr();
-    y += 2 as libc::c_int * (16 as libc::c_int + 2 as libc::c_int);
-    s_graphicsoptions.driver.generic.type_0 = 3 as libc::c_int;
+    y += 2 as i32 * (16 as i32 + 2 as i32);
+    s_graphicsoptions.driver.generic.type_0 = 3 as i32;
     s_graphicsoptions.driver.generic.name = b"GL Driver:\x00" as *const u8 as *const libc::c_char;
     s_graphicsoptions.driver.generic.flags =
-        0x100 as libc::c_int as libc::c_uint | 0x2 as libc::c_int as libc::c_uint;
-    s_graphicsoptions.driver.generic.x = 400 as libc::c_int;
+        0x100 as i32 as u32 | 0x2 as i32 as u32;
+    s_graphicsoptions.driver.generic.x = 400 as i32;
     s_graphicsoptions.driver.generic.y = y;
     s_graphicsoptions.driver.itemnames = s_driver_names.as_mut_ptr();
     s_graphicsoptions.driver.curvalue = (crate::src::q3_ui::ui_atoms::uis.glconfig.driverType
-        as libc::c_uint
-        == crate::tr_types_h::GLDRV_VOODOO as libc::c_int as libc::c_uint)
-        as libc::c_int;
-    y += 16 as libc::c_int + 2 as libc::c_int;
+        as u32
+        == crate::tr_types_h::GLDRV_VOODOO as i32 as u32)
+        as i32;
+    y += 16 as i32 + 2 as i32;
     // references/modifies "r_allowExtensions"
-    s_graphicsoptions.allow_extensions.generic.type_0 = 3 as libc::c_int;
+    s_graphicsoptions.allow_extensions.generic.type_0 = 3 as i32;
     s_graphicsoptions.allow_extensions.generic.name =
         b"GL Extensions:\x00" as *const u8 as *const libc::c_char;
     s_graphicsoptions.allow_extensions.generic.flags =
-        0x100 as libc::c_int as libc::c_uint | 0x2 as libc::c_int as libc::c_uint;
-    s_graphicsoptions.allow_extensions.generic.x = 400 as libc::c_int;
+        0x100 as i32 as u32 | 0x2 as i32 as u32;
+    s_graphicsoptions.allow_extensions.generic.x = 400 as i32;
     s_graphicsoptions.allow_extensions.generic.y = y;
     s_graphicsoptions.allow_extensions.itemnames = enabled_names.as_mut_ptr();
-    y += 16 as libc::c_int + 2 as libc::c_int;
-    s_graphicsoptions.ratio.generic.type_0 = 3 as libc::c_int;
+    y += 16 as i32 + 2 as i32;
+    s_graphicsoptions.ratio.generic.type_0 = 3 as i32;
     s_graphicsoptions.ratio.generic.name = b"Aspect Ratio:\x00" as *const u8 as *const libc::c_char;
     s_graphicsoptions.ratio.generic.flags =
-        0x100 as libc::c_int as libc::c_uint | 0x2 as libc::c_int as libc::c_uint;
-    s_graphicsoptions.ratio.generic.x = 400 as libc::c_int;
+        0x100 as i32 as u32 | 0x2 as i32 as u32;
+    s_graphicsoptions.ratio.generic.x = 400 as i32;
     s_graphicsoptions.ratio.generic.y = y;
     s_graphicsoptions.ratio.itemnames = ratios.as_mut_ptr();
     s_graphicsoptions.ratio.generic.callback = Some(
-        GraphicsOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        GraphicsOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    s_graphicsoptions.ratio.generic.id = 110 as libc::c_int;
-    y += 16 as libc::c_int + 2 as libc::c_int;
+    s_graphicsoptions.ratio.generic.id = 110 as i32;
+    y += 16 as i32 + 2 as i32;
     // references/modifies "r_mode"
-    s_graphicsoptions.mode.generic.type_0 = 3 as libc::c_int;
+    s_graphicsoptions.mode.generic.type_0 = 3 as i32;
     s_graphicsoptions.mode.generic.name = b"Resolution:\x00" as *const u8 as *const libc::c_char;
     s_graphicsoptions.mode.generic.flags =
-        0x100 as libc::c_int as libc::c_uint | 0x2 as libc::c_int as libc::c_uint;
-    s_graphicsoptions.mode.generic.x = 400 as libc::c_int;
+        0x100 as i32 as u32 | 0x2 as i32 as u32;
+    s_graphicsoptions.mode.generic.x = 400 as i32;
     s_graphicsoptions.mode.generic.y = y;
     s_graphicsoptions.mode.itemnames = resolutions;
     s_graphicsoptions.mode.generic.callback = Some(
-        GraphicsOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        GraphicsOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    s_graphicsoptions.mode.generic.id = 104 as libc::c_int;
-    y += 16 as libc::c_int + 2 as libc::c_int;
+    s_graphicsoptions.mode.generic.id = 104 as i32;
+    y += 16 as i32 + 2 as i32;
     // references "r_colorbits"
-    s_graphicsoptions.colordepth.generic.type_0 = 3 as libc::c_int;
+    s_graphicsoptions.colordepth.generic.type_0 = 3 as i32;
     s_graphicsoptions.colordepth.generic.name =
         b"Color Depth:\x00" as *const u8 as *const libc::c_char;
     s_graphicsoptions.colordepth.generic.flags =
-        0x100 as libc::c_int as libc::c_uint | 0x2 as libc::c_int as libc::c_uint;
-    s_graphicsoptions.colordepth.generic.x = 400 as libc::c_int;
+        0x100 as i32 as u32 | 0x2 as i32 as u32;
+    s_graphicsoptions.colordepth.generic.x = 400 as i32;
     s_graphicsoptions.colordepth.generic.y = y;
     s_graphicsoptions.colordepth.itemnames = colordepth_names.as_mut_ptr();
-    y += 16 as libc::c_int + 2 as libc::c_int;
+    y += 16 as i32 + 2 as i32;
     // references/modifies "r_fullscreen"
-    s_graphicsoptions.fs.generic.type_0 = 3 as libc::c_int;
+    s_graphicsoptions.fs.generic.type_0 = 3 as i32;
     s_graphicsoptions.fs.generic.name = b"Fullscreen:\x00" as *const u8 as *const libc::c_char;
     s_graphicsoptions.fs.generic.flags =
-        0x100 as libc::c_int as libc::c_uint | 0x2 as libc::c_int as libc::c_uint;
-    s_graphicsoptions.fs.generic.x = 400 as libc::c_int;
+        0x100 as i32 as u32 | 0x2 as i32 as u32;
+    s_graphicsoptions.fs.generic.x = 400 as i32;
     s_graphicsoptions.fs.generic.y = y;
     s_graphicsoptions.fs.itemnames = enabled_names.as_mut_ptr();
-    y += 16 as libc::c_int + 2 as libc::c_int;
+    y += 16 as i32 + 2 as i32;
     // references/modifies "r_vertexLight"
-    s_graphicsoptions.lighting.generic.type_0 = 3 as libc::c_int;
+    s_graphicsoptions.lighting.generic.type_0 = 3 as i32;
     s_graphicsoptions.lighting.generic.name = b"Lighting:\x00" as *const u8 as *const libc::c_char;
     s_graphicsoptions.lighting.generic.flags =
-        0x100 as libc::c_int as libc::c_uint | 0x2 as libc::c_int as libc::c_uint;
-    s_graphicsoptions.lighting.generic.x = 400 as libc::c_int;
+        0x100 as i32 as u32 | 0x2 as i32 as u32;
+    s_graphicsoptions.lighting.generic.x = 400 as i32;
     s_graphicsoptions.lighting.generic.y = y;
     s_graphicsoptions.lighting.itemnames = lighting_names.as_mut_ptr();
-    y += 16 as libc::c_int + 2 as libc::c_int;
+    y += 16 as i32 + 2 as i32;
     // references/modifies "r_lodBias" & "subdivisions"
-    s_graphicsoptions.geometry.generic.type_0 = 3 as libc::c_int;
+    s_graphicsoptions.geometry.generic.type_0 = 3 as i32;
     s_graphicsoptions.geometry.generic.name =
         b"Geometric Detail:\x00" as *const u8 as *const libc::c_char;
     s_graphicsoptions.geometry.generic.flags =
-        0x100 as libc::c_int as libc::c_uint | 0x2 as libc::c_int as libc::c_uint;
-    s_graphicsoptions.geometry.generic.x = 400 as libc::c_int;
+        0x100 as i32 as u32 | 0x2 as i32 as u32;
+    s_graphicsoptions.geometry.generic.x = 400 as i32;
     s_graphicsoptions.geometry.generic.y = y;
     s_graphicsoptions.geometry.itemnames = quality_names.as_mut_ptr();
-    y += 16 as libc::c_int + 2 as libc::c_int;
+    y += 16 as i32 + 2 as i32;
     // references/modifies "r_picmip"
-    s_graphicsoptions.tq.generic.type_0 = 1 as libc::c_int;
+    s_graphicsoptions.tq.generic.type_0 = 1 as i32;
     s_graphicsoptions.tq.generic.name = b"Texture Detail:\x00" as *const u8 as *const libc::c_char;
     s_graphicsoptions.tq.generic.flags =
-        0x100 as libc::c_int as libc::c_uint | 0x2 as libc::c_int as libc::c_uint;
-    s_graphicsoptions.tq.generic.x = 400 as libc::c_int;
+        0x100 as i32 as u32 | 0x2 as i32 as u32;
+    s_graphicsoptions.tq.generic.x = 400 as i32;
     s_graphicsoptions.tq.generic.y = y;
-    s_graphicsoptions.tq.minvalue = 0 as libc::c_int as libc::c_float;
-    s_graphicsoptions.tq.maxvalue = 3 as libc::c_int as libc::c_float;
+    s_graphicsoptions.tq.minvalue = 0 as i32 as f32;
+    s_graphicsoptions.tq.maxvalue = 3 as i32 as f32;
     s_graphicsoptions.tq.generic.callback = Some(
-        GraphicsOptions_TQEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        GraphicsOptions_TQEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    y += 16 as libc::c_int + 2 as libc::c_int;
+    y += 16 as i32 + 2 as i32;
     // references/modifies "r_textureBits"
-    s_graphicsoptions.texturebits.generic.type_0 = 3 as libc::c_int;
+    s_graphicsoptions.texturebits.generic.type_0 = 3 as i32;
     s_graphicsoptions.texturebits.generic.name =
         b"Texture Quality:\x00" as *const u8 as *const libc::c_char;
     s_graphicsoptions.texturebits.generic.flags =
-        0x100 as libc::c_int as libc::c_uint | 0x2 as libc::c_int as libc::c_uint;
-    s_graphicsoptions.texturebits.generic.x = 400 as libc::c_int;
+        0x100 as i32 as u32 | 0x2 as i32 as u32;
+    s_graphicsoptions.texturebits.generic.x = 400 as i32;
     s_graphicsoptions.texturebits.generic.y = y;
     s_graphicsoptions.texturebits.itemnames = tq_names.as_mut_ptr();
-    y += 16 as libc::c_int + 2 as libc::c_int;
+    y += 16 as i32 + 2 as i32;
     // references/modifies "r_textureMode"
-    s_graphicsoptions.filter.generic.type_0 = 3 as libc::c_int;
+    s_graphicsoptions.filter.generic.type_0 = 3 as i32;
     s_graphicsoptions.filter.generic.name =
         b"Texture Filter:\x00" as *const u8 as *const libc::c_char;
     s_graphicsoptions.filter.generic.flags =
-        0x100 as libc::c_int as libc::c_uint | 0x2 as libc::c_int as libc::c_uint;
-    s_graphicsoptions.filter.generic.x = 400 as libc::c_int;
+        0x100 as i32 as u32 | 0x2 as i32 as u32;
+    s_graphicsoptions.filter.generic.x = 400 as i32;
     s_graphicsoptions.filter.generic.y = y;
     s_graphicsoptions.filter.itemnames = filter_names.as_mut_ptr();
-    y += 2 as libc::c_int * 16 as libc::c_int;
-    s_graphicsoptions.driverinfo.generic.type_0 = 9 as libc::c_int;
+    y += 2 as i32 * 16 as i32;
+    s_graphicsoptions.driverinfo.generic.type_0 = 9 as i32;
     s_graphicsoptions.driverinfo.generic.flags =
-        0x8 as libc::c_int as libc::c_uint | 0x100 as libc::c_int as libc::c_uint;
+        0x8 as i32 as u32 | 0x100 as i32 as u32;
     s_graphicsoptions.driverinfo.generic.callback = Some(
-        GraphicsOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        GraphicsOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    s_graphicsoptions.driverinfo.generic.id = 105 as libc::c_int;
-    s_graphicsoptions.driverinfo.generic.x = 320 as libc::c_int;
+    s_graphicsoptions.driverinfo.generic.id = 105 as i32;
+    s_graphicsoptions.driverinfo.generic.x = 320 as i32;
     s_graphicsoptions.driverinfo.generic.y = y;
     s_graphicsoptions.driverinfo.string =
         b"Driver Info\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    s_graphicsoptions.driverinfo.style = 0x1 as libc::c_int | 0x10 as libc::c_int;
+    s_graphicsoptions.driverinfo.style = 0x1 as i32 | 0x10 as i32;
     s_graphicsoptions.driverinfo.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
-    s_graphicsoptions.back.generic.type_0 = 6 as libc::c_int;
+    s_graphicsoptions.back.generic.type_0 = 6 as i32;
     s_graphicsoptions.back.generic.name =
         b"menu/art/back_0\x00" as *const u8 as *const libc::c_char;
     s_graphicsoptions.back.generic.flags =
-        0x4 as libc::c_int as libc::c_uint | 0x100 as libc::c_int as libc::c_uint;
+        0x4 as i32 as u32 | 0x100 as i32 as u32;
     s_graphicsoptions.back.generic.callback = Some(
-        GraphicsOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        GraphicsOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    s_graphicsoptions.back.generic.id = 101 as libc::c_int;
-    s_graphicsoptions.back.generic.x = 0 as libc::c_int;
-    s_graphicsoptions.back.generic.y = 480 as libc::c_int - 64 as libc::c_int;
-    s_graphicsoptions.back.width = 128 as libc::c_int;
-    s_graphicsoptions.back.height = 64 as libc::c_int;
+    s_graphicsoptions.back.generic.id = 101 as i32;
+    s_graphicsoptions.back.generic.x = 0 as i32;
+    s_graphicsoptions.back.generic.y = 480 as i32 - 64 as i32;
+    s_graphicsoptions.back.width = 128 as i32;
+    s_graphicsoptions.back.height = 64 as i32;
     s_graphicsoptions.back.focuspic =
         b"menu/art/back_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    s_graphicsoptions.apply.generic.type_0 = 6 as libc::c_int;
+    s_graphicsoptions.apply.generic.type_0 = 6 as i32;
     s_graphicsoptions.apply.generic.name =
         b"menu/art/accept_0\x00" as *const u8 as *const libc::c_char;
-    s_graphicsoptions.apply.generic.flags = 0x10 as libc::c_int as libc::c_uint
-        | 0x100 as libc::c_int as libc::c_uint
-        | 0x1000 as libc::c_int as libc::c_uint
-        | 0x4000 as libc::c_int as libc::c_uint;
+    s_graphicsoptions.apply.generic.flags = 0x10 as i32 as u32
+        | 0x100 as i32 as u32
+        | 0x1000 as i32 as u32
+        | 0x4000 as i32 as u32;
     s_graphicsoptions.apply.generic.callback = Some(
         GraphicsOptions_ApplyChanges
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    s_graphicsoptions.apply.generic.x = 640 as libc::c_int;
-    s_graphicsoptions.apply.generic.y = 480 as libc::c_int - 64 as libc::c_int;
-    s_graphicsoptions.apply.width = 128 as libc::c_int;
-    s_graphicsoptions.apply.height = 64 as libc::c_int;
+    s_graphicsoptions.apply.generic.x = 640 as i32;
+    s_graphicsoptions.apply.generic.y = 480 as i32 - 64 as i32;
+    s_graphicsoptions.apply.width = 128 as i32;
+    s_graphicsoptions.apply.height = 64 as i32;
     s_graphicsoptions.apply.focuspic =
         b"menu/art/accept_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     crate::src::q3_ui::ui_qmenu::Menu_AddItem(
@@ -2458,13 +2458,13 @@ pub unsafe extern "C" fn GraphicsOptions_MenuInit() {
     );
     GraphicsOptions_SetMenuItems();
     GraphicsOptions_GetInitialVideo();
-    if crate::src::q3_ui::ui_atoms::uis.glconfig.driverType as libc::c_uint
-        == crate::tr_types_h::GLDRV_ICD as libc::c_int as libc::c_uint
-        && crate::src::q3_ui::ui_atoms::uis.glconfig.hardwareType as libc::c_uint
-            == crate::tr_types_h::GLHW_3DFX_2D3D as libc::c_int as libc::c_uint
+    if crate::src::q3_ui::ui_atoms::uis.glconfig.driverType as u32
+        == crate::tr_types_h::GLDRV_ICD as i32 as u32
+        && crate::src::q3_ui::ui_atoms::uis.glconfig.hardwareType as u32
+            == crate::tr_types_h::GLHW_3DFX_2D3D as i32 as u32
     {
         s_graphicsoptions.driver.generic.flags |=
-            0x1000 as libc::c_int as libc::c_uint | 0x4000 as libc::c_int as libc::c_uint
+            0x1000 as i32 as u32 | 0x4000 as i32 as u32
     };
 }
 /*

@@ -24,13 +24,13 @@ pub use crate::src::qcommon::q_shared::FS_WRITE;
 
 #[no_mangle]
 
-pub static mut allocatedmemory: libc::c_int = 0;
+pub static mut allocatedmemory: i32 = 0;
 #[no_mangle]
 
-pub static mut totalmemorysize: libc::c_int = 0;
+pub static mut totalmemorysize: i32 = 0;
 #[no_mangle]
 
-pub static mut numblocks: libc::c_int = 0;
+pub static mut numblocks: i32 = 0;
 /*
 ===========================================================================
 Copyright (C) 1999-2005 Id Software, Inc.
@@ -78,7 +78,7 @@ pub unsafe extern "C" fn GetMemory(mut size: libc::c_ulong) -> *mut libc::c_void
     ptr = crate::src::botlib::be_interface::botimport
         .GetMemory
         .expect("non-null function pointer")(
-        size.wrapping_add(::std::mem::size_of::<libc::c_ulong>() as libc::c_ulong) as libc::c_int,
+        size.wrapping_add(::std::mem::size_of::<libc::c_ulong>() as libc::c_ulong) as i32,
     );
     if ptr.is_null() {
         return 0 as *mut libc::c_void;
@@ -105,7 +105,7 @@ pub unsafe extern "C" fn GetClearedMemory(mut size: libc::c_ulong) -> *mut libc:
     let mut ptr: *mut libc::c_void = 0 as *mut libc::c_void;
     ptr = GetMemory(size);
     //MEMDEBUG
-    crate::stdlib::memset(ptr, 0 as libc::c_int, size);
+    crate::stdlib::memset(ptr, 0 as i32, size);
     return ptr;
 }
 //
@@ -127,7 +127,7 @@ pub unsafe extern "C" fn GetHunkMemory(mut size: libc::c_ulong) -> *mut libc::c_
     ptr = crate::src::botlib::be_interface::botimport
         .HunkAlloc
         .expect("non-null function pointer")(
-        size.wrapping_add(::std::mem::size_of::<libc::c_ulong>() as libc::c_ulong) as libc::c_int,
+        size.wrapping_add(::std::mem::size_of::<libc::c_ulong>() as libc::c_ulong) as i32,
     );
     if ptr.is_null() {
         return 0 as *mut libc::c_void;
@@ -154,7 +154,7 @@ pub unsafe extern "C" fn GetClearedHunkMemory(mut size: libc::c_ulong) -> *mut l
     let mut ptr: *mut libc::c_void = 0 as *mut libc::c_void;
     ptr = GetHunkMemory(size);
     //MEMDEBUG
-    crate::stdlib::memset(ptr, 0 as libc::c_int, size);
+    crate::stdlib::memset(ptr, 0 as i32, size);
     return ptr;
 }
 //free the given memory block
@@ -189,7 +189,7 @@ pub unsafe extern "C" fn FreeMemory(mut ptr: *mut libc::c_void) {
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AvailableMemory() -> libc::c_int {
+pub unsafe extern "C" fn AvailableMemory() -> i32 {
     return crate::src::botlib::be_interface::botimport
         .AvailableMemory
         .expect("non-null function pointer")();

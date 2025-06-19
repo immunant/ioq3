@@ -1,4 +1,4 @@
-pub type DCTELEM = libc::c_int;
+pub type DCTELEM = i32;
 /* 16 or 32 bits is fine */
 pub type forward_DCT_method_ptr = Option<
     unsafe extern "C" fn(
@@ -9,7 +9,7 @@ pub type forward_DCT_method_ptr = Option<
 >;
 pub type float_DCT_method_ptr = Option<
     unsafe extern "C" fn(
-        _: *mut libc::c_float,
+        _: *mut f32,
         _: crate::jpeglib_h::JSAMPARRAY,
         _: crate::jmorecfg_h::JDIMENSION,
     ) -> (),
@@ -30,10 +30,10 @@ pub type float_DCT_method_ptr = Option<
 /*
  * Each IDCT routine has its own ideas about the best dct_table element type.
  */
-pub type ISLOW_MULT_TYPE = libc::c_int;
+pub type ISLOW_MULT_TYPE = i32;
 /* short or int, whichever is faster */
-pub type IFAST_MULT_TYPE = libc::c_int;
+pub type IFAST_MULT_TYPE = i32;
 /* 16 bits is OK, use short if faster */
 
 /* fractional bits in scale factors */
-pub type FLOAT_MULT_TYPE = libc::c_float;
+pub type FLOAT_MULT_TYPE = f32;

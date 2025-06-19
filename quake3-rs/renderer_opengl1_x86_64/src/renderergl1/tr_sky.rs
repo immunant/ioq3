@@ -220,15 +220,15 @@ pub mod q_shared_h {
         mut v2: *const crate::src::qcommon::q_shared::vec_t,
         mut cross: *mut crate::src::qcommon::q_shared::vec_t,
     ) {
-        *cross.offset(0 as libc::c_int as isize) = *v1.offset(1 as libc::c_int as isize)
-            * *v2.offset(2 as libc::c_int as isize)
-            - *v1.offset(2 as libc::c_int as isize) * *v2.offset(1 as libc::c_int as isize);
-        *cross.offset(1 as libc::c_int as isize) = *v1.offset(2 as libc::c_int as isize)
-            * *v2.offset(0 as libc::c_int as isize)
-            - *v1.offset(0 as libc::c_int as isize) * *v2.offset(2 as libc::c_int as isize);
-        *cross.offset(2 as libc::c_int as isize) = *v1.offset(0 as libc::c_int as isize)
-            * *v2.offset(1 as libc::c_int as isize)
-            - *v1.offset(1 as libc::c_int as isize) * *v2.offset(0 as libc::c_int as isize);
+        *cross.offset(0 as i32 as isize) = *v1.offset(1 as i32 as isize)
+            * *v2.offset(2 as i32 as isize)
+            - *v1.offset(2 as i32 as isize) * *v2.offset(1 as i32 as isize);
+        *cross.offset(1 as i32 as isize) = *v1.offset(2 as i32 as isize)
+            * *v2.offset(0 as i32 as isize)
+            - *v1.offset(0 as i32 as isize) * *v2.offset(2 as i32 as isize);
+        *cross.offset(2 as i32 as isize) = *v1.offset(0 as i32 as isize)
+            * *v2.offset(1 as i32 as isize)
+            - *v1.offset(1 as i32 as isize) * *v2.offset(0 as i32 as isize);
     }
 
     // __Q_SHARED_H
@@ -482,9 +482,9 @@ pub use crate::tr_local_h::TMOD_STRETCH;
 pub use crate::tr_local_h::TMOD_TRANSFORM;
 pub use crate::tr_local_h::TMOD_TURBULENT;
 
-static mut s_cloudTexCoords: [[[[libc::c_float; 2]; 9]; 9]; 6] = [[[[0.; 2]; 9]; 9]; 6];
+static mut s_cloudTexCoords: [[[[f32; 2]; 9]; 9]; 6] = [[[[0.; 2]; 9]; 9]; 6];
 
-static mut s_cloudTexP: [[[libc::c_float; 9]; 9]; 6] = [[[0.; 9]; 9]; 6];
+static mut s_cloudTexP: [[[f32; 9]; 9]; 6] = [[[0.; 9]; 9]; 6];
 /*
 ===================================================================================
 
@@ -495,44 +495,44 @@ POLYGON TO BOX SIDE PROJECTION
 
 static mut sky_clip: [crate::src::qcommon::q_shared::vec3_t; 6] = [
     [
-        1 as libc::c_int as crate::src::qcommon::q_shared::vec_t,
-        1 as libc::c_int as crate::src::qcommon::q_shared::vec_t,
-        0 as libc::c_int as crate::src::qcommon::q_shared::vec_t,
+        1 as i32 as crate::src::qcommon::q_shared::vec_t,
+        1 as i32 as crate::src::qcommon::q_shared::vec_t,
+        0 as i32 as crate::src::qcommon::q_shared::vec_t,
     ],
     [
-        1 as libc::c_int as crate::src::qcommon::q_shared::vec_t,
-        -(1 as libc::c_int) as crate::src::qcommon::q_shared::vec_t,
-        0 as libc::c_int as crate::src::qcommon::q_shared::vec_t,
+        1 as i32 as crate::src::qcommon::q_shared::vec_t,
+        -(1 as i32) as crate::src::qcommon::q_shared::vec_t,
+        0 as i32 as crate::src::qcommon::q_shared::vec_t,
     ],
     [
-        0 as libc::c_int as crate::src::qcommon::q_shared::vec_t,
-        -(1 as libc::c_int) as crate::src::qcommon::q_shared::vec_t,
-        1 as libc::c_int as crate::src::qcommon::q_shared::vec_t,
+        0 as i32 as crate::src::qcommon::q_shared::vec_t,
+        -(1 as i32) as crate::src::qcommon::q_shared::vec_t,
+        1 as i32 as crate::src::qcommon::q_shared::vec_t,
     ],
     [
-        0 as libc::c_int as crate::src::qcommon::q_shared::vec_t,
-        1 as libc::c_int as crate::src::qcommon::q_shared::vec_t,
-        1 as libc::c_int as crate::src::qcommon::q_shared::vec_t,
+        0 as i32 as crate::src::qcommon::q_shared::vec_t,
+        1 as i32 as crate::src::qcommon::q_shared::vec_t,
+        1 as i32 as crate::src::qcommon::q_shared::vec_t,
     ],
     [
-        1 as libc::c_int as crate::src::qcommon::q_shared::vec_t,
-        0 as libc::c_int as crate::src::qcommon::q_shared::vec_t,
-        1 as libc::c_int as crate::src::qcommon::q_shared::vec_t,
+        1 as i32 as crate::src::qcommon::q_shared::vec_t,
+        0 as i32 as crate::src::qcommon::q_shared::vec_t,
+        1 as i32 as crate::src::qcommon::q_shared::vec_t,
     ],
     [
-        -(1 as libc::c_int) as crate::src::qcommon::q_shared::vec_t,
-        0 as libc::c_int as crate::src::qcommon::q_shared::vec_t,
-        1 as libc::c_int as crate::src::qcommon::q_shared::vec_t,
+        -(1 as i32) as crate::src::qcommon::q_shared::vec_t,
+        0 as i32 as crate::src::qcommon::q_shared::vec_t,
+        1 as i32 as crate::src::qcommon::q_shared::vec_t,
     ],
 ];
 
-static mut sky_mins: [[libc::c_float; 6]; 2] = [[0.; 6]; 2];
+static mut sky_mins: [[f32; 6]; 2] = [[0.; 6]; 2];
 
-static mut sky_maxs: [[libc::c_float; 6]; 2] = [[0.; 6]; 2];
+static mut sky_maxs: [[f32; 6]; 2] = [[0.; 6]; 2];
 
-static mut sky_min: libc::c_float = 0.;
+static mut sky_min: f32 = 0.;
 
-static mut sky_max: libc::c_float = 0.;
+static mut sky_max: f32 = 0.;
 /*
 ================
 AddSkyPolygon
@@ -540,113 +540,113 @@ AddSkyPolygon
 */
 
 unsafe extern "C" fn AddSkyPolygon(
-    mut nump: libc::c_int,
+    mut nump: i32,
     mut vecs: *mut crate::src::qcommon::q_shared::vec_t,
 ) {
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
     let mut v: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut av: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut s: libc::c_float = 0.;
-    let mut t: libc::c_float = 0.;
-    let mut dv: libc::c_float = 0.;
-    let mut axis: libc::c_int = 0;
-    let mut vp: *mut libc::c_float = 0 as *mut libc::c_float;
+    let mut s: f32 = 0.;
+    let mut t: f32 = 0.;
+    let mut dv: f32 = 0.;
+    let mut axis: i32 = 0;
+    let mut vp: *mut f32 = 0 as *mut f32;
     // s = [0]/[2], t = [1]/[2]
-    static mut vec_to_st: [[libc::c_int; 3]; 6] = [
-        [-(2 as libc::c_int), 3 as libc::c_int, 1 as libc::c_int],
-        [2 as libc::c_int, 3 as libc::c_int, -(1 as libc::c_int)],
-        [1 as libc::c_int, 3 as libc::c_int, 2 as libc::c_int],
-        [-(1 as libc::c_int), 3 as libc::c_int, -(2 as libc::c_int)],
-        [-(2 as libc::c_int), -(1 as libc::c_int), 3 as libc::c_int],
-        [-(2 as libc::c_int), 1 as libc::c_int, -(3 as libc::c_int)],
+    static mut vec_to_st: [[i32; 3]; 6] = [
+        [-(2 as i32), 3 as i32, 1 as i32],
+        [2 as i32, 3 as i32, -(1 as i32)],
+        [1 as i32, 3 as i32, 2 as i32],
+        [-(1 as i32), 3 as i32, -(2 as i32)],
+        [-(2 as i32), -(1 as i32), 3 as i32],
+        [-(2 as i32), 1 as i32, -(3 as i32)],
     ];
     // decide which face it maps to
-    v[0 as libc::c_int as usize] =
-        crate::src::qcommon::q_math::vec3_origin[0 as libc::c_int as usize];
-    v[1 as libc::c_int as usize] =
-        crate::src::qcommon::q_math::vec3_origin[1 as libc::c_int as usize];
-    v[2 as libc::c_int as usize] =
-        crate::src::qcommon::q_math::vec3_origin[2 as libc::c_int as usize];
-    i = 0 as libc::c_int;
+    v[0 as i32 as usize] =
+        crate::src::qcommon::q_math::vec3_origin[0 as i32 as usize];
+    v[1 as i32 as usize] =
+        crate::src::qcommon::q_math::vec3_origin[1 as i32 as usize];
+    v[2 as i32 as usize] =
+        crate::src::qcommon::q_math::vec3_origin[2 as i32 as usize];
+    i = 0 as i32;
     vp = vecs;
     while i < nump {
-        v[0 as libc::c_int as usize] =
-            *vp.offset(0 as libc::c_int as isize) + v[0 as libc::c_int as usize];
-        v[1 as libc::c_int as usize] =
-            *vp.offset(1 as libc::c_int as isize) + v[1 as libc::c_int as usize];
-        v[2 as libc::c_int as usize] =
-            *vp.offset(2 as libc::c_int as isize) + v[2 as libc::c_int as usize];
+        v[0 as i32 as usize] =
+            *vp.offset(0 as i32 as isize) + v[0 as i32 as usize];
+        v[1 as i32 as usize] =
+            *vp.offset(1 as i32 as isize) + v[1 as i32 as usize];
+        v[2 as i32 as usize] =
+            *vp.offset(2 as i32 as isize) + v[2 as i32 as usize];
         i += 1;
-        vp = vp.offset(3 as libc::c_int as isize)
+        vp = vp.offset(3 as i32 as isize)
     }
-    av[0 as libc::c_int as usize] =
-        crate::stdlib::fabs(v[0 as libc::c_int as usize] as libc::c_double)
+    av[0 as i32 as usize] =
+        crate::stdlib::fabs(v[0 as i32 as usize] as f64)
             as crate::src::qcommon::q_shared::vec_t;
-    av[1 as libc::c_int as usize] =
-        crate::stdlib::fabs(v[1 as libc::c_int as usize] as libc::c_double)
+    av[1 as i32 as usize] =
+        crate::stdlib::fabs(v[1 as i32 as usize] as f64)
             as crate::src::qcommon::q_shared::vec_t;
-    av[2 as libc::c_int as usize] =
-        crate::stdlib::fabs(v[2 as libc::c_int as usize] as libc::c_double)
+    av[2 as i32 as usize] =
+        crate::stdlib::fabs(v[2 as i32 as usize] as f64)
             as crate::src::qcommon::q_shared::vec_t;
-    if av[0 as libc::c_int as usize] > av[1 as libc::c_int as usize]
-        && av[0 as libc::c_int as usize] > av[2 as libc::c_int as usize]
+    if av[0 as i32 as usize] > av[1 as i32 as usize]
+        && av[0 as i32 as usize] > av[2 as i32 as usize]
     {
-        if v[0 as libc::c_int as usize] < 0 as libc::c_int as libc::c_float {
-            axis = 1 as libc::c_int
+        if v[0 as i32 as usize] < 0 as i32 as f32 {
+            axis = 1 as i32
         } else {
-            axis = 0 as libc::c_int
+            axis = 0 as i32
         }
-    } else if av[1 as libc::c_int as usize] > av[2 as libc::c_int as usize]
-        && av[1 as libc::c_int as usize] > av[0 as libc::c_int as usize]
+    } else if av[1 as i32 as usize] > av[2 as i32 as usize]
+        && av[1 as i32 as usize] > av[0 as i32 as usize]
     {
-        if v[1 as libc::c_int as usize] < 0 as libc::c_int as libc::c_float {
-            axis = 3 as libc::c_int
+        if v[1 as i32 as usize] < 0 as i32 as f32 {
+            axis = 3 as i32
         } else {
-            axis = 2 as libc::c_int
+            axis = 2 as i32
         }
-    } else if v[2 as libc::c_int as usize] < 0 as libc::c_int as libc::c_float {
-        axis = 5 as libc::c_int
+    } else if v[2 as i32 as usize] < 0 as i32 as f32 {
+        axis = 5 as i32
     } else {
-        axis = 4 as libc::c_int
+        axis = 4 as i32
     }
     // project new texture coords
-    i = 0 as libc::c_int; // don't divide by zero
+    i = 0 as i32; // don't divide by zero
     while i < nump {
-        j = vec_to_st[axis as usize][2 as libc::c_int as usize];
-        if j > 0 as libc::c_int {
-            dv = *vecs.offset((j - 1 as libc::c_int) as isize)
+        j = vec_to_st[axis as usize][2 as i32 as usize];
+        if j > 0 as i32 {
+            dv = *vecs.offset((j - 1 as i32) as isize)
         } else {
-            dv = -*vecs.offset((-j - 1 as libc::c_int) as isize)
+            dv = -*vecs.offset((-j - 1 as i32) as isize)
         }
-        if !((dv as libc::c_double) < 0.001f64) {
-            j = vec_to_st[axis as usize][0 as libc::c_int as usize];
-            if j < 0 as libc::c_int {
-                s = -*vecs.offset((-j - 1 as libc::c_int) as isize) / dv
+        if !((dv as f64) < 0.001f64) {
+            j = vec_to_st[axis as usize][0 as i32 as usize];
+            if j < 0 as i32 {
+                s = -*vecs.offset((-j - 1 as i32) as isize) / dv
             } else {
-                s = *vecs.offset((j - 1 as libc::c_int) as isize) / dv
+                s = *vecs.offset((j - 1 as i32) as isize) / dv
             }
-            j = vec_to_st[axis as usize][1 as libc::c_int as usize];
-            if j < 0 as libc::c_int {
-                t = -*vecs.offset((-j - 1 as libc::c_int) as isize) / dv
+            j = vec_to_st[axis as usize][1 as i32 as usize];
+            if j < 0 as i32 {
+                t = -*vecs.offset((-j - 1 as i32) as isize) / dv
             } else {
-                t = *vecs.offset((j - 1 as libc::c_int) as isize) / dv
+                t = *vecs.offset((j - 1 as i32) as isize) / dv
             }
-            if s < sky_mins[0 as libc::c_int as usize][axis as usize] {
-                sky_mins[0 as libc::c_int as usize][axis as usize] = s
+            if s < sky_mins[0 as i32 as usize][axis as usize] {
+                sky_mins[0 as i32 as usize][axis as usize] = s
             }
-            if t < sky_mins[1 as libc::c_int as usize][axis as usize] {
-                sky_mins[1 as libc::c_int as usize][axis as usize] = t
+            if t < sky_mins[1 as i32 as usize][axis as usize] {
+                sky_mins[1 as i32 as usize][axis as usize] = t
             }
-            if s > sky_maxs[0 as libc::c_int as usize][axis as usize] {
-                sky_maxs[0 as libc::c_int as usize][axis as usize] = s
+            if s > sky_maxs[0 as i32 as usize][axis as usize] {
+                sky_maxs[0 as i32 as usize][axis as usize] = s
             }
-            if t > sky_maxs[1 as libc::c_int as usize][axis as usize] {
-                sky_maxs[1 as libc::c_int as usize][axis as usize] = t
+            if t > sky_maxs[1 as i32 as usize][axis as usize] {
+                sky_maxs[1 as i32 as usize][axis as usize] = t
             }
         }
         i += 1;
-        vecs = vecs.offset(3 as libc::c_int as isize)
+        vecs = vecs.offset(3 as i32 as isize)
     }
 }
 /*
@@ -656,31 +656,31 @@ ClipSkyPolygon
 */
 
 unsafe extern "C" fn ClipSkyPolygon(
-    mut nump: libc::c_int,
+    mut nump: i32,
     mut vecs: *mut crate::src::qcommon::q_shared::vec_t,
-    mut stage: libc::c_int,
+    mut stage: i32,
 ) {
-    let mut norm: *mut libc::c_float = 0 as *mut libc::c_float;
-    let mut v: *mut libc::c_float = 0 as *mut libc::c_float;
+    let mut norm: *mut f32 = 0 as *mut f32;
+    let mut v: *mut f32 = 0 as *mut f32;
     let mut front: crate::src::qcommon::q_shared::qboolean = crate::src::qcommon::q_shared::qfalse;
     let mut back: crate::src::qcommon::q_shared::qboolean = crate::src::qcommon::q_shared::qfalse;
-    let mut d: libc::c_float = 0.;
-    let mut e: libc::c_float = 0.;
-    let mut dists: [libc::c_float; 64] = [0.; 64];
-    let mut sides: [libc::c_int; 64] = [0; 64];
+    let mut d: f32 = 0.;
+    let mut e: f32 = 0.;
+    let mut dists: [f32; 64] = [0.; 64];
+    let mut sides: [i32; 64] = [0; 64];
     let mut newv: [[crate::src::qcommon::q_shared::vec3_t; 64]; 2] = [[[0.; 3]; 64]; 2];
-    let mut newc: [libc::c_int; 2] = [0; 2];
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
-    if nump > 64 as libc::c_int - 2 as libc::c_int {
+    let mut newc: [i32; 2] = [0; 2];
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
+    if nump > 64 as i32 - 2 as i32 {
         crate::src::renderergl1::tr_main::ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"ClipSkyPolygon: MAX_CLIP_VERTS\x00" as *const u8 as *const libc::c_char,
         );
     }
-    if stage == 6 as libc::c_int {
+    if stage == 6 as i32 {
         // fully clipped, so draw it
         AddSkyPolygon(nump, vecs);
         return;
@@ -688,115 +688,115 @@ unsafe extern "C" fn ClipSkyPolygon(
     back = crate::src::qcommon::q_shared::qfalse;
     front = back;
     norm = sky_clip[stage as usize].as_mut_ptr();
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     v = vecs;
     while i < nump {
-        d = *v.offset(0 as libc::c_int as isize) * *norm.offset(0 as libc::c_int as isize)
-            + *v.offset(1 as libc::c_int as isize) * *norm.offset(1 as libc::c_int as isize)
-            + *v.offset(2 as libc::c_int as isize) * *norm.offset(2 as libc::c_int as isize);
+        d = *v.offset(0 as i32 as isize) * *norm.offset(0 as i32 as isize)
+            + *v.offset(1 as i32 as isize) * *norm.offset(1 as i32 as isize)
+            + *v.offset(2 as i32 as isize) * *norm.offset(2 as i32 as isize);
         if d > 0.1f32 {
             front = crate::src::qcommon::q_shared::qtrue;
-            sides[i as usize] = 0 as libc::c_int
+            sides[i as usize] = 0 as i32
         } else if d < -0.1f32 {
             back = crate::src::qcommon::q_shared::qtrue;
-            sides[i as usize] = 1 as libc::c_int
+            sides[i as usize] = 1 as i32
         } else {
-            sides[i as usize] = 2 as libc::c_int
+            sides[i as usize] = 2 as i32
         }
         dists[i as usize] = d;
         i += 1;
-        v = v.offset(3 as libc::c_int as isize)
+        v = v.offset(3 as i32 as isize)
     }
     if front as u64 == 0 || back as u64 == 0 {
         // not clipped
-        ClipSkyPolygon(nump, vecs, stage + 1 as libc::c_int);
+        ClipSkyPolygon(nump, vecs, stage + 1 as i32);
         return;
     }
     // clip it
-    sides[i as usize] = sides[0 as libc::c_int as usize];
-    dists[i as usize] = dists[0 as libc::c_int as usize];
+    sides[i as usize] = sides[0 as i32 as usize];
+    dists[i as usize] = dists[0 as i32 as usize];
     *vecs
-        .offset((i * 3 as libc::c_int) as isize)
-        .offset(0 as libc::c_int as isize) = *vecs.offset(0 as libc::c_int as isize);
+        .offset((i * 3 as i32) as isize)
+        .offset(0 as i32 as isize) = *vecs.offset(0 as i32 as isize);
     *vecs
-        .offset((i * 3 as libc::c_int) as isize)
-        .offset(1 as libc::c_int as isize) = *vecs.offset(1 as libc::c_int as isize);
+        .offset((i * 3 as i32) as isize)
+        .offset(1 as i32 as isize) = *vecs.offset(1 as i32 as isize);
     *vecs
-        .offset((i * 3 as libc::c_int) as isize)
-        .offset(2 as libc::c_int as isize) = *vecs.offset(2 as libc::c_int as isize);
-    newc[1 as libc::c_int as usize] = 0 as libc::c_int;
-    newc[0 as libc::c_int as usize] = newc[1 as libc::c_int as usize];
-    i = 0 as libc::c_int;
+        .offset((i * 3 as i32) as isize)
+        .offset(2 as i32 as isize) = *vecs.offset(2 as i32 as isize);
+    newc[1 as i32 as usize] = 0 as i32;
+    newc[0 as i32 as usize] = newc[1 as i32 as usize];
+    i = 0 as i32;
     v = vecs;
     while i < nump {
         match sides[i as usize] {
             0 => {
-                newv[0 as libc::c_int as usize][newc[0 as libc::c_int as usize] as usize]
-                    [0 as libc::c_int as usize] = *v.offset(0 as libc::c_int as isize);
-                newv[0 as libc::c_int as usize][newc[0 as libc::c_int as usize] as usize]
-                    [1 as libc::c_int as usize] = *v.offset(1 as libc::c_int as isize);
-                newv[0 as libc::c_int as usize][newc[0 as libc::c_int as usize] as usize]
-                    [2 as libc::c_int as usize] = *v.offset(2 as libc::c_int as isize);
-                newc[0 as libc::c_int as usize] += 1
+                newv[0 as i32 as usize][newc[0 as i32 as usize] as usize]
+                    [0 as i32 as usize] = *v.offset(0 as i32 as isize);
+                newv[0 as i32 as usize][newc[0 as i32 as usize] as usize]
+                    [1 as i32 as usize] = *v.offset(1 as i32 as isize);
+                newv[0 as i32 as usize][newc[0 as i32 as usize] as usize]
+                    [2 as i32 as usize] = *v.offset(2 as i32 as isize);
+                newc[0 as i32 as usize] += 1
             }
             1 => {
-                newv[1 as libc::c_int as usize][newc[1 as libc::c_int as usize] as usize]
-                    [0 as libc::c_int as usize] = *v.offset(0 as libc::c_int as isize);
-                newv[1 as libc::c_int as usize][newc[1 as libc::c_int as usize] as usize]
-                    [1 as libc::c_int as usize] = *v.offset(1 as libc::c_int as isize);
-                newv[1 as libc::c_int as usize][newc[1 as libc::c_int as usize] as usize]
-                    [2 as libc::c_int as usize] = *v.offset(2 as libc::c_int as isize);
-                newc[1 as libc::c_int as usize] += 1
+                newv[1 as i32 as usize][newc[1 as i32 as usize] as usize]
+                    [0 as i32 as usize] = *v.offset(0 as i32 as isize);
+                newv[1 as i32 as usize][newc[1 as i32 as usize] as usize]
+                    [1 as i32 as usize] = *v.offset(1 as i32 as isize);
+                newv[1 as i32 as usize][newc[1 as i32 as usize] as usize]
+                    [2 as i32 as usize] = *v.offset(2 as i32 as isize);
+                newc[1 as i32 as usize] += 1
             }
             2 => {
-                newv[0 as libc::c_int as usize][newc[0 as libc::c_int as usize] as usize]
-                    [0 as libc::c_int as usize] = *v.offset(0 as libc::c_int as isize);
-                newv[0 as libc::c_int as usize][newc[0 as libc::c_int as usize] as usize]
-                    [1 as libc::c_int as usize] = *v.offset(1 as libc::c_int as isize);
-                newv[0 as libc::c_int as usize][newc[0 as libc::c_int as usize] as usize]
-                    [2 as libc::c_int as usize] = *v.offset(2 as libc::c_int as isize);
-                newc[0 as libc::c_int as usize] += 1;
-                newv[1 as libc::c_int as usize][newc[1 as libc::c_int as usize] as usize]
-                    [0 as libc::c_int as usize] = *v.offset(0 as libc::c_int as isize);
-                newv[1 as libc::c_int as usize][newc[1 as libc::c_int as usize] as usize]
-                    [1 as libc::c_int as usize] = *v.offset(1 as libc::c_int as isize);
-                newv[1 as libc::c_int as usize][newc[1 as libc::c_int as usize] as usize]
-                    [2 as libc::c_int as usize] = *v.offset(2 as libc::c_int as isize);
-                newc[1 as libc::c_int as usize] += 1
+                newv[0 as i32 as usize][newc[0 as i32 as usize] as usize]
+                    [0 as i32 as usize] = *v.offset(0 as i32 as isize);
+                newv[0 as i32 as usize][newc[0 as i32 as usize] as usize]
+                    [1 as i32 as usize] = *v.offset(1 as i32 as isize);
+                newv[0 as i32 as usize][newc[0 as i32 as usize] as usize]
+                    [2 as i32 as usize] = *v.offset(2 as i32 as isize);
+                newc[0 as i32 as usize] += 1;
+                newv[1 as i32 as usize][newc[1 as i32 as usize] as usize]
+                    [0 as i32 as usize] = *v.offset(0 as i32 as isize);
+                newv[1 as i32 as usize][newc[1 as i32 as usize] as usize]
+                    [1 as i32 as usize] = *v.offset(1 as i32 as isize);
+                newv[1 as i32 as usize][newc[1 as i32 as usize] as usize]
+                    [2 as i32 as usize] = *v.offset(2 as i32 as isize);
+                newc[1 as i32 as usize] += 1
             }
             _ => {}
         }
-        if !(sides[i as usize] == 2 as libc::c_int
-            || sides[(i + 1 as libc::c_int) as usize] == 2 as libc::c_int
-            || sides[(i + 1 as libc::c_int) as usize] == sides[i as usize])
+        if !(sides[i as usize] == 2 as i32
+            || sides[(i + 1 as i32) as usize] == 2 as i32
+            || sides[(i + 1 as i32) as usize] == sides[i as usize])
         {
-            d = dists[i as usize] / (dists[i as usize] - dists[(i + 1 as libc::c_int) as usize]);
-            j = 0 as libc::c_int;
-            while j < 3 as libc::c_int {
+            d = dists[i as usize] / (dists[i as usize] - dists[(i + 1 as i32) as usize]);
+            j = 0 as i32;
+            while j < 3 as i32 {
                 e = *v.offset(j as isize)
-                    + d * (*v.offset((j + 3 as libc::c_int) as isize) - *v.offset(j as isize));
-                newv[0 as libc::c_int as usize][newc[0 as libc::c_int as usize] as usize]
+                    + d * (*v.offset((j + 3 as i32) as isize) - *v.offset(j as isize));
+                newv[0 as i32 as usize][newc[0 as i32 as usize] as usize]
                     [j as usize] = e;
-                newv[1 as libc::c_int as usize][newc[1 as libc::c_int as usize] as usize]
+                newv[1 as i32 as usize][newc[1 as i32 as usize] as usize]
                     [j as usize] = e;
                 j += 1
             }
-            newc[0 as libc::c_int as usize] += 1;
-            newc[1 as libc::c_int as usize] += 1
+            newc[0 as i32 as usize] += 1;
+            newc[1 as i32 as usize] += 1
         }
         i += 1;
-        v = v.offset(3 as libc::c_int as isize)
+        v = v.offset(3 as i32 as isize)
     }
     // continue
     ClipSkyPolygon(
-        newc[0 as libc::c_int as usize],
-        newv[0 as libc::c_int as usize][0 as libc::c_int as usize].as_mut_ptr(),
-        stage + 1 as libc::c_int,
+        newc[0 as i32 as usize],
+        newv[0 as i32 as usize][0 as i32 as usize].as_mut_ptr(),
+        stage + 1 as i32,
     );
     ClipSkyPolygon(
-        newc[1 as libc::c_int as usize],
-        newv[1 as libc::c_int as usize][0 as libc::c_int as usize].as_mut_ptr(),
-        stage + 1 as libc::c_int,
+        newc[1 as i32 as usize],
+        newv[1 as i32 as usize][0 as i32 as usize].as_mut_ptr(),
+        stage + 1 as i32,
     );
 }
 /*
@@ -806,15 +806,15 @@ ClearSkyBox
 */
 
 unsafe extern "C" fn ClearSkyBox() {
-    let mut i: libc::c_int = 0;
-    i = 0 as libc::c_int;
-    while i < 6 as libc::c_int {
-        sky_mins[1 as libc::c_int as usize][i as usize] = 9999 as libc::c_int as libc::c_float;
-        sky_mins[0 as libc::c_int as usize][i as usize] =
-            sky_mins[1 as libc::c_int as usize][i as usize];
-        sky_maxs[1 as libc::c_int as usize][i as usize] = -(9999 as libc::c_int) as libc::c_float;
-        sky_maxs[0 as libc::c_int as usize][i as usize] =
-            sky_maxs[1 as libc::c_int as usize][i as usize];
+    let mut i: i32 = 0;
+    i = 0 as i32;
+    while i < 6 as i32 {
+        sky_mins[1 as i32 as usize][i as usize] = 9999 as i32 as f32;
+        sky_mins[0 as i32 as usize][i as usize] =
+            sky_mins[1 as i32 as usize][i as usize];
+        sky_maxs[1 as i32 as usize][i as usize] = -(9999 as i32) as f32;
+        sky_maxs[0 as i32 as usize][i as usize] =
+            sky_maxs[1 as i32 as usize][i as usize];
         i += 1
     }
 }
@@ -827,39 +827,39 @@ RB_ClipSkyPolygons
 
 pub unsafe extern "C" fn RB_ClipSkyPolygons(mut input: *mut crate::tr_local_h::shaderCommands_t) {
     let mut p: [crate::src::qcommon::q_shared::vec3_t; 5] = [[0.; 3]; 5]; // need one extra point for clipping
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
     ClearSkyBox();
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < (*input).numIndexes {
-        j = 0 as libc::c_int;
-        while j < 3 as libc::c_int {
-            p[j as usize][0 as libc::c_int as usize] = (*input).xyz
-                [(*input).indexes[(i + j) as usize] as usize][0 as libc::c_int as usize]
+        j = 0 as i32;
+        while j < 3 as i32 {
+            p[j as usize][0 as i32 as usize] = (*input).xyz
+                [(*input).indexes[(i + j) as usize] as usize][0 as i32 as usize]
                 - crate::src::renderergl1::tr_backend::backEnd
                     .viewParms
                     .or
-                    .origin[0 as libc::c_int as usize];
-            p[j as usize][1 as libc::c_int as usize] = (*input).xyz
-                [(*input).indexes[(i + j) as usize] as usize][1 as libc::c_int as usize]
+                    .origin[0 as i32 as usize];
+            p[j as usize][1 as i32 as usize] = (*input).xyz
+                [(*input).indexes[(i + j) as usize] as usize][1 as i32 as usize]
                 - crate::src::renderergl1::tr_backend::backEnd
                     .viewParms
                     .or
-                    .origin[1 as libc::c_int as usize];
-            p[j as usize][2 as libc::c_int as usize] = (*input).xyz
-                [(*input).indexes[(i + j) as usize] as usize][2 as libc::c_int as usize]
+                    .origin[1 as i32 as usize];
+            p[j as usize][2 as i32 as usize] = (*input).xyz
+                [(*input).indexes[(i + j) as usize] as usize][2 as i32 as usize]
                 - crate::src::renderergl1::tr_backend::backEnd
                     .viewParms
                     .or
-                    .origin[2 as libc::c_int as usize];
+                    .origin[2 as i32 as usize];
             j += 1
         }
         ClipSkyPolygon(
-            3 as libc::c_int,
-            p[0 as libc::c_int as usize].as_mut_ptr(),
-            0 as libc::c_int,
+            3 as i32,
+            p[0 as i32 as usize].as_mut_ptr(),
+            0 as i32,
         );
-        i += 3 as libc::c_int
+        i += 3 as i32
     }
 }
 /*
@@ -876,43 +876,43 @@ CLOUD VERTEX GENERATION
 */
 
 unsafe extern "C" fn MakeSkyVec(
-    mut s: libc::c_float,
-    mut t: libc::c_float,
-    mut axis: libc::c_int,
-    mut outSt: *mut libc::c_float,
+    mut s: f32,
+    mut t: f32,
+    mut axis: i32,
+    mut outSt: *mut f32,
     mut outXYZ: *mut crate::src::qcommon::q_shared::vec_t,
 ) {
     // 1 = s, 2 = t, 3 = 2048
-    static mut st_to_vec: [[libc::c_int; 3]; 6] = [
-        [3 as libc::c_int, -(1 as libc::c_int), 2 as libc::c_int],
-        [-(3 as libc::c_int), 1 as libc::c_int, 2 as libc::c_int],
-        [1 as libc::c_int, 3 as libc::c_int, 2 as libc::c_int],
-        [-(1 as libc::c_int), -(3 as libc::c_int), 2 as libc::c_int],
-        [-(2 as libc::c_int), -(1 as libc::c_int), 3 as libc::c_int],
-        [2 as libc::c_int, -(1 as libc::c_int), -(3 as libc::c_int)],
+    static mut st_to_vec: [[i32; 3]; 6] = [
+        [3 as i32, -(1 as i32), 2 as i32],
+        [-(3 as i32), 1 as i32, 2 as i32],
+        [1 as i32, 3 as i32, 2 as i32],
+        [-(1 as i32), -(3 as i32), 2 as i32],
+        [-(2 as i32), -(1 as i32), 3 as i32],
+        [2 as i32, -(1 as i32), -(3 as i32)],
     ]; // div sqrt(3)
     let mut b: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut j: libc::c_int = 0;
-    let mut k: libc::c_int = 0;
-    let mut boxSize: libc::c_float = 0.;
-    boxSize = (crate::src::renderergl1::tr_backend::backEnd.viewParms.zFar as libc::c_double
-        / 1.75f64) as libc::c_float;
-    b[0 as libc::c_int as usize] = s * boxSize;
-    b[1 as libc::c_int as usize] = t * boxSize;
-    b[2 as libc::c_int as usize] = boxSize;
-    j = 0 as libc::c_int;
-    while j < 3 as libc::c_int {
+    let mut j: i32 = 0;
+    let mut k: i32 = 0;
+    let mut boxSize: f32 = 0.;
+    boxSize = (crate::src::renderergl1::tr_backend::backEnd.viewParms.zFar as f64
+        / 1.75f64) as f32;
+    b[0 as i32 as usize] = s * boxSize;
+    b[1 as i32 as usize] = t * boxSize;
+    b[2 as i32 as usize] = boxSize;
+    j = 0 as i32;
+    while j < 3 as i32 {
         k = st_to_vec[axis as usize][j as usize];
-        if k < 0 as libc::c_int {
-            *outXYZ.offset(j as isize) = -b[(-k - 1 as libc::c_int) as usize]
+        if k < 0 as i32 {
+            *outXYZ.offset(j as isize) = -b[(-k - 1 as i32) as usize]
         } else {
-            *outXYZ.offset(j as isize) = b[(k - 1 as libc::c_int) as usize]
+            *outXYZ.offset(j as isize) = b[(k - 1 as i32) as usize]
         }
         j += 1
     }
     // avoid bilerp seam
-    s = ((s + 1 as libc::c_int as libc::c_float) as libc::c_double * 0.5f64) as libc::c_float;
-    t = ((t + 1 as libc::c_int as libc::c_float) as libc::c_double * 0.5f64) as libc::c_float;
+    s = ((s + 1 as i32 as f32) as f64 * 0.5f64) as f32;
+    t = ((t + 1 as i32 as f32) as f64 * 0.5f64) as f32;
     if s < sky_min {
         s = sky_min
     } else if s > sky_max {
@@ -923,41 +923,41 @@ unsafe extern "C" fn MakeSkyVec(
     } else if t > sky_max {
         t = sky_max
     }
-    t = (1.0f64 - t as libc::c_double) as libc::c_float;
+    t = (1.0f64 - t as f64) as f32;
     if !outSt.is_null() {
-        *outSt.offset(0 as libc::c_int as isize) = s;
-        *outSt.offset(1 as libc::c_int as isize) = t
+        *outSt.offset(0 as i32 as isize) = s;
+        *outSt.offset(1 as i32 as isize) = t
     };
 }
 
-static mut sky_texorder: [libc::c_int; 6] = [
-    0 as libc::c_int,
-    2 as libc::c_int,
-    1 as libc::c_int,
-    3 as libc::c_int,
-    4 as libc::c_int,
-    5 as libc::c_int,
+static mut sky_texorder: [i32; 6] = [
+    0 as i32,
+    2 as i32,
+    1 as i32,
+    3 as i32,
+    4 as i32,
+    5 as i32,
 ];
 
 static mut s_skyPoints: [[crate::src::qcommon::q_shared::vec3_t; 9]; 9] = [[[0.; 3]; 9]; 9];
 
-static mut s_skyTexCoords: [[[libc::c_float; 2]; 9]; 9] = [[[0.; 2]; 9]; 9];
+static mut s_skyTexCoords: [[[f32; 2]; 9]; 9] = [[[0.; 2]; 9]; 9];
 
 unsafe extern "C" fn DrawSkySide(
     mut image: *mut crate::tr_common_h::image_s,
-    mut mins: *const libc::c_int,
-    mut maxs: *const libc::c_int,
+    mut mins: *const i32,
+    mut maxs: *const i32,
 ) {
-    let mut s: libc::c_int = 0;
-    let mut t: libc::c_int = 0;
+    let mut s: i32 = 0;
+    let mut t: i32 = 0;
     crate::src::renderergl1::tr_backend::GL_Bind(image as *mut crate::tr_common_h::image_s);
-    t = *mins.offset(1 as libc::c_int as isize) + 8 as libc::c_int / 2 as libc::c_int;
-    while t < *maxs.offset(1 as libc::c_int as isize) + 8 as libc::c_int / 2 as libc::c_int {
+    t = *mins.offset(1 as i32 as isize) + 8 as i32 / 2 as i32;
+    while t < *maxs.offset(1 as i32 as isize) + 8 as i32 / 2 as i32 {
         crate::src::sdl::sdl_glimp::qglBegin.expect("non-null function pointer")(
-            0x5 as libc::c_int as crate::stdlib::GLenum,
+            0x5 as i32 as crate::stdlib::GLenum,
         );
-        s = *mins.offset(0 as libc::c_int as isize) + 8 as libc::c_int / 2 as libc::c_int;
-        while s <= *maxs.offset(0 as libc::c_int as isize) + 8 as libc::c_int / 2 as libc::c_int {
+        s = *mins.offset(0 as i32 as isize) + 8 as i32 / 2 as i32;
+        while s <= *maxs.offset(0 as i32 as isize) + 8 as i32 / 2 as i32 {
             crate::src::sdl::sdl_glimp::qglTexCoord2fv.expect("non-null function pointer")(
                 s_skyTexCoords[t as usize][s as usize].as_mut_ptr(),
             );
@@ -965,10 +965,10 @@ unsafe extern "C" fn DrawSkySide(
                 s_skyPoints[t as usize][s as usize].as_mut_ptr(),
             );
             crate::src::sdl::sdl_glimp::qglTexCoord2fv.expect("non-null function pointer")(
-                s_skyTexCoords[(t + 1 as libc::c_int) as usize][s as usize].as_mut_ptr(),
+                s_skyTexCoords[(t + 1 as i32) as usize][s as usize].as_mut_ptr(),
             );
             crate::src::sdl::sdl_glimp::qglVertex3fv.expect("non-null function pointer")(
-                s_skyPoints[(t + 1 as libc::c_int) as usize][s as usize].as_mut_ptr(),
+                s_skyPoints[(t + 1 as i32) as usize][s as usize].as_mut_ptr(),
             );
             s += 1
         }
@@ -978,110 +978,110 @@ unsafe extern "C" fn DrawSkySide(
 }
 
 unsafe extern "C" fn DrawSkyBox(mut shader: *mut crate::tr_local_h::shader_t) {
-    let mut i: libc::c_int = 0;
-    sky_min = 0 as libc::c_int as libc::c_float;
-    sky_max = 1 as libc::c_int as libc::c_float;
+    let mut i: i32 = 0;
+    sky_min = 0 as i32 as f32;
+    sky_max = 1 as i32 as f32;
     crate::stdlib::memset(
         s_skyTexCoords.as_mut_ptr() as *mut libc::c_void,
-        0 as libc::c_int,
-        ::std::mem::size_of::<[[[libc::c_float; 2]; 9]; 9]>() as libc::c_ulong,
+        0 as i32,
+        ::std::mem::size_of::<[[[f32; 2]; 9]; 9]>() as libc::c_ulong,
     );
-    i = 0 as libc::c_int;
-    while i < 6 as libc::c_int {
-        let mut sky_mins_subd: [libc::c_int; 2] = [0; 2];
-        let mut sky_maxs_subd: [libc::c_int; 2] = [0; 2];
-        let mut s: libc::c_int = 0;
-        let mut t: libc::c_int = 0;
-        sky_mins[0 as libc::c_int as usize][i as usize] = (crate::stdlib::floor(
-            (sky_mins[0 as libc::c_int as usize][i as usize]
-                * (8 as libc::c_int / 2 as libc::c_int) as libc::c_float)
-                as libc::c_double,
-        ) / (8 as libc::c_int / 2 as libc::c_int)
-            as libc::c_double)
-            as libc::c_float;
-        sky_mins[1 as libc::c_int as usize][i as usize] = (crate::stdlib::floor(
-            (sky_mins[1 as libc::c_int as usize][i as usize]
-                * (8 as libc::c_int / 2 as libc::c_int) as libc::c_float)
-                as libc::c_double,
-        ) / (8 as libc::c_int / 2 as libc::c_int)
-            as libc::c_double)
-            as libc::c_float;
-        sky_maxs[0 as libc::c_int as usize][i as usize] = (crate::stdlib::ceil(
-            (sky_maxs[0 as libc::c_int as usize][i as usize]
-                * (8 as libc::c_int / 2 as libc::c_int) as libc::c_float)
-                as libc::c_double,
-        ) / (8 as libc::c_int / 2 as libc::c_int)
-            as libc::c_double)
-            as libc::c_float;
-        sky_maxs[1 as libc::c_int as usize][i as usize] = (crate::stdlib::ceil(
-            (sky_maxs[1 as libc::c_int as usize][i as usize]
-                * (8 as libc::c_int / 2 as libc::c_int) as libc::c_float)
-                as libc::c_double,
-        ) / (8 as libc::c_int / 2 as libc::c_int)
-            as libc::c_double)
-            as libc::c_float;
-        if !(sky_mins[0 as libc::c_int as usize][i as usize]
-            >= sky_maxs[0 as libc::c_int as usize][i as usize]
-            || sky_mins[1 as libc::c_int as usize][i as usize]
-                >= sky_maxs[1 as libc::c_int as usize][i as usize])
+    i = 0 as i32;
+    while i < 6 as i32 {
+        let mut sky_mins_subd: [i32; 2] = [0; 2];
+        let mut sky_maxs_subd: [i32; 2] = [0; 2];
+        let mut s: i32 = 0;
+        let mut t: i32 = 0;
+        sky_mins[0 as i32 as usize][i as usize] = (crate::stdlib::floor(
+            (sky_mins[0 as i32 as usize][i as usize]
+                * (8 as i32 / 2 as i32) as f32)
+                as f64,
+        ) / (8 as i32 / 2 as i32)
+            as f64)
+            as f32;
+        sky_mins[1 as i32 as usize][i as usize] = (crate::stdlib::floor(
+            (sky_mins[1 as i32 as usize][i as usize]
+                * (8 as i32 / 2 as i32) as f32)
+                as f64,
+        ) / (8 as i32 / 2 as i32)
+            as f64)
+            as f32;
+        sky_maxs[0 as i32 as usize][i as usize] = (crate::stdlib::ceil(
+            (sky_maxs[0 as i32 as usize][i as usize]
+                * (8 as i32 / 2 as i32) as f32)
+                as f64,
+        ) / (8 as i32 / 2 as i32)
+            as f64)
+            as f32;
+        sky_maxs[1 as i32 as usize][i as usize] = (crate::stdlib::ceil(
+            (sky_maxs[1 as i32 as usize][i as usize]
+                * (8 as i32 / 2 as i32) as f32)
+                as f64,
+        ) / (8 as i32 / 2 as i32)
+            as f64)
+            as f32;
+        if !(sky_mins[0 as i32 as usize][i as usize]
+            >= sky_maxs[0 as i32 as usize][i as usize]
+            || sky_mins[1 as i32 as usize][i as usize]
+                >= sky_maxs[1 as i32 as usize][i as usize])
         {
-            sky_mins_subd[0 as libc::c_int as usize] = (sky_mins[0 as libc::c_int as usize]
+            sky_mins_subd[0 as i32 as usize] = (sky_mins[0 as i32 as usize]
                 [i as usize]
-                * (8 as libc::c_int / 2 as libc::c_int) as libc::c_float)
-                as libc::c_int;
-            sky_mins_subd[1 as libc::c_int as usize] = (sky_mins[1 as libc::c_int as usize]
+                * (8 as i32 / 2 as i32) as f32)
+                as i32;
+            sky_mins_subd[1 as i32 as usize] = (sky_mins[1 as i32 as usize]
                 [i as usize]
-                * (8 as libc::c_int / 2 as libc::c_int) as libc::c_float)
-                as libc::c_int;
-            sky_maxs_subd[0 as libc::c_int as usize] = (sky_maxs[0 as libc::c_int as usize]
+                * (8 as i32 / 2 as i32) as f32)
+                as i32;
+            sky_maxs_subd[0 as i32 as usize] = (sky_maxs[0 as i32 as usize]
                 [i as usize]
-                * (8 as libc::c_int / 2 as libc::c_int) as libc::c_float)
-                as libc::c_int;
-            sky_maxs_subd[1 as libc::c_int as usize] = (sky_maxs[1 as libc::c_int as usize]
+                * (8 as i32 / 2 as i32) as f32)
+                as i32;
+            sky_maxs_subd[1 as i32 as usize] = (sky_maxs[1 as i32 as usize]
                 [i as usize]
-                * (8 as libc::c_int / 2 as libc::c_int) as libc::c_float)
-                as libc::c_int;
-            if sky_mins_subd[0 as libc::c_int as usize] < -(8 as libc::c_int / 2 as libc::c_int) {
-                sky_mins_subd[0 as libc::c_int as usize] = -(8 as libc::c_int / 2 as libc::c_int)
-            } else if sky_mins_subd[0 as libc::c_int as usize] > 8 as libc::c_int / 2 as libc::c_int
+                * (8 as i32 / 2 as i32) as f32)
+                as i32;
+            if sky_mins_subd[0 as i32 as usize] < -(8 as i32 / 2 as i32) {
+                sky_mins_subd[0 as i32 as usize] = -(8 as i32 / 2 as i32)
+            } else if sky_mins_subd[0 as i32 as usize] > 8 as i32 / 2 as i32
             {
-                sky_mins_subd[0 as libc::c_int as usize] = 8 as libc::c_int / 2 as libc::c_int
+                sky_mins_subd[0 as i32 as usize] = 8 as i32 / 2 as i32
             }
-            if sky_mins_subd[1 as libc::c_int as usize] < -(8 as libc::c_int / 2 as libc::c_int) {
-                sky_mins_subd[1 as libc::c_int as usize] = -(8 as libc::c_int / 2 as libc::c_int)
-            } else if sky_mins_subd[1 as libc::c_int as usize] > 8 as libc::c_int / 2 as libc::c_int
+            if sky_mins_subd[1 as i32 as usize] < -(8 as i32 / 2 as i32) {
+                sky_mins_subd[1 as i32 as usize] = -(8 as i32 / 2 as i32)
+            } else if sky_mins_subd[1 as i32 as usize] > 8 as i32 / 2 as i32
             {
-                sky_mins_subd[1 as libc::c_int as usize] = 8 as libc::c_int / 2 as libc::c_int
+                sky_mins_subd[1 as i32 as usize] = 8 as i32 / 2 as i32
             }
-            if sky_maxs_subd[0 as libc::c_int as usize] < -(8 as libc::c_int / 2 as libc::c_int) {
-                sky_maxs_subd[0 as libc::c_int as usize] = -(8 as libc::c_int / 2 as libc::c_int)
-            } else if sky_maxs_subd[0 as libc::c_int as usize] > 8 as libc::c_int / 2 as libc::c_int
+            if sky_maxs_subd[0 as i32 as usize] < -(8 as i32 / 2 as i32) {
+                sky_maxs_subd[0 as i32 as usize] = -(8 as i32 / 2 as i32)
+            } else if sky_maxs_subd[0 as i32 as usize] > 8 as i32 / 2 as i32
             {
-                sky_maxs_subd[0 as libc::c_int as usize] = 8 as libc::c_int / 2 as libc::c_int
+                sky_maxs_subd[0 as i32 as usize] = 8 as i32 / 2 as i32
             }
-            if sky_maxs_subd[1 as libc::c_int as usize] < -(8 as libc::c_int / 2 as libc::c_int) {
-                sky_maxs_subd[1 as libc::c_int as usize] = -(8 as libc::c_int / 2 as libc::c_int)
-            } else if sky_maxs_subd[1 as libc::c_int as usize] > 8 as libc::c_int / 2 as libc::c_int
+            if sky_maxs_subd[1 as i32 as usize] < -(8 as i32 / 2 as i32) {
+                sky_maxs_subd[1 as i32 as usize] = -(8 as i32 / 2 as i32)
+            } else if sky_maxs_subd[1 as i32 as usize] > 8 as i32 / 2 as i32
             {
-                sky_maxs_subd[1 as libc::c_int as usize] = 8 as libc::c_int / 2 as libc::c_int
+                sky_maxs_subd[1 as i32 as usize] = 8 as i32 / 2 as i32
             }
             //
             // iterate through the subdivisions
             //
-            t = sky_mins_subd[1 as libc::c_int as usize] + 8 as libc::c_int / 2 as libc::c_int;
+            t = sky_mins_subd[1 as i32 as usize] + 8 as i32 / 2 as i32;
             while t
-                <= sky_maxs_subd[1 as libc::c_int as usize] + 8 as libc::c_int / 2 as libc::c_int
+                <= sky_maxs_subd[1 as i32 as usize] + 8 as i32 / 2 as i32
             {
-                s = sky_mins_subd[0 as libc::c_int as usize] + 8 as libc::c_int / 2 as libc::c_int;
+                s = sky_mins_subd[0 as i32 as usize] + 8 as i32 / 2 as i32;
                 while s
-                    <= sky_maxs_subd[0 as libc::c_int as usize]
-                        + 8 as libc::c_int / 2 as libc::c_int
+                    <= sky_maxs_subd[0 as i32 as usize]
+                        + 8 as i32 / 2 as i32
                 {
                     MakeSkyVec(
-                        (s - 8 as libc::c_int / 2 as libc::c_int) as libc::c_float
-                            / (8 as libc::c_int / 2 as libc::c_int) as libc::c_float,
-                        (t - 8 as libc::c_int / 2 as libc::c_int) as libc::c_float
-                            / (8 as libc::c_int / 2 as libc::c_int) as libc::c_float,
+                        (s - 8 as i32 / 2 as i32) as f32
+                            / (8 as i32 / 2 as i32) as f32,
+                        (t - 8 as i32 / 2 as i32) as f32
+                            / (8 as i32 / 2 as i32) as f32,
                         i,
                         s_skyTexCoords[t as usize][s as usize].as_mut_ptr(),
                         s_skyPoints[t as usize][s as usize].as_mut_ptr(),
@@ -1092,8 +1092,8 @@ unsafe extern "C" fn DrawSkyBox(mut shader: *mut crate::tr_local_h::shader_t) {
             }
             DrawSkySide(
                 (*shader).sky.outerbox[sky_texorder[i as usize] as usize],
-                sky_mins_subd.as_mut_ptr() as *const libc::c_int,
-                sky_maxs_subd.as_mut_ptr() as *const libc::c_int,
+                sky_mins_subd.as_mut_ptr() as *const i32,
+                sky_maxs_subd.as_mut_ptr() as *const i32,
             );
         }
         i += 1
@@ -1101,61 +1101,61 @@ unsafe extern "C" fn DrawSkyBox(mut shader: *mut crate::tr_local_h::shader_t) {
 }
 
 unsafe extern "C" fn FillCloudySkySide(
-    mut mins: *const libc::c_int,
-    mut maxs: *const libc::c_int,
+    mut mins: *const i32,
+    mut maxs: *const i32,
     mut addIndexes: crate::src::qcommon::q_shared::qboolean,
 ) {
-    let mut s: libc::c_int = 0;
-    let mut t: libc::c_int = 0;
-    let mut vertexStart: libc::c_int = crate::src::renderergl1::tr_shade::tess.numVertexes;
-    let mut tHeight: libc::c_int = 0;
-    let mut sWidth: libc::c_int = 0;
-    tHeight = *maxs.offset(1 as libc::c_int as isize) - *mins.offset(1 as libc::c_int as isize)
-        + 1 as libc::c_int;
-    sWidth = *maxs.offset(0 as libc::c_int as isize) - *mins.offset(0 as libc::c_int as isize)
-        + 1 as libc::c_int;
-    t = *mins.offset(1 as libc::c_int as isize) + 8 as libc::c_int / 2 as libc::c_int;
-    while t <= *maxs.offset(1 as libc::c_int as isize) + 8 as libc::c_int / 2 as libc::c_int {
-        s = *mins.offset(0 as libc::c_int as isize) + 8 as libc::c_int / 2 as libc::c_int;
-        while s <= *maxs.offset(0 as libc::c_int as isize) + 8 as libc::c_int / 2 as libc::c_int {
+    let mut s: i32 = 0;
+    let mut t: i32 = 0;
+    let mut vertexStart: i32 = crate::src::renderergl1::tr_shade::tess.numVertexes;
+    let mut tHeight: i32 = 0;
+    let mut sWidth: i32 = 0;
+    tHeight = *maxs.offset(1 as i32 as isize) - *mins.offset(1 as i32 as isize)
+        + 1 as i32;
+    sWidth = *maxs.offset(0 as i32 as isize) - *mins.offset(0 as i32 as isize)
+        + 1 as i32;
+    t = *mins.offset(1 as i32 as isize) + 8 as i32 / 2 as i32;
+    while t <= *maxs.offset(1 as i32 as isize) + 8 as i32 / 2 as i32 {
+        s = *mins.offset(0 as i32 as isize) + 8 as i32 / 2 as i32;
+        while s <= *maxs.offset(0 as i32 as isize) + 8 as i32 / 2 as i32 {
             crate::src::renderergl1::tr_shade::tess.xyz
                 [crate::src::renderergl1::tr_shade::tess.numVertexes as usize]
-                [0 as libc::c_int as usize] = s_skyPoints[t as usize][s as usize]
-                [0 as libc::c_int as usize]
+                [0 as i32 as usize] = s_skyPoints[t as usize][s as usize]
+                [0 as i32 as usize]
                 + crate::src::renderergl1::tr_backend::backEnd
                     .viewParms
                     .or
-                    .origin[0 as libc::c_int as usize];
+                    .origin[0 as i32 as usize];
             crate::src::renderergl1::tr_shade::tess.xyz
                 [crate::src::renderergl1::tr_shade::tess.numVertexes as usize]
-                [1 as libc::c_int as usize] = s_skyPoints[t as usize][s as usize]
-                [1 as libc::c_int as usize]
+                [1 as i32 as usize] = s_skyPoints[t as usize][s as usize]
+                [1 as i32 as usize]
                 + crate::src::renderergl1::tr_backend::backEnd
                     .viewParms
                     .or
-                    .origin[1 as libc::c_int as usize];
+                    .origin[1 as i32 as usize];
             crate::src::renderergl1::tr_shade::tess.xyz
                 [crate::src::renderergl1::tr_shade::tess.numVertexes as usize]
-                [2 as libc::c_int as usize] = s_skyPoints[t as usize][s as usize]
-                [2 as libc::c_int as usize]
+                [2 as i32 as usize] = s_skyPoints[t as usize][s as usize]
+                [2 as i32 as usize]
                 + crate::src::renderergl1::tr_backend::backEnd
                     .viewParms
                     .or
-                    .origin[2 as libc::c_int as usize];
+                    .origin[2 as i32 as usize];
             crate::src::renderergl1::tr_shade::tess.texCoords
                 [crate::src::renderergl1::tr_shade::tess.numVertexes as usize]
-                [0 as libc::c_int as usize][0 as libc::c_int as usize] =
-                s_skyTexCoords[t as usize][s as usize][0 as libc::c_int as usize];
+                [0 as i32 as usize][0 as i32 as usize] =
+                s_skyTexCoords[t as usize][s as usize][0 as i32 as usize];
             crate::src::renderergl1::tr_shade::tess.texCoords
                 [crate::src::renderergl1::tr_shade::tess.numVertexes as usize]
-                [0 as libc::c_int as usize][1 as libc::c_int as usize] =
-                s_skyTexCoords[t as usize][s as usize][1 as libc::c_int as usize];
+                [0 as i32 as usize][1 as i32 as usize] =
+                s_skyTexCoords[t as usize][s as usize][1 as i32 as usize];
             crate::src::renderergl1::tr_shade::tess.numVertexes += 1;
-            if crate::src::renderergl1::tr_shade::tess.numVertexes >= 1000 as libc::c_int {
+            if crate::src::renderergl1::tr_shade::tess.numVertexes >= 1000 as i32 {
                 crate::src::renderergl1::tr_main::ri
                     .Error
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+                    crate::src::qcommon::q_shared::ERR_DROP as i32,
                     b"SHADER_MAX_VERTEXES hit in FillCloudySkySide()\x00" as *const u8
                         as *const libc::c_char,
                 );
@@ -1166,37 +1166,37 @@ unsafe extern "C" fn FillCloudySkySide(
     }
     // only add indexes for one pass, otherwise it would draw multiple times for each pass
     if addIndexes as u64 != 0 {
-        t = 0 as libc::c_int;
-        while t < tHeight - 1 as libc::c_int {
-            s = 0 as libc::c_int;
-            while s < sWidth - 1 as libc::c_int {
+        t = 0 as i32;
+        while t < tHeight - 1 as i32 {
+            s = 0 as i32;
+            while s < sWidth - 1 as i32 {
                 crate::src::renderergl1::tr_shade::tess.indexes
                     [crate::src::renderergl1::tr_shade::tess.numIndexes as usize] =
                     (vertexStart + s + t * sWidth) as crate::tr_local_h::glIndex_t;
                 crate::src::renderergl1::tr_shade::tess.numIndexes += 1;
                 crate::src::renderergl1::tr_shade::tess.indexes
                     [crate::src::renderergl1::tr_shade::tess.numIndexes as usize] =
-                    (vertexStart + s + (t + 1 as libc::c_int) * sWidth)
+                    (vertexStart + s + (t + 1 as i32) * sWidth)
                         as crate::tr_local_h::glIndex_t;
                 crate::src::renderergl1::tr_shade::tess.numIndexes += 1;
                 crate::src::renderergl1::tr_shade::tess.indexes
                     [crate::src::renderergl1::tr_shade::tess.numIndexes as usize] =
-                    (vertexStart + s + 1 as libc::c_int + t * sWidth)
+                    (vertexStart + s + 1 as i32 + t * sWidth)
                         as crate::tr_local_h::glIndex_t;
                 crate::src::renderergl1::tr_shade::tess.numIndexes += 1;
                 crate::src::renderergl1::tr_shade::tess.indexes
                     [crate::src::renderergl1::tr_shade::tess.numIndexes as usize] =
-                    (vertexStart + s + (t + 1 as libc::c_int) * sWidth)
+                    (vertexStart + s + (t + 1 as i32) * sWidth)
                         as crate::tr_local_h::glIndex_t;
                 crate::src::renderergl1::tr_shade::tess.numIndexes += 1;
                 crate::src::renderergl1::tr_shade::tess.indexes
                     [crate::src::renderergl1::tr_shade::tess.numIndexes as usize] =
-                    (vertexStart + s + 1 as libc::c_int + (t + 1 as libc::c_int) * sWidth)
+                    (vertexStart + s + 1 as i32 + (t + 1 as i32) * sWidth)
                         as crate::tr_local_h::glIndex_t;
                 crate::src::renderergl1::tr_shade::tess.numIndexes += 1;
                 crate::src::renderergl1::tr_shade::tess.indexes
                     [crate::src::renderergl1::tr_shade::tess.numIndexes as usize] =
-                    (vertexStart + s + 1 as libc::c_int + t * sWidth)
+                    (vertexStart + s + 1 as i32 + t * sWidth)
                         as crate::tr_local_h::glIndex_t;
                 crate::src::renderergl1::tr_shade::tess.numIndexes += 1;
                 s += 1
@@ -1208,147 +1208,147 @@ unsafe extern "C" fn FillCloudySkySide(
 
 unsafe extern "C" fn FillCloudBox(
     mut _shader: *const crate::tr_local_h::shader_t,
-    mut stage: libc::c_int,
+    mut stage: i32,
 ) {
-    let mut i: libc::c_int = 0;
-    i = 0 as libc::c_int;
-    while i < 6 as libc::c_int {
-        let mut sky_mins_subd: [libc::c_int; 2] = [0; 2];
-        let mut sky_maxs_subd: [libc::c_int; 2] = [0; 2];
-        let mut s: libc::c_int = 0;
-        let mut t: libc::c_int = 0;
-        let mut MIN_T: libc::c_float = 0.;
+    let mut i: i32 = 0;
+    i = 0 as i32;
+    while i < 6 as i32 {
+        let mut sky_mins_subd: [i32; 2] = [0; 2];
+        let mut sky_maxs_subd: [i32; 2] = [0; 2];
+        let mut s: i32 = 0;
+        let mut t: i32 = 0;
+        let mut MIN_T: f32 = 0.;
         // FIXME? shader->sky.fullClouds )
-        MIN_T = -(8 as libc::c_int / 2 as libc::c_int) as libc::c_float;
+        MIN_T = -(8 as i32 / 2 as i32) as f32;
         // still don't want to draw the bottom, even if fullClouds
-        if !(i == 5 as libc::c_int) {
-            sky_mins[0 as libc::c_int as usize][i as usize] =
+        if !(i == 5 as i32) {
+            sky_mins[0 as i32 as usize][i as usize] =
                 (crate::stdlib::floor(
-                    (sky_mins[0 as libc::c_int as usize][i as usize]
-                        * (8 as libc::c_int / 2 as libc::c_int) as libc::c_float)
-                        as libc::c_double,
-                ) / (8 as libc::c_int / 2 as libc::c_int) as libc::c_double)
-                    as libc::c_float;
-            sky_mins[1 as libc::c_int as usize][i as usize] =
+                    (sky_mins[0 as i32 as usize][i as usize]
+                        * (8 as i32 / 2 as i32) as f32)
+                        as f64,
+                ) / (8 as i32 / 2 as i32) as f64)
+                    as f32;
+            sky_mins[1 as i32 as usize][i as usize] =
                 (crate::stdlib::floor(
-                    (sky_mins[1 as libc::c_int as usize][i as usize]
-                        * (8 as libc::c_int / 2 as libc::c_int) as libc::c_float)
-                        as libc::c_double,
-                ) / (8 as libc::c_int / 2 as libc::c_int) as libc::c_double)
-                    as libc::c_float;
-            sky_maxs[0 as libc::c_int as usize][i as usize] =
+                    (sky_mins[1 as i32 as usize][i as usize]
+                        * (8 as i32 / 2 as i32) as f32)
+                        as f64,
+                ) / (8 as i32 / 2 as i32) as f64)
+                    as f32;
+            sky_maxs[0 as i32 as usize][i as usize] =
                 (crate::stdlib::ceil(
-                    (sky_maxs[0 as libc::c_int as usize][i as usize]
-                        * (8 as libc::c_int / 2 as libc::c_int) as libc::c_float)
-                        as libc::c_double,
-                ) / (8 as libc::c_int / 2 as libc::c_int) as libc::c_double)
-                    as libc::c_float;
-            sky_maxs[1 as libc::c_int as usize][i as usize] =
+                    (sky_maxs[0 as i32 as usize][i as usize]
+                        * (8 as i32 / 2 as i32) as f32)
+                        as f64,
+                ) / (8 as i32 / 2 as i32) as f64)
+                    as f32;
+            sky_maxs[1 as i32 as usize][i as usize] =
                 (crate::stdlib::ceil(
-                    (sky_maxs[1 as libc::c_int as usize][i as usize]
-                        * (8 as libc::c_int / 2 as libc::c_int) as libc::c_float)
-                        as libc::c_double,
-                ) / (8 as libc::c_int / 2 as libc::c_int) as libc::c_double)
-                    as libc::c_float;
-            if !(sky_mins[0 as libc::c_int as usize][i as usize]
-                >= sky_maxs[0 as libc::c_int as usize][i as usize]
-                || sky_mins[1 as libc::c_int as usize][i as usize]
-                    >= sky_maxs[1 as libc::c_int as usize][i as usize])
+                    (sky_maxs[1 as i32 as usize][i as usize]
+                        * (8 as i32 / 2 as i32) as f32)
+                        as f64,
+                ) / (8 as i32 / 2 as i32) as f64)
+                    as f32;
+            if !(sky_mins[0 as i32 as usize][i as usize]
+                >= sky_maxs[0 as i32 as usize][i as usize]
+                || sky_mins[1 as i32 as usize][i as usize]
+                    >= sky_maxs[1 as i32 as usize][i as usize])
             {
-                sky_mins_subd[0 as libc::c_int as usize] = crate::src::renderergl1::tr_main::ri
+                sky_mins_subd[0 as i32 as usize] = crate::src::renderergl1::tr_main::ri
                     .ftol
                     .expect("non-null function pointer")(
-                    sky_mins[0 as libc::c_int as usize][i as usize]
-                        * (8 as libc::c_int / 2 as libc::c_int) as libc::c_float,
-                ) as libc::c_int;
-                sky_mins_subd[1 as libc::c_int as usize] = crate::src::renderergl1::tr_main::ri
+                    sky_mins[0 as i32 as usize][i as usize]
+                        * (8 as i32 / 2 as i32) as f32,
+                ) as i32;
+                sky_mins_subd[1 as i32 as usize] = crate::src::renderergl1::tr_main::ri
                     .ftol
                     .expect("non-null function pointer")(
-                    sky_mins[1 as libc::c_int as usize][i as usize]
-                        * (8 as libc::c_int / 2 as libc::c_int) as libc::c_float,
-                ) as libc::c_int;
-                sky_maxs_subd[0 as libc::c_int as usize] = crate::src::renderergl1::tr_main::ri
+                    sky_mins[1 as i32 as usize][i as usize]
+                        * (8 as i32 / 2 as i32) as f32,
+                ) as i32;
+                sky_maxs_subd[0 as i32 as usize] = crate::src::renderergl1::tr_main::ri
                     .ftol
                     .expect("non-null function pointer")(
-                    sky_maxs[0 as libc::c_int as usize][i as usize]
-                        * (8 as libc::c_int / 2 as libc::c_int) as libc::c_float,
-                ) as libc::c_int;
-                sky_maxs_subd[1 as libc::c_int as usize] = crate::src::renderergl1::tr_main::ri
+                    sky_maxs[0 as i32 as usize][i as usize]
+                        * (8 as i32 / 2 as i32) as f32,
+                ) as i32;
+                sky_maxs_subd[1 as i32 as usize] = crate::src::renderergl1::tr_main::ri
                     .ftol
                     .expect("non-null function pointer")(
-                    sky_maxs[1 as libc::c_int as usize][i as usize]
-                        * (8 as libc::c_int / 2 as libc::c_int) as libc::c_float,
-                ) as libc::c_int;
-                if sky_mins_subd[0 as libc::c_int as usize] < -(8 as libc::c_int / 2 as libc::c_int)
+                    sky_maxs[1 as i32 as usize][i as usize]
+                        * (8 as i32 / 2 as i32) as f32,
+                ) as i32;
+                if sky_mins_subd[0 as i32 as usize] < -(8 as i32 / 2 as i32)
                 {
-                    sky_mins_subd[0 as libc::c_int as usize] =
-                        -(8 as libc::c_int / 2 as libc::c_int)
-                } else if sky_mins_subd[0 as libc::c_int as usize]
-                    > 8 as libc::c_int / 2 as libc::c_int
+                    sky_mins_subd[0 as i32 as usize] =
+                        -(8 as i32 / 2 as i32)
+                } else if sky_mins_subd[0 as i32 as usize]
+                    > 8 as i32 / 2 as i32
                 {
-                    sky_mins_subd[0 as libc::c_int as usize] = 8 as libc::c_int / 2 as libc::c_int
+                    sky_mins_subd[0 as i32 as usize] = 8 as i32 / 2 as i32
                 }
-                if (sky_mins_subd[1 as libc::c_int as usize] as libc::c_float) < MIN_T {
-                    sky_mins_subd[1 as libc::c_int as usize] = MIN_T as libc::c_int
-                } else if sky_mins_subd[1 as libc::c_int as usize]
-                    > 8 as libc::c_int / 2 as libc::c_int
+                if (sky_mins_subd[1 as i32 as usize] as f32) < MIN_T {
+                    sky_mins_subd[1 as i32 as usize] = MIN_T as i32
+                } else if sky_mins_subd[1 as i32 as usize]
+                    > 8 as i32 / 2 as i32
                 {
-                    sky_mins_subd[1 as libc::c_int as usize] = 8 as libc::c_int / 2 as libc::c_int
+                    sky_mins_subd[1 as i32 as usize] = 8 as i32 / 2 as i32
                 }
-                if sky_maxs_subd[0 as libc::c_int as usize] < -(8 as libc::c_int / 2 as libc::c_int)
+                if sky_maxs_subd[0 as i32 as usize] < -(8 as i32 / 2 as i32)
                 {
-                    sky_maxs_subd[0 as libc::c_int as usize] =
-                        -(8 as libc::c_int / 2 as libc::c_int)
-                } else if sky_maxs_subd[0 as libc::c_int as usize]
-                    > 8 as libc::c_int / 2 as libc::c_int
+                    sky_maxs_subd[0 as i32 as usize] =
+                        -(8 as i32 / 2 as i32)
+                } else if sky_maxs_subd[0 as i32 as usize]
+                    > 8 as i32 / 2 as i32
                 {
-                    sky_maxs_subd[0 as libc::c_int as usize] = 8 as libc::c_int / 2 as libc::c_int
+                    sky_maxs_subd[0 as i32 as usize] = 8 as i32 / 2 as i32
                 }
-                if (sky_maxs_subd[1 as libc::c_int as usize] as libc::c_float) < MIN_T {
-                    sky_maxs_subd[1 as libc::c_int as usize] = MIN_T as libc::c_int
-                } else if sky_maxs_subd[1 as libc::c_int as usize]
-                    > 8 as libc::c_int / 2 as libc::c_int
+                if (sky_maxs_subd[1 as i32 as usize] as f32) < MIN_T {
+                    sky_maxs_subd[1 as i32 as usize] = MIN_T as i32
+                } else if sky_maxs_subd[1 as i32 as usize]
+                    > 8 as i32 / 2 as i32
                 {
-                    sky_maxs_subd[1 as libc::c_int as usize] = 8 as libc::c_int / 2 as libc::c_int
+                    sky_maxs_subd[1 as i32 as usize] = 8 as i32 / 2 as i32
                 }
                 //
                 // iterate through the subdivisions
                 //
-                t = sky_mins_subd[1 as libc::c_int as usize] + 8 as libc::c_int / 2 as libc::c_int;
+                t = sky_mins_subd[1 as i32 as usize] + 8 as i32 / 2 as i32;
                 while t
-                    <= sky_maxs_subd[1 as libc::c_int as usize]
-                        + 8 as libc::c_int / 2 as libc::c_int
+                    <= sky_maxs_subd[1 as i32 as usize]
+                        + 8 as i32 / 2 as i32
                 {
-                    s = sky_mins_subd[0 as libc::c_int as usize]
-                        + 8 as libc::c_int / 2 as libc::c_int;
+                    s = sky_mins_subd[0 as i32 as usize]
+                        + 8 as i32 / 2 as i32;
                     while s
-                        <= sky_maxs_subd[0 as libc::c_int as usize]
-                            + 8 as libc::c_int / 2 as libc::c_int
+                        <= sky_maxs_subd[0 as i32 as usize]
+                            + 8 as i32 / 2 as i32
                     {
                         MakeSkyVec(
-                            (s - 8 as libc::c_int / 2 as libc::c_int) as libc::c_float
-                                / (8 as libc::c_int / 2 as libc::c_int) as libc::c_float,
-                            (t - 8 as libc::c_int / 2 as libc::c_int) as libc::c_float
-                                / (8 as libc::c_int / 2 as libc::c_int) as libc::c_float,
+                            (s - 8 as i32 / 2 as i32) as f32
+                                / (8 as i32 / 2 as i32) as f32,
+                            (t - 8 as i32 / 2 as i32) as f32
+                                / (8 as i32 / 2 as i32) as f32,
                             i,
-                            0 as *mut libc::c_float,
+                            0 as *mut f32,
                             s_skyPoints[t as usize][s as usize].as_mut_ptr(),
                         );
-                        s_skyTexCoords[t as usize][s as usize][0 as libc::c_int as usize] =
+                        s_skyTexCoords[t as usize][s as usize][0 as i32 as usize] =
                             s_cloudTexCoords[i as usize][t as usize][s as usize]
-                                [0 as libc::c_int as usize];
-                        s_skyTexCoords[t as usize][s as usize][1 as libc::c_int as usize] =
+                                [0 as i32 as usize];
+                        s_skyTexCoords[t as usize][s as usize][1 as i32 as usize] =
                             s_cloudTexCoords[i as usize][t as usize][s as usize]
-                                [1 as libc::c_int as usize];
+                                [1 as i32 as usize];
                         s += 1
                     }
                     t += 1
                 }
                 // only add indexes for first stage
                 FillCloudySkySide(
-                    sky_mins_subd.as_mut_ptr() as *const libc::c_int,
-                    sky_maxs_subd.as_mut_ptr() as *const libc::c_int,
-                    (stage == 0 as libc::c_int) as libc::c_int
+                    sky_mins_subd.as_mut_ptr() as *const i32,
+                    sky_maxs_subd.as_mut_ptr() as *const i32,
+                    (stage == 0 as i32) as i32
                         as crate::src::qcommon::q_shared::qboolean,
                 );
             }
@@ -1363,17 +1363,17 @@ unsafe extern "C" fn FillCloudBox(
 #[no_mangle]
 
 pub unsafe extern "C" fn R_BuildCloudData(mut input: *mut crate::tr_local_h::shaderCommands_t) {
-    let mut i: libc::c_int = 0; // FIXME: not correct?
+    let mut i: i32 = 0; // FIXME: not correct?
     let mut shader: *mut crate::tr_local_h::shader_t = 0 as *mut crate::tr_local_h::shader_t;
     shader = (*input).shader;
-    sky_min = (1.0f64 / 256.0f32 as libc::c_double) as libc::c_float;
-    sky_max = (255.0f64 / 256.0f32 as libc::c_double) as libc::c_float;
+    sky_min = (1.0f64 / 256.0f32 as f64) as f32;
+    sky_max = (255.0f64 / 256.0f32 as f64) as f32;
     // set up for drawing
-    crate::src::renderergl1::tr_shade::tess.numIndexes = 0 as libc::c_int;
-    crate::src::renderergl1::tr_shade::tess.numVertexes = 0 as libc::c_int;
+    crate::src::renderergl1::tr_shade::tess.numIndexes = 0 as i32;
+    crate::src::renderergl1::tr_shade::tess.numVertexes = 0 as i32;
     if (*shader).sky.cloudHeight != 0. {
-        i = 0 as libc::c_int;
-        while i < 8 as libc::c_int {
+        i = 0 as i32;
+        while i < 8 as i32 {
             if (*crate::src::renderergl1::tr_shade::tess
                 .xstages
                 .offset(i as isize))
@@ -1392,92 +1392,92 @@ pub unsafe extern "C" fn R_BuildCloudData(mut input: *mut crate::tr_local_h::sha
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn R_InitSkyTexCoords(mut heightCloud: libc::c_float) {
-    let mut i: libc::c_int = 0;
-    let mut s: libc::c_int = 0;
-    let mut t: libc::c_int = 0;
-    let mut radiusWorld: libc::c_float = 4096 as libc::c_int as libc::c_float;
-    let mut p: libc::c_float = 0.;
-    let mut sRad: libc::c_float = 0.;
-    let mut tRad: libc::c_float = 0.;
+pub unsafe extern "C" fn R_InitSkyTexCoords(mut heightCloud: f32) {
+    let mut i: i32 = 0;
+    let mut s: i32 = 0;
+    let mut t: i32 = 0;
+    let mut radiusWorld: f32 = 4096 as i32 as f32;
+    let mut p: f32 = 0.;
+    let mut sRad: f32 = 0.;
+    let mut tRad: f32 = 0.;
     let mut skyVec: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut v: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     // init zfar so MakeSkyVec works even though
     // a world hasn't been bounded
     crate::src::renderergl1::tr_backend::backEnd.viewParms.zFar =
-        1024 as libc::c_int as libc::c_float;
-    i = 0 as libc::c_int;
-    while i < 6 as libc::c_int {
-        t = 0 as libc::c_int;
-        while t <= 8 as libc::c_int {
-            s = 0 as libc::c_int;
-            while s <= 8 as libc::c_int {
+        1024 as i32 as f32;
+    i = 0 as i32;
+    while i < 6 as i32 {
+        t = 0 as i32;
+        while t <= 8 as i32 {
+            s = 0 as i32;
+            while s <= 8 as i32 {
                 // compute vector from view origin to sky side integral point
                 MakeSkyVec(
-                    (s - 8 as libc::c_int / 2 as libc::c_int) as libc::c_float
-                        / (8 as libc::c_int / 2 as libc::c_int) as libc::c_float,
-                    (t - 8 as libc::c_int / 2 as libc::c_int) as libc::c_float
-                        / (8 as libc::c_int / 2 as libc::c_int) as libc::c_float,
+                    (s - 8 as i32 / 2 as i32) as f32
+                        / (8 as i32 / 2 as i32) as f32,
+                    (t - 8 as i32 / 2 as i32) as f32
+                        / (8 as i32 / 2 as i32) as f32,
                     i,
-                    0 as *mut libc::c_float,
+                    0 as *mut f32,
                     skyVec.as_mut_ptr(),
                 );
                 // compute parametric value 'p' that intersects with cloud layer
                 p = ((1.0f32
-                    / (2 as libc::c_int as libc::c_float
-                        * (skyVec[0 as libc::c_int as usize] * skyVec[0 as libc::c_int as usize]
-                            + skyVec[1 as libc::c_int as usize]
-                                * skyVec[1 as libc::c_int as usize]
-                            + skyVec[2 as libc::c_int as usize]
-                                * skyVec[2 as libc::c_int as usize])))
-                    as libc::c_double
-                    * ((-(2 as libc::c_int) as libc::c_float
-                        * skyVec[2 as libc::c_int as usize]
-                        * radiusWorld) as libc::c_double
-                        + 2 as libc::c_int as libc::c_double
+                    / (2 as i32 as f32
+                        * (skyVec[0 as i32 as usize] * skyVec[0 as i32 as usize]
+                            + skyVec[1 as i32 as usize]
+                                * skyVec[1 as i32 as usize]
+                            + skyVec[2 as i32 as usize]
+                                * skyVec[2 as i32 as usize])))
+                    as f64
+                    * ((-(2 as i32) as f32
+                        * skyVec[2 as i32 as usize]
+                        * radiusWorld) as f64
+                        + 2 as i32 as f64
                             * crate::stdlib::sqrt(
-                                (skyVec[2 as libc::c_int as usize]
-                                    * skyVec[2 as libc::c_int as usize]
+                                (skyVec[2 as i32 as usize]
+                                    * skyVec[2 as i32 as usize]
                                     * (radiusWorld * radiusWorld)
-                                    + 2 as libc::c_int as libc::c_float
-                                        * (skyVec[0 as libc::c_int as usize]
-                                            * skyVec[0 as libc::c_int as usize])
+                                    + 2 as i32 as f32
+                                        * (skyVec[0 as i32 as usize]
+                                            * skyVec[0 as i32 as usize])
                                         * radiusWorld
                                         * heightCloud
-                                    + skyVec[0 as libc::c_int as usize]
-                                        * skyVec[0 as libc::c_int as usize]
+                                    + skyVec[0 as i32 as usize]
+                                        * skyVec[0 as i32 as usize]
                                         * (heightCloud * heightCloud)
-                                    + 2 as libc::c_int as libc::c_float
-                                        * (skyVec[1 as libc::c_int as usize]
-                                            * skyVec[1 as libc::c_int as usize])
+                                    + 2 as i32 as f32
+                                        * (skyVec[1 as i32 as usize]
+                                            * skyVec[1 as i32 as usize])
                                         * radiusWorld
                                         * heightCloud
-                                    + skyVec[1 as libc::c_int as usize]
-                                        * skyVec[1 as libc::c_int as usize]
+                                    + skyVec[1 as i32 as usize]
+                                        * skyVec[1 as i32 as usize]
                                         * (heightCloud * heightCloud)
-                                    + 2 as libc::c_int as libc::c_float
-                                        * (skyVec[2 as libc::c_int as usize]
-                                            * skyVec[2 as libc::c_int as usize])
+                                    + 2 as i32 as f32
+                                        * (skyVec[2 as i32 as usize]
+                                            * skyVec[2 as i32 as usize])
                                         * radiusWorld
                                         * heightCloud
-                                    + skyVec[2 as libc::c_int as usize]
-                                        * skyVec[2 as libc::c_int as usize]
+                                    + skyVec[2 as i32 as usize]
+                                        * skyVec[2 as i32 as usize]
                                         * (heightCloud * heightCloud))
-                                    as libc::c_double,
-                            ))) as libc::c_float;
+                                    as f64,
+                            ))) as f32;
                 s_cloudTexP[i as usize][t as usize][s as usize] = p;
                 // compute intersection point based on p
-                v[0 as libc::c_int as usize] = skyVec[0 as libc::c_int as usize] * p;
-                v[1 as libc::c_int as usize] = skyVec[1 as libc::c_int as usize] * p;
-                v[2 as libc::c_int as usize] = skyVec[2 as libc::c_int as usize] * p;
-                v[2 as libc::c_int as usize] += radiusWorld;
+                v[0 as i32 as usize] = skyVec[0 as i32 as usize] * p;
+                v[1 as i32 as usize] = skyVec[1 as i32 as usize] * p;
+                v[2 as i32 as usize] = skyVec[2 as i32 as usize] * p;
+                v[2 as i32 as usize] += radiusWorld;
                 // compute vector from world origin to intersection point 'v'
                 crate::src::qcommon::q_math::VectorNormalize(v.as_mut_ptr());
-                sRad = crate::src::qcommon::q_math::Q_acos(v[0 as libc::c_int as usize]);
-                tRad = crate::src::qcommon::q_math::Q_acos(v[1 as libc::c_int as usize]);
-                s_cloudTexCoords[i as usize][t as usize][s as usize][0 as libc::c_int as usize] =
+                sRad = crate::src::qcommon::q_math::Q_acos(v[0 as i32 as usize]);
+                tRad = crate::src::qcommon::q_math::Q_acos(v[1 as i32 as usize]);
+                s_cloudTexCoords[i as usize][t as usize][s as usize][0 as i32 as usize] =
                     sRad;
-                s_cloudTexCoords[i as usize][t as usize][s as usize][1 as libc::c_int as usize] =
+                s_cloudTexCoords[i as usize][t as usize][s as usize][1 as i32 as usize] =
                     tRad;
                 s += 1
             }
@@ -1528,19 +1528,19 @@ SKIES
 #[no_mangle]
 
 pub unsafe extern "C" fn RB_DrawSun(
-    mut scale: libc::c_float,
+    mut scale: f32,
     mut shader: *mut crate::tr_local_h::shader_t,
 ) {
-    let mut size: libc::c_float = 0.; // div sqrt(3)
-    let mut dist: libc::c_float = 0.;
+    let mut size: f32 = 0.; // div sqrt(3)
+    let mut dist: f32 = 0.;
     let mut origin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut vec1: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut vec2: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut sunColor: [crate::src::qcommon::q_shared::byte; 4] = [
-        255 as libc::c_int as crate::src::qcommon::q_shared::byte,
-        255 as libc::c_int as crate::src::qcommon::q_shared::byte,
-        255 as libc::c_int as crate::src::qcommon::q_shared::byte,
-        255 as libc::c_int as crate::src::qcommon::q_shared::byte,
+        255 as i32 as crate::src::qcommon::q_shared::byte,
+        255 as i32 as crate::src::qcommon::q_shared::byte,
+        255 as i32 as crate::src::qcommon::q_shared::byte,
+        255 as i32 as crate::src::qcommon::q_shared::byte,
     ];
     if crate::src::renderergl1::tr_backend::backEnd.skyRenderedThisView as u64 == 0 {
         return;
@@ -1556,25 +1556,25 @@ pub unsafe extern "C" fn RB_DrawSun(
         crate::src::renderergl1::tr_backend::backEnd
             .viewParms
             .or
-            .origin[0 as libc::c_int as usize],
+            .origin[0 as i32 as usize],
         crate::src::renderergl1::tr_backend::backEnd
             .viewParms
             .or
-            .origin[1 as libc::c_int as usize],
+            .origin[1 as i32 as usize],
         crate::src::renderergl1::tr_backend::backEnd
             .viewParms
             .or
-            .origin[2 as libc::c_int as usize],
+            .origin[2 as i32 as usize],
     );
-    dist = (crate::src::renderergl1::tr_backend::backEnd.viewParms.zFar as libc::c_double / 1.75f64)
-        as libc::c_float;
+    dist = (crate::src::renderergl1::tr_backend::backEnd.viewParms.zFar as f64 / 1.75f64)
+        as f32;
     size = dist * scale;
-    origin[0 as libc::c_int as usize] =
-        crate::src::renderergl1::tr_main::tr.sunDirection[0 as libc::c_int as usize] * dist;
-    origin[1 as libc::c_int as usize] =
-        crate::src::renderergl1::tr_main::tr.sunDirection[1 as libc::c_int as usize] * dist;
-    origin[2 as libc::c_int as usize] =
-        crate::src::renderergl1::tr_main::tr.sunDirection[2 as libc::c_int as usize] * dist;
+    origin[0 as i32 as usize] =
+        crate::src::renderergl1::tr_main::tr.sunDirection[0 as i32 as usize] * dist;
+    origin[1 as i32 as usize] =
+        crate::src::renderergl1::tr_main::tr.sunDirection[1 as i32 as usize] * dist;
+    origin[2 as i32 as usize] =
+        crate::src::renderergl1::tr_main::tr.sunDirection[2 as i32 as usize] * dist;
     crate::src::qcommon::q_math::PerpendicularVector(
         vec1.as_mut_ptr(),
         crate::src::renderergl1::tr_main::tr
@@ -1588,17 +1588,17 @@ pub unsafe extern "C" fn RB_DrawSun(
         vec1.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
         vec2.as_mut_ptr(),
     );
-    vec1[0 as libc::c_int as usize] = vec1[0 as libc::c_int as usize] * size;
-    vec1[1 as libc::c_int as usize] = vec1[1 as libc::c_int as usize] * size;
-    vec1[2 as libc::c_int as usize] = vec1[2 as libc::c_int as usize] * size;
-    vec2[0 as libc::c_int as usize] = vec2[0 as libc::c_int as usize] * size;
-    vec2[1 as libc::c_int as usize] = vec2[1 as libc::c_int as usize] * size;
-    vec2[2 as libc::c_int as usize] = vec2[2 as libc::c_int as usize] * size;
+    vec1[0 as i32 as usize] = vec1[0 as i32 as usize] * size;
+    vec1[1 as i32 as usize] = vec1[1 as i32 as usize] * size;
+    vec1[2 as i32 as usize] = vec1[2 as i32 as usize] * size;
+    vec2[0 as i32 as usize] = vec2[0 as i32 as usize] * size;
+    vec2[1 as i32 as usize] = vec2[1 as i32 as usize] * size;
+    vec2[2 as i32 as usize] = vec2[2 as i32 as usize] * size;
     // farthest depth range
     crate::src::sdl::sdl_glimp::qglDepthRange.expect("non-null function pointer")(1.0f64, 1.0f64);
     crate::src::renderergl1::tr_shade::RB_BeginSurface(
         shader as *mut crate::tr_local_h::shader_s,
-        0 as libc::c_int,
+        0 as i32,
     );
     crate::src::renderergl1::tr_surface::RB_AddQuadStamp(
         origin.as_mut_ptr(),
@@ -1975,11 +1975,11 @@ pub unsafe extern "C" fn RB_StageIteratorSky() {
     // draw the outer skybox
     if !(*crate::src::renderergl1::tr_shade::tess.shader)
         .sky
-        .outerbox[0 as libc::c_int as usize]
+        .outerbox[0 as i32 as usize]
         .is_null()
         && (*crate::src::renderergl1::tr_shade::tess.shader)
             .sky
-            .outerbox[0 as libc::c_int as usize]
+            .outerbox[0 as i32 as usize]
             != crate::src::renderergl1::tr_main::tr.defaultImage
     {
         crate::src::sdl::sdl_glimp::qglColor3f.expect("non-null function pointer")(
@@ -1988,23 +1988,23 @@ pub unsafe extern "C" fn RB_StageIteratorSky() {
             crate::src::renderergl1::tr_main::tr.identityLight,
         );
         crate::src::sdl::sdl_glimp::qglPushMatrix.expect("non-null function pointer")();
-        crate::src::renderergl1::tr_backend::GL_State(0 as libc::c_int as libc::c_ulong);
+        crate::src::renderergl1::tr_backend::GL_State(0 as i32 as libc::c_ulong);
         crate::src::renderergl1::tr_backend::GL_Cull(
-            crate::tr_local_h::CT_FRONT_SIDED as libc::c_int,
+            crate::tr_local_h::CT_FRONT_SIDED as i32,
         );
         crate::src::sdl::sdl_glimp::qglTranslatef.expect("non-null function pointer")(
             crate::src::renderergl1::tr_backend::backEnd
                 .viewParms
                 .or
-                .origin[0 as libc::c_int as usize],
+                .origin[0 as i32 as usize],
             crate::src::renderergl1::tr_backend::backEnd
                 .viewParms
                 .or
-                .origin[1 as libc::c_int as usize],
+                .origin[1 as i32 as usize],
             crate::src::renderergl1::tr_backend::backEnd
                 .viewParms
                 .or
-                .origin[2 as libc::c_int as usize],
+                .origin[2 as i32 as usize],
         );
         DrawSkyBox(crate::src::renderergl1::tr_shade::tess.shader);
         crate::src::sdl::sdl_glimp::qglPopMatrix.expect("non-null function pointer")();

@@ -70,9 +70,9 @@ pub static mut opus_codec: crate::src::client::snd_codec::snd_codec_t = {
                 S_OggOpus_CodecReadStream
                     as unsafe extern "C" fn(
                         _: *mut crate::src::client::snd_codec::snd_stream_t,
-                        _: libc::c_int,
+                        _: i32,
                         _: *mut libc::c_void,
-                    ) -> libc::c_int,
+                    ) -> i32,
             ),
             close: Some(
                 S_OggOpus_CodecCloseStream
@@ -92,29 +92,29 @@ pub static mut opus_codec: crate::src::client::snd_codec::snd_codec_t = {
 
 pub unsafe extern "C" fn S_OggOpus_Callback_read(
     mut datasource: *mut libc::c_void,
-    mut ptr: *mut libc::c_uchar,
-    mut size: libc::c_int,
-) -> libc::c_int {
+    mut ptr: *mut u8,
+    mut size: i32,
+) -> i32 {
     let mut stream: *mut crate::src::client::snd_codec::snd_stream_t =
         0 as *mut crate::src::client::snd_codec::snd_stream_t;
-    let mut bytesRead: libc::c_int = 0 as libc::c_int;
+    let mut bytesRead: i32 = 0 as i32;
     // check if input is valid
     if ptr.is_null() {
-        *::libc::__errno_location() = 14 as libc::c_int;
-        return -(1 as libc::c_int);
+        *::libc::__errno_location() = 14 as i32;
+        return -(1 as i32);
     }
     if size == 0 {
         // It's not an error, caller just wants zero bytes!
-        *::libc::__errno_location() = 0 as libc::c_int;
-        return 0 as libc::c_int;
+        *::libc::__errno_location() = 0 as i32;
+        return 0 as i32;
     }
-    if size < 0 as libc::c_int {
-        *::libc::__errno_location() = 22 as libc::c_int;
-        return -(1 as libc::c_int);
+    if size < 0 as i32 {
+        *::libc::__errno_location() = 22 as i32;
+        return -(1 as i32);
     }
     if datasource.is_null() {
-        *::libc::__errno_location() = 9 as libc::c_int;
-        return -(1 as libc::c_int);
+        *::libc::__errno_location() = 9 as i32;
+        return -(1 as i32);
     }
     // we use a snd_stream_t in the generic pointer to pass around
     stream = datasource as *mut crate::src::client::snd_codec::snd_stream_t;
@@ -129,16 +129,16 @@ pub unsafe extern "C" fn S_OggOpus_Callback_read(
 
 pub unsafe extern "C" fn S_OggOpus_Callback_seek(
     mut datasource: *mut libc::c_void,
-    mut offset: libc::c_longlong,
-    mut whence: libc::c_int,
-) -> libc::c_int {
+    mut offset: i64,
+    mut whence: i32,
+) -> i32 {
     let mut stream: *mut crate::src::client::snd_codec::snd_stream_t =
         0 as *mut crate::src::client::snd_codec::snd_stream_t;
-    let mut retVal: libc::c_int = 0 as libc::c_int;
+    let mut retVal: i32 = 0 as i32;
     // check if input is valid
     if datasource.is_null() {
-        *::libc::__errno_location() = 9 as libc::c_int;
-        return -(1 as libc::c_int);
+        *::libc::__errno_location() = 9 as i32;
+        return -(1 as i32);
     }
     // snd_stream_t in the generic pointer
     stream = datasource as *mut crate::src::client::snd_codec::snd_stream_t;
@@ -149,52 +149,52 @@ pub unsafe extern "C" fn S_OggOpus_Callback_seek(
             retVal = crate::src::qcommon::files::FS_Seek(
                 (*stream).file,
                 offset as libc::c_long,
-                crate::src::qcommon::q_shared::FS_SEEK_SET as libc::c_int,
+                crate::src::qcommon::q_shared::FS_SEEK_SET as i32,
             );
             // something has gone wrong, so we return here
-            if retVal < 0 as libc::c_int {
+            if retVal < 0 as i32 {
                 return retVal;
             }
             // keep track of file position
-            (*stream).pos = offset as libc::c_int
+            (*stream).pos = offset as i32
         }
         1 => {
             // set the file position in the actual file with the Q3 function
             retVal = crate::src::qcommon::files::FS_Seek(
                 (*stream).file,
                 offset as libc::c_long,
-                crate::src::qcommon::q_shared::FS_SEEK_CUR as libc::c_int,
+                crate::src::qcommon::q_shared::FS_SEEK_CUR as i32,
             );
             // something has gone wrong, so we return here
-            if retVal < 0 as libc::c_int {
+            if retVal < 0 as i32 {
                 return retVal;
             }
             // keep track of file position
-            (*stream).pos += offset as libc::c_int
+            (*stream).pos += offset as i32
         }
         2 => {
             // set the file position in the actual file with the Q3 function
             retVal = crate::src::qcommon::files::FS_Seek(
                 (*stream).file,
                 offset as libc::c_long,
-                crate::src::qcommon::q_shared::FS_SEEK_END as libc::c_int,
+                crate::src::qcommon::q_shared::FS_SEEK_END as i32,
             );
             // something has gone wrong, so we return here
-            if retVal < 0 as libc::c_int {
+            if retVal < 0 as i32 {
                 return retVal;
             }
             // keep track of file position
-            (*stream).pos = (*stream).length + offset as libc::c_int
+            (*stream).pos = (*stream).length + offset as i32
         }
         _ => {
             // unknown whence, so we return an error
-            *::libc::__errno_location() = 22 as libc::c_int;
-            return -(1 as libc::c_int);
+            *::libc::__errno_location() = 22 as i32;
+            return -(1 as i32);
         }
     }
     // stream->pos shouldn't be smaller than zero or bigger than the filesize
-    (*stream).pos = if (*stream).pos < 0 as libc::c_int {
-        0 as libc::c_int
+    (*stream).pos = if (*stream).pos < 0 as i32 {
+        0 as i32
     } else {
         (*stream).pos
     };
@@ -203,33 +203,33 @@ pub unsafe extern "C" fn S_OggOpus_Callback_seek(
     } else {
         (*stream).pos
     };
-    return 0 as libc::c_int;
+    return 0 as i32;
 }
 // fclose() replacement
 #[no_mangle]
 
 pub unsafe extern "C" fn S_OggOpus_Callback_close(
     mut _datasource: *mut libc::c_void,
-) -> libc::c_int {
+) -> i32 {
     // we do nothing here and close all things manually in S_OggOpus_CodecCloseStream()
-    return 0 as libc::c_int;
+    return 0 as i32;
 }
 // ftell() replacement
 #[no_mangle]
 
 pub unsafe extern "C" fn S_OggOpus_Callback_tell(
     mut datasource: *mut libc::c_void,
-) -> libc::c_longlong {
+) -> i64 {
     let mut stream: *mut crate::src::client::snd_codec::snd_stream_t =
         0 as *mut crate::src::client::snd_codec::snd_stream_t;
     // check if input is valid
     if datasource.is_null() {
-        *::libc::__errno_location() = 9 as libc::c_int;
-        return -(1 as libc::c_int) as libc::c_longlong;
+        *::libc::__errno_location() = 9 as i32;
+        return -(1 as i32) as i64;
     }
     // snd_stream_t in the generic pointer
     stream = datasource as *mut crate::src::client::snd_codec::snd_stream_t;
-    return crate::src::qcommon::files::FS_FTell((*stream).file) as libc::c_longlong;
+    return crate::src::qcommon::files::FS_FTell((*stream).file) as i64;
 }
 // the callback structure
 #[no_mangle]
@@ -240,24 +240,24 @@ pub static mut S_OggOpus_Callbacks: crate::src::opusfile_0_9::src::opusfile::Opu
             S_OggOpus_Callback_read
                 as unsafe extern "C" fn(
                     _: *mut libc::c_void,
-                    _: *mut libc::c_uchar,
-                    _: libc::c_int,
-                ) -> libc::c_int,
+                    _: *mut u8,
+                    _: i32,
+                ) -> i32,
         ),
         seek: Some(
             S_OggOpus_Callback_seek
                 as unsafe extern "C" fn(
                     _: *mut libc::c_void,
-                    _: libc::c_longlong,
-                    _: libc::c_int,
-                ) -> libc::c_int,
+                    _: i64,
+                    _: i32,
+                ) -> i32,
         ),
         tell: Some(
             S_OggOpus_Callback_tell
-                as unsafe extern "C" fn(_: *mut libc::c_void) -> libc::c_longlong,
+                as unsafe extern "C" fn(_: *mut libc::c_void) -> i64,
         ),
         close: Some(
-            S_OggOpus_Callback_close as unsafe extern "C" fn(_: *mut libc::c_void) -> libc::c_int,
+            S_OggOpus_Callback_close as unsafe extern "C" fn(_: *mut libc::c_void) -> i32,
         ),
     };
     init
@@ -297,9 +297,9 @@ pub unsafe extern "C" fn S_OggOpus_CodecOpenStream(
         stream as *mut libc::c_void,
         &S_OggOpus_Callbacks as *const _
             as *const crate::src::opusfile_0_9::src::opusfile::OpusFileCallbacks,
-        0 as *const libc::c_uchar,
-        0 as libc::c_int as crate::stddef_h::size_t,
-        0 as *mut libc::c_int,
+        0 as *const u8,
+        0 as i32 as crate::stddef_h::size_t,
+        0 as *mut i32,
     );
     if of.is_null() {
         crate::src::client::snd_codec::S_CodecUtilClose(
@@ -316,7 +316,7 @@ pub unsafe extern "C" fn S_OggOpus_CodecOpenStream(
         return 0 as *mut crate::src::client::snd_codec::snd_stream_t;
     }
     // get the info about channels and rate
-    opusInfo = crate::src::opusfile_0_9::src::opusfile::op_head(of, -(1 as libc::c_int))
+    opusInfo = crate::src::opusfile_0_9::src::opusfile::op_head(of, -(1 as i32))
         as *const crate::src::opusfile_0_9::src::opusfile::OpusHead;
     if opusInfo.is_null() {
         crate::src::opusfile_0_9::src::opusfile::op_free(of);
@@ -325,7 +325,7 @@ pub unsafe extern "C" fn S_OggOpus_CodecOpenStream(
         );
         return 0 as *mut crate::src::client::snd_codec::snd_stream_t;
     }
-    if (*opusInfo).stream_count != 1 as libc::c_int {
+    if (*opusInfo).stream_count != 1 as i32 {
         crate::src::opusfile_0_9::src::opusfile::op_free(of);
         crate::src::client::snd_codec::S_CodecUtilClose(
             &mut stream as *mut _ as *mut *mut crate::src::client::snd_codec::snd_stream_s,
@@ -336,8 +336,8 @@ pub unsafe extern "C" fn S_OggOpus_CodecOpenStream(
         );
         return 0 as *mut crate::src::client::snd_codec::snd_stream_t;
     }
-    if (*opusInfo).channel_count != 1 as libc::c_int
-        && (*opusInfo).channel_count != 2 as libc::c_int
+    if (*opusInfo).channel_count != 1 as i32
+        && (*opusInfo).channel_count != 2 as i32
     {
         crate::src::opusfile_0_9::src::opusfile::op_free(of);
         crate::src::client::snd_codec::S_CodecUtilClose(
@@ -350,16 +350,16 @@ pub unsafe extern "C" fn S_OggOpus_CodecOpenStream(
         return 0 as *mut crate::src::client::snd_codec::snd_stream_t;
     }
     // get the number of sample-frames in the file
-    numSamples = crate::src::opusfile_0_9::src::opusfile::op_pcm_total(of, -(1 as libc::c_int));
+    numSamples = crate::src::opusfile_0_9::src::opusfile::op_pcm_total(of, -(1 as i32));
     // fill in the info-structure in the stream
-    (*stream).info.rate = 48000 as libc::c_int;
-    (*stream).info.width = 2 as libc::c_int;
+    (*stream).info.rate = 48000 as i32;
+    (*stream).info.width = 2 as i32;
     (*stream).info.channels = (*opusInfo).channel_count;
-    (*stream).info.samples = numSamples as libc::c_int;
+    (*stream).info.samples = numSamples as i32;
     (*stream).info.size = (*stream).info.samples * (*stream).info.channels * (*stream).info.width;
-    (*stream).info.dataofs = 0 as libc::c_int;
+    (*stream).info.dataofs = 0 as i32;
     // We use stream->pos for the file pointer in the compressed ogg file
-    (*stream).pos = 0 as libc::c_int;
+    (*stream).pos = 0 as i32;
     // We use the generic pointer in stream for the opus codec control structure
     (*stream).ptr = of as *mut libc::c_void;
     return stream;
@@ -396,45 +396,45 @@ S_OggOpus_CodecReadStream
 
 pub unsafe extern "C" fn S_OggOpus_CodecReadStream(
     mut stream: *mut crate::src::client::snd_codec::snd_stream_t,
-    mut bytes: libc::c_int,
+    mut bytes: i32,
     mut buffer: *mut libc::c_void,
-) -> libc::c_int {
+) -> i32 {
     // buffer handling
-    let mut samplesRead: libc::c_int = 0;
-    let mut samplesLeft: libc::c_int = 0;
-    let mut c: libc::c_int = 0;
+    let mut samplesRead: i32 = 0;
+    let mut samplesLeft: i32 = 0;
+    let mut c: i32 = 0;
     let mut bufPtr: *mut crate::opus_types_h::opus_int16 =
         0 as *mut crate::opus_types_h::opus_int16;
     // check if input is valid
     if !(!stream.is_null() && !buffer.is_null()) {
-        return 0 as libc::c_int;
+        return 0 as i32;
     }
-    if bytes <= 0 as libc::c_int {
-        return 0 as libc::c_int;
+    if bytes <= 0 as i32 {
+        return 0 as i32;
     }
-    samplesRead = 0 as libc::c_int;
+    samplesRead = 0 as i32;
     samplesLeft = bytes / (*stream).info.channels / (*stream).info.width;
     bufPtr = buffer as *mut crate::opus_types_h::opus_int16;
-    if samplesLeft <= 0 as libc::c_int {
-        return 0 as libc::c_int;
+    if samplesLeft <= 0 as i32 {
+        return 0 as i32;
     }
     // cycle until we have the requested or all available bytes read
-    while -(1 as libc::c_int) != 0 {
+    while -(1 as i32) != 0 {
         // read some samples from the opus codec
         c = crate::src::opusfile_0_9::src::opusfile::op_read(
             (*stream).ptr as *mut crate::internal_h::OggOpusFile,
             bufPtr.offset((samplesRead * (*stream).info.channels) as isize),
             samplesLeft * (*stream).info.channels,
-            0 as *mut libc::c_int,
+            0 as *mut i32,
         );
         // no more samples are left
-        if c <= 0 as libc::c_int {
+        if c <= 0 as i32 {
             break;
         }
         samplesRead += c;
         samplesLeft -= c;
         // we have enough samples
-        if samplesLeft <= 0 as libc::c_int {
+        if samplesLeft <= 0 as i32 {
             break;
         }
     }
@@ -460,7 +460,7 @@ pub unsafe extern "C" fn S_OggOpus_CodecLoad(
         0 as *mut crate::src::client::snd_codec::snd_stream_t;
     let mut buffer: *mut crate::src::qcommon::q_shared::byte =
         0 as *mut crate::src::qcommon::q_shared::byte;
-    let mut bytesRead: libc::c_int = 0;
+    let mut bytesRead: i32 = 0;
     // check if input is valid
     if !(!filename.is_null() && !info.is_null()) {
         return 0 as *mut libc::c_void;
@@ -488,7 +488,7 @@ pub unsafe extern "C" fn S_OggOpus_CodecLoad(
     // fill the buffer
     bytesRead = S_OggOpus_CodecReadStream(stream, (*info).size, buffer as *mut libc::c_void);
     // we don't even have read a single byte
-    if bytesRead <= 0 as libc::c_int {
+    if bytesRead <= 0 as i32 {
         crate::src::qcommon::common::Hunk_FreeTempMemory(buffer as *mut libc::c_void);
         S_OggOpus_CodecCloseStream(stream);
         return 0 as *mut libc::c_void;

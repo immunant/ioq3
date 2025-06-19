@@ -8,10 +8,10 @@ pub mod q_shared_h {
         mut v: *const crate::src::qcommon::q_shared::vec_t,
     ) -> crate::src::qcommon::q_shared::vec_t {
         return crate::stdlib::sqrt(
-            (*v.offset(0 as libc::c_int as isize) * *v.offset(0 as libc::c_int as isize)
-                + *v.offset(1 as libc::c_int as isize) * *v.offset(1 as libc::c_int as isize)
-                + *v.offset(2 as libc::c_int as isize) * *v.offset(2 as libc::c_int as isize))
-                as libc::c_double,
+            (*v.offset(0 as i32 as isize) * *v.offset(0 as i32 as isize)
+                + *v.offset(1 as i32 as isize) * *v.offset(1 as i32 as isize)
+                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize))
+                as f64,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
 
@@ -378,22 +378,22 @@ unsafe extern "C" fn R_ArrayElementDiscrete(mut index: crate::stdlib::GLint) {
     );
     if crate::src::renderergl1::tr_init::glState.currenttmu != 0 {
         crate::src::sdl::sdl_glimp::qglMultiTexCoord2fARB.expect("non-null function pointer")(
-            0 as libc::c_int as crate::stdlib::GLenum,
-            tess.svars.texcoords[0 as libc::c_int as usize][index as usize]
-                [0 as libc::c_int as usize],
-            tess.svars.texcoords[0 as libc::c_int as usize][index as usize]
-                [1 as libc::c_int as usize],
+            0 as i32 as crate::stdlib::GLenum,
+            tess.svars.texcoords[0 as i32 as usize][index as usize]
+                [0 as i32 as usize],
+            tess.svars.texcoords[0 as i32 as usize][index as usize]
+                [1 as i32 as usize],
         );
         crate::src::sdl::sdl_glimp::qglMultiTexCoord2fARB.expect("non-null function pointer")(
-            1 as libc::c_int as crate::stdlib::GLenum,
-            tess.svars.texcoords[1 as libc::c_int as usize][index as usize]
-                [0 as libc::c_int as usize],
-            tess.svars.texcoords[1 as libc::c_int as usize][index as usize]
-                [1 as libc::c_int as usize],
+            1 as i32 as crate::stdlib::GLenum,
+            tess.svars.texcoords[1 as i32 as usize][index as usize]
+                [0 as i32 as usize],
+            tess.svars.texcoords[1 as i32 as usize][index as usize]
+                [1 as i32 as usize],
         );
     } else {
         crate::src::sdl::sdl_glimp::qglTexCoord2fv.expect("non-null function pointer")(
-            tess.svars.texcoords[0 as libc::c_int as usize][index as usize].as_mut_ptr(),
+            tess.svars.texcoords[0 as i32 as usize][index as usize].as_mut_ptr(),
         );
     }
     crate::src::sdl::sdl_glimp::qglVertex3fv.expect("non-null function pointer")(
@@ -407,57 +407,57 @@ R_DrawStripElements
 ===================
 */
 
-static mut c_vertexes: libc::c_int = 0;
+static mut c_vertexes: i32 = 0;
 // for seeing how long our average strips are
 
-static mut c_begins: libc::c_int = 0;
+static mut c_begins: i32 = 0;
 
 unsafe extern "C" fn R_DrawStripElements(
-    mut numIndexes: libc::c_int,
+    mut numIndexes: i32,
     mut indexes: *const crate::tr_local_h::glIndex_t,
     mut element: Option<unsafe extern "C" fn(_: crate::stdlib::GLint) -> ()>,
 ) {
-    let mut i: libc::c_int = 0;
-    let mut last: [libc::c_int; 3] = [
-        -(1 as libc::c_int),
-        -(1 as libc::c_int),
-        -(1 as libc::c_int),
+    let mut i: i32 = 0;
+    let mut last: [i32; 3] = [
+        -(1 as i32),
+        -(1 as i32),
+        -(1 as i32),
     ];
     let mut even: crate::src::qcommon::q_shared::qboolean = crate::src::qcommon::q_shared::qfalse;
     c_begins += 1;
-    if numIndexes <= 0 as libc::c_int {
+    if numIndexes <= 0 as i32 {
         return;
     }
     crate::src::sdl::sdl_glimp::qglBegin.expect("non-null function pointer")(
-        0x5 as libc::c_int as crate::stdlib::GLenum,
+        0x5 as i32 as crate::stdlib::GLenum,
     );
     // prime the strip
     element.expect("non-null function pointer")(
-        *indexes.offset(0 as libc::c_int as isize) as crate::stdlib::GLint
+        *indexes.offset(0 as i32 as isize) as crate::stdlib::GLint
     );
     element.expect("non-null function pointer")(
-        *indexes.offset(1 as libc::c_int as isize) as crate::stdlib::GLint
+        *indexes.offset(1 as i32 as isize) as crate::stdlib::GLint
     );
     element.expect("non-null function pointer")(
-        *indexes.offset(2 as libc::c_int as isize) as crate::stdlib::GLint
+        *indexes.offset(2 as i32 as isize) as crate::stdlib::GLint
     );
-    c_vertexes += 3 as libc::c_int;
-    last[0 as libc::c_int as usize] = *indexes.offset(0 as libc::c_int as isize) as libc::c_int;
-    last[1 as libc::c_int as usize] = *indexes.offset(1 as libc::c_int as isize) as libc::c_int;
-    last[2 as libc::c_int as usize] = *indexes.offset(2 as libc::c_int as isize) as libc::c_int;
+    c_vertexes += 3 as i32;
+    last[0 as i32 as usize] = *indexes.offset(0 as i32 as isize) as i32;
+    last[1 as i32 as usize] = *indexes.offset(1 as i32 as isize) as i32;
+    last[2 as i32 as usize] = *indexes.offset(2 as i32 as isize) as i32;
     even = crate::src::qcommon::q_shared::qfalse;
-    i = 3 as libc::c_int;
+    i = 3 as i32;
     while i < numIndexes {
         // odd numbered triangle in potential strip
         if even as u64 == 0 {
             // check previous triangle to see if we're continuing a strip
-            if *indexes.offset((i + 0 as libc::c_int) as isize)
-                == last[2 as libc::c_int as usize] as libc::c_uint
-                && *indexes.offset((i + 1 as libc::c_int) as isize)
-                    == last[1 as libc::c_int as usize] as libc::c_uint
+            if *indexes.offset((i + 0 as i32) as isize)
+                == last[2 as i32 as usize] as u32
+                && *indexes.offset((i + 1 as i32) as isize)
+                    == last[1 as i32 as usize] as u32
             {
                 element.expect("non-null function pointer")(
-                    *indexes.offset((i + 2 as libc::c_int) as isize) as crate::stdlib::GLint,
+                    *indexes.offset((i + 2 as i32) as isize) as crate::stdlib::GLint,
                 );
                 c_vertexes += 1;
                 even = crate::src::qcommon::q_shared::qtrue
@@ -466,28 +466,28 @@ unsafe extern "C" fn R_DrawStripElements(
                 // a new one
                 crate::src::sdl::sdl_glimp::qglEnd.expect("non-null function pointer")();
                 crate::src::sdl::sdl_glimp::qglBegin.expect("non-null function pointer")(
-                    0x5 as libc::c_int as crate::stdlib::GLenum,
+                    0x5 as i32 as crate::stdlib::GLenum,
                 );
                 c_begins += 1;
                 element.expect("non-null function pointer")(
-                    *indexes.offset((i + 0 as libc::c_int) as isize) as crate::stdlib::GLint,
+                    *indexes.offset((i + 0 as i32) as isize) as crate::stdlib::GLint,
                 );
                 element.expect("non-null function pointer")(
-                    *indexes.offset((i + 1 as libc::c_int) as isize) as crate::stdlib::GLint,
+                    *indexes.offset((i + 1 as i32) as isize) as crate::stdlib::GLint,
                 );
                 element.expect("non-null function pointer")(
-                    *indexes.offset((i + 2 as libc::c_int) as isize) as crate::stdlib::GLint,
+                    *indexes.offset((i + 2 as i32) as isize) as crate::stdlib::GLint,
                 );
-                c_vertexes += 3 as libc::c_int;
+                c_vertexes += 3 as i32;
                 even = crate::src::qcommon::q_shared::qfalse
             }
-        } else if last[2 as libc::c_int as usize] as libc::c_uint
-            == *indexes.offset((i + 1 as libc::c_int) as isize)
-            && last[0 as libc::c_int as usize] as libc::c_uint
-                == *indexes.offset((i + 0 as libc::c_int) as isize)
+        } else if last[2 as i32 as usize] as u32
+            == *indexes.offset((i + 1 as i32) as isize)
+            && last[0 as i32 as usize] as u32
+                == *indexes.offset((i + 0 as i32) as isize)
         {
             element.expect("non-null function pointer")(
-                *indexes.offset((i + 2 as libc::c_int) as isize) as crate::stdlib::GLint,
+                *indexes.offset((i + 2 as i32) as isize) as crate::stdlib::GLint,
             );
             c_vertexes += 1;
             even = crate::src::qcommon::q_shared::qfalse
@@ -497,29 +497,29 @@ unsafe extern "C" fn R_DrawStripElements(
             // a new one
             crate::src::sdl::sdl_glimp::qglEnd.expect("non-null function pointer")();
             crate::src::sdl::sdl_glimp::qglBegin.expect("non-null function pointer")(
-                0x5 as libc::c_int as crate::stdlib::GLenum,
+                0x5 as i32 as crate::stdlib::GLenum,
             );
             c_begins += 1;
             element.expect("non-null function pointer")(
-                *indexes.offset((i + 0 as libc::c_int) as isize) as crate::stdlib::GLint,
+                *indexes.offset((i + 0 as i32) as isize) as crate::stdlib::GLint,
             );
             element.expect("non-null function pointer")(
-                *indexes.offset((i + 1 as libc::c_int) as isize) as crate::stdlib::GLint,
+                *indexes.offset((i + 1 as i32) as isize) as crate::stdlib::GLint,
             );
             element.expect("non-null function pointer")(
-                *indexes.offset((i + 2 as libc::c_int) as isize) as crate::stdlib::GLint,
+                *indexes.offset((i + 2 as i32) as isize) as crate::stdlib::GLint,
             );
-            c_vertexes += 3 as libc::c_int;
+            c_vertexes += 3 as i32;
             even = crate::src::qcommon::q_shared::qfalse
         }
         // cache the last three vertices
-        last[0 as libc::c_int as usize] =
-            *indexes.offset((i + 0 as libc::c_int) as isize) as libc::c_int;
-        last[1 as libc::c_int as usize] =
-            *indexes.offset((i + 1 as libc::c_int) as isize) as libc::c_int;
-        last[2 as libc::c_int as usize] =
-            *indexes.offset((i + 2 as libc::c_int) as isize) as libc::c_int;
-        i += 3 as libc::c_int
+        last[0 as i32 as usize] =
+            *indexes.offset((i + 0 as i32) as isize) as i32;
+        last[1 as i32 as usize] =
+            *indexes.offset((i + 1 as i32) as isize) as i32;
+        last[2 as i32 as usize] =
+            *indexes.offset((i + 2 as i32) as isize) as i32;
+        i += 3 as i32
     }
     crate::src::sdl::sdl_glimp::qglEnd.expect("non-null function pointer")();
 }
@@ -631,29 +631,29 @@ without compiled vertex arrays.
 #[no_mangle]
 
 pub unsafe extern "C" fn R_DrawElements(
-    mut numIndexes: libc::c_int,
+    mut numIndexes: i32,
     mut indexes: *const crate::tr_local_h::glIndex_t,
 ) {
-    let mut primitives: libc::c_int = 0;
+    let mut primitives: i32 = 0;
     primitives = (*crate::src::renderergl1::tr_init::r_primitives).integer;
     // default is to use triangles if compiled vertex arrays are present
-    if primitives == 0 as libc::c_int {
+    if primitives == 0 as i32 {
         if crate::src::sdl::sdl_glimp::qglLockArraysEXT.is_some() {
-            primitives = 2 as libc::c_int
+            primitives = 2 as i32
         } else {
-            primitives = 1 as libc::c_int
+            primitives = 1 as i32
         }
     }
-    if primitives == 2 as libc::c_int {
+    if primitives == 2 as i32 {
         crate::src::sdl::sdl_glimp::qglDrawElements.expect("non-null function pointer")(
-            0x4 as libc::c_int as crate::stdlib::GLenum,
+            0x4 as i32 as crate::stdlib::GLenum,
             numIndexes,
-            0x1405 as libc::c_int as crate::stdlib::GLenum,
+            0x1405 as i32 as crate::stdlib::GLenum,
             indexes as *const libc::c_void,
         );
         return;
     }
-    if primitives == 1 as libc::c_int {
+    if primitives == 1 as i32 {
         R_DrawStripElements(
             numIndexes,
             indexes,
@@ -661,7 +661,7 @@ pub unsafe extern "C" fn R_DrawElements(
         );
         return;
     }
-    if primitives == 3 as libc::c_int {
+    if primitives == 3 as i32 {
         R_DrawStripElements(
             numIndexes,
             indexes,
@@ -724,20 +724,20 @@ unsafe extern "C" fn R_BindAnimatedImage(mut bundle: *mut crate::tr_local_h::tex
             .expect("non-null function pointer")((*bundle).videoMapHandle);
         return;
     }
-    if (*bundle).numImageAnimations <= 1 as libc::c_int {
+    if (*bundle).numImageAnimations <= 1 as i32 {
         crate::src::renderergl1::tr_backend::GL_Bind(
-            (*bundle).image[0 as libc::c_int as usize] as *mut crate::tr_common_h::image_s,
+            (*bundle).image[0 as i32 as usize] as *mut crate::tr_common_h::image_s,
         );
         return;
     }
     // it is necessary to do this messy calc to make sure animations line up
     // exactly with waveforms of the same frequency
     index = (tess.shaderTime
-        * (*bundle).imageAnimationSpeed as libc::c_double
-        * 1024 as libc::c_int as libc::c_double) as crate::stdlib::int64_t;
-    index >>= 10 as libc::c_int;
-    if index < 0 as libc::c_int as libc::c_long {
-        index = 0 as libc::c_int as crate::stdlib::int64_t
+        * (*bundle).imageAnimationSpeed as f64
+        * 1024 as i32 as f64) as crate::stdlib::int64_t;
+    index >>= 10 as i32;
+    if index < 0 as i32 as libc::c_long {
+        index = 0 as i32 as crate::stdlib::int64_t
         // may happen with shader time offsets
     }
     // Windows x86 doesn't load renderer DLL with 64 bit modulus
@@ -762,32 +762,32 @@ unsafe extern "C" fn DrawTris(mut input: *mut crate::tr_local_h::shaderCommands_
         crate::src::renderergl1::tr_main::tr.whiteImage as *mut crate::tr_common_h::image_s,
     ); // padded for SIMD
     crate::src::sdl::sdl_glimp::qglColor3f.expect("non-null function pointer")(
-        1 as libc::c_int as crate::stdlib::GLfloat,
-        1 as libc::c_int as crate::stdlib::GLfloat,
-        1 as libc::c_int as crate::stdlib::GLfloat,
+        1 as i32 as crate::stdlib::GLfloat,
+        1 as i32 as crate::stdlib::GLfloat,
+        1 as i32 as crate::stdlib::GLfloat,
     );
     crate::src::renderergl1::tr_backend::GL_State(
-        (0x1000 as libc::c_int | 0x100 as libc::c_int) as libc::c_ulong,
+        (0x1000 as i32 | 0x100 as i32) as libc::c_ulong,
     );
     crate::src::sdl::sdl_glimp::qglDepthRange.expect("non-null function pointer")(
-        0 as libc::c_int as crate::stdlib::GLclampd,
-        0 as libc::c_int as crate::stdlib::GLclampd,
+        0 as i32 as crate::stdlib::GLclampd,
+        0 as i32 as crate::stdlib::GLclampd,
     );
     crate::src::sdl::sdl_glimp::qglDisableClientState.expect("non-null function pointer")(
-        0x8076 as libc::c_int as crate::stdlib::GLenum,
+        0x8076 as i32 as crate::stdlib::GLenum,
     );
     crate::src::sdl::sdl_glimp::qglDisableClientState.expect("non-null function pointer")(
-        0x8078 as libc::c_int as crate::stdlib::GLenum,
+        0x8078 as i32 as crate::stdlib::GLenum,
     );
     crate::src::sdl::sdl_glimp::qglVertexPointer.expect("non-null function pointer")(
-        3 as libc::c_int,
-        0x1406 as libc::c_int as crate::stdlib::GLenum,
-        16 as libc::c_int,
+        3 as i32,
+        0x1406 as i32 as crate::stdlib::GLenum,
+        16 as i32,
         (*input).xyz.as_mut_ptr() as *const libc::c_void,
     );
     if crate::src::sdl::sdl_glimp::qglLockArraysEXT.is_some() {
         crate::src::sdl::sdl_glimp::qglLockArraysEXT.expect("non-null function pointer")(
-            0 as libc::c_int,
+            0 as i32,
             (*input).numVertexes,
         );
         crate::src::sdl::sdl_glimp::GLimp_LogComment(
@@ -802,8 +802,8 @@ unsafe extern "C" fn DrawTris(mut input: *mut crate::tr_local_h::shaderCommands_
         );
     }
     crate::src::sdl::sdl_glimp::qglDepthRange.expect("non-null function pointer")(
-        0 as libc::c_int as crate::stdlib::GLclampd,
-        1 as libc::c_int as crate::stdlib::GLclampd,
+        0 as i32 as crate::stdlib::GLclampd,
+        1 as i32 as crate::stdlib::GLclampd,
     );
 }
 /*
@@ -815,40 +815,40 @@ Draws vertex normals for debugging
 */
 
 unsafe extern "C" fn DrawNormals(mut input: *mut crate::tr_local_h::shaderCommands_t) {
-    let mut i: libc::c_int = 0; // never occluded
+    let mut i: i32 = 0; // never occluded
     let mut temp: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     crate::src::renderergl1::tr_backend::GL_Bind(
         crate::src::renderergl1::tr_main::tr.whiteImage as *mut crate::tr_common_h::image_s,
     );
     crate::src::sdl::sdl_glimp::qglColor3f.expect("non-null function pointer")(
-        1 as libc::c_int as crate::stdlib::GLfloat,
-        1 as libc::c_int as crate::stdlib::GLfloat,
-        1 as libc::c_int as crate::stdlib::GLfloat,
+        1 as i32 as crate::stdlib::GLfloat,
+        1 as i32 as crate::stdlib::GLfloat,
+        1 as i32 as crate::stdlib::GLfloat,
     );
     crate::src::sdl::sdl_glimp::qglDepthRange.expect("non-null function pointer")(
-        0 as libc::c_int as crate::stdlib::GLclampd,
-        0 as libc::c_int as crate::stdlib::GLclampd,
+        0 as i32 as crate::stdlib::GLclampd,
+        0 as i32 as crate::stdlib::GLclampd,
     );
     crate::src::renderergl1::tr_backend::GL_State(
-        (0x1000 as libc::c_int | 0x100 as libc::c_int) as libc::c_ulong,
+        (0x1000 as i32 | 0x100 as i32) as libc::c_ulong,
     );
     crate::src::sdl::sdl_glimp::qglBegin.expect("non-null function pointer")(
-        0x1 as libc::c_int as crate::stdlib::GLenum,
+        0x1 as i32 as crate::stdlib::GLenum,
     );
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < (*input).numVertexes {
         crate::src::sdl::sdl_glimp::qglVertex3fv.expect("non-null function pointer")(
             (*input).xyz[i as usize].as_mut_ptr(),
         );
-        temp[0 as libc::c_int as usize] = (*input).xyz[i as usize][0 as libc::c_int as usize]
-            + (*input).normal[i as usize][0 as libc::c_int as usize]
-                * 2 as libc::c_int as libc::c_float;
-        temp[1 as libc::c_int as usize] = (*input).xyz[i as usize][1 as libc::c_int as usize]
-            + (*input).normal[i as usize][1 as libc::c_int as usize]
-                * 2 as libc::c_int as libc::c_float;
-        temp[2 as libc::c_int as usize] = (*input).xyz[i as usize][2 as libc::c_int as usize]
-            + (*input).normal[i as usize][2 as libc::c_int as usize]
-                * 2 as libc::c_int as libc::c_float;
+        temp[0 as i32 as usize] = (*input).xyz[i as usize][0 as i32 as usize]
+            + (*input).normal[i as usize][0 as i32 as usize]
+                * 2 as i32 as f32;
+        temp[1 as i32 as usize] = (*input).xyz[i as usize][1 as i32 as usize]
+            + (*input).normal[i as usize][1 as i32 as usize]
+                * 2 as i32 as f32;
+        temp[2 as i32 as usize] = (*input).xyz[i as usize][2 as i32 as usize]
+            + (*input).normal[i as usize][2 as i32 as usize]
+                * 2 as i32 as f32;
         crate::src::sdl::sdl_glimp::qglVertex3fv.expect("non-null function pointer")(
             temp.as_mut_ptr(),
         );
@@ -856,8 +856,8 @@ unsafe extern "C" fn DrawNormals(mut input: *mut crate::tr_local_h::shaderComman
     }
     crate::src::sdl::sdl_glimp::qglEnd.expect("non-null function pointer")();
     crate::src::sdl::sdl_glimp::qglDepthRange.expect("non-null function pointer")(
-        0 as libc::c_int as crate::stdlib::GLclampd,
-        1 as libc::c_int as crate::stdlib::GLclampd,
+        0 as i32 as crate::stdlib::GLclampd,
+        1 as i32 as crate::stdlib::GLclampd,
     );
 }
 /*
@@ -873,18 +873,18 @@ to overflow.
 
 pub unsafe extern "C" fn RB_BeginSurface(
     mut shader: *mut crate::tr_local_h::shader_t,
-    mut fogNum: libc::c_int,
+    mut fogNum: i32,
 ) {
     let mut state: *mut crate::tr_local_h::shader_t = if !(*shader).remappedShader.is_null() {
         (*shader).remappedShader
     } else {
         shader
     }; // will be OR'd in by surface functions
-    tess.numIndexes = 0 as libc::c_int;
-    tess.numVertexes = 0 as libc::c_int;
+    tess.numIndexes = 0 as i32;
+    tess.numVertexes = 0 as i32;
     tess.shader = state;
     tess.fogNum = fogNum;
-    tess.dlightBits = 0 as libc::c_int;
+    tess.dlightBits = 0 as i32;
     tess.xstages = (*state).stages.as_mut_ptr();
     tess.numPasses = (*state).numUnfoggedPasses;
     tess.currentStageIteratorFunc = (*state).optimalStageIteratorFunc;
@@ -909,7 +909,7 @@ t1 = most downstream according to spec
 
 unsafe extern "C" fn DrawMultitextured(
     mut input: *mut crate::tr_local_h::shaderCommands_t,
-    mut stage: libc::c_int,
+    mut stage: i32,
 ) {
     let mut pStage: *mut crate::tr_local_h::shaderStage_t =
         0 as *mut crate::tr_local_h::shaderStage_t;
@@ -923,52 +923,52 @@ unsafe extern "C" fn DrawMultitextured(
         != 0
     {
         crate::src::sdl::sdl_glimp::qglPolygonMode.expect("non-null function pointer")(
-            0x408 as libc::c_int as crate::stdlib::GLenum,
-            0x1b02 as libc::c_int as crate::stdlib::GLenum,
+            0x408 as i32 as crate::stdlib::GLenum,
+            0x1b02 as i32 as crate::stdlib::GLenum,
         );
     }
     //
     // base
     //
-    crate::src::renderergl1::tr_backend::GL_SelectTexture(0 as libc::c_int);
+    crate::src::renderergl1::tr_backend::GL_SelectTexture(0 as i32);
     crate::src::sdl::sdl_glimp::qglTexCoordPointer.expect("non-null function pointer")(
-        2 as libc::c_int,
-        0x1406 as libc::c_int as crate::stdlib::GLenum,
-        0 as libc::c_int,
-        (*input).svars.texcoords[0 as libc::c_int as usize].as_mut_ptr() as *const libc::c_void,
+        2 as i32,
+        0x1406 as i32 as crate::stdlib::GLenum,
+        0 as i32,
+        (*input).svars.texcoords[0 as i32 as usize].as_mut_ptr() as *const libc::c_void,
     );
     R_BindAnimatedImage(
         &mut *(*pStage)
             .bundle
             .as_mut_ptr()
-            .offset(0 as libc::c_int as isize),
+            .offset(0 as i32 as isize),
     );
     //
     // lightmap/secondary pass
     //
-    crate::src::renderergl1::tr_backend::GL_SelectTexture(1 as libc::c_int);
+    crate::src::renderergl1::tr_backend::GL_SelectTexture(1 as i32);
     crate::src::sdl::sdl_glimp::qglEnable.expect("non-null function pointer")(
-        0xde1 as libc::c_int as crate::stdlib::GLenum,
+        0xde1 as i32 as crate::stdlib::GLenum,
     );
     crate::src::sdl::sdl_glimp::qglEnableClientState.expect("non-null function pointer")(
-        0x8078 as libc::c_int as crate::stdlib::GLenum,
+        0x8078 as i32 as crate::stdlib::GLenum,
     );
     if (*crate::src::renderergl1::tr_init::r_lightmap).integer != 0 {
-        crate::src::renderergl1::tr_backend::GL_TexEnv(0x1e01 as libc::c_int);
+        crate::src::renderergl1::tr_backend::GL_TexEnv(0x1e01 as i32);
     } else {
         crate::src::renderergl1::tr_backend::GL_TexEnv((*tess.shader).multitextureEnv);
     }
     crate::src::sdl::sdl_glimp::qglTexCoordPointer.expect("non-null function pointer")(
-        2 as libc::c_int,
-        0x1406 as libc::c_int as crate::stdlib::GLenum,
-        0 as libc::c_int,
-        (*input).svars.texcoords[1 as libc::c_int as usize].as_mut_ptr() as *const libc::c_void,
+        2 as i32,
+        0x1406 as i32 as crate::stdlib::GLenum,
+        0 as i32,
+        (*input).svars.texcoords[1 as i32 as usize].as_mut_ptr() as *const libc::c_void,
     );
     R_BindAnimatedImage(
         &mut *(*pStage)
             .bundle
             .as_mut_ptr()
-            .offset(1 as libc::c_int as isize),
+            .offset(1 as i32 as isize),
     );
     R_DrawElements((*input).numIndexes, (*input).indexes.as_mut_ptr());
     //
@@ -976,9 +976,9 @@ unsafe extern "C" fn DrawMultitextured(
     //
     //qglDisableClientState( GL_TEXTURE_COORD_ARRAY );
     crate::src::sdl::sdl_glimp::qglDisable.expect("non-null function pointer")(
-        0xde1 as libc::c_int as crate::stdlib::GLenum,
+        0xde1 as i32 as crate::stdlib::GLenum,
     );
-    crate::src::renderergl1::tr_backend::GL_SelectTexture(0 as libc::c_int);
+    crate::src::renderergl1::tr_backend::GL_SelectTexture(0 as i32);
 }
 /*
 ===================
@@ -989,21 +989,21 @@ Perform dynamic lighting with another rendering pass
 */
 
 unsafe extern "C" fn ProjectDlightTexture_scalar() {
-    let mut i: libc::c_int = 0;
-    let mut l: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut l: i32 = 0;
     let mut origin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut texCoords: *mut libc::c_float = 0 as *mut libc::c_float;
+    let mut texCoords: *mut f32 = 0 as *mut f32;
     let mut colors: *mut crate::src::qcommon::q_shared::byte =
         0 as *mut crate::src::qcommon::q_shared::byte;
     let mut clipBits: [crate::src::qcommon::q_shared::byte; 1000] = [0; 1000];
-    let mut texCoordsArray: [[libc::c_float; 2]; 1000] = [[0.; 2]; 1000];
+    let mut texCoordsArray: [[f32; 2]; 1000] = [[0.; 2]; 1000];
     let mut colorArray: [[crate::src::qcommon::q_shared::byte; 4]; 1000] = [[0; 4]; 1000];
     let mut hitIndexes: [crate::tr_local_h::glIndex_t; 6000] = [0; 6000];
-    let mut numIndexes: libc::c_int = 0;
-    let mut scale: libc::c_float = 0.;
-    let mut radius: libc::c_float = 0.;
+    let mut numIndexes: i32 = 0;
+    let mut scale: f32 = 0.;
+    let mut radius: f32 = 0.;
     let mut floatColor: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut modulate: libc::c_float = 0.0f32;
+    let mut modulate: f32 = 0.0f32;
     if crate::src::renderergl1::tr_backend::backEnd
         .refdef
         .num_dlights
@@ -1011,187 +1011,187 @@ unsafe extern "C" fn ProjectDlightTexture_scalar() {
     {
         return;
     }
-    l = 0 as libc::c_int;
+    l = 0 as i32;
     while l < crate::src::renderergl1::tr_backend::backEnd
         .refdef
         .num_dlights
     {
         let mut dl: *mut crate::tr_local_h::dlight_t = 0 as *mut crate::tr_local_h::dlight_t;
-        if !(tess.dlightBits & (1 as libc::c_int) << l == 0) {
-            texCoords = texCoordsArray[0 as libc::c_int as usize].as_mut_ptr();
-            colors = colorArray[0 as libc::c_int as usize].as_mut_ptr();
+        if !(tess.dlightBits & (1 as i32) << l == 0) {
+            texCoords = texCoordsArray[0 as i32 as usize].as_mut_ptr();
+            colors = colorArray[0 as i32 as usize].as_mut_ptr();
             dl = &mut *crate::src::renderergl1::tr_backend::backEnd
                 .refdef
                 .dlights
                 .offset(l as isize) as *mut crate::tr_local_h::dlight_s;
-            origin[0 as libc::c_int as usize] = (*dl).transformed[0 as libc::c_int as usize];
-            origin[1 as libc::c_int as usize] = (*dl).transformed[1 as libc::c_int as usize];
-            origin[2 as libc::c_int as usize] = (*dl).transformed[2 as libc::c_int as usize];
+            origin[0 as i32 as usize] = (*dl).transformed[0 as i32 as usize];
+            origin[1 as i32 as usize] = (*dl).transformed[1 as i32 as usize];
+            origin[2 as i32 as usize] = (*dl).transformed[2 as i32 as usize];
             radius = (*dl).radius;
             scale = 1.0f32 / radius;
             if (*crate::src::renderergl1::tr_init::r_greyscale).integer != 0 {
-                let mut luminance: libc::c_float = 0.;
-                luminance = (0.2126f32 * (*dl).color[0 as libc::c_int as usize]
-                    + 0.7152f32 * (*dl).color[1 as libc::c_int as usize]
-                    + 0.0722f32 * (*dl).color[2 as libc::c_int as usize])
+                let mut luminance: f32 = 0.;
+                luminance = (0.2126f32 * (*dl).color[0 as i32 as usize]
+                    + 0.7152f32 * (*dl).color[1 as i32 as usize]
+                    + 0.0722f32 * (*dl).color[2 as i32 as usize])
                     * 255.0f32;
-                floatColor[2 as libc::c_int as usize] = luminance;
-                floatColor[1 as libc::c_int as usize] = floatColor[2 as libc::c_int as usize];
-                floatColor[0 as libc::c_int as usize] = floatColor[1 as libc::c_int as usize]
+                floatColor[2 as i32 as usize] = luminance;
+                floatColor[1 as i32 as usize] = floatColor[2 as i32 as usize];
+                floatColor[0 as i32 as usize] = floatColor[1 as i32 as usize]
             } else if (*crate::src::renderergl1::tr_init::r_greyscale).value != 0. {
-                let mut luminance_0: libc::c_float = 0.;
-                luminance_0 = (0.2126f32 * (*dl).color[0 as libc::c_int as usize]
-                    + 0.7152f32 * (*dl).color[1 as libc::c_int as usize]
-                    + 0.0722f32 * (*dl).color[2 as libc::c_int as usize])
+                let mut luminance_0: f32 = 0.;
+                luminance_0 = (0.2126f32 * (*dl).color[0 as i32 as usize]
+                    + 0.7152f32 * (*dl).color[1 as i32 as usize]
+                    + 0.0722f32 * (*dl).color[2 as i32 as usize])
                     * 255.0f32;
-                floatColor[0 as libc::c_int as usize] = (*dl).color[0 as libc::c_int as usize]
+                floatColor[0 as i32 as usize] = (*dl).color[0 as i32 as usize]
                     * 255.0f32
                     * (1.0f32 - (*crate::src::renderergl1::tr_init::r_greyscale).value)
                     + luminance_0 * (*crate::src::renderergl1::tr_init::r_greyscale).value;
-                floatColor[1 as libc::c_int as usize] = (*dl).color[1 as libc::c_int as usize]
+                floatColor[1 as i32 as usize] = (*dl).color[1 as i32 as usize]
                     * 255.0f32
                     * (1.0f32 - (*crate::src::renderergl1::tr_init::r_greyscale).value)
                     + luminance_0 * (*crate::src::renderergl1::tr_init::r_greyscale).value;
-                floatColor[2 as libc::c_int as usize] = (*dl).color[2 as libc::c_int as usize]
+                floatColor[2 as i32 as usize] = (*dl).color[2 as i32 as usize]
                     * 255.0f32
                     * (1.0f32 - (*crate::src::renderergl1::tr_init::r_greyscale).value)
                     + luminance_0 * (*crate::src::renderergl1::tr_init::r_greyscale).value
             } else {
-                floatColor[0 as libc::c_int as usize] =
-                    (*dl).color[0 as libc::c_int as usize] * 255.0f32;
-                floatColor[1 as libc::c_int as usize] =
-                    (*dl).color[1 as libc::c_int as usize] * 255.0f32;
-                floatColor[2 as libc::c_int as usize] =
-                    (*dl).color[2 as libc::c_int as usize] * 255.0f32
+                floatColor[0 as i32 as usize] =
+                    (*dl).color[0 as i32 as usize] * 255.0f32;
+                floatColor[1 as i32 as usize] =
+                    (*dl).color[1 as i32 as usize] * 255.0f32;
+                floatColor[2 as i32 as usize] =
+                    (*dl).color[2 as i32 as usize] * 255.0f32
             }
-            i = 0 as libc::c_int;
+            i = 0 as i32;
             while i < tess.numVertexes {
-                let mut clip: libc::c_int = 0 as libc::c_int;
+                let mut clip: i32 = 0 as i32;
                 let mut dist: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-                dist[0 as libc::c_int as usize] = origin[0 as libc::c_int as usize]
-                    - tess.xyz[i as usize][0 as libc::c_int as usize];
-                dist[1 as libc::c_int as usize] = origin[1 as libc::c_int as usize]
-                    - tess.xyz[i as usize][1 as libc::c_int as usize];
-                dist[2 as libc::c_int as usize] = origin[2 as libc::c_int as usize]
-                    - tess.xyz[i as usize][2 as libc::c_int as usize];
+                dist[0 as i32 as usize] = origin[0 as i32 as usize]
+                    - tess.xyz[i as usize][0 as i32 as usize];
+                dist[1 as i32 as usize] = origin[1 as i32 as usize]
+                    - tess.xyz[i as usize][1 as i32 as usize];
+                dist[2 as i32 as usize] = origin[2 as i32 as usize]
+                    - tess.xyz[i as usize][2 as i32 as usize];
                 crate::src::renderergl1::tr_backend::backEnd
                     .pc
                     .c_dlightVertexes += 1;
-                *texCoords.offset(0 as libc::c_int as isize) =
-                    0.5f32 + dist[0 as libc::c_int as usize] * scale;
-                *texCoords.offset(1 as libc::c_int as isize) =
-                    0.5f32 + dist[1 as libc::c_int as usize] * scale;
+                *texCoords.offset(0 as i32 as isize) =
+                    0.5f32 + dist[0 as i32 as usize] * scale;
+                *texCoords.offset(1 as i32 as isize) =
+                    0.5f32 + dist[1 as i32 as usize] * scale;
                 if (*crate::src::renderergl1::tr_init::r_dlightBacks).integer == 0
-                    && dist[0 as libc::c_int as usize]
-                        * tess.normal[i as usize][0 as libc::c_int as usize]
-                        + dist[1 as libc::c_int as usize]
-                            * tess.normal[i as usize][1 as libc::c_int as usize]
-                        + dist[2 as libc::c_int as usize]
-                            * tess.normal[i as usize][2 as libc::c_int as usize]
+                    && dist[0 as i32 as usize]
+                        * tess.normal[i as usize][0 as i32 as usize]
+                        + dist[1 as i32 as usize]
+                            * tess.normal[i as usize][1 as i32 as usize]
+                        + dist[2 as i32 as usize]
+                            * tess.normal[i as usize][2 as i32 as usize]
                         < 0.0f32
                 {
-                    clip = 63 as libc::c_int
+                    clip = 63 as i32
                 } else {
-                    if *texCoords.offset(0 as libc::c_int as isize) < 0.0f32 {
-                        clip |= 1 as libc::c_int
-                    } else if *texCoords.offset(0 as libc::c_int as isize) > 1.0f32 {
-                        clip |= 2 as libc::c_int
+                    if *texCoords.offset(0 as i32 as isize) < 0.0f32 {
+                        clip |= 1 as i32
+                    } else if *texCoords.offset(0 as i32 as isize) > 1.0f32 {
+                        clip |= 2 as i32
                     }
-                    if *texCoords.offset(1 as libc::c_int as isize) < 0.0f32 {
-                        clip |= 4 as libc::c_int
-                    } else if *texCoords.offset(1 as libc::c_int as isize) > 1.0f32 {
-                        clip |= 8 as libc::c_int
+                    if *texCoords.offset(1 as i32 as isize) < 0.0f32 {
+                        clip |= 4 as i32
+                    } else if *texCoords.offset(1 as i32 as isize) > 1.0f32 {
+                        clip |= 8 as i32
                     }
-                    *texCoords.offset(0 as libc::c_int as isize) =
-                        *texCoords.offset(0 as libc::c_int as isize);
-                    *texCoords.offset(1 as libc::c_int as isize) =
-                        *texCoords.offset(1 as libc::c_int as isize);
+                    *texCoords.offset(0 as i32 as isize) =
+                        *texCoords.offset(0 as i32 as isize);
+                    *texCoords.offset(1 as i32 as isize) =
+                        *texCoords.offset(1 as i32 as isize);
                     // modulate the strength based on the height and color
-                    if dist[2 as libc::c_int as usize] > radius {
-                        clip |= 16 as libc::c_int;
+                    if dist[2 as i32 as usize] > radius {
+                        clip |= 16 as i32;
                         modulate = 0.0f32
-                    } else if dist[2 as libc::c_int as usize] < -radius {
-                        clip |= 32 as libc::c_int;
+                    } else if dist[2 as i32 as usize] < -radius {
+                        clip |= 32 as i32;
                         modulate = 0.0f32
                     } else {
-                        dist[2 as libc::c_int as usize] =
-                            crate::src::qcommon::q_math::Q_fabs(dist[2 as libc::c_int as usize]);
-                        if dist[2 as libc::c_int as usize] < radius * 0.5f32 {
+                        dist[2 as i32 as usize] =
+                            crate::src::qcommon::q_math::Q_fabs(dist[2 as i32 as usize]);
+                        if dist[2 as i32 as usize] < radius * 0.5f32 {
                             modulate = 1.0f32
                         } else {
-                            modulate = 2.0f32 * (radius - dist[2 as libc::c_int as usize]) * scale
+                            modulate = 2.0f32 * (radius - dist[2 as i32 as usize]) * scale
                         }
                     }
                 }
                 clipBits[i as usize] = clip as crate::src::qcommon::q_shared::byte;
-                *colors.offset(0 as libc::c_int as isize) = crate::src::renderergl1::tr_main::ri
+                *colors.offset(0 as i32 as isize) = crate::src::renderergl1::tr_main::ri
                     .ftol
                     .expect("non-null function pointer")(
-                    floatColor[0 as libc::c_int as usize] * modulate,
+                    floatColor[0 as i32 as usize] * modulate,
                 )
                     as crate::src::qcommon::q_shared::byte;
-                *colors.offset(1 as libc::c_int as isize) = crate::src::renderergl1::tr_main::ri
+                *colors.offset(1 as i32 as isize) = crate::src::renderergl1::tr_main::ri
                     .ftol
                     .expect("non-null function pointer")(
-                    floatColor[1 as libc::c_int as usize] * modulate,
+                    floatColor[1 as i32 as usize] * modulate,
                 )
                     as crate::src::qcommon::q_shared::byte;
-                *colors.offset(2 as libc::c_int as isize) = crate::src::renderergl1::tr_main::ri
+                *colors.offset(2 as i32 as isize) = crate::src::renderergl1::tr_main::ri
                     .ftol
                     .expect("non-null function pointer")(
-                    floatColor[2 as libc::c_int as usize] * modulate,
+                    floatColor[2 as i32 as usize] * modulate,
                 )
                     as crate::src::qcommon::q_shared::byte;
-                *colors.offset(3 as libc::c_int as isize) =
-                    255 as libc::c_int as crate::src::qcommon::q_shared::byte;
+                *colors.offset(3 as i32 as isize) =
+                    255 as i32 as crate::src::qcommon::q_shared::byte;
                 i += 1;
-                texCoords = texCoords.offset(2 as libc::c_int as isize);
-                colors = colors.offset(4 as libc::c_int as isize)
+                texCoords = texCoords.offset(2 as i32 as isize);
+                colors = colors.offset(4 as i32 as isize)
             }
             // build a list of triangles that need light
-            numIndexes = 0 as libc::c_int;
-            i = 0 as libc::c_int;
+            numIndexes = 0 as i32;
+            i = 0 as i32;
             while i < tess.numIndexes {
-                let mut a: libc::c_int = 0;
-                let mut b: libc::c_int = 0;
-                let mut c: libc::c_int = 0;
-                a = tess.indexes[i as usize] as libc::c_int;
-                b = tess.indexes[(i + 1 as libc::c_int) as usize] as libc::c_int;
-                c = tess.indexes[(i + 2 as libc::c_int) as usize] as libc::c_int;
-                if !(clipBits[a as usize] as libc::c_int
-                    & clipBits[b as usize] as libc::c_int
-                    & clipBits[c as usize] as libc::c_int
+                let mut a: i32 = 0;
+                let mut b: i32 = 0;
+                let mut c: i32 = 0;
+                a = tess.indexes[i as usize] as i32;
+                b = tess.indexes[(i + 1 as i32) as usize] as i32;
+                c = tess.indexes[(i + 2 as i32) as usize] as i32;
+                if !(clipBits[a as usize] as i32
+                    & clipBits[b as usize] as i32
+                    & clipBits[c as usize] as i32
                     != 0)
                 {
                     hitIndexes[numIndexes as usize] = a as crate::tr_local_h::glIndex_t;
-                    hitIndexes[(numIndexes + 1 as libc::c_int) as usize] =
+                    hitIndexes[(numIndexes + 1 as i32) as usize] =
                         b as crate::tr_local_h::glIndex_t;
-                    hitIndexes[(numIndexes + 2 as libc::c_int) as usize] =
+                    hitIndexes[(numIndexes + 2 as i32) as usize] =
                         c as crate::tr_local_h::glIndex_t;
-                    numIndexes += 3 as libc::c_int
+                    numIndexes += 3 as i32
                 }
-                i += 3 as libc::c_int
+                i += 3 as i32
                 // not lighted
             }
             if !(numIndexes == 0) {
                 crate::src::sdl::sdl_glimp::qglEnableClientState
                     .expect("non-null function pointer")(
-                    0x8078 as libc::c_int as crate::stdlib::GLenum,
+                    0x8078 as i32 as crate::stdlib::GLenum,
                 );
                 crate::src::sdl::sdl_glimp::qglTexCoordPointer.expect("non-null function pointer")(
-                    2 as libc::c_int,
-                    0x1406 as libc::c_int as crate::stdlib::GLenum,
-                    0 as libc::c_int,
-                    texCoordsArray[0 as libc::c_int as usize].as_mut_ptr() as *const libc::c_void,
+                    2 as i32,
+                    0x1406 as i32 as crate::stdlib::GLenum,
+                    0 as i32,
+                    texCoordsArray[0 as i32 as usize].as_mut_ptr() as *const libc::c_void,
                 );
                 crate::src::sdl::sdl_glimp::qglEnableClientState
                     .expect("non-null function pointer")(
-                    0x8076 as libc::c_int as crate::stdlib::GLenum,
+                    0x8076 as i32 as crate::stdlib::GLenum,
                 );
                 crate::src::sdl::sdl_glimp::qglColorPointer.expect("non-null function pointer")(
-                    4 as libc::c_int,
-                    0x1401 as libc::c_int as crate::stdlib::GLenum,
-                    0 as libc::c_int,
+                    4 as i32,
+                    0x1401 as i32 as crate::stdlib::GLenum,
+                    0 as i32,
                     colorArray.as_mut_ptr() as *const libc::c_void,
                 );
                 crate::src::renderergl1::tr_backend::GL_Bind(
@@ -1202,12 +1202,12 @@ unsafe extern "C" fn ProjectDlightTexture_scalar() {
                 // where they aren't rendered
                 if (*dl).additive != 0 {
                     crate::src::renderergl1::tr_backend::GL_State(
-                        (0x2 as libc::c_int | 0x20 as libc::c_int | 0x20000 as libc::c_int)
+                        (0x2 as i32 | 0x20 as i32 | 0x20000 as i32)
                             as libc::c_ulong,
                     );
                 } else {
                     crate::src::renderergl1::tr_backend::GL_State(
-                        (0x3 as libc::c_int | 0x20 as libc::c_int | 0x20000 as libc::c_int)
+                        (0x3 as i32 | 0x20 as i32 | 0x20000 as i32)
                             as libc::c_ulong,
                     );
                 }
@@ -1238,50 +1238,50 @@ Blends a fog texture on top of everything else
 
 unsafe extern "C" fn RB_FogPass() {
     let mut fog: *mut crate::tr_local_h::fog_t = 0 as *mut crate::tr_local_h::fog_t;
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     crate::src::sdl::sdl_glimp::qglEnableClientState.expect("non-null function pointer")(
-        0x8076 as libc::c_int as crate::stdlib::GLenum,
+        0x8076 as i32 as crate::stdlib::GLenum,
     );
     crate::src::sdl::sdl_glimp::qglColorPointer.expect("non-null function pointer")(
-        4 as libc::c_int,
-        0x1401 as libc::c_int as crate::stdlib::GLenum,
-        0 as libc::c_int,
+        4 as i32,
+        0x1401 as i32 as crate::stdlib::GLenum,
+        0 as i32,
         tess.svars.colors.as_mut_ptr() as *const libc::c_void,
     );
     crate::src::sdl::sdl_glimp::qglEnableClientState.expect("non-null function pointer")(
-        0x8078 as libc::c_int as crate::stdlib::GLenum,
+        0x8078 as i32 as crate::stdlib::GLenum,
     );
     crate::src::sdl::sdl_glimp::qglTexCoordPointer.expect("non-null function pointer")(
-        2 as libc::c_int,
-        0x1406 as libc::c_int as crate::stdlib::GLenum,
-        0 as libc::c_int,
-        tess.svars.texcoords[0 as libc::c_int as usize].as_mut_ptr() as *const libc::c_void,
+        2 as i32,
+        0x1406 as i32 as crate::stdlib::GLenum,
+        0 as i32,
+        tess.svars.texcoords[0 as i32 as usize].as_mut_ptr() as *const libc::c_void,
     );
     fog = (*crate::src::renderergl1::tr_main::tr.world)
         .fogs
         .offset(tess.fogNum as isize);
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < tess.numVertexes {
         *(&mut *tess.svars.colors.as_mut_ptr().offset(i as isize)
-            as *mut crate::tr_local_h::color4ub_t as *mut libc::c_int) =
-            (*fog).colorInt as libc::c_int;
+            as *mut crate::tr_local_h::color4ub_t as *mut i32) =
+            (*fog).colorInt as i32;
         i += 1
     }
     crate::src::renderergl1::tr_shade_calc::RB_CalcFogTexCoords(
-        tess.svars.texcoords[0 as libc::c_int as usize].as_mut_ptr() as *mut libc::c_float,
+        tess.svars.texcoords[0 as i32 as usize].as_mut_ptr() as *mut f32,
     );
     crate::src::renderergl1::tr_backend::GL_Bind(
         crate::src::renderergl1::tr_main::tr.fogImage as *mut crate::tr_common_h::image_s,
     );
-    if (*tess.shader).fogPass as libc::c_uint
-        == crate::tr_local_h::FP_EQUAL as libc::c_int as libc::c_uint
+    if (*tess.shader).fogPass as u32
+        == crate::tr_local_h::FP_EQUAL as i32 as u32
     {
         crate::src::renderergl1::tr_backend::GL_State(
-            (0x5 as libc::c_int | 0x60 as libc::c_int | 0x20000 as libc::c_int) as libc::c_ulong,
+            (0x5 as i32 | 0x60 as i32 | 0x20000 as i32) as libc::c_ulong,
         );
     } else {
         crate::src::renderergl1::tr_backend::GL_State(
-            (0x5 as libc::c_int | 0x60 as libc::c_int) as libc::c_ulong,
+            (0x5 as i32 | 0x60 as i32) as libc::c_ulong,
         );
     }
     R_DrawElements(tess.numIndexes, tess.indexes.as_mut_ptr());
@@ -1293,21 +1293,21 @@ ComputeColors
 */
 
 unsafe extern "C" fn ComputeColors(mut pStage: *mut crate::tr_local_h::shaderStage_t) {
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     //
     // rgbGen
     //
-    match (*pStage).rgbGen as libc::c_uint {
+    match (*pStage).rgbGen as u32 {
         2 => {
             crate::stdlib::memset(
                 tess.svars.colors.as_mut_ptr() as *mut libc::c_void,
-                0xff as libc::c_int,
-                (tess.numVertexes * 4 as libc::c_int) as libc::c_ulong,
+                0xff as i32,
+                (tess.numVertexes * 4 as i32) as libc::c_ulong,
             );
         }
         9 => {
             crate::src::renderergl1::tr_shade_calc::RB_CalcDiffuseColor(
-                tess.svars.colors.as_mut_ptr() as *mut libc::c_uchar,
+                tess.svars.colors.as_mut_ptr() as *mut u8,
             );
         }
         5 => {
@@ -1321,16 +1321,16 @@ unsafe extern "C" fn ComputeColors(mut pStage: *mut crate::tr_local_h::shaderSta
             );
         }
         11 => {
-            i = 0 as libc::c_int;
+            i = 0 as i32;
             while i < tess.numVertexes {
-                *(tess.svars.colors[i as usize].as_mut_ptr() as *mut libc::c_int) =
-                    *((*pStage).constantColor.as_mut_ptr() as *mut libc::c_int);
+                *(tess.svars.colors[i as usize].as_mut_ptr() as *mut i32) =
+                    *((*pStage).constantColor.as_mut_ptr() as *mut i32);
                 i += 1
             }
         }
         6 => {
             if crate::src::renderergl1::tr_main::tr.identityLight
-                == 1 as libc::c_int as libc::c_float
+                == 1 as i32 as f32
             {
                 crate::stdlib::memcpy(
                     tess.svars.colors.as_mut_ptr() as *mut libc::c_void,
@@ -1341,62 +1341,62 @@ unsafe extern "C" fn ComputeColors(mut pStage: *mut crate::tr_local_h::shaderSta
                         ),
                 );
             } else {
-                i = 0 as libc::c_int;
+                i = 0 as i32;
                 while i < tess.numVertexes {
-                    tess.svars.colors[i as usize][0 as libc::c_int as usize] =
-                        (tess.vertexColors[i as usize][0 as libc::c_int as usize] as libc::c_int
-                            as libc::c_float
+                    tess.svars.colors[i as usize][0 as i32 as usize] =
+                        (tess.vertexColors[i as usize][0 as i32 as usize] as i32
+                            as f32
                             * crate::src::renderergl1::tr_main::tr.identityLight)
                             as crate::src::qcommon::q_shared::byte;
-                    tess.svars.colors[i as usize][1 as libc::c_int as usize] =
-                        (tess.vertexColors[i as usize][1 as libc::c_int as usize] as libc::c_int
-                            as libc::c_float
+                    tess.svars.colors[i as usize][1 as i32 as usize] =
+                        (tess.vertexColors[i as usize][1 as i32 as usize] as i32
+                            as f32
                             * crate::src::renderergl1::tr_main::tr.identityLight)
                             as crate::src::qcommon::q_shared::byte;
-                    tess.svars.colors[i as usize][2 as libc::c_int as usize] =
-                        (tess.vertexColors[i as usize][2 as libc::c_int as usize] as libc::c_int
-                            as libc::c_float
+                    tess.svars.colors[i as usize][2 as i32 as usize] =
+                        (tess.vertexColors[i as usize][2 as i32 as usize] as i32
+                            as f32
                             * crate::src::renderergl1::tr_main::tr.identityLight)
                             as crate::src::qcommon::q_shared::byte;
-                    tess.svars.colors[i as usize][3 as libc::c_int as usize] =
-                        tess.vertexColors[i as usize][3 as libc::c_int as usize];
+                    tess.svars.colors[i as usize][3 as i32 as usize] =
+                        tess.vertexColors[i as usize][3 as i32 as usize];
                     i += 1
                 }
             }
         }
         7 => {
             if crate::src::renderergl1::tr_main::tr.identityLight
-                == 1 as libc::c_int as libc::c_float
+                == 1 as i32 as f32
             {
-                i = 0 as libc::c_int;
+                i = 0 as i32;
                 while i < tess.numVertexes {
-                    tess.svars.colors[i as usize][0 as libc::c_int as usize] = (255 as libc::c_int
-                        - tess.vertexColors[i as usize][0 as libc::c_int as usize] as libc::c_int)
+                    tess.svars.colors[i as usize][0 as i32 as usize] = (255 as i32
+                        - tess.vertexColors[i as usize][0 as i32 as usize] as i32)
                         as crate::src::qcommon::q_shared::byte;
-                    tess.svars.colors[i as usize][1 as libc::c_int as usize] = (255 as libc::c_int
-                        - tess.vertexColors[i as usize][1 as libc::c_int as usize] as libc::c_int)
+                    tess.svars.colors[i as usize][1 as i32 as usize] = (255 as i32
+                        - tess.vertexColors[i as usize][1 as i32 as usize] as i32)
                         as crate::src::qcommon::q_shared::byte;
-                    tess.svars.colors[i as usize][2 as libc::c_int as usize] = (255 as libc::c_int
-                        - tess.vertexColors[i as usize][2 as libc::c_int as usize] as libc::c_int)
+                    tess.svars.colors[i as usize][2 as i32 as usize] = (255 as i32
+                        - tess.vertexColors[i as usize][2 as i32 as usize] as i32)
                         as crate::src::qcommon::q_shared::byte;
                     i += 1
                 }
             } else {
-                i = 0 as libc::c_int;
+                i = 0 as i32;
                 while i < tess.numVertexes {
-                    tess.svars.colors[i as usize][0 as libc::c_int as usize] = ((255 as libc::c_int
-                        - tess.vertexColors[i as usize][0 as libc::c_int as usize] as libc::c_int)
-                        as libc::c_float
+                    tess.svars.colors[i as usize][0 as i32 as usize] = ((255 as i32
+                        - tess.vertexColors[i as usize][0 as i32 as usize] as i32)
+                        as f32
                         * crate::src::renderergl1::tr_main::tr.identityLight)
                         as crate::src::qcommon::q_shared::byte;
-                    tess.svars.colors[i as usize][1 as libc::c_int as usize] = ((255 as libc::c_int
-                        - tess.vertexColors[i as usize][1 as libc::c_int as usize] as libc::c_int)
-                        as libc::c_float
+                    tess.svars.colors[i as usize][1 as i32 as usize] = ((255 as i32
+                        - tess.vertexColors[i as usize][1 as i32 as usize] as i32)
+                        as f32
                         * crate::src::renderergl1::tr_main::tr.identityLight)
                         as crate::src::qcommon::q_shared::byte;
-                    tess.svars.colors[i as usize][2 as libc::c_int as usize] = ((255 as libc::c_int
-                        - tess.vertexColors[i as usize][2 as libc::c_int as usize] as libc::c_int)
-                        as libc::c_float
+                    tess.svars.colors[i as usize][2 as i32 as usize] = ((255 as i32
+                        - tess.vertexColors[i as usize][2 as i32 as usize] as i32)
+                        as f32
                         * crate::src::renderergl1::tr_main::tr.identityLight)
                         as crate::src::qcommon::q_shared::byte;
                     i += 1
@@ -1408,70 +1408,70 @@ unsafe extern "C" fn ComputeColors(mut pStage: *mut crate::tr_local_h::shaderSta
             fog = (*crate::src::renderergl1::tr_main::tr.world)
                 .fogs
                 .offset(tess.fogNum as isize);
-            i = 0 as libc::c_int;
+            i = 0 as i32;
             while i < tess.numVertexes {
                 *(&mut *tess.svars.colors.as_mut_ptr().offset(i as isize)
-                    as *mut crate::tr_local_h::color4ub_t as *mut libc::c_int) =
-                    (*fog).colorInt as libc::c_int;
+                    as *mut crate::tr_local_h::color4ub_t as *mut i32) =
+                    (*fog).colorInt as i32;
                 i += 1
             }
         }
         8 => {
             crate::src::renderergl1::tr_shade_calc::RB_CalcWaveColor(
                 &mut (*pStage).rgbWave as *mut _ as *const crate::tr_local_h::waveForm_t,
-                tess.svars.colors.as_mut_ptr() as *mut libc::c_uchar,
+                tess.svars.colors.as_mut_ptr() as *mut u8,
             );
         }
         3 => {
             crate::src::renderergl1::tr_shade_calc::RB_CalcColorFromEntity(
-                tess.svars.colors.as_mut_ptr() as *mut libc::c_uchar,
+                tess.svars.colors.as_mut_ptr() as *mut u8,
             );
         }
         4 => {
             crate::src::renderergl1::tr_shade_calc::RB_CalcColorFromOneMinusEntity(
-                tess.svars.colors.as_mut_ptr() as *mut libc::c_uchar,
+                tess.svars.colors.as_mut_ptr() as *mut u8,
             );
         }
         1 | _ => {
             crate::stdlib::memset(
                 tess.svars.colors.as_mut_ptr() as *mut libc::c_void,
                 crate::src::renderergl1::tr_main::tr.identityLightByte,
-                (tess.numVertexes * 4 as libc::c_int) as libc::c_ulong,
+                (tess.numVertexes * 4 as i32) as libc::c_ulong,
             );
         }
     }
     //
     // alphaGen
     //
-    match (*pStage).alphaGen as libc::c_uint {
+    match (*pStage).alphaGen as u32 {
         0 => {
-            if (*pStage).rgbGen as libc::c_uint
-                != crate::tr_local_h::CGEN_IDENTITY as libc::c_int as libc::c_uint
+            if (*pStage).rgbGen as u32
+                != crate::tr_local_h::CGEN_IDENTITY as i32 as u32
             {
-                if (*pStage).rgbGen as libc::c_uint
-                    == crate::tr_local_h::CGEN_VERTEX as libc::c_int as libc::c_uint
+                if (*pStage).rgbGen as u32
+                    == crate::tr_local_h::CGEN_VERTEX as i32 as u32
                     && crate::src::renderergl1::tr_main::tr.identityLight
-                        != 1 as libc::c_int as libc::c_float
-                    || (*pStage).rgbGen as libc::c_uint
-                        != crate::tr_local_h::CGEN_VERTEX as libc::c_int as libc::c_uint
+                        != 1 as i32 as f32
+                    || (*pStage).rgbGen as u32
+                        != crate::tr_local_h::CGEN_VERTEX as i32 as u32
                 {
-                    i = 0 as libc::c_int;
+                    i = 0 as i32;
                     while i < tess.numVertexes {
-                        tess.svars.colors[i as usize][3 as libc::c_int as usize] =
-                            0xff as libc::c_int as crate::src::qcommon::q_shared::byte;
+                        tess.svars.colors[i as usize][3 as i32 as usize] =
+                            0xff as i32 as crate::src::qcommon::q_shared::byte;
                         i += 1
                     }
                 }
             }
         }
         9 => {
-            if (*pStage).rgbGen as libc::c_uint
-                != crate::tr_local_h::CGEN_CONST as libc::c_int as libc::c_uint
+            if (*pStage).rgbGen as u32
+                != crate::tr_local_h::CGEN_CONST as i32 as u32
             {
-                i = 0 as libc::c_int;
+                i = 0 as i32;
                 while i < tess.numVertexes {
-                    tess.svars.colors[i as usize][3 as libc::c_int as usize] =
-                        (*pStage).constantColor[3 as libc::c_int as usize];
+                    tess.svars.colors[i as usize][3 as i32 as usize] =
+                        (*pStage).constantColor[3 as i32 as usize];
                     i += 1
                 }
             }
@@ -1479,76 +1479,76 @@ unsafe extern "C" fn ComputeColors(mut pStage: *mut crate::tr_local_h::shaderSta
         7 => {
             crate::src::renderergl1::tr_shade_calc::RB_CalcWaveAlpha(
                 &mut (*pStage).alphaWave as *mut _ as *const crate::tr_local_h::waveForm_t,
-                tess.svars.colors.as_mut_ptr() as *mut libc::c_uchar,
+                tess.svars.colors.as_mut_ptr() as *mut u8,
             );
         }
         6 => {
             crate::src::renderergl1::tr_shade_calc::RB_CalcSpecularAlpha(
-                tess.svars.colors.as_mut_ptr() as *mut libc::c_uchar,
+                tess.svars.colors.as_mut_ptr() as *mut u8,
             );
         }
         2 => {
             crate::src::renderergl1::tr_shade_calc::RB_CalcAlphaFromEntity(
-                tess.svars.colors.as_mut_ptr() as *mut libc::c_uchar,
+                tess.svars.colors.as_mut_ptr() as *mut u8,
             );
         }
         3 => {
             crate::src::renderergl1::tr_shade_calc::RB_CalcAlphaFromOneMinusEntity(
-                tess.svars.colors.as_mut_ptr() as *mut libc::c_uchar,
+                tess.svars.colors.as_mut_ptr() as *mut u8,
             );
         }
         4 => {
-            if (*pStage).rgbGen as libc::c_uint
-                != crate::tr_local_h::CGEN_VERTEX as libc::c_int as libc::c_uint
+            if (*pStage).rgbGen as u32
+                != crate::tr_local_h::CGEN_VERTEX as i32 as u32
             {
-                i = 0 as libc::c_int;
+                i = 0 as i32;
                 while i < tess.numVertexes {
-                    tess.svars.colors[i as usize][3 as libc::c_int as usize] =
-                        tess.vertexColors[i as usize][3 as libc::c_int as usize];
+                    tess.svars.colors[i as usize][3 as i32 as usize] =
+                        tess.vertexColors[i as usize][3 as i32 as usize];
                     i += 1
                 }
             }
         }
         5 => {
-            i = 0 as libc::c_int;
+            i = 0 as i32;
             while i < tess.numVertexes {
-                tess.svars.colors[i as usize][3 as libc::c_int as usize] = (255 as libc::c_int
-                    - tess.vertexColors[i as usize][3 as libc::c_int as usize] as libc::c_int)
+                tess.svars.colors[i as usize][3 as i32 as usize] = (255 as i32
+                    - tess.vertexColors[i as usize][3 as i32 as usize] as i32)
                     as crate::src::qcommon::q_shared::byte;
                 i += 1
             }
         }
         8 => {
-            let mut alpha: libc::c_uchar = 0;
-            i = 0 as libc::c_int;
+            let mut alpha: u8 = 0;
+            i = 0 as i32;
             while i < tess.numVertexes {
-                let mut len: libc::c_float = 0.;
+                let mut len: f32 = 0.;
                 let mut v: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-                v[0 as libc::c_int as usize] = tess.xyz[i as usize][0 as libc::c_int as usize]
+                v[0 as i32 as usize] = tess.xyz[i as usize][0 as i32 as usize]
                     - crate::src::renderergl1::tr_backend::backEnd
                         .viewParms
                         .or
-                        .origin[0 as libc::c_int as usize];
-                v[1 as libc::c_int as usize] = tess.xyz[i as usize][1 as libc::c_int as usize]
+                        .origin[0 as i32 as usize];
+                v[1 as i32 as usize] = tess.xyz[i as usize][1 as i32 as usize]
                     - crate::src::renderergl1::tr_backend::backEnd
                         .viewParms
                         .or
-                        .origin[1 as libc::c_int as usize];
-                v[2 as libc::c_int as usize] = tess.xyz[i as usize][2 as libc::c_int as usize]
+                        .origin[1 as i32 as usize];
+                v[2 as i32 as usize] = tess.xyz[i as usize][2 as i32 as usize]
                     - crate::src::renderergl1::tr_backend::backEnd
                         .viewParms
                         .or
-                        .origin[2 as libc::c_int as usize];
+                        .origin[2 as i32 as usize];
                 len = VectorLength(v.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
                 len /= (*tess.shader).portalRange;
-                if len < 0 as libc::c_int as libc::c_float {
-                    alpha = 0 as libc::c_int as libc::c_uchar
-                } else if len > 1 as libc::c_int as libc::c_float {
-                    alpha = 0xff as libc::c_int as libc::c_uchar
+                if len < 0 as i32 as f32 {
+                    alpha = 0 as i32 as u8
+                } else if len > 1 as i32 as f32 {
+                    alpha = 0xff as i32 as u8
                 } else {
-                    alpha = (len * 0xff as libc::c_int as libc::c_float) as libc::c_uchar
+                    alpha = (len * 0xff as i32 as f32) as u8
                 }
-                tess.svars.colors[i as usize][3 as libc::c_int as usize] = alpha;
+                tess.svars.colors[i as usize][3 as i32 as usize] = alpha;
                 i += 1
             }
         }
@@ -1558,20 +1558,20 @@ unsafe extern "C" fn ComputeColors(mut pStage: *mut crate::tr_local_h::shaderSta
     // fog adjustment for colors to fade out as fog increases
     //
     if tess.fogNum != 0 {
-        match (*pStage).adjustColorsForFog as libc::c_uint {
+        match (*pStage).adjustColorsForFog as u32 {
             1 => {
                 crate::src::renderergl1::tr_shade_calc::RB_CalcModulateColorsByFog(
-                    tess.svars.colors.as_mut_ptr() as *mut libc::c_uchar,
+                    tess.svars.colors.as_mut_ptr() as *mut u8,
                 );
             }
             3 => {
                 crate::src::renderergl1::tr_shade_calc::RB_CalcModulateAlphasByFog(
-                    tess.svars.colors.as_mut_ptr() as *mut libc::c_uchar,
+                    tess.svars.colors.as_mut_ptr() as *mut u8,
                 );
             }
             2 => {
                 crate::src::renderergl1::tr_shade_calc::RB_CalcModulateRGBAsByFog(
-                    tess.svars.colors.as_mut_ptr() as *mut libc::c_uchar,
+                    tess.svars.colors.as_mut_ptr() as *mut u8,
                 );
             }
             0 | _ => {}
@@ -1579,54 +1579,54 @@ unsafe extern "C" fn ComputeColors(mut pStage: *mut crate::tr_local_h::shaderSta
     }
     // if in greyscale rendering mode turn all color values into greyscale.
     if (*crate::src::renderergl1::tr_init::r_greyscale).integer != 0 {
-        let mut scale: libc::c_int = 0;
-        i = 0 as libc::c_int;
+        let mut scale: i32 = 0;
+        i = 0 as i32;
         while i < tess.numVertexes {
             scale = (0.2126f32
-                * tess.svars.colors[i as usize][0 as libc::c_int as usize] as libc::c_int
-                    as libc::c_float
+                * tess.svars.colors[i as usize][0 as i32 as usize] as i32
+                    as f32
                 + 0.7152f32
-                    * tess.svars.colors[i as usize][1 as libc::c_int as usize] as libc::c_int
-                        as libc::c_float
+                    * tess.svars.colors[i as usize][1 as i32 as usize] as i32
+                        as f32
                 + 0.0722f32
-                    * tess.svars.colors[i as usize][2 as libc::c_int as usize] as libc::c_int
-                        as libc::c_float) as libc::c_int;
-            tess.svars.colors[i as usize][2 as libc::c_int as usize] =
+                    * tess.svars.colors[i as usize][2 as i32 as usize] as i32
+                        as f32) as i32;
+            tess.svars.colors[i as usize][2 as i32 as usize] =
                 scale as crate::src::qcommon::q_shared::byte;
-            tess.svars.colors[i as usize][1 as libc::c_int as usize] =
-                tess.svars.colors[i as usize][2 as libc::c_int as usize];
-            tess.svars.colors[i as usize][0 as libc::c_int as usize] =
-                tess.svars.colors[i as usize][1 as libc::c_int as usize];
+            tess.svars.colors[i as usize][1 as i32 as usize] =
+                tess.svars.colors[i as usize][2 as i32 as usize];
+            tess.svars.colors[i as usize][0 as i32 as usize] =
+                tess.svars.colors[i as usize][1 as i32 as usize];
             i += 1
         }
     } else if (*crate::src::renderergl1::tr_init::r_greyscale).value != 0. {
-        let mut scale_0: libc::c_float = 0.;
-        i = 0 as libc::c_int;
+        let mut scale_0: f32 = 0.;
+        i = 0 as i32;
         while i < tess.numVertexes {
             scale_0 = 0.2126f32
-                * tess.svars.colors[i as usize][0 as libc::c_int as usize] as libc::c_int
-                    as libc::c_float
+                * tess.svars.colors[i as usize][0 as i32 as usize] as i32
+                    as f32
                 + 0.7152f32
-                    * tess.svars.colors[i as usize][1 as libc::c_int as usize] as libc::c_int
-                        as libc::c_float
+                    * tess.svars.colors[i as usize][1 as i32 as usize] as i32
+                        as f32
                 + 0.0722f32
-                    * tess.svars.colors[i as usize][2 as libc::c_int as usize] as libc::c_int
-                        as libc::c_float;
-            tess.svars.colors[i as usize][0 as libc::c_int as usize] =
-                (tess.svars.colors[i as usize][0 as libc::c_int as usize] as libc::c_int
-                    as libc::c_float
+                    * tess.svars.colors[i as usize][2 as i32 as usize] as i32
+                        as f32;
+            tess.svars.colors[i as usize][0 as i32 as usize] =
+                (tess.svars.colors[i as usize][0 as i32 as usize] as i32
+                    as f32
                     * (1.0f32 - (*crate::src::renderergl1::tr_init::r_greyscale).value)
                     + scale_0 * (*crate::src::renderergl1::tr_init::r_greyscale).value)
                     as crate::src::qcommon::q_shared::byte;
-            tess.svars.colors[i as usize][1 as libc::c_int as usize] =
-                (tess.svars.colors[i as usize][1 as libc::c_int as usize] as libc::c_int
-                    as libc::c_float
+            tess.svars.colors[i as usize][1 as i32 as usize] =
+                (tess.svars.colors[i as usize][1 as i32 as usize] as i32
+                    as f32
                     * (1.0f32 - (*crate::src::renderergl1::tr_init::r_greyscale).value)
                     + scale_0 * (*crate::src::renderergl1::tr_init::r_greyscale).value)
                     as crate::src::qcommon::q_shared::byte;
-            tess.svars.colors[i as usize][2 as libc::c_int as usize] =
-                (tess.svars.colors[i as usize][2 as libc::c_int as usize] as libc::c_int
-                    as libc::c_float
+            tess.svars.colors[i as usize][2 as i32 as usize] =
+                (tess.svars.colors[i as usize][2 as i32 as usize] as i32
+                    as f32
                     * (1.0f32 - (*crate::src::renderergl1::tr_init::r_greyscale).value)
                     + scale_0 * (*crate::src::renderergl1::tr_init::r_greyscale).value)
                     as crate::src::qcommon::q_shared::byte;
@@ -1641,82 +1641,82 @@ ComputeTexCoords
 */
 
 unsafe extern "C" fn ComputeTexCoords(mut pStage: *mut crate::tr_local_h::shaderStage_t) {
-    let mut i: libc::c_int = 0;
-    let mut b: libc::c_int = 0;
-    b = 0 as libc::c_int;
-    while b < 2 as libc::c_int {
-        let mut tm: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut b: i32 = 0;
+    b = 0 as i32;
+    while b < 2 as i32 {
+        let mut tm: i32 = 0;
         //
         // generate the texture coordinates
         //
-        match (*pStage).bundle[b as usize].tcGen as libc::c_uint {
+        match (*pStage).bundle[b as usize].tcGen as u32 {
             1 => {
                 crate::stdlib::memset(
                     tess.svars.texcoords[b as usize].as_mut_ptr() as *mut libc::c_void,
-                    0 as libc::c_int,
-                    (::std::mem::size_of::<libc::c_float>() as libc::c_ulong)
-                        .wrapping_mul(2 as libc::c_int as libc::c_ulong)
+                    0 as i32,
+                    (::std::mem::size_of::<f32>() as libc::c_ulong)
+                        .wrapping_mul(2 as i32 as libc::c_ulong)
                         .wrapping_mul(tess.numVertexes as libc::c_ulong),
                 );
             }
             3 => {
-                i = 0 as libc::c_int;
+                i = 0 as i32;
                 while i < tess.numVertexes {
-                    tess.svars.texcoords[b as usize][i as usize][0 as libc::c_int as usize] = tess
-                        .texCoords[i as usize][0 as libc::c_int as usize]
-                        [0 as libc::c_int as usize];
-                    tess.svars.texcoords[b as usize][i as usize][1 as libc::c_int as usize] = tess
-                        .texCoords[i as usize][0 as libc::c_int as usize]
-                        [1 as libc::c_int as usize];
+                    tess.svars.texcoords[b as usize][i as usize][0 as i32 as usize] = tess
+                        .texCoords[i as usize][0 as i32 as usize]
+                        [0 as i32 as usize];
+                    tess.svars.texcoords[b as usize][i as usize][1 as i32 as usize] = tess
+                        .texCoords[i as usize][0 as i32 as usize]
+                        [1 as i32 as usize];
                     i += 1
                 }
             }
             2 => {
-                i = 0 as libc::c_int;
+                i = 0 as i32;
                 while i < tess.numVertexes {
-                    tess.svars.texcoords[b as usize][i as usize][0 as libc::c_int as usize] = tess
-                        .texCoords[i as usize][1 as libc::c_int as usize]
-                        [0 as libc::c_int as usize];
-                    tess.svars.texcoords[b as usize][i as usize][1 as libc::c_int as usize] = tess
-                        .texCoords[i as usize][1 as libc::c_int as usize]
-                        [1 as libc::c_int as usize];
+                    tess.svars.texcoords[b as usize][i as usize][0 as i32 as usize] = tess
+                        .texCoords[i as usize][1 as i32 as usize]
+                        [0 as i32 as usize];
+                    tess.svars.texcoords[b as usize][i as usize][1 as i32 as usize] = tess
+                        .texCoords[i as usize][1 as i32 as usize]
+                        [1 as i32 as usize];
                     i += 1
                 }
             }
             6 => {
-                i = 0 as libc::c_int;
+                i = 0 as i32;
                 while i < tess.numVertexes {
-                    tess.svars.texcoords[b as usize][i as usize][0 as libc::c_int as usize] = tess
-                        .xyz[i as usize][0 as libc::c_int as usize]
-                        * (*pStage).bundle[b as usize].tcGenVectors[0 as libc::c_int as usize]
-                            [0 as libc::c_int as usize]
-                        + tess.xyz[i as usize][1 as libc::c_int as usize]
-                            * (*pStage).bundle[b as usize].tcGenVectors[0 as libc::c_int as usize]
-                                [1 as libc::c_int as usize]
-                        + tess.xyz[i as usize][2 as libc::c_int as usize]
-                            * (*pStage).bundle[b as usize].tcGenVectors[0 as libc::c_int as usize]
-                                [2 as libc::c_int as usize];
-                    tess.svars.texcoords[b as usize][i as usize][1 as libc::c_int as usize] = tess
-                        .xyz[i as usize][0 as libc::c_int as usize]
-                        * (*pStage).bundle[b as usize].tcGenVectors[1 as libc::c_int as usize]
-                            [0 as libc::c_int as usize]
-                        + tess.xyz[i as usize][1 as libc::c_int as usize]
-                            * (*pStage).bundle[b as usize].tcGenVectors[1 as libc::c_int as usize]
-                                [1 as libc::c_int as usize]
-                        + tess.xyz[i as usize][2 as libc::c_int as usize]
-                            * (*pStage).bundle[b as usize].tcGenVectors[1 as libc::c_int as usize]
-                                [2 as libc::c_int as usize];
+                    tess.svars.texcoords[b as usize][i as usize][0 as i32 as usize] = tess
+                        .xyz[i as usize][0 as i32 as usize]
+                        * (*pStage).bundle[b as usize].tcGenVectors[0 as i32 as usize]
+                            [0 as i32 as usize]
+                        + tess.xyz[i as usize][1 as i32 as usize]
+                            * (*pStage).bundle[b as usize].tcGenVectors[0 as i32 as usize]
+                                [1 as i32 as usize]
+                        + tess.xyz[i as usize][2 as i32 as usize]
+                            * (*pStage).bundle[b as usize].tcGenVectors[0 as i32 as usize]
+                                [2 as i32 as usize];
+                    tess.svars.texcoords[b as usize][i as usize][1 as i32 as usize] = tess
+                        .xyz[i as usize][0 as i32 as usize]
+                        * (*pStage).bundle[b as usize].tcGenVectors[1 as i32 as usize]
+                            [0 as i32 as usize]
+                        + tess.xyz[i as usize][1 as i32 as usize]
+                            * (*pStage).bundle[b as usize].tcGenVectors[1 as i32 as usize]
+                                [1 as i32 as usize]
+                        + tess.xyz[i as usize][2 as i32 as usize]
+                            * (*pStage).bundle[b as usize].tcGenVectors[1 as i32 as usize]
+                                [2 as i32 as usize];
                     i += 1
                 }
             }
             5 => {
                 crate::src::renderergl1::tr_shade_calc::RB_CalcFogTexCoords(
-                    tess.svars.texcoords[b as usize].as_mut_ptr() as *mut libc::c_float,
+                    tess.svars.texcoords[b as usize].as_mut_ptr() as *mut f32,
                 );
             }
             4 => {
                 crate::src::renderergl1::tr_shade_calc::RB_CalcEnvironmentTexCoords(
-                    tess.svars.texcoords[b as usize].as_mut_ptr() as *mut libc::c_float,
+                    tess.svars.texcoords[b as usize].as_mut_ptr() as *mut f32,
                 );
             }
             0 => return,
@@ -1725,11 +1725,11 @@ unsafe extern "C" fn ComputeTexCoords(mut pStage: *mut crate::tr_local_h::shader
         //
         // alter texture coordinates
         //
-        tm = 0 as libc::c_int; // break out of for loop
+        tm = 0 as i32; // break out of for loop
         while tm < (*pStage).bundle[b as usize].numTexMods {
-            match (*(*pStage).bundle[b as usize].texMods.offset(tm as isize)).type_0 as libc::c_uint
+            match (*(*pStage).bundle[b as usize].texMods.offset(tm as isize)).type_0 as u32
             {
-                0 => tm = 4 as libc::c_int,
+                0 => tm = 4 as i32,
                 2 => {
                     crate::src::renderergl1::tr_shade_calc::RB_CalcTurbulentTexCoords(
                         &mut (*(*(*pStage).bundle.as_mut_ptr().offset(b as isize))
@@ -1737,7 +1737,7 @@ unsafe extern "C" fn ComputeTexCoords(mut pStage: *mut crate::tr_local_h::shader
                             .offset(tm as isize))
                         .wave as *mut _
                             as *const crate::tr_local_h::waveForm_t,
-                        tess.svars.texcoords[b as usize].as_mut_ptr() as *mut libc::c_float,
+                        tess.svars.texcoords[b as usize].as_mut_ptr() as *mut f32,
                     );
                 }
                 7 => {
@@ -1745,24 +1745,24 @@ unsafe extern "C" fn ComputeTexCoords(mut pStage: *mut crate::tr_local_h::shader
                         (*crate::src::renderergl1::tr_backend::backEnd.currentEntity)
                             .e
                             .shaderTexCoord
-                            .as_mut_ptr() as *const libc::c_float,
-                        tess.svars.texcoords[b as usize].as_mut_ptr() as *mut libc::c_float,
+                            .as_mut_ptr() as *const f32,
+                        tess.svars.texcoords[b as usize].as_mut_ptr() as *mut f32,
                     );
                 }
                 3 => {
                     crate::src::renderergl1::tr_shade_calc::RB_CalcScrollTexCoords(
                         (*(*pStage).bundle[b as usize].texMods.offset(tm as isize))
                             .scroll
-                            .as_mut_ptr() as *const libc::c_float,
-                        tess.svars.texcoords[b as usize].as_mut_ptr() as *mut libc::c_float,
+                            .as_mut_ptr() as *const f32,
+                        tess.svars.texcoords[b as usize].as_mut_ptr() as *mut f32,
                     );
                 }
                 4 => {
                     crate::src::renderergl1::tr_shade_calc::RB_CalcScaleTexCoords(
                         (*(*pStage).bundle[b as usize].texMods.offset(tm as isize))
                             .scale
-                            .as_mut_ptr() as *const libc::c_float,
-                        tess.svars.texcoords[b as usize].as_mut_ptr() as *mut libc::c_float,
+                            .as_mut_ptr() as *const f32,
+                        tess.svars.texcoords[b as usize].as_mut_ptr() as *mut f32,
                     );
                 }
                 5 => {
@@ -1772,7 +1772,7 @@ unsafe extern "C" fn ComputeTexCoords(mut pStage: *mut crate::tr_local_h::shader
                             .offset(tm as isize))
                         .wave as *mut _
                             as *const crate::tr_local_h::waveForm_t,
-                        tess.svars.texcoords[b as usize].as_mut_ptr() as *mut libc::c_float,
+                        tess.svars.texcoords[b as usize].as_mut_ptr() as *mut f32,
                     );
                 }
                 1 => {
@@ -1781,24 +1781,24 @@ unsafe extern "C" fn ComputeTexCoords(mut pStage: *mut crate::tr_local_h::shader
                             .texMods
                             .offset(tm as isize) as *mut _
                             as *const crate::tr_local_h::texModInfo_t,
-                        tess.svars.texcoords[b as usize].as_mut_ptr() as *mut libc::c_float,
+                        tess.svars.texcoords[b as usize].as_mut_ptr() as *mut f32,
                     );
                 }
                 6 => {
                     crate::src::renderergl1::tr_shade_calc::RB_CalcRotateTexCoords(
                         (*(*pStage).bundle[b as usize].texMods.offset(tm as isize)).rotateSpeed,
-                        tess.svars.texcoords[b as usize].as_mut_ptr() as *mut libc::c_float,
+                        tess.svars.texcoords[b as usize].as_mut_ptr() as *mut f32,
                     );
                 }
                 _ => {
                     crate::src::renderergl1::tr_main::ri
                         .Error
                         .expect("non-null function pointer")(
-                        crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+                        crate::src::qcommon::q_shared::ERR_DROP as i32,
                         b"ERROR: unknown texmod \'%d\' in shader \'%s\'\x00" as *const u8
                             as *const libc::c_char,
                         (*(*pStage).bundle[b as usize].texMods.offset(tm as isize)).type_0
-                            as libc::c_uint,
+                            as u32,
                         (*tess.shader).name.as_mut_ptr(),
                     );
                 }
@@ -1813,9 +1813,9 @@ unsafe extern "C" fn ComputeTexCoords(mut pStage: *mut crate::tr_local_h::shader
 */
 
 unsafe extern "C" fn RB_IterateStagesGeneric(mut input: *mut crate::tr_local_h::shaderCommands_t) {
-    let mut stage: libc::c_int = 0;
-    stage = 0 as libc::c_int;
-    while stage < 8 as libc::c_int {
+    let mut stage: i32 = 0;
+    stage = 0 as i32;
+    while stage < 8 as i32 {
         let mut pStage: *mut crate::tr_local_h::shaderStage_t =
             *tess.xstages.offset(stage as isize);
         if pStage.is_null() {
@@ -1825,27 +1825,27 @@ unsafe extern "C" fn RB_IterateStagesGeneric(mut input: *mut crate::tr_local_h::
         ComputeTexCoords(pStage);
         if setArraysOnce as u64 == 0 {
             crate::src::sdl::sdl_glimp::qglEnableClientState.expect("non-null function pointer")(
-                0x8076 as libc::c_int as crate::stdlib::GLenum,
+                0x8076 as i32 as crate::stdlib::GLenum,
             );
             crate::src::sdl::sdl_glimp::qglColorPointer.expect("non-null function pointer")(
-                4 as libc::c_int,
-                0x1401 as libc::c_int as crate::stdlib::GLenum,
-                0 as libc::c_int,
+                4 as i32,
+                0x1401 as i32 as crate::stdlib::GLenum,
+                0 as i32,
                 (*input).svars.colors.as_mut_ptr() as *const libc::c_void,
             );
         }
         //
         // do multitexture
         //
-        if !(*pStage).bundle[1 as libc::c_int as usize].image[0 as libc::c_int as usize].is_null() {
+        if !(*pStage).bundle[1 as i32 as usize].image[0 as i32 as usize].is_null() {
             DrawMultitextured(input, stage);
         } else {
             if setArraysOnce as u64 == 0 {
                 crate::src::sdl::sdl_glimp::qglTexCoordPointer.expect("non-null function pointer")(
-                    2 as libc::c_int,
-                    0x1406 as libc::c_int as crate::stdlib::GLenum,
-                    0 as libc::c_int,
-                    (*input).svars.texcoords[0 as libc::c_int as usize].as_mut_ptr()
+                    2 as i32,
+                    0x1406 as i32 as crate::stdlib::GLenum,
+                    0 as i32,
+                    (*input).svars.texcoords[0 as i32 as usize].as_mut_ptr()
                         as *const libc::c_void,
                 );
             }
@@ -1856,7 +1856,7 @@ unsafe extern "C" fn RB_IterateStagesGeneric(mut input: *mut crate::tr_local_h::
                 &mut *(*pStage)
                     .bundle
                     .as_mut_ptr()
-                    .offset(0 as libc::c_int as isize),
+                    .offset(0 as i32 as isize),
             );
             crate::src::renderergl1::tr_backend::GL_State((*pStage).stateBits as libc::c_ulong);
             //
@@ -1866,8 +1866,8 @@ unsafe extern "C" fn RB_IterateStagesGeneric(mut input: *mut crate::tr_local_h::
         }
         // allow skipping out to show just lightmaps during development
         if (*crate::src::renderergl1::tr_init::r_lightmap).integer != 0
-            && ((*pStage).bundle[0 as libc::c_int as usize].isLightmap as libc::c_uint != 0
-                || (*pStage).bundle[1 as libc::c_int as usize].isLightmap as libc::c_uint != 0)
+            && ((*pStage).bundle[0 as i32 as usize].isLightmap as u32 != 0
+                || (*pStage).bundle[1 as i32 as usize].isLightmap as u32 != 0)
         {
             break;
         }
@@ -1901,11 +1901,11 @@ pub unsafe extern "C" fn RB_StageIteratorGeneric() {
     //
     // set face culling appropriately
     //
-    crate::src::renderergl1::tr_backend::GL_Cull((*shader).cullType as libc::c_int);
+    crate::src::renderergl1::tr_backend::GL_Cull((*shader).cullType as i32);
     // set polygon offset if necessary
     if (*shader).polygonOffset as u64 != 0 {
         crate::src::sdl::sdl_glimp::qglEnable.expect("non-null function pointer")(
-            0x8037 as libc::c_int as crate::stdlib::GLenum,
+            0x8037 as i32 as crate::stdlib::GLenum,
         );
         crate::src::sdl::sdl_glimp::qglPolygonOffset.expect("non-null function pointer")(
             (*crate::src::renderergl1::tr_init::r_offsetFactor).value,
@@ -1918,47 +1918,47 @@ pub unsafe extern "C" fn RB_StageIteratorGeneric() {
     // to avoid compiling those arrays since they will change
     // during multipass rendering
     //
-    if tess.numPasses > 1 as libc::c_int || (*shader).multitextureEnv != 0 {
+    if tess.numPasses > 1 as i32 || (*shader).multitextureEnv != 0 {
         setArraysOnce = crate::src::qcommon::q_shared::qfalse;
         crate::src::sdl::sdl_glimp::qglDisableClientState.expect("non-null function pointer")(
-            0x8076 as libc::c_int as crate::stdlib::GLenum,
+            0x8076 as i32 as crate::stdlib::GLenum,
         );
         crate::src::sdl::sdl_glimp::qglDisableClientState.expect("non-null function pointer")(
-            0x8078 as libc::c_int as crate::stdlib::GLenum,
+            0x8078 as i32 as crate::stdlib::GLenum,
         );
     } else {
         setArraysOnce = crate::src::qcommon::q_shared::qtrue;
         crate::src::sdl::sdl_glimp::qglEnableClientState.expect("non-null function pointer")(
-            0x8076 as libc::c_int as crate::stdlib::GLenum,
+            0x8076 as i32 as crate::stdlib::GLenum,
         );
         crate::src::sdl::sdl_glimp::qglColorPointer.expect("non-null function pointer")(
-            4 as libc::c_int,
-            0x1401 as libc::c_int as crate::stdlib::GLenum,
-            0 as libc::c_int,
+            4 as i32,
+            0x1401 as i32 as crate::stdlib::GLenum,
+            0 as i32,
             tess.svars.colors.as_mut_ptr() as *const libc::c_void,
         );
         crate::src::sdl::sdl_glimp::qglEnableClientState.expect("non-null function pointer")(
-            0x8078 as libc::c_int as crate::stdlib::GLenum,
+            0x8078 as i32 as crate::stdlib::GLenum,
         );
         crate::src::sdl::sdl_glimp::qglTexCoordPointer.expect("non-null function pointer")(
-            2 as libc::c_int,
-            0x1406 as libc::c_int as crate::stdlib::GLenum,
-            0 as libc::c_int,
-            tess.svars.texcoords[0 as libc::c_int as usize].as_mut_ptr() as *const libc::c_void,
+            2 as i32,
+            0x1406 as i32 as crate::stdlib::GLenum,
+            0 as i32,
+            tess.svars.texcoords[0 as i32 as usize].as_mut_ptr() as *const libc::c_void,
         );
     }
     //
     // lock XYZ
     //
     crate::src::sdl::sdl_glimp::qglVertexPointer.expect("non-null function pointer")(
-        3 as libc::c_int,
-        0x1406 as libc::c_int as crate::stdlib::GLenum,
-        16 as libc::c_int,
+        3 as i32,
+        0x1406 as i32 as crate::stdlib::GLenum,
+        16 as i32,
         (*input).xyz.as_mut_ptr() as *const libc::c_void,
     ); // padded for SIMD
     if crate::src::sdl::sdl_glimp::qglLockArraysEXT.is_some() {
         crate::src::sdl::sdl_glimp::qglLockArraysEXT.expect("non-null function pointer")(
-            0 as libc::c_int,
+            0 as i32,
             (*input).numVertexes,
         );
         crate::src::sdl::sdl_glimp::GLimp_LogComment(
@@ -1970,10 +1970,10 @@ pub unsafe extern "C" fn RB_StageIteratorGeneric() {
     //
     if setArraysOnce as u64 == 0 {
         crate::src::sdl::sdl_glimp::qglEnableClientState.expect("non-null function pointer")(
-            0x8078 as libc::c_int as crate::stdlib::GLenum,
+            0x8078 as i32 as crate::stdlib::GLenum,
         );
         crate::src::sdl::sdl_glimp::qglEnableClientState.expect("non-null function pointer")(
-            0x8076 as libc::c_int as crate::stdlib::GLenum,
+            0x8076 as i32 as crate::stdlib::GLenum,
         );
     }
     //
@@ -1984,15 +1984,15 @@ pub unsafe extern "C" fn RB_StageIteratorGeneric() {
     // now do any dynamic lighting needed
     //
     if tess.dlightBits != 0
-        && (*tess.shader).sort <= crate::tr_local_h::SS_OPAQUE as libc::c_int as libc::c_float
-        && (*tess.shader).surfaceFlags & (0x20000 as libc::c_int | 0x4 as libc::c_int) == 0
+        && (*tess.shader).sort <= crate::tr_local_h::SS_OPAQUE as i32 as f32
+        && (*tess.shader).surfaceFlags & (0x20000 as i32 | 0x4 as i32) == 0
     {
         ProjectDlightTexture();
     }
     //
     // now do fog
     //
-    if tess.fogNum != 0 && (*tess.shader).fogPass as libc::c_uint != 0 {
+    if tess.fogNum != 0 && (*tess.shader).fogPass as u32 != 0 {
         RB_FogPass();
     }
     //
@@ -2009,7 +2009,7 @@ pub unsafe extern "C" fn RB_StageIteratorGeneric() {
     //
     if (*shader).polygonOffset as u64 != 0 {
         crate::src::sdl::sdl_glimp::qglDisable.expect("non-null function pointer")(
-            0x8037 as libc::c_int as crate::stdlib::GLenum,
+            0x8037 as i32 as crate::stdlib::GLenum,
         );
     };
 }
@@ -2028,7 +2028,7 @@ pub unsafe extern "C" fn RB_StageIteratorVertexLitTexture() {
     // compute colors
     //
     crate::src::renderergl1::tr_shade_calc::RB_CalcDiffuseColor(
-        tess.svars.colors.as_mut_ptr() as *mut libc::c_uchar
+        tess.svars.colors.as_mut_ptr() as *mut u8
     );
     //
     // log this call
@@ -2045,38 +2045,38 @@ pub unsafe extern "C" fn RB_StageIteratorVertexLitTexture() {
     //
     // set face culling appropriately
     //
-    crate::src::renderergl1::tr_backend::GL_Cull((*shader).cullType as libc::c_int);
+    crate::src::renderergl1::tr_backend::GL_Cull((*shader).cullType as i32);
     //
     // set arrays and lock
     //
     crate::src::sdl::sdl_glimp::qglEnableClientState.expect("non-null function pointer")(
-        0x8076 as libc::c_int as crate::stdlib::GLenum,
+        0x8076 as i32 as crate::stdlib::GLenum,
     );
     crate::src::sdl::sdl_glimp::qglEnableClientState.expect("non-null function pointer")(
-        0x8078 as libc::c_int as crate::stdlib::GLenum,
+        0x8078 as i32 as crate::stdlib::GLenum,
     );
     crate::src::sdl::sdl_glimp::qglColorPointer.expect("non-null function pointer")(
-        4 as libc::c_int,
-        0x1401 as libc::c_int as crate::stdlib::GLenum,
-        0 as libc::c_int,
+        4 as i32,
+        0x1401 as i32 as crate::stdlib::GLenum,
+        0 as i32,
         tess.svars.colors.as_mut_ptr() as *const libc::c_void,
     );
     crate::src::sdl::sdl_glimp::qglTexCoordPointer.expect("non-null function pointer")(
-        2 as libc::c_int,
-        0x1406 as libc::c_int as crate::stdlib::GLenum,
-        16 as libc::c_int,
-        tess.texCoords[0 as libc::c_int as usize][0 as libc::c_int as usize].as_mut_ptr()
+        2 as i32,
+        0x1406 as i32 as crate::stdlib::GLenum,
+        16 as i32,
+        tess.texCoords[0 as i32 as usize][0 as i32 as usize].as_mut_ptr()
             as *const libc::c_void,
     );
     crate::src::sdl::sdl_glimp::qglVertexPointer.expect("non-null function pointer")(
-        3 as libc::c_int,
-        0x1406 as libc::c_int as crate::stdlib::GLenum,
-        16 as libc::c_int,
+        3 as i32,
+        0x1406 as i32 as crate::stdlib::GLenum,
+        16 as i32,
         (*input).xyz.as_mut_ptr() as *const libc::c_void,
     );
     if crate::src::sdl::sdl_glimp::qglLockArraysEXT.is_some() {
         crate::src::sdl::sdl_glimp::qglLockArraysEXT.expect("non-null function pointer")(
-            0 as libc::c_int,
+            0 as i32,
             (*input).numVertexes,
         );
         crate::src::sdl::sdl_glimp::GLimp_LogComment(
@@ -2087,27 +2087,27 @@ pub unsafe extern "C" fn RB_StageIteratorVertexLitTexture() {
     // call special shade routine
     //
     R_BindAnimatedImage(
-        &mut *(**tess.xstages.offset(0 as libc::c_int as isize))
+        &mut *(**tess.xstages.offset(0 as i32 as isize))
             .bundle
             .as_mut_ptr()
-            .offset(0 as libc::c_int as isize),
+            .offset(0 as i32 as isize),
     );
     crate::src::renderergl1::tr_backend::GL_State(
-        (**tess.xstages.offset(0 as libc::c_int as isize)).stateBits as libc::c_ulong,
+        (**tess.xstages.offset(0 as i32 as isize)).stateBits as libc::c_ulong,
     );
     R_DrawElements((*input).numIndexes, (*input).indexes.as_mut_ptr());
     //
     // now do any dynamic lighting needed
     //
     if tess.dlightBits != 0
-        && (*tess.shader).sort <= crate::tr_local_h::SS_OPAQUE as libc::c_int as libc::c_float
+        && (*tess.shader).sort <= crate::tr_local_h::SS_OPAQUE as i32 as f32
     {
         ProjectDlightTexture();
     }
     //
     // now do fog
     //
-    if tess.fogNum != 0 && (*tess.shader).fogPass as libc::c_uint != 0 {
+    if tess.fogNum != 0 && (*tess.shader).fogPass as u32 != 0 {
         RB_FogPass();
     }
     //
@@ -2144,72 +2144,72 @@ pub unsafe extern "C" fn RB_StageIteratorLightmappedMultitexture() {
     //
     // set face culling appropriately
     //
-    crate::src::renderergl1::tr_backend::GL_Cull((*shader).cullType as libc::c_int);
+    crate::src::renderergl1::tr_backend::GL_Cull((*shader).cullType as i32);
     //
     // set color, pointers, and lock
     //
-    crate::src::renderergl1::tr_backend::GL_State(0x100 as libc::c_int as libc::c_ulong);
+    crate::src::renderergl1::tr_backend::GL_State(0x100 as i32 as libc::c_ulong);
     crate::src::sdl::sdl_glimp::qglVertexPointer.expect("non-null function pointer")(
-        3 as libc::c_int,
-        0x1406 as libc::c_int as crate::stdlib::GLenum,
-        16 as libc::c_int,
+        3 as i32,
+        0x1406 as i32 as crate::stdlib::GLenum,
+        16 as i32,
         (*input).xyz.as_mut_ptr() as *const libc::c_void,
     );
     crate::src::sdl::sdl_glimp::qglEnableClientState.expect("non-null function pointer")(
-        0x8076 as libc::c_int as crate::stdlib::GLenum,
+        0x8076 as i32 as crate::stdlib::GLenum,
     );
     crate::src::sdl::sdl_glimp::qglColorPointer.expect("non-null function pointer")(
-        4 as libc::c_int,
-        0x1401 as libc::c_int as crate::stdlib::GLenum,
-        0 as libc::c_int,
+        4 as i32,
+        0x1401 as i32 as crate::stdlib::GLenum,
+        0 as i32,
         tess.constantColor255.as_mut_ptr() as *const libc::c_void,
     );
     //
     // select base stage
     //
-    crate::src::renderergl1::tr_backend::GL_SelectTexture(0 as libc::c_int);
+    crate::src::renderergl1::tr_backend::GL_SelectTexture(0 as i32);
     crate::src::sdl::sdl_glimp::qglEnableClientState.expect("non-null function pointer")(
-        0x8078 as libc::c_int as crate::stdlib::GLenum,
+        0x8078 as i32 as crate::stdlib::GLenum,
     );
     R_BindAnimatedImage(
-        &mut *(**tess.xstages.offset(0 as libc::c_int as isize))
+        &mut *(**tess.xstages.offset(0 as i32 as isize))
             .bundle
             .as_mut_ptr()
-            .offset(0 as libc::c_int as isize),
+            .offset(0 as i32 as isize),
     );
     crate::src::sdl::sdl_glimp::qglTexCoordPointer.expect("non-null function pointer")(
-        2 as libc::c_int,
-        0x1406 as libc::c_int as crate::stdlib::GLenum,
-        16 as libc::c_int,
-        tess.texCoords[0 as libc::c_int as usize][0 as libc::c_int as usize].as_mut_ptr()
+        2 as i32,
+        0x1406 as i32 as crate::stdlib::GLenum,
+        16 as i32,
+        tess.texCoords[0 as i32 as usize][0 as i32 as usize].as_mut_ptr()
             as *const libc::c_void,
     );
     //
     // configure second stage
     //
-    crate::src::renderergl1::tr_backend::GL_SelectTexture(1 as libc::c_int);
+    crate::src::renderergl1::tr_backend::GL_SelectTexture(1 as i32);
     crate::src::sdl::sdl_glimp::qglEnable.expect("non-null function pointer")(
-        0xde1 as libc::c_int as crate::stdlib::GLenum,
+        0xde1 as i32 as crate::stdlib::GLenum,
     );
     if (*crate::src::renderergl1::tr_init::r_lightmap).integer != 0 {
-        crate::src::renderergl1::tr_backend::GL_TexEnv(0x1e01 as libc::c_int);
+        crate::src::renderergl1::tr_backend::GL_TexEnv(0x1e01 as i32);
     } else {
-        crate::src::renderergl1::tr_backend::GL_TexEnv(0x2100 as libc::c_int);
+        crate::src::renderergl1::tr_backend::GL_TexEnv(0x2100 as i32);
     }
     R_BindAnimatedImage(
-        &mut *(**tess.xstages.offset(0 as libc::c_int as isize))
+        &mut *(**tess.xstages.offset(0 as i32 as isize))
             .bundle
             .as_mut_ptr()
-            .offset(1 as libc::c_int as isize),
+            .offset(1 as i32 as isize),
     );
     crate::src::sdl::sdl_glimp::qglEnableClientState.expect("non-null function pointer")(
-        0x8078 as libc::c_int as crate::stdlib::GLenum,
+        0x8078 as i32 as crate::stdlib::GLenum,
     );
     crate::src::sdl::sdl_glimp::qglTexCoordPointer.expect("non-null function pointer")(
-        2 as libc::c_int,
-        0x1406 as libc::c_int as crate::stdlib::GLenum,
-        16 as libc::c_int,
-        tess.texCoords[0 as libc::c_int as usize][1 as libc::c_int as usize].as_mut_ptr()
+        2 as i32,
+        0x1406 as i32 as crate::stdlib::GLenum,
+        16 as i32,
+        tess.texCoords[0 as i32 as usize][1 as i32 as usize].as_mut_ptr()
             as *const libc::c_void,
     );
     //
@@ -2217,7 +2217,7 @@ pub unsafe extern "C" fn RB_StageIteratorLightmappedMultitexture() {
     //
     if crate::src::sdl::sdl_glimp::qglLockArraysEXT.is_some() {
         crate::src::sdl::sdl_glimp::qglLockArraysEXT.expect("non-null function pointer")(
-            0 as libc::c_int,
+            0 as i32,
             (*input).numVertexes,
         );
         crate::src::sdl::sdl_glimp::GLimp_LogComment(
@@ -2229,24 +2229,24 @@ pub unsafe extern "C" fn RB_StageIteratorLightmappedMultitexture() {
     // disable texturing on TEXTURE1, then select TEXTURE0
     //
     crate::src::sdl::sdl_glimp::qglDisable.expect("non-null function pointer")(
-        0xde1 as libc::c_int as crate::stdlib::GLenum,
+        0xde1 as i32 as crate::stdlib::GLenum,
     );
     crate::src::sdl::sdl_glimp::qglDisableClientState.expect("non-null function pointer")(
-        0x8078 as libc::c_int as crate::stdlib::GLenum,
+        0x8078 as i32 as crate::stdlib::GLenum,
     );
-    crate::src::renderergl1::tr_backend::GL_SelectTexture(0 as libc::c_int);
+    crate::src::renderergl1::tr_backend::GL_SelectTexture(0 as i32);
     //
     // now do any dynamic lighting needed
     //
     if tess.dlightBits != 0
-        && (*tess.shader).sort <= crate::tr_local_h::SS_OPAQUE as libc::c_int as libc::c_float
+        && (*tess.shader).sort <= crate::tr_local_h::SS_OPAQUE as i32 as f32
     {
         ProjectDlightTexture();
     }
     //
     // now do fog
     //
-    if tess.fogNum != 0 && (*tess.shader).fogPass as libc::c_uint != 0 {
+    if tess.fogNum != 0 && (*tess.shader).fogPass as u32 != 0 {
         RB_FogPass();
     }
     //
@@ -2599,26 +2599,26 @@ pub unsafe extern "C" fn RB_EndSurface() {
     let mut input: *mut crate::tr_local_h::shaderCommands_t =
         0 as *mut crate::tr_local_h::shaderCommands_t;
     input = &mut tess;
-    if (*input).numIndexes == 0 as libc::c_int {
+    if (*input).numIndexes == 0 as i32 {
         return;
     }
-    if (*input).indexes[(6 as libc::c_int * 1000 as libc::c_int - 1 as libc::c_int) as usize]
-        != 0 as libc::c_int as libc::c_uint
+    if (*input).indexes[(6 as i32 * 1000 as i32 - 1 as i32) as usize]
+        != 0 as i32 as u32
     {
         crate::src::renderergl1::tr_main::ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"RB_EndSurface() - SHADER_MAX_INDEXES hit\x00" as *const u8 as *const libc::c_char,
         );
     }
-    if (*input).xyz[(1000 as libc::c_int - 1 as libc::c_int) as usize][0 as libc::c_int as usize]
-        != 0 as libc::c_int as libc::c_float
+    if (*input).xyz[(1000 as i32 - 1 as i32) as usize][0 as i32 as usize]
+        != 0 as i32 as f32
     {
         crate::src::renderergl1::tr_main::ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"RB_EndSurface() - SHADER_MAX_VERTEXES hit\x00" as *const u8 as *const libc::c_char,
         );
     }
@@ -2628,7 +2628,7 @@ pub unsafe extern "C" fn RB_EndSurface() {
     }
     // for debugging of sort order issues, stop rendering after a given sort value
     if (*crate::src::renderergl1::tr_init::r_debugSort).integer != 0
-        && ((*crate::src::renderergl1::tr_init::r_debugSort).integer as libc::c_float)
+        && ((*crate::src::renderergl1::tr_init::r_debugSort).integer as f32)
             < (*tess.shader).sort
     {
         return;
@@ -2657,7 +2657,7 @@ pub unsafe extern "C" fn RB_EndSurface() {
         DrawNormals(input);
     }
     // clear shader so we can tell we don't have any unclosed surfaces
-    tess.numIndexes = 0 as libc::c_int;
+    tess.numIndexes = 0 as i32;
     crate::src::sdl::sdl_glimp::GLimp_LogComment(
         b"----------\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
     );

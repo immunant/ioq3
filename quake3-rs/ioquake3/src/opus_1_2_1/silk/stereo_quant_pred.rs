@@ -92,46 +92,46 @@ POSSIBILITY OF SUCH DAMAGE.
 
 pub unsafe extern "C" fn silk_stereo_quant_pred(
     mut pred_Q13: *mut crate::opus_types_h::opus_int32,
-    mut ix: *mut [libc::c_schar; 3],
+    mut ix: *mut [i8; 3],
 )
 /* O    Quantization indices                        */
 {
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
-    let mut n: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
+    let mut n: i32 = 0;
     let mut low_Q13: crate::opus_types_h::opus_int32 = 0;
     let mut step_Q13: crate::opus_types_h::opus_int32 = 0;
     let mut lvl_Q13: crate::opus_types_h::opus_int32 = 0;
     let mut err_min_Q13: crate::opus_types_h::opus_int32 = 0;
     let mut err_Q13: crate::opus_types_h::opus_int32 = 0;
-    let mut quant_pred_Q13: crate::opus_types_h::opus_int32 = 0 as libc::c_int;
+    let mut quant_pred_Q13: crate::opus_types_h::opus_int32 = 0 as i32;
     /* Quantize */
-    n = 0 as libc::c_int;
-    while n < 2 as libc::c_int {
+    n = 0 as i32;
+    while n < 2 as i32 {
         /* Brute-force search over quantization levels */
-        err_min_Q13 = 0x7fffffff as libc::c_int;
-        i = 0 as libc::c_int;
-        's_23: while i < 16 as libc::c_int - 1 as libc::c_int {
+        err_min_Q13 = 0x7fffffff as i32;
+        i = 0 as i32;
+        's_23: while i < 16 as i32 - 1 as i32 {
             low_Q13 = crate::src::opus_1_2_1::silk::tables_other::silk_stereo_pred_quant_Q13
                 [i as usize] as crate::opus_types_h::opus_int32;
             step_Q13 = ((crate::src::opus_1_2_1::silk::tables_other::silk_stereo_pred_quant_Q13
-                [(i + 1 as libc::c_int) as usize] as libc::c_int
-                - low_Q13) as libc::c_longlong
-                * (0.5f64 / 5 as libc::c_int as libc::c_double
-                    * ((1 as libc::c_int as libc::c_longlong) << 16 as libc::c_int)
-                        as libc::c_double
+                [(i + 1 as i32) as usize] as i32
+                - low_Q13) as i64
+                * (0.5f64 / 5 as i32 as f64
+                    * ((1 as i32 as i64) << 16 as i32)
+                        as f64
                     + 0.5f64) as crate::opus_types_h::opus_int32
-                    as crate::opus_types_h::opus_int16 as libc::c_longlong
-                >> 16 as libc::c_int) as crate::opus_types_h::opus_int32;
-            j = 0 as libc::c_int;
-            while j < 5 as libc::c_int {
+                    as crate::opus_types_h::opus_int16 as i64
+                >> 16 as i32) as crate::opus_types_h::opus_int32;
+            j = 0 as i32;
+            while j < 5 as i32 {
                 lvl_Q13 = low_Q13
                     + step_Q13 as crate::opus_types_h::opus_int16
                         as crate::opus_types_h::opus_int32
-                        * (2 as libc::c_int * j + 1 as libc::c_int)
+                        * (2 as i32 * j + 1 as i32)
                             as crate::opus_types_h::opus_int16
                             as crate::opus_types_h::opus_int32;
-                err_Q13 = if *pred_Q13.offset(n as isize) - lvl_Q13 > 0 as libc::c_int {
+                err_Q13 = if *pred_Q13.offset(n as isize) - lvl_Q13 > 0 as i32 {
                     (*pred_Q13.offset(n as isize)) - lvl_Q13
                 } else {
                     -(*pred_Q13.offset(n as isize) - lvl_Q13)
@@ -141,24 +141,24 @@ pub unsafe extern "C" fn silk_stereo_quant_pred(
                 }
                 err_min_Q13 = err_Q13;
                 quant_pred_Q13 = lvl_Q13;
-                (*ix.offset(n as isize))[0 as libc::c_int as usize] = i as libc::c_schar;
-                (*ix.offset(n as isize))[1 as libc::c_int as usize] = j as libc::c_schar;
+                (*ix.offset(n as isize))[0 as i32 as usize] = i as i8;
+                (*ix.offset(n as isize))[1 as i32 as usize] = j as i8;
                 j += 1
             }
             i += 1
         }
         /* Error increasing, so we're past the optimum */
-        (*ix.offset(n as isize))[2 as libc::c_int as usize] =
-            ((*ix.offset(n as isize))[0 as libc::c_int as usize] as libc::c_int / 3 as libc::c_int)
-                as libc::c_schar;
-        let ref mut fresh0 = (*ix.offset(n as isize))[0 as libc::c_int as usize];
-        *fresh0 = (*fresh0 as libc::c_int
-            - (*ix.offset(n as isize))[2 as libc::c_int as usize] as libc::c_int * 3 as libc::c_int)
-            as libc::c_schar;
+        (*ix.offset(n as isize))[2 as i32 as usize] =
+            ((*ix.offset(n as isize))[0 as i32 as usize] as i32 / 3 as i32)
+                as i8;
+        let ref mut fresh0 = (*ix.offset(n as isize))[0 as i32 as usize];
+        *fresh0 = (*fresh0 as i32
+            - (*ix.offset(n as isize))[2 as i32 as usize] as i32 * 3 as i32)
+            as i8;
         *pred_Q13.offset(n as isize) = quant_pred_Q13;
         n += 1
     }
     /* Subtract second from first predictor (helps when actually applying these) */
-    let ref mut fresh1 = *pred_Q13.offset(0 as libc::c_int as isize);
-    *fresh1 -= *pred_Q13.offset(1 as libc::c_int as isize);
+    let ref mut fresh1 = *pred_Q13.offset(0 as i32 as isize);
+    *fresh1 -= *pred_Q13.offset(1 as i32 as isize);
 }

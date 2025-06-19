@@ -1,9 +1,9 @@
-pub type imgType_t = libc::c_uint;
+pub type imgType_t = u32;
 pub const IMGTYPE_COLORALPHA: imgType_t = 0;
 pub const IMGTYPE_NORMAL: imgType_t = 1;
 pub const IMGTYPE_NORMALHEIGHT: imgType_t = 2;
 pub const IMGTYPE_DELUXE: imgType_t = 3;
-pub type imgFlags_t = libc::c_uint;
+pub type imgFlags_t = u32;
 pub const IMGFLAG_NONE: imgFlags_t = 0;
 pub const IMGFLAG_MIPMAP: imgFlags_t = 1;
 pub const IMGFLAG_PICMIP: imgFlags_t = 2;
@@ -17,14 +17,14 @@ pub type image_t = image_s;
 #[derive(Copy, Clone)]
 pub struct image_s {
     pub imgName: [libc::c_char; 64],
-    pub width: libc::c_int,
-    pub height: libc::c_int,
-    pub uploadWidth: libc::c_int,
-    pub uploadHeight: libc::c_int,
+    pub width: i32,
+    pub height: i32,
+    pub uploadWidth: i32,
+    pub uploadHeight: i32,
     pub texnum: crate::stdlib::GLuint,
-    pub frameUsed: libc::c_int,
-    pub internalFormat: libc::c_int,
-    pub TMU: libc::c_int,
+    pub frameUsed: i32,
+    pub internalFormat: i32,
+    pub TMU: i32,
     pub type_0: imgType_t,
     pub flags: imgFlags_t,
     pub next: *mut image_s,

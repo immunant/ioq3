@@ -36,22 +36,22 @@ Written by Jean-Marc Valin and Koen Vos */
 #[no_mangle]
 
 pub unsafe extern "C" fn opus_pcm_soft_clip(
-    mut _x: *mut libc::c_float,
-    mut N: libc::c_int,
-    mut C: libc::c_int,
-    mut declip_mem: *mut libc::c_float,
+    mut _x: *mut f32,
+    mut N: i32,
+    mut C: i32,
+    mut declip_mem: *mut f32,
 ) {
-    let mut c: libc::c_int = 0;
-    let mut i: libc::c_int = 0;
-    let mut x: *mut libc::c_float = 0 as *mut libc::c_float;
-    if C < 1 as libc::c_int || N < 1 as libc::c_int || _x.is_null() || declip_mem.is_null() {
+    let mut c: i32 = 0;
+    let mut i: i32 = 0;
+    let mut x: *mut f32 = 0 as *mut f32;
+    if C < 1 as i32 || N < 1 as i32 || _x.is_null() || declip_mem.is_null() {
         return;
     }
     /* First thing: saturate everything to +/- 2 which is the highest level our
     non-linearity can handle. At the point where the signal reaches +/-2,
     the derivative will be zero anyway, so this doesn't introduce any
     discontinuity in the derivative. */
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < N * C {
         *_x.offset(i as isize) = if -2.0f32
             > (if 2.0f32 < *_x.offset(i as isize) {
@@ -67,86 +67,86 @@ pub unsafe extern "C" fn opus_pcm_soft_clip(
         };
         i += 1
     }
-    c = 0 as libc::c_int;
+    c = 0 as i32;
     while c < C {
-        let mut a: libc::c_float = 0.;
-        let mut x0: libc::c_float = 0.;
-        let mut curr: libc::c_int = 0;
+        let mut a: f32 = 0.;
+        let mut x0: f32 = 0.;
+        let mut curr: i32 = 0;
         x = _x.offset(c as isize);
         a = *declip_mem.offset(c as isize);
         /* Continue applying the non-linearity from the previous frame to avoid
         any discontinuity. */
-        i = 0 as libc::c_int;
+        i = 0 as i32;
         while i < N {
-            if *x.offset((i * C) as isize) * a >= 0 as libc::c_int as libc::c_float {
+            if *x.offset((i * C) as isize) * a >= 0 as i32 as f32 {
                 break;
             }
             *x.offset((i * C) as isize) = *x.offset((i * C) as isize)
                 + a * *x.offset((i * C) as isize) * *x.offset((i * C) as isize);
             i += 1
         }
-        curr = 0 as libc::c_int;
-        x0 = *x.offset(0 as libc::c_int as isize);
+        curr = 0 as i32;
+        x0 = *x.offset(0 as i32 as isize);
         loop {
-            let mut start: libc::c_int = 0;
-            let mut end: libc::c_int = 0;
-            let mut maxval: libc::c_float = 0.;
-            let mut special: libc::c_int = 0 as libc::c_int;
-            let mut peak_pos: libc::c_int = 0;
+            let mut start: i32 = 0;
+            let mut end: i32 = 0;
+            let mut maxval: f32 = 0.;
+            let mut special: i32 = 0 as i32;
+            let mut peak_pos: i32 = 0;
             i = curr;
             while i < N {
-                if *x.offset((i * C) as isize) > 1 as libc::c_int as libc::c_float
-                    || *x.offset((i * C) as isize) < -(1 as libc::c_int) as libc::c_float
+                if *x.offset((i * C) as isize) > 1 as i32 as f32
+                    || *x.offset((i * C) as isize) < -(1 as i32) as f32
                 {
                     break;
                 }
                 i += 1
             }
             if i == N {
-                a = 0 as libc::c_int as libc::c_float;
+                a = 0 as i32 as f32;
                 break;
             } else {
                 peak_pos = i;
                 end = i;
                 start = end;
-                maxval = crate::stdlib::fabs(*x.offset((i * C) as isize) as libc::c_double)
-                    as libc::c_float;
+                maxval = crate::stdlib::fabs(*x.offset((i * C) as isize) as f64)
+                    as f32;
                 /* Look for first zero crossing before clipping */
-                while start > 0 as libc::c_int
+                while start > 0 as i32
                     && *x.offset((i * C) as isize)
-                        * *x.offset(((start - 1 as libc::c_int) * C) as isize)
-                        >= 0 as libc::c_int as libc::c_float
+                        * *x.offset(((start - 1 as i32) * C) as isize)
+                        >= 0 as i32 as f32
                 {
                     start -= 1
                 }
                 /* Look for first zero crossing after clipping */
                 while end < N
                     && *x.offset((i * C) as isize) * *x.offset((end * C) as isize)
-                        >= 0 as libc::c_int as libc::c_float
+                        >= 0 as i32 as f32
                 {
                     /* Look for other peaks until the next zero-crossing. */
-                    if crate::stdlib::fabs(*x.offset((end * C) as isize) as libc::c_double)
-                        as libc::c_float
+                    if crate::stdlib::fabs(*x.offset((end * C) as isize) as f64)
+                        as f32
                         > maxval
                     {
-                        maxval = crate::stdlib::fabs(*x.offset((end * C) as isize) as libc::c_double)
-                            as libc::c_float;
+                        maxval = crate::stdlib::fabs(*x.offset((end * C) as isize) as f64)
+                            as f32;
                         peak_pos = end
                     }
                     end += 1
                 }
                 /* Detect the special case where we clip before the first zero crossing */
-                special = (start == 0 as libc::c_int
-                    && *x.offset((i * C) as isize) * *x.offset(0 as libc::c_int as isize)
-                        >= 0 as libc::c_int as libc::c_float)
-                    as libc::c_int;
+                special = (start == 0 as i32
+                    && *x.offset((i * C) as isize) * *x.offset(0 as i32 as isize)
+                        >= 0 as i32 as f32)
+                    as i32;
                 /* Compute a such that maxval + a*maxval^2 = 1 */
-                a = (maxval - 1 as libc::c_int as libc::c_float) / (maxval * maxval);
+                a = (maxval - 1 as i32 as f32) / (maxval * maxval);
                 /* Slightly boost "a" by 2^-22. This is just enough to ensure -ffast-math
                 does not cause output values larger than +/-1, but small enough not
                 to matter even for 24-bit output.  */
                 a += a * 2.4e-7f32;
-                if *x.offset((i * C) as isize) > 0 as libc::c_int as libc::c_float {
+                if *x.offset((i * C) as isize) > 0 as i32 as f32 {
                     a = -a
                 }
                 /* Apply soft clipping */
@@ -156,12 +156,12 @@ pub unsafe extern "C" fn opus_pcm_soft_clip(
                         + a * *x.offset((i * C) as isize) * *x.offset((i * C) as isize);
                     i += 1
                 }
-                if special != 0 && peak_pos >= 2 as libc::c_int {
+                if special != 0 && peak_pos >= 2 as i32 {
                     /* Add a linear ramp from the first sample to the signal peak.
                     This avoids a discontinuity at the beginning of the frame. */
-                    let mut delta: libc::c_float = 0.;
-                    let mut offset: libc::c_float = x0 - *x.offset(0 as libc::c_int as isize);
-                    delta = offset / peak_pos as libc::c_float;
+                    let mut delta: f32 = 0.;
+                    let mut offset: f32 = x0 - *x.offset(0 as i32 as isize);
+                    delta = offset / peak_pos as f32;
                     i = curr;
                     while i < peak_pos {
                         offset -= delta;
@@ -194,70 +194,70 @@ pub unsafe extern "C" fn opus_pcm_soft_clip(
 #[no_mangle]
 
 pub unsafe extern "C" fn encode_size(
-    mut size: libc::c_int,
-    mut data: *mut libc::c_uchar,
-) -> libc::c_int {
-    if size < 252 as libc::c_int {
-        *data.offset(0 as libc::c_int as isize) = size as libc::c_uchar;
-        return 1 as libc::c_int;
+    mut size: i32,
+    mut data: *mut u8,
+) -> i32 {
+    if size < 252 as i32 {
+        *data.offset(0 as i32 as isize) = size as u8;
+        return 1 as i32;
     } else {
-        *data.offset(0 as libc::c_int as isize) =
-            (252 as libc::c_int + (size & 0x3 as libc::c_int)) as libc::c_uchar;
-        *data.offset(1 as libc::c_int as isize) = (size
-            - *data.offset(0 as libc::c_int as isize) as libc::c_int
-            >> 2 as libc::c_int) as libc::c_uchar;
-        return 2 as libc::c_int;
+        *data.offset(0 as i32 as isize) =
+            (252 as i32 + (size & 0x3 as i32)) as u8;
+        *data.offset(1 as i32 as isize) = (size
+            - *data.offset(0 as i32 as isize) as i32
+            >> 2 as i32) as u8;
+        return 2 as i32;
     };
 }
 
 unsafe extern "C" fn parse_size(
-    mut data: *const libc::c_uchar,
+    mut data: *const u8,
     mut len: crate::opus_types_h::opus_int32,
     mut size: *mut crate::opus_types_h::opus_int16,
-) -> libc::c_int {
-    if len < 1 as libc::c_int {
-        *size = -(1 as libc::c_int) as crate::opus_types_h::opus_int16;
-        return -(1 as libc::c_int);
-    } else if (*data.offset(0 as libc::c_int as isize) as libc::c_int) < 252 as libc::c_int {
-        *size = *data.offset(0 as libc::c_int as isize) as crate::opus_types_h::opus_int16;
-        return 1 as libc::c_int;
-    } else if len < 2 as libc::c_int {
-        *size = -(1 as libc::c_int) as crate::opus_types_h::opus_int16;
-        return -(1 as libc::c_int);
+) -> i32 {
+    if len < 1 as i32 {
+        *size = -(1 as i32) as crate::opus_types_h::opus_int16;
+        return -(1 as i32);
+    } else if (*data.offset(0 as i32 as isize) as i32) < 252 as i32 {
+        *size = *data.offset(0 as i32 as isize) as crate::opus_types_h::opus_int16;
+        return 1 as i32;
+    } else if len < 2 as i32 {
+        *size = -(1 as i32) as crate::opus_types_h::opus_int16;
+        return -(1 as i32);
     } else {
-        *size = (4 as libc::c_int * *data.offset(1 as libc::c_int as isize) as libc::c_int
-            + *data.offset(0 as libc::c_int as isize) as libc::c_int)
+        *size = (4 as i32 * *data.offset(1 as i32 as isize) as i32
+            + *data.offset(0 as i32 as isize) as i32)
             as crate::opus_types_h::opus_int16;
-        return 2 as libc::c_int;
+        return 2 as i32;
     };
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn opus_packet_get_samples_per_frame(
-    mut data: *const libc::c_uchar,
+    mut data: *const u8,
     mut Fs: crate::opus_types_h::opus_int32,
-) -> libc::c_int {
-    let mut audiosize: libc::c_int = 0;
-    if *data.offset(0 as libc::c_int as isize) as libc::c_int & 0x80 as libc::c_int != 0 {
-        audiosize = *data.offset(0 as libc::c_int as isize) as libc::c_int >> 3 as libc::c_int
-            & 0x3 as libc::c_int;
-        audiosize = (Fs << audiosize) / 400 as libc::c_int
-    } else if *data.offset(0 as libc::c_int as isize) as libc::c_int & 0x60 as libc::c_int
-        == 0x60 as libc::c_int
+) -> i32 {
+    let mut audiosize: i32 = 0;
+    if *data.offset(0 as i32 as isize) as i32 & 0x80 as i32 != 0 {
+        audiosize = *data.offset(0 as i32 as isize) as i32 >> 3 as i32
+            & 0x3 as i32;
+        audiosize = (Fs << audiosize) / 400 as i32
+    } else if *data.offset(0 as i32 as isize) as i32 & 0x60 as i32
+        == 0x60 as i32
     {
         audiosize =
-            if *data.offset(0 as libc::c_int as isize) as libc::c_int & 0x8 as libc::c_int != 0 {
-                (Fs) / 50 as libc::c_int
+            if *data.offset(0 as i32 as isize) as i32 & 0x8 as i32 != 0 {
+                (Fs) / 50 as i32
             } else {
-                (Fs) / 100 as libc::c_int
+                (Fs) / 100 as i32
             }
     } else {
-        audiosize = *data.offset(0 as libc::c_int as isize) as libc::c_int >> 3 as libc::c_int
-            & 0x3 as libc::c_int;
-        if audiosize == 3 as libc::c_int {
-            audiosize = Fs * 60 as libc::c_int / 1000 as libc::c_int
+        audiosize = *data.offset(0 as i32 as isize) as i32 >> 3 as i32
+            & 0x3 as i32;
+        if audiosize == 3 as i32 {
+            audiosize = Fs * 60 as i32 / 1000 as i32
         } else {
-            audiosize = (Fs << audiosize) / 100 as libc::c_int
+            audiosize = (Fs << audiosize) / 100 as i32
         }
     }
     return audiosize;
@@ -308,141 +308,141 @@ for all sensible alignment values. */
 #[no_mangle]
 
 pub unsafe extern "C" fn opus_packet_parse_impl(
-    mut data: *const libc::c_uchar,
+    mut data: *const u8,
     mut len: crate::opus_types_h::opus_int32,
-    mut self_delimited: libc::c_int,
-    mut out_toc: *mut libc::c_uchar,
-    mut frames: *mut *const libc::c_uchar,
+    mut self_delimited: i32,
+    mut out_toc: *mut u8,
+    mut frames: *mut *const u8,
     mut size: *mut crate::opus_types_h::opus_int16,
-    mut payload_offset: *mut libc::c_int,
+    mut payload_offset: *mut i32,
     mut packet_offset: *mut crate::opus_types_h::opus_int32,
-) -> libc::c_int {
-    let mut i: libc::c_int = 0;
-    let mut bytes: libc::c_int = 0;
-    let mut count: libc::c_int = 0;
-    let mut cbr: libc::c_int = 0;
-    let mut ch: libc::c_uchar = 0;
-    let mut toc: libc::c_uchar = 0;
-    let mut framesize: libc::c_int = 0;
+) -> i32 {
+    let mut i: i32 = 0;
+    let mut bytes: i32 = 0;
+    let mut count: i32 = 0;
+    let mut cbr: i32 = 0;
+    let mut ch: u8 = 0;
+    let mut toc: u8 = 0;
+    let mut framesize: i32 = 0;
     let mut last_size: crate::opus_types_h::opus_int32 = 0;
-    let mut pad: crate::opus_types_h::opus_int32 = 0 as libc::c_int;
-    let mut data0: *const libc::c_uchar = data;
-    if size.is_null() || len < 0 as libc::c_int {
-        return -(1 as libc::c_int);
+    let mut pad: crate::opus_types_h::opus_int32 = 0 as i32;
+    let mut data0: *const u8 = data;
+    if size.is_null() || len < 0 as i32 {
+        return -(1 as i32);
     }
-    if len == 0 as libc::c_int {
-        return -(4 as libc::c_int);
+    if len == 0 as i32 {
+        return -(4 as i32);
     }
-    framesize = opus_packet_get_samples_per_frame(data, 48000 as libc::c_int);
-    cbr = 0 as libc::c_int;
+    framesize = opus_packet_get_samples_per_frame(data, 48000 as i32);
+    cbr = 0 as i32;
     let fresh0 = data;
     data = data.offset(1);
     toc = *fresh0;
     len -= 1;
     last_size = len;
-    match toc as libc::c_int & 0x3 as libc::c_int {
+    match toc as i32 & 0x3 as i32 {
         0 => {
             /* One frame */
-            count = 1 as libc::c_int
+            count = 1 as i32
         }
         1 => {
             /* Two CBR frames */
-            count = 2 as libc::c_int;
-            cbr = 1 as libc::c_int;
+            count = 2 as i32;
+            cbr = 1 as i32;
             if self_delimited == 0 {
-                if len & 0x1 as libc::c_int != 0 {
-                    return -(4 as libc::c_int);
+                if len & 0x1 as i32 != 0 {
+                    return -(4 as i32);
                 }
-                last_size = len / 2 as libc::c_int;
+                last_size = len / 2 as i32;
                 /* If last_size doesn't fit in size[0], we'll catch it later */
-                *size.offset(0 as libc::c_int as isize) =
+                *size.offset(0 as i32 as isize) =
                     last_size as crate::opus_types_h::opus_int16
             }
         }
         2 => {
             /* Two VBR frames */
-            count = 2 as libc::c_int;
+            count = 2 as i32;
             bytes = parse_size(data, len, size);
             len -= bytes;
-            if (*size.offset(0 as libc::c_int as isize) as libc::c_int) < 0 as libc::c_int
-                || *size.offset(0 as libc::c_int as isize) as libc::c_int > len
+            if (*size.offset(0 as i32 as isize) as i32) < 0 as i32
+                || *size.offset(0 as i32 as isize) as i32 > len
             {
-                return -(4 as libc::c_int);
+                return -(4 as i32);
             }
             data = data.offset(bytes as isize);
-            last_size = len - *size.offset(0 as libc::c_int as isize) as libc::c_int
+            last_size = len - *size.offset(0 as i32 as isize) as i32
         }
         _ => {
             /* Multiple CBR/VBR frames (from 0 to 120 ms) */
             /*case 3:*/
-            if len < 1 as libc::c_int {
-                return -(4 as libc::c_int);
+            if len < 1 as i32 {
+                return -(4 as i32);
             }
             /* Number of frames encoded in bits 0 to 5 */
             let fresh1 = data;
             data = data.offset(1);
             ch = *fresh1;
-            count = ch as libc::c_int & 0x3f as libc::c_int;
-            if count <= 0 as libc::c_int || framesize * count > 5760 as libc::c_int {
-                return -(4 as libc::c_int);
+            count = ch as i32 & 0x3f as i32;
+            if count <= 0 as i32 || framesize * count > 5760 as i32 {
+                return -(4 as i32);
             }
             len -= 1;
             /* Padding flag is bit 6 */
-            if ch as libc::c_int & 0x40 as libc::c_int != 0 {
-                let mut p: libc::c_int = 0;
+            if ch as i32 & 0x40 as i32 != 0 {
+                let mut p: i32 = 0;
                 loop {
-                    let mut tmp: libc::c_int = 0;
-                    if len <= 0 as libc::c_int {
-                        return -(4 as libc::c_int);
+                    let mut tmp: i32 = 0;
+                    if len <= 0 as i32 {
+                        return -(4 as i32);
                     }
                     let fresh2 = data;
                     data = data.offset(1);
-                    p = *fresh2 as libc::c_int;
+                    p = *fresh2 as i32;
                     len -= 1;
-                    tmp = if p == 255 as libc::c_int {
-                        254 as libc::c_int
+                    tmp = if p == 255 as i32 {
+                        254 as i32
                     } else {
                         p
                     };
                     len -= tmp;
                     pad += tmp;
-                    if !(p == 255 as libc::c_int) {
+                    if !(p == 255 as i32) {
                         break;
                     }
                 }
             }
-            if len < 0 as libc::c_int {
-                return -(4 as libc::c_int);
+            if len < 0 as i32 {
+                return -(4 as i32);
             }
             /* VBR flag is bit 7 */
-            cbr = (ch as libc::c_int & 0x80 as libc::c_int == 0) as libc::c_int;
+            cbr = (ch as i32 & 0x80 as i32 == 0) as i32;
             if cbr == 0 {
                 /* VBR case */
                 last_size = len;
-                i = 0 as libc::c_int;
-                while i < count - 1 as libc::c_int {
+                i = 0 as i32;
+                while i < count - 1 as i32 {
                     bytes = parse_size(data, len, size.offset(i as isize));
                     len -= bytes;
-                    if (*size.offset(i as isize) as libc::c_int) < 0 as libc::c_int
-                        || *size.offset(i as isize) as libc::c_int > len
+                    if (*size.offset(i as isize) as i32) < 0 as i32
+                        || *size.offset(i as isize) as i32 > len
                     {
-                        return -(4 as libc::c_int);
+                        return -(4 as i32);
                     }
                     data = data.offset(bytes as isize);
-                    last_size -= bytes + *size.offset(i as isize) as libc::c_int;
+                    last_size -= bytes + *size.offset(i as isize) as i32;
                     i += 1
                 }
-                if last_size < 0 as libc::c_int {
-                    return -(4 as libc::c_int);
+                if last_size < 0 as i32 {
+                    return -(4 as i32);
                 }
             } else if self_delimited == 0 {
                 /* CBR case */
                 last_size = len / count;
                 if last_size * count != len {
-                    return -(4 as libc::c_int);
+                    return -(4 as i32);
                 }
-                i = 0 as libc::c_int;
-                while i < count - 1 as libc::c_int {
+                i = 0 as i32;
+                while i < count - 1 as i32 {
                     *size.offset(i as isize) = last_size as crate::opus_types_h::opus_int16;
                     i += 1
                 }
@@ -455,50 +455,50 @@ pub unsafe extern "C" fn opus_packet_parse_impl(
             data,
             len,
             size.offset(count as isize)
-                .offset(-(1 as libc::c_int as isize)),
+                .offset(-(1 as i32 as isize)),
         );
         len -= bytes;
-        if (*size.offset((count - 1 as libc::c_int) as isize) as libc::c_int) < 0 as libc::c_int
-            || *size.offset((count - 1 as libc::c_int) as isize) as libc::c_int > len
+        if (*size.offset((count - 1 as i32) as isize) as i32) < 0 as i32
+            || *size.offset((count - 1 as i32) as isize) as i32 > len
         {
-            return -(4 as libc::c_int);
+            return -(4 as i32);
         }
         data = data.offset(bytes as isize);
         /* For CBR packets, apply the size to all the frames. */
         if cbr != 0 {
-            if *size.offset((count - 1 as libc::c_int) as isize) as libc::c_int * count > len {
-                return -(4 as libc::c_int);
+            if *size.offset((count - 1 as i32) as isize) as i32 * count > len {
+                return -(4 as i32);
             }
-            i = 0 as libc::c_int;
-            while i < count - 1 as libc::c_int {
-                *size.offset(i as isize) = *size.offset((count - 1 as libc::c_int) as isize);
+            i = 0 as i32;
+            while i < count - 1 as i32 {
+                *size.offset(i as isize) = *size.offset((count - 1 as i32) as isize);
                 i += 1
             }
-        } else if bytes + *size.offset((count - 1 as libc::c_int) as isize) as libc::c_int
+        } else if bytes + *size.offset((count - 1 as i32) as isize) as i32
             > last_size
         {
-            return -(4 as libc::c_int);
+            return -(4 as i32);
         }
     } else {
         /* Because it's not encoded explicitly, it's possible the size of the
         last packet (or all the packets, for the CBR case) is larger than
         1275. Reject them here.*/
-        if last_size > 1275 as libc::c_int {
-            return -(4 as libc::c_int);
+        if last_size > 1275 as i32 {
+            return -(4 as i32);
         }
-        *size.offset((count - 1 as libc::c_int) as isize) =
+        *size.offset((count - 1 as i32) as isize) =
             last_size as crate::opus_types_h::opus_int16
     }
     if !payload_offset.is_null() {
-        *payload_offset = data.offset_from(data0) as libc::c_long as libc::c_int
+        *payload_offset = data.offset_from(data0) as libc::c_long as i32
     }
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < count {
         if !frames.is_null() {
             let ref mut fresh3 = *frames.offset(i as isize);
             *fresh3 = data
         }
-        data = data.offset(*size.offset(i as isize) as libc::c_int as isize);
+        data = data.offset(*size.offset(i as isize) as i32 as isize);
         i += 1
     }
     if !packet_offset.is_null() {
@@ -513,17 +513,17 @@ pub unsafe extern "C" fn opus_packet_parse_impl(
 #[no_mangle]
 
 pub unsafe extern "C" fn opus_packet_parse(
-    mut data: *const libc::c_uchar,
+    mut data: *const u8,
     mut len: crate::opus_types_h::opus_int32,
-    mut out_toc: *mut libc::c_uchar,
-    mut frames: *mut *const libc::c_uchar,
+    mut out_toc: *mut u8,
+    mut frames: *mut *const u8,
     mut size: *mut crate::opus_types_h::opus_int16,
-    mut payload_offset: *mut libc::c_int,
-) -> libc::c_int {
+    mut payload_offset: *mut i32,
+) -> i32 {
     return opus_packet_parse_impl(
         data,
         len,
-        0 as libc::c_int,
+        0 as i32,
         out_toc,
         frames,
         size,

@@ -87,13 +87,13 @@ pub mod SigProc_FIX_h {
     /* silk_min() versions with typecast in the function call */
     #[inline]
 
-    pub unsafe extern "C" fn silk_min_int(mut a: libc::c_int, mut b: libc::c_int) -> libc::c_int {
+    pub unsafe extern "C" fn silk_min_int(mut a: i32, mut b: i32) -> i32 {
         return if a < b { a } else { b };
     }
     /* silk_min() versions with typecast in the function call */
     #[inline]
 
-    pub unsafe extern "C" fn silk_max_int(mut a: libc::c_int, mut b: libc::c_int) -> libc::c_int {
+    pub unsafe extern "C" fn silk_max_int(mut a: i32, mut b: i32) -> i32 {
         return if a > b { a } else { b };
     }
     /* SILK_SIGPROC_FIX_H */
@@ -363,56 +363,56 @@ Signal Processing, pp. 641-644, 1991.
 pub unsafe extern "C" fn silk_NLSF_VQ_weights_laroia(
     mut pNLSFW_Q_OUT: *mut crate::opus_types_h::opus_int16,
     mut pNLSF_Q15: *const crate::opus_types_h::opus_int16,
-    D: libc::c_int,
+    D: i32,
 )
 /* I     Input vector dimension (even)                              */
 {
-    let mut k: libc::c_int = 0;
+    let mut k: i32 = 0;
     let mut tmp1_int: crate::opus_types_h::opus_int32 = 0;
     let mut tmp2_int: crate::opus_types_h::opus_int32 = 0;
     /* First value */
     tmp1_int = silk_max_int(
-        *pNLSF_Q15.offset(0 as libc::c_int as isize) as libc::c_int,
-        1 as libc::c_int,
+        *pNLSF_Q15.offset(0 as i32 as isize) as i32,
+        1 as i32,
     );
-    tmp1_int = ((1 as libc::c_int) << 15 as libc::c_int + 2 as libc::c_int) / tmp1_int;
+    tmp1_int = ((1 as i32) << 15 as i32 + 2 as i32) / tmp1_int;
     tmp2_int = silk_max_int(
-        *pNLSF_Q15.offset(1 as libc::c_int as isize) as libc::c_int
-            - *pNLSF_Q15.offset(0 as libc::c_int as isize) as libc::c_int,
-        1 as libc::c_int,
+        *pNLSF_Q15.offset(1 as i32 as isize) as i32
+            - *pNLSF_Q15.offset(0 as i32 as isize) as i32,
+        1 as i32,
     );
-    tmp2_int = ((1 as libc::c_int) << 15 as libc::c_int + 2 as libc::c_int) / tmp2_int;
-    *pNLSFW_Q_OUT.offset(0 as libc::c_int as isize) =
-        silk_min_int(tmp1_int + tmp2_int, 0x7fff as libc::c_int) as crate::opus_types_h::opus_int16;
+    tmp2_int = ((1 as i32) << 15 as i32 + 2 as i32) / tmp2_int;
+    *pNLSFW_Q_OUT.offset(0 as i32 as isize) =
+        silk_min_int(tmp1_int + tmp2_int, 0x7fff as i32) as crate::opus_types_h::opus_int16;
     /* Main loop */
-    k = 1 as libc::c_int;
-    while k < D - 1 as libc::c_int {
+    k = 1 as i32;
+    while k < D - 1 as i32 {
         tmp1_int = silk_max_int(
-            *pNLSF_Q15.offset((k + 1 as libc::c_int) as isize) as libc::c_int
-                - *pNLSF_Q15.offset(k as isize) as libc::c_int,
-            1 as libc::c_int,
+            *pNLSF_Q15.offset((k + 1 as i32) as isize) as i32
+                - *pNLSF_Q15.offset(k as isize) as i32,
+            1 as i32,
         );
-        tmp1_int = ((1 as libc::c_int) << 15 as libc::c_int + 2 as libc::c_int) / tmp1_int;
-        *pNLSFW_Q_OUT.offset(k as isize) = silk_min_int(tmp1_int + tmp2_int, 0x7fff as libc::c_int)
+        tmp1_int = ((1 as i32) << 15 as i32 + 2 as i32) / tmp1_int;
+        *pNLSFW_Q_OUT.offset(k as isize) = silk_min_int(tmp1_int + tmp2_int, 0x7fff as i32)
             as crate::opus_types_h::opus_int16;
         tmp2_int = silk_max_int(
-            *pNLSF_Q15.offset((k + 2 as libc::c_int) as isize) as libc::c_int
-                - *pNLSF_Q15.offset((k + 1 as libc::c_int) as isize) as libc::c_int,
-            1 as libc::c_int,
+            *pNLSF_Q15.offset((k + 2 as i32) as isize) as i32
+                - *pNLSF_Q15.offset((k + 1 as i32) as isize) as i32,
+            1 as i32,
         );
-        tmp2_int = ((1 as libc::c_int) << 15 as libc::c_int + 2 as libc::c_int) / tmp2_int;
-        *pNLSFW_Q_OUT.offset((k + 1 as libc::c_int) as isize) =
-            silk_min_int(tmp1_int + tmp2_int, 0x7fff as libc::c_int)
+        tmp2_int = ((1 as i32) << 15 as i32 + 2 as i32) / tmp2_int;
+        *pNLSFW_Q_OUT.offset((k + 1 as i32) as isize) =
+            silk_min_int(tmp1_int + tmp2_int, 0x7fff as i32)
                 as crate::opus_types_h::opus_int16;
-        k += 2 as libc::c_int
+        k += 2 as i32
     }
     /* Last value */
     tmp1_int = silk_max_int(
-        ((1 as libc::c_int) << 15 as libc::c_int)
-            - *pNLSF_Q15.offset((D - 1 as libc::c_int) as isize) as libc::c_int,
-        1 as libc::c_int,
+        ((1 as i32) << 15 as i32)
+            - *pNLSF_Q15.offset((D - 1 as i32) as isize) as i32,
+        1 as i32,
     );
-    tmp1_int = ((1 as libc::c_int) << 15 as libc::c_int + 2 as libc::c_int) / tmp1_int;
-    *pNLSFW_Q_OUT.offset((D - 1 as libc::c_int) as isize) =
-        silk_min_int(tmp1_int + tmp2_int, 0x7fff as libc::c_int) as crate::opus_types_h::opus_int16;
+    tmp1_int = ((1 as i32) << 15 as i32 + 2 as i32) / tmp1_int;
+    *pNLSFW_Q_OUT.offset((D - 1 as i32) as isize) =
+        silk_min_int(tmp1_int + tmp2_int, 0x7fff as i32) as crate::opus_types_h::opus_int16;
 }

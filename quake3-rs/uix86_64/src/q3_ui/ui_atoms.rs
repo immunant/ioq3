@@ -209,7 +209,7 @@ pub static mut m_entersound: crate::src::qcommon::q_shared::qboolean =
 #[no_mangle]
 
 pub unsafe extern "C" fn Com_Error(
-    mut _level: libc::c_int,
+    mut _level: i32,
     mut error: *const libc::c_char,
     mut args: ...
 ) -> ! {
@@ -397,10 +397,10 @@ UI_ClampCvar
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_ClampCvar(
-    mut min: libc::c_float,
-    mut max: libc::c_float,
-    mut value: libc::c_float,
-) -> libc::c_float {
+    mut min: f32,
+    mut max: f32,
+    mut value: f32,
+) -> f32 {
     if value < min {
         return min;
     }
@@ -418,7 +418,7 @@ UI_StartDemoLoop
 
 pub unsafe extern "C" fn UI_StartDemoLoop() {
     crate::src::ui::ui_syscalls::trap_Cmd_ExecuteText(
-        crate::src::qcommon::q_shared::EXEC_APPEND as libc::c_int,
+        crate::src::qcommon::q_shared::EXEC_APPEND as i32,
         b"d1\n\x00" as *const u8 as *const libc::c_char,
     );
 }
@@ -430,10 +430,10 @@ UI_PushMenu
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_PushMenu(mut menu: *mut crate::ui_local_h::menuframework_s) {
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     let mut item: *mut crate::ui_local_h::menucommon_s = 0 as *mut crate::ui_local_h::menucommon_s;
     // avoid stacking menus invoked by hotkeys
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < uis.menusp {
         if uis.stack[i as usize] == menu {
             uis.menusp = i;
@@ -443,7 +443,7 @@ pub unsafe extern "C" fn UI_PushMenu(mut menu: *mut crate::ui_local_h::menuframe
         }
     }
     if i == uis.menusp {
-        if uis.menusp >= 8 as libc::c_int {
+        if uis.menusp >= 8 as i32 {
             crate::src::ui::ui_syscalls::trap_Error(
                 b"UI_PushMenu: menu stack overflow\x00" as *const u8 as *const libc::c_char,
             );
@@ -454,21 +454,21 @@ pub unsafe extern "C" fn UI_PushMenu(mut menu: *mut crate::ui_local_h::menuframe
     }
     uis.activemenu = menu;
     // default cursor position
-    (*menu).cursor = 0 as libc::c_int;
-    (*menu).cursor_prev = 0 as libc::c_int;
+    (*menu).cursor = 0 as i32;
+    (*menu).cursor_prev = 0 as i32;
     m_entersound = crate::src::qcommon::q_shared::qtrue;
-    crate::src::ui::ui_syscalls::trap_Key_SetCatcher(0x2 as libc::c_int);
+    crate::src::ui::ui_syscalls::trap_Key_SetCatcher(0x2 as i32);
     // force first available item to have focus
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < (*menu).nitems {
         item = (*menu).items[i as usize] as *mut crate::ui_local_h::menucommon_s;
         if (*item).flags
-            & (0x2000 as libc::c_int as libc::c_uint
-                | 0x800 as libc::c_int as libc::c_uint
-                | 0x4000 as libc::c_int as libc::c_uint)
+            & (0x2000 as i32 as u32
+                | 0x800 as i32 as u32
+                | 0x4000 as i32 as u32)
             == 0
         {
-            (*menu).cursor_prev = -(1 as libc::c_int);
+            (*menu).cursor_prev = -(1 as i32);
             crate::src::q3_ui::ui_qmenu::Menu_SetCursor(
                 menu as *mut crate::ui_local_h::_tag_menuframework,
                 i,
@@ -490,16 +490,16 @@ UI_PopMenu
 pub unsafe extern "C" fn UI_PopMenu() {
     crate::src::ui::ui_syscalls::trap_S_StartLocalSound(
         crate::src::q3_ui::ui_qmenu::menu_out_sound,
-        crate::src::qcommon::q_shared::CHAN_LOCAL_SOUND as libc::c_int,
+        crate::src::qcommon::q_shared::CHAN_LOCAL_SOUND as i32,
     );
     uis.menusp -= 1;
-    if uis.menusp < 0 as libc::c_int {
+    if uis.menusp < 0 as i32 {
         crate::src::ui::ui_syscalls::trap_Error(
             b"UI_PopMenu: menu stack underflow\x00" as *const u8 as *const libc::c_char,
         );
     }
     if uis.menusp != 0 {
-        uis.activemenu = uis.stack[(uis.menusp - 1 as libc::c_int) as usize];
+        uis.activemenu = uis.stack[(uis.menusp - 1 as i32) as usize];
         uis.firstdraw = crate::src::qcommon::q_shared::qtrue
     } else {
         UI_ForceMenuOff();
@@ -508,10 +508,10 @@ pub unsafe extern "C" fn UI_PopMenu() {
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_ForceMenuOff() {
-    uis.menusp = 0 as libc::c_int;
+    uis.menusp = 0 as i32;
     uis.activemenu = 0 as *mut crate::ui_local_h::menuframework_s;
     crate::src::ui::ui_syscalls::trap_Key_SetCatcher(
-        crate::src::ui::ui_syscalls::trap_Key_GetCatcher() & !(0x2 as libc::c_int),
+        crate::src::ui::ui_syscalls::trap_Key_GetCatcher() & !(0x2 as i32),
     );
     crate::src::ui::ui_syscalls::trap_Key_ClearStates();
     crate::src::ui::ui_syscalls::trap_Cvar_Set(
@@ -530,17 +530,17 @@ pub unsafe extern "C" fn UI_LerpColor(
     mut a: *mut crate::src::qcommon::q_shared::vec_t,
     mut b: *mut crate::src::qcommon::q_shared::vec_t,
     mut c: *mut crate::src::qcommon::q_shared::vec_t,
-    mut t: libc::c_float,
+    mut t: f32,
 ) {
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     // lerp and clamp each component
-    i = 0 as libc::c_int;
-    while i < 4 as libc::c_int {
+    i = 0 as i32;
+    while i < 4 as i32 {
         *c.offset(i as isize) =
             *a.offset(i as isize) + t * (*b.offset(i as isize) - *a.offset(i as isize));
-        if *c.offset(i as isize) < 0 as libc::c_int as libc::c_float {
-            *c.offset(i as isize) = 0 as libc::c_int as crate::src::qcommon::q_shared::vec_t
-        } else if *c.offset(i as isize) as libc::c_double > 1.0f64 {
+        if *c.offset(i as isize) < 0 as i32 as f32 {
+            *c.offset(i as isize) = 0 as i32 as crate::src::qcommon::q_shared::vec_t
+        } else if *c.offset(i as isize) as f64 > 1.0f64 {
             *c.offset(i as isize) = 1.0f64 as crate::src::qcommon::q_shared::vec_t
         }
         i += 1
@@ -552,164 +552,164 @@ UI_DrawProportionalString2
 =================
 */
 
-static mut propMap: [[libc::c_int; 3]; 128] = [
-    [0 as libc::c_int, 0 as libc::c_int, -(1 as libc::c_int)],
-    [0 as libc::c_int, 0 as libc::c_int, -(1 as libc::c_int)],
-    [0 as libc::c_int, 0 as libc::c_int, -(1 as libc::c_int)],
-    [0 as libc::c_int, 0 as libc::c_int, -(1 as libc::c_int)],
-    [0 as libc::c_int, 0 as libc::c_int, -(1 as libc::c_int)],
-    [0 as libc::c_int, 0 as libc::c_int, -(1 as libc::c_int)],
-    [0 as libc::c_int, 0 as libc::c_int, -(1 as libc::c_int)],
-    [0 as libc::c_int, 0 as libc::c_int, -(1 as libc::c_int)],
-    [0 as libc::c_int, 0 as libc::c_int, -(1 as libc::c_int)],
-    [0 as libc::c_int, 0 as libc::c_int, -(1 as libc::c_int)],
-    [0 as libc::c_int, 0 as libc::c_int, -(1 as libc::c_int)],
-    [0 as libc::c_int, 0 as libc::c_int, -(1 as libc::c_int)],
-    [0 as libc::c_int, 0 as libc::c_int, -(1 as libc::c_int)],
-    [0 as libc::c_int, 0 as libc::c_int, -(1 as libc::c_int)],
-    [0 as libc::c_int, 0 as libc::c_int, -(1 as libc::c_int)],
-    [0 as libc::c_int, 0 as libc::c_int, -(1 as libc::c_int)],
-    [0 as libc::c_int, 0 as libc::c_int, -(1 as libc::c_int)],
-    [0 as libc::c_int, 0 as libc::c_int, -(1 as libc::c_int)],
-    [0 as libc::c_int, 0 as libc::c_int, -(1 as libc::c_int)],
-    [0 as libc::c_int, 0 as libc::c_int, -(1 as libc::c_int)],
-    [0 as libc::c_int, 0 as libc::c_int, -(1 as libc::c_int)],
-    [0 as libc::c_int, 0 as libc::c_int, -(1 as libc::c_int)],
-    [0 as libc::c_int, 0 as libc::c_int, -(1 as libc::c_int)],
-    [0 as libc::c_int, 0 as libc::c_int, -(1 as libc::c_int)],
-    [0 as libc::c_int, 0 as libc::c_int, -(1 as libc::c_int)],
-    [0 as libc::c_int, 0 as libc::c_int, -(1 as libc::c_int)],
-    [0 as libc::c_int, 0 as libc::c_int, -(1 as libc::c_int)],
-    [0 as libc::c_int, 0 as libc::c_int, -(1 as libc::c_int)],
-    [0 as libc::c_int, 0 as libc::c_int, -(1 as libc::c_int)],
-    [0 as libc::c_int, 0 as libc::c_int, -(1 as libc::c_int)],
-    [0 as libc::c_int, 0 as libc::c_int, -(1 as libc::c_int)],
-    [0 as libc::c_int, 0 as libc::c_int, -(1 as libc::c_int)],
-    [0 as libc::c_int, 0 as libc::c_int, 8 as libc::c_int],
-    [11 as libc::c_int, 122 as libc::c_int, 7 as libc::c_int],
-    [154 as libc::c_int, 181 as libc::c_int, 14 as libc::c_int],
-    [55 as libc::c_int, 122 as libc::c_int, 17 as libc::c_int],
-    [79 as libc::c_int, 122 as libc::c_int, 18 as libc::c_int],
-    [101 as libc::c_int, 122 as libc::c_int, 23 as libc::c_int],
-    [153 as libc::c_int, 122 as libc::c_int, 18 as libc::c_int],
-    [9 as libc::c_int, 93 as libc::c_int, 7 as libc::c_int],
-    [207 as libc::c_int, 122 as libc::c_int, 8 as libc::c_int],
-    [230 as libc::c_int, 122 as libc::c_int, 9 as libc::c_int],
-    [177 as libc::c_int, 122 as libc::c_int, 18 as libc::c_int],
-    [30 as libc::c_int, 152 as libc::c_int, 18 as libc::c_int],
-    [85 as libc::c_int, 181 as libc::c_int, 7 as libc::c_int],
-    [34 as libc::c_int, 93 as libc::c_int, 11 as libc::c_int],
-    [110 as libc::c_int, 181 as libc::c_int, 6 as libc::c_int],
-    [130 as libc::c_int, 152 as libc::c_int, 14 as libc::c_int],
-    [22 as libc::c_int, 64 as libc::c_int, 17 as libc::c_int],
-    [41 as libc::c_int, 64 as libc::c_int, 12 as libc::c_int],
-    [58 as libc::c_int, 64 as libc::c_int, 17 as libc::c_int],
-    [78 as libc::c_int, 64 as libc::c_int, 18 as libc::c_int],
-    [98 as libc::c_int, 64 as libc::c_int, 19 as libc::c_int],
-    [120 as libc::c_int, 64 as libc::c_int, 18 as libc::c_int],
-    [141 as libc::c_int, 64 as libc::c_int, 18 as libc::c_int],
-    [204 as libc::c_int, 64 as libc::c_int, 16 as libc::c_int],
-    [162 as libc::c_int, 64 as libc::c_int, 17 as libc::c_int],
-    [182 as libc::c_int, 64 as libc::c_int, 18 as libc::c_int],
-    [59 as libc::c_int, 181 as libc::c_int, 7 as libc::c_int],
-    [35 as libc::c_int, 181 as libc::c_int, 7 as libc::c_int],
-    [203 as libc::c_int, 152 as libc::c_int, 14 as libc::c_int],
-    [56 as libc::c_int, 93 as libc::c_int, 14 as libc::c_int],
-    [228 as libc::c_int, 152 as libc::c_int, 14 as libc::c_int],
-    [177 as libc::c_int, 181 as libc::c_int, 18 as libc::c_int],
-    [28 as libc::c_int, 122 as libc::c_int, 22 as libc::c_int],
-    [5 as libc::c_int, 4 as libc::c_int, 18 as libc::c_int],
-    [27 as libc::c_int, 4 as libc::c_int, 18 as libc::c_int],
-    [48 as libc::c_int, 4 as libc::c_int, 18 as libc::c_int],
-    [69 as libc::c_int, 4 as libc::c_int, 17 as libc::c_int],
-    [90 as libc::c_int, 4 as libc::c_int, 13 as libc::c_int],
-    [106 as libc::c_int, 4 as libc::c_int, 13 as libc::c_int],
-    [121 as libc::c_int, 4 as libc::c_int, 18 as libc::c_int],
-    [143 as libc::c_int, 4 as libc::c_int, 17 as libc::c_int],
-    [164 as libc::c_int, 4 as libc::c_int, 8 as libc::c_int],
-    [175 as libc::c_int, 4 as libc::c_int, 16 as libc::c_int],
-    [195 as libc::c_int, 4 as libc::c_int, 18 as libc::c_int],
-    [216 as libc::c_int, 4 as libc::c_int, 12 as libc::c_int],
-    [230 as libc::c_int, 4 as libc::c_int, 23 as libc::c_int],
-    [6 as libc::c_int, 34 as libc::c_int, 18 as libc::c_int],
-    [27 as libc::c_int, 34 as libc::c_int, 18 as libc::c_int],
-    [48 as libc::c_int, 34 as libc::c_int, 18 as libc::c_int],
-    [68 as libc::c_int, 34 as libc::c_int, 18 as libc::c_int],
-    [90 as libc::c_int, 34 as libc::c_int, 17 as libc::c_int],
-    [110 as libc::c_int, 34 as libc::c_int, 18 as libc::c_int],
-    [130 as libc::c_int, 34 as libc::c_int, 14 as libc::c_int],
-    [146 as libc::c_int, 34 as libc::c_int, 18 as libc::c_int],
-    [166 as libc::c_int, 34 as libc::c_int, 19 as libc::c_int],
-    [185 as libc::c_int, 34 as libc::c_int, 29 as libc::c_int],
-    [215 as libc::c_int, 34 as libc::c_int, 18 as libc::c_int],
-    [234 as libc::c_int, 34 as libc::c_int, 18 as libc::c_int],
-    [5 as libc::c_int, 64 as libc::c_int, 14 as libc::c_int],
-    [60 as libc::c_int, 152 as libc::c_int, 7 as libc::c_int],
-    [106 as libc::c_int, 151 as libc::c_int, 13 as libc::c_int],
-    [83 as libc::c_int, 152 as libc::c_int, 7 as libc::c_int],
-    [128 as libc::c_int, 122 as libc::c_int, 17 as libc::c_int],
-    [4 as libc::c_int, 152 as libc::c_int, 21 as libc::c_int],
-    [134 as libc::c_int, 181 as libc::c_int, 5 as libc::c_int],
-    [5 as libc::c_int, 4 as libc::c_int, 18 as libc::c_int],
-    [27 as libc::c_int, 4 as libc::c_int, 18 as libc::c_int],
-    [48 as libc::c_int, 4 as libc::c_int, 18 as libc::c_int],
-    [69 as libc::c_int, 4 as libc::c_int, 17 as libc::c_int],
-    [90 as libc::c_int, 4 as libc::c_int, 13 as libc::c_int],
-    [106 as libc::c_int, 4 as libc::c_int, 13 as libc::c_int],
-    [121 as libc::c_int, 4 as libc::c_int, 18 as libc::c_int],
-    [143 as libc::c_int, 4 as libc::c_int, 17 as libc::c_int],
-    [164 as libc::c_int, 4 as libc::c_int, 8 as libc::c_int],
-    [175 as libc::c_int, 4 as libc::c_int, 16 as libc::c_int],
-    [195 as libc::c_int, 4 as libc::c_int, 18 as libc::c_int],
-    [216 as libc::c_int, 4 as libc::c_int, 12 as libc::c_int],
-    [230 as libc::c_int, 4 as libc::c_int, 23 as libc::c_int],
-    [6 as libc::c_int, 34 as libc::c_int, 18 as libc::c_int],
-    [27 as libc::c_int, 34 as libc::c_int, 18 as libc::c_int],
-    [48 as libc::c_int, 34 as libc::c_int, 18 as libc::c_int],
-    [68 as libc::c_int, 34 as libc::c_int, 18 as libc::c_int],
-    [90 as libc::c_int, 34 as libc::c_int, 17 as libc::c_int],
-    [110 as libc::c_int, 34 as libc::c_int, 18 as libc::c_int],
-    [130 as libc::c_int, 34 as libc::c_int, 14 as libc::c_int],
-    [146 as libc::c_int, 34 as libc::c_int, 18 as libc::c_int],
-    [166 as libc::c_int, 34 as libc::c_int, 19 as libc::c_int],
-    [185 as libc::c_int, 34 as libc::c_int, 29 as libc::c_int],
-    [215 as libc::c_int, 34 as libc::c_int, 18 as libc::c_int],
-    [234 as libc::c_int, 34 as libc::c_int, 18 as libc::c_int],
-    [5 as libc::c_int, 64 as libc::c_int, 14 as libc::c_int],
-    [153 as libc::c_int, 152 as libc::c_int, 13 as libc::c_int],
-    [11 as libc::c_int, 181 as libc::c_int, 5 as libc::c_int],
-    [180 as libc::c_int, 152 as libc::c_int, 13 as libc::c_int],
-    [79 as libc::c_int, 93 as libc::c_int, 17 as libc::c_int],
-    [0 as libc::c_int, 0 as libc::c_int, -(1 as libc::c_int)],
+static mut propMap: [[i32; 3]; 128] = [
+    [0 as i32, 0 as i32, -(1 as i32)],
+    [0 as i32, 0 as i32, -(1 as i32)],
+    [0 as i32, 0 as i32, -(1 as i32)],
+    [0 as i32, 0 as i32, -(1 as i32)],
+    [0 as i32, 0 as i32, -(1 as i32)],
+    [0 as i32, 0 as i32, -(1 as i32)],
+    [0 as i32, 0 as i32, -(1 as i32)],
+    [0 as i32, 0 as i32, -(1 as i32)],
+    [0 as i32, 0 as i32, -(1 as i32)],
+    [0 as i32, 0 as i32, -(1 as i32)],
+    [0 as i32, 0 as i32, -(1 as i32)],
+    [0 as i32, 0 as i32, -(1 as i32)],
+    [0 as i32, 0 as i32, -(1 as i32)],
+    [0 as i32, 0 as i32, -(1 as i32)],
+    [0 as i32, 0 as i32, -(1 as i32)],
+    [0 as i32, 0 as i32, -(1 as i32)],
+    [0 as i32, 0 as i32, -(1 as i32)],
+    [0 as i32, 0 as i32, -(1 as i32)],
+    [0 as i32, 0 as i32, -(1 as i32)],
+    [0 as i32, 0 as i32, -(1 as i32)],
+    [0 as i32, 0 as i32, -(1 as i32)],
+    [0 as i32, 0 as i32, -(1 as i32)],
+    [0 as i32, 0 as i32, -(1 as i32)],
+    [0 as i32, 0 as i32, -(1 as i32)],
+    [0 as i32, 0 as i32, -(1 as i32)],
+    [0 as i32, 0 as i32, -(1 as i32)],
+    [0 as i32, 0 as i32, -(1 as i32)],
+    [0 as i32, 0 as i32, -(1 as i32)],
+    [0 as i32, 0 as i32, -(1 as i32)],
+    [0 as i32, 0 as i32, -(1 as i32)],
+    [0 as i32, 0 as i32, -(1 as i32)],
+    [0 as i32, 0 as i32, -(1 as i32)],
+    [0 as i32, 0 as i32, 8 as i32],
+    [11 as i32, 122 as i32, 7 as i32],
+    [154 as i32, 181 as i32, 14 as i32],
+    [55 as i32, 122 as i32, 17 as i32],
+    [79 as i32, 122 as i32, 18 as i32],
+    [101 as i32, 122 as i32, 23 as i32],
+    [153 as i32, 122 as i32, 18 as i32],
+    [9 as i32, 93 as i32, 7 as i32],
+    [207 as i32, 122 as i32, 8 as i32],
+    [230 as i32, 122 as i32, 9 as i32],
+    [177 as i32, 122 as i32, 18 as i32],
+    [30 as i32, 152 as i32, 18 as i32],
+    [85 as i32, 181 as i32, 7 as i32],
+    [34 as i32, 93 as i32, 11 as i32],
+    [110 as i32, 181 as i32, 6 as i32],
+    [130 as i32, 152 as i32, 14 as i32],
+    [22 as i32, 64 as i32, 17 as i32],
+    [41 as i32, 64 as i32, 12 as i32],
+    [58 as i32, 64 as i32, 17 as i32],
+    [78 as i32, 64 as i32, 18 as i32],
+    [98 as i32, 64 as i32, 19 as i32],
+    [120 as i32, 64 as i32, 18 as i32],
+    [141 as i32, 64 as i32, 18 as i32],
+    [204 as i32, 64 as i32, 16 as i32],
+    [162 as i32, 64 as i32, 17 as i32],
+    [182 as i32, 64 as i32, 18 as i32],
+    [59 as i32, 181 as i32, 7 as i32],
+    [35 as i32, 181 as i32, 7 as i32],
+    [203 as i32, 152 as i32, 14 as i32],
+    [56 as i32, 93 as i32, 14 as i32],
+    [228 as i32, 152 as i32, 14 as i32],
+    [177 as i32, 181 as i32, 18 as i32],
+    [28 as i32, 122 as i32, 22 as i32],
+    [5 as i32, 4 as i32, 18 as i32],
+    [27 as i32, 4 as i32, 18 as i32],
+    [48 as i32, 4 as i32, 18 as i32],
+    [69 as i32, 4 as i32, 17 as i32],
+    [90 as i32, 4 as i32, 13 as i32],
+    [106 as i32, 4 as i32, 13 as i32],
+    [121 as i32, 4 as i32, 18 as i32],
+    [143 as i32, 4 as i32, 17 as i32],
+    [164 as i32, 4 as i32, 8 as i32],
+    [175 as i32, 4 as i32, 16 as i32],
+    [195 as i32, 4 as i32, 18 as i32],
+    [216 as i32, 4 as i32, 12 as i32],
+    [230 as i32, 4 as i32, 23 as i32],
+    [6 as i32, 34 as i32, 18 as i32],
+    [27 as i32, 34 as i32, 18 as i32],
+    [48 as i32, 34 as i32, 18 as i32],
+    [68 as i32, 34 as i32, 18 as i32],
+    [90 as i32, 34 as i32, 17 as i32],
+    [110 as i32, 34 as i32, 18 as i32],
+    [130 as i32, 34 as i32, 14 as i32],
+    [146 as i32, 34 as i32, 18 as i32],
+    [166 as i32, 34 as i32, 19 as i32],
+    [185 as i32, 34 as i32, 29 as i32],
+    [215 as i32, 34 as i32, 18 as i32],
+    [234 as i32, 34 as i32, 18 as i32],
+    [5 as i32, 64 as i32, 14 as i32],
+    [60 as i32, 152 as i32, 7 as i32],
+    [106 as i32, 151 as i32, 13 as i32],
+    [83 as i32, 152 as i32, 7 as i32],
+    [128 as i32, 122 as i32, 17 as i32],
+    [4 as i32, 152 as i32, 21 as i32],
+    [134 as i32, 181 as i32, 5 as i32],
+    [5 as i32, 4 as i32, 18 as i32],
+    [27 as i32, 4 as i32, 18 as i32],
+    [48 as i32, 4 as i32, 18 as i32],
+    [69 as i32, 4 as i32, 17 as i32],
+    [90 as i32, 4 as i32, 13 as i32],
+    [106 as i32, 4 as i32, 13 as i32],
+    [121 as i32, 4 as i32, 18 as i32],
+    [143 as i32, 4 as i32, 17 as i32],
+    [164 as i32, 4 as i32, 8 as i32],
+    [175 as i32, 4 as i32, 16 as i32],
+    [195 as i32, 4 as i32, 18 as i32],
+    [216 as i32, 4 as i32, 12 as i32],
+    [230 as i32, 4 as i32, 23 as i32],
+    [6 as i32, 34 as i32, 18 as i32],
+    [27 as i32, 34 as i32, 18 as i32],
+    [48 as i32, 34 as i32, 18 as i32],
+    [68 as i32, 34 as i32, 18 as i32],
+    [90 as i32, 34 as i32, 17 as i32],
+    [110 as i32, 34 as i32, 18 as i32],
+    [130 as i32, 34 as i32, 14 as i32],
+    [146 as i32, 34 as i32, 18 as i32],
+    [166 as i32, 34 as i32, 19 as i32],
+    [185 as i32, 34 as i32, 29 as i32],
+    [215 as i32, 34 as i32, 18 as i32],
+    [234 as i32, 34 as i32, 18 as i32],
+    [5 as i32, 64 as i32, 14 as i32],
+    [153 as i32, 152 as i32, 13 as i32],
+    [11 as i32, 181 as i32, 5 as i32],
+    [180 as i32, 152 as i32, 13 as i32],
+    [79 as i32, 93 as i32, 17 as i32],
+    [0 as i32, 0 as i32, -(1 as i32)],
 ];
 
-static mut propMapB: [[libc::c_int; 3]; 26] = [
-    [11 as libc::c_int, 12 as libc::c_int, 33 as libc::c_int],
-    [49 as libc::c_int, 12 as libc::c_int, 31 as libc::c_int],
-    [85 as libc::c_int, 12 as libc::c_int, 31 as libc::c_int],
-    [120 as libc::c_int, 12 as libc::c_int, 30 as libc::c_int],
-    [156 as libc::c_int, 12 as libc::c_int, 21 as libc::c_int],
-    [183 as libc::c_int, 12 as libc::c_int, 21 as libc::c_int],
-    [207 as libc::c_int, 12 as libc::c_int, 32 as libc::c_int],
-    [13 as libc::c_int, 55 as libc::c_int, 30 as libc::c_int],
-    [49 as libc::c_int, 55 as libc::c_int, 13 as libc::c_int],
-    [66 as libc::c_int, 55 as libc::c_int, 29 as libc::c_int],
-    [101 as libc::c_int, 55 as libc::c_int, 31 as libc::c_int],
-    [135 as libc::c_int, 55 as libc::c_int, 21 as libc::c_int],
-    [158 as libc::c_int, 55 as libc::c_int, 40 as libc::c_int],
-    [204 as libc::c_int, 55 as libc::c_int, 32 as libc::c_int],
-    [12 as libc::c_int, 97 as libc::c_int, 31 as libc::c_int],
-    [48 as libc::c_int, 97 as libc::c_int, 31 as libc::c_int],
-    [82 as libc::c_int, 97 as libc::c_int, 30 as libc::c_int],
-    [118 as libc::c_int, 97 as libc::c_int, 30 as libc::c_int],
-    [153 as libc::c_int, 97 as libc::c_int, 30 as libc::c_int],
-    [185 as libc::c_int, 97 as libc::c_int, 25 as libc::c_int],
-    [213 as libc::c_int, 97 as libc::c_int, 30 as libc::c_int],
-    [11 as libc::c_int, 139 as libc::c_int, 32 as libc::c_int],
-    [42 as libc::c_int, 139 as libc::c_int, 51 as libc::c_int],
-    [93 as libc::c_int, 139 as libc::c_int, 32 as libc::c_int],
-    [126 as libc::c_int, 139 as libc::c_int, 31 as libc::c_int],
-    [158 as libc::c_int, 139 as libc::c_int, 25 as libc::c_int],
+static mut propMapB: [[i32; 3]; 26] = [
+    [11 as i32, 12 as i32, 33 as i32],
+    [49 as i32, 12 as i32, 31 as i32],
+    [85 as i32, 12 as i32, 31 as i32],
+    [120 as i32, 12 as i32, 30 as i32],
+    [156 as i32, 12 as i32, 21 as i32],
+    [183 as i32, 12 as i32, 21 as i32],
+    [207 as i32, 12 as i32, 32 as i32],
+    [13 as i32, 55 as i32, 30 as i32],
+    [49 as i32, 55 as i32, 13 as i32],
+    [66 as i32, 55 as i32, 29 as i32],
+    [101 as i32, 55 as i32, 31 as i32],
+    [135 as i32, 55 as i32, 21 as i32],
+    [158 as i32, 55 as i32, 40 as i32],
+    [204 as i32, 55 as i32, 32 as i32],
+    [12 as i32, 97 as i32, 31 as i32],
+    [48 as i32, 97 as i32, 31 as i32],
+    [82 as i32, 97 as i32, 30 as i32],
+    [118 as i32, 97 as i32, 30 as i32],
+    [153 as i32, 97 as i32, 30 as i32],
+    [185 as i32, 97 as i32, 25 as i32],
+    [213 as i32, 97 as i32, 30 as i32],
+    [11 as i32, 139 as i32, 32 as i32],
+    [42 as i32, 139 as i32, 51 as i32],
+    [93 as i32, 139 as i32, 32 as i32],
+    [126 as i32, 139 as i32, 31 as i32],
+    [158 as i32, 139 as i32, 25 as i32],
 ];
 /*
 =================
@@ -718,39 +718,39 @@ UI_DrawBannerString
 */
 
 unsafe extern "C" fn UI_DrawBannerString2(
-    mut x: libc::c_int,
-    mut y: libc::c_int,
+    mut x: i32,
+    mut y: i32,
     mut str: *const libc::c_char,
     mut color: *mut crate::src::qcommon::q_shared::vec_t,
 ) {
     let mut s: *const libc::c_char = 0 as *const libc::c_char;
-    let mut ch: libc::c_uchar = 0;
-    let mut ax: libc::c_float = 0.;
-    let mut ay: libc::c_float = 0.;
-    let mut aw: libc::c_float = 0.;
-    let mut ah: libc::c_float = 0.;
-    let mut frow: libc::c_float = 0.;
-    let mut fcol: libc::c_float = 0.;
-    let mut fwidth: libc::c_float = 0.;
-    let mut fheight: libc::c_float = 0.;
+    let mut ch: u8 = 0;
+    let mut ax: f32 = 0.;
+    let mut ay: f32 = 0.;
+    let mut aw: f32 = 0.;
+    let mut ah: f32 = 0.;
+    let mut frow: f32 = 0.;
+    let mut fcol: f32 = 0.;
+    let mut fwidth: f32 = 0.;
+    let mut fheight: f32 = 0.;
     // draw the colored text
-    crate::src::ui::ui_syscalls::trap_R_SetColor(color as *const libc::c_float);
-    ax = x as libc::c_float * uis.xscale + uis.bias;
-    ay = y as libc::c_float * uis.yscale;
+    crate::src::ui::ui_syscalls::trap_R_SetColor(color as *const f32);
+    ax = x as f32 * uis.xscale + uis.bias;
+    ay = y as f32 * uis.yscale;
     s = str;
     while *s != 0 {
-        ch = (*s as libc::c_int & 127 as libc::c_int) as libc::c_uchar;
-        if ch as libc::c_int == ' ' as i32 {
-            ax += (12 as libc::c_int as libc::c_float + 4 as libc::c_int as libc::c_float)
+        ch = (*s as i32 & 127 as i32) as u8;
+        if ch as i32 == ' ' as i32 {
+            ax += (12 as i32 as f32 + 4 as i32 as f32)
                 * uis.xscale
-        } else if ch as libc::c_int >= 'A' as i32 && ch as libc::c_int <= 'Z' as i32 {
-            ch = (ch as libc::c_int - 'A' as i32) as libc::c_uchar;
-            fcol = propMapB[ch as usize][0 as libc::c_int as usize] as libc::c_float / 256.0f32;
-            frow = propMapB[ch as usize][1 as libc::c_int as usize] as libc::c_float / 256.0f32;
-            fwidth = propMapB[ch as usize][2 as libc::c_int as usize] as libc::c_float / 256.0f32;
-            fheight = 36 as libc::c_int as libc::c_float / 256.0f32;
-            aw = propMapB[ch as usize][2 as libc::c_int as usize] as libc::c_float * uis.xscale;
-            ah = 36 as libc::c_int as libc::c_float * uis.yscale;
+        } else if ch as i32 >= 'A' as i32 && ch as i32 <= 'Z' as i32 {
+            ch = (ch as i32 - 'A' as i32) as u8;
+            fcol = propMapB[ch as usize][0 as i32 as usize] as f32 / 256.0f32;
+            frow = propMapB[ch as usize][1 as i32 as usize] as f32 / 256.0f32;
+            fwidth = propMapB[ch as usize][2 as i32 as usize] as f32 / 256.0f32;
+            fheight = 36 as i32 as f32 / 256.0f32;
+            aw = propMapB[ch as usize][2 as i32 as usize] as f32 * uis.xscale;
+            ah = 36 as i32 as f32 * uis.yscale;
             crate::src::ui::ui_syscalls::trap_R_DrawStretchPic(
                 ax,
                 ay,
@@ -762,53 +762,53 @@ unsafe extern "C" fn UI_DrawBannerString2(
                 frow + fheight,
                 uis.charsetPropB,
             );
-            ax += aw + 4 as libc::c_int as libc::c_float * uis.xscale
+            ax += aw + 4 as i32 as f32 * uis.xscale
         }
         s = s.offset(1)
     }
-    crate::src::ui::ui_syscalls::trap_R_SetColor(0 as *const libc::c_float);
+    crate::src::ui::ui_syscalls::trap_R_SetColor(0 as *const f32);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_DrawBannerString(
-    mut x: libc::c_int,
-    mut y: libc::c_int,
+    mut x: i32,
+    mut y: i32,
     mut str: *const libc::c_char,
-    mut style: libc::c_int,
+    mut style: i32,
     mut color: *mut crate::src::qcommon::q_shared::vec_t,
 ) {
     let mut s: *const libc::c_char = 0 as *const libc::c_char;
-    let mut ch: libc::c_int = 0;
-    let mut width: libc::c_int = 0;
+    let mut ch: i32 = 0;
+    let mut width: i32 = 0;
     let mut drawcolor: crate::src::qcommon::q_shared::vec4_t = [0.; 4];
     // find the width of the drawn text
     s = str;
-    width = 0 as libc::c_int;
+    width = 0 as i32;
     while *s != 0 {
-        ch = *s as libc::c_int;
+        ch = *s as i32;
         if ch == ' ' as i32 {
-            width += 12 as libc::c_int
+            width += 12 as i32
         } else if ch >= 'A' as i32 && ch <= 'Z' as i32 {
             width +=
-                propMapB[(ch - 'A' as i32) as usize][2 as libc::c_int as usize] + 4 as libc::c_int
+                propMapB[(ch - 'A' as i32) as usize][2 as i32 as usize] + 4 as i32
         }
         s = s.offset(1)
     }
-    width -= 4 as libc::c_int;
-    match style & 0x7 as libc::c_int {
-        1 => x -= width / 2 as libc::c_int,
+    width -= 4 as i32;
+    match style & 0x7 as i32 {
+        1 => x -= width / 2 as i32,
         2 => x -= width,
         0 | _ => {}
     }
-    if style & 0x800 as libc::c_int != 0 {
-        drawcolor[2 as libc::c_int as usize] =
-            0 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-        drawcolor[1 as libc::c_int as usize] = drawcolor[2 as libc::c_int as usize];
-        drawcolor[0 as libc::c_int as usize] = drawcolor[1 as libc::c_int as usize];
-        drawcolor[3 as libc::c_int as usize] = *color.offset(3 as libc::c_int as isize);
+    if style & 0x800 as i32 != 0 {
+        drawcolor[2 as i32 as usize] =
+            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        drawcolor[1 as i32 as usize] = drawcolor[2 as i32 as usize];
+        drawcolor[0 as i32 as usize] = drawcolor[1 as i32 as usize];
+        drawcolor[3 as i32 as usize] = *color.offset(3 as i32 as isize);
         UI_DrawBannerString2(
-            x + 2 as libc::c_int,
-            y + 2 as libc::c_int,
+            x + 2 as i32,
+            y + 2 as i32,
             str,
             drawcolor.as_mut_ptr(),
         );
@@ -817,62 +817,62 @@ pub unsafe extern "C" fn UI_DrawBannerString(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn UI_ProportionalStringWidth(mut str: *const libc::c_char) -> libc::c_int {
+pub unsafe extern "C" fn UI_ProportionalStringWidth(mut str: *const libc::c_char) -> i32 {
     let mut s: *const libc::c_char = 0 as *const libc::c_char;
-    let mut ch: libc::c_int = 0;
-    let mut charWidth: libc::c_int = 0;
-    let mut width: libc::c_int = 0;
+    let mut ch: i32 = 0;
+    let mut charWidth: i32 = 0;
+    let mut width: i32 = 0;
     s = str;
-    width = 0 as libc::c_int;
+    width = 0 as i32;
     while *s != 0 {
-        ch = *s as libc::c_int & 127 as libc::c_int;
-        charWidth = propMap[ch as usize][2 as libc::c_int as usize];
-        if charWidth != -(1 as libc::c_int) {
+        ch = *s as i32 & 127 as i32;
+        charWidth = propMap[ch as usize][2 as i32 as usize];
+        if charWidth != -(1 as i32) {
             width += charWidth;
-            width += 3 as libc::c_int
+            width += 3 as i32
         }
         s = s.offset(1)
     }
-    width -= 3 as libc::c_int;
+    width -= 3 as i32;
     return width;
 }
 
 unsafe extern "C" fn UI_DrawProportionalString2(
-    mut x: libc::c_int,
-    mut y: libc::c_int,
+    mut x: i32,
+    mut y: i32,
     mut str: *const libc::c_char,
     mut color: *mut crate::src::qcommon::q_shared::vec_t,
-    mut sizeScale: libc::c_float,
+    mut sizeScale: f32,
     mut charset: crate::src::qcommon::q_shared::qhandle_t,
 ) {
     let mut s: *const libc::c_char = 0 as *const libc::c_char;
-    let mut ch: libc::c_uchar = 0;
-    let mut ax: libc::c_float = 0.;
-    let mut ay: libc::c_float = 0.;
-    let mut aw: libc::c_float = 0 as libc::c_int as libc::c_float;
-    let mut ah: libc::c_float = 0.;
-    let mut frow: libc::c_float = 0.;
-    let mut fcol: libc::c_float = 0.;
-    let mut fwidth: libc::c_float = 0.;
-    let mut fheight: libc::c_float = 0.;
+    let mut ch: u8 = 0;
+    let mut ax: f32 = 0.;
+    let mut ay: f32 = 0.;
+    let mut aw: f32 = 0 as i32 as f32;
+    let mut ah: f32 = 0.;
+    let mut frow: f32 = 0.;
+    let mut fcol: f32 = 0.;
+    let mut fwidth: f32 = 0.;
+    let mut fheight: f32 = 0.;
     // draw the colored text
-    crate::src::ui::ui_syscalls::trap_R_SetColor(color as *const libc::c_float);
-    ax = x as libc::c_float * uis.xscale + uis.bias;
-    ay = y as libc::c_float * uis.yscale;
+    crate::src::ui::ui_syscalls::trap_R_SetColor(color as *const f32);
+    ax = x as f32 * uis.xscale + uis.bias;
+    ay = y as f32 * uis.yscale;
     s = str;
     while *s != 0 {
-        ch = (*s as libc::c_int & 127 as libc::c_int) as libc::c_uchar;
-        if ch as libc::c_int == ' ' as i32 {
-            aw = 8 as libc::c_int as libc::c_float * uis.xscale * sizeScale
-        } else if propMap[ch as usize][2 as libc::c_int as usize] != -(1 as libc::c_int) {
-            fcol = propMap[ch as usize][0 as libc::c_int as usize] as libc::c_float / 256.0f32;
-            frow = propMap[ch as usize][1 as libc::c_int as usize] as libc::c_float / 256.0f32;
-            fwidth = propMap[ch as usize][2 as libc::c_int as usize] as libc::c_float / 256.0f32;
-            fheight = 27 as libc::c_int as libc::c_float / 256.0f32;
-            aw = propMap[ch as usize][2 as libc::c_int as usize] as libc::c_float
+        ch = (*s as i32 & 127 as i32) as u8;
+        if ch as i32 == ' ' as i32 {
+            aw = 8 as i32 as f32 * uis.xscale * sizeScale
+        } else if propMap[ch as usize][2 as i32 as usize] != -(1 as i32) {
+            fcol = propMap[ch as usize][0 as i32 as usize] as f32 / 256.0f32;
+            frow = propMap[ch as usize][1 as i32 as usize] as f32 / 256.0f32;
+            fwidth = propMap[ch as usize][2 as i32 as usize] as f32 / 256.0f32;
+            fheight = 27 as i32 as f32 / 256.0f32;
+            aw = propMap[ch as usize][2 as i32 as usize] as f32
                 * uis.xscale
                 * sizeScale;
-            ah = 27 as libc::c_int as libc::c_float * uis.yscale * sizeScale;
+            ah = 27 as i32 as f32 * uis.yscale * sizeScale;
             crate::src::ui::ui_syscalls::trap_R_DrawStretchPic(
                 ax,
                 ay,
@@ -885,10 +885,10 @@ unsafe extern "C" fn UI_DrawProportionalString2(
                 charset,
             );
         }
-        ax += aw + 3 as libc::c_int as libc::c_float * uis.xscale * sizeScale;
+        ax += aw + 3 as i32 as f32 * uis.xscale * sizeScale;
         s = s.offset(1)
     }
-    crate::src::ui::ui_syscalls::trap_R_SetColor(0 as *const libc::c_float);
+    crate::src::ui::ui_syscalls::trap_R_SetColor(0 as *const f32);
 }
 /*
 =================
@@ -897,11 +897,11 @@ UI_ProportionalSizeScale
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn UI_ProportionalSizeScale(mut style: libc::c_int) -> libc::c_float {
-    if style & 0x10 as libc::c_int != 0 {
-        return 0.75f64 as libc::c_float;
+pub unsafe extern "C" fn UI_ProportionalSizeScale(mut style: i32) -> f32 {
+    if style & 0x10 as i32 != 0 {
+        return 0.75f64 as f32;
     }
-    return 1.00f64 as libc::c_float;
+    return 1.00f64 as f32;
 }
 /*
 =================
@@ -911,56 +911,56 @@ UI_DrawProportionalString
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_DrawProportionalString(
-    mut x: libc::c_int,
-    mut y: libc::c_int,
+    mut x: i32,
+    mut y: i32,
     mut str: *const libc::c_char,
-    mut style: libc::c_int,
+    mut style: i32,
     mut color: *mut crate::src::qcommon::q_shared::vec_t,
 ) {
     let mut drawcolor: crate::src::qcommon::q_shared::vec4_t = [0.; 4];
-    let mut width: libc::c_int = 0;
-    let mut sizeScale: libc::c_float = 0.;
+    let mut width: i32 = 0;
+    let mut sizeScale: f32 = 0.;
     if str.is_null() {
         return;
     }
     sizeScale = UI_ProportionalSizeScale(style);
-    match style & 0x7 as libc::c_int {
+    match style & 0x7 as i32 {
         1 => {
-            width = (UI_ProportionalStringWidth(str) as libc::c_float * sizeScale) as libc::c_int;
-            x -= width / 2 as libc::c_int
+            width = (UI_ProportionalStringWidth(str) as f32 * sizeScale) as i32;
+            x -= width / 2 as i32
         }
         2 => {
-            width = (UI_ProportionalStringWidth(str) as libc::c_float * sizeScale) as libc::c_int;
+            width = (UI_ProportionalStringWidth(str) as f32 * sizeScale) as i32;
             x -= width
         }
         0 | _ => {}
     }
-    if style & 0x800 as libc::c_int != 0 {
-        drawcolor[2 as libc::c_int as usize] =
-            0 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-        drawcolor[1 as libc::c_int as usize] = drawcolor[2 as libc::c_int as usize];
-        drawcolor[0 as libc::c_int as usize] = drawcolor[1 as libc::c_int as usize];
-        drawcolor[3 as libc::c_int as usize] = *color.offset(3 as libc::c_int as isize);
+    if style & 0x800 as i32 != 0 {
+        drawcolor[2 as i32 as usize] =
+            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        drawcolor[1 as i32 as usize] = drawcolor[2 as i32 as usize];
+        drawcolor[0 as i32 as usize] = drawcolor[1 as i32 as usize];
+        drawcolor[3 as i32 as usize] = *color.offset(3 as i32 as isize);
         UI_DrawProportionalString2(
-            x + 2 as libc::c_int,
-            y + 2 as libc::c_int,
+            x + 2 as i32,
+            y + 2 as i32,
             str,
             drawcolor.as_mut_ptr(),
             sizeScale,
             uis.charsetProp,
         );
     }
-    if style & 0x2000 as libc::c_int != 0 {
-        drawcolor[0 as libc::c_int as usize] =
-            (*color.offset(0 as libc::c_int as isize) as libc::c_double * 0.7f64)
+    if style & 0x2000 as i32 != 0 {
+        drawcolor[0 as i32 as usize] =
+            (*color.offset(0 as i32 as isize) as f64 * 0.7f64)
                 as crate::src::qcommon::q_shared::vec_t;
-        drawcolor[1 as libc::c_int as usize] =
-            (*color.offset(1 as libc::c_int as isize) as libc::c_double * 0.7f64)
+        drawcolor[1 as i32 as usize] =
+            (*color.offset(1 as i32 as isize) as f64 * 0.7f64)
                 as crate::src::qcommon::q_shared::vec_t;
-        drawcolor[2 as libc::c_int as usize] =
-            (*color.offset(2 as libc::c_int as isize) as libc::c_double * 0.7f64)
+        drawcolor[2 as i32 as usize] =
+            (*color.offset(2 as i32 as isize) as f64 * 0.7f64)
                 as crate::src::qcommon::q_shared::vec_t;
-        drawcolor[3 as libc::c_int as usize] = *color.offset(3 as libc::c_int as isize);
+        drawcolor[3 as i32 as usize] = *color.offset(3 as i32 as isize);
         UI_DrawProportionalString2(
             x,
             y,
@@ -971,23 +971,23 @@ pub unsafe extern "C" fn UI_DrawProportionalString(
         );
         return;
     }
-    if style & 0x4000 as libc::c_int != 0 {
-        drawcolor[0 as libc::c_int as usize] =
-            (*color.offset(0 as libc::c_int as isize) as libc::c_double * 0.7f64)
+    if style & 0x4000 as i32 != 0 {
+        drawcolor[0 as i32 as usize] =
+            (*color.offset(0 as i32 as isize) as f64 * 0.7f64)
                 as crate::src::qcommon::q_shared::vec_t;
-        drawcolor[1 as libc::c_int as usize] =
-            (*color.offset(1 as libc::c_int as isize) as libc::c_double * 0.7f64)
+        drawcolor[1 as i32 as usize] =
+            (*color.offset(1 as i32 as isize) as f64 * 0.7f64)
                 as crate::src::qcommon::q_shared::vec_t;
-        drawcolor[2 as libc::c_int as usize] =
-            (*color.offset(2 as libc::c_int as isize) as libc::c_double * 0.7f64)
+        drawcolor[2 as i32 as usize] =
+            (*color.offset(2 as i32 as isize) as f64 * 0.7f64)
                 as crate::src::qcommon::q_shared::vec_t;
-        drawcolor[3 as libc::c_int as usize] = *color.offset(3 as libc::c_int as isize);
+        drawcolor[3 as i32 as usize] = *color.offset(3 as i32 as isize);
         UI_DrawProportionalString2(x, y, str, color, sizeScale, uis.charsetProp);
-        drawcolor[0 as libc::c_int as usize] = *color.offset(0 as libc::c_int as isize);
-        drawcolor[1 as libc::c_int as usize] = *color.offset(1 as libc::c_int as isize);
-        drawcolor[2 as libc::c_int as usize] = *color.offset(2 as libc::c_int as isize);
-        drawcolor[3 as libc::c_int as usize] = (0.5f64
-            + 0.5f64 * crate::stdlib::sin((uis.realtime / 75 as libc::c_int) as libc::c_double))
+        drawcolor[0 as i32 as usize] = *color.offset(0 as i32 as isize);
+        drawcolor[1 as i32 as usize] = *color.offset(1 as i32 as isize);
+        drawcolor[2 as i32 as usize] = *color.offset(2 as i32 as isize);
+        drawcolor[3 as i32 as usize] = (0.5f64
+            + 0.5f64 * crate::stdlib::sin((uis.realtime / 75 as i32) as f64))
             as crate::src::qcommon::q_shared::vec_t;
         UI_DrawProportionalString2(
             x,
@@ -1009,29 +1009,29 @@ UI_DrawProportionalString_Wrapped
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_DrawProportionalString_AutoWrapped(
-    mut x: libc::c_int,
-    mut y: libc::c_int,
-    mut xmax: libc::c_int,
-    mut ystep: libc::c_int,
+    mut x: i32,
+    mut y: i32,
+    mut xmax: i32,
+    mut ystep: i32,
     mut str: *const libc::c_char,
-    mut style: libc::c_int,
+    mut style: i32,
     mut color: *mut crate::src::qcommon::q_shared::vec_t,
 ) {
-    let mut width: libc::c_int = 0;
+    let mut width: i32 = 0;
     let mut s1: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut s2: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut s3: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut c_bcp: libc::c_char = 0;
     let mut buf: [libc::c_char; 1024] = [0; 1024];
-    let mut sizeScale: libc::c_float = 0.;
-    if str.is_null() || *str.offset(0 as libc::c_int as isize) as libc::c_int == '\u{0}' as i32 {
+    let mut sizeScale: f32 = 0.;
+    if str.is_null() || *str.offset(0 as i32 as isize) as i32 == '\u{0}' as i32 {
         return;
     }
     sizeScale = UI_ProportionalSizeScale(style);
     crate::src::qcommon::q_shared::Q_strncpyz(
         buf.as_mut_ptr(),
         str,
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
     s3 = buf.as_mut_ptr();
     s2 = s3;
@@ -1039,13 +1039,13 @@ pub unsafe extern "C" fn UI_DrawProportionalString_AutoWrapped(
     loop {
         loop {
             s3 = s3.offset(1);
-            if !(*s3 as libc::c_int != ' ' as i32 && *s3 as libc::c_int != '\u{0}' as i32) {
+            if !(*s3 as i32 != ' ' as i32 && *s3 as i32 != '\u{0}' as i32) {
                 break;
             }
         }
         c_bcp = *s3;
         *s3 = '\u{0}' as i32 as libc::c_char;
-        width = (UI_ProportionalStringWidth(s1) as libc::c_float * sizeScale) as libc::c_int;
+        width = (UI_ProportionalStringWidth(s1) as f32 * sizeScale) as i32;
         *s3 = c_bcp;
         if width > xmax {
             if s1 == s2 {
@@ -1055,13 +1055,13 @@ pub unsafe extern "C" fn UI_DrawProportionalString_AutoWrapped(
             *s2 = '\u{0}' as i32 as libc::c_char;
             UI_DrawProportionalString(x, y, s1, style, color);
             y += ystep;
-            if c_bcp as libc::c_int == '\u{0}' as i32 {
+            if c_bcp as i32 == '\u{0}' as i32 {
                 // that was the last word
                 // we could start a new loop, but that wouldn't be much use
                 // even if the word is too long, we would overflow it (see above)
                 // so just print it now if needed
                 s2 = s2.offset(1);
-                if *s2 as libc::c_int != '\u{0}' as i32 {
+                if *s2 as i32 != '\u{0}' as i32 {
                     // if we are printing an overflowing line we have s2 == s3
                     UI_DrawProportionalString(x, y, s2, style, color);
                 }
@@ -1073,7 +1073,7 @@ pub unsafe extern "C" fn UI_DrawProportionalString_AutoWrapped(
             }
         } else {
             s2 = s3;
-            if !(c_bcp as libc::c_int == '\u{0}' as i32) {
+            if !(c_bcp as i32 == '\u{0}' as i32) {
                 continue;
             }
             // we reached the end
@@ -1089,58 +1089,58 @@ UI_DrawString2
 */
 
 unsafe extern "C" fn UI_DrawString2(
-    mut x: libc::c_int,
-    mut y: libc::c_int,
+    mut x: i32,
+    mut y: i32,
     mut str: *const libc::c_char,
     mut color: *mut crate::src::qcommon::q_shared::vec_t,
-    mut charw: libc::c_int,
-    mut charh: libc::c_int,
+    mut charw: i32,
+    mut charh: i32,
 ) {
     let mut s: *const libc::c_char = 0 as *const libc::c_char; //APSFIXME;
     let mut ch: libc::c_char = 0;
-    let mut forceColor: libc::c_int = crate::src::qcommon::q_shared::qfalse as libc::c_int;
+    let mut forceColor: i32 = crate::src::qcommon::q_shared::qfalse as i32;
     let mut tempcolor: crate::src::qcommon::q_shared::vec4_t = [0.; 4];
-    let mut ax: libc::c_float = 0.;
-    let mut ay: libc::c_float = 0.;
-    let mut aw: libc::c_float = 0.;
-    let mut ah: libc::c_float = 0.;
-    let mut frow: libc::c_float = 0.;
-    let mut fcol: libc::c_float = 0.;
+    let mut ax: f32 = 0.;
+    let mut ay: f32 = 0.;
+    let mut aw: f32 = 0.;
+    let mut ah: f32 = 0.;
+    let mut frow: f32 = 0.;
+    let mut fcol: f32 = 0.;
     if y < -charh {
         // offscreen
         return;
     }
     // draw the colored text
-    crate::src::ui::ui_syscalls::trap_R_SetColor(color as *const libc::c_float);
-    ax = x as libc::c_float * uis.xscale + uis.bias;
-    ay = y as libc::c_float * uis.yscale;
-    aw = charw as libc::c_float * uis.xscale;
-    ah = charh as libc::c_float * uis.yscale;
+    crate::src::ui::ui_syscalls::trap_R_SetColor(color as *const f32);
+    ax = x as f32 * uis.xscale + uis.bias;
+    ay = y as f32 * uis.yscale;
+    aw = charw as f32 * uis.xscale;
+    ah = charh as f32 * uis.yscale;
     s = str;
     while *s != 0 {
         if crate::src::qcommon::q_shared::Q_IsColorString(s) as u64 != 0 {
             if forceColor == 0 {
                 crate::stdlib::memcpy(
                     tempcolor.as_mut_ptr() as *mut libc::c_void,
-                    crate::src::qcommon::q_math::g_color_table[(*s.offset(1 as libc::c_int as isize)
-                        as libc::c_int
+                    crate::src::qcommon::q_math::g_color_table[(*s.offset(1 as i32 as isize)
+                        as i32
                         - '0' as i32
-                        & 0x7 as libc::c_int)
+                        & 0x7 as i32)
                         as usize]
                         .as_mut_ptr() as *const libc::c_void,
                     ::std::mem::size_of::<crate::src::qcommon::q_shared::vec4_t>() as libc::c_ulong,
                 );
-                tempcolor[3 as libc::c_int as usize] = *color.offset(3 as libc::c_int as isize);
+                tempcolor[3 as i32 as usize] = *color.offset(3 as i32 as isize);
                 crate::src::ui::ui_syscalls::trap_R_SetColor(tempcolor.as_mut_ptr());
             }
-            s = s.offset(2 as libc::c_int as isize)
+            s = s.offset(2 as i32 as isize)
         } else {
-            ch = (*s as libc::c_int & 255 as libc::c_int) as libc::c_char;
-            if ch as libc::c_int != ' ' as i32 {
-                frow = ((ch as libc::c_int >> 4 as libc::c_int) as libc::c_double * 0.0625f64)
-                    as libc::c_float;
-                fcol = ((ch as libc::c_int & 15 as libc::c_int) as libc::c_double * 0.0625f64)
-                    as libc::c_float;
+            ch = (*s as i32 & 255 as i32) as libc::c_char;
+            if ch as i32 != ' ' as i32 {
+                frow = ((ch as i32 >> 4 as i32) as f64 * 0.0625f64)
+                    as f32;
+                fcol = ((ch as i32 & 15 as i32) as f64 * 0.0625f64)
+                    as f32;
                 crate::src::ui::ui_syscalls::trap_R_DrawStretchPic(
                     ax,
                     ay,
@@ -1148,8 +1148,8 @@ unsafe extern "C" fn UI_DrawString2(
                     ah,
                     fcol,
                     frow,
-                    (fcol as libc::c_double + 0.0625f64) as libc::c_float,
-                    (frow as libc::c_double + 0.0625f64) as libc::c_float,
+                    (fcol as f64 + 0.0625f64) as f32,
+                    (frow as f64 + 0.0625f64) as f32,
                     uis.charset,
                 );
             }
@@ -1157,7 +1157,7 @@ unsafe extern "C" fn UI_DrawString2(
             s = s.offset(1)
         }
     }
-    crate::src::ui::ui_syscalls::trap_R_SetColor(0 as *const libc::c_float);
+    crate::src::ui::ui_syscalls::trap_R_SetColor(0 as *const f32);
 }
 /*
 =================
@@ -1167,84 +1167,84 @@ UI_DrawString
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_DrawString(
-    mut x: libc::c_int,
-    mut y: libc::c_int,
+    mut x: i32,
+    mut y: i32,
     mut str: *const libc::c_char,
-    mut style: libc::c_int,
+    mut style: i32,
     mut color: *mut crate::src::qcommon::q_shared::vec_t,
 ) {
-    let mut len: libc::c_int = 0;
-    let mut charw: libc::c_int = 0;
-    let mut charh: libc::c_int = 0;
+    let mut len: i32 = 0;
+    let mut charw: i32 = 0;
+    let mut charh: i32 = 0;
     let mut newcolor: crate::src::qcommon::q_shared::vec4_t = [0.; 4];
     let mut lowlight: crate::src::qcommon::q_shared::vec4_t = [0.; 4];
-    let mut drawcolor: *mut libc::c_float = 0 as *mut libc::c_float;
+    let mut drawcolor: *mut f32 = 0 as *mut f32;
     let mut dropcolor: crate::src::qcommon::q_shared::vec4_t = [0.; 4];
     if str.is_null() {
         return;
     }
-    if style & 0x1000 as libc::c_int != 0
-        && uis.realtime / 200 as libc::c_int & 1 as libc::c_int != 0
+    if style & 0x1000 as i32 != 0
+        && uis.realtime / 200 as i32 & 1 as i32 != 0
     {
         return;
     }
-    if style & 0x10 as libc::c_int != 0 {
-        charw = 8 as libc::c_int;
-        charh = 16 as libc::c_int
-    } else if style & 0x40 as libc::c_int != 0 {
-        charw = 32 as libc::c_int;
-        charh = 48 as libc::c_int
+    if style & 0x10 as i32 != 0 {
+        charw = 8 as i32;
+        charh = 16 as i32
+    } else if style & 0x40 as i32 != 0 {
+        charw = 32 as i32;
+        charh = 48 as i32
     } else {
-        charw = 16 as libc::c_int;
-        charh = 16 as libc::c_int
+        charw = 16 as i32;
+        charh = 16 as i32
     }
-    if style & 0x4000 as libc::c_int != 0 {
-        lowlight[0 as libc::c_int as usize] = (0.8f64
-            * *color.offset(0 as libc::c_int as isize) as libc::c_double)
+    if style & 0x4000 as i32 != 0 {
+        lowlight[0 as i32 as usize] = (0.8f64
+            * *color.offset(0 as i32 as isize) as f64)
             as crate::src::qcommon::q_shared::vec_t;
-        lowlight[1 as libc::c_int as usize] = (0.8f64
-            * *color.offset(1 as libc::c_int as isize) as libc::c_double)
+        lowlight[1 as i32 as usize] = (0.8f64
+            * *color.offset(1 as i32 as isize) as f64)
             as crate::src::qcommon::q_shared::vec_t;
-        lowlight[2 as libc::c_int as usize] = (0.8f64
-            * *color.offset(2 as libc::c_int as isize) as libc::c_double)
+        lowlight[2 as i32 as usize] = (0.8f64
+            * *color.offset(2 as i32 as isize) as f64)
             as crate::src::qcommon::q_shared::vec_t;
-        lowlight[3 as libc::c_int as usize] = (0.8f64
-            * *color.offset(3 as libc::c_int as isize) as libc::c_double)
+        lowlight[3 as i32 as usize] = (0.8f64
+            * *color.offset(3 as i32 as isize) as f64)
             as crate::src::qcommon::q_shared::vec_t;
         UI_LerpColor(
             color,
             lowlight.as_mut_ptr(),
             newcolor.as_mut_ptr(),
             (0.5f64
-                + 0.5f64 * crate::stdlib::sin((uis.realtime / 75 as libc::c_int) as libc::c_double))
-                as libc::c_float,
+                + 0.5f64 * crate::stdlib::sin((uis.realtime / 75 as i32) as f64))
+                as f32,
         );
         drawcolor = newcolor.as_mut_ptr()
     } else {
         drawcolor = color
     }
-    match style & 0x7 as libc::c_int {
+    match style & 0x7 as i32 {
         1 => {
             // center justify at x
-            len = crate::stdlib::strlen(str) as libc::c_int;
-            x = x - len * charw / 2 as libc::c_int
+            len = crate::stdlib::strlen(str) as i32;
+            x = x - len * charw / 2 as i32
         }
         2 => {
             // right justify at x
-            len = crate::stdlib::strlen(str) as libc::c_int;
+            len = crate::stdlib::strlen(str) as i32;
             x = x - len * charw
         }
         _ => {}
     }
-    if style & 0x800 as libc::c_int != 0 {
-        dropcolor[2 as libc::c_int as usize] =
-            0 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-        dropcolor[1 as libc::c_int as usize] = dropcolor[2 as libc::c_int as usize];
-        dropcolor[0 as libc::c_int as usize] = dropcolor[1 as libc::c_int as usize];
-        dropcolor[3 as libc::c_int as usize] = *drawcolor.offset(3 as libc::c_int as isize);
+    if style & 0x800 as i32 != 0 {
+        dropcolor[2 as i32 as usize] =
+            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        dropcolor[1 as i32 as usize] = dropcolor[2 as i32 as usize];
+        dropcolor[0 as i32 as usize] = dropcolor[1 as i32 as usize];
+        dropcolor[3 as i32 as usize] = *drawcolor.offset(3 as i32 as isize);
         UI_DrawString2(
-            x + 2 as libc::c_int,
-            y + 2 as libc::c_int,
+            x + 2 as i32,
+            y + 2 as i32,
             str,
             dropcolor.as_mut_ptr(),
             charw,
@@ -1261,22 +1261,22 @@ UI_DrawChar
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_DrawChar(
-    mut x: libc::c_int,
-    mut y: libc::c_int,
-    mut ch: libc::c_int,
-    mut style: libc::c_int,
+    mut x: i32,
+    mut y: i32,
+    mut ch: i32,
+    mut style: i32,
     mut color: *mut crate::src::qcommon::q_shared::vec_t,
 ) {
     let mut buff: [libc::c_char; 2] = [0; 2];
-    buff[0 as libc::c_int as usize] = ch as libc::c_char;
-    buff[1 as libc::c_int as usize] = '\u{0}' as i32 as libc::c_char;
+    buff[0 as i32 as usize] = ch as libc::c_char;
+    buff[1 as i32 as usize] = '\u{0}' as i32 as libc::c_char;
     UI_DrawString(x, y, buff.as_mut_ptr(), style, color);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_IsFullscreen() -> crate::src::qcommon::q_shared::qboolean {
     if !uis.activemenu.is_null()
-        && crate::src::ui::ui_syscalls::trap_Key_GetCatcher() & 0x2 as libc::c_int != 0
+        && crate::src::ui::ui_syscalls::trap_Key_GetCatcher() & 0x2 as i32 != 0
     {
         return (*uis.activemenu).fullscreen;
     }
@@ -1286,7 +1286,7 @@ pub unsafe extern "C" fn UI_IsFullscreen() -> crate::src::qcommon::q_shared::qbo
 unsafe extern "C" fn NeedCDAction(mut result: crate::src::qcommon::q_shared::qboolean) {
     if result as u64 == 0 {
         crate::src::ui::ui_syscalls::trap_Cmd_ExecuteText(
-            crate::src::qcommon::q_shared::EXEC_APPEND as libc::c_int,
+            crate::src::qcommon::q_shared::EXEC_APPEND as i32,
             b"quit\n\x00" as *const u8 as *const libc::c_char,
         );
     };
@@ -1295,7 +1295,7 @@ unsafe extern "C" fn NeedCDAction(mut result: crate::src::qcommon::q_shared::qbo
 unsafe extern "C" fn NeedCDKeyAction(mut result: crate::src::qcommon::q_shared::qboolean) {
     if result as u64 == 0 {
         crate::src::ui::ui_syscalls::trap_Cmd_ExecuteText(
-            crate::src::qcommon::q_shared::EXEC_APPEND as libc::c_int,
+            crate::src::qcommon::q_shared::EXEC_APPEND as i32,
             b"quit\n\x00" as *const u8 as *const libc::c_char,
         );
     };
@@ -1306,7 +1306,7 @@ pub unsafe extern "C" fn UI_SetActiveMenu(mut menu: crate::ui_public_h::uiMenuCo
     // this should be the ONLY way the menu system is brought up
     // ensure minimum menu data is cached
     crate::src::q3_ui::ui_qmenu::Menu_Cache();
-    match menu as libc::c_uint {
+    match menu as u32 {
         0 => {
             UI_ForceMenuOff();
             return;
@@ -1360,7 +1360,7 @@ UI_KeyEvent
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn UI_KeyEvent(mut key: libc::c_int, mut down: libc::c_int) {
+pub unsafe extern "C" fn UI_KeyEvent(mut key: i32, mut down: i32) {
     let mut s: crate::src::qcommon::q_shared::sfxHandle_t = 0;
     if uis.activemenu.is_null() {
         return;
@@ -1376,10 +1376,10 @@ pub unsafe extern "C" fn UI_KeyEvent(mut key: libc::c_int, mut down: libc::c_int
             key,
         )
     }
-    if s > 0 as libc::c_int && s != crate::src::q3_ui::ui_qmenu::menu_null_sound {
+    if s > 0 as i32 && s != crate::src::q3_ui::ui_qmenu::menu_null_sound {
         crate::src::ui::ui_syscalls::trap_S_StartLocalSound(
             s,
-            crate::src::qcommon::q_shared::CHAN_LOCAL_SOUND as libc::c_int,
+            crate::src::qcommon::q_shared::CHAN_LOCAL_SOUND as i32,
         );
     };
 }
@@ -1390,34 +1390,34 @@ UI_MouseEvent
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn UI_MouseEvent(mut dx: libc::c_int, mut dy: libc::c_int) {
-    let mut i: libc::c_int = 0;
-    let mut bias: libc::c_int = 0;
+pub unsafe extern "C" fn UI_MouseEvent(mut dx: i32, mut dy: i32) {
+    let mut i: i32 = 0;
+    let mut bias: i32 = 0;
     let mut m: *mut crate::ui_local_h::menucommon_s = 0 as *mut crate::ui_local_h::menucommon_s;
     if uis.activemenu.is_null() {
         return;
     }
     // convert X bias to 640 coords
-    bias = (uis.bias / uis.xscale) as libc::c_int;
+    bias = (uis.bias / uis.xscale) as i32;
     // update mouse screen position
     uis.cursorx += dx;
     if uis.cursorx < -bias {
         uis.cursorx = -bias
-    } else if uis.cursorx > 640 as libc::c_int + bias {
-        uis.cursorx = 640 as libc::c_int + bias
+    } else if uis.cursorx > 640 as i32 + bias {
+        uis.cursorx = 640 as i32 + bias
     }
     uis.cursory += dy;
-    if uis.cursory < 0 as libc::c_int {
-        uis.cursory = 0 as libc::c_int
-    } else if uis.cursory > 480 as libc::c_int {
-        uis.cursory = 480 as libc::c_int
+    if uis.cursory < 0 as i32 {
+        uis.cursory = 0 as i32
+    } else if uis.cursory > 480 as i32 {
+        uis.cursory = 480 as i32
     }
     // region test the active menu items
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < (*uis.activemenu).nitems {
         m = (*uis.activemenu).items[i as usize] as *mut crate::ui_local_h::menucommon_s;
         if !((*m).flags
-            & (0x2000 as libc::c_int as libc::c_uint | 0x4000 as libc::c_int as libc::c_uint)
+            & (0x2000 as i32 as u32 | 0x4000 as i32 as u32)
             != 0)
         {
             if !(uis.cursorx < (*m).left
@@ -1433,43 +1433,43 @@ pub unsafe extern "C" fn UI_MouseEvent(mut dx: libc::c_int, mut dy: libc::c_int)
                     );
                     (*((*uis.activemenu).items[(*uis.activemenu).cursor_prev as usize]
                         as *mut crate::ui_local_h::menucommon_s))
-                        .flags &= !(0x200 as libc::c_int as libc::c_uint);
+                        .flags &= !(0x200 as i32 as u32);
                     if (*((*uis.activemenu).items[(*uis.activemenu).cursor as usize]
                         as *mut crate::ui_local_h::menucommon_s))
                         .flags
-                        & 0x100000 as libc::c_int as libc::c_uint
+                        & 0x100000 as i32 as u32
                         == 0
                     {
                         crate::src::ui::ui_syscalls::trap_S_StartLocalSound(
                             crate::src::q3_ui::ui_qmenu::menu_move_sound,
-                            crate::src::qcommon::q_shared::CHAN_LOCAL_SOUND as libc::c_int,
+                            crate::src::qcommon::q_shared::CHAN_LOCAL_SOUND as i32,
                         );
                     }
                 }
                 (*((*uis.activemenu).items[(*uis.activemenu).cursor as usize]
                     as *mut crate::ui_local_h::menucommon_s))
-                    .flags |= 0x200 as libc::c_int as libc::c_uint;
+                    .flags |= 0x200 as i32 as u32;
                 return;
             }
         }
         // cursor out of item bounds
         i += 1
     }
-    if (*uis.activemenu).nitems > 0 as libc::c_int {
+    if (*uis.activemenu).nitems > 0 as i32 {
         // out of any region
         (*((*uis.activemenu).items[(*uis.activemenu).cursor as usize]
             as *mut crate::ui_local_h::menucommon_s))
-            .flags &= !(0x200 as libc::c_int as libc::c_uint)
+            .flags &= !(0x200 as i32 as u32)
     };
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn UI_Argv(mut arg: libc::c_int) -> *mut libc::c_char {
+pub unsafe extern "C" fn UI_Argv(mut arg: i32) -> *mut libc::c_char {
     static mut buffer: [libc::c_char; 1024] = [0; 1024];
     crate::src::ui::ui_syscalls::trap_Argv(
         arg,
         buffer.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
     return buffer.as_mut_ptr();
 }
@@ -1482,7 +1482,7 @@ pub unsafe extern "C" fn UI_Cvar_VariableString(
     crate::src::ui::ui_syscalls::trap_Cvar_VariableStringBuffer(
         var_name,
         buffer.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
     return buffer.as_mut_ptr();
 }
@@ -1534,18 +1534,18 @@ UI_ConsoleCommand
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_ConsoleCommand(
-    mut realTime: libc::c_int,
+    mut realTime: i32,
 ) -> crate::src::qcommon::q_shared::qboolean {
     let mut cmd: *mut libc::c_char = 0 as *mut libc::c_char;
     uis.frametime = realTime - uis.realtime;
     uis.realtime = realTime;
-    cmd = UI_Argv(0 as libc::c_int);
+    cmd = UI_Argv(0 as i32);
     // ensure minimum menu data is available
     crate::src::q3_ui::ui_qmenu::Menu_Cache();
     if crate::src::qcommon::q_shared::Q_stricmp(
         cmd,
         b"levelselect\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as libc::c_int
+    ) == 0 as i32
     {
         crate::src::q3_ui::ui_splevel::UI_SPLevelMenu_f();
         return crate::src::qcommon::q_shared::qtrue;
@@ -1553,7 +1553,7 @@ pub unsafe extern "C" fn UI_ConsoleCommand(
     if crate::src::qcommon::q_shared::Q_stricmp(
         cmd,
         b"postgame\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as libc::c_int
+    ) == 0 as i32
     {
         crate::src::q3_ui::ui_sppostgame::UI_SPPostgameMenu_f();
         return crate::src::qcommon::q_shared::qtrue;
@@ -1561,7 +1561,7 @@ pub unsafe extern "C" fn UI_ConsoleCommand(
     if crate::src::qcommon::q_shared::Q_stricmp(
         cmd,
         b"ui_cache\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as libc::c_int
+    ) == 0 as i32
     {
         UI_Cache_f();
         return crate::src::qcommon::q_shared::qtrue;
@@ -1569,7 +1569,7 @@ pub unsafe extern "C" fn UI_ConsoleCommand(
     if crate::src::qcommon::q_shared::Q_stricmp(
         cmd,
         b"ui_cinematics\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as libc::c_int
+    ) == 0 as i32
     {
         crate::src::q3_ui::ui_cinematics::UI_CinematicsMenu_f();
         return crate::src::qcommon::q_shared::qtrue;
@@ -1577,7 +1577,7 @@ pub unsafe extern "C" fn UI_ConsoleCommand(
     if crate::src::qcommon::q_shared::Q_stricmp(
         cmd,
         b"ui_teamOrders\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as libc::c_int
+    ) == 0 as i32
     {
         crate::src::q3_ui::ui_teamorders::UI_TeamOrdersMenu_f();
         return crate::src::qcommon::q_shared::qtrue;
@@ -1585,7 +1585,7 @@ pub unsafe extern "C" fn UI_ConsoleCommand(
     if crate::src::qcommon::q_shared::Q_stricmp(
         cmd,
         b"iamacheater\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as libc::c_int
+    ) == 0 as i32
     {
         crate::src::q3_ui::ui_gameinfo::UI_SPUnlock_f();
         return crate::src::qcommon::q_shared::qtrue;
@@ -1593,7 +1593,7 @@ pub unsafe extern "C" fn UI_ConsoleCommand(
     if crate::src::qcommon::q_shared::Q_stricmp(
         cmd,
         b"iamamonkey\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as libc::c_int
+    ) == 0 as i32
     {
         crate::src::q3_ui::ui_gameinfo::UI_SPUnlockMedals_f();
         return crate::src::qcommon::q_shared::qtrue;
@@ -1601,7 +1601,7 @@ pub unsafe extern "C" fn UI_ConsoleCommand(
     if crate::src::qcommon::q_shared::Q_stricmp(
         cmd,
         b"ui_cdkey\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as libc::c_int
+    ) == 0 as i32
     {
         crate::src::q3_ui::ui_cdkey::UI_CDKeyMenu_f();
         return crate::src::qcommon::q_shared::qtrue;
@@ -1631,23 +1631,23 @@ pub unsafe extern "C" fn UI_Init() {
         &mut uis.glconfig as *mut _ as *mut crate::tr_types_h::glconfig_t,
     );
     // for 640x480 virtualized screen
-    uis.xscale = (uis.glconfig.vidWidth as libc::c_double * (1.0f64 / 640.0f64)) as libc::c_float;
-    uis.yscale = (uis.glconfig.vidHeight as libc::c_double * (1.0f64 / 480.0f64)) as libc::c_float;
-    if uis.glconfig.vidWidth * 480 as libc::c_int > uis.glconfig.vidHeight * 640 as libc::c_int {
+    uis.xscale = (uis.glconfig.vidWidth as f64 * (1.0f64 / 640.0f64)) as f32;
+    uis.yscale = (uis.glconfig.vidHeight as f64 * (1.0f64 / 480.0f64)) as f32;
+    if uis.glconfig.vidWidth * 480 as i32 > uis.glconfig.vidHeight * 640 as i32 {
         // wide screen
         uis.bias = (0.5f64
-            * (uis.glconfig.vidWidth as libc::c_double
-                - uis.glconfig.vidHeight as libc::c_double * (640.0f64 / 480.0f64)))
-            as libc::c_float;
+            * (uis.glconfig.vidWidth as f64
+                - uis.glconfig.vidHeight as f64 * (640.0f64 / 480.0f64)))
+            as f32;
         uis.xscale = uis.yscale
     } else {
         // no wide screen
-        uis.bias = 0 as libc::c_int as libc::c_float
+        uis.bias = 0 as i32 as f32
     }
     // initialize the menu system
     crate::src::q3_ui::ui_qmenu::Menu_Cache();
     uis.activemenu = 0 as *mut crate::ui_local_h::menuframework_s;
-    uis.menusp = 0 as libc::c_int;
+    uis.menusp = 0 as i32;
 }
 /*
 ================
@@ -1659,10 +1659,10 @@ Adjusted for resolution and screen aspect ratio
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_AdjustFrom640(
-    mut x: *mut libc::c_float,
-    mut y: *mut libc::c_float,
-    mut w: *mut libc::c_float,
-    mut h: *mut libc::c_float,
+    mut x: *mut f32,
+    mut y: *mut f32,
+    mut w: *mut f32,
+    mut h: *mut f32,
 ) {
     // expect valid pointers
     *x = *x * uis.xscale + uis.bias;
@@ -1673,10 +1673,10 @@ pub unsafe extern "C" fn UI_AdjustFrom640(
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_DrawNamedPic(
-    mut x: libc::c_float,
-    mut y: libc::c_float,
-    mut width: libc::c_float,
-    mut height: libc::c_float,
+    mut x: f32,
+    mut y: f32,
+    mut width: f32,
+    mut height: f32,
     mut picname: *const libc::c_char,
 ) {
     let mut hShader: crate::src::qcommon::q_shared::qhandle_t = 0;
@@ -1687,43 +1687,43 @@ pub unsafe extern "C" fn UI_DrawNamedPic(
         y,
         width,
         height,
-        0 as libc::c_int as libc::c_float,
-        0 as libc::c_int as libc::c_float,
-        1 as libc::c_int as libc::c_float,
-        1 as libc::c_int as libc::c_float,
+        0 as i32 as f32,
+        0 as i32 as f32,
+        1 as i32 as f32,
+        1 as i32 as f32,
         hShader,
     );
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_DrawHandlePic(
-    mut x: libc::c_float,
-    mut y: libc::c_float,
-    mut w: libc::c_float,
-    mut h: libc::c_float,
+    mut x: f32,
+    mut y: f32,
+    mut w: f32,
+    mut h: f32,
     mut hShader: crate::src::qcommon::q_shared::qhandle_t,
 ) {
-    let mut s0: libc::c_float = 0.;
-    let mut s1: libc::c_float = 0.;
-    let mut t0: libc::c_float = 0.;
-    let mut t1: libc::c_float = 0.;
-    if w < 0 as libc::c_int as libc::c_float {
+    let mut s0: f32 = 0.;
+    let mut s1: f32 = 0.;
+    let mut t0: f32 = 0.;
+    let mut t1: f32 = 0.;
+    if w < 0 as i32 as f32 {
         // flip about vertical
         w = -w;
-        s0 = 1 as libc::c_int as libc::c_float;
-        s1 = 0 as libc::c_int as libc::c_float
+        s0 = 1 as i32 as f32;
+        s1 = 0 as i32 as f32
     } else {
-        s0 = 0 as libc::c_int as libc::c_float;
-        s1 = 1 as libc::c_int as libc::c_float
+        s0 = 0 as i32 as f32;
+        s1 = 1 as i32 as f32
     }
-    if h < 0 as libc::c_int as libc::c_float {
+    if h < 0 as i32 as f32 {
         // flip about horizontal
         h = -h;
-        t0 = 1 as libc::c_int as libc::c_float;
-        t1 = 0 as libc::c_int as libc::c_float
+        t0 = 1 as i32 as f32;
+        t1 = 0 as i32 as f32
     } else {
-        t0 = 0 as libc::c_int as libc::c_float;
-        t1 = 1 as libc::c_int as libc::c_float
+        t0 = 0 as i32 as f32;
+        t1 = 1 as i32 as f32
     }
     UI_AdjustFrom640(&mut x, &mut y, &mut w, &mut h);
     crate::src::ui::ui_syscalls::trap_R_DrawStretchPic(x, y, w, h, s0, t0, s1, t1, hShader);
@@ -1738,11 +1738,11 @@ Coordinates are 640*480 virtual values
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_FillRect(
-    mut x: libc::c_float,
-    mut y: libc::c_float,
-    mut width: libc::c_float,
-    mut height: libc::c_float,
-    mut color: *const libc::c_float,
+    mut x: f32,
+    mut y: f32,
+    mut width: f32,
+    mut height: f32,
+    mut color: *const f32,
 ) {
     crate::src::ui::ui_syscalls::trap_R_SetColor(color);
     UI_AdjustFrom640(&mut x, &mut y, &mut width, &mut height);
@@ -1751,13 +1751,13 @@ pub unsafe extern "C" fn UI_FillRect(
         y,
         width,
         height,
-        0 as libc::c_int as libc::c_float,
-        0 as libc::c_int as libc::c_float,
-        0 as libc::c_int as libc::c_float,
-        0 as libc::c_int as libc::c_float,
+        0 as i32 as f32,
+        0 as i32 as f32,
+        0 as i32 as f32,
+        0 as i32 as f32,
         uis.whiteShader,
     );
-    crate::src::ui::ui_syscalls::trap_R_SetColor(0 as *const libc::c_float);
+    crate::src::ui::ui_syscalls::trap_R_SetColor(0 as *const f32);
 }
 /*
 ================
@@ -1769,11 +1769,11 @@ Coordinates are 640*480 virtual values
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_DrawRect(
-    mut x: libc::c_float,
-    mut y: libc::c_float,
-    mut width: libc::c_float,
-    mut height: libc::c_float,
-    mut color: *const libc::c_float,
+    mut x: f32,
+    mut y: f32,
+    mut width: f32,
+    mut height: f32,
+    mut color: *const f32,
 ) {
     crate::src::ui::ui_syscalls::trap_R_SetColor(color);
     UI_AdjustFrom640(&mut x, &mut y, &mut width, &mut height);
@@ -1781,51 +1781,51 @@ pub unsafe extern "C" fn UI_DrawRect(
         x,
         y,
         width,
-        1 as libc::c_int as libc::c_float,
-        0 as libc::c_int as libc::c_float,
-        0 as libc::c_int as libc::c_float,
-        0 as libc::c_int as libc::c_float,
-        0 as libc::c_int as libc::c_float,
+        1 as i32 as f32,
+        0 as i32 as f32,
+        0 as i32 as f32,
+        0 as i32 as f32,
+        0 as i32 as f32,
         uis.whiteShader,
     );
     crate::src::ui::ui_syscalls::trap_R_DrawStretchPic(
         x,
         y,
-        1 as libc::c_int as libc::c_float,
+        1 as i32 as f32,
         height,
-        0 as libc::c_int as libc::c_float,
-        0 as libc::c_int as libc::c_float,
-        0 as libc::c_int as libc::c_float,
-        0 as libc::c_int as libc::c_float,
+        0 as i32 as f32,
+        0 as i32 as f32,
+        0 as i32 as f32,
+        0 as i32 as f32,
         uis.whiteShader,
     );
     crate::src::ui::ui_syscalls::trap_R_DrawStretchPic(
         x,
-        y + height - 1 as libc::c_int as libc::c_float,
+        y + height - 1 as i32 as f32,
         width,
-        1 as libc::c_int as libc::c_float,
-        0 as libc::c_int as libc::c_float,
-        0 as libc::c_int as libc::c_float,
-        0 as libc::c_int as libc::c_float,
-        0 as libc::c_int as libc::c_float,
+        1 as i32 as f32,
+        0 as i32 as f32,
+        0 as i32 as f32,
+        0 as i32 as f32,
+        0 as i32 as f32,
         uis.whiteShader,
     );
     crate::src::ui::ui_syscalls::trap_R_DrawStretchPic(
-        x + width - 1 as libc::c_int as libc::c_float,
+        x + width - 1 as i32 as f32,
         y,
-        1 as libc::c_int as libc::c_float,
+        1 as i32 as f32,
         height,
-        0 as libc::c_int as libc::c_float,
-        0 as libc::c_int as libc::c_float,
-        0 as libc::c_int as libc::c_float,
-        0 as libc::c_int as libc::c_float,
+        0 as i32 as f32,
+        0 as i32 as f32,
+        0 as i32 as f32,
+        0 as i32 as f32,
         uis.whiteShader,
     );
-    crate::src::ui::ui_syscalls::trap_R_SetColor(0 as *const libc::c_float);
+    crate::src::ui::ui_syscalls::trap_R_SetColor(0 as *const f32);
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn UI_SetColor(mut rgba: *const libc::c_float) {
+pub unsafe extern "C" fn UI_SetColor(mut rgba: *const f32) {
     crate::src::ui::ui_syscalls::trap_R_SetColor(rgba);
 }
 #[no_mangle]
@@ -1840,10 +1840,10 @@ UI_Refresh
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn UI_Refresh(mut realtime: libc::c_int) {
+pub unsafe extern "C" fn UI_Refresh(mut realtime: i32) {
     uis.frametime = realtime - uis.realtime;
     uis.realtime = realtime;
-    if crate::src::ui::ui_syscalls::trap_Key_GetCatcher() & 0x2 as libc::c_int == 0 {
+    if crate::src::ui::ui_syscalls::trap_Key_GetCatcher() & 0x2 as i32 == 0 {
         return;
     }
     crate::src::q3_ui::ui_main::UI_UpdateCvars();
@@ -1852,18 +1852,18 @@ pub unsafe extern "C" fn UI_Refresh(mut realtime: libc::c_int) {
             // draw the background
             if (*uis.activemenu).showlogo as u64 != 0 {
                 UI_DrawHandlePic(
-                    0 as libc::c_int as libc::c_float,
-                    0 as libc::c_int as libc::c_float,
-                    640 as libc::c_int as libc::c_float,
-                    480 as libc::c_int as libc::c_float,
+                    0 as i32 as f32,
+                    0 as i32 as f32,
+                    640 as i32 as f32,
+                    480 as i32 as f32,
                     uis.menuBackShader,
                 );
             } else {
                 UI_DrawHandlePic(
-                    0 as libc::c_int as libc::c_float,
-                    0 as libc::c_int as libc::c_float,
-                    640 as libc::c_int as libc::c_float,
-                    480 as libc::c_int as libc::c_float,
+                    0 as i32 as f32,
+                    0 as i32 as f32,
+                    640 as i32 as f32,
+                    480 as i32 as f32,
                     uis.menuBackNoLogoShader,
                 );
             }
@@ -1876,17 +1876,17 @@ pub unsafe extern "C" fn UI_Refresh(mut realtime: libc::c_int) {
             );
         }
         if uis.firstdraw as u64 != 0 {
-            UI_MouseEvent(0 as libc::c_int, 0 as libc::c_int);
+            UI_MouseEvent(0 as i32, 0 as i32);
             uis.firstdraw = crate::src::qcommon::q_shared::qfalse
         }
     }
     // draw cursor
-    UI_SetColor(0 as *const libc::c_float);
+    UI_SetColor(0 as *const f32);
     UI_DrawHandlePic(
-        (uis.cursorx - 16 as libc::c_int) as libc::c_float,
-        (uis.cursory - 16 as libc::c_int) as libc::c_float,
-        32 as libc::c_int as libc::c_float,
-        32 as libc::c_int as libc::c_float,
+        (uis.cursorx - 16 as i32) as f32,
+        (uis.cursory - 16 as i32) as f32,
+        32 as i32 as f32,
+        32 as i32 as f32,
         uis.cursor,
     );
     // delay playing the enter sound until after the
@@ -1895,7 +1895,7 @@ pub unsafe extern "C" fn UI_Refresh(mut realtime: libc::c_int) {
     if m_entersound as u64 != 0 {
         crate::src::ui::ui_syscalls::trap_S_StartLocalSound(
             crate::src::q3_ui::ui_qmenu::menu_in_sound,
-            crate::src::qcommon::q_shared::CHAN_LOCAL_SOUND as libc::c_int,
+            crate::src::qcommon::q_shared::CHAN_LOCAL_SOUND as i32,
         );
         m_entersound = crate::src::qcommon::q_shared::qfalse
     };
@@ -1903,23 +1903,23 @@ pub unsafe extern "C" fn UI_Refresh(mut realtime: libc::c_int) {
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_DrawTextBox(
-    mut x: libc::c_int,
-    mut y: libc::c_int,
-    mut width: libc::c_int,
-    mut lines: libc::c_int,
+    mut x: i32,
+    mut y: i32,
+    mut width: i32,
+    mut lines: i32,
 ) {
     UI_FillRect(
-        (x + 16 as libc::c_int / 2 as libc::c_int) as libc::c_float,
-        (y + 16 as libc::c_int / 2 as libc::c_int) as libc::c_float,
-        ((width + 1 as libc::c_int) * 16 as libc::c_int) as libc::c_float,
-        ((lines + 1 as libc::c_int) * 16 as libc::c_int) as libc::c_float,
+        (x + 16 as i32 / 2 as i32) as f32,
+        (y + 16 as i32 / 2 as i32) as f32,
+        ((width + 1 as i32) * 16 as i32) as f32,
+        ((lines + 1 as i32) * 16 as i32) as f32,
         crate::src::qcommon::q_math::colorBlack.as_mut_ptr(),
     );
     UI_DrawRect(
-        (x + 16 as libc::c_int / 2 as libc::c_int) as libc::c_float,
-        (y + 16 as libc::c_int / 2 as libc::c_int) as libc::c_float,
-        ((width + 1 as libc::c_int) * 16 as libc::c_int) as libc::c_float,
-        ((lines + 1 as libc::c_int) * 16 as libc::c_int) as libc::c_float,
+        (x + 16 as i32 / 2 as i32) as f32,
+        (y + 16 as i32 / 2 as i32) as f32,
+        ((width + 1 as i32) * 16 as i32) as f32,
+        ((lines + 1 as i32) * 16 as i32) as f32,
         crate::src::qcommon::q_math::colorWhite.as_mut_ptr(),
     );
 }
@@ -2046,10 +2046,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_CursorInRect(
-    mut x: libc::c_int,
-    mut y: libc::c_int,
-    mut width: libc::c_int,
-    mut height: libc::c_int,
+    mut x: i32,
+    mut y: i32,
+    mut width: i32,
+    mut height: i32,
 ) -> crate::src::qcommon::q_shared::qboolean {
     if uis.cursorx < x || uis.cursory < y || uis.cursorx > x + width || uis.cursory > y + height {
         return crate::src::qcommon::q_shared::qfalse;

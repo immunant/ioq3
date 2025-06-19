@@ -1,4 +1,4 @@
-pub type JSAMPLE = libc::c_uchar;
+pub type JSAMPLE = u8;
 /* not HAVE_UNSIGNED_CHAR */
 
 /* HAVE_UNSIGNED_CHAR */
@@ -12,13 +12,13 @@ pub type JSAMPLE = libc::c_uchar;
  * Again, we allocate large arrays of these, but you can change to int
  * if you have memory to burn and "short" is really slow.
  */
-pub type JCOEF = libc::c_short;
+pub type JCOEF = i16;
 /* Compressed datastreams are represented as arrays of JOCTET.
  * These must be EXACTLY 8 bits wide, at least once they are written to
  * external storage.  Note that when using the stdio data source/destination
  * managers, this is also the data type passed to fread/fwrite.
  */
-pub type JOCTET = libc::c_uchar;
+pub type JOCTET = u8;
 /* not HAVE_UNSIGNED_CHAR */
 
 /* HAVE_UNSIGNED_CHAR */
@@ -31,9 +31,9 @@ pub type JOCTET = libc::c_uchar;
  */
 
 /* UINT8 must hold at least the values 0..255. */
-pub type UINT8 = libc::c_uchar;
-pub type UINT16 = libc::c_ushort;
-pub type INT16 = libc::c_short;
+pub type UINT8 = u8;
+pub type UINT16 = u16;
+pub type INT16 = i16;
 pub type INT32 = libc::c_long;
 /* Datatype used for image dimensions.  The JPEG standard only supports
  * images up to 64K*64K due to 16-bit fields in SOF markers.  Therefore
@@ -41,7 +41,7 @@ pub type INT32 = libc::c_long;
  * handle larger images and you don't mind deviating from the spec, you
  * can change this datatype.
  */
-pub type JDIMENSION = libc::c_uint;
+pub type JDIMENSION = u32;
 /* a tad under 64K to prevent overflows */
 
 /* These macros are used in all function definitions and extern declarations.
@@ -77,4 +77,4 @@ pub type JDIMENSION = libc::c_uint;
  * specific header files that you want to include together with these files.
  * Defining HAVE_BOOLEAN before including jpeglib.h should make it work.
  */
-pub type boolean = libc::c_int;
+pub type boolean = i32;

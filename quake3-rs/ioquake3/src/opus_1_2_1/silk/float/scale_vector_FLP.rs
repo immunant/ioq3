@@ -106,21 +106,21 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_scale_vector_FLP(
-    mut data1: *mut libc::c_float,
-    mut gain: libc::c_float,
-    mut dataSize: libc::c_int,
+    mut data1: *mut f32,
+    mut gain: f32,
+    mut dataSize: i32,
 ) {
-    let mut i: libc::c_int = 0;
-    let mut dataSize4: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut dataSize4: i32 = 0;
     /* 4x unrolled loop */
-    dataSize4 = dataSize & 0xfffc as libc::c_int;
-    i = 0 as libc::c_int;
+    dataSize4 = dataSize & 0xfffc as i32;
+    i = 0 as i32;
     while i < dataSize4 {
-        *data1.offset((i + 0 as libc::c_int) as isize) *= gain;
-        *data1.offset((i + 1 as libc::c_int) as isize) *= gain;
-        *data1.offset((i + 2 as libc::c_int) as isize) *= gain;
-        *data1.offset((i + 3 as libc::c_int) as isize) *= gain;
-        i += 4 as libc::c_int
+        *data1.offset((i + 0 as i32) as isize) *= gain;
+        *data1.offset((i + 1 as i32) as isize) *= gain;
+        *data1.offset((i + 2 as i32) as isize) *= gain;
+        *data1.offset((i + 3 as i32) as isize) *= gain;
+        i += 4 as i32
     }
     /* any remaining elements */
     while i < dataSize {

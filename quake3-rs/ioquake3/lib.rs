@@ -20,7 +20,7 @@ pub mod mathops_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub union C2RustUnnamed_61 {
-        pub f: libc::c_float,
+        pub f: f32,
         pub i: crate::opus_types_h::opus_uint32,
     }
 }
@@ -29,7 +29,7 @@ pub mod scales_h {
     #[derive(Copy, Clone)]
     pub union C2RustUnnamed_58 {
         pub i: crate::config_types_h::ogg_uint32_t,
-        pub f: libc::c_float,
+        pub f: f32,
     }
 }
 pub mod zlib_h {
@@ -60,7 +60,7 @@ pub mod zlib_h {
         pub zalloc: crate::zlib_h::alloc_func,
         pub zfree: crate::zlib_h::free_func,
         pub opaque: crate::zconf_h::voidpf,
-        pub data_type: libc::c_int,
+        pub data_type: i32,
         pub adler: crate::zconf_h::uLong,
         pub reserved: crate::zconf_h::uLong,
     }
@@ -72,10 +72,10 @@ pub mod zlib_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct gz_header_s {
-        pub text: libc::c_int,
+        pub text: i32,
         pub time: crate::zconf_h::uLong,
-        pub xflags: libc::c_int,
-        pub os: libc::c_int,
+        pub xflags: i32,
+        pub os: i32,
         pub extra: *mut crate::zconf_h::Bytef,
         pub extra_len: crate::zconf_h::uInt,
         pub extra_max: crate::zconf_h::uInt,
@@ -83,8 +83,8 @@ pub mod zlib_h {
         pub name_max: crate::zconf_h::uInt,
         pub comment: *mut crate::zconf_h::Bytef,
         pub comm_max: crate::zconf_h::uInt,
-        pub hcrc: libc::c_int,
-        pub done: libc::c_int,
+        pub hcrc: i32,
+        pub done: i32,
     }
 
     pub type gz_headerp = *mut crate::zlib_h::gz_header;
@@ -92,13 +92,13 @@ pub mod zlib_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct internal_state {
-        pub dummy: libc::c_int,
+        pub dummy: i32,
     }
 }
 pub mod zconf_h {
-    pub type Byte = libc::c_uchar;
+    pub type Byte = u8;
 
-    pub type uInt = libc::c_uint;
+    pub type uInt = u32;
 
     pub type uLong = libc::c_ulong;
 
@@ -115,18 +115,18 @@ pub mod cm_local_h {
     #[derive(Copy, Clone)]
     pub struct cNode_t {
         pub plane: *mut crate::src::qcommon::q_shared::cplane_t,
-        pub children: [libc::c_int; 2],
+        pub children: [i32; 2],
     }
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct cLeaf_t {
-        pub cluster: libc::c_int,
-        pub area: libc::c_int,
-        pub firstLeafBrush: libc::c_int,
-        pub numLeafBrushes: libc::c_int,
-        pub firstLeafSurface: libc::c_int,
-        pub numLeafSurfaces: libc::c_int,
+        pub cluster: i32,
+        pub area: i32,
+        pub firstLeafBrush: i32,
+        pub numLeafBrushes: i32,
+        pub firstLeafSurface: i32,
+        pub numLeafSurfaces: i32,
     }
 
     pub type cmodel_t = crate::cm_local_h::cmodel_s;
@@ -143,80 +143,80 @@ pub mod cm_local_h {
     #[derive(Copy, Clone)]
     pub struct cbrushside_t {
         pub plane: *mut crate::src::qcommon::q_shared::cplane_t,
-        pub surfaceFlags: libc::c_int,
-        pub shaderNum: libc::c_int,
+        pub surfaceFlags: i32,
+        pub shaderNum: i32,
     }
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct cbrush_t {
-        pub shaderNum: libc::c_int,
-        pub contents: libc::c_int,
+        pub shaderNum: i32,
+        pub contents: i32,
         pub bounds: [crate::src::qcommon::q_shared::vec3_t; 2],
-        pub numsides: libc::c_int,
+        pub numsides: i32,
         pub sides: *mut crate::cm_local_h::cbrushside_t,
-        pub checkcount: libc::c_int,
+        pub checkcount: i32,
     }
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct cPatch_t {
-        pub checkcount: libc::c_int,
-        pub surfaceFlags: libc::c_int,
-        pub contents: libc::c_int,
+        pub checkcount: i32,
+        pub surfaceFlags: i32,
+        pub contents: i32,
         pub pc: *mut crate::src::qcommon::cm_patch::patchCollide_s,
     }
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct cArea_t {
-        pub floodnum: libc::c_int,
-        pub floodvalid: libc::c_int,
+        pub floodnum: i32,
+        pub floodvalid: i32,
     }
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct clipMap_t {
         pub name: [libc::c_char; 64],
-        pub numShaders: libc::c_int,
+        pub numShaders: i32,
         pub shaders: *mut crate::qfiles_h::dshader_t,
-        pub numBrushSides: libc::c_int,
+        pub numBrushSides: i32,
         pub brushsides: *mut crate::cm_local_h::cbrushside_t,
-        pub numPlanes: libc::c_int,
+        pub numPlanes: i32,
         pub planes: *mut crate::src::qcommon::q_shared::cplane_t,
-        pub numNodes: libc::c_int,
+        pub numNodes: i32,
         pub nodes: *mut crate::cm_local_h::cNode_t,
-        pub numLeafs: libc::c_int,
+        pub numLeafs: i32,
         pub leafs: *mut crate::cm_local_h::cLeaf_t,
-        pub numLeafBrushes: libc::c_int,
-        pub leafbrushes: *mut libc::c_int,
-        pub numLeafSurfaces: libc::c_int,
-        pub leafsurfaces: *mut libc::c_int,
-        pub numSubModels: libc::c_int,
+        pub numLeafBrushes: i32,
+        pub leafbrushes: *mut i32,
+        pub numLeafSurfaces: i32,
+        pub leafsurfaces: *mut i32,
+        pub numSubModels: i32,
         pub cmodels: *mut crate::cm_local_h::cmodel_t,
-        pub numBrushes: libc::c_int,
+        pub numBrushes: i32,
         pub brushes: *mut crate::cm_local_h::cbrush_t,
-        pub numClusters: libc::c_int,
-        pub clusterBytes: libc::c_int,
+        pub numClusters: i32,
+        pub clusterBytes: i32,
         pub visibility: *mut crate::src::qcommon::q_shared::byte,
         pub vised: crate::src::qcommon::q_shared::qboolean,
-        pub numEntityChars: libc::c_int,
+        pub numEntityChars: i32,
         pub entityString: *mut libc::c_char,
-        pub numAreas: libc::c_int,
+        pub numAreas: i32,
         pub areas: *mut crate::cm_local_h::cArea_t,
-        pub areaPortals: *mut libc::c_int,
-        pub numSurfaces: libc::c_int,
+        pub areaPortals: *mut i32,
+        pub numSurfaces: i32,
         pub surfaces: *mut *mut crate::cm_local_h::cPatch_t,
-        pub floodvalid: libc::c_int,
-        pub checkcount: libc::c_int,
+        pub floodvalid: i32,
+        pub checkcount: i32,
     }
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct sphere_t {
         pub use_0: crate::src::qcommon::q_shared::qboolean,
-        pub radius: libc::c_float,
-        pub halfheight: libc::c_float,
+        pub radius: f32,
+        pub halfheight: f32,
         pub offset: crate::src::qcommon::q_shared::vec3_t,
     }
 
@@ -227,11 +227,11 @@ pub mod cm_local_h {
         pub end: crate::src::qcommon::q_shared::vec3_t,
         pub size: [crate::src::qcommon::q_shared::vec3_t; 2],
         pub offsets: [crate::src::qcommon::q_shared::vec3_t; 8],
-        pub maxOffset: libc::c_float,
+        pub maxOffset: f32,
         pub extents: crate::src::qcommon::q_shared::vec3_t,
         pub bounds: [crate::src::qcommon::q_shared::vec3_t; 2],
         pub modelOrigin: crate::src::qcommon::q_shared::vec3_t,
-        pub contents: libc::c_int,
+        pub contents: i32,
         pub isPoint: crate::src::qcommon::q_shared::qboolean,
         pub trace: crate::src::qcommon::q_shared::trace_t,
         pub sphere: crate::cm_local_h::sphere_t,
@@ -242,14 +242,14 @@ pub mod cm_local_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct leafList_s {
-        pub count: libc::c_int,
-        pub maxcount: libc::c_int,
+        pub count: i32,
+        pub maxcount: i32,
         pub overflowed: crate::src::qcommon::q_shared::qboolean,
-        pub list: *mut libc::c_int,
+        pub list: *mut i32,
         pub bounds: [crate::src::qcommon::q_shared::vec3_t; 2],
-        pub lastLeaf: libc::c_int,
+        pub lastLeaf: i32,
         pub storeLeafs: Option<
-            unsafe extern "C" fn(_: *mut crate::cm_local_h::leafList_s, _: libc::c_int) -> (),
+            unsafe extern "C" fn(_: *mut crate::cm_local_h::leafList_s, _: i32) -> (),
         >,
     }
 }
@@ -257,31 +257,31 @@ pub mod opus_private_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct OpusRepacketizer {
-        pub toc: libc::c_uchar,
-        pub nb_frames: libc::c_int,
-        pub frames: [*const libc::c_uchar; 48],
+        pub toc: u8,
+        pub nb_frames: i32,
+        pub frames: [*const u8; 48],
         pub len: [crate::opus_types_h::opus_int16; 48],
-        pub framesize: libc::c_int,
+        pub framesize: i32,
     }
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct ChannelLayout {
-        pub nb_channels: libc::c_int,
-        pub nb_streams: libc::c_int,
-        pub nb_coupled_streams: libc::c_int,
-        pub mapping: [libc::c_uchar; 256],
+        pub nb_channels: i32,
+        pub nb_streams: i32,
+        pub nb_coupled_streams: i32,
+        pub mapping: [u8; 256],
     }
 
     pub type downmix_func = Option<
         unsafe extern "C" fn(
             _: *const libc::c_void,
             _: *mut crate::arch_h::opus_val32,
-            _: libc::c_int,
-            _: libc::c_int,
-            _: libc::c_int,
-            _: libc::c_int,
-            _: libc::c_int,
+            _: i32,
+            _: i32,
+            _: i32,
+            _: i32,
+            _: i32,
         ) -> (),
     >;
 
@@ -310,25 +310,25 @@ pub mod control_h {
         pub maxInternalSampleRate: crate::opus_types_h::opus_int32,
         pub minInternalSampleRate: crate::opus_types_h::opus_int32,
         pub desiredInternalSampleRate: crate::opus_types_h::opus_int32,
-        pub payloadSize_ms: libc::c_int,
+        pub payloadSize_ms: i32,
         pub bitRate: crate::opus_types_h::opus_int32,
-        pub packetLossPercentage: libc::c_int,
-        pub complexity: libc::c_int,
-        pub useInBandFEC: libc::c_int,
-        pub LBRR_coded: libc::c_int,
-        pub useDTX: libc::c_int,
-        pub useCBR: libc::c_int,
-        pub maxBits: libc::c_int,
-        pub toMono: libc::c_int,
-        pub opusCanSwitch: libc::c_int,
-        pub reducedDependency: libc::c_int,
+        pub packetLossPercentage: i32,
+        pub complexity: i32,
+        pub useInBandFEC: i32,
+        pub LBRR_coded: i32,
+        pub useDTX: i32,
+        pub useCBR: i32,
+        pub maxBits: i32,
+        pub toMono: i32,
+        pub opusCanSwitch: i32,
+        pub reducedDependency: i32,
         pub internalSampleRate: crate::opus_types_h::opus_int32,
-        pub allowBandwidthSwitch: libc::c_int,
-        pub inWBmodeWithoutVariableLP: libc::c_int,
-        pub stereoWidth_Q14: libc::c_int,
-        pub switchReady: libc::c_int,
-        pub signalType: libc::c_int,
-        pub offset: libc::c_int,
+        pub allowBandwidthSwitch: i32,
+        pub inWBmodeWithoutVariableLP: i32,
+        pub stereoWidth_Q14: i32,
+        pub switchReady: i32,
+        pub signalType: i32,
+        pub offset: i32,
     }
 
     #[repr(C)]
@@ -338,17 +338,17 @@ pub mod control_h {
         pub nChannelsInternal: crate::opus_types_h::opus_int32,
         pub API_sampleRate: crate::opus_types_h::opus_int32,
         pub internalSampleRate: crate::opus_types_h::opus_int32,
-        pub payloadSize_ms: libc::c_int,
-        pub prevPitchLag: libc::c_int,
+        pub payloadSize_ms: i32,
+        pub prevPitchLag: i32,
     }
 }
 pub mod structs_FLP_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct silk_shape_state_FLP {
-        pub LastGainIndex: libc::c_schar,
-        pub HarmShapeGain_smth: libc::c_float,
-        pub Tilt_smth: libc::c_float,
+        pub LastGainIndex: i8,
+        pub HarmShapeGain_smth: f32,
+        pub Tilt_smth: f32,
     }
 
     #[repr(C)]
@@ -356,31 +356,31 @@ pub mod structs_FLP_h {
     pub struct silk_encoder_state_FLP {
         pub sCmn: crate::structs_h::silk_encoder_state,
         pub sShape: crate::structs_FLP_h::silk_shape_state_FLP,
-        pub x_buf: [libc::c_float; 720],
-        pub LTPCorr: libc::c_float,
+        pub x_buf: [f32; 720],
+        pub LTPCorr: f32,
     }
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct silk_encoder_control_FLP {
-        pub Gains: [libc::c_float; 4],
-        pub PredCoef: [[libc::c_float; 16]; 2],
-        pub LTPCoef: [libc::c_float; 20],
-        pub LTP_scale: libc::c_float,
-        pub pitchL: [libc::c_int; 4],
-        pub AR: [libc::c_float; 96],
-        pub LF_MA_shp: [libc::c_float; 4],
-        pub LF_AR_shp: [libc::c_float; 4],
-        pub Tilt: [libc::c_float; 4],
-        pub HarmShapeGain: [libc::c_float; 4],
-        pub Lambda: libc::c_float,
-        pub input_quality: libc::c_float,
-        pub coding_quality: libc::c_float,
-        pub predGain: libc::c_float,
-        pub LTPredCodGain: libc::c_float,
-        pub ResNrg: [libc::c_float; 4],
+        pub Gains: [f32; 4],
+        pub PredCoef: [[f32; 16]; 2],
+        pub LTPCoef: [f32; 20],
+        pub LTP_scale: f32,
+        pub pitchL: [i32; 4],
+        pub AR: [f32; 96],
+        pub LF_MA_shp: [f32; 4],
+        pub LF_AR_shp: [f32; 4],
+        pub Tilt: [f32; 4],
+        pub HarmShapeGain: [f32; 4],
+        pub Lambda: f32,
+        pub input_quality: f32,
+        pub coding_quality: f32,
+        pub predGain: f32,
+        pub LTPredCodGain: f32,
+        pub ResNrg: [f32; 4],
         pub GainsUnq_Q16: [crate::opus_types_h::opus_int32; 4],
-        pub lastGainIndexPrev: libc::c_schar,
+        pub lastGainIndexPrev: i8,
     }
 
     #[repr(C)]
@@ -390,12 +390,12 @@ pub mod structs_FLP_h {
         pub sStereo: crate::structs_h::stereo_enc_state,
         pub nBitsUsedLBRR: crate::opus_types_h::opus_int32,
         pub nBitsExceeded: crate::opus_types_h::opus_int32,
-        pub nChannelsAPI: libc::c_int,
-        pub nChannelsInternal: libc::c_int,
-        pub nPrevChannelsInternal: libc::c_int,
-        pub timeSinceSwitchAllowed_ms: libc::c_int,
-        pub allowBandwidthSwitch: libc::c_int,
-        pub prev_decode_only_middle: libc::c_int,
+        pub nChannelsAPI: i32,
+        pub nChannelsInternal: i32,
+        pub nPrevChannelsInternal: i32,
+        pub timeSinceSwitchAllowed_ms: i32,
+        pub allowBandwidthSwitch: i32,
+        pub prev_decode_only_middle: i32,
     }
 }
 pub mod structs_h {
@@ -408,12 +408,12 @@ pub mod structs_h {
         pub sAR2_Q14: [crate::opus_types_h::opus_int32; 24],
         pub sLF_AR_shp_Q14: crate::opus_types_h::opus_int32,
         pub sDiff_shp_Q14: crate::opus_types_h::opus_int32,
-        pub lagPrev: libc::c_int,
-        pub sLTP_buf_idx: libc::c_int,
-        pub sLTP_shp_buf_idx: libc::c_int,
+        pub lagPrev: i32,
+        pub sLTP_buf_idx: i32,
+        pub sLTP_shp_buf_idx: i32,
         pub rand_seed: crate::opus_types_h::opus_int32,
         pub prev_gain_Q16: crate::opus_types_h::opus_int32,
-        pub rewhite_flag: libc::c_int,
+        pub rewhite_flag: i32,
     }
 
     #[repr(C)]
@@ -436,7 +436,7 @@ pub mod structs_h {
     pub struct silk_LP_state {
         pub In_LP_State: [crate::opus_types_h::opus_int32; 2],
         pub transition_frame_no: crate::opus_types_h::opus_int32,
-        pub mode: libc::c_int,
+        pub mode: i32,
     }
 
     #[repr(C)]
@@ -446,13 +446,13 @@ pub mod structs_h {
         pub order: crate::opus_types_h::opus_int16,
         pub quantStepSize_Q16: crate::opus_types_h::opus_int16,
         pub invQuantStepSize_Q6: crate::opus_types_h::opus_int16,
-        pub CB1_NLSF_Q8: *const libc::c_uchar,
+        pub CB1_NLSF_Q8: *const u8,
         pub CB1_Wght_Q9: *const crate::opus_types_h::opus_int16,
-        pub CB1_iCDF: *const libc::c_uchar,
-        pub pred_Q8: *const libc::c_uchar,
-        pub ec_sel: *const libc::c_uchar,
-        pub ec_iCDF: *const libc::c_uchar,
-        pub ec_Rates_Q5: *const libc::c_uchar,
+        pub CB1_iCDF: *const u8,
+        pub pred_Q8: *const u8,
+        pub ec_sel: *const u8,
+        pub ec_iCDF: *const u8,
+        pub ec_Rates_Q5: *const u8,
         pub deltaMin_Q15: *const crate::opus_types_h::opus_int16,
     }
 
@@ -466,8 +466,8 @@ pub mod structs_h {
         pub smth_width_Q14: crate::opus_types_h::opus_int16,
         pub width_prev_Q14: crate::opus_types_h::opus_int16,
         pub silent_side_len: crate::opus_types_h::opus_int16,
-        pub predIx: [[[libc::c_schar; 3]; 2]; 3],
-        pub mid_only_flags: [libc::c_schar; 3],
+        pub predIx: [[[i8; 3]; 2]; 3],
+        pub mid_only_flags: [i8; 3],
     }
 
     #[repr(C)]
@@ -481,17 +481,17 @@ pub mod structs_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct SideInfoIndices {
-        pub GainsIndices: [libc::c_schar; 4],
-        pub LTPIndex: [libc::c_schar; 4],
-        pub NLSFIndices: [libc::c_schar; 17],
+        pub GainsIndices: [i8; 4],
+        pub LTPIndex: [i8; 4],
+        pub NLSFIndices: [i8; 17],
         pub lagIndex: crate::opus_types_h::opus_int16,
-        pub contourIndex: libc::c_schar,
-        pub signalType: libc::c_schar,
-        pub quantOffsetType: libc::c_schar,
-        pub NLSFInterpCoef_Q2: libc::c_schar,
-        pub PERIndex: libc::c_schar,
-        pub LTP_scaleIndex: libc::c_schar,
-        pub Seed: libc::c_schar,
+        pub contourIndex: i8,
+        pub signalType: i8,
+        pub quantOffsetType: i8,
+        pub NLSFInterpCoef_Q2: i8,
+        pub PERIndex: i8,
+        pub LTP_scaleIndex: i8,
+        pub Seed: i8,
     }
 
     #[repr(C)]
@@ -504,76 +504,76 @@ pub mod structs_h {
         pub sVAD: crate::structs_h::silk_VAD_state,
         pub sNSQ: crate::structs_h::silk_nsq_state,
         pub prev_NLSFq_Q15: [crate::opus_types_h::opus_int16; 16],
-        pub speech_activity_Q8: libc::c_int,
-        pub allow_bandwidth_switch: libc::c_int,
-        pub LBRRprevLastGainIndex: libc::c_schar,
-        pub prevSignalType: libc::c_schar,
-        pub prevLag: libc::c_int,
-        pub pitch_LPC_win_length: libc::c_int,
-        pub max_pitch_lag: libc::c_int,
+        pub speech_activity_Q8: i32,
+        pub allow_bandwidth_switch: i32,
+        pub LBRRprevLastGainIndex: i8,
+        pub prevSignalType: i8,
+        pub prevLag: i32,
+        pub pitch_LPC_win_length: i32,
+        pub max_pitch_lag: i32,
         pub API_fs_Hz: crate::opus_types_h::opus_int32,
         pub prev_API_fs_Hz: crate::opus_types_h::opus_int32,
-        pub maxInternal_fs_Hz: libc::c_int,
-        pub minInternal_fs_Hz: libc::c_int,
-        pub desiredInternal_fs_Hz: libc::c_int,
-        pub fs_kHz: libc::c_int,
-        pub nb_subfr: libc::c_int,
-        pub frame_length: libc::c_int,
-        pub subfr_length: libc::c_int,
-        pub ltp_mem_length: libc::c_int,
-        pub la_pitch: libc::c_int,
-        pub la_shape: libc::c_int,
-        pub shapeWinLength: libc::c_int,
+        pub maxInternal_fs_Hz: i32,
+        pub minInternal_fs_Hz: i32,
+        pub desiredInternal_fs_Hz: i32,
+        pub fs_kHz: i32,
+        pub nb_subfr: i32,
+        pub frame_length: i32,
+        pub subfr_length: i32,
+        pub ltp_mem_length: i32,
+        pub la_pitch: i32,
+        pub la_shape: i32,
+        pub shapeWinLength: i32,
         pub TargetRate_bps: crate::opus_types_h::opus_int32,
-        pub PacketSize_ms: libc::c_int,
-        pub PacketLoss_perc: libc::c_int,
+        pub PacketSize_ms: i32,
+        pub PacketLoss_perc: i32,
         pub frameCounter: crate::opus_types_h::opus_int32,
-        pub Complexity: libc::c_int,
-        pub nStatesDelayedDecision: libc::c_int,
-        pub useInterpolatedNLSFs: libc::c_int,
-        pub shapingLPCOrder: libc::c_int,
-        pub predictLPCOrder: libc::c_int,
-        pub pitchEstimationComplexity: libc::c_int,
-        pub pitchEstimationLPCOrder: libc::c_int,
+        pub Complexity: i32,
+        pub nStatesDelayedDecision: i32,
+        pub useInterpolatedNLSFs: i32,
+        pub shapingLPCOrder: i32,
+        pub predictLPCOrder: i32,
+        pub pitchEstimationComplexity: i32,
+        pub pitchEstimationLPCOrder: i32,
         pub pitchEstimationThreshold_Q16: crate::opus_types_h::opus_int32,
         pub sum_log_gain_Q7: crate::opus_types_h::opus_int32,
-        pub NLSF_MSVQ_Survivors: libc::c_int,
-        pub first_frame_after_reset: libc::c_int,
-        pub controlled_since_last_payload: libc::c_int,
-        pub warping_Q16: libc::c_int,
-        pub useCBR: libc::c_int,
-        pub prefillFlag: libc::c_int,
-        pub pitch_lag_low_bits_iCDF: *const libc::c_uchar,
-        pub pitch_contour_iCDF: *const libc::c_uchar,
+        pub NLSF_MSVQ_Survivors: i32,
+        pub first_frame_after_reset: i32,
+        pub controlled_since_last_payload: i32,
+        pub warping_Q16: i32,
+        pub useCBR: i32,
+        pub prefillFlag: i32,
+        pub pitch_lag_low_bits_iCDF: *const u8,
+        pub pitch_contour_iCDF: *const u8,
         pub psNLSF_CB: *const crate::structs_h::silk_NLSF_CB_struct,
-        pub input_quality_bands_Q15: [libc::c_int; 4],
-        pub input_tilt_Q15: libc::c_int,
-        pub SNR_dB_Q7: libc::c_int,
-        pub VAD_flags: [libc::c_schar; 3],
-        pub LBRR_flag: libc::c_schar,
-        pub LBRR_flags: [libc::c_int; 3],
+        pub input_quality_bands_Q15: [i32; 4],
+        pub input_tilt_Q15: i32,
+        pub SNR_dB_Q7: i32,
+        pub VAD_flags: [i8; 3],
+        pub LBRR_flag: i8,
+        pub LBRR_flags: [i32; 3],
         pub indices: crate::structs_h::SideInfoIndices,
-        pub pulses: [libc::c_schar; 320],
-        pub arch: libc::c_int,
+        pub pulses: [i8; 320],
+        pub arch: i32,
         pub inputBuf: [crate::opus_types_h::opus_int16; 322],
-        pub inputBufIx: libc::c_int,
-        pub nFramesPerPacket: libc::c_int,
-        pub nFramesEncoded: libc::c_int,
-        pub nChannelsAPI: libc::c_int,
-        pub nChannelsInternal: libc::c_int,
-        pub channelNb: libc::c_int,
-        pub frames_since_onset: libc::c_int,
-        pub ec_prevSignalType: libc::c_int,
+        pub inputBufIx: i32,
+        pub nFramesPerPacket: i32,
+        pub nFramesEncoded: i32,
+        pub nChannelsAPI: i32,
+        pub nChannelsInternal: i32,
+        pub channelNb: i32,
+        pub frames_since_onset: i32,
+        pub ec_prevSignalType: i32,
         pub ec_prevLagIndex: crate::opus_types_h::opus_int16,
         pub resampler_state: crate::resampler_structs_h::silk_resampler_state_struct,
-        pub useDTX: libc::c_int,
-        pub inDTX: libc::c_int,
-        pub noSpeechCounter: libc::c_int,
-        pub useInBandFEC: libc::c_int,
-        pub LBRR_enabled: libc::c_int,
-        pub LBRR_GainIncreases: libc::c_int,
+        pub useDTX: i32,
+        pub inDTX: i32,
+        pub noSpeechCounter: i32,
+        pub useInBandFEC: i32,
+        pub LBRR_enabled: i32,
+        pub LBRR_GainIncreases: i32,
         pub indices_LBRR: [crate::structs_h::SideInfoIndices; 3],
-        pub pulses_LBRR: [[libc::c_schar; 320]; 3],
+        pub pulses_LBRR: [[i8; 320]; 3],
     }
 
     #[repr(C)]
@@ -582,16 +582,16 @@ pub mod structs_h {
         pub pitchL_Q8: crate::opus_types_h::opus_int32,
         pub LTPCoef_Q14: [crate::opus_types_h::opus_int16; 5],
         pub prevLPC_Q12: [crate::opus_types_h::opus_int16; 16],
-        pub last_frame_lost: libc::c_int,
+        pub last_frame_lost: i32,
         pub rand_seed: crate::opus_types_h::opus_int32,
         pub randScale_Q14: crate::opus_types_h::opus_int16,
         pub conc_energy: crate::opus_types_h::opus_int32,
-        pub conc_energy_shift: libc::c_int,
+        pub conc_energy_shift: i32,
         pub prevLTP_scale_Q14: crate::opus_types_h::opus_int16,
         pub prevGain_Q16: [crate::opus_types_h::opus_int32; 2],
-        pub fs_kHz: libc::c_int,
-        pub nb_subfr: libc::c_int,
-        pub subfr_length: libc::c_int,
+        pub fs_kHz: i32,
+        pub nb_subfr: i32,
+        pub subfr_length: i32,
     }
 
     #[repr(C)]
@@ -602,7 +602,7 @@ pub mod structs_h {
         pub CNG_synth_state: [crate::opus_types_h::opus_int32; 16],
         pub CNG_smth_Gain_Q16: crate::opus_types_h::opus_int32,
         pub rand_seed: crate::opus_types_h::opus_int32,
-        pub fs_kHz: libc::c_int,
+        pub fs_kHz: i32,
     }
 
     #[repr(C)]
@@ -612,44 +612,44 @@ pub mod structs_h {
         pub exc_Q14: [crate::opus_types_h::opus_int32; 320],
         pub sLPC_Q14_buf: [crate::opus_types_h::opus_int32; 16],
         pub outBuf: [crate::opus_types_h::opus_int16; 480],
-        pub lagPrev: libc::c_int,
-        pub LastGainIndex: libc::c_schar,
-        pub fs_kHz: libc::c_int,
+        pub lagPrev: i32,
+        pub LastGainIndex: i8,
+        pub fs_kHz: i32,
         pub fs_API_hz: crate::opus_types_h::opus_int32,
-        pub nb_subfr: libc::c_int,
-        pub frame_length: libc::c_int,
-        pub subfr_length: libc::c_int,
-        pub ltp_mem_length: libc::c_int,
-        pub LPC_order: libc::c_int,
+        pub nb_subfr: i32,
+        pub frame_length: i32,
+        pub subfr_length: i32,
+        pub ltp_mem_length: i32,
+        pub LPC_order: i32,
         pub prevNLSF_Q15: [crate::opus_types_h::opus_int16; 16],
-        pub first_frame_after_reset: libc::c_int,
-        pub pitch_lag_low_bits_iCDF: *const libc::c_uchar,
-        pub pitch_contour_iCDF: *const libc::c_uchar,
-        pub nFramesDecoded: libc::c_int,
-        pub nFramesPerPacket: libc::c_int,
-        pub ec_prevSignalType: libc::c_int,
+        pub first_frame_after_reset: i32,
+        pub pitch_lag_low_bits_iCDF: *const u8,
+        pub pitch_contour_iCDF: *const u8,
+        pub nFramesDecoded: i32,
+        pub nFramesPerPacket: i32,
+        pub ec_prevSignalType: i32,
         pub ec_prevLagIndex: crate::opus_types_h::opus_int16,
-        pub VAD_flags: [libc::c_int; 3],
-        pub LBRR_flag: libc::c_int,
-        pub LBRR_flags: [libc::c_int; 3],
+        pub VAD_flags: [i32; 3],
+        pub LBRR_flag: i32,
+        pub LBRR_flags: [i32; 3],
         pub resampler_state: crate::resampler_structs_h::silk_resampler_state_struct,
         pub psNLSF_CB: *const crate::structs_h::silk_NLSF_CB_struct,
         pub indices: crate::structs_h::SideInfoIndices,
         pub sCNG: crate::structs_h::silk_CNG_struct,
-        pub lossCnt: libc::c_int,
-        pub prevSignalType: libc::c_int,
-        pub arch: libc::c_int,
+        pub lossCnt: i32,
+        pub prevSignalType: i32,
+        pub arch: i32,
         pub sPLC: crate::structs_h::silk_PLC_struct,
     }
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct silk_decoder_control {
-        pub pitchL: [libc::c_int; 4],
+        pub pitchL: [i32; 4],
         pub Gains_Q16: [crate::opus_types_h::opus_int32; 4],
         pub PredCoef_Q12: [[crate::opus_types_h::opus_int16; 16]; 2],
         pub LTPCoef_Q14: [crate::opus_types_h::opus_int16; 20],
-        pub LTP_scale_Q14: libc::c_int,
+        pub LTP_scale_Q14: i32,
     }
 }
 pub mod resampler_structs_h {
@@ -661,14 +661,14 @@ pub mod resampler_structs_h {
         pub sIIR: [crate::opus_types_h::opus_int32; 6],
         pub sFIR: crate::resampler_structs_h::C2RustUnnamed_64,
         pub delayBuf: [crate::opus_types_h::opus_int16; 48],
-        pub resampler_function: libc::c_int,
-        pub batchSize: libc::c_int,
+        pub resampler_function: i32,
+        pub batchSize: i32,
         pub invRatio_Q16: crate::opus_types_h::opus_int32,
-        pub FIR_Order: libc::c_int,
-        pub FIR_Fracs: libc::c_int,
-        pub Fs_in_kHz: libc::c_int,
-        pub Fs_out_kHz: libc::c_int,
-        pub inputDelay: libc::c_int,
+        pub FIR_Order: i32,
+        pub FIR_Fracs: i32,
+        pub Fs_in_kHz: i32,
+        pub Fs_out_kHz: i32,
+        pub inputDelay: i32,
         pub Coefs: *const crate::opus_types_h::opus_int16,
     }
 
@@ -683,37 +683,37 @@ pub mod celt_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct AnalysisInfo {
-        pub valid: libc::c_int,
-        pub tonality: libc::c_float,
-        pub tonality_slope: libc::c_float,
-        pub noisiness: libc::c_float,
-        pub activity: libc::c_float,
-        pub music_prob: libc::c_float,
-        pub vad_prob: libc::c_float,
-        pub bandwidth: libc::c_int,
-        pub activity_probability: libc::c_float,
-        pub leak_boost: [libc::c_uchar; 19],
+        pub valid: i32,
+        pub tonality: f32,
+        pub tonality_slope: f32,
+        pub noisiness: f32,
+        pub activity: f32,
+        pub music_prob: f32,
+        pub vad_prob: f32,
+        pub bandwidth: i32,
+        pub activity_probability: f32,
+        pub leak_boost: [u8; 19],
     }
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct SILKInfo {
-        pub signalType: libc::c_int,
-        pub offset: libc::c_int,
+        pub signalType: i32,
+        pub offset: i32,
     }
 }
 pub mod arch_h {
-    pub type opus_val16 = libc::c_float;
+    pub type opus_val16 = f32;
 
-    pub type opus_val32 = libc::c_float;
+    pub type opus_val32 = f32;
 
-    pub type opus_val64 = libc::c_float;
+    pub type opus_val64 = f32;
 
-    pub type celt_sig = libc::c_float;
+    pub type celt_sig = f32;
 
-    pub type celt_norm = libc::c_float;
+    pub type celt_norm = f32;
 
-    pub type celt_ener = libc::c_float;
+    pub type celt_ener = f32;
 }
 pub mod os_h {
     pub type vorbis_fpu_control = crate::config_types_h::ogg_int16_t;
@@ -722,37 +722,37 @@ pub mod highlevel_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct highlevel_byblocktype {
-        pub tone_mask_setting: libc::c_double,
-        pub tone_peaklimit_setting: libc::c_double,
-        pub noise_bias_setting: libc::c_double,
-        pub noise_compand_setting: libc::c_double,
+        pub tone_mask_setting: f64,
+        pub tone_peaklimit_setting: f64,
+        pub noise_bias_setting: f64,
+        pub noise_compand_setting: f64,
     }
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct highlevel_encode_setup {
-        pub set_in_stone: libc::c_int,
+        pub set_in_stone: i32,
         pub setup: *const libc::c_void,
-        pub base_setting: libc::c_double,
-        pub impulse_noisetune: libc::c_double,
-        pub req: libc::c_float,
-        pub managed: libc::c_int,
+        pub base_setting: f64,
+        pub impulse_noisetune: f64,
+        pub req: f32,
+        pub managed: i32,
         pub bitrate_min: libc::c_long,
         pub bitrate_av: libc::c_long,
-        pub bitrate_av_damp: libc::c_double,
+        pub bitrate_av_damp: f64,
         pub bitrate_max: libc::c_long,
         pub bitrate_reservoir: libc::c_long,
-        pub bitrate_reservoir_bias: libc::c_double,
-        pub impulse_block_p: libc::c_int,
-        pub noise_normalize_p: libc::c_int,
-        pub coupling_p: libc::c_int,
-        pub stereo_point_setting: libc::c_double,
-        pub lowpass_kHz: libc::c_double,
-        pub lowpass_altered: libc::c_int,
-        pub ath_floating_dB: libc::c_double,
-        pub ath_absolute_dB: libc::c_double,
-        pub amplitude_track_dBpersec: libc::c_double,
-        pub trigger_setting: libc::c_double,
+        pub bitrate_reservoir_bias: f64,
+        pub impulse_block_p: i32,
+        pub noise_normalize_p: i32,
+        pub coupling_p: i32,
+        pub stereo_point_setting: f64,
+        pub lowpass_kHz: f64,
+        pub lowpass_altered: i32,
+        pub ath_floating_dB: f64,
+        pub ath_absolute_dB: f64,
+        pub amplitude_track_dBpersec: f64,
+        pub trigger_setting: f64,
         pub block: [crate::highlevel_h::highlevel_byblocktype; 4],
     }
 }
@@ -760,9 +760,9 @@ pub mod codec_internal_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct vorbis_block_internal {
-        pub pcmdelay: *mut *mut libc::c_float,
-        pub ampmax: libc::c_float,
-        pub blocktype: libc::c_int,
+        pub pcmdelay: *mut *mut f32,
+        pub ampmax: f32,
+        pub blocktype: i32,
         pub packetblob: [*mut crate::ogg_h::oggpack_buffer; 15],
     }
 
@@ -775,10 +775,10 @@ pub mod codec_internal_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct vorbis_info_mode {
-        pub blockflag: libc::c_int,
-        pub windowtype: libc::c_int,
-        pub transformtype: libc::c_int,
-        pub mapping: libc::c_int,
+        pub blockflag: i32,
+        pub windowtype: i32,
+        pub transformtype: i32,
+        pub mapping: i32,
     }
 
     pub type vorbis_info_floor = ();
@@ -791,17 +791,17 @@ pub mod codec_internal_h {
     #[derive(Copy, Clone)]
     pub struct private_state {
         pub ve: *mut crate::src::libvorbis_1_3_6::lib::envelope::envelope_lookup,
-        pub window: [libc::c_int; 2],
+        pub window: [i32; 2],
         pub transform: [*mut *mut libc::c_void; 2],
         pub fft_look: [crate::src::libvorbis_1_3_6::lib::smallft::drft_lookup; 2],
-        pub modebits: libc::c_int,
+        pub modebits: i32,
         pub flr: *mut *mut libc::c_void,
         pub residue: *mut *mut libc::c_void,
         pub psy: *mut crate::src::libvorbis_1_3_6::lib::psy::vorbis_look_psy,
         pub psy_g_look: *mut crate::src::libvorbis_1_3_6::lib::psy::vorbis_look_psy_global,
-        pub header: *mut libc::c_uchar,
-        pub header1: *mut libc::c_uchar,
-        pub header2: *mut libc::c_uchar,
+        pub header: *mut u8,
+        pub header1: *mut u8,
+        pub header2: *mut u8,
         pub bms: crate::src::libvorbis_1_3_6::lib::bitrate::bitrate_manager_state,
         pub sample_count: crate::config_types_h::ogg_int64_t,
     }
@@ -810,18 +810,18 @@ pub mod codec_internal_h {
     #[derive(Copy, Clone)]
     pub struct codec_setup_info {
         pub blocksizes: [libc::c_long; 2],
-        pub modes: libc::c_int,
-        pub maps: libc::c_int,
-        pub floors: libc::c_int,
-        pub residues: libc::c_int,
-        pub books: libc::c_int,
-        pub psys: libc::c_int,
+        pub modes: i32,
+        pub maps: i32,
+        pub floors: i32,
+        pub residues: i32,
+        pub books: i32,
+        pub psys: i32,
         pub mode_param: [*mut crate::codec_internal_h::vorbis_info_mode; 64],
-        pub map_type: [libc::c_int; 64],
+        pub map_type: [i32; 64],
         pub map_param: [*mut libc::c_void; 64],
-        pub floor_type: [libc::c_int; 64],
+        pub floor_type: [i32; 64],
         pub floor_param: [*mut libc::c_void; 64],
-        pub residue_type: [libc::c_int; 64],
+        pub residue_type: [i32; 64],
         pub residue_param: [*mut libc::c_void; 64],
         pub book_param: [*mut crate::src::libvorbis_1_3_6::lib::codebook::static_codebook; 256],
         pub fullbooks: *mut crate::src::libvorbis_1_3_6::lib::codebook::codebook,
@@ -829,20 +829,20 @@ pub mod codec_internal_h {
         pub psy_g_param: crate::src::libvorbis_1_3_6::lib::psy::vorbis_info_psy_global,
         pub bi: crate::src::libvorbis_1_3_6::lib::bitrate::bitrate_manager_info,
         pub hi: crate::highlevel_h::highlevel_encode_setup,
-        pub halfrate_flag: libc::c_int,
+        pub halfrate_flag: i32,
     }
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct vorbis_look_floor1 {
-        pub sorted_index: [libc::c_int; 65],
-        pub forward_index: [libc::c_int; 65],
-        pub reverse_index: [libc::c_int; 65],
-        pub hineighbor: [libc::c_int; 63],
-        pub loneighbor: [libc::c_int; 63],
-        pub posts: libc::c_int,
-        pub n: libc::c_int,
-        pub quant_q: libc::c_int,
+        pub sorted_index: [i32; 65],
+        pub forward_index: [i32; 65],
+        pub reverse_index: [i32; 65],
+        pub hineighbor: [i32; 63],
+        pub loneighbor: [i32; 63],
+        pub posts: i32,
+        pub n: i32,
+        pub quant_q: i32,
         pub vi: *mut crate::backends_h::vorbis_info_floor1,
         pub phrasebits: libc::c_long,
         pub postbits: libc::c_long,
@@ -881,42 +881,42 @@ pub mod backends_h {
                 _: *mut crate::codec_h::vorbis_block,
                 _: *mut libc::c_void,
                 _: *mut libc::c_void,
-                _: *mut libc::c_float,
-            ) -> libc::c_int,
+                _: *mut f32,
+            ) -> i32,
         >,
     }
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct vorbis_info_floor0 {
-        pub order: libc::c_int,
+        pub order: i32,
         pub rate: libc::c_long,
         pub barkmap: libc::c_long,
-        pub ampbits: libc::c_int,
-        pub ampdB: libc::c_int,
-        pub numbooks: libc::c_int,
-        pub books: [libc::c_int; 16],
-        pub lessthan: libc::c_float,
-        pub greaterthan: libc::c_float,
+        pub ampbits: i32,
+        pub ampdB: i32,
+        pub numbooks: i32,
+        pub books: [i32; 16],
+        pub lessthan: f32,
+        pub greaterthan: f32,
     }
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct vorbis_info_floor1 {
-        pub partitions: libc::c_int,
-        pub partitionclass: [libc::c_int; 31],
-        pub class_dim: [libc::c_int; 16],
-        pub class_subs: [libc::c_int; 16],
-        pub class_book: [libc::c_int; 16],
-        pub class_subbook: [[libc::c_int; 8]; 16],
-        pub mult: libc::c_int,
-        pub postlist: [libc::c_int; 65],
-        pub maxover: libc::c_float,
-        pub maxunder: libc::c_float,
-        pub maxerr: libc::c_float,
-        pub twofitweight: libc::c_float,
-        pub twofitatten: libc::c_float,
-        pub n: libc::c_int,
+        pub partitions: i32,
+        pub partitionclass: [i32; 31],
+        pub class_dim: [i32; 16],
+        pub class_subs: [i32; 16],
+        pub class_book: [i32; 16],
+        pub class_subbook: [[i32; 8]; 16],
+        pub mult: i32,
+        pub postlist: [i32; 65],
+        pub maxover: f32,
+        pub maxunder: f32,
+        pub maxerr: f32,
+        pub twofitweight: f32,
+        pub twofitatten: f32,
+        pub n: i32,
     }
 
     #[repr(C)]
@@ -943,9 +943,9 @@ pub mod backends_h {
             unsafe extern "C" fn(
                 _: *mut crate::codec_h::vorbis_block,
                 _: *mut libc::c_void,
-                _: *mut *mut libc::c_int,
-                _: *mut libc::c_int,
-                _: libc::c_int,
+                _: *mut *mut i32,
+                _: *mut i32,
+                _: i32,
             ) -> *mut *mut libc::c_long,
         >,
         pub forward: Option<
@@ -953,21 +953,21 @@ pub mod backends_h {
                 _: *mut crate::ogg_h::oggpack_buffer,
                 _: *mut crate::codec_h::vorbis_block,
                 _: *mut libc::c_void,
-                _: *mut *mut libc::c_int,
-                _: *mut libc::c_int,
-                _: libc::c_int,
+                _: *mut *mut i32,
+                _: *mut i32,
+                _: i32,
                 _: *mut *mut libc::c_long,
-                _: libc::c_int,
-            ) -> libc::c_int,
+                _: i32,
+            ) -> i32,
         >,
         pub inverse: Option<
             unsafe extern "C" fn(
                 _: *mut crate::codec_h::vorbis_block,
                 _: *mut libc::c_void,
-                _: *mut *mut libc::c_float,
-                _: *mut libc::c_int,
-                _: libc::c_int,
-            ) -> libc::c_int,
+                _: *mut *mut f32,
+                _: *mut i32,
+                _: i32,
+            ) -> i32,
         >,
     }
 
@@ -976,14 +976,14 @@ pub mod backends_h {
     pub struct vorbis_info_residue0 {
         pub begin: libc::c_long,
         pub end: libc::c_long,
-        pub grouping: libc::c_int,
-        pub partitions: libc::c_int,
-        pub partvals: libc::c_int,
-        pub groupbook: libc::c_int,
-        pub secondstages: [libc::c_int; 64],
-        pub booklist: [libc::c_int; 512],
-        pub classmetric1: [libc::c_int; 64],
-        pub classmetric2: [libc::c_int; 64],
+        pub grouping: i32,
+        pub partitions: i32,
+        pub partvals: i32,
+        pub groupbook: i32,
+        pub secondstages: [i32; 64],
+        pub booklist: [i32; 512],
+        pub classmetric1: [i32; 64],
+        pub classmetric2: [i32; 64],
     }
 
     #[repr(C)]
@@ -1004,36 +1004,36 @@ pub mod backends_h {
         >,
         pub free_info: Option<unsafe extern "C" fn(_: *mut libc::c_void) -> ()>,
         pub forward:
-            Option<unsafe extern "C" fn(_: *mut crate::codec_h::vorbis_block) -> libc::c_int>,
+            Option<unsafe extern "C" fn(_: *mut crate::codec_h::vorbis_block) -> i32>,
         pub inverse: Option<
             unsafe extern "C" fn(
                 _: *mut crate::codec_h::vorbis_block,
                 _: *mut libc::c_void,
-            ) -> libc::c_int,
+            ) -> i32,
         >,
     }
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct vorbis_info_mapping0 {
-        pub submaps: libc::c_int,
-        pub chmuxlist: [libc::c_int; 256],
-        pub floorsubmap: [libc::c_int; 16],
-        pub residuesubmap: [libc::c_int; 16],
-        pub coupling_steps: libc::c_int,
-        pub coupling_mag: [libc::c_int; 256],
-        pub coupling_ang: [libc::c_int; 256],
+        pub submaps: i32,
+        pub chmuxlist: [i32; 256],
+        pub floorsubmap: [i32; 16],
+        pub residuesubmap: [i32; 16],
+        pub coupling_steps: i32,
+        pub coupling_mag: [i32; 256],
+        pub coupling_ang: [i32; 256],
     }
 }
 pub mod internal_h {
-    pub type op_sample = libc::c_float;
+    pub type op_sample = f32;
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct OggOpusLink {
-        pub offset: libc::c_longlong,
-        pub data_offset: libc::c_longlong,
-        pub end_offset: libc::c_longlong,
+        pub offset: i64,
+        pub data_offset: i64,
+        pub end_offset: i64,
         pub pcm_file_offset: crate::config_types_h::ogg_int64_t,
         pub pcm_end: crate::config_types_h::ogg_int64_t,
         pub pcm_start: crate::config_types_h::ogg_int64_t,
@@ -1047,53 +1047,53 @@ pub mod internal_h {
     pub struct OggOpusFile {
         pub callbacks: crate::src::opusfile_0_9::src::opusfile::OpusFileCallbacks,
         pub stream: *mut libc::c_void,
-        pub seekable: libc::c_int,
-        pub nlinks: libc::c_int,
+        pub seekable: i32,
+        pub nlinks: i32,
         pub links: *mut crate::internal_h::OggOpusLink,
-        pub nserialnos: libc::c_int,
-        pub cserialnos: libc::c_int,
+        pub nserialnos: i32,
+        pub cserialnos: i32,
         pub serialnos: *mut crate::config_types_h::ogg_uint32_t,
-        pub offset: libc::c_longlong,
-        pub end: libc::c_longlong,
+        pub offset: i64,
+        pub end: i64,
         pub oy: crate::ogg_h::ogg_sync_state,
-        pub ready_state: libc::c_int,
-        pub cur_link: libc::c_int,
+        pub ready_state: i32,
+        pub cur_link: i32,
         pub cur_discard_count: crate::opus_types_h::opus_int32,
         pub prev_packet_gp: crate::config_types_h::ogg_int64_t,
-        pub prev_page_offset: libc::c_longlong,
-        pub bytes_tracked: libc::c_longlong,
+        pub prev_page_offset: i64,
+        pub bytes_tracked: i64,
         pub samples_tracked: crate::config_types_h::ogg_int64_t,
         pub os: crate::ogg_h::ogg_stream_state,
         pub op: [crate::ogg_h::ogg_packet; 255],
-        pub op_pos: libc::c_int,
-        pub op_count: libc::c_int,
+        pub op_pos: i32,
+        pub op_count: i32,
         pub od: *mut crate::src::opus_1_2_1::src::opus_multistream_decoder::OpusMSDecoder,
         pub decode_cb: crate::src::opusfile_0_9::src::opusfile::op_decode_cb_func,
         pub decode_cb_ctx: *mut libc::c_void,
-        pub od_stream_count: libc::c_int,
-        pub od_coupled_count: libc::c_int,
-        pub od_channel_count: libc::c_int,
-        pub od_mapping: [libc::c_uchar; 8],
+        pub od_stream_count: i32,
+        pub od_coupled_count: i32,
+        pub od_channel_count: i32,
+        pub od_mapping: [u8; 8],
         pub od_buffer: *mut crate::internal_h::op_sample,
-        pub od_buffer_pos: libc::c_int,
-        pub od_buffer_size: libc::c_int,
-        pub gain_type: libc::c_int,
+        pub od_buffer_pos: i32,
+        pub od_buffer_size: i32,
+        pub gain_type: i32,
         pub gain_offset_q8: crate::opus_types_h::opus_int32,
-        pub clip_state: [libc::c_float; 8],
-        pub dither_a: [libc::c_float; 32],
-        pub dither_b: [libc::c_float; 32],
+        pub clip_state: [f32; 8],
+        pub dither_a: [f32; 32],
+        pub dither_b: [f32; 32],
         pub dither_seed: crate::opus_types_h::opus_uint32,
-        pub dither_mute: libc::c_int,
-        pub dither_disabled: libc::c_int,
-        pub state_channel_count: libc::c_int,
+        pub dither_mute: i32,
+        pub dither_disabled: i32,
+        pub state_channel_count: i32,
     }
 }
 pub mod codec_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct vorbis_info {
-        pub version: libc::c_int,
-        pub channels: libc::c_int,
+        pub version: i32,
+        pub channels: i32,
         pub rate: libc::c_long,
         pub bitrate_upper: libc::c_long,
         pub bitrate_nominal: libc::c_long,
@@ -1105,15 +1105,15 @@ pub mod codec_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct vorbis_dsp_state {
-        pub analysisp: libc::c_int,
+        pub analysisp: i32,
         pub vi: *mut crate::codec_h::vorbis_info,
-        pub pcm: *mut *mut libc::c_float,
-        pub pcmret: *mut *mut libc::c_float,
-        pub pcm_storage: libc::c_int,
-        pub pcm_current: libc::c_int,
-        pub pcm_returned: libc::c_int,
-        pub preextrapolate: libc::c_int,
-        pub eofflag: libc::c_int,
+        pub pcm: *mut *mut f32,
+        pub pcmret: *mut *mut f32,
+        pub pcm_storage: i32,
+        pub pcm_current: i32,
+        pub pcm_returned: i32,
+        pub preextrapolate: i32,
+        pub eofflag: i32,
         pub lW: libc::c_long,
         pub W: libc::c_long,
         pub nW: libc::c_long,
@@ -1130,14 +1130,14 @@ pub mod codec_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct vorbis_block {
-        pub pcm: *mut *mut libc::c_float,
+        pub pcm: *mut *mut f32,
         pub opb: crate::ogg_h::oggpack_buffer,
         pub lW: libc::c_long,
         pub W: libc::c_long,
         pub nW: libc::c_long,
-        pub pcmend: libc::c_int,
-        pub mode: libc::c_int,
-        pub eofflag: libc::c_int,
+        pub pcmend: i32,
+        pub mode: i32,
+        pub eofflag: i32,
         pub granulepos: crate::config_types_h::ogg_int64_t,
         pub sequence: crate::config_types_h::ogg_int64_t,
         pub vd: *mut crate::codec_h::vorbis_dsp_state,
@@ -1164,8 +1164,8 @@ pub mod codec_h {
     #[derive(Copy, Clone)]
     pub struct vorbis_comment {
         pub user_comments: *mut *mut libc::c_char,
-        pub comment_lengths: *mut libc::c_int,
-        pub comments: libc::c_int,
+        pub comment_lengths: *mut i32,
+        pub comments: i32,
         pub vendor: *mut libc::c_char,
     }
 }
@@ -1181,38 +1181,38 @@ pub mod ogg_h {
     #[derive(Copy, Clone)]
     pub struct oggpack_buffer {
         pub endbyte: libc::c_long,
-        pub endbit: libc::c_int,
-        pub buffer: *mut libc::c_uchar,
-        pub ptr: *mut libc::c_uchar,
+        pub endbit: i32,
+        pub buffer: *mut u8,
+        pub ptr: *mut u8,
         pub storage: libc::c_long,
     }
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct ogg_page {
-        pub header: *mut libc::c_uchar,
+        pub header: *mut u8,
         pub header_len: libc::c_long,
-        pub body: *mut libc::c_uchar,
+        pub body: *mut u8,
         pub body_len: libc::c_long,
     }
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct ogg_stream_state {
-        pub body_data: *mut libc::c_uchar,
+        pub body_data: *mut u8,
         pub body_storage: libc::c_long,
         pub body_fill: libc::c_long,
         pub body_returned: libc::c_long,
-        pub lacing_vals: *mut libc::c_int,
+        pub lacing_vals: *mut i32,
         pub granule_vals: *mut crate::config_types_h::ogg_int64_t,
         pub lacing_storage: libc::c_long,
         pub lacing_fill: libc::c_long,
         pub lacing_packet: libc::c_long,
         pub lacing_returned: libc::c_long,
-        pub header: [libc::c_uchar; 282],
-        pub header_fill: libc::c_int,
-        pub e_o_s: libc::c_int,
-        pub b_o_s: libc::c_int,
+        pub header: [u8; 282],
+        pub header_fill: i32,
+        pub e_o_s: i32,
+        pub b_o_s: i32,
         pub serialno: libc::c_long,
         pub pageno: libc::c_long,
         pub packetno: crate::config_types_h::ogg_int64_t,
@@ -1222,7 +1222,7 @@ pub mod ogg_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct ogg_packet {
-        pub packet: *mut libc::c_uchar,
+        pub packet: *mut u8,
         pub bytes: libc::c_long,
         pub b_o_s: libc::c_long,
         pub e_o_s: libc::c_long,
@@ -1233,13 +1233,13 @@ pub mod ogg_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct ogg_sync_state {
-        pub data: *mut libc::c_uchar,
-        pub storage: libc::c_int,
-        pub fill: libc::c_int,
-        pub returned: libc::c_int,
-        pub unsynced: libc::c_int,
-        pub headerbytes: libc::c_int,
-        pub bodybytes: libc::c_int,
+        pub data: *mut u8,
+        pub storage: i32,
+        pub fill: i32,
+        pub returned: i32,
+        pub unsynced: i32,
+        pub headerbytes: i32,
+        pub bodybytes: i32,
     }
 }
 pub mod config_types_h {
@@ -1265,13 +1265,13 @@ pub mod alc_h {
 
     pub type ALCchar = libc::c_char;
 
-    pub type ALCint = libc::c_int;
+    pub type ALCint = i32;
 
-    pub type ALCuint = libc::c_uint;
+    pub type ALCuint = u32;
 
-    pub type ALCsizei = libc::c_int;
+    pub type ALCsizei = i32;
 
-    pub type ALCenum = libc::c_int;
+    pub type ALCenum = i32;
 
     pub type ALCvoid = ();
 
@@ -1378,17 +1378,17 @@ pub mod al_h {
 
     pub type ALchar = libc::c_char;
 
-    pub type ALint = libc::c_int;
+    pub type ALint = i32;
 
-    pub type ALuint = libc::c_uint;
+    pub type ALuint = u32;
 
-    pub type ALsizei = libc::c_int;
+    pub type ALsizei = i32;
 
-    pub type ALenum = libc::c_int;
+    pub type ALenum = i32;
 
-    pub type ALfloat = libc::c_float;
+    pub type ALfloat = f32;
 
-    pub type ALdouble = libc::c_double;
+    pub type ALdouble = f64;
 
     pub type ALvoid = ();
 
@@ -1632,7 +1632,7 @@ pub mod keys_h {
     #[derive(Copy, Clone)]
     pub struct qkey_t {
         pub down: crate::src::qcommon::q_shared::qboolean,
-        pub repeats: libc::c_int,
+        pub repeats: i32,
         pub binding: *mut libc::c_char,
     }
 }
@@ -1653,52 +1653,52 @@ pub mod client_h {
     #[derive(Copy, Clone)]
     pub struct clSnapshot_t {
         pub valid: crate::src::qcommon::q_shared::qboolean,
-        pub snapFlags: libc::c_int,
-        pub serverTime: libc::c_int,
-        pub messageNum: libc::c_int,
-        pub deltaNum: libc::c_int,
-        pub ping: libc::c_int,
+        pub snapFlags: i32,
+        pub serverTime: i32,
+        pub messageNum: i32,
+        pub deltaNum: i32,
+        pub ping: i32,
         pub areamask: [crate::src::qcommon::q_shared::byte; 32],
-        pub cmdNum: libc::c_int,
+        pub cmdNum: i32,
         pub ps: crate::src::qcommon::q_shared::playerState_t,
-        pub numEntities: libc::c_int,
-        pub parseEntitiesNum: libc::c_int,
-        pub serverCommandNum: libc::c_int,
+        pub numEntities: i32,
+        pub parseEntitiesNum: i32,
+        pub serverCommandNum: i32,
     }
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct outPacket_t {
-        pub p_cmdNumber: libc::c_int,
-        pub p_serverTime: libc::c_int,
-        pub p_realtime: libc::c_int,
+        pub p_cmdNumber: i32,
+        pub p_serverTime: i32,
+        pub p_realtime: i32,
     }
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct clientActive_t {
-        pub timeoutcount: libc::c_int,
+        pub timeoutcount: i32,
         pub snap: crate::client_h::clSnapshot_t,
-        pub serverTime: libc::c_int,
-        pub oldServerTime: libc::c_int,
-        pub oldFrameServerTime: libc::c_int,
-        pub serverTimeDelta: libc::c_int,
+        pub serverTime: i32,
+        pub oldServerTime: i32,
+        pub oldFrameServerTime: i32,
+        pub serverTimeDelta: i32,
         pub extrapolatedSnapshot: crate::src::qcommon::q_shared::qboolean,
         pub newSnapshots: crate::src::qcommon::q_shared::qboolean,
         pub gameState: crate::src::qcommon::q_shared::gameState_t,
         pub mapname: [libc::c_char; 64],
-        pub parseEntitiesNum: libc::c_int,
-        pub mouseDx: [libc::c_int; 2],
-        pub mouseDy: [libc::c_int; 2],
-        pub mouseIndex: libc::c_int,
-        pub joystickAxis: [libc::c_int; 16],
-        pub cgameUserCmdValue: libc::c_int,
-        pub cgameSensitivity: libc::c_float,
+        pub parseEntitiesNum: i32,
+        pub mouseDx: [i32; 2],
+        pub mouseDy: [i32; 2],
+        pub mouseIndex: i32,
+        pub joystickAxis: [i32; 16],
+        pub cgameUserCmdValue: i32,
+        pub cgameSensitivity: f32,
         pub cmds: [crate::src::qcommon::q_shared::usercmd_t; 64],
-        pub cmdNumber: libc::c_int,
+        pub cmdNumber: i32,
         pub outPackets: [crate::client_h::outPacket_t; 32],
         pub viewangles: crate::src::qcommon::q_shared::vec3_t,
-        pub serverId: libc::c_int,
+        pub serverId: i32,
         pub snapshots: [crate::client_h::clSnapshot_t; 32],
         pub entityBaselines: [crate::src::qcommon::q_shared::entityState_t; 1024],
         pub parseEntities: [crate::src::qcommon::q_shared::entityState_t; 8192],
@@ -1708,22 +1708,22 @@ pub mod client_h {
     #[derive(Copy, Clone)]
     pub struct clientConnection_t {
         pub state: crate::src::qcommon::q_shared::connstate_t,
-        pub clientNum: libc::c_int,
-        pub lastPacketSentTime: libc::c_int,
-        pub lastPacketTime: libc::c_int,
+        pub clientNum: i32,
+        pub lastPacketSentTime: i32,
+        pub lastPacketTime: i32,
         pub servername: [libc::c_char; 4096],
         pub serverAddress: crate::qcommon_h::netadr_t,
-        pub connectTime: libc::c_int,
-        pub connectPacketCount: libc::c_int,
+        pub connectTime: i32,
+        pub connectPacketCount: i32,
         pub serverMessage: [libc::c_char; 1024],
-        pub challenge: libc::c_int,
-        pub checksumFeed: libc::c_int,
-        pub reliableSequence: libc::c_int,
-        pub reliableAcknowledge: libc::c_int,
+        pub challenge: i32,
+        pub checksumFeed: i32,
+        pub reliableSequence: i32,
+        pub reliableAcknowledge: i32,
         pub reliableCommands: [[libc::c_char; 1024]; 64],
-        pub serverMessageSequence: libc::c_int,
-        pub serverCommandSequence: libc::c_int,
-        pub lastExecutedServerCommand: libc::c_int,
+        pub serverMessageSequence: i32,
+        pub serverCommandSequence: i32,
+        pub lastExecutedServerCommand: i32,
         pub serverCommands: [[libc::c_char; 1024]; 64],
         pub download: crate::src::qcommon::q_shared::fileHandle_t,
         pub downloadTempName: [libc::c_char; 4096],
@@ -1734,12 +1734,12 @@ pub mod client_h {
         pub downloadURL: [libc::c_char; 4096],
         pub downloadCURL: *mut libc::c_void,
         pub downloadCURLM: *mut libc::c_void,
-        pub sv_allowDownload: libc::c_int,
+        pub sv_allowDownload: i32,
         pub sv_dlURL: [libc::c_char; 256],
-        pub downloadNumber: libc::c_int,
-        pub downloadBlock: libc::c_int,
-        pub downloadCount: libc::c_int,
-        pub downloadSize: libc::c_int,
+        pub downloadNumber: i32,
+        pub downloadBlock: i32,
+        pub downloadCount: i32,
+        pub downloadSize: i32,
         pub downloadList: [libc::c_char; 1024],
         pub downloadRestart: crate::src::qcommon::q_shared::qboolean,
         pub demoName: [libc::c_char; 64],
@@ -1749,32 +1749,32 @@ pub mod client_h {
         pub demowaiting: crate::src::qcommon::q_shared::qboolean,
         pub firstDemoFrameSkipped: crate::src::qcommon::q_shared::qboolean,
         pub demofile: crate::src::qcommon::q_shared::fileHandle_t,
-        pub timeDemoFrames: libc::c_int,
-        pub timeDemoStart: libc::c_int,
-        pub timeDemoBaseTime: libc::c_int,
-        pub timeDemoLastFrame: libc::c_int,
-        pub timeDemoMinDuration: libc::c_int,
-        pub timeDemoMaxDuration: libc::c_int,
-        pub timeDemoDurations: [libc::c_uchar; 4096],
-        pub aviVideoFrameRemainder: libc::c_float,
-        pub aviSoundFrameRemainder: libc::c_float,
+        pub timeDemoFrames: i32,
+        pub timeDemoStart: i32,
+        pub timeDemoBaseTime: i32,
+        pub timeDemoLastFrame: i32,
+        pub timeDemoMinDuration: i32,
+        pub timeDemoMaxDuration: i32,
+        pub timeDemoDurations: [u8; 4096],
+        pub aviVideoFrameRemainder: f32,
+        pub aviSoundFrameRemainder: f32,
         pub voipEnabled: crate::src::qcommon::q_shared::qboolean,
         pub voipCodecInitialized: crate::src::qcommon::q_shared::qboolean,
         pub opusDecoder: [*mut crate::src::opus_1_2_1::src::opus_decoder::OpusDecoder; 64],
         pub voipIncomingGeneration: [crate::src::qcommon::q_shared::byte; 64],
-        pub voipIncomingSequence: [libc::c_int; 64],
-        pub voipGain: [libc::c_float; 64],
+        pub voipIncomingSequence: [i32; 64],
+        pub voipGain: [f32; 64],
         pub voipIgnore: [crate::src::qcommon::q_shared::qboolean; 64],
         pub voipMuteAll: crate::src::qcommon::q_shared::qboolean,
         pub voipTargets: [crate::stdlib::uint8_t; 8],
         pub voipFlags: crate::stdlib::uint8_t,
         pub opusEncoder: *mut crate::src::opus_1_2_1::src::opus_encoder::OpusEncoder,
-        pub voipOutgoingDataSize: libc::c_int,
-        pub voipOutgoingDataFrames: libc::c_int,
-        pub voipOutgoingSequence: libc::c_int,
+        pub voipOutgoingDataSize: i32,
+        pub voipOutgoingDataFrames: i32,
+        pub voipOutgoingSequence: i32,
         pub voipOutgoingGeneration: crate::src::qcommon::q_shared::byte,
         pub voipOutgoingData: [crate::src::qcommon::q_shared::byte; 1024],
-        pub voipPower: libc::c_float,
+        pub voipPower: f32,
         pub compat: crate::src::qcommon::q_shared::qboolean,
         pub netchan: crate::qcommon_h::netchan_t,
     }
@@ -1783,8 +1783,8 @@ pub mod client_h {
     #[derive(Copy, Clone)]
     pub struct ping_t {
         pub adr: crate::qcommon_h::netadr_t,
-        pub start: libc::c_int,
-        pub time: libc::c_int,
+        pub start: i32,
+        pub time: i32,
         pub info: [libc::c_char; 1024],
     }
 
@@ -1795,17 +1795,17 @@ pub mod client_h {
         pub hostName: [libc::c_char; 32],
         pub mapName: [libc::c_char; 32],
         pub game: [libc::c_char; 32],
-        pub netType: libc::c_int,
-        pub gameType: libc::c_int,
-        pub clients: libc::c_int,
-        pub maxClients: libc::c_int,
-        pub minPing: libc::c_int,
-        pub maxPing: libc::c_int,
-        pub ping: libc::c_int,
+        pub netType: i32,
+        pub gameType: i32,
+        pub clients: i32,
+        pub maxClients: i32,
+        pub minPing: i32,
+        pub maxPing: i32,
+        pub ping: i32,
         pub visible: crate::src::qcommon::q_shared::qboolean,
-        pub punkbuster: libc::c_int,
-        pub g_humanplayers: libc::c_int,
-        pub g_needpass: libc::c_int,
+        pub punkbuster: i32,
+        pub g_humanplayers: i32,
+        pub g_needpass: i32,
     }
 
     #[repr(C)]
@@ -1817,19 +1817,19 @@ pub mod client_h {
         pub soundRegistered: crate::src::qcommon::q_shared::qboolean,
         pub uiStarted: crate::src::qcommon::q_shared::qboolean,
         pub cgameStarted: crate::src::qcommon::q_shared::qboolean,
-        pub framecount: libc::c_int,
-        pub frametime: libc::c_int,
-        pub realtime: libc::c_int,
-        pub realFrametime: libc::c_int,
-        pub numlocalservers: libc::c_int,
+        pub framecount: i32,
+        pub frametime: i32,
+        pub realtime: i32,
+        pub realFrametime: i32,
+        pub numlocalservers: i32,
         pub localServers: [crate::client_h::serverInfo_t; 128],
-        pub numglobalservers: libc::c_int,
+        pub numglobalservers: i32,
         pub globalServers: [crate::client_h::serverInfo_t; 4096],
-        pub numGlobalServerAddresses: libc::c_int,
+        pub numGlobalServerAddresses: i32,
         pub globalServerAddresses: [crate::qcommon_h::netadr_t; 4096],
-        pub numfavoriteservers: libc::c_int,
+        pub numfavoriteservers: i32,
         pub favoriteServers: [crate::client_h::serverInfo_t; 128],
-        pub pingUpdateSource: libc::c_int,
+        pub pingUpdateSource: i32,
         pub updateServer: crate::qcommon_h::netadr_t,
         pub updateChallenge: [libc::c_char; 1024],
         pub updateInfoString: [libc::c_char; 1024],
@@ -1844,9 +1844,9 @@ pub mod client_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct kbutton_t {
-        pub down: [libc::c_int; 2],
-        pub downtime: libc::c_uint,
-        pub msec: libc::c_uint,
+        pub down: [i32; 2],
+        pub downtime: u32,
+        pub msec: u32,
         pub active: crate::src::qcommon::q_shared::qboolean,
         pub wasPressed: crate::src::qcommon::q_shared::qboolean,
     }
@@ -1889,9 +1889,9 @@ pub mod tr_public_h {
         pub AddPolyToScene: Option<
             unsafe extern "C" fn(
                 _: crate::src::qcommon::q_shared::qhandle_t,
-                _: libc::c_int,
+                _: i32,
                 _: *const crate::tr_types_h::polyVert_t,
-                _: libc::c_int,
+                _: i32,
             ) -> (),
         >,
         pub LightForPoint: Option<
@@ -1900,87 +1900,87 @@ pub mod tr_public_h {
                 _: *mut crate::src::qcommon::q_shared::vec_t,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
-            ) -> libc::c_int,
+            ) -> i32,
         >,
         pub AddLightToScene: Option<
             unsafe extern "C" fn(
                 _: *const crate::src::qcommon::q_shared::vec_t,
-                _: libc::c_float,
-                _: libc::c_float,
-                _: libc::c_float,
-                _: libc::c_float,
+                _: f32,
+                _: f32,
+                _: f32,
+                _: f32,
             ) -> (),
         >,
         pub AddAdditiveLightToScene: Option<
             unsafe extern "C" fn(
                 _: *const crate::src::qcommon::q_shared::vec_t,
-                _: libc::c_float,
-                _: libc::c_float,
-                _: libc::c_float,
-                _: libc::c_float,
+                _: f32,
+                _: f32,
+                _: f32,
+                _: f32,
             ) -> (),
         >,
         pub RenderScene: Option<unsafe extern "C" fn(_: *const crate::tr_types_h::refdef_t) -> ()>,
-        pub SetColor: Option<unsafe extern "C" fn(_: *const libc::c_float) -> ()>,
+        pub SetColor: Option<unsafe extern "C" fn(_: *const f32) -> ()>,
         pub DrawStretchPic: Option<
             unsafe extern "C" fn(
-                _: libc::c_float,
-                _: libc::c_float,
-                _: libc::c_float,
-                _: libc::c_float,
-                _: libc::c_float,
-                _: libc::c_float,
-                _: libc::c_float,
-                _: libc::c_float,
+                _: f32,
+                _: f32,
+                _: f32,
+                _: f32,
+                _: f32,
+                _: f32,
+                _: f32,
+                _: f32,
                 _: crate::src::qcommon::q_shared::qhandle_t,
             ) -> (),
         >,
         pub DrawStretchRaw: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
-                _: libc::c_int,
-                _: libc::c_int,
-                _: libc::c_int,
-                _: libc::c_int,
-                _: libc::c_int,
+                _: i32,
+                _: i32,
+                _: i32,
+                _: i32,
+                _: i32,
+                _: i32,
                 _: *const crate::src::qcommon::q_shared::byte,
-                _: libc::c_int,
+                _: i32,
                 _: crate::src::qcommon::q_shared::qboolean,
             ) -> (),
         >,
         pub UploadCinematic: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
-                _: libc::c_int,
-                _: libc::c_int,
-                _: libc::c_int,
+                _: i32,
+                _: i32,
+                _: i32,
+                _: i32,
                 _: *const crate::src::qcommon::q_shared::byte,
-                _: libc::c_int,
+                _: i32,
                 _: crate::src::qcommon::q_shared::qboolean,
             ) -> (),
         >,
         pub BeginFrame: Option<unsafe extern "C" fn(_: crate::tr_types_h::stereoFrame_t) -> ()>,
-        pub EndFrame: Option<unsafe extern "C" fn(_: *mut libc::c_int, _: *mut libc::c_int) -> ()>,
+        pub EndFrame: Option<unsafe extern "C" fn(_: *mut i32, _: *mut i32) -> ()>,
         pub MarkFragments: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
+                _: i32,
                 _: *const crate::src::qcommon::q_shared::vec3_t,
                 _: *const crate::src::qcommon::q_shared::vec_t,
-                _: libc::c_int,
+                _: i32,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
-                _: libc::c_int,
+                _: i32,
                 _: *mut crate::src::qcommon::q_shared::markFragment_t,
-            ) -> libc::c_int,
+            ) -> i32,
         >,
         pub LerpTag: Option<
             unsafe extern "C" fn(
                 _: *mut crate::src::qcommon::q_shared::orientation_t,
                 _: crate::src::qcommon::q_shared::qhandle_t,
-                _: libc::c_int,
-                _: libc::c_int,
-                _: libc::c_float,
+                _: i32,
+                _: i32,
+                _: f32,
                 _: *const libc::c_char,
-            ) -> libc::c_int,
+            ) -> i32,
         >,
         pub ModelBounds: Option<
             unsafe extern "C" fn(
@@ -1992,7 +1992,7 @@ pub mod tr_public_h {
         pub RegisterFont: Option<
             unsafe extern "C" fn(
                 _: *const libc::c_char,
-                _: libc::c_int,
+                _: i32,
                 _: *mut crate::src::qcommon::q_shared::fontInfo_t,
             ) -> (),
         >,
@@ -2006,7 +2006,7 @@ pub mod tr_public_h {
         pub GetEntityToken: Option<
             unsafe extern "C" fn(
                 _: *mut libc::c_char,
-                _: libc::c_int,
+                _: i32,
             ) -> crate::src::qcommon::q_shared::qboolean,
         >,
         pub inPVS: Option<
@@ -2017,8 +2017,8 @@ pub mod tr_public_h {
         >,
         pub TakeVideoFrame: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
-                _: libc::c_int,
+                _: i32,
+                _: i32,
                 _: *mut crate::src::qcommon::q_shared::byte,
                 _: *mut crate::src::qcommon::q_shared::byte,
                 _: crate::src::qcommon::q_shared::qboolean,
@@ -2030,37 +2030,37 @@ pub mod tr_public_h {
     #[derive(Copy, Clone)]
     pub struct refimport_t {
         pub Printf:
-            Option<unsafe extern "C" fn(_: libc::c_int, _: *const libc::c_char, _: ...) -> ()>,
+            Option<unsafe extern "C" fn(_: i32, _: *const libc::c_char, _: ...) -> ()>,
         pub Error:
-            Option<unsafe extern "C" fn(_: libc::c_int, _: *const libc::c_char, _: ...) -> !>,
-        pub Milliseconds: Option<unsafe extern "C" fn() -> libc::c_int>,
+            Option<unsafe extern "C" fn(_: i32, _: *const libc::c_char, _: ...) -> !>,
+        pub Milliseconds: Option<unsafe extern "C" fn() -> i32>,
         pub Hunk_Alloc: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
+                _: i32,
                 _: crate::src::qcommon::q_shared::ha_pref,
             ) -> *mut libc::c_void,
         >,
         pub Hunk_AllocateTempMemory:
-            Option<unsafe extern "C" fn(_: libc::c_int) -> *mut libc::c_void>,
+            Option<unsafe extern "C" fn(_: i32) -> *mut libc::c_void>,
         pub Hunk_FreeTempMemory: Option<unsafe extern "C" fn(_: *mut libc::c_void) -> ()>,
-        pub Malloc: Option<unsafe extern "C" fn(_: libc::c_int) -> *mut libc::c_void>,
+        pub Malloc: Option<unsafe extern "C" fn(_: i32) -> *mut libc::c_void>,
         pub Free: Option<unsafe extern "C" fn(_: *mut libc::c_void) -> ()>,
         pub Cvar_Get: Option<
             unsafe extern "C" fn(
                 _: *const libc::c_char,
                 _: *const libc::c_char,
-                _: libc::c_int,
+                _: i32,
             ) -> *mut crate::src::qcommon::q_shared::cvar_t,
         >,
         pub Cvar_Set:
             Option<unsafe extern "C" fn(_: *const libc::c_char, _: *const libc::c_char) -> ()>,
         pub Cvar_SetValue:
-            Option<unsafe extern "C" fn(_: *const libc::c_char, _: libc::c_float) -> ()>,
+            Option<unsafe extern "C" fn(_: *const libc::c_char, _: f32) -> ()>,
         pub Cvar_CheckRange: Option<
             unsafe extern "C" fn(
                 _: *mut crate::src::qcommon::q_shared::cvar_t,
-                _: libc::c_float,
-                _: libc::c_float,
+                _: f32,
+                _: f32,
                 _: crate::src::qcommon::q_shared::qboolean,
             ) -> (),
         >,
@@ -2071,7 +2071,7 @@ pub mod tr_public_h {
             ) -> (),
         >,
         pub Cvar_VariableIntegerValue:
-            Option<unsafe extern "C" fn(_: *const libc::c_char) -> libc::c_int>,
+            Option<unsafe extern "C" fn(_: *const libc::c_char) -> i32>,
         pub Cmd_AddCommand: Option<
             unsafe extern "C" fn(
                 _: *const libc::c_char,
@@ -2079,26 +2079,26 @@ pub mod tr_public_h {
             ) -> (),
         >,
         pub Cmd_RemoveCommand: Option<unsafe extern "C" fn(_: *const libc::c_char) -> ()>,
-        pub Cmd_Argc: Option<unsafe extern "C" fn() -> libc::c_int>,
-        pub Cmd_Argv: Option<unsafe extern "C" fn(_: libc::c_int) -> *mut libc::c_char>,
+        pub Cmd_Argc: Option<unsafe extern "C" fn() -> i32>,
+        pub Cmd_Argv: Option<unsafe extern "C" fn(_: i32) -> *mut libc::c_char>,
         pub Cmd_ExecuteText:
-            Option<unsafe extern "C" fn(_: libc::c_int, _: *const libc::c_char) -> ()>,
+            Option<unsafe extern "C" fn(_: i32, _: *const libc::c_char) -> ()>,
         pub CM_ClusterPVS: Option<
-            unsafe extern "C" fn(_: libc::c_int) -> *mut crate::src::qcommon::q_shared::byte,
+            unsafe extern "C" fn(_: i32) -> *mut crate::src::qcommon::q_shared::byte,
         >,
         pub CM_DrawDebugSurface: Option<
             unsafe extern "C" fn(
                 _: Option<
                     unsafe extern "C" fn(
-                        _: libc::c_int,
-                        _: libc::c_int,
-                        _: *mut libc::c_float,
+                        _: i32,
+                        _: i32,
+                        _: *mut f32,
                     ) -> (),
                 >,
             ) -> (),
         >,
         pub FS_FileIsInPAK: Option<
-            unsafe extern "C" fn(_: *const libc::c_char, _: *mut libc::c_int) -> libc::c_int,
+            unsafe extern "C" fn(_: *const libc::c_char, _: *mut i32) -> i32,
         >,
         pub FS_ReadFile: Option<
             unsafe extern "C" fn(_: *const libc::c_char, _: *mut *mut libc::c_void) -> libc::c_long,
@@ -2108,7 +2108,7 @@ pub mod tr_public_h {
             unsafe extern "C" fn(
                 _: *const libc::c_char,
                 _: *const libc::c_char,
-                _: *mut libc::c_int,
+                _: *mut i32,
             ) -> *mut *mut libc::c_char,
         >,
         pub FS_FreeFileList: Option<unsafe extern "C" fn(_: *mut *mut libc::c_char) -> ()>,
@@ -2116,35 +2116,35 @@ pub mod tr_public_h {
             unsafe extern "C" fn(
                 _: *const libc::c_char,
                 _: *const libc::c_void,
-                _: libc::c_int,
+                _: i32,
             ) -> (),
         >,
         pub FS_FileExists: Option<
             unsafe extern "C" fn(_: *const libc::c_char) -> crate::src::qcommon::q_shared::qboolean,
         >,
-        pub CIN_UploadCinematic: Option<unsafe extern "C" fn(_: libc::c_int) -> ()>,
+        pub CIN_UploadCinematic: Option<unsafe extern "C" fn(_: i32) -> ()>,
         pub CIN_PlayCinematic: Option<
             unsafe extern "C" fn(
                 _: *const libc::c_char,
-                _: libc::c_int,
-                _: libc::c_int,
-                _: libc::c_int,
-                _: libc::c_int,
-                _: libc::c_int,
-            ) -> libc::c_int,
+                _: i32,
+                _: i32,
+                _: i32,
+                _: i32,
+                _: i32,
+            ) -> i32,
         >,
         pub CIN_RunCinematic:
-            Option<unsafe extern "C" fn(_: libc::c_int) -> crate::src::qcommon::q_shared::e_status>,
+            Option<unsafe extern "C" fn(_: i32) -> crate::src::qcommon::q_shared::e_status>,
         pub CL_WriteAVIVideoFrame: Option<
             unsafe extern "C" fn(
                 _: *const crate::src::qcommon::q_shared::byte,
-                _: libc::c_int,
+                _: i32,
             ) -> (),
         >,
         pub IN_Init: Option<unsafe extern "C" fn(_: *mut libc::c_void) -> ()>,
         pub IN_Shutdown: Option<unsafe extern "C" fn() -> ()>,
         pub IN_Restart: Option<unsafe extern "C" fn() -> ()>,
-        pub ftol: Option<unsafe extern "C" fn(_: libc::c_float) -> libc::c_long>,
+        pub ftol: Option<unsafe extern "C" fn(_: f32) -> libc::c_long>,
         pub Sys_SetEnv:
             Option<unsafe extern "C" fn(_: *const libc::c_char, _: *const libc::c_char) -> ()>,
         pub Sys_GLimpSafeInit: Option<unsafe extern "C" fn() -> ()>,
@@ -2155,7 +2155,7 @@ pub mod tr_public_h {
 
     pub type GetRefAPI_t = Option<
         unsafe extern "C" fn(
-            _: libc::c_int,
+            _: i32,
             _: *mut crate::tr_public_h::refimport_t,
         ) -> *mut crate::tr_public_h::refexport_t,
     >;
@@ -2165,7 +2165,7 @@ pub mod stddef_h {
 
     pub type size_t = libc::c_ulong;
 
-    pub type wchar_t = libc::c_int;
+    pub type wchar_t = i32;
 }
 pub mod stdarg_h {
     pub type va_list = crate::internal::__builtin_va_list;
@@ -2176,8 +2176,8 @@ pub mod internal {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct __va_list_tag {
-        pub gp_offset: libc::c_uint,
-        pub fp_offset: libc::c_uint,
+        pub gp_offset: u32,
+        pub fp_offset: u32,
         pub overflow_arg_area: *mut libc::c_void,
         pub reg_save_area: *mut libc::c_void,
     }
@@ -2188,8 +2188,8 @@ pub mod aasfile_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct aas_bbox_s {
-        pub presencetype: libc::c_int,
-        pub flags: libc::c_int,
+        pub presencetype: i32,
+        pub flags: i32,
         pub mins: crate::src::qcommon::q_shared::vec3_t,
         pub maxs: crate::src::qcommon::q_shared::vec3_t,
     }
@@ -2201,13 +2201,13 @@ pub mod aasfile_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct aas_reachability_s {
-        pub areanum: libc::c_int,
-        pub facenum: libc::c_int,
-        pub edgenum: libc::c_int,
+        pub areanum: i32,
+        pub facenum: i32,
+        pub edgenum: i32,
         pub start: crate::src::qcommon::q_shared::vec3_t,
         pub end: crate::src::qcommon::q_shared::vec3_t,
-        pub traveltype: libc::c_int,
-        pub traveltime: libc::c_ushort,
+        pub traveltype: i32,
+        pub traveltime: u16,
     }
     //number of the reachable area
     //number of the face towards the other area
@@ -2223,13 +2223,13 @@ pub mod aasfile_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct aas_areasettings_s {
-        pub contents: libc::c_int,
-        pub areaflags: libc::c_int,
-        pub presencetype: libc::c_int,
-        pub cluster: libc::c_int,
-        pub clusterareanum: libc::c_int,
-        pub numreachableareas: libc::c_int,
-        pub firstreachablearea: libc::c_int,
+        pub contents: i32,
+        pub areaflags: i32,
+        pub presencetype: i32,
+        pub cluster: i32,
+        pub clusterareanum: i32,
+        pub numreachableareas: i32,
+        pub firstreachablearea: i32,
     }
     //could also add all kind of statistic fields
     //contents of the area
@@ -2246,10 +2246,10 @@ pub mod aasfile_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct aas_portal_s {
-        pub areanum: libc::c_int,
-        pub frontcluster: libc::c_int,
-        pub backcluster: libc::c_int,
-        pub clusterareanum: [libc::c_int; 2],
+        pub areanum: i32,
+        pub frontcluster: i32,
+        pub backcluster: i32,
+        pub clusterareanum: [i32; 2],
     }
     //area that is the actual portal
     //cluster at front of portal
@@ -2257,7 +2257,7 @@ pub mod aasfile_h {
     //number of the area in the front and back cluster
     //cluster portal index
 
-    pub type aas_portalindex_t = libc::c_int;
+    pub type aas_portalindex_t = i32;
     //cluster
 
     pub type aas_cluster_t = crate::aasfile_h::aas_cluster_s;
@@ -2265,10 +2265,10 @@ pub mod aasfile_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct aas_cluster_s {
-        pub numareas: libc::c_int,
-        pub numreachabilityareas: libc::c_int,
-        pub numportals: libc::c_int,
-        pub firstportal: libc::c_int,
+        pub numareas: i32,
+        pub numreachabilityareas: i32,
+        pub numportals: i32,
+        pub firstportal: i32,
     }
     //number of areas in the cluster
     //number of areas with reachabilities
@@ -2285,8 +2285,8 @@ pub mod aasfile_h {
     #[derive(Copy, Clone)]
     pub struct aas_plane_s {
         pub normal: crate::src::qcommon::q_shared::vec3_t,
-        pub dist: libc::c_float,
-        pub type_0: libc::c_int,
+        pub dist: f32,
+        pub type_0: i32,
     }
     //normal vector of the plane
     //distance of the plane (normal vector * distance = point in plane)
@@ -2297,12 +2297,12 @@ pub mod aasfile_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct aas_edge_s {
-        pub v: [libc::c_int; 2],
+        pub v: [i32; 2],
     }
     //numbers of the vertexes of this edge
     //edge index, negative if vertexes are reversed
 
-    pub type aas_edgeindex_t = libc::c_int;
+    pub type aas_edgeindex_t = i32;
     //a face bounds an area, often it will also separate two areas
 
     pub type aas_face_t = crate::aasfile_h::aas_face_s;
@@ -2310,12 +2310,12 @@ pub mod aasfile_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct aas_face_s {
-        pub planenum: libc::c_int,
-        pub faceflags: libc::c_int,
-        pub numedges: libc::c_int,
-        pub firstedge: libc::c_int,
-        pub frontarea: libc::c_int,
-        pub backarea: libc::c_int,
+        pub planenum: i32,
+        pub faceflags: i32,
+        pub numedges: i32,
+        pub firstedge: i32,
+        pub frontarea: i32,
+        pub backarea: i32,
     }
     //number of the plane this face is in
     //face flags (no use to create face settings for just this field)
@@ -2325,7 +2325,7 @@ pub mod aasfile_h {
     //area at the back of this face
     //face index, stores a negative index if backside of face
 
-    pub type aas_faceindex_t = libc::c_int;
+    pub type aas_faceindex_t = i32;
     //area with a boundary of faces
 
     pub type aas_area_t = crate::aasfile_h::aas_area_s;
@@ -2333,9 +2333,9 @@ pub mod aasfile_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct aas_area_s {
-        pub areanum: libc::c_int,
-        pub numfaces: libc::c_int,
-        pub firstface: libc::c_int,
+        pub areanum: i32,
+        pub numfaces: i32,
+        pub firstface: i32,
         pub mins: crate::src::qcommon::q_shared::vec3_t,
         pub maxs: crate::src::qcommon::q_shared::vec3_t,
         pub center: crate::src::qcommon::q_shared::vec3_t,
@@ -2354,15 +2354,15 @@ pub mod aasfile_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct aas_node_s {
-        pub planenum: libc::c_int,
-        pub children: [libc::c_int; 2],
+        pub planenum: i32,
+        pub children: [i32; 2],
     }
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct aas_lump_t {
-        pub fileofs: libc::c_int,
-        pub filelen: libc::c_int,
+        pub fileofs: i32,
+        pub filelen: i32,
     }
     //child nodes of this node, or areas as leaves when negative
     //when a child is zero it's a solid leaf
@@ -2373,9 +2373,9 @@ pub mod aasfile_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct aas_header_s {
-        pub ident: libc::c_int,
-        pub version: libc::c_int,
-        pub bspchecksum: libc::c_int,
+        pub ident: i32,
+        pub version: i32,
+        pub bspchecksum: i32,
         pub lumps: [crate::aasfile_h::aas_lump_t; 14],
     }
 }
@@ -2385,8 +2385,8 @@ pub mod be_aas_def_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct aas_link_s {
-        pub entnum: libc::c_int,
-        pub areanum: libc::c_int,
+        pub entnum: i32,
+        pub areanum: i32,
         pub next_ent: *mut crate::be_aas_def_h::aas_link_s,
         pub prev_ent: *mut crate::be_aas_def_h::aas_link_s,
         pub next_area: *mut crate::be_aas_def_h::aas_link_s,
@@ -2399,8 +2399,8 @@ pub mod be_aas_def_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct bsp_link_s {
-        pub entnum: libc::c_int,
-        pub leafnum: libc::c_int,
+        pub entnum: i32,
+        pub leafnum: i32,
         pub next_ent: *mut crate::be_aas_def_h::bsp_link_s,
         pub prev_ent: *mut crate::be_aas_def_h::bsp_link_s,
         pub next_leaf: *mut crate::be_aas_def_h::bsp_link_s,
@@ -2416,8 +2416,8 @@ pub mod be_aas_def_h {
         pub angles: crate::src::qcommon::q_shared::vec3_t,
         pub absmins: crate::src::qcommon::q_shared::vec3_t,
         pub absmaxs: crate::src::qcommon::q_shared::vec3_t,
-        pub solid: libc::c_int,
-        pub modelnum: libc::c_int,
+        pub solid: i32,
+        pub modelnum: i32,
     }
     //entity
 
@@ -2437,42 +2437,42 @@ pub mod be_aas_def_h {
     #[derive(Copy, Clone)]
     pub struct aas_settings_s {
         pub phys_gravitydirection: crate::src::qcommon::q_shared::vec3_t,
-        pub phys_friction: libc::c_float,
-        pub phys_stopspeed: libc::c_float,
-        pub phys_gravity: libc::c_float,
-        pub phys_waterfriction: libc::c_float,
-        pub phys_watergravity: libc::c_float,
-        pub phys_maxvelocity: libc::c_float,
-        pub phys_maxwalkvelocity: libc::c_float,
-        pub phys_maxcrouchvelocity: libc::c_float,
-        pub phys_maxswimvelocity: libc::c_float,
-        pub phys_walkaccelerate: libc::c_float,
-        pub phys_airaccelerate: libc::c_float,
-        pub phys_swimaccelerate: libc::c_float,
-        pub phys_maxstep: libc::c_float,
-        pub phys_maxsteepness: libc::c_float,
-        pub phys_maxwaterjump: libc::c_float,
-        pub phys_maxbarrier: libc::c_float,
-        pub phys_jumpvel: libc::c_float,
-        pub phys_falldelta5: libc::c_float,
-        pub phys_falldelta10: libc::c_float,
-        pub rs_waterjump: libc::c_float,
-        pub rs_teleport: libc::c_float,
-        pub rs_barrierjump: libc::c_float,
-        pub rs_startcrouch: libc::c_float,
-        pub rs_startgrapple: libc::c_float,
-        pub rs_startwalkoffledge: libc::c_float,
-        pub rs_startjump: libc::c_float,
-        pub rs_rocketjump: libc::c_float,
-        pub rs_bfgjump: libc::c_float,
-        pub rs_jumppad: libc::c_float,
-        pub rs_aircontrolledjumppad: libc::c_float,
-        pub rs_funcbob: libc::c_float,
-        pub rs_startelevator: libc::c_float,
-        pub rs_falldamage5: libc::c_float,
-        pub rs_falldamage10: libc::c_float,
-        pub rs_maxfallheight: libc::c_float,
-        pub rs_maxjumpfallheight: libc::c_float,
+        pub phys_friction: f32,
+        pub phys_stopspeed: f32,
+        pub phys_gravity: f32,
+        pub phys_waterfriction: f32,
+        pub phys_watergravity: f32,
+        pub phys_maxvelocity: f32,
+        pub phys_maxwalkvelocity: f32,
+        pub phys_maxcrouchvelocity: f32,
+        pub phys_maxswimvelocity: f32,
+        pub phys_walkaccelerate: f32,
+        pub phys_airaccelerate: f32,
+        pub phys_swimaccelerate: f32,
+        pub phys_maxstep: f32,
+        pub phys_maxsteepness: f32,
+        pub phys_maxwaterjump: f32,
+        pub phys_maxbarrier: f32,
+        pub phys_jumpvel: f32,
+        pub phys_falldelta5: f32,
+        pub phys_falldelta10: f32,
+        pub rs_waterjump: f32,
+        pub rs_teleport: f32,
+        pub rs_barrierjump: f32,
+        pub rs_startcrouch: f32,
+        pub rs_startgrapple: f32,
+        pub rs_startwalkoffledge: f32,
+        pub rs_startjump: f32,
+        pub rs_rocketjump: f32,
+        pub rs_bfgjump: f32,
+        pub rs_jumppad: f32,
+        pub rs_aircontrolledjumppad: f32,
+        pub rs_funcbob: f32,
+        pub rs_startelevator: f32,
+        pub rs_falldamage5: f32,
+        pub rs_falldamage10: f32,
+        pub rs_maxfallheight: f32,
+        pub rs_maxjumpfallheight: f32,
     }
     //entity info
     //links into the AAS areas
@@ -2485,19 +2485,19 @@ pub mod be_aas_def_h {
     #[derive(Copy, Clone)]
     pub struct aas_routingcache_s {
         pub type_0: crate::src::qcommon::q_shared::byte,
-        pub time: libc::c_float,
-        pub size: libc::c_int,
-        pub cluster: libc::c_int,
-        pub areanum: libc::c_int,
+        pub time: f32,
+        pub size: i32,
+        pub cluster: i32,
+        pub areanum: i32,
         pub origin: crate::src::qcommon::q_shared::vec3_t,
-        pub starttraveltime: libc::c_float,
-        pub travelflags: libc::c_int,
+        pub starttraveltime: f32,
+        pub travelflags: i32,
         pub prev: *mut crate::be_aas_def_h::aas_routingcache_s,
         pub next: *mut crate::be_aas_def_h::aas_routingcache_s,
         pub time_prev: *mut crate::be_aas_def_h::aas_routingcache_s,
         pub time_next: *mut crate::be_aas_def_h::aas_routingcache_s,
-        pub reachabilities: *mut libc::c_uchar,
-        pub traveltimes: [libc::c_ushort; 1],
+        pub reachabilities: *mut u8,
+        pub traveltimes: [u16; 1],
     }
     //portal or area cache
     //last time accessed or updated
@@ -2516,11 +2516,11 @@ pub mod be_aas_def_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct aas_routingupdate_s {
-        pub cluster: libc::c_int,
-        pub areanum: libc::c_int,
+        pub cluster: i32,
+        pub areanum: i32,
         pub start: crate::src::qcommon::q_shared::vec3_t,
-        pub tmptraveltime: libc::c_ushort,
-        pub areatraveltimes: *mut libc::c_ushort,
+        pub tmptraveltime: u16,
+        pub areatraveltimes: *mut u16,
         pub inlist: crate::src::qcommon::q_shared::qboolean,
         pub next: *mut crate::be_aas_def_h::aas_routingupdate_s,
         pub prev: *mut crate::be_aas_def_h::aas_routingupdate_s,
@@ -2537,8 +2537,8 @@ pub mod be_aas_def_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct aas_reversedlink_s {
-        pub linknum: libc::c_int,
-        pub areanum: libc::c_int,
+        pub linknum: i32,
+        pub areanum: i32,
         pub next: *mut crate::be_aas_def_h::aas_reversedlink_s,
     }
     //the aas_areareachability_t
@@ -2551,7 +2551,7 @@ pub mod be_aas_def_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct aas_reversedreachability_s {
-        pub numlinks: libc::c_int,
+        pub numlinks: i32,
         pub first: *mut crate::be_aas_def_h::aas_reversedlink_t,
     }
     //areas a reachability goes through
@@ -2561,8 +2561,8 @@ pub mod be_aas_def_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct aas_reachabilityareas_s {
-        pub firstarea: libc::c_int,
-        pub numareas: libc::c_int,
+        pub firstarea: i32,
+        pub numareas: i32,
     }
 
     pub type aas_t = crate::be_aas_def_h::aas_s;
@@ -2570,64 +2570,64 @@ pub mod be_aas_def_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct aas_s {
-        pub loaded: libc::c_int,
-        pub initialized: libc::c_int,
-        pub savefile: libc::c_int,
-        pub bspchecksum: libc::c_int,
-        pub time: libc::c_float,
-        pub numframes: libc::c_int,
+        pub loaded: i32,
+        pub initialized: i32,
+        pub savefile: i32,
+        pub bspchecksum: i32,
+        pub time: f32,
+        pub numframes: i32,
         pub filename: [libc::c_char; 64],
         pub mapname: [libc::c_char; 64],
-        pub numbboxes: libc::c_int,
+        pub numbboxes: i32,
         pub bboxes: *mut crate::aasfile_h::aas_bbox_t,
-        pub numvertexes: libc::c_int,
+        pub numvertexes: i32,
         pub vertexes: *mut crate::aasfile_h::aas_vertex_t,
-        pub numplanes: libc::c_int,
+        pub numplanes: i32,
         pub planes: *mut crate::aasfile_h::aas_plane_t,
-        pub numedges: libc::c_int,
+        pub numedges: i32,
         pub edges: *mut crate::aasfile_h::aas_edge_t,
-        pub edgeindexsize: libc::c_int,
+        pub edgeindexsize: i32,
         pub edgeindex: *mut crate::aasfile_h::aas_edgeindex_t,
-        pub numfaces: libc::c_int,
+        pub numfaces: i32,
         pub faces: *mut crate::aasfile_h::aas_face_t,
-        pub faceindexsize: libc::c_int,
+        pub faceindexsize: i32,
         pub faceindex: *mut crate::aasfile_h::aas_faceindex_t,
-        pub numareas: libc::c_int,
+        pub numareas: i32,
         pub areas: *mut crate::aasfile_h::aas_area_t,
-        pub numareasettings: libc::c_int,
+        pub numareasettings: i32,
         pub areasettings: *mut crate::aasfile_h::aas_areasettings_t,
-        pub reachabilitysize: libc::c_int,
+        pub reachabilitysize: i32,
         pub reachability: *mut crate::aasfile_h::aas_reachability_t,
-        pub numnodes: libc::c_int,
+        pub numnodes: i32,
         pub nodes: *mut crate::aasfile_h::aas_node_t,
-        pub numportals: libc::c_int,
+        pub numportals: i32,
         pub portals: *mut crate::aasfile_h::aas_portal_t,
-        pub portalindexsize: libc::c_int,
+        pub portalindexsize: i32,
         pub portalindex: *mut crate::aasfile_h::aas_portalindex_t,
-        pub numclusters: libc::c_int,
+        pub numclusters: i32,
         pub clusters: *mut crate::aasfile_h::aas_cluster_t,
-        pub numreachabilityareas: libc::c_int,
-        pub reachabilitytime: libc::c_float,
+        pub numreachabilityareas: i32,
+        pub reachabilitytime: f32,
         pub linkheap: *mut crate::be_aas_def_h::aas_link_t,
-        pub linkheapsize: libc::c_int,
+        pub linkheapsize: i32,
         pub freelinks: *mut crate::be_aas_def_h::aas_link_t,
         pub arealinkedentities: *mut *mut crate::be_aas_def_h::aas_link_t,
-        pub maxentities: libc::c_int,
-        pub maxclients: libc::c_int,
+        pub maxentities: i32,
+        pub maxclients: i32,
         pub entities: *mut crate::be_aas_def_h::aas_entity_t,
-        pub travelflagfortype: [libc::c_int; 32],
-        pub areacontentstravelflags: *mut libc::c_int,
+        pub travelflagfortype: [i32; 32],
+        pub areacontentstravelflags: *mut i32,
         pub areaupdate: *mut crate::be_aas_def_h::aas_routingupdate_t,
         pub portalupdate: *mut crate::be_aas_def_h::aas_routingupdate_t,
-        pub frameroutingupdates: libc::c_int,
+        pub frameroutingupdates: i32,
         pub reversedreachability: *mut crate::be_aas_def_h::aas_reversedreachability_t,
-        pub areatraveltimes: *mut *mut *mut libc::c_ushort,
+        pub areatraveltimes: *mut *mut *mut u16,
         pub clusterareacache: *mut *mut *mut crate::be_aas_def_h::aas_routingcache_t,
         pub portalcache: *mut *mut crate::be_aas_def_h::aas_routingcache_t,
         pub oldestcache: *mut crate::be_aas_def_h::aas_routingcache_t,
         pub newestcache: *mut crate::be_aas_def_h::aas_routingcache_t,
-        pub portalmaxtraveltimes: *mut libc::c_int,
-        pub reachabilityareaindex: *mut libc::c_int,
+        pub portalmaxtraveltimes: *mut i32,
+        pub reachabilityareaindex: *mut i32,
         pub reachabilityareas: *mut crate::be_aas_def_h::aas_reachabilityareas_t,
     }
 }
@@ -2637,12 +2637,12 @@ pub mod botlib_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct bot_input_s {
-        pub thinktime: libc::c_float,
+        pub thinktime: f32,
         pub dir: crate::src::qcommon::q_shared::vec3_t,
-        pub speed: libc::c_float,
+        pub speed: f32,
         pub viewangles: crate::src::qcommon::q_shared::vec3_t,
-        pub actionflags: libc::c_int,
-        pub weapon: libc::c_int,
+        pub actionflags: i32,
+        pub weapon: i32,
     }
     //bsp_trace_t hit surface
 
@@ -2652,8 +2652,8 @@ pub mod botlib_h {
     #[derive(Copy, Clone)]
     pub struct bsp_surface_s {
         pub name: [libc::c_char; 16],
-        pub flags: libc::c_int,
-        pub value: libc::c_int,
+        pub flags: i32,
+        pub value: i32,
     }
     //remove the bsp_trace_s structure definition l8r on
     //a trace is returned when a box is swept through the world
@@ -2665,14 +2665,14 @@ pub mod botlib_h {
     pub struct bsp_trace_s {
         pub allsolid: crate::src::qcommon::q_shared::qboolean,
         pub startsolid: crate::src::qcommon::q_shared::qboolean,
-        pub fraction: libc::c_float,
+        pub fraction: f32,
         pub endpos: crate::src::qcommon::q_shared::vec3_t,
         pub plane: crate::src::qcommon::q_shared::cplane_t,
-        pub exp_dist: libc::c_float,
-        pub sidenum: libc::c_int,
+        pub exp_dist: f32,
+        pub sidenum: i32,
         pub surface: crate::botlib_h::bsp_surface_t,
-        pub contents: libc::c_int,
-        pub ent: libc::c_int,
+        pub contents: i32,
+        pub ent: i32,
     }
     // if true, plane is not valid
     // if true, the initial point was in a solid area
@@ -2692,24 +2692,24 @@ pub mod botlib_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct bot_entitystate_s {
-        pub type_0: libc::c_int,
-        pub flags: libc::c_int,
+        pub type_0: i32,
+        pub flags: i32,
         pub origin: crate::src::qcommon::q_shared::vec3_t,
         pub angles: crate::src::qcommon::q_shared::vec3_t,
         pub old_origin: crate::src::qcommon::q_shared::vec3_t,
         pub mins: crate::src::qcommon::q_shared::vec3_t,
         pub maxs: crate::src::qcommon::q_shared::vec3_t,
-        pub groundent: libc::c_int,
-        pub solid: libc::c_int,
-        pub modelindex: libc::c_int,
-        pub modelindex2: libc::c_int,
-        pub frame: libc::c_int,
-        pub event: libc::c_int,
-        pub eventParm: libc::c_int,
-        pub powerups: libc::c_int,
-        pub weapon: libc::c_int,
-        pub legsAnim: libc::c_int,
-        pub torsoAnim: libc::c_int,
+        pub groundent: i32,
+        pub solid: i32,
+        pub modelindex: i32,
+        pub modelindex2: i32,
+        pub frame: i32,
+        pub event: i32,
+        pub eventParm: i32,
+        pub powerups: i32,
+        pub weapon: i32,
+        pub legsAnim: i32,
+        pub torsoAnim: i32,
     }
     // if true, plane is not valid
     // if true, the initial point was in a solid area
@@ -2728,7 +2728,7 @@ pub mod botlib_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct botlib_import_s {
-        pub Print: Option<unsafe extern "C" fn(_: libc::c_int, _: *mut libc::c_char, _: ...) -> ()>,
+        pub Print: Option<unsafe extern "C" fn(_: i32, _: *mut libc::c_char, _: ...) -> ()>,
         pub Trace: Option<
             unsafe extern "C" fn(
                 _: *mut crate::botlib_h::bsp_trace_t,
@@ -2736,8 +2736,8 @@ pub mod botlib_h {
                 _: *mut crate::src::qcommon::q_shared::vec_t,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
-                _: libc::c_int,
-                _: libc::c_int,
+                _: i32,
+                _: i32,
             ) -> (),
         >,
         pub EntityTrace: Option<
@@ -2747,23 +2747,23 @@ pub mod botlib_h {
                 _: *mut crate::src::qcommon::q_shared::vec_t,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
-                _: libc::c_int,
-                _: libc::c_int,
+                _: i32,
+                _: i32,
             ) -> (),
         >,
         pub PointContents: Option<
-            unsafe extern "C" fn(_: *mut crate::src::qcommon::q_shared::vec_t) -> libc::c_int,
+            unsafe extern "C" fn(_: *mut crate::src::qcommon::q_shared::vec_t) -> i32,
         >,
         pub inPVS: Option<
             unsafe extern "C" fn(
                 _: *mut crate::src::qcommon::q_shared::vec_t,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
-            ) -> libc::c_int,
+            ) -> i32,
         >,
         pub BSPEntityData: Option<unsafe extern "C" fn() -> *mut libc::c_char>,
         pub BSPModelMinsMaxsOrigin: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
+                _: i32,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
@@ -2771,31 +2771,31 @@ pub mod botlib_h {
             ) -> (),
         >,
         pub BotClientCommand:
-            Option<unsafe extern "C" fn(_: libc::c_int, _: *mut libc::c_char) -> ()>,
-        pub GetMemory: Option<unsafe extern "C" fn(_: libc::c_int) -> *mut libc::c_void>,
+            Option<unsafe extern "C" fn(_: i32, _: *mut libc::c_char) -> ()>,
+        pub GetMemory: Option<unsafe extern "C" fn(_: i32) -> *mut libc::c_void>,
         pub FreeMemory: Option<unsafe extern "C" fn(_: *mut libc::c_void) -> ()>,
-        pub AvailableMemory: Option<unsafe extern "C" fn() -> libc::c_int>,
-        pub HunkAlloc: Option<unsafe extern "C" fn(_: libc::c_int) -> *mut libc::c_void>,
+        pub AvailableMemory: Option<unsafe extern "C" fn() -> i32>,
+        pub HunkAlloc: Option<unsafe extern "C" fn(_: i32) -> *mut libc::c_void>,
         pub FS_FOpenFile: Option<
             unsafe extern "C" fn(
                 _: *const libc::c_char,
                 _: *mut crate::src::qcommon::q_shared::fileHandle_t,
                 _: crate::src::qcommon::q_shared::fsMode_t,
-            ) -> libc::c_int,
+            ) -> i32,
         >,
         pub FS_Read: Option<
             unsafe extern "C" fn(
                 _: *mut libc::c_void,
-                _: libc::c_int,
+                _: i32,
                 _: crate::src::qcommon::q_shared::fileHandle_t,
-            ) -> libc::c_int,
+            ) -> i32,
         >,
         pub FS_Write: Option<
             unsafe extern "C" fn(
                 _: *const libc::c_void,
-                _: libc::c_int,
+                _: i32,
                 _: crate::src::qcommon::q_shared::fileHandle_t,
-            ) -> libc::c_int,
+            ) -> i32,
         >,
         pub FS_FCloseFile:
             Option<unsafe extern "C" fn(_: crate::src::qcommon::q_shared::fileHandle_t) -> ()>,
@@ -2803,27 +2803,27 @@ pub mod botlib_h {
             unsafe extern "C" fn(
                 _: crate::src::qcommon::q_shared::fileHandle_t,
                 _: libc::c_long,
-                _: libc::c_int,
-            ) -> libc::c_int,
+                _: i32,
+            ) -> i32,
         >,
-        pub DebugLineCreate: Option<unsafe extern "C" fn() -> libc::c_int>,
-        pub DebugLineDelete: Option<unsafe extern "C" fn(_: libc::c_int) -> ()>,
+        pub DebugLineCreate: Option<unsafe extern "C" fn() -> i32>,
+        pub DebugLineDelete: Option<unsafe extern "C" fn(_: i32) -> ()>,
         pub DebugLineShow: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
+                _: i32,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
-                _: libc::c_int,
+                _: i32,
             ) -> (),
         >,
         pub DebugPolygonCreate: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
-                _: libc::c_int,
+                _: i32,
+                _: i32,
                 _: *mut crate::src::qcommon::q_shared::vec3_t,
-            ) -> libc::c_int,
+            ) -> i32,
         >,
-        pub DebugPolygonDelete: Option<unsafe extern "C" fn(_: libc::c_int) -> ()>,
+        pub DebugPolygonDelete: Option<unsafe extern "C" fn(_: i32) -> ()>,
     }
 
     pub type aas_export_t = crate::botlib_h::aas_export_s;
@@ -2832,136 +2832,136 @@ pub mod botlib_h {
     #[derive(Copy, Clone)]
     pub struct aas_export_s {
         pub AAS_EntityInfo: Option<
-            unsafe extern "C" fn(_: libc::c_int, _: *mut crate::be_aas_h::aas_entityinfo_s) -> (),
+            unsafe extern "C" fn(_: i32, _: *mut crate::be_aas_h::aas_entityinfo_s) -> (),
         >,
-        pub AAS_Initialized: Option<unsafe extern "C" fn() -> libc::c_int>,
+        pub AAS_Initialized: Option<unsafe extern "C" fn() -> i32>,
         pub AAS_PresenceTypeBoundingBox: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
+                _: i32,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
             ) -> (),
         >,
-        pub AAS_Time: Option<unsafe extern "C" fn() -> libc::c_float>,
+        pub AAS_Time: Option<unsafe extern "C" fn() -> f32>,
         pub AAS_PointAreaNum: Option<
-            unsafe extern "C" fn(_: *mut crate::src::qcommon::q_shared::vec_t) -> libc::c_int,
+            unsafe extern "C" fn(_: *mut crate::src::qcommon::q_shared::vec_t) -> i32,
         >,
         pub AAS_PointReachabilityAreaIndex: Option<
-            unsafe extern "C" fn(_: *mut crate::src::qcommon::q_shared::vec_t) -> libc::c_int,
+            unsafe extern "C" fn(_: *mut crate::src::qcommon::q_shared::vec_t) -> i32,
         >,
         pub AAS_TraceAreas: Option<
             unsafe extern "C" fn(
                 _: *mut crate::src::qcommon::q_shared::vec_t,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
-                _: *mut libc::c_int,
+                _: *mut i32,
                 _: *mut crate::src::qcommon::q_shared::vec3_t,
-                _: libc::c_int,
-            ) -> libc::c_int,
+                _: i32,
+            ) -> i32,
         >,
         pub AAS_BBoxAreas: Option<
             unsafe extern "C" fn(
                 _: *mut crate::src::qcommon::q_shared::vec_t,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
-                _: *mut libc::c_int,
-                _: libc::c_int,
-            ) -> libc::c_int,
+                _: *mut i32,
+                _: i32,
+            ) -> i32,
         >,
         pub AAS_AreaInfo: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
+                _: i32,
                 _: *mut crate::be_aas_h::aas_areainfo_s,
-            ) -> libc::c_int,
+            ) -> i32,
         >,
         pub AAS_PointContents: Option<
-            unsafe extern "C" fn(_: *mut crate::src::qcommon::q_shared::vec_t) -> libc::c_int,
+            unsafe extern "C" fn(_: *mut crate::src::qcommon::q_shared::vec_t) -> i32,
         >,
-        pub AAS_NextBSPEntity: Option<unsafe extern "C" fn(_: libc::c_int) -> libc::c_int>,
+        pub AAS_NextBSPEntity: Option<unsafe extern "C" fn(_: i32) -> i32>,
         pub AAS_ValueForBSPEpairKey: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
+                _: i32,
                 _: *mut libc::c_char,
                 _: *mut libc::c_char,
-                _: libc::c_int,
-            ) -> libc::c_int,
+                _: i32,
+            ) -> i32,
         >,
         pub AAS_VectorForBSPEpairKey: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
+                _: i32,
                 _: *mut libc::c_char,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
-            ) -> libc::c_int,
+            ) -> i32,
         >,
         pub AAS_FloatForBSPEpairKey: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
+                _: i32,
                 _: *mut libc::c_char,
-                _: *mut libc::c_float,
-            ) -> libc::c_int,
+                _: *mut f32,
+            ) -> i32,
         >,
         pub AAS_IntForBSPEpairKey: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
+                _: i32,
                 _: *mut libc::c_char,
-                _: *mut libc::c_int,
-            ) -> libc::c_int,
+                _: *mut i32,
+            ) -> i32,
         >,
-        pub AAS_AreaReachability: Option<unsafe extern "C" fn(_: libc::c_int) -> libc::c_int>,
+        pub AAS_AreaReachability: Option<unsafe extern "C" fn(_: i32) -> i32>,
         pub AAS_AreaTravelTimeToGoalArea: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
+                _: i32,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
-                _: libc::c_int,
-                _: libc::c_int,
-            ) -> libc::c_int,
+                _: i32,
+                _: i32,
+            ) -> i32,
         >,
         pub AAS_EnableRoutingArea:
-            Option<unsafe extern "C" fn(_: libc::c_int, _: libc::c_int) -> libc::c_int>,
+            Option<unsafe extern "C" fn(_: i32, _: i32) -> i32>,
         pub AAS_PredictRoute: Option<
             unsafe extern "C" fn(
                 _: *mut crate::be_aas_h::aas_predictroute_s,
-                _: libc::c_int,
+                _: i32,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
-                _: libc::c_int,
-                _: libc::c_int,
-                _: libc::c_int,
-                _: libc::c_int,
-                _: libc::c_int,
-                _: libc::c_int,
-                _: libc::c_int,
-                _: libc::c_int,
-            ) -> libc::c_int,
+                _: i32,
+                _: i32,
+                _: i32,
+                _: i32,
+                _: i32,
+                _: i32,
+                _: i32,
+                _: i32,
+            ) -> i32,
         >,
         pub AAS_AlternativeRouteGoals: Option<
             unsafe extern "C" fn(
                 _: *mut crate::src::qcommon::q_shared::vec_t,
-                _: libc::c_int,
+                _: i32,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
-                _: libc::c_int,
-                _: libc::c_int,
+                _: i32,
+                _: i32,
                 _: *mut crate::be_aas_h::aas_altroutegoal_s,
-                _: libc::c_int,
-                _: libc::c_int,
-            ) -> libc::c_int,
+                _: i32,
+                _: i32,
+            ) -> i32,
         >,
         pub AAS_Swimming: Option<
-            unsafe extern "C" fn(_: *mut crate::src::qcommon::q_shared::vec_t) -> libc::c_int,
+            unsafe extern "C" fn(_: *mut crate::src::qcommon::q_shared::vec_t) -> i32,
         >,
         pub AAS_PredictClientMovement: Option<
             unsafe extern "C" fn(
                 _: *mut crate::be_aas_h::aas_clientmove_s,
-                _: libc::c_int,
+                _: i32,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
-                _: libc::c_int,
-                _: libc::c_int,
+                _: i32,
+                _: i32,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
-                _: libc::c_int,
-                _: libc::c_int,
-                _: libc::c_float,
-                _: libc::c_int,
-                _: libc::c_int,
-                _: libc::c_int,
-            ) -> libc::c_int,
+                _: i32,
+                _: i32,
+                _: f32,
+                _: i32,
+                _: i32,
+                _: i32,
+            ) -> i32,
         >,
     }
 
@@ -2970,47 +2970,47 @@ pub mod botlib_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct ea_export_s {
-        pub EA_Command: Option<unsafe extern "C" fn(_: libc::c_int, _: *mut libc::c_char) -> ()>,
-        pub EA_Say: Option<unsafe extern "C" fn(_: libc::c_int, _: *mut libc::c_char) -> ()>,
-        pub EA_SayTeam: Option<unsafe extern "C" fn(_: libc::c_int, _: *mut libc::c_char) -> ()>,
-        pub EA_Action: Option<unsafe extern "C" fn(_: libc::c_int, _: libc::c_int) -> ()>,
-        pub EA_Gesture: Option<unsafe extern "C" fn(_: libc::c_int) -> ()>,
-        pub EA_Talk: Option<unsafe extern "C" fn(_: libc::c_int) -> ()>,
-        pub EA_Attack: Option<unsafe extern "C" fn(_: libc::c_int) -> ()>,
-        pub EA_Use: Option<unsafe extern "C" fn(_: libc::c_int) -> ()>,
-        pub EA_Respawn: Option<unsafe extern "C" fn(_: libc::c_int) -> ()>,
-        pub EA_MoveUp: Option<unsafe extern "C" fn(_: libc::c_int) -> ()>,
-        pub EA_MoveDown: Option<unsafe extern "C" fn(_: libc::c_int) -> ()>,
-        pub EA_MoveForward: Option<unsafe extern "C" fn(_: libc::c_int) -> ()>,
-        pub EA_MoveBack: Option<unsafe extern "C" fn(_: libc::c_int) -> ()>,
-        pub EA_MoveLeft: Option<unsafe extern "C" fn(_: libc::c_int) -> ()>,
-        pub EA_MoveRight: Option<unsafe extern "C" fn(_: libc::c_int) -> ()>,
-        pub EA_Crouch: Option<unsafe extern "C" fn(_: libc::c_int) -> ()>,
-        pub EA_SelectWeapon: Option<unsafe extern "C" fn(_: libc::c_int, _: libc::c_int) -> ()>,
-        pub EA_Jump: Option<unsafe extern "C" fn(_: libc::c_int) -> ()>,
-        pub EA_DelayedJump: Option<unsafe extern "C" fn(_: libc::c_int) -> ()>,
+        pub EA_Command: Option<unsafe extern "C" fn(_: i32, _: *mut libc::c_char) -> ()>,
+        pub EA_Say: Option<unsafe extern "C" fn(_: i32, _: *mut libc::c_char) -> ()>,
+        pub EA_SayTeam: Option<unsafe extern "C" fn(_: i32, _: *mut libc::c_char) -> ()>,
+        pub EA_Action: Option<unsafe extern "C" fn(_: i32, _: i32) -> ()>,
+        pub EA_Gesture: Option<unsafe extern "C" fn(_: i32) -> ()>,
+        pub EA_Talk: Option<unsafe extern "C" fn(_: i32) -> ()>,
+        pub EA_Attack: Option<unsafe extern "C" fn(_: i32) -> ()>,
+        pub EA_Use: Option<unsafe extern "C" fn(_: i32) -> ()>,
+        pub EA_Respawn: Option<unsafe extern "C" fn(_: i32) -> ()>,
+        pub EA_MoveUp: Option<unsafe extern "C" fn(_: i32) -> ()>,
+        pub EA_MoveDown: Option<unsafe extern "C" fn(_: i32) -> ()>,
+        pub EA_MoveForward: Option<unsafe extern "C" fn(_: i32) -> ()>,
+        pub EA_MoveBack: Option<unsafe extern "C" fn(_: i32) -> ()>,
+        pub EA_MoveLeft: Option<unsafe extern "C" fn(_: i32) -> ()>,
+        pub EA_MoveRight: Option<unsafe extern "C" fn(_: i32) -> ()>,
+        pub EA_Crouch: Option<unsafe extern "C" fn(_: i32) -> ()>,
+        pub EA_SelectWeapon: Option<unsafe extern "C" fn(_: i32, _: i32) -> ()>,
+        pub EA_Jump: Option<unsafe extern "C" fn(_: i32) -> ()>,
+        pub EA_DelayedJump: Option<unsafe extern "C" fn(_: i32) -> ()>,
         pub EA_Move: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
+                _: i32,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
-                _: libc::c_float,
+                _: f32,
             ) -> (),
         >,
         pub EA_View: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
+                _: i32,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
             ) -> (),
         >,
-        pub EA_EndRegular: Option<unsafe extern "C" fn(_: libc::c_int, _: libc::c_float) -> ()>,
+        pub EA_EndRegular: Option<unsafe extern "C" fn(_: i32, _: f32) -> ()>,
         pub EA_GetInput: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
-                _: libc::c_float,
+                _: i32,
+                _: f32,
                 _: *mut crate::botlib_h::bot_input_t,
             ) -> (),
         >,
-        pub EA_ResetInput: Option<unsafe extern "C" fn(_: libc::c_int) -> ()>,
+        pub EA_ResetInput: Option<unsafe extern "C" fn(_: i32) -> ()>,
     }
 
     pub type ai_export_t = crate::botlib_h::ai_export_s;
@@ -3019,55 +3019,55 @@ pub mod botlib_h {
     #[derive(Copy, Clone)]
     pub struct ai_export_s {
         pub BotLoadCharacter:
-            Option<unsafe extern "C" fn(_: *mut libc::c_char, _: libc::c_float) -> libc::c_int>,
-        pub BotFreeCharacter: Option<unsafe extern "C" fn(_: libc::c_int) -> ()>,
+            Option<unsafe extern "C" fn(_: *mut libc::c_char, _: f32) -> i32>,
+        pub BotFreeCharacter: Option<unsafe extern "C" fn(_: i32) -> ()>,
         pub Characteristic_Float:
-            Option<unsafe extern "C" fn(_: libc::c_int, _: libc::c_int) -> libc::c_float>,
+            Option<unsafe extern "C" fn(_: i32, _: i32) -> f32>,
         pub Characteristic_BFloat: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
-                _: libc::c_int,
-                _: libc::c_float,
-                _: libc::c_float,
-            ) -> libc::c_float,
+                _: i32,
+                _: i32,
+                _: f32,
+                _: f32,
+            ) -> f32,
         >,
         pub Characteristic_Integer:
-            Option<unsafe extern "C" fn(_: libc::c_int, _: libc::c_int) -> libc::c_int>,
+            Option<unsafe extern "C" fn(_: i32, _: i32) -> i32>,
         pub Characteristic_BInteger: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
-                _: libc::c_int,
-                _: libc::c_int,
-                _: libc::c_int,
-            ) -> libc::c_int,
+                _: i32,
+                _: i32,
+                _: i32,
+                _: i32,
+            ) -> i32,
         >,
         pub Characteristic_String: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
-                _: libc::c_int,
+                _: i32,
+                _: i32,
                 _: *mut libc::c_char,
-                _: libc::c_int,
+                _: i32,
             ) -> (),
         >,
-        pub BotAllocChatState: Option<unsafe extern "C" fn() -> libc::c_int>,
-        pub BotFreeChatState: Option<unsafe extern "C" fn(_: libc::c_int) -> ()>,
+        pub BotAllocChatState: Option<unsafe extern "C" fn() -> i32>,
+        pub BotFreeChatState: Option<unsafe extern "C" fn(_: i32) -> ()>,
         pub BotQueueConsoleMessage: Option<
-            unsafe extern "C" fn(_: libc::c_int, _: libc::c_int, _: *mut libc::c_char) -> (),
+            unsafe extern "C" fn(_: i32, _: i32, _: *mut libc::c_char) -> (),
         >,
         pub BotRemoveConsoleMessage:
-            Option<unsafe extern "C" fn(_: libc::c_int, _: libc::c_int) -> ()>,
+            Option<unsafe extern "C" fn(_: i32, _: i32) -> ()>,
         pub BotNextConsoleMessage: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
+                _: i32,
                 _: *mut crate::src::botlib::be_ai_chat::bot_consolemessage_s,
-            ) -> libc::c_int,
+            ) -> i32,
         >,
-        pub BotNumConsoleMessages: Option<unsafe extern "C" fn(_: libc::c_int) -> libc::c_int>,
+        pub BotNumConsoleMessages: Option<unsafe extern "C" fn(_: i32) -> i32>,
         pub BotInitialChat: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
+                _: i32,
                 _: *mut libc::c_char,
-                _: libc::c_int,
+                _: i32,
                 _: *mut libc::c_char,
                 _: *mut libc::c_char,
                 _: *mut libc::c_char,
@@ -3079,49 +3079,49 @@ pub mod botlib_h {
             ) -> (),
         >,
         pub BotNumInitialChats:
-            Option<unsafe extern "C" fn(_: libc::c_int, _: *mut libc::c_char) -> libc::c_int>,
+            Option<unsafe extern "C" fn(_: i32, _: *mut libc::c_char) -> i32>,
         pub BotReplyChat: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
+                _: i32,
                 _: *mut libc::c_char,
-                _: libc::c_int,
-                _: libc::c_int,
-                _: *mut libc::c_char,
-                _: *mut libc::c_char,
+                _: i32,
+                _: i32,
                 _: *mut libc::c_char,
                 _: *mut libc::c_char,
                 _: *mut libc::c_char,
                 _: *mut libc::c_char,
                 _: *mut libc::c_char,
                 _: *mut libc::c_char,
-            ) -> libc::c_int,
+                _: *mut libc::c_char,
+                _: *mut libc::c_char,
+            ) -> i32,
         >,
-        pub BotChatLength: Option<unsafe extern "C" fn(_: libc::c_int) -> libc::c_int>,
+        pub BotChatLength: Option<unsafe extern "C" fn(_: i32) -> i32>,
         pub BotEnterChat:
-            Option<unsafe extern "C" fn(_: libc::c_int, _: libc::c_int, _: libc::c_int) -> ()>,
+            Option<unsafe extern "C" fn(_: i32, _: i32, _: i32) -> ()>,
         pub BotGetChatMessage: Option<
-            unsafe extern "C" fn(_: libc::c_int, _: *mut libc::c_char, _: libc::c_int) -> (),
+            unsafe extern "C" fn(_: i32, _: *mut libc::c_char, _: i32) -> (),
         >,
         pub StringContains: Option<
             unsafe extern "C" fn(
                 _: *mut libc::c_char,
                 _: *mut libc::c_char,
-                _: libc::c_int,
-            ) -> libc::c_int,
+                _: i32,
+            ) -> i32,
         >,
         pub BotFindMatch: Option<
             unsafe extern "C" fn(
                 _: *mut libc::c_char,
                 _: *mut crate::src::botlib::be_ai_chat::bot_match_s,
                 _: libc::c_ulong,
-            ) -> libc::c_int,
+            ) -> i32,
         >,
         pub BotMatchVariable: Option<
             unsafe extern "C" fn(
                 _: *mut crate::src::botlib::be_ai_chat::bot_match_s,
-                _: libc::c_int,
+                _: i32,
                 _: *mut libc::c_char,
-                _: libc::c_int,
+                _: i32,
             ) -> (),
         >,
         pub UnifyWhiteSpaces: Option<unsafe extern "C" fn(_: *mut libc::c_char) -> ()>,
@@ -3129,193 +3129,193 @@ pub mod botlib_h {
             Option<unsafe extern "C" fn(_: *mut libc::c_char, _: libc::c_ulong) -> ()>,
         pub BotLoadChatFile: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
+                _: i32,
                 _: *mut libc::c_char,
                 _: *mut libc::c_char,
-            ) -> libc::c_int,
+            ) -> i32,
         >,
-        pub BotSetChatGender: Option<unsafe extern "C" fn(_: libc::c_int, _: libc::c_int) -> ()>,
+        pub BotSetChatGender: Option<unsafe extern "C" fn(_: i32, _: i32) -> ()>,
         pub BotSetChatName: Option<
-            unsafe extern "C" fn(_: libc::c_int, _: *mut libc::c_char, _: libc::c_int) -> (),
+            unsafe extern "C" fn(_: i32, _: *mut libc::c_char, _: i32) -> (),
         >,
-        pub BotResetGoalState: Option<unsafe extern "C" fn(_: libc::c_int) -> ()>,
-        pub BotResetAvoidGoals: Option<unsafe extern "C" fn(_: libc::c_int) -> ()>,
+        pub BotResetGoalState: Option<unsafe extern "C" fn(_: i32) -> ()>,
+        pub BotResetAvoidGoals: Option<unsafe extern "C" fn(_: i32) -> ()>,
         pub BotRemoveFromAvoidGoals:
-            Option<unsafe extern "C" fn(_: libc::c_int, _: libc::c_int) -> ()>,
+            Option<unsafe extern "C" fn(_: i32, _: i32) -> ()>,
         pub BotPushGoal: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
+                _: i32,
                 _: *mut crate::src::botlib::be_ai_goal::bot_goal_s,
             ) -> (),
         >,
-        pub BotPopGoal: Option<unsafe extern "C" fn(_: libc::c_int) -> ()>,
-        pub BotEmptyGoalStack: Option<unsafe extern "C" fn(_: libc::c_int) -> ()>,
-        pub BotDumpAvoidGoals: Option<unsafe extern "C" fn(_: libc::c_int) -> ()>,
-        pub BotDumpGoalStack: Option<unsafe extern "C" fn(_: libc::c_int) -> ()>,
+        pub BotPopGoal: Option<unsafe extern "C" fn(_: i32) -> ()>,
+        pub BotEmptyGoalStack: Option<unsafe extern "C" fn(_: i32) -> ()>,
+        pub BotDumpAvoidGoals: Option<unsafe extern "C" fn(_: i32) -> ()>,
+        pub BotDumpGoalStack: Option<unsafe extern "C" fn(_: i32) -> ()>,
         pub BotGoalName: Option<
-            unsafe extern "C" fn(_: libc::c_int, _: *mut libc::c_char, _: libc::c_int) -> (),
+            unsafe extern "C" fn(_: i32, _: *mut libc::c_char, _: i32) -> (),
         >,
         pub BotGetTopGoal: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
+                _: i32,
                 _: *mut crate::src::botlib::be_ai_goal::bot_goal_s,
-            ) -> libc::c_int,
+            ) -> i32,
         >,
         pub BotGetSecondGoal: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
+                _: i32,
                 _: *mut crate::src::botlib::be_ai_goal::bot_goal_s,
-            ) -> libc::c_int,
+            ) -> i32,
         >,
         pub BotChooseLTGItem: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
+                _: i32,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
-                _: *mut libc::c_int,
-                _: libc::c_int,
-            ) -> libc::c_int,
+                _: *mut i32,
+                _: i32,
+            ) -> i32,
         >,
         pub BotChooseNBGItem: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
+                _: i32,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
-                _: *mut libc::c_int,
-                _: libc::c_int,
+                _: *mut i32,
+                _: i32,
                 _: *mut crate::src::botlib::be_ai_goal::bot_goal_s,
-                _: libc::c_float,
-            ) -> libc::c_int,
+                _: f32,
+            ) -> i32,
         >,
         pub BotTouchingGoal: Option<
             unsafe extern "C" fn(
                 _: *mut crate::src::qcommon::q_shared::vec_t,
                 _: *mut crate::src::botlib::be_ai_goal::bot_goal_s,
-            ) -> libc::c_int,
+            ) -> i32,
         >,
         pub BotItemGoalInVisButNotVisible: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
+                _: i32,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
                 _: *mut crate::src::botlib::be_ai_goal::bot_goal_s,
-            ) -> libc::c_int,
+            ) -> i32,
         >,
         pub BotGetLevelItemGoal: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
+                _: i32,
                 _: *mut libc::c_char,
                 _: *mut crate::src::botlib::be_ai_goal::bot_goal_s,
-            ) -> libc::c_int,
+            ) -> i32,
         >,
         pub BotGetNextCampSpotGoal: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
+                _: i32,
                 _: *mut crate::src::botlib::be_ai_goal::bot_goal_s,
-            ) -> libc::c_int,
+            ) -> i32,
         >,
         pub BotGetMapLocationGoal: Option<
             unsafe extern "C" fn(
                 _: *mut libc::c_char,
                 _: *mut crate::src::botlib::be_ai_goal::bot_goal_s,
-            ) -> libc::c_int,
+            ) -> i32,
         >,
         pub BotAvoidGoalTime:
-            Option<unsafe extern "C" fn(_: libc::c_int, _: libc::c_int) -> libc::c_float>,
+            Option<unsafe extern "C" fn(_: i32, _: i32) -> f32>,
         pub BotSetAvoidGoalTime:
-            Option<unsafe extern "C" fn(_: libc::c_int, _: libc::c_int, _: libc::c_float) -> ()>,
+            Option<unsafe extern "C" fn(_: i32, _: i32, _: f32) -> ()>,
         pub BotInitLevelItems: Option<unsafe extern "C" fn() -> ()>,
         pub BotUpdateEntityItems: Option<unsafe extern "C" fn() -> ()>,
         pub BotLoadItemWeights:
-            Option<unsafe extern "C" fn(_: libc::c_int, _: *mut libc::c_char) -> libc::c_int>,
-        pub BotFreeItemWeights: Option<unsafe extern "C" fn(_: libc::c_int) -> ()>,
+            Option<unsafe extern "C" fn(_: i32, _: *mut libc::c_char) -> i32>,
+        pub BotFreeItemWeights: Option<unsafe extern "C" fn(_: i32) -> ()>,
         pub BotInterbreedGoalFuzzyLogic:
-            Option<unsafe extern "C" fn(_: libc::c_int, _: libc::c_int, _: libc::c_int) -> ()>,
+            Option<unsafe extern "C" fn(_: i32, _: i32, _: i32) -> ()>,
         pub BotSaveGoalFuzzyLogic:
-            Option<unsafe extern "C" fn(_: libc::c_int, _: *mut libc::c_char) -> ()>,
+            Option<unsafe extern "C" fn(_: i32, _: *mut libc::c_char) -> ()>,
         pub BotMutateGoalFuzzyLogic:
-            Option<unsafe extern "C" fn(_: libc::c_int, _: libc::c_float) -> ()>,
-        pub BotAllocGoalState: Option<unsafe extern "C" fn(_: libc::c_int) -> libc::c_int>,
-        pub BotFreeGoalState: Option<unsafe extern "C" fn(_: libc::c_int) -> ()>,
-        pub BotResetMoveState: Option<unsafe extern "C" fn(_: libc::c_int) -> ()>,
+            Option<unsafe extern "C" fn(_: i32, _: f32) -> ()>,
+        pub BotAllocGoalState: Option<unsafe extern "C" fn(_: i32) -> i32>,
+        pub BotFreeGoalState: Option<unsafe extern "C" fn(_: i32) -> ()>,
+        pub BotResetMoveState: Option<unsafe extern "C" fn(_: i32) -> ()>,
         pub BotMoveToGoal: Option<
             unsafe extern "C" fn(
                 _: *mut crate::src::botlib::be_ai_move::bot_moveresult_s,
-                _: libc::c_int,
+                _: i32,
                 _: *mut crate::src::botlib::be_ai_goal::bot_goal_s,
-                _: libc::c_int,
+                _: i32,
             ) -> (),
         >,
         pub BotMoveInDirection: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
+                _: i32,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
-                _: libc::c_float,
-                _: libc::c_int,
-            ) -> libc::c_int,
+                _: f32,
+                _: i32,
+            ) -> i32,
         >,
-        pub BotResetAvoidReach: Option<unsafe extern "C" fn(_: libc::c_int) -> ()>,
-        pub BotResetLastAvoidReach: Option<unsafe extern "C" fn(_: libc::c_int) -> ()>,
+        pub BotResetAvoidReach: Option<unsafe extern "C" fn(_: i32) -> ()>,
+        pub BotResetLastAvoidReach: Option<unsafe extern "C" fn(_: i32) -> ()>,
         pub BotReachabilityArea: Option<
             unsafe extern "C" fn(
                 _: *mut crate::src::qcommon::q_shared::vec_t,
-                _: libc::c_int,
-            ) -> libc::c_int,
+                _: i32,
+            ) -> i32,
         >,
         pub BotMovementViewTarget: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
+                _: i32,
                 _: *mut crate::src::botlib::be_ai_goal::bot_goal_s,
-                _: libc::c_int,
-                _: libc::c_float,
+                _: i32,
+                _: f32,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
-            ) -> libc::c_int,
+            ) -> i32,
         >,
         pub BotPredictVisiblePosition: Option<
             unsafe extern "C" fn(
                 _: *mut crate::src::qcommon::q_shared::vec_t,
-                _: libc::c_int,
+                _: i32,
                 _: *mut crate::src::botlib::be_ai_goal::bot_goal_s,
-                _: libc::c_int,
+                _: i32,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
-            ) -> libc::c_int,
+            ) -> i32,
         >,
-        pub BotAllocMoveState: Option<unsafe extern "C" fn() -> libc::c_int>,
-        pub BotFreeMoveState: Option<unsafe extern "C" fn(_: libc::c_int) -> ()>,
+        pub BotAllocMoveState: Option<unsafe extern "C" fn() -> i32>,
+        pub BotFreeMoveState: Option<unsafe extern "C" fn(_: i32) -> ()>,
         pub BotInitMoveState: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
+                _: i32,
                 _: *mut crate::src::botlib::be_ai_move::bot_initmove_s,
             ) -> (),
         >,
         pub BotAddAvoidSpot: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
+                _: i32,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
-                _: libc::c_float,
-                _: libc::c_int,
+                _: f32,
+                _: i32,
             ) -> (),
         >,
         pub BotChooseBestFightWeapon:
-            Option<unsafe extern "C" fn(_: libc::c_int, _: *mut libc::c_int) -> libc::c_int>,
+            Option<unsafe extern "C" fn(_: i32, _: *mut i32) -> i32>,
         pub BotGetWeaponInfo: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
-                _: libc::c_int,
+                _: i32,
+                _: i32,
                 _: *mut crate::src::botlib::be_ai_weap::weaponinfo_s,
             ) -> (),
         >,
         pub BotLoadWeaponWeights:
-            Option<unsafe extern "C" fn(_: libc::c_int, _: *mut libc::c_char) -> libc::c_int>,
-        pub BotAllocWeaponState: Option<unsafe extern "C" fn() -> libc::c_int>,
-        pub BotFreeWeaponState: Option<unsafe extern "C" fn(_: libc::c_int) -> ()>,
-        pub BotResetWeaponState: Option<unsafe extern "C" fn(_: libc::c_int) -> ()>,
+            Option<unsafe extern "C" fn(_: i32, _: *mut libc::c_char) -> i32>,
+        pub BotAllocWeaponState: Option<unsafe extern "C" fn() -> i32>,
+        pub BotFreeWeaponState: Option<unsafe extern "C" fn(_: i32) -> ()>,
+        pub BotResetWeaponState: Option<unsafe extern "C" fn(_: i32) -> ()>,
         pub GeneticParentsAndChildSelection: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
-                _: *mut libc::c_float,
-                _: *mut libc::c_int,
-                _: *mut libc::c_int,
-                _: *mut libc::c_int,
-            ) -> libc::c_int,
+                _: i32,
+                _: *mut f32,
+                _: *mut i32,
+                _: *mut i32,
+                _: *mut i32,
+            ) -> i32,
         >,
     }
 
@@ -3327,50 +3327,50 @@ pub mod botlib_h {
         pub aas: crate::botlib_h::aas_export_t,
         pub ea: crate::botlib_h::ea_export_t,
         pub ai: crate::botlib_h::ai_export_t,
-        pub BotLibSetup: Option<unsafe extern "C" fn() -> libc::c_int>,
-        pub BotLibShutdown: Option<unsafe extern "C" fn() -> libc::c_int>,
+        pub BotLibSetup: Option<unsafe extern "C" fn() -> i32>,
+        pub BotLibShutdown: Option<unsafe extern "C" fn() -> i32>,
         pub BotLibVarSet: Option<
-            unsafe extern "C" fn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_int,
+            unsafe extern "C" fn(_: *const libc::c_char, _: *const libc::c_char) -> i32,
         >,
         pub BotLibVarGet: Option<
             unsafe extern "C" fn(
                 _: *const libc::c_char,
                 _: *mut libc::c_char,
-                _: libc::c_int,
-            ) -> libc::c_int,
+                _: i32,
+            ) -> i32,
         >,
-        pub PC_AddGlobalDefine: Option<unsafe extern "C" fn(_: *mut libc::c_char) -> libc::c_int>,
+        pub PC_AddGlobalDefine: Option<unsafe extern "C" fn(_: *mut libc::c_char) -> i32>,
         pub PC_LoadSourceHandle:
-            Option<unsafe extern "C" fn(_: *const libc::c_char) -> libc::c_int>,
-        pub PC_FreeSourceHandle: Option<unsafe extern "C" fn(_: libc::c_int) -> libc::c_int>,
+            Option<unsafe extern "C" fn(_: *const libc::c_char) -> i32>,
+        pub PC_FreeSourceHandle: Option<unsafe extern "C" fn(_: i32) -> i32>,
         pub PC_ReadTokenHandle: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
+                _: i32,
                 _: *mut crate::src::qcommon::q_shared::pc_token_t,
-            ) -> libc::c_int,
+            ) -> i32,
         >,
         pub PC_SourceFileAndLine: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
+                _: i32,
                 _: *mut libc::c_char,
-                _: *mut libc::c_int,
-            ) -> libc::c_int,
+                _: *mut i32,
+            ) -> i32,
         >,
-        pub BotLibStartFrame: Option<unsafe extern "C" fn(_: libc::c_float) -> libc::c_int>,
-        pub BotLibLoadMap: Option<unsafe extern "C" fn(_: *const libc::c_char) -> libc::c_int>,
+        pub BotLibStartFrame: Option<unsafe extern "C" fn(_: f32) -> i32>,
+        pub BotLibLoadMap: Option<unsafe extern "C" fn(_: *const libc::c_char) -> i32>,
         pub BotLibUpdateEntity: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
+                _: i32,
                 _: *mut crate::botlib_h::bot_entitystate_t,
-            ) -> libc::c_int,
+            ) -> i32,
         >,
         pub Test: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
+                _: i32,
                 _: *mut libc::c_char,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
                 _: *mut crate::src::qcommon::q_shared::vec_t,
-            ) -> libc::c_int,
+            ) -> i32,
         >,
     }
 }
@@ -3382,12 +3382,12 @@ pub mod server_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct voipServerPacket_s {
-        pub generation: libc::c_int,
-        pub sequence: libc::c_int,
-        pub frames: libc::c_int,
-        pub len: libc::c_int,
-        pub sender: libc::c_int,
-        pub flags: libc::c_int,
+        pub generation: i32,
+        pub sequence: i32,
+        pub frames: i32,
+        pub len: i32,
+        pub sender: i32,
+        pub flags: i32,
         pub data: [crate::src::qcommon::q_shared::byte; 4000],
     }
 
@@ -3399,15 +3399,15 @@ pub mod server_h {
         pub worldSector: *mut crate::server_h::worldSector_s,
         pub nextEntityInWorldSector: *mut crate::server_h::svEntity_s,
         pub baseline: crate::src::qcommon::q_shared::entityState_t,
-        pub numClusters: libc::c_int,
-        pub clusternums: [libc::c_int; 16],
-        pub lastCluster: libc::c_int,
-        pub areanum: libc::c_int,
-        pub areanum2: libc::c_int,
-        pub snapshotCounter: libc::c_int,
+        pub numClusters: i32,
+        pub clusternums: [i32; 16],
+        pub lastCluster: i32,
+        pub areanum: i32,
+        pub areanum2: i32,
+        pub snapshotCounter: i32,
     }
 
-    pub type serverState_t = libc::c_uint;
+    pub type serverState_t = u32;
 
     pub const SS_DEAD: crate::server_h::serverState_t = 0;
 
@@ -3420,39 +3420,39 @@ pub mod server_h {
     pub struct server_t {
         pub state: crate::server_h::serverState_t,
         pub restarting: crate::src::qcommon::q_shared::qboolean,
-        pub serverId: libc::c_int,
-        pub restartedServerId: libc::c_int,
-        pub checksumFeed: libc::c_int,
-        pub checksumFeedServerId: libc::c_int,
-        pub snapshotCounter: libc::c_int,
-        pub timeResidual: libc::c_int,
-        pub nextFrameTime: libc::c_int,
+        pub serverId: i32,
+        pub restartedServerId: i32,
+        pub checksumFeed: i32,
+        pub checksumFeedServerId: i32,
+        pub snapshotCounter: i32,
+        pub timeResidual: i32,
+        pub nextFrameTime: i32,
         pub configstrings: [*mut libc::c_char; 1024],
         pub svEntities: [crate::server_h::svEntity_t; 1024],
         pub entityParsePoint: *mut libc::c_char,
         pub gentities: *mut crate::g_public_h::sharedEntity_t,
-        pub gentitySize: libc::c_int,
-        pub num_entities: libc::c_int,
+        pub gentitySize: i32,
+        pub num_entities: i32,
         pub gameClients: *mut crate::src::qcommon::q_shared::playerState_t,
-        pub gameClientSize: libc::c_int,
-        pub restartTime: libc::c_int,
-        pub time: libc::c_int,
+        pub gameClientSize: i32,
+        pub restartTime: i32,
+        pub time: i32,
     }
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct clientSnapshot_t {
-        pub areabytes: libc::c_int,
+        pub areabytes: i32,
         pub areabits: [crate::src::qcommon::q_shared::byte; 32],
         pub ps: crate::src::qcommon::q_shared::playerState_t,
-        pub num_entities: libc::c_int,
-        pub first_entity: libc::c_int,
-        pub messageSent: libc::c_int,
-        pub messageAcked: libc::c_int,
-        pub messageSize: libc::c_int,
+        pub num_entities: i32,
+        pub first_entity: i32,
+        pub messageSent: i32,
+        pub messageAcked: i32,
+        pub messageSize: i32,
     }
 
-    pub type clientState_t = libc::c_uint;
+    pub type clientState_t = u32;
 
     pub const CS_FREE: crate::server_h::clientState_t = 0;
 
@@ -3483,41 +3483,41 @@ pub mod server_h {
         pub state: crate::server_h::clientState_t,
         pub userinfo: [libc::c_char; 1024],
         pub reliableCommands: [[libc::c_char; 1024]; 64],
-        pub reliableSequence: libc::c_int,
-        pub reliableAcknowledge: libc::c_int,
-        pub reliableSent: libc::c_int,
-        pub messageAcknowledge: libc::c_int,
-        pub gamestateMessageNum: libc::c_int,
-        pub challenge: libc::c_int,
+        pub reliableSequence: i32,
+        pub reliableAcknowledge: i32,
+        pub reliableSent: i32,
+        pub messageAcknowledge: i32,
+        pub gamestateMessageNum: i32,
+        pub challenge: i32,
         pub lastUsercmd: crate::src::qcommon::q_shared::usercmd_t,
-        pub lastMessageNum: libc::c_int,
-        pub lastClientCommand: libc::c_int,
+        pub lastMessageNum: i32,
+        pub lastClientCommand: i32,
         pub lastClientCommandString: [libc::c_char; 1024],
         pub gentity: *mut crate::g_public_h::sharedEntity_t,
         pub name: [libc::c_char; 32],
         pub downloadName: [libc::c_char; 64],
         pub download: crate::src::qcommon::q_shared::fileHandle_t,
-        pub downloadSize: libc::c_int,
-        pub downloadCount: libc::c_int,
-        pub downloadClientBlock: libc::c_int,
-        pub downloadCurrentBlock: libc::c_int,
-        pub downloadXmitBlock: libc::c_int,
-        pub downloadBlocks: [*mut libc::c_uchar; 48],
-        pub downloadBlockSize: [libc::c_int; 48],
+        pub downloadSize: i32,
+        pub downloadCount: i32,
+        pub downloadClientBlock: i32,
+        pub downloadCurrentBlock: i32,
+        pub downloadXmitBlock: i32,
+        pub downloadBlocks: [*mut u8; 48],
+        pub downloadBlockSize: [i32; 48],
         pub downloadEOF: crate::src::qcommon::q_shared::qboolean,
-        pub downloadSendTime: libc::c_int,
-        pub deltaMessage: libc::c_int,
-        pub nextReliableTime: libc::c_int,
-        pub lastPacketTime: libc::c_int,
-        pub lastConnectTime: libc::c_int,
-        pub lastSnapshotTime: libc::c_int,
+        pub downloadSendTime: i32,
+        pub deltaMessage: i32,
+        pub nextReliableTime: i32,
+        pub lastPacketTime: i32,
+        pub lastConnectTime: i32,
+        pub lastSnapshotTime: i32,
         pub rateDelayed: crate::src::qcommon::q_shared::qboolean,
-        pub timeoutCount: libc::c_int,
+        pub timeoutCount: i32,
         pub frames: [crate::server_h::clientSnapshot_t; 32],
-        pub ping: libc::c_int,
-        pub rate: libc::c_int,
-        pub snapshotMsec: libc::c_int,
-        pub pureAuthentic: libc::c_int,
+        pub ping: i32,
+        pub rate: i32,
+        pub snapshotMsec: i32,
+        pub pureAuthentic: i32,
         pub gotCP: crate::src::qcommon::q_shared::qboolean,
         pub netchan: crate::qcommon_h::netchan_t,
         pub netchan_start_queue: *mut crate::server_h::netchan_buffer_t,
@@ -3526,9 +3526,9 @@ pub mod server_h {
         pub muteAllVoip: crate::src::qcommon::q_shared::qboolean,
         pub ignoreVoipFromClient: [crate::src::qcommon::q_shared::qboolean; 64],
         pub voipPacket: [*mut crate::server_h::voipServerPacket_t; 64],
-        pub queuedVoipPackets: libc::c_int,
-        pub queuedVoipIndex: libc::c_int,
-        pub oldServerTime: libc::c_int,
+        pub queuedVoipPackets: i32,
+        pub queuedVoipIndex: i32,
+        pub oldServerTime: i32,
         pub csUpdated: [crate::src::qcommon::q_shared::qboolean; 1024],
         pub compat: crate::src::qcommon::q_shared::qboolean,
     }
@@ -3537,11 +3537,11 @@ pub mod server_h {
     #[derive(Copy, Clone)]
     pub struct challenge_t {
         pub adr: crate::qcommon_h::netadr_t,
-        pub challenge: libc::c_int,
-        pub clientChallenge: libc::c_int,
-        pub time: libc::c_int,
-        pub pingTime: libc::c_int,
-        pub firstTime: libc::c_int,
+        pub challenge: i32,
+        pub clientChallenge: i32,
+        pub time: i32,
+        pub pingTime: i32,
+        pub firstTime: i32,
         pub wasrefused: crate::src::qcommon::q_shared::qboolean,
         pub connected: crate::src::qcommon::q_shared::qboolean,
     }
@@ -3550,24 +3550,24 @@ pub mod server_h {
     #[derive(Copy, Clone)]
     pub struct serverStatic_t {
         pub initialized: crate::src::qcommon::q_shared::qboolean,
-        pub time: libc::c_int,
-        pub snapFlagServerBit: libc::c_int,
+        pub time: i32,
+        pub snapFlagServerBit: i32,
         pub clients: *mut crate::server_h::client_t,
-        pub numSnapshotEntities: libc::c_int,
-        pub nextSnapshotEntities: libc::c_int,
+        pub numSnapshotEntities: i32,
+        pub nextSnapshotEntities: i32,
         pub snapshotEntities: *mut crate::src::qcommon::q_shared::entityState_t,
-        pub nextHeartbeatTime: libc::c_int,
+        pub nextHeartbeatTime: i32,
         pub challenges: [crate::server_h::challenge_t; 2048],
         pub redirectAddress: crate::qcommon_h::netadr_t,
         pub authorizeAddress: crate::qcommon_h::netadr_t,
-        pub masterResolveTime: [libc::c_int; 5],
+        pub masterResolveTime: [i32; 5],
     }
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct serverBan_t {
         pub ip: crate::qcommon_h::netadr_t,
-        pub subnet: libc::c_int,
+        pub subnet: i32,
         pub isexception: crate::src::qcommon::q_shared::qboolean,
     }
 
@@ -3578,8 +3578,8 @@ pub mod server_h {
     pub struct leakyBucket_s {
         pub type_0: crate::qcommon_h::netadrtype_t,
         pub ipv: crate::server_h::C2RustUnnamed_164,
-        pub lastTime: libc::c_int,
-        pub burst: libc::c_schar,
+        pub lastTime: i32,
+        pub burst: i8,
         pub hash: libc::c_long,
         pub prev: *mut crate::server_h::leakyBucket_t,
         pub next: *mut crate::server_h::leakyBucket_t,
@@ -3598,18 +3598,18 @@ pub mod g_public_h {
     pub struct entityShared_t {
         pub unused: crate::src::qcommon::q_shared::entityState_t,
         pub linked: crate::src::qcommon::q_shared::qboolean,
-        pub linkcount: libc::c_int,
-        pub svFlags: libc::c_int,
-        pub singleClient: libc::c_int,
+        pub linkcount: i32,
+        pub svFlags: i32,
+        pub singleClient: i32,
         pub bmodel: crate::src::qcommon::q_shared::qboolean,
         pub mins: crate::src::qcommon::q_shared::vec3_t,
         pub maxs: crate::src::qcommon::q_shared::vec3_t,
-        pub contents: libc::c_int,
+        pub contents: i32,
         pub absmin: crate::src::qcommon::q_shared::vec3_t,
         pub absmax: crate::src::qcommon::q_shared::vec3_t,
         pub currentOrigin: crate::src::qcommon::q_shared::vec3_t,
         pub currentAngles: crate::src::qcommon::q_shared::vec3_t,
-        pub ownerNum: libc::c_int,
+        pub ownerNum: i32,
     }
 
     #[repr(C)]
@@ -4134,15 +4134,15 @@ pub mod vm_local_h {
     #[derive(Copy, Clone)]
     pub struct vmSymbol_s {
         pub next: *mut crate::vm_local_h::vmSymbol_s,
-        pub symValue: libc::c_int,
-        pub profileCount: libc::c_int,
+        pub symValue: i32,
+        pub profileCount: i32,
         pub symName: [libc::c_char; 1],
     }
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct vm_s {
-        pub programStack: libc::c_int,
+        pub programStack: i32,
         pub systemCall: Option<
             unsafe extern "C" fn(_: *mut crate::stdlib::intptr_t) -> crate::stdlib::intptr_t,
         >,
@@ -4150,127 +4150,127 @@ pub mod vm_local_h {
         pub searchPath: *mut libc::c_void,
         pub dllHandle: *mut libc::c_void,
         pub entryPoint:
-            Option<unsafe extern "C" fn(_: libc::c_int, _: ...) -> crate::stdlib::intptr_t>,
+            Option<unsafe extern "C" fn(_: i32, _: ...) -> crate::stdlib::intptr_t>,
         pub destroy: Option<unsafe extern "C" fn(_: *mut crate::qcommon_h::vm_t) -> ()>,
         pub currentlyInterpreting: crate::src::qcommon::q_shared::qboolean,
         pub compiled: crate::src::qcommon::q_shared::qboolean,
         pub codeBase: *mut crate::src::qcommon::q_shared::byte,
-        pub entryOfs: libc::c_int,
-        pub codeLength: libc::c_int,
+        pub entryOfs: i32,
+        pub codeLength: i32,
         pub instructionPointers: *mut crate::stdlib::intptr_t,
-        pub instructionCount: libc::c_int,
+        pub instructionCount: i32,
         pub dataBase: *mut crate::src::qcommon::q_shared::byte,
-        pub dataMask: libc::c_int,
-        pub dataAlloc: libc::c_int,
-        pub stackBottom: libc::c_int,
-        pub numSymbols: libc::c_int,
+        pub dataMask: i32,
+        pub dataAlloc: i32,
+        pub stackBottom: i32,
+        pub numSymbols: i32,
         pub symbols: *mut crate::vm_local_h::vmSymbol_s,
-        pub callLevel: libc::c_int,
-        pub breakFunction: libc::c_int,
-        pub breakCount: libc::c_int,
+        pub callLevel: i32,
+        pub breakFunction: i32,
+        pub breakCount: i32,
         pub jumpTableTargets: *mut crate::src::qcommon::q_shared::byte,
-        pub numJumpTableTargets: libc::c_int,
+        pub numJumpTableTargets: i32,
     }
 }
 pub mod qfiles_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct vmHeader_t {
-        pub vmMagic: libc::c_int,
-        pub instructionCount: libc::c_int,
-        pub codeOffset: libc::c_int,
-        pub codeLength: libc::c_int,
-        pub dataOffset: libc::c_int,
-        pub dataLength: libc::c_int,
-        pub litLength: libc::c_int,
-        pub bssLength: libc::c_int,
-        pub jtrgLength: libc::c_int,
+        pub vmMagic: i32,
+        pub instructionCount: i32,
+        pub codeOffset: i32,
+        pub codeLength: i32,
+        pub dataOffset: i32,
+        pub dataLength: i32,
+        pub litLength: i32,
+        pub bssLength: i32,
+        pub jtrgLength: i32,
     }
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct lump_t {
-        pub fileofs: libc::c_int,
-        pub filelen: libc::c_int,
+        pub fileofs: i32,
+        pub filelen: i32,
     }
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct dheader_t {
-        pub ident: libc::c_int,
-        pub version: libc::c_int,
+        pub ident: i32,
+        pub version: i32,
         pub lumps: [crate::qfiles_h::lump_t; 17],
     }
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct dmodel_t {
-        pub mins: [libc::c_float; 3],
-        pub maxs: [libc::c_float; 3],
-        pub firstSurface: libc::c_int,
-        pub numSurfaces: libc::c_int,
-        pub firstBrush: libc::c_int,
-        pub numBrushes: libc::c_int,
+        pub mins: [f32; 3],
+        pub maxs: [f32; 3],
+        pub firstSurface: i32,
+        pub numSurfaces: i32,
+        pub firstBrush: i32,
+        pub numBrushes: i32,
     }
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct dshader_t {
         pub shader: [libc::c_char; 64],
-        pub surfaceFlags: libc::c_int,
-        pub contentFlags: libc::c_int,
+        pub surfaceFlags: i32,
+        pub contentFlags: i32,
     }
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct dplane_t {
-        pub normal: [libc::c_float; 3],
-        pub dist: libc::c_float,
+        pub normal: [f32; 3],
+        pub dist: f32,
     }
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct dnode_t {
-        pub planeNum: libc::c_int,
-        pub children: [libc::c_int; 2],
-        pub mins: [libc::c_int; 3],
-        pub maxs: [libc::c_int; 3],
+        pub planeNum: i32,
+        pub children: [i32; 2],
+        pub mins: [i32; 3],
+        pub maxs: [i32; 3],
     }
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct dleaf_t {
-        pub cluster: libc::c_int,
-        pub area: libc::c_int,
-        pub mins: [libc::c_int; 3],
-        pub maxs: [libc::c_int; 3],
-        pub firstLeafSurface: libc::c_int,
-        pub numLeafSurfaces: libc::c_int,
-        pub firstLeafBrush: libc::c_int,
-        pub numLeafBrushes: libc::c_int,
+        pub cluster: i32,
+        pub area: i32,
+        pub mins: [i32; 3],
+        pub maxs: [i32; 3],
+        pub firstLeafSurface: i32,
+        pub numLeafSurfaces: i32,
+        pub firstLeafBrush: i32,
+        pub numLeafBrushes: i32,
     }
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct dbrushside_t {
-        pub planeNum: libc::c_int,
-        pub shaderNum: libc::c_int,
+        pub planeNum: i32,
+        pub shaderNum: i32,
     }
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct dbrush_t {
-        pub firstSide: libc::c_int,
-        pub numSides: libc::c_int,
-        pub shaderNum: libc::c_int,
+        pub firstSide: i32,
+        pub numSides: i32,
+        pub shaderNum: i32,
     }
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct drawVert_t {
         pub xyz: crate::src::qcommon::q_shared::vec3_t,
-        pub st: [libc::c_float; 2],
-        pub lightmap: [libc::c_float; 2],
+        pub st: [f32; 2],
+        pub lightmap: [f32; 2],
         pub normal: crate::src::qcommon::q_shared::vec3_t,
         pub color: [crate::src::qcommon::q_shared::byte; 4],
     }
@@ -4288,22 +4288,22 @@ pub mod qfiles_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct dsurface_t {
-        pub shaderNum: libc::c_int,
-        pub fogNum: libc::c_int,
-        pub surfaceType: libc::c_int,
-        pub firstVert: libc::c_int,
-        pub numVerts: libc::c_int,
-        pub firstIndex: libc::c_int,
-        pub numIndexes: libc::c_int,
-        pub lightmapNum: libc::c_int,
-        pub lightmapX: libc::c_int,
-        pub lightmapY: libc::c_int,
-        pub lightmapWidth: libc::c_int,
-        pub lightmapHeight: libc::c_int,
+        pub shaderNum: i32,
+        pub fogNum: i32,
+        pub surfaceType: i32,
+        pub firstVert: i32,
+        pub numVerts: i32,
+        pub firstIndex: i32,
+        pub numIndexes: i32,
+        pub lightmapNum: i32,
+        pub lightmapX: i32,
+        pub lightmapY: i32,
+        pub lightmapWidth: i32,
+        pub lightmapHeight: i32,
         pub lightmapOrigin: crate::src::qcommon::q_shared::vec3_t,
         pub lightmapVecs: [crate::src::qcommon::q_shared::vec3_t; 3],
-        pub patchWidth: libc::c_int,
-        pub patchHeight: libc::c_int,
+        pub patchWidth: i32,
+        pub patchHeight: i32,
     }
 }
 pub mod xmmintrin_h {
@@ -4327,15 +4327,15 @@ pub mod emmintrin_h {
     #[repr(C, packed)]
     #[derive(Copy, Clone)]
     pub struct __mm_load_sd_struct {
-        pub __u: libc::c_double,
+        pub __u: f64,
     }
 }
 pub mod snd_local_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct portable_samplepair_t {
-        pub left: libc::c_int,
-        pub right: libc::c_int,
+        pub left: i32,
+        pub right: i32,
     }
 
     pub type adpcm_state_t = crate::snd_local_h::adpcm_state;
@@ -4343,7 +4343,7 @@ pub mod snd_local_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct adpcm_state {
-        pub sample: libc::c_short,
+        pub sample: i16,
         pub index: libc::c_char,
     }
 
@@ -4352,9 +4352,9 @@ pub mod snd_local_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct sndBuffer_s {
-        pub sndChunk: [libc::c_short; 1024],
+        pub sndChunk: [i16; 1024],
         pub next: *mut crate::snd_local_h::sndBuffer_s,
-        pub size: libc::c_int,
+        pub size: i32,
         pub adpcm: crate::snd_local_h::adpcm_state_t,
     }
 
@@ -4367,24 +4367,24 @@ pub mod snd_local_h {
         pub defaultSound: crate::src::qcommon::q_shared::qboolean,
         pub inMemory: crate::src::qcommon::q_shared::qboolean,
         pub soundCompressed: crate::src::qcommon::q_shared::qboolean,
-        pub soundCompressionMethod: libc::c_int,
-        pub soundLength: libc::c_int,
-        pub soundChannels: libc::c_int,
+        pub soundCompressionMethod: i32,
+        pub soundLength: i32,
+        pub soundChannels: i32,
         pub soundName: [libc::c_char; 64],
-        pub lastTimeUsed: libc::c_int,
+        pub lastTimeUsed: i32,
         pub next: *mut crate::snd_local_h::sfx_s,
     }
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct dma_t {
-        pub channels: libc::c_int,
-        pub samples: libc::c_int,
-        pub fullsamples: libc::c_int,
-        pub submission_chunk: libc::c_int,
-        pub samplebits: libc::c_int,
-        pub isfloat: libc::c_int,
-        pub speed: libc::c_int,
+        pub channels: i32,
+        pub samples: i32,
+        pub fullsamples: i32,
+        pub submission_chunk: i32,
+        pub samplebits: i32,
+        pub isfloat: i32,
+        pub speed: i32,
         pub buffer: *mut crate::src::qcommon::q_shared::byte,
     }
 
@@ -4396,27 +4396,27 @@ pub mod snd_local_h {
         pub origin: crate::src::qcommon::q_shared::vec3_t,
         pub velocity: crate::src::qcommon::q_shared::vec3_t,
         pub sfx: *mut crate::snd_local_h::sfx_t,
-        pub mergeFrame: libc::c_int,
+        pub mergeFrame: i32,
         pub active: crate::src::qcommon::q_shared::qboolean,
         pub kill: crate::src::qcommon::q_shared::qboolean,
         pub doppler: crate::src::qcommon::q_shared::qboolean,
-        pub dopplerScale: libc::c_float,
-        pub oldDopplerScale: libc::c_float,
-        pub framenum: libc::c_int,
+        pub dopplerScale: f32,
+        pub oldDopplerScale: f32,
+        pub framenum: i32,
     }
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct channel_t {
-        pub allocTime: libc::c_int,
-        pub startSample: libc::c_int,
-        pub entnum: libc::c_int,
-        pub entchannel: libc::c_int,
-        pub leftvol: libc::c_int,
-        pub rightvol: libc::c_int,
-        pub master_vol: libc::c_int,
-        pub dopplerScale: libc::c_float,
-        pub oldDopplerScale: libc::c_float,
+        pub allocTime: i32,
+        pub startSample: i32,
+        pub entnum: i32,
+        pub entchannel: i32,
+        pub leftvol: i32,
+        pub rightvol: i32,
+        pub master_vol: i32,
+        pub dopplerScale: f32,
+        pub oldDopplerScale: f32,
         pub origin: crate::src::qcommon::q_shared::vec3_t,
         pub fixed_origin: crate::src::qcommon::q_shared::qboolean,
         pub thesfx: *mut crate::snd_local_h::sfx_t,
@@ -4427,12 +4427,12 @@ pub mod snd_local_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct wavinfo_t {
-        pub format: libc::c_int,
-        pub rate: libc::c_int,
-        pub width: libc::c_int,
-        pub channels: libc::c_int,
-        pub samples: libc::c_int,
-        pub dataofs: libc::c_int,
+        pub format: i32,
+        pub rate: i32,
+        pub width: i32,
+        pub channels: i32,
+        pub samples: i32,
+        pub dataofs: i32,
     }
 
     #[repr(C)]
@@ -4442,15 +4442,15 @@ pub mod snd_local_h {
         pub StartSound: Option<
             unsafe extern "C" fn(
                 _: *mut crate::src::qcommon::q_shared::vec_t,
-                _: libc::c_int,
-                _: libc::c_int,
+                _: i32,
+                _: i32,
                 _: crate::src::qcommon::q_shared::sfxHandle_t,
             ) -> (),
         >,
         pub StartLocalSound: Option<
             unsafe extern "C" fn(
                 _: crate::src::qcommon::q_shared::sfxHandle_t,
-                _: libc::c_int,
+                _: i32,
             ) -> (),
         >,
         pub StartBackgroundTrack:
@@ -4458,14 +4458,14 @@ pub mod snd_local_h {
         pub StopBackgroundTrack: Option<unsafe extern "C" fn() -> ()>,
         pub RawSamples: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
-                _: libc::c_int,
-                _: libc::c_int,
-                _: libc::c_int,
-                _: libc::c_int,
+                _: i32,
+                _: i32,
+                _: i32,
+                _: i32,
+                _: i32,
                 _: *const crate::src::qcommon::q_shared::byte,
-                _: libc::c_float,
-                _: libc::c_int,
+                _: f32,
+                _: i32,
             ) -> (),
         >,
         pub StopAllSounds: Option<unsafe extern "C" fn() -> ()>,
@@ -4473,7 +4473,7 @@ pub mod snd_local_h {
             Option<unsafe extern "C" fn(_: crate::src::qcommon::q_shared::qboolean) -> ()>,
         pub AddLoopingSound: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
+                _: i32,
                 _: *const crate::src::qcommon::q_shared::vec_t,
                 _: *const crate::src::qcommon::q_shared::vec_t,
                 _: crate::src::qcommon::q_shared::sfxHandle_t,
@@ -4481,24 +4481,24 @@ pub mod snd_local_h {
         >,
         pub AddRealLoopingSound: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
+                _: i32,
                 _: *const crate::src::qcommon::q_shared::vec_t,
                 _: *const crate::src::qcommon::q_shared::vec_t,
                 _: crate::src::qcommon::q_shared::sfxHandle_t,
             ) -> (),
         >,
-        pub StopLoopingSound: Option<unsafe extern "C" fn(_: libc::c_int) -> ()>,
+        pub StopLoopingSound: Option<unsafe extern "C" fn(_: i32) -> ()>,
         pub Respatialize: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
+                _: i32,
                 _: *const crate::src::qcommon::q_shared::vec_t,
                 _: *mut crate::src::qcommon::q_shared::vec3_t,
-                _: libc::c_int,
+                _: i32,
             ) -> (),
         >,
         pub UpdateEntityPosition: Option<
             unsafe extern "C" fn(
-                _: libc::c_int,
+                _: i32,
                 _: *const crate::src::qcommon::q_shared::vec_t,
             ) -> (),
         >,
@@ -4515,15 +4515,15 @@ pub mod snd_local_h {
         pub SoundInfo: Option<unsafe extern "C" fn() -> ()>,
         pub SoundList: Option<unsafe extern "C" fn() -> ()>,
         pub StartCapture: Option<unsafe extern "C" fn() -> ()>,
-        pub AvailableCaptureSamples: Option<unsafe extern "C" fn() -> libc::c_int>,
+        pub AvailableCaptureSamples: Option<unsafe extern "C" fn() -> i32>,
         pub Capture: Option<
-            unsafe extern "C" fn(_: libc::c_int, _: *mut crate::src::qcommon::q_shared::byte) -> (),
+            unsafe extern "C" fn(_: i32, _: *mut crate::src::qcommon::q_shared::byte) -> (),
         >,
         pub StopCapture: Option<unsafe extern "C" fn() -> ()>,
-        pub MasterGain: Option<unsafe extern "C" fn(_: libc::c_float) -> ()>,
+        pub MasterGain: Option<unsafe extern "C" fn(_: f32) -> ()>,
     }
 
-    pub type alSrcPriority_t = libc::c_uint;
+    pub type alSrcPriority_t = u32;
 
     pub const SRCPRI_AMBIENT: crate::snd_local_h::alSrcPriority_t = 0;
 
@@ -4535,12 +4535,12 @@ pub mod snd_local_h {
 
     pub const SRCPRI_STREAM: crate::snd_local_h::alSrcPriority_t = 4;
 
-    pub type srcHandle_t = libc::c_int;
+    pub type srcHandle_t = i32;
 }
 pub mod multi_h {
     pub type CURLM = ();
 
-    pub type CURLMcode = libc::c_int;
+    pub type CURLMcode = i32;
 
     pub const CURLM_CALL_MULTI_PERFORM: crate::multi_h::CURLMcode = -1;
 
@@ -4562,7 +4562,7 @@ pub mod multi_h {
 
     pub const CURLM_LAST: crate::multi_h::CURLMcode = 8;
 
-    pub type CURLMSG = libc::c_uint;
+    pub type CURLMSG = u32;
 
     pub const CURLMSG_NONE: crate::multi_h::CURLMSG = 0;
 
@@ -4588,7 +4588,7 @@ pub mod multi_h {
 pub mod curl_h {
     pub type CURL = ();
 
-    pub type CURLcode = libc::c_uint;
+    pub type CURLcode = u32;
 
     pub const CURLE_OK: crate::curl_h::CURLcode = 0;
 
@@ -4778,7 +4778,7 @@ pub mod curl_h {
 
     pub const CURL_LAST: crate::curl_h::CURLcode = 93;
 
-    pub type CURLoption = libc::c_uint;
+    pub type CURLoption = u32;
 
     pub const CURLOPT_WRITEDATA: crate::curl_h::CURLoption = 10001;
 
@@ -5276,7 +5276,7 @@ pub mod curl_h {
 
     pub const CURLOPT_LASTENTRY: crate::curl_h::CURLoption = 266;
 
-    pub type CURLINFO = libc::c_uint;
+    pub type CURLINFO = u32;
 
     pub const CURLINFO_NONE: crate::curl_h::CURLINFO = 0;
 
@@ -5414,7 +5414,7 @@ pub mod bg_public_h {
     pub const PM_SPINTERMISSION: crate::be_aas_h::C2RustUnnamed_0 = 6;
 }
 pub mod keycodes_h {
-    pub type keyNum_t = libc::c_uint;
+    pub type keyNum_t = u32;
 
     pub const K_TAB: crate::be_aas_h::C2RustUnnamed_0 = 9;
 
@@ -5909,8 +5909,8 @@ pub mod ui_public_h {
     #[derive(Copy, Clone)]
     pub struct uiClientState_t {
         pub connState: crate::src::qcommon::q_shared::connstate_t,
-        pub connectPacketCount: libc::c_int,
-        pub clientNum: libc::c_int,
+        pub connectPacketCount: i32,
+        pub clientNum: i32,
         pub servername: [libc::c_char; 1024],
         pub updateInfoString: [libc::c_char; 1024],
         pub messageString: [libc::c_char; 1024],
@@ -6150,15 +6150,15 @@ pub mod cg_public_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct snapshot_t {
-        pub snapFlags: libc::c_int,
-        pub ping: libc::c_int,
-        pub serverTime: libc::c_int,
+        pub snapFlags: i32,
+        pub ping: i32,
+        pub serverTime: i32,
         pub areamask: [crate::src::qcommon::q_shared::byte; 32],
         pub ps: crate::src::qcommon::q_shared::playerState_t,
-        pub numEntities: libc::c_int,
+        pub numEntities: i32,
         pub entities: [crate::src::qcommon::q_shared::entityState_t; 256],
-        pub numServerCommands: libc::c_int,
-        pub serverCommandSequence: libc::c_int,
+        pub numServerCommands: i32,
+        pub serverCommandSequence: i32,
     }
 
     pub const CGAME_EVENT_NONE: crate::be_aas_h::C2RustUnnamed_0 = 0;
@@ -6396,11 +6396,11 @@ pub mod tr_types_h {
     #[derive(Copy, Clone)]
     pub struct polyVert_t {
         pub xyz: crate::src::qcommon::q_shared::vec3_t,
-        pub st: [libc::c_float; 2],
+        pub st: [f32; 2],
         pub modulate: [crate::src::qcommon::q_shared::byte; 4],
     }
 
-    pub type refEntityType_t = libc::c_uint;
+    pub type refEntityType_t = u32;
 
     pub const RT_MODEL: crate::tr_types_h::refEntityType_t = 0;
 
@@ -6424,45 +6424,45 @@ pub mod tr_types_h {
     #[derive(Copy, Clone)]
     pub struct refEntity_t {
         pub reType: crate::tr_types_h::refEntityType_t,
-        pub renderfx: libc::c_int,
+        pub renderfx: i32,
         pub hModel: crate::src::qcommon::q_shared::qhandle_t,
         pub lightingOrigin: crate::src::qcommon::q_shared::vec3_t,
-        pub shadowPlane: libc::c_float,
+        pub shadowPlane: f32,
         pub axis: [crate::src::qcommon::q_shared::vec3_t; 3],
         pub nonNormalizedAxes: crate::src::qcommon::q_shared::qboolean,
-        pub origin: [libc::c_float; 3],
-        pub frame: libc::c_int,
-        pub oldorigin: [libc::c_float; 3],
-        pub oldframe: libc::c_int,
-        pub backlerp: libc::c_float,
-        pub skinNum: libc::c_int,
+        pub origin: [f32; 3],
+        pub frame: i32,
+        pub oldorigin: [f32; 3],
+        pub oldframe: i32,
+        pub backlerp: f32,
+        pub skinNum: i32,
         pub customSkin: crate::src::qcommon::q_shared::qhandle_t,
         pub customShader: crate::src::qcommon::q_shared::qhandle_t,
         pub shaderRGBA: [crate::src::qcommon::q_shared::byte; 4],
-        pub shaderTexCoord: [libc::c_float; 2],
-        pub shaderTime: libc::c_float,
-        pub radius: libc::c_float,
-        pub rotation: libc::c_float,
+        pub shaderTexCoord: [f32; 2],
+        pub shaderTime: f32,
+        pub radius: f32,
+        pub rotation: f32,
     }
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct refdef_t {
-        pub x: libc::c_int,
-        pub y: libc::c_int,
-        pub width: libc::c_int,
-        pub height: libc::c_int,
-        pub fov_x: libc::c_float,
-        pub fov_y: libc::c_float,
+        pub x: i32,
+        pub y: i32,
+        pub width: i32,
+        pub height: i32,
+        pub fov_x: f32,
+        pub fov_y: f32,
         pub vieworg: crate::src::qcommon::q_shared::vec3_t,
         pub viewaxis: [crate::src::qcommon::q_shared::vec3_t; 3],
-        pub time: libc::c_int,
-        pub rdflags: libc::c_int,
+        pub time: i32,
+        pub rdflags: i32,
         pub areamask: [crate::src::qcommon::q_shared::byte; 32],
         pub text: [[libc::c_char; 32]; 8],
     }
 
-    pub type stereoFrame_t = libc::c_uint;
+    pub type stereoFrame_t = u32;
 
     pub const STEREO_CENTER: crate::tr_types_h::stereoFrame_t = 0;
 
@@ -6470,7 +6470,7 @@ pub mod tr_types_h {
 
     pub const STEREO_RIGHT: crate::tr_types_h::stereoFrame_t = 2;
 
-    pub type textureCompression_t = libc::c_uint;
+    pub type textureCompression_t = u32;
 
     pub const TC_NONE: crate::tr_types_h::textureCompression_t = 0;
 
@@ -6478,7 +6478,7 @@ pub mod tr_types_h {
 
     pub const TC_S3TC_ARB: crate::tr_types_h::textureCompression_t = 2;
 
-    pub type glDriverType_t = libc::c_uint;
+    pub type glDriverType_t = u32;
 
     pub const GLDRV_ICD: crate::tr_types_h::glDriverType_t = 0;
 
@@ -6486,7 +6486,7 @@ pub mod tr_types_h {
 
     pub const GLDRV_VOODOO: crate::tr_types_h::glDriverType_t = 2;
 
-    pub type glHardwareType_t = libc::c_uint;
+    pub type glHardwareType_t = u32;
 
     pub const GLHW_GENERIC: crate::tr_types_h::glHardwareType_t = 0;
 
@@ -6505,20 +6505,20 @@ pub mod tr_types_h {
         pub vendor_string: [libc::c_char; 1024],
         pub version_string: [libc::c_char; 1024],
         pub extensions_string: [libc::c_char; 8192],
-        pub maxTextureSize: libc::c_int,
-        pub numTextureUnits: libc::c_int,
-        pub colorBits: libc::c_int,
-        pub depthBits: libc::c_int,
-        pub stencilBits: libc::c_int,
+        pub maxTextureSize: i32,
+        pub numTextureUnits: i32,
+        pub colorBits: i32,
+        pub depthBits: i32,
+        pub stencilBits: i32,
         pub driverType: crate::tr_types_h::glDriverType_t,
         pub hardwareType: crate::tr_types_h::glHardwareType_t,
         pub deviceSupportsGamma: crate::src::qcommon::q_shared::qboolean,
         pub textureCompression: crate::tr_types_h::textureCompression_t,
         pub textureEnvAddAvailable: crate::src::qcommon::q_shared::qboolean,
-        pub vidWidth: libc::c_int,
-        pub vidHeight: libc::c_int,
-        pub windowAspect: libc::c_float,
-        pub displayFrequency: libc::c_int,
+        pub vidWidth: i32,
+        pub vidHeight: i32,
+        pub windowAspect: f32,
+        pub displayFrequency: i32,
         pub isFullscreen: crate::src::qcommon::q_shared::qboolean,
         pub stereoEnabled: crate::src::qcommon::q_shared::qboolean,
         pub smpActive: crate::src::qcommon::q_shared::qboolean,
@@ -6532,13 +6532,13 @@ pub mod qcommon_h {
         pub overflowed: crate::src::qcommon::q_shared::qboolean,
         pub oob: crate::src::qcommon::q_shared::qboolean,
         pub data: *mut crate::src::qcommon::q_shared::byte,
-        pub maxsize: libc::c_int,
-        pub cursize: libc::c_int,
-        pub readcount: libc::c_int,
-        pub bit: libc::c_int,
+        pub maxsize: i32,
+        pub cursize: i32,
+        pub readcount: i32,
+        pub bit: i32,
     }
 
-    pub type netadrtype_t = libc::c_uint;
+    pub type netadrtype_t = u32;
 
     pub const NA_BAD: crate::qcommon_h::netadrtype_t = 0;
 
@@ -6556,7 +6556,7 @@ pub mod qcommon_h {
 
     pub const NA_UNSPEC: crate::qcommon_h::netadrtype_t = 7;
 
-    pub type netsrc_t = libc::c_uint;
+    pub type netsrc_t = u32;
 
     pub const NS_CLIENT: crate::qcommon_h::netsrc_t = 0;
 
@@ -6568,7 +6568,7 @@ pub mod qcommon_h {
         pub type_0: crate::qcommon_h::netadrtype_t,
         pub ip: [crate::src::qcommon::q_shared::byte; 4],
         pub ip6: [crate::src::qcommon::q_shared::byte; 16],
-        pub port: libc::c_ushort,
+        pub port: u16,
         pub scope_id: libc::c_ulong,
     }
 
@@ -6576,25 +6576,25 @@ pub mod qcommon_h {
     #[derive(Copy, Clone)]
     pub struct netchan_t {
         pub sock: crate::qcommon_h::netsrc_t,
-        pub dropped: libc::c_int,
+        pub dropped: i32,
         pub remoteAddress: crate::qcommon_h::netadr_t,
-        pub qport: libc::c_int,
-        pub incomingSequence: libc::c_int,
-        pub outgoingSequence: libc::c_int,
-        pub fragmentSequence: libc::c_int,
-        pub fragmentLength: libc::c_int,
+        pub qport: i32,
+        pub incomingSequence: i32,
+        pub outgoingSequence: i32,
+        pub fragmentSequence: i32,
+        pub fragmentLength: i32,
         pub fragmentBuffer: [crate::src::qcommon::q_shared::byte; 16384],
         pub unsentFragments: crate::src::qcommon::q_shared::qboolean,
-        pub unsentFragmentStart: libc::c_int,
-        pub unsentLength: libc::c_int,
+        pub unsentFragmentStart: i32,
+        pub unsentLength: i32,
         pub unsentBuffer: [crate::src::qcommon::q_shared::byte; 16384],
-        pub challenge: libc::c_int,
-        pub lastSentTime: libc::c_int,
-        pub lastSentSize: libc::c_int,
+        pub challenge: i32,
+        pub lastSentTime: i32,
+        pub lastSentSize: i32,
         pub compat: crate::src::qcommon::q_shared::qboolean,
     }
 
-    pub type svc_ops_e = libc::c_uint;
+    pub type svc_ops_e = u32;
 
     pub const svc_bad: crate::qcommon_h::svc_ops_e = 0;
 
@@ -6618,7 +6618,7 @@ pub mod qcommon_h {
 
     pub const svc_voipOpus: crate::qcommon_h::svc_ops_e = 10;
 
-    pub type clc_ops_e = libc::c_uint;
+    pub type clc_ops_e = u32;
 
     pub const clc_bad: crate::qcommon_h::clc_ops_e = 0;
 
@@ -6638,7 +6638,7 @@ pub mod qcommon_h {
 
     pub type vm_t = crate::vm_local_h::vm_s;
 
-    pub type vmInterpret_t = libc::c_uint;
+    pub type vmInterpret_t = u32;
 
     pub const VMI_NATIVE: crate::qcommon_h::vmInterpret_t = 0;
 
@@ -6677,18 +6677,18 @@ pub mod qcommon_h {
     pub type xcommand_t = Option<unsafe extern "C" fn() -> ()>;
 
     pub type completionFunc_t =
-        Option<unsafe extern "C" fn(_: *mut libc::c_char, _: libc::c_int) -> ()>;
+        Option<unsafe extern "C" fn(_: *mut libc::c_char, _: i32) -> ()>;
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct field_t {
-        pub cursor: libc::c_int,
-        pub scroll: libc::c_int,
-        pub widthInChars: libc::c_int,
+        pub cursor: i32,
+        pub scroll: i32,
+        pub widthInChars: i32,
         pub buffer: [libc::c_char; 256],
     }
 
-    pub type cpuFeatures_t = libc::c_uint;
+    pub type cpuFeatures_t = u32;
 
     pub const CF_RDTSC: crate::qcommon_h::cpuFeatures_t = 1;
 
@@ -6706,7 +6706,7 @@ pub mod qcommon_h {
 
     pub const CF_ALTIVEC: crate::qcommon_h::cpuFeatures_t = 128;
 
-    pub type sysEventType_t = libc::c_uint;
+    pub type sysEventType_t = u32;
 
     pub const SE_NONE: crate::qcommon_h::sysEventType_t = 0;
 
@@ -6723,11 +6723,11 @@ pub mod qcommon_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct sysEvent_t {
-        pub evTime: libc::c_int,
+        pub evTime: i32,
         pub evType: crate::qcommon_h::sysEventType_t,
-        pub evValue: libc::c_int,
-        pub evValue2: libc::c_int,
-        pub evPtrLength: libc::c_int,
+        pub evValue: i32,
+        pub evValue2: i32,
+        pub evPtrLength: i32,
         pub evPtr: *mut libc::c_void,
     }
 
@@ -6743,7 +6743,7 @@ pub mod qcommon_h {
 
     pub const TAG_STATIC: crate::be_aas_h::C2RustUnnamed_0 = 5;
 
-    pub type dialogResult_t = libc::c_uint;
+    pub type dialogResult_t = u32;
 
     pub const DR_YES: crate::qcommon_h::dialogResult_t = 0;
 
@@ -6753,7 +6753,7 @@ pub mod qcommon_h {
 
     pub const DR_CANCEL: crate::qcommon_h::dialogResult_t = 1;
 
-    pub type dialogType_t = libc::c_uint;
+    pub type dialogType_t = u32;
 
     pub const DT_INFO: crate::qcommon_h::dialogType_t = 0;
 
@@ -6776,15 +6776,15 @@ pub mod qcommon_h {
         pub next: *mut crate::qcommon_h::nodetype,
         pub prev: *mut crate::qcommon_h::nodetype,
         pub head: *mut *mut crate::qcommon_h::nodetype,
-        pub weight: libc::c_int,
-        pub symbol: libc::c_int,
+        pub weight: i32,
+        pub symbol: i32,
     }
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct huff_t {
-        pub blocNode: libc::c_int,
-        pub blocPtrs: libc::c_int,
+        pub blocNode: i32,
+        pub blocPtrs: i32,
         pub tree: *mut crate::qcommon_h::node_t,
         pub lhead: *mut crate::qcommon_h::node_t,
         pub ltail: *mut crate::qcommon_h::node_t,
@@ -6802,7 +6802,7 @@ pub mod qcommon_h {
     }
 }
 pub mod be_aas_h {
-    pub type C2RustUnnamed_0 = libc::c_uint;
+    pub type C2RustUnnamed_0 = u32;
 
     pub const SOLID_NOT: crate::be_aas_h::C2RustUnnamed_0 = 0;
 
@@ -6819,12 +6819,12 @@ pub mod be_aas_h {
     #[derive(Copy, Clone)]
     pub struct aas_trace_s {
         pub startsolid: crate::src::qcommon::q_shared::qboolean,
-        pub fraction: libc::c_float,
+        pub fraction: f32,
         pub endpos: crate::src::qcommon::q_shared::vec3_t,
-        pub ent: libc::c_int,
-        pub lastarea: libc::c_int,
-        pub area: libc::c_int,
-        pub planenum: libc::c_int,
+        pub ent: i32,
+        pub lastarea: i32,
+        pub area: i32,
+        pub planenum: i32,
     }
     /* Defined in botlib.h
 
@@ -6859,29 +6859,29 @@ pub mod be_aas_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct aas_entityinfo_s {
-        pub valid: libc::c_int,
-        pub type_0: libc::c_int,
-        pub flags: libc::c_int,
-        pub ltime: libc::c_float,
-        pub update_time: libc::c_float,
-        pub number: libc::c_int,
+        pub valid: i32,
+        pub type_0: i32,
+        pub flags: i32,
+        pub ltime: f32,
+        pub update_time: f32,
+        pub number: i32,
         pub origin: crate::src::qcommon::q_shared::vec3_t,
         pub angles: crate::src::qcommon::q_shared::vec3_t,
         pub old_origin: crate::src::qcommon::q_shared::vec3_t,
         pub lastvisorigin: crate::src::qcommon::q_shared::vec3_t,
         pub mins: crate::src::qcommon::q_shared::vec3_t,
         pub maxs: crate::src::qcommon::q_shared::vec3_t,
-        pub groundent: libc::c_int,
-        pub solid: libc::c_int,
-        pub modelindex: libc::c_int,
-        pub modelindex2: libc::c_int,
-        pub frame: libc::c_int,
-        pub event: libc::c_int,
-        pub eventParm: libc::c_int,
-        pub powerups: libc::c_int,
-        pub weapon: libc::c_int,
-        pub legsAnim: libc::c_int,
-        pub torsoAnim: libc::c_int,
+        pub groundent: i32,
+        pub solid: i32,
+        pub modelindex: i32,
+        pub modelindex2: i32,
+        pub frame: i32,
+        pub event: i32,
+        pub eventParm: i32,
+        pub powerups: i32,
+        pub weapon: i32,
+        pub legsAnim: i32,
+        pub torsoAnim: i32,
     }
 
     pub type aas_areainfo_t = crate::be_aas_h::aas_areainfo_s;
@@ -6889,10 +6889,10 @@ pub mod be_aas_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct aas_areainfo_s {
-        pub contents: libc::c_int,
-        pub flags: libc::c_int,
-        pub presencetype: libc::c_int,
-        pub cluster: libc::c_int,
+        pub contents: i32,
+        pub flags: i32,
+        pub presencetype: i32,
+        pub cluster: i32,
         pub mins: crate::src::qcommon::q_shared::vec3_t,
         pub maxs: crate::src::qcommon::q_shared::vec3_t,
         pub center: crate::src::qcommon::q_shared::vec3_t,
@@ -6930,14 +6930,14 @@ pub mod be_aas_h {
     #[derive(Copy, Clone)]
     pub struct aas_clientmove_s {
         pub endpos: crate::src::qcommon::q_shared::vec3_t,
-        pub endarea: libc::c_int,
+        pub endarea: i32,
         pub velocity: crate::src::qcommon::q_shared::vec3_t,
         pub trace: crate::be_aas_h::aas_trace_t,
-        pub presencetype: libc::c_int,
-        pub stopevent: libc::c_int,
-        pub endcontents: libc::c_int,
-        pub time: libc::c_float,
-        pub frames: libc::c_int,
+        pub presencetype: i32,
+        pub stopevent: i32,
+        pub endcontents: i32,
+        pub time: f32,
+        pub frames: i32,
     }
 
     pub type aas_altroutegoal_t = crate::be_aas_h::aas_altroutegoal_s;
@@ -6946,22 +6946,22 @@ pub mod be_aas_h {
     #[derive(Copy, Clone)]
     pub struct aas_altroutegoal_s {
         pub origin: crate::src::qcommon::q_shared::vec3_t,
-        pub areanum: libc::c_int,
-        pub starttraveltime: libc::c_ushort,
-        pub goaltraveltime: libc::c_ushort,
-        pub extratraveltime: libc::c_ushort,
+        pub areanum: i32,
+        pub starttraveltime: u16,
+        pub goaltraveltime: u16,
+        pub extratraveltime: u16,
     }
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct aas_predictroute_s {
         pub endpos: crate::src::qcommon::q_shared::vec3_t,
-        pub endarea: libc::c_int,
-        pub stopevent: libc::c_int,
-        pub endcontents: libc::c_int,
-        pub endtravelflags: libc::c_int,
-        pub numareas: libc::c_int,
-        pub time: libc::c_int,
+        pub endarea: i32,
+        pub stopevent: i32,
+        pub endcontents: i32,
+        pub endtravelflags: i32,
+        pub numareas: i32,
+        pub time: i32,
     }
 }
 pub mod stdlib {
@@ -6972,14 +6972,14 @@ pub mod stdlib {
         #[no_mangle]
         pub fn SDL_OpenAudioDevice(
             device: *const libc::c_char,
-            iscapture: libc::c_int,
+            iscapture: i32,
             desired: *const crate::stdlib::SDL_AudioSpec,
             obtained: *mut crate::stdlib::SDL_AudioSpec,
-            allowed_changes: libc::c_int,
+            allowed_changes: i32,
         ) -> crate::stdlib::SDL_AudioDeviceID;
 
         #[no_mangle]
-        pub fn SDL_PauseAudioDevice(dev: crate::stdlib::SDL_AudioDeviceID, pause_on: libc::c_int);
+        pub fn SDL_PauseAudioDevice(dev: crate::stdlib::SDL_AudioDeviceID, pause_on: i32);
 
         #[no_mangle]
         pub fn SDL_DequeueAudio(
@@ -7033,26 +7033,26 @@ pub mod stdlib {
         #[no_mangle]
         pub fn SDL_PeepEvents(
             events: *mut crate::stdlib::SDL_Event,
-            numevents: libc::c_int,
+            numevents: i32,
             action: crate::stdlib::SDL_eventaction,
             minType: crate::stdlib::Uint32,
             maxType: crate::stdlib::Uint32,
-        ) -> libc::c_int;
+        ) -> i32;
 
         #[no_mangle]
-        pub fn SDL_PollEvent(event: *mut crate::stdlib::SDL_Event) -> libc::c_int;
+        pub fn SDL_PollEvent(event: *mut crate::stdlib::SDL_Event) -> i32;
         pub type _SDL_GameController;
 
         #[no_mangle]
-        pub fn SDL_IsGameController(joystick_index: libc::c_int) -> crate::stdlib::SDL_bool;
+        pub fn SDL_IsGameController(joystick_index: i32) -> crate::stdlib::SDL_bool;
 
         #[no_mangle]
         pub fn SDL_GameControllerOpen(
-            joystick_index: libc::c_int,
+            joystick_index: i32,
         ) -> *mut crate::stdlib::SDL_GameController;
 
         #[no_mangle]
-        pub fn SDL_GameControllerEventState(state: libc::c_int) -> libc::c_int;
+        pub fn SDL_GameControllerEventState(state: i32) -> i32;
 
         #[no_mangle]
         pub fn SDL_GameControllerUpdate();
@@ -7072,7 +7072,7 @@ pub mod stdlib {
         #[no_mangle]
         pub fn SDL_GameControllerClose(gamecontroller: *mut crate::stdlib::SDL_GameController);
         #[no_mangle]
-        pub fn SDL_Init(flags: crate::stdlib::Uint32) -> libc::c_int;
+        pub fn SDL_Init(flags: crate::stdlib::Uint32) -> i32;
 
         #[no_mangle]
         pub fn SDL_QuitSubSystem(flags: crate::stdlib::Uint32);
@@ -7085,56 +7085,56 @@ pub mod stdlib {
         pub type _SDL_Joystick;
 
         #[no_mangle]
-        pub fn SDL_NumJoysticks() -> libc::c_int;
+        pub fn SDL_NumJoysticks() -> i32;
 
         #[no_mangle]
-        pub fn SDL_JoystickNameForIndex(device_index: libc::c_int) -> *const libc::c_char;
+        pub fn SDL_JoystickNameForIndex(device_index: i32) -> *const libc::c_char;
 
         #[no_mangle]
-        pub fn SDL_JoystickOpen(device_index: libc::c_int) -> *mut crate::stdlib::SDL_Joystick;
+        pub fn SDL_JoystickOpen(device_index: i32) -> *mut crate::stdlib::SDL_Joystick;
 
         #[no_mangle]
-        pub fn SDL_JoystickNumAxes(joystick: *mut crate::stdlib::SDL_Joystick) -> libc::c_int;
+        pub fn SDL_JoystickNumAxes(joystick: *mut crate::stdlib::SDL_Joystick) -> i32;
 
         #[no_mangle]
-        pub fn SDL_JoystickNumBalls(joystick: *mut crate::stdlib::SDL_Joystick) -> libc::c_int;
+        pub fn SDL_JoystickNumBalls(joystick: *mut crate::stdlib::SDL_Joystick) -> i32;
 
         #[no_mangle]
-        pub fn SDL_JoystickNumHats(joystick: *mut crate::stdlib::SDL_Joystick) -> libc::c_int;
+        pub fn SDL_JoystickNumHats(joystick: *mut crate::stdlib::SDL_Joystick) -> i32;
 
         #[no_mangle]
-        pub fn SDL_JoystickNumButtons(joystick: *mut crate::stdlib::SDL_Joystick) -> libc::c_int;
+        pub fn SDL_JoystickNumButtons(joystick: *mut crate::stdlib::SDL_Joystick) -> i32;
 
         #[no_mangle]
         pub fn SDL_JoystickUpdate();
 
         #[no_mangle]
-        pub fn SDL_JoystickEventState(state: libc::c_int) -> libc::c_int;
+        pub fn SDL_JoystickEventState(state: i32) -> i32;
 
         #[no_mangle]
         pub fn SDL_JoystickGetAxis(
             joystick: *mut crate::stdlib::SDL_Joystick,
-            axis: libc::c_int,
+            axis: i32,
         ) -> crate::stdlib::Sint16;
 
         #[no_mangle]
         pub fn SDL_JoystickGetHat(
             joystick: *mut crate::stdlib::SDL_Joystick,
-            hat: libc::c_int,
+            hat: i32,
         ) -> crate::stdlib::Uint8;
 
         #[no_mangle]
         pub fn SDL_JoystickGetBall(
             joystick: *mut crate::stdlib::SDL_Joystick,
-            ball: libc::c_int,
-            dx: *mut libc::c_int,
-            dy: *mut libc::c_int,
-        ) -> libc::c_int;
+            ball: i32,
+            dx: *mut i32,
+            dy: *mut i32,
+        ) -> i32;
 
         #[no_mangle]
         pub fn SDL_JoystickGetButton(
             joystick: *mut crate::stdlib::SDL_Joystick,
-            button: libc::c_int,
+            button: i32,
         ) -> crate::stdlib::Uint8;
 
         #[no_mangle]
@@ -7164,22 +7164,22 @@ pub mod stdlib {
         #[no_mangle]
         pub fn SDL_WarpMouseInWindow(
             window: *mut crate::stdlib::SDL_Window,
-            x: libc::c_int,
-            y: libc::c_int,
+            x: i32,
+            y: i32,
         );
 
         #[no_mangle]
-        pub fn SDL_SetRelativeMouseMode(enabled: crate::stdlib::SDL_bool) -> libc::c_int;
+        pub fn SDL_SetRelativeMouseMode(enabled: crate::stdlib::SDL_bool) -> i32;
 
         #[no_mangle]
-        pub fn SDL_ShowCursor(toggle: libc::c_int) -> libc::c_int;
+        pub fn SDL_ShowCursor(toggle: i32) -> i32;
         #[no_mangle]
         pub fn SDL_free(mem: *mut libc::c_void);
 
         #[no_mangle]
         pub fn SDL_memset(
             dst: *mut libc::c_void,
-            c: libc::c_int,
+            c: i32,
             len: crate::stddef_h::size_t,
         ) -> *mut libc::c_void;
         #[no_mangle]
@@ -7195,7 +7195,7 @@ pub mod stdlib {
             grabbed: crate::stdlib::SDL_bool,
         );
         #[no_mangle]
-        pub fn __ctype_b_loc() -> *mut *const libc::c_ushort;
+        pub fn __ctype_b_loc() -> *mut *const u16;
 
         #[no_mangle]
         pub fn __ctype_tolower_loc() -> *mut *const crate::stdlib::__int32_t;
@@ -7203,9 +7203,9 @@ pub mod stdlib {
         #[no_mangle]
         pub fn __ctype_toupper_loc() -> *mut *const crate::stdlib::__int32_t;
         #[no_mangle]
-        pub fn fesetround(__rounding_direction: libc::c_int) -> libc::c_int;
+        pub fn fesetround(__rounding_direction: i32) -> i32;
         #[no_mangle]
-        pub fn getifaddrs(__ifap: *mut *mut crate::stdlib::ifaddrs) -> libc::c_int;
+        pub fn getifaddrs(__ifap: *mut *mut crate::stdlib::ifaddrs) -> i32;
 
         #[no_mangle]
         pub fn freeifaddrs(__ifa: *mut crate::stdlib::ifaddrs);
@@ -7217,108 +7217,108 @@ pub mod stdlib {
         pub fn opendir(__name: *const libc::c_char) -> *mut crate::stdlib::DIR;
 
         #[no_mangle]
-        pub fn closedir(__dirp: *mut crate::stdlib::DIR) -> libc::c_int;
+        pub fn closedir(__dirp: *mut crate::stdlib::DIR) -> i32;
 
         #[no_mangle]
         pub fn readdir(__dirp: *mut crate::stdlib::DIR) -> *mut ::libc::dirent;
         #[no_mangle]
-        pub fn _setjmp(_: *mut crate::stdlib::__jmp_buf_tag) -> libc::c_int;
+        pub fn _setjmp(_: *mut crate::stdlib::__jmp_buf_tag) -> i32;
 
         #[no_mangle]
-        pub fn longjmp(_: *mut crate::stdlib::__jmp_buf_tag, _: libc::c_int) -> !;
+        pub fn longjmp(_: *mut crate::stdlib::__jmp_buf_tag, _: i32) -> !;
         #[no_mangle]
         pub fn dirname(__path: *mut libc::c_char) -> *mut libc::c_char;
 
         #[no_mangle]
         pub fn __xpg_basename(__path: *mut libc::c_char) -> *mut libc::c_char;
         #[no_mangle]
-        pub fn acos(_: libc::c_double) -> libc::c_double;
+        pub fn acos(_: f64) -> f64;
 
         #[no_mangle]
-        pub fn atan(_: libc::c_double) -> libc::c_double;
+        pub fn atan(_: f64) -> f64;
 
         #[no_mangle]
-        pub fn atan2(_: libc::c_double, _: libc::c_double) -> libc::c_double;
+        pub fn atan2(_: f64, _: f64) -> f64;
 
         #[no_mangle]
-        pub fn cos(_: libc::c_double) -> libc::c_double;
+        pub fn cos(_: f64) -> f64;
 
         #[no_mangle]
-        pub fn sin(_: libc::c_double) -> libc::c_double;
+        pub fn sin(_: f64) -> f64;
 
         #[no_mangle]
-        pub fn tan(_: libc::c_double) -> libc::c_double;
+        pub fn tan(_: f64) -> f64;
 
         #[no_mangle]
-        pub fn exp(_: libc::c_double) -> libc::c_double;
+        pub fn exp(_: f64) -> f64;
 
         #[no_mangle]
-        pub fn ldexp(_: libc::c_double, _: libc::c_int) -> libc::c_double;
+        pub fn ldexp(_: f64, _: i32) -> f64;
 
         #[no_mangle]
-        pub fn log(_: libc::c_double) -> libc::c_double;
+        pub fn log(_: f64) -> f64;
 
         #[no_mangle]
-        pub fn log10(_: libc::c_double) -> libc::c_double;
+        pub fn log10(_: f64) -> f64;
 
         #[no_mangle]
-        pub fn powf(_: libc::c_float, _: libc::c_float) -> libc::c_float;
+        pub fn powf(_: f32, _: f32) -> f32;
 
         #[no_mangle]
-        pub fn pow(_: libc::c_double, _: libc::c_double) -> libc::c_double;
+        pub fn pow(_: f64, _: f64) -> f64;
 
         #[no_mangle]
-        pub fn sqrt(_: libc::c_double) -> libc::c_double;
+        pub fn sqrt(_: f64) -> f64;
 
         #[no_mangle]
-        pub fn ceil(_: libc::c_double) -> libc::c_double;
+        pub fn ceil(_: f64) -> f64;
 
         #[no_mangle]
-        pub fn fabsf(_: libc::c_float) -> libc::c_float;
+        pub fn fabsf(_: f32) -> f32;
 
         #[no_mangle]
-        pub fn fabs(_: libc::c_double) -> libc::c_double;
+        pub fn fabs(_: f64) -> f64;
 
         #[no_mangle]
-        pub fn floor(_: libc::c_double) -> libc::c_double;
+        pub fn floor(_: f64) -> f64;
 
         #[no_mangle]
-        pub fn fmodf(_: libc::c_float, _: libc::c_float) -> libc::c_float;
+        pub fn fmodf(_: f32, _: f32) -> f32;
 
         #[no_mangle]
-        pub fn rint(_: libc::c_double) -> libc::c_double;
+        pub fn rint(_: f64) -> f64;
         #[no_mangle]
         pub fn mmap(
             __addr: *mut libc::c_void,
             __len: crate::stddef_h::size_t,
-            __prot: libc::c_int,
-            __flags: libc::c_int,
-            __fd: libc::c_int,
+            __prot: i32,
+            __flags: i32,
+            __fd: i32,
             __offset: crate::stdlib::__off_t,
         ) -> *mut libc::c_void;
 
         #[no_mangle]
-        pub fn munmap(__addr: *mut libc::c_void, __len: crate::stddef_h::size_t) -> libc::c_int;
+        pub fn munmap(__addr: *mut libc::c_void, __len: crate::stddef_h::size_t) -> i32;
 
         #[no_mangle]
         pub fn mprotect(
             __addr: *mut libc::c_void,
             __len: crate::stddef_h::size_t,
-            __prot: libc::c_int,
-        ) -> libc::c_int;
+            __prot: i32,
+        ) -> i32;
         #[no_mangle]
         pub fn gethostbyname(__name: *const libc::c_char) -> *mut ::libc::hostent;
         #[no_mangle]
         pub fn select(
-            __nfds: libc::c_int,
+            __nfds: i32,
             __readfds: *mut crate::stdlib::fd_set,
             __writefds: *mut crate::stdlib::fd_set,
             __exceptfds: *mut crate::stdlib::fd_set,
             __timeout: *mut ::libc::timeval,
-        ) -> libc::c_int;
+        ) -> i32;
         #[no_mangle]
         pub fn signal(
-            __sig: libc::c_int,
+            __sig: i32,
             __handler: crate::stdlib::__sighandler_t,
         ) -> crate::stdlib::__sighandler_t;
         #[no_mangle]
@@ -7328,10 +7328,10 @@ pub mod stdlib {
         pub static mut stderr: *mut crate::stdlib::FILE;
 
         #[no_mangle]
-        pub fn fclose(__stream: *mut crate::stdlib::FILE) -> libc::c_int;
+        pub fn fclose(__stream: *mut crate::stdlib::FILE) -> i32;
 
         #[no_mangle]
-        pub fn fflush(__stream: *mut crate::stdlib::FILE) -> libc::c_int;
+        pub fn fflush(__stream: *mut crate::stdlib::FILE) -> i32;
 
         #[no_mangle]
         pub fn fopen(_: *const libc::c_char, _: *const libc::c_char) -> *mut crate::stdlib::FILE;
@@ -7344,25 +7344,25 @@ pub mod stdlib {
         ) -> *mut crate::stdlib::FILE;
 
         #[no_mangle]
-        pub fn fdopen(__fd: libc::c_int, __modes: *const libc::c_char) -> *mut crate::stdlib::FILE;
+        pub fn fdopen(__fd: i32, __modes: *const libc::c_char) -> *mut crate::stdlib::FILE;
 
         #[no_mangle]
         pub fn setvbuf(
             __stream: *mut crate::stdlib::FILE,
             __buf: *mut libc::c_char,
-            __modes: libc::c_int,
+            __modes: i32,
             __n: crate::stddef_h::size_t,
-        ) -> libc::c_int;
+        ) -> i32;
 
         #[no_mangle]
-        pub fn fprintf(_: *mut crate::stdlib::FILE, _: *const libc::c_char, _: ...) -> libc::c_int;
+        pub fn fprintf(_: *mut crate::stdlib::FILE, _: *const libc::c_char, _: ...) -> i32;
 
         #[no_mangle]
         pub fn vfprintf(
             _: *mut crate::stdlib::FILE,
             _: *const libc::c_char,
             _: ::std::ffi::VaList,
-        ) -> libc::c_int;
+        ) -> i32;
 
         #[no_mangle]
         pub fn snprintf(
@@ -7370,7 +7370,7 @@ pub mod stdlib {
             _: libc::c_ulong,
             _: *const libc::c_char,
             _: ...
-        ) -> libc::c_int;
+        ) -> i32;
 
         #[no_mangle]
         pub fn vsnprintf(
@@ -7378,10 +7378,10 @@ pub mod stdlib {
             _: libc::c_ulong,
             _: *const libc::c_char,
             _: ::std::ffi::VaList,
-        ) -> libc::c_int;
+        ) -> i32;
 
         #[no_mangle]
-        pub fn fputs(__s: *const libc::c_char, __stream: *mut crate::stdlib::FILE) -> libc::c_int;
+        pub fn fputs(__s: *const libc::c_char, __stream: *mut crate::stdlib::FILE) -> i32;
 
         #[no_mangle]
         pub fn fread(
@@ -7403,8 +7403,8 @@ pub mod stdlib {
         pub fn fseek(
             __stream: *mut crate::stdlib::FILE,
             __off: libc::c_long,
-            __whence: libc::c_int,
-        ) -> libc::c_int;
+            __whence: i32,
+        ) -> i32;
 
         #[no_mangle]
         pub fn ftell(__stream: *mut crate::stdlib::FILE) -> libc::c_long;
@@ -7413,20 +7413,20 @@ pub mod stdlib {
         pub fn fseeko(
             __stream: *mut crate::stdlib::FILE,
             __off: crate::stdlib::__off64_t,
-            __whence: libc::c_int,
-        ) -> libc::c_int;
+            __whence: i32,
+        ) -> i32;
 
         #[no_mangle]
         pub fn ftello(__stream: *mut crate::stdlib::FILE) -> crate::stdlib::__off64_t;
 
         #[no_mangle]
-        pub fn feof(__stream: *mut crate::stdlib::FILE) -> libc::c_int;
+        pub fn feof(__stream: *mut crate::stdlib::FILE) -> i32;
 
         #[no_mangle]
-        pub fn ferror(__stream: *mut crate::stdlib::FILE) -> libc::c_int;
+        pub fn ferror(__stream: *mut crate::stdlib::FILE) -> i32;
 
         #[no_mangle]
-        pub fn fileno(__stream: *mut crate::stdlib::FILE) -> libc::c_int;
+        pub fn fileno(__stream: *mut crate::stdlib::FILE) -> i32;
         #[no_mangle]
         pub fn malloc(_: libc::c_ulong) -> *mut libc::c_void;
 
@@ -7465,19 +7465,19 @@ pub mod stdlib {
         ) -> *mut libc::c_void;
 
         #[no_mangle]
-        pub fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong) -> *mut libc::c_void;
+        pub fn memset(_: *mut libc::c_void, _: i32, _: libc::c_ulong) -> *mut libc::c_void;
 
         #[no_mangle]
         pub fn memcmp(
             _: *const libc::c_void,
             _: *const libc::c_void,
             _: libc::c_ulong,
-        ) -> libc::c_int;
+        ) -> i32;
 
         #[no_mangle]
         pub fn memchr(
             _: *const libc::c_void,
-            _: libc::c_int,
+            _: i32,
             _: libc::c_ulong,
         ) -> *mut libc::c_void;
 
@@ -7500,7 +7500,7 @@ pub mod stdlib {
             _: *const libc::c_char,
             _: *const libc::c_char,
             _: libc::c_ulong,
-        ) -> libc::c_int;
+        ) -> i32;
 
         #[no_mangle]
         pub fn strspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
@@ -7514,50 +7514,50 @@ pub mod stdlib {
         pub type _IO_wide_data;
         #[no_mangle]
         pub fn send(
-            __fd: libc::c_int,
+            __fd: i32,
             __buf: *const libc::c_void,
             __n: crate::stddef_h::size_t,
-            __flags: libc::c_int,
+            __flags: i32,
         ) -> crate::stdlib::ssize_t;
 
         #[no_mangle]
         pub fn recv(
-            __fd: libc::c_int,
+            __fd: i32,
             __buf: *mut libc::c_void,
             __n: crate::stddef_h::size_t,
-            __flags: libc::c_int,
+            __flags: i32,
         ) -> crate::stdlib::ssize_t;
 
         #[no_mangle]
         pub fn sendto(
-            __fd: libc::c_int,
+            __fd: i32,
             __buf: *const libc::c_void,
             __n: crate::stddef_h::size_t,
-            __flags: libc::c_int,
+            __flags: i32,
             __addr: *const ::libc::sockaddr,
             __addr_len: crate::stdlib::socklen_t,
         ) -> crate::stdlib::ssize_t;
 
         #[no_mangle]
         pub fn recvfrom(
-            __fd: libc::c_int,
+            __fd: i32,
             __buf: *mut libc::c_void,
             __n: crate::stddef_h::size_t,
-            __flags: libc::c_int,
+            __flags: i32,
             __addr: *mut ::libc::sockaddr,
             __addr_len: *mut crate::stdlib::socklen_t,
         ) -> crate::stdlib::ssize_t;
         #[no_mangle]
         pub fn __xstat(
-            __ver: libc::c_int,
+            __ver: i32,
             __filename: *const libc::c_char,
             __stat_buf: *mut crate::stdlib::stat,
-        ) -> libc::c_int;
+        ) -> i32;
         #[no_mangle]
         pub fn gettimeofday(
             __tv: *mut ::libc::timeval,
             __tz: crate::stdlib::__timezone_ptr_t,
-        ) -> libc::c_int;
+        ) -> i32;
 
         #[no_mangle]
         pub fn clock() -> crate::stdlib::clock_t;
@@ -7569,14 +7569,14 @@ pub mod stdlib {
         pub fn ctime(__timer: *const crate::stdlib::time_t) -> *mut libc::c_char;
         #[no_mangle]
         pub fn read(
-            __fd: libc::c_int,
+            __fd: i32,
             __buf: *mut libc::c_void,
             __nbytes: crate::stddef_h::size_t,
         ) -> crate::stdlib::ssize_t;
 
         #[no_mangle]
         pub fn write(
-            __fd: libc::c_int,
+            __fd: i32,
             __buf: *const libc::c_void,
             __n: crate::stddef_h::size_t,
         ) -> crate::stdlib::ssize_t;
@@ -7589,7 +7589,7 @@ pub mod stdlib {
 
         #[no_mangle]
         pub fn execvp(__file: *const libc::c_char, __argv: *const *mut libc::c_char)
-            -> libc::c_int;
+            -> i32;
     }
     pub type FILE = crate::stdlib::_IO_FILE;
     pub type SDL_AudioFormat = crate::stdlib::Uint16;
@@ -7598,14 +7598,14 @@ pub mod stdlib {
         unsafe extern "C" fn(
             _: *mut libc::c_void,
             _: *mut crate::stdlib::Uint8,
-            _: libc::c_int,
+            _: i32,
         ) -> (),
     >;
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct SDL_AudioSpec {
-        pub freq: libc::c_int,
+        pub freq: i32,
         pub format: crate::stdlib::SDL_AudioFormat,
         pub channels: crate::stdlib::Uint8,
         pub silence: crate::stdlib::Uint8,
@@ -7940,11 +7940,11 @@ pub mod stdlib {
         pub timestamp: crate::stdlib::Uint32,
         pub touchId: crate::stdlib::SDL_TouchID,
         pub fingerId: crate::stdlib::SDL_FingerID,
-        pub x: libc::c_float,
-        pub y: libc::c_float,
-        pub dx: libc::c_float,
-        pub dy: libc::c_float,
-        pub pressure: libc::c_float,
+        pub x: f32,
+        pub y: f32,
+        pub dx: f32,
+        pub dy: f32,
+        pub pressure: f32,
     }
 
     #[repr(C)]
@@ -7953,10 +7953,10 @@ pub mod stdlib {
         pub type_0: crate::stdlib::Uint32,
         pub timestamp: crate::stdlib::Uint32,
         pub touchId: crate::stdlib::SDL_TouchID,
-        pub dTheta: libc::c_float,
-        pub dDist: libc::c_float,
-        pub x: libc::c_float,
-        pub y: libc::c_float,
+        pub dTheta: f32,
+        pub dDist: f32,
+        pub x: f32,
+        pub y: f32,
         pub numFingers: crate::stdlib::Uint16,
         pub padding: crate::stdlib::Uint16,
     }
@@ -7969,9 +7969,9 @@ pub mod stdlib {
         pub touchId: crate::stdlib::SDL_TouchID,
         pub gestureId: crate::stdlib::SDL_GestureID,
         pub numFingers: crate::stdlib::Uint32,
-        pub error: libc::c_float,
-        pub x: libc::c_float,
-        pub y: libc::c_float,
+        pub error: f32,
+        pub x: f32,
+        pub y: f32,
     }
 
     #[repr(C)]
@@ -7989,7 +7989,7 @@ pub mod stdlib {
         pub type_0: crate::stdlib::Uint32,
         pub timestamp: crate::stdlib::Uint32,
         pub which: crate::stdlib::Sint32,
-        pub data: [libc::c_float; 6],
+        pub data: [f32; 6],
     }
 
     #[repr(C)]
@@ -8051,7 +8051,7 @@ pub mod stdlib {
         pub padding: [crate::stdlib::Uint8; 56],
     }
 
-    pub type SDL_eventaction = libc::c_uint;
+    pub type SDL_eventaction = u32;
 
     pub const SDL_ADDEVENT: crate::stdlib::SDL_eventaction = 0;
 
@@ -8060,7 +8060,7 @@ pub mod stdlib {
     pub const SDL_GETEVENT: crate::stdlib::SDL_eventaction = 2;
     pub type SDL_GameController = crate::stdlib::_SDL_GameController;
 
-    pub type SDL_GameControllerAxis = libc::c_int;
+    pub type SDL_GameControllerAxis = i32;
 
     pub const SDL_CONTROLLER_AXIS_INVALID: crate::stdlib::SDL_GameControllerAxis = -1;
 
@@ -8078,7 +8078,7 @@ pub mod stdlib {
 
     pub const SDL_CONTROLLER_AXIS_MAX: crate::stdlib::SDL_GameControllerAxis = 6;
 
-    pub type SDL_GameControllerButton = libc::c_int;
+    pub type SDL_GameControllerButton = i32;
 
     pub const SDL_CONTROLLER_BUTTON_INVALID: crate::stdlib::SDL_GameControllerButton = -1;
 
@@ -8632,7 +8632,7 @@ pub mod stdlib {
     pub const KMOD_MODE: crate::be_aas_h::C2RustUnnamed_0 = 16384;
 
     pub const KMOD_RESERVED: crate::be_aas_h::C2RustUnnamed_0 = 32768;
-    pub type SDL_Scancode = libc::c_uint;
+    pub type SDL_Scancode = u32;
 
     pub const SDL_SCANCODE_UNKNOWN: crate::stdlib::SDL_Scancode = 0;
 
@@ -9121,7 +9121,7 @@ pub mod stdlib {
     pub const SDL_SCANCODE_AUDIOFASTFORWARD: crate::stdlib::SDL_Scancode = 286;
 
     pub const SDL_NUM_SCANCODES: crate::stdlib::SDL_Scancode = 512;
-    pub type SDL_bool = libc::c_uint;
+    pub type SDL_bool = u32;
 
     pub const SDL_FALSE: crate::stdlib::SDL_bool = 0;
 
@@ -9226,14 +9226,14 @@ pub mod stdlib {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct __mbstate_t {
-        pub __count: libc::c_int,
+        pub __count: i32,
         pub __value: crate::stdlib::C2RustUnnamed_18,
     }
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub union C2RustUnnamed_18 {
-        pub __wch: libc::c_uint,
+        pub __wch: u32,
         pub __wchb: [libc::c_char; 4],
     }
     #[repr(C)]
@@ -9301,7 +9301,7 @@ pub mod stdlib {
     pub struct ifaddrs {
         pub ifa_next: *mut crate::stdlib::ifaddrs,
         pub ifa_name: *mut libc::c_char,
-        pub ifa_flags: libc::c_uint,
+        pub ifa_flags: u32,
         pub ifa_addr: *mut ::libc::sockaddr,
         pub ifa_netmask: *mut ::libc::sockaddr,
         pub ifa_ifu: crate::stdlib::C2RustUnnamed_131,
@@ -9398,14 +9398,14 @@ pub mod stdlib {
     #[derive(Copy, Clone)]
     pub struct ipv6_mreq {
         pub ipv6mr_multiaddr: crate::stdlib::in6_addr,
-        pub ipv6mr_interface: libc::c_uint,
+        pub ipv6mr_interface: u32,
     }
     pub type DIR = crate::stdlib::__dirstream;
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct __jmp_buf_tag {
         pub __jmpbuf: crate::stdlib::__jmp_buf,
-        pub __mask_was_saved: libc::c_int,
+        pub __mask_was_saved: i32,
         pub __saved_mask: crate::stdlib::__sigset_t,
     }
 
@@ -9420,8 +9420,8 @@ pub mod stdlib {
         pub __fds_bits: [crate::stdlib::__fd_mask; 16],
     }
     pub type __jmp_buf = [libc::c_long; 8];
-    pub type __sighandler_t = Option<unsafe extern "C" fn(_: libc::c_int) -> ()>;
-    pub type sa_family_t = libc::c_ushort;
+    pub type __sighandler_t = Option<unsafe extern "C" fn(_: i32) -> ()>;
+    pub type sa_family_t = u16;
     pub type socklen_t = crate::stdlib::__socklen_t;
 
     #[repr(C)]
@@ -9431,7 +9431,7 @@ pub mod stdlib {
         pub __ss_padding: [libc::c_char; 118],
         pub __ss_align: libc::c_ulong,
     }
-    pub type __socket_type = libc::c_uint;
+    pub type __socket_type = u32;
 
     pub const SOCK_STREAM: crate::stdlib::__socket_type = 1;
 
@@ -9459,7 +9459,7 @@ pub mod stdlib {
         pub st_mode: crate::stdlib::__mode_t,
         pub st_uid: crate::stdlib::__uid_t,
         pub st_gid: crate::stdlib::__gid_t,
-        pub __pad0: libc::c_int,
+        pub __pad0: i32,
         pub st_rdev: crate::stdlib::__dev_t,
         pub st_size: crate::stdlib::__off_t,
         pub st_blksize: crate::stdlib::__blksize_t,
@@ -9482,13 +9482,13 @@ pub mod stdlib {
     pub type uint32_t = crate::stdlib::__uint32_t;
     pub type ssize_t = crate::stdlib::__ssize_t;
     pub type __compar_fn_t =
-        Option<unsafe extern "C" fn(_: *const libc::c_void, _: *const libc::c_void) -> libc::c_int>;
+        Option<unsafe extern "C" fn(_: *const libc::c_void, _: *const libc::c_void) -> i32>;
     pub type _IO_lock_t = ();
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct _IO_FILE {
-        pub _flags: libc::c_int,
+        pub _flags: i32,
         pub _IO_read_ptr: *mut libc::c_char,
         pub _IO_read_end: *mut libc::c_char,
         pub _IO_read_base: *mut libc::c_char,
@@ -9502,11 +9502,11 @@ pub mod stdlib {
         pub _IO_save_end: *mut libc::c_char,
         pub _markers: *mut crate::stdlib::_IO_marker,
         pub _chain: *mut crate::stdlib::_IO_FILE,
-        pub _fileno: libc::c_int,
-        pub _flags2: libc::c_int,
+        pub _fileno: i32,
+        pub _flags2: i32,
         pub _old_offset: crate::stdlib::__off_t,
-        pub _cur_column: libc::c_ushort,
-        pub _vtable_offset: libc::c_schar,
+        pub _cur_column: u16,
+        pub _vtable_offset: i8,
         pub _shortbuf: [libc::c_char; 1],
         pub _lock: *mut libc::c_void,
         pub _offset: crate::stdlib::__off64_t,
@@ -9515,47 +9515,47 @@ pub mod stdlib {
         pub _freeres_list: *mut crate::stdlib::_IO_FILE,
         pub _freeres_buf: *mut libc::c_void,
         pub __pad5: crate::stddef_h::size_t,
-        pub _mode: libc::c_int,
+        pub _mode: i32,
         pub _unused2: [libc::c_char; 20],
     }
     pub type off_t = crate::stdlib::__off64_t;
 
     pub type pid_t = crate::stdlib::__pid_t;
-    pub type cc_t = libc::c_uchar;
+    pub type cc_t = u8;
 
-    pub type speed_t = libc::c_uint;
+    pub type speed_t = u32;
 
-    pub type tcflag_t = libc::c_uint;
+    pub type tcflag_t = u32;
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct timezone {
-        pub tz_minuteswest: libc::c_int,
-        pub tz_dsttime: libc::c_int,
+        pub tz_minuteswest: i32,
+        pub tz_dsttime: i32,
     }
 
     pub type __timezone_ptr_t = *mut crate::stdlib::timezone;
     pub type time_t = crate::stdlib::__time_t;
-    pub type __uint8_t = libc::c_uchar;
+    pub type __uint8_t = u8;
 
-    pub type __int16_t = libc::c_short;
+    pub type __int16_t = i16;
 
-    pub type __uint16_t = libc::c_ushort;
+    pub type __uint16_t = u16;
 
-    pub type __int32_t = libc::c_int;
+    pub type __int32_t = i32;
 
-    pub type __uint32_t = libc::c_uint;
+    pub type __uint32_t = u32;
 
     pub type __int64_t = libc::c_long;
 
     pub type __dev_t = libc::c_ulong;
 
-    pub type __uid_t = libc::c_uint;
+    pub type __uid_t = u32;
 
-    pub type __gid_t = libc::c_uint;
+    pub type __gid_t = u32;
 
     pub type __ino_t = libc::c_ulong;
 
-    pub type __mode_t = libc::c_uint;
+    pub type __mode_t = u32;
 
     pub type __nlink_t = libc::c_ulong;
 
@@ -9563,13 +9563,13 @@ pub mod stdlib {
 
     pub type __off64_t = libc::c_long;
 
-    pub type __pid_t = libc::c_int;
+    pub type __pid_t = i32;
 
     pub type __clock_t = libc::c_long;
 
     pub type __time_t = libc::c_long;
 
-    pub type __useconds_t = libc::c_uint;
+    pub type __useconds_t = u32;
 
     pub type __suseconds_t = libc::c_long;
 
@@ -9581,7 +9581,7 @@ pub mod stdlib {
 
     pub type __syscall_slong_t = libc::c_long;
 
-    pub type __socklen_t = libc::c_uint;
+    pub type __socklen_t = u32;
 }
 extern crate c2rust_asm_casts;
 extern crate libc;
@@ -9902,7 +9902,7 @@ pub fn main() {
     args.push(::std::ptr::null_mut());
     unsafe {
         ::std::process::exit(src::sys::sys_main::main_0(
-            (args.len() - 1) as libc::c_int,
+            (args.len() - 1) as i32,
             args.as_mut_ptr() as *mut *mut libc::c_char,
         ) as i32)
     }

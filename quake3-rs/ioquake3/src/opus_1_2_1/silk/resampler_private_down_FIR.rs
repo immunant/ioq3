@@ -46,8 +46,8 @@ unsafe extern "C" fn silk_resampler_private_down_FIR_INTERPOL(
     mut out: *mut crate::opus_types_h::opus_int16,
     mut buf: *mut crate::opus_types_h::opus_int32,
     mut FIR_Coefs: *const crate::opus_types_h::opus_int16,
-    mut FIR_Order: libc::c_int,
-    mut FIR_Fracs: libc::c_int,
+    mut FIR_Order: i32,
+    mut FIR_Fracs: i32,
     mut max_index_Q16: crate::opus_types_h::opus_int32,
     mut index_increment_Q16: crate::opus_types_h::opus_int32,
 ) -> *mut crate::opus_types_h::opus_int16 {
@@ -60,416 +60,416 @@ unsafe extern "C" fn silk_resampler_private_down_FIR_INTERPOL(
         0 as *const crate::opus_types_h::opus_int16;
     match FIR_Order {
         18 => {
-            index_Q16 = 0 as libc::c_int;
+            index_Q16 = 0 as i32;
             while index_Q16 < max_index_Q16 {
                 /* Integer part gives pointer to buffered input */
-                buf_ptr = buf.offset((index_Q16 >> 16 as libc::c_int) as isize);
+                buf_ptr = buf.offset((index_Q16 >> 16 as i32) as isize);
                 /* Fractional part gives interpolation coefficients */
-                interpol_ind = ((index_Q16 & 0xffff as libc::c_int) as libc::c_longlong
-                    * FIR_Fracs as crate::opus_types_h::opus_int16 as libc::c_longlong
-                    >> 16 as libc::c_int)
+                interpol_ind = ((index_Q16 & 0xffff as i32) as i64
+                    * FIR_Fracs as crate::opus_types_h::opus_int16 as i64
+                    >> 16 as i32)
                     as crate::opus_types_h::opus_int32;
                 /* Inner product */
                 interpol_ptr = &*FIR_Coefs
-                    .offset((18 as libc::c_int / 2 as libc::c_int * interpol_ind) as isize)
+                    .offset((18 as i32 / 2 as i32 * interpol_ind) as isize)
                     as *const crate::opus_types_h::opus_int16;
-                res_Q6 = (*buf_ptr.offset(0 as libc::c_int as isize) as libc::c_longlong
-                    * *interpol_ptr.offset(0 as libc::c_int as isize) as libc::c_longlong
-                    >> 16 as libc::c_int)
+                res_Q6 = (*buf_ptr.offset(0 as i32 as isize) as i64
+                    * *interpol_ptr.offset(0 as i32 as isize) as i64
+                    >> 16 as i32)
                     as crate::opus_types_h::opus_int32;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + (*buf_ptr.offset(1 as libc::c_int as isize) as libc::c_longlong
-                        * *interpol_ptr.offset(1 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + (*buf_ptr.offset(1 as i32 as isize) as i64
+                        * *interpol_ptr.offset(1 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + (*buf_ptr.offset(2 as libc::c_int as isize) as libc::c_longlong
-                        * *interpol_ptr.offset(2 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + (*buf_ptr.offset(2 as i32 as isize) as i64
+                        * *interpol_ptr.offset(2 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + (*buf_ptr.offset(3 as libc::c_int as isize) as libc::c_longlong
-                        * *interpol_ptr.offset(3 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + (*buf_ptr.offset(3 as i32 as isize) as i64
+                        * *interpol_ptr.offset(3 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + (*buf_ptr.offset(4 as libc::c_int as isize) as libc::c_longlong
-                        * *interpol_ptr.offset(4 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + (*buf_ptr.offset(4 as i32 as isize) as i64
+                        * *interpol_ptr.offset(4 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + (*buf_ptr.offset(5 as libc::c_int as isize) as libc::c_longlong
-                        * *interpol_ptr.offset(5 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + (*buf_ptr.offset(5 as i32 as isize) as i64
+                        * *interpol_ptr.offset(5 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + (*buf_ptr.offset(6 as libc::c_int as isize) as libc::c_longlong
-                        * *interpol_ptr.offset(6 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + (*buf_ptr.offset(6 as i32 as isize) as i64
+                        * *interpol_ptr.offset(6 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + (*buf_ptr.offset(7 as libc::c_int as isize) as libc::c_longlong
-                        * *interpol_ptr.offset(7 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + (*buf_ptr.offset(7 as i32 as isize) as i64
+                        * *interpol_ptr.offset(7 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + (*buf_ptr.offset(8 as libc::c_int as isize) as libc::c_longlong
-                        * *interpol_ptr.offset(8 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + (*buf_ptr.offset(8 as i32 as isize) as i64
+                        * *interpol_ptr.offset(8 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
                 interpol_ptr = &*FIR_Coefs.offset(
-                    (18 as libc::c_int / 2 as libc::c_int
-                        * (FIR_Fracs - 1 as libc::c_int - interpol_ind))
+                    (18 as i32 / 2 as i32
+                        * (FIR_Fracs - 1 as i32 - interpol_ind))
                         as isize,
                 ) as *const crate::opus_types_h::opus_int16;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + (*buf_ptr.offset(17 as libc::c_int as isize) as libc::c_longlong
-                        * *interpol_ptr.offset(0 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + (*buf_ptr.offset(17 as i32 as isize) as i64
+                        * *interpol_ptr.offset(0 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + (*buf_ptr.offset(16 as libc::c_int as isize) as libc::c_longlong
-                        * *interpol_ptr.offset(1 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + (*buf_ptr.offset(16 as i32 as isize) as i64
+                        * *interpol_ptr.offset(1 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + (*buf_ptr.offset(15 as libc::c_int as isize) as libc::c_longlong
-                        * *interpol_ptr.offset(2 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + (*buf_ptr.offset(15 as i32 as isize) as i64
+                        * *interpol_ptr.offset(2 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + (*buf_ptr.offset(14 as libc::c_int as isize) as libc::c_longlong
-                        * *interpol_ptr.offset(3 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + (*buf_ptr.offset(14 as i32 as isize) as i64
+                        * *interpol_ptr.offset(3 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + (*buf_ptr.offset(13 as libc::c_int as isize) as libc::c_longlong
-                        * *interpol_ptr.offset(4 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + (*buf_ptr.offset(13 as i32 as isize) as i64
+                        * *interpol_ptr.offset(4 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + (*buf_ptr.offset(12 as libc::c_int as isize) as libc::c_longlong
-                        * *interpol_ptr.offset(5 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + (*buf_ptr.offset(12 as i32 as isize) as i64
+                        * *interpol_ptr.offset(5 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + (*buf_ptr.offset(11 as libc::c_int as isize) as libc::c_longlong
-                        * *interpol_ptr.offset(6 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + (*buf_ptr.offset(11 as i32 as isize) as i64
+                        * *interpol_ptr.offset(6 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + (*buf_ptr.offset(10 as libc::c_int as isize) as libc::c_longlong
-                        * *interpol_ptr.offset(7 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + (*buf_ptr.offset(10 as i32 as isize) as i64
+                        * *interpol_ptr.offset(7 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + (*buf_ptr.offset(9 as libc::c_int as isize) as libc::c_longlong
-                        * *interpol_ptr.offset(8 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + (*buf_ptr.offset(9 as i32 as isize) as i64
+                        * *interpol_ptr.offset(8 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
                 /* Scale down, saturate and store in output array */
                 let fresh0 = out;
                 out = out.offset(1);
-                *fresh0 = if (if 6 as libc::c_int == 1 as libc::c_int {
-                    (res_Q6 >> 1 as libc::c_int) + (res_Q6 & 1 as libc::c_int)
+                *fresh0 = if (if 6 as i32 == 1 as i32 {
+                    (res_Q6 >> 1 as i32) + (res_Q6 & 1 as i32)
                 } else {
-                    ((res_Q6 >> 6 as libc::c_int - 1 as libc::c_int) + 1 as libc::c_int)
-                        >> 1 as libc::c_int
-                }) > 0x7fff as libc::c_int
+                    ((res_Q6 >> 6 as i32 - 1 as i32) + 1 as i32)
+                        >> 1 as i32
+                }) > 0x7fff as i32
                 {
-                    0x7fff as libc::c_int
-                } else if (if 6 as libc::c_int == 1 as libc::c_int {
-                    (res_Q6 >> 1 as libc::c_int) + (res_Q6 & 1 as libc::c_int)
+                    0x7fff as i32
+                } else if (if 6 as i32 == 1 as i32 {
+                    (res_Q6 >> 1 as i32) + (res_Q6 & 1 as i32)
                 } else {
-                    ((res_Q6 >> 6 as libc::c_int - 1 as libc::c_int) + 1 as libc::c_int)
-                        >> 1 as libc::c_int
-                }) < 0x8000 as libc::c_int as crate::opus_types_h::opus_int16
-                    as libc::c_int
+                    ((res_Q6 >> 6 as i32 - 1 as i32) + 1 as i32)
+                        >> 1 as i32
+                }) < 0x8000 as i32 as crate::opus_types_h::opus_int16
+                    as i32
                 {
-                    0x8000 as libc::c_int as crate::opus_types_h::opus_int16 as libc::c_int
-                } else if 6 as libc::c_int == 1 as libc::c_int {
-                    (res_Q6 >> 1 as libc::c_int) + (res_Q6 & 1 as libc::c_int)
+                    0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+                } else if 6 as i32 == 1 as i32 {
+                    (res_Q6 >> 1 as i32) + (res_Q6 & 1 as i32)
                 } else {
-                    ((res_Q6 >> 6 as libc::c_int - 1 as libc::c_int) + 1 as libc::c_int)
-                        >> 1 as libc::c_int
+                    ((res_Q6 >> 6 as i32 - 1 as i32) + 1 as i32)
+                        >> 1 as i32
                 } as crate::opus_types_h::opus_int16;
                 index_Q16 += index_increment_Q16
             }
         }
         24 => {
-            index_Q16 = 0 as libc::c_int;
+            index_Q16 = 0 as i32;
             while index_Q16 < max_index_Q16 {
                 /* Integer part gives pointer to buffered input */
-                buf_ptr = buf.offset((index_Q16 >> 16 as libc::c_int) as isize);
+                buf_ptr = buf.offset((index_Q16 >> 16 as i32) as isize);
                 /* Inner product */
-                res_Q6 = ((*buf_ptr.offset(0 as libc::c_int as isize)
-                    + *buf_ptr.offset(23 as libc::c_int as isize))
-                    as libc::c_longlong
-                    * *FIR_Coefs.offset(0 as libc::c_int as isize) as libc::c_longlong
-                    >> 16 as libc::c_int)
+                res_Q6 = ((*buf_ptr.offset(0 as i32 as isize)
+                    + *buf_ptr.offset(23 as i32 as isize))
+                    as i64
+                    * *FIR_Coefs.offset(0 as i32 as isize) as i64
+                    >> 16 as i32)
                     as crate::opus_types_h::opus_int32;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + ((*buf_ptr.offset(1 as libc::c_int as isize)
-                        + *buf_ptr.offset(22 as libc::c_int as isize))
-                        as libc::c_longlong
-                        * *FIR_Coefs.offset(1 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + ((*buf_ptr.offset(1 as i32 as isize)
+                        + *buf_ptr.offset(22 as i32 as isize))
+                        as i64
+                        * *FIR_Coefs.offset(1 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + ((*buf_ptr.offset(2 as libc::c_int as isize)
-                        + *buf_ptr.offset(21 as libc::c_int as isize))
-                        as libc::c_longlong
-                        * *FIR_Coefs.offset(2 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + ((*buf_ptr.offset(2 as i32 as isize)
+                        + *buf_ptr.offset(21 as i32 as isize))
+                        as i64
+                        * *FIR_Coefs.offset(2 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + ((*buf_ptr.offset(3 as libc::c_int as isize)
-                        + *buf_ptr.offset(20 as libc::c_int as isize))
-                        as libc::c_longlong
-                        * *FIR_Coefs.offset(3 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + ((*buf_ptr.offset(3 as i32 as isize)
+                        + *buf_ptr.offset(20 as i32 as isize))
+                        as i64
+                        * *FIR_Coefs.offset(3 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + ((*buf_ptr.offset(4 as libc::c_int as isize)
-                        + *buf_ptr.offset(19 as libc::c_int as isize))
-                        as libc::c_longlong
-                        * *FIR_Coefs.offset(4 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + ((*buf_ptr.offset(4 as i32 as isize)
+                        + *buf_ptr.offset(19 as i32 as isize))
+                        as i64
+                        * *FIR_Coefs.offset(4 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + ((*buf_ptr.offset(5 as libc::c_int as isize)
-                        + *buf_ptr.offset(18 as libc::c_int as isize))
-                        as libc::c_longlong
-                        * *FIR_Coefs.offset(5 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + ((*buf_ptr.offset(5 as i32 as isize)
+                        + *buf_ptr.offset(18 as i32 as isize))
+                        as i64
+                        * *FIR_Coefs.offset(5 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + ((*buf_ptr.offset(6 as libc::c_int as isize)
-                        + *buf_ptr.offset(17 as libc::c_int as isize))
-                        as libc::c_longlong
-                        * *FIR_Coefs.offset(6 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + ((*buf_ptr.offset(6 as i32 as isize)
+                        + *buf_ptr.offset(17 as i32 as isize))
+                        as i64
+                        * *FIR_Coefs.offset(6 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + ((*buf_ptr.offset(7 as libc::c_int as isize)
-                        + *buf_ptr.offset(16 as libc::c_int as isize))
-                        as libc::c_longlong
-                        * *FIR_Coefs.offset(7 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + ((*buf_ptr.offset(7 as i32 as isize)
+                        + *buf_ptr.offset(16 as i32 as isize))
+                        as i64
+                        * *FIR_Coefs.offset(7 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + ((*buf_ptr.offset(8 as libc::c_int as isize)
-                        + *buf_ptr.offset(15 as libc::c_int as isize))
-                        as libc::c_longlong
-                        * *FIR_Coefs.offset(8 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + ((*buf_ptr.offset(8 as i32 as isize)
+                        + *buf_ptr.offset(15 as i32 as isize))
+                        as i64
+                        * *FIR_Coefs.offset(8 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + ((*buf_ptr.offset(9 as libc::c_int as isize)
-                        + *buf_ptr.offset(14 as libc::c_int as isize))
-                        as libc::c_longlong
-                        * *FIR_Coefs.offset(9 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + ((*buf_ptr.offset(9 as i32 as isize)
+                        + *buf_ptr.offset(14 as i32 as isize))
+                        as i64
+                        * *FIR_Coefs.offset(9 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + ((*buf_ptr.offset(10 as libc::c_int as isize)
-                        + *buf_ptr.offset(13 as libc::c_int as isize))
-                        as libc::c_longlong
-                        * *FIR_Coefs.offset(10 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + ((*buf_ptr.offset(10 as i32 as isize)
+                        + *buf_ptr.offset(13 as i32 as isize))
+                        as i64
+                        * *FIR_Coefs.offset(10 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + ((*buf_ptr.offset(11 as libc::c_int as isize)
-                        + *buf_ptr.offset(12 as libc::c_int as isize))
-                        as libc::c_longlong
-                        * *FIR_Coefs.offset(11 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + ((*buf_ptr.offset(11 as i32 as isize)
+                        + *buf_ptr.offset(12 as i32 as isize))
+                        as i64
+                        * *FIR_Coefs.offset(11 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
                 /* Scale down, saturate and store in output array */
                 let fresh1 = out;
                 out = out.offset(1);
-                *fresh1 = if (if 6 as libc::c_int == 1 as libc::c_int {
-                    (res_Q6 >> 1 as libc::c_int) + (res_Q6 & 1 as libc::c_int)
+                *fresh1 = if (if 6 as i32 == 1 as i32 {
+                    (res_Q6 >> 1 as i32) + (res_Q6 & 1 as i32)
                 } else {
-                    ((res_Q6 >> 6 as libc::c_int - 1 as libc::c_int) + 1 as libc::c_int)
-                        >> 1 as libc::c_int
-                }) > 0x7fff as libc::c_int
+                    ((res_Q6 >> 6 as i32 - 1 as i32) + 1 as i32)
+                        >> 1 as i32
+                }) > 0x7fff as i32
                 {
-                    0x7fff as libc::c_int
-                } else if (if 6 as libc::c_int == 1 as libc::c_int {
-                    (res_Q6 >> 1 as libc::c_int) + (res_Q6 & 1 as libc::c_int)
+                    0x7fff as i32
+                } else if (if 6 as i32 == 1 as i32 {
+                    (res_Q6 >> 1 as i32) + (res_Q6 & 1 as i32)
                 } else {
-                    ((res_Q6 >> 6 as libc::c_int - 1 as libc::c_int) + 1 as libc::c_int)
-                        >> 1 as libc::c_int
-                }) < 0x8000 as libc::c_int as crate::opus_types_h::opus_int16
-                    as libc::c_int
+                    ((res_Q6 >> 6 as i32 - 1 as i32) + 1 as i32)
+                        >> 1 as i32
+                }) < 0x8000 as i32 as crate::opus_types_h::opus_int16
+                    as i32
                 {
-                    0x8000 as libc::c_int as crate::opus_types_h::opus_int16 as libc::c_int
-                } else if 6 as libc::c_int == 1 as libc::c_int {
-                    (res_Q6 >> 1 as libc::c_int) + (res_Q6 & 1 as libc::c_int)
+                    0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+                } else if 6 as i32 == 1 as i32 {
+                    (res_Q6 >> 1 as i32) + (res_Q6 & 1 as i32)
                 } else {
-                    ((res_Q6 >> 6 as libc::c_int - 1 as libc::c_int) + 1 as libc::c_int)
-                        >> 1 as libc::c_int
+                    ((res_Q6 >> 6 as i32 - 1 as i32) + 1 as i32)
+                        >> 1 as i32
                 } as crate::opus_types_h::opus_int16;
                 index_Q16 += index_increment_Q16
             }
         }
         36 => {
-            index_Q16 = 0 as libc::c_int;
+            index_Q16 = 0 as i32;
             while index_Q16 < max_index_Q16 {
                 /* Integer part gives pointer to buffered input */
-                buf_ptr = buf.offset((index_Q16 >> 16 as libc::c_int) as isize);
+                buf_ptr = buf.offset((index_Q16 >> 16 as i32) as isize);
                 /* Inner product */
-                res_Q6 = ((*buf_ptr.offset(0 as libc::c_int as isize)
-                    + *buf_ptr.offset(35 as libc::c_int as isize))
-                    as libc::c_longlong
-                    * *FIR_Coefs.offset(0 as libc::c_int as isize) as libc::c_longlong
-                    >> 16 as libc::c_int)
+                res_Q6 = ((*buf_ptr.offset(0 as i32 as isize)
+                    + *buf_ptr.offset(35 as i32 as isize))
+                    as i64
+                    * *FIR_Coefs.offset(0 as i32 as isize) as i64
+                    >> 16 as i32)
                     as crate::opus_types_h::opus_int32;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + ((*buf_ptr.offset(1 as libc::c_int as isize)
-                        + *buf_ptr.offset(34 as libc::c_int as isize))
-                        as libc::c_longlong
-                        * *FIR_Coefs.offset(1 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + ((*buf_ptr.offset(1 as i32 as isize)
+                        + *buf_ptr.offset(34 as i32 as isize))
+                        as i64
+                        * *FIR_Coefs.offset(1 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + ((*buf_ptr.offset(2 as libc::c_int as isize)
-                        + *buf_ptr.offset(33 as libc::c_int as isize))
-                        as libc::c_longlong
-                        * *FIR_Coefs.offset(2 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + ((*buf_ptr.offset(2 as i32 as isize)
+                        + *buf_ptr.offset(33 as i32 as isize))
+                        as i64
+                        * *FIR_Coefs.offset(2 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + ((*buf_ptr.offset(3 as libc::c_int as isize)
-                        + *buf_ptr.offset(32 as libc::c_int as isize))
-                        as libc::c_longlong
-                        * *FIR_Coefs.offset(3 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + ((*buf_ptr.offset(3 as i32 as isize)
+                        + *buf_ptr.offset(32 as i32 as isize))
+                        as i64
+                        * *FIR_Coefs.offset(3 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + ((*buf_ptr.offset(4 as libc::c_int as isize)
-                        + *buf_ptr.offset(31 as libc::c_int as isize))
-                        as libc::c_longlong
-                        * *FIR_Coefs.offset(4 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + ((*buf_ptr.offset(4 as i32 as isize)
+                        + *buf_ptr.offset(31 as i32 as isize))
+                        as i64
+                        * *FIR_Coefs.offset(4 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + ((*buf_ptr.offset(5 as libc::c_int as isize)
-                        + *buf_ptr.offset(30 as libc::c_int as isize))
-                        as libc::c_longlong
-                        * *FIR_Coefs.offset(5 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + ((*buf_ptr.offset(5 as i32 as isize)
+                        + *buf_ptr.offset(30 as i32 as isize))
+                        as i64
+                        * *FIR_Coefs.offset(5 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + ((*buf_ptr.offset(6 as libc::c_int as isize)
-                        + *buf_ptr.offset(29 as libc::c_int as isize))
-                        as libc::c_longlong
-                        * *FIR_Coefs.offset(6 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + ((*buf_ptr.offset(6 as i32 as isize)
+                        + *buf_ptr.offset(29 as i32 as isize))
+                        as i64
+                        * *FIR_Coefs.offset(6 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + ((*buf_ptr.offset(7 as libc::c_int as isize)
-                        + *buf_ptr.offset(28 as libc::c_int as isize))
-                        as libc::c_longlong
-                        * *FIR_Coefs.offset(7 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + ((*buf_ptr.offset(7 as i32 as isize)
+                        + *buf_ptr.offset(28 as i32 as isize))
+                        as i64
+                        * *FIR_Coefs.offset(7 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + ((*buf_ptr.offset(8 as libc::c_int as isize)
-                        + *buf_ptr.offset(27 as libc::c_int as isize))
-                        as libc::c_longlong
-                        * *FIR_Coefs.offset(8 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + ((*buf_ptr.offset(8 as i32 as isize)
+                        + *buf_ptr.offset(27 as i32 as isize))
+                        as i64
+                        * *FIR_Coefs.offset(8 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + ((*buf_ptr.offset(9 as libc::c_int as isize)
-                        + *buf_ptr.offset(26 as libc::c_int as isize))
-                        as libc::c_longlong
-                        * *FIR_Coefs.offset(9 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + ((*buf_ptr.offset(9 as i32 as isize)
+                        + *buf_ptr.offset(26 as i32 as isize))
+                        as i64
+                        * *FIR_Coefs.offset(9 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + ((*buf_ptr.offset(10 as libc::c_int as isize)
-                        + *buf_ptr.offset(25 as libc::c_int as isize))
-                        as libc::c_longlong
-                        * *FIR_Coefs.offset(10 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + ((*buf_ptr.offset(10 as i32 as isize)
+                        + *buf_ptr.offset(25 as i32 as isize))
+                        as i64
+                        * *FIR_Coefs.offset(10 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + ((*buf_ptr.offset(11 as libc::c_int as isize)
-                        + *buf_ptr.offset(24 as libc::c_int as isize))
-                        as libc::c_longlong
-                        * *FIR_Coefs.offset(11 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + ((*buf_ptr.offset(11 as i32 as isize)
+                        + *buf_ptr.offset(24 as i32 as isize))
+                        as i64
+                        * *FIR_Coefs.offset(11 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + ((*buf_ptr.offset(12 as libc::c_int as isize)
-                        + *buf_ptr.offset(23 as libc::c_int as isize))
-                        as libc::c_longlong
-                        * *FIR_Coefs.offset(12 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + ((*buf_ptr.offset(12 as i32 as isize)
+                        + *buf_ptr.offset(23 as i32 as isize))
+                        as i64
+                        * *FIR_Coefs.offset(12 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + ((*buf_ptr.offset(13 as libc::c_int as isize)
-                        + *buf_ptr.offset(22 as libc::c_int as isize))
-                        as libc::c_longlong
-                        * *FIR_Coefs.offset(13 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + ((*buf_ptr.offset(13 as i32 as isize)
+                        + *buf_ptr.offset(22 as i32 as isize))
+                        as i64
+                        * *FIR_Coefs.offset(13 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + ((*buf_ptr.offset(14 as libc::c_int as isize)
-                        + *buf_ptr.offset(21 as libc::c_int as isize))
-                        as libc::c_longlong
-                        * *FIR_Coefs.offset(14 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + ((*buf_ptr.offset(14 as i32 as isize)
+                        + *buf_ptr.offset(21 as i32 as isize))
+                        as i64
+                        * *FIR_Coefs.offset(14 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + ((*buf_ptr.offset(15 as libc::c_int as isize)
-                        + *buf_ptr.offset(20 as libc::c_int as isize))
-                        as libc::c_longlong
-                        * *FIR_Coefs.offset(15 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + ((*buf_ptr.offset(15 as i32 as isize)
+                        + *buf_ptr.offset(20 as i32 as isize))
+                        as i64
+                        * *FIR_Coefs.offset(15 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + ((*buf_ptr.offset(16 as libc::c_int as isize)
-                        + *buf_ptr.offset(19 as libc::c_int as isize))
-                        as libc::c_longlong
-                        * *FIR_Coefs.offset(16 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + ((*buf_ptr.offset(16 as i32 as isize)
+                        + *buf_ptr.offset(19 as i32 as isize))
+                        as i64
+                        * *FIR_Coefs.offset(16 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
-                res_Q6 = (res_Q6 as libc::c_longlong
-                    + ((*buf_ptr.offset(17 as libc::c_int as isize)
-                        + *buf_ptr.offset(18 as libc::c_int as isize))
-                        as libc::c_longlong
-                        * *FIR_Coefs.offset(17 as libc::c_int as isize) as libc::c_longlong
-                        >> 16 as libc::c_int))
+                res_Q6 = (res_Q6 as i64
+                    + ((*buf_ptr.offset(17 as i32 as isize)
+                        + *buf_ptr.offset(18 as i32 as isize))
+                        as i64
+                        * *FIR_Coefs.offset(17 as i32 as isize) as i64
+                        >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
                 /* Scale down, saturate and store in output array */
                 let fresh2 = out;
                 out = out.offset(1);
-                *fresh2 = if (if 6 as libc::c_int == 1 as libc::c_int {
-                    (res_Q6 >> 1 as libc::c_int) + (res_Q6 & 1 as libc::c_int)
+                *fresh2 = if (if 6 as i32 == 1 as i32 {
+                    (res_Q6 >> 1 as i32) + (res_Q6 & 1 as i32)
                 } else {
-                    ((res_Q6 >> 6 as libc::c_int - 1 as libc::c_int) + 1 as libc::c_int)
-                        >> 1 as libc::c_int
-                }) > 0x7fff as libc::c_int
+                    ((res_Q6 >> 6 as i32 - 1 as i32) + 1 as i32)
+                        >> 1 as i32
+                }) > 0x7fff as i32
                 {
-                    0x7fff as libc::c_int
-                } else if (if 6 as libc::c_int == 1 as libc::c_int {
-                    (res_Q6 >> 1 as libc::c_int) + (res_Q6 & 1 as libc::c_int)
+                    0x7fff as i32
+                } else if (if 6 as i32 == 1 as i32 {
+                    (res_Q6 >> 1 as i32) + (res_Q6 & 1 as i32)
                 } else {
-                    ((res_Q6 >> 6 as libc::c_int - 1 as libc::c_int) + 1 as libc::c_int)
-                        >> 1 as libc::c_int
-                }) < 0x8000 as libc::c_int as crate::opus_types_h::opus_int16
-                    as libc::c_int
+                    ((res_Q6 >> 6 as i32 - 1 as i32) + 1 as i32)
+                        >> 1 as i32
+                }) < 0x8000 as i32 as crate::opus_types_h::opus_int16
+                    as i32
                 {
-                    0x8000 as libc::c_int as crate::opus_types_h::opus_int16 as libc::c_int
-                } else if 6 as libc::c_int == 1 as libc::c_int {
-                    (res_Q6 >> 1 as libc::c_int) + (res_Q6 & 1 as libc::c_int)
+                    0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+                } else if 6 as i32 == 1 as i32 {
+                    (res_Q6 >> 1 as i32) + (res_Q6 & 1 as i32)
                 } else {
-                    ((res_Q6 >> 6 as libc::c_int - 1 as libc::c_int) + 1 as libc::c_int)
-                        >> 1 as libc::c_int
+                    ((res_Q6 >> 6 as i32 - 1 as i32) + 1 as i32)
+                        >> 1 as i32
                 } as crate::opus_types_h::opus_int16;
                 index_Q16 += index_increment_Q16
             }
@@ -511,7 +511,7 @@ pub unsafe extern "C" fn silk_resampler_private_down_FIR(
                 libc::c_ulong).wrapping_mul(::std::mem::size_of::<crate::opus_types_h::opus_int32>()
                                                 as libc::c_ulong));
     FIR_Coefs =
-        &*(*S).Coefs.offset(2 as libc::c_int as isize) as *const crate::opus_types_h::opus_int16;
+        &*(*S).Coefs.offset(2 as i32 as isize) as *const crate::opus_types_h::opus_int16;
     /* Iterate over blocks of frameSizeIn input samples */
     index_increment_Q16 = (*S).invRatio_Q16;
     loop {
@@ -528,7 +528,7 @@ pub unsafe extern "C" fn silk_resampler_private_down_FIR(
             (*S).Coefs,
             nSamplesIn,
         );
-        max_index_Q16 = ((nSamplesIn as crate::opus_types_h::opus_uint32) << 16 as libc::c_int)
+        max_index_Q16 = ((nSamplesIn as crate::opus_types_h::opus_uint32) << 16 as i32)
             as crate::opus_types_h::opus_int32;
         /* Interpolate filtered signal */
         out = silk_resampler_private_down_FIR_INTERPOL(
@@ -542,7 +542,7 @@ pub unsafe extern "C" fn silk_resampler_private_down_FIR(
         );
         in_0 = in_0.offset(nSamplesIn as isize);
         inLen -= nSamplesIn;
-        if !(inLen > 1 as libc::c_int) {
+        if !(inLen > 1 as i32) {
             break;
         }
         /* More iterations to do; copy last part of filtered signal to beginning of buffer */

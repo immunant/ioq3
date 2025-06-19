@@ -9,24 +9,24 @@ pub mod q_shared_h {
         mut v2: *const crate::src::qcommon::q_shared::vec_t,
         mut cross: *mut crate::src::qcommon::q_shared::vec_t,
     ) {
-        *cross.offset(0 as libc::c_int as isize) = *v1.offset(1 as libc::c_int as isize)
-            * *v2.offset(2 as libc::c_int as isize)
-            - *v1.offset(2 as libc::c_int as isize) * *v2.offset(1 as libc::c_int as isize);
-        *cross.offset(1 as libc::c_int as isize) = *v1.offset(2 as libc::c_int as isize)
-            * *v2.offset(0 as libc::c_int as isize)
-            - *v1.offset(0 as libc::c_int as isize) * *v2.offset(2 as libc::c_int as isize);
-        *cross.offset(2 as libc::c_int as isize) = *v1.offset(0 as libc::c_int as isize)
-            * *v2.offset(1 as libc::c_int as isize)
-            - *v1.offset(1 as libc::c_int as isize) * *v2.offset(0 as libc::c_int as isize);
+        *cross.offset(0 as i32 as isize) = *v1.offset(1 as i32 as isize)
+            * *v2.offset(2 as i32 as isize)
+            - *v1.offset(2 as i32 as isize) * *v2.offset(1 as i32 as isize);
+        *cross.offset(1 as i32 as isize) = *v1.offset(2 as i32 as isize)
+            * *v2.offset(0 as i32 as isize)
+            - *v1.offset(0 as i32 as isize) * *v2.offset(2 as i32 as isize);
+        *cross.offset(2 as i32 as isize) = *v1.offset(0 as i32 as isize)
+            * *v2.offset(1 as i32 as isize)
+            - *v1.offset(1 as i32 as isize) * *v2.offset(0 as i32 as isize);
     }
     #[inline]
 
     pub unsafe extern "C" fn VectorLengthSquared(
         mut v: *const crate::src::qcommon::q_shared::vec_t,
     ) -> crate::src::qcommon::q_shared::vec_t {
-        return *v.offset(0 as libc::c_int as isize) * *v.offset(0 as libc::c_int as isize)
-            + *v.offset(1 as libc::c_int as isize) * *v.offset(1 as libc::c_int as isize)
-            + *v.offset(2 as libc::c_int as isize) * *v.offset(2 as libc::c_int as isize);
+        return *v.offset(0 as i32 as isize) * *v.offset(0 as i32 as isize)
+            + *v.offset(1 as i32 as isize) * *v.offset(1 as i32 as isize)
+            + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize);
     }
     #[inline]
 
@@ -34,10 +34,10 @@ pub mod q_shared_h {
         mut v: *const crate::src::qcommon::q_shared::vec_t,
     ) -> crate::src::qcommon::q_shared::vec_t {
         return crate::stdlib::sqrt(
-            (*v.offset(0 as libc::c_int as isize) * *v.offset(0 as libc::c_int as isize)
-                + *v.offset(1 as libc::c_int as isize) * *v.offset(1 as libc::c_int as isize)
-                + *v.offset(2 as libc::c_int as isize) * *v.offset(2 as libc::c_int as isize))
-                as libc::c_double,
+            (*v.offset(0 as i32 as isize) * *v.offset(0 as i32 as isize)
+                + *v.offset(1 as i32 as isize) * *v.offset(1 as i32 as isize)
+                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize))
+                as f64,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
 
@@ -526,23 +526,23 @@ pub static mut tr: crate::tr_local_h::trGlobals_t = crate::tr_local_h::trGlobals
     fogTable: [0.; 256],
 };
 
-static mut s_flipMatrix: [libc::c_float; 16] = [
-    0 as libc::c_int as libc::c_float,
-    0 as libc::c_int as libc::c_float,
-    -(1 as libc::c_int) as libc::c_float,
-    0 as libc::c_int as libc::c_float,
-    -(1 as libc::c_int) as libc::c_float,
-    0 as libc::c_int as libc::c_float,
-    0 as libc::c_int as libc::c_float,
-    0 as libc::c_int as libc::c_float,
-    0 as libc::c_int as libc::c_float,
-    1 as libc::c_int as libc::c_float,
-    0 as libc::c_int as libc::c_float,
-    0 as libc::c_int as libc::c_float,
-    0 as libc::c_int as libc::c_float,
-    0 as libc::c_int as libc::c_float,
-    0 as libc::c_int as libc::c_float,
-    1 as libc::c_int as libc::c_float,
+static mut s_flipMatrix: [f32; 16] = [
+    0 as i32 as f32,
+    0 as i32 as f32,
+    -(1 as i32) as f32,
+    0 as i32 as f32,
+    -(1 as i32) as f32,
+    0 as i32 as f32,
+    0 as i32 as f32,
+    0 as i32 as f32,
+    0 as i32 as f32,
+    1 as i32 as f32,
+    0 as i32 as f32,
+    0 as i32 as f32,
+    0 as i32 as f32,
+    0 as i32 as f32,
+    0 as i32 as f32,
+    1 as i32 as f32,
 ];
 #[no_mangle]
 
@@ -604,113 +604,113 @@ Returns CULL_IN, CULL_CLIP, or CULL_OUT
 
 pub unsafe extern "C" fn R_CullLocalBox(
     mut bounds: *mut crate::src::qcommon::q_shared::vec3_t,
-) -> libc::c_int {
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
+) -> i32 {
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
     let mut transformed: [crate::src::qcommon::q_shared::vec3_t; 8] = [[0.; 3]; 8];
-    let mut dists: [libc::c_float; 8] = [0.; 8];
+    let mut dists: [f32; 8] = [0.; 8];
     let mut v: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut frust: *mut crate::src::qcommon::q_shared::cplane_t =
         0 as *mut crate::src::qcommon::q_shared::cplane_t;
-    let mut anyBack: libc::c_int = 0;
-    let mut front: libc::c_int = 0;
-    let mut back: libc::c_int = 0;
+    let mut anyBack: i32 = 0;
+    let mut front: i32 = 0;
+    let mut back: i32 = 0;
     if (*crate::src::renderergl1::tr_init::r_nocull).integer != 0 {
-        return 1 as libc::c_int;
+        return 1 as i32;
     }
     // transform into world space
-    i = 0 as libc::c_int;
-    while i < 8 as libc::c_int {
-        v[0 as libc::c_int as usize] =
-            (*bounds.offset((i & 1 as libc::c_int) as isize))[0 as libc::c_int as usize];
-        v[1 as libc::c_int as usize] = (*bounds
-            .offset((i >> 1 as libc::c_int & 1 as libc::c_int) as isize))
-            [1 as libc::c_int as usize];
-        v[2 as libc::c_int as usize] = (*bounds
-            .offset((i >> 2 as libc::c_int & 1 as libc::c_int) as isize))
-            [2 as libc::c_int as usize];
-        transformed[i as usize][0 as libc::c_int as usize] =
-            tr.or.origin[0 as libc::c_int as usize];
-        transformed[i as usize][1 as libc::c_int as usize] =
-            tr.or.origin[1 as libc::c_int as usize];
-        transformed[i as usize][2 as libc::c_int as usize] =
-            tr.or.origin[2 as libc::c_int as usize];
-        transformed[i as usize][0 as libc::c_int as usize] = transformed[i as usize]
-            [0 as libc::c_int as usize]
-            + tr.or.axis[0 as libc::c_int as usize][0 as libc::c_int as usize]
-                * v[0 as libc::c_int as usize];
-        transformed[i as usize][1 as libc::c_int as usize] = transformed[i as usize]
-            [1 as libc::c_int as usize]
-            + tr.or.axis[0 as libc::c_int as usize][1 as libc::c_int as usize]
-                * v[0 as libc::c_int as usize];
-        transformed[i as usize][2 as libc::c_int as usize] = transformed[i as usize]
-            [2 as libc::c_int as usize]
-            + tr.or.axis[0 as libc::c_int as usize][2 as libc::c_int as usize]
-                * v[0 as libc::c_int as usize];
-        transformed[i as usize][0 as libc::c_int as usize] = transformed[i as usize]
-            [0 as libc::c_int as usize]
-            + tr.or.axis[1 as libc::c_int as usize][0 as libc::c_int as usize]
-                * v[1 as libc::c_int as usize];
-        transformed[i as usize][1 as libc::c_int as usize] = transformed[i as usize]
-            [1 as libc::c_int as usize]
-            + tr.or.axis[1 as libc::c_int as usize][1 as libc::c_int as usize]
-                * v[1 as libc::c_int as usize];
-        transformed[i as usize][2 as libc::c_int as usize] = transformed[i as usize]
-            [2 as libc::c_int as usize]
-            + tr.or.axis[1 as libc::c_int as usize][2 as libc::c_int as usize]
-                * v[1 as libc::c_int as usize];
-        transformed[i as usize][0 as libc::c_int as usize] = transformed[i as usize]
-            [0 as libc::c_int as usize]
-            + tr.or.axis[2 as libc::c_int as usize][0 as libc::c_int as usize]
-                * v[2 as libc::c_int as usize];
-        transformed[i as usize][1 as libc::c_int as usize] = transformed[i as usize]
-            [1 as libc::c_int as usize]
-            + tr.or.axis[2 as libc::c_int as usize][1 as libc::c_int as usize]
-                * v[2 as libc::c_int as usize];
-        transformed[i as usize][2 as libc::c_int as usize] = transformed[i as usize]
-            [2 as libc::c_int as usize]
-            + tr.or.axis[2 as libc::c_int as usize][2 as libc::c_int as usize]
-                * v[2 as libc::c_int as usize];
+    i = 0 as i32;
+    while i < 8 as i32 {
+        v[0 as i32 as usize] =
+            (*bounds.offset((i & 1 as i32) as isize))[0 as i32 as usize];
+        v[1 as i32 as usize] = (*bounds
+            .offset((i >> 1 as i32 & 1 as i32) as isize))
+            [1 as i32 as usize];
+        v[2 as i32 as usize] = (*bounds
+            .offset((i >> 2 as i32 & 1 as i32) as isize))
+            [2 as i32 as usize];
+        transformed[i as usize][0 as i32 as usize] =
+            tr.or.origin[0 as i32 as usize];
+        transformed[i as usize][1 as i32 as usize] =
+            tr.or.origin[1 as i32 as usize];
+        transformed[i as usize][2 as i32 as usize] =
+            tr.or.origin[2 as i32 as usize];
+        transformed[i as usize][0 as i32 as usize] = transformed[i as usize]
+            [0 as i32 as usize]
+            + tr.or.axis[0 as i32 as usize][0 as i32 as usize]
+                * v[0 as i32 as usize];
+        transformed[i as usize][1 as i32 as usize] = transformed[i as usize]
+            [1 as i32 as usize]
+            + tr.or.axis[0 as i32 as usize][1 as i32 as usize]
+                * v[0 as i32 as usize];
+        transformed[i as usize][2 as i32 as usize] = transformed[i as usize]
+            [2 as i32 as usize]
+            + tr.or.axis[0 as i32 as usize][2 as i32 as usize]
+                * v[0 as i32 as usize];
+        transformed[i as usize][0 as i32 as usize] = transformed[i as usize]
+            [0 as i32 as usize]
+            + tr.or.axis[1 as i32 as usize][0 as i32 as usize]
+                * v[1 as i32 as usize];
+        transformed[i as usize][1 as i32 as usize] = transformed[i as usize]
+            [1 as i32 as usize]
+            + tr.or.axis[1 as i32 as usize][1 as i32 as usize]
+                * v[1 as i32 as usize];
+        transformed[i as usize][2 as i32 as usize] = transformed[i as usize]
+            [2 as i32 as usize]
+            + tr.or.axis[1 as i32 as usize][2 as i32 as usize]
+                * v[1 as i32 as usize];
+        transformed[i as usize][0 as i32 as usize] = transformed[i as usize]
+            [0 as i32 as usize]
+            + tr.or.axis[2 as i32 as usize][0 as i32 as usize]
+                * v[2 as i32 as usize];
+        transformed[i as usize][1 as i32 as usize] = transformed[i as usize]
+            [1 as i32 as usize]
+            + tr.or.axis[2 as i32 as usize][1 as i32 as usize]
+                * v[2 as i32 as usize];
+        transformed[i as usize][2 as i32 as usize] = transformed[i as usize]
+            [2 as i32 as usize]
+            + tr.or.axis[2 as i32 as usize][2 as i32 as usize]
+                * v[2 as i32 as usize];
         i += 1
     }
     // check against frustum planes
-    anyBack = 0 as libc::c_int;
-    i = 0 as libc::c_int;
-    while i < 4 as libc::c_int {
+    anyBack = 0 as i32;
+    i = 0 as i32;
+    while i < 4 as i32 {
         frust = &mut *tr.viewParms.frustum.as_mut_ptr().offset(i as isize)
             as *mut crate::src::qcommon::q_shared::cplane_t;
-        back = 0 as libc::c_int;
+        back = 0 as i32;
         front = back;
-        j = 0 as libc::c_int;
-        while j < 8 as libc::c_int {
-            dists[j as usize] = transformed[j as usize][0 as libc::c_int as usize]
-                * (*frust).normal[0 as libc::c_int as usize]
-                + transformed[j as usize][1 as libc::c_int as usize]
-                    * (*frust).normal[1 as libc::c_int as usize]
-                + transformed[j as usize][2 as libc::c_int as usize]
-                    * (*frust).normal[2 as libc::c_int as usize];
+        j = 0 as i32;
+        while j < 8 as i32 {
+            dists[j as usize] = transformed[j as usize][0 as i32 as usize]
+                * (*frust).normal[0 as i32 as usize]
+                + transformed[j as usize][1 as i32 as usize]
+                    * (*frust).normal[1 as i32 as usize]
+                + transformed[j as usize][2 as i32 as usize]
+                    * (*frust).normal[2 as i32 as usize];
             if dists[j as usize] > (*frust).dist {
-                front = 1 as libc::c_int;
+                front = 1 as i32;
                 if back != 0 {
                     break;
                 }
             } else {
-                back = 1 as libc::c_int
+                back = 1 as i32
             }
             j += 1
         }
         if front == 0 {
             // all points were behind one of the planes
-            return 2 as libc::c_int;
+            return 2 as i32;
         }
         anyBack |= back;
         i += 1
     }
     if anyBack == 0 {
-        return 0 as libc::c_int;
+        return 0 as i32;
         // completely inside frustum
     }
-    return 1 as libc::c_int;
+    return 1 as i32;
     // partially clipped
 }
 /*
@@ -720,8 +720,8 @@ pub unsafe extern "C" fn R_CullLocalBox(
 
 pub unsafe extern "C" fn R_CullLocalPointAndRadius(
     mut pt: *mut crate::src::qcommon::q_shared::vec_t,
-    mut radius: libc::c_float,
-) -> libc::c_int {
+    mut radius: f32,
+) -> i32 {
     let mut transformed: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     R_LocalPointToWorld(pt, transformed.as_mut_ptr());
     return R_CullPointAndRadius(transformed.as_mut_ptr(), radius);
@@ -733,28 +733,28 @@ pub unsafe extern "C" fn R_CullLocalPointAndRadius(
 
 pub unsafe extern "C" fn R_CullPointAndRadius(
     mut pt: *mut crate::src::qcommon::q_shared::vec_t,
-    mut radius: libc::c_float,
-) -> libc::c_int {
-    let mut i: libc::c_int = 0;
-    let mut dist: libc::c_float = 0.;
+    mut radius: f32,
+) -> i32 {
+    let mut i: i32 = 0;
+    let mut dist: f32 = 0.;
     let mut frust: *mut crate::src::qcommon::q_shared::cplane_t =
         0 as *mut crate::src::qcommon::q_shared::cplane_t;
     let mut mightBeClipped: crate::src::qcommon::q_shared::qboolean =
         crate::src::qcommon::q_shared::qfalse;
     if (*crate::src::renderergl1::tr_init::r_nocull).integer != 0 {
-        return 1 as libc::c_int;
+        return 1 as i32;
     }
     // check against frustum planes
-    i = 0 as libc::c_int;
-    while i < 4 as libc::c_int {
+    i = 0 as i32;
+    while i < 4 as i32 {
         frust = &mut *tr.viewParms.frustum.as_mut_ptr().offset(i as isize)
             as *mut crate::src::qcommon::q_shared::cplane_t;
-        dist = *pt.offset(0 as libc::c_int as isize) * (*frust).normal[0 as libc::c_int as usize]
-            + *pt.offset(1 as libc::c_int as isize) * (*frust).normal[1 as libc::c_int as usize]
-            + *pt.offset(2 as libc::c_int as isize) * (*frust).normal[2 as libc::c_int as usize]
+        dist = *pt.offset(0 as i32 as isize) * (*frust).normal[0 as i32 as usize]
+            + *pt.offset(1 as i32 as isize) * (*frust).normal[1 as i32 as usize]
+            + *pt.offset(2 as i32 as isize) * (*frust).normal[2 as i32 as usize]
             - (*frust).dist;
         if dist < -radius {
-            return 2 as libc::c_int;
+            return 2 as i32;
         } else {
             if dist <= radius {
                 mightBeClipped = crate::src::qcommon::q_shared::qtrue
@@ -763,9 +763,9 @@ pub unsafe extern "C" fn R_CullPointAndRadius(
         i += 1
     }
     if mightBeClipped as u64 != 0 {
-        return 1 as libc::c_int;
+        return 1 as i32;
     }
-    return 0 as libc::c_int;
+    return 0 as i32;
     // completely inside frustum
 }
 /*
@@ -780,24 +780,24 @@ pub unsafe extern "C" fn R_LocalNormalToWorld(
     mut local: *mut crate::src::qcommon::q_shared::vec_t,
     mut world: *mut crate::src::qcommon::q_shared::vec_t,
 ) {
-    *world.offset(0 as libc::c_int as isize) = *local.offset(0 as libc::c_int as isize)
-        * tr.or.axis[0 as libc::c_int as usize][0 as libc::c_int as usize]
-        + *local.offset(1 as libc::c_int as isize)
-            * tr.or.axis[1 as libc::c_int as usize][0 as libc::c_int as usize]
-        + *local.offset(2 as libc::c_int as isize)
-            * tr.or.axis[2 as libc::c_int as usize][0 as libc::c_int as usize];
-    *world.offset(1 as libc::c_int as isize) = *local.offset(0 as libc::c_int as isize)
-        * tr.or.axis[0 as libc::c_int as usize][1 as libc::c_int as usize]
-        + *local.offset(1 as libc::c_int as isize)
-            * tr.or.axis[1 as libc::c_int as usize][1 as libc::c_int as usize]
-        + *local.offset(2 as libc::c_int as isize)
-            * tr.or.axis[2 as libc::c_int as usize][1 as libc::c_int as usize];
-    *world.offset(2 as libc::c_int as isize) = *local.offset(0 as libc::c_int as isize)
-        * tr.or.axis[0 as libc::c_int as usize][2 as libc::c_int as usize]
-        + *local.offset(1 as libc::c_int as isize)
-            * tr.or.axis[1 as libc::c_int as usize][2 as libc::c_int as usize]
-        + *local.offset(2 as libc::c_int as isize)
-            * tr.or.axis[2 as libc::c_int as usize][2 as libc::c_int as usize];
+    *world.offset(0 as i32 as isize) = *local.offset(0 as i32 as isize)
+        * tr.or.axis[0 as i32 as usize][0 as i32 as usize]
+        + *local.offset(1 as i32 as isize)
+            * tr.or.axis[1 as i32 as usize][0 as i32 as usize]
+        + *local.offset(2 as i32 as isize)
+            * tr.or.axis[2 as i32 as usize][0 as i32 as usize];
+    *world.offset(1 as i32 as isize) = *local.offset(0 as i32 as isize)
+        * tr.or.axis[0 as i32 as usize][1 as i32 as usize]
+        + *local.offset(1 as i32 as isize)
+            * tr.or.axis[1 as i32 as usize][1 as i32 as usize]
+        + *local.offset(2 as i32 as isize)
+            * tr.or.axis[2 as i32 as usize][1 as i32 as usize];
+    *world.offset(2 as i32 as isize) = *local.offset(0 as i32 as isize)
+        * tr.or.axis[0 as i32 as usize][2 as i32 as usize]
+        + *local.offset(1 as i32 as isize)
+            * tr.or.axis[1 as i32 as usize][2 as i32 as usize]
+        + *local.offset(2 as i32 as isize)
+            * tr.or.axis[2 as i32 as usize][2 as i32 as usize];
 }
 /*
 =================
@@ -811,27 +811,27 @@ pub unsafe extern "C" fn R_LocalPointToWorld(
     mut local: *mut crate::src::qcommon::q_shared::vec_t,
     mut world: *mut crate::src::qcommon::q_shared::vec_t,
 ) {
-    *world.offset(0 as libc::c_int as isize) = *local.offset(0 as libc::c_int as isize)
-        * tr.or.axis[0 as libc::c_int as usize][0 as libc::c_int as usize]
-        + *local.offset(1 as libc::c_int as isize)
-            * tr.or.axis[1 as libc::c_int as usize][0 as libc::c_int as usize]
-        + *local.offset(2 as libc::c_int as isize)
-            * tr.or.axis[2 as libc::c_int as usize][0 as libc::c_int as usize]
-        + tr.or.origin[0 as libc::c_int as usize];
-    *world.offset(1 as libc::c_int as isize) = *local.offset(0 as libc::c_int as isize)
-        * tr.or.axis[0 as libc::c_int as usize][1 as libc::c_int as usize]
-        + *local.offset(1 as libc::c_int as isize)
-            * tr.or.axis[1 as libc::c_int as usize][1 as libc::c_int as usize]
-        + *local.offset(2 as libc::c_int as isize)
-            * tr.or.axis[2 as libc::c_int as usize][1 as libc::c_int as usize]
-        + tr.or.origin[1 as libc::c_int as usize];
-    *world.offset(2 as libc::c_int as isize) = *local.offset(0 as libc::c_int as isize)
-        * tr.or.axis[0 as libc::c_int as usize][2 as libc::c_int as usize]
-        + *local.offset(1 as libc::c_int as isize)
-            * tr.or.axis[1 as libc::c_int as usize][2 as libc::c_int as usize]
-        + *local.offset(2 as libc::c_int as isize)
-            * tr.or.axis[2 as libc::c_int as usize][2 as libc::c_int as usize]
-        + tr.or.origin[2 as libc::c_int as usize];
+    *world.offset(0 as i32 as isize) = *local.offset(0 as i32 as isize)
+        * tr.or.axis[0 as i32 as usize][0 as i32 as usize]
+        + *local.offset(1 as i32 as isize)
+            * tr.or.axis[1 as i32 as usize][0 as i32 as usize]
+        + *local.offset(2 as i32 as isize)
+            * tr.or.axis[2 as i32 as usize][0 as i32 as usize]
+        + tr.or.origin[0 as i32 as usize];
+    *world.offset(1 as i32 as isize) = *local.offset(0 as i32 as isize)
+        * tr.or.axis[0 as i32 as usize][1 as i32 as usize]
+        + *local.offset(1 as i32 as isize)
+            * tr.or.axis[1 as i32 as usize][1 as i32 as usize]
+        + *local.offset(2 as i32 as isize)
+            * tr.or.axis[2 as i32 as usize][1 as i32 as usize]
+        + tr.or.origin[1 as i32 as usize];
+    *world.offset(2 as i32 as isize) = *local.offset(0 as i32 as isize)
+        * tr.or.axis[0 as i32 as usize][2 as i32 as usize]
+        + *local.offset(1 as i32 as isize)
+            * tr.or.axis[1 as i32 as usize][2 as i32 as usize]
+        + *local.offset(2 as i32 as isize)
+            * tr.or.axis[2 as i32 as usize][2 as i32 as usize]
+        + tr.or.origin[2 as i32 as usize];
 }
 /*
 =================
@@ -845,24 +845,24 @@ pub unsafe extern "C" fn R_WorldToLocal(
     mut world: *mut crate::src::qcommon::q_shared::vec_t,
     mut local: *mut crate::src::qcommon::q_shared::vec_t,
 ) {
-    *local.offset(0 as libc::c_int as isize) = *world.offset(0 as libc::c_int as isize)
-        * tr.or.axis[0 as libc::c_int as usize][0 as libc::c_int as usize]
-        + *world.offset(1 as libc::c_int as isize)
-            * tr.or.axis[0 as libc::c_int as usize][1 as libc::c_int as usize]
-        + *world.offset(2 as libc::c_int as isize)
-            * tr.or.axis[0 as libc::c_int as usize][2 as libc::c_int as usize];
-    *local.offset(1 as libc::c_int as isize) = *world.offset(0 as libc::c_int as isize)
-        * tr.or.axis[1 as libc::c_int as usize][0 as libc::c_int as usize]
-        + *world.offset(1 as libc::c_int as isize)
-            * tr.or.axis[1 as libc::c_int as usize][1 as libc::c_int as usize]
-        + *world.offset(2 as libc::c_int as isize)
-            * tr.or.axis[1 as libc::c_int as usize][2 as libc::c_int as usize];
-    *local.offset(2 as libc::c_int as isize) = *world.offset(0 as libc::c_int as isize)
-        * tr.or.axis[2 as libc::c_int as usize][0 as libc::c_int as usize]
-        + *world.offset(1 as libc::c_int as isize)
-            * tr.or.axis[2 as libc::c_int as usize][1 as libc::c_int as usize]
-        + *world.offset(2 as libc::c_int as isize)
-            * tr.or.axis[2 as libc::c_int as usize][2 as libc::c_int as usize];
+    *local.offset(0 as i32 as isize) = *world.offset(0 as i32 as isize)
+        * tr.or.axis[0 as i32 as usize][0 as i32 as usize]
+        + *world.offset(1 as i32 as isize)
+            * tr.or.axis[0 as i32 as usize][1 as i32 as usize]
+        + *world.offset(2 as i32 as isize)
+            * tr.or.axis[0 as i32 as usize][2 as i32 as usize];
+    *local.offset(1 as i32 as isize) = *world.offset(0 as i32 as isize)
+        * tr.or.axis[1 as i32 as usize][0 as i32 as usize]
+        + *world.offset(1 as i32 as isize)
+            * tr.or.axis[1 as i32 as usize][1 as i32 as usize]
+        + *world.offset(2 as i32 as isize)
+            * tr.or.axis[1 as i32 as usize][2 as i32 as usize];
+    *local.offset(2 as i32 as isize) = *world.offset(0 as i32 as isize)
+        * tr.or.axis[2 as i32 as usize][0 as i32 as usize]
+        + *world.offset(1 as i32 as isize)
+            * tr.or.axis[2 as i32 as usize][1 as i32 as usize]
+        + *world.offset(2 as i32 as isize)
+            * tr.or.axis[2 as i32 as usize][2 as i32 as usize];
 }
 /*
 ==========================
@@ -874,34 +874,34 @@ R_TransformModelToClip
 
 pub unsafe extern "C" fn R_TransformModelToClip(
     mut src: *const crate::src::qcommon::q_shared::vec_t,
-    mut modelMatrix: *const libc::c_float,
-    mut projectionMatrix: *const libc::c_float,
+    mut modelMatrix: *const f32,
+    mut projectionMatrix: *const f32,
     mut eye: *mut crate::src::qcommon::q_shared::vec_t,
     mut dst: *mut crate::src::qcommon::q_shared::vec_t,
 ) {
-    let mut i: libc::c_int = 0;
-    i = 0 as libc::c_int;
-    while i < 4 as libc::c_int {
-        *eye.offset(i as isize) = *src.offset(0 as libc::c_int as isize)
-            * *modelMatrix.offset((i + 0 as libc::c_int * 4 as libc::c_int) as isize)
-            + *src.offset(1 as libc::c_int as isize)
-                * *modelMatrix.offset((i + 1 as libc::c_int * 4 as libc::c_int) as isize)
-            + *src.offset(2 as libc::c_int as isize)
-                * *modelMatrix.offset((i + 2 as libc::c_int * 4 as libc::c_int) as isize)
-            + 1 as libc::c_int as libc::c_float
-                * *modelMatrix.offset((i + 3 as libc::c_int * 4 as libc::c_int) as isize);
+    let mut i: i32 = 0;
+    i = 0 as i32;
+    while i < 4 as i32 {
+        *eye.offset(i as isize) = *src.offset(0 as i32 as isize)
+            * *modelMatrix.offset((i + 0 as i32 * 4 as i32) as isize)
+            + *src.offset(1 as i32 as isize)
+                * *modelMatrix.offset((i + 1 as i32 * 4 as i32) as isize)
+            + *src.offset(2 as i32 as isize)
+                * *modelMatrix.offset((i + 2 as i32 * 4 as i32) as isize)
+            + 1 as i32 as f32
+                * *modelMatrix.offset((i + 3 as i32 * 4 as i32) as isize);
         i += 1
     }
-    i = 0 as libc::c_int;
-    while i < 4 as libc::c_int {
-        *dst.offset(i as isize) = *eye.offset(0 as libc::c_int as isize)
-            * *projectionMatrix.offset((i + 0 as libc::c_int * 4 as libc::c_int) as isize)
-            + *eye.offset(1 as libc::c_int as isize)
-                * *projectionMatrix.offset((i + 1 as libc::c_int * 4 as libc::c_int) as isize)
-            + *eye.offset(2 as libc::c_int as isize)
-                * *projectionMatrix.offset((i + 2 as libc::c_int * 4 as libc::c_int) as isize)
-            + *eye.offset(3 as libc::c_int as isize)
-                * *projectionMatrix.offset((i + 3 as libc::c_int * 4 as libc::c_int) as isize);
+    i = 0 as i32;
+    while i < 4 as i32 {
+        *dst.offset(i as isize) = *eye.offset(0 as i32 as isize)
+            * *projectionMatrix.offset((i + 0 as i32 * 4 as i32) as isize)
+            + *eye.offset(1 as i32 as isize)
+                * *projectionMatrix.offset((i + 1 as i32 * 4 as i32) as isize)
+            + *eye.offset(2 as i32 as isize)
+                * *projectionMatrix.offset((i + 2 as i32 * 4 as i32) as isize)
+            + *eye.offset(3 as i32 as isize)
+                * *projectionMatrix.offset((i + 3 as i32 * 4 as i32) as isize);
         i += 1
     }
 }
@@ -1009,25 +1009,25 @@ pub unsafe extern "C" fn R_TransformClipToWindow(
     mut normalized: *mut crate::src::qcommon::q_shared::vec_t,
     mut window: *mut crate::src::qcommon::q_shared::vec_t,
 ) {
-    *normalized.offset(0 as libc::c_int as isize) =
-        *clip.offset(0 as libc::c_int as isize) / *clip.offset(3 as libc::c_int as isize);
-    *normalized.offset(1 as libc::c_int as isize) =
-        *clip.offset(1 as libc::c_int as isize) / *clip.offset(3 as libc::c_int as isize);
-    *normalized.offset(2 as libc::c_int as isize) = (*clip.offset(2 as libc::c_int as isize)
-        + *clip.offset(3 as libc::c_int as isize))
-        / (2 as libc::c_int as libc::c_float * *clip.offset(3 as libc::c_int as isize));
-    *window.offset(0 as libc::c_int as isize) = 0.5f32
-        * (1.0f32 + *normalized.offset(0 as libc::c_int as isize))
-        * (*view).viewportWidth as libc::c_float;
-    *window.offset(1 as libc::c_int as isize) = 0.5f32
-        * (1.0f32 + *normalized.offset(1 as libc::c_int as isize))
-        * (*view).viewportHeight as libc::c_float;
-    *window.offset(2 as libc::c_int as isize) = *normalized.offset(2 as libc::c_int as isize);
-    *window.offset(0 as libc::c_int as isize) =
-        (*window.offset(0 as libc::c_int as isize) as libc::c_double + 0.5f64) as libc::c_int
+    *normalized.offset(0 as i32 as isize) =
+        *clip.offset(0 as i32 as isize) / *clip.offset(3 as i32 as isize);
+    *normalized.offset(1 as i32 as isize) =
+        *clip.offset(1 as i32 as isize) / *clip.offset(3 as i32 as isize);
+    *normalized.offset(2 as i32 as isize) = (*clip.offset(2 as i32 as isize)
+        + *clip.offset(3 as i32 as isize))
+        / (2 as i32 as f32 * *clip.offset(3 as i32 as isize));
+    *window.offset(0 as i32 as isize) = 0.5f32
+        * (1.0f32 + *normalized.offset(0 as i32 as isize))
+        * (*view).viewportWidth as f32;
+    *window.offset(1 as i32 as isize) = 0.5f32
+        * (1.0f32 + *normalized.offset(1 as i32 as isize))
+        * (*view).viewportHeight as f32;
+    *window.offset(2 as i32 as isize) = *normalized.offset(2 as i32 as isize);
+    *window.offset(0 as i32 as isize) =
+        (*window.offset(0 as i32 as isize) as f64 + 0.5f64) as i32
             as crate::src::qcommon::q_shared::vec_t;
-    *window.offset(1 as libc::c_int as isize) =
-        (*window.offset(1 as libc::c_int as isize) as libc::c_double + 0.5f64) as libc::c_int
+    *window.offset(1 as i32 as isize) =
+        (*window.offset(1 as i32 as isize) as f64 + 0.5f64) as i32
             as crate::src::qcommon::q_shared::vec_t;
 }
 /*
@@ -1039,25 +1039,25 @@ myGlMultMatrix
 #[no_mangle]
 
 pub unsafe extern "C" fn myGlMultMatrix(
-    mut a: *const libc::c_float,
-    mut b: *const libc::c_float,
-    mut out: *mut libc::c_float,
+    mut a: *const f32,
+    mut b: *const f32,
+    mut out: *mut f32,
 ) {
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
-    i = 0 as libc::c_int;
-    while i < 4 as libc::c_int {
-        j = 0 as libc::c_int;
-        while j < 4 as libc::c_int {
-            *out.offset((i * 4 as libc::c_int + j) as isize) = *a
-                .offset((i * 4 as libc::c_int + 0 as libc::c_int) as isize)
-                * *b.offset((0 as libc::c_int * 4 as libc::c_int + j) as isize)
-                + *a.offset((i * 4 as libc::c_int + 1 as libc::c_int) as isize)
-                    * *b.offset((1 as libc::c_int * 4 as libc::c_int + j) as isize)
-                + *a.offset((i * 4 as libc::c_int + 2 as libc::c_int) as isize)
-                    * *b.offset((2 as libc::c_int * 4 as libc::c_int + j) as isize)
-                + *a.offset((i * 4 as libc::c_int + 3 as libc::c_int) as isize)
-                    * *b.offset((3 as libc::c_int * 4 as libc::c_int + j) as isize);
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
+    i = 0 as i32;
+    while i < 4 as i32 {
+        j = 0 as i32;
+        while j < 4 as i32 {
+            *out.offset((i * 4 as i32 + j) as isize) = *a
+                .offset((i * 4 as i32 + 0 as i32) as isize)
+                * *b.offset((0 as i32 * 4 as i32 + j) as isize)
+                + *a.offset((i * 4 as i32 + 1 as i32) as isize)
+                    * *b.offset((1 as i32 * 4 as i32 + j) as isize)
+                + *a.offset((i * 4 as i32 + 2 as i32) as isize)
+                    * *b.offset((2 as i32 * 4 as i32 + j) as isize)
+                + *a.offset((i * 4 as i32 + 3 as i32) as isize)
+                    * *b.offset((3 as i32 * 4 as i32 + j) as isize);
             j += 1
         }
         i += 1
@@ -1079,60 +1079,60 @@ pub unsafe extern "C" fn R_RotateForEntity(
     mut viewParms: *const crate::tr_local_h::viewParms_t,
     mut or: *mut crate::tr_local_h::orientationr_t,
 ) {
-    let mut glMatrix: [libc::c_float; 16] = [0.; 16];
+    let mut glMatrix: [f32; 16] = [0.; 16];
     let mut delta: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut axisLength: libc::c_float = 0.;
-    if (*ent).e.reType as libc::c_uint != crate::tr_types_h::RT_MODEL as libc::c_int as libc::c_uint
+    let mut axisLength: f32 = 0.;
+    if (*ent).e.reType as u32 != crate::tr_types_h::RT_MODEL as i32 as u32
     {
         *or = (*viewParms).world;
         return;
     }
-    (*or).origin[0 as libc::c_int as usize] = (*ent).e.origin[0 as libc::c_int as usize];
-    (*or).origin[1 as libc::c_int as usize] = (*ent).e.origin[1 as libc::c_int as usize];
-    (*or).origin[2 as libc::c_int as usize] = (*ent).e.origin[2 as libc::c_int as usize];
-    (*or).axis[0 as libc::c_int as usize][0 as libc::c_int as usize] =
-        (*ent).e.axis[0 as libc::c_int as usize][0 as libc::c_int as usize];
-    (*or).axis[0 as libc::c_int as usize][1 as libc::c_int as usize] =
-        (*ent).e.axis[0 as libc::c_int as usize][1 as libc::c_int as usize];
-    (*or).axis[0 as libc::c_int as usize][2 as libc::c_int as usize] =
-        (*ent).e.axis[0 as libc::c_int as usize][2 as libc::c_int as usize];
-    (*or).axis[1 as libc::c_int as usize][0 as libc::c_int as usize] =
-        (*ent).e.axis[1 as libc::c_int as usize][0 as libc::c_int as usize];
-    (*or).axis[1 as libc::c_int as usize][1 as libc::c_int as usize] =
-        (*ent).e.axis[1 as libc::c_int as usize][1 as libc::c_int as usize];
-    (*or).axis[1 as libc::c_int as usize][2 as libc::c_int as usize] =
-        (*ent).e.axis[1 as libc::c_int as usize][2 as libc::c_int as usize];
-    (*or).axis[2 as libc::c_int as usize][0 as libc::c_int as usize] =
-        (*ent).e.axis[2 as libc::c_int as usize][0 as libc::c_int as usize];
-    (*or).axis[2 as libc::c_int as usize][1 as libc::c_int as usize] =
-        (*ent).e.axis[2 as libc::c_int as usize][1 as libc::c_int as usize];
-    (*or).axis[2 as libc::c_int as usize][2 as libc::c_int as usize] =
-        (*ent).e.axis[2 as libc::c_int as usize][2 as libc::c_int as usize];
-    glMatrix[0 as libc::c_int as usize] =
-        (*or).axis[0 as libc::c_int as usize][0 as libc::c_int as usize];
-    glMatrix[4 as libc::c_int as usize] =
-        (*or).axis[1 as libc::c_int as usize][0 as libc::c_int as usize];
-    glMatrix[8 as libc::c_int as usize] =
-        (*or).axis[2 as libc::c_int as usize][0 as libc::c_int as usize];
-    glMatrix[12 as libc::c_int as usize] = (*or).origin[0 as libc::c_int as usize];
-    glMatrix[1 as libc::c_int as usize] =
-        (*or).axis[0 as libc::c_int as usize][1 as libc::c_int as usize];
-    glMatrix[5 as libc::c_int as usize] =
-        (*or).axis[1 as libc::c_int as usize][1 as libc::c_int as usize];
-    glMatrix[9 as libc::c_int as usize] =
-        (*or).axis[2 as libc::c_int as usize][1 as libc::c_int as usize];
-    glMatrix[13 as libc::c_int as usize] = (*or).origin[1 as libc::c_int as usize];
-    glMatrix[2 as libc::c_int as usize] =
-        (*or).axis[0 as libc::c_int as usize][2 as libc::c_int as usize];
-    glMatrix[6 as libc::c_int as usize] =
-        (*or).axis[1 as libc::c_int as usize][2 as libc::c_int as usize];
-    glMatrix[10 as libc::c_int as usize] =
-        (*or).axis[2 as libc::c_int as usize][2 as libc::c_int as usize];
-    glMatrix[14 as libc::c_int as usize] = (*or).origin[2 as libc::c_int as usize];
-    glMatrix[3 as libc::c_int as usize] = 0 as libc::c_int as libc::c_float;
-    glMatrix[7 as libc::c_int as usize] = 0 as libc::c_int as libc::c_float;
-    glMatrix[11 as libc::c_int as usize] = 0 as libc::c_int as libc::c_float;
-    glMatrix[15 as libc::c_int as usize] = 1 as libc::c_int as libc::c_float;
+    (*or).origin[0 as i32 as usize] = (*ent).e.origin[0 as i32 as usize];
+    (*or).origin[1 as i32 as usize] = (*ent).e.origin[1 as i32 as usize];
+    (*or).origin[2 as i32 as usize] = (*ent).e.origin[2 as i32 as usize];
+    (*or).axis[0 as i32 as usize][0 as i32 as usize] =
+        (*ent).e.axis[0 as i32 as usize][0 as i32 as usize];
+    (*or).axis[0 as i32 as usize][1 as i32 as usize] =
+        (*ent).e.axis[0 as i32 as usize][1 as i32 as usize];
+    (*or).axis[0 as i32 as usize][2 as i32 as usize] =
+        (*ent).e.axis[0 as i32 as usize][2 as i32 as usize];
+    (*or).axis[1 as i32 as usize][0 as i32 as usize] =
+        (*ent).e.axis[1 as i32 as usize][0 as i32 as usize];
+    (*or).axis[1 as i32 as usize][1 as i32 as usize] =
+        (*ent).e.axis[1 as i32 as usize][1 as i32 as usize];
+    (*or).axis[1 as i32 as usize][2 as i32 as usize] =
+        (*ent).e.axis[1 as i32 as usize][2 as i32 as usize];
+    (*or).axis[2 as i32 as usize][0 as i32 as usize] =
+        (*ent).e.axis[2 as i32 as usize][0 as i32 as usize];
+    (*or).axis[2 as i32 as usize][1 as i32 as usize] =
+        (*ent).e.axis[2 as i32 as usize][1 as i32 as usize];
+    (*or).axis[2 as i32 as usize][2 as i32 as usize] =
+        (*ent).e.axis[2 as i32 as usize][2 as i32 as usize];
+    glMatrix[0 as i32 as usize] =
+        (*or).axis[0 as i32 as usize][0 as i32 as usize];
+    glMatrix[4 as i32 as usize] =
+        (*or).axis[1 as i32 as usize][0 as i32 as usize];
+    glMatrix[8 as i32 as usize] =
+        (*or).axis[2 as i32 as usize][0 as i32 as usize];
+    glMatrix[12 as i32 as usize] = (*or).origin[0 as i32 as usize];
+    glMatrix[1 as i32 as usize] =
+        (*or).axis[0 as i32 as usize][1 as i32 as usize];
+    glMatrix[5 as i32 as usize] =
+        (*or).axis[1 as i32 as usize][1 as i32 as usize];
+    glMatrix[9 as i32 as usize] =
+        (*or).axis[2 as i32 as usize][1 as i32 as usize];
+    glMatrix[13 as i32 as usize] = (*or).origin[1 as i32 as usize];
+    glMatrix[2 as i32 as usize] =
+        (*or).axis[0 as i32 as usize][2 as i32 as usize];
+    glMatrix[6 as i32 as usize] =
+        (*or).axis[1 as i32 as usize][2 as i32 as usize];
+    glMatrix[10 as i32 as usize] =
+        (*or).axis[2 as i32 as usize][2 as i32 as usize];
+    glMatrix[14 as i32 as usize] = (*or).origin[2 as i32 as usize];
+    glMatrix[3 as i32 as usize] = 0 as i32 as f32;
+    glMatrix[7 as i32 as usize] = 0 as i32 as f32;
+    glMatrix[11 as i32 as usize] = 0 as i32 as f32;
+    glMatrix[15 as i32 as usize] = 1 as i32 as f32;
     myGlMultMatrix(
         glMatrix.as_mut_ptr(),
         (*viewParms).world.modelMatrix.as_ptr(),
@@ -1140,43 +1140,43 @@ pub unsafe extern "C" fn R_RotateForEntity(
     );
     // calculate the viewer origin in the model's space
     // needed for fog, specular, and environment mapping
-    delta[0 as libc::c_int as usize] =
-        (*viewParms).or.origin[0 as libc::c_int as usize] - (*or).origin[0 as libc::c_int as usize];
-    delta[1 as libc::c_int as usize] =
-        (*viewParms).or.origin[1 as libc::c_int as usize] - (*or).origin[1 as libc::c_int as usize];
-    delta[2 as libc::c_int as usize] =
-        (*viewParms).or.origin[2 as libc::c_int as usize] - (*or).origin[2 as libc::c_int as usize];
+    delta[0 as i32 as usize] =
+        (*viewParms).or.origin[0 as i32 as usize] - (*or).origin[0 as i32 as usize];
+    delta[1 as i32 as usize] =
+        (*viewParms).or.origin[1 as i32 as usize] - (*or).origin[1 as i32 as usize];
+    delta[2 as i32 as usize] =
+        (*viewParms).or.origin[2 as i32 as usize] - (*or).origin[2 as i32 as usize];
     // compensate for scale in the axes if necessary
     if (*ent).e.nonNormalizedAxes as u64 != 0 {
-        axisLength = VectorLength((*ent).e.axis[0 as libc::c_int as usize].as_ptr());
+        axisLength = VectorLength((*ent).e.axis[0 as i32 as usize].as_ptr());
         if axisLength == 0. {
-            axisLength = 0 as libc::c_int as libc::c_float
+            axisLength = 0 as i32 as f32
         } else {
             axisLength = 1.0f32 / axisLength
         }
     } else {
         axisLength = 1.0f32
     }
-    (*or).viewOrigin[0 as libc::c_int as usize] = (delta[0 as libc::c_int as usize]
-        * (*or).axis[0 as libc::c_int as usize][0 as libc::c_int as usize]
-        + delta[1 as libc::c_int as usize]
-            * (*or).axis[0 as libc::c_int as usize][1 as libc::c_int as usize]
-        + delta[2 as libc::c_int as usize]
-            * (*or).axis[0 as libc::c_int as usize][2 as libc::c_int as usize])
+    (*or).viewOrigin[0 as i32 as usize] = (delta[0 as i32 as usize]
+        * (*or).axis[0 as i32 as usize][0 as i32 as usize]
+        + delta[1 as i32 as usize]
+            * (*or).axis[0 as i32 as usize][1 as i32 as usize]
+        + delta[2 as i32 as usize]
+            * (*or).axis[0 as i32 as usize][2 as i32 as usize])
         * axisLength;
-    (*or).viewOrigin[1 as libc::c_int as usize] = (delta[0 as libc::c_int as usize]
-        * (*or).axis[1 as libc::c_int as usize][0 as libc::c_int as usize]
-        + delta[1 as libc::c_int as usize]
-            * (*or).axis[1 as libc::c_int as usize][1 as libc::c_int as usize]
-        + delta[2 as libc::c_int as usize]
-            * (*or).axis[1 as libc::c_int as usize][2 as libc::c_int as usize])
+    (*or).viewOrigin[1 as i32 as usize] = (delta[0 as i32 as usize]
+        * (*or).axis[1 as i32 as usize][0 as i32 as usize]
+        + delta[1 as i32 as usize]
+            * (*or).axis[1 as i32 as usize][1 as i32 as usize]
+        + delta[2 as i32 as usize]
+            * (*or).axis[1 as i32 as usize][2 as i32 as usize])
         * axisLength;
-    (*or).viewOrigin[2 as libc::c_int as usize] = (delta[0 as libc::c_int as usize]
-        * (*or).axis[2 as libc::c_int as usize][0 as libc::c_int as usize]
-        + delta[1 as libc::c_int as usize]
-            * (*or).axis[2 as libc::c_int as usize][1 as libc::c_int as usize]
-        + delta[2 as libc::c_int as usize]
-            * (*or).axis[2 as libc::c_int as usize][2 as libc::c_int as usize])
+    (*or).viewOrigin[2 as i32 as usize] = (delta[0 as i32 as usize]
+        * (*or).axis[2 as i32 as usize][0 as i32 as usize]
+        + delta[1 as i32 as usize]
+            * (*or).axis[2 as i32 as usize][1 as i32 as usize]
+        + delta[2 as i32 as usize]
+            * (*or).axis[2 as i32 as usize][2 as i32 as usize])
         * axisLength;
 }
 /*
@@ -1189,60 +1189,60 @@ Sets up the modelview matrix for a given viewParm
 #[no_mangle]
 
 pub unsafe extern "C" fn R_RotateForViewer() {
-    let mut viewerMatrix: [libc::c_float; 16] = [0.; 16];
+    let mut viewerMatrix: [f32; 16] = [0.; 16];
     let mut origin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     crate::stdlib::memset(
         &mut tr.or as *mut crate::tr_local_h::orientationr_t as *mut libc::c_void,
-        0 as libc::c_int,
+        0 as i32,
         ::std::mem::size_of::<crate::tr_local_h::orientationr_t>() as libc::c_ulong,
     );
-    tr.or.axis[0 as libc::c_int as usize][0 as libc::c_int as usize] =
-        1 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-    tr.or.axis[1 as libc::c_int as usize][1 as libc::c_int as usize] =
-        1 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-    tr.or.axis[2 as libc::c_int as usize][2 as libc::c_int as usize] =
-        1 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-    tr.or.viewOrigin[0 as libc::c_int as usize] = tr.viewParms.or.origin[0 as libc::c_int as usize];
-    tr.or.viewOrigin[1 as libc::c_int as usize] = tr.viewParms.or.origin[1 as libc::c_int as usize];
-    tr.or.viewOrigin[2 as libc::c_int as usize] = tr.viewParms.or.origin[2 as libc::c_int as usize];
+    tr.or.axis[0 as i32 as usize][0 as i32 as usize] =
+        1 as i32 as crate::src::qcommon::q_shared::vec_t;
+    tr.or.axis[1 as i32 as usize][1 as i32 as usize] =
+        1 as i32 as crate::src::qcommon::q_shared::vec_t;
+    tr.or.axis[2 as i32 as usize][2 as i32 as usize] =
+        1 as i32 as crate::src::qcommon::q_shared::vec_t;
+    tr.or.viewOrigin[0 as i32 as usize] = tr.viewParms.or.origin[0 as i32 as usize];
+    tr.or.viewOrigin[1 as i32 as usize] = tr.viewParms.or.origin[1 as i32 as usize];
+    tr.or.viewOrigin[2 as i32 as usize] = tr.viewParms.or.origin[2 as i32 as usize];
     // transform by the camera placement
-    origin[0 as libc::c_int as usize] = tr.viewParms.or.origin[0 as libc::c_int as usize];
-    origin[1 as libc::c_int as usize] = tr.viewParms.or.origin[1 as libc::c_int as usize];
-    origin[2 as libc::c_int as usize] = tr.viewParms.or.origin[2 as libc::c_int as usize];
-    viewerMatrix[0 as libc::c_int as usize] =
-        tr.viewParms.or.axis[0 as libc::c_int as usize][0 as libc::c_int as usize];
-    viewerMatrix[4 as libc::c_int as usize] =
-        tr.viewParms.or.axis[0 as libc::c_int as usize][1 as libc::c_int as usize];
-    viewerMatrix[8 as libc::c_int as usize] =
-        tr.viewParms.or.axis[0 as libc::c_int as usize][2 as libc::c_int as usize];
-    viewerMatrix[12 as libc::c_int as usize] = -origin[0 as libc::c_int as usize]
-        * viewerMatrix[0 as libc::c_int as usize]
-        + -origin[1 as libc::c_int as usize] * viewerMatrix[4 as libc::c_int as usize]
-        + -origin[2 as libc::c_int as usize] * viewerMatrix[8 as libc::c_int as usize];
-    viewerMatrix[1 as libc::c_int as usize] =
-        tr.viewParms.or.axis[1 as libc::c_int as usize][0 as libc::c_int as usize];
-    viewerMatrix[5 as libc::c_int as usize] =
-        tr.viewParms.or.axis[1 as libc::c_int as usize][1 as libc::c_int as usize];
-    viewerMatrix[9 as libc::c_int as usize] =
-        tr.viewParms.or.axis[1 as libc::c_int as usize][2 as libc::c_int as usize];
-    viewerMatrix[13 as libc::c_int as usize] = -origin[0 as libc::c_int as usize]
-        * viewerMatrix[1 as libc::c_int as usize]
-        + -origin[1 as libc::c_int as usize] * viewerMatrix[5 as libc::c_int as usize]
-        + -origin[2 as libc::c_int as usize] * viewerMatrix[9 as libc::c_int as usize];
-    viewerMatrix[2 as libc::c_int as usize] =
-        tr.viewParms.or.axis[2 as libc::c_int as usize][0 as libc::c_int as usize];
-    viewerMatrix[6 as libc::c_int as usize] =
-        tr.viewParms.or.axis[2 as libc::c_int as usize][1 as libc::c_int as usize];
-    viewerMatrix[10 as libc::c_int as usize] =
-        tr.viewParms.or.axis[2 as libc::c_int as usize][2 as libc::c_int as usize];
-    viewerMatrix[14 as libc::c_int as usize] = -origin[0 as libc::c_int as usize]
-        * viewerMatrix[2 as libc::c_int as usize]
-        + -origin[1 as libc::c_int as usize] * viewerMatrix[6 as libc::c_int as usize]
-        + -origin[2 as libc::c_int as usize] * viewerMatrix[10 as libc::c_int as usize];
-    viewerMatrix[3 as libc::c_int as usize] = 0 as libc::c_int as libc::c_float;
-    viewerMatrix[7 as libc::c_int as usize] = 0 as libc::c_int as libc::c_float;
-    viewerMatrix[11 as libc::c_int as usize] = 0 as libc::c_int as libc::c_float;
-    viewerMatrix[15 as libc::c_int as usize] = 1 as libc::c_int as libc::c_float;
+    origin[0 as i32 as usize] = tr.viewParms.or.origin[0 as i32 as usize];
+    origin[1 as i32 as usize] = tr.viewParms.or.origin[1 as i32 as usize];
+    origin[2 as i32 as usize] = tr.viewParms.or.origin[2 as i32 as usize];
+    viewerMatrix[0 as i32 as usize] =
+        tr.viewParms.or.axis[0 as i32 as usize][0 as i32 as usize];
+    viewerMatrix[4 as i32 as usize] =
+        tr.viewParms.or.axis[0 as i32 as usize][1 as i32 as usize];
+    viewerMatrix[8 as i32 as usize] =
+        tr.viewParms.or.axis[0 as i32 as usize][2 as i32 as usize];
+    viewerMatrix[12 as i32 as usize] = -origin[0 as i32 as usize]
+        * viewerMatrix[0 as i32 as usize]
+        + -origin[1 as i32 as usize] * viewerMatrix[4 as i32 as usize]
+        + -origin[2 as i32 as usize] * viewerMatrix[8 as i32 as usize];
+    viewerMatrix[1 as i32 as usize] =
+        tr.viewParms.or.axis[1 as i32 as usize][0 as i32 as usize];
+    viewerMatrix[5 as i32 as usize] =
+        tr.viewParms.or.axis[1 as i32 as usize][1 as i32 as usize];
+    viewerMatrix[9 as i32 as usize] =
+        tr.viewParms.or.axis[1 as i32 as usize][2 as i32 as usize];
+    viewerMatrix[13 as i32 as usize] = -origin[0 as i32 as usize]
+        * viewerMatrix[1 as i32 as usize]
+        + -origin[1 as i32 as usize] * viewerMatrix[5 as i32 as usize]
+        + -origin[2 as i32 as usize] * viewerMatrix[9 as i32 as usize];
+    viewerMatrix[2 as i32 as usize] =
+        tr.viewParms.or.axis[2 as i32 as usize][0 as i32 as usize];
+    viewerMatrix[6 as i32 as usize] =
+        tr.viewParms.or.axis[2 as i32 as usize][1 as i32 as usize];
+    viewerMatrix[10 as i32 as usize] =
+        tr.viewParms.or.axis[2 as i32 as usize][2 as i32 as usize];
+    viewerMatrix[14 as i32 as usize] = -origin[0 as i32 as usize]
+        * viewerMatrix[2 as i32 as usize]
+        + -origin[1 as i32 as usize] * viewerMatrix[6 as i32 as usize]
+        + -origin[2 as i32 as usize] * viewerMatrix[10 as i32 as usize];
+    viewerMatrix[3 as i32 as usize] = 0 as i32 as f32;
+    viewerMatrix[7 as i32 as usize] = 0 as i32 as f32;
+    viewerMatrix[11 as i32 as usize] = 0 as i32 as f32;
+    viewerMatrix[15 as i32 as usize] = 1 as i32 as f32;
     // convert from our coordinate system (looking down X)
     // to OpenGL's coordinate system (looking down -Z)
     myGlMultMatrix(
@@ -1257,60 +1257,60 @@ pub unsafe extern "C" fn R_RotateForViewer() {
 */
 
 unsafe extern "C" fn R_SetFarClip() {
-    let mut farthestCornerDistance: libc::c_float = 0 as libc::c_int as libc::c_float;
-    let mut i: libc::c_int = 0;
+    let mut farthestCornerDistance: f32 = 0 as i32 as f32;
+    let mut i: i32 = 0;
     // if not rendering the world (icons, menus, etc)
     // set a 2k far clip plane
-    if tr.refdef.rdflags & 0x1 as libc::c_int != 0 {
-        tr.viewParms.zFar = 2048 as libc::c_int as libc::c_float;
+    if tr.refdef.rdflags & 0x1 as i32 != 0 {
+        tr.viewParms.zFar = 2048 as i32 as f32;
         return;
     }
     //
     // set far clipping planes dynamically
     //
-    farthestCornerDistance = 0 as libc::c_int as libc::c_float;
-    i = 0 as libc::c_int;
-    while i < 8 as libc::c_int {
+    farthestCornerDistance = 0 as i32 as f32;
+    i = 0 as i32;
+    while i < 8 as i32 {
         let mut v: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
         let mut vecTo: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-        let mut distance: libc::c_float = 0.;
-        if i & 1 as libc::c_int != 0 {
-            v[0 as libc::c_int as usize] =
-                tr.viewParms.visBounds[0 as libc::c_int as usize][0 as libc::c_int as usize]
+        let mut distance: f32 = 0.;
+        if i & 1 as i32 != 0 {
+            v[0 as i32 as usize] =
+                tr.viewParms.visBounds[0 as i32 as usize][0 as i32 as usize]
         } else {
-            v[0 as libc::c_int as usize] =
-                tr.viewParms.visBounds[1 as libc::c_int as usize][0 as libc::c_int as usize]
+            v[0 as i32 as usize] =
+                tr.viewParms.visBounds[1 as i32 as usize][0 as i32 as usize]
         }
-        if i & 2 as libc::c_int != 0 {
-            v[1 as libc::c_int as usize] =
-                tr.viewParms.visBounds[0 as libc::c_int as usize][1 as libc::c_int as usize]
+        if i & 2 as i32 != 0 {
+            v[1 as i32 as usize] =
+                tr.viewParms.visBounds[0 as i32 as usize][1 as i32 as usize]
         } else {
-            v[1 as libc::c_int as usize] =
-                tr.viewParms.visBounds[1 as libc::c_int as usize][1 as libc::c_int as usize]
+            v[1 as i32 as usize] =
+                tr.viewParms.visBounds[1 as i32 as usize][1 as i32 as usize]
         }
-        if i & 4 as libc::c_int != 0 {
-            v[2 as libc::c_int as usize] =
-                tr.viewParms.visBounds[0 as libc::c_int as usize][2 as libc::c_int as usize]
+        if i & 4 as i32 != 0 {
+            v[2 as i32 as usize] =
+                tr.viewParms.visBounds[0 as i32 as usize][2 as i32 as usize]
         } else {
-            v[2 as libc::c_int as usize] =
-                tr.viewParms.visBounds[1 as libc::c_int as usize][2 as libc::c_int as usize]
+            v[2 as i32 as usize] =
+                tr.viewParms.visBounds[1 as i32 as usize][2 as i32 as usize]
         }
-        vecTo[0 as libc::c_int as usize] =
-            v[0 as libc::c_int as usize] - tr.viewParms.or.origin[0 as libc::c_int as usize];
-        vecTo[1 as libc::c_int as usize] =
-            v[1 as libc::c_int as usize] - tr.viewParms.or.origin[1 as libc::c_int as usize];
-        vecTo[2 as libc::c_int as usize] =
-            v[2 as libc::c_int as usize] - tr.viewParms.or.origin[2 as libc::c_int as usize];
-        distance = vecTo[0 as libc::c_int as usize] * vecTo[0 as libc::c_int as usize]
-            + vecTo[1 as libc::c_int as usize] * vecTo[1 as libc::c_int as usize]
-            + vecTo[2 as libc::c_int as usize] * vecTo[2 as libc::c_int as usize];
+        vecTo[0 as i32 as usize] =
+            v[0 as i32 as usize] - tr.viewParms.or.origin[0 as i32 as usize];
+        vecTo[1 as i32 as usize] =
+            v[1 as i32 as usize] - tr.viewParms.or.origin[1 as i32 as usize];
+        vecTo[2 as i32 as usize] =
+            v[2 as i32 as usize] - tr.viewParms.or.origin[2 as i32 as usize];
+        distance = vecTo[0 as i32 as usize] * vecTo[0 as i32 as usize]
+            + vecTo[1 as i32 as usize] * vecTo[1 as i32 as usize]
+            + vecTo[2 as i32 as usize] * vecTo[2 as i32 as usize];
         if distance > farthestCornerDistance {
             farthestCornerDistance = distance
         }
         i += 1
     }
     tr.viewParms.zFar =
-        crate::stdlib::sqrt(farthestCornerDistance as libc::c_double) as libc::c_float;
+        crate::stdlib::sqrt(farthestCornerDistance as f64) as f32;
 }
 /*
 =================
@@ -1324,157 +1324,157 @@ the projection matrix.
 
 pub unsafe extern "C" fn R_SetupFrustum(
     mut dest: *mut crate::tr_local_h::viewParms_t,
-    mut xmin: libc::c_float,
-    mut xmax: libc::c_float,
-    mut ymax: libc::c_float,
-    mut zProj: libc::c_float,
-    mut stereoSep: libc::c_float,
+    mut xmin: f32,
+    mut xmax: f32,
+    mut ymax: f32,
+    mut zProj: f32,
+    mut stereoSep: f32,
 ) {
     let mut ofsorigin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut oppleg: libc::c_float = 0.;
-    let mut adjleg: libc::c_float = 0.;
-    let mut length: libc::c_float = 0.;
-    let mut i: libc::c_int = 0;
-    if stereoSep == 0 as libc::c_int as libc::c_float && xmin == -xmax {
+    let mut oppleg: f32 = 0.;
+    let mut adjleg: f32 = 0.;
+    let mut length: f32 = 0.;
+    let mut i: i32 = 0;
+    if stereoSep == 0 as i32 as f32 && xmin == -xmax {
         // symmetric case can be simplified
-        ofsorigin[0 as libc::c_int as usize] = (*dest).or.origin[0 as libc::c_int as usize];
-        ofsorigin[1 as libc::c_int as usize] = (*dest).or.origin[1 as libc::c_int as usize];
-        ofsorigin[2 as libc::c_int as usize] = (*dest).or.origin[2 as libc::c_int as usize];
+        ofsorigin[0 as i32 as usize] = (*dest).or.origin[0 as i32 as usize];
+        ofsorigin[1 as i32 as usize] = (*dest).or.origin[1 as i32 as usize];
+        ofsorigin[2 as i32 as usize] = (*dest).or.origin[2 as i32 as usize];
         length =
-            crate::stdlib::sqrt((xmax * xmax + zProj * zProj) as libc::c_double) as libc::c_float;
+            crate::stdlib::sqrt((xmax * xmax + zProj * zProj) as f64) as f32;
         oppleg = xmax / length;
         adjleg = zProj / length;
-        (*dest).frustum[0 as libc::c_int as usize].normal[0 as libc::c_int as usize] =
-            (*dest).or.axis[0 as libc::c_int as usize][0 as libc::c_int as usize] * oppleg;
-        (*dest).frustum[0 as libc::c_int as usize].normal[1 as libc::c_int as usize] =
-            (*dest).or.axis[0 as libc::c_int as usize][1 as libc::c_int as usize] * oppleg;
-        (*dest).frustum[0 as libc::c_int as usize].normal[2 as libc::c_int as usize] =
-            (*dest).or.axis[0 as libc::c_int as usize][2 as libc::c_int as usize] * oppleg;
-        (*dest).frustum[0 as libc::c_int as usize].normal[0 as libc::c_int as usize] =
-            (*dest).frustum[0 as libc::c_int as usize].normal[0 as libc::c_int as usize]
-                + (*dest).or.axis[1 as libc::c_int as usize][0 as libc::c_int as usize] * adjleg;
-        (*dest).frustum[0 as libc::c_int as usize].normal[1 as libc::c_int as usize] =
-            (*dest).frustum[0 as libc::c_int as usize].normal[1 as libc::c_int as usize]
-                + (*dest).or.axis[1 as libc::c_int as usize][1 as libc::c_int as usize] * adjleg;
-        (*dest).frustum[0 as libc::c_int as usize].normal[2 as libc::c_int as usize] =
-            (*dest).frustum[0 as libc::c_int as usize].normal[2 as libc::c_int as usize]
-                + (*dest).or.axis[1 as libc::c_int as usize][2 as libc::c_int as usize] * adjleg;
-        (*dest).frustum[1 as libc::c_int as usize].normal[0 as libc::c_int as usize] =
-            (*dest).or.axis[0 as libc::c_int as usize][0 as libc::c_int as usize] * oppleg;
-        (*dest).frustum[1 as libc::c_int as usize].normal[1 as libc::c_int as usize] =
-            (*dest).or.axis[0 as libc::c_int as usize][1 as libc::c_int as usize] * oppleg;
-        (*dest).frustum[1 as libc::c_int as usize].normal[2 as libc::c_int as usize] =
-            (*dest).or.axis[0 as libc::c_int as usize][2 as libc::c_int as usize] * oppleg;
-        (*dest).frustum[1 as libc::c_int as usize].normal[0 as libc::c_int as usize] =
-            (*dest).frustum[1 as libc::c_int as usize].normal[0 as libc::c_int as usize]
-                + (*dest).or.axis[1 as libc::c_int as usize][0 as libc::c_int as usize] * -adjleg;
-        (*dest).frustum[1 as libc::c_int as usize].normal[1 as libc::c_int as usize] =
-            (*dest).frustum[1 as libc::c_int as usize].normal[1 as libc::c_int as usize]
-                + (*dest).or.axis[1 as libc::c_int as usize][1 as libc::c_int as usize] * -adjleg;
-        (*dest).frustum[1 as libc::c_int as usize].normal[2 as libc::c_int as usize] =
-            (*dest).frustum[1 as libc::c_int as usize].normal[2 as libc::c_int as usize]
-                + (*dest).or.axis[1 as libc::c_int as usize][2 as libc::c_int as usize] * -adjleg
+        (*dest).frustum[0 as i32 as usize].normal[0 as i32 as usize] =
+            (*dest).or.axis[0 as i32 as usize][0 as i32 as usize] * oppleg;
+        (*dest).frustum[0 as i32 as usize].normal[1 as i32 as usize] =
+            (*dest).or.axis[0 as i32 as usize][1 as i32 as usize] * oppleg;
+        (*dest).frustum[0 as i32 as usize].normal[2 as i32 as usize] =
+            (*dest).or.axis[0 as i32 as usize][2 as i32 as usize] * oppleg;
+        (*dest).frustum[0 as i32 as usize].normal[0 as i32 as usize] =
+            (*dest).frustum[0 as i32 as usize].normal[0 as i32 as usize]
+                + (*dest).or.axis[1 as i32 as usize][0 as i32 as usize] * adjleg;
+        (*dest).frustum[0 as i32 as usize].normal[1 as i32 as usize] =
+            (*dest).frustum[0 as i32 as usize].normal[1 as i32 as usize]
+                + (*dest).or.axis[1 as i32 as usize][1 as i32 as usize] * adjleg;
+        (*dest).frustum[0 as i32 as usize].normal[2 as i32 as usize] =
+            (*dest).frustum[0 as i32 as usize].normal[2 as i32 as usize]
+                + (*dest).or.axis[1 as i32 as usize][2 as i32 as usize] * adjleg;
+        (*dest).frustum[1 as i32 as usize].normal[0 as i32 as usize] =
+            (*dest).or.axis[0 as i32 as usize][0 as i32 as usize] * oppleg;
+        (*dest).frustum[1 as i32 as usize].normal[1 as i32 as usize] =
+            (*dest).or.axis[0 as i32 as usize][1 as i32 as usize] * oppleg;
+        (*dest).frustum[1 as i32 as usize].normal[2 as i32 as usize] =
+            (*dest).or.axis[0 as i32 as usize][2 as i32 as usize] * oppleg;
+        (*dest).frustum[1 as i32 as usize].normal[0 as i32 as usize] =
+            (*dest).frustum[1 as i32 as usize].normal[0 as i32 as usize]
+                + (*dest).or.axis[1 as i32 as usize][0 as i32 as usize] * -adjleg;
+        (*dest).frustum[1 as i32 as usize].normal[1 as i32 as usize] =
+            (*dest).frustum[1 as i32 as usize].normal[1 as i32 as usize]
+                + (*dest).or.axis[1 as i32 as usize][1 as i32 as usize] * -adjleg;
+        (*dest).frustum[1 as i32 as usize].normal[2 as i32 as usize] =
+            (*dest).frustum[1 as i32 as usize].normal[2 as i32 as usize]
+                + (*dest).or.axis[1 as i32 as usize][2 as i32 as usize] * -adjleg
     } else {
         // In stereo rendering, due to the modification of the projection matrix, dest->or.origin is not the
         // actual origin that we're rendering so offset the tip of the view pyramid.
-        ofsorigin[0 as libc::c_int as usize] = (*dest).or.origin[0 as libc::c_int as usize]
-            + (*dest).or.axis[1 as libc::c_int as usize][0 as libc::c_int as usize] * stereoSep;
-        ofsorigin[1 as libc::c_int as usize] = (*dest).or.origin[1 as libc::c_int as usize]
-            + (*dest).or.axis[1 as libc::c_int as usize][1 as libc::c_int as usize] * stereoSep;
-        ofsorigin[2 as libc::c_int as usize] = (*dest).or.origin[2 as libc::c_int as usize]
-            + (*dest).or.axis[1 as libc::c_int as usize][2 as libc::c_int as usize] * stereoSep;
+        ofsorigin[0 as i32 as usize] = (*dest).or.origin[0 as i32 as usize]
+            + (*dest).or.axis[1 as i32 as usize][0 as i32 as usize] * stereoSep;
+        ofsorigin[1 as i32 as usize] = (*dest).or.origin[1 as i32 as usize]
+            + (*dest).or.axis[1 as i32 as usize][1 as i32 as usize] * stereoSep;
+        ofsorigin[2 as i32 as usize] = (*dest).or.origin[2 as i32 as usize]
+            + (*dest).or.axis[1 as i32 as usize][2 as i32 as usize] * stereoSep;
         oppleg = xmax + stereoSep;
-        length = crate::stdlib::sqrt((oppleg * oppleg + zProj * zProj) as libc::c_double)
-            as libc::c_float;
-        (*dest).frustum[0 as libc::c_int as usize].normal[0 as libc::c_int as usize] =
-            (*dest).or.axis[0 as libc::c_int as usize][0 as libc::c_int as usize]
+        length = crate::stdlib::sqrt((oppleg * oppleg + zProj * zProj) as f64)
+            as f32;
+        (*dest).frustum[0 as i32 as usize].normal[0 as i32 as usize] =
+            (*dest).or.axis[0 as i32 as usize][0 as i32 as usize]
                 * (oppleg / length);
-        (*dest).frustum[0 as libc::c_int as usize].normal[1 as libc::c_int as usize] =
-            (*dest).or.axis[0 as libc::c_int as usize][1 as libc::c_int as usize]
+        (*dest).frustum[0 as i32 as usize].normal[1 as i32 as usize] =
+            (*dest).or.axis[0 as i32 as usize][1 as i32 as usize]
                 * (oppleg / length);
-        (*dest).frustum[0 as libc::c_int as usize].normal[2 as libc::c_int as usize] =
-            (*dest).or.axis[0 as libc::c_int as usize][2 as libc::c_int as usize]
+        (*dest).frustum[0 as i32 as usize].normal[2 as i32 as usize] =
+            (*dest).or.axis[0 as i32 as usize][2 as i32 as usize]
                 * (oppleg / length);
-        (*dest).frustum[0 as libc::c_int as usize].normal[0 as libc::c_int as usize] =
-            (*dest).frustum[0 as libc::c_int as usize].normal[0 as libc::c_int as usize]
-                + (*dest).or.axis[1 as libc::c_int as usize][0 as libc::c_int as usize]
+        (*dest).frustum[0 as i32 as usize].normal[0 as i32 as usize] =
+            (*dest).frustum[0 as i32 as usize].normal[0 as i32 as usize]
+                + (*dest).or.axis[1 as i32 as usize][0 as i32 as usize]
                     * (zProj / length);
-        (*dest).frustum[0 as libc::c_int as usize].normal[1 as libc::c_int as usize] =
-            (*dest).frustum[0 as libc::c_int as usize].normal[1 as libc::c_int as usize]
-                + (*dest).or.axis[1 as libc::c_int as usize][1 as libc::c_int as usize]
+        (*dest).frustum[0 as i32 as usize].normal[1 as i32 as usize] =
+            (*dest).frustum[0 as i32 as usize].normal[1 as i32 as usize]
+                + (*dest).or.axis[1 as i32 as usize][1 as i32 as usize]
                     * (zProj / length);
-        (*dest).frustum[0 as libc::c_int as usize].normal[2 as libc::c_int as usize] =
-            (*dest).frustum[0 as libc::c_int as usize].normal[2 as libc::c_int as usize]
-                + (*dest).or.axis[1 as libc::c_int as usize][2 as libc::c_int as usize]
+        (*dest).frustum[0 as i32 as usize].normal[2 as i32 as usize] =
+            (*dest).frustum[0 as i32 as usize].normal[2 as i32 as usize]
+                + (*dest).or.axis[1 as i32 as usize][2 as i32 as usize]
                     * (zProj / length);
         oppleg = xmin + stereoSep;
-        length = crate::stdlib::sqrt((oppleg * oppleg + zProj * zProj) as libc::c_double)
-            as libc::c_float;
-        (*dest).frustum[1 as libc::c_int as usize].normal[0 as libc::c_int as usize] =
-            (*dest).or.axis[0 as libc::c_int as usize][0 as libc::c_int as usize]
+        length = crate::stdlib::sqrt((oppleg * oppleg + zProj * zProj) as f64)
+            as f32;
+        (*dest).frustum[1 as i32 as usize].normal[0 as i32 as usize] =
+            (*dest).or.axis[0 as i32 as usize][0 as i32 as usize]
                 * (-oppleg / length);
-        (*dest).frustum[1 as libc::c_int as usize].normal[1 as libc::c_int as usize] =
-            (*dest).or.axis[0 as libc::c_int as usize][1 as libc::c_int as usize]
+        (*dest).frustum[1 as i32 as usize].normal[1 as i32 as usize] =
+            (*dest).or.axis[0 as i32 as usize][1 as i32 as usize]
                 * (-oppleg / length);
-        (*dest).frustum[1 as libc::c_int as usize].normal[2 as libc::c_int as usize] =
-            (*dest).or.axis[0 as libc::c_int as usize][2 as libc::c_int as usize]
+        (*dest).frustum[1 as i32 as usize].normal[2 as i32 as usize] =
+            (*dest).or.axis[0 as i32 as usize][2 as i32 as usize]
                 * (-oppleg / length);
-        (*dest).frustum[1 as libc::c_int as usize].normal[0 as libc::c_int as usize] =
-            (*dest).frustum[1 as libc::c_int as usize].normal[0 as libc::c_int as usize]
-                + (*dest).or.axis[1 as libc::c_int as usize][0 as libc::c_int as usize]
+        (*dest).frustum[1 as i32 as usize].normal[0 as i32 as usize] =
+            (*dest).frustum[1 as i32 as usize].normal[0 as i32 as usize]
+                + (*dest).or.axis[1 as i32 as usize][0 as i32 as usize]
                     * (-zProj / length);
-        (*dest).frustum[1 as libc::c_int as usize].normal[1 as libc::c_int as usize] =
-            (*dest).frustum[1 as libc::c_int as usize].normal[1 as libc::c_int as usize]
-                + (*dest).or.axis[1 as libc::c_int as usize][1 as libc::c_int as usize]
+        (*dest).frustum[1 as i32 as usize].normal[1 as i32 as usize] =
+            (*dest).frustum[1 as i32 as usize].normal[1 as i32 as usize]
+                + (*dest).or.axis[1 as i32 as usize][1 as i32 as usize]
                     * (-zProj / length);
-        (*dest).frustum[1 as libc::c_int as usize].normal[2 as libc::c_int as usize] =
-            (*dest).frustum[1 as libc::c_int as usize].normal[2 as libc::c_int as usize]
-                + (*dest).or.axis[1 as libc::c_int as usize][2 as libc::c_int as usize]
+        (*dest).frustum[1 as i32 as usize].normal[2 as i32 as usize] =
+            (*dest).frustum[1 as i32 as usize].normal[2 as i32 as usize]
+                + (*dest).or.axis[1 as i32 as usize][2 as i32 as usize]
                     * (-zProj / length)
     }
-    length = crate::stdlib::sqrt((ymax * ymax + zProj * zProj) as libc::c_double) as libc::c_float;
+    length = crate::stdlib::sqrt((ymax * ymax + zProj * zProj) as f64) as f32;
     oppleg = ymax / length;
     adjleg = zProj / length;
-    (*dest).frustum[2 as libc::c_int as usize].normal[0 as libc::c_int as usize] =
-        (*dest).or.axis[0 as libc::c_int as usize][0 as libc::c_int as usize] * oppleg;
-    (*dest).frustum[2 as libc::c_int as usize].normal[1 as libc::c_int as usize] =
-        (*dest).or.axis[0 as libc::c_int as usize][1 as libc::c_int as usize] * oppleg;
-    (*dest).frustum[2 as libc::c_int as usize].normal[2 as libc::c_int as usize] =
-        (*dest).or.axis[0 as libc::c_int as usize][2 as libc::c_int as usize] * oppleg;
-    (*dest).frustum[2 as libc::c_int as usize].normal[0 as libc::c_int as usize] =
-        (*dest).frustum[2 as libc::c_int as usize].normal[0 as libc::c_int as usize]
-            + (*dest).or.axis[2 as libc::c_int as usize][0 as libc::c_int as usize] * adjleg;
-    (*dest).frustum[2 as libc::c_int as usize].normal[1 as libc::c_int as usize] =
-        (*dest).frustum[2 as libc::c_int as usize].normal[1 as libc::c_int as usize]
-            + (*dest).or.axis[2 as libc::c_int as usize][1 as libc::c_int as usize] * adjleg;
-    (*dest).frustum[2 as libc::c_int as usize].normal[2 as libc::c_int as usize] =
-        (*dest).frustum[2 as libc::c_int as usize].normal[2 as libc::c_int as usize]
-            + (*dest).or.axis[2 as libc::c_int as usize][2 as libc::c_int as usize] * adjleg;
-    (*dest).frustum[3 as libc::c_int as usize].normal[0 as libc::c_int as usize] =
-        (*dest).or.axis[0 as libc::c_int as usize][0 as libc::c_int as usize] * oppleg;
-    (*dest).frustum[3 as libc::c_int as usize].normal[1 as libc::c_int as usize] =
-        (*dest).or.axis[0 as libc::c_int as usize][1 as libc::c_int as usize] * oppleg;
-    (*dest).frustum[3 as libc::c_int as usize].normal[2 as libc::c_int as usize] =
-        (*dest).or.axis[0 as libc::c_int as usize][2 as libc::c_int as usize] * oppleg;
-    (*dest).frustum[3 as libc::c_int as usize].normal[0 as libc::c_int as usize] =
-        (*dest).frustum[3 as libc::c_int as usize].normal[0 as libc::c_int as usize]
-            + (*dest).or.axis[2 as libc::c_int as usize][0 as libc::c_int as usize] * -adjleg;
-    (*dest).frustum[3 as libc::c_int as usize].normal[1 as libc::c_int as usize] =
-        (*dest).frustum[3 as libc::c_int as usize].normal[1 as libc::c_int as usize]
-            + (*dest).or.axis[2 as libc::c_int as usize][1 as libc::c_int as usize] * -adjleg;
-    (*dest).frustum[3 as libc::c_int as usize].normal[2 as libc::c_int as usize] =
-        (*dest).frustum[3 as libc::c_int as usize].normal[2 as libc::c_int as usize]
-            + (*dest).or.axis[2 as libc::c_int as usize][2 as libc::c_int as usize] * -adjleg;
-    i = 0 as libc::c_int;
-    while i < 4 as libc::c_int {
+    (*dest).frustum[2 as i32 as usize].normal[0 as i32 as usize] =
+        (*dest).or.axis[0 as i32 as usize][0 as i32 as usize] * oppleg;
+    (*dest).frustum[2 as i32 as usize].normal[1 as i32 as usize] =
+        (*dest).or.axis[0 as i32 as usize][1 as i32 as usize] * oppleg;
+    (*dest).frustum[2 as i32 as usize].normal[2 as i32 as usize] =
+        (*dest).or.axis[0 as i32 as usize][2 as i32 as usize] * oppleg;
+    (*dest).frustum[2 as i32 as usize].normal[0 as i32 as usize] =
+        (*dest).frustum[2 as i32 as usize].normal[0 as i32 as usize]
+            + (*dest).or.axis[2 as i32 as usize][0 as i32 as usize] * adjleg;
+    (*dest).frustum[2 as i32 as usize].normal[1 as i32 as usize] =
+        (*dest).frustum[2 as i32 as usize].normal[1 as i32 as usize]
+            + (*dest).or.axis[2 as i32 as usize][1 as i32 as usize] * adjleg;
+    (*dest).frustum[2 as i32 as usize].normal[2 as i32 as usize] =
+        (*dest).frustum[2 as i32 as usize].normal[2 as i32 as usize]
+            + (*dest).or.axis[2 as i32 as usize][2 as i32 as usize] * adjleg;
+    (*dest).frustum[3 as i32 as usize].normal[0 as i32 as usize] =
+        (*dest).or.axis[0 as i32 as usize][0 as i32 as usize] * oppleg;
+    (*dest).frustum[3 as i32 as usize].normal[1 as i32 as usize] =
+        (*dest).or.axis[0 as i32 as usize][1 as i32 as usize] * oppleg;
+    (*dest).frustum[3 as i32 as usize].normal[2 as i32 as usize] =
+        (*dest).or.axis[0 as i32 as usize][2 as i32 as usize] * oppleg;
+    (*dest).frustum[3 as i32 as usize].normal[0 as i32 as usize] =
+        (*dest).frustum[3 as i32 as usize].normal[0 as i32 as usize]
+            + (*dest).or.axis[2 as i32 as usize][0 as i32 as usize] * -adjleg;
+    (*dest).frustum[3 as i32 as usize].normal[1 as i32 as usize] =
+        (*dest).frustum[3 as i32 as usize].normal[1 as i32 as usize]
+            + (*dest).or.axis[2 as i32 as usize][1 as i32 as usize] * -adjleg;
+    (*dest).frustum[3 as i32 as usize].normal[2 as i32 as usize] =
+        (*dest).frustum[3 as i32 as usize].normal[2 as i32 as usize]
+            + (*dest).or.axis[2 as i32 as usize][2 as i32 as usize] * -adjleg;
+    i = 0 as i32;
+    while i < 4 as i32 {
         (*dest).frustum[i as usize].type_0 =
-            3 as libc::c_int as crate::src::qcommon::q_shared::byte;
-        (*dest).frustum[i as usize].dist = ofsorigin[0 as libc::c_int as usize]
-            * (*dest).frustum[i as usize].normal[0 as libc::c_int as usize]
-            + ofsorigin[1 as libc::c_int as usize]
-                * (*dest).frustum[i as usize].normal[1 as libc::c_int as usize]
-            + ofsorigin[2 as libc::c_int as usize]
-                * (*dest).frustum[i as usize].normal[2 as libc::c_int as usize];
+            3 as i32 as crate::src::qcommon::q_shared::byte;
+        (*dest).frustum[i as usize].dist = ofsorigin[0 as i32 as usize]
+            * (*dest).frustum[i as usize].normal[0 as i32 as usize]
+            + ofsorigin[1 as i32 as usize]
+                * (*dest).frustum[i as usize].normal[1 as i32 as usize]
+            + ofsorigin[2 as i32 as usize]
+                * (*dest).frustum[i as usize].normal[2 as i32 as usize];
         crate::src::qcommon::q_math::SetPlaneSignbits(
             &mut *(*dest).frustum.as_mut_ptr().offset(i as isize) as *mut _
                 as *mut crate::src::qcommon::q_shared::cplane_s,
@@ -1494,62 +1494,62 @@ R_SetupProjection
 
 pub unsafe extern "C" fn R_SetupProjection(
     mut dest: *mut crate::tr_local_h::viewParms_t,
-    mut zProj: libc::c_float,
+    mut zProj: f32,
     mut computeFrustum: crate::src::qcommon::q_shared::qboolean,
 ) {
-    let mut xmin: libc::c_float = 0.;
-    let mut xmax: libc::c_float = 0.;
-    let mut ymin: libc::c_float = 0.;
-    let mut ymax: libc::c_float = 0.;
-    let mut width: libc::c_float = 0.;
-    let mut height: libc::c_float = 0.;
-    let mut stereoSep: libc::c_float =
+    let mut xmin: f32 = 0.;
+    let mut xmax: f32 = 0.;
+    let mut ymin: f32 = 0.;
+    let mut ymax: f32 = 0.;
+    let mut width: f32 = 0.;
+    let mut height: f32 = 0.;
+    let mut stereoSep: f32 =
         (*crate::src::renderergl1::tr_init::r_stereoSeparation).value;
     /*
      * offset the view origin of the viewer for stereo rendering
      * by setting the projection matrix appropriately.
      */
-    if stereoSep != 0 as libc::c_int as libc::c_float {
-        if (*dest).stereoFrame as libc::c_uint
-            == crate::tr_types_h::STEREO_LEFT as libc::c_int as libc::c_uint
+    if stereoSep != 0 as i32 as f32 {
+        if (*dest).stereoFrame as u32
+            == crate::tr_types_h::STEREO_LEFT as i32 as u32
         {
             stereoSep = zProj / stereoSep
-        } else if (*dest).stereoFrame as libc::c_uint
-            == crate::tr_types_h::STEREO_RIGHT as libc::c_int as libc::c_uint
+        } else if (*dest).stereoFrame as u32
+            == crate::tr_types_h::STEREO_RIGHT as i32 as u32
         {
             stereoSep = zProj / -stereoSep
         } else {
-            stereoSep = 0 as libc::c_int as libc::c_float
+            stereoSep = 0 as i32 as f32
         }
     } // normally 0
-    ymax = (zProj as libc::c_double
+    ymax = (zProj as f64
         * crate::stdlib::tan(
-            (*dest).fovY as libc::c_double * 3.14159265358979323846f64 / 360.0f32 as libc::c_double,
-        )) as libc::c_float;
+            (*dest).fovY as f64 * 3.14159265358979323846f64 / 360.0f32 as f64,
+        )) as f32;
     ymin = -ymax;
-    xmax = (zProj as libc::c_double
+    xmax = (zProj as f64
         * crate::stdlib::tan(
-            (*dest).fovX as libc::c_double * 3.14159265358979323846f64 / 360.0f32 as libc::c_double,
-        )) as libc::c_float;
+            (*dest).fovX as f64 * 3.14159265358979323846f64 / 360.0f32 as f64,
+        )) as f32;
     xmin = -xmax;
     width = xmax - xmin;
     height = ymax - ymin;
-    (*dest).projectionMatrix[0 as libc::c_int as usize] =
-        2 as libc::c_int as libc::c_float * zProj / width;
-    (*dest).projectionMatrix[4 as libc::c_int as usize] = 0 as libc::c_int as libc::c_float;
-    (*dest).projectionMatrix[8 as libc::c_int as usize] =
-        (xmax + xmin + 2 as libc::c_int as libc::c_float * stereoSep) / width;
-    (*dest).projectionMatrix[12 as libc::c_int as usize] =
-        2 as libc::c_int as libc::c_float * zProj * stereoSep / width;
-    (*dest).projectionMatrix[1 as libc::c_int as usize] = 0 as libc::c_int as libc::c_float;
-    (*dest).projectionMatrix[5 as libc::c_int as usize] =
-        2 as libc::c_int as libc::c_float * zProj / height;
-    (*dest).projectionMatrix[9 as libc::c_int as usize] = (ymax + ymin) / height;
-    (*dest).projectionMatrix[13 as libc::c_int as usize] = 0 as libc::c_int as libc::c_float;
-    (*dest).projectionMatrix[3 as libc::c_int as usize] = 0 as libc::c_int as libc::c_float;
-    (*dest).projectionMatrix[7 as libc::c_int as usize] = 0 as libc::c_int as libc::c_float;
-    (*dest).projectionMatrix[11 as libc::c_int as usize] = -(1 as libc::c_int) as libc::c_float;
-    (*dest).projectionMatrix[15 as libc::c_int as usize] = 0 as libc::c_int as libc::c_float;
+    (*dest).projectionMatrix[0 as i32 as usize] =
+        2 as i32 as f32 * zProj / width;
+    (*dest).projectionMatrix[4 as i32 as usize] = 0 as i32 as f32;
+    (*dest).projectionMatrix[8 as i32 as usize] =
+        (xmax + xmin + 2 as i32 as f32 * stereoSep) / width;
+    (*dest).projectionMatrix[12 as i32 as usize] =
+        2 as i32 as f32 * zProj * stereoSep / width;
+    (*dest).projectionMatrix[1 as i32 as usize] = 0 as i32 as f32;
+    (*dest).projectionMatrix[5 as i32 as usize] =
+        2 as i32 as f32 * zProj / height;
+    (*dest).projectionMatrix[9 as i32 as usize] = (ymax + ymin) / height;
+    (*dest).projectionMatrix[13 as i32 as usize] = 0 as i32 as f32;
+    (*dest).projectionMatrix[3 as i32 as usize] = 0 as i32 as f32;
+    (*dest).projectionMatrix[7 as i32 as usize] = 0 as i32 as f32;
+    (*dest).projectionMatrix[11 as i32 as usize] = -(1 as i32) as f32;
+    (*dest).projectionMatrix[15 as i32 as usize] = 0 as i32 as f32;
     // Now that we have all the data for the projection matrix we can also setup the view frustum.
     if computeFrustum as u64 != 0 {
         R_SetupFrustum(dest, xmin, xmax, ymax, zProj, stereoSep);
@@ -1565,17 +1565,17 @@ Sets the z-component transformation part in the projection matrix
 #[no_mangle]
 
 pub unsafe extern "C" fn R_SetupProjectionZ(mut dest: *mut crate::tr_local_h::viewParms_t) {
-    let mut zNear: libc::c_float = 0.;
-    let mut zFar: libc::c_float = 0.;
-    let mut depth: libc::c_float = 0.;
+    let mut zNear: f32 = 0.;
+    let mut zFar: f32 = 0.;
+    let mut depth: f32 = 0.;
     zNear = (*crate::src::renderergl1::tr_init::r_znear).value;
     zFar = (*dest).zFar;
     depth = zFar - zNear;
-    (*dest).projectionMatrix[2 as libc::c_int as usize] = 0 as libc::c_int as libc::c_float;
-    (*dest).projectionMatrix[6 as libc::c_int as usize] = 0 as libc::c_int as libc::c_float;
-    (*dest).projectionMatrix[10 as libc::c_int as usize] = -(zFar + zNear) / depth;
-    (*dest).projectionMatrix[14 as libc::c_int as usize] =
-        -(2 as libc::c_int) as libc::c_float * zFar * zNear / depth;
+    (*dest).projectionMatrix[2 as i32 as usize] = 0 as i32 as f32;
+    (*dest).projectionMatrix[6 as i32 as usize] = 0 as i32 as f32;
+    (*dest).projectionMatrix[10 as i32 as usize] = -(zFar + zNear) / depth;
+    (*dest).projectionMatrix[14 as i32 as usize] =
+        -(2 as i32) as f32 * zFar * zNear / depth;
 }
 /*
 =================
@@ -1590,42 +1590,42 @@ pub unsafe extern "C" fn R_MirrorPoint(
     mut camera: *mut crate::src::qcommon::q_shared::orientation_t,
     mut out: *mut crate::src::qcommon::q_shared::vec_t,
 ) {
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     let mut local: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut transformed: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut d: libc::c_float = 0.;
-    local[0 as libc::c_int as usize] =
-        *in_0.offset(0 as libc::c_int as isize) - (*surface).origin[0 as libc::c_int as usize];
-    local[1 as libc::c_int as usize] =
-        *in_0.offset(1 as libc::c_int as isize) - (*surface).origin[1 as libc::c_int as usize];
-    local[2 as libc::c_int as usize] =
-        *in_0.offset(2 as libc::c_int as isize) - (*surface).origin[2 as libc::c_int as usize];
-    transformed[2 as libc::c_int as usize] =
-        0 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-    transformed[1 as libc::c_int as usize] = transformed[2 as libc::c_int as usize];
-    transformed[0 as libc::c_int as usize] = transformed[1 as libc::c_int as usize];
-    i = 0 as libc::c_int;
-    while i < 3 as libc::c_int {
-        d = local[0 as libc::c_int as usize]
-            * (*surface).axis[i as usize][0 as libc::c_int as usize]
-            + local[1 as libc::c_int as usize]
-                * (*surface).axis[i as usize][1 as libc::c_int as usize]
-            + local[2 as libc::c_int as usize]
-                * (*surface).axis[i as usize][2 as libc::c_int as usize];
-        transformed[0 as libc::c_int as usize] = transformed[0 as libc::c_int as usize]
-            + (*camera).axis[i as usize][0 as libc::c_int as usize] * d;
-        transformed[1 as libc::c_int as usize] = transformed[1 as libc::c_int as usize]
-            + (*camera).axis[i as usize][1 as libc::c_int as usize] * d;
-        transformed[2 as libc::c_int as usize] = transformed[2 as libc::c_int as usize]
-            + (*camera).axis[i as usize][2 as libc::c_int as usize] * d;
+    let mut d: f32 = 0.;
+    local[0 as i32 as usize] =
+        *in_0.offset(0 as i32 as isize) - (*surface).origin[0 as i32 as usize];
+    local[1 as i32 as usize] =
+        *in_0.offset(1 as i32 as isize) - (*surface).origin[1 as i32 as usize];
+    local[2 as i32 as usize] =
+        *in_0.offset(2 as i32 as isize) - (*surface).origin[2 as i32 as usize];
+    transformed[2 as i32 as usize] =
+        0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    transformed[1 as i32 as usize] = transformed[2 as i32 as usize];
+    transformed[0 as i32 as usize] = transformed[1 as i32 as usize];
+    i = 0 as i32;
+    while i < 3 as i32 {
+        d = local[0 as i32 as usize]
+            * (*surface).axis[i as usize][0 as i32 as usize]
+            + local[1 as i32 as usize]
+                * (*surface).axis[i as usize][1 as i32 as usize]
+            + local[2 as i32 as usize]
+                * (*surface).axis[i as usize][2 as i32 as usize];
+        transformed[0 as i32 as usize] = transformed[0 as i32 as usize]
+            + (*camera).axis[i as usize][0 as i32 as usize] * d;
+        transformed[1 as i32 as usize] = transformed[1 as i32 as usize]
+            + (*camera).axis[i as usize][1 as i32 as usize] * d;
+        transformed[2 as i32 as usize] = transformed[2 as i32 as usize]
+            + (*camera).axis[i as usize][2 as i32 as usize] * d;
         i += 1
     }
-    *out.offset(0 as libc::c_int as isize) =
-        transformed[0 as libc::c_int as usize] + (*camera).origin[0 as libc::c_int as usize];
-    *out.offset(1 as libc::c_int as isize) =
-        transformed[1 as libc::c_int as usize] + (*camera).origin[1 as libc::c_int as usize];
-    *out.offset(2 as libc::c_int as isize) =
-        transformed[2 as libc::c_int as usize] + (*camera).origin[2 as libc::c_int as usize];
+    *out.offset(0 as i32 as isize) =
+        transformed[0 as i32 as usize] + (*camera).origin[0 as i32 as usize];
+    *out.offset(1 as i32 as isize) =
+        transformed[1 as i32 as usize] + (*camera).origin[1 as i32 as usize];
+    *out.offset(2 as i32 as isize) =
+        transformed[2 as i32 as usize] + (*camera).origin[2 as i32 as usize];
 }
 #[no_mangle]
 
@@ -1635,27 +1635,27 @@ pub unsafe extern "C" fn R_MirrorVector(
     mut camera: *mut crate::src::qcommon::q_shared::orientation_t,
     mut out: *mut crate::src::qcommon::q_shared::vec_t,
 ) {
-    let mut i: libc::c_int = 0;
-    let mut d: libc::c_float = 0.;
-    let ref mut fresh0 = *out.offset(2 as libc::c_int as isize);
-    *fresh0 = 0 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-    let ref mut fresh1 = *out.offset(1 as libc::c_int as isize);
+    let mut i: i32 = 0;
+    let mut d: f32 = 0.;
+    let ref mut fresh0 = *out.offset(2 as i32 as isize);
+    *fresh0 = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    let ref mut fresh1 = *out.offset(1 as i32 as isize);
     *fresh1 = *fresh0;
-    *out.offset(0 as libc::c_int as isize) = *fresh1;
-    i = 0 as libc::c_int;
-    while i < 3 as libc::c_int {
-        d = *in_0.offset(0 as libc::c_int as isize)
-            * (*surface).axis[i as usize][0 as libc::c_int as usize]
-            + *in_0.offset(1 as libc::c_int as isize)
-                * (*surface).axis[i as usize][1 as libc::c_int as usize]
-            + *in_0.offset(2 as libc::c_int as isize)
-                * (*surface).axis[i as usize][2 as libc::c_int as usize];
-        *out.offset(0 as libc::c_int as isize) = *out.offset(0 as libc::c_int as isize)
-            + (*camera).axis[i as usize][0 as libc::c_int as usize] * d;
-        *out.offset(1 as libc::c_int as isize) = *out.offset(1 as libc::c_int as isize)
-            + (*camera).axis[i as usize][1 as libc::c_int as usize] * d;
-        *out.offset(2 as libc::c_int as isize) = *out.offset(2 as libc::c_int as isize)
-            + (*camera).axis[i as usize][2 as libc::c_int as usize] * d;
+    *out.offset(0 as i32 as isize) = *fresh1;
+    i = 0 as i32;
+    while i < 3 as i32 {
+        d = *in_0.offset(0 as i32 as isize)
+            * (*surface).axis[i as usize][0 as i32 as usize]
+            + *in_0.offset(1 as i32 as isize)
+                * (*surface).axis[i as usize][1 as i32 as usize]
+            + *in_0.offset(2 as i32 as isize)
+                * (*surface).axis[i as usize][2 as i32 as usize];
+        *out.offset(0 as i32 as isize) = *out.offset(0 as i32 as isize)
+            + (*camera).axis[i as usize][0 as i32 as usize] * d;
+        *out.offset(1 as i32 as isize) = *out.offset(1 as i32 as isize)
+            + (*camera).axis[i as usize][1 as i32 as usize] * d;
+        *out.offset(2 as i32 as isize) = *out.offset(2 as i32 as isize)
+            + (*camera).axis[i as usize][2 as i32 as usize] * d;
         i += 1
     }
 }
@@ -1680,14 +1680,14 @@ pub unsafe extern "C" fn R_PlaneForSurface(
     if surfType.is_null() {
         crate::stdlib::memset(
             plane as *mut libc::c_void,
-            0 as libc::c_int,
+            0 as i32,
             ::std::mem::size_of::<crate::src::qcommon::q_shared::cplane_t>() as libc::c_ulong,
         );
-        (*plane).normal[0 as libc::c_int as usize] =
-            1 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
+        (*plane).normal[0 as i32 as usize] =
+            1 as i32 as crate::src::qcommon::q_shared::vec_t;
         return;
     }
-    match *surfType as libc::c_uint {
+    match *surfType as u32 {
         2 => {
             *plane = (*(surfType as *mut crate::tr_local_h::srfSurfaceFace_t)).plane;
             return;
@@ -1696,53 +1696,53 @@ pub unsafe extern "C" fn R_PlaneForSurface(
             tri = surfType as *mut crate::tr_local_h::srfTriangles_t;
             v1 = (*tri)
                 .verts
-                .offset(*(*tri).indexes.offset(0 as libc::c_int as isize) as isize);
+                .offset(*(*tri).indexes.offset(0 as i32 as isize) as isize);
             v2 = (*tri)
                 .verts
-                .offset(*(*tri).indexes.offset(1 as libc::c_int as isize) as isize);
+                .offset(*(*tri).indexes.offset(1 as i32 as isize) as isize);
             v3 = (*tri)
                 .verts
-                .offset(*(*tri).indexes.offset(2 as libc::c_int as isize) as isize);
+                .offset(*(*tri).indexes.offset(2 as i32 as isize) as isize);
             crate::src::qcommon::q_math::PlaneFromPoints(
                 plane4.as_mut_ptr(),
                 (*v1).xyz.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
                 (*v2).xyz.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
                 (*v3).xyz.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
             );
-            (*plane).normal[0 as libc::c_int as usize] = plane4[0 as libc::c_int as usize];
-            (*plane).normal[1 as libc::c_int as usize] = plane4[1 as libc::c_int as usize];
-            (*plane).normal[2 as libc::c_int as usize] = plane4[2 as libc::c_int as usize];
-            (*plane).dist = plane4[3 as libc::c_int as usize];
+            (*plane).normal[0 as i32 as usize] = plane4[0 as i32 as usize];
+            (*plane).normal[1 as i32 as usize] = plane4[1 as i32 as usize];
+            (*plane).normal[2 as i32 as usize] = plane4[2 as i32 as usize];
+            (*plane).dist = plane4[3 as i32 as usize];
             return;
         }
         5 => {
             poly = surfType as *mut crate::tr_local_h::srfPoly_t;
             crate::src::qcommon::q_math::PlaneFromPoints(
                 plane4.as_mut_ptr(),
-                (*(*poly).verts.offset(0 as libc::c_int as isize))
+                (*(*poly).verts.offset(0 as i32 as isize))
                     .xyz
                     .as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-                (*(*poly).verts.offset(1 as libc::c_int as isize))
+                (*(*poly).verts.offset(1 as i32 as isize))
                     .xyz
                     .as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-                (*(*poly).verts.offset(2 as libc::c_int as isize))
+                (*(*poly).verts.offset(2 as i32 as isize))
                     .xyz
                     .as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
             );
-            (*plane).normal[0 as libc::c_int as usize] = plane4[0 as libc::c_int as usize];
-            (*plane).normal[1 as libc::c_int as usize] = plane4[1 as libc::c_int as usize];
-            (*plane).normal[2 as libc::c_int as usize] = plane4[2 as libc::c_int as usize];
-            (*plane).dist = plane4[3 as libc::c_int as usize];
+            (*plane).normal[0 as i32 as usize] = plane4[0 as i32 as usize];
+            (*plane).normal[1 as i32 as usize] = plane4[1 as i32 as usize];
+            (*plane).normal[2 as i32 as usize] = plane4[2 as i32 as usize];
+            (*plane).dist = plane4[3 as i32 as usize];
             return;
         }
         _ => {
             crate::stdlib::memset(
                 plane as *mut libc::c_void,
-                0 as libc::c_int,
+                0 as i32,
                 ::std::mem::size_of::<crate::src::qcommon::q_shared::cplane_t>() as libc::c_ulong,
             );
-            (*plane).normal[0 as libc::c_int as usize] =
-                1 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
+            (*plane).normal[0 as i32 as usize] =
+                1 as i32 as crate::src::qcommon::q_shared::vec_t;
             return;
         }
     };
@@ -1761,13 +1761,13 @@ Returns qtrue if it should be mirrored
 
 pub unsafe extern "C" fn R_GetPortalOrientations(
     mut drawSurf: *mut crate::tr_local_h::drawSurf_t,
-    mut entityNum: libc::c_int,
+    mut entityNum: i32,
     mut surface: *mut crate::src::qcommon::q_shared::orientation_t,
     mut camera: *mut crate::src::qcommon::q_shared::orientation_t,
     mut pvsOrigin: *mut crate::src::qcommon::q_shared::vec_t,
     mut mirror: *mut crate::src::qcommon::q_shared::qboolean,
 ) -> crate::src::qcommon::q_shared::qboolean {
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     let mut originalPlane: crate::src::qcommon::q_shared::cplane_t =
         crate::src::qcommon::q_shared::cplane_t {
             normal: [0.; 3],
@@ -1785,12 +1785,12 @@ pub unsafe extern "C" fn R_GetPortalOrientations(
             pad: [0; 2],
         };
     let mut e: *mut crate::tr_local_h::trRefEntity_t = 0 as *mut crate::tr_local_h::trRefEntity_t;
-    let mut d: libc::c_float = 0.;
+    let mut d: f32 = 0.;
     let mut transformed: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     // create plane axis for the portal we are seeing
     R_PlaneForSurface((*drawSurf).surface, &mut originalPlane);
     // rotate the plane if necessary
-    if entityNum != ((1 as libc::c_int) << 10 as libc::c_int) - 1 as libc::c_int {
+    if entityNum != ((1 as i32) << 10 as i32) - 1 as i32 {
         tr.currentEntityNum = entityNum;
         tr.currentEntity = &mut *tr.refdef.entities.offset(entityNum as isize)
             as *mut crate::tr_local_h::trRefEntity_t;
@@ -1800,232 +1800,232 @@ pub unsafe extern "C" fn R_GetPortalOrientations(
         // against the portalSurface entities
         R_LocalNormalToWorld(originalPlane.normal.as_mut_ptr(), plane.normal.as_mut_ptr());
         plane.dist = originalPlane.dist
-            + (plane.normal[0 as libc::c_int as usize] * tr.or.origin[0 as libc::c_int as usize]
-                + plane.normal[1 as libc::c_int as usize]
-                    * tr.or.origin[1 as libc::c_int as usize]
-                + plane.normal[2 as libc::c_int as usize]
-                    * tr.or.origin[2 as libc::c_int as usize]);
+            + (plane.normal[0 as i32 as usize] * tr.or.origin[0 as i32 as usize]
+                + plane.normal[1 as i32 as usize]
+                    * tr.or.origin[1 as i32 as usize]
+                + plane.normal[2 as i32 as usize]
+                    * tr.or.origin[2 as i32 as usize]);
         // translate the original plane
         originalPlane.dist = originalPlane.dist
-            + (originalPlane.normal[0 as libc::c_int as usize]
-                * tr.or.origin[0 as libc::c_int as usize]
-                + originalPlane.normal[1 as libc::c_int as usize]
-                    * tr.or.origin[1 as libc::c_int as usize]
-                + originalPlane.normal[2 as libc::c_int as usize]
-                    * tr.or.origin[2 as libc::c_int as usize])
+            + (originalPlane.normal[0 as i32 as usize]
+                * tr.or.origin[0 as i32 as usize]
+                + originalPlane.normal[1 as i32 as usize]
+                    * tr.or.origin[1 as i32 as usize]
+                + originalPlane.normal[2 as i32 as usize]
+                    * tr.or.origin[2 as i32 as usize])
     } else {
         plane = originalPlane
     }
-    (*surface).axis[0 as libc::c_int as usize][0 as libc::c_int as usize] =
-        plane.normal[0 as libc::c_int as usize];
-    (*surface).axis[0 as libc::c_int as usize][1 as libc::c_int as usize] =
-        plane.normal[1 as libc::c_int as usize];
-    (*surface).axis[0 as libc::c_int as usize][2 as libc::c_int as usize] =
-        plane.normal[2 as libc::c_int as usize];
+    (*surface).axis[0 as i32 as usize][0 as i32 as usize] =
+        plane.normal[0 as i32 as usize];
+    (*surface).axis[0 as i32 as usize][1 as i32 as usize] =
+        plane.normal[1 as i32 as usize];
+    (*surface).axis[0 as i32 as usize][2 as i32 as usize] =
+        plane.normal[2 as i32 as usize];
     crate::src::qcommon::q_math::PerpendicularVector(
-        (*surface).axis[1 as libc::c_int as usize].as_mut_ptr(),
-        (*surface).axis[0 as libc::c_int as usize].as_mut_ptr()
+        (*surface).axis[1 as i32 as usize].as_mut_ptr(),
+        (*surface).axis[0 as i32 as usize].as_mut_ptr()
             as *const crate::src::qcommon::q_shared::vec_t,
     );
     CrossProduct(
-        (*surface).axis[0 as libc::c_int as usize].as_mut_ptr()
+        (*surface).axis[0 as i32 as usize].as_mut_ptr()
             as *const crate::src::qcommon::q_shared::vec_t,
-        (*surface).axis[1 as libc::c_int as usize].as_mut_ptr()
+        (*surface).axis[1 as i32 as usize].as_mut_ptr()
             as *const crate::src::qcommon::q_shared::vec_t,
-        (*surface).axis[2 as libc::c_int as usize].as_mut_ptr(),
+        (*surface).axis[2 as i32 as usize].as_mut_ptr(),
     );
     // locate the portal entity closest to this plane.
     // origin will be the origin of the portal, origin2 will be
     // the origin of the camera
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < tr.refdef.num_entities {
         e = &mut *tr.refdef.entities.offset(i as isize) as *mut crate::tr_local_h::trRefEntity_t;
-        if !((*e).e.reType as libc::c_uint
-            != crate::tr_types_h::RT_PORTALSURFACE as libc::c_int as libc::c_uint)
+        if !((*e).e.reType as u32
+            != crate::tr_types_h::RT_PORTALSURFACE as i32 as u32)
         {
-            d = (*e).e.origin[0 as libc::c_int as usize]
-                * originalPlane.normal[0 as libc::c_int as usize]
-                + (*e).e.origin[1 as libc::c_int as usize]
-                    * originalPlane.normal[1 as libc::c_int as usize]
-                + (*e).e.origin[2 as libc::c_int as usize]
-                    * originalPlane.normal[2 as libc::c_int as usize]
+            d = (*e).e.origin[0 as i32 as usize]
+                * originalPlane.normal[0 as i32 as usize]
+                + (*e).e.origin[1 as i32 as usize]
+                    * originalPlane.normal[1 as i32 as usize]
+                + (*e).e.origin[2 as i32 as usize]
+                    * originalPlane.normal[2 as i32 as usize]
                 - originalPlane.dist;
-            if !(d > 64 as libc::c_int as libc::c_float
-                || d < -(64 as libc::c_int) as libc::c_float)
+            if !(d > 64 as i32 as f32
+                || d < -(64 as i32) as f32)
             {
                 // get the pvsOrigin from the entity
-                *pvsOrigin.offset(0 as libc::c_int as isize) =
-                    (*e).e.oldorigin[0 as libc::c_int as usize];
-                *pvsOrigin.offset(1 as libc::c_int as isize) =
-                    (*e).e.oldorigin[1 as libc::c_int as usize];
-                *pvsOrigin.offset(2 as libc::c_int as isize) =
-                    (*e).e.oldorigin[2 as libc::c_int as usize];
+                *pvsOrigin.offset(0 as i32 as isize) =
+                    (*e).e.oldorigin[0 as i32 as usize];
+                *pvsOrigin.offset(1 as i32 as isize) =
+                    (*e).e.oldorigin[1 as i32 as usize];
+                *pvsOrigin.offset(2 as i32 as isize) =
+                    (*e).e.oldorigin[2 as i32 as usize];
                 // if the entity is just a mirror, don't use as a camera point
-                if (*e).e.oldorigin[0 as libc::c_int as usize]
-                    == (*e).e.origin[0 as libc::c_int as usize]
-                    && (*e).e.oldorigin[1 as libc::c_int as usize]
-                        == (*e).e.origin[1 as libc::c_int as usize]
-                    && (*e).e.oldorigin[2 as libc::c_int as usize]
-                        == (*e).e.origin[2 as libc::c_int as usize]
+                if (*e).e.oldorigin[0 as i32 as usize]
+                    == (*e).e.origin[0 as i32 as usize]
+                    && (*e).e.oldorigin[1 as i32 as usize]
+                        == (*e).e.origin[1 as i32 as usize]
+                    && (*e).e.oldorigin[2 as i32 as usize]
+                        == (*e).e.origin[2 as i32 as usize]
                 {
-                    (*surface).origin[0 as libc::c_int as usize] =
-                        plane.normal[0 as libc::c_int as usize] * plane.dist;
-                    (*surface).origin[1 as libc::c_int as usize] =
-                        plane.normal[1 as libc::c_int as usize] * plane.dist;
-                    (*surface).origin[2 as libc::c_int as usize] =
-                        plane.normal[2 as libc::c_int as usize] * plane.dist;
-                    (*camera).origin[0 as libc::c_int as usize] =
-                        (*surface).origin[0 as libc::c_int as usize];
-                    (*camera).origin[1 as libc::c_int as usize] =
-                        (*surface).origin[1 as libc::c_int as usize];
-                    (*camera).origin[2 as libc::c_int as usize] =
-                        (*surface).origin[2 as libc::c_int as usize];
-                    (*camera).axis[0 as libc::c_int as usize][0 as libc::c_int as usize] =
-                        crate::src::qcommon::q_math::vec3_origin[0 as libc::c_int as usize]
-                            - (*surface).axis[0 as libc::c_int as usize][0 as libc::c_int as usize];
-                    (*camera).axis[0 as libc::c_int as usize][1 as libc::c_int as usize] =
-                        crate::src::qcommon::q_math::vec3_origin[1 as libc::c_int as usize]
-                            - (*surface).axis[0 as libc::c_int as usize][1 as libc::c_int as usize];
-                    (*camera).axis[0 as libc::c_int as usize][2 as libc::c_int as usize] =
-                        crate::src::qcommon::q_math::vec3_origin[2 as libc::c_int as usize]
-                            - (*surface).axis[0 as libc::c_int as usize][2 as libc::c_int as usize];
-                    (*camera).axis[1 as libc::c_int as usize][0 as libc::c_int as usize] =
-                        (*surface).axis[1 as libc::c_int as usize][0 as libc::c_int as usize];
-                    (*camera).axis[1 as libc::c_int as usize][1 as libc::c_int as usize] =
-                        (*surface).axis[1 as libc::c_int as usize][1 as libc::c_int as usize];
-                    (*camera).axis[1 as libc::c_int as usize][2 as libc::c_int as usize] =
-                        (*surface).axis[1 as libc::c_int as usize][2 as libc::c_int as usize];
-                    (*camera).axis[2 as libc::c_int as usize][0 as libc::c_int as usize] =
-                        (*surface).axis[2 as libc::c_int as usize][0 as libc::c_int as usize];
-                    (*camera).axis[2 as libc::c_int as usize][1 as libc::c_int as usize] =
-                        (*surface).axis[2 as libc::c_int as usize][1 as libc::c_int as usize];
-                    (*camera).axis[2 as libc::c_int as usize][2 as libc::c_int as usize] =
-                        (*surface).axis[2 as libc::c_int as usize][2 as libc::c_int as usize];
+                    (*surface).origin[0 as i32 as usize] =
+                        plane.normal[0 as i32 as usize] * plane.dist;
+                    (*surface).origin[1 as i32 as usize] =
+                        plane.normal[1 as i32 as usize] * plane.dist;
+                    (*surface).origin[2 as i32 as usize] =
+                        plane.normal[2 as i32 as usize] * plane.dist;
+                    (*camera).origin[0 as i32 as usize] =
+                        (*surface).origin[0 as i32 as usize];
+                    (*camera).origin[1 as i32 as usize] =
+                        (*surface).origin[1 as i32 as usize];
+                    (*camera).origin[2 as i32 as usize] =
+                        (*surface).origin[2 as i32 as usize];
+                    (*camera).axis[0 as i32 as usize][0 as i32 as usize] =
+                        crate::src::qcommon::q_math::vec3_origin[0 as i32 as usize]
+                            - (*surface).axis[0 as i32 as usize][0 as i32 as usize];
+                    (*camera).axis[0 as i32 as usize][1 as i32 as usize] =
+                        crate::src::qcommon::q_math::vec3_origin[1 as i32 as usize]
+                            - (*surface).axis[0 as i32 as usize][1 as i32 as usize];
+                    (*camera).axis[0 as i32 as usize][2 as i32 as usize] =
+                        crate::src::qcommon::q_math::vec3_origin[2 as i32 as usize]
+                            - (*surface).axis[0 as i32 as usize][2 as i32 as usize];
+                    (*camera).axis[1 as i32 as usize][0 as i32 as usize] =
+                        (*surface).axis[1 as i32 as usize][0 as i32 as usize];
+                    (*camera).axis[1 as i32 as usize][1 as i32 as usize] =
+                        (*surface).axis[1 as i32 as usize][1 as i32 as usize];
+                    (*camera).axis[1 as i32 as usize][2 as i32 as usize] =
+                        (*surface).axis[1 as i32 as usize][2 as i32 as usize];
+                    (*camera).axis[2 as i32 as usize][0 as i32 as usize] =
+                        (*surface).axis[2 as i32 as usize][0 as i32 as usize];
+                    (*camera).axis[2 as i32 as usize][1 as i32 as usize] =
+                        (*surface).axis[2 as i32 as usize][1 as i32 as usize];
+                    (*camera).axis[2 as i32 as usize][2 as i32 as usize] =
+                        (*surface).axis[2 as i32 as usize][2 as i32 as usize];
                     *mirror = crate::src::qcommon::q_shared::qtrue;
                     return crate::src::qcommon::q_shared::qtrue;
                 }
                 // project the origin onto the surface plane to get
                 // an origin point we can rotate around
-                d = (*e).e.origin[0 as libc::c_int as usize]
-                    * plane.normal[0 as libc::c_int as usize]
-                    + (*e).e.origin[1 as libc::c_int as usize]
-                        * plane.normal[1 as libc::c_int as usize]
-                    + (*e).e.origin[2 as libc::c_int as usize]
-                        * plane.normal[2 as libc::c_int as usize]
+                d = (*e).e.origin[0 as i32 as usize]
+                    * plane.normal[0 as i32 as usize]
+                    + (*e).e.origin[1 as i32 as usize]
+                        * plane.normal[1 as i32 as usize]
+                    + (*e).e.origin[2 as i32 as usize]
+                        * plane.normal[2 as i32 as usize]
                     - plane.dist;
-                (*surface).origin[0 as libc::c_int as usize] = (*e).e.origin
-                    [0 as libc::c_int as usize]
-                    + (*surface).axis[0 as libc::c_int as usize][0 as libc::c_int as usize] * -d;
-                (*surface).origin[1 as libc::c_int as usize] = (*e).e.origin
-                    [1 as libc::c_int as usize]
-                    + (*surface).axis[0 as libc::c_int as usize][1 as libc::c_int as usize] * -d;
-                (*surface).origin[2 as libc::c_int as usize] = (*e).e.origin
-                    [2 as libc::c_int as usize]
-                    + (*surface).axis[0 as libc::c_int as usize][2 as libc::c_int as usize] * -d;
+                (*surface).origin[0 as i32 as usize] = (*e).e.origin
+                    [0 as i32 as usize]
+                    + (*surface).axis[0 as i32 as usize][0 as i32 as usize] * -d;
+                (*surface).origin[1 as i32 as usize] = (*e).e.origin
+                    [1 as i32 as usize]
+                    + (*surface).axis[0 as i32 as usize][1 as i32 as usize] * -d;
+                (*surface).origin[2 as i32 as usize] = (*e).e.origin
+                    [2 as i32 as usize]
+                    + (*surface).axis[0 as i32 as usize][2 as i32 as usize] * -d;
                 // now get the camera origin and orientation
-                (*camera).origin[0 as libc::c_int as usize] =
-                    (*e).e.oldorigin[0 as libc::c_int as usize];
-                (*camera).origin[1 as libc::c_int as usize] =
-                    (*e).e.oldorigin[1 as libc::c_int as usize];
-                (*camera).origin[2 as libc::c_int as usize] =
-                    (*e).e.oldorigin[2 as libc::c_int as usize];
+                (*camera).origin[0 as i32 as usize] =
+                    (*e).e.oldorigin[0 as i32 as usize];
+                (*camera).origin[1 as i32 as usize] =
+                    (*e).e.oldorigin[1 as i32 as usize];
+                (*camera).origin[2 as i32 as usize] =
+                    (*e).e.oldorigin[2 as i32 as usize];
                 crate::src::qcommon::q_math::AxisCopy(
                     (*e).e.axis.as_mut_ptr(),
                     (*camera).axis.as_mut_ptr(),
                 );
-                (*camera).axis[0 as libc::c_int as usize][0 as libc::c_int as usize] =
-                    crate::src::qcommon::q_math::vec3_origin[0 as libc::c_int as usize]
-                        - (*camera).axis[0 as libc::c_int as usize][0 as libc::c_int as usize];
-                (*camera).axis[0 as libc::c_int as usize][1 as libc::c_int as usize] =
-                    crate::src::qcommon::q_math::vec3_origin[1 as libc::c_int as usize]
-                        - (*camera).axis[0 as libc::c_int as usize][1 as libc::c_int as usize];
-                (*camera).axis[0 as libc::c_int as usize][2 as libc::c_int as usize] =
-                    crate::src::qcommon::q_math::vec3_origin[2 as libc::c_int as usize]
-                        - (*camera).axis[0 as libc::c_int as usize][2 as libc::c_int as usize];
-                (*camera).axis[1 as libc::c_int as usize][0 as libc::c_int as usize] =
-                    crate::src::qcommon::q_math::vec3_origin[0 as libc::c_int as usize]
-                        - (*camera).axis[1 as libc::c_int as usize][0 as libc::c_int as usize];
-                (*camera).axis[1 as libc::c_int as usize][1 as libc::c_int as usize] =
-                    crate::src::qcommon::q_math::vec3_origin[1 as libc::c_int as usize]
-                        - (*camera).axis[1 as libc::c_int as usize][1 as libc::c_int as usize];
-                (*camera).axis[1 as libc::c_int as usize][2 as libc::c_int as usize] =
-                    crate::src::qcommon::q_math::vec3_origin[2 as libc::c_int as usize]
-                        - (*camera).axis[1 as libc::c_int as usize][2 as libc::c_int as usize];
+                (*camera).axis[0 as i32 as usize][0 as i32 as usize] =
+                    crate::src::qcommon::q_math::vec3_origin[0 as i32 as usize]
+                        - (*camera).axis[0 as i32 as usize][0 as i32 as usize];
+                (*camera).axis[0 as i32 as usize][1 as i32 as usize] =
+                    crate::src::qcommon::q_math::vec3_origin[1 as i32 as usize]
+                        - (*camera).axis[0 as i32 as usize][1 as i32 as usize];
+                (*camera).axis[0 as i32 as usize][2 as i32 as usize] =
+                    crate::src::qcommon::q_math::vec3_origin[2 as i32 as usize]
+                        - (*camera).axis[0 as i32 as usize][2 as i32 as usize];
+                (*camera).axis[1 as i32 as usize][0 as i32 as usize] =
+                    crate::src::qcommon::q_math::vec3_origin[0 as i32 as usize]
+                        - (*camera).axis[1 as i32 as usize][0 as i32 as usize];
+                (*camera).axis[1 as i32 as usize][1 as i32 as usize] =
+                    crate::src::qcommon::q_math::vec3_origin[1 as i32 as usize]
+                        - (*camera).axis[1 as i32 as usize][1 as i32 as usize];
+                (*camera).axis[1 as i32 as usize][2 as i32 as usize] =
+                    crate::src::qcommon::q_math::vec3_origin[2 as i32 as usize]
+                        - (*camera).axis[1 as i32 as usize][2 as i32 as usize];
                 // optionally rotate
                 if (*e).e.oldframe != 0 {
                     // if a speed is specified
                     if (*e).e.frame != 0 {
                         // continuous rotate
-                        d = tr.refdef.time as libc::c_float / 1000.0f32
-                            * (*e).e.frame as libc::c_float;
-                        transformed[0 as libc::c_int as usize] =
-                            (*camera).axis[1 as libc::c_int as usize][0 as libc::c_int as usize];
-                        transformed[1 as libc::c_int as usize] =
-                            (*camera).axis[1 as libc::c_int as usize][1 as libc::c_int as usize];
-                        transformed[2 as libc::c_int as usize] =
-                            (*camera).axis[1 as libc::c_int as usize][2 as libc::c_int as usize];
+                        d = tr.refdef.time as f32 / 1000.0f32
+                            * (*e).e.frame as f32;
+                        transformed[0 as i32 as usize] =
+                            (*camera).axis[1 as i32 as usize][0 as i32 as usize];
+                        transformed[1 as i32 as usize] =
+                            (*camera).axis[1 as i32 as usize][1 as i32 as usize];
+                        transformed[2 as i32 as usize] =
+                            (*camera).axis[1 as i32 as usize][2 as i32 as usize];
                         crate::src::qcommon::q_math::RotatePointAroundVector(
-                            (*camera).axis[1 as libc::c_int as usize].as_mut_ptr(),
-                            (*camera).axis[0 as libc::c_int as usize].as_mut_ptr()
+                            (*camera).axis[1 as i32 as usize].as_mut_ptr(),
+                            (*camera).axis[0 as i32 as usize].as_mut_ptr()
                                 as *const crate::src::qcommon::q_shared::vec_t,
                             transformed.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
                             d,
                         );
                         CrossProduct(
-                            (*camera).axis[0 as libc::c_int as usize].as_mut_ptr()
+                            (*camera).axis[0 as i32 as usize].as_mut_ptr()
                                 as *const crate::src::qcommon::q_shared::vec_t,
-                            (*camera).axis[1 as libc::c_int as usize].as_mut_ptr()
+                            (*camera).axis[1 as i32 as usize].as_mut_ptr()
                                 as *const crate::src::qcommon::q_shared::vec_t,
-                            (*camera).axis[2 as libc::c_int as usize].as_mut_ptr(),
+                            (*camera).axis[2 as i32 as usize].as_mut_ptr(),
                         );
                     } else {
                         // bobbing rotate, with skinNum being the rotation offset
                         d = crate::stdlib::sin(
-                            (tr.refdef.time as libc::c_float * 0.003f32) as libc::c_double,
-                        ) as libc::c_float;
-                        d = (*e).e.skinNum as libc::c_float + d * 4 as libc::c_int as libc::c_float;
-                        transformed[0 as libc::c_int as usize] =
-                            (*camera).axis[1 as libc::c_int as usize][0 as libc::c_int as usize];
-                        transformed[1 as libc::c_int as usize] =
-                            (*camera).axis[1 as libc::c_int as usize][1 as libc::c_int as usize];
-                        transformed[2 as libc::c_int as usize] =
-                            (*camera).axis[1 as libc::c_int as usize][2 as libc::c_int as usize];
+                            (tr.refdef.time as f32 * 0.003f32) as f64,
+                        ) as f32;
+                        d = (*e).e.skinNum as f32 + d * 4 as i32 as f32;
+                        transformed[0 as i32 as usize] =
+                            (*camera).axis[1 as i32 as usize][0 as i32 as usize];
+                        transformed[1 as i32 as usize] =
+                            (*camera).axis[1 as i32 as usize][1 as i32 as usize];
+                        transformed[2 as i32 as usize] =
+                            (*camera).axis[1 as i32 as usize][2 as i32 as usize];
                         crate::src::qcommon::q_math::RotatePointAroundVector(
-                            (*camera).axis[1 as libc::c_int as usize].as_mut_ptr(),
-                            (*camera).axis[0 as libc::c_int as usize].as_mut_ptr()
+                            (*camera).axis[1 as i32 as usize].as_mut_ptr(),
+                            (*camera).axis[0 as i32 as usize].as_mut_ptr()
                                 as *const crate::src::qcommon::q_shared::vec_t,
                             transformed.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
                             d,
                         );
                         CrossProduct(
-                            (*camera).axis[0 as libc::c_int as usize].as_mut_ptr()
+                            (*camera).axis[0 as i32 as usize].as_mut_ptr()
                                 as *const crate::src::qcommon::q_shared::vec_t,
-                            (*camera).axis[1 as libc::c_int as usize].as_mut_ptr()
+                            (*camera).axis[1 as i32 as usize].as_mut_ptr()
                                 as *const crate::src::qcommon::q_shared::vec_t,
-                            (*camera).axis[2 as libc::c_int as usize].as_mut_ptr(),
+                            (*camera).axis[2 as i32 as usize].as_mut_ptr(),
                         );
                     }
                 } else if (*e).e.skinNum != 0 {
-                    d = (*e).e.skinNum as libc::c_float;
-                    transformed[0 as libc::c_int as usize] =
-                        (*camera).axis[1 as libc::c_int as usize][0 as libc::c_int as usize];
-                    transformed[1 as libc::c_int as usize] =
-                        (*camera).axis[1 as libc::c_int as usize][1 as libc::c_int as usize];
-                    transformed[2 as libc::c_int as usize] =
-                        (*camera).axis[1 as libc::c_int as usize][2 as libc::c_int as usize];
+                    d = (*e).e.skinNum as f32;
+                    transformed[0 as i32 as usize] =
+                        (*camera).axis[1 as i32 as usize][0 as i32 as usize];
+                    transformed[1 as i32 as usize] =
+                        (*camera).axis[1 as i32 as usize][1 as i32 as usize];
+                    transformed[2 as i32 as usize] =
+                        (*camera).axis[1 as i32 as usize][2 as i32 as usize];
                     crate::src::qcommon::q_math::RotatePointAroundVector(
-                        (*camera).axis[1 as libc::c_int as usize].as_mut_ptr(),
-                        (*camera).axis[0 as libc::c_int as usize].as_mut_ptr()
+                        (*camera).axis[1 as i32 as usize].as_mut_ptr(),
+                        (*camera).axis[0 as i32 as usize].as_mut_ptr()
                             as *const crate::src::qcommon::q_shared::vec_t,
                         transformed.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
                         d,
                     );
                     CrossProduct(
-                        (*camera).axis[0 as libc::c_int as usize].as_mut_ptr()
+                        (*camera).axis[0 as i32 as usize].as_mut_ptr()
                             as *const crate::src::qcommon::q_shared::vec_t,
-                        (*camera).axis[1 as libc::c_int as usize].as_mut_ptr()
+                        (*camera).axis[1 as i32 as usize].as_mut_ptr()
                             as *const crate::src::qcommon::q_shared::vec_t,
-                        (*camera).axis[2 as libc::c_int as usize].as_mut_ptr(),
+                        (*camera).axis[2 as i32 as usize].as_mut_ptr(),
                     );
                 }
                 *mirror = crate::src::qcommon::q_shared::qfalse;
@@ -2047,9 +2047,9 @@ pub unsafe extern "C" fn R_GetPortalOrientations(
 
 unsafe extern "C" fn IsMirror(
     mut drawSurf: *const crate::tr_local_h::drawSurf_t,
-    mut entityNum: libc::c_int,
+    mut entityNum: i32,
 ) -> crate::src::qcommon::q_shared::qboolean {
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     let mut originalPlane: crate::src::qcommon::q_shared::cplane_t =
         crate::src::qcommon::q_shared::cplane_t {
             normal: [0.; 3],
@@ -2067,11 +2067,11 @@ unsafe extern "C" fn IsMirror(
             pad: [0; 2],
         };
     let mut e: *mut crate::tr_local_h::trRefEntity_t = 0 as *mut crate::tr_local_h::trRefEntity_t;
-    let mut d: libc::c_float = 0.;
+    let mut d: f32 = 0.;
     // create plane axis for the portal we are seeing
     R_PlaneForSurface((*drawSurf).surface, &mut originalPlane);
     // rotate the plane if necessary
-    if entityNum != ((1 as libc::c_int) << 10 as libc::c_int) - 1 as libc::c_int {
+    if entityNum != ((1 as i32) << 10 as i32) - 1 as i32 {
         tr.currentEntityNum = entityNum;
         tr.currentEntity = &mut *tr.refdef.entities.offset(entityNum as isize)
             as *mut crate::tr_local_h::trRefEntity_t;
@@ -2081,46 +2081,46 @@ unsafe extern "C" fn IsMirror(
         // against the portalSurface entities
         R_LocalNormalToWorld(originalPlane.normal.as_mut_ptr(), plane.normal.as_mut_ptr());
         plane.dist = originalPlane.dist
-            + (plane.normal[0 as libc::c_int as usize] * tr.or.origin[0 as libc::c_int as usize]
-                + plane.normal[1 as libc::c_int as usize]
-                    * tr.or.origin[1 as libc::c_int as usize]
-                + plane.normal[2 as libc::c_int as usize]
-                    * tr.or.origin[2 as libc::c_int as usize]);
+            + (plane.normal[0 as i32 as usize] * tr.or.origin[0 as i32 as usize]
+                + plane.normal[1 as i32 as usize]
+                    * tr.or.origin[1 as i32 as usize]
+                + plane.normal[2 as i32 as usize]
+                    * tr.or.origin[2 as i32 as usize]);
         // translate the original plane
         originalPlane.dist = originalPlane.dist
-            + (originalPlane.normal[0 as libc::c_int as usize]
-                * tr.or.origin[0 as libc::c_int as usize]
-                + originalPlane.normal[1 as libc::c_int as usize]
-                    * tr.or.origin[1 as libc::c_int as usize]
-                + originalPlane.normal[2 as libc::c_int as usize]
-                    * tr.or.origin[2 as libc::c_int as usize])
+            + (originalPlane.normal[0 as i32 as usize]
+                * tr.or.origin[0 as i32 as usize]
+                + originalPlane.normal[1 as i32 as usize]
+                    * tr.or.origin[1 as i32 as usize]
+                + originalPlane.normal[2 as i32 as usize]
+                    * tr.or.origin[2 as i32 as usize])
     }
     // locate the portal entity closest to this plane.
     // origin will be the origin of the portal, origin2 will be
     // the origin of the camera
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < tr.refdef.num_entities {
         e = &mut *tr.refdef.entities.offset(i as isize) as *mut crate::tr_local_h::trRefEntity_t;
-        if !((*e).e.reType as libc::c_uint
-            != crate::tr_types_h::RT_PORTALSURFACE as libc::c_int as libc::c_uint)
+        if !((*e).e.reType as u32
+            != crate::tr_types_h::RT_PORTALSURFACE as i32 as u32)
         {
-            d = (*e).e.origin[0 as libc::c_int as usize]
-                * originalPlane.normal[0 as libc::c_int as usize]
-                + (*e).e.origin[1 as libc::c_int as usize]
-                    * originalPlane.normal[1 as libc::c_int as usize]
-                + (*e).e.origin[2 as libc::c_int as usize]
-                    * originalPlane.normal[2 as libc::c_int as usize]
+            d = (*e).e.origin[0 as i32 as usize]
+                * originalPlane.normal[0 as i32 as usize]
+                + (*e).e.origin[1 as i32 as usize]
+                    * originalPlane.normal[1 as i32 as usize]
+                + (*e).e.origin[2 as i32 as usize]
+                    * originalPlane.normal[2 as i32 as usize]
                 - originalPlane.dist;
-            if !(d > 64 as libc::c_int as libc::c_float
-                || d < -(64 as libc::c_int) as libc::c_float)
+            if !(d > 64 as i32 as f32
+                || d < -(64 as i32) as f32)
             {
                 // if the entity is just a mirror, don't use as a camera point
-                if (*e).e.oldorigin[0 as libc::c_int as usize]
-                    == (*e).e.origin[0 as libc::c_int as usize]
-                    && (*e).e.oldorigin[1 as libc::c_int as usize]
-                        == (*e).e.origin[1 as libc::c_int as usize]
-                    && (*e).e.oldorigin[2 as libc::c_int as usize]
-                        == (*e).e.origin[2 as libc::c_int as usize]
+                if (*e).e.oldorigin[0 as i32 as usize]
+                    == (*e).e.origin[0 as i32 as usize]
+                    && (*e).e.oldorigin[1 as i32 as usize]
+                        == (*e).e.origin[1 as i32 as usize]
+                    && (*e).e.oldorigin[2 as i32 as usize]
+                        == (*e).e.origin[2 as i32 as usize]
                 {
                     return crate::src::qcommon::q_shared::qtrue;
                 }
@@ -2141,16 +2141,16 @@ unsafe extern "C" fn SurfIsOffscreen(
     mut drawSurf: *const crate::tr_local_h::drawSurf_t,
     mut _clipDest: *mut crate::src::qcommon::q_shared::vec4_t,
 ) -> crate::src::qcommon::q_shared::qboolean {
-    let mut shortest: libc::c_float = 100000000 as libc::c_int as libc::c_float;
-    let mut entityNum: libc::c_int = 0;
-    let mut numTriangles: libc::c_int = 0;
+    let mut shortest: f32 = 100000000 as i32 as f32;
+    let mut entityNum: i32 = 0;
+    let mut numTriangles: i32 = 0;
     let mut shader: *mut crate::tr_local_h::shader_t = 0 as *mut crate::tr_local_h::shader_t;
-    let mut fogNum: libc::c_int = 0;
-    let mut dlighted: libc::c_int = 0;
+    let mut fogNum: i32 = 0;
+    let mut dlighted: i32 = 0;
     let mut clip: crate::src::qcommon::q_shared::vec4_t = [0.; 4];
     let mut eye: crate::src::qcommon::q_shared::vec4_t = [0.; 4];
-    let mut i: libc::c_int = 0;
-    let mut pointAnd: libc::c_uint = !(0 as libc::c_int) as libc::c_uint;
+    let mut i: i32 = 0;
+    let mut pointAnd: u32 = !(0 as i32) as u32;
     R_RotateForViewer();
     R_DecomposeSort(
         (*drawSurf).sort,
@@ -2165,10 +2165,10 @@ unsafe extern "C" fn SurfIsOffscreen(
     );
     crate::src::renderergl1::tr_surface::rb_surfaceTable[*(*drawSurf).surface as usize]
         .expect("non-null function pointer")((*drawSurf).surface as *mut libc::c_void);
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < crate::src::renderergl1::tr_shade::tess.numVertexes {
-        let mut j: libc::c_int = 0;
-        let mut pointFlags: libc::c_uint = 0 as libc::c_int as libc::c_uint;
+        let mut j: i32 = 0;
+        let mut pointFlags: u32 = 0 as i32 as u32;
         R_TransformModelToClip(
             crate::src::renderergl1::tr_shade::tess.xyz[i as usize].as_mut_ptr()
                 as *const crate::src::qcommon::q_shared::vec_t,
@@ -2177,13 +2177,13 @@ unsafe extern "C" fn SurfIsOffscreen(
             eye.as_mut_ptr(),
             clip.as_mut_ptr(),
         );
-        j = 0 as libc::c_int;
-        while j < 3 as libc::c_int {
-            if clip[j as usize] >= clip[3 as libc::c_int as usize] {
-                pointFlags |= ((1 as libc::c_int) << j * 2 as libc::c_int) as libc::c_uint
-            } else if clip[j as usize] <= -clip[3 as libc::c_int as usize] {
+        j = 0 as i32;
+        while j < 3 as i32 {
+            if clip[j as usize] >= clip[3 as i32 as usize] {
+                pointFlags |= ((1 as i32) << j * 2 as i32) as u32
+            } else if clip[j as usize] <= -clip[3 as i32 as usize] {
                 pointFlags |=
-                    ((1 as libc::c_int) << j * 2 as libc::c_int + 1 as libc::c_int) as libc::c_uint
+                    ((1 as i32) << j * 2 as i32 + 1 as i32) as u32
             }
             j += 1
         }
@@ -2199,45 +2199,45 @@ unsafe extern "C" fn SurfIsOffscreen(
     // based on vertex distance isn't 100% correct (we should be checking for
     // range to the surface), but it's good enough for the types of portals
     // we have in the game right now.
-    numTriangles = crate::src::renderergl1::tr_shade::tess.numIndexes / 3 as libc::c_int; // lose the sqrt
-    i = 0 as libc::c_int;
+    numTriangles = crate::src::renderergl1::tr_shade::tess.numIndexes / 3 as i32; // lose the sqrt
+    i = 0 as i32;
     while i < crate::src::renderergl1::tr_shade::tess.numIndexes {
         let mut normal: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-        let mut len: libc::c_float = 0.;
-        normal[0 as libc::c_int as usize] = crate::src::renderergl1::tr_shade::tess.xyz
+        let mut len: f32 = 0.;
+        normal[0 as i32 as usize] = crate::src::renderergl1::tr_shade::tess.xyz
             [crate::src::renderergl1::tr_shade::tess.indexes[i as usize] as usize]
-            [0 as libc::c_int as usize]
-            - tr.viewParms.or.origin[0 as libc::c_int as usize];
-        normal[1 as libc::c_int as usize] = crate::src::renderergl1::tr_shade::tess.xyz
+            [0 as i32 as usize]
+            - tr.viewParms.or.origin[0 as i32 as usize];
+        normal[1 as i32 as usize] = crate::src::renderergl1::tr_shade::tess.xyz
             [crate::src::renderergl1::tr_shade::tess.indexes[i as usize] as usize]
-            [1 as libc::c_int as usize]
-            - tr.viewParms.or.origin[1 as libc::c_int as usize];
-        normal[2 as libc::c_int as usize] = crate::src::renderergl1::tr_shade::tess.xyz
+            [1 as i32 as usize]
+            - tr.viewParms.or.origin[1 as i32 as usize];
+        normal[2 as i32 as usize] = crate::src::renderergl1::tr_shade::tess.xyz
             [crate::src::renderergl1::tr_shade::tess.indexes[i as usize] as usize]
-            [2 as libc::c_int as usize]
-            - tr.viewParms.or.origin[2 as libc::c_int as usize];
+            [2 as i32 as usize]
+            - tr.viewParms.or.origin[2 as i32 as usize];
         len =
             VectorLengthSquared(normal.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
         if len < shortest {
             shortest = len
         }
-        if normal[0 as libc::c_int as usize]
+        if normal[0 as i32 as usize]
             * crate::src::renderergl1::tr_shade::tess.normal
                 [crate::src::renderergl1::tr_shade::tess.indexes[i as usize] as usize]
-                [0 as libc::c_int as usize]
-            + normal[1 as libc::c_int as usize]
+                [0 as i32 as usize]
+            + normal[1 as i32 as usize]
                 * crate::src::renderergl1::tr_shade::tess.normal
                     [crate::src::renderergl1::tr_shade::tess.indexes[i as usize] as usize]
-                    [1 as libc::c_int as usize]
-            + normal[2 as libc::c_int as usize]
+                    [1 as i32 as usize]
+            + normal[2 as i32 as usize]
                 * crate::src::renderergl1::tr_shade::tess.normal
                     [crate::src::renderergl1::tr_shade::tess.indexes[i as usize] as usize]
-                    [2 as libc::c_int as usize]
-            >= 0 as libc::c_int as libc::c_float
+                    [2 as i32 as usize]
+            >= 0 as i32 as f32
         {
             numTriangles -= 1
         }
-        i += 3 as libc::c_int
+        i += 3 as i32
     }
     if numTriangles == 0 {
         return crate::src::qcommon::q_shared::qtrue;
@@ -2266,7 +2266,7 @@ Returns qtrue if another view has been rendered
 
 pub unsafe extern "C" fn R_MirrorViewBySurface(
     mut drawSurf: *mut crate::tr_local_h::drawSurf_t,
-    mut entityNum: libc::c_int,
+    mut entityNum: i32,
 ) -> crate::src::qcommon::q_shared::qboolean {
     let mut clipDest: [crate::src::qcommon::q_shared::vec4_t; 128] = [[0.; 4]; 128];
     let mut newParms: crate::tr_local_h::viewParms_t = crate::tr_local_h::viewParms_t {
@@ -2368,13 +2368,13 @@ pub unsafe extern "C" fn R_MirrorViewBySurface(
     // don't recursively mirror
     if tr.viewParms.isPortal as u64 != 0 {
         ri.Printf.expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_DEVELOPER as libc::c_int,
+            crate::src::qcommon::q_shared::PRINT_DEVELOPER as i32,
             b"WARNING: recursive mirror/portal found\n\x00" as *const u8 as *const libc::c_char,
         );
         return crate::src::qcommon::q_shared::qfalse;
     }
     if (*crate::src::renderergl1::tr_init::r_noportals).integer != 0
-        || (*crate::src::renderergl1::tr_init::r_fastsky).integer == 1 as libc::c_int
+        || (*crate::src::renderergl1::tr_init::r_fastsky).integer == 1 as i32
     {
         return crate::src::qcommon::q_shared::qfalse;
     }
@@ -2405,38 +2405,38 @@ pub unsafe extern "C" fn R_MirrorViewBySurface(
         &mut camera,
         newParms.or.origin.as_mut_ptr(),
     );
-    newParms.portalPlane.normal[0 as libc::c_int as usize] =
-        crate::src::qcommon::q_math::vec3_origin[0 as libc::c_int as usize]
-            - camera.axis[0 as libc::c_int as usize][0 as libc::c_int as usize];
-    newParms.portalPlane.normal[1 as libc::c_int as usize] =
-        crate::src::qcommon::q_math::vec3_origin[1 as libc::c_int as usize]
-            - camera.axis[0 as libc::c_int as usize][1 as libc::c_int as usize];
-    newParms.portalPlane.normal[2 as libc::c_int as usize] =
-        crate::src::qcommon::q_math::vec3_origin[2 as libc::c_int as usize]
-            - camera.axis[0 as libc::c_int as usize][2 as libc::c_int as usize];
-    newParms.portalPlane.dist = camera.origin[0 as libc::c_int as usize]
-        * newParms.portalPlane.normal[0 as libc::c_int as usize]
-        + camera.origin[1 as libc::c_int as usize]
-            * newParms.portalPlane.normal[1 as libc::c_int as usize]
-        + camera.origin[2 as libc::c_int as usize]
-            * newParms.portalPlane.normal[2 as libc::c_int as usize];
+    newParms.portalPlane.normal[0 as i32 as usize] =
+        crate::src::qcommon::q_math::vec3_origin[0 as i32 as usize]
+            - camera.axis[0 as i32 as usize][0 as i32 as usize];
+    newParms.portalPlane.normal[1 as i32 as usize] =
+        crate::src::qcommon::q_math::vec3_origin[1 as i32 as usize]
+            - camera.axis[0 as i32 as usize][1 as i32 as usize];
+    newParms.portalPlane.normal[2 as i32 as usize] =
+        crate::src::qcommon::q_math::vec3_origin[2 as i32 as usize]
+            - camera.axis[0 as i32 as usize][2 as i32 as usize];
+    newParms.portalPlane.dist = camera.origin[0 as i32 as usize]
+        * newParms.portalPlane.normal[0 as i32 as usize]
+        + camera.origin[1 as i32 as usize]
+            * newParms.portalPlane.normal[1 as i32 as usize]
+        + camera.origin[2 as i32 as usize]
+            * newParms.portalPlane.normal[2 as i32 as usize];
     R_MirrorVector(
-        oldParms.or.axis[0 as libc::c_int as usize].as_mut_ptr(),
+        oldParms.or.axis[0 as i32 as usize].as_mut_ptr(),
         &mut surface,
         &mut camera,
-        newParms.or.axis[0 as libc::c_int as usize].as_mut_ptr(),
+        newParms.or.axis[0 as i32 as usize].as_mut_ptr(),
     );
     R_MirrorVector(
-        oldParms.or.axis[1 as libc::c_int as usize].as_mut_ptr(),
+        oldParms.or.axis[1 as i32 as usize].as_mut_ptr(),
         &mut surface,
         &mut camera,
-        newParms.or.axis[1 as libc::c_int as usize].as_mut_ptr(),
+        newParms.or.axis[1 as i32 as usize].as_mut_ptr(),
     );
     R_MirrorVector(
-        oldParms.or.axis[2 as libc::c_int as usize].as_mut_ptr(),
+        oldParms.or.axis[2 as i32 as usize].as_mut_ptr(),
         &mut surface,
         &mut camera,
-        newParms.or.axis[2 as libc::c_int as usize].as_mut_ptr(),
+        newParms.or.axis[2 as i32 as usize].as_mut_ptr(),
     );
     // OPTIMIZE: restrict the viewport on the mirrored view
     // render the mirror view
@@ -2455,39 +2455,39 @@ See if a sprite is inside a fog volume
 
 pub unsafe extern "C" fn R_SpriteFogNum(
     mut ent: *mut crate::tr_local_h::trRefEntity_t,
-) -> libc::c_int {
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
+) -> i32 {
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
     let mut fog: *mut crate::tr_local_h::fog_t = 0 as *mut crate::tr_local_h::fog_t;
-    if tr.refdef.rdflags & 0x1 as libc::c_int != 0 {
-        return 0 as libc::c_int;
+    if tr.refdef.rdflags & 0x1 as i32 != 0 {
+        return 0 as i32;
     }
-    if (*ent).e.renderfx & 0x10 as libc::c_int != 0 {
-        return 0 as libc::c_int;
+    if (*ent).e.renderfx & 0x10 as i32 != 0 {
+        return 0 as i32;
     }
-    i = 1 as libc::c_int;
+    i = 1 as i32;
     while i < (*tr.world).numfogs {
         fog = &mut *(*tr.world).fogs.offset(i as isize) as *mut crate::tr_local_h::fog_t;
-        j = 0 as libc::c_int;
-        while j < 3 as libc::c_int {
+        j = 0 as i32;
+        while j < 3 as i32 {
             if (*ent).e.origin[j as usize] - (*ent).e.radius
-                >= (*fog).bounds[1 as libc::c_int as usize][j as usize]
+                >= (*fog).bounds[1 as i32 as usize][j as usize]
             {
                 break;
             }
             if (*ent).e.origin[j as usize] + (*ent).e.radius
-                <= (*fog).bounds[0 as libc::c_int as usize][j as usize]
+                <= (*fog).bounds[0 as i32 as usize][j as usize]
             {
                 break;
             }
             j += 1
         }
-        if j == 3 as libc::c_int {
+        if j == 3 as i32 {
             return i;
         }
         i += 1
     }
-    return 0 as libc::c_int;
+    return 0 as i32;
 }
 /*
 ==========================================================================================
@@ -2504,13 +2504,13 @@ R_Radix
 #[inline]
 
 unsafe extern "C" fn R_Radix(
-    mut byte: libc::c_int,
-    mut size: libc::c_int,
+    mut byte: i32,
+    mut size: i32,
     mut source: *mut crate::tr_local_h::drawSurf_t,
     mut dest: *mut crate::tr_local_h::drawSurf_t,
 ) {
-    let mut count: [libc::c_int; 256] = [
-        0 as libc::c_int,
+    let mut count: [i32; 256] = [
+        0 as i32,
         0,
         0,
         0,
@@ -2767,12 +2767,12 @@ unsafe extern "C" fn R_Radix(
         0,
         0,
     ];
-    let mut index: [libc::c_int; 256] = [0; 256];
-    let mut i: libc::c_int = 0;
-    let mut sortKey: *mut libc::c_uchar = 0 as *mut libc::c_uchar;
-    let mut end: *mut libc::c_uchar = 0 as *mut libc::c_uchar;
-    sortKey = (&mut (*source.offset(0 as libc::c_int as isize)).sort as *mut libc::c_uint
-        as *mut libc::c_uchar)
+    let mut index: [i32; 256] = [0; 256];
+    let mut i: i32 = 0;
+    let mut sortKey: *mut u8 = 0 as *mut u8;
+    let mut end: *mut u8 = 0 as *mut u8;
+    sortKey = (&mut (*source.offset(0 as i32 as isize)).sort as *mut u32
+        as *mut u8)
         .offset(byte as isize);
     end = sortKey.offset(
         (size as libc::c_ulong)
@@ -2785,17 +2785,17 @@ unsafe extern "C" fn R_Radix(
             ::std::mem::size_of::<crate::tr_local_h::drawSurf_t>() as libc::c_ulong as isize
         )
     }
-    index[0 as libc::c_int as usize] = 0 as libc::c_int;
-    i = 1 as libc::c_int;
-    while i < 256 as libc::c_int {
+    index[0 as i32 as usize] = 0 as i32;
+    i = 1 as i32;
+    while i < 256 as i32 {
         index[i as usize] =
-            index[(i - 1 as libc::c_int) as usize] + count[(i - 1 as libc::c_int) as usize];
+            index[(i - 1 as i32) as usize] + count[(i - 1 as i32) as usize];
         i += 1
     }
-    sortKey = (&mut (*source.offset(0 as libc::c_int as isize)).sort as *mut libc::c_uint
-        as *mut libc::c_uchar)
+    sortKey = (&mut (*source.offset(0 as i32 as isize)).sort as *mut u32
+        as *mut u8)
         .offset(byte as isize);
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < size {
         let fresh2 = index[*sortKey as usize];
         index[*sortKey as usize] = index[*sortKey as usize] + 1;
@@ -2816,17 +2816,17 @@ Radix sort with 4 byte size buckets
 
 unsafe extern "C" fn R_RadixSort(
     mut source: *mut crate::tr_local_h::drawSurf_t,
-    mut size: libc::c_int,
+    mut size: i32,
 ) {
     static mut scratch: [crate::tr_local_h::drawSurf_t; 65536] = [crate::tr_local_h::drawSurf_t {
         sort: 0,
         surface: 0 as *const crate::tr_local_h::surfaceType_t
             as *mut crate::tr_local_h::surfaceType_t,
     }; 65536];
-    R_Radix(0 as libc::c_int, size, source, scratch.as_mut_ptr());
-    R_Radix(1 as libc::c_int, size, scratch.as_mut_ptr(), source);
-    R_Radix(2 as libc::c_int, size, source, scratch.as_mut_ptr());
-    R_Radix(3 as libc::c_int, size, scratch.as_mut_ptr(), source);
+    R_Radix(0 as i32, size, source, scratch.as_mut_ptr());
+    R_Radix(1 as i32, size, scratch.as_mut_ptr(), source);
+    R_Radix(2 as i32, size, source, scratch.as_mut_ptr());
+    R_Radix(3 as i32, size, scratch.as_mut_ptr(), source);
     //Q3_LITTLE_ENDIAN
 }
 //==========================================================================================
@@ -2840,20 +2840,20 @@ R_AddDrawSurf
 pub unsafe extern "C" fn R_AddDrawSurf(
     mut surface: *mut crate::tr_local_h::surfaceType_t,
     mut shader: *mut crate::tr_local_h::shader_t,
-    mut fogIndex: libc::c_int,
-    mut dlightMap: libc::c_int,
+    mut fogIndex: i32,
+    mut dlightMap: i32,
 ) {
-    let mut index: libc::c_int = 0;
+    let mut index: i32 = 0;
     // instead of checking for overflow, we just mask the index
     // so it wraps around
-    index = tr.refdef.numDrawSurfs & 0x10000 as libc::c_int - 1 as libc::c_int;
+    index = tr.refdef.numDrawSurfs & 0x10000 as i32 - 1 as i32;
     // the sort data is packed into a single 32 bit value so it can be
     // compared quickly during the qsorting process
     (*tr.refdef.drawSurfs.offset(index as isize)).sort = ((*shader).sortedIndex
-        << 7 as libc::c_int + 10 as libc::c_int
+        << 7 as i32 + 10 as i32
         | tr.shiftedEntityNum
-        | fogIndex << 2 as libc::c_int
-        | dlightMap) as libc::c_uint;
+        | fogIndex << 2 as i32
+        | dlightMap) as u32;
     let ref mut fresh3 = (*tr.refdef.drawSurfs.offset(index as isize)).surface;
     *fresh3 = surface;
     tr.refdef.numDrawSurfs += 1;
@@ -2866,20 +2866,20 @@ R_DecomposeSort
 #[no_mangle]
 
 pub unsafe extern "C" fn R_DecomposeSort(
-    mut sort: libc::c_uint,
-    mut entityNum: *mut libc::c_int,
+    mut sort: u32,
+    mut entityNum: *mut i32,
     mut shader: *mut *mut crate::tr_local_h::shader_t,
-    mut fogNum: *mut libc::c_int,
-    mut dlightMap: *mut libc::c_int,
+    mut fogNum: *mut i32,
+    mut dlightMap: *mut i32,
 ) {
-    *fogNum = (sort >> 2 as libc::c_int & 31 as libc::c_int as libc::c_uint) as libc::c_int;
-    *shader = tr.sortedShaders[(sort >> 7 as libc::c_int + 10 as libc::c_int
-        & (((1 as libc::c_int) << 14 as libc::c_int) - 1 as libc::c_int) as libc::c_uint)
+    *fogNum = (sort >> 2 as i32 & 31 as i32 as u32) as i32;
+    *shader = tr.sortedShaders[(sort >> 7 as i32 + 10 as i32
+        & (((1 as i32) << 14 as i32) - 1 as i32) as u32)
         as usize];
-    *entityNum = (sort >> 7 as libc::c_int
-        & (((1 as libc::c_int) << 10 as libc::c_int) - 1 as libc::c_int) as libc::c_uint)
-        as libc::c_int;
-    *dlightMap = (sort & 3 as libc::c_int as libc::c_uint) as libc::c_int;
+    *entityNum = (sort >> 7 as i32
+        & (((1 as i32) << 10 as i32) - 1 as i32) as u32)
+        as i32;
+    *dlightMap = (sort & 3 as i32 as u32) as i32;
 }
 /*
 =================
@@ -2890,15 +2890,15 @@ R_SortDrawSurfs
 
 pub unsafe extern "C" fn R_SortDrawSurfs(
     mut drawSurfs: *mut crate::tr_local_h::drawSurf_t,
-    mut numDrawSurfs: libc::c_int,
+    mut numDrawSurfs: i32,
 ) {
     let mut shader: *mut crate::tr_local_h::shader_t = 0 as *mut crate::tr_local_h::shader_t;
-    let mut fogNum: libc::c_int = 0;
-    let mut entityNum: libc::c_int = 0;
-    let mut dlighted: libc::c_int = 0;
-    let mut i: libc::c_int = 0;
+    let mut fogNum: i32 = 0;
+    let mut entityNum: i32 = 0;
+    let mut dlighted: i32 = 0;
+    let mut i: i32 = 0;
     // it is possible for some views to not have any surfaces
-    if numDrawSurfs < 1 as libc::c_int {
+    if numDrawSurfs < 1 as i32 {
         // we still need to add it for hyperspace cases
         crate::src::renderergl1::tr_cmds::R_AddDrawSurfCmd(
             drawSurfs as *mut crate::tr_local_h::drawSurf_s,
@@ -2910,7 +2910,7 @@ pub unsafe extern "C" fn R_SortDrawSurfs(
     R_RadixSort(drawSurfs, numDrawSurfs);
     // check for any pass through drawing, which
     // may cause another view to be rendered first
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < numDrawSurfs {
         R_DecomposeSort(
             (*drawSurfs.offset(i as isize)).sort,
@@ -2919,13 +2919,13 @@ pub unsafe extern "C" fn R_SortDrawSurfs(
             &mut fogNum,
             &mut dlighted,
         );
-        if (*shader).sort > crate::tr_local_h::SS_PORTAL as libc::c_int as libc::c_float {
+        if (*shader).sort > crate::tr_local_h::SS_PORTAL as i32 as f32 {
             break;
         }
         // no shader should ever have this sort type
-        if (*shader).sort == crate::tr_local_h::SS_BAD as libc::c_int as libc::c_float {
+        if (*shader).sort == crate::tr_local_h::SS_BAD as i32 as f32 {
             ri.Error.expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+                crate::src::qcommon::q_shared::ERR_DROP as i32,
                 b"Shader \'%s\'with sort == SS_BAD\x00" as *const u8 as *const libc::c_char,
                 (*shader).name.as_mut_ptr(),
             );
@@ -2961,31 +2961,31 @@ pub unsafe extern "C" fn R_AddEntitySurfaces() {
         return;
     }
     let mut current_block_22: u64;
-    tr.currentEntityNum = 0 as libc::c_int;
+    tr.currentEntityNum = 0 as i32;
     while tr.currentEntityNum < tr.refdef.num_entities {
         tr.currentEntity = &mut *tr.refdef.entities.offset(tr.currentEntityNum as isize)
             as *mut crate::tr_local_h::trRefEntity_t;
         ent = tr.currentEntity;
         (*ent).needDlights = crate::src::qcommon::q_shared::qfalse;
         // preshift the value we are going to OR into the drawsurf sort
-        tr.shiftedEntityNum = tr.currentEntityNum << 7 as libc::c_int;
+        tr.shiftedEntityNum = tr.currentEntityNum << 7 as i32;
         //
         // the weapon model must be handled special --
         // we don't want the hacked weapon position showing in
         // mirrors, because the true body position will already be drawn
         //
-        if !((*ent).e.renderfx & 0x4 as libc::c_int != 0
-            && tr.viewParms.isPortal as libc::c_uint != 0)
+        if !((*ent).e.renderfx & 0x4 as i32 != 0
+            && tr.viewParms.isPortal as u32 != 0)
         {
             // simple generated models, like sprites and beams, are not culled
-            match (*ent).e.reType as libc::c_uint {
+            match (*ent).e.reType as u32 {
                 7 => {}
                 2 | 3 | 6 | 4 | 5 => {
                     current_block_22 = 15325006274910139791;
                     match current_block_22 {
                         5465853293512199010 => {
                             ri.Error.expect("non-null function pointer")(
-                                crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+                                crate::src::qcommon::q_shared::ERR_DROP as i32,
                                 b"R_AddEntitySurfaces: Bad reType\x00" as *const u8
                                     as *const libc::c_char,
                             );
@@ -3001,11 +3001,11 @@ pub unsafe extern "C" fn R_AddEntitySurfaces() {
                                 R_AddDrawSurf(
                                     &mut entitySurface,
                                     tr.defaultShader,
-                                    0 as libc::c_int,
-                                    0 as libc::c_int,
+                                    0 as i32,
+                                    0 as i32,
                                 );
                             } else {
-                                match (*tr.currentModel).type_0 as libc::c_uint {
+                                match (*tr.currentModel).type_0 as u32 {
                                     2 => {
                                         crate::src::renderergl1::tr_mesh::R_AddMD3Surfaces(
                                             ent as *mut crate::tr_local_h::trRefEntity_t,
@@ -3028,20 +3028,20 @@ pub unsafe extern "C" fn R_AddEntitySurfaces() {
                                     }
                                     0 => {
                                         // null model axis
-                                        if !((*ent).e.renderfx & 0x2 as libc::c_int != 0
+                                        if !((*ent).e.renderfx & 0x2 as i32 != 0
                                             && tr.viewParms.isPortal as u64 == 0)
                                         {
                                             R_AddDrawSurf(
                                                 &mut entitySurface,
                                                 tr.defaultShader,
-                                                0 as libc::c_int,
-                                                0 as libc::c_int,
+                                                0 as i32,
+                                                0 as i32,
                                             );
                                         }
                                     }
                                     _ => {
                                         ri.Error.expect("non-null function pointer")(
-                                            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+                                            crate::src::qcommon::q_shared::ERR_DROP as i32,
                                             b"R_AddEntitySurfaces: Bad modeltype\x00" as *const u8
                                                 as *const libc::c_char,
                                         );
@@ -3054,7 +3054,7 @@ pub unsafe extern "C" fn R_AddEntitySurfaces() {
                         // view.  We can't just do this check for all entities, because md3
                         // entities may still want to cast shadows from them
                         {
-                            if !((*ent).e.renderfx & 0x2 as libc::c_int != 0
+                            if !((*ent).e.renderfx & 0x2 as i32 != 0
                                 && tr.viewParms.isPortal as u64 == 0)
                             {
                                 shader = crate::src::renderergl1::tr_shader::R_GetShaderByHandle(
@@ -3065,7 +3065,7 @@ pub unsafe extern "C" fn R_AddEntitySurfaces() {
                                     &mut entitySurface,
                                     shader,
                                     R_SpriteFogNum(ent),
-                                    0 as libc::c_int,
+                                    0 as i32,
                                 );
                             }
                         }
@@ -3076,7 +3076,7 @@ pub unsafe extern "C" fn R_AddEntitySurfaces() {
                     match current_block_22 {
                         5465853293512199010 => {
                             ri.Error.expect("non-null function pointer")(
-                                crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+                                crate::src::qcommon::q_shared::ERR_DROP as i32,
                                 b"R_AddEntitySurfaces: Bad reType\x00" as *const u8
                                     as *const libc::c_char,
                             );
@@ -3091,11 +3091,11 @@ pub unsafe extern "C" fn R_AddEntitySurfaces() {
                                 R_AddDrawSurf(
                                     &mut entitySurface,
                                     tr.defaultShader,
-                                    0 as libc::c_int,
-                                    0 as libc::c_int,
+                                    0 as i32,
+                                    0 as i32,
                                 );
                             } else {
-                                match (*tr.currentModel).type_0 as libc::c_uint {
+                                match (*tr.currentModel).type_0 as u32 {
                                     2 => {
                                         crate::src::renderergl1::tr_mesh::R_AddMD3Surfaces(
                                             ent as *mut crate::tr_local_h::trRefEntity_t,
@@ -3117,20 +3117,20 @@ pub unsafe extern "C" fn R_AddEntitySurfaces() {
                                         );
                                     }
                                     0 => {
-                                        if !((*ent).e.renderfx & 0x2 as libc::c_int != 0
+                                        if !((*ent).e.renderfx & 0x2 as i32 != 0
                                             && tr.viewParms.isPortal as u64 == 0)
                                         {
                                             R_AddDrawSurf(
                                                 &mut entitySurface,
                                                 tr.defaultShader,
-                                                0 as libc::c_int,
-                                                0 as libc::c_int,
+                                                0 as i32,
+                                                0 as i32,
                                             );
                                         }
                                     }
                                     _ => {
                                         ri.Error.expect("non-null function pointer")(
-                                            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+                                            crate::src::qcommon::q_shared::ERR_DROP as i32,
                                             b"R_AddEntitySurfaces: Bad modeltype\x00" as *const u8
                                                 as *const libc::c_char,
                                         );
@@ -3139,7 +3139,7 @@ pub unsafe extern "C" fn R_AddEntitySurfaces() {
                             }
                         }
                         _ => {
-                            if !((*ent).e.renderfx & 0x2 as libc::c_int != 0
+                            if !((*ent).e.renderfx & 0x2 as i32 != 0
                                 && tr.viewParms.isPortal as u64 == 0)
                             {
                                 shader = crate::src::renderergl1::tr_shader::R_GetShaderByHandle(
@@ -3150,7 +3150,7 @@ pub unsafe extern "C" fn R_AddEntitySurfaces() {
                                     &mut entitySurface,
                                     shader,
                                     R_SpriteFogNum(ent),
-                                    0 as libc::c_int,
+                                    0 as i32,
                                 );
                             }
                         }
@@ -3161,7 +3161,7 @@ pub unsafe extern "C" fn R_AddEntitySurfaces() {
                     match current_block_22 {
                         5465853293512199010 => {
                             ri.Error.expect("non-null function pointer")(
-                                crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+                                crate::src::qcommon::q_shared::ERR_DROP as i32,
                                 b"R_AddEntitySurfaces: Bad reType\x00" as *const u8
                                     as *const libc::c_char,
                             );
@@ -3176,11 +3176,11 @@ pub unsafe extern "C" fn R_AddEntitySurfaces() {
                                 R_AddDrawSurf(
                                     &mut entitySurface,
                                     tr.defaultShader,
-                                    0 as libc::c_int,
-                                    0 as libc::c_int,
+                                    0 as i32,
+                                    0 as i32,
                                 );
                             } else {
-                                match (*tr.currentModel).type_0 as libc::c_uint {
+                                match (*tr.currentModel).type_0 as u32 {
                                     2 => {
                                         crate::src::renderergl1::tr_mesh::R_AddMD3Surfaces(
                                             ent as *mut crate::tr_local_h::trRefEntity_t,
@@ -3202,20 +3202,20 @@ pub unsafe extern "C" fn R_AddEntitySurfaces() {
                                         );
                                     }
                                     0 => {
-                                        if !((*ent).e.renderfx & 0x2 as libc::c_int != 0
+                                        if !((*ent).e.renderfx & 0x2 as i32 != 0
                                             && tr.viewParms.isPortal as u64 == 0)
                                         {
                                             R_AddDrawSurf(
                                                 &mut entitySurface,
                                                 tr.defaultShader,
-                                                0 as libc::c_int,
-                                                0 as libc::c_int,
+                                                0 as i32,
+                                                0 as i32,
                                             );
                                         }
                                     }
                                     _ => {
                                         ri.Error.expect("non-null function pointer")(
-                                            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+                                            crate::src::qcommon::q_shared::ERR_DROP as i32,
                                             b"R_AddEntitySurfaces: Bad modeltype\x00" as *const u8
                                                 as *const libc::c_char,
                                         );
@@ -3224,7 +3224,7 @@ pub unsafe extern "C" fn R_AddEntitySurfaces() {
                             }
                         }
                         _ => {
-                            if !((*ent).e.renderfx & 0x2 as libc::c_int != 0
+                            if !((*ent).e.renderfx & 0x2 as i32 != 0
                                 && tr.viewParms.isPortal as u64 == 0)
                             {
                                 shader = crate::src::renderergl1::tr_shader::R_GetShaderByHandle(
@@ -3235,7 +3235,7 @@ pub unsafe extern "C" fn R_AddEntitySurfaces() {
                                     &mut entitySurface,
                                     shader,
                                     R_SpriteFogNum(ent),
-                                    0 as libc::c_int,
+                                    0 as i32,
                                 );
                             }
                         }
@@ -3275,59 +3275,59 @@ R_DebugPolygon
 #[no_mangle]
 
 pub unsafe extern "C" fn R_DebugPolygon(
-    mut color: libc::c_int,
-    mut numPoints: libc::c_int,
-    mut points: *mut libc::c_float,
+    mut color: i32,
+    mut numPoints: i32,
+    mut points: *mut f32,
 ) {
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     crate::src::renderergl1::tr_backend::GL_State(
-        (0x100 as libc::c_int | 0x2 as libc::c_int | 0x20 as libc::c_int) as libc::c_ulong,
+        (0x100 as i32 | 0x2 as i32 | 0x20 as i32) as libc::c_ulong,
     );
     // draw solid shade
     crate::src::sdl::sdl_glimp::qglColor3f.expect("non-null function pointer")(
-        (color & 1 as libc::c_int) as crate::stdlib::GLfloat,
-        (color >> 1 as libc::c_int & 1 as libc::c_int) as crate::stdlib::GLfloat,
-        (color >> 2 as libc::c_int & 1 as libc::c_int) as crate::stdlib::GLfloat,
+        (color & 1 as i32) as crate::stdlib::GLfloat,
+        (color >> 1 as i32 & 1 as i32) as crate::stdlib::GLfloat,
+        (color >> 2 as i32 & 1 as i32) as crate::stdlib::GLfloat,
     );
     crate::src::sdl::sdl_glimp::qglBegin.expect("non-null function pointer")(
-        0x9 as libc::c_int as crate::stdlib::GLenum,
+        0x9 as i32 as crate::stdlib::GLenum,
     );
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < numPoints {
         crate::src::sdl::sdl_glimp::qglVertex3fv.expect("non-null function pointer")(
-            points.offset((i * 3 as libc::c_int) as isize),
+            points.offset((i * 3 as i32) as isize),
         );
         i += 1
     }
     crate::src::sdl::sdl_glimp::qglEnd.expect("non-null function pointer")();
     // draw wireframe outline
     crate::src::renderergl1::tr_backend::GL_State(
-        (0x1000 as libc::c_int | 0x100 as libc::c_int | 0x2 as libc::c_int | 0x20 as libc::c_int)
+        (0x1000 as i32 | 0x100 as i32 | 0x2 as i32 | 0x20 as i32)
             as libc::c_ulong,
     );
     crate::src::sdl::sdl_glimp::qglDepthRange.expect("non-null function pointer")(
-        0 as libc::c_int as crate::stdlib::GLclampd,
-        0 as libc::c_int as crate::stdlib::GLclampd,
+        0 as i32 as crate::stdlib::GLclampd,
+        0 as i32 as crate::stdlib::GLclampd,
     );
     crate::src::sdl::sdl_glimp::qglColor3f.expect("non-null function pointer")(
-        1 as libc::c_int as crate::stdlib::GLfloat,
-        1 as libc::c_int as crate::stdlib::GLfloat,
-        1 as libc::c_int as crate::stdlib::GLfloat,
+        1 as i32 as crate::stdlib::GLfloat,
+        1 as i32 as crate::stdlib::GLfloat,
+        1 as i32 as crate::stdlib::GLfloat,
     );
     crate::src::sdl::sdl_glimp::qglBegin.expect("non-null function pointer")(
-        0x9 as libc::c_int as crate::stdlib::GLenum,
+        0x9 as i32 as crate::stdlib::GLenum,
     );
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < numPoints {
         crate::src::sdl::sdl_glimp::qglVertex3fv.expect("non-null function pointer")(
-            points.offset((i * 3 as libc::c_int) as isize),
+            points.offset((i * 3 as i32) as isize),
         );
         i += 1
     }
     crate::src::sdl::sdl_glimp::qglEnd.expect("non-null function pointer")();
     crate::src::sdl::sdl_glimp::qglDepthRange.expect("non-null function pointer")(
-        0 as libc::c_int as crate::stdlib::GLclampd,
-        1 as libc::c_int as crate::stdlib::GLclampd,
+        0 as i32 as crate::stdlib::GLclampd,
+        1 as i32 as crate::stdlib::GLclampd,
     );
 }
 /*
@@ -3340,7 +3340,7 @@ Visualization aid for movement clipping debugging
 #[no_mangle]
 
 pub unsafe extern "C" fn R_DebugGraphics() {
-    if tr.refdef.rdflags & 0x1 as libc::c_int != 0 {
+    if tr.refdef.rdflags & 0x1 as i32 != 0 {
         return;
     }
     if (*crate::src::renderergl1::tr_init::r_debugSurface).integer == 0 {
@@ -3348,10 +3348,10 @@ pub unsafe extern "C" fn R_DebugGraphics() {
     }
     crate::src::renderergl1::tr_cmds::R_IssuePendingRenderCommands();
     crate::src::renderergl1::tr_backend::GL_Bind(tr.whiteImage as *mut crate::tr_common_h::image_s);
-    crate::src::renderergl1::tr_backend::GL_Cull(crate::tr_local_h::CT_FRONT_SIDED as libc::c_int);
+    crate::src::renderergl1::tr_backend::GL_Cull(crate::tr_local_h::CT_FRONT_SIDED as i32);
     ri.CM_DrawDebugSurface.expect("non-null function pointer")(Some(
         R_DebugPolygon
-            as unsafe extern "C" fn(_: libc::c_int, _: libc::c_int, _: *mut libc::c_float) -> (),
+            as unsafe extern "C" fn(_: i32, _: i32, _: *mut f32) -> (),
     ));
 }
 /*
@@ -3677,9 +3677,9 @@ or a mirror / remote location
 #[no_mangle]
 
 pub unsafe extern "C" fn R_RenderView(mut parms: *mut crate::tr_local_h::viewParms_t) {
-    let mut firstDrawSurf: libc::c_int = 0;
-    let mut numDrawSurfs: libc::c_int = 0;
-    if (*parms).viewportWidth <= 0 as libc::c_int || (*parms).viewportHeight <= 0 as libc::c_int {
+    let mut firstDrawSurf: i32 = 0;
+    let mut numDrawSurfs: i32 = 0;
+    if (*parms).viewportWidth <= 0 as i32 || (*parms).viewportHeight <= 0 as i32 {
         return;
     }
     tr.viewCount += 1;
@@ -3700,8 +3700,8 @@ pub unsafe extern "C" fn R_RenderView(mut parms: *mut crate::tr_local_h::viewPar
     // wrapped around in the buffer and we will be missing
     // the first surfaces, not the last ones
     numDrawSurfs = tr.refdef.numDrawSurfs;
-    if numDrawSurfs > 0x10000 as libc::c_int {
-        numDrawSurfs = 0x10000 as libc::c_int
+    if numDrawSurfs > 0x10000 as i32 {
+        numDrawSurfs = 0x10000 as i32
     }
     R_SortDrawSurfs(
         tr.refdef.drawSurfs.offset(firstDrawSurf as isize),

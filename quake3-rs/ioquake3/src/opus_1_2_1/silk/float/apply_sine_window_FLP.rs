@@ -188,24 +188,24 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_apply_sine_window_FLP(
-    mut px_win: *mut libc::c_float,
-    mut px: *const libc::c_float,
-    win_type: libc::c_int,
-    length: libc::c_int,
+    mut px_win: *mut f32,
+    mut px: *const f32,
+    win_type: i32,
+    length: i32,
 )
 /* I    Window length, multiple of 4                */
 {
-    let mut k: libc::c_int = 0;
-    let mut freq: libc::c_float = 0.;
-    let mut c: libc::c_float = 0.;
-    let mut S0: libc::c_float = 0.;
-    let mut S1: libc::c_float = 0.;
+    let mut k: i32 = 0;
+    let mut freq: f32 = 0.;
+    let mut c: f32 = 0.;
+    let mut S0: f32 = 0.;
+    let mut S1: f32 = 0.;
     /* Length must be multiple of 4 */
-    freq = 3.1415926536f32 / (length + 1 as libc::c_int) as libc::c_float;
+    freq = 3.1415926536f32 / (length + 1 as i32) as f32;
     /* Approximation of 2 * cos(f) */
     c = 2.0f32 - freq * freq;
     /* Initialize state */
-    if win_type < 2 as libc::c_int {
+    if win_type < 2 as i32 {
         /* Start from 0 */
         S0 = 0.0f32;
         /* Approximation of sin(f) */
@@ -218,18 +218,18 @@ pub unsafe extern "C" fn silk_apply_sine_window_FLP(
     }
     /* Uses the recursive equation:   sin(n*f) = 2 * cos(f) * sin((n-1)*f) - sin((n-2)*f)   */
     /* 4 samples at a time */
-    k = 0 as libc::c_int;
+    k = 0 as i32;
     while k < length {
-        *px_win.offset((k + 0 as libc::c_int) as isize) =
-            *px.offset((k + 0 as libc::c_int) as isize) * 0.5f32 * (S0 + S1);
-        *px_win.offset((k + 1 as libc::c_int) as isize) =
-            *px.offset((k + 1 as libc::c_int) as isize) * S1;
+        *px_win.offset((k + 0 as i32) as isize) =
+            *px.offset((k + 0 as i32) as isize) * 0.5f32 * (S0 + S1);
+        *px_win.offset((k + 1 as i32) as isize) =
+            *px.offset((k + 1 as i32) as isize) * S1;
         S0 = c * S1 - S0;
-        *px_win.offset((k + 2 as libc::c_int) as isize) =
-            *px.offset((k + 2 as libc::c_int) as isize) * 0.5f32 * (S1 + S0);
-        *px_win.offset((k + 3 as libc::c_int) as isize) =
-            *px.offset((k + 3 as libc::c_int) as isize) * S0;
+        *px_win.offset((k + 2 as i32) as isize) =
+            *px.offset((k + 2 as i32) as isize) * 0.5f32 * (S1 + S0);
+        *px_win.offset((k + 3 as i32) as isize) =
+            *px.offset((k + 3 as i32) as isize) * S0;
         S1 = c * S0 - S1;
-        k += 4 as libc::c_int
+        k += 4 as i32
     }
 }

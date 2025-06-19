@@ -52,10 +52,10 @@ pub struct soundOptionsInfo_t {
     pub quality: crate::ui_local_h::menulist_s,
     pub back: crate::ui_local_h::menubitmap_s,
     pub apply: crate::ui_local_h::menubitmap_s,
-    pub sfxvolume_original: libc::c_float,
-    pub musicvolume_original: libc::c_float,
-    pub soundSystem_original: libc::c_int,
-    pub quality_original: libc::c_int,
+    pub sfxvolume_original: f32,
+    pub musicvolume_original: f32,
+    pub soundSystem_original: i32,
+    pub quality_original: i32,
 }
 
 static mut quality_items: [*const libc::c_char; 4] = [
@@ -104,7 +104,7 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
         },
         string: 0 as *const libc::c_char as *mut libc::c_char,
         style: 0,
-        color: 0 as *const libc::c_float as *mut libc::c_float,
+        color: 0 as *const f32 as *mut f32,
     },
     framel: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -131,7 +131,7 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     framer: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -158,7 +158,7 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     graphics: crate::ui_local_h::menutext_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -181,7 +181,7 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
         },
         string: 0 as *const libc::c_char as *mut libc::c_char,
         style: 0,
-        color: 0 as *const libc::c_float as *mut libc::c_float,
+        color: 0 as *const f32 as *mut f32,
     },
     display: crate::ui_local_h::menutext_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -204,7 +204,7 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
         },
         string: 0 as *const libc::c_char as *mut libc::c_char,
         style: 0,
-        color: 0 as *const libc::c_float as *mut libc::c_float,
+        color: 0 as *const f32 as *mut f32,
     },
     sound: crate::ui_local_h::menutext_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -227,7 +227,7 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
         },
         string: 0 as *const libc::c_char as *mut libc::c_char,
         style: 0,
-        color: 0 as *const libc::c_float as *mut libc::c_float,
+        color: 0 as *const f32 as *mut f32,
     },
     network: crate::ui_local_h::menutext_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -250,7 +250,7 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
         },
         string: 0 as *const libc::c_char as *mut libc::c_char,
         style: 0,
-        color: 0 as *const libc::c_float as *mut libc::c_float,
+        color: 0 as *const f32 as *mut f32,
     },
     sfxvolume: crate::ui_local_h::menuslider_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -383,7 +383,7 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     apply: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -410,7 +410,7 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     sfxvolume_original: 0.,
     musicvolume_original: 0.,
@@ -423,8 +423,8 @@ UI_SoundOptionsMenu_Event
 =================
 */
 
-unsafe extern "C" fn UI_SoundOptionsMenu_Event(mut ptr: *mut libc::c_void, mut event: libc::c_int) {
-    if event != 3 as libc::c_int {
+unsafe extern "C" fn UI_SoundOptionsMenu_Event(mut ptr: *mut libc::c_void, mut event: i32) {
+    if event != 3 as i32 {
         return;
     }
     match (*(ptr as *mut crate::ui_local_h::menucommon_s)).id {
@@ -457,41 +457,41 @@ unsafe extern "C" fn UI_SoundOptionsMenu_Event(mut ptr: *mut libc::c_void, mut e
         20 => {
             crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
                 b"s_volume\x00" as *const u8 as *const libc::c_char,
-                soundOptionsInfo.sfxvolume.curvalue / 10 as libc::c_int as libc::c_float,
+                soundOptionsInfo.sfxvolume.curvalue / 10 as i32 as f32,
             );
             soundOptionsInfo.sfxvolume_original = soundOptionsInfo.sfxvolume.curvalue;
             crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
                 b"s_musicvolume\x00" as *const u8 as *const libc::c_char,
-                soundOptionsInfo.musicvolume.curvalue / 10 as libc::c_int as libc::c_float,
+                soundOptionsInfo.musicvolume.curvalue / 10 as i32 as f32,
             );
             soundOptionsInfo.musicvolume_original = soundOptionsInfo.musicvolume.curvalue;
             // Check if something changed that requires the sound system to be restarted.
             if soundOptionsInfo.quality_original != soundOptionsInfo.quality.curvalue
                 || soundOptionsInfo.soundSystem_original != soundOptionsInfo.soundSystem.curvalue
             {
-                let mut speed: libc::c_int = 0;
+                let mut speed: i32 = 0;
                 match soundOptionsInfo.quality.curvalue {
-                    1 => speed = 22050 as libc::c_int,
-                    2 => speed = 44100 as libc::c_int,
-                    0 | _ => speed = 11025 as libc::c_int,
+                    1 => speed = 22050 as i32,
+                    2 => speed = 44100 as i32,
+                    0 | _ => speed = 11025 as i32,
                 }
-                if speed == 22050 as libc::c_int {
-                    speed = 0 as libc::c_int
+                if speed == 22050 as i32 {
+                    speed = 0 as i32
                 }
                 crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
                     b"s_sdlSpeed\x00" as *const u8 as *const libc::c_char,
-                    speed as libc::c_float,
+                    speed as f32,
                 );
                 soundOptionsInfo.quality_original = soundOptionsInfo.quality.curvalue;
                 crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
                     b"s_useOpenAL\x00" as *const u8 as *const libc::c_char,
-                    (soundOptionsInfo.soundSystem.curvalue == 1 as libc::c_int) as libc::c_int
-                        as libc::c_float,
+                    (soundOptionsInfo.soundSystem.curvalue == 1 as i32) as i32
+                        as f32,
                 );
                 soundOptionsInfo.soundSystem_original = soundOptionsInfo.soundSystem.curvalue;
                 crate::src::q3_ui::ui_atoms::UI_ForceMenuOff();
                 crate::src::ui::ui_syscalls::trap_Cmd_ExecuteText(
-                    crate::src::qcommon::q_shared::EXEC_APPEND as libc::c_int,
+                    crate::src::qcommon::q_shared::EXEC_APPEND as i32,
                     b"snd_restart\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
@@ -506,28 +506,28 @@ SoundOptions_UpdateMenuItems
 */
 
 unsafe extern "C" fn SoundOptions_UpdateMenuItems() {
-    if soundOptionsInfo.soundSystem.curvalue == 0 as libc::c_int {
-        soundOptionsInfo.quality.generic.flags &= !(0x2000 as libc::c_int as libc::c_uint)
+    if soundOptionsInfo.soundSystem.curvalue == 0 as i32 {
+        soundOptionsInfo.quality.generic.flags &= !(0x2000 as i32 as u32)
     } else {
-        soundOptionsInfo.quality.generic.flags |= 0x2000 as libc::c_int as libc::c_uint
+        soundOptionsInfo.quality.generic.flags |= 0x2000 as i32 as u32
     }
     soundOptionsInfo.apply.generic.flags |=
-        0x1000 as libc::c_int as libc::c_uint | 0x4000 as libc::c_int as libc::c_uint;
+        0x1000 as i32 as u32 | 0x4000 as i32 as u32;
     if soundOptionsInfo.sfxvolume_original != soundOptionsInfo.sfxvolume.curvalue {
         soundOptionsInfo.apply.generic.flags &=
-            !(0x1000 as libc::c_int as libc::c_uint | 0x4000 as libc::c_int as libc::c_uint)
+            !(0x1000 as i32 as u32 | 0x4000 as i32 as u32)
     }
     if soundOptionsInfo.musicvolume_original != soundOptionsInfo.musicvolume.curvalue {
         soundOptionsInfo.apply.generic.flags &=
-            !(0x1000 as libc::c_int as libc::c_uint | 0x4000 as libc::c_int as libc::c_uint)
+            !(0x1000 as i32 as u32 | 0x4000 as i32 as u32)
     }
     if soundOptionsInfo.soundSystem_original != soundOptionsInfo.soundSystem.curvalue {
         soundOptionsInfo.apply.generic.flags &=
-            !(0x1000 as libc::c_int as libc::c_uint | 0x4000 as libc::c_int as libc::c_uint)
+            !(0x1000 as i32 as u32 | 0x4000 as i32 as u32)
     }
     if soundOptionsInfo.quality_original != soundOptionsInfo.quality.curvalue {
         soundOptionsInfo.apply.generic.flags &=
-            !(0x1000 as libc::c_int as libc::c_uint | 0x4000 as libc::c_int as libc::c_uint)
+            !(0x1000 as i32 as u32 | 0x4000 as i32 as u32)
     };
 }
 /*
@@ -551,152 +551,152 @@ UI_SoundOptionsMenu_Init
 */
 
 unsafe extern "C" fn UI_SoundOptionsMenu_Init() {
-    let mut y: libc::c_int = 0;
-    let mut speed: libc::c_int = 0;
+    let mut y: i32 = 0;
+    let mut speed: i32 = 0;
     crate::stdlib::memset(
         &mut soundOptionsInfo as *mut soundOptionsInfo_t as *mut libc::c_void,
-        0 as libc::c_int,
+        0 as i32,
         ::std::mem::size_of::<soundOptionsInfo_t>() as libc::c_ulong,
     );
     UI_SoundOptionsMenu_Cache();
     soundOptionsInfo.menu.wrapAround = crate::src::qcommon::q_shared::qtrue;
     soundOptionsInfo.menu.fullscreen = crate::src::qcommon::q_shared::qtrue;
     soundOptionsInfo.menu.draw = Some(SoundOptions_MenuDraw as unsafe extern "C" fn() -> ());
-    soundOptionsInfo.banner.generic.type_0 = 10 as libc::c_int;
-    soundOptionsInfo.banner.generic.flags = 0x8 as libc::c_int as libc::c_uint;
-    soundOptionsInfo.banner.generic.x = 320 as libc::c_int;
-    soundOptionsInfo.banner.generic.y = 16 as libc::c_int;
+    soundOptionsInfo.banner.generic.type_0 = 10 as i32;
+    soundOptionsInfo.banner.generic.flags = 0x8 as i32 as u32;
+    soundOptionsInfo.banner.generic.x = 320 as i32;
+    soundOptionsInfo.banner.generic.y = 16 as i32;
     soundOptionsInfo.banner.string =
         b"SYSTEM SETUP\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     soundOptionsInfo.banner.color = crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr();
-    soundOptionsInfo.banner.style = 0x1 as libc::c_int;
-    soundOptionsInfo.framel.generic.type_0 = 6 as libc::c_int;
+    soundOptionsInfo.banner.style = 0x1 as i32;
+    soundOptionsInfo.framel.generic.type_0 = 6 as i32;
     soundOptionsInfo.framel.generic.name =
         b"menu/art/frame2_l\x00" as *const u8 as *const libc::c_char;
-    soundOptionsInfo.framel.generic.flags = 0x4000 as libc::c_int as libc::c_uint;
-    soundOptionsInfo.framel.generic.x = 0 as libc::c_int;
-    soundOptionsInfo.framel.generic.y = 78 as libc::c_int;
-    soundOptionsInfo.framel.width = 256 as libc::c_int;
-    soundOptionsInfo.framel.height = 329 as libc::c_int;
-    soundOptionsInfo.framer.generic.type_0 = 6 as libc::c_int;
+    soundOptionsInfo.framel.generic.flags = 0x4000 as i32 as u32;
+    soundOptionsInfo.framel.generic.x = 0 as i32;
+    soundOptionsInfo.framel.generic.y = 78 as i32;
+    soundOptionsInfo.framel.width = 256 as i32;
+    soundOptionsInfo.framel.height = 329 as i32;
+    soundOptionsInfo.framer.generic.type_0 = 6 as i32;
     soundOptionsInfo.framer.generic.name =
         b"menu/art/frame1_r\x00" as *const u8 as *const libc::c_char;
-    soundOptionsInfo.framer.generic.flags = 0x4000 as libc::c_int as libc::c_uint;
-    soundOptionsInfo.framer.generic.x = 376 as libc::c_int;
-    soundOptionsInfo.framer.generic.y = 76 as libc::c_int;
-    soundOptionsInfo.framer.width = 256 as libc::c_int;
-    soundOptionsInfo.framer.height = 334 as libc::c_int;
-    soundOptionsInfo.graphics.generic.type_0 = 9 as libc::c_int;
+    soundOptionsInfo.framer.generic.flags = 0x4000 as i32 as u32;
+    soundOptionsInfo.framer.generic.x = 376 as i32;
+    soundOptionsInfo.framer.generic.y = 76 as i32;
+    soundOptionsInfo.framer.width = 256 as i32;
+    soundOptionsInfo.framer.height = 334 as i32;
+    soundOptionsInfo.graphics.generic.type_0 = 9 as i32;
     soundOptionsInfo.graphics.generic.flags =
-        0x10 as libc::c_int as libc::c_uint | 0x100 as libc::c_int as libc::c_uint;
-    soundOptionsInfo.graphics.generic.id = 10 as libc::c_int;
+        0x10 as i32 as u32 | 0x100 as i32 as u32;
+    soundOptionsInfo.graphics.generic.id = 10 as i32;
     soundOptionsInfo.graphics.generic.callback = Some(
         UI_SoundOptionsMenu_Event
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    soundOptionsInfo.graphics.generic.x = 216 as libc::c_int;
-    soundOptionsInfo.graphics.generic.y = 240 as libc::c_int - 2 as libc::c_int * 27 as libc::c_int;
+    soundOptionsInfo.graphics.generic.x = 216 as i32;
+    soundOptionsInfo.graphics.generic.y = 240 as i32 - 2 as i32 * 27 as i32;
     soundOptionsInfo.graphics.string =
         b"GRAPHICS\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    soundOptionsInfo.graphics.style = 0x2 as libc::c_int;
+    soundOptionsInfo.graphics.style = 0x2 as i32;
     soundOptionsInfo.graphics.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
-    soundOptionsInfo.display.generic.type_0 = 9 as libc::c_int;
+    soundOptionsInfo.display.generic.type_0 = 9 as i32;
     soundOptionsInfo.display.generic.flags =
-        0x10 as libc::c_int as libc::c_uint | 0x100 as libc::c_int as libc::c_uint;
-    soundOptionsInfo.display.generic.id = 11 as libc::c_int;
+        0x10 as i32 as u32 | 0x100 as i32 as u32;
+    soundOptionsInfo.display.generic.id = 11 as i32;
     soundOptionsInfo.display.generic.callback = Some(
         UI_SoundOptionsMenu_Event
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    soundOptionsInfo.display.generic.x = 216 as libc::c_int;
-    soundOptionsInfo.display.generic.y = 240 as libc::c_int - 27 as libc::c_int;
+    soundOptionsInfo.display.generic.x = 216 as i32;
+    soundOptionsInfo.display.generic.y = 240 as i32 - 27 as i32;
     soundOptionsInfo.display.string =
         b"DISPLAY\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    soundOptionsInfo.display.style = 0x2 as libc::c_int;
+    soundOptionsInfo.display.style = 0x2 as i32;
     soundOptionsInfo.display.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
-    soundOptionsInfo.sound.generic.type_0 = 9 as libc::c_int;
-    soundOptionsInfo.sound.generic.flags = 0x10 as libc::c_int as libc::c_uint;
-    soundOptionsInfo.sound.generic.id = 12 as libc::c_int;
+    soundOptionsInfo.sound.generic.type_0 = 9 as i32;
+    soundOptionsInfo.sound.generic.flags = 0x10 as i32 as u32;
+    soundOptionsInfo.sound.generic.id = 12 as i32;
     soundOptionsInfo.sound.generic.callback = Some(
         UI_SoundOptionsMenu_Event
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    soundOptionsInfo.sound.generic.x = 216 as libc::c_int;
-    soundOptionsInfo.sound.generic.y = 240 as libc::c_int;
+    soundOptionsInfo.sound.generic.x = 216 as i32;
+    soundOptionsInfo.sound.generic.y = 240 as i32;
     soundOptionsInfo.sound.string =
         b"SOUND\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    soundOptionsInfo.sound.style = 0x2 as libc::c_int;
+    soundOptionsInfo.sound.style = 0x2 as i32;
     soundOptionsInfo.sound.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
-    soundOptionsInfo.network.generic.type_0 = 9 as libc::c_int;
+    soundOptionsInfo.network.generic.type_0 = 9 as i32;
     soundOptionsInfo.network.generic.flags =
-        0x10 as libc::c_int as libc::c_uint | 0x100 as libc::c_int as libc::c_uint;
-    soundOptionsInfo.network.generic.id = 13 as libc::c_int;
+        0x10 as i32 as u32 | 0x100 as i32 as u32;
+    soundOptionsInfo.network.generic.id = 13 as i32;
     soundOptionsInfo.network.generic.callback = Some(
         UI_SoundOptionsMenu_Event
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    soundOptionsInfo.network.generic.x = 216 as libc::c_int;
-    soundOptionsInfo.network.generic.y = 240 as libc::c_int + 27 as libc::c_int;
+    soundOptionsInfo.network.generic.x = 216 as i32;
+    soundOptionsInfo.network.generic.y = 240 as i32 + 27 as i32;
     soundOptionsInfo.network.string =
         b"NETWORK\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    soundOptionsInfo.network.style = 0x2 as libc::c_int;
+    soundOptionsInfo.network.style = 0x2 as i32;
     soundOptionsInfo.network.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
-    y = 240 as libc::c_int - 2 as libc::c_int * (16 as libc::c_int + 2 as libc::c_int);
-    soundOptionsInfo.sfxvolume.generic.type_0 = 1 as libc::c_int;
+    y = 240 as i32 - 2 as i32 * (16 as i32 + 2 as i32);
+    soundOptionsInfo.sfxvolume.generic.type_0 = 1 as i32;
     soundOptionsInfo.sfxvolume.generic.name =
         b"Effects Volume:\x00" as *const u8 as *const libc::c_char;
     soundOptionsInfo.sfxvolume.generic.flags =
-        0x100 as libc::c_int as libc::c_uint | 0x2 as libc::c_int as libc::c_uint;
+        0x100 as i32 as u32 | 0x2 as i32 as u32;
     soundOptionsInfo.sfxvolume.generic.callback = Some(
         UI_SoundOptionsMenu_Event
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    soundOptionsInfo.sfxvolume.generic.id = 14 as libc::c_int;
-    soundOptionsInfo.sfxvolume.generic.x = 400 as libc::c_int;
+    soundOptionsInfo.sfxvolume.generic.id = 14 as i32;
+    soundOptionsInfo.sfxvolume.generic.x = 400 as i32;
     soundOptionsInfo.sfxvolume.generic.y = y;
-    soundOptionsInfo.sfxvolume.minvalue = 0 as libc::c_int as libc::c_float;
-    soundOptionsInfo.sfxvolume.maxvalue = 10 as libc::c_int as libc::c_float;
-    y += 16 as libc::c_int + 2 as libc::c_int;
-    soundOptionsInfo.musicvolume.generic.type_0 = 1 as libc::c_int;
+    soundOptionsInfo.sfxvolume.minvalue = 0 as i32 as f32;
+    soundOptionsInfo.sfxvolume.maxvalue = 10 as i32 as f32;
+    y += 16 as i32 + 2 as i32;
+    soundOptionsInfo.musicvolume.generic.type_0 = 1 as i32;
     soundOptionsInfo.musicvolume.generic.name =
         b"Music Volume:\x00" as *const u8 as *const libc::c_char;
     soundOptionsInfo.musicvolume.generic.flags =
-        0x100 as libc::c_int as libc::c_uint | 0x2 as libc::c_int as libc::c_uint;
+        0x100 as i32 as u32 | 0x2 as i32 as u32;
     soundOptionsInfo.musicvolume.generic.callback = Some(
         UI_SoundOptionsMenu_Event
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    soundOptionsInfo.musicvolume.generic.id = 15 as libc::c_int;
-    soundOptionsInfo.musicvolume.generic.x = 400 as libc::c_int;
+    soundOptionsInfo.musicvolume.generic.id = 15 as i32;
+    soundOptionsInfo.musicvolume.generic.x = 400 as i32;
     soundOptionsInfo.musicvolume.generic.y = y;
-    soundOptionsInfo.musicvolume.minvalue = 0 as libc::c_int as libc::c_float;
-    soundOptionsInfo.musicvolume.maxvalue = 10 as libc::c_int as libc::c_float;
-    y += 16 as libc::c_int + 2 as libc::c_int;
-    soundOptionsInfo.soundSystem.generic.type_0 = 3 as libc::c_int;
+    soundOptionsInfo.musicvolume.minvalue = 0 as i32 as f32;
+    soundOptionsInfo.musicvolume.maxvalue = 10 as i32 as f32;
+    y += 16 as i32 + 2 as i32;
+    soundOptionsInfo.soundSystem.generic.type_0 = 3 as i32;
     soundOptionsInfo.soundSystem.generic.name =
         b"Sound System:\x00" as *const u8 as *const libc::c_char;
     soundOptionsInfo.soundSystem.generic.flags =
-        0x100 as libc::c_int as libc::c_uint | 0x2 as libc::c_int as libc::c_uint;
+        0x100 as i32 as u32 | 0x2 as i32 as u32;
     soundOptionsInfo.soundSystem.generic.callback = Some(
         UI_SoundOptionsMenu_Event
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    soundOptionsInfo.soundSystem.generic.id = 17 as libc::c_int;
-    soundOptionsInfo.soundSystem.generic.x = 400 as libc::c_int;
+    soundOptionsInfo.soundSystem.generic.id = 17 as i32;
+    soundOptionsInfo.soundSystem.generic.x = 400 as i32;
     soundOptionsInfo.soundSystem.generic.y = y;
     soundOptionsInfo.soundSystem.itemnames = soundSystem_items.as_mut_ptr();
-    y += 16 as libc::c_int + 2 as libc::c_int;
-    soundOptionsInfo.quality.generic.type_0 = 3 as libc::c_int;
+    y += 16 as i32 + 2 as i32;
+    soundOptionsInfo.quality.generic.type_0 = 3 as i32;
     soundOptionsInfo.quality.generic.name =
         b"SDL Sound Quality:\x00" as *const u8 as *const libc::c_char;
     soundOptionsInfo.quality.generic.flags =
-        0x100 as libc::c_int as libc::c_uint | 0x2 as libc::c_int as libc::c_uint;
+        0x100 as i32 as u32 | 0x2 as i32 as u32;
     soundOptionsInfo.quality.generic.callback = Some(
         UI_SoundOptionsMenu_Event
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    soundOptionsInfo.quality.generic.id = 16 as libc::c_int;
-    soundOptionsInfo.quality.generic.x = 400 as libc::c_int;
+    soundOptionsInfo.quality.generic.id = 16 as i32;
+    soundOptionsInfo.quality.generic.x = 400 as i32;
     soundOptionsInfo.quality.generic.y = y;
     soundOptionsInfo.quality.itemnames = quality_items.as_mut_ptr();
     /*
@@ -709,37 +709,37 @@ unsafe extern "C" fn UI_SoundOptionsMenu_Init() {
         soundOptionsInfo.a3d.generic.x				= 400;
         soundOptionsInfo.a3d.generic.y				= y;
     */
-    soundOptionsInfo.back.generic.type_0 = 6 as libc::c_int;
+    soundOptionsInfo.back.generic.type_0 = 6 as i32;
     soundOptionsInfo.back.generic.name = b"menu/art/back_0\x00" as *const u8 as *const libc::c_char;
     soundOptionsInfo.back.generic.flags =
-        0x4 as libc::c_int as libc::c_uint | 0x100 as libc::c_int as libc::c_uint;
+        0x4 as i32 as u32 | 0x100 as i32 as u32;
     soundOptionsInfo.back.generic.callback = Some(
         UI_SoundOptionsMenu_Event
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    soundOptionsInfo.back.generic.id = 19 as libc::c_int;
-    soundOptionsInfo.back.generic.x = 0 as libc::c_int;
-    soundOptionsInfo.back.generic.y = 480 as libc::c_int - 64 as libc::c_int;
-    soundOptionsInfo.back.width = 128 as libc::c_int;
-    soundOptionsInfo.back.height = 64 as libc::c_int;
+    soundOptionsInfo.back.generic.id = 19 as i32;
+    soundOptionsInfo.back.generic.x = 0 as i32;
+    soundOptionsInfo.back.generic.y = 480 as i32 - 64 as i32;
+    soundOptionsInfo.back.width = 128 as i32;
+    soundOptionsInfo.back.height = 64 as i32;
     soundOptionsInfo.back.focuspic =
         b"menu/art/back_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    soundOptionsInfo.apply.generic.type_0 = 6 as libc::c_int;
+    soundOptionsInfo.apply.generic.type_0 = 6 as i32;
     soundOptionsInfo.apply.generic.name =
         b"menu/art/accept_0\x00" as *const u8 as *const libc::c_char;
-    soundOptionsInfo.apply.generic.flags = 0x10 as libc::c_int as libc::c_uint
-        | 0x100 as libc::c_int as libc::c_uint
-        | 0x1000 as libc::c_int as libc::c_uint
-        | 0x4000 as libc::c_int as libc::c_uint;
+    soundOptionsInfo.apply.generic.flags = 0x10 as i32 as u32
+        | 0x100 as i32 as u32
+        | 0x1000 as i32 as u32
+        | 0x4000 as i32 as u32;
     soundOptionsInfo.apply.generic.callback = Some(
         UI_SoundOptionsMenu_Event
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    soundOptionsInfo.apply.generic.id = 20 as libc::c_int;
-    soundOptionsInfo.apply.generic.x = 640 as libc::c_int;
-    soundOptionsInfo.apply.generic.y = 480 as libc::c_int - 64 as libc::c_int;
-    soundOptionsInfo.apply.width = 128 as libc::c_int;
-    soundOptionsInfo.apply.height = 64 as libc::c_int;
+    soundOptionsInfo.apply.generic.id = 20 as i32;
+    soundOptionsInfo.apply.generic.x = 640 as i32;
+    soundOptionsInfo.apply.generic.y = 480 as i32 - 64 as i32;
+    soundOptionsInfo.apply.width = 128 as i32;
+    soundOptionsInfo.apply.height = 64 as i32;
     soundOptionsInfo.apply.focuspic =
         b"menu/art/accept_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     crate::src::q3_ui::ui_qmenu::Menu_AddItem(
@@ -800,35 +800,35 @@ unsafe extern "C" fn UI_SoundOptionsMenu_Init() {
     );
     soundOptionsInfo.sfxvolume_original = crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
         b"s_volume\x00" as *const u8 as *const libc::c_char,
-    ) * 10 as libc::c_int as libc::c_float;
+    ) * 10 as i32 as f32;
     soundOptionsInfo.sfxvolume.curvalue = soundOptionsInfo.sfxvolume_original;
     soundOptionsInfo.musicvolume_original = crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
         b"s_musicvolume\x00" as *const u8 as *const libc::c_char,
-    ) * 10 as libc::c_int as libc::c_float;
+    ) * 10 as i32 as f32;
     soundOptionsInfo.musicvolume.curvalue = soundOptionsInfo.musicvolume_original;
     if crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
         b"s_useOpenAL\x00" as *const u8 as *const libc::c_char,
     ) != 0.
     {
-        soundOptionsInfo.soundSystem_original = 1 as libc::c_int
+        soundOptionsInfo.soundSystem_original = 1 as i32
     } else {
-        soundOptionsInfo.soundSystem_original = 0 as libc::c_int
+        soundOptionsInfo.soundSystem_original = 0 as i32
     }
     soundOptionsInfo.soundSystem.curvalue = soundOptionsInfo.soundSystem_original;
     speed = crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
         b"s_sdlSpeed\x00" as *const u8 as *const libc::c_char,
-    ) as libc::c_int;
+    ) as i32;
     if speed == 0 {
         // Check for default
-        speed = 22050 as libc::c_int
+        speed = 22050 as i32
     }
-    if speed <= 11025 as libc::c_int {
-        soundOptionsInfo.quality_original = 0 as libc::c_int
-    } else if speed <= 22050 as libc::c_int {
-        soundOptionsInfo.quality_original = 1 as libc::c_int
+    if speed <= 11025 as i32 {
+        soundOptionsInfo.quality_original = 0 as i32
+    } else if speed <= 22050 as i32 {
+        soundOptionsInfo.quality_original = 1 as i32
     } else {
         // 44100
-        soundOptionsInfo.quality_original = 2 as libc::c_int
+        soundOptionsInfo.quality_original = 2 as i32
     }
     soundOptionsInfo.quality.curvalue = soundOptionsInfo.quality_original;
     //	soundOptionsInfo.a3d.curvalue = (int)trap_Cvar_VariableValue( "s_usingA3D" );

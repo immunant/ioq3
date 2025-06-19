@@ -1,15 +1,15 @@
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct snapshot_t {
-    pub snapFlags: libc::c_int,
-    pub ping: libc::c_int,
-    pub serverTime: libc::c_int,
+    pub snapFlags: i32,
+    pub ping: i32,
+    pub serverTime: i32,
     pub areamask: [crate::src::qcommon::q_shared::byte; 32],
     pub ps: crate::src::qcommon::q_shared::playerState_t,
-    pub numEntities: libc::c_int,
+    pub numEntities: i32,
     pub entities: [crate::src::qcommon::q_shared::entityState_t; 256],
-    pub numServerCommands: libc::c_int,
-    pub serverCommandSequence: libc::c_int,
+    pub numServerCommands: i32,
+    pub serverCommandSequence: i32,
 }
 pub const CG_PRINT: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 0;
 pub const CG_ERROR: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 1;

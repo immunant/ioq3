@@ -7,12 +7,12 @@ pub mod macros_h {
         mut in32: crate::opus_types_h::opus_int32,
     ) -> crate::opus_types_h::opus_int32 {
         return if in32 != 0 {
-            (32 as libc::c_int)
-                - (::std::mem::size_of::<libc::c_uint>() as libc::c_ulong as libc::c_int
-                    * 8 as libc::c_int
-                    - (in32 as libc::c_uint).leading_zeros() as i32)
+            (32 as i32)
+                - (::std::mem::size_of::<u32>() as libc::c_ulong as i32
+                    * 8 as i32
+                    - (in32 as u32).leading_zeros() as i32)
         } else {
-            32 as libc::c_int
+            32 as i32
         };
     }
 
@@ -28,79 +28,79 @@ pub mod Inlines_h {
     pub unsafe extern "C" fn silk_DIV32_varQ(
         a32: crate::opus_types_h::opus_int32,
         b32: crate::opus_types_h::opus_int32,
-        Qres: libc::c_int,
+        Qres: i32,
     ) -> crate::opus_types_h::opus_int32
 /* I    Q-domain of result (>= 0)       */ {
-        let mut a_headrm: libc::c_int = 0;
-        let mut b_headrm: libc::c_int = 0;
-        let mut lshift: libc::c_int = 0;
+        let mut a_headrm: i32 = 0;
+        let mut b_headrm: i32 = 0;
+        let mut lshift: i32 = 0;
         let mut b32_inv: crate::opus_types_h::opus_int32 = 0;
         let mut a32_nrm: crate::opus_types_h::opus_int32 = 0;
         let mut b32_nrm: crate::opus_types_h::opus_int32 = 0;
         let mut result: crate::opus_types_h::opus_int32 = 0;
         /* Compute number of bits head room and normalize inputs */
-        a_headrm = silk_CLZ32(if a32 > 0 as libc::c_int { a32 } else { -a32 }) - 1 as libc::c_int; /* Q: a_headrm                  */
+        a_headrm = silk_CLZ32(if a32 > 0 as i32 { a32 } else { -a32 }) - 1 as i32; /* Q: a_headrm                  */
         a32_nrm = ((a32 as crate::opus_types_h::opus_uint32) << a_headrm)
             as crate::opus_types_h::opus_int32; /* Q: b_headrm                  */
-        b_headrm = silk_CLZ32(if b32 > 0 as libc::c_int { b32 } else { -b32 }) - 1 as libc::c_int;
+        b_headrm = silk_CLZ32(if b32 > 0 as i32 { b32 } else { -b32 }) - 1 as i32;
         b32_nrm = ((b32 as crate::opus_types_h::opus_uint32) << b_headrm)
             as crate::opus_types_h::opus_int32;
         /* Inverse of b32, with 14 bits of precision */
-        b32_inv = (0x7fffffff as libc::c_int >> 2 as libc::c_int) / (b32_nrm >> 16 as libc::c_int); /* Q: 29 + 16 - b_headrm        */
+        b32_inv = (0x7fffffff as i32 >> 2 as i32) / (b32_nrm >> 16 as i32); /* Q: 29 + 16 - b_headrm        */
         /* First approximation */
-        result = (a32_nrm as libc::c_longlong
-            * b32_inv as crate::opus_types_h::opus_int16 as libc::c_longlong
-            >> 16 as libc::c_int) as crate::opus_types_h::opus_int32; /* Q: 29 + a_headrm - b_headrm  */
+        result = (a32_nrm as i64
+            * b32_inv as crate::opus_types_h::opus_int16 as i64
+            >> 16 as i32) as crate::opus_types_h::opus_int32; /* Q: 29 + a_headrm - b_headrm  */
         /* Compute residual by subtracting product of denominator and first approximation */
         /* It's OK to overflow because the final value of a32_nrm should always be small */
         a32_nrm = (a32_nrm as crate::opus_types_h::opus_uint32).wrapping_sub(
-            (((b32_nrm as libc::c_longlong * result as libc::c_longlong >> 32 as libc::c_int)
+            (((b32_nrm as i64 * result as i64 >> 32 as i32)
                 as crate::opus_types_h::opus_int32
                 as crate::opus_types_h::opus_uint32)
-                << 3 as libc::c_int) as crate::opus_types_h::opus_int32
+                << 3 as i32) as crate::opus_types_h::opus_int32
                 as crate::opus_types_h::opus_uint32,
         ) as crate::opus_types_h::opus_int32; /* Q: a_headrm   */
         /* Refinement */
-        result = (result as libc::c_longlong
-            + (a32_nrm as libc::c_longlong
-                * b32_inv as crate::opus_types_h::opus_int16 as libc::c_longlong
-                >> 16 as libc::c_int)) as crate::opus_types_h::opus_int32; /* Q: 29 + a_headrm - b_headrm  */
+        result = (result as i64
+            + (a32_nrm as i64
+                * b32_inv as crate::opus_types_h::opus_int16 as i64
+                >> 16 as i32)) as crate::opus_types_h::opus_int32; /* Q: 29 + a_headrm - b_headrm  */
         /* Convert to Qres domain */
-        lshift = 29 as libc::c_int + a_headrm - b_headrm - Qres;
-        if lshift < 0 as libc::c_int {
-            return (((if 0x80000000 as libc::c_uint as crate::opus_types_h::opus_int32 >> -lshift
-                > 0x7fffffff as libc::c_int >> -lshift
+        lshift = 29 as i32 + a_headrm - b_headrm - Qres;
+        if lshift < 0 as i32 {
+            return (((if 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> -lshift
+                > 0x7fffffff as i32 >> -lshift
             {
                 (if result
-                    > 0x80000000 as libc::c_uint as crate::opus_types_h::opus_int32 >> -lshift
+                    > 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> -lshift
                 {
-                    (0x80000000 as libc::c_uint as crate::opus_types_h::opus_int32) >> -lshift
+                    (0x80000000 as u32 as crate::opus_types_h::opus_int32) >> -lshift
                 } else {
-                    (if result < 0x7fffffff as libc::c_int >> -lshift {
-                        (0x7fffffff as libc::c_int) >> -lshift
+                    (if result < 0x7fffffff as i32 >> -lshift {
+                        (0x7fffffff as i32) >> -lshift
                     } else {
                         result
                     })
                 })
             } else {
-                (if result > 0x7fffffff as libc::c_int >> -lshift {
-                    (0x7fffffff as libc::c_int) >> -lshift
+                (if result > 0x7fffffff as i32 >> -lshift {
+                    (0x7fffffff as i32) >> -lshift
                 } else {
                     (if result
-                        < 0x80000000 as libc::c_uint as crate::opus_types_h::opus_int32 >> -lshift
+                        < 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> -lshift
                     {
-                        (0x80000000 as libc::c_uint as crate::opus_types_h::opus_int32) >> -lshift
+                        (0x80000000 as u32 as crate::opus_types_h::opus_int32) >> -lshift
                     } else {
                         result
                     })
                 })
             }) as crate::opus_types_h::opus_uint32)
                 << -lshift) as crate::opus_types_h::opus_int32;
-        } else if lshift < 32 as libc::c_int {
+        } else if lshift < 32 as i32 {
             return result >> lshift;
         } else {
             /* Avoid undefined result */
-            return 0 as libc::c_int;
+            return 0 as i32;
         };
     }
 
@@ -367,43 +367,43 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_NLSF_encode(
-    mut NLSFIndices: *mut libc::c_schar,
+    mut NLSFIndices: *mut i8,
     mut pNLSF_Q15: *mut crate::opus_types_h::opus_int16,
     mut psNLSF_CB: *const crate::structs_h::silk_NLSF_CB_struct,
     mut pW_Q2: *const crate::opus_types_h::opus_int16,
-    NLSF_mu_Q20: libc::c_int,
-    nSurvivors: libc::c_int,
-    signalType: libc::c_int,
+    NLSF_mu_Q20: i32,
+    nSurvivors: i32,
+    signalType: i32,
 ) -> crate::opus_types_h::opus_int32
 /* I    Signal type: 0/1/2                          */ {
-    let mut i: libc::c_int = 0;
-    let mut s: libc::c_int = 0;
-    let mut ind1: libc::c_int = 0;
-    let mut bestIndex: libc::c_int = 0;
-    let mut prob_Q8: libc::c_int = 0;
-    let mut bits_q7: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut s: i32 = 0;
+    let mut ind1: i32 = 0;
+    let mut bestIndex: i32 = 0;
+    let mut prob_Q8: i32 = 0;
+    let mut bits_q7: i32 = 0;
     let mut W_tmp_Q9: crate::opus_types_h::opus_int32 = 0;
     let mut ret: crate::opus_types_h::opus_int32 = 0;
     let mut err_Q24: *mut crate::opus_types_h::opus_int32 =
         0 as *mut crate::opus_types_h::opus_int32;
     let mut RD_Q25: *mut crate::opus_types_h::opus_int32 =
         0 as *mut crate::opus_types_h::opus_int32;
-    let mut tempIndices1: *mut libc::c_int = 0 as *mut libc::c_int;
-    let mut tempIndices2: *mut libc::c_schar = 0 as *mut libc::c_schar;
+    let mut tempIndices1: *mut i32 = 0 as *mut i32;
+    let mut tempIndices2: *mut i8 = 0 as *mut i8;
     let mut res_Q10: [crate::opus_types_h::opus_int16; 16] = [0; 16];
     let mut NLSF_tmp_Q15: [crate::opus_types_h::opus_int16; 16] = [0; 16];
     let mut W_adj_Q5: [crate::opus_types_h::opus_int16; 16] = [0; 16];
-    let mut pred_Q8: [libc::c_uchar; 16] = [0; 16];
+    let mut pred_Q8: [u8; 16] = [0; 16];
     let mut ec_ix: [crate::opus_types_h::opus_int16; 16] = [0; 16];
-    let mut pCB_element: *const libc::c_uchar = 0 as *const libc::c_uchar;
-    let mut iCDF_ptr: *const libc::c_uchar = 0 as *const libc::c_uchar;
+    let mut pCB_element: *const u8 = 0 as *const u8;
+    let mut iCDF_ptr: *const u8 = 0 as *const u8;
     let mut pCB_Wght_Q9: *const crate::opus_types_h::opus_int16 =
         0 as *const crate::opus_types_h::opus_int16;
     /* NLSF stabilization */
     crate::src::opus_1_2_1::silk::NLSF_stabilize::silk_NLSF_stabilize(
         pNLSF_Q15,
         (*psNLSF_CB).deltaMin_Q15,
-        (*psNLSF_CB).order as libc::c_int,
+        (*psNLSF_CB).order as i32,
     );
     /* First stage: VQ */
     let mut fresh0 = ::std::vec::from_elem(
@@ -417,20 +417,20 @@ pub unsafe extern "C" fn silk_NLSF_encode(
         pNLSF_Q15 as *const crate::opus_types_h::opus_int16,
         (*psNLSF_CB).CB1_NLSF_Q8,
         (*psNLSF_CB).CB1_Wght_Q9,
-        (*psNLSF_CB).nVectors as libc::c_int,
-        (*psNLSF_CB).order as libc::c_int,
+        (*psNLSF_CB).nVectors as i32,
+        (*psNLSF_CB).order as i32,
     );
     /* Sort the quantization errors */
     let mut fresh1 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<libc::c_int>() as libc::c_ulong)
+        (::std::mem::size_of::<i32>() as libc::c_ulong)
             .wrapping_mul(nSurvivors as libc::c_ulong) as usize,
     );
-    tempIndices1 = fresh1.as_mut_ptr() as *mut libc::c_int;
+    tempIndices1 = fresh1.as_mut_ptr() as *mut i32;
     crate::src::opus_1_2_1::silk::sort::silk_insertion_sort_increasing(
         err_Q24,
         tempIndices1,
-        (*psNLSF_CB).nVectors as libc::c_int,
+        (*psNLSF_CB).nVectors as i32,
         nSurvivors,
     );
     let mut fresh2 = ::std::vec::from_elem(
@@ -441,43 +441,43 @@ pub unsafe extern "C" fn silk_NLSF_encode(
     RD_Q25 = fresh2.as_mut_ptr() as *mut crate::opus_types_h::opus_int32;
     let mut fresh3 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<libc::c_schar>() as libc::c_ulong)
-            .wrapping_mul((nSurvivors * 16 as libc::c_int) as libc::c_ulong) as usize,
+        (::std::mem::size_of::<i8>() as libc::c_ulong)
+            .wrapping_mul((nSurvivors * 16 as i32) as libc::c_ulong) as usize,
     );
-    tempIndices2 = fresh3.as_mut_ptr() as *mut libc::c_schar;
+    tempIndices2 = fresh3.as_mut_ptr() as *mut i8;
     /* Loop over survivors */
-    s = 0 as libc::c_int;
+    s = 0 as i32;
     while s < nSurvivors {
         ind1 = *tempIndices1.offset(s as isize);
         /* Residual after first stage */
         pCB_element = &*(*psNLSF_CB)
             .CB1_NLSF_Q8
-            .offset((ind1 * (*psNLSF_CB).order as libc::c_int) as isize)
-            as *const libc::c_uchar;
+            .offset((ind1 * (*psNLSF_CB).order as i32) as isize)
+            as *const u8;
         pCB_Wght_Q9 = &*(*psNLSF_CB)
             .CB1_Wght_Q9
-            .offset((ind1 * (*psNLSF_CB).order as libc::c_int) as isize)
+            .offset((ind1 * (*psNLSF_CB).order as i32) as isize)
             as *const crate::opus_types_h::opus_int16;
-        i = 0 as libc::c_int;
-        while i < (*psNLSF_CB).order as libc::c_int {
+        i = 0 as i32;
+        while i < (*psNLSF_CB).order as i32 {
             NLSF_tmp_Q15[i as usize] =
                 ((*pCB_element.offset(i as isize) as crate::opus_types_h::opus_int16
-                    as crate::opus_types_h::opus_uint16 as libc::c_int)
-                    << 7 as libc::c_int) as crate::opus_types_h::opus_int16;
+                    as crate::opus_types_h::opus_uint16 as i32)
+                    << 7 as i32) as crate::opus_types_h::opus_int16;
             W_tmp_Q9 = *pCB_Wght_Q9.offset(i as isize) as crate::opus_types_h::opus_int32;
-            res_Q10[i as usize] = ((*pNLSF_Q15.offset(i as isize) as libc::c_int
-                - NLSF_tmp_Q15[i as usize] as libc::c_int)
+            res_Q10[i as usize] = ((*pNLSF_Q15.offset(i as isize) as i32
+                - NLSF_tmp_Q15[i as usize] as i32)
                 as crate::opus_types_h::opus_int16
                 as crate::opus_types_h::opus_int32
                 * W_tmp_Q9 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
-                >> 14 as libc::c_int)
+                >> 14 as i32)
                 as crate::opus_types_h::opus_int16;
             W_adj_Q5[i as usize] = silk_DIV32_varQ(
                 *pW_Q2.offset(i as isize) as crate::opus_types_h::opus_int32,
                 W_tmp_Q9 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
                     * W_tmp_Q9 as crate::opus_types_h::opus_int16
                         as crate::opus_types_h::opus_int32,
-                21 as libc::c_int,
+                21 as i32,
             ) as crate::opus_types_h::opus_int16;
             i += 1
         }
@@ -491,32 +491,32 @@ pub unsafe extern "C" fn silk_NLSF_encode(
         /* Trellis quantizer */
         *RD_Q25.offset(s as isize) =
             crate::src::opus_1_2_1::silk::NLSF_del_dec_quant::silk_NLSF_del_dec_quant(
-                &mut *tempIndices2.offset((s * 16 as libc::c_int) as isize),
+                &mut *tempIndices2.offset((s * 16 as i32) as isize),
                 res_Q10.as_mut_ptr() as *const crate::opus_types_h::opus_int16,
                 W_adj_Q5.as_mut_ptr() as *const crate::opus_types_h::opus_int16,
-                pred_Q8.as_mut_ptr() as *const libc::c_uchar,
+                pred_Q8.as_mut_ptr() as *const u8,
                 ec_ix.as_mut_ptr() as *const crate::opus_types_h::opus_int16,
                 (*psNLSF_CB).ec_Rates_Q5,
-                (*psNLSF_CB).quantStepSize_Q16 as libc::c_int,
+                (*psNLSF_CB).quantStepSize_Q16 as i32,
                 (*psNLSF_CB).invQuantStepSize_Q6,
                 NLSF_mu_Q20,
                 (*psNLSF_CB).order,
             );
         /* Add rate for first stage */
         iCDF_ptr = &*(*psNLSF_CB).CB1_iCDF.offset(
-            ((signalType >> 1 as libc::c_int) * (*psNLSF_CB).nVectors as libc::c_int) as isize,
-        ) as *const libc::c_uchar;
-        if ind1 == 0 as libc::c_int {
-            prob_Q8 = 256 as libc::c_int - *iCDF_ptr.offset(ind1 as isize) as libc::c_int
+            ((signalType >> 1 as i32) * (*psNLSF_CB).nVectors as i32) as isize,
+        ) as *const u8;
+        if ind1 == 0 as i32 {
+            prob_Q8 = 256 as i32 - *iCDF_ptr.offset(ind1 as isize) as i32
         } else {
-            prob_Q8 = *iCDF_ptr.offset((ind1 - 1 as libc::c_int) as isize) as libc::c_int
-                - *iCDF_ptr.offset(ind1 as isize) as libc::c_int
+            prob_Q8 = *iCDF_ptr.offset((ind1 - 1 as i32) as isize) as i32
+                - *iCDF_ptr.offset(ind1 as isize) as i32
         }
-        bits_q7 = ((8 as libc::c_int) << 7 as libc::c_int)
+        bits_q7 = ((8 as i32) << 7 as i32)
             - crate::src::opus_1_2_1::silk::lin2log::silk_lin2log(prob_Q8);
         *RD_Q25.offset(s as isize) = *RD_Q25.offset(s as isize)
             + bits_q7 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
-                * (NLSF_mu_Q20 >> 2 as libc::c_int) as crate::opus_types_h::opus_int16
+                * (NLSF_mu_Q20 >> 2 as i32) as crate::opus_types_h::opus_int16
                     as crate::opus_types_h::opus_int32;
         s += 1
     }
@@ -525,17 +525,17 @@ pub unsafe extern "C" fn silk_NLSF_encode(
         RD_Q25,
         &mut bestIndex,
         nSurvivors,
-        1 as libc::c_int,
+        1 as i32,
     );
-    *NLSFIndices.offset(0 as libc::c_int as isize) =
-        *tempIndices1.offset(bestIndex as isize) as libc::c_schar;
+    *NLSFIndices.offset(0 as i32 as isize) =
+        *tempIndices1.offset(bestIndex as isize) as i8;
     crate::stdlib::memcpy(
-        &mut *NLSFIndices.offset(1 as libc::c_int as isize) as *mut libc::c_schar
+        &mut *NLSFIndices.offset(1 as i32 as isize) as *mut i8
             as *mut libc::c_void,
-        &mut *tempIndices2.offset((bestIndex * 16 as libc::c_int) as isize) as *mut libc::c_schar
+        &mut *tempIndices2.offset((bestIndex * 16 as i32) as isize) as *mut i8
             as *const libc::c_void,
         ((*psNLSF_CB).order as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<libc::c_schar>() as libc::c_ulong),
+            .wrapping_mul(::std::mem::size_of::<i8>() as libc::c_ulong),
     );
     /* Decode */
     crate::src::opus_1_2_1::silk::NLSF_decode::silk_NLSF_decode(
@@ -543,6 +543,6 @@ pub unsafe extern "C" fn silk_NLSF_encode(
         NLSFIndices,
         psNLSF_CB as *const crate::structs_h::silk_NLSF_CB_struct,
     );
-    ret = *RD_Q25.offset(0 as libc::c_int as isize);
+    ret = *RD_Q25.offset(0 as i32 as isize);
     return ret;
 }

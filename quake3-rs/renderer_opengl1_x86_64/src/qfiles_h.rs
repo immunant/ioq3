@@ -4,7 +4,7 @@ pub type md3Frame_t = md3Frame_s;
 pub struct md3Frame_s {
     pub bounds: [crate::src::qcommon::q_shared::vec3_t; 2],
     pub localOrigin: crate::src::qcommon::q_shared::vec3_t,
-    pub radius: libc::c_float,
+    pub radius: f32,
     pub name: [libc::c_char; 16],
 }
 pub type md3Tag_t = md3Tag_s;
@@ -18,62 +18,62 @@ pub struct md3Tag_s {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct md3Surface_t {
-    pub ident: libc::c_int,
+    pub ident: i32,
     pub name: [libc::c_char; 64],
-    pub flags: libc::c_int,
-    pub numFrames: libc::c_int,
-    pub numShaders: libc::c_int,
-    pub numVerts: libc::c_int,
-    pub numTriangles: libc::c_int,
-    pub ofsTriangles: libc::c_int,
-    pub ofsShaders: libc::c_int,
-    pub ofsSt: libc::c_int,
-    pub ofsXyzNormals: libc::c_int,
-    pub ofsEnd: libc::c_int,
+    pub flags: i32,
+    pub numFrames: i32,
+    pub numShaders: i32,
+    pub numVerts: i32,
+    pub numTriangles: i32,
+    pub ofsTriangles: i32,
+    pub ofsShaders: i32,
+    pub ofsSt: i32,
+    pub ofsXyzNormals: i32,
+    pub ofsEnd: i32,
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct md3Shader_t {
     pub name: [libc::c_char; 64],
-    pub shaderIndex: libc::c_int,
+    pub shaderIndex: i32,
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct md3Triangle_t {
-    pub indexes: [libc::c_int; 3],
+    pub indexes: [i32; 3],
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct md3St_t {
-    pub st: [libc::c_float; 2],
+    pub st: [f32; 2],
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct md3XyzNormal_t {
-    pub xyz: [libc::c_short; 3],
-    pub normal: libc::c_short,
+    pub xyz: [i16; 3],
+    pub normal: i16,
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct md3Header_t {
-    pub ident: libc::c_int,
-    pub version: libc::c_int,
+    pub ident: i32,
+    pub version: i32,
     pub name: [libc::c_char; 64],
-    pub flags: libc::c_int,
-    pub numFrames: libc::c_int,
-    pub numTags: libc::c_int,
-    pub numSurfaces: libc::c_int,
-    pub numSkins: libc::c_int,
-    pub ofsFrames: libc::c_int,
-    pub ofsTags: libc::c_int,
-    pub ofsSurfaces: libc::c_int,
-    pub ofsEnd: libc::c_int,
+    pub flags: i32,
+    pub numFrames: i32,
+    pub numTags: i32,
+    pub numSurfaces: i32,
+    pub numSkins: i32,
+    pub ofsFrames: i32,
+    pub ofsTags: i32,
+    pub ofsSurfaces: i32,
+    pub ofsEnd: i32,
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct mdrWeight_t {
-    pub boneIndex: libc::c_int,
-    pub boneWeight: libc::c_float,
+    pub boneIndex: i32,
+    pub boneWeight: f32,
     pub offset: crate::src::qcommon::q_shared::vec3_t,
 }
 #[repr(C)]
@@ -81,167 +81,167 @@ pub struct mdrWeight_t {
 pub struct mdrVertex_t {
     pub normal: crate::src::qcommon::q_shared::vec3_t,
     pub texCoords: crate::src::qcommon::q_shared::vec2_t,
-    pub numWeights: libc::c_int,
+    pub numWeights: i32,
     pub weights: [mdrWeight_t; 1],
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct mdrTriangle_t {
-    pub indexes: [libc::c_int; 3],
+    pub indexes: [i32; 3],
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct mdrSurface_t {
-    pub ident: libc::c_int,
+    pub ident: i32,
     pub name: [libc::c_char; 64],
     pub shader: [libc::c_char; 64],
-    pub shaderIndex: libc::c_int,
-    pub ofsHeader: libc::c_int,
-    pub numVerts: libc::c_int,
-    pub ofsVerts: libc::c_int,
-    pub numTriangles: libc::c_int,
-    pub ofsTriangles: libc::c_int,
-    pub numBoneReferences: libc::c_int,
-    pub ofsBoneReferences: libc::c_int,
-    pub ofsEnd: libc::c_int,
+    pub shaderIndex: i32,
+    pub ofsHeader: i32,
+    pub numVerts: i32,
+    pub ofsVerts: i32,
+    pub numTriangles: i32,
+    pub ofsTriangles: i32,
+    pub numBoneReferences: i32,
+    pub ofsBoneReferences: i32,
+    pub ofsEnd: i32,
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct mdrBone_t {
-    pub matrix: [[libc::c_float; 4]; 3],
+    pub matrix: [[f32; 4]; 3],
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct mdrFrame_t {
     pub bounds: [crate::src::qcommon::q_shared::vec3_t; 2],
     pub localOrigin: crate::src::qcommon::q_shared::vec3_t,
-    pub radius: libc::c_float,
+    pub radius: f32,
     pub name: [libc::c_char; 16],
     pub bones: [mdrBone_t; 1],
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct mdrCompBone_t {
-    pub Comp: [libc::c_uchar; 24],
+    pub Comp: [u8; 24],
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct mdrCompFrame_t {
     pub bounds: [crate::src::qcommon::q_shared::vec3_t; 2],
     pub localOrigin: crate::src::qcommon::q_shared::vec3_t,
-    pub radius: libc::c_float,
+    pub radius: f32,
     pub bones: [mdrCompBone_t; 1],
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct mdrLOD_t {
-    pub numSurfaces: libc::c_int,
-    pub ofsSurfaces: libc::c_int,
-    pub ofsEnd: libc::c_int,
+    pub numSurfaces: i32,
+    pub ofsSurfaces: i32,
+    pub ofsEnd: i32,
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct mdrTag_t {
-    pub boneIndex: libc::c_int,
+    pub boneIndex: i32,
     pub name: [libc::c_char; 32],
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct mdrHeader_t {
-    pub ident: libc::c_int,
-    pub version: libc::c_int,
+    pub ident: i32,
+    pub version: i32,
     pub name: [libc::c_char; 64],
-    pub numFrames: libc::c_int,
-    pub numBones: libc::c_int,
-    pub ofsFrames: libc::c_int,
-    pub numLODs: libc::c_int,
-    pub ofsLODs: libc::c_int,
-    pub numTags: libc::c_int,
-    pub ofsTags: libc::c_int,
-    pub ofsEnd: libc::c_int,
+    pub numFrames: i32,
+    pub numBones: i32,
+    pub ofsFrames: i32,
+    pub numLODs: i32,
+    pub ofsLODs: i32,
+    pub numTags: i32,
+    pub ofsTags: i32,
+    pub ofsEnd: i32,
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct lump_t {
-    pub fileofs: libc::c_int,
-    pub filelen: libc::c_int,
+    pub fileofs: i32,
+    pub filelen: i32,
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct dheader_t {
-    pub ident: libc::c_int,
-    pub version: libc::c_int,
+    pub ident: i32,
+    pub version: i32,
     pub lumps: [lump_t; 17],
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct dmodel_t {
-    pub mins: [libc::c_float; 3],
-    pub maxs: [libc::c_float; 3],
-    pub firstSurface: libc::c_int,
-    pub numSurfaces: libc::c_int,
-    pub firstBrush: libc::c_int,
-    pub numBrushes: libc::c_int,
+    pub mins: [f32; 3],
+    pub maxs: [f32; 3],
+    pub firstSurface: i32,
+    pub numSurfaces: i32,
+    pub firstBrush: i32,
+    pub numBrushes: i32,
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct dshader_t {
     pub shader: [libc::c_char; 64],
-    pub surfaceFlags: libc::c_int,
-    pub contentFlags: libc::c_int,
+    pub surfaceFlags: i32,
+    pub contentFlags: i32,
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct dplane_t {
-    pub normal: [libc::c_float; 3],
-    pub dist: libc::c_float,
+    pub normal: [f32; 3],
+    pub dist: f32,
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct dnode_t {
-    pub planeNum: libc::c_int,
-    pub children: [libc::c_int; 2],
-    pub mins: [libc::c_int; 3],
-    pub maxs: [libc::c_int; 3],
+    pub planeNum: i32,
+    pub children: [i32; 2],
+    pub mins: [i32; 3],
+    pub maxs: [i32; 3],
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct dleaf_t {
-    pub cluster: libc::c_int,
-    pub area: libc::c_int,
-    pub mins: [libc::c_int; 3],
-    pub maxs: [libc::c_int; 3],
-    pub firstLeafSurface: libc::c_int,
-    pub numLeafSurfaces: libc::c_int,
-    pub firstLeafBrush: libc::c_int,
-    pub numLeafBrushes: libc::c_int,
+    pub cluster: i32,
+    pub area: i32,
+    pub mins: [i32; 3],
+    pub maxs: [i32; 3],
+    pub firstLeafSurface: i32,
+    pub numLeafSurfaces: i32,
+    pub firstLeafBrush: i32,
+    pub numLeafBrushes: i32,
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct dbrushside_t {
-    pub planeNum: libc::c_int,
-    pub shaderNum: libc::c_int,
+    pub planeNum: i32,
+    pub shaderNum: i32,
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct dbrush_t {
-    pub firstSide: libc::c_int,
-    pub numSides: libc::c_int,
-    pub shaderNum: libc::c_int,
+    pub firstSide: i32,
+    pub numSides: i32,
+    pub shaderNum: i32,
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct dfog_t {
     pub shader: [libc::c_char; 64],
-    pub brushNum: libc::c_int,
-    pub visibleSide: libc::c_int,
+    pub brushNum: i32,
+    pub visibleSide: i32,
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct drawVert_t {
     pub xyz: crate::src::qcommon::q_shared::vec3_t,
-    pub st: [libc::c_float; 2],
-    pub lightmap: [libc::c_float; 2],
+    pub st: [f32; 2],
+    pub lightmap: [f32; 2],
     pub normal: crate::src::qcommon::q_shared::vec3_t,
     pub color: [crate::src::qcommon::q_shared::byte; 4],
 }
@@ -253,20 +253,20 @@ pub const MST_FLARE: crate::src::jpeg_8c::jerror::C2RustUnnamed_1 = 4;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct dsurface_t {
-    pub shaderNum: libc::c_int,
-    pub fogNum: libc::c_int,
-    pub surfaceType: libc::c_int,
-    pub firstVert: libc::c_int,
-    pub numVerts: libc::c_int,
-    pub firstIndex: libc::c_int,
-    pub numIndexes: libc::c_int,
-    pub lightmapNum: libc::c_int,
-    pub lightmapX: libc::c_int,
-    pub lightmapY: libc::c_int,
-    pub lightmapWidth: libc::c_int,
-    pub lightmapHeight: libc::c_int,
+    pub shaderNum: i32,
+    pub fogNum: i32,
+    pub surfaceType: i32,
+    pub firstVert: i32,
+    pub numVerts: i32,
+    pub firstIndex: i32,
+    pub numIndexes: i32,
+    pub lightmapNum: i32,
+    pub lightmapX: i32,
+    pub lightmapY: i32,
+    pub lightmapWidth: i32,
+    pub lightmapHeight: i32,
     pub lightmapOrigin: crate::src::qcommon::q_shared::vec3_t,
     pub lightmapVecs: [crate::src::qcommon::q_shared::vec3_t; 3],
-    pub patchWidth: libc::c_int,
-    pub patchHeight: libc::c_int,
+    pub patchWidth: i32,
+    pub patchHeight: i32,
 }

@@ -28,16 +28,16 @@ pub use ::libc::timeval;
 pub struct LinkedMem {
     pub uiVersion: crate::stdlib::uint32_t,
     pub uiTick: crate::stdlib::uint32_t,
-    pub fAvatarPosition: [libc::c_float; 3],
-    pub fAvatarFront: [libc::c_float; 3],
-    pub fAvatarTop: [libc::c_float; 3],
+    pub fAvatarPosition: [f32; 3],
+    pub fAvatarFront: [f32; 3],
+    pub fAvatarTop: [f32; 3],
     pub name: [crate::stddef_h::wchar_t; 256],
-    pub fCameraPosition: [libc::c_float; 3],
-    pub fCameraFront: [libc::c_float; 3],
-    pub fCameraTop: [libc::c_float; 3],
+    pub fCameraPosition: [f32; 3],
+    pub fCameraFront: [f32; 3],
+    pub fCameraTop: [f32; 3],
     pub identity: [crate::stddef_h::wchar_t; 256],
     pub context_len: crate::stdlib::uint32_t,
-    pub context: [libc::c_uchar; 256],
+    pub context: [u8; 256],
     pub description: [crate::stddef_h::wchar_t; 2048],
 }
 
@@ -49,8 +49,8 @@ unsafe extern "C" fn GetTickCount() -> crate::stdlib::int32_t {
         tv_usec: 0,
     };
     crate::stdlib::gettimeofday(&mut tv, 0 as *mut crate::stdlib::timezone);
-    return (tv.tv_usec / 1000 as libc::c_int as libc::c_long
-        + tv.tv_sec * 1000 as libc::c_int as libc::c_long) as crate::stdlib::int32_t;
+    return (tv.tv_usec / 1000 as i32 as libc::c_long
+        + tv.tv_sec * 1000 as i32 as libc::c_long) as crate::stdlib::int32_t;
 }
 /* libmumblelink.h -- mumble link interface
 
@@ -75,11 +75,11 @@ unsafe extern "C" fn GetTickCount() -> crate::stdlib::int32_t {
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn mumble_link(mut name: *const libc::c_char) -> libc::c_int {
+pub unsafe extern "C" fn mumble_link(mut name: *const libc::c_char) -> i32 {
     let mut file: [libc::c_char; 256] = [0; 256];
-    let mut shmfd: libc::c_int = 0;
+    let mut shmfd: i32 = 0;
     if !lm.is_null() {
-        return 0 as libc::c_int;
+        return 0 as i32;
     }
     crate::stdlib::snprintf(
         file.as_mut_ptr(),
@@ -89,29 +89,29 @@ pub unsafe extern "C" fn mumble_link(mut name: *const libc::c_char) -> libc::c_i
     );
     shmfd = ::libc::shm_open(
         file.as_mut_ptr(),
-        0o2 as libc::c_int,
-        (0o400 as libc::c_int | 0o200 as libc::c_int) as crate::stdlib::mode_t,
+        0o2 as i32,
+        (0o400 as i32 | 0o200 as i32) as crate::stdlib::mode_t,
     );
-    if shmfd < 0 as libc::c_int {
-        return -(1 as libc::c_int);
+    if shmfd < 0 as i32 {
+        return -(1 as i32);
     }
     lm = crate::stdlib::mmap(
         0 as *mut libc::c_void,
         ::std::mem::size_of::<LinkedMem>() as libc::c_ulong,
-        0x1 as libc::c_int | 0x2 as libc::c_int,
-        0x1 as libc::c_int,
+        0x1 as i32 | 0x2 as i32,
+        0x1 as i32,
         shmfd,
-        0 as libc::c_int as crate::stdlib::__off_t,
+        0 as i32 as crate::stdlib::__off_t,
     ) as *mut LinkedMem;
-    if lm == -(1 as libc::c_int) as *mut libc::c_void as *mut LinkedMem {
+    if lm == -(1 as i32) as *mut libc::c_void as *mut LinkedMem {
         lm = 0 as *mut LinkedMem;
         ::libc::close(shmfd);
-        return -(1 as libc::c_int);
+        return -(1 as i32);
     }
     ::libc::close(shmfd);
     crate::stdlib::memset(
         lm as *mut libc::c_void,
-        0 as libc::c_int,
+        0 as i32,
         ::std::mem::size_of::<LinkedMem>() as libc::c_ulong,
     );
     crate::stdlib::mbstowcs(
@@ -120,14 +120,14 @@ pub unsafe extern "C" fn mumble_link(mut name: *const libc::c_char) -> libc::c_i
         (::std::mem::size_of::<[crate::stddef_h::wchar_t; 256]>() as libc::c_ulong)
             .wrapping_div(::std::mem::size_of::<crate::stddef_h::wchar_t>() as libc::c_ulong),
     );
-    return 0 as libc::c_int;
+    return 0 as i32;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn mumble_update_coordinates(
-    mut fPosition: *mut libc::c_float,
-    mut fFront: *mut libc::c_float,
-    mut fTop: *mut libc::c_float,
+    mut fPosition: *mut f32,
+    mut fFront: *mut f32,
+    mut fTop: *mut f32,
 ) {
     mumble_update_coordinates2(fPosition, fFront, fTop, fPosition, fFront, fTop);
 }
@@ -135,12 +135,12 @@ pub unsafe extern "C" fn mumble_update_coordinates(
 #[no_mangle]
 
 pub unsafe extern "C" fn mumble_update_coordinates2(
-    mut fAvatarPosition: *mut libc::c_float,
-    mut fAvatarFront: *mut libc::c_float,
-    mut fAvatarTop: *mut libc::c_float,
-    mut fCameraPosition: *mut libc::c_float,
-    mut fCameraFront: *mut libc::c_float,
-    mut fCameraTop: *mut libc::c_float,
+    mut fAvatarPosition: *mut f32,
+    mut fAvatarFront: *mut f32,
+    mut fAvatarTop: *mut f32,
+    mut fCameraPosition: *mut f32,
+    mut fCameraFront: *mut f32,
+    mut fCameraTop: *mut f32,
 ) {
     if lm.is_null() {
         return;
@@ -148,34 +148,34 @@ pub unsafe extern "C" fn mumble_update_coordinates2(
     crate::stdlib::memcpy(
         (*lm).fAvatarPosition.as_mut_ptr() as *mut libc::c_void,
         fAvatarPosition as *const libc::c_void,
-        ::std::mem::size_of::<[libc::c_float; 3]>() as libc::c_ulong,
+        ::std::mem::size_of::<[f32; 3]>() as libc::c_ulong,
     );
     crate::stdlib::memcpy(
         (*lm).fAvatarFront.as_mut_ptr() as *mut libc::c_void,
         fAvatarFront as *const libc::c_void,
-        ::std::mem::size_of::<[libc::c_float; 3]>() as libc::c_ulong,
+        ::std::mem::size_of::<[f32; 3]>() as libc::c_ulong,
     );
     crate::stdlib::memcpy(
         (*lm).fAvatarTop.as_mut_ptr() as *mut libc::c_void,
         fAvatarTop as *const libc::c_void,
-        ::std::mem::size_of::<[libc::c_float; 3]>() as libc::c_ulong,
+        ::std::mem::size_of::<[f32; 3]>() as libc::c_ulong,
     );
     crate::stdlib::memcpy(
         (*lm).fCameraPosition.as_mut_ptr() as *mut libc::c_void,
         fCameraPosition as *const libc::c_void,
-        ::std::mem::size_of::<[libc::c_float; 3]>() as libc::c_ulong,
+        ::std::mem::size_of::<[f32; 3]>() as libc::c_ulong,
     );
     crate::stdlib::memcpy(
         (*lm).fCameraFront.as_mut_ptr() as *mut libc::c_void,
         fCameraFront as *const libc::c_void,
-        ::std::mem::size_of::<[libc::c_float; 3]>() as libc::c_ulong,
+        ::std::mem::size_of::<[f32; 3]>() as libc::c_ulong,
     );
     crate::stdlib::memcpy(
         (*lm).fCameraTop.as_mut_ptr() as *mut libc::c_void,
         fCameraTop as *const libc::c_void,
-        ::std::mem::size_of::<[libc::c_float; 3]>() as libc::c_ulong,
+        ::std::mem::size_of::<[f32; 3]>() as libc::c_ulong,
     );
-    (*lm).uiVersion = 2 as libc::c_int as crate::stdlib::uint32_t;
+    (*lm).uiVersion = 2 as i32 as crate::stdlib::uint32_t;
     (*lm).uiTick = GetTickCount() as crate::stdlib::uint32_t;
 }
 #[no_mangle]
@@ -187,26 +187,26 @@ pub unsafe extern "C" fn mumble_set_identity(mut identity: *const libc::c_char) 
     }
     len = if (::std::mem::size_of::<[crate::stddef_h::wchar_t; 256]>() as libc::c_ulong)
         .wrapping_div(::std::mem::size_of::<crate::stddef_h::wchar_t>() as libc::c_ulong)
-        < crate::stdlib::strlen(identity).wrapping_add(1 as libc::c_int as libc::c_ulong)
+        < crate::stdlib::strlen(identity).wrapping_add(1 as i32 as libc::c_ulong)
     {
         (::std::mem::size_of::<[crate::stddef_h::wchar_t; 256]>() as libc::c_ulong)
             .wrapping_div(::std::mem::size_of::<crate::stddef_h::wchar_t>() as libc::c_ulong)
     } else {
-        crate::stdlib::strlen(identity).wrapping_add(1 as libc::c_int as libc::c_ulong)
+        crate::stdlib::strlen(identity).wrapping_add(1 as i32 as libc::c_ulong)
     };
     crate::stdlib::mbstowcs((*lm).identity.as_mut_ptr(), identity, len);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn mumble_set_context(
-    mut context: *const libc::c_uchar,
+    mut context: *const u8,
     mut len: crate::stddef_h::size_t,
 ) {
     if lm.is_null() {
         return;
     }
-    len = if (::std::mem::size_of::<[libc::c_uchar; 256]>() as libc::c_ulong) < len {
-        ::std::mem::size_of::<[libc::c_uchar; 256]>() as libc::c_ulong
+    len = if (::std::mem::size_of::<[u8; 256]>() as libc::c_ulong) < len {
+        ::std::mem::size_of::<[u8; 256]>() as libc::c_ulong
     } else {
         len
     };
@@ -226,12 +226,12 @@ pub unsafe extern "C" fn mumble_set_description(mut description: *const libc::c_
     }
     len = if (::std::mem::size_of::<[crate::stddef_h::wchar_t; 2048]>() as libc::c_ulong)
         .wrapping_div(::std::mem::size_of::<crate::stddef_h::wchar_t>() as libc::c_ulong)
-        < crate::stdlib::strlen(description).wrapping_add(1 as libc::c_int as libc::c_ulong)
+        < crate::stdlib::strlen(description).wrapping_add(1 as i32 as libc::c_ulong)
     {
         (::std::mem::size_of::<[crate::stddef_h::wchar_t; 2048]>() as libc::c_ulong)
             .wrapping_div(::std::mem::size_of::<crate::stddef_h::wchar_t>() as libc::c_ulong)
     } else {
-        crate::stdlib::strlen(description).wrapping_add(1 as libc::c_int as libc::c_ulong)
+        crate::stdlib::strlen(description).wrapping_add(1 as i32 as libc::c_ulong)
     };
     crate::stdlib::mbstowcs((*lm).description.as_mut_ptr(), description, len);
 }
@@ -249,6 +249,6 @@ pub unsafe extern "C" fn mumble_unlink() {
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn mumble_islinked() -> libc::c_int {
-    return (lm != 0 as *mut libc::c_void as *mut LinkedMem) as libc::c_int;
+pub unsafe extern "C" fn mumble_islinked() -> i32 {
+    return (lm != 0 as *mut libc::c_void as *mut LinkedMem) as i32;
 }

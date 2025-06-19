@@ -109,27 +109,27 @@ ec_tell() can be used to determine how many bits were needed to decode
 
 unsafe extern "C" fn ec_read_byte(
     mut _this: *mut crate::src::opus_1_2_1::celt::entcode::ec_dec,
-) -> libc::c_int {
+) -> i32 {
     return if (*_this).offs < (*_this).storage {
         let fresh0 = (*_this).offs;
         (*_this).offs = (*_this).offs.wrapping_add(1);
-        *(*_this).buf.offset(fresh0 as isize) as libc::c_int
+        *(*_this).buf.offset(fresh0 as isize) as i32
     } else {
-        0 as libc::c_int
+        0 as i32
     };
 }
 
 unsafe extern "C" fn ec_read_byte_from_end(
     mut _this: *mut crate::src::opus_1_2_1::celt::entcode::ec_dec,
-) -> libc::c_int {
+) -> i32 {
     return if (*_this).end_offs < (*_this).storage {
         (*_this).end_offs = (*_this).end_offs.wrapping_add(1);
         *(*_this)
             .buf
             .offset((*_this).storage.wrapping_sub((*_this).end_offs) as isize)
-            as libc::c_int
+            as i32
     } else {
-        0 as libc::c_int
+        0 as i32
     };
 }
 /*Normalizes the contents of val and rng so that rng lies entirely in the
@@ -140,62 +140,62 @@ unsafe extern "C" fn ec_dec_normalize(
 ) {
     /*If the range is too small, rescale it and input some bits.*/
     while (*_this).rng
-        <= (1 as libc::c_uint) << 32 as libc::c_int - 1 as libc::c_int >> 8 as libc::c_int
+        <= (1 as u32) << 32 as i32 - 1 as i32 >> 8 as i32
     {
-        let mut sym: libc::c_int = 0;
-        (*_this).nbits_total += 8 as libc::c_int;
-        (*_this).rng <<= 8 as libc::c_int;
+        let mut sym: i32 = 0;
+        (*_this).nbits_total += 8 as i32;
+        (*_this).rng <<= 8 as i32;
         /*Use up the remaining bits from our last symbol.*/
         sym = (*_this).rem;
         /*Read the next value from the input.*/
         (*_this).rem = ec_read_byte(_this);
         /*Take the rest of the bits we need from this new symbol.*/
-        sym = (sym << 8 as libc::c_int | (*_this).rem)
-            >> 8 as libc::c_int
-                - ((32 as libc::c_int - 2 as libc::c_int) % 8 as libc::c_int + 1 as libc::c_int);
+        sym = (sym << 8 as i32 | (*_this).rem)
+            >> 8 as i32
+                - ((32 as i32 - 2 as i32) % 8 as i32 + 1 as i32);
         /*And subtract them from val, capped to be less than EC_CODE_TOP.*/
-        (*_this).val = ((*_this).val << 8 as libc::c_int).wrapping_add(
-            ((1 as libc::c_uint) << 8 as libc::c_int)
-                .wrapping_sub(1 as libc::c_int as libc::c_uint)
-                & !sym as libc::c_uint,
-        ) & ((1 as libc::c_uint) << 32 as libc::c_int - 1 as libc::c_int)
-            .wrapping_sub(1 as libc::c_int as libc::c_uint)
+        (*_this).val = ((*_this).val << 8 as i32).wrapping_add(
+            ((1 as u32) << 8 as i32)
+                .wrapping_sub(1 as i32 as u32)
+                & !sym as u32,
+        ) & ((1 as u32) << 32 as i32 - 1 as i32)
+            .wrapping_sub(1 as i32 as u32)
     }
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn ec_dec_init(
     mut _this: *mut crate::src::opus_1_2_1::celt::entcode::ec_dec,
-    mut _buf: *mut libc::c_uchar,
+    mut _buf: *mut u8,
     mut _storage: crate::opus_types_h::opus_uint32,
 ) {
     (*_this).buf = _buf;
     (*_this).storage = _storage;
-    (*_this).end_offs = 0 as libc::c_int as crate::opus_types_h::opus_uint32;
-    (*_this).end_window = 0 as libc::c_int as crate::src::opus_1_2_1::celt::entcode::ec_window;
-    (*_this).nend_bits = 0 as libc::c_int;
+    (*_this).end_offs = 0 as i32 as crate::opus_types_h::opus_uint32;
+    (*_this).end_window = 0 as i32 as crate::src::opus_1_2_1::celt::entcode::ec_window;
+    (*_this).nend_bits = 0 as i32;
     /*This is the offset from which ec_tell() will subtract partial bits.
     The final value after the ec_dec_normalize() call will be the same as in
      the encoder, but we have to compensate for the bits that are added there.*/
-    (*_this).nbits_total = 32 as libc::c_int + 1 as libc::c_int
-        - (32 as libc::c_int
-            - ((32 as libc::c_int - 2 as libc::c_int) % 8 as libc::c_int + 1 as libc::c_int))
-            / 8 as libc::c_int
-            * 8 as libc::c_int;
-    (*_this).offs = 0 as libc::c_int as crate::opus_types_h::opus_uint32;
-    (*_this).rng = (1 as libc::c_uint)
-        << (32 as libc::c_int - 2 as libc::c_int) % 8 as libc::c_int + 1 as libc::c_int;
+    (*_this).nbits_total = 32 as i32 + 1 as i32
+        - (32 as i32
+            - ((32 as i32 - 2 as i32) % 8 as i32 + 1 as i32))
+            / 8 as i32
+            * 8 as i32;
+    (*_this).offs = 0 as i32 as crate::opus_types_h::opus_uint32;
+    (*_this).rng = (1 as u32)
+        << (32 as i32 - 2 as i32) % 8 as i32 + 1 as i32;
     (*_this).rem = ec_read_byte(_this);
     (*_this).val = (*_this)
         .rng
-        .wrapping_sub(1 as libc::c_int as libc::c_uint)
+        .wrapping_sub(1 as i32 as u32)
         .wrapping_sub(
             ((*_this).rem
-                >> 8 as libc::c_int
-                    - ((32 as libc::c_int - 2 as libc::c_int) % 8 as libc::c_int
-                        + 1 as libc::c_int)) as libc::c_uint,
+                >> 8 as i32
+                    - ((32 as i32 - 2 as i32) % 8 as i32
+                        + 1 as i32)) as u32,
         );
-    (*_this).error = 0 as libc::c_int;
+    (*_this).error = 0 as i32;
     /*Normalize the interval.*/
     ec_dec_normalize(_this);
 }
@@ -203,17 +203,17 @@ pub unsafe extern "C" fn ec_dec_init(
 
 pub unsafe extern "C" fn ec_decode(
     mut _this: *mut crate::src::opus_1_2_1::celt::entcode::ec_dec,
-    mut _ft: libc::c_uint,
-) -> libc::c_uint {
-    let mut s: libc::c_uint = 0;
+    mut _ft: u32,
+) -> u32 {
+    let mut s: u32 = 0;
     (*_this).ext = celt_udiv((*_this).rng, _ft);
     s = (*_this).val.wrapping_div((*_this).ext);
     return _ft.wrapping_sub(
-        s.wrapping_add(1 as libc::c_int as libc::c_uint)
+        s.wrapping_add(1 as i32 as u32)
             .wrapping_add(
-                _ft.wrapping_sub(s.wrapping_add(1 as libc::c_int as libc::c_uint))
-                    & -((_ft < s.wrapping_add(1 as libc::c_int as libc::c_uint)) as libc::c_int)
-                        as libc::c_uint,
+                _ft.wrapping_sub(s.wrapping_add(1 as i32 as u32))
+                    & -((_ft < s.wrapping_add(1 as i32 as u32)) as i32)
+                        as u32,
             ),
     );
 }
@@ -221,16 +221,16 @@ pub unsafe extern "C" fn ec_decode(
 
 pub unsafe extern "C" fn ec_decode_bin(
     mut _this: *mut crate::src::opus_1_2_1::celt::entcode::ec_dec,
-    mut _bits: libc::c_uint,
-) -> libc::c_uint {
-    let mut s: libc::c_uint = 0;
+    mut _bits: u32,
+) -> u32 {
+    let mut s: u32 = 0;
     (*_this).ext = (*_this).rng >> _bits;
     s = (*_this).val.wrapping_div((*_this).ext);
-    return ((1 as libc::c_uint) << _bits).wrapping_sub(
-        s.wrapping_add(1 as libc::c_uint).wrapping_add(
-            ((1 as libc::c_uint) << _bits).wrapping_sub(s.wrapping_add(1 as libc::c_uint))
-                & -(((1 as libc::c_uint) << _bits < s.wrapping_add(1 as libc::c_uint))
-                    as libc::c_int) as libc::c_uint,
+    return ((1 as u32) << _bits).wrapping_sub(
+        s.wrapping_add(1 as u32).wrapping_add(
+            ((1 as u32) << _bits).wrapping_sub(s.wrapping_add(1 as u32))
+                & -(((1 as u32) << _bits < s.wrapping_add(1 as u32))
+                    as i32) as u32,
         ),
     );
 }
@@ -238,15 +238,15 @@ pub unsafe extern "C" fn ec_decode_bin(
 
 pub unsafe extern "C" fn ec_dec_update(
     mut _this: *mut crate::src::opus_1_2_1::celt::entcode::ec_dec,
-    mut _fl: libc::c_uint,
-    mut _fh: libc::c_uint,
-    mut _ft: libc::c_uint,
+    mut _fl: u32,
+    mut _fh: u32,
+    mut _ft: u32,
 ) {
     let mut s: crate::opus_types_h::opus_uint32 = 0;
     s = (*_this).ext.wrapping_mul(_ft.wrapping_sub(_fh));
-    (*_this).val = ((*_this).val as libc::c_uint).wrapping_sub(s)
+    (*_this).val = ((*_this).val as u32).wrapping_sub(s)
         as crate::opus_types_h::opus_uint32 as crate::opus_types_h::opus_uint32;
-    (*_this).rng = if _fl > 0 as libc::c_int as libc::c_uint {
+    (*_this).rng = if _fl > 0 as i32 as u32 {
         (*_this).ext.wrapping_mul(_fh.wrapping_sub(_fl))
     } else {
         (*_this).rng.wrapping_sub(s)
@@ -258,16 +258,16 @@ pub unsafe extern "C" fn ec_dec_update(
 
 pub unsafe extern "C" fn ec_dec_bit_logp(
     mut _this: *mut crate::src::opus_1_2_1::celt::entcode::ec_dec,
-    mut _logp: libc::c_uint,
-) -> libc::c_int {
+    mut _logp: u32,
+) -> i32 {
     let mut r: crate::opus_types_h::opus_uint32 = 0;
     let mut d: crate::opus_types_h::opus_uint32 = 0;
     let mut s: crate::opus_types_h::opus_uint32 = 0;
-    let mut ret: libc::c_int = 0;
+    let mut ret: i32 = 0;
     r = (*_this).rng;
     d = (*_this).val;
     s = r >> _logp;
-    ret = (d < s) as libc::c_int;
+    ret = (d < s) as i32;
     if ret == 0 {
         (*_this).val = d.wrapping_sub(s)
     }
@@ -279,22 +279,22 @@ pub unsafe extern "C" fn ec_dec_bit_logp(
 
 pub unsafe extern "C" fn ec_dec_icdf(
     mut _this: *mut crate::src::opus_1_2_1::celt::entcode::ec_dec,
-    mut _icdf: *const libc::c_uchar,
-    mut _ftb: libc::c_uint,
-) -> libc::c_int {
+    mut _icdf: *const u8,
+    mut _ftb: u32,
+) -> i32 {
     let mut r: crate::opus_types_h::opus_uint32 = 0;
     let mut d: crate::opus_types_h::opus_uint32 = 0;
     let mut s: crate::opus_types_h::opus_uint32 = 0;
     let mut t: crate::opus_types_h::opus_uint32 = 0;
-    let mut ret: libc::c_int = 0;
+    let mut ret: i32 = 0;
     s = (*_this).rng;
     d = (*_this).val;
     r = s >> _ftb;
-    ret = -(1 as libc::c_int);
+    ret = -(1 as i32);
     loop {
         t = s;
         ret += 1;
-        s = r.wrapping_mul(*_icdf.offset(ret as isize) as libc::c_uint);
+        s = r.wrapping_mul(*_icdf.offset(ret as isize) as u32);
         if !(d < s) {
             break;
         }
@@ -310,29 +310,29 @@ pub unsafe extern "C" fn ec_dec_uint(
     mut _this: *mut crate::src::opus_1_2_1::celt::entcode::ec_dec,
     mut _ft: crate::opus_types_h::opus_uint32,
 ) -> crate::opus_types_h::opus_uint32 {
-    let mut ft: libc::c_uint = 0;
-    let mut s: libc::c_uint = 0;
-    let mut ftb: libc::c_int = 0;
+    let mut ft: u32 = 0;
+    let mut s: u32 = 0;
+    let mut ftb: i32 = 0;
     /*In order to optimize EC_ILOG(), it is undefined for the value 0.*/
     _ft = _ft.wrapping_sub(1);
-    ftb = ::std::mem::size_of::<libc::c_uint>() as libc::c_ulong as libc::c_int * 8 as libc::c_int
+    ftb = ::std::mem::size_of::<u32>() as libc::c_ulong as i32 * 8 as i32
         - _ft.leading_zeros() as i32;
-    if ftb > 8 as libc::c_int {
+    if ftb > 8 as i32 {
         let mut t: crate::opus_types_h::opus_uint32 = 0;
-        ftb -= 8 as libc::c_int;
-        ft = (_ft >> ftb).wrapping_add(1 as libc::c_int as libc::c_uint);
+        ftb -= 8 as i32;
+        ft = (_ft >> ftb).wrapping_add(1 as i32 as u32);
         s = ec_decode(_this, ft);
         ec_dec_update(
             _this,
             s,
-            s.wrapping_add(1 as libc::c_int as libc::c_uint),
+            s.wrapping_add(1 as i32 as u32),
             ft,
         );
-        t = s << ftb | ec_dec_bits(_this, ftb as libc::c_uint);
+        t = s << ftb | ec_dec_bits(_this, ftb as u32);
         if t <= _ft {
             return t;
         }
-        (*_this).error = 1 as libc::c_int;
+        (*_this).error = 1 as i32;
         return _ft;
     } else {
         _ft = _ft.wrapping_add(1);
@@ -340,7 +340,7 @@ pub unsafe extern "C" fn ec_dec_uint(
         ec_dec_update(
             _this,
             s,
-            s.wrapping_add(1 as libc::c_int as libc::c_uint),
+            s.wrapping_add(1 as i32 as u32),
             _ft,
         );
         return s;
@@ -427,37 +427,37 @@ Return: The decoded bits.*/
 
 pub unsafe extern "C" fn ec_dec_bits(
     mut _this: *mut crate::src::opus_1_2_1::celt::entcode::ec_dec,
-    mut _bits: libc::c_uint,
+    mut _bits: u32,
 ) -> crate::opus_types_h::opus_uint32 {
     let mut window: crate::src::opus_1_2_1::celt::entcode::ec_window = 0;
-    let mut available: libc::c_int = 0;
+    let mut available: i32 = 0;
     let mut ret: crate::opus_types_h::opus_uint32 = 0;
     window = (*_this).end_window;
     available = (*_this).nend_bits;
-    if (available as libc::c_uint) < _bits {
+    if (available as u32) < _bits {
         loop {
             window |= (ec_read_byte_from_end(_this)
                 as crate::src::opus_1_2_1::celt::entcode::ec_window)
                 << available;
-            available += 8 as libc::c_int;
+            available += 8 as i32;
             if !(available
                 <= ::std::mem::size_of::<crate::src::opus_1_2_1::celt::entcode::ec_window>()
-                    as libc::c_ulong as libc::c_int
-                    * 8 as libc::c_int
-                    - 8 as libc::c_int)
+                    as libc::c_ulong as i32
+                    * 8 as i32
+                    - 8 as i32)
             {
                 break;
             }
         }
     }
     ret = window
-        & ((1 as libc::c_int as crate::opus_types_h::opus_uint32) << _bits)
-            .wrapping_sub(1 as libc::c_uint);
+        & ((1 as i32 as crate::opus_types_h::opus_uint32) << _bits)
+            .wrapping_sub(1 as u32);
     window >>= _bits;
-    available = (available as libc::c_uint).wrapping_sub(_bits) as libc::c_int as libc::c_int;
+    available = (available as u32).wrapping_sub(_bits) as i32 as i32;
     (*_this).end_window = window;
     (*_this).nend_bits = available;
     (*_this).nbits_total =
-        ((*_this).nbits_total as libc::c_uint).wrapping_add(_bits) as libc::c_int as libc::c_int;
+        ((*_this).nbits_total as u32).wrapping_add(_bits) as i32 as i32;
     return ret;
 }

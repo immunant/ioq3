@@ -42,19 +42,19 @@ pub unsafe extern "C" fn zlibVersion() -> *const libc::c_char {
 
 pub unsafe extern "C" fn zlibCompileFlags() -> crate::zconf_h::uLong {
     let mut flags: crate::zconf_h::uLong = 0;
-    flags = 0 as libc::c_int as crate::zconf_h::uLong;
+    flags = 0 as i32 as crate::zconf_h::uLong;
     match ::std::mem::size_of::<crate::zconf_h::uInt>() as libc::c_ulong {
         2 => {}
         4 => {
-            flags = (flags as libc::c_ulong).wrapping_add(1 as libc::c_int as libc::c_ulong)
+            flags = (flags as libc::c_ulong).wrapping_add(1 as i32 as libc::c_ulong)
                 as crate::zconf_h::uLong as crate::zconf_h::uLong
         }
         8 => {
-            flags = (flags as libc::c_ulong).wrapping_add(2 as libc::c_int as libc::c_ulong)
+            flags = (flags as libc::c_ulong).wrapping_add(2 as i32 as libc::c_ulong)
                 as crate::zconf_h::uLong as crate::zconf_h::uLong
         }
         _ => {
-            flags = (flags as libc::c_ulong).wrapping_add(3 as libc::c_int as libc::c_ulong)
+            flags = (flags as libc::c_ulong).wrapping_add(3 as i32 as libc::c_ulong)
                 as crate::zconf_h::uLong as crate::zconf_h::uLong
         }
     }
@@ -62,17 +62,17 @@ pub unsafe extern "C" fn zlibCompileFlags() -> crate::zconf_h::uLong {
         2 => {}
         4 => {
             flags = (flags as libc::c_ulong)
-                .wrapping_add(((1 as libc::c_int) << 2 as libc::c_int) as libc::c_ulong)
+                .wrapping_add(((1 as i32) << 2 as i32) as libc::c_ulong)
                 as crate::zconf_h::uLong as crate::zconf_h::uLong
         }
         8 => {
             flags = (flags as libc::c_ulong)
-                .wrapping_add(((2 as libc::c_int) << 2 as libc::c_int) as libc::c_ulong)
+                .wrapping_add(((2 as i32) << 2 as i32) as libc::c_ulong)
                 as crate::zconf_h::uLong as crate::zconf_h::uLong
         }
         _ => {
             flags = (flags as libc::c_ulong)
-                .wrapping_add(((3 as libc::c_int) << 2 as libc::c_int) as libc::c_ulong)
+                .wrapping_add(((3 as i32) << 2 as i32) as libc::c_ulong)
                 as crate::zconf_h::uLong as crate::zconf_h::uLong
         }
     }
@@ -80,17 +80,17 @@ pub unsafe extern "C" fn zlibCompileFlags() -> crate::zconf_h::uLong {
         2 => {}
         4 => {
             flags = (flags as libc::c_ulong)
-                .wrapping_add(((1 as libc::c_int) << 4 as libc::c_int) as libc::c_ulong)
+                .wrapping_add(((1 as i32) << 4 as i32) as libc::c_ulong)
                 as crate::zconf_h::uLong as crate::zconf_h::uLong
         }
         8 => {
             flags = (flags as libc::c_ulong)
-                .wrapping_add(((2 as libc::c_int) << 4 as libc::c_int) as libc::c_ulong)
+                .wrapping_add(((2 as i32) << 4 as i32) as libc::c_ulong)
                 as crate::zconf_h::uLong as crate::zconf_h::uLong
         }
         _ => {
             flags = (flags as libc::c_ulong)
-                .wrapping_add(((3 as libc::c_int) << 4 as libc::c_int) as libc::c_ulong)
+                .wrapping_add(((3 as i32) << 4 as i32) as libc::c_ulong)
                 as crate::zconf_h::uLong as crate::zconf_h::uLong
         }
     }
@@ -98,22 +98,22 @@ pub unsafe extern "C" fn zlibCompileFlags() -> crate::zconf_h::uLong {
         2 => {}
         4 => {
             flags = (flags as libc::c_ulong)
-                .wrapping_add(((1 as libc::c_int) << 6 as libc::c_int) as libc::c_ulong)
+                .wrapping_add(((1 as i32) << 6 as i32) as libc::c_ulong)
                 as crate::zconf_h::uLong as crate::zconf_h::uLong
         }
         8 => {
             flags = (flags as libc::c_ulong)
-                .wrapping_add(((2 as libc::c_int) << 6 as libc::c_int) as libc::c_ulong)
+                .wrapping_add(((2 as i32) << 6 as i32) as libc::c_ulong)
                 as crate::zconf_h::uLong as crate::zconf_h::uLong
         }
         _ => {
             flags = (flags as libc::c_ulong)
-                .wrapping_add(((3 as libc::c_int) << 6 as libc::c_int) as libc::c_ulong)
+                .wrapping_add(((3 as i32) << 6 as i32) as libc::c_ulong)
                 as crate::zconf_h::uLong as crate::zconf_h::uLong
         }
     }
     flags = (flags as libc::c_ulong)
-        .wrapping_add(((1 as libc::c_long) << 17 as libc::c_int) as libc::c_ulong)
+        .wrapping_add(((1 as libc::c_long) << 17 as i32) as libc::c_ulong)
         as crate::zconf_h::uLong as crate::zconf_h::uLong;
     return flags;
 }
@@ -680,8 +680,8 @@ end of file, -1 for error). */
  */
 #[no_mangle]
 
-pub unsafe extern "C" fn zError(mut err: libc::c_int) -> *const libc::c_char {
-    return z_errmsg[(2 as libc::c_int - err) as usize];
+pub unsafe extern "C" fn zError(mut err: i32) -> *const libc::c_char {
+    return z_errmsg[(2 as i32 - err) as usize];
 }
 /* SYS16BIT */
 /* Any system without a special alloc function */
@@ -689,14 +689,14 @@ pub unsafe extern "C" fn zError(mut err: libc::c_int) -> *const libc::c_char {
 
 pub unsafe extern "C" fn zcalloc(
     mut opaque: crate::zconf_h::voidpf,
-    mut items: libc::c_uint,
-    mut size: libc::c_uint,
+    mut items: u32,
+    mut size: u32,
 ) -> crate::zconf_h::voidpf {
     if !opaque.is_null() {
         items = items.wrapping_add(size.wrapping_sub(size))
     } /* make compiler happy */
     return if ::std::mem::size_of::<crate::zconf_h::uInt>() as libc::c_ulong
-        > 2 as libc::c_int as libc::c_ulong
+        > 2 as i32 as libc::c_ulong
     {
         crate::stdlib::malloc(items.wrapping_mul(size) as libc::c_ulong)
     } else {

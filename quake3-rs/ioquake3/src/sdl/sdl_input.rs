@@ -1065,16 +1065,16 @@ pub use crate::tr_types_h::TC_S3TC_ARB;
 #[derive(Copy, Clone)]
 pub struct C2RustUnnamed_151 {
     pub buttons: [crate::src::qcommon::q_shared::qboolean; 16],
-    pub oldaxes: libc::c_uint,
-    pub oldaaxes: [libc::c_int; 16],
-    pub oldhats: libc::c_uint,
+    pub oldaxes: u32,
+    pub oldaaxes: [i32; 16],
+    pub oldhats: u32,
 }
 
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub union C2RustUnnamed_152 {
     pub key: crate::keycodes_h::keyNum_t,
-    pub character: libc::c_int,
+    pub character: i32,
 }
 
 pub type consoleKey_t = consoleKey_s;
@@ -1086,7 +1086,7 @@ pub struct consoleKey_s {
     pub u: C2RustUnnamed_152,
 }
 
-pub type C2RustUnnamed_153 = libc::c_uint;
+pub type C2RustUnnamed_153 = u32;
 
 pub const CHARACTER: C2RustUnnamed_153 = 1;
 
@@ -1146,9 +1146,9 @@ static mut in_joystickNo: *mut crate::src::qcommon::q_shared::cvar_t =
 static mut in_joystickUseAnalog: *mut crate::src::qcommon::q_shared::cvar_t =
     0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
 
-static mut vidRestartTime: libc::c_int = 0 as libc::c_int;
+static mut vidRestartTime: i32 = 0 as i32;
 
-static mut in_eventTime: libc::c_int = 0 as libc::c_int;
+static mut in_eventTime: i32 = 0 as i32;
 
 static mut SDL_window: *mut crate::stdlib::SDL_Window =
     0 as *const crate::stdlib::SDL_Window as *mut crate::stdlib::SDL_Window;
@@ -1170,75 +1170,75 @@ unsafe extern "C" fn IN_PrintKey(
     }
     crate::src::qcommon::common::Com_Printf(
         b"Scancode: 0x%02x(%s) Sym: 0x%02x(%s)\x00" as *const u8 as *const libc::c_char,
-        (*keysym).scancode as libc::c_uint,
+        (*keysym).scancode as u32,
         crate::stdlib::SDL_GetScancodeName((*keysym).scancode),
         (*keysym).sym,
         crate::stdlib::SDL_GetKeyName((*keysym).sym),
     );
-    if (*keysym).mod_0 as libc::c_int & crate::stdlib::KMOD_LSHIFT as libc::c_int != 0 {
+    if (*keysym).mod_0 as i32 & crate::stdlib::KMOD_LSHIFT as i32 != 0 {
         crate::src::qcommon::common::Com_Printf(
             b" KMOD_LSHIFT\x00" as *const u8 as *const libc::c_char,
         );
     }
-    if (*keysym).mod_0 as libc::c_int & crate::stdlib::KMOD_RSHIFT as libc::c_int != 0 {
+    if (*keysym).mod_0 as i32 & crate::stdlib::KMOD_RSHIFT as i32 != 0 {
         crate::src::qcommon::common::Com_Printf(
             b" KMOD_RSHIFT\x00" as *const u8 as *const libc::c_char,
         );
     }
-    if (*keysym).mod_0 as libc::c_int & crate::stdlib::KMOD_LCTRL as libc::c_int != 0 {
+    if (*keysym).mod_0 as i32 & crate::stdlib::KMOD_LCTRL as i32 != 0 {
         crate::src::qcommon::common::Com_Printf(
             b" KMOD_LCTRL\x00" as *const u8 as *const libc::c_char,
         );
     }
-    if (*keysym).mod_0 as libc::c_int & crate::stdlib::KMOD_RCTRL as libc::c_int != 0 {
+    if (*keysym).mod_0 as i32 & crate::stdlib::KMOD_RCTRL as i32 != 0 {
         crate::src::qcommon::common::Com_Printf(
             b" KMOD_RCTRL\x00" as *const u8 as *const libc::c_char,
         );
     }
-    if (*keysym).mod_0 as libc::c_int & crate::stdlib::KMOD_LALT as libc::c_int != 0 {
+    if (*keysym).mod_0 as i32 & crate::stdlib::KMOD_LALT as i32 != 0 {
         crate::src::qcommon::common::Com_Printf(
             b" KMOD_LALT\x00" as *const u8 as *const libc::c_char,
         );
     }
-    if (*keysym).mod_0 as libc::c_int & crate::stdlib::KMOD_RALT as libc::c_int != 0 {
+    if (*keysym).mod_0 as i32 & crate::stdlib::KMOD_RALT as i32 != 0 {
         crate::src::qcommon::common::Com_Printf(
             b" KMOD_RALT\x00" as *const u8 as *const libc::c_char,
         );
     }
-    if (*keysym).mod_0 as libc::c_int & crate::stdlib::KMOD_LGUI as libc::c_int != 0 {
+    if (*keysym).mod_0 as i32 & crate::stdlib::KMOD_LGUI as i32 != 0 {
         crate::src::qcommon::common::Com_Printf(
             b" KMOD_LGUI\x00" as *const u8 as *const libc::c_char,
         );
     }
-    if (*keysym).mod_0 as libc::c_int & crate::stdlib::KMOD_RGUI as libc::c_int != 0 {
+    if (*keysym).mod_0 as i32 & crate::stdlib::KMOD_RGUI as i32 != 0 {
         crate::src::qcommon::common::Com_Printf(
             b" KMOD_RGUI\x00" as *const u8 as *const libc::c_char,
         );
     }
-    if (*keysym).mod_0 as libc::c_int & crate::stdlib::KMOD_NUM as libc::c_int != 0 {
+    if (*keysym).mod_0 as i32 & crate::stdlib::KMOD_NUM as i32 != 0 {
         crate::src::qcommon::common::Com_Printf(
             b" KMOD_NUM\x00" as *const u8 as *const libc::c_char,
         );
     }
-    if (*keysym).mod_0 as libc::c_int & crate::stdlib::KMOD_CAPS as libc::c_int != 0 {
+    if (*keysym).mod_0 as i32 & crate::stdlib::KMOD_CAPS as i32 != 0 {
         crate::src::qcommon::common::Com_Printf(
             b" KMOD_CAPS\x00" as *const u8 as *const libc::c_char,
         );
     }
-    if (*keysym).mod_0 as libc::c_int & crate::stdlib::KMOD_MODE as libc::c_int != 0 {
+    if (*keysym).mod_0 as i32 & crate::stdlib::KMOD_MODE as i32 != 0 {
         crate::src::qcommon::common::Com_Printf(
             b" KMOD_MODE\x00" as *const u8 as *const libc::c_char,
         );
     }
-    if (*keysym).mod_0 as libc::c_int & crate::stdlib::KMOD_RESERVED as libc::c_int != 0 {
+    if (*keysym).mod_0 as i32 & crate::stdlib::KMOD_RESERVED as i32 != 0 {
         crate::src::qcommon::common::Com_Printf(
             b" KMOD_RESERVED\x00" as *const u8 as *const libc::c_char,
         );
     }
     crate::src::qcommon::common::Com_Printf(
         b" Q:0x%02x(%s)\n\x00" as *const u8 as *const libc::c_char,
-        key as libc::c_uint,
-        crate::src::client::cl_keys::Key_KeynumToString(key as libc::c_int),
+        key as u32,
+        crate::src::client::cl_keys::Key_KeynumToString(key as i32),
     );
 }
 /*
@@ -1252,7 +1252,7 @@ TODO: If the SDL_Scancode situation improves, use it instead of
 
 unsafe extern "C" fn IN_IsConsoleKey(
     mut key: crate::keycodes_h::keyNum_t,
-    mut character: libc::c_int,
+    mut character: i32,
 ) -> crate::src::qcommon::q_shared::qboolean {
     static mut consoleKeys: [consoleKey_t; 16] = [consoleKey_t {
         type_0: QUAKE_KEY,
@@ -1260,8 +1260,8 @@ unsafe extern "C" fn IN_IsConsoleKey(
             key: 0 as crate::keycodes_h::keyNum_t,
         },
     }; 16];
-    static mut numConsoleKeys: libc::c_int = 0 as libc::c_int;
-    let mut i: libc::c_int = 0;
+    static mut numConsoleKeys: i32 = 0 as i32;
+    let mut i: i32 = 0;
     // Only parse the variable when it changes
     if (*crate::src::client::cl_main::cl_consoleKeys).modified as u64 != 0 {
         let mut text_p: *mut libc::c_char = 0 as *mut libc::c_char;
@@ -1269,17 +1269,17 @@ unsafe extern "C" fn IN_IsConsoleKey(
         (*crate::src::client::cl_main::cl_consoleKeys).modified =
             crate::src::qcommon::q_shared::qfalse;
         text_p = (*crate::src::client::cl_main::cl_consoleKeys).string;
-        numConsoleKeys = 0 as libc::c_int;
-        while numConsoleKeys < 16 as libc::c_int {
+        numConsoleKeys = 0 as i32;
+        while numConsoleKeys < 16 as i32 {
             let mut c: *mut consoleKey_t =
                 &mut *consoleKeys.as_mut_ptr().offset(numConsoleKeys as isize) as *mut consoleKey_t;
-            let mut charCode: libc::c_int = 0 as libc::c_int;
+            let mut charCode: i32 = 0 as i32;
             token = crate::src::qcommon::q_shared::COM_Parse(&mut text_p);
-            if *token.offset(0 as libc::c_int as isize) == 0 {
+            if *token.offset(0 as i32 as isize) == 0 {
                 break;
             }
             charCode = crate::src::qcommon::q_shared::Com_HexStrToInt(token);
-            if charCode > 0 as libc::c_int {
+            if charCode > 0 as i32 {
                 (*c).type_0 = CHARACTER;
                 (*c).u.character = charCode
             } else {
@@ -1287,7 +1287,7 @@ unsafe extern "C" fn IN_IsConsoleKey(
                 (*c).u.key = crate::src::client::cl_keys::Key_StringToKeynum(token)
                     as crate::keycodes_h::keyNum_t;
                 // 0 isn't a key
-                if (*c).u.key as libc::c_uint <= 0 as libc::c_int as libc::c_uint {
+                if (*c).u.key as u32 <= 0 as i32 as u32 {
                     continue;
                 }
             }
@@ -1295,16 +1295,16 @@ unsafe extern "C" fn IN_IsConsoleKey(
         }
     }
     // If the character is the same as the key, prefer the character
-    if key as libc::c_uint == character as libc::c_uint {
+    if key as u32 == character as u32 {
         key = 0 as crate::keycodes_h::keyNum_t
     }
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < numConsoleKeys {
         let mut c_0: *mut consoleKey_t =
             &mut *consoleKeys.as_mut_ptr().offset(i as isize) as *mut consoleKey_t;
-        match (*c_0).type_0 as libc::c_uint {
+        match (*c_0).type_0 as u32 {
             0 => {
-                if key as libc::c_uint != 0 && (*c_0).u.key as libc::c_uint == key as libc::c_uint {
+                if key as u32 != 0 && (*c_0).u.key as u32 == key as u32 {
                     return crate::src::qcommon::q_shared::qtrue;
                 }
             }
@@ -1330,27 +1330,27 @@ unsafe extern "C" fn IN_TranslateSDLToQ3Key(
     mut down: crate::src::qcommon::q_shared::qboolean,
 ) -> crate::keycodes_h::keyNum_t {
     let mut key: crate::keycodes_h::keyNum_t = 0 as crate::keycodes_h::keyNum_t;
-    if (*keysym).scancode as libc::c_uint
-        >= crate::stdlib::SDL_SCANCODE_1 as libc::c_int as libc::c_uint
-        && (*keysym).scancode as libc::c_uint
-            <= crate::stdlib::SDL_SCANCODE_0 as libc::c_int as libc::c_uint
+    if (*keysym).scancode as u32
+        >= crate::stdlib::SDL_SCANCODE_1 as i32 as u32
+        && (*keysym).scancode as u32
+            <= crate::stdlib::SDL_SCANCODE_0 as i32 as u32
     {
         // Always map the number keys as such even if they actually map
         // to other characters (eg, "1" is "&" on an AZERTY keyboard).
         // This is required for SDL before 2.0.6, except on Windows
         // which already had this behavior.
-        if (*keysym).scancode as libc::c_uint
-            == crate::stdlib::SDL_SCANCODE_0 as libc::c_int as libc::c_uint
+        if (*keysym).scancode as u32
+            == crate::stdlib::SDL_SCANCODE_0 as i32 as u32
         {
             key = '0' as i32 as crate::keycodes_h::keyNum_t
         } else {
-            key = ('1' as i32 as libc::c_uint)
-                .wrapping_add((*keysym).scancode as libc::c_uint)
-                .wrapping_sub(crate::stdlib::SDL_SCANCODE_1 as libc::c_int as libc::c_uint)
+            key = ('1' as i32 as u32)
+                .wrapping_add((*keysym).scancode as u32)
+                .wrapping_sub(crate::stdlib::SDL_SCANCODE_1 as i32 as u32)
                 as crate::keycodes_h::keyNum_t
         }
-    } else if (*keysym).sym >= crate::stdlib::SDLK_SPACE as libc::c_int
-        && (*keysym).sym < crate::stdlib::SDLK_DELETE as libc::c_int
+    } else if (*keysym).sym >= crate::stdlib::SDLK_SPACE as i32
+        && (*keysym).sym < crate::stdlib::SDLK_DELETE as i32
     {
         // These happen to match the ASCII chars
         key = (*keysym).sym as crate::keycodes_h::keyNum_t
@@ -1418,16 +1418,16 @@ unsafe extern "C" fn IN_TranslateSDLToQ3Key(
             1073741907 => key = crate::keycodes_h::K_KP_NUMLOCK,
             1073741881 => key = crate::keycodes_h::K_CAPSLOCK,
             _ => {
-                if (*keysym).sym & (1 as libc::c_int) << 30 as libc::c_int == 0
-                    && (*keysym).scancode as libc::c_uint <= 95 as libc::c_int as libc::c_uint
+                if (*keysym).sym & (1 as i32) << 30 as i32 == 0
+                    && (*keysym).scancode as u32 <= 95 as i32 as u32
                 {
                     // Map Unicode characters to 95 world keys using the key's scan code.
                     // FIXME: There aren't enough world keys to cover all the scancodes.
                     // Maybe create a map of scancode to quake key at start up and on
                     // key map change; allocate world key numbers as needed similar
                     // to SDL 1.2.
-                    key = (crate::keycodes_h::K_WORLD_0 as libc::c_int
-                        + (*keysym).scancode as libc::c_int)
+                    key = (crate::keycodes_h::K_WORLD_0 as i32
+                        + (*keysym).scancode as i32)
                         as crate::keycodes_h::keyNum_t
                 }
             }
@@ -1436,7 +1436,7 @@ unsafe extern "C" fn IN_TranslateSDLToQ3Key(
     if (*in_keyboardDebug).integer != 0 {
         IN_PrintKey(keysym, key, down);
     }
-    if IN_IsConsoleKey(key, 0 as libc::c_int) as u64 != 0 {
+    if IN_IsConsoleKey(key, 0 as i32) as u64 != 0 {
         // Console keys can't be bound or generate characters
         key = crate::keycodes_h::K_CONSOLE
     }
@@ -1450,22 +1450,22 @@ IN_GobbleMotionEvents
 
 unsafe extern "C" fn IN_GobbleMotionEvents() {
     let mut dummy: [crate::stdlib::SDL_Event; 1] = [crate::stdlib::SDL_Event { type_0: 0 }; 1];
-    let mut val: libc::c_int = 0 as libc::c_int;
+    let mut val: i32 = 0 as i32;
     // Gobble any mouse motion events
     crate::stdlib::SDL_PumpEvents();
     loop {
         val = crate::stdlib::SDL_PeepEvents(
             dummy.as_mut_ptr(),
-            1 as libc::c_int,
+            1 as i32,
             crate::stdlib::SDL_GETEVENT,
-            crate::stdlib::SDL_MOUSEMOTION as libc::c_int as crate::stdlib::Uint32,
-            crate::stdlib::SDL_MOUSEMOTION as libc::c_int as crate::stdlib::Uint32,
+            crate::stdlib::SDL_MOUSEMOTION as i32 as crate::stdlib::Uint32,
+            crate::stdlib::SDL_MOUSEMOTION as i32 as crate::stdlib::Uint32,
         );
-        if !(val > 0 as libc::c_int) {
+        if !(val > 0 as i32) {
             break;
         }
     }
-    if val < 0 as libc::c_int {
+    if val < 0 as i32 {
         crate::src::qcommon::common::Com_Printf(
             b"IN_GobbleMotionEvents failed: %s\n\x00" as *const u8 as *const libc::c_char,
             crate::stdlib::SDL_GetError(),
@@ -1479,7 +1479,7 @@ IN_ActivateMouse
 */
 
 unsafe extern "C" fn IN_ActivateMouse(mut isFullscreen: crate::src::qcommon::q_shared::qboolean) {
-    if mouseAvailable as u64 == 0 || crate::stdlib::SDL_WasInit(0x20 as libc::c_uint) == 0 {
+    if mouseAvailable as u64 == 0 || crate::stdlib::SDL_WasInit(0x20 as u32) == 0 {
         return;
     }
     if mouseActive as u64 == 0 {
@@ -1489,7 +1489,7 @@ unsafe extern "C" fn IN_ActivateMouse(mut isFullscreen: crate::src::qcommon::q_s
     }
     // in_nograb makes no sense in fullscreen mode
     if isFullscreen as u64 == 0 {
-        if (*in_nograb).modified as libc::c_uint != 0 || mouseActive as u64 == 0 {
+        if (*in_nograb).modified as u32 != 0 || mouseActive as u64 == 0 {
             if (*in_nograb).integer != 0 {
                 crate::stdlib::SDL_SetRelativeMouseMode(crate::stdlib::SDL_FALSE);
                 crate::stdlib::SDL_SetWindowGrab(SDL_window, crate::stdlib::SDL_FALSE);
@@ -1509,13 +1509,13 @@ IN_DeactivateMouse
 */
 
 unsafe extern "C" fn IN_DeactivateMouse(mut isFullscreen: crate::src::qcommon::q_shared::qboolean) {
-    if crate::stdlib::SDL_WasInit(0x20 as libc::c_uint) == 0 {
+    if crate::stdlib::SDL_WasInit(0x20 as u32) == 0 {
         return;
     }
     // Always show the cursor when the mouse is disabled,
     // but not when fullscreen
     if isFullscreen as u64 == 0 {
-        crate::stdlib::SDL_ShowCursor(crate::stdlib::SDL_TRUE as libc::c_int);
+        crate::stdlib::SDL_ShowCursor(crate::stdlib::SDL_TRUE as i32);
     }
     if mouseAvailable as u64 == 0 {
         return;
@@ -1526,13 +1526,13 @@ unsafe extern "C" fn IN_DeactivateMouse(mut isFullscreen: crate::src::qcommon::q
         crate::stdlib::SDL_SetRelativeMouseMode(crate::stdlib::SDL_FALSE);
         // Don't warp the mouse unless the cursor is within the window
         if crate::stdlib::SDL_GetWindowFlags(SDL_window)
-            & crate::stdlib::SDL_WINDOW_MOUSE_FOCUS as libc::c_int as libc::c_uint
+            & crate::stdlib::SDL_WINDOW_MOUSE_FOCUS as i32 as u32
             != 0
         {
             crate::stdlib::SDL_WarpMouseInWindow(
                 SDL_window,
-                crate::src::client::cl_main::cls.glconfig.vidWidth / 2 as libc::c_int,
-                crate::src::client::cl_main::cls.glconfig.vidHeight / 2 as libc::c_int,
+                crate::src::client::cl_main::cls.glconfig.vidWidth / 2 as i32,
+                crate::src::client::cl_main::cls.glconfig.vidHeight / 2 as i32,
             );
         }
         mouseActive = crate::src::qcommon::q_shared::qfalse
@@ -1540,44 +1540,44 @@ unsafe extern "C" fn IN_DeactivateMouse(mut isFullscreen: crate::src::qcommon::q
 }
 // We translate axes movement into keypresses
 
-static mut joy_keys: [libc::c_int; 16] = [
-    crate::keycodes_h::K_LEFTARROW as libc::c_int,
-    crate::keycodes_h::K_RIGHTARROW as libc::c_int,
-    crate::keycodes_h::K_UPARROW as libc::c_int,
-    crate::keycodes_h::K_DOWNARROW as libc::c_int,
-    crate::keycodes_h::K_JOY17 as libc::c_int,
-    crate::keycodes_h::K_JOY18 as libc::c_int,
-    crate::keycodes_h::K_JOY19 as libc::c_int,
-    crate::keycodes_h::K_JOY20 as libc::c_int,
-    crate::keycodes_h::K_JOY21 as libc::c_int,
-    crate::keycodes_h::K_JOY22 as libc::c_int,
-    crate::keycodes_h::K_JOY23 as libc::c_int,
-    crate::keycodes_h::K_JOY24 as libc::c_int,
-    crate::keycodes_h::K_JOY25 as libc::c_int,
-    crate::keycodes_h::K_JOY26 as libc::c_int,
-    crate::keycodes_h::K_JOY27 as libc::c_int,
-    crate::keycodes_h::K_JOY28 as libc::c_int,
+static mut joy_keys: [i32; 16] = [
+    crate::keycodes_h::K_LEFTARROW as i32,
+    crate::keycodes_h::K_RIGHTARROW as i32,
+    crate::keycodes_h::K_UPARROW as i32,
+    crate::keycodes_h::K_DOWNARROW as i32,
+    crate::keycodes_h::K_JOY17 as i32,
+    crate::keycodes_h::K_JOY18 as i32,
+    crate::keycodes_h::K_JOY19 as i32,
+    crate::keycodes_h::K_JOY20 as i32,
+    crate::keycodes_h::K_JOY21 as i32,
+    crate::keycodes_h::K_JOY22 as i32,
+    crate::keycodes_h::K_JOY23 as i32,
+    crate::keycodes_h::K_JOY24 as i32,
+    crate::keycodes_h::K_JOY25 as i32,
+    crate::keycodes_h::K_JOY26 as i32,
+    crate::keycodes_h::K_JOY27 as i32,
+    crate::keycodes_h::K_JOY28 as i32,
 ];
 // translate hat events into keypresses
 // the 4 highest buttons are used for the first hat ...
 
-static mut hat_keys: [libc::c_int; 16] = [
-    crate::keycodes_h::K_JOY29 as libc::c_int,
-    crate::keycodes_h::K_JOY30 as libc::c_int,
-    crate::keycodes_h::K_JOY31 as libc::c_int,
-    crate::keycodes_h::K_JOY32 as libc::c_int,
-    crate::keycodes_h::K_JOY25 as libc::c_int,
-    crate::keycodes_h::K_JOY26 as libc::c_int,
-    crate::keycodes_h::K_JOY27 as libc::c_int,
-    crate::keycodes_h::K_JOY28 as libc::c_int,
-    crate::keycodes_h::K_JOY21 as libc::c_int,
-    crate::keycodes_h::K_JOY22 as libc::c_int,
-    crate::keycodes_h::K_JOY23 as libc::c_int,
-    crate::keycodes_h::K_JOY24 as libc::c_int,
-    crate::keycodes_h::K_JOY17 as libc::c_int,
-    crate::keycodes_h::K_JOY18 as libc::c_int,
-    crate::keycodes_h::K_JOY19 as libc::c_int,
-    crate::keycodes_h::K_JOY20 as libc::c_int,
+static mut hat_keys: [i32; 16] = [
+    crate::keycodes_h::K_JOY29 as i32,
+    crate::keycodes_h::K_JOY30 as i32,
+    crate::keycodes_h::K_JOY31 as i32,
+    crate::keycodes_h::K_JOY32 as i32,
+    crate::keycodes_h::K_JOY25 as i32,
+    crate::keycodes_h::K_JOY26 as i32,
+    crate::keycodes_h::K_JOY27 as i32,
+    crate::keycodes_h::K_JOY28 as i32,
+    crate::keycodes_h::K_JOY21 as i32,
+    crate::keycodes_h::K_JOY22 as i32,
+    crate::keycodes_h::K_JOY23 as i32,
+    crate::keycodes_h::K_JOY24 as i32,
+    crate::keycodes_h::K_JOY17 as i32,
+    crate::keycodes_h::K_JOY18 as i32,
+    crate::keycodes_h::K_JOY19 as i32,
+    crate::keycodes_h::K_JOY20 as i32,
 ];
 #[no_mangle]
 
@@ -1594,8 +1594,8 @@ IN_InitJoystick
 */
 
 unsafe extern "C" fn IN_InitJoystick() {
-    let mut i: libc::c_int = 0 as libc::c_int;
-    let mut total: libc::c_int = 0 as libc::c_int;
+    let mut i: i32 = 0 as i32;
+    let mut total: i32 = 0 as i32;
     let mut buf: [libc::c_char; 16384] =
         *::std::mem::transmute::<&[u8; 16384],
                                  &mut [libc::c_char; 16384]>(b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00");
@@ -1616,11 +1616,11 @@ unsafe extern "C" fn IN_InitJoystick() {
     // SDL_INIT_GAMECONTROLLER for SDL_JoystickOpen() to work correctly,
     // despite https://wiki.libsdl.org/SDL_Init (retrieved 2016-08-16)
     // indicating SDL_INIT_JOYSTICK should be initialized automatically.
-    if crate::stdlib::SDL_WasInit(0x200 as libc::c_uint) == 0 {
+    if crate::stdlib::SDL_WasInit(0x200 as u32) == 0 {
         crate::src::qcommon::common::Com_DPrintf(
             b"Calling SDL_Init(SDL_INIT_JOYSTICK)...\n\x00" as *const u8 as *const libc::c_char,
         );
-        if crate::stdlib::SDL_Init(0x200 as libc::c_uint) != 0 as libc::c_int {
+        if crate::stdlib::SDL_Init(0x200 as u32) != 0 as i32 {
             crate::src::qcommon::common::Com_DPrintf(
                 b"SDL_Init(SDL_INIT_JOYSTICK) failed: %s\n\x00" as *const u8 as *const libc::c_char,
                 crate::stdlib::SDL_GetError(),
@@ -1631,12 +1631,12 @@ unsafe extern "C" fn IN_InitJoystick() {
             b"SDL_Init(SDL_INIT_JOYSTICK) passed.\n\x00" as *const u8 as *const libc::c_char,
         );
     }
-    if crate::stdlib::SDL_WasInit(0x2000 as libc::c_uint) == 0 {
+    if crate::stdlib::SDL_WasInit(0x2000 as u32) == 0 {
         crate::src::qcommon::common::Com_DPrintf(
             b"Calling SDL_Init(SDL_INIT_GAMECONTROLLER)...\n\x00" as *const u8
                 as *const libc::c_char,
         );
-        if crate::stdlib::SDL_Init(0x2000 as libc::c_uint) != 0 as libc::c_int {
+        if crate::stdlib::SDL_Init(0x2000 as u32) != 0 as i32 {
             crate::src::qcommon::common::Com_DPrintf(
                 b"SDL_Init(SDL_INIT_GAMECONTROLLER) failed: %s\n\x00" as *const u8
                     as *const libc::c_char,
@@ -1654,16 +1654,16 @@ unsafe extern "C" fn IN_InitJoystick() {
         total,
     );
     // Print list and build cvar to allow ui to select joystick.
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < total {
         crate::src::qcommon::q_shared::Q_strcat(
             buf.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 16384]>() as libc::c_ulong as libc::c_int,
+            ::std::mem::size_of::<[libc::c_char; 16384]>() as libc::c_ulong as i32,
             crate::stdlib::SDL_JoystickNameForIndex(i),
         );
         crate::src::qcommon::q_shared::Q_strcat(
             buf.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 16384]>() as libc::c_ulong as libc::c_int,
+            ::std::mem::size_of::<[libc::c_char; 16384]>() as libc::c_ulong as i32,
             b"\n\x00" as *const u8 as *const libc::c_char,
         );
         i += 1
@@ -1672,21 +1672,21 @@ unsafe extern "C" fn IN_InitJoystick() {
     crate::src::qcommon::cvar::Cvar_Get(
         b"in_availableJoysticks\x00" as *const u8 as *const libc::c_char,
         buf.as_mut_ptr(),
-        0x40 as libc::c_int,
+        0x40 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s;
     if (*in_joystick).integer == 0 {
         crate::src::qcommon::common::Com_DPrintf(
             b"Joystick is not active.\n\x00" as *const u8 as *const libc::c_char,
         );
-        crate::stdlib::SDL_QuitSubSystem(0x2000 as libc::c_uint);
+        crate::stdlib::SDL_QuitSubSystem(0x2000 as u32);
         return;
     }
     in_joystickNo = crate::src::qcommon::cvar::Cvar_Get(
         b"in_joystickNo\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
-        0x1 as libc::c_int,
+        0x1 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s;
-    if (*in_joystickNo).integer < 0 as libc::c_int || (*in_joystickNo).integer >= total {
+    if (*in_joystickNo).integer < 0 as i32 || (*in_joystickNo).integer >= total {
         crate::src::qcommon::cvar::Cvar_Set(
             b"in_joystickNo\x00" as *const u8 as *const libc::c_char,
             b"0\x00" as *const u8 as *const libc::c_char,
@@ -1695,7 +1695,7 @@ unsafe extern "C" fn IN_InitJoystick() {
     in_joystickUseAnalog = crate::src::qcommon::cvar::Cvar_Get(
         b"in_joystickUseAnalog\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
-        0x1 as libc::c_int,
+        0x1 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s;
     stick = crate::stdlib::SDL_JoystickOpen((*in_joystickNo).integer);
     if stick.is_null() {
@@ -1748,8 +1748,8 @@ unsafe extern "C" fn IN_InitJoystick() {
             b"No\x00" as *const u8 as *const libc::c_char
         },
     );
-    crate::stdlib::SDL_JoystickEventState(-(1 as libc::c_int));
-    crate::stdlib::SDL_GameControllerEventState(-(1 as libc::c_int));
+    crate::stdlib::SDL_JoystickEventState(-(1 as i32));
+    crate::stdlib::SDL_GameControllerEventState(-(1 as i32));
 }
 /*
 ===============
@@ -1758,10 +1758,10 @@ IN_ShutdownJoystick
 */
 
 unsafe extern "C" fn IN_ShutdownJoystick() {
-    if crate::stdlib::SDL_WasInit(0x2000 as libc::c_uint) == 0 {
+    if crate::stdlib::SDL_WasInit(0x2000 as u32) == 0 {
         return;
     }
-    if crate::stdlib::SDL_WasInit(0x200 as libc::c_uint) == 0 {
+    if crate::stdlib::SDL_WasInit(0x200 as u32) == 0 {
         return;
     }
     if !gamepad.is_null() {
@@ -1772,136 +1772,136 @@ unsafe extern "C" fn IN_ShutdownJoystick() {
         crate::stdlib::SDL_JoystickClose(stick);
         stick = 0 as *mut crate::stdlib::SDL_Joystick
     }
-    crate::stdlib::SDL_QuitSubSystem(0x2000 as libc::c_uint);
-    crate::stdlib::SDL_QuitSubSystem(0x200 as libc::c_uint);
+    crate::stdlib::SDL_QuitSubSystem(0x2000 as u32);
+    crate::stdlib::SDL_QuitSubSystem(0x200 as u32);
 }
 
 unsafe extern "C" fn KeyToAxisAndSign(
-    mut keynum: libc::c_int,
-    mut outAxis: *mut libc::c_int,
-    mut outSign: *mut libc::c_int,
+    mut keynum: i32,
+    mut outAxis: *mut i32,
+    mut outSign: *mut i32,
 ) -> crate::src::qcommon::q_shared::qboolean {
     let mut bind: *mut libc::c_char = 0 as *mut libc::c_char;
     if keynum == 0 {
         return crate::src::qcommon::q_shared::qfalse;
     }
     bind = crate::src::client::cl_keys::Key_GetBinding(keynum);
-    if bind.is_null() || *bind as libc::c_int != '+' as i32 {
+    if bind.is_null() || *bind as i32 != '+' as i32 {
         return crate::src::qcommon::q_shared::qfalse;
     }
-    *outSign = 0 as libc::c_int;
+    *outSign = 0 as i32;
     if crate::src::qcommon::q_shared::Q_stricmp(
         bind,
         b"+forward\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as libc::c_int
+    ) == 0 as i32
     {
         *outAxis = (*crate::src::client::cl_main::j_forward_axis).integer;
         *outSign = if (*crate::src::client::cl_main::j_forward).value > 0.0f32 {
-            1 as libc::c_int
+            1 as i32
         } else {
-            -(1 as libc::c_int)
+            -(1 as i32)
         }
     } else if crate::src::qcommon::q_shared::Q_stricmp(
         bind,
         b"+back\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as libc::c_int
+    ) == 0 as i32
     {
         *outAxis = (*crate::src::client::cl_main::j_forward_axis).integer;
         *outSign = if (*crate::src::client::cl_main::j_forward).value > 0.0f32 {
-            -(1 as libc::c_int)
+            -(1 as i32)
         } else {
-            1 as libc::c_int
+            1 as i32
         }
     } else if crate::src::qcommon::q_shared::Q_stricmp(
         bind,
         b"+moveleft\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as libc::c_int
+    ) == 0 as i32
     {
         *outAxis = (*crate::src::client::cl_main::j_side_axis).integer;
         *outSign = if (*crate::src::client::cl_main::j_side).value > 0.0f32 {
-            -(1 as libc::c_int)
+            -(1 as i32)
         } else {
-            1 as libc::c_int
+            1 as i32
         }
     } else if crate::src::qcommon::q_shared::Q_stricmp(
         bind,
         b"+moveright\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as libc::c_int
+    ) == 0 as i32
     {
         *outAxis = (*crate::src::client::cl_main::j_side_axis).integer;
         *outSign = if (*crate::src::client::cl_main::j_side).value > 0.0f32 {
-            1 as libc::c_int
+            1 as i32
         } else {
-            -(1 as libc::c_int)
+            -(1 as i32)
         }
     } else if crate::src::qcommon::q_shared::Q_stricmp(
         bind,
         b"+lookup\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as libc::c_int
+    ) == 0 as i32
     {
         *outAxis = (*crate::src::client::cl_main::j_pitch_axis).integer;
         *outSign = if (*crate::src::client::cl_main::j_pitch).value > 0.0f32 {
-            -(1 as libc::c_int)
+            -(1 as i32)
         } else {
-            1 as libc::c_int
+            1 as i32
         }
     } else if crate::src::qcommon::q_shared::Q_stricmp(
         bind,
         b"+lookdown\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as libc::c_int
+    ) == 0 as i32
     {
         *outAxis = (*crate::src::client::cl_main::j_pitch_axis).integer;
         *outSign = if (*crate::src::client::cl_main::j_pitch).value > 0.0f32 {
-            1 as libc::c_int
+            1 as i32
         } else {
-            -(1 as libc::c_int)
+            -(1 as i32)
         }
     } else if crate::src::qcommon::q_shared::Q_stricmp(
         bind,
         b"+left\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as libc::c_int
+    ) == 0 as i32
     {
         *outAxis = (*crate::src::client::cl_main::j_yaw_axis).integer;
         *outSign = if (*crate::src::client::cl_main::j_yaw).value > 0.0f32 {
-            1 as libc::c_int
+            1 as i32
         } else {
-            -(1 as libc::c_int)
+            -(1 as i32)
         }
     } else if crate::src::qcommon::q_shared::Q_stricmp(
         bind,
         b"+right\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as libc::c_int
+    ) == 0 as i32
     {
         *outAxis = (*crate::src::client::cl_main::j_yaw_axis).integer;
         *outSign = if (*crate::src::client::cl_main::j_yaw).value > 0.0f32 {
-            -(1 as libc::c_int)
+            -(1 as i32)
         } else {
-            1 as libc::c_int
+            1 as i32
         }
     } else if crate::src::qcommon::q_shared::Q_stricmp(
         bind,
         b"+moveup\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as libc::c_int
+    ) == 0 as i32
     {
         *outAxis = (*crate::src::client::cl_main::j_up_axis).integer;
         *outSign = if (*crate::src::client::cl_main::j_up).value > 0.0f32 {
-            1 as libc::c_int
+            1 as i32
         } else {
-            -(1 as libc::c_int)
+            -(1 as i32)
         }
     } else if crate::src::qcommon::q_shared::Q_stricmp(
         bind,
         b"+movedown\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as libc::c_int
+    ) == 0 as i32
     {
         *outAxis = (*crate::src::client::cl_main::j_up_axis).integer;
         *outSign = if (*crate::src::client::cl_main::j_up).value > 0.0f32 {
-            -(1 as libc::c_int)
+            -(1 as i32)
         } else {
-            1 as libc::c_int
+            1 as i32
         }
     }
-    return (*outSign != 0 as libc::c_int) as libc::c_int
+    return (*outSign != 0 as i32) as i32
         as crate::src::qcommon::q_shared::qboolean;
 }
 /*
@@ -1911,27 +1911,27 @@ IN_GamepadMove
 */
 
 unsafe extern "C" fn IN_GamepadMove() {
-    let mut i: libc::c_int = 0;
-    let mut translatedAxes: [libc::c_int; 16] = [0; 16];
+    let mut i: i32 = 0;
+    let mut translatedAxes: [i32; 16] = [0; 16];
     let mut translatedAxesSet: [crate::src::qcommon::q_shared::qboolean; 16] =
         [crate::src::qcommon::q_shared::qfalse; 16];
     crate::stdlib::SDL_GameControllerUpdate();
     // check buttons
-    i = 0 as libc::c_int;
-    while i < crate::stdlib::SDL_CONTROLLER_BUTTON_MAX as libc::c_int {
+    i = 0 as i32;
+    while i < crate::stdlib::SDL_CONTROLLER_BUTTON_MAX as i32 {
         let mut pressed: crate::src::qcommon::q_shared::qboolean =
             crate::stdlib::SDL_GameControllerGetButton(
                 gamepad,
-                (crate::stdlib::SDL_CONTROLLER_BUTTON_A as libc::c_int + i)
+                (crate::stdlib::SDL_CONTROLLER_BUTTON_A as i32 + i)
                     as crate::stdlib::SDL_GameControllerButton,
             ) as crate::src::qcommon::q_shared::qboolean;
-        if pressed as libc::c_uint != stick_state.buttons[i as usize] as libc::c_uint {
+        if pressed as u32 != stick_state.buttons[i as usize] as u32 {
             crate::src::qcommon::common::Com_QueueEvent(
                 in_eventTime,
                 crate::qcommon_h::SE_KEY,
-                crate::keycodes_h::K_PAD0_A as libc::c_int + i,
-                pressed as libc::c_int,
-                0 as libc::c_int,
+                crate::keycodes_h::K_PAD0_A as i32 + i,
+                pressed as i32,
+                0 as i32,
                 0 as *mut libc::c_void,
             );
             stick_state.buttons[i as usize] = pressed
@@ -1941,87 +1941,87 @@ unsafe extern "C" fn IN_GamepadMove() {
     // must defer translated axes until all real axes are processed
     // must be done this way to prevent a later mapped axis from zeroing out a previous one
     if (*in_joystickUseAnalog).integer != 0 {
-        i = 0 as libc::c_int;
-        while i < 16 as libc::c_int {
-            translatedAxes[i as usize] = 0 as libc::c_int;
+        i = 0 as i32;
+        while i < 16 as i32 {
+            translatedAxes[i as usize] = 0 as i32;
             translatedAxesSet[i as usize] = crate::src::qcommon::q_shared::qfalse;
             i += 1
         }
     }
     // check axes
-    i = 0 as libc::c_int;
-    while i < crate::stdlib::SDL_CONTROLLER_AXIS_MAX as libc::c_int {
-        let mut axis: libc::c_int = crate::stdlib::SDL_GameControllerGetAxis(
+    i = 0 as i32;
+    while i < crate::stdlib::SDL_CONTROLLER_AXIS_MAX as i32 {
+        let mut axis: i32 = crate::stdlib::SDL_GameControllerGetAxis(
             gamepad,
-            (crate::stdlib::SDL_CONTROLLER_AXIS_LEFTX as libc::c_int + i)
+            (crate::stdlib::SDL_CONTROLLER_AXIS_LEFTX as i32 + i)
                 as crate::stdlib::SDL_GameControllerAxis,
-        ) as libc::c_int;
-        let mut oldAxis: libc::c_int = stick_state.oldaaxes[i as usize];
+        ) as i32;
+        let mut oldAxis: i32 = stick_state.oldaaxes[i as usize];
         // Smoothly ramp from dead zone to maximum value
-        let mut f: libc::c_float = (::libc::abs(axis) as libc::c_float / 32767.0f32
+        let mut f: f32 = (::libc::abs(axis) as f32 / 32767.0f32
             - (*in_joystickThreshold).value)
             / (1.0f32 - (*in_joystickThreshold).value);
         if f < 0.0f32 {
             f = 0.0f32
         }
-        axis = (32767 as libc::c_int as libc::c_float
-            * (if axis < 0 as libc::c_int { -f } else { f })) as libc::c_int;
+        axis = (32767 as i32 as f32
+            * (if axis < 0 as i32 { -f } else { f })) as i32;
         if axis != oldAxis {
-            let negMap: [libc::c_int; 6] = [
-                crate::keycodes_h::K_PAD0_LEFTSTICK_LEFT as libc::c_int,
-                crate::keycodes_h::K_PAD0_LEFTSTICK_UP as libc::c_int,
-                crate::keycodes_h::K_PAD0_RIGHTSTICK_LEFT as libc::c_int,
-                crate::keycodes_h::K_PAD0_RIGHTSTICK_UP as libc::c_int,
-                0 as libc::c_int,
-                0 as libc::c_int,
+            let negMap: [i32; 6] = [
+                crate::keycodes_h::K_PAD0_LEFTSTICK_LEFT as i32,
+                crate::keycodes_h::K_PAD0_LEFTSTICK_UP as i32,
+                crate::keycodes_h::K_PAD0_RIGHTSTICK_LEFT as i32,
+                crate::keycodes_h::K_PAD0_RIGHTSTICK_UP as i32,
+                0 as i32,
+                0 as i32,
             ];
-            let posMap: [libc::c_int; 6] = [
-                crate::keycodes_h::K_PAD0_LEFTSTICK_RIGHT as libc::c_int,
-                crate::keycodes_h::K_PAD0_LEFTSTICK_DOWN as libc::c_int,
-                crate::keycodes_h::K_PAD0_RIGHTSTICK_RIGHT as libc::c_int,
-                crate::keycodes_h::K_PAD0_RIGHTSTICK_DOWN as libc::c_int,
-                crate::keycodes_h::K_PAD0_LEFTTRIGGER as libc::c_int,
-                crate::keycodes_h::K_PAD0_RIGHTTRIGGER as libc::c_int,
+            let posMap: [i32; 6] = [
+                crate::keycodes_h::K_PAD0_LEFTSTICK_RIGHT as i32,
+                crate::keycodes_h::K_PAD0_LEFTSTICK_DOWN as i32,
+                crate::keycodes_h::K_PAD0_RIGHTSTICK_RIGHT as i32,
+                crate::keycodes_h::K_PAD0_RIGHTSTICK_DOWN as i32,
+                crate::keycodes_h::K_PAD0_LEFTTRIGGER as i32,
+                crate::keycodes_h::K_PAD0_RIGHTTRIGGER as i32,
             ];
             let mut posAnalog: crate::src::qcommon::q_shared::qboolean =
                 crate::src::qcommon::q_shared::qfalse;
             let mut negAnalog: crate::src::qcommon::q_shared::qboolean =
                 crate::src::qcommon::q_shared::qfalse;
-            let mut negKey: libc::c_int = negMap[i as usize];
-            let mut posKey: libc::c_int = posMap[i as usize];
+            let mut negKey: i32 = negMap[i as usize];
+            let mut posKey: i32 = posMap[i as usize];
             if (*in_joystickUseAnalog).integer != 0 {
-                let mut posAxis: libc::c_int = 0 as libc::c_int;
-                let mut posSign: libc::c_int = 0 as libc::c_int;
-                let mut negAxis: libc::c_int = 0 as libc::c_int;
-                let mut negSign: libc::c_int = 0 as libc::c_int;
+                let mut posAxis: i32 = 0 as i32;
+                let mut posSign: i32 = 0 as i32;
+                let mut negAxis: i32 = 0 as i32;
+                let mut negSign: i32 = 0 as i32;
                 // get axes and axes signs for keys if available
                 posAnalog = KeyToAxisAndSign(posKey, &mut posAxis, &mut posSign);
                 negAnalog = KeyToAxisAndSign(negKey, &mut negAxis, &mut negSign);
                 // positive to negative/neutral -> keyup if axis hasn't yet been set
-                if posAnalog as libc::c_uint != 0
+                if posAnalog as u32 != 0
                     && translatedAxesSet[posAxis as usize] as u64 == 0
-                    && oldAxis > 0 as libc::c_int
-                    && axis <= 0 as libc::c_int
+                    && oldAxis > 0 as i32
+                    && axis <= 0 as i32
                 {
-                    translatedAxes[posAxis as usize] = 0 as libc::c_int;
+                    translatedAxes[posAxis as usize] = 0 as i32;
                     translatedAxesSet[posAxis as usize] = crate::src::qcommon::q_shared::qtrue
                 }
                 // negative to positive/neutral -> keyup if axis hasn't yet been set
-                if negAnalog as libc::c_uint != 0
+                if negAnalog as u32 != 0
                     && translatedAxesSet[negAxis as usize] as u64 == 0
-                    && oldAxis < 0 as libc::c_int
-                    && axis >= 0 as libc::c_int
+                    && oldAxis < 0 as i32
+                    && axis >= 0 as i32
                 {
-                    translatedAxes[negAxis as usize] = 0 as libc::c_int;
+                    translatedAxes[negAxis as usize] = 0 as i32;
                     translatedAxesSet[negAxis as usize] = crate::src::qcommon::q_shared::qtrue
                 }
                 // negative/neutral to positive -> keydown
-                if posAnalog as libc::c_uint != 0 && axis > 0 as libc::c_int {
+                if posAnalog as u32 != 0 && axis > 0 as i32 {
                     translatedAxes[posAxis as usize] = axis * posSign;
                     translatedAxesSet[posAxis as usize] = crate::src::qcommon::q_shared::qtrue
                 }
                 // positive/neutral to negative -> keydown
-                if negAnalog as libc::c_uint != 0 && axis < 0 as libc::c_int {
+                if negAnalog as u32 != 0 && axis < 0 as i32 {
                     translatedAxes[negAxis as usize] = -axis * negSign;
                     translatedAxesSet[negAxis as usize] = crate::src::qcommon::q_shared::qtrue
                 }
@@ -2030,60 +2030,60 @@ unsafe extern "C" fn IN_GamepadMove() {
             // positive to negative/neutral -> keyup
             if posAnalog as u64 == 0
                 && posKey != 0
-                && oldAxis > 0 as libc::c_int
-                && axis <= 0 as libc::c_int
+                && oldAxis > 0 as i32
+                && axis <= 0 as i32
             {
                 crate::src::qcommon::common::Com_QueueEvent(
                     in_eventTime,
                     crate::qcommon_h::SE_KEY,
                     posKey,
-                    crate::src::qcommon::q_shared::qfalse as libc::c_int,
-                    0 as libc::c_int,
+                    crate::src::qcommon::q_shared::qfalse as i32,
+                    0 as i32,
                     0 as *mut libc::c_void,
                 );
             }
             // negative to positive/neutral -> keyup
             if negAnalog as u64 == 0
                 && negKey != 0
-                && oldAxis < 0 as libc::c_int
-                && axis >= 0 as libc::c_int
+                && oldAxis < 0 as i32
+                && axis >= 0 as i32
             {
                 crate::src::qcommon::common::Com_QueueEvent(
                     in_eventTime,
                     crate::qcommon_h::SE_KEY,
                     negKey,
-                    crate::src::qcommon::q_shared::qfalse as libc::c_int,
-                    0 as libc::c_int,
+                    crate::src::qcommon::q_shared::qfalse as i32,
+                    0 as i32,
                     0 as *mut libc::c_void,
                 );
             }
             // negative/neutral to positive -> keydown
             if posAnalog as u64 == 0
                 && posKey != 0
-                && oldAxis <= 0 as libc::c_int
-                && axis > 0 as libc::c_int
+                && oldAxis <= 0 as i32
+                && axis > 0 as i32
             {
                 crate::src::qcommon::common::Com_QueueEvent(
                     in_eventTime,
                     crate::qcommon_h::SE_KEY,
                     posKey,
-                    crate::src::qcommon::q_shared::qtrue as libc::c_int,
-                    0 as libc::c_int,
+                    crate::src::qcommon::q_shared::qtrue as i32,
+                    0 as i32,
                     0 as *mut libc::c_void,
                 );
             }
             // positive/neutral to negative -> keydown
             if negAnalog as u64 == 0
                 && negKey != 0
-                && oldAxis >= 0 as libc::c_int
-                && axis < 0 as libc::c_int
+                && oldAxis >= 0 as i32
+                && axis < 0 as i32
             {
                 crate::src::qcommon::common::Com_QueueEvent(
                     in_eventTime,
                     crate::qcommon_h::SE_KEY,
                     negKey,
-                    crate::src::qcommon::q_shared::qtrue as libc::c_int,
-                    0 as libc::c_int,
+                    crate::src::qcommon::q_shared::qtrue as i32,
+                    0 as i32,
                     0 as *mut libc::c_void,
                 );
             }
@@ -2093,15 +2093,15 @@ unsafe extern "C" fn IN_GamepadMove() {
     }
     // set translated axes
     if (*in_joystickUseAnalog).integer != 0 {
-        i = 0 as libc::c_int;
-        while i < 16 as libc::c_int {
+        i = 0 as i32;
+        while i < 16 as i32 {
             if translatedAxesSet[i as usize] as u64 != 0 {
                 crate::src::qcommon::common::Com_QueueEvent(
                     in_eventTime,
                     crate::qcommon_h::SE_JOYSTICK_AXIS,
                     i,
                     translatedAxes[i as usize],
-                    0 as libc::c_int,
+                    0 as i32,
                     0 as *mut libc::c_void,
                 );
             }
@@ -2116,10 +2116,10 @@ IN_JoyMove
 */
 
 unsafe extern "C" fn IN_JoyMove() {
-    let mut axes: libc::c_uint = 0 as libc::c_int as libc::c_uint;
-    let mut hats: libc::c_uint = 0 as libc::c_int as libc::c_uint;
-    let mut total: libc::c_int = 0 as libc::c_int;
-    let mut i: libc::c_int = 0 as libc::c_int;
+    let mut axes: u32 = 0 as i32 as u32;
+    let mut hats: u32 = 0 as i32 as u32;
+    let mut total: i32 = 0 as i32;
+    let mut i: i32 = 0 as i32;
     if !gamepad.is_null() {
         IN_GamepadMove();
         return;
@@ -2130,13 +2130,13 @@ unsafe extern "C" fn IN_JoyMove() {
     crate::stdlib::SDL_JoystickUpdate();
     // update the ball state.
     total = crate::stdlib::SDL_JoystickNumBalls(stick);
-    if total > 0 as libc::c_int {
-        let mut balldx: libc::c_int = 0 as libc::c_int;
-        let mut balldy: libc::c_int = 0 as libc::c_int;
-        i = 0 as libc::c_int;
+    if total > 0 as i32 {
+        let mut balldx: i32 = 0 as i32;
+        let mut balldy: i32 = 0 as i32;
+        i = 0 as i32;
         while i < total {
-            let mut dx: libc::c_int = 0 as libc::c_int;
-            let mut dy: libc::c_int = 0 as libc::c_int;
+            let mut dx: i32 = 0 as i32;
+            let mut dy: i32 = 0 as i32;
             crate::stdlib::SDL_JoystickGetBall(stick, i, &mut dx, &mut dy);
             balldx += dx;
             balldy += dy;
@@ -2145,25 +2145,25 @@ unsafe extern "C" fn IN_JoyMove() {
         if balldx != 0 || balldy != 0 {
             // !!! FIXME: is this good for stick balls, or just mice?
             // Scale like the mouse input...
-            if ::libc::abs(balldx) > 1 as libc::c_int {
-                balldx *= 2 as libc::c_int
+            if ::libc::abs(balldx) > 1 as i32 {
+                balldx *= 2 as i32
             }
-            if ::libc::abs(balldy) > 1 as libc::c_int {
-                balldy *= 2 as libc::c_int
+            if ::libc::abs(balldy) > 1 as i32 {
+                balldy *= 2 as i32
             }
             crate::src::qcommon::common::Com_QueueEvent(
                 in_eventTime,
                 crate::qcommon_h::SE_MOUSE,
                 balldx,
                 balldy,
-                0 as libc::c_int,
+                0 as i32,
                 0 as *mut libc::c_void,
             );
         }
     }
     // now query the stick buttons...
     total = crate::stdlib::SDL_JoystickNumButtons(stick);
-    if total > 0 as libc::c_int {
+    if total > 0 as i32 {
         if total as libc::c_ulong
             > (::std::mem::size_of::<[crate::src::qcommon::q_shared::qboolean; 16]>()
                 as libc::c_ulong)
@@ -2177,20 +2177,20 @@ unsafe extern "C" fn IN_JoyMove() {
                 .wrapping_div(
                     ::std::mem::size_of::<crate::src::qcommon::q_shared::qboolean>()
                         as libc::c_ulong,
-                ) as libc::c_int
+                ) as i32
         }
-        i = 0 as libc::c_int;
+        i = 0 as i32;
         while i < total {
             let mut pressed: crate::src::qcommon::q_shared::qboolean =
-                (crate::stdlib::SDL_JoystickGetButton(stick, i) as libc::c_int != 0 as libc::c_int)
-                    as libc::c_int as crate::src::qcommon::q_shared::qboolean;
-            if pressed as libc::c_uint != stick_state.buttons[i as usize] as libc::c_uint {
+                (crate::stdlib::SDL_JoystickGetButton(stick, i) as i32 != 0 as i32)
+                    as i32 as crate::src::qcommon::q_shared::qboolean;
+            if pressed as u32 != stick_state.buttons[i as usize] as u32 {
                 crate::src::qcommon::common::Com_QueueEvent(
                     in_eventTime,
                     crate::qcommon_h::SE_KEY,
-                    crate::keycodes_h::K_JOY1 as libc::c_int + i,
-                    pressed as libc::c_int,
-                    0 as libc::c_int,
+                    crate::keycodes_h::K_JOY1 as i32 + i,
+                    pressed as i32,
+                    0 as i32,
                     0 as *mut libc::c_void,
                 );
                 stick_state.buttons[i as usize] = pressed
@@ -2200,37 +2200,37 @@ unsafe extern "C" fn IN_JoyMove() {
     }
     // look at the hats...
     total = crate::stdlib::SDL_JoystickNumHats(stick);
-    if total > 0 as libc::c_int {
-        if total > 4 as libc::c_int {
-            total = 4 as libc::c_int
+    if total > 0 as i32 {
+        if total > 4 as i32 {
+            total = 4 as i32
         }
-        i = 0 as libc::c_int;
+        i = 0 as i32;
         while i < total {
-            *(&mut hats as *mut libc::c_uint as *mut crate::stdlib::Uint8).offset(i as isize) =
+            *(&mut hats as *mut u32 as *mut crate::stdlib::Uint8).offset(i as isize) =
                 crate::stdlib::SDL_JoystickGetHat(stick, i);
             i += 1
         }
     }
     // update hat state
     if hats != stick_state.oldhats {
-        i = 0 as libc::c_int;
-        while i < 4 as libc::c_int {
-            if *(&mut hats as *mut libc::c_uint as *mut crate::stdlib::Uint8).offset(i as isize)
-                as libc::c_int
-                != *(&mut stick_state.oldhats as *mut libc::c_uint as *mut crate::stdlib::Uint8)
-                    .offset(i as isize) as libc::c_int
+        i = 0 as i32;
+        while i < 4 as i32 {
+            if *(&mut hats as *mut u32 as *mut crate::stdlib::Uint8).offset(i as isize)
+                as i32
+                != *(&mut stick_state.oldhats as *mut u32 as *mut crate::stdlib::Uint8)
+                    .offset(i as isize) as i32
             {
                 // release event
-                match *(&mut stick_state.oldhats as *mut libc::c_uint as *mut crate::stdlib::Uint8)
-                    .offset(i as isize) as libc::c_int
+                match *(&mut stick_state.oldhats as *mut u32 as *mut crate::stdlib::Uint8)
+                    .offset(i as isize) as i32
                 {
                     1 => {
                         crate::src::qcommon::common::Com_QueueEvent(
                             in_eventTime,
                             crate::qcommon_h::SE_KEY,
-                            hat_keys[(4 as libc::c_int * i + 0 as libc::c_int) as usize],
-                            crate::src::qcommon::q_shared::qfalse as libc::c_int,
-                            0 as libc::c_int,
+                            hat_keys[(4 as i32 * i + 0 as i32) as usize],
+                            crate::src::qcommon::q_shared::qfalse as i32,
+                            0 as i32,
                             0 as *mut libc::c_void,
                         );
                     }
@@ -2238,9 +2238,9 @@ unsafe extern "C" fn IN_JoyMove() {
                         crate::src::qcommon::common::Com_QueueEvent(
                             in_eventTime,
                             crate::qcommon_h::SE_KEY,
-                            hat_keys[(4 as libc::c_int * i + 1 as libc::c_int) as usize],
-                            crate::src::qcommon::q_shared::qfalse as libc::c_int,
-                            0 as libc::c_int,
+                            hat_keys[(4 as i32 * i + 1 as i32) as usize],
+                            crate::src::qcommon::q_shared::qfalse as i32,
+                            0 as i32,
                             0 as *mut libc::c_void,
                         );
                     }
@@ -2248,9 +2248,9 @@ unsafe extern "C" fn IN_JoyMove() {
                         crate::src::qcommon::common::Com_QueueEvent(
                             in_eventTime,
                             crate::qcommon_h::SE_KEY,
-                            hat_keys[(4 as libc::c_int * i + 2 as libc::c_int) as usize],
-                            crate::src::qcommon::q_shared::qfalse as libc::c_int,
-                            0 as libc::c_int,
+                            hat_keys[(4 as i32 * i + 2 as i32) as usize],
+                            crate::src::qcommon::q_shared::qfalse as i32,
+                            0 as i32,
                             0 as *mut libc::c_void,
                         );
                     }
@@ -2258,9 +2258,9 @@ unsafe extern "C" fn IN_JoyMove() {
                         crate::src::qcommon::common::Com_QueueEvent(
                             in_eventTime,
                             crate::qcommon_h::SE_KEY,
-                            hat_keys[(4 as libc::c_int * i + 3 as libc::c_int) as usize],
-                            crate::src::qcommon::q_shared::qfalse as libc::c_int,
-                            0 as libc::c_int,
+                            hat_keys[(4 as i32 * i + 3 as i32) as usize],
+                            crate::src::qcommon::q_shared::qfalse as i32,
+                            0 as i32,
                             0 as *mut libc::c_void,
                         );
                     }
@@ -2268,17 +2268,17 @@ unsafe extern "C" fn IN_JoyMove() {
                         crate::src::qcommon::common::Com_QueueEvent(
                             in_eventTime,
                             crate::qcommon_h::SE_KEY,
-                            hat_keys[(4 as libc::c_int * i + 0 as libc::c_int) as usize],
-                            crate::src::qcommon::q_shared::qfalse as libc::c_int,
-                            0 as libc::c_int,
+                            hat_keys[(4 as i32 * i + 0 as i32) as usize],
+                            crate::src::qcommon::q_shared::qfalse as i32,
+                            0 as i32,
                             0 as *mut libc::c_void,
                         );
                         crate::src::qcommon::common::Com_QueueEvent(
                             in_eventTime,
                             crate::qcommon_h::SE_KEY,
-                            hat_keys[(4 as libc::c_int * i + 1 as libc::c_int) as usize],
-                            crate::src::qcommon::q_shared::qfalse as libc::c_int,
-                            0 as libc::c_int,
+                            hat_keys[(4 as i32 * i + 1 as i32) as usize],
+                            crate::src::qcommon::q_shared::qfalse as i32,
+                            0 as i32,
                             0 as *mut libc::c_void,
                         );
                     }
@@ -2286,17 +2286,17 @@ unsafe extern "C" fn IN_JoyMove() {
                         crate::src::qcommon::common::Com_QueueEvent(
                             in_eventTime,
                             crate::qcommon_h::SE_KEY,
-                            hat_keys[(4 as libc::c_int * i + 2 as libc::c_int) as usize],
-                            crate::src::qcommon::q_shared::qfalse as libc::c_int,
-                            0 as libc::c_int,
+                            hat_keys[(4 as i32 * i + 2 as i32) as usize],
+                            crate::src::qcommon::q_shared::qfalse as i32,
+                            0 as i32,
                             0 as *mut libc::c_void,
                         );
                         crate::src::qcommon::common::Com_QueueEvent(
                             in_eventTime,
                             crate::qcommon_h::SE_KEY,
-                            hat_keys[(4 as libc::c_int * i + 1 as libc::c_int) as usize],
-                            crate::src::qcommon::q_shared::qfalse as libc::c_int,
-                            0 as libc::c_int,
+                            hat_keys[(4 as i32 * i + 1 as i32) as usize],
+                            crate::src::qcommon::q_shared::qfalse as i32,
+                            0 as i32,
                             0 as *mut libc::c_void,
                         );
                     }
@@ -2304,17 +2304,17 @@ unsafe extern "C" fn IN_JoyMove() {
                         crate::src::qcommon::common::Com_QueueEvent(
                             in_eventTime,
                             crate::qcommon_h::SE_KEY,
-                            hat_keys[(4 as libc::c_int * i + 0 as libc::c_int) as usize],
-                            crate::src::qcommon::q_shared::qfalse as libc::c_int,
-                            0 as libc::c_int,
+                            hat_keys[(4 as i32 * i + 0 as i32) as usize],
+                            crate::src::qcommon::q_shared::qfalse as i32,
+                            0 as i32,
                             0 as *mut libc::c_void,
                         );
                         crate::src::qcommon::common::Com_QueueEvent(
                             in_eventTime,
                             crate::qcommon_h::SE_KEY,
-                            hat_keys[(4 as libc::c_int * i + 3 as libc::c_int) as usize],
-                            crate::src::qcommon::q_shared::qfalse as libc::c_int,
-                            0 as libc::c_int,
+                            hat_keys[(4 as i32 * i + 3 as i32) as usize],
+                            crate::src::qcommon::q_shared::qfalse as i32,
+                            0 as i32,
                             0 as *mut libc::c_void,
                         );
                     }
@@ -2322,33 +2322,33 @@ unsafe extern "C" fn IN_JoyMove() {
                         crate::src::qcommon::common::Com_QueueEvent(
                             in_eventTime,
                             crate::qcommon_h::SE_KEY,
-                            hat_keys[(4 as libc::c_int * i + 2 as libc::c_int) as usize],
-                            crate::src::qcommon::q_shared::qfalse as libc::c_int,
-                            0 as libc::c_int,
+                            hat_keys[(4 as i32 * i + 2 as i32) as usize],
+                            crate::src::qcommon::q_shared::qfalse as i32,
+                            0 as i32,
                             0 as *mut libc::c_void,
                         );
                         crate::src::qcommon::common::Com_QueueEvent(
                             in_eventTime,
                             crate::qcommon_h::SE_KEY,
-                            hat_keys[(4 as libc::c_int * i + 3 as libc::c_int) as usize],
-                            crate::src::qcommon::q_shared::qfalse as libc::c_int,
-                            0 as libc::c_int,
+                            hat_keys[(4 as i32 * i + 3 as i32) as usize],
+                            crate::src::qcommon::q_shared::qfalse as i32,
+                            0 as i32,
                             0 as *mut libc::c_void,
                         );
                     }
                     _ => {}
                 }
                 // press event
-                match *(&mut hats as *mut libc::c_uint as *mut crate::stdlib::Uint8)
-                    .offset(i as isize) as libc::c_int
+                match *(&mut hats as *mut u32 as *mut crate::stdlib::Uint8)
+                    .offset(i as isize) as i32
                 {
                     1 => {
                         crate::src::qcommon::common::Com_QueueEvent(
                             in_eventTime,
                             crate::qcommon_h::SE_KEY,
-                            hat_keys[(4 as libc::c_int * i + 0 as libc::c_int) as usize],
-                            crate::src::qcommon::q_shared::qtrue as libc::c_int,
-                            0 as libc::c_int,
+                            hat_keys[(4 as i32 * i + 0 as i32) as usize],
+                            crate::src::qcommon::q_shared::qtrue as i32,
+                            0 as i32,
                             0 as *mut libc::c_void,
                         );
                     }
@@ -2356,9 +2356,9 @@ unsafe extern "C" fn IN_JoyMove() {
                         crate::src::qcommon::common::Com_QueueEvent(
                             in_eventTime,
                             crate::qcommon_h::SE_KEY,
-                            hat_keys[(4 as libc::c_int * i + 1 as libc::c_int) as usize],
-                            crate::src::qcommon::q_shared::qtrue as libc::c_int,
-                            0 as libc::c_int,
+                            hat_keys[(4 as i32 * i + 1 as i32) as usize],
+                            crate::src::qcommon::q_shared::qtrue as i32,
+                            0 as i32,
                             0 as *mut libc::c_void,
                         );
                     }
@@ -2366,9 +2366,9 @@ unsafe extern "C" fn IN_JoyMove() {
                         crate::src::qcommon::common::Com_QueueEvent(
                             in_eventTime,
                             crate::qcommon_h::SE_KEY,
-                            hat_keys[(4 as libc::c_int * i + 2 as libc::c_int) as usize],
-                            crate::src::qcommon::q_shared::qtrue as libc::c_int,
-                            0 as libc::c_int,
+                            hat_keys[(4 as i32 * i + 2 as i32) as usize],
+                            crate::src::qcommon::q_shared::qtrue as i32,
+                            0 as i32,
                             0 as *mut libc::c_void,
                         );
                     }
@@ -2376,9 +2376,9 @@ unsafe extern "C" fn IN_JoyMove() {
                         crate::src::qcommon::common::Com_QueueEvent(
                             in_eventTime,
                             crate::qcommon_h::SE_KEY,
-                            hat_keys[(4 as libc::c_int * i + 3 as libc::c_int) as usize],
-                            crate::src::qcommon::q_shared::qtrue as libc::c_int,
-                            0 as libc::c_int,
+                            hat_keys[(4 as i32 * i + 3 as i32) as usize],
+                            crate::src::qcommon::q_shared::qtrue as i32,
+                            0 as i32,
                             0 as *mut libc::c_void,
                         );
                     }
@@ -2386,17 +2386,17 @@ unsafe extern "C" fn IN_JoyMove() {
                         crate::src::qcommon::common::Com_QueueEvent(
                             in_eventTime,
                             crate::qcommon_h::SE_KEY,
-                            hat_keys[(4 as libc::c_int * i + 0 as libc::c_int) as usize],
-                            crate::src::qcommon::q_shared::qtrue as libc::c_int,
-                            0 as libc::c_int,
+                            hat_keys[(4 as i32 * i + 0 as i32) as usize],
+                            crate::src::qcommon::q_shared::qtrue as i32,
+                            0 as i32,
                             0 as *mut libc::c_void,
                         );
                         crate::src::qcommon::common::Com_QueueEvent(
                             in_eventTime,
                             crate::qcommon_h::SE_KEY,
-                            hat_keys[(4 as libc::c_int * i + 1 as libc::c_int) as usize],
-                            crate::src::qcommon::q_shared::qtrue as libc::c_int,
-                            0 as libc::c_int,
+                            hat_keys[(4 as i32 * i + 1 as i32) as usize],
+                            crate::src::qcommon::q_shared::qtrue as i32,
+                            0 as i32,
                             0 as *mut libc::c_void,
                         );
                     }
@@ -2404,17 +2404,17 @@ unsafe extern "C" fn IN_JoyMove() {
                         crate::src::qcommon::common::Com_QueueEvent(
                             in_eventTime,
                             crate::qcommon_h::SE_KEY,
-                            hat_keys[(4 as libc::c_int * i + 2 as libc::c_int) as usize],
-                            crate::src::qcommon::q_shared::qtrue as libc::c_int,
-                            0 as libc::c_int,
+                            hat_keys[(4 as i32 * i + 2 as i32) as usize],
+                            crate::src::qcommon::q_shared::qtrue as i32,
+                            0 as i32,
                             0 as *mut libc::c_void,
                         );
                         crate::src::qcommon::common::Com_QueueEvent(
                             in_eventTime,
                             crate::qcommon_h::SE_KEY,
-                            hat_keys[(4 as libc::c_int * i + 1 as libc::c_int) as usize],
-                            crate::src::qcommon::q_shared::qtrue as libc::c_int,
-                            0 as libc::c_int,
+                            hat_keys[(4 as i32 * i + 1 as i32) as usize],
+                            crate::src::qcommon::q_shared::qtrue as i32,
+                            0 as i32,
                             0 as *mut libc::c_void,
                         );
                     }
@@ -2422,17 +2422,17 @@ unsafe extern "C" fn IN_JoyMove() {
                         crate::src::qcommon::common::Com_QueueEvent(
                             in_eventTime,
                             crate::qcommon_h::SE_KEY,
-                            hat_keys[(4 as libc::c_int * i + 0 as libc::c_int) as usize],
-                            crate::src::qcommon::q_shared::qtrue as libc::c_int,
-                            0 as libc::c_int,
+                            hat_keys[(4 as i32 * i + 0 as i32) as usize],
+                            crate::src::qcommon::q_shared::qtrue as i32,
+                            0 as i32,
                             0 as *mut libc::c_void,
                         );
                         crate::src::qcommon::common::Com_QueueEvent(
                             in_eventTime,
                             crate::qcommon_h::SE_KEY,
-                            hat_keys[(4 as libc::c_int * i + 3 as libc::c_int) as usize],
-                            crate::src::qcommon::q_shared::qtrue as libc::c_int,
-                            0 as libc::c_int,
+                            hat_keys[(4 as i32 * i + 3 as i32) as usize],
+                            crate::src::qcommon::q_shared::qtrue as i32,
+                            0 as i32,
                             0 as *mut libc::c_void,
                         );
                     }
@@ -2440,17 +2440,17 @@ unsafe extern "C" fn IN_JoyMove() {
                         crate::src::qcommon::common::Com_QueueEvent(
                             in_eventTime,
                             crate::qcommon_h::SE_KEY,
-                            hat_keys[(4 as libc::c_int * i + 2 as libc::c_int) as usize],
-                            crate::src::qcommon::q_shared::qtrue as libc::c_int,
-                            0 as libc::c_int,
+                            hat_keys[(4 as i32 * i + 2 as i32) as usize],
+                            crate::src::qcommon::q_shared::qtrue as i32,
+                            0 as i32,
                             0 as *mut libc::c_void,
                         );
                         crate::src::qcommon::common::Com_QueueEvent(
                             in_eventTime,
                             crate::qcommon_h::SE_KEY,
-                            hat_keys[(4 as libc::c_int * i + 3 as libc::c_int) as usize],
-                            crate::src::qcommon::q_shared::qtrue as libc::c_int,
-                            0 as libc::c_int,
+                            hat_keys[(4 as i32 * i + 3 as i32) as usize],
+                            crate::src::qcommon::q_shared::qtrue as i32,
+                            0 as i32,
                             0 as *mut libc::c_void,
                         );
                     }
@@ -2464,46 +2464,46 @@ unsafe extern "C" fn IN_JoyMove() {
     stick_state.oldhats = hats;
     // finally, look at the axes...
     total = crate::stdlib::SDL_JoystickNumAxes(stick);
-    if total > 0 as libc::c_int {
+    if total > 0 as i32 {
         if (*in_joystickUseAnalog).integer != 0 {
-            if total > 16 as libc::c_int {
-                total = 16 as libc::c_int
+            if total > 16 as i32 {
+                total = 16 as i32
             }
-            i = 0 as libc::c_int;
+            i = 0 as i32;
             while i < total {
                 let mut axis: crate::stdlib::Sint16 = crate::stdlib::SDL_JoystickGetAxis(stick, i);
-                let mut f: libc::c_float =
-                    ::libc::abs(axis as libc::c_int) as libc::c_float / 32767.0f32;
+                let mut f: f32 =
+                    ::libc::abs(axis as i32) as f32 / 32767.0f32;
                 if f < (*in_joystickThreshold).value {
-                    axis = 0 as libc::c_int as crate::stdlib::Sint16
+                    axis = 0 as i32 as crate::stdlib::Sint16
                 }
-                if axis as libc::c_int != stick_state.oldaaxes[i as usize] {
+                if axis as i32 != stick_state.oldaaxes[i as usize] {
                     crate::src::qcommon::common::Com_QueueEvent(
                         in_eventTime,
                         crate::qcommon_h::SE_JOYSTICK_AXIS,
                         i,
-                        axis as libc::c_int,
-                        0 as libc::c_int,
+                        axis as i32,
+                        0 as i32,
                         0 as *mut libc::c_void,
                     );
-                    stick_state.oldaaxes[i as usize] = axis as libc::c_int
+                    stick_state.oldaaxes[i as usize] = axis as i32
                 }
                 i += 1
             }
         } else {
-            if total > 16 as libc::c_int {
-                total = 16 as libc::c_int
+            if total > 16 as i32 {
+                total = 16 as i32
             }
-            i = 0 as libc::c_int;
+            i = 0 as i32;
             while i < total {
                 let mut axis_0: crate::stdlib::Sint16 =
                     crate::stdlib::SDL_JoystickGetAxis(stick, i);
-                let mut f_0: libc::c_float = axis_0 as libc::c_float / 32767.0f32;
+                let mut f_0: f32 = axis_0 as f32 / 32767.0f32;
                 if f_0 < -(*in_joystickThreshold).value {
-                    axes |= ((1 as libc::c_int) << i * 2 as libc::c_int) as libc::c_uint
+                    axes |= ((1 as i32) << i * 2 as i32) as u32
                 } else if f_0 > (*in_joystickThreshold).value {
-                    axes |= ((1 as libc::c_int) << i * 2 as libc::c_int + 1 as libc::c_int)
-                        as libc::c_uint
+                    axes |= ((1 as i32) << i * 2 as i32 + 1 as i32)
+                        as u32
                 }
                 i += 1
             }
@@ -2511,29 +2511,29 @@ unsafe extern "C" fn IN_JoyMove() {
     }
     /* Time to update axes state based on old vs. new. */
     if axes != stick_state.oldaxes {
-        i = 0 as libc::c_int;
-        while i < 16 as libc::c_int {
-            if axes & ((1 as libc::c_int) << i) as libc::c_uint != 0
-                && stick_state.oldaxes & ((1 as libc::c_int) << i) as libc::c_uint == 0
+        i = 0 as i32;
+        while i < 16 as i32 {
+            if axes & ((1 as i32) << i) as u32 != 0
+                && stick_state.oldaxes & ((1 as i32) << i) as u32 == 0
             {
                 crate::src::qcommon::common::Com_QueueEvent(
                     in_eventTime,
                     crate::qcommon_h::SE_KEY,
                     joy_keys[i as usize],
-                    crate::src::qcommon::q_shared::qtrue as libc::c_int,
-                    0 as libc::c_int,
+                    crate::src::qcommon::q_shared::qtrue as i32,
+                    0 as i32,
                     0 as *mut libc::c_void,
                 );
             }
-            if axes & ((1 as libc::c_int) << i) as libc::c_uint == 0
-                && stick_state.oldaxes & ((1 as libc::c_int) << i) as libc::c_uint != 0
+            if axes & ((1 as i32) << i) as u32 == 0
+                && stick_state.oldaxes & ((1 as i32) << i) as u32 != 0
             {
                 crate::src::qcommon::common::Com_QueueEvent(
                     in_eventTime,
                     crate::qcommon_h::SE_KEY,
                     joy_keys[i as usize],
-                    crate::src::qcommon::q_shared::qfalse as libc::c_int,
-                    0 as libc::c_int,
+                    crate::src::qcommon::q_shared::qfalse as i32,
+                    0 as i32,
                     0 as *mut libc::c_void,
                 );
             }
@@ -2553,14 +2553,14 @@ unsafe extern "C" fn IN_ProcessEvents() {
     let mut e: crate::stdlib::SDL_Event = crate::stdlib::SDL_Event { type_0: 0 };
     let mut key: crate::keycodes_h::keyNum_t = 0 as crate::keycodes_h::keyNum_t;
     static mut lastKeyDown: crate::keycodes_h::keyNum_t = 0 as crate::keycodes_h::keyNum_t;
-    if crate::stdlib::SDL_WasInit(0x20 as libc::c_uint) == 0 {
+    if crate::stdlib::SDL_WasInit(0x20 as u32) == 0 {
         return;
     }
     while crate::stdlib::SDL_PollEvent(&mut e) != 0 {
         match e.type_0 {
             768 => {
-                if !(e.key.repeat as libc::c_int != 0
-                    && crate::src::client::cl_keys::Key_GetCatcher() == 0 as libc::c_int)
+                if !(e.key.repeat as i32 != 0
+                    && crate::src::client::cl_keys::Key_GetCatcher() == 0 as i32)
                 {
                     key = IN_TranslateSDLToQ3Key(
                         &mut e.key.keysym,
@@ -2570,39 +2570,39 @@ unsafe extern "C" fn IN_ProcessEvents() {
                         crate::src::qcommon::common::Com_QueueEvent(
                             in_eventTime,
                             crate::qcommon_h::SE_KEY,
-                            key as libc::c_int,
-                            crate::src::qcommon::q_shared::qtrue as libc::c_int,
-                            0 as libc::c_int,
+                            key as i32,
+                            crate::src::qcommon::q_shared::qtrue as i32,
+                            0 as i32,
                             0 as *mut libc::c_void,
                         );
                     }
-                    if key as libc::c_uint
-                        == crate::keycodes_h::K_BACKSPACE as libc::c_int as libc::c_uint
+                    if key as u32
+                        == crate::keycodes_h::K_BACKSPACE as i32 as u32
                     {
                         crate::src::qcommon::common::Com_QueueEvent(
                             in_eventTime,
                             crate::qcommon_h::SE_CHAR,
-                            'h' as i32 - 'a' as i32 + 1 as libc::c_int,
-                            0 as libc::c_int,
-                            0 as libc::c_int,
+                            'h' as i32 - 'a' as i32 + 1 as i32,
+                            0 as i32,
+                            0 as i32,
                             0 as *mut libc::c_void,
                         );
                     } else if crate::src::client::cl_keys::keys
-                        [crate::keycodes_h::K_CTRL as libc::c_int as usize]
-                        .down as libc::c_uint
+                        [crate::keycodes_h::K_CTRL as i32 as usize]
+                        .down as u32
                         != 0
-                        && key as libc::c_uint >= 'a' as i32 as libc::c_uint
-                        && key as libc::c_uint <= 'z' as i32 as libc::c_uint
+                        && key as u32 >= 'a' as i32 as u32
+                        && key as u32 <= 'z' as i32 as u32
                     {
                         crate::src::qcommon::common::Com_QueueEvent(
                             in_eventTime,
                             crate::qcommon_h::SE_CHAR,
-                            (key as libc::c_uint)
-                                .wrapping_sub('a' as i32 as libc::c_uint)
-                                .wrapping_add(1 as libc::c_int as libc::c_uint)
-                                as libc::c_int,
-                            0 as libc::c_int,
-                            0 as libc::c_int,
+                            (key as u32)
+                                .wrapping_sub('a' as i32 as u32)
+                                .wrapping_add(1 as i32 as u32)
+                                as i32,
+                            0 as i32,
+                            0 as i32,
                             0 as *mut libc::c_void,
                         );
                     }
@@ -2618,90 +2618,90 @@ unsafe extern "C" fn IN_ProcessEvents() {
                     crate::src::qcommon::common::Com_QueueEvent(
                         in_eventTime,
                         crate::qcommon_h::SE_KEY,
-                        key as libc::c_int,
-                        crate::src::qcommon::q_shared::qfalse as libc::c_int,
-                        0 as libc::c_int,
+                        key as i32,
+                        crate::src::qcommon::q_shared::qfalse as i32,
+                        0 as i32,
                         0 as *mut libc::c_void,
                     );
                 }
                 lastKeyDown = 0 as crate::keycodes_h::keyNum_t
             }
             771 => {
-                if lastKeyDown as libc::c_uint
-                    != crate::keycodes_h::K_CONSOLE as libc::c_int as libc::c_uint
+                if lastKeyDown as u32
+                    != crate::keycodes_h::K_CONSOLE as i32 as u32
                 {
                     let mut c: *mut libc::c_char = e.text.text.as_mut_ptr();
                     // Quick and dirty UTF-8 to UTF-32 conversion
                     while *c != 0 {
-                        let mut utf32: libc::c_int = 0 as libc::c_int;
-                        if *c as libc::c_int & 0x80 as libc::c_int == 0 as libc::c_int {
+                        let mut utf32: i32 = 0 as i32;
+                        if *c as i32 & 0x80 as i32 == 0 as i32 {
                             let fresh0 = c;
                             c = c.offset(1);
-                            utf32 = *fresh0 as libc::c_int
-                        } else if *c as libc::c_int & 0xe0 as libc::c_int == 0xc0 as libc::c_int {
+                            utf32 = *fresh0 as i32
+                        } else if *c as i32 & 0xe0 as i32 == 0xc0 as i32 {
                             // 110x xxxx
                             let fresh1 = c;
                             c = c.offset(1);
                             utf32 |=
-                                (*fresh1 as libc::c_int & 0x1f as libc::c_int) << 6 as libc::c_int;
+                                (*fresh1 as i32 & 0x1f as i32) << 6 as i32;
                             let fresh2 = c;
                             c = c.offset(1);
-                            utf32 |= *fresh2 as libc::c_int & 0x3f as libc::c_int
-                        } else if *c as libc::c_int & 0xf0 as libc::c_int == 0xe0 as libc::c_int {
+                            utf32 |= *fresh2 as i32 & 0x3f as i32
+                        } else if *c as i32 & 0xf0 as i32 == 0xe0 as i32 {
                             // 1110 xxxx
                             let fresh3 = c;
                             c = c.offset(1);
                             utf32 |=
-                                (*fresh3 as libc::c_int & 0xf as libc::c_int) << 12 as libc::c_int;
+                                (*fresh3 as i32 & 0xf as i32) << 12 as i32;
                             let fresh4 = c;
                             c = c.offset(1);
                             utf32 |=
-                                (*fresh4 as libc::c_int & 0x3f as libc::c_int) << 6 as libc::c_int;
+                                (*fresh4 as i32 & 0x3f as i32) << 6 as i32;
                             let fresh5 = c;
                             c = c.offset(1);
-                            utf32 |= *fresh5 as libc::c_int & 0x3f as libc::c_int
-                        } else if *c as libc::c_int & 0xf8 as libc::c_int == 0xf0 as libc::c_int {
+                            utf32 |= *fresh5 as i32 & 0x3f as i32
+                        } else if *c as i32 & 0xf8 as i32 == 0xf0 as i32 {
                             // 1111 0xxx
                             let fresh6 = c;
                             c = c.offset(1);
                             utf32 |=
-                                (*fresh6 as libc::c_int & 0x7 as libc::c_int) << 18 as libc::c_int;
+                                (*fresh6 as i32 & 0x7 as i32) << 18 as i32;
                             let fresh7 = c;
                             c = c.offset(1);
                             utf32 |=
-                                (*fresh7 as libc::c_int & 0x3f as libc::c_int) << 12 as libc::c_int;
+                                (*fresh7 as i32 & 0x3f as i32) << 12 as i32;
                             let fresh8 = c;
                             c = c.offset(1);
                             utf32 |=
-                                (*fresh8 as libc::c_int & 0x3f as libc::c_int) << 6 as libc::c_int;
+                                (*fresh8 as i32 & 0x3f as i32) << 6 as i32;
                             let fresh9 = c;
                             c = c.offset(1);
-                            utf32 |= *fresh9 as libc::c_int & 0x3f as libc::c_int
+                            utf32 |= *fresh9 as i32 & 0x3f as i32
                         } else {
                             crate::src::qcommon::common::Com_DPrintf(
                                 b"Unrecognised UTF-8 lead byte: 0x%x\n\x00" as *const u8
                                     as *const libc::c_char,
-                                *c as libc::c_uint,
+                                *c as u32,
                             );
                             c = c.offset(1)
                         }
-                        if utf32 != 0 as libc::c_int {
+                        if utf32 != 0 as i32 {
                             if IN_IsConsoleKey(0 as crate::keycodes_h::keyNum_t, utf32) as u64 != 0
                             {
                                 crate::src::qcommon::common::Com_QueueEvent(
                                     in_eventTime,
                                     crate::qcommon_h::SE_KEY,
-                                    crate::keycodes_h::K_CONSOLE as libc::c_int,
-                                    crate::src::qcommon::q_shared::qtrue as libc::c_int,
-                                    0 as libc::c_int,
+                                    crate::keycodes_h::K_CONSOLE as i32,
+                                    crate::src::qcommon::q_shared::qtrue as i32,
+                                    0 as i32,
                                     0 as *mut libc::c_void,
                                 );
                                 crate::src::qcommon::common::Com_QueueEvent(
                                     in_eventTime,
                                     crate::qcommon_h::SE_KEY,
-                                    crate::keycodes_h::K_CONSOLE as libc::c_int,
-                                    crate::src::qcommon::q_shared::qfalse as libc::c_int,
-                                    0 as libc::c_int,
+                                    crate::keycodes_h::K_CONSOLE as i32,
+                                    crate::src::qcommon::q_shared::qfalse as i32,
+                                    0 as i32,
                                     0 as *mut libc::c_void,
                                 );
                             } else {
@@ -2709,8 +2709,8 @@ unsafe extern "C" fn IN_ProcessEvents() {
                                     in_eventTime,
                                     crate::qcommon_h::SE_CHAR,
                                     utf32,
-                                    0 as libc::c_int,
-                                    0 as libc::c_int,
+                                    0 as i32,
+                                    0 as i32,
                                     0 as *mut libc::c_void,
                                 );
                             }
@@ -2726,73 +2726,73 @@ unsafe extern "C" fn IN_ProcessEvents() {
                             crate::qcommon_h::SE_MOUSE,
                             e.motion.xrel,
                             e.motion.yrel,
-                            0 as libc::c_int,
+                            0 as i32,
                             0 as *mut libc::c_void,
                         );
                     }
                 }
             }
             1025 | 1026 => {
-                let mut b: libc::c_int = 0;
-                match e.button.button as libc::c_int {
-                    1 => b = crate::keycodes_h::K_MOUSE1 as libc::c_int,
-                    2 => b = crate::keycodes_h::K_MOUSE3 as libc::c_int,
-                    3 => b = crate::keycodes_h::K_MOUSE2 as libc::c_int,
-                    4 => b = crate::keycodes_h::K_MOUSE4 as libc::c_int,
-                    5 => b = crate::keycodes_h::K_MOUSE5 as libc::c_int,
+                let mut b: i32 = 0;
+                match e.button.button as i32 {
+                    1 => b = crate::keycodes_h::K_MOUSE1 as i32,
+                    2 => b = crate::keycodes_h::K_MOUSE3 as i32,
+                    3 => b = crate::keycodes_h::K_MOUSE2 as i32,
+                    4 => b = crate::keycodes_h::K_MOUSE4 as i32,
+                    5 => b = crate::keycodes_h::K_MOUSE5 as i32,
                     _ => {
-                        b = crate::keycodes_h::K_AUX1 as libc::c_int
-                            + (e.button.button as libc::c_int - 5 as libc::c_int + 1 as libc::c_int)
-                                % 16 as libc::c_int
+                        b = crate::keycodes_h::K_AUX1 as i32
+                            + (e.button.button as i32 - 5 as i32 + 1 as i32)
+                                % 16 as i32
                     }
                 }
                 crate::src::qcommon::common::Com_QueueEvent(
                     in_eventTime,
                     crate::qcommon_h::SE_KEY,
                     b,
-                    if e.type_0 == crate::stdlib::SDL_MOUSEBUTTONDOWN as libc::c_int as libc::c_uint
+                    if e.type_0 == crate::stdlib::SDL_MOUSEBUTTONDOWN as i32 as u32
                     {
-                        crate::src::qcommon::q_shared::qtrue as libc::c_int
+                        crate::src::qcommon::q_shared::qtrue as i32
                     } else {
-                        crate::src::qcommon::q_shared::qfalse as libc::c_int
+                        crate::src::qcommon::q_shared::qfalse as i32
                     },
-                    0 as libc::c_int,
+                    0 as i32,
                     0 as *mut libc::c_void,
                 );
             }
             1027 => {
-                if e.wheel.y > 0 as libc::c_int {
+                if e.wheel.y > 0 as i32 {
                     crate::src::qcommon::common::Com_QueueEvent(
                         in_eventTime,
                         crate::qcommon_h::SE_KEY,
-                        crate::keycodes_h::K_MWHEELUP as libc::c_int,
-                        crate::src::qcommon::q_shared::qtrue as libc::c_int,
-                        0 as libc::c_int,
+                        crate::keycodes_h::K_MWHEELUP as i32,
+                        crate::src::qcommon::q_shared::qtrue as i32,
+                        0 as i32,
                         0 as *mut libc::c_void,
                     );
                     crate::src::qcommon::common::Com_QueueEvent(
                         in_eventTime,
                         crate::qcommon_h::SE_KEY,
-                        crate::keycodes_h::K_MWHEELUP as libc::c_int,
-                        crate::src::qcommon::q_shared::qfalse as libc::c_int,
-                        0 as libc::c_int,
+                        crate::keycodes_h::K_MWHEELUP as i32,
+                        crate::src::qcommon::q_shared::qfalse as i32,
+                        0 as i32,
                         0 as *mut libc::c_void,
                     );
-                } else if e.wheel.y < 0 as libc::c_int {
+                } else if e.wheel.y < 0 as i32 {
                     crate::src::qcommon::common::Com_QueueEvent(
                         in_eventTime,
                         crate::qcommon_h::SE_KEY,
-                        crate::keycodes_h::K_MWHEELDOWN as libc::c_int,
-                        crate::src::qcommon::q_shared::qtrue as libc::c_int,
-                        0 as libc::c_int,
+                        crate::keycodes_h::K_MWHEELDOWN as i32,
+                        crate::src::qcommon::q_shared::qtrue as i32,
+                        0 as i32,
                         0 as *mut libc::c_void,
                     );
                     crate::src::qcommon::common::Com_QueueEvent(
                         in_eventTime,
                         crate::qcommon_h::SE_KEY,
-                        crate::keycodes_h::K_MWHEELDOWN as libc::c_int,
-                        crate::src::qcommon::q_shared::qfalse as libc::c_int,
-                        0 as libc::c_int,
+                        crate::keycodes_h::K_MWHEELDOWN as i32,
+                        crate::src::qcommon::q_shared::qfalse as i32,
+                        0 as i32,
                         0 as *mut libc::c_void,
                     );
                 }
@@ -2804,15 +2804,15 @@ unsafe extern "C" fn IN_ProcessEvents() {
             }
             256 => {
                 crate::src::qcommon::cmd::Cbuf_ExecuteText(
-                    crate::src::qcommon::q_shared::EXEC_NOW as libc::c_int,
+                    crate::src::qcommon::q_shared::EXEC_NOW as i32,
                     b"quit Closed window\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
             512 => {
-                match e.window.event as libc::c_int {
+                match e.window.event as i32 {
                     5 => {
-                        let mut width: libc::c_int = 0;
-                        let mut height: libc::c_int = 0;
+                        let mut width: i32 = 0;
+                        let mut height: i32 = 0;
                         width = e.window.data1;
                         height = e.window.data2;
                         // ignore this event on fullscreen
@@ -2823,11 +2823,11 @@ unsafe extern "C" fn IN_ProcessEvents() {
                             {
                                 crate::src::qcommon::cvar::Cvar_SetValue(
                                     b"r_customwidth\x00" as *const u8 as *const libc::c_char,
-                                    width as libc::c_float,
+                                    width as f32,
                                 );
                                 crate::src::qcommon::cvar::Cvar_SetValue(
                                     b"r_customheight\x00" as *const u8 as *const libc::c_char,
-                                    height as libc::c_float,
+                                    height as f32,
                                 );
                                 crate::src::qcommon::cvar::Cvar_Set(
                                     b"r_mode\x00" as *const u8 as *const libc::c_char,
@@ -2837,32 +2837,32 @@ unsafe extern "C" fn IN_ProcessEvents() {
                                 // we aren't constantly recreating the GL context while
                                 // he tries to drag...
                                 vidRestartTime = crate::src::sys::sys_unix::Sys_Milliseconds()
-                                    + 1000 as libc::c_int
+                                    + 1000 as i32
                             }
                         }
                     }
                     7 => {
                         crate::src::qcommon::cvar::Cvar_SetValue(
                             b"com_minimized\x00" as *const u8 as *const libc::c_char,
-                            1 as libc::c_int as libc::c_float,
+                            1 as i32 as f32,
                         );
                     }
                     9 | 8 => {
                         crate::src::qcommon::cvar::Cvar_SetValue(
                             b"com_minimized\x00" as *const u8 as *const libc::c_char,
-                            0 as libc::c_int as libc::c_float,
+                            0 as i32 as f32,
                         );
                     }
                     13 => {
                         crate::src::qcommon::cvar::Cvar_SetValue(
                             b"com_unfocused\x00" as *const u8 as *const libc::c_char,
-                            1 as libc::c_int as libc::c_float,
+                            1 as i32 as f32,
                         );
                     }
                     12 => {
                         crate::src::qcommon::cvar::Cvar_SetValue(
                             b"com_unfocused\x00" as *const u8 as *const libc::c_char,
-                            0 as libc::c_int as libc::c_float,
+                            0 as i32 as f32,
                         );
                     }
                     _ => {}
@@ -2884,28 +2884,28 @@ pub unsafe extern "C" fn IN_Frame() {
         crate::src::qcommon::q_shared::qfalse;
     IN_JoyMove();
     // If not DISCONNECTED (main menu) or ACTIVE (in game), we're loading
-    loading = (crate::src::client::cl_main::clc.state as libc::c_uint
-        != crate::src::qcommon::q_shared::CA_DISCONNECTED as libc::c_int as libc::c_uint
-        && crate::src::client::cl_main::clc.state as libc::c_uint
-            != crate::src::qcommon::q_shared::CA_ACTIVE as libc::c_int as libc::c_uint)
-        as libc::c_int as crate::src::qcommon::q_shared::qboolean;
+    loading = (crate::src::client::cl_main::clc.state as u32
+        != crate::src::qcommon::q_shared::CA_DISCONNECTED as i32 as u32
+        && crate::src::client::cl_main::clc.state as u32
+            != crate::src::qcommon::q_shared::CA_ACTIVE as i32 as u32)
+        as i32 as crate::src::qcommon::q_shared::qboolean;
     // update isFullscreen since it might of changed since the last vid_restart
     crate::src::client::cl_main::cls.glconfig.isFullscreen =
         (crate::src::qcommon::cvar::Cvar_VariableIntegerValue(
             b"r_fullscreen\x00" as *const u8 as *const libc::c_char,
-        ) != 0 as libc::c_int) as libc::c_int as crate::src::qcommon::q_shared::qboolean;
+        ) != 0 as i32) as i32 as crate::src::qcommon::q_shared::qboolean;
     if crate::src::client::cl_main::cls.glconfig.isFullscreen as u64 == 0
-        && crate::src::client::cl_keys::Key_GetCatcher() & 0x1 as libc::c_int != 0
+        && crate::src::client::cl_keys::Key_GetCatcher() & 0x1 as i32 != 0
     {
         // Console is down in windowed mode
         IN_DeactivateMouse(crate::src::client::cl_main::cls.glconfig.isFullscreen);
     } else if crate::src::client::cl_main::cls.glconfig.isFullscreen as u64 == 0
-        && loading as libc::c_uint != 0
+        && loading as u32 != 0
     {
         // Loading in windowed mode
         IN_DeactivateMouse(crate::src::client::cl_main::cls.glconfig.isFullscreen);
     } else if crate::stdlib::SDL_GetWindowFlags(SDL_window)
-        & crate::stdlib::SDL_WINDOW_INPUT_FOCUS as libc::c_int as libc::c_uint
+        & crate::stdlib::SDL_WINDOW_INPUT_FOCUS as i32 as u32
         == 0
     {
         // Window not got focus
@@ -2917,10 +2917,10 @@ pub unsafe extern "C" fn IN_Frame() {
     // Set event time for next frame to earliest possible time an event could happen
     in_eventTime = crate::src::sys::sys_unix::Sys_Milliseconds();
     // In case we had to delay actual restart of video system
-    if vidRestartTime != 0 as libc::c_int
+    if vidRestartTime != 0 as i32
         && vidRestartTime < crate::src::sys::sys_unix::Sys_Milliseconds()
     {
-        vidRestartTime = 0 as libc::c_int;
+        vidRestartTime = 0 as i32;
         crate::src::qcommon::cmd::Cbuf_AddText(
             b"vid_restart\n\x00" as *const u8 as *const libc::c_char,
         );
@@ -2934,10 +2934,10 @@ IN_Init
 #[no_mangle]
 
 pub unsafe extern "C" fn IN_Init(mut windowData: *mut libc::c_void) {
-    let mut appState: libc::c_int = 0;
-    if crate::stdlib::SDL_WasInit(0x20 as libc::c_uint) == 0 {
+    let mut appState: i32 = 0;
+    if crate::stdlib::SDL_WasInit(0x20 as u32) == 0 {
         crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_FATAL as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_FATAL as i32,
             b"IN_Init called before SDL_Init( SDL_INIT_VIDEO )\x00" as *const u8
                 as *const libc::c_char,
         );
@@ -2949,46 +2949,46 @@ pub unsafe extern "C" fn IN_Init(mut windowData: *mut libc::c_void) {
     in_keyboardDebug = crate::src::qcommon::cvar::Cvar_Get(
         b"in_keyboardDebug\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
-        0x1 as libc::c_int,
+        0x1 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s;
     // mouse variables
     in_mouse = crate::src::qcommon::cvar::Cvar_Get(
         b"in_mouse\x00" as *const u8 as *const libc::c_char,
         b"1\x00" as *const u8 as *const libc::c_char,
-        0x1 as libc::c_int,
+        0x1 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s;
     in_nograb = crate::src::qcommon::cvar::Cvar_Get(
         b"in_nograb\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
-        0x1 as libc::c_int,
+        0x1 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s;
     in_joystick = crate::src::qcommon::cvar::Cvar_Get(
         b"in_joystick\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
-        0x1 as libc::c_int | 0x20 as libc::c_int,
+        0x1 as i32 | 0x20 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s;
     in_joystickThreshold = crate::src::qcommon::cvar::Cvar_Get(
         b"joy_threshold\x00" as *const u8 as *const libc::c_char,
         b"0.15\x00" as *const u8 as *const libc::c_char,
-        0x1 as libc::c_int,
+        0x1 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s;
     crate::stdlib::SDL_StartTextInput();
-    mouseAvailable = ((*in_mouse).value != 0 as libc::c_int as libc::c_float) as libc::c_int
+    mouseAvailable = ((*in_mouse).value != 0 as i32 as f32) as i32
         as crate::src::qcommon::q_shared::qboolean;
     IN_DeactivateMouse(
         (crate::src::qcommon::cvar::Cvar_VariableIntegerValue(
             b"r_fullscreen\x00" as *const u8 as *const libc::c_char,
-        ) != 0 as libc::c_int) as libc::c_int as crate::src::qcommon::q_shared::qboolean,
+        ) != 0 as i32) as i32 as crate::src::qcommon::q_shared::qboolean,
     );
-    appState = crate::stdlib::SDL_GetWindowFlags(SDL_window) as libc::c_int;
+    appState = crate::stdlib::SDL_GetWindowFlags(SDL_window) as i32;
     crate::src::qcommon::cvar::Cvar_SetValue(
         b"com_unfocused\x00" as *const u8 as *const libc::c_char,
-        (appState & crate::stdlib::SDL_WINDOW_INPUT_FOCUS as libc::c_int == 0) as libc::c_int
-            as libc::c_float,
+        (appState & crate::stdlib::SDL_WINDOW_INPUT_FOCUS as i32 == 0) as i32
+            as f32,
     );
     crate::src::qcommon::cvar::Cvar_SetValue(
         b"com_minimized\x00" as *const u8 as *const libc::c_char,
-        (appState & crate::stdlib::SDL_WINDOW_MINIMIZED as libc::c_int) as libc::c_float,
+        (appState & crate::stdlib::SDL_WINDOW_MINIMIZED as i32) as f32,
     );
     IN_InitJoystick();
     crate::src::qcommon::common::Com_DPrintf(
@@ -3007,7 +3007,7 @@ pub unsafe extern "C" fn IN_Shutdown() {
     IN_DeactivateMouse(
         (crate::src::qcommon::cvar::Cvar_VariableIntegerValue(
             b"r_fullscreen\x00" as *const u8 as *const libc::c_char,
-        ) != 0 as libc::c_int) as libc::c_int as crate::src::qcommon::q_shared::qboolean,
+        ) != 0 as i32) as i32 as crate::src::qcommon::q_shared::qboolean,
     );
     mouseAvailable = crate::src::qcommon::q_shared::qfalse;
     IN_ShutdownJoystick();

@@ -197,9 +197,9 @@ pub struct my_prep_controller {
     pub pub_0: crate::jpegint_h::jpeg_c_prep_controller,
     pub color_buf: [crate::jpeglib_h::JSAMPARRAY; 10],
     pub rows_to_go: crate::jmorecfg_h::JDIMENSION,
-    pub next_buf_row: libc::c_int,
-    pub this_row_group: libc::c_int,
-    pub next_buf_stop: libc::c_int,
+    pub next_buf_row: i32,
+    pub this_row_group: i32,
+    pub next_buf_stop: i32,
 }
 /*
  * Initialize for a processing pass.
@@ -210,9 +210,9 @@ unsafe extern "C" fn start_pass_prep(
     mut pass_mode: crate::jpegint_h::J_BUF_MODE,
 ) {
     let mut prep: my_prep_ptr = (*cinfo).prep as my_prep_ptr;
-    if pass_mode as libc::c_uint != crate::jpegint_h::JBUF_PASS_THRU as libc::c_int as libc::c_uint
+    if pass_mode as u32 != crate::jpegint_h::JBUF_PASS_THRU as i32 as u32
     {
-        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_BUFFER_MODE as libc::c_int;
+        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_BUFFER_MODE as i32;
         Some(
             (*(*cinfo).err)
                 .error_exit
@@ -223,13 +223,13 @@ unsafe extern "C" fn start_pass_prep(
     /* Initialize total-height counter for detecting bottom of image */
     (*prep).rows_to_go = (*cinfo).image_height;
     /* Mark the conversion buffer empty */
-    (*prep).next_buf_row = 0 as libc::c_int;
+    (*prep).next_buf_row = 0 as i32;
     /* Preset additional state variables for context mode.
      * These aren't used in non-context mode, so we needn't test which mode.
      */
-    (*prep).this_row_group = 0 as libc::c_int;
+    (*prep).this_row_group = 0 as i32;
     /* Set next_buf_stop to stop after two row groups have been read in. */
-    (*prep).next_buf_stop = 2 as libc::c_int * (*cinfo).max_v_samp_factor;
+    (*prep).next_buf_stop = 2 as i32 * (*cinfo).max_v_samp_factor;
 }
 /*
  * Expand an image vertically from height input_rows to height output_rows,
@@ -239,18 +239,18 @@ unsafe extern "C" fn start_pass_prep(
 unsafe extern "C" fn expand_bottom_edge(
     mut image_data: crate::jpeglib_h::JSAMPARRAY,
     mut num_cols: crate::jmorecfg_h::JDIMENSION,
-    mut input_rows: libc::c_int,
-    mut output_rows: libc::c_int,
+    mut input_rows: i32,
+    mut output_rows: i32,
 ) {
-    let mut row: libc::c_int = 0;
+    let mut row: i32 = 0;
     row = input_rows;
     while row < output_rows {
         crate::src::jpeg_8c::jutils::jcopy_sample_rows(
             image_data,
-            input_rows - 1 as libc::c_int,
+            input_rows - 1 as i32,
             image_data,
             row,
-            1 as libc::c_int,
+            1 as i32,
             num_cols,
         );
         row += 1
@@ -275,8 +275,8 @@ unsafe extern "C" fn pre_process_data(
     mut out_row_groups_avail: crate::jmorecfg_h::JDIMENSION,
 ) {
     let mut prep: my_prep_ptr = (*cinfo).prep as my_prep_ptr;
-    let mut numrows: libc::c_int = 0;
-    let mut ci: libc::c_int = 0;
+    let mut numrows: i32 = 0;
+    let mut ci: i32 = 0;
     let mut inrows: crate::jmorecfg_h::JDIMENSION = 0;
     let mut compptr: *mut crate::jpeglib_h::jpeg_component_info =
         0 as *mut crate::jpeglib_h::jpeg_component_info;
@@ -288,7 +288,7 @@ unsafe extern "C" fn pre_process_data(
             numrows as crate::jmorecfg_h::JDIMENSION
         } else {
             inrows
-        } as libc::c_int;
+        } as i32;
         Some(
             (*(*cinfo).cconvert)
                 .color_convert
@@ -301,17 +301,17 @@ unsafe extern "C" fn pre_process_data(
             (*prep).next_buf_row as crate::jmorecfg_h::JDIMENSION,
             numrows,
         );
-        *in_row_ctr = (*in_row_ctr as libc::c_uint).wrapping_add(numrows as libc::c_uint)
+        *in_row_ctr = (*in_row_ctr as u32).wrapping_add(numrows as u32)
             as crate::jmorecfg_h::JDIMENSION as crate::jmorecfg_h::JDIMENSION;
         (*prep).next_buf_row += numrows;
         (*prep).rows_to_go =
-            ((*prep).rows_to_go as libc::c_uint).wrapping_sub(numrows as libc::c_uint)
+            ((*prep).rows_to_go as u32).wrapping_sub(numrows as u32)
                 as crate::jmorecfg_h::JDIMENSION as crate::jmorecfg_h::JDIMENSION;
         /* If at bottom of image, pad to fill the conversion buffer. */
-        if (*prep).rows_to_go == 0 as libc::c_int as libc::c_uint
+        if (*prep).rows_to_go == 0 as i32 as u32
             && (*prep).next_buf_row < (*cinfo).max_v_samp_factor
         {
-            ci = 0 as libc::c_int;
+            ci = 0 as i32;
             while ci < (*cinfo).num_components {
                 expand_bottom_edge(
                     (*prep).color_buf[ci as usize],
@@ -333,22 +333,22 @@ unsafe extern "C" fn pre_process_data(
             .expect("non-null function pointer")(
                 cinfo,
                 (*prep).color_buf.as_mut_ptr(),
-                0 as libc::c_int as crate::jmorecfg_h::JDIMENSION,
+                0 as i32 as crate::jmorecfg_h::JDIMENSION,
                 output_buf,
                 *out_row_group_ctr,
             );
-            (*prep).next_buf_row = 0 as libc::c_int;
+            (*prep).next_buf_row = 0 as i32;
             *out_row_group_ctr = (*out_row_group_ctr).wrapping_add(1)
         }
         /* If at bottom of image, pad the output to a full iMCU height.
          * Note we assume the caller is providing a one-iMCU-height output buffer!
          */
-        if !((*prep).rows_to_go == 0 as libc::c_int as libc::c_uint
+        if !((*prep).rows_to_go == 0 as i32 as u32
             && *out_row_group_ctr < out_row_groups_avail)
         {
             continue;
         }
-        ci = 0 as libc::c_int;
+        ci = 0 as i32;
         compptr = (*cinfo).comp_info;
         while ci < (*cinfo).num_components {
             numrows = (*compptr).v_samp_factor * (*compptr).DCT_v_scaled_size
@@ -357,9 +357,9 @@ unsafe extern "C" fn pre_process_data(
                 *output_buf.offset(ci as isize),
                 (*compptr)
                     .width_in_blocks
-                    .wrapping_mul((*compptr).DCT_h_scaled_size as libc::c_uint),
-                (*out_row_group_ctr).wrapping_mul(numrows as libc::c_uint) as libc::c_int,
-                out_row_groups_avail.wrapping_mul(numrows as libc::c_uint) as libc::c_int,
+                    .wrapping_mul((*compptr).DCT_h_scaled_size as u32),
+                (*out_row_group_ctr).wrapping_mul(numrows as u32) as i32,
+                out_row_groups_avail.wrapping_mul(numrows as u32) as i32,
             );
             ci += 1;
             compptr = compptr.offset(1)
@@ -383,9 +383,9 @@ unsafe extern "C" fn pre_process_context(
     mut out_row_groups_avail: crate::jmorecfg_h::JDIMENSION,
 ) {
     let mut prep: my_prep_ptr = (*cinfo).prep as my_prep_ptr;
-    let mut numrows: libc::c_int = 0;
-    let mut ci: libc::c_int = 0;
-    let mut buf_height: libc::c_int = (*cinfo).max_v_samp_factor * 3 as libc::c_int;
+    let mut numrows: i32 = 0;
+    let mut ci: i32 = 0;
+    let mut buf_height: i32 = (*cinfo).max_v_samp_factor * 3 as i32;
     let mut inrows: crate::jmorecfg_h::JDIMENSION = 0;
     while *out_row_group_ctr < out_row_groups_avail {
         if *in_row_ctr < in_rows_avail {
@@ -396,7 +396,7 @@ unsafe extern "C" fn pre_process_context(
                 numrows as crate::jmorecfg_h::JDIMENSION
             } else {
                 inrows
-            } as libc::c_int;
+            } as i32;
             Some(
                 (*(*cinfo).cconvert)
                     .color_convert
@@ -411,17 +411,17 @@ unsafe extern "C" fn pre_process_context(
             );
             /* Pad at top of image, if first time through */
             if (*prep).rows_to_go == (*cinfo).image_height {
-                ci = 0 as libc::c_int;
+                ci = 0 as i32;
                 while ci < (*cinfo).num_components {
-                    let mut row: libc::c_int = 0;
-                    row = 1 as libc::c_int;
+                    let mut row: i32 = 0;
+                    row = 1 as i32;
                     while row <= (*cinfo).max_v_samp_factor {
                         crate::src::jpeg_8c::jutils::jcopy_sample_rows(
                             (*prep).color_buf[ci as usize],
-                            0 as libc::c_int,
+                            0 as i32,
                             (*prep).color_buf[ci as usize],
                             -row,
-                            1 as libc::c_int,
+                            1 as i32,
                             (*cinfo).image_width,
                         );
                         row += 1
@@ -429,22 +429,22 @@ unsafe extern "C" fn pre_process_context(
                     ci += 1
                 }
             }
-            *in_row_ctr = (*in_row_ctr as libc::c_uint).wrapping_add(numrows as libc::c_uint)
+            *in_row_ctr = (*in_row_ctr as u32).wrapping_add(numrows as u32)
                 as crate::jmorecfg_h::JDIMENSION
                 as crate::jmorecfg_h::JDIMENSION;
             (*prep).next_buf_row += numrows;
-            (*prep).rows_to_go = ((*prep).rows_to_go as libc::c_uint)
-                .wrapping_sub(numrows as libc::c_uint)
+            (*prep).rows_to_go = ((*prep).rows_to_go as u32)
+                .wrapping_sub(numrows as u32)
                 as crate::jmorecfg_h::JDIMENSION
                 as crate::jmorecfg_h::JDIMENSION
         } else {
             /* Return for more data, unless we are at the bottom of the image. */
-            if (*prep).rows_to_go != 0 as libc::c_int as libc::c_uint {
+            if (*prep).rows_to_go != 0 as i32 as u32 {
                 break;
             }
             /* When at bottom of image, pad to fill the conversion buffer. */
             if (*prep).next_buf_row < (*prep).next_buf_stop {
-                ci = 0 as libc::c_int;
+                ci = 0 as i32;
                 while ci < (*cinfo).num_components {
                     expand_bottom_edge(
                         (*prep).color_buf[ci as usize],
@@ -475,10 +475,10 @@ unsafe extern "C" fn pre_process_context(
             /* Advance pointers with wraparound as necessary. */
             (*prep).this_row_group += (*cinfo).max_v_samp_factor;
             if (*prep).this_row_group >= buf_height {
-                (*prep).this_row_group = 0 as libc::c_int
+                (*prep).this_row_group = 0 as i32
             }
             if (*prep).next_buf_row >= buf_height {
-                (*prep).next_buf_row = 0 as libc::c_int
+                (*prep).next_buf_row = 0 as i32
             }
             (*prep).next_buf_stop = (*prep).next_buf_row + (*cinfo).max_v_samp_factor
         }
@@ -490,9 +490,9 @@ unsafe extern "C" fn pre_process_context(
 
 unsafe extern "C" fn create_context_buffer(mut cinfo: crate::jpeglib_h::j_compress_ptr) {
     let mut prep: my_prep_ptr = (*cinfo).prep as my_prep_ptr;
-    let mut rgroup_height: libc::c_int = (*cinfo).max_v_samp_factor;
-    let mut ci: libc::c_int = 0;
-    let mut i: libc::c_int = 0;
+    let mut rgroup_height: i32 = (*cinfo).max_v_samp_factor;
+    let mut ci: i32 = 0;
+    let mut i: i32 = 0;
     let mut compptr: *mut crate::jpeglib_h::jpeg_component_info =
         0 as *mut crate::jpeglib_h::jpeg_component_info;
     let mut true_buffer: crate::jpeglib_h::JSAMPARRAY = 0 as *mut crate::jpeglib_h::JSAMPROW;
@@ -507,11 +507,11 @@ unsafe extern "C" fn create_context_buffer(mut cinfo: crate::jpeglib_h::j_compre
     )
     .expect("non-null function pointer")(
         cinfo as crate::jpeglib_h::j_common_ptr,
-        1 as libc::c_int,
-        (((*cinfo).num_components * 5 as libc::c_int * rgroup_height) as libc::c_ulong)
+        1 as i32,
+        (((*cinfo).num_components * 5 as i32 * rgroup_height) as libc::c_ulong)
             .wrapping_mul(::std::mem::size_of::<crate::jpeglib_h::JSAMPROW>() as libc::c_ulong),
     ) as crate::jpeglib_h::JSAMPARRAY;
-    ci = 0 as libc::c_int;
+    ci = 0 as i32;
     compptr = (*cinfo).comp_info;
     while ci < (*cinfo).num_components {
         /* Allocate the actual buffer space (3 row groups) for this component.
@@ -525,32 +525,32 @@ unsafe extern "C" fn create_context_buffer(mut cinfo: crate::jpeglib_h::j_compre
         )
         .expect("non-null function pointer")(
             cinfo as crate::jpeglib_h::j_common_ptr,
-            1 as libc::c_int,
+            1 as i32,
             ((*compptr).width_in_blocks as libc::c_long
                 * (*cinfo).min_DCT_h_scaled_size as libc::c_long
                 * (*cinfo).max_h_samp_factor as libc::c_long
                 / (*compptr).h_samp_factor as libc::c_long)
                 as crate::jmorecfg_h::JDIMENSION,
-            (3 as libc::c_int * rgroup_height) as crate::jmorecfg_h::JDIMENSION,
+            (3 as i32 * rgroup_height) as crate::jmorecfg_h::JDIMENSION,
         );
         /* point to space for next component */
         crate::stdlib::memcpy(
             fake_buffer.offset(rgroup_height as isize) as *mut libc::c_void,
             true_buffer as *const libc::c_void,
-            ((3 as libc::c_int * rgroup_height) as libc::c_ulong)
+            ((3 as i32 * rgroup_height) as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<crate::jpeglib_h::JSAMPROW>() as libc::c_ulong),
         );
-        i = 0 as libc::c_int;
+        i = 0 as i32;
         while i < rgroup_height {
             let ref mut fresh0 = *fake_buffer.offset(i as isize);
-            *fresh0 = *true_buffer.offset((2 as libc::c_int * rgroup_height + i) as isize);
+            *fresh0 = *true_buffer.offset((2 as i32 * rgroup_height + i) as isize);
             let ref mut fresh1 =
-                *fake_buffer.offset((4 as libc::c_int * rgroup_height + i) as isize);
+                *fake_buffer.offset((4 as i32 * rgroup_height + i) as isize);
             *fresh1 = *true_buffer.offset(i as isize);
             i += 1
         }
         (*prep).color_buf[ci as usize] = fake_buffer.offset(rgroup_height as isize);
-        fake_buffer = fake_buffer.offset((5 as libc::c_int * rgroup_height) as isize);
+        fake_buffer = fake_buffer.offset((5 as i32 * rgroup_height) as isize);
         ci += 1;
         compptr = compptr.offset(1)
     }
@@ -582,12 +582,12 @@ pub unsafe extern "C" fn jinit_c_prep_controller(
     mut need_full_buffer: crate::jmorecfg_h::boolean,
 ) {
     let mut prep: my_prep_ptr = 0 as *mut my_prep_controller;
-    let mut ci: libc::c_int = 0;
+    let mut ci: i32 = 0;
     let mut compptr: *mut crate::jpeglib_h::jpeg_component_info =
         0 as *mut crate::jpeglib_h::jpeg_component_info;
     if need_full_buffer != 0 {
         /* safety check */
-        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_BUFFER_MODE as libc::c_int;
+        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_BUFFER_MODE as i32;
         Some(
             (*(*cinfo).err)
                 .error_exit
@@ -602,7 +602,7 @@ pub unsafe extern "C" fn jinit_c_prep_controller(
     )
     .expect("non-null function pointer")(
         cinfo as crate::jpeglib_h::j_common_ptr,
-        1 as libc::c_int,
+        1 as i32,
         ::std::mem::size_of::<my_prep_controller>() as libc::c_ulong,
     ) as my_prep_ptr;
     (*cinfo).prep = prep as *mut crate::jpegint_h::jpeg_c_prep_controller;
@@ -646,7 +646,7 @@ pub unsafe extern "C" fn jinit_c_prep_controller(
                     _: crate::jmorecfg_h::JDIMENSION,
                 ) -> (),
         );
-        ci = 0 as libc::c_int;
+        ci = 0 as i32;
         compptr = (*cinfo).comp_info;
         while ci < (*cinfo).num_components {
             (*prep).color_buf[ci as usize] = Some(
@@ -656,7 +656,7 @@ pub unsafe extern "C" fn jinit_c_prep_controller(
             )
             .expect("non-null function pointer")(
                 cinfo as crate::jpeglib_h::j_common_ptr,
-                1 as libc::c_int,
+                1 as i32,
                 ((*compptr).width_in_blocks as libc::c_long
                     * (*cinfo).min_DCT_h_scaled_size as libc::c_long
                     * (*cinfo).max_h_samp_factor as libc::c_long

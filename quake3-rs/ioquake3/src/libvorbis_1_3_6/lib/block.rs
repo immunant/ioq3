@@ -67,32 +67,32 @@ pub use crate::src::libvorbis_1_3_6::lib::smallft::drft_lookup;
 pub unsafe extern "C" fn vorbis_block_init(
     mut v: *mut crate::codec_h::vorbis_dsp_state,
     mut vb: *mut crate::codec_h::vorbis_block,
-) -> libc::c_int {
-    let mut i: libc::c_int = 0;
+) -> i32 {
+    let mut i: i32 = 0;
     crate::stdlib::memset(
         vb as *mut libc::c_void,
-        0 as libc::c_int,
+        0 as i32,
         ::std::mem::size_of::<crate::codec_h::vorbis_block>() as libc::c_ulong,
     );
     (*vb).vd = v;
-    (*vb).localalloc = 0 as libc::c_int as libc::c_long;
+    (*vb).localalloc = 0 as i32 as libc::c_long;
     (*vb).localstore = 0 as *mut libc::c_void;
     if (*v).analysisp != 0 {
         (*vb).internal = crate::stdlib::calloc(
-            1 as libc::c_int as libc::c_ulong,
+            1 as i32 as libc::c_ulong,
             ::std::mem::size_of::<crate::codec_internal_h::vorbis_block_internal>()
                 as libc::c_ulong,
         );
         let mut vbi: *mut crate::codec_internal_h::vorbis_block_internal =
             (*vb).internal as *mut crate::codec_internal_h::vorbis_block_internal;
-        (*vbi).ampmax = -(9999 as libc::c_int) as libc::c_float;
-        i = 0 as libc::c_int;
-        while i < 15 as libc::c_int {
-            if i == 15 as libc::c_int / 2 as libc::c_int {
+        (*vbi).ampmax = -(9999 as i32) as f32;
+        i = 0 as i32;
+        while i < 15 as i32 {
+            if i == 15 as i32 / 2 as i32 {
                 (*vbi).packetblob[i as usize] = &mut (*vb).opb
             } else {
                 (*vbi).packetblob[i as usize] = crate::stdlib::calloc(
-                    1 as libc::c_int as libc::c_ulong,
+                    1 as i32 as libc::c_ulong,
                     ::std::mem::size_of::<crate::ogg_h::oggpack_buffer>() as libc::c_ulong,
                 )
                     as *mut crate::ogg_h::oggpack_buffer
@@ -103,7 +103,7 @@ pub unsafe extern "C" fn vorbis_block_init(
             i += 1
         }
     }
-    return 0 as libc::c_int;
+    return 0 as i32;
 }
 #[no_mangle]
 
@@ -111,8 +111,8 @@ pub unsafe extern "C" fn _vorbis_block_alloc(
     mut vb: *mut crate::codec_h::vorbis_block,
     mut bytes: libc::c_long,
 ) -> *mut libc::c_void {
-    bytes = bytes + (8 as libc::c_int - 1 as libc::c_int) as libc::c_long
-        & !(8 as libc::c_int - 1 as libc::c_int) as libc::c_long;
+    bytes = bytes + (8 as i32 - 1 as i32) as libc::c_long
+        & !(8 as i32 - 1 as i32) as libc::c_long;
     if bytes + (*vb).localtop > (*vb).localalloc {
         /* can't just _ogg_realloc... there are outstanding pointers */
         if !(*vb).localstore.is_null() {
@@ -128,7 +128,7 @@ pub unsafe extern "C" fn _vorbis_block_alloc(
         /* highly conservative */
         (*vb).localalloc = bytes;
         (*vb).localstore = crate::stdlib::malloc((*vb).localalloc as libc::c_ulong);
-        (*vb).localtop = 0 as libc::c_int as libc::c_long
+        (*vb).localtop = 0 as i32 as libc::c_long
     }
     let mut ret: *mut libc::c_void = ((*vb).localstore as *mut libc::c_char)
         .offset((*vb).localtop as isize) as *mut libc::c_void;
@@ -161,7 +161,7 @@ pub unsafe extern "C" fn _vorbis_block_ripcord(mut vb: *mut crate::codec_h::vorb
         ::libc::free((*reap).ptr);
         crate::stdlib::memset(
             reap as *mut libc::c_void,
-            0 as libc::c_int,
+            0 as i32,
             ::std::mem::size_of::<crate::codec_h::alloc_chain>() as libc::c_ulong,
         );
         ::libc::free(reap as *mut libc::c_void);
@@ -174,18 +174,18 @@ pub unsafe extern "C" fn _vorbis_block_ripcord(mut vb: *mut crate::codec_h::vorb
             ((*vb).totaluse + (*vb).localalloc) as libc::c_ulong,
         );
         (*vb).localalloc += (*vb).totaluse;
-        (*vb).totaluse = 0 as libc::c_int as libc::c_long
+        (*vb).totaluse = 0 as i32 as libc::c_long
     }
     /* pull the ripcord */
-    (*vb).localtop = 0 as libc::c_int as libc::c_long;
+    (*vb).localtop = 0 as i32 as libc::c_long;
     (*vb).reap = 0 as *mut crate::codec_h::alloc_chain;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn vorbis_block_clear(
     mut vb: *mut crate::codec_h::vorbis_block,
-) -> libc::c_int {
-    let mut i: libc::c_int = 0;
+) -> i32 {
+    let mut i: i32 = 0;
     let mut vbi: *mut crate::codec_internal_h::vorbis_block_internal =
         (*vb).internal as *mut crate::codec_internal_h::vorbis_block_internal;
     _vorbis_block_ripcord(vb);
@@ -193,12 +193,12 @@ pub unsafe extern "C" fn vorbis_block_clear(
         ::libc::free((*vb).localstore);
     }
     if !vbi.is_null() {
-        i = 0 as libc::c_int;
-        while i < 15 as libc::c_int {
+        i = 0 as i32;
+        while i < 15 as i32 {
             crate::src::libogg_1_3_3::src::bitwise::oggpack_writeclear(
                 (*vbi).packetblob[i as usize] as *mut crate::ogg_h::oggpack_buffer,
             );
-            if i != 15 as libc::c_int / 2 as libc::c_int {
+            if i != 15 as i32 / 2 as i32 {
                 ::libc::free((*vbi).packetblob[i as usize] as *mut libc::c_void);
             }
             i += 1
@@ -207,10 +207,10 @@ pub unsafe extern "C" fn vorbis_block_clear(
     }
     crate::stdlib::memset(
         vb as *mut libc::c_void,
-        0 as libc::c_int,
+        0 as i32,
         ::std::mem::size_of::<crate::codec_h::vorbis_block>() as libc::c_ulong,
     );
-    return 0 as libc::c_int;
+    return 0 as i32;
 }
 /* Analysis side code, but directly related to blocking.  Thus it's
 here and not in analysis.c (which is for analysis transforms only).
@@ -219,71 +219,71 @@ The init is here because some of it is shared */
 unsafe extern "C" fn _vds_shared_init(
     mut v: *mut crate::codec_h::vorbis_dsp_state,
     mut vi: *mut crate::codec_h::vorbis_info,
-    mut encp: libc::c_int,
-) -> libc::c_int {
+    mut encp: i32,
+) -> i32 {
     let mut current_block: u64;
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     let mut ci: *mut crate::codec_internal_h::codec_setup_info =
         (*vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info;
     let mut b: *mut crate::codec_internal_h::private_state =
         0 as *mut crate::codec_internal_h::private_state;
-    let mut hs: libc::c_int = 0;
+    let mut hs: i32 = 0;
     if ci.is_null()
-        || (*ci).modes <= 0 as libc::c_int
-        || (*ci).blocksizes[0 as libc::c_int as usize] < 64 as libc::c_int as libc::c_long
-        || (*ci).blocksizes[1 as libc::c_int as usize] < (*ci).blocksizes[0 as libc::c_int as usize]
+        || (*ci).modes <= 0 as i32
+        || (*ci).blocksizes[0 as i32 as usize] < 64 as i32 as libc::c_long
+        || (*ci).blocksizes[1 as i32 as usize] < (*ci).blocksizes[0 as i32 as usize]
     {
-        return 1 as libc::c_int;
+        return 1 as i32;
     }
     hs = (*ci).halfrate_flag;
     crate::stdlib::memset(
         v as *mut libc::c_void,
-        0 as libc::c_int,
+        0 as i32,
         ::std::mem::size_of::<crate::codec_h::vorbis_dsp_state>() as libc::c_ulong,
     );
     (*v).backend_state = crate::stdlib::calloc(
-        1 as libc::c_int as libc::c_ulong,
+        1 as i32 as libc::c_ulong,
         ::std::mem::size_of::<crate::codec_internal_h::private_state>() as libc::c_ulong,
     );
     b = (*v).backend_state as *mut crate::codec_internal_h::private_state;
     (*v).vi = vi;
     (*b).modebits = crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
-        ((*ci).modes - 1 as libc::c_int) as crate::config_types_h::ogg_uint32_t,
+        ((*ci).modes - 1 as i32) as crate::config_types_h::ogg_uint32_t,
     );
-    (*b).transform[0 as libc::c_int as usize] = crate::stdlib::calloc(
-        1 as libc::c_int as libc::c_ulong,
+    (*b).transform[0 as i32 as usize] = crate::stdlib::calloc(
+        1 as i32 as libc::c_ulong,
         ::std::mem::size_of::<*mut libc::c_void>() as libc::c_ulong,
     ) as *mut *mut libc::c_void;
-    (*b).transform[1 as libc::c_int as usize] = crate::stdlib::calloc(
-        1 as libc::c_int as libc::c_ulong,
+    (*b).transform[1 as i32 as usize] = crate::stdlib::calloc(
+        1 as i32 as libc::c_ulong,
         ::std::mem::size_of::<*mut libc::c_void>() as libc::c_ulong,
     ) as *mut *mut libc::c_void;
     /* MDCT is tranform 0 */
     let ref mut fresh0 =
-        *(*b).transform[0 as libc::c_int as usize].offset(0 as libc::c_int as isize);
+        *(*b).transform[0 as i32 as usize].offset(0 as i32 as isize);
     *fresh0 = crate::stdlib::calloc(
-        1 as libc::c_int as libc::c_ulong,
+        1 as i32 as libc::c_ulong,
         ::std::mem::size_of::<crate::src::libvorbis_1_3_6::lib::mdct::mdct_lookup>()
             as libc::c_ulong,
     );
     let ref mut fresh1 =
-        *(*b).transform[1 as libc::c_int as usize].offset(0 as libc::c_int as isize);
+        *(*b).transform[1 as i32 as usize].offset(0 as i32 as isize);
     *fresh1 = crate::stdlib::calloc(
-        1 as libc::c_int as libc::c_ulong,
+        1 as i32 as libc::c_ulong,
         ::std::mem::size_of::<crate::src::libvorbis_1_3_6::lib::mdct::mdct_lookup>()
             as libc::c_ulong,
     );
     crate::src::libvorbis_1_3_6::lib::mdct::mdct_init(
-        *(*b).transform[0 as libc::c_int as usize].offset(0 as libc::c_int as isize)
+        *(*b).transform[0 as i32 as usize].offset(0 as i32 as isize)
             as *mut crate::src::libvorbis_1_3_6::lib::mdct::mdct_lookup
             as *mut crate::src::libvorbis_1_3_6::lib::mdct::mdct_lookup,
-        ((*ci).blocksizes[0 as libc::c_int as usize] >> hs) as libc::c_int,
+        ((*ci).blocksizes[0 as i32 as usize] >> hs) as i32,
     );
     crate::src::libvorbis_1_3_6::lib::mdct::mdct_init(
-        *(*b).transform[1 as libc::c_int as usize].offset(0 as libc::c_int as isize)
+        *(*b).transform[1 as i32 as usize].offset(0 as i32 as isize)
             as *mut crate::src::libvorbis_1_3_6::lib::mdct::mdct_lookup
             as *mut crate::src::libvorbis_1_3_6::lib::mdct::mdct_lookup,
-        ((*ci).blocksizes[1 as libc::c_int as usize] >> hs) as libc::c_int,
+        ((*ci).blocksizes[1 as i32 as usize] >> hs) as i32,
     );
     /* Vorbis I uses only window type 0 */
     /* note that the correct computation below is technically:
@@ -292,24 +292,24 @@ unsafe extern "C" fn _vds_shared_init(
      but since blocksizes are always powers of two,
      the below is equivalent.
     */
-    (*b).window[0 as libc::c_int as usize] = crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
-        (*ci).blocksizes[0 as libc::c_int as usize] as crate::config_types_h::ogg_uint32_t,
-    ) - 7 as libc::c_int;
-    (*b).window[1 as libc::c_int as usize] = crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
-        (*ci).blocksizes[1 as libc::c_int as usize] as crate::config_types_h::ogg_uint32_t,
-    ) - 7 as libc::c_int;
+    (*b).window[0 as i32 as usize] = crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
+        (*ci).blocksizes[0 as i32 as usize] as crate::config_types_h::ogg_uint32_t,
+    ) - 7 as i32;
+    (*b).window[1 as i32 as usize] = crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
+        (*ci).blocksizes[1 as i32 as usize] as crate::config_types_h::ogg_uint32_t,
+    ) - 7 as i32;
     if encp != 0 {
         /* encode/decode differ here */
         /* analysis always needs an fft */
         crate::src::libvorbis_1_3_6::lib::smallft::drft_init(
-            &mut *(*b).fft_look.as_mut_ptr().offset(0 as libc::c_int as isize) as *mut _
+            &mut *(*b).fft_look.as_mut_ptr().offset(0 as i32 as isize) as *mut _
                 as *mut crate::src::libvorbis_1_3_6::lib::smallft::drft_lookup,
-            (*ci).blocksizes[0 as libc::c_int as usize] as libc::c_int,
+            (*ci).blocksizes[0 as i32 as usize] as i32,
         );
         crate::src::libvorbis_1_3_6::lib::smallft::drft_init(
-            &mut *(*b).fft_look.as_mut_ptr().offset(1 as libc::c_int as isize) as *mut _
+            &mut *(*b).fft_look.as_mut_ptr().offset(1 as i32 as isize) as *mut _
                 as *mut crate::src::libvorbis_1_3_6::lib::smallft::drft_lookup,
-            (*ci).blocksizes[1 as libc::c_int as usize] as libc::c_int,
+            (*ci).blocksizes[1 as i32 as usize] as i32,
         );
         /* finish the codebooks */
         if (*ci).fullbooks.is_null() {
@@ -319,7 +319,7 @@ unsafe extern "C" fn _vds_shared_init(
                     as libc::c_ulong,
             )
                 as *mut crate::src::libvorbis_1_3_6::lib::codebook::codebook;
-            i = 0 as libc::c_int;
+            i = 0 as i32;
             while i < (*ci).books {
                 crate::src::libvorbis_1_3_6::lib::sharedbook::vorbis_book_init_encode(
                     (*ci).fullbooks.offset(i as isize)
@@ -335,7 +335,7 @@ unsafe extern "C" fn _vds_shared_init(
             ::std::mem::size_of::<crate::src::libvorbis_1_3_6::lib::psy::vorbis_look_psy>()
                 as libc::c_ulong,
         ) as *mut crate::src::libvorbis_1_3_6::lib::psy::vorbis_look_psy;
-        i = 0 as libc::c_int;
+        i = 0 as i32;
         while i < (*ci).psys {
             crate::src::libvorbis_1_3_6::lib::psy::_vp_psy_init(
                 (*b).psy.offset(i as isize)
@@ -345,19 +345,19 @@ unsafe extern "C" fn _vds_shared_init(
                 &mut (*ci).psy_g_param as *mut _
                     as *mut crate::src::libvorbis_1_3_6::lib::psy::vorbis_info_psy_global,
                 ((*ci).blocksizes[(*(*ci).psy_param[i as usize]).blockflag as usize]
-                    / 2 as libc::c_int as libc::c_long) as libc::c_int,
+                    / 2 as i32 as libc::c_long) as i32,
                 (*vi).rate,
             );
             i += 1
         }
-        (*v).analysisp = 1 as libc::c_int
+        (*v).analysisp = 1 as i32
     } else if (*ci).fullbooks.is_null() {
         (*ci).fullbooks = crate::stdlib::calloc(
             (*ci).books as libc::c_ulong,
             ::std::mem::size_of::<crate::src::libvorbis_1_3_6::lib::codebook::codebook>()
                 as libc::c_ulong,
         ) as *mut crate::src::libvorbis_1_3_6::lib::codebook::codebook;
-        i = 0 as libc::c_int;
+        i = 0 as i32;
         loop {
             if !(i < (*ci).books) {
                 current_block = 11743904203796629665;
@@ -390,7 +390,7 @@ unsafe extern "C" fn _vds_shared_init(
         match current_block {
             11743904203796629665 => {}
             _ => {
-                i = 0 as libc::c_int;
+                i = 0 as i32;
                 while i < (*ci).books {
                     if !(*ci).book_param[i as usize].is_null() {
                         crate::src::libvorbis_1_3_6::lib::sharedbook::vorbis_staticbook_destroy(
@@ -403,38 +403,38 @@ unsafe extern "C" fn _vds_shared_init(
                     i += 1
                 }
                 vorbis_dsp_clear(v);
-                return -(1 as libc::c_int);
+                return -(1 as i32);
             }
         }
     }
     /* initialize the storage vectors. blocksize[1] is small for encode,
     but the correct size for decode */
-    (*v).pcm_storage = (*ci).blocksizes[1 as libc::c_int as usize] as libc::c_int;
+    (*v).pcm_storage = (*ci).blocksizes[1 as i32 as usize] as i32;
     (*v).pcm = crate::stdlib::malloc(
         ((*vi).channels as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<*mut libc::c_float>() as libc::c_ulong),
-    ) as *mut *mut libc::c_float;
+            .wrapping_mul(::std::mem::size_of::<*mut f32>() as libc::c_ulong),
+    ) as *mut *mut f32;
     (*v).pcmret = crate::stdlib::malloc(
         ((*vi).channels as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<*mut libc::c_float>() as libc::c_ulong),
-    ) as *mut *mut libc::c_float;
-    let mut i_0: libc::c_int = 0;
-    i_0 = 0 as libc::c_int;
+            .wrapping_mul(::std::mem::size_of::<*mut f32>() as libc::c_ulong),
+    ) as *mut *mut f32;
+    let mut i_0: i32 = 0;
+    i_0 = 0 as i32;
     while i_0 < (*vi).channels {
         let ref mut fresh2 = *(*v).pcm.offset(i_0 as isize);
         *fresh2 = crate::stdlib::calloc(
             (*v).pcm_storage as libc::c_ulong,
-            ::std::mem::size_of::<libc::c_float>() as libc::c_ulong,
-        ) as *mut libc::c_float;
+            ::std::mem::size_of::<f32>() as libc::c_ulong,
+        ) as *mut f32;
         i_0 += 1
     }
     /* all 1 (large block) or 0 (small block) */
     /* explicitly set for the sake of clarity */
-    (*v).lW = 0 as libc::c_int as libc::c_long; /* previous window size */
-    (*v).W = 0 as libc::c_int as libc::c_long; /* current window size */
+    (*v).lW = 0 as i32 as libc::c_long; /* previous window size */
+    (*v).W = 0 as i32 as libc::c_long; /* current window size */
     /* all vector indexes */
-    (*v).centerW = (*ci).blocksizes[1 as libc::c_int as usize] / 2 as libc::c_int as libc::c_long;
-    (*v).pcm_current = (*v).centerW as libc::c_int;
+    (*v).centerW = (*ci).blocksizes[1 as i32 as usize] / 2 as i32 as libc::c_long;
+    (*v).pcm_current = (*v).centerW as i32;
     /* initialize all the backend lookups */
     (*b).flr = crate::stdlib::calloc(
         (*ci).floors as libc::c_ulong,
@@ -444,7 +444,7 @@ unsafe extern "C" fn _vds_shared_init(
         (*ci).residues as libc::c_ulong,
         ::std::mem::size_of::<*mut libc::c_void>() as libc::c_ulong,
     ) as *mut *mut libc::c_void;
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < (*ci).floors {
         let ref mut fresh3 = *(*b).flr.offset(i as isize);
         *fresh3 = (**crate::src::libvorbis_1_3_6::lib::registry::_floor_P
@@ -454,7 +454,7 @@ unsafe extern "C" fn _vds_shared_init(
         .expect("non-null function pointer")(v, (*ci).floor_param[i as usize]);
         i += 1
     }
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < (*ci).residues {
         let ref mut fresh4 = *(*b).residue.offset(i as isize);
         *fresh4 = (**crate::src::libvorbis_1_3_6::lib::registry::_residue_P
@@ -464,7 +464,7 @@ unsafe extern "C" fn _vds_shared_init(
         .expect("non-null function pointer")(v, (*ci).residue_param[i as usize]);
         i += 1
     }
-    return 0 as libc::c_int;
+    return 0 as i32;
 }
 /* Vorbis PRIMITIVES: analysis/DSP layer ****************************/
 /* arbitrary settings and spec-mandated numbers get filled in here */
@@ -473,11 +473,11 @@ unsafe extern "C" fn _vds_shared_init(
 pub unsafe extern "C" fn vorbis_analysis_init(
     mut v: *mut crate::codec_h::vorbis_dsp_state,
     mut vi: *mut crate::codec_h::vorbis_info,
-) -> libc::c_int {
+) -> i32 {
     let mut b: *mut crate::codec_internal_h::private_state =
         0 as *mut crate::codec_internal_h::private_state;
-    if _vds_shared_init(v, vi, 1 as libc::c_int) != 0 {
-        return 1 as libc::c_int;
+    if _vds_shared_init(v, vi, 1 as i32) != 0 {
+        return 1 as i32;
     }
     b = (*v).backend_state as *mut crate::codec_internal_h::private_state;
     (*b).psy_g_look = crate::src::libvorbis_1_3_6::lib::psy::_vp_global_look(
@@ -485,7 +485,7 @@ pub unsafe extern "C" fn vorbis_analysis_init(
     ) as *mut crate::src::libvorbis_1_3_6::lib::psy::vorbis_look_psy_global;
     /* Initialize the envelope state storage */
     (*b).ve = crate::stdlib::calloc(
-        1 as libc::c_int as libc::c_ulong,
+        1 as i32 as libc::c_ulong,
         ::std::mem::size_of::<crate::src::libvorbis_1_3_6::lib::envelope::envelope_lookup>()
             as libc::c_ulong,
     ) as *mut crate::src::libvorbis_1_3_6::lib::envelope::envelope_lookup;
@@ -500,13 +500,13 @@ pub unsafe extern "C" fn vorbis_analysis_init(
     );
     /* compressed audio packets start after the headers
     with sequence number 3 */
-    (*v).sequence = 3 as libc::c_int as crate::config_types_h::ogg_int64_t;
-    return 0 as libc::c_int;
+    (*v).sequence = 3 as i32 as crate::config_types_h::ogg_int64_t;
+    return 0 as i32;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn vorbis_dsp_clear(mut v: *mut crate::codec_h::vorbis_dsp_state) {
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     if !v.is_null() {
         let mut vi: *mut crate::codec_h::vorbis_info = (*v).vi;
         let mut ci: *mut crate::codec_internal_h::codec_setup_info = if !vi.is_null() {
@@ -524,31 +524,31 @@ pub unsafe extern "C" fn vorbis_dsp_clear(mut v: *mut crate::codec_h::vorbis_dsp
                 );
                 ::libc::free((*b).ve as *mut libc::c_void);
             }
-            if !(*b).transform[0 as libc::c_int as usize].is_null() {
+            if !(*b).transform[0 as i32 as usize].is_null() {
                 crate::src::libvorbis_1_3_6::lib::mdct::mdct_clear(
-                    *(*b).transform[0 as libc::c_int as usize].offset(0 as libc::c_int as isize)
+                    *(*b).transform[0 as i32 as usize].offset(0 as i32 as isize)
                         as *mut crate::src::libvorbis_1_3_6::lib::mdct::mdct_lookup
                         as *mut crate::src::libvorbis_1_3_6::lib::mdct::mdct_lookup,
                 );
                 ::libc::free(
-                    *(*b).transform[0 as libc::c_int as usize].offset(0 as libc::c_int as isize),
+                    *(*b).transform[0 as i32 as usize].offset(0 as i32 as isize),
                 );
-                ::libc::free((*b).transform[0 as libc::c_int as usize] as *mut libc::c_void);
+                ::libc::free((*b).transform[0 as i32 as usize] as *mut libc::c_void);
             }
-            if !(*b).transform[1 as libc::c_int as usize].is_null() {
+            if !(*b).transform[1 as i32 as usize].is_null() {
                 crate::src::libvorbis_1_3_6::lib::mdct::mdct_clear(
-                    *(*b).transform[1 as libc::c_int as usize].offset(0 as libc::c_int as isize)
+                    *(*b).transform[1 as i32 as usize].offset(0 as i32 as isize)
                         as *mut crate::src::libvorbis_1_3_6::lib::mdct::mdct_lookup
                         as *mut crate::src::libvorbis_1_3_6::lib::mdct::mdct_lookup,
                 );
                 ::libc::free(
-                    *(*b).transform[1 as libc::c_int as usize].offset(0 as libc::c_int as isize),
+                    *(*b).transform[1 as i32 as usize].offset(0 as i32 as isize),
                 );
-                ::libc::free((*b).transform[1 as libc::c_int as usize] as *mut libc::c_void);
+                ::libc::free((*b).transform[1 as i32 as usize] as *mut libc::c_void);
             }
             if !(*b).flr.is_null() {
                 if !ci.is_null() {
-                    i = 0 as libc::c_int;
+                    i = 0 as i32;
                     while i < (*ci).floors {
                         (**crate::src::libvorbis_1_3_6::lib::registry::_floor_P
                             .as_ptr()
@@ -564,7 +564,7 @@ pub unsafe extern "C" fn vorbis_dsp_clear(mut v: *mut crate::codec_h::vorbis_dsp
             }
             if !(*b).residue.is_null() {
                 if !ci.is_null() {
-                    i = 0 as libc::c_int;
+                    i = 0 as i32;
                     while i < (*ci).residues {
                         (**crate::src::libvorbis_1_3_6::lib::registry::_residue_P
                             .as_ptr()
@@ -580,7 +580,7 @@ pub unsafe extern "C" fn vorbis_dsp_clear(mut v: *mut crate::codec_h::vorbis_dsp
             }
             if !(*b).psy.is_null() {
                 if !ci.is_null() {
-                    i = 0 as libc::c_int;
+                    i = 0 as i32;
                     while i < (*ci).psys {
                         crate::src::libvorbis_1_3_6::lib::psy::_vp_psy_clear(
                             (*b).psy.offset(i as isize)
@@ -602,17 +602,17 @@ pub unsafe extern "C" fn vorbis_dsp_clear(mut v: *mut crate::codec_h::vorbis_dsp
                     as *mut crate::src::libvorbis_1_3_6::lib::bitrate::bitrate_manager_state,
             );
             crate::src::libvorbis_1_3_6::lib::smallft::drft_clear(
-                &mut *(*b).fft_look.as_mut_ptr().offset(0 as libc::c_int as isize) as *mut _
+                &mut *(*b).fft_look.as_mut_ptr().offset(0 as i32 as isize) as *mut _
                     as *mut crate::src::libvorbis_1_3_6::lib::smallft::drft_lookup,
             );
             crate::src::libvorbis_1_3_6::lib::smallft::drft_clear(
-                &mut *(*b).fft_look.as_mut_ptr().offset(1 as libc::c_int as isize) as *mut _
+                &mut *(*b).fft_look.as_mut_ptr().offset(1 as i32 as isize) as *mut _
                     as *mut crate::src::libvorbis_1_3_6::lib::smallft::drft_lookup,
             );
         }
         if !(*v).pcm.is_null() {
             if !vi.is_null() {
-                i = 0 as libc::c_int;
+                i = 0 as i32;
                 while i < (*vi).channels {
                     if !(*(*v).pcm.offset(i as isize)).is_null() {
                         ::libc::free(*(*v).pcm.offset(i as isize) as *mut libc::c_void);
@@ -640,7 +640,7 @@ pub unsafe extern "C" fn vorbis_dsp_clear(mut v: *mut crate::codec_h::vorbis_dsp
         }
         crate::stdlib::memset(
             v as *mut libc::c_void,
-            0 as libc::c_int,
+            0 as i32,
             ::std::mem::size_of::<crate::codec_h::vorbis_dsp_state>() as libc::c_ulong,
         );
     };
@@ -649,9 +649,9 @@ pub unsafe extern "C" fn vorbis_dsp_clear(mut v: *mut crate::codec_h::vorbis_dsp
 
 pub unsafe extern "C" fn vorbis_analysis_buffer(
     mut v: *mut crate::codec_h::vorbis_dsp_state,
-    mut vals: libc::c_int,
-) -> *mut *mut libc::c_float {
-    let mut i: libc::c_int = 0;
+    mut vals: i32,
+) -> *mut *mut f32 {
+    let mut i: i32 = 0;
     let mut vi: *mut crate::codec_h::vorbis_info = (*v).vi;
     let mut b: *mut crate::codec_internal_h::private_state =
         (*v).backend_state as *mut crate::codec_internal_h::private_state;
@@ -659,31 +659,31 @@ pub unsafe extern "C" fn vorbis_analysis_buffer(
     if !(*b).header.is_null() {
         ::libc::free((*b).header as *mut libc::c_void);
     }
-    (*b).header = 0 as *mut libc::c_uchar;
+    (*b).header = 0 as *mut u8;
     if !(*b).header1.is_null() {
         ::libc::free((*b).header1 as *mut libc::c_void);
     }
-    (*b).header1 = 0 as *mut libc::c_uchar;
+    (*b).header1 = 0 as *mut u8;
     if !(*b).header2.is_null() {
         ::libc::free((*b).header2 as *mut libc::c_void);
     }
-    (*b).header2 = 0 as *mut libc::c_uchar;
+    (*b).header2 = 0 as *mut u8;
     /* Do we have enough storage space for the requested buffer? If not,
     expand the PCM (and envelope) storage */
     if (*v).pcm_current + vals >= (*v).pcm_storage {
-        (*v).pcm_storage = (*v).pcm_current + vals * 2 as libc::c_int;
-        i = 0 as libc::c_int;
+        (*v).pcm_storage = (*v).pcm_current + vals * 2 as i32;
+        i = 0 as i32;
         while i < (*vi).channels {
             let ref mut fresh5 = *(*v).pcm.offset(i as isize);
             *fresh5 = crate::stdlib::realloc(
                 *(*v).pcm.offset(i as isize) as *mut libc::c_void,
                 ((*v).pcm_storage as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<libc::c_float>() as libc::c_ulong),
-            ) as *mut libc::c_float;
+                    .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
+            ) as *mut f32;
             i += 1
         }
     }
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < (*vi).channels {
         let ref mut fresh6 = *(*v).pcmret.offset(i as isize);
         *fresh6 = (*(*v).pcm.offset(i as isize)).offset((*v).pcm_current as isize);
@@ -693,32 +693,32 @@ pub unsafe extern "C" fn vorbis_analysis_buffer(
 }
 
 unsafe extern "C" fn _preextrapolate_helper(mut v: *mut crate::codec_h::vorbis_dsp_state) {
-    let mut i: libc::c_int = 0;
-    let mut order: libc::c_int = 16 as libc::c_int;
+    let mut i: i32 = 0;
+    let mut order: i32 = 16 as i32;
     let mut fresh7 = ::std::vec::from_elem(
         0,
         (order as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<libc::c_float>() as libc::c_ulong) as usize,
+            .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as usize,
     );
-    let mut lpc: *mut libc::c_float = fresh7.as_mut_ptr() as *mut libc::c_float;
+    let mut lpc: *mut f32 = fresh7.as_mut_ptr() as *mut f32;
     let mut fresh8 = ::std::vec::from_elem(
         0,
         ((*v).pcm_current as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<libc::c_float>() as libc::c_ulong) as usize,
+            .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as usize,
     );
-    let mut work: *mut libc::c_float = fresh8.as_mut_ptr() as *mut libc::c_float;
+    let mut work: *mut f32 = fresh8.as_mut_ptr() as *mut f32;
     let mut j: libc::c_long = 0;
-    (*v).preextrapolate = 1 as libc::c_int;
-    if (*v).pcm_current as libc::c_long - (*v).centerW > (order * 2 as libc::c_int) as libc::c_long
+    (*v).preextrapolate = 1 as i32;
+    if (*v).pcm_current as libc::c_long - (*v).centerW > (order * 2 as i32) as libc::c_long
     {
         /* safety */
-        i = 0 as libc::c_int;
+        i = 0 as i32;
         while i < (*(*v).vi).channels {
             /* need to run the extrapolation in reverse! */
-            j = 0 as libc::c_int as libc::c_long;
+            j = 0 as i32 as libc::c_long;
             while j < (*v).pcm_current as libc::c_long {
                 *work.offset(j as isize) = *(*(*v).pcm.offset(i as isize)).offset(
-                    ((*v).pcm_current as libc::c_long - j - 1 as libc::c_int as libc::c_long)
+                    ((*v).pcm_current as libc::c_long - j - 1 as i32 as libc::c_long)
                         as isize,
                 );
                 j += 1
@@ -727,7 +727,7 @@ unsafe extern "C" fn _preextrapolate_helper(mut v: *mut crate::codec_h::vorbis_d
             crate::src::libvorbis_1_3_6::lib::lpc::vorbis_lpc_from_data(
                 work,
                 lpc,
-                ((*v).pcm_current as libc::c_long - (*v).centerW) as libc::c_int,
+                ((*v).pcm_current as libc::c_long - (*v).centerW) as i32,
                 order,
             );
             /* run the predictor filter */
@@ -741,10 +741,10 @@ unsafe extern "C" fn _preextrapolate_helper(mut v: *mut crate::codec_h::vorbis_d
                     .offset(-((*v).centerW as isize)),
                 (*v).centerW,
             );
-            j = 0 as libc::c_int as libc::c_long;
+            j = 0 as i32 as libc::c_long;
             while j < (*v).pcm_current as libc::c_long {
                 *(*(*v).pcm.offset(i as isize)).offset(
-                    ((*v).pcm_current as libc::c_long - j - 1 as libc::c_int as libc::c_long)
+                    ((*v).pcm_current as libc::c_long - j - 1 as i32 as libc::c_long)
                         as isize,
                 ) = *work.offset(j as isize);
                 j += 1
@@ -758,21 +758,21 @@ unsafe extern "C" fn _preextrapolate_helper(mut v: *mut crate::codec_h::vorbis_d
 
 pub unsafe extern "C" fn vorbis_analysis_wrote(
     mut v: *mut crate::codec_h::vorbis_dsp_state,
-    mut vals: libc::c_int,
-) -> libc::c_int {
+    mut vals: i32,
+) -> i32 {
     let mut vi: *mut crate::codec_h::vorbis_info = (*v).vi;
     let mut ci: *mut crate::codec_internal_h::codec_setup_info =
         (*vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info;
-    if vals <= 0 as libc::c_int {
-        let mut order: libc::c_int = 32 as libc::c_int;
-        let mut i: libc::c_int = 0;
+    if vals <= 0 as i32 {
+        let mut order: i32 = 32 as i32;
+        let mut i: i32 = 0;
         let mut fresh9 = ::std::vec::from_elem(
             0,
             (order as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<libc::c_float>() as libc::c_ulong)
+                .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong)
                 as usize,
         );
-        let mut lpc: *mut libc::c_float = fresh9.as_mut_ptr() as *mut libc::c_float;
+        let mut lpc: *mut f32 = fresh9.as_mut_ptr() as *mut f32;
         /* if it wasn't done earlier (very short sample) */
         if (*v).preextrapolate == 0 {
             _preextrapolate_helper(v);
@@ -784,29 +784,29 @@ pub unsafe extern "C" fn vorbis_analysis_wrote(
         suck to encode.  Extrapolate for the sake of cleanliness. */
         vorbis_analysis_buffer(
             v,
-            ((*ci).blocksizes[1 as libc::c_int as usize] * 3 as libc::c_int as libc::c_long)
-                as libc::c_int,
+            ((*ci).blocksizes[1 as i32 as usize] * 3 as i32 as libc::c_long)
+                as i32,
         );
         (*v).eofflag = (*v).pcm_current;
         (*v).pcm_current = ((*v).pcm_current as libc::c_long
-            + (*ci).blocksizes[1 as libc::c_int as usize] * 3 as libc::c_int as libc::c_long)
-            as libc::c_int;
-        i = 0 as libc::c_int;
+            + (*ci).blocksizes[1 as i32 as usize] * 3 as i32 as libc::c_long)
+            as i32;
+        i = 0 as i32;
         while i < (*vi).channels {
-            if (*v).eofflag > order * 2 as libc::c_int {
+            if (*v).eofflag > order * 2 as i32 {
                 /* extrapolate with LPC to fill in */
                 let mut n: libc::c_long = 0;
                 /* make a predictor filter */
                 n = (*v).eofflag as libc::c_long;
-                if n > (*ci).blocksizes[1 as libc::c_int as usize] {
-                    n = (*ci).blocksizes[1 as libc::c_int as usize]
+                if n > (*ci).blocksizes[1 as i32 as usize] {
+                    n = (*ci).blocksizes[1 as i32 as usize]
                 }
                 crate::src::libvorbis_1_3_6::lib::lpc::vorbis_lpc_from_data(
                     (*(*v).pcm.offset(i as isize))
                         .offset((*v).eofflag as isize)
                         .offset(-(n as isize)),
                     lpc,
-                    n as libc::c_int,
+                    n as i32,
                     order,
                 );
                 /* run the predictor filter */
@@ -826,16 +826,16 @@ pub unsafe extern "C" fn vorbis_analysis_wrote(
                 crate::stdlib::memset(
                     (*(*v).pcm.offset(i as isize)).offset((*v).eofflag as isize)
                         as *mut libc::c_void,
-                    0 as libc::c_int,
+                    0 as i32,
                     (((*v).pcm_current - (*v).eofflag) as libc::c_ulong)
-                        .wrapping_mul(::std::mem::size_of::<libc::c_float>() as libc::c_ulong),
+                        .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
                 );
             }
             i += 1
         }
     } else {
         if (*v).pcm_current + vals > (*v).pcm_storage {
-            return -(131 as libc::c_int);
+            return -(131 as i32);
         }
         (*v).pcm_current += vals;
         /* we may want to reverse extrapolate the beginning of a stream
@@ -843,12 +843,12 @@ pub unsafe extern "C" fn vorbis_analysis_wrote(
         /* clumsy, but simple.  It only runs once, so simple is good. */
         if (*v).preextrapolate == 0
             && (*v).pcm_current as libc::c_long - (*v).centerW
-                > (*ci).blocksizes[1 as libc::c_int as usize]
+                > (*ci).blocksizes[1 as i32 as usize]
         {
             _preextrapolate_helper(v);
         }
     }
-    return 0 as libc::c_int;
+    return 0 as i32;
 }
 /* do the deltas, envelope shaping, pre-echo and determine the size of
 the next block on which to continue analysis */
@@ -857,8 +857,8 @@ the next block on which to continue analysis */
 pub unsafe extern "C" fn vorbis_analysis_blockout(
     mut v: *mut crate::codec_h::vorbis_dsp_state,
     mut vb: *mut crate::codec_h::vorbis_block,
-) -> libc::c_int {
-    let mut i: libc::c_int = 0;
+) -> i32 {
+    let mut i: i32 = 0;
     let mut vi: *mut crate::codec_h::vorbis_info = (*v).vi;
     let mut ci: *mut crate::codec_internal_h::codec_setup_info =
         (*vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info;
@@ -866,17 +866,17 @@ pub unsafe extern "C" fn vorbis_analysis_blockout(
         (*v).backend_state as *mut crate::codec_internal_h::private_state;
     let mut g: *mut crate::src::libvorbis_1_3_6::lib::psy::vorbis_look_psy_global = (*b).psy_g_look;
     let mut beginW: libc::c_long =
-        (*v).centerW - (*ci).blocksizes[(*v).W as usize] / 2 as libc::c_int as libc::c_long;
+        (*v).centerW - (*ci).blocksizes[(*v).W as usize] / 2 as i32 as libc::c_long;
     let mut centerNext: libc::c_long = 0;
     let mut vbi: *mut crate::codec_internal_h::vorbis_block_internal =
         (*vb).internal as *mut crate::codec_internal_h::vorbis_block_internal;
     /* check to see if we're started... */
     if (*v).preextrapolate == 0 {
-        return 0 as libc::c_int;
+        return 0 as i32;
     }
     /* check to see if we're done... */
-    if (*v).eofflag == -(1 as libc::c_int) {
-        return 0 as libc::c_int;
+    if (*v).eofflag == -(1 as i32) {
+        return 0 as i32;
     }
     /* By our invariant, we have lW, W and centerW set.  Search for
     the next boundary so we can determine nW (the next window size)
@@ -888,26 +888,26 @@ pub unsafe extern "C" fn vorbis_analysis_blockout(
         v as *mut crate::codec_h::vorbis_dsp_state,
     ); /* not enough data currently to search for a
        full long block */
-    if bp == -(1 as libc::c_int) as libc::c_long {
-        if (*v).eofflag == 0 as libc::c_int {
-            return 0 as libc::c_int;
+    if bp == -(1 as i32) as libc::c_long {
+        if (*v).eofflag == 0 as i32 {
+            return 0 as i32;
         }
-        (*v).nW = 0 as libc::c_int as libc::c_long
-    } else if (*ci).blocksizes[0 as libc::c_int as usize]
-        == (*ci).blocksizes[1 as libc::c_int as usize]
+        (*v).nW = 0 as i32 as libc::c_long
+    } else if (*ci).blocksizes[0 as i32 as usize]
+        == (*ci).blocksizes[1 as i32 as usize]
     {
-        (*v).nW = 0 as libc::c_int as libc::c_long
+        (*v).nW = 0 as i32 as libc::c_long
     } else {
         (*v).nW = bp
     }
     centerNext = (*v).centerW
-        + (*ci).blocksizes[(*v).W as usize] / 4 as libc::c_int as libc::c_long
-        + (*ci).blocksizes[(*v).nW as usize] / 4 as libc::c_int as libc::c_long;
+        + (*ci).blocksizes[(*v).W as usize] / 4 as i32 as libc::c_long
+        + (*ci).blocksizes[(*v).nW as usize] / 4 as i32 as libc::c_long;
     /* center of next block + next block maximum right side. */
     let mut blockbound: libc::c_long =
-        centerNext + (*ci).blocksizes[(*v).nW as usize] / 2 as libc::c_int as libc::c_long;
+        centerNext + (*ci).blocksizes[(*v).nW as usize] / 2 as i32 as libc::c_long;
     if ((*v).pcm_current as libc::c_long) < blockbound {
-        return 0 as libc::c_int;
+        return 0 as i32;
     }
     /* fill in the block.  Note that for a short window, lW and nW are *short*
     regardless of actual settings in the stream */
@@ -917,20 +917,20 @@ pub unsafe extern "C" fn vorbis_analysis_blockout(
     (*vb).nW = (*v).nW;
     if (*v).W != 0 {
         if (*v).lW == 0 || (*v).nW == 0 {
-            (*vbi).blocktype = 0 as libc::c_int
+            (*vbi).blocktype = 0 as i32
         /*fprintf(stderr,"-");*/
         } else {
-            (*vbi).blocktype = 1 as libc::c_int
+            (*vbi).blocktype = 1 as i32
             /*fprintf(stderr,"_");*/
         }
     } else if crate::src::libvorbis_1_3_6::lib::envelope::_ve_envelope_mark(
         v as *mut crate::codec_h::vorbis_dsp_state,
     ) != 0
     {
-        (*vbi).blocktype = 0 as libc::c_int
+        (*vbi).blocktype = 0 as i32
     /*fprintf(stderr,"|");*/
     } else {
-        (*vbi).blocktype = 1 as libc::c_int
+        (*vbi).blocktype = 1 as i32
         /*fprintf(stderr,".");*/
     }
     (*vb).vd = v;
@@ -938,7 +938,7 @@ pub unsafe extern "C" fn vorbis_analysis_blockout(
     (*v).sequence = (*v).sequence + 1;
     (*vb).sequence = fresh10;
     (*vb).granulepos = (*v).granulepos;
-    (*vb).pcmend = (*ci).blocksizes[(*v).W as usize] as libc::c_int;
+    (*vb).pcmend = (*ci).blocksizes[(*v).W as usize] as i32;
     /* copy the vectors; this uses the local storage in vb */
     /* this tracks 'strongest peak' for later psychoacoustics */
     /* moved to the global psy state; clean this mess up */
@@ -952,28 +952,28 @@ pub unsafe extern "C" fn vorbis_analysis_blockout(
     (*vbi).ampmax = (*g).ampmax;
     (*vb).pcm = _vorbis_block_alloc(
         vb,
-        (::std::mem::size_of::<*mut libc::c_float>() as libc::c_ulong)
+        (::std::mem::size_of::<*mut f32>() as libc::c_ulong)
             .wrapping_mul((*vi).channels as libc::c_ulong) as libc::c_long,
-    ) as *mut *mut libc::c_float;
+    ) as *mut *mut f32;
     (*vbi).pcmdelay = _vorbis_block_alloc(
         vb,
-        (::std::mem::size_of::<*mut libc::c_float>() as libc::c_ulong)
+        (::std::mem::size_of::<*mut f32>() as libc::c_ulong)
             .wrapping_mul((*vi).channels as libc::c_ulong) as libc::c_long,
-    ) as *mut *mut libc::c_float;
-    i = 0 as libc::c_int;
+    ) as *mut *mut f32;
+    i = 0 as i32;
     while i < (*vi).channels {
         let ref mut fresh11 = *(*vbi).pcmdelay.offset(i as isize);
         *fresh11 = _vorbis_block_alloc(
             vb,
             (((*vb).pcmend as libc::c_long + beginW) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<libc::c_float>() as libc::c_ulong)
+                .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong)
                 as libc::c_long,
-        ) as *mut libc::c_float;
+        ) as *mut f32;
         crate::stdlib::memcpy(
             *(*vbi).pcmdelay.offset(i as isize) as *mut libc::c_void,
             *(*v).pcm.offset(i as isize) as *const libc::c_void,
             (((*vb).pcmend as libc::c_long + beginW) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<libc::c_float>() as libc::c_ulong),
+                .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
         );
         let ref mut fresh12 = *(*vb).pcm.offset(i as isize);
         *fresh12 = (*(*vbi).pcmdelay.offset(i as isize)).offset(beginW as isize);
@@ -988,29 +988,29 @@ pub unsafe extern "C" fn vorbis_analysis_blockout(
     eof<0  'no more to do'; doesn't get here */
     if (*v).eofflag != 0 {
         if (*v).centerW >= (*v).eofflag as libc::c_long {
-            (*v).eofflag = -(1 as libc::c_int);
-            (*vb).eofflag = 1 as libc::c_int;
-            return 1 as libc::c_int;
+            (*v).eofflag = -(1 as i32);
+            (*vb).eofflag = 1 as i32;
+            return 1 as i32;
         }
     }
     /* advance storage vectors and clean up */
-    let mut new_centerNext: libc::c_int = ((*ci).blocksizes[1 as libc::c_int as usize]
-        / 2 as libc::c_int as libc::c_long)
-        as libc::c_int;
-    let mut movementW: libc::c_int = (centerNext - new_centerNext as libc::c_long) as libc::c_int;
-    if movementW > 0 as libc::c_int {
+    let mut new_centerNext: i32 = ((*ci).blocksizes[1 as i32 as usize]
+        / 2 as i32 as libc::c_long)
+        as i32;
+    let mut movementW: i32 = (centerNext - new_centerNext as libc::c_long) as i32;
+    if movementW > 0 as i32 {
         crate::src::libvorbis_1_3_6::lib::envelope::_ve_envelope_shift(
             (*b).ve as *mut crate::src::libvorbis_1_3_6::lib::envelope::envelope_lookup,
             movementW as libc::c_long,
         );
         (*v).pcm_current -= movementW;
-        i = 0 as libc::c_int;
+        i = 0 as i32;
         while i < (*vi).channels {
             crate::stdlib::memmove(
                 *(*v).pcm.offset(i as isize) as *mut libc::c_void,
                 (*(*v).pcm.offset(i as isize)).offset(movementW as isize) as *const libc::c_void,
                 ((*v).pcm_current as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<libc::c_float>() as libc::c_ulong),
+                    .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
             );
             i += 1
         }
@@ -1019,8 +1019,8 @@ pub unsafe extern "C" fn vorbis_analysis_blockout(
         (*v).centerW = new_centerNext as libc::c_long;
         if (*v).eofflag != 0 {
             (*v).eofflag -= movementW;
-            if (*v).eofflag <= 0 as libc::c_int {
-                (*v).eofflag = -(1 as libc::c_int)
+            if (*v).eofflag <= 0 as i32 {
+                (*v).eofflag = -(1 as i32)
             }
             /* do not add padding to end of stream! */
             if (*v).centerW >= (*v).eofflag as libc::c_long {
@@ -1034,50 +1034,50 @@ pub unsafe extern "C" fn vorbis_analysis_blockout(
         }
     }
     /* done */
-    return 1 as libc::c_int;
+    return 1 as i32;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn vorbis_synthesis_restart(
     mut v: *mut crate::codec_h::vorbis_dsp_state,
-) -> libc::c_int {
+) -> i32 {
     let mut vi: *mut crate::codec_h::vorbis_info = (*v).vi;
     let mut ci: *mut crate::codec_internal_h::codec_setup_info =
         0 as *mut crate::codec_internal_h::codec_setup_info;
-    let mut hs: libc::c_int = 0;
+    let mut hs: i32 = 0;
     if (*v).backend_state.is_null() {
-        return -(1 as libc::c_int);
+        return -(1 as i32);
     }
     if vi.is_null() {
-        return -(1 as libc::c_int);
+        return -(1 as i32);
     }
     ci = (*vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info;
     if ci.is_null() {
-        return -(1 as libc::c_int);
+        return -(1 as i32);
     }
     hs = (*ci).halfrate_flag;
-    (*v).centerW = (*ci).blocksizes[1 as libc::c_int as usize] >> hs + 1 as libc::c_int;
-    (*v).pcm_current = ((*v).centerW >> hs) as libc::c_int;
-    (*v).pcm_returned = -(1 as libc::c_int);
-    (*v).granulepos = -(1 as libc::c_int) as crate::config_types_h::ogg_int64_t;
-    (*v).sequence = -(1 as libc::c_int) as crate::config_types_h::ogg_int64_t;
-    (*v).eofflag = 0 as libc::c_int;
+    (*v).centerW = (*ci).blocksizes[1 as i32 as usize] >> hs + 1 as i32;
+    (*v).pcm_current = ((*v).centerW >> hs) as i32;
+    (*v).pcm_returned = -(1 as i32);
+    (*v).granulepos = -(1 as i32) as crate::config_types_h::ogg_int64_t;
+    (*v).sequence = -(1 as i32) as crate::config_types_h::ogg_int64_t;
+    (*v).eofflag = 0 as i32;
     (*((*v).backend_state as *mut crate::codec_internal_h::private_state)).sample_count =
-        -(1 as libc::c_int) as crate::config_types_h::ogg_int64_t;
-    return 0 as libc::c_int;
+        -(1 as i32) as crate::config_types_h::ogg_int64_t;
+    return 0 as i32;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn vorbis_synthesis_init(
     mut v: *mut crate::codec_h::vorbis_dsp_state,
     mut vi: *mut crate::codec_h::vorbis_info,
-) -> libc::c_int {
-    if _vds_shared_init(v, vi, 0 as libc::c_int) != 0 {
+) -> i32 {
+    if _vds_shared_init(v, vi, 0 as i32) != 0 {
         vorbis_dsp_clear(v);
-        return 1 as libc::c_int;
+        return 1 as i32;
     }
     vorbis_synthesis_restart(v);
-    return 0 as libc::c_int;
+    return 0 as i32;
 }
 /* Unlike in analysis, the window is only partially applied for each
 block.  The time domain envelope is not yet handled at the point of
@@ -1087,139 +1087,139 @@ calling (as it relies on the previous block). */
 pub unsafe extern "C" fn vorbis_synthesis_blockin(
     mut v: *mut crate::codec_h::vorbis_dsp_state,
     mut vb: *mut crate::codec_h::vorbis_block,
-) -> libc::c_int {
+) -> i32 {
     let mut vi: *mut crate::codec_h::vorbis_info = (*v).vi; /* out of sequence; lose count */
     let mut ci: *mut crate::codec_internal_h::codec_setup_info =
         (*vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info;
     let mut b: *mut crate::codec_internal_h::private_state =
         (*v).backend_state as *mut crate::codec_internal_h::private_state;
-    let mut hs: libc::c_int = (*ci).halfrate_flag;
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
+    let mut hs: i32 = (*ci).halfrate_flag;
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
     if vb.is_null() {
-        return -(131 as libc::c_int);
+        return -(131 as i32);
     }
-    if (*v).pcm_current > (*v).pcm_returned && (*v).pcm_returned != -(1 as libc::c_int) {
-        return -(131 as libc::c_int);
+    if (*v).pcm_current > (*v).pcm_returned && (*v).pcm_returned != -(1 as i32) {
+        return -(131 as i32);
     }
     (*v).lW = (*v).W;
     (*v).W = (*vb).W;
-    (*v).nW = -(1 as libc::c_int) as libc::c_long;
-    if (*v).sequence == -(1 as libc::c_int) as libc::c_long
-        || (*v).sequence + 1 as libc::c_int as libc::c_long != (*vb).sequence
+    (*v).nW = -(1 as i32) as libc::c_long;
+    if (*v).sequence == -(1 as i32) as libc::c_long
+        || (*v).sequence + 1 as i32 as libc::c_long != (*vb).sequence
     {
-        (*v).granulepos = -(1 as libc::c_int) as crate::config_types_h::ogg_int64_t;
-        (*b).sample_count = -(1 as libc::c_int) as crate::config_types_h::ogg_int64_t
+        (*v).granulepos = -(1 as i32) as crate::config_types_h::ogg_int64_t;
+        (*b).sample_count = -(1 as i32) as crate::config_types_h::ogg_int64_t
     }
     (*v).sequence = (*vb).sequence;
     if !(*vb).pcm.is_null() {
         /* no pcm to process if vorbis_synthesis_trackonly
         was called on block */
-        let mut n: libc::c_int =
-            ((*ci).blocksizes[(*v).W as usize] >> hs + 1 as libc::c_int) as libc::c_int;
-        let mut n0: libc::c_int =
-            ((*ci).blocksizes[0 as libc::c_int as usize] >> hs + 1 as libc::c_int) as libc::c_int;
-        let mut n1: libc::c_int =
-            ((*ci).blocksizes[1 as libc::c_int as usize] >> hs + 1 as libc::c_int) as libc::c_int;
-        let mut thisCenter: libc::c_int = 0;
-        let mut prevCenter: libc::c_int = 0;
+        let mut n: i32 =
+            ((*ci).blocksizes[(*v).W as usize] >> hs + 1 as i32) as i32;
+        let mut n0: i32 =
+            ((*ci).blocksizes[0 as i32 as usize] >> hs + 1 as i32) as i32;
+        let mut n1: i32 =
+            ((*ci).blocksizes[1 as i32 as usize] >> hs + 1 as i32) as i32;
+        let mut thisCenter: i32 = 0;
+        let mut prevCenter: i32 = 0;
         (*v).glue_bits += (*vb).glue_bits;
         (*v).time_bits += (*vb).time_bits;
         (*v).floor_bits += (*vb).floor_bits;
         (*v).res_bits += (*vb).res_bits;
         if (*v).centerW != 0 {
             thisCenter = n1;
-            prevCenter = 0 as libc::c_int
+            prevCenter = 0 as i32
         } else {
-            thisCenter = 0 as libc::c_int;
+            thisCenter = 0 as i32;
             prevCenter = n1
         }
         /* v->pcm is now used like a two-stage double buffer.  We don't want
         to have to constantly shift *or* adjust memory usage.  Don't
         accept a new block until the old is shifted out */
-        j = 0 as libc::c_int;
+        j = 0 as i32;
         while j < (*vi).channels {
             /* the overlap/add section */
             if (*v).lW != 0 {
                 if (*v).W != 0 {
                     /* large/large */
-                    let mut w: *const libc::c_float =
+                    let mut w: *const f32 =
                         crate::src::libvorbis_1_3_6::lib::window::_vorbis_window_get(
-                            (*b).window[1 as libc::c_int as usize] - hs,
+                            (*b).window[1 as i32 as usize] - hs,
                         );
-                    let mut pcm: *mut libc::c_float =
+                    let mut pcm: *mut f32 =
                         (*(*v).pcm.offset(j as isize)).offset(prevCenter as isize);
-                    let mut p: *mut libc::c_float = *(*vb).pcm.offset(j as isize);
-                    i = 0 as libc::c_int;
+                    let mut p: *mut f32 = *(*vb).pcm.offset(j as isize);
+                    i = 0 as i32;
                     while i < n1 {
                         *pcm.offset(i as isize) = *pcm.offset(i as isize)
-                            * *w.offset((n1 - i - 1 as libc::c_int) as isize)
+                            * *w.offset((n1 - i - 1 as i32) as isize)
                             + *p.offset(i as isize) * *w.offset(i as isize);
                         i += 1
                     }
                 } else {
                     /* large/small */
-                    let mut w_0: *const libc::c_float =
+                    let mut w_0: *const f32 =
                         crate::src::libvorbis_1_3_6::lib::window::_vorbis_window_get(
-                            (*b).window[0 as libc::c_int as usize] - hs,
+                            (*b).window[0 as i32 as usize] - hs,
                         );
-                    let mut pcm_0: *mut libc::c_float = (*(*v).pcm.offset(j as isize))
+                    let mut pcm_0: *mut f32 = (*(*v).pcm.offset(j as isize))
                         .offset(prevCenter as isize)
-                        .offset((n1 / 2 as libc::c_int) as isize)
-                        .offset(-((n0 / 2 as libc::c_int) as isize));
-                    let mut p_0: *mut libc::c_float = *(*vb).pcm.offset(j as isize);
-                    i = 0 as libc::c_int;
+                        .offset((n1 / 2 as i32) as isize)
+                        .offset(-((n0 / 2 as i32) as isize));
+                    let mut p_0: *mut f32 = *(*vb).pcm.offset(j as isize);
+                    i = 0 as i32;
                     while i < n0 {
                         *pcm_0.offset(i as isize) = *pcm_0.offset(i as isize)
-                            * *w_0.offset((n0 - i - 1 as libc::c_int) as isize)
+                            * *w_0.offset((n0 - i - 1 as i32) as isize)
                             + *p_0.offset(i as isize) * *w_0.offset(i as isize);
                         i += 1
                     }
                 }
             } else if (*v).W != 0 {
                 /* small/large */
-                let mut w_1: *const libc::c_float =
+                let mut w_1: *const f32 =
                     crate::src::libvorbis_1_3_6::lib::window::_vorbis_window_get(
-                        (*b).window[0 as libc::c_int as usize] - hs,
+                        (*b).window[0 as i32 as usize] - hs,
                     );
-                let mut pcm_1: *mut libc::c_float =
+                let mut pcm_1: *mut f32 =
                     (*(*v).pcm.offset(j as isize)).offset(prevCenter as isize);
-                let mut p_1: *mut libc::c_float = (*(*vb).pcm.offset(j as isize))
-                    .offset((n1 / 2 as libc::c_int) as isize)
-                    .offset(-((n0 / 2 as libc::c_int) as isize));
-                i = 0 as libc::c_int;
+                let mut p_1: *mut f32 = (*(*vb).pcm.offset(j as isize))
+                    .offset((n1 / 2 as i32) as isize)
+                    .offset(-((n0 / 2 as i32) as isize));
+                i = 0 as i32;
                 while i < n0 {
                     *pcm_1.offset(i as isize) = *pcm_1.offset(i as isize)
-                        * *w_1.offset((n0 - i - 1 as libc::c_int) as isize)
+                        * *w_1.offset((n0 - i - 1 as i32) as isize)
                         + *p_1.offset(i as isize) * *w_1.offset(i as isize);
                     i += 1
                 }
-                while i < n1 / 2 as libc::c_int + n0 / 2 as libc::c_int {
+                while i < n1 / 2 as i32 + n0 / 2 as i32 {
                     *pcm_1.offset(i as isize) = *p_1.offset(i as isize);
                     i += 1
                 }
             } else {
                 /* small/small */
-                let mut w_2: *const libc::c_float =
+                let mut w_2: *const f32 =
                     crate::src::libvorbis_1_3_6::lib::window::_vorbis_window_get(
-                        (*b).window[0 as libc::c_int as usize] - hs,
+                        (*b).window[0 as i32 as usize] - hs,
                     );
-                let mut pcm_2: *mut libc::c_float =
+                let mut pcm_2: *mut f32 =
                     (*(*v).pcm.offset(j as isize)).offset(prevCenter as isize);
-                let mut p_2: *mut libc::c_float = *(*vb).pcm.offset(j as isize);
-                i = 0 as libc::c_int;
+                let mut p_2: *mut f32 = *(*vb).pcm.offset(j as isize);
+                i = 0 as i32;
                 while i < n0 {
                     *pcm_2.offset(i as isize) = *pcm_2.offset(i as isize)
-                        * *w_2.offset((n0 - i - 1 as libc::c_int) as isize)
+                        * *w_2.offset((n0 - i - 1 as i32) as isize)
                         + *p_2.offset(i as isize) * *w_2.offset(i as isize);
                     i += 1
                 }
             }
             /* the copy section */
-            let mut pcm_3: *mut libc::c_float =
+            let mut pcm_3: *mut f32 =
                 (*(*v).pcm.offset(j as isize)).offset(thisCenter as isize);
-            let mut p_3: *mut libc::c_float = (*(*vb).pcm.offset(j as isize)).offset(n as isize);
-            i = 0 as libc::c_int;
+            let mut p_3: *mut f32 = (*(*vb).pcm.offset(j as isize)).offset(n as isize);
+            i = 0 as i32;
             while i < n {
                 *pcm_3.offset(i as isize) = *p_3.offset(i as isize);
                 i += 1
@@ -1227,22 +1227,22 @@ pub unsafe extern "C" fn vorbis_synthesis_blockin(
             j += 1
         }
         if (*v).centerW != 0 {
-            (*v).centerW = 0 as libc::c_int as libc::c_long
+            (*v).centerW = 0 as i32 as libc::c_long
         } else {
             (*v).centerW = n1 as libc::c_long
         }
         /* deal with initial packet state; we do this using the explicit
         pcm_returned==-1 flag otherwise we're sensitive to first block
         being short or long */
-        if (*v).pcm_returned == -(1 as libc::c_int) {
+        if (*v).pcm_returned == -(1 as i32) {
             (*v).pcm_returned = thisCenter;
             (*v).pcm_current = thisCenter
         } else {
             (*v).pcm_returned = prevCenter;
             (*v).pcm_current = (prevCenter as libc::c_long
-                + ((*ci).blocksizes[(*v).lW as usize] / 4 as libc::c_int as libc::c_long
-                    + (*ci).blocksizes[(*v).W as usize] / 4 as libc::c_int as libc::c_long
-                    >> hs)) as libc::c_int
+                + ((*ci).blocksizes[(*v).lW as usize] / 4 as i32 as libc::c_long
+                    + (*ci).blocksizes[(*v).W as usize] / 4 as i32 as libc::c_long
+                    >> hs)) as i32
         }
     }
     /* track the frame number... This is for convenience, but also
@@ -1255,14 +1255,14 @@ pub unsafe extern "C" fn vorbis_synthesis_blockin(
     we don't have a starting point to judge where the last frame
     is.  For this reason, vorbisfile will always try to make sure
     it reads the last two marked pages in proper sequence */
-    if (*b).sample_count == -(1 as libc::c_int) as libc::c_long {
-        (*b).sample_count = 0 as libc::c_int as crate::config_types_h::ogg_int64_t
+    if (*b).sample_count == -(1 as i32) as libc::c_long {
+        (*b).sample_count = 0 as i32 as crate::config_types_h::ogg_int64_t
     } else {
-        (*b).sample_count += (*ci).blocksizes[(*v).lW as usize] / 4 as libc::c_int as libc::c_long
-            + (*ci).blocksizes[(*v).W as usize] / 4 as libc::c_int as libc::c_long
+        (*b).sample_count += (*ci).blocksizes[(*v).lW as usize] / 4 as i32 as libc::c_long
+            + (*ci).blocksizes[(*v).W as usize] / 4 as i32 as libc::c_long
     }
-    if (*v).granulepos == -(1 as libc::c_int) as libc::c_long {
-        if (*vb).granulepos != -(1 as libc::c_int) as libc::c_long {
+    if (*v).granulepos == -(1 as i32) as libc::c_long {
+        if (*vb).granulepos != -(1 as i32) as libc::c_long {
             /* only set if we have a position to set to */
             (*v).granulepos = (*vb).granulepos;
             /* is this a short page? */
@@ -1274,8 +1274,8 @@ pub unsafe extern "C" fn vorbis_synthesis_blockin(
                 uint64 isn't universally available.  Unfortunately,
                 that means granposes can be 'negative' and result in
                 extra being negative */
-                if extra < 0 as libc::c_int as libc::c_long {
-                    extra = 0 as libc::c_int as libc::c_long
+                if extra < 0 as i32 as libc::c_long {
+                    extra = 0 as i32 as libc::c_long
                 }
                 if (*vb).eofflag != 0 {
                     /* trim the end */
@@ -1290,11 +1290,11 @@ pub unsafe extern "C" fn vorbis_synthesis_blockin(
                         extra = ((*v).pcm_current - (*v).pcm_returned << hs) as libc::c_long
                     }
                     (*v).pcm_current =
-                        ((*v).pcm_current as libc::c_long - (extra >> hs)) as libc::c_int
+                        ((*v).pcm_current as libc::c_long - (extra >> hs)) as i32
                 } else {
                     /* trim the beginning */
                     (*v).pcm_returned =
-                        ((*v).pcm_returned as libc::c_long + (extra >> hs)) as libc::c_int; /* else {Shouldn't happen *unless* the bitstream is out of
+                        ((*v).pcm_returned as libc::c_long + (extra >> hs)) as i32; /* else {Shouldn't happen *unless* the bitstream is out of
                                                                                             spec.  Either way, believe the bitstream } */
                     if (*v).pcm_returned > (*v).pcm_current {
                         (*v).pcm_returned = (*v).pcm_current
@@ -1303,9 +1303,9 @@ pub unsafe extern "C" fn vorbis_synthesis_blockin(
             }
         }
     } else {
-        (*v).granulepos += (*ci).blocksizes[(*v).lW as usize] / 4 as libc::c_int as libc::c_long
-            + (*ci).blocksizes[(*v).W as usize] / 4 as libc::c_int as libc::c_long;
-        if (*vb).granulepos != -(1 as libc::c_int) as libc::c_long
+        (*v).granulepos += (*ci).blocksizes[(*v).lW as usize] / 4 as i32 as libc::c_long
+            + (*ci).blocksizes[(*v).W as usize] / 4 as i32 as libc::c_long;
+        if (*vb).granulepos != -(1 as i32) as libc::c_long
             && (*v).granulepos != (*vb).granulepos
         {
             if (*v).granulepos > (*vb).granulepos {
@@ -1325,11 +1325,11 @@ pub unsafe extern "C" fn vorbis_synthesis_blockin(
                         uint64 isn't universally available.  Unfortunately,
                         that means granposes can be 'negative' and result in
                         extra being negative */
-                        if extra_0 < 0 as libc::c_int as libc::c_long {
-                            extra_0 = 0 as libc::c_int as libc::c_long
+                        if extra_0 < 0 as i32 as libc::c_long {
+                            extra_0 = 0 as i32 as libc::c_long
                         }
                         (*v).pcm_current =
-                            ((*v).pcm_current as libc::c_long - (extra_0 >> hs)) as libc::c_int
+                            ((*v).pcm_current as libc::c_long - (extra_0 >> hs)) as i32
                     }
                 }
             }
@@ -1338,22 +1338,22 @@ pub unsafe extern "C" fn vorbis_synthesis_blockin(
     }
     /* Update, cleanup */
     if (*vb).eofflag != 0 {
-        (*v).eofflag = 1 as libc::c_int
+        (*v).eofflag = 1 as i32
     }
-    return 0 as libc::c_int;
+    return 0 as i32;
 }
 /* pcm==NULL indicates we just want the pending samples, no more */
 #[no_mangle]
 
 pub unsafe extern "C" fn vorbis_synthesis_pcmout(
     mut v: *mut crate::codec_h::vorbis_dsp_state,
-    mut pcm: *mut *mut *mut libc::c_float,
-) -> libc::c_int {
+    mut pcm: *mut *mut *mut f32,
+) -> i32 {
     let mut vi: *mut crate::codec_h::vorbis_info = (*v).vi;
-    if (*v).pcm_returned > -(1 as libc::c_int) && (*v).pcm_returned < (*v).pcm_current {
+    if (*v).pcm_returned > -(1 as i32) && (*v).pcm_returned < (*v).pcm_current {
         if !pcm.is_null() {
-            let mut i: libc::c_int = 0;
-            i = 0 as libc::c_int;
+            let mut i: i32 = 0;
+            i = 0 as i32;
             while i < (*vi).channels {
                 let ref mut fresh13 = *(*v).pcmret.offset(i as isize);
                 *fresh13 = (*(*v).pcm.offset(i as isize)).offset((*v).pcm_returned as isize);
@@ -1363,19 +1363,19 @@ pub unsafe extern "C" fn vorbis_synthesis_pcmout(
         }
         return (*v).pcm_current - (*v).pcm_returned;
     }
-    return 0 as libc::c_int;
+    return 0 as i32;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn vorbis_synthesis_read(
     mut v: *mut crate::codec_h::vorbis_dsp_state,
-    mut n: libc::c_int,
-) -> libc::c_int {
+    mut n: i32,
+) -> i32 {
     if n != 0 && (*v).pcm_returned + n > (*v).pcm_current {
-        return -(131 as libc::c_int);
+        return -(131 as i32);
     }
     (*v).pcm_returned += n;
-    return 0 as libc::c_int;
+    return 0 as i32;
 }
 /* intended for use with a specific vorbisfile feature; we want access
 to the [usually synthetic/postextrapolated] buffer and lapping at
@@ -1386,22 +1386,22 @@ this implicit buffer data not normally decoded. */
 
 pub unsafe extern "C" fn vorbis_synthesis_lapout(
     mut v: *mut crate::codec_h::vorbis_dsp_state,
-    mut pcm: *mut *mut *mut libc::c_float,
-) -> libc::c_int {
+    mut pcm: *mut *mut *mut f32,
+) -> i32 {
     let mut vi: *mut crate::codec_h::vorbis_info = (*v).vi;
     let mut ci: *mut crate::codec_internal_h::codec_setup_info =
         (*vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info;
-    let mut hs: libc::c_int = (*ci).halfrate_flag;
-    let mut n: libc::c_int =
-        ((*ci).blocksizes[(*v).W as usize] >> hs + 1 as libc::c_int) as libc::c_int;
-    let mut n0: libc::c_int =
-        ((*ci).blocksizes[0 as libc::c_int as usize] >> hs + 1 as libc::c_int) as libc::c_int;
-    let mut n1: libc::c_int =
-        ((*ci).blocksizes[1 as libc::c_int as usize] >> hs + 1 as libc::c_int) as libc::c_int;
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
-    if (*v).pcm_returned < 0 as libc::c_int {
-        return 0 as libc::c_int;
+    let mut hs: i32 = (*ci).halfrate_flag;
+    let mut n: i32 =
+        ((*ci).blocksizes[(*v).W as usize] >> hs + 1 as i32) as i32;
+    let mut n0: i32 =
+        ((*ci).blocksizes[0 as i32 as usize] >> hs + 1 as i32) as i32;
+    let mut n1: i32 =
+        ((*ci).blocksizes[1 as i32 as usize] >> hs + 1 as i32) as i32;
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
+    if (*v).pcm_returned < 0 as i32 {
+        return 0 as i32;
     }
     /* our returned data ends at pcm_returned; because the synthesis pcm
     buffer is a two-fragment ring, that means our data block may be
@@ -1415,12 +1415,12 @@ pub unsafe extern "C" fn vorbis_synthesis_lapout(
     if (*v).centerW == n1 as libc::c_long {
         /* the data buffer wraps; swap the halves */
         /* slow, sure, small */
-        j = 0 as libc::c_int;
+        j = 0 as i32;
         while j < (*vi).channels {
-            let mut p: *mut libc::c_float = *(*v).pcm.offset(j as isize);
-            i = 0 as libc::c_int;
+            let mut p: *mut f32 = *(*v).pcm.offset(j as isize);
+            i = 0 as i32;
             while i < n1 {
-                let mut temp: libc::c_float = *p.offset(i as isize);
+                let mut temp: f32 = *p.offset(i as isize);
                 *p.offset(i as isize) = *p.offset((i + n1) as isize);
                 *p.offset((i + n1) as isize) = temp;
                 i += 1
@@ -1429,35 +1429,35 @@ pub unsafe extern "C" fn vorbis_synthesis_lapout(
         }
         (*v).pcm_current -= n1;
         (*v).pcm_returned -= n1;
-        (*v).centerW = 0 as libc::c_int as libc::c_long
+        (*v).centerW = 0 as i32 as libc::c_long
     }
     /* solidify buffer into contiguous space */
-    if (*v).lW ^ (*v).W == 1 as libc::c_int as libc::c_long {
+    if (*v).lW ^ (*v).W == 1 as i32 as libc::c_long {
         /* long/short or short/long */
-        j = 0 as libc::c_int;
+        j = 0 as i32;
         while j < (*vi).channels {
-            let mut s: *mut libc::c_float = *(*v).pcm.offset(j as isize);
-            let mut d: *mut libc::c_float =
-                (*(*v).pcm.offset(j as isize)).offset(((n1 - n0) / 2 as libc::c_int) as isize);
-            i = (n1 + n0) / 2 as libc::c_int - 1 as libc::c_int;
-            while i >= 0 as libc::c_int {
+            let mut s: *mut f32 = *(*v).pcm.offset(j as isize);
+            let mut d: *mut f32 =
+                (*(*v).pcm.offset(j as isize)).offset(((n1 - n0) / 2 as i32) as isize);
+            i = (n1 + n0) / 2 as i32 - 1 as i32;
+            while i >= 0 as i32 {
                 *d.offset(i as isize) = *s.offset(i as isize);
                 i -= 1
             }
             j += 1
         }
-        (*v).pcm_returned += (n1 - n0) / 2 as libc::c_int;
-        (*v).pcm_current += (n1 - n0) / 2 as libc::c_int
-    } else if (*v).lW == 0 as libc::c_int as libc::c_long {
+        (*v).pcm_returned += (n1 - n0) / 2 as i32;
+        (*v).pcm_current += (n1 - n0) / 2 as i32
+    } else if (*v).lW == 0 as i32 as libc::c_long {
         /* short/short */
-        j = 0 as libc::c_int;
+        j = 0 as i32;
         while j < (*vi).channels {
-            let mut s_0: *mut libc::c_float = *(*v).pcm.offset(j as isize);
-            let mut d_0: *mut libc::c_float = (*(*v).pcm.offset(j as isize))
+            let mut s_0: *mut f32 = *(*v).pcm.offset(j as isize);
+            let mut d_0: *mut f32 = (*(*v).pcm.offset(j as isize))
                 .offset(n1 as isize)
                 .offset(-(n0 as isize));
-            i = n0 - 1 as libc::c_int;
-            while i >= 0 as libc::c_int {
+            i = n0 - 1 as i32;
+            while i >= 0 as i32 {
                 *d_0.offset(i as isize) = *s_0.offset(i as isize);
                 i -= 1
             }
@@ -1467,8 +1467,8 @@ pub unsafe extern "C" fn vorbis_synthesis_lapout(
         (*v).pcm_current += n1 - n0
     }
     if !pcm.is_null() {
-        let mut i_0: libc::c_int = 0;
-        i_0 = 0 as libc::c_int;
+        let mut i_0: i32 = 0;
+        i_0 = 0 as i32;
         while i_0 < (*vi).channels {
             let ref mut fresh14 = *(*v).pcmret.offset(i_0 as isize);
             *fresh14 = (*(*v).pcm.offset(i_0 as isize)).offset((*v).pcm_returned as isize);
@@ -1482,16 +1482,16 @@ pub unsafe extern "C" fn vorbis_synthesis_lapout(
 
 pub unsafe extern "C" fn vorbis_window(
     mut v: *mut crate::codec_h::vorbis_dsp_state,
-    mut W: libc::c_int,
-) -> *const libc::c_float {
+    mut W: i32,
+) -> *const f32 {
     let mut vi: *mut crate::codec_h::vorbis_info = (*v).vi;
     let mut ci: *mut crate::codec_internal_h::codec_setup_info =
         (*vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info;
-    let mut hs: libc::c_int = (*ci).halfrate_flag;
+    let mut hs: i32 = (*ci).halfrate_flag;
     let mut b: *mut crate::codec_internal_h::private_state =
         (*v).backend_state as *mut crate::codec_internal_h::private_state;
-    if ((*b).window[W as usize] - 1 as libc::c_int) < 0 as libc::c_int {
-        return 0 as *const libc::c_float;
+    if ((*b).window[W as usize] - 1 as i32) < 0 as i32 {
+        return 0 as *const f32;
     }
     return crate::src::libvorbis_1_3_6::lib::window::_vorbis_window_get(
         (*b).window[W as usize] - hs,

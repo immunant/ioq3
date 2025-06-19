@@ -3,12 +3,12 @@ use ::libc;
 pub mod stdlib_h {
     #[inline]
 
-    pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> libc::c_int {
+    pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return ::libc::strtol(
             __nptr,
             0 as *mut libc::c_void as *mut *mut libc::c_char,
-            10 as libc::c_int,
-        ) as libc::c_int;
+            10 as i32,
+        ) as i32;
     }
 }
 
@@ -350,9 +350,9 @@ pub struct teamOrdersMenuInfo_t {
     pub frame: crate::ui_local_h::menubitmap_s,
     pub list: crate::ui_local_h::menulist_s,
     pub back: crate::ui_local_h::menubitmap_s,
-    pub gametype: libc::c_int,
-    pub numBots: libc::c_int,
-    pub selectedBot: libc::c_int,
+    pub gametype: i32,
+    pub numBots: i32,
+    pub selectedBot: i32,
     pub bots: [*mut libc::c_char; 9],
     pub botNames: [[libc::c_char; 16]; 9],
 }
@@ -390,7 +390,7 @@ static mut teamOrdersMenuInfo: teamOrdersMenuInfo_t = teamOrdersMenuInfo_t {
         },
         string: 0 as *const libc::c_char as *mut libc::c_char,
         style: 0,
-        color: 0 as *const libc::c_float as *mut libc::c_float,
+        color: 0 as *const f32 as *mut f32,
     },
     frame: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -417,7 +417,7 @@ static mut teamOrdersMenuInfo: teamOrdersMenuInfo_t = teamOrdersMenuInfo_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     list: crate::ui_local_h::menulist_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -473,7 +473,7 @@ static mut teamOrdersMenuInfo: teamOrdersMenuInfo_t = teamOrdersMenuInfo_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     gametype: 0,
     numBots: 0,
@@ -531,9 +531,9 @@ UI_TeamOrdersMenu_BackEvent
 
 unsafe extern "C" fn UI_TeamOrdersMenu_BackEvent(
     mut _ptr: *mut libc::c_void,
-    mut event: libc::c_int,
+    mut event: i32,
 ) {
-    if event != 3 as libc::c_int {
+    if event != 3 as i32 {
         return;
     }
     crate::src::q3_ui::ui_atoms::UI_PopMenu();
@@ -544,16 +544,16 @@ UI_TeamOrdersMenu_SetList
 ===============
 */
 
-unsafe extern "C" fn UI_TeamOrdersMenu_SetList(mut id: libc::c_int) {
+unsafe extern "C" fn UI_TeamOrdersMenu_SetList(mut id: i32) {
     match id {
         11 => {
             teamOrdersMenuInfo.list.generic.id = id;
-            teamOrdersMenuInfo.list.numitems = 7 as libc::c_int;
+            teamOrdersMenuInfo.list.numitems = 7 as i32;
             teamOrdersMenuInfo.list.itemnames = ctfOrders.as_mut_ptr()
         }
         12 => {
             teamOrdersMenuInfo.list.generic.id = id;
-            teamOrdersMenuInfo.list.numitems = 6 as libc::c_int;
+            teamOrdersMenuInfo.list.numitems = 6 as i32;
             teamOrdersMenuInfo.list.itemnames = teamOrders.as_mut_ptr()
         }
         10 | _ => {
@@ -564,7 +564,7 @@ unsafe extern "C" fn UI_TeamOrdersMenu_SetList(mut id: libc::c_int) {
         }
     }
     teamOrdersMenuInfo.list.generic.bottom =
-        teamOrdersMenuInfo.list.generic.top + teamOrdersMenuInfo.list.numitems * 27 as libc::c_int;
+        teamOrdersMenuInfo.list.generic.top + teamOrdersMenuInfo.list.numitems * 27 as i32;
 }
 /*
 =================
@@ -574,12 +574,12 @@ UI_TeamOrdersMenu_Key
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_TeamOrdersMenu_Key(
-    mut key: libc::c_int,
+    mut key: i32,
 ) -> crate::src::qcommon::q_shared::sfxHandle_t {
     let mut l: *mut crate::ui_local_h::menulist_s = 0 as *mut crate::ui_local_h::menulist_s;
-    let mut x: libc::c_int = 0;
-    let mut y: libc::c_int = 0;
-    let mut index: libc::c_int = 0;
+    let mut x: i32 = 0;
+    let mut y: i32 = 0;
+    let mut index: i32 = 0;
     l = crate::src::q3_ui::ui_qmenu::Menu_ItemAtCursor(
         &mut teamOrdersMenuInfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
     ) as *mut crate::ui_local_h::menulist_s;
@@ -601,13 +601,13 @@ pub unsafe extern "C" fn UI_TeamOrdersMenu_Key(
             ) as u64
                 != 0
             {
-                index = (crate::src::q3_ui::ui_atoms::uis.cursory - y) / 27 as libc::c_int;
+                index = (crate::src::q3_ui::ui_atoms::uis.cursory - y) / 27 as i32;
                 (*l).oldvalue = (*l).curvalue;
                 (*l).curvalue = index;
                 if (*l).generic.callback.is_some() {
                     (*l).generic.callback.expect("non-null function pointer")(
                         l as *mut libc::c_void,
-                        3 as libc::c_int,
+                        3 as i32,
                     );
                     return crate::src::q3_ui::ui_qmenu::menu_move_sound;
                 }
@@ -616,8 +616,8 @@ pub unsafe extern "C" fn UI_TeamOrdersMenu_Key(
         }
         161 | 132 => {
             (*l).oldvalue = (*l).curvalue;
-            if (*l).curvalue == 0 as libc::c_int {
-                (*l).curvalue = (*l).numitems - 1 as libc::c_int
+            if (*l).curvalue == 0 as i32 {
+                (*l).curvalue = (*l).numitems - 1 as i32
             } else {
                 (*l).curvalue -= 1
             }
@@ -625,8 +625,8 @@ pub unsafe extern "C" fn UI_TeamOrdersMenu_Key(
         }
         167 | 133 => {
             (*l).oldvalue = (*l).curvalue;
-            if (*l).curvalue == (*l).numitems - 1 as libc::c_int {
-                (*l).curvalue = 0 as libc::c_int
+            if (*l).curvalue == (*l).numitems - 1 as i32 {
+                (*l).curvalue = 0 as i32
             } else {
                 (*l).curvalue += 1
             }
@@ -647,25 +647,25 @@ UI_TeamOrdersMenu_ListDraw
 
 unsafe extern "C" fn UI_TeamOrdersMenu_ListDraw(mut self_0: *mut libc::c_void) {
     let mut l: *mut crate::ui_local_h::menulist_s = 0 as *mut crate::ui_local_h::menulist_s; //l->generic.x;
-    let mut x: libc::c_int = 0;
-    let mut y: libc::c_int = 0;
-    let mut i: libc::c_int = 0;
-    let mut color: *mut libc::c_float = 0 as *mut libc::c_float;
+    let mut x: i32 = 0;
+    let mut y: i32 = 0;
+    let mut i: i32 = 0;
+    let mut color: *mut f32 = 0 as *mut f32;
     let mut hasfocus: crate::src::qcommon::q_shared::qboolean =
         crate::src::qcommon::q_shared::qfalse;
-    let mut style: libc::c_int = 0;
+    let mut style: i32 = 0;
     l = self_0 as *mut crate::ui_local_h::menulist_s;
-    hasfocus = ((*(*l).generic.parent).cursor == (*l).generic.menuPosition) as libc::c_int
+    hasfocus = ((*(*l).generic.parent).cursor == (*l).generic.menuPosition) as i32
         as crate::src::qcommon::q_shared::qboolean;
-    x = 320 as libc::c_int;
+    x = 320 as i32;
     y = (*l).generic.y;
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < (*l).numitems {
-        style = 0 as libc::c_int | 0x10 as libc::c_int | 0x1 as libc::c_int;
+        style = 0 as i32 | 0x10 as i32 | 0x1 as i32;
         if i == (*l).curvalue {
             color = crate::src::q3_ui::ui_qmenu::color_yellow.as_mut_ptr();
             if hasfocus as u64 != 0 {
-                style |= 0x4000 as libc::c_int
+                style |= 0x4000 as i32
             }
         } else {
             color = crate::src::q3_ui::ui_qmenu::color_orange.as_mut_ptr()
@@ -677,7 +677,7 @@ unsafe extern "C" fn UI_TeamOrdersMenu_ListDraw(mut self_0: *mut libc::c_void) {
             style,
             color,
         );
-        y += 27 as libc::c_int;
+        y += 27 as i32;
         i += 1
     }
 }
@@ -689,42 +689,42 @@ UI_TeamOrdersMenu_ListEvent
 
 unsafe extern "C" fn UI_TeamOrdersMenu_ListEvent(
     mut ptr: *mut libc::c_void,
-    mut event: libc::c_int,
+    mut event: i32,
 ) {
-    let mut id: libc::c_int = 0;
-    let mut selection: libc::c_int = 0;
+    let mut id: i32 = 0;
+    let mut selection: i32 = 0;
     let mut message: [libc::c_char; 256] = [0; 256];
-    if event != 3 as libc::c_int {
+    if event != 3 as i32 {
         return;
     }
     id = (*(ptr as *mut crate::ui_local_h::menulist_s)).generic.id;
     selection = (*(ptr as *mut crate::ui_local_h::menulist_s)).curvalue;
-    if id == 10 as libc::c_int {
+    if id == 10 as i32 {
         teamOrdersMenuInfo.selectedBot = selection;
-        if teamOrdersMenuInfo.gametype == crate::bg_public_h::GT_CTF as libc::c_int {
-            UI_TeamOrdersMenu_SetList(11 as libc::c_int);
+        if teamOrdersMenuInfo.gametype == crate::bg_public_h::GT_CTF as i32 {
+            UI_TeamOrdersMenu_SetList(11 as i32);
         } else {
-            UI_TeamOrdersMenu_SetList(12 as libc::c_int);
+            UI_TeamOrdersMenu_SetList(12 as i32);
         }
         return;
     }
-    if id == 11 as libc::c_int {
+    if id == 11 as i32 {
         crate::src::qcommon::q_shared::Com_sprintf(
             message.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as libc::c_int,
+            ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
             ctfMessages[selection as usize],
             teamOrdersMenuInfo.botNames[teamOrdersMenuInfo.selectedBot as usize].as_mut_ptr(),
         );
     } else {
         crate::src::qcommon::q_shared::Com_sprintf(
             message.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as libc::c_int,
+            ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
             teamMessages[selection as usize],
             teamOrdersMenuInfo.botNames[teamOrdersMenuInfo.selectedBot as usize].as_mut_ptr(),
         );
     }
     crate::src::ui::ui_syscalls::trap_Cmd_ExecuteText(
-        crate::src::qcommon::q_shared::EXEC_APPEND as libc::c_int,
+        crate::src::qcommon::q_shared::EXEC_APPEND as i32,
         crate::src::qcommon::q_shared::va(
             b"say_team \"%s\"\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             message.as_mut_ptr(),
@@ -747,14 +747,14 @@ unsafe extern "C" fn UI_TeamOrdersMenu_BuildBotList() {
         updateInfoString: [0; 1024],
         messageString: [0; 1024],
     };
-    let mut numPlayers: libc::c_int = 0;
-    let mut isBot: libc::c_int = 0;
-    let mut n: libc::c_int = 0;
+    let mut numPlayers: i32 = 0;
+    let mut isBot: i32 = 0;
+    let mut n: i32 = 0;
     let mut playerTeam: libc::c_char = '3' as i32 as libc::c_char;
     let mut botTeam: libc::c_char = 0;
     let mut info: [libc::c_char; 1024] = [0; 1024];
-    n = 0 as libc::c_int;
-    while n < 9 as libc::c_int {
+    n = 0 as i32;
+    while n < 9 as i32 {
         teamOrdersMenuInfo.bots[n as usize] = teamOrdersMenuInfo.botNames[n as usize].as_mut_ptr();
         n += 1
     }
@@ -762,15 +762,15 @@ unsafe extern "C" fn UI_TeamOrdersMenu_BuildBotList() {
         &mut cs as *mut _ as *mut crate::ui_public_h::uiClientState_t,
     );
     crate::src::qcommon::q_shared::Q_strncpyz(
-        teamOrdersMenuInfo.botNames[0 as libc::c_int as usize].as_mut_ptr(),
+        teamOrdersMenuInfo.botNames[0 as i32 as usize].as_mut_ptr(),
         b"Everyone\x00" as *const u8 as *const libc::c_char,
-        16 as libc::c_int,
+        16 as i32,
     );
-    teamOrdersMenuInfo.numBots = 1 as libc::c_int;
+    teamOrdersMenuInfo.numBots = 1 as i32;
     crate::src::ui::ui_syscalls::trap_GetConfigString(
-        0 as libc::c_int,
+        0 as i32,
         info.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
     numPlayers = atoi(crate::src::qcommon::q_shared::Info_ValueForKey(
         info.as_mut_ptr(),
@@ -780,12 +780,12 @@ unsafe extern "C" fn UI_TeamOrdersMenu_BuildBotList() {
         info.as_mut_ptr(),
         b"g_gametype\x00" as *const u8 as *const libc::c_char,
     ));
-    n = 0 as libc::c_int;
-    while n < numPlayers && teamOrdersMenuInfo.numBots < 9 as libc::c_int {
+    n = 0 as i32;
+    while n < numPlayers && teamOrdersMenuInfo.numBots < 9 as i32 {
         crate::src::ui::ui_syscalls::trap_GetConfigString(
-            32 as libc::c_int + 256 as libc::c_int + 256 as libc::c_int + n,
+            32 as i32 + 256 as i32 + 256 as i32 + n,
             info.as_mut_ptr(),
-            1024 as libc::c_int,
+            1024 as i32,
         );
         if n == cs.clientNum {
             playerTeam = *crate::src::qcommon::q_shared::Info_ValueForKey(
@@ -802,7 +802,7 @@ unsafe extern "C" fn UI_TeamOrdersMenu_BuildBotList() {
                     info.as_mut_ptr(),
                     b"t\x00" as *const u8 as *const libc::c_char,
                 );
-                if !(botTeam as libc::c_int != playerTeam as libc::c_int) {
+                if !(botTeam as i32 != playerTeam as i32) {
                     crate::src::qcommon::q_shared::Q_strncpyz(
                         teamOrdersMenuInfo.botNames[teamOrdersMenuInfo.numBots as usize]
                             .as_mut_ptr(),
@@ -810,7 +810,7 @@ unsafe extern "C" fn UI_TeamOrdersMenu_BuildBotList() {
                             info.as_mut_ptr(),
                             b"n\x00" as *const u8 as *const libc::c_char,
                         ),
-                        16 as libc::c_int,
+                        16 as i32,
                     );
                     crate::src::qcommon::q_shared::Q_CleanStr(
                         teamOrdersMenuInfo.botNames[teamOrdersMenuInfo.numBots as usize]
@@ -833,53 +833,53 @@ unsafe extern "C" fn UI_TeamOrdersMenu_Init() {
     UI_TeamOrdersMenu_Cache();
     crate::stdlib::memset(
         &mut teamOrdersMenuInfo as *mut teamOrdersMenuInfo_t as *mut libc::c_void,
-        0 as libc::c_int,
+        0 as i32,
         ::std::mem::size_of::<teamOrdersMenuInfo_t>() as libc::c_ulong,
     );
     teamOrdersMenuInfo.menu.fullscreen = crate::src::qcommon::q_shared::qfalse;
     teamOrdersMenuInfo.menu.key = Some(
         UI_TeamOrdersMenu_Key
-            as unsafe extern "C" fn(_: libc::c_int) -> crate::src::qcommon::q_shared::sfxHandle_t,
+            as unsafe extern "C" fn(_: i32) -> crate::src::qcommon::q_shared::sfxHandle_t,
     );
     UI_TeamOrdersMenu_BuildBotList();
-    teamOrdersMenuInfo.banner.generic.type_0 = 10 as libc::c_int;
-    teamOrdersMenuInfo.banner.generic.x = 320 as libc::c_int;
-    teamOrdersMenuInfo.banner.generic.y = 16 as libc::c_int;
+    teamOrdersMenuInfo.banner.generic.type_0 = 10 as i32;
+    teamOrdersMenuInfo.banner.generic.x = 320 as i32;
+    teamOrdersMenuInfo.banner.generic.y = 16 as i32;
     teamOrdersMenuInfo.banner.string =
         b"TEAM ORDERS\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     teamOrdersMenuInfo.banner.color = crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr();
-    teamOrdersMenuInfo.banner.style = 0x1 as libc::c_int;
-    teamOrdersMenuInfo.frame.generic.type_0 = 6 as libc::c_int;
-    teamOrdersMenuInfo.frame.generic.flags = 0x4000 as libc::c_int as libc::c_uint;
+    teamOrdersMenuInfo.banner.style = 0x1 as i32;
+    teamOrdersMenuInfo.frame.generic.type_0 = 6 as i32;
+    teamOrdersMenuInfo.frame.generic.flags = 0x4000 as i32 as u32;
     teamOrdersMenuInfo.frame.generic.name =
         b"menu/art/addbotframe\x00" as *const u8 as *const libc::c_char;
-    teamOrdersMenuInfo.frame.generic.x = 320 as libc::c_int - 233 as libc::c_int;
-    teamOrdersMenuInfo.frame.generic.y = 240 as libc::c_int - 166 as libc::c_int;
-    teamOrdersMenuInfo.frame.width = 466 as libc::c_int;
-    teamOrdersMenuInfo.frame.height = 332 as libc::c_int;
-    teamOrdersMenuInfo.list.generic.type_0 = 8 as libc::c_int;
-    teamOrdersMenuInfo.list.generic.flags = 0x100 as libc::c_int as libc::c_uint;
+    teamOrdersMenuInfo.frame.generic.x = 320 as i32 - 233 as i32;
+    teamOrdersMenuInfo.frame.generic.y = 240 as i32 - 166 as i32;
+    teamOrdersMenuInfo.frame.width = 466 as i32;
+    teamOrdersMenuInfo.frame.height = 332 as i32;
+    teamOrdersMenuInfo.list.generic.type_0 = 8 as i32;
+    teamOrdersMenuInfo.list.generic.flags = 0x100 as i32 as u32;
     teamOrdersMenuInfo.list.generic.ownerdraw =
         Some(UI_TeamOrdersMenu_ListDraw as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     teamOrdersMenuInfo.list.generic.callback = Some(
         UI_TeamOrdersMenu_ListEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    teamOrdersMenuInfo.list.generic.x = 320 as libc::c_int - 64 as libc::c_int;
-    teamOrdersMenuInfo.list.generic.y = 120 as libc::c_int;
-    teamOrdersMenuInfo.back.generic.type_0 = 6 as libc::c_int;
+    teamOrdersMenuInfo.list.generic.x = 320 as i32 - 64 as i32;
+    teamOrdersMenuInfo.list.generic.y = 120 as i32;
+    teamOrdersMenuInfo.back.generic.type_0 = 6 as i32;
     teamOrdersMenuInfo.back.generic.name =
         b"menu/art/back_0\x00" as *const u8 as *const libc::c_char;
     teamOrdersMenuInfo.back.generic.flags =
-        0x4 as libc::c_int as libc::c_uint | 0x100 as libc::c_int as libc::c_uint;
+        0x4 as i32 as u32 | 0x100 as i32 as u32;
     teamOrdersMenuInfo.back.generic.callback = Some(
         UI_TeamOrdersMenu_BackEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    teamOrdersMenuInfo.back.generic.x = 0 as libc::c_int;
-    teamOrdersMenuInfo.back.generic.y = 480 as libc::c_int - 64 as libc::c_int;
-    teamOrdersMenuInfo.back.width = 128 as libc::c_int;
-    teamOrdersMenuInfo.back.height = 64 as libc::c_int;
+    teamOrdersMenuInfo.back.generic.x = 0 as i32;
+    teamOrdersMenuInfo.back.generic.y = 480 as i32 - 64 as i32;
+    teamOrdersMenuInfo.back.width = 128 as i32;
+    teamOrdersMenuInfo.back.height = 64 as i32;
     teamOrdersMenuInfo.back.focuspic =
         b"menu/art/back_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     crate::src::q3_ui::ui_qmenu::Menu_AddItem(
@@ -898,10 +898,10 @@ unsafe extern "C" fn UI_TeamOrdersMenu_Init() {
         &mut teamOrdersMenuInfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
         &mut teamOrdersMenuInfo.back as *mut crate::ui_local_h::menubitmap_s as *mut libc::c_void,
     );
-    teamOrdersMenuInfo.list.generic.left = 220 as libc::c_int;
+    teamOrdersMenuInfo.list.generic.left = 220 as i32;
     teamOrdersMenuInfo.list.generic.top = teamOrdersMenuInfo.list.generic.y;
-    teamOrdersMenuInfo.list.generic.right = 420 as libc::c_int;
-    UI_TeamOrdersMenu_SetList(10 as libc::c_int);
+    teamOrdersMenuInfo.list.generic.right = 420 as i32;
+    UI_TeamOrdersMenu_SetList(10 as i32);
 }
 /*
 =================
@@ -1097,18 +1097,18 @@ pub unsafe extern "C" fn UI_TeamOrdersMenu_f() {
         messageString: [0; 1024],
     };
     let mut info: [libc::c_char; 1024] = [0; 1024];
-    let mut team: libc::c_int = 0;
+    let mut team: i32 = 0;
     // make sure it's a team game
     crate::src::ui::ui_syscalls::trap_GetConfigString(
-        0 as libc::c_int,
+        0 as i32,
         info.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
     teamOrdersMenuInfo.gametype = atoi(crate::src::qcommon::q_shared::Info_ValueForKey(
         info.as_mut_ptr(),
         b"g_gametype\x00" as *const u8 as *const libc::c_char,
     ));
-    if teamOrdersMenuInfo.gametype < crate::bg_public_h::GT_TEAM as libc::c_int {
+    if teamOrdersMenuInfo.gametype < crate::bg_public_h::GT_TEAM as i32 {
         return;
     }
     // not available to spectators
@@ -1116,15 +1116,15 @@ pub unsafe extern "C" fn UI_TeamOrdersMenu_f() {
         &mut cs as *mut _ as *mut crate::ui_public_h::uiClientState_t,
     );
     crate::src::ui::ui_syscalls::trap_GetConfigString(
-        32 as libc::c_int + 256 as libc::c_int + 256 as libc::c_int + cs.clientNum,
+        32 as i32 + 256 as i32 + 256 as i32 + cs.clientNum,
         info.as_mut_ptr(),
-        1024 as libc::c_int,
+        1024 as i32,
     );
     team = atoi(crate::src::qcommon::q_shared::Info_ValueForKey(
         info.as_mut_ptr(),
         b"t\x00" as *const u8 as *const libc::c_char,
     ));
-    if team == crate::bg_public_h::TEAM_SPECTATOR as libc::c_int {
+    if team == crate::bg_public_h::TEAM_SPECTATOR as i32 {
         return;
     }
     UI_TeamOrdersMenu();

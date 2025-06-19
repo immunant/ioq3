@@ -108,30 +108,30 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_inner_product_FLP(
-    mut data1: *const libc::c_float,
-    mut data2: *const libc::c_float,
-    mut dataSize: libc::c_int,
-) -> libc::c_double {
-    let mut i: libc::c_int = 0;
-    let mut result: libc::c_double = 0.;
+    mut data1: *const f32,
+    mut data2: *const f32,
+    mut dataSize: i32,
+) -> f64 {
+    let mut i: i32 = 0;
+    let mut result: f64 = 0.;
     /* 4x unrolled loop */
     result = 0.0f64;
-    i = 0 as libc::c_int;
-    while i < dataSize - 3 as libc::c_int {
-        result += *data1.offset((i + 0 as libc::c_int) as isize) as libc::c_double
-            * *data2.offset((i + 0 as libc::c_int) as isize) as libc::c_double
-            + *data1.offset((i + 1 as libc::c_int) as isize) as libc::c_double
-                * *data2.offset((i + 1 as libc::c_int) as isize) as libc::c_double
-            + *data1.offset((i + 2 as libc::c_int) as isize) as libc::c_double
-                * *data2.offset((i + 2 as libc::c_int) as isize) as libc::c_double
-            + *data1.offset((i + 3 as libc::c_int) as isize) as libc::c_double
-                * *data2.offset((i + 3 as libc::c_int) as isize) as libc::c_double;
-        i += 4 as libc::c_int
+    i = 0 as i32;
+    while i < dataSize - 3 as i32 {
+        result += *data1.offset((i + 0 as i32) as isize) as f64
+            * *data2.offset((i + 0 as i32) as isize) as f64
+            + *data1.offset((i + 1 as i32) as isize) as f64
+                * *data2.offset((i + 1 as i32) as isize) as f64
+            + *data1.offset((i + 2 as i32) as isize) as f64
+                * *data2.offset((i + 2 as i32) as isize) as f64
+            + *data1.offset((i + 3 as i32) as isize) as f64
+                * *data2.offset((i + 3 as i32) as isize) as f64;
+        i += 4 as i32
     }
     /* add any remaining products */
     while i < dataSize {
-        result += *data1.offset(i as isize) as libc::c_double
-            * *data2.offset(i as isize) as libc::c_double;
+        result += *data1.offset(i as isize) as f64
+            * *data2.offset(i as isize) as f64;
         i += 1
     }
     return result;

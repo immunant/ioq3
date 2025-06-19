@@ -1,8 +1,8 @@
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct C2RustUnnamed_152 {
-    pub width: libc::c_uint,
-    pub height: libc::c_uint,
-    pub bytes_per_pixel: libc::c_uint,
-    pub pixel_data: [libc::c_uchar; 4097],
+    pub width: u32,
+    pub height: u32,
+    pub bytes_per_pixel: u32,
+    pub pixel_data: [u8; 4097],
 }

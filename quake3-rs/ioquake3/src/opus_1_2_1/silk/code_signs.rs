@@ -49,56 +49,56 @@ POSSIBILITY OF SUCH DAMAGE.
 
 pub unsafe extern "C" fn silk_encode_signs(
     mut psRangeEnc: *mut crate::src::opus_1_2_1::celt::entcode::ec_enc,
-    mut pulses: *const libc::c_schar,
-    mut length: libc::c_int,
-    signalType: libc::c_int,
-    quantOffsetType: libc::c_int,
-    mut sum_pulses: *const libc::c_int,
+    mut pulses: *const i8,
+    mut length: i32,
+    signalType: i32,
+    quantOffsetType: i32,
+    mut sum_pulses: *const i32,
 )
 /* I    Sum of absolute pulses per block            */
 {
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
-    let mut p: libc::c_int = 0;
-    let mut icdf: [libc::c_uchar; 2] = [0; 2];
-    let mut q_ptr: *const libc::c_schar = 0 as *const libc::c_schar;
-    let mut icdf_ptr: *const libc::c_uchar = 0 as *const libc::c_uchar;
-    icdf[1 as libc::c_int as usize] = 0 as libc::c_int as libc::c_uchar;
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
+    let mut p: i32 = 0;
+    let mut icdf: [u8; 2] = [0; 2];
+    let mut q_ptr: *const i8 = 0 as *const i8;
+    let mut icdf_ptr: *const u8 = 0 as *const u8;
+    icdf[1 as i32 as usize] = 0 as i32 as u8;
     q_ptr = pulses;
-    i = 7 as libc::c_int as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
+    i = 7 as i32 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
         * (quantOffsetType
-            + ((signalType as crate::opus_types_h::opus_uint32) << 1 as libc::c_int)
+            + ((signalType as crate::opus_types_h::opus_uint32) << 1 as i32)
                 as crate::opus_types_h::opus_int32) as crate::opus_types_h::opus_int16
             as crate::opus_types_h::opus_int32;
     icdf_ptr = &*crate::src::opus_1_2_1::silk::tables_pulses_per_block::silk_sign_iCDF
         .as_ptr()
-        .offset(i as isize) as *const libc::c_uchar;
-    length = length + 16 as libc::c_int / 2 as libc::c_int >> 4 as libc::c_int;
-    i = 0 as libc::c_int;
+        .offset(i as isize) as *const u8;
+    length = length + 16 as i32 / 2 as i32 >> 4 as i32;
+    i = 0 as i32;
     while i < length {
         p = *sum_pulses.offset(i as isize);
-        if p > 0 as libc::c_int {
-            icdf[0 as libc::c_int as usize] =
-                *icdf_ptr.offset(if (p & 0x1f as libc::c_int) < 6 as libc::c_int {
-                    (p) & 0x1f as libc::c_int
+        if p > 0 as i32 {
+            icdf[0 as i32 as usize] =
+                *icdf_ptr.offset(if (p & 0x1f as i32) < 6 as i32 {
+                    (p) & 0x1f as i32
                 } else {
-                    6 as libc::c_int
+                    6 as i32
                 } as isize);
-            j = 0 as libc::c_int;
-            while j < 16 as libc::c_int {
-                if *q_ptr.offset(j as isize) as libc::c_int != 0 as libc::c_int {
+            j = 0 as i32;
+            while j < 16 as i32 {
+                if *q_ptr.offset(j as isize) as i32 != 0 as i32 {
                     crate::src::opus_1_2_1::celt::entenc::ec_enc_icdf(
                         psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
-                        (*q_ptr.offset(j as isize) as libc::c_int >> 15 as libc::c_int)
-                            + 1 as libc::c_int,
+                        (*q_ptr.offset(j as isize) as i32 >> 15 as i32)
+                            + 1 as i32,
                         icdf.as_mut_ptr(),
-                        8 as libc::c_int as libc::c_uint,
+                        8 as i32 as u32,
                     );
                 }
                 j += 1
             }
         }
-        q_ptr = q_ptr.offset(16 as libc::c_int as isize);
+        q_ptr = q_ptr.offset(16 as i32 as isize);
         i += 1
     }
 }
@@ -183,61 +183,61 @@ POSSIBILITY OF SUCH DAMAGE.
 pub unsafe extern "C" fn silk_decode_signs(
     mut psRangeDec: *mut crate::src::opus_1_2_1::celt::entcode::ec_dec,
     mut pulses: *mut crate::opus_types_h::opus_int16,
-    mut length: libc::c_int,
-    signalType: libc::c_int,
-    quantOffsetType: libc::c_int,
-    mut sum_pulses: *const libc::c_int,
+    mut length: i32,
+    signalType: i32,
+    quantOffsetType: i32,
+    mut sum_pulses: *const i32,
 )
 /* I    Sum of absolute pulses per block            */
 {
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
-    let mut p: libc::c_int = 0;
-    let mut icdf: [libc::c_uchar; 2] = [0; 2];
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
+    let mut p: i32 = 0;
+    let mut icdf: [u8; 2] = [0; 2];
     let mut q_ptr: *mut crate::opus_types_h::opus_int16 = 0 as *mut crate::opus_types_h::opus_int16;
-    let mut icdf_ptr: *const libc::c_uchar = 0 as *const libc::c_uchar;
-    icdf[1 as libc::c_int as usize] = 0 as libc::c_int as libc::c_uchar;
+    let mut icdf_ptr: *const u8 = 0 as *const u8;
+    icdf[1 as i32 as usize] = 0 as i32 as u8;
     q_ptr = pulses;
-    i = 7 as libc::c_int as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
+    i = 7 as i32 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
         * (quantOffsetType
-            + ((signalType as crate::opus_types_h::opus_uint32) << 1 as libc::c_int)
+            + ((signalType as crate::opus_types_h::opus_uint32) << 1 as i32)
                 as crate::opus_types_h::opus_int32) as crate::opus_types_h::opus_int16
             as crate::opus_types_h::opus_int32;
     icdf_ptr = &*crate::src::opus_1_2_1::silk::tables_pulses_per_block::silk_sign_iCDF
         .as_ptr()
-        .offset(i as isize) as *const libc::c_uchar;
-    length = length + 16 as libc::c_int / 2 as libc::c_int >> 4 as libc::c_int;
-    i = 0 as libc::c_int;
+        .offset(i as isize) as *const u8;
+    length = length + 16 as i32 / 2 as i32 >> 4 as i32;
+    i = 0 as i32;
     while i < length {
         p = *sum_pulses.offset(i as isize);
-        if p > 0 as libc::c_int {
-            icdf[0 as libc::c_int as usize] =
-                *icdf_ptr.offset(if (p & 0x1f as libc::c_int) < 6 as libc::c_int {
-                    (p) & 0x1f as libc::c_int
+        if p > 0 as i32 {
+            icdf[0 as i32 as usize] =
+                *icdf_ptr.offset(if (p & 0x1f as i32) < 6 as i32 {
+                    (p) & 0x1f as i32
                 } else {
-                    6 as libc::c_int
+                    6 as i32
                 } as isize);
-            j = 0 as libc::c_int;
-            while j < 16 as libc::c_int {
-                if *q_ptr.offset(j as isize) as libc::c_int > 0 as libc::c_int {
+            j = 0 as i32;
+            while j < 16 as i32 {
+                if *q_ptr.offset(j as isize) as i32 > 0 as i32 {
                     /* attach sign */
                     /* implementation with shift, subtraction, multiplication */
                     let ref mut fresh0 = *q_ptr.offset(j as isize);
-                    *fresh0 = (*fresh0 as libc::c_int
+                    *fresh0 = (*fresh0 as i32
                         * (((crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
                             psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
                             icdf.as_mut_ptr(),
-                            8 as libc::c_int as libc::c_uint,
+                            8 as i32 as u32,
                         ) as crate::opus_types_h::opus_uint32)
-                            << 1 as libc::c_int)
+                            << 1 as i32)
                             as crate::opus_types_h::opus_int32
-                            - 1 as libc::c_int))
+                            - 1 as i32))
                         as crate::opus_types_h::opus_int16
                 }
                 j += 1
             }
         }
-        q_ptr = q_ptr.offset(16 as libc::c_int as isize);
+        q_ptr = q_ptr.offset(16 as i32 as isize);
         i += 1
     }
 }

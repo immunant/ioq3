@@ -3,12 +3,12 @@ use ::libc;
 pub mod stdlib_h {
     #[inline]
 
-    pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> libc::c_int {
+    pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return ::libc::strtol(
             __nptr,
             0 as *mut libc::c_void as *mut *mut libc::c_char,
-            10 as libc::c_int,
-        ) as libc::c_int;
+            10 as i32,
+        ) as i32;
     }
 }
 
@@ -351,23 +351,23 @@ pub struct postgameMenuInfo_t {
     pub item_again: crate::ui_local_h::menubitmap_s,
     pub item_next: crate::ui_local_h::menubitmap_s,
     pub item_menu: crate::ui_local_h::menubitmap_s,
-    pub phase: libc::c_int,
-    pub ignoreKeysTime: libc::c_int,
-    pub starttime: libc::c_int,
-    pub scoreboardtime: libc::c_int,
-    pub serverId: libc::c_int,
-    pub clientNums: [libc::c_int; 8],
-    pub ranks: [libc::c_int; 8],
-    pub scores: [libc::c_int; 8],
+    pub phase: i32,
+    pub ignoreKeysTime: i32,
+    pub starttime: i32,
+    pub scoreboardtime: i32,
+    pub serverId: i32,
+    pub clientNums: [i32; 8],
+    pub ranks: [i32; 8],
+    pub scores: [i32; 8],
     pub placeNames: [[libc::c_char; 64]; 3],
-    pub level: libc::c_int,
-    pub numClients: libc::c_int,
-    pub won: libc::c_int,
-    pub numAwards: libc::c_int,
-    pub awardsEarned: [libc::c_int; 6],
-    pub awardsLevels: [libc::c_int; 6],
+    pub level: i32,
+    pub numClients: i32,
+    pub won: i32,
+    pub numAwards: i32,
+    pub awardsEarned: [i32; 6],
+    pub awardsLevels: [i32; 6],
     pub playedSound: [crate::src::qcommon::q_shared::qboolean; 6],
-    pub lastTier: libc::c_int,
+    pub lastTier: i32,
     pub winnerSound: crate::src::qcommon::q_shared::sfxHandle_t,
 }
 
@@ -408,7 +408,7 @@ static mut postgameMenuInfo: postgameMenuInfo_t = postgameMenuInfo_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     item_next: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -435,7 +435,7 @@ static mut postgameMenuInfo: postgameMenuInfo_t = postgameMenuInfo_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     item_menu: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -462,7 +462,7 @@ static mut postgameMenuInfo: postgameMenuInfo_t = postgameMenuInfo_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     phase: 0,
     ignoreKeysTime: 0,
@@ -523,14 +523,14 @@ UI_SPPostgameMenu_AgainEvent
 
 unsafe extern "C" fn UI_SPPostgameMenu_AgainEvent(
     mut _ptr: *mut libc::c_void,
-    mut event: libc::c_int,
+    mut event: i32,
 ) {
-    if event != 3 as libc::c_int {
+    if event != 3 as i32 {
         return;
     }
     crate::src::q3_ui::ui_atoms::UI_PopMenu();
     crate::src::ui::ui_syscalls::trap_Cmd_ExecuteText(
-        crate::src::qcommon::q_shared::EXEC_APPEND as libc::c_int,
+        crate::src::qcommon::q_shared::EXEC_APPEND as i32,
         b"map_restart 0\n\x00" as *const u8 as *const libc::c_char,
     );
 }
@@ -542,29 +542,29 @@ UI_SPPostgameMenu_NextEvent
 
 unsafe extern "C" fn UI_SPPostgameMenu_NextEvent(
     mut _ptr: *mut libc::c_void,
-    mut event: libc::c_int,
+    mut event: i32,
 ) {
-    let mut currentSet: libc::c_int = 0;
-    let mut levelSet: libc::c_int = 0;
-    let mut level: libc::c_int = 0;
-    let mut currentLevel: libc::c_int = 0;
+    let mut currentSet: i32 = 0;
+    let mut levelSet: i32 = 0;
+    let mut level: i32 = 0;
+    let mut currentLevel: i32 = 0;
     let mut arenaInfo: *const libc::c_char = 0 as *const libc::c_char;
-    if event != 3 as libc::c_int {
+    if event != 3 as i32 {
         return;
     }
     crate::src::q3_ui::ui_atoms::UI_PopMenu();
     // handle specially if we just won the training map
-    if postgameMenuInfo.won == 0 as libc::c_int {
-        level = 0 as libc::c_int
+    if postgameMenuInfo.won == 0 as i32 {
+        level = 0 as i32
     } else {
-        level = postgameMenuInfo.level + 1 as libc::c_int
+        level = postgameMenuInfo.level + 1 as i32
     }
-    levelSet = level / 4 as libc::c_int;
+    levelSet = level / 4 as i32;
     currentLevel = crate::src::q3_ui::ui_gameinfo::UI_GetCurrentGame();
-    if currentLevel == -(1 as libc::c_int) {
+    if currentLevel == -(1 as i32) {
         currentLevel = postgameMenuInfo.level
     }
-    currentSet = currentLevel / 4 as libc::c_int;
+    currentSet = currentLevel / 4 as i32;
     if levelSet > currentSet || levelSet == crate::src::q3_ui::ui_gameinfo::UI_GetNumSPTiers() {
         level = currentLevel
     }
@@ -582,14 +582,14 @@ UI_SPPostgameMenu_MenuEvent
 
 unsafe extern "C" fn UI_SPPostgameMenu_MenuEvent(
     mut _ptr: *mut libc::c_void,
-    mut event: libc::c_int,
+    mut event: i32,
 ) {
-    if event != 3 as libc::c_int {
+    if event != 3 as i32 {
         return;
     }
     crate::src::q3_ui::ui_atoms::UI_PopMenu();
     crate::src::ui::ui_syscalls::trap_Cmd_ExecuteText(
-        crate::src::qcommon::q_shared::EXEC_APPEND as libc::c_int,
+        crate::src::qcommon::q_shared::EXEC_APPEND as i32,
         b"disconnect; levelselect\n\x00" as *const u8 as *const libc::c_char,
     );
 }
@@ -600,33 +600,33 @@ UI_SPPostgameMenu_MenuKey
 */
 
 unsafe extern "C" fn UI_SPPostgameMenu_MenuKey(
-    mut key: libc::c_int,
+    mut key: i32,
 ) -> crate::src::qcommon::q_shared::sfxHandle_t {
     if crate::src::q3_ui::ui_atoms::uis.realtime < postgameMenuInfo.ignoreKeysTime {
-        return 0 as libc::c_int;
+        return 0 as i32;
     }
-    if postgameMenuInfo.phase == 1 as libc::c_int {
+    if postgameMenuInfo.phase == 1 as i32 {
         crate::src::ui::ui_syscalls::trap_Cmd_ExecuteText(
-            crate::src::qcommon::q_shared::EXEC_APPEND as libc::c_int,
+            crate::src::qcommon::q_shared::EXEC_APPEND as i32,
             b"abort_podium\n\x00" as *const u8 as *const libc::c_char,
         );
-        postgameMenuInfo.phase = 2 as libc::c_int;
+        postgameMenuInfo.phase = 2 as i32;
         postgameMenuInfo.starttime = crate::src::q3_ui::ui_atoms::uis.realtime;
         postgameMenuInfo.ignoreKeysTime =
-            crate::src::q3_ui::ui_atoms::uis.realtime + 250 as libc::c_int;
-        return 0 as libc::c_int;
+            crate::src::q3_ui::ui_atoms::uis.realtime + 250 as i32;
+        return 0 as i32;
     }
-    if postgameMenuInfo.phase == 2 as libc::c_int {
-        postgameMenuInfo.phase = 3 as libc::c_int;
+    if postgameMenuInfo.phase == 2 as i32 {
+        postgameMenuInfo.phase = 3 as i32;
         postgameMenuInfo.starttime = crate::src::q3_ui::ui_atoms::uis.realtime;
         postgameMenuInfo.ignoreKeysTime =
-            crate::src::q3_ui::ui_atoms::uis.realtime + 250 as libc::c_int;
-        return 0 as libc::c_int;
+            crate::src::q3_ui::ui_atoms::uis.realtime + 250 as i32;
+        return 0 as i32;
     }
-    if key == crate::keycodes_h::K_ESCAPE as libc::c_int
-        || key == crate::keycodes_h::K_MOUSE2 as libc::c_int
+    if key == crate::keycodes_h::K_ESCAPE as i32
+        || key == crate::keycodes_h::K_MOUSE2 as i32
     {
-        return 0 as libc::c_int;
+        return 0 as i32;
     }
     return crate::src::q3_ui::ui_qmenu::Menu_DefaultKey(
         &mut postgameMenuInfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
@@ -634,50 +634,50 @@ unsafe extern "C" fn UI_SPPostgameMenu_MenuKey(
     );
 }
 
-static mut medalLocations: [libc::c_int; 6] = [
-    144 as libc::c_int,
-    448 as libc::c_int,
-    88 as libc::c_int,
-    504 as libc::c_int,
-    32 as libc::c_int,
-    560 as libc::c_int,
+static mut medalLocations: [i32; 6] = [
+    144 as i32,
+    448 as i32,
+    88 as i32,
+    504 as i32,
+    32 as i32,
+    560 as i32,
 ];
 
-unsafe extern "C" fn UI_SPPostgameMenu_DrawAwardsMedals(mut max: libc::c_int) {
-    let mut n: libc::c_int = 0;
-    let mut medal: libc::c_int = 0;
-    let mut amount: libc::c_int = 0;
-    let mut x: libc::c_int = 0;
-    let mut y: libc::c_int = 0;
+unsafe extern "C" fn UI_SPPostgameMenu_DrawAwardsMedals(mut max: i32) {
+    let mut n: i32 = 0;
+    let mut medal: i32 = 0;
+    let mut amount: i32 = 0;
+    let mut x: i32 = 0;
+    let mut y: i32 = 0;
     let mut buf: [libc::c_char; 16] = [0; 16];
     let mut current_block_9: u64;
-    n = 0 as libc::c_int;
+    n = 0 as i32;
     while n < max {
         x = medalLocations[n as usize];
-        y = 64 as libc::c_int;
+        y = 64 as i32;
         medal = postgameMenuInfo.awardsEarned[n as usize];
         amount = postgameMenuInfo.awardsLevels[n as usize];
         crate::src::q3_ui::ui_atoms::UI_DrawNamedPic(
-            x as libc::c_float,
-            y as libc::c_float,
-            48 as libc::c_int as libc::c_float,
-            48 as libc::c_int as libc::c_float,
+            x as f32,
+            y as f32,
+            48 as i32 as f32,
+            48 as i32 as f32,
             ui_medalPicNames[medal as usize],
         );
-        if medal == crate::ui_local_h::AWARD_ACCURACY as libc::c_int {
+        if medal == crate::ui_local_h::AWARD_ACCURACY as i32 {
             crate::src::qcommon::q_shared::Com_sprintf(
                 buf.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as libc::c_int,
+                ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as i32,
                 b"%i%%\x00" as *const u8 as *const libc::c_char,
                 amount,
             );
             current_block_9 = 8236137900636309791;
-        } else if amount == 1 as libc::c_int {
+        } else if amount == 1 as i32 {
             current_block_9 = 4644295000439058019;
         } else {
             crate::src::qcommon::q_shared::Com_sprintf(
                 buf.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as libc::c_int,
+                ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as i32,
                 b"%i\x00" as *const u8 as *const libc::c_char,
                 amount,
             );
@@ -686,10 +686,10 @@ unsafe extern "C" fn UI_SPPostgameMenu_DrawAwardsMedals(mut max: libc::c_int) {
         match current_block_9 {
             8236137900636309791 => {
                 crate::src::q3_ui::ui_atoms::UI_DrawString(
-                    x + 24 as libc::c_int,
-                    y + 52 as libc::c_int,
+                    x + 24 as i32,
+                    y + 52 as i32,
                     buf.as_mut_ptr(),
-                    0x1 as libc::c_int,
+                    0x1 as i32,
                     crate::src::q3_ui::ui_qmenu::color_yellow.as_mut_ptr(),
                 );
             }
@@ -699,25 +699,25 @@ unsafe extern "C" fn UI_SPPostgameMenu_DrawAwardsMedals(mut max: libc::c_int) {
     }
 }
 
-unsafe extern "C" fn UI_SPPostgameMenu_DrawAwardsPresentation(mut timer: libc::c_int) {
-    let mut awardNum: libc::c_int = 0;
-    let mut atimer: libc::c_int = 0;
+unsafe extern "C" fn UI_SPPostgameMenu_DrawAwardsPresentation(mut timer: i32) {
+    let mut awardNum: i32 = 0;
+    let mut atimer: i32 = 0;
     let mut color: crate::src::qcommon::q_shared::vec4_t = [0.; 4];
-    awardNum = timer / 2000 as libc::c_int;
-    atimer = timer % 2000 as libc::c_int;
-    color[2 as libc::c_int as usize] = 1.0f32;
-    color[1 as libc::c_int as usize] = color[2 as libc::c_int as usize];
-    color[0 as libc::c_int as usize] = color[1 as libc::c_int as usize];
-    color[3 as libc::c_int as usize] =
-        (2000 as libc::c_int - atimer) as libc::c_float / 2000 as libc::c_int as libc::c_float;
+    awardNum = timer / 2000 as i32;
+    atimer = timer % 2000 as i32;
+    color[2 as i32 as usize] = 1.0f32;
+    color[1 as i32 as usize] = color[2 as i32 as usize];
+    color[0 as i32 as usize] = color[1 as i32 as usize];
+    color[3 as i32 as usize] =
+        (2000 as i32 - atimer) as f32 / 2000 as i32 as f32;
     crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
-        320 as libc::c_int,
-        64 as libc::c_int,
+        320 as i32,
+        64 as i32,
         ui_medalNames[postgameMenuInfo.awardsEarned[awardNum as usize] as usize],
-        0x1 as libc::c_int,
+        0x1 as i32,
         color.as_mut_ptr(),
     );
-    UI_SPPostgameMenu_DrawAwardsMedals(awardNum + 1 as libc::c_int);
+    UI_SPPostgameMenu_DrawAwardsMedals(awardNum + 1 as i32);
     if postgameMenuInfo.playedSound[awardNum as usize] as u64 == 0 {
         postgameMenuInfo.playedSound[awardNum as usize] = crate::src::qcommon::q_shared::qtrue;
         crate::src::ui::ui_syscalls::trap_S_StartLocalSound(
@@ -725,7 +725,7 @@ unsafe extern "C" fn UI_SPPostgameMenu_DrawAwardsPresentation(mut timer: libc::c
                 ui_medalSounds[postgameMenuInfo.awardsEarned[awardNum as usize] as usize],
                 crate::src::qcommon::q_shared::qfalse,
             ),
-            crate::src::qcommon::q_shared::CHAN_ANNOUNCER as libc::c_int,
+            crate::src::qcommon::q_shared::CHAN_ANNOUNCER as i32,
         );
     };
 }
@@ -735,34 +735,34 @@ UI_SPPostgameMenu_MenuDrawScoreLine
 =================
 */
 
-unsafe extern "C" fn UI_SPPostgameMenu_MenuDrawScoreLine(mut n: libc::c_int, mut y: libc::c_int) {
-    let mut rank: libc::c_int = 0;
+unsafe extern "C" fn UI_SPPostgameMenu_MenuDrawScoreLine(mut n: i32, mut y: i32) {
+    let mut rank: i32 = 0;
     let mut name: [libc::c_char; 64] = [0; 64];
     let mut info: [libc::c_char; 1024] = [0; 1024];
-    if n > postgameMenuInfo.numClients + 1 as libc::c_int {
-        n -= postgameMenuInfo.numClients + 2 as libc::c_int
+    if n > postgameMenuInfo.numClients + 1 as i32 {
+        n -= postgameMenuInfo.numClients + 2 as i32
     }
     if n >= postgameMenuInfo.numClients {
         return;
     }
     rank = postgameMenuInfo.ranks[n as usize];
-    if rank & 0x4000 as libc::c_int != 0 {
+    if rank & 0x4000 as i32 != 0 {
         crate::src::q3_ui::ui_atoms::UI_DrawString(
-            640 as libc::c_int - 31 as libc::c_int * 8 as libc::c_int,
+            640 as i32 - 31 as i32 * 8 as i32,
             y,
             b"(tie)\x00" as *const u8 as *const libc::c_char,
-            0 as libc::c_int | 0x10 as libc::c_int,
+            0 as i32 | 0x10 as i32,
             crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
         );
-        rank &= !(0x4000 as libc::c_int)
+        rank &= !(0x4000 as i32)
     }
     crate::src::ui::ui_syscalls::trap_GetConfigString(
-        32 as libc::c_int
-            + 256 as libc::c_int
-            + 256 as libc::c_int
+        32 as i32
+            + 256 as i32
+            + 256 as i32
             + postgameMenuInfo.clientNums[n as usize],
         info.as_mut_ptr(),
-        1024 as libc::c_int,
+        1024 as i32,
     );
     crate::src::qcommon::q_shared::Q_strncpyz(
         name.as_mut_ptr(),
@@ -770,19 +770,19 @@ unsafe extern "C" fn UI_SPPostgameMenu_MenuDrawScoreLine(mut n: libc::c_int, mut
             info.as_mut_ptr(),
             b"n\x00" as *const u8 as *const libc::c_char,
         ),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
     );
     crate::src::qcommon::q_shared::Q_CleanStr(name.as_mut_ptr());
     crate::src::q3_ui::ui_atoms::UI_DrawString(
-        640 as libc::c_int - 25 as libc::c_int * 8 as libc::c_int,
+        640 as i32 - 25 as i32 * 8 as i32,
         y,
         crate::src::qcommon::q_shared::va(
             b"#%i: %-16s %2i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            rank + 1 as libc::c_int,
+            rank + 1 as i32,
             name.as_mut_ptr(),
             postgameMenuInfo.scores[n as usize],
         ),
-        0 as libc::c_int | 0x10 as libc::c_int,
+        0 as i32 | 0x10 as i32,
         crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
     );
 }
@@ -793,14 +793,14 @@ UI_SPPostgameMenu_MenuDraw
 */
 
 unsafe extern "C" fn UI_SPPostgameMenu_MenuDraw() {
-    let mut timer: libc::c_int = 0;
-    let mut serverId: libc::c_int = 0;
-    let mut n: libc::c_int = 0;
+    let mut timer: i32 = 0;
+    let mut serverId: i32 = 0;
+    let mut n: i32 = 0;
     let mut info: [libc::c_char; 1024] = [0; 1024];
     crate::src::ui::ui_syscalls::trap_GetConfigString(
-        1 as libc::c_int,
+        1 as i32,
         info.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
     serverId = atoi(crate::src::qcommon::q_shared::Info_ValueForKey(
         info.as_mut_ptr(),
@@ -811,63 +811,63 @@ unsafe extern "C" fn UI_SPPostgameMenu_MenuDraw() {
         return;
     }
     // phase 1
-    if postgameMenuInfo.numClients > 2 as libc::c_int {
+    if postgameMenuInfo.numClients > 2 as i32 {
         crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
-            510 as libc::c_int,
-            480 as libc::c_int - 64 as libc::c_int - 27 as libc::c_int,
-            postgameMenuInfo.placeNames[2 as libc::c_int as usize].as_mut_ptr(),
-            0x1 as libc::c_int,
+            510 as i32,
+            480 as i32 - 64 as i32 - 27 as i32,
+            postgameMenuInfo.placeNames[2 as i32 as usize].as_mut_ptr(),
+            0x1 as i32,
             crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
         );
     }
     crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
-        130 as libc::c_int,
-        480 as libc::c_int - 64 as libc::c_int - 27 as libc::c_int,
-        postgameMenuInfo.placeNames[1 as libc::c_int as usize].as_mut_ptr(),
-        0x1 as libc::c_int,
+        130 as i32,
+        480 as i32 - 64 as i32 - 27 as i32,
+        postgameMenuInfo.placeNames[1 as i32 as usize].as_mut_ptr(),
+        0x1 as i32,
         crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
     );
     crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
-        320 as libc::c_int,
-        480 as libc::c_int - 64 as libc::c_int - 2 as libc::c_int * 27 as libc::c_int,
-        postgameMenuInfo.placeNames[0 as libc::c_int as usize].as_mut_ptr(),
-        0x1 as libc::c_int,
+        320 as i32,
+        480 as i32 - 64 as i32 - 2 as i32 * 27 as i32,
+        postgameMenuInfo.placeNames[0 as i32 as usize].as_mut_ptr(),
+        0x1 as i32,
         crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
     );
-    if postgameMenuInfo.phase == 1 as libc::c_int {
+    if postgameMenuInfo.phase == 1 as i32 {
         timer = crate::src::q3_ui::ui_atoms::uis.realtime - postgameMenuInfo.starttime;
-        if timer >= 1000 as libc::c_int && postgameMenuInfo.winnerSound != 0 {
+        if timer >= 1000 as i32 && postgameMenuInfo.winnerSound != 0 {
             crate::src::ui::ui_syscalls::trap_S_StartLocalSound(
                 postgameMenuInfo.winnerSound,
-                crate::src::qcommon::q_shared::CHAN_ANNOUNCER as libc::c_int,
+                crate::src::qcommon::q_shared::CHAN_ANNOUNCER as i32,
             );
-            postgameMenuInfo.winnerSound = 0 as libc::c_int
+            postgameMenuInfo.winnerSound = 0 as i32
         }
-        if timer < 5000 as libc::c_int {
+        if timer < 5000 as i32 {
             return;
         }
-        postgameMenuInfo.phase = 2 as libc::c_int;
+        postgameMenuInfo.phase = 2 as i32;
         postgameMenuInfo.starttime = crate::src::q3_ui::ui_atoms::uis.realtime
     }
     // phase 2
-    if postgameMenuInfo.phase == 2 as libc::c_int {
+    if postgameMenuInfo.phase == 2 as i32 {
         timer = crate::src::q3_ui::ui_atoms::uis.realtime - postgameMenuInfo.starttime;
-        if timer >= postgameMenuInfo.numAwards * 2000 as libc::c_int {
-            if timer < 5000 as libc::c_int {
+        if timer >= postgameMenuInfo.numAwards * 2000 as i32 {
+            if timer < 5000 as i32 {
                 return;
             }
-            postgameMenuInfo.phase = 3 as libc::c_int;
+            postgameMenuInfo.phase = 3 as i32;
             postgameMenuInfo.starttime = crate::src::q3_ui::ui_atoms::uis.realtime
         } else {
             UI_SPPostgameMenu_DrawAwardsPresentation(timer);
         }
     }
     // phase 3
-    if postgameMenuInfo.phase == 3 as libc::c_int {
+    if postgameMenuInfo.phase == 3 as i32 {
         if crate::src::q3_ui::ui_atoms::uis.demoversion as u64 != 0 {
-            if postgameMenuInfo.won == 1 as libc::c_int
-                && crate::src::q3_ui::ui_gameinfo::UI_ShowTierVideo(8 as libc::c_int)
-                    as libc::c_uint
+            if postgameMenuInfo.won == 1 as i32
+                && crate::src::q3_ui::ui_gameinfo::UI_ShowTierVideo(8 as i32)
+                    as u32
                     != 0
             {
                 crate::src::ui::ui_syscalls::trap_Cvar_Set(
@@ -875,15 +875,15 @@ unsafe extern "C" fn UI_SPPostgameMenu_MenuDraw() {
                     b"\x00" as *const u8 as *const libc::c_char,
                 );
                 crate::src::ui::ui_syscalls::trap_Cmd_ExecuteText(
-                    crate::src::qcommon::q_shared::EXEC_APPEND as libc::c_int,
+                    crate::src::qcommon::q_shared::EXEC_APPEND as i32,
                     b"disconnect; cinematic demoEnd.RoQ\n\x00" as *const u8 as *const libc::c_char,
                 );
                 return;
             }
-        } else if postgameMenuInfo.won > -(1 as libc::c_int)
+        } else if postgameMenuInfo.won > -(1 as i32)
             && crate::src::q3_ui::ui_gameinfo::UI_ShowTierVideo(
-                postgameMenuInfo.won + 1 as libc::c_int,
-            ) as libc::c_uint
+                postgameMenuInfo.won + 1 as i32,
+            ) as u32
                 != 0
         {
             if postgameMenuInfo.won == postgameMenuInfo.lastTier {
@@ -892,32 +892,32 @@ unsafe extern "C" fn UI_SPPostgameMenu_MenuDraw() {
                     b"\x00" as *const u8 as *const libc::c_char,
                 );
                 crate::src::ui::ui_syscalls::trap_Cmd_ExecuteText(
-                    crate::src::qcommon::q_shared::EXEC_APPEND as libc::c_int,
+                    crate::src::qcommon::q_shared::EXEC_APPEND as i32,
                     b"disconnect; cinematic end.RoQ\n\x00" as *const u8 as *const libc::c_char,
                 );
                 return;
             }
             crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
                 b"ui_spSelection\x00" as *const u8 as *const libc::c_char,
-                (postgameMenuInfo.won * 4 as libc::c_int) as libc::c_float,
+                (postgameMenuInfo.won * 4 as i32) as f32,
             );
             crate::src::ui::ui_syscalls::trap_Cvar_Set(
                 b"nextmap\x00" as *const u8 as *const libc::c_char,
                 b"levelselect\x00" as *const u8 as *const libc::c_char,
             );
             crate::src::ui::ui_syscalls::trap_Cmd_ExecuteText(
-                crate::src::qcommon::q_shared::EXEC_APPEND as libc::c_int,
+                crate::src::qcommon::q_shared::EXEC_APPEND as i32,
                 crate::src::qcommon::q_shared::va(
                     b"disconnect; cinematic tier%i.RoQ\n\x00" as *const u8 as *const libc::c_char
                         as *mut libc::c_char,
-                    postgameMenuInfo.won + 1 as libc::c_int,
+                    postgameMenuInfo.won + 1 as i32,
                 ),
             );
             return;
         }
-        postgameMenuInfo.item_again.generic.flags &= !(0x4000 as libc::c_int as libc::c_uint);
-        postgameMenuInfo.item_next.generic.flags &= !(0x4000 as libc::c_int as libc::c_uint);
-        postgameMenuInfo.item_menu.generic.flags &= !(0x4000 as libc::c_int as libc::c_uint);
+        postgameMenuInfo.item_again.generic.flags &= !(0x4000 as i32 as u32);
+        postgameMenuInfo.item_next.generic.flags &= !(0x4000 as i32 as u32);
+        postgameMenuInfo.item_menu.generic.flags &= !(0x4000 as i32 as u32);
         UI_SPPostgameMenu_DrawAwardsMedals(postgameMenuInfo.numAwards);
         crate::src::q3_ui::ui_qmenu::Menu_Draw(
             &mut postgameMenuInfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
@@ -931,16 +931,16 @@ unsafe extern "C" fn UI_SPPostgameMenu_MenuDraw() {
         return;
     }
     timer = crate::src::q3_ui::ui_atoms::uis.realtime - postgameMenuInfo.scoreboardtime;
-    if postgameMenuInfo.numClients <= 3 as libc::c_int {
-        n = 0 as libc::c_int
+    if postgameMenuInfo.numClients <= 3 as i32 {
+        n = 0 as i32
     } else {
-        n = timer / 1500 as libc::c_int % (postgameMenuInfo.numClients + 2 as libc::c_int)
+        n = timer / 1500 as i32 % (postgameMenuInfo.numClients + 2 as i32)
     }
-    UI_SPPostgameMenu_MenuDrawScoreLine(n, 0 as libc::c_int);
-    UI_SPPostgameMenu_MenuDrawScoreLine(n + 1 as libc::c_int, 0 as libc::c_int + 16 as libc::c_int);
+    UI_SPPostgameMenu_MenuDrawScoreLine(n, 0 as i32);
+    UI_SPPostgameMenu_MenuDrawScoreLine(n + 1 as i32, 0 as i32 + 16 as i32);
     UI_SPPostgameMenu_MenuDrawScoreLine(
-        n + 2 as libc::c_int,
-        0 as libc::c_int + 2 as libc::c_int * 16 as libc::c_int,
+        n + 2 as i32,
+        0 as i32 + 2 as i32 * 16 as i32,
     );
 }
 /*
@@ -951,7 +951,7 @@ UI_SPPostgameMenu_Cache
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_SPPostgameMenu_Cache() {
-    let mut n: libc::c_int = 0;
+    let mut n: i32 = 0;
     let mut buildscript: crate::src::qcommon::q_shared::qboolean =
         crate::src::qcommon::q_shared::qfalse;
     buildscript = crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
@@ -975,8 +975,8 @@ pub unsafe extern "C" fn UI_SPPostgameMenu_Cache() {
     crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
         b"menu/art/next_1\x00" as *const u8 as *const libc::c_char,
     );
-    n = 0 as libc::c_int;
-    while n < 6 as libc::c_int {
+    n = 0 as i32;
+    while n < 6 as i32 {
         crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(ui_medalPicNames[n as usize]);
         crate::src::ui::ui_syscalls::trap_S_RegisterSound(
             ui_medalSounds[n as usize],
@@ -1009,61 +1009,61 @@ unsafe extern "C" fn UI_SPPostgameMenu_Init() {
     postgameMenuInfo.menu.wrapAround = crate::src::qcommon::q_shared::qtrue;
     postgameMenuInfo.menu.key = Some(
         UI_SPPostgameMenu_MenuKey
-            as unsafe extern "C" fn(_: libc::c_int) -> crate::src::qcommon::q_shared::sfxHandle_t,
+            as unsafe extern "C" fn(_: i32) -> crate::src::qcommon::q_shared::sfxHandle_t,
     );
     postgameMenuInfo.menu.draw = Some(UI_SPPostgameMenu_MenuDraw as unsafe extern "C" fn() -> ());
     postgameMenuInfo.ignoreKeysTime =
-        crate::src::q3_ui::ui_atoms::uis.realtime + 1500 as libc::c_int;
+        crate::src::q3_ui::ui_atoms::uis.realtime + 1500 as i32;
     UI_SPPostgameMenu_Cache();
-    postgameMenuInfo.item_menu.generic.type_0 = 6 as libc::c_int;
+    postgameMenuInfo.item_menu.generic.type_0 = 6 as i32;
     postgameMenuInfo.item_menu.generic.name =
         b"menu/art/menu_0\x00" as *const u8 as *const libc::c_char;
-    postgameMenuInfo.item_menu.generic.flags = 0x4 as libc::c_int as libc::c_uint
-        | 0x100 as libc::c_int as libc::c_uint
-        | 0x4000 as libc::c_int as libc::c_uint;
-    postgameMenuInfo.item_menu.generic.x = 0 as libc::c_int;
-    postgameMenuInfo.item_menu.generic.y = 480 as libc::c_int - 64 as libc::c_int;
+    postgameMenuInfo.item_menu.generic.flags = 0x4 as i32 as u32
+        | 0x100 as i32 as u32
+        | 0x4000 as i32 as u32;
+    postgameMenuInfo.item_menu.generic.x = 0 as i32;
+    postgameMenuInfo.item_menu.generic.y = 480 as i32 - 64 as i32;
     postgameMenuInfo.item_menu.generic.callback = Some(
         UI_SPPostgameMenu_MenuEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    postgameMenuInfo.item_menu.generic.id = 12 as libc::c_int;
-    postgameMenuInfo.item_menu.width = 128 as libc::c_int;
-    postgameMenuInfo.item_menu.height = 64 as libc::c_int;
+    postgameMenuInfo.item_menu.generic.id = 12 as i32;
+    postgameMenuInfo.item_menu.width = 128 as i32;
+    postgameMenuInfo.item_menu.height = 64 as i32;
     postgameMenuInfo.item_menu.focuspic =
         b"menu/art/menu_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    postgameMenuInfo.item_again.generic.type_0 = 6 as libc::c_int;
+    postgameMenuInfo.item_again.generic.type_0 = 6 as i32;
     postgameMenuInfo.item_again.generic.name =
         b"menu/art/replay_0\x00" as *const u8 as *const libc::c_char;
-    postgameMenuInfo.item_again.generic.flags = 0x8 as libc::c_int as libc::c_uint
-        | 0x100 as libc::c_int as libc::c_uint
-        | 0x4000 as libc::c_int as libc::c_uint;
-    postgameMenuInfo.item_again.generic.x = 320 as libc::c_int;
-    postgameMenuInfo.item_again.generic.y = 480 as libc::c_int - 64 as libc::c_int;
+    postgameMenuInfo.item_again.generic.flags = 0x8 as i32 as u32
+        | 0x100 as i32 as u32
+        | 0x4000 as i32 as u32;
+    postgameMenuInfo.item_again.generic.x = 320 as i32;
+    postgameMenuInfo.item_again.generic.y = 480 as i32 - 64 as i32;
     postgameMenuInfo.item_again.generic.callback = Some(
         UI_SPPostgameMenu_AgainEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    postgameMenuInfo.item_again.generic.id = 10 as libc::c_int;
-    postgameMenuInfo.item_again.width = 128 as libc::c_int;
-    postgameMenuInfo.item_again.height = 64 as libc::c_int;
+    postgameMenuInfo.item_again.generic.id = 10 as i32;
+    postgameMenuInfo.item_again.width = 128 as i32;
+    postgameMenuInfo.item_again.height = 64 as i32;
     postgameMenuInfo.item_again.focuspic =
         b"menu/art/replay_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    postgameMenuInfo.item_next.generic.type_0 = 6 as libc::c_int;
+    postgameMenuInfo.item_next.generic.type_0 = 6 as i32;
     postgameMenuInfo.item_next.generic.name =
         b"menu/art/next_0\x00" as *const u8 as *const libc::c_char;
-    postgameMenuInfo.item_next.generic.flags = 0x10 as libc::c_int as libc::c_uint
-        | 0x100 as libc::c_int as libc::c_uint
-        | 0x4000 as libc::c_int as libc::c_uint;
-    postgameMenuInfo.item_next.generic.x = 640 as libc::c_int;
-    postgameMenuInfo.item_next.generic.y = 480 as libc::c_int - 64 as libc::c_int;
+    postgameMenuInfo.item_next.generic.flags = 0x10 as i32 as u32
+        | 0x100 as i32 as u32
+        | 0x4000 as i32 as u32;
+    postgameMenuInfo.item_next.generic.x = 640 as i32;
+    postgameMenuInfo.item_next.generic.y = 480 as i32 - 64 as i32;
     postgameMenuInfo.item_next.generic.callback = Some(
         UI_SPPostgameMenu_NextEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    postgameMenuInfo.item_next.generic.id = 11 as libc::c_int;
-    postgameMenuInfo.item_next.width = 128 as libc::c_int;
-    postgameMenuInfo.item_next.height = 64 as libc::c_int;
+    postgameMenuInfo.item_next.generic.id = 11 as i32;
+    postgameMenuInfo.item_next.width = 128 as i32;
+    postgameMenuInfo.item_next.height = 64 as i32;
     postgameMenuInfo.item_next.focuspic =
         b"menu/art/next_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     crate::src::q3_ui::ui_qmenu::Menu_AddItem(
@@ -1083,17 +1083,17 @@ unsafe extern "C" fn UI_SPPostgameMenu_Init() {
     );
 }
 
-unsafe extern "C" fn Prepname(mut index: libc::c_int) {
-    let mut len: libc::c_int = 0;
+unsafe extern "C" fn Prepname(mut index: i32) {
+    let mut len: i32 = 0;
     let mut name: [libc::c_char; 64] = [0; 64];
     let mut info: [libc::c_char; 1024] = [0; 1024];
     crate::src::ui::ui_syscalls::trap_GetConfigString(
-        32 as libc::c_int
-            + 256 as libc::c_int
-            + 256 as libc::c_int
+        32 as i32
+            + 256 as i32
+            + 256 as i32
             + postgameMenuInfo.clientNums[index as usize],
         info.as_mut_ptr(),
-        1024 as libc::c_int,
+        1024 as i32,
     );
     crate::src::qcommon::q_shared::Q_strncpyz(
         name.as_mut_ptr(),
@@ -1101,21 +1101,21 @@ unsafe extern "C" fn Prepname(mut index: libc::c_int) {
             info.as_mut_ptr(),
             b"n\x00" as *const u8 as *const libc::c_char,
         ),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
     );
     crate::src::qcommon::q_shared::Q_CleanStr(name.as_mut_ptr());
-    len = crate::stdlib::strlen(name.as_mut_ptr()) as libc::c_int;
+    len = crate::stdlib::strlen(name.as_mut_ptr()) as i32;
     while len != 0
         && crate::src::q3_ui::ui_atoms::UI_ProportionalStringWidth(name.as_mut_ptr())
-            > 256 as libc::c_int
+            > 256 as i32
     {
         len -= 1;
-        name[len as usize] = 0 as libc::c_int as libc::c_char
+        name[len as usize] = 0 as i32 as libc::c_char
     }
     crate::src::qcommon::q_shared::Q_strncpyz(
         postgameMenuInfo.placeNames[index as usize].as_mut_ptr(),
         name.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
     );
 }
 /*
@@ -1255,33 +1255,33 @@ UI_SPPostgameMenu_f
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_SPPostgameMenu_f() {
-    let mut playerGameRank: libc::c_int = 0; // in case they ended game as a spectator
-    let mut playerClientNum: libc::c_int = 0;
-    let mut n: libc::c_int = 0;
-    let mut oldFrags: libc::c_int = 0;
-    let mut newFrags: libc::c_int = 0;
+    let mut playerGameRank: i32 = 0; // in case they ended game as a spectator
+    let mut playerClientNum: i32 = 0;
+    let mut n: i32 = 0;
+    let mut oldFrags: i32 = 0;
+    let mut newFrags: i32 = 0;
     let mut arena: *const libc::c_char = 0 as *const libc::c_char;
-    let mut awardValues: [libc::c_int; 6] = [0; 6];
+    let mut awardValues: [i32; 6] = [0; 6];
     let mut map: [libc::c_char; 64] = [0; 64];
     let mut info: [libc::c_char; 1024] = [0; 1024];
     crate::stdlib::memset(
         &mut postgameMenuInfo as *mut postgameMenuInfo_t as *mut libc::c_void,
-        0 as libc::c_int,
+        0 as i32,
         ::std::mem::size_of::<postgameMenuInfo_t>() as libc::c_ulong,
     );
     crate::src::ui::ui_syscalls::trap_GetConfigString(
-        1 as libc::c_int,
+        1 as i32,
         info.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
     postgameMenuInfo.serverId = atoi(crate::src::qcommon::q_shared::Info_ValueForKey(
         info.as_mut_ptr(),
         b"sv_serverid\x00" as *const u8 as *const libc::c_char,
     ));
     crate::src::ui::ui_syscalls::trap_GetConfigString(
-        0 as libc::c_int,
+        0 as i32,
         info.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
     crate::src::qcommon::q_shared::Q_strncpyz(
         map.as_mut_ptr(),
@@ -1289,7 +1289,7 @@ pub unsafe extern "C" fn UI_SPPostgameMenu_f() {
             info.as_mut_ptr(),
             b"mapname\x00" as *const u8 as *const libc::c_char,
         ),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
     );
     arena = crate::src::q3_ui::ui_gameinfo::UI_GetArenaInfoByMap(map.as_mut_ptr());
     if arena.is_null() {
@@ -1298,136 +1298,136 @@ pub unsafe extern "C" fn UI_SPPostgameMenu_f() {
     crate::src::qcommon::q_shared::Q_strncpyz(
         arenainfo.as_mut_ptr(),
         arena,
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
     postgameMenuInfo.level = atoi(crate::src::qcommon::q_shared::Info_ValueForKey(
         arenainfo.as_mut_ptr(),
         b"num\x00" as *const u8 as *const libc::c_char,
     ));
-    postgameMenuInfo.numClients = atoi(crate::src::q3_ui::ui_atoms::UI_Argv(1 as libc::c_int));
-    playerClientNum = atoi(crate::src::q3_ui::ui_atoms::UI_Argv(2 as libc::c_int));
-    playerGameRank = 8 as libc::c_int;
-    if postgameMenuInfo.numClients > 8 as libc::c_int {
-        postgameMenuInfo.numClients = 8 as libc::c_int
+    postgameMenuInfo.numClients = atoi(crate::src::q3_ui::ui_atoms::UI_Argv(1 as i32));
+    playerClientNum = atoi(crate::src::q3_ui::ui_atoms::UI_Argv(2 as i32));
+    playerGameRank = 8 as i32;
+    if postgameMenuInfo.numClients > 8 as i32 {
+        postgameMenuInfo.numClients = 8 as i32
     }
-    n = 0 as libc::c_int;
+    n = 0 as i32;
     while n < postgameMenuInfo.numClients {
         postgameMenuInfo.clientNums[n as usize] = atoi(crate::src::q3_ui::ui_atoms::UI_Argv(
-            8 as libc::c_int + n * 3 as libc::c_int + 1 as libc::c_int,
+            8 as i32 + n * 3 as i32 + 1 as i32,
         ));
         postgameMenuInfo.ranks[n as usize] = atoi(crate::src::q3_ui::ui_atoms::UI_Argv(
-            8 as libc::c_int + n * 3 as libc::c_int + 2 as libc::c_int,
+            8 as i32 + n * 3 as i32 + 2 as i32,
         ));
         postgameMenuInfo.scores[n as usize] = atoi(crate::src::q3_ui::ui_atoms::UI_Argv(
-            8 as libc::c_int + n * 3 as libc::c_int + 3 as libc::c_int,
+            8 as i32 + n * 3 as i32 + 3 as i32,
         ));
         if postgameMenuInfo.clientNums[n as usize] == playerClientNum {
             playerGameRank =
-                (postgameMenuInfo.ranks[n as usize] & !(0x4000 as libc::c_int)) + 1 as libc::c_int
+                (postgameMenuInfo.ranks[n as usize] & !(0x4000 as i32)) + 1 as i32
         }
         n += 1
     }
     crate::src::q3_ui::ui_gameinfo::UI_SetBestScore(postgameMenuInfo.level, playerGameRank);
     // process award stats and prepare presentation data
-    awardValues[crate::ui_local_h::AWARD_ACCURACY as libc::c_int as usize] =
-        atoi(crate::src::q3_ui::ui_atoms::UI_Argv(3 as libc::c_int));
-    awardValues[crate::ui_local_h::AWARD_IMPRESSIVE as libc::c_int as usize] =
-        atoi(crate::src::q3_ui::ui_atoms::UI_Argv(4 as libc::c_int));
-    awardValues[crate::ui_local_h::AWARD_EXCELLENT as libc::c_int as usize] =
-        atoi(crate::src::q3_ui::ui_atoms::UI_Argv(5 as libc::c_int));
-    awardValues[crate::ui_local_h::AWARD_GAUNTLET as libc::c_int as usize] =
-        atoi(crate::src::q3_ui::ui_atoms::UI_Argv(6 as libc::c_int));
-    awardValues[crate::ui_local_h::AWARD_FRAGS as libc::c_int as usize] =
-        atoi(crate::src::q3_ui::ui_atoms::UI_Argv(7 as libc::c_int));
-    awardValues[crate::ui_local_h::AWARD_PERFECT as libc::c_int as usize] =
-        atoi(crate::src::q3_ui::ui_atoms::UI_Argv(8 as libc::c_int));
-    postgameMenuInfo.numAwards = 0 as libc::c_int;
-    if awardValues[crate::ui_local_h::AWARD_ACCURACY as libc::c_int as usize] >= 50 as libc::c_int {
+    awardValues[crate::ui_local_h::AWARD_ACCURACY as i32 as usize] =
+        atoi(crate::src::q3_ui::ui_atoms::UI_Argv(3 as i32));
+    awardValues[crate::ui_local_h::AWARD_IMPRESSIVE as i32 as usize] =
+        atoi(crate::src::q3_ui::ui_atoms::UI_Argv(4 as i32));
+    awardValues[crate::ui_local_h::AWARD_EXCELLENT as i32 as usize] =
+        atoi(crate::src::q3_ui::ui_atoms::UI_Argv(5 as i32));
+    awardValues[crate::ui_local_h::AWARD_GAUNTLET as i32 as usize] =
+        atoi(crate::src::q3_ui::ui_atoms::UI_Argv(6 as i32));
+    awardValues[crate::ui_local_h::AWARD_FRAGS as i32 as usize] =
+        atoi(crate::src::q3_ui::ui_atoms::UI_Argv(7 as i32));
+    awardValues[crate::ui_local_h::AWARD_PERFECT as i32 as usize] =
+        atoi(crate::src::q3_ui::ui_atoms::UI_Argv(8 as i32));
+    postgameMenuInfo.numAwards = 0 as i32;
+    if awardValues[crate::ui_local_h::AWARD_ACCURACY as i32 as usize] >= 50 as i32 {
         crate::src::q3_ui::ui_gameinfo::UI_LogAwardData(
-            crate::ui_local_h::AWARD_ACCURACY as libc::c_int,
-            1 as libc::c_int,
+            crate::ui_local_h::AWARD_ACCURACY as i32,
+            1 as i32,
         );
         postgameMenuInfo.awardsEarned[postgameMenuInfo.numAwards as usize] =
-            crate::ui_local_h::AWARD_ACCURACY as libc::c_int;
+            crate::ui_local_h::AWARD_ACCURACY as i32;
         postgameMenuInfo.awardsLevels[postgameMenuInfo.numAwards as usize] =
-            awardValues[crate::ui_local_h::AWARD_ACCURACY as libc::c_int as usize];
+            awardValues[crate::ui_local_h::AWARD_ACCURACY as i32 as usize];
         postgameMenuInfo.numAwards += 1
     }
-    if awardValues[crate::ui_local_h::AWARD_IMPRESSIVE as libc::c_int as usize] != 0 {
+    if awardValues[crate::ui_local_h::AWARD_IMPRESSIVE as i32 as usize] != 0 {
         crate::src::q3_ui::ui_gameinfo::UI_LogAwardData(
-            crate::ui_local_h::AWARD_IMPRESSIVE as libc::c_int,
-            awardValues[crate::ui_local_h::AWARD_IMPRESSIVE as libc::c_int as usize],
+            crate::ui_local_h::AWARD_IMPRESSIVE as i32,
+            awardValues[crate::ui_local_h::AWARD_IMPRESSIVE as i32 as usize],
         );
         postgameMenuInfo.awardsEarned[postgameMenuInfo.numAwards as usize] =
-            crate::ui_local_h::AWARD_IMPRESSIVE as libc::c_int;
+            crate::ui_local_h::AWARD_IMPRESSIVE as i32;
         postgameMenuInfo.awardsLevels[postgameMenuInfo.numAwards as usize] =
-            awardValues[crate::ui_local_h::AWARD_IMPRESSIVE as libc::c_int as usize];
+            awardValues[crate::ui_local_h::AWARD_IMPRESSIVE as i32 as usize];
         postgameMenuInfo.numAwards += 1
     }
-    if awardValues[crate::ui_local_h::AWARD_EXCELLENT as libc::c_int as usize] != 0 {
+    if awardValues[crate::ui_local_h::AWARD_EXCELLENT as i32 as usize] != 0 {
         crate::src::q3_ui::ui_gameinfo::UI_LogAwardData(
-            crate::ui_local_h::AWARD_EXCELLENT as libc::c_int,
-            awardValues[crate::ui_local_h::AWARD_EXCELLENT as libc::c_int as usize],
+            crate::ui_local_h::AWARD_EXCELLENT as i32,
+            awardValues[crate::ui_local_h::AWARD_EXCELLENT as i32 as usize],
         );
         postgameMenuInfo.awardsEarned[postgameMenuInfo.numAwards as usize] =
-            crate::ui_local_h::AWARD_EXCELLENT as libc::c_int;
+            crate::ui_local_h::AWARD_EXCELLENT as i32;
         postgameMenuInfo.awardsLevels[postgameMenuInfo.numAwards as usize] =
-            awardValues[crate::ui_local_h::AWARD_EXCELLENT as libc::c_int as usize];
+            awardValues[crate::ui_local_h::AWARD_EXCELLENT as i32 as usize];
         postgameMenuInfo.numAwards += 1
     }
-    if awardValues[crate::ui_local_h::AWARD_GAUNTLET as libc::c_int as usize] != 0 {
+    if awardValues[crate::ui_local_h::AWARD_GAUNTLET as i32 as usize] != 0 {
         crate::src::q3_ui::ui_gameinfo::UI_LogAwardData(
-            crate::ui_local_h::AWARD_GAUNTLET as libc::c_int,
-            awardValues[crate::ui_local_h::AWARD_GAUNTLET as libc::c_int as usize],
+            crate::ui_local_h::AWARD_GAUNTLET as i32,
+            awardValues[crate::ui_local_h::AWARD_GAUNTLET as i32 as usize],
         );
         postgameMenuInfo.awardsEarned[postgameMenuInfo.numAwards as usize] =
-            crate::ui_local_h::AWARD_GAUNTLET as libc::c_int;
+            crate::ui_local_h::AWARD_GAUNTLET as i32;
         postgameMenuInfo.awardsLevels[postgameMenuInfo.numAwards as usize] =
-            awardValues[crate::ui_local_h::AWARD_GAUNTLET as libc::c_int as usize];
+            awardValues[crate::ui_local_h::AWARD_GAUNTLET as i32 as usize];
         postgameMenuInfo.numAwards += 1
     }
     oldFrags = crate::src::q3_ui::ui_gameinfo::UI_GetAwardLevel(
-        crate::ui_local_h::AWARD_FRAGS as libc::c_int,
-    ) / 100 as libc::c_int;
+        crate::ui_local_h::AWARD_FRAGS as i32,
+    ) / 100 as i32;
     crate::src::q3_ui::ui_gameinfo::UI_LogAwardData(
-        crate::ui_local_h::AWARD_FRAGS as libc::c_int,
-        awardValues[crate::ui_local_h::AWARD_FRAGS as libc::c_int as usize],
+        crate::ui_local_h::AWARD_FRAGS as i32,
+        awardValues[crate::ui_local_h::AWARD_FRAGS as i32 as usize],
     );
     newFrags = crate::src::q3_ui::ui_gameinfo::UI_GetAwardLevel(
-        crate::ui_local_h::AWARD_FRAGS as libc::c_int,
-    ) / 100 as libc::c_int;
+        crate::ui_local_h::AWARD_FRAGS as i32,
+    ) / 100 as i32;
     if newFrags > oldFrags {
         postgameMenuInfo.awardsEarned[postgameMenuInfo.numAwards as usize] =
-            crate::ui_local_h::AWARD_FRAGS as libc::c_int;
+            crate::ui_local_h::AWARD_FRAGS as i32;
         postgameMenuInfo.awardsLevels[postgameMenuInfo.numAwards as usize] =
-            newFrags * 100 as libc::c_int;
+            newFrags * 100 as i32;
         postgameMenuInfo.numAwards += 1
     }
-    if awardValues[crate::ui_local_h::AWARD_PERFECT as libc::c_int as usize] != 0 {
+    if awardValues[crate::ui_local_h::AWARD_PERFECT as i32 as usize] != 0 {
         crate::src::q3_ui::ui_gameinfo::UI_LogAwardData(
-            crate::ui_local_h::AWARD_PERFECT as libc::c_int,
-            1 as libc::c_int,
+            crate::ui_local_h::AWARD_PERFECT as i32,
+            1 as i32,
         );
         postgameMenuInfo.awardsEarned[postgameMenuInfo.numAwards as usize] =
-            crate::ui_local_h::AWARD_PERFECT as libc::c_int;
-        postgameMenuInfo.awardsLevels[postgameMenuInfo.numAwards as usize] = 1 as libc::c_int;
+            crate::ui_local_h::AWARD_PERFECT as i32;
+        postgameMenuInfo.awardsLevels[postgameMenuInfo.numAwards as usize] = 1 as i32;
         postgameMenuInfo.numAwards += 1
     }
-    if playerGameRank == 1 as libc::c_int {
+    if playerGameRank == 1 as i32 {
         postgameMenuInfo.won =
             crate::src::q3_ui::ui_gameinfo::UI_TierCompleted(postgameMenuInfo.level)
     } else {
-        postgameMenuInfo.won = -(1 as libc::c_int)
+        postgameMenuInfo.won = -(1 as i32)
     }
     postgameMenuInfo.starttime = crate::src::q3_ui::ui_atoms::uis.realtime;
     postgameMenuInfo.scoreboardtime = crate::src::q3_ui::ui_atoms::uis.realtime;
-    crate::src::ui::ui_syscalls::trap_Key_SetCatcher(0x2 as libc::c_int);
-    crate::src::q3_ui::ui_atoms::uis.menusp = 0 as libc::c_int;
+    crate::src::ui::ui_syscalls::trap_Key_SetCatcher(0x2 as i32);
+    crate::src::q3_ui::ui_atoms::uis.menusp = 0 as i32;
     UI_SPPostgameMenu_Init();
     crate::src::q3_ui::ui_atoms::UI_PushMenu(
         &mut postgameMenuInfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
     );
-    if playerGameRank == 1 as libc::c_int {
+    if playerGameRank == 1 as i32 {
         crate::src::q3_ui::ui_qmenu::Menu_SetCursorToItem(
             &mut postgameMenuInfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
             &mut postgameMenuInfo.item_next as *mut crate::ui_local_h::menubitmap_s
@@ -1440,20 +1440,20 @@ pub unsafe extern "C" fn UI_SPPostgameMenu_f() {
                 as *mut libc::c_void,
         );
     }
-    Prepname(0 as libc::c_int);
-    Prepname(1 as libc::c_int);
-    Prepname(2 as libc::c_int);
-    if playerGameRank != 1 as libc::c_int {
+    Prepname(0 as i32);
+    Prepname(1 as i32);
+    Prepname(2 as i32);
+    if playerGameRank != 1 as i32 {
         postgameMenuInfo.winnerSound = crate::src::ui::ui_syscalls::trap_S_RegisterSound(
             crate::src::qcommon::q_shared::va(
                 b"sound/player/announce/%s_wins.wav\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                postgameMenuInfo.placeNames[0 as libc::c_int as usize].as_mut_ptr(),
+                postgameMenuInfo.placeNames[0 as i32 as usize].as_mut_ptr(),
             ),
             crate::src::qcommon::q_shared::qfalse,
         );
         crate::src::ui::ui_syscalls::trap_Cmd_ExecuteText(
-            crate::src::qcommon::q_shared::EXEC_APPEND as libc::c_int,
+            crate::src::qcommon::q_shared::EXEC_APPEND as i32,
             b"music music/loss\n\x00" as *const u8 as *const libc::c_char,
         );
     } else {
@@ -1462,11 +1462,11 @@ pub unsafe extern "C" fn UI_SPPostgameMenu_f() {
             crate::src::qcommon::q_shared::qfalse,
         );
         crate::src::ui::ui_syscalls::trap_Cmd_ExecuteText(
-            crate::src::qcommon::q_shared::EXEC_APPEND as libc::c_int,
+            crate::src::qcommon::q_shared::EXEC_APPEND as i32,
             b"music music/win\n\x00" as *const u8 as *const libc::c_char,
         );
     }
-    postgameMenuInfo.phase = 1 as libc::c_int;
+    postgameMenuInfo.phase = 1 as i32;
     postgameMenuInfo.lastTier = crate::src::q3_ui::ui_gameinfo::UI_GetNumSPTiers();
     if !crate::src::q3_ui::ui_gameinfo::UI_GetSpecialArenaInfo(
         b"final\x00" as *const u8 as *const libc::c_char,

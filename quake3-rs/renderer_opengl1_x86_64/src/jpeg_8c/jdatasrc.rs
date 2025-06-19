@@ -220,7 +220,7 @@ unsafe extern "C" fn init_source(mut cinfo: crate::jpeglib_h::j_decompress_ptr) 
      * but we don't clear the input buffer.
      * This is correct behavior for reading a series of images from one source.
      */
-    (*src).start_of_file = 1 as libc::c_int;
+    (*src).start_of_file = 1 as i32;
 }
 
 unsafe extern "C" fn init_mem_source(mut _cinfo: crate::jpeglib_h::j_decompress_ptr) {
@@ -266,14 +266,14 @@ unsafe extern "C" fn fill_input_buffer(
     let mut nbytes: crate::stddef_h::size_t = 0;
     nbytes = crate::stdlib::fread(
         (*src).buffer as *mut libc::c_void,
-        1 as libc::c_int as crate::stddef_h::size_t,
-        4096 as libc::c_int as crate::stddef_h::size_t,
+        1 as i32 as crate::stddef_h::size_t,
+        4096 as i32 as crate::stddef_h::size_t,
         (*src).infile,
     );
-    if nbytes <= 0 as libc::c_int as libc::c_ulong {
+    if nbytes <= 0 as i32 as libc::c_ulong {
         if (*src).start_of_file != 0 {
             /* Treat empty input file as fatal error */
-            (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_INPUT_EMPTY as libc::c_int;
+            (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_INPUT_EMPTY as i32;
             Some(
                 (*(*cinfo).err)
                     .error_exit
@@ -283,7 +283,7 @@ unsafe extern "C" fn fill_input_buffer(
                 cinfo as crate::jpeglib_h::j_common_ptr
             );
         }
-        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JWRN_JPEG_EOF as libc::c_int;
+        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JWRN_JPEG_EOF as i32;
         Some(
             (*(*cinfo).err)
                 .emit_message
@@ -291,19 +291,19 @@ unsafe extern "C" fn fill_input_buffer(
         )
         .expect("non-null function pointer")(
             cinfo as crate::jpeglib_h::j_common_ptr,
-            -(1 as libc::c_int),
+            -(1 as i32),
         );
         /* Insert a fake EOI marker */
-        *(*src).buffer.offset(0 as libc::c_int as isize) =
-            0xff as libc::c_int as crate::jmorecfg_h::JOCTET;
-        *(*src).buffer.offset(1 as libc::c_int as isize) =
-            0xd9 as libc::c_int as crate::jmorecfg_h::JOCTET;
-        nbytes = 2 as libc::c_int as crate::stddef_h::size_t
+        *(*src).buffer.offset(0 as i32 as isize) =
+            0xff as i32 as crate::jmorecfg_h::JOCTET;
+        *(*src).buffer.offset(1 as i32 as isize) =
+            0xd9 as i32 as crate::jmorecfg_h::JOCTET;
+        nbytes = 2 as i32 as crate::stddef_h::size_t
     }
     (*src).pub_0.next_input_byte = (*src).buffer;
     (*src).pub_0.bytes_in_buffer = nbytes;
-    (*src).start_of_file = 0 as libc::c_int;
-    return 1 as libc::c_int;
+    (*src).start_of_file = 0 as i32;
+    return 1 as i32;
 }
 
 unsafe extern "C" fn fill_mem_input_buffer(
@@ -314,7 +314,7 @@ unsafe extern "C" fn fill_mem_input_buffer(
      * buffer, so any request for more data beyond the given buffer size
      * is treated as an error.
      */
-    (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JWRN_JPEG_EOF as libc::c_int;
+    (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JWRN_JPEG_EOF as i32;
     Some(
         (*(*cinfo).err)
             .emit_message
@@ -322,14 +322,14 @@ unsafe extern "C" fn fill_mem_input_buffer(
     )
     .expect("non-null function pointer")(
         cinfo as crate::jpeglib_h::j_common_ptr,
-        -(1 as libc::c_int),
+        -(1 as i32),
     );
     /* Insert a fake EOI marker */
-    mybuffer[0 as libc::c_int as usize] = 0xff as libc::c_int as crate::jmorecfg_h::JOCTET;
-    mybuffer[1 as libc::c_int as usize] = 0xd9 as libc::c_int as crate::jmorecfg_h::JOCTET;
+    mybuffer[0 as i32 as usize] = 0xff as i32 as crate::jmorecfg_h::JOCTET;
+    mybuffer[1 as i32 as usize] = 0xd9 as i32 as crate::jmorecfg_h::JOCTET;
     (*(*cinfo).src).next_input_byte = mybuffer.as_mut_ptr();
-    (*(*cinfo).src).bytes_in_buffer = 2 as libc::c_int as crate::stddef_h::size_t;
-    return 1 as libc::c_int;
+    (*(*cinfo).src).bytes_in_buffer = 2 as i32 as crate::stddef_h::size_t;
+    return 1 as i32;
 }
 /*
  * Skip data --- used to skip over a potentially large amount of
@@ -352,7 +352,7 @@ unsafe extern "C" fn skip_input_data(
      * it doesn't work on pipes.  Not clear that being smart is worth
      * any trouble anyway --- large skips are infrequent.
      */
-    if num_bytes > 0 as libc::c_int as libc::c_long {
+    if num_bytes > 0 as i32 as libc::c_long {
         while num_bytes > (*src).bytes_in_buffer as libc::c_long {
             num_bytes -= (*src).bytes_in_buffer as libc::c_long;
             Some((*src).fill_input_buffer.expect("non-null function pointer"))
@@ -416,7 +416,7 @@ pub unsafe extern "C" fn jpeg_stdio_src(
         )
         .expect("non-null function pointer")(
             cinfo as crate::jpeglib_h::j_common_ptr,
-            0 as libc::c_int,
+            0 as i32,
             ::std::mem::size_of::<my_source_mgr>() as libc::c_ulong,
         ) as *mut crate::jpeglib_h::jpeg_source_mgr; /* use default method */
         src = (*cinfo).src as my_src_ptr; /* forces fill_input_buffer on first read */
@@ -427,8 +427,8 @@ pub unsafe extern "C" fn jpeg_stdio_src(
         )
         .expect("non-null function pointer")(
             cinfo as crate::jpeglib_h::j_common_ptr,
-            0 as libc::c_int,
-            (4096 as libc::c_int as libc::c_ulong)
+            0 as i32,
+            (4096 as i32 as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<crate::jmorecfg_h::JOCTET>() as libc::c_ulong),
         ) as *mut crate::jmorecfg_h::JOCTET
     }
@@ -449,13 +449,13 @@ pub unsafe extern "C" fn jpeg_stdio_src(
         crate::src::jpeg_8c::jdmarker::jpeg_resync_to_restart
             as unsafe extern "C" fn(
                 _: crate::jpeglib_h::j_decompress_ptr,
-                _: libc::c_int,
+                _: i32,
             ) -> crate::jmorecfg_h::boolean,
     );
     (*src).pub_0.term_source =
         Some(term_source as unsafe extern "C" fn(_: crate::jpeglib_h::j_decompress_ptr) -> ());
     (*src).infile = infile;
-    (*src).pub_0.bytes_in_buffer = 0 as libc::c_int as crate::stddef_h::size_t;
+    (*src).pub_0.bytes_in_buffer = 0 as i32 as crate::stddef_h::size_t;
     (*src).pub_0.next_input_byte = 0 as *const crate::jmorecfg_h::JOCTET;
     /* until buffer loaded */
 }
@@ -467,14 +467,14 @@ pub unsafe extern "C" fn jpeg_stdio_src(
 
 pub unsafe extern "C" fn jpeg_mem_src(
     mut cinfo: crate::jpeglib_h::j_decompress_ptr,
-    mut inbuffer: *mut libc::c_uchar,
+    mut inbuffer: *mut u8,
     mut insize: libc::c_ulong,
 ) {
     let mut src: *mut crate::jpeglib_h::jpeg_source_mgr =
         0 as *mut crate::jpeglib_h::jpeg_source_mgr;
-    if inbuffer.is_null() || insize == 0 as libc::c_int as libc::c_ulong {
+    if inbuffer.is_null() || insize == 0 as i32 as libc::c_ulong {
         /* Treat empty input as fatal error */
-        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_INPUT_EMPTY as libc::c_int;
+        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_INPUT_EMPTY as i32;
         Some(
             (*(*cinfo).err)
                 .error_exit
@@ -495,7 +495,7 @@ pub unsafe extern "C" fn jpeg_mem_src(
         )
         .expect("non-null function pointer")(
             cinfo as crate::jpeglib_h::j_common_ptr,
-            0 as libc::c_int,
+            0 as i32,
             ::std::mem::size_of::<crate::jpeglib_h::jpeg_source_mgr>() as libc::c_ulong,
         ) as *mut crate::jpeglib_h::jpeg_source_mgr
     } /* use default method */
@@ -516,7 +516,7 @@ pub unsafe extern "C" fn jpeg_mem_src(
         crate::src::jpeg_8c::jdmarker::jpeg_resync_to_restart
             as unsafe extern "C" fn(
                 _: crate::jpeglib_h::j_decompress_ptr,
-                _: libc::c_int,
+                _: i32,
             ) -> crate::jmorecfg_h::boolean,
     );
     (*src).term_source =

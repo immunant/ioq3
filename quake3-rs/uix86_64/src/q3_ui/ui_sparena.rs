@@ -3,12 +3,12 @@ use ::libc;
 pub mod stdlib_h {
     #[inline]
 
-    pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> libc::c_int {
+    pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return ::libc::strtol(
             __nptr,
             0 as *mut libc::c_void as *mut *mut libc::c_char,
-            10 as libc::c_int,
-        ) as libc::c_int;
+            10 as i32,
+        ) as i32;
     }
 }
 
@@ -174,16 +174,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 pub unsafe extern "C" fn UI_SPArena_Start(mut arenaInfo: *const libc::c_char) {
     let mut map: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut level: libc::c_int = 0;
-    let mut n: libc::c_int = 0;
+    let mut level: i32 = 0;
+    let mut n: i32 = 0;
     let mut txt: *mut libc::c_char = 0 as *mut libc::c_char;
     n = crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
         b"sv_maxclients\x00" as *const u8 as *const libc::c_char,
-    ) as libc::c_int;
-    if n < 8 as libc::c_int {
+    ) as i32;
+    if n < 8 as i32 {
         crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
             b"sv_maxclients\x00" as *const u8 as *const libc::c_char,
-            8 as libc::c_int as libc::c_float,
+            8 as i32 as f32,
         );
     }
     level = atoi(crate::src::qcommon::q_shared::Info_ValueForKey(
@@ -194,31 +194,31 @@ pub unsafe extern "C" fn UI_SPArena_Start(mut arenaInfo: *const libc::c_char) {
         arenaInfo,
         b"special\x00" as *const u8 as *const libc::c_char,
     );
-    if *txt.offset(0 as libc::c_int as isize) != 0 {
+    if *txt.offset(0 as i32 as isize) != 0 {
         if crate::src::qcommon::q_shared::Q_stricmp(
             txt,
             b"training\x00" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
-            level = -(4 as libc::c_int)
+            level = -(4 as i32)
         } else if crate::src::qcommon::q_shared::Q_stricmp(
             txt,
             b"final\x00" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
-            level = crate::src::q3_ui::ui_gameinfo::UI_GetNumSPTiers() * 4 as libc::c_int
+            level = crate::src::q3_ui::ui_gameinfo::UI_GetNumSPTiers() * 4 as i32
         }
     }
     crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
         b"ui_spSelection\x00" as *const u8 as *const libc::c_char,
-        level as libc::c_float,
+        level as f32,
     );
     map = crate::src::qcommon::q_shared::Info_ValueForKey(
         arenaInfo,
         b"map\x00" as *const u8 as *const libc::c_char,
     );
     crate::src::ui::ui_syscalls::trap_Cmd_ExecuteText(
-        crate::src::qcommon::q_shared::EXEC_APPEND as libc::c_int,
+        crate::src::qcommon::q_shared::EXEC_APPEND as i32,
         crate::src::qcommon::q_shared::va(
             b"spmap %s\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             map,

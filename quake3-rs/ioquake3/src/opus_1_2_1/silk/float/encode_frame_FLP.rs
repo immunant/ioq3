@@ -21,10 +21,10 @@ pub mod entcode_h {
 
     pub unsafe extern "C" fn ec_tell(
         mut _this: *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
-    ) -> libc::c_int {
+    ) -> i32 {
         return (*_this).nbits_total
-            - (::std::mem::size_of::<libc::c_uint>() as libc::c_ulong as libc::c_int
-                * 8 as libc::c_int
+            - (::std::mem::size_of::<u32>() as libc::c_ulong as i32
+                * 8 as i32
                 - (*_this).rng.leading_zeros() as i32);
     }
 }
@@ -77,7 +77,7 @@ pub mod SigProc_FIX_h {
     /* silk_min() versions with typecast in the function call */
     #[inline]
 
-    pub unsafe extern "C" fn silk_min_int(mut a: libc::c_int, mut b: libc::c_int) -> libc::c_int {
+    pub unsafe extern "C" fn silk_min_int(mut a: i32, mut b: i32) -> i32 {
         return if a < b { a } else { b };
     }
 
@@ -100,14 +100,14 @@ pub mod SigProc_FLP_h {
     #[inline]
 
     pub unsafe extern "C" fn silk_short2float_array(
-        mut out: *mut libc::c_float,
+        mut out: *mut f32,
         mut in_0: *const crate::opus_types_h::opus_int16,
         mut length: crate::opus_types_h::opus_int32,
     ) {
         let mut k: crate::opus_types_h::opus_int32 = 0;
-        k = length - 1 as libc::c_int;
-        while k >= 0 as libc::c_int {
-            *out.offset(k as isize) = *in_0.offset(k as isize) as libc::c_float;
+        k = length - 1 as i32;
+        while k >= 0 as i32 {
+            *out.offset(k as isize) = *in_0.offset(k as isize) as f32;
             k -= 1
         }
     }
@@ -162,32 +162,32 @@ pub unsafe extern "C" fn silk_encode_do_VAD_FLP(
             .sCmn
             .inputBuf
             .as_mut_ptr()
-            .offset(1 as libc::c_int as isize) as *const crate::opus_types_h::opus_int16,
+            .offset(1 as i32 as isize) as *const crate::opus_types_h::opus_int16,
     );
     /* *************************************************/
     /* Convert speech activity into VAD and DTX flags */
     /* *************************************************/
     if (*psEnc).sCmn.speech_activity_Q8
-        < ((0.05f32 * ((1 as libc::c_int as libc::c_longlong) << 8 as libc::c_int) as libc::c_float)
-            as libc::c_double
+        < ((0.05f32 * ((1 as i32 as i64) << 8 as i32) as f32)
+            as f64
             + 0.5f64) as crate::opus_types_h::opus_int32
     {
-        (*psEnc).sCmn.indices.signalType = 0 as libc::c_int as libc::c_schar;
+        (*psEnc).sCmn.indices.signalType = 0 as i32 as i8;
         (*psEnc).sCmn.noSpeechCounter += 1;
-        if (*psEnc).sCmn.noSpeechCounter < 10 as libc::c_int {
-            (*psEnc).sCmn.inDTX = 0 as libc::c_int
-        } else if (*psEnc).sCmn.noSpeechCounter > 20 as libc::c_int + 10 as libc::c_int {
-            (*psEnc).sCmn.noSpeechCounter = 10 as libc::c_int;
-            (*psEnc).sCmn.inDTX = 0 as libc::c_int
+        if (*psEnc).sCmn.noSpeechCounter < 10 as i32 {
+            (*psEnc).sCmn.inDTX = 0 as i32
+        } else if (*psEnc).sCmn.noSpeechCounter > 20 as i32 + 10 as i32 {
+            (*psEnc).sCmn.noSpeechCounter = 10 as i32;
+            (*psEnc).sCmn.inDTX = 0 as i32
         }
         (*psEnc).sCmn.VAD_flags[(*psEnc).sCmn.nFramesEncoded as usize] =
-            0 as libc::c_int as libc::c_schar
+            0 as i32 as i8
     } else {
-        (*psEnc).sCmn.noSpeechCounter = 0 as libc::c_int;
-        (*psEnc).sCmn.inDTX = 0 as libc::c_int;
-        (*psEnc).sCmn.indices.signalType = 1 as libc::c_int as libc::c_schar;
+        (*psEnc).sCmn.noSpeechCounter = 0 as i32;
+        (*psEnc).sCmn.inDTX = 0 as i32;
+        (*psEnc).sCmn.indices.signalType = 1 as i32 as i8;
         (*psEnc).sCmn.VAD_flags[(*psEnc).sCmn.nFramesEncoded as usize] =
-            1 as libc::c_int as libc::c_schar
+            1 as i32 as i8
     };
 }
 /* **********************************************************************
@@ -233,10 +233,10 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
     mut psEnc: *mut crate::structs_FLP_h::silk_encoder_state_FLP,
     mut pnBytesOut: *mut crate::opus_types_h::opus_int32,
     mut psRangeEnc: *mut crate::src::opus_1_2_1::celt::entcode::ec_enc,
-    mut condCoding: libc::c_int,
-    mut maxBits: libc::c_int,
-    mut useCBR: libc::c_int,
-) -> libc::c_int
+    mut condCoding: i32,
+    mut maxBits: i32,
+    mut useCBR: i32,
+) -> i32
 /* I    Flag to force constant-bitrate operation    */ {
     let mut sEncCtrl: crate::structs_FLP_h::silk_encoder_control_FLP =
         crate::structs_FLP_h::silk_encoder_control_FLP {
@@ -259,18 +259,18 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
             GainsUnq_Q16: [0; 4],
             lastGainIndexPrev: 0,
         };
-    let mut i: libc::c_int = 0;
-    let mut iter: libc::c_int = 0;
-    let mut maxIter: libc::c_int = 0;
-    let mut found_upper: libc::c_int = 0;
-    let mut found_lower: libc::c_int = 0;
-    let mut ret: libc::c_int = 0 as libc::c_int;
-    let mut x_frame: *mut libc::c_float = 0 as *mut libc::c_float;
-    let mut res_pitch_frame: *mut libc::c_float = 0 as *mut libc::c_float;
-    let mut res_pitch: [libc::c_float; 672] = [0.; 672];
+    let mut i: i32 = 0;
+    let mut iter: i32 = 0;
+    let mut maxIter: i32 = 0;
+    let mut found_upper: i32 = 0;
+    let mut found_lower: i32 = 0;
+    let mut ret: i32 = 0 as i32;
+    let mut x_frame: *mut f32 = 0 as *mut f32;
+    let mut res_pitch_frame: *mut f32 = 0 as *mut f32;
+    let mut res_pitch: [f32; 672] = [0.; 672];
     let mut sRangeEnc_copy: crate::src::opus_1_2_1::celt::entcode::ec_enc =
         crate::src::opus_1_2_1::celt::entcode::ec_enc {
-            buf: 0 as *mut libc::c_uchar,
+            buf: 0 as *mut u8,
             storage: 0,
             end_offs: 0,
             end_window: 0,
@@ -285,7 +285,7 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
         };
     let mut sRangeEnc_copy2: crate::src::opus_1_2_1::celt::entcode::ec_enc =
         crate::src::opus_1_2_1::celt::entcode::ec_enc {
-            buf: 0 as *mut libc::c_uchar,
+            buf: 0 as *mut u8,
             storage: 0,
             end_offs: 0,
             end_window: 0,
@@ -337,22 +337,22 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
     let mut gainsID_upper: crate::opus_types_h::opus_int32 = 0;
     let mut gainMult_Q8: crate::opus_types_h::opus_int16 = 0;
     let mut ec_prevLagIndex_copy: crate::opus_types_h::opus_int16 = 0;
-    let mut ec_prevSignalType_copy: libc::c_int = 0;
-    let mut LastGainIndex_copy2: libc::c_schar = 0;
+    let mut ec_prevSignalType_copy: i32 = 0;
+    let mut LastGainIndex_copy2: i8 = 0;
     let mut pGains_Q16: [crate::opus_types_h::opus_int32; 4] = [0; 4];
-    let mut ec_buf_copy: [libc::c_uchar; 1275] = [0; 1275];
-    let mut gain_lock: [libc::c_int; 4] = [0 as libc::c_int, 0, 0, 0];
+    let mut ec_buf_copy: [u8; 1275] = [0; 1275];
+    let mut gain_lock: [i32; 4] = [0 as i32, 0, 0, 0];
     let mut best_gain_mult: [crate::opus_types_h::opus_int16; 4] = [0; 4];
-    let mut best_sum: [libc::c_int; 4] = [0; 4];
+    let mut best_sum: [i32; 4] = [0; 4];
     /* This is totally unnecessary but many compilers (including gcc) are too dumb to realise it */
-    gainMult_upper = 0 as libc::c_int;
+    gainMult_upper = 0 as i32;
     gainMult_lower = gainMult_upper;
     nBits_upper = gainMult_lower;
     nBits_lower = nBits_upper;
-    LastGainIndex_copy2 = nBits_lower as libc::c_schar;
+    LastGainIndex_copy2 = nBits_lower as i8;
     let fresh0 = (*psEnc).sCmn.frameCounter;
     (*psEnc).sCmn.frameCounter = (*psEnc).sCmn.frameCounter + 1;
-    (*psEnc).sCmn.indices.Seed = (fresh0 & 3 as libc::c_int) as libc::c_schar;
+    (*psEnc).sCmn.indices.Seed = (fresh0 & 3 as i32) as i8;
     /* *************************************************************/
     /* Set up Input Pointers, and insert frame in input buffer    */
     /* *************************************************************/
@@ -373,28 +373,28 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
             .sCmn
             .inputBuf
             .as_mut_ptr()
-            .offset(1 as libc::c_int as isize),
+            .offset(1 as i32 as isize),
         (*psEnc).sCmn.frame_length,
     );
     /* ******************************************/
     /* Copy new frame to front of input buffer */
     /* ******************************************/
     silk_short2float_array(
-        x_frame.offset((5 as libc::c_int * (*psEnc).sCmn.fs_kHz) as isize),
+        x_frame.offset((5 as i32 * (*psEnc).sCmn.fs_kHz) as isize),
         (*psEnc)
             .sCmn
             .inputBuf
             .as_mut_ptr()
-            .offset(1 as libc::c_int as isize),
+            .offset(1 as i32 as isize),
         (*psEnc).sCmn.frame_length,
     );
     /* Add tiny signal to avoid high CPU load from denormalized floating point numbers */
-    i = 0 as libc::c_int;
-    while i < 8 as libc::c_int {
+    i = 0 as i32;
+    while i < 8 as i32 {
         *x_frame.offset(
-            (5 as libc::c_int * (*psEnc).sCmn.fs_kHz
-                + i * ((*psEnc).sCmn.frame_length >> 3 as libc::c_int)) as isize,
-        ) += (1 as libc::c_int - (i & 2 as libc::c_int)) as libc::c_float * 1e-6f32;
+            (5 as i32 * (*psEnc).sCmn.fs_kHz
+                + i * ((*psEnc).sCmn.frame_length >> 3 as i32)) as isize,
+        ) += (1 as i32 - (i & 2 as i32)) as f32 * 1e-6f32;
         i += 1
     }
     if (*psEnc).sCmn.prefillFlag == 0 {
@@ -405,7 +405,7 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
             psEnc as *mut crate::structs_FLP_h::silk_encoder_state_FLP,
             &mut sEncCtrl as *mut _ as *mut crate::structs_FLP_h::silk_encoder_control_FLP,
             res_pitch.as_mut_ptr(),
-            x_frame as *const libc::c_float,
+            x_frame as *const f32,
             (*psEnc).sCmn.arch,
         );
         /* ***********************/
@@ -419,8 +419,8 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
         crate::src::opus_1_2_1::silk::float::find_pred_coefs_FLP::silk_find_pred_coefs_FLP(
             psEnc as *mut crate::structs_FLP_h::silk_encoder_state_FLP,
             &mut sEncCtrl as *mut _ as *mut crate::structs_FLP_h::silk_encoder_control_FLP,
-            res_pitch_frame as *const libc::c_float,
-            x_frame as *const libc::c_float,
+            res_pitch_frame as *const f32,
+            x_frame as *const f32,
             condCoding,
         );
         /* ***************************************/
@@ -437,24 +437,24 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
         silk_LBRR_encode_FLP(
             psEnc,
             &mut sEncCtrl,
-            x_frame as *const libc::c_float,
+            x_frame as *const f32,
             condCoding,
         );
         /* Loop over quantizer and entroy coding to control bitrate */
-        maxIter = 6 as libc::c_int;
-        gainMult_Q8 = ((1 as libc::c_int as libc::c_longlong
-            * ((1 as libc::c_int as libc::c_longlong) << 8 as libc::c_int))
-            as libc::c_double
+        maxIter = 6 as i32;
+        gainMult_Q8 = ((1 as i32 as i64
+            * ((1 as i32 as i64) << 8 as i32))
+            as f64
             + 0.5f64) as crate::opus_types_h::opus_int32
             as crate::opus_types_h::opus_int16;
-        found_lower = 0 as libc::c_int;
-        found_upper = 0 as libc::c_int;
+        found_lower = 0 as i32;
+        found_upper = 0 as i32;
         gainsID = crate::src::opus_1_2_1::silk::gain_quant::silk_gains_ID(
-            (*psEnc).sCmn.indices.GainsIndices.as_mut_ptr() as *const libc::c_schar,
+            (*psEnc).sCmn.indices.GainsIndices.as_mut_ptr() as *const i8,
             (*psEnc).sCmn.nb_subfr,
         );
-        gainsID_lower = -(1 as libc::c_int);
-        gainsID_upper = -(1 as libc::c_int);
+        gainsID_lower = -(1 as i32);
+        gainsID_upper = -(1 as i32);
         /* Copy part of the input state */
         crate::stdlib::memcpy(
             &mut sRangeEnc_copy as *mut crate::src::opus_1_2_1::celt::entcode::ec_enc
@@ -470,7 +470,7 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
         seed_copy = (*psEnc).sCmn.indices.Seed as crate::opus_types_h::opus_int32;
         ec_prevLagIndex_copy = (*psEnc).sCmn.ec_prevLagIndex;
         ec_prevSignalType_copy = (*psEnc).sCmn.ec_prevSignalType;
-        iter = 0 as libc::c_int;
+        iter = 0 as i32;
         loop {
             if gainsID == gainsID_lower {
                 nBits = nBits_lower
@@ -478,7 +478,7 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
                 nBits = nBits_upper
             } else {
                 /* Restore part of the input state */
-                if iter > 0 as libc::c_int {
+                if iter > 0 as i32 {
                     crate::stdlib::memcpy(
                         psRangeEnc as *mut libc::c_void,
                         &mut sRangeEnc_copy as *mut crate::src::opus_1_2_1::celt::entcode::ec_enc
@@ -493,7 +493,7 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
                             as *const libc::c_void,
                         ::std::mem::size_of::<crate::structs_h::silk_nsq_state>() as libc::c_ulong,
                     );
-                    (*psEnc).sCmn.indices.Seed = seed_copy as libc::c_schar;
+                    (*psEnc).sCmn.indices.Seed = seed_copy as i8;
                     (*psEnc).sCmn.ec_prevLagIndex = ec_prevLagIndex_copy;
                     (*psEnc).sCmn.ec_prevSignalType = ec_prevSignalType_copy
                 }
@@ -506,7 +506,7 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
                     &mut (*psEnc).sCmn.indices as *mut _ as *mut crate::structs_h::SideInfoIndices,
                     &mut (*psEnc).sCmn.sNSQ as *mut _ as *mut crate::structs_h::silk_nsq_state,
                     (*psEnc).sCmn.pulses.as_mut_ptr(),
-                    x_frame as *const libc::c_float,
+                    x_frame as *const f32,
                 );
                 if iter == maxIter && found_lower == 0 {
                     crate::stdlib::memcpy(
@@ -524,7 +524,7 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
                     &mut (*psEnc).sCmn as *mut _ as *mut crate::structs_h::silk_encoder_state,
                     psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
                     (*psEnc).sCmn.nFramesEncoded,
-                    0 as libc::c_int,
+                    0 as i32,
                     condCoding,
                 );
                 /* ***************************************/
@@ -532,8 +532,8 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
                 /* ***************************************/
                 crate::src::opus_1_2_1::silk::encode_pulses::silk_encode_pulses(
                     psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
-                    (*psEnc).sCmn.indices.signalType as libc::c_int,
-                    (*psEnc).sCmn.indices.quantOffsetType as libc::c_int,
+                    (*psEnc).sCmn.indices.signalType as i32,
+                    (*psEnc).sCmn.indices.quantOffsetType as i32,
                     (*psEnc).sCmn.pulses.as_mut_ptr(),
                     (*psEnc).sCmn.frame_length,
                 );
@@ -549,41 +549,41 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
                     );
                     /* Keep gains the same as the last frame. */
                     (*psEnc).sShape.LastGainIndex = sEncCtrl.lastGainIndexPrev;
-                    i = 0 as libc::c_int;
+                    i = 0 as i32;
                     while i < (*psEnc).sCmn.nb_subfr {
                         (*psEnc).sCmn.indices.GainsIndices[i as usize] =
-                            4 as libc::c_int as libc::c_schar;
+                            4 as i32 as i8;
                         i += 1
                     }
-                    if condCoding != 2 as libc::c_int {
-                        (*psEnc).sCmn.indices.GainsIndices[0 as libc::c_int as usize] =
+                    if condCoding != 2 as i32 {
+                        (*psEnc).sCmn.indices.GainsIndices[0 as i32 as usize] =
                             sEncCtrl.lastGainIndexPrev
                     }
                     (*psEnc).sCmn.ec_prevLagIndex = ec_prevLagIndex_copy;
                     (*psEnc).sCmn.ec_prevSignalType = ec_prevSignalType_copy;
                     /* Clear all pulses. */
-                    i = 0 as libc::c_int;
+                    i = 0 as i32;
                     while i < (*psEnc).sCmn.frame_length {
-                        (*psEnc).sCmn.pulses[i as usize] = 0 as libc::c_int as libc::c_schar;
+                        (*psEnc).sCmn.pulses[i as usize] = 0 as i32 as i8;
                         i += 1
                     }
                     crate::src::opus_1_2_1::silk::encode_indices::silk_encode_indices(
                         &mut (*psEnc).sCmn as *mut _ as *mut crate::structs_h::silk_encoder_state,
                         psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
                         (*psEnc).sCmn.nFramesEncoded,
-                        0 as libc::c_int,
+                        0 as i32,
                         condCoding,
                     );
                     crate::src::opus_1_2_1::silk::encode_pulses::silk_encode_pulses(
                         psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
-                        (*psEnc).sCmn.indices.signalType as libc::c_int,
-                        (*psEnc).sCmn.indices.quantOffsetType as libc::c_int,
+                        (*psEnc).sCmn.indices.signalType as i32,
+                        (*psEnc).sCmn.indices.quantOffsetType as i32,
                         (*psEnc).sCmn.pulses.as_mut_ptr(),
                         (*psEnc).sCmn.frame_length,
                     );
                     nBits = ec_tell(psRangeEnc)
                 }
-                if useCBR == 0 as libc::c_int && iter == 0 as libc::c_int && nBits <= maxBits {
+                if useCBR == 0 as i32 && iter == 0 as i32 && nBits <= maxBits {
                     break;
                 }
             }
@@ -614,7 +614,7 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
                 break;
             } else {
                 if nBits > maxBits {
-                    if found_lower == 0 as libc::c_int && iter >= 2 as libc::c_int {
+                    if found_lower == 0 as i32 && iter >= 2 as i32 {
                         /* Adjust the quantizer's rate/distortion tradeoff and discard previous "upper" results */
                         sEncCtrl.Lambda = if sEncCtrl.Lambda * 1.5f32 > 1.5f32 {
                             (sEncCtrl.Lambda) * 1.5f32
@@ -622,20 +622,20 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
                             1.5f32
                         };
                         /* Reducing dithering can help us hit the target. */
-                        (*psEnc).sCmn.indices.quantOffsetType = 0 as libc::c_int as libc::c_schar;
-                        found_upper = 0 as libc::c_int;
-                        gainsID_upper = -(1 as libc::c_int)
+                        (*psEnc).sCmn.indices.quantOffsetType = 0 as i32 as i8;
+                        found_upper = 0 as i32;
+                        gainsID_upper = -(1 as i32)
                     } else {
-                        found_upper = 1 as libc::c_int;
+                        found_upper = 1 as i32;
                         nBits_upper = nBits;
                         gainMult_upper = gainMult_Q8 as crate::opus_types_h::opus_int32;
                         gainsID_upper = gainsID
                     }
                 } else {
-                    if !(nBits < maxBits - 5 as libc::c_int) {
+                    if !(nBits < maxBits - 5 as i32) {
                         break;
                     }
-                    found_lower = 1 as libc::c_int;
+                    found_lower = 1 as i32;
                     nBits_lower = nBits;
                     gainMult_lower = gainMult_Q8 as crate::opus_types_h::opus_int32;
                     if gainsID != gainsID_lower {
@@ -666,51 +666,51 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
                     }
                 }
                 if found_lower == 0 && nBits > maxBits {
-                    let mut j: libc::c_int = 0;
-                    i = 0 as libc::c_int;
+                    let mut j: i32 = 0;
+                    i = 0 as i32;
                     while i < (*psEnc).sCmn.nb_subfr {
-                        let mut sum: libc::c_int = 0 as libc::c_int;
+                        let mut sum: i32 = 0 as i32;
                         j = i * (*psEnc).sCmn.subfr_length;
-                        while j < (i + 1 as libc::c_int) * (*psEnc).sCmn.subfr_length {
-                            sum += ::libc::abs((*psEnc).sCmn.pulses[j as usize] as libc::c_int);
+                        while j < (i + 1 as i32) * (*psEnc).sCmn.subfr_length {
+                            sum += ::libc::abs((*psEnc).sCmn.pulses[j as usize] as i32);
                             j += 1
                         }
-                        if iter == 0 as libc::c_int
+                        if iter == 0 as i32
                             || sum < best_sum[i as usize] && gain_lock[i as usize] == 0
                         {
                             best_sum[i as usize] = sum;
                             best_gain_mult[i as usize] = gainMult_Q8
                         } else {
-                            gain_lock[i as usize] = 1 as libc::c_int
+                            gain_lock[i as usize] = 1 as i32
                         }
                         i += 1
                     }
                 }
-                if found_lower & found_upper == 0 as libc::c_int {
+                if found_lower & found_upper == 0 as i32 {
                     /* Adjust gain according to high-rate rate/distortion curve */
                     if nBits > maxBits {
-                        if (gainMult_Q8 as libc::c_int) < 16384 as libc::c_int {
-                            gainMult_Q8 = (gainMult_Q8 as libc::c_int * 2 as libc::c_int)
+                        if (gainMult_Q8 as i32) < 16384 as i32 {
+                            gainMult_Q8 = (gainMult_Q8 as i32 * 2 as i32)
                                 as crate::opus_types_h::opus_int16
                         } else {
-                            gainMult_Q8 = 32767 as libc::c_int as crate::opus_types_h::opus_int16
+                            gainMult_Q8 = 32767 as i32 as crate::opus_types_h::opus_int16
                         }
                     } else {
                         let mut gain_factor_Q16: crate::opus_types_h::opus_int32 = 0;
                         gain_factor_Q16 = crate::src::opus_1_2_1::silk::log2lin::silk_log2lin(
                             (((nBits - maxBits) as crate::opus_types_h::opus_uint32)
-                                << 7 as libc::c_int)
+                                << 7 as i32)
                                 as crate::opus_types_h::opus_int32
                                 / (*psEnc).sCmn.frame_length
-                                + ((16 as libc::c_int as libc::c_longlong
-                                    * ((1 as libc::c_int as libc::c_longlong) << 7 as libc::c_int))
-                                    as libc::c_double
+                                + ((16 as i32 as i64
+                                    * ((1 as i32 as i64) << 7 as i32))
+                                    as f64
                                     + 0.5f64)
                                     as crate::opus_types_h::opus_int32,
                         );
-                        gainMult_Q8 = (gain_factor_Q16 as libc::c_longlong
-                            * gainMult_Q8 as libc::c_longlong
-                            >> 16 as libc::c_int)
+                        gainMult_Q8 = (gain_factor_Q16 as i64
+                            * gainMult_Q8 as i64
+                            >> 16 as i32)
                             as crate::opus_types_h::opus_int32
                             as crate::opus_types_h::opus_int16
                     }
@@ -721,21 +721,21 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
                             / (nBits_upper - nBits_lower))
                         as crate::opus_types_h::opus_int16;
                     /* New gain multplier must be between 25% and 75% of old range (note that gainMult_upper < gainMult_lower) */
-                    if gainMult_Q8 as libc::c_int
-                        > gainMult_lower + (gainMult_upper - gainMult_lower >> 2 as libc::c_int)
+                    if gainMult_Q8 as i32
+                        > gainMult_lower + (gainMult_upper - gainMult_lower >> 2 as i32)
                     {
                         gainMult_Q8 = (gainMult_lower
-                            + (gainMult_upper - gainMult_lower >> 2 as libc::c_int))
+                            + (gainMult_upper - gainMult_lower >> 2 as i32))
                             as crate::opus_types_h::opus_int16
-                    } else if (gainMult_Q8 as libc::c_int)
-                        < gainMult_upper - (gainMult_upper - gainMult_lower >> 2 as libc::c_int)
+                    } else if (gainMult_Q8 as i32)
+                        < gainMult_upper - (gainMult_upper - gainMult_lower >> 2 as i32)
                     {
                         gainMult_Q8 = (gainMult_upper
-                            - (gainMult_upper - gainMult_lower >> 2 as libc::c_int))
+                            - (gainMult_upper - gainMult_lower >> 2 as i32))
                             as crate::opus_types_h::opus_int16
                     }
                 }
-                i = 0 as libc::c_int;
+                i = 0 as i32;
                 while i < (*psEnc).sCmn.nb_subfr {
                     let mut tmp: crate::opus_types_h::opus_int16 = 0;
                     if gain_lock[i as usize] != 0 {
@@ -744,61 +744,61 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
                         tmp = gainMult_Q8
                     }
                     pGains_Q16[i as usize] =
-                        (((if 0x80000000 as libc::c_uint as crate::opus_types_h::opus_int32
-                            >> 8 as libc::c_int
-                            > 0x7fffffff as libc::c_int >> 8 as libc::c_int
+                        (((if 0x80000000 as u32 as crate::opus_types_h::opus_int32
+                            >> 8 as i32
+                            > 0x7fffffff as i32 >> 8 as i32
                         {
-                            (if (sEncCtrl.GainsUnq_Q16[i as usize] as libc::c_longlong
-                                * tmp as libc::c_longlong
-                                >> 16 as libc::c_int)
+                            (if (sEncCtrl.GainsUnq_Q16[i as usize] as i64
+                                * tmp as i64
+                                >> 16 as i32)
                                 as crate::opus_types_h::opus_int32
-                                > 0x80000000 as libc::c_uint as crate::opus_types_h::opus_int32
-                                    >> 8 as libc::c_int
+                                > 0x80000000 as u32 as crate::opus_types_h::opus_int32
+                                    >> 8 as i32
                             {
-                                (0x80000000 as libc::c_uint as crate::opus_types_h::opus_int32)
-                                    >> 8 as libc::c_int
+                                (0x80000000 as u32 as crate::opus_types_h::opus_int32)
+                                    >> 8 as i32
                             } else {
-                                (if ((sEncCtrl.GainsUnq_Q16[i as usize] as libc::c_longlong
-                                    * tmp as libc::c_longlong
-                                    >> 16 as libc::c_int)
+                                (if ((sEncCtrl.GainsUnq_Q16[i as usize] as i64
+                                    * tmp as i64
+                                    >> 16 as i32)
                                     as crate::opus_types_h::opus_int32)
-                                    < 0x7fffffff as libc::c_int >> 8 as libc::c_int
+                                    < 0x7fffffff as i32 >> 8 as i32
                                 {
-                                    (0x7fffffff as libc::c_int) >> 8 as libc::c_int
+                                    (0x7fffffff as i32) >> 8 as i32
                                 } else {
-                                    (sEncCtrl.GainsUnq_Q16[i as usize] as libc::c_longlong
-                                        * tmp as libc::c_longlong
-                                        >> 16 as libc::c_int)
+                                    (sEncCtrl.GainsUnq_Q16[i as usize] as i64
+                                        * tmp as i64
+                                        >> 16 as i32)
                                         as crate::opus_types_h::opus_int32
                                 })
                             })
                         } else {
-                            (if (sEncCtrl.GainsUnq_Q16[i as usize] as libc::c_longlong
-                                * tmp as libc::c_longlong
-                                >> 16 as libc::c_int)
+                            (if (sEncCtrl.GainsUnq_Q16[i as usize] as i64
+                                * tmp as i64
+                                >> 16 as i32)
                                 as crate::opus_types_h::opus_int32
-                                > 0x7fffffff as libc::c_int >> 8 as libc::c_int
+                                > 0x7fffffff as i32 >> 8 as i32
                             {
-                                (0x7fffffff as libc::c_int) >> 8 as libc::c_int
+                                (0x7fffffff as i32) >> 8 as i32
                             } else {
-                                (if ((sEncCtrl.GainsUnq_Q16[i as usize] as libc::c_longlong
-                                    * tmp as libc::c_longlong
-                                    >> 16 as libc::c_int)
+                                (if ((sEncCtrl.GainsUnq_Q16[i as usize] as i64
+                                    * tmp as i64
+                                    >> 16 as i32)
                                     as crate::opus_types_h::opus_int32)
-                                    < 0x80000000 as libc::c_uint as crate::opus_types_h::opus_int32
-                                        >> 8 as libc::c_int
+                                    < 0x80000000 as u32 as crate::opus_types_h::opus_int32
+                                        >> 8 as i32
                                 {
-                                    (0x80000000 as libc::c_uint as crate::opus_types_h::opus_int32)
-                                        >> 8 as libc::c_int
+                                    (0x80000000 as u32 as crate::opus_types_h::opus_int32)
+                                        >> 8 as i32
                                 } else {
-                                    (sEncCtrl.GainsUnq_Q16[i as usize] as libc::c_longlong
-                                        * tmp as libc::c_longlong
-                                        >> 16 as libc::c_int)
+                                    (sEncCtrl.GainsUnq_Q16[i as usize] as i64
+                                        * tmp as i64
+                                        >> 16 as i32)
                                         as crate::opus_types_h::opus_int32
                                 })
                             })
                         }) as crate::opus_types_h::opus_uint32)
-                            << 8 as libc::c_int)
+                            << 8 as i32)
                             as crate::opus_types_h::opus_int32;
                     i += 1
                 }
@@ -808,19 +808,19 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
                     (*psEnc).sCmn.indices.GainsIndices.as_mut_ptr(),
                     pGains_Q16.as_mut_ptr(),
                     &mut (*psEnc).sShape.LastGainIndex,
-                    (condCoding == 2 as libc::c_int) as libc::c_int,
+                    (condCoding == 2 as i32) as i32,
                     (*psEnc).sCmn.nb_subfr,
                 );
                 /* Unique identifier of gains vector */
                 gainsID = crate::src::opus_1_2_1::silk::gain_quant::silk_gains_ID(
-                    (*psEnc).sCmn.indices.GainsIndices.as_mut_ptr() as *const libc::c_schar,
+                    (*psEnc).sCmn.indices.GainsIndices.as_mut_ptr() as *const i8,
                     (*psEnc).sCmn.nb_subfr,
                 );
                 /* Overwrite unquantized gains with quantized gains and convert back to Q0 from Q16 */
-                i = 0 as libc::c_int;
+                i = 0 as i32;
                 while i < (*psEnc).sCmn.nb_subfr {
                     sEncCtrl.Gains[i as usize] =
-                        pGains_Q16[i as usize] as libc::c_float / 65536.0f32;
+                        pGains_Q16[i as usize] as f32 / 65536.0f32;
                     i += 1
                 }
                 iter += 1
@@ -833,26 +833,26 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
         &mut *(*psEnc)
             .x_buf
             .as_mut_ptr()
-            .offset((*psEnc).sCmn.frame_length as isize) as *mut libc::c_float
+            .offset((*psEnc).sCmn.frame_length as isize) as *mut f32
             as *const libc::c_void,
-        (((*psEnc).sCmn.ltp_mem_length + 5 as libc::c_int * (*psEnc).sCmn.fs_kHz) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<libc::c_float>() as libc::c_ulong),
+        (((*psEnc).sCmn.ltp_mem_length + 5 as i32 * (*psEnc).sCmn.fs_kHz) as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
     );
     /* Exit without entropy coding */
     if (*psEnc).sCmn.prefillFlag != 0 {
         /* No payload */
-        *pnBytesOut = 0 as libc::c_int;
+        *pnBytesOut = 0 as i32;
         return ret;
     }
     /* Parameters needed for next frame */
-    (*psEnc).sCmn.prevLag = sEncCtrl.pitchL[((*psEnc).sCmn.nb_subfr - 1 as libc::c_int) as usize];
+    (*psEnc).sCmn.prevLag = sEncCtrl.pitchL[((*psEnc).sCmn.nb_subfr - 1 as i32) as usize];
     (*psEnc).sCmn.prevSignalType = (*psEnc).sCmn.indices.signalType;
     /* ***************************************/
     /* Finalize payload                     */
     /* ***************************************/
-    (*psEnc).sCmn.first_frame_after_reset = 0 as libc::c_int;
+    (*psEnc).sCmn.first_frame_after_reset = 0 as i32;
     /* Payload size */
-    *pnBytesOut = ec_tell(psRangeEnc) + 7 as libc::c_int >> 3 as libc::c_int;
+    *pnBytesOut = ec_tell(psRangeEnc) + 7 as i32 >> 3 as i32;
     return ret;
 }
 /* **********************************************************************
@@ -888,14 +888,14 @@ POSSIBILITY OF SUCH DAMAGE.
 unsafe extern "C" fn silk_LBRR_encode_FLP(
     mut psEnc: *mut crate::structs_FLP_h::silk_encoder_state_FLP,
     mut psEncCtrl: *mut crate::structs_FLP_h::silk_encoder_control_FLP,
-    mut xfw: *const libc::c_float,
-    mut condCoding: libc::c_int,
+    mut xfw: *const f32,
+    mut condCoding: i32,
 )
 /* I    The type of conditional coding used so far for this frame */
 {
-    let mut k: libc::c_int = 0;
+    let mut k: i32 = 0;
     let mut Gains_Q16: [crate::opus_types_h::opus_int32; 4] = [0; 4];
-    let mut TempGains: [libc::c_float; 4] = [0.; 4];
+    let mut TempGains: [f32; 4] = [0.; 4];
     let mut psIndices_LBRR: *mut crate::structs_h::SideInfoIndices = &mut *(*psEnc)
         .sCmn
         .indices_LBRR
@@ -922,11 +922,11 @@ unsafe extern "C" fn silk_LBRR_encode_FLP(
     if (*psEnc).sCmn.LBRR_enabled != 0
         && (*psEnc).sCmn.speech_activity_Q8
             > ((0.3f32
-                * ((1 as libc::c_int as libc::c_longlong) << 8 as libc::c_int) as libc::c_float)
-                as libc::c_double
+                * ((1 as i32 as i64) << 8 as i32) as f32)
+                as f64
                 + 0.5f64) as crate::opus_types_h::opus_int32
     {
-        (*psEnc).sCmn.LBRR_flags[(*psEnc).sCmn.nFramesEncoded as usize] = 1 as libc::c_int;
+        (*psEnc).sCmn.LBRR_flags[(*psEnc).sCmn.nFramesEncoded as usize] = 1 as i32;
         /* Copy noise shaping quantizer state and quantization indices from regular encoding */
         crate::stdlib::memcpy(
             &mut sNSQ_LBRR as *mut crate::structs_h::silk_nsq_state as *mut libc::c_void,
@@ -944,37 +944,37 @@ unsafe extern "C" fn silk_LBRR_encode_FLP(
             TempGains.as_mut_ptr() as *mut libc::c_void,
             (*psEncCtrl).Gains.as_mut_ptr() as *const libc::c_void,
             ((*psEnc).sCmn.nb_subfr as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<libc::c_float>() as libc::c_ulong),
+                .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
         );
-        if (*psEnc).sCmn.nFramesEncoded == 0 as libc::c_int
-            || (*psEnc).sCmn.LBRR_flags[((*psEnc).sCmn.nFramesEncoded - 1 as libc::c_int) as usize]
-                == 0 as libc::c_int
+        if (*psEnc).sCmn.nFramesEncoded == 0 as i32
+            || (*psEnc).sCmn.LBRR_flags[((*psEnc).sCmn.nFramesEncoded - 1 as i32) as usize]
+                == 0 as i32
         {
             /* First frame in packet or previous frame not LBRR coded */
             (*psEnc).sCmn.LBRRprevLastGainIndex = (*psEnc).sShape.LastGainIndex;
             /* Increase Gains to get target LBRR rate */
-            (*psIndices_LBRR).GainsIndices[0 as libc::c_int as usize] =
-                ((*psIndices_LBRR).GainsIndices[0 as libc::c_int as usize] as libc::c_int
-                    + (*psEnc).sCmn.LBRR_GainIncreases) as libc::c_schar;
-            (*psIndices_LBRR).GainsIndices[0 as libc::c_int as usize] = silk_min_int(
-                (*psIndices_LBRR).GainsIndices[0 as libc::c_int as usize] as libc::c_int,
-                64 as libc::c_int - 1 as libc::c_int,
+            (*psIndices_LBRR).GainsIndices[0 as i32 as usize] =
+                ((*psIndices_LBRR).GainsIndices[0 as i32 as usize] as i32
+                    + (*psEnc).sCmn.LBRR_GainIncreases) as i8;
+            (*psIndices_LBRR).GainsIndices[0 as i32 as usize] = silk_min_int(
+                (*psIndices_LBRR).GainsIndices[0 as i32 as usize] as i32,
+                64 as i32 - 1 as i32,
             )
-                as libc::c_schar
+                as i8
         }
         /* Decode to get gains in sync with decoder */
         crate::src::opus_1_2_1::silk::gain_quant::silk_gains_dequant(
             Gains_Q16.as_mut_ptr(),
-            (*psIndices_LBRR).GainsIndices.as_mut_ptr() as *const libc::c_schar,
+            (*psIndices_LBRR).GainsIndices.as_mut_ptr() as *const i8,
             &mut (*psEnc).sCmn.LBRRprevLastGainIndex,
-            (condCoding == 2 as libc::c_int) as libc::c_int,
+            (condCoding == 2 as i32) as i32,
             (*psEnc).sCmn.nb_subfr,
         );
         /* Overwrite unquantized gains with quantized gains and convert back to Q0 from Q16 */
-        k = 0 as libc::c_int;
+        k = 0 as i32;
         while k < (*psEnc).sCmn.nb_subfr {
             (*psEncCtrl).Gains[k as usize] =
-                Gains_Q16[k as usize] as libc::c_float * (1.0f32 / 65536.0f32);
+                Gains_Q16[k as usize] as f32 * (1.0f32 / 65536.0f32);
             k += 1
         }
         /* ****************************************/
@@ -993,7 +993,7 @@ unsafe extern "C" fn silk_LBRR_encode_FLP(
             (*psEncCtrl).Gains.as_mut_ptr() as *mut libc::c_void,
             TempGains.as_mut_ptr() as *const libc::c_void,
             ((*psEnc).sCmn.nb_subfr as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<libc::c_float>() as libc::c_ulong),
+                .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
         );
     };
 }

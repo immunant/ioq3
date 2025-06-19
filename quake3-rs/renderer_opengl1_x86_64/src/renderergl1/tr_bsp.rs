@@ -227,10 +227,10 @@ pub mod q_shared_h {
         mut v: *const crate::src::qcommon::q_shared::vec_t,
     ) -> crate::src::qcommon::q_shared::vec_t {
         return crate::stdlib::sqrt(
-            (*v.offset(0 as libc::c_int as isize) * *v.offset(0 as libc::c_int as isize)
-                + *v.offset(1 as libc::c_int as isize) * *v.offset(1 as libc::c_int as isize)
-                + *v.offset(2 as libc::c_int as isize) * *v.offset(2 as libc::c_int as isize))
-                as libc::c_double,
+            (*v.offset(0 as i32 as isize) * *v.offset(0 as i32 as isize)
+                + *v.offset(1 as i32 as isize) * *v.offset(1 as i32 as isize)
+                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize))
+                as f64,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
 
@@ -584,59 +584,59 @@ static mut fileBase: *mut crate::src::qcommon::q_shared::byte =
     0 as *const crate::src::qcommon::q_shared::byte as *mut crate::src::qcommon::q_shared::byte;
 #[no_mangle]
 
-pub static mut c_subdivisions: libc::c_int = 0;
+pub static mut c_subdivisions: i32 = 0;
 #[no_mangle]
 
-pub static mut c_gridVerts: libc::c_int = 0;
+pub static mut c_gridVerts: i32 = 0;
 //===============================================================================
 
 unsafe extern "C" fn HSVtoRGB(
-    mut h: libc::c_float,
-    mut s: libc::c_float,
-    mut v: libc::c_float,
-    mut rgb: *mut libc::c_float,
+    mut h: f32,
+    mut s: f32,
+    mut v: f32,
+    mut rgb: *mut f32,
 ) {
-    let mut i: libc::c_int = 0;
-    let mut f: libc::c_float = 0.;
-    let mut p: libc::c_float = 0.;
-    let mut q: libc::c_float = 0.;
-    let mut t: libc::c_float = 0.;
-    h *= 5 as libc::c_int as libc::c_float;
-    i = crate::stdlib::floor(h as libc::c_double) as libc::c_int;
-    f = h - i as libc::c_float;
-    p = v * (1 as libc::c_int as libc::c_float - s);
-    q = v * (1 as libc::c_int as libc::c_float - s * f);
-    t = v * (1 as libc::c_int as libc::c_float - s * (1 as libc::c_int as libc::c_float - f));
+    let mut i: i32 = 0;
+    let mut f: f32 = 0.;
+    let mut p: f32 = 0.;
+    let mut q: f32 = 0.;
+    let mut t: f32 = 0.;
+    h *= 5 as i32 as f32;
+    i = crate::stdlib::floor(h as f64) as i32;
+    f = h - i as f32;
+    p = v * (1 as i32 as f32 - s);
+    q = v * (1 as i32 as f32 - s * f);
+    t = v * (1 as i32 as f32 - s * (1 as i32 as f32 - f));
     match i {
         0 => {
-            *rgb.offset(0 as libc::c_int as isize) = v;
-            *rgb.offset(1 as libc::c_int as isize) = t;
-            *rgb.offset(2 as libc::c_int as isize) = p
+            *rgb.offset(0 as i32 as isize) = v;
+            *rgb.offset(1 as i32 as isize) = t;
+            *rgb.offset(2 as i32 as isize) = p
         }
         1 => {
-            *rgb.offset(0 as libc::c_int as isize) = q;
-            *rgb.offset(1 as libc::c_int as isize) = v;
-            *rgb.offset(2 as libc::c_int as isize) = p
+            *rgb.offset(0 as i32 as isize) = q;
+            *rgb.offset(1 as i32 as isize) = v;
+            *rgb.offset(2 as i32 as isize) = p
         }
         2 => {
-            *rgb.offset(0 as libc::c_int as isize) = p;
-            *rgb.offset(1 as libc::c_int as isize) = v;
-            *rgb.offset(2 as libc::c_int as isize) = t
+            *rgb.offset(0 as i32 as isize) = p;
+            *rgb.offset(1 as i32 as isize) = v;
+            *rgb.offset(2 as i32 as isize) = t
         }
         3 => {
-            *rgb.offset(0 as libc::c_int as isize) = p;
-            *rgb.offset(1 as libc::c_int as isize) = q;
-            *rgb.offset(2 as libc::c_int as isize) = v
+            *rgb.offset(0 as i32 as isize) = p;
+            *rgb.offset(1 as i32 as isize) = q;
+            *rgb.offset(2 as i32 as isize) = v
         }
         4 => {
-            *rgb.offset(0 as libc::c_int as isize) = t;
-            *rgb.offset(1 as libc::c_int as isize) = p;
-            *rgb.offset(2 as libc::c_int as isize) = v
+            *rgb.offset(0 as i32 as isize) = t;
+            *rgb.offset(1 as i32 as isize) = p;
+            *rgb.offset(2 as i32 as isize) = v
         }
         5 => {
-            *rgb.offset(0 as libc::c_int as isize) = v;
-            *rgb.offset(1 as libc::c_int as isize) = p;
-            *rgb.offset(2 as libc::c_int as isize) = q
+            *rgb.offset(0 as i32 as isize) = v;
+            *rgb.offset(1 as i32 as isize) = p;
+            *rgb.offset(2 as i32 as isize) = q
         }
         _ => {}
     };
@@ -652,30 +652,30 @@ unsafe extern "C" fn R_ColorShiftLightingBytes(
     mut in_0: *mut crate::src::qcommon::q_shared::byte,
     mut out: *mut crate::src::qcommon::q_shared::byte,
 ) {
-    let mut shift: libc::c_int = 0;
-    let mut r: libc::c_int = 0;
-    let mut g: libc::c_int = 0;
-    let mut b: libc::c_int = 0;
+    let mut shift: i32 = 0;
+    let mut r: i32 = 0;
+    let mut g: i32 = 0;
+    let mut b: i32 = 0;
     // shift the color data based on overbright range
     shift = (*crate::src::renderergl1::tr_init::r_mapOverBrightBits).integer
         - crate::src::renderergl1::tr_main::tr.overbrightBits;
     // shift the data based on overbright range
-    r = (*in_0.offset(0 as libc::c_int as isize) as libc::c_int) << shift;
-    g = (*in_0.offset(1 as libc::c_int as isize) as libc::c_int) << shift;
-    b = (*in_0.offset(2 as libc::c_int as isize) as libc::c_int) << shift;
+    r = (*in_0.offset(0 as i32 as isize) as i32) << shift;
+    g = (*in_0.offset(1 as i32 as isize) as i32) << shift;
+    b = (*in_0.offset(2 as i32 as isize) as i32) << shift;
     // normalize by color instead of saturating to white
-    if r | g | b > 255 as libc::c_int {
-        let mut max: libc::c_int = 0;
+    if r | g | b > 255 as i32 {
+        let mut max: i32 = 0;
         max = if r > g { r } else { g };
         max = if max > b { max } else { b };
-        r = r * 255 as libc::c_int / max;
-        g = g * 255 as libc::c_int / max;
-        b = b * 255 as libc::c_int / max
+        r = r * 255 as i32 / max;
+        g = g * 255 as i32 / max;
+        b = b * 255 as i32 / max
     }
-    *out.offset(0 as libc::c_int as isize) = r as crate::src::qcommon::q_shared::byte;
-    *out.offset(1 as libc::c_int as isize) = g as crate::src::qcommon::q_shared::byte;
-    *out.offset(2 as libc::c_int as isize) = b as crate::src::qcommon::q_shared::byte;
-    *out.offset(3 as libc::c_int as isize) = *in_0.offset(3 as libc::c_int as isize);
+    *out.offset(0 as i32 as isize) = r as crate::src::qcommon::q_shared::byte;
+    *out.offset(1 as i32 as isize) = g as crate::src::qcommon::q_shared::byte;
+    *out.offset(2 as i32 as isize) = b as crate::src::qcommon::q_shared::byte;
+    *out.offset(3 as i32 as isize) = *in_0.offset(3 as i32 as isize);
 }
 
 unsafe extern "C" fn R_LoadLightmaps(mut l: *mut crate::qfiles_h::lump_t) {
@@ -683,11 +683,11 @@ unsafe extern "C" fn R_LoadLightmaps(mut l: *mut crate::qfiles_h::lump_t) {
         0 as *mut crate::src::qcommon::q_shared::byte;
     let mut buf_p: *mut crate::src::qcommon::q_shared::byte =
         0 as *mut crate::src::qcommon::q_shared::byte;
-    let mut len: libc::c_int = 0;
+    let mut len: i32 = 0;
     let mut image: [crate::src::qcommon::q_shared::byte; 65536] = [0; 65536];
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
-    let mut maxIntensity: libc::c_float = 0 as libc::c_int as libc::c_float;
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
+    let mut maxIntensity: f32 = 0 as i32 as f32;
     len = (*l).filelen;
     if len == 0 {
         return;
@@ -697,16 +697,16 @@ unsafe extern "C" fn R_LoadLightmaps(mut l: *mut crate::qfiles_h::lump_t) {
     crate::src::renderergl1::tr_cmds::R_IssuePendingRenderCommands();
     // create all the lightmaps
     crate::src::renderergl1::tr_main::tr.numLightmaps =
-        len / (128 as libc::c_int * 128 as libc::c_int * 3 as libc::c_int);
-    if crate::src::renderergl1::tr_main::tr.numLightmaps == 1 as libc::c_int {
+        len / (128 as i32 * 128 as i32 * 3 as i32);
+    if crate::src::renderergl1::tr_main::tr.numLightmaps == 1 as i32 {
         //FIXME: HACK: maps with only one lightmap turn up fullbright for some reason.
         //this avoids this, but isn't the correct solution.
         crate::src::renderergl1::tr_main::tr.numLightmaps += 1
     }
     // if we are in r_vertexLight mode, we don't need the lightmaps at all
     if (*crate::src::renderergl1::tr_init::r_vertexLight).integer != 0
-        || crate::src::renderergl1::tr_init::glConfig.hardwareType as libc::c_uint
-            == crate::tr_types_h::GLHW_PERMEDIA2 as libc::c_int as libc::c_uint
+        || crate::src::renderergl1::tr_init::glConfig.hardwareType as u32
+            == crate::tr_types_h::GLHW_PERMEDIA2 as i32 as u32
     {
         return;
     }
@@ -716,35 +716,35 @@ unsafe extern "C" fn R_LoadLightmaps(mut l: *mut crate::qfiles_h::lump_t) {
             .expect("non-null function pointer")(
             (crate::src::renderergl1::tr_main::tr.numLightmaps as libc::c_ulong).wrapping_mul(
                 ::std::mem::size_of::<*mut crate::tr_common_h::image_t>() as libc::c_ulong,
-            ) as libc::c_int,
+            ) as i32,
             crate::src::qcommon::q_shared::h_low,
         ) as *mut *mut crate::tr_common_h::image_t;
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < crate::src::renderergl1::tr_main::tr.numLightmaps {
         // expand the 24 bit on-disk to 32 bit
         buf_p =
-            buf.offset((i * 128 as libc::c_int * 128 as libc::c_int * 3 as libc::c_int) as isize);
-        if (*crate::src::renderergl1::tr_init::r_lightmap).integer == 2 as libc::c_int {
+            buf.offset((i * 128 as i32 * 128 as i32 * 3 as i32) as isize);
+        if (*crate::src::renderergl1::tr_init::r_lightmap).integer == 2 as i32 {
             // color code by intensity as development tool	(FIXME: check range)
-            j = 0 as libc::c_int;
-            while j < 128 as libc::c_int * 128 as libc::c_int {
-                let mut r: libc::c_float = *buf_p
-                    .offset((j * 3 as libc::c_int + 0 as libc::c_int) as isize)
-                    as libc::c_float;
-                let mut g: libc::c_float = *buf_p
-                    .offset((j * 3 as libc::c_int + 1 as libc::c_int) as isize)
-                    as libc::c_float;
-                let mut b: libc::c_float = *buf_p
-                    .offset((j * 3 as libc::c_int + 2 as libc::c_int) as isize)
-                    as libc::c_float;
-                let mut intensity: libc::c_float = 0.;
-                let mut out: [libc::c_float; 3] = [
-                    0.0f64 as libc::c_float,
-                    0.0f64 as libc::c_float,
-                    0.0f64 as libc::c_float,
+            j = 0 as i32;
+            while j < 128 as i32 * 128 as i32 {
+                let mut r: f32 = *buf_p
+                    .offset((j * 3 as i32 + 0 as i32) as isize)
+                    as f32;
+                let mut g: f32 = *buf_p
+                    .offset((j * 3 as i32 + 1 as i32) as isize)
+                    as f32;
+                let mut b: f32 = *buf_p
+                    .offset((j * 3 as i32 + 2 as i32) as isize)
+                    as f32;
+                let mut intensity: f32 = 0.;
+                let mut out: [f32; 3] = [
+                    0.0f64 as f32,
+                    0.0f64 as f32,
+                    0.0f64 as f32,
                 ];
                 intensity = 0.33f32 * r + 0.685f32 * g + 0.063f32 * b;
-                if intensity > 255 as libc::c_int as libc::c_float {
+                if intensity > 255 as i32 as f32 {
                     intensity = 1.0f32
                 } else {
                     intensity /= 255.0f32
@@ -754,32 +754,32 @@ unsafe extern "C" fn R_LoadLightmaps(mut l: *mut crate::qfiles_h::lump_t) {
                 }
                 HSVtoRGB(
                     intensity,
-                    1.00f64 as libc::c_float,
-                    0.50f64 as libc::c_float,
+                    1.00f64 as f32,
+                    0.50f64 as f32,
                     out.as_mut_ptr(),
                 );
-                image[(j * 4 as libc::c_int + 0 as libc::c_int) as usize] =
-                    (out[0 as libc::c_int as usize] * 255 as libc::c_int as libc::c_float)
+                image[(j * 4 as i32 + 0 as i32) as usize] =
+                    (out[0 as i32 as usize] * 255 as i32 as f32)
                         as crate::src::qcommon::q_shared::byte;
-                image[(j * 4 as libc::c_int + 1 as libc::c_int) as usize] =
-                    (out[1 as libc::c_int as usize] * 255 as libc::c_int as libc::c_float)
+                image[(j * 4 as i32 + 1 as i32) as usize] =
+                    (out[1 as i32 as usize] * 255 as i32 as f32)
                         as crate::src::qcommon::q_shared::byte;
-                image[(j * 4 as libc::c_int + 2 as libc::c_int) as usize] =
-                    (out[2 as libc::c_int as usize] * 255 as libc::c_int as libc::c_float)
+                image[(j * 4 as i32 + 2 as i32) as usize] =
+                    (out[2 as i32 as usize] * 255 as i32 as f32)
                         as crate::src::qcommon::q_shared::byte;
-                image[(j * 4 as libc::c_int + 3 as libc::c_int) as usize] =
-                    255 as libc::c_int as crate::src::qcommon::q_shared::byte;
+                image[(j * 4 as i32 + 3 as i32) as usize] =
+                    255 as i32 as crate::src::qcommon::q_shared::byte;
                 j += 1
             }
         } else {
-            j = 0 as libc::c_int;
-            while j < 128 as libc::c_int * 128 as libc::c_int {
+            j = 0 as i32;
+            while j < 128 as i32 * 128 as i32 {
                 R_ColorShiftLightingBytes(
-                    &mut *buf_p.offset((j * 3 as libc::c_int) as isize),
-                    &mut *image.as_mut_ptr().offset((j * 4 as libc::c_int) as isize),
+                    &mut *buf_p.offset((j * 3 as i32) as isize),
+                    &mut *image.as_mut_ptr().offset((j * 4 as i32) as isize),
                 );
-                image[(j * 4 as libc::c_int + 3 as libc::c_int) as usize] =
-                    255 as libc::c_int as crate::src::qcommon::q_shared::byte;
+                image[(j * 4 as i32 + 3 as i32) as usize] =
+                    255 as i32 as crate::src::qcommon::q_shared::byte;
                 j += 1
             }
         }
@@ -792,24 +792,24 @@ unsafe extern "C" fn R_LoadLightmaps(mut l: *mut crate::qfiles_h::lump_t) {
                 i,
             ),
             image.as_mut_ptr(),
-            128 as libc::c_int,
-            128 as libc::c_int,
+            128 as i32,
+            128 as i32,
             crate::tr_common_h::IMGTYPE_COLORALPHA,
-            (crate::tr_common_h::IMGFLAG_NOLIGHTSCALE as libc::c_int
-                | crate::tr_common_h::IMGFLAG_NO_COMPRESSION as libc::c_int
-                | crate::tr_common_h::IMGFLAG_CLAMPTOEDGE as libc::c_int)
+            (crate::tr_common_h::IMGFLAG_NOLIGHTSCALE as i32
+                | crate::tr_common_h::IMGFLAG_NO_COMPRESSION as i32
+                | crate::tr_common_h::IMGFLAG_CLAMPTOEDGE as i32)
                 as crate::tr_common_h::imgFlags_t,
-            0 as libc::c_int,
+            0 as i32,
         ) as *mut crate::tr_common_h::image_s;
         i += 1
     }
-    if (*crate::src::renderergl1::tr_init::r_lightmap).integer == 2 as libc::c_int {
+    if (*crate::src::renderergl1::tr_init::r_lightmap).integer == 2 as i32 {
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+            crate::src::qcommon::q_shared::PRINT_ALL as i32,
             b"Brightest lightmap value: %d\n\x00" as *const u8 as *const libc::c_char,
-            (maxIntensity * 255 as libc::c_int as libc::c_float) as libc::c_int,
+            (maxIntensity * 255 as i32 as f32) as i32,
         );
     };
 }
@@ -833,10 +833,10 @@ R_LoadVisibility
 */
 
 unsafe extern "C" fn R_LoadVisibility(mut l: *mut crate::qfiles_h::lump_t) {
-    let mut len: libc::c_int = 0;
+    let mut len: i32 = 0;
     let mut buf: *mut crate::src::qcommon::q_shared::byte =
         0 as *mut crate::src::qcommon::q_shared::byte;
-    len = s_worldData.numClusters + 63 as libc::c_int & !(63 as libc::c_int);
+    len = s_worldData.numClusters + 63 as i32 & !(63 as i32);
     s_worldData.novis = crate::src::renderergl1::tr_main::ri
         .Hunk_Alloc
         .expect("non-null function pointer")(
@@ -844,7 +844,7 @@ unsafe extern "C" fn R_LoadVisibility(mut l: *mut crate::qfiles_h::lump_t) {
     ) as *mut crate::src::qcommon::q_shared::byte;
     crate::stdlib::memset(
         s_worldData.novis as *mut libc::c_void,
-        0xff as libc::c_int,
+        0xff as i32,
         len as libc::c_ulong,
     );
     len = (*l).filelen;
@@ -852,8 +852,8 @@ unsafe extern "C" fn R_LoadVisibility(mut l: *mut crate::qfiles_h::lump_t) {
         return;
     }
     buf = fileBase.offset((*l).fileofs as isize);
-    s_worldData.numClusters = *(buf as *mut libc::c_int).offset(0 as libc::c_int as isize);
-    s_worldData.clusterBytes = *(buf as *mut libc::c_int).offset(1 as libc::c_int as isize);
+    s_worldData.numClusters = *(buf as *mut i32).offset(0 as i32 as isize);
+    s_worldData.clusterBytes = *(buf as *mut i32).offset(1 as i32 as isize);
     // CM_Load should have given us the vis data to share, so
     // we don't need to allocate another copy
     if !crate::src::renderergl1::tr_main::tr
@@ -867,13 +867,13 @@ unsafe extern "C" fn R_LoadVisibility(mut l: *mut crate::qfiles_h::lump_t) {
         dest = crate::src::renderergl1::tr_main::ri
             .Hunk_Alloc
             .expect("non-null function pointer")(
-            len - 8 as libc::c_int,
+            len - 8 as i32,
             crate::src::qcommon::q_shared::h_low,
         ) as *mut crate::src::qcommon::q_shared::byte;
         crate::stdlib::memcpy(
             dest as *mut libc::c_void,
-            buf.offset(8 as libc::c_int as isize) as *const libc::c_void,
-            (len - 8 as libc::c_int) as libc::c_ulong,
+            buf.offset(8 as i32 as isize) as *const libc::c_void,
+            (len - 8 as i32) as libc::c_ulong,
         );
         s_worldData.vis = dest
     };
@@ -886,30 +886,30 @@ ShaderForShaderNum
 */
 
 unsafe extern "C" fn ShaderForShaderNum(
-    mut shaderNum: libc::c_int,
-    mut lightmapNum: libc::c_int,
+    mut shaderNum: i32,
+    mut lightmapNum: i32,
 ) -> *mut crate::tr_local_h::shader_t {
     let mut shader: *mut crate::tr_local_h::shader_t = 0 as *mut crate::tr_local_h::shader_t;
     let mut dsh: *mut crate::qfiles_h::dshader_t = 0 as *mut crate::qfiles_h::dshader_t;
-    let mut _shaderNum: libc::c_int = shaderNum;
-    if _shaderNum < 0 as libc::c_int || _shaderNum >= s_worldData.numShaders {
+    let mut _shaderNum: i32 = shaderNum;
+    if _shaderNum < 0 as i32 || _shaderNum >= s_worldData.numShaders {
         crate::src::renderergl1::tr_main::ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"ShaderForShaderNum: bad num %i\x00" as *const u8 as *const libc::c_char,
             _shaderNum,
         );
     }
     dsh = &mut *s_worldData.shaders.offset(_shaderNum as isize) as *mut crate::qfiles_h::dshader_t;
     if (*crate::src::renderergl1::tr_init::r_vertexLight).integer != 0
-        || crate::src::renderergl1::tr_init::glConfig.hardwareType as libc::c_uint
-            == crate::tr_types_h::GLHW_PERMEDIA2 as libc::c_int as libc::c_uint
+        || crate::src::renderergl1::tr_init::glConfig.hardwareType as u32
+            == crate::tr_types_h::GLHW_PERMEDIA2 as i32 as u32
     {
-        lightmapNum = -(3 as libc::c_int)
+        lightmapNum = -(3 as i32)
     }
     if (*crate::src::renderergl1::tr_init::r_fullbright).integer != 0 {
-        lightmapNum = -(2 as libc::c_int)
+        lightmapNum = -(2 as i32)
     }
     shader = crate::src::renderergl1::tr_shader::R_FindShader(
         (*dsh).shader.as_mut_ptr(),
@@ -932,20 +932,20 @@ unsafe extern "C" fn ParseFace(
     mut ds: *mut crate::qfiles_h::dsurface_t,
     mut verts: *mut crate::qfiles_h::drawVert_t,
     mut surf: *mut crate::tr_local_h::msurface_t,
-    mut indexes: *mut libc::c_int,
+    mut indexes: *mut i32,
 ) {
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
     let mut cv: *mut crate::tr_local_h::srfSurfaceFace_t =
         0 as *mut crate::tr_local_h::srfSurfaceFace_t;
-    let mut numPoints: libc::c_int = 0;
-    let mut numIndexes: libc::c_int = 0;
-    let mut lightmapNum: libc::c_int = 0;
-    let mut sfaceSize: libc::c_int = 0;
-    let mut ofsIndexes: libc::c_int = 0;
+    let mut numPoints: i32 = 0;
+    let mut numIndexes: i32 = 0;
+    let mut lightmapNum: i32 = 0;
+    let mut sfaceSize: i32 = 0;
+    let mut ofsIndexes: i32 = 0;
     lightmapNum = (*ds).lightmapNum;
     // get fog volume
-    (*surf).fogIndex = (*ds).fogNum + 1 as libc::c_int;
+    (*surf).fogIndex = (*ds).fogNum + 1 as i32;
     // get shader value
     (*surf).shader = ShaderForShaderNum((*ds).shaderNum, lightmapNum);
     if (*crate::src::renderergl1::tr_init::r_singleShader).integer != 0
@@ -954,28 +954,28 @@ unsafe extern "C" fn ParseFace(
         (*surf).shader = crate::src::renderergl1::tr_main::tr.defaultShader
     }
     numPoints = (*ds).numVerts;
-    if numPoints > 64 as libc::c_int {
+    if numPoints > 64 as i32 {
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_WARNING as libc::c_int,
+            crate::src::qcommon::q_shared::PRINT_WARNING as i32,
             b"WARNING: MAX_FACE_POINTS exceeded: %i\n\x00" as *const u8 as *const libc::c_char,
             numPoints,
         );
-        numPoints = 64 as libc::c_int;
+        numPoints = 64 as i32;
         (*surf).shader = crate::src::renderergl1::tr_main::tr.defaultShader
     }
     numIndexes = (*ds).numIndexes;
     // create the srfSurfaceFace_t
     sfaceSize = (40 as libc::c_ulong).wrapping_add(
-        (::std::mem::size_of::<[libc::c_float; 8]>() as libc::c_ulong)
+        (::std::mem::size_of::<[f32; 8]>() as libc::c_ulong)
             .wrapping_mul(numPoints as libc::c_ulong),
-    ) as libc::c_int;
+    ) as i32;
     ofsIndexes = sfaceSize;
     sfaceSize = (sfaceSize as libc::c_ulong).wrapping_add(
-        (::std::mem::size_of::<libc::c_int>() as libc::c_ulong)
+        (::std::mem::size_of::<i32>() as libc::c_ulong)
             .wrapping_mul(numIndexes as libc::c_ulong),
-    ) as libc::c_int as libc::c_int;
+    ) as i32 as i32;
     cv = crate::src::renderergl1::tr_main::ri
         .Hunk_Alloc
         .expect("non-null function pointer")(
@@ -986,19 +986,19 @@ unsafe extern "C" fn ParseFace(
     (*cv).numIndices = numIndexes;
     (*cv).ofsIndices = ofsIndexes;
     verts = verts.offset((*ds).firstVert as isize);
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < numPoints {
-        j = 0 as libc::c_int;
-        while j < 3 as libc::c_int {
+        j = 0 as i32;
+        while j < 3 as i32 {
             (*(*cv).points.as_mut_ptr().offset(i as isize))[j as usize] =
                 (*verts.offset(i as isize)).xyz[j as usize];
             j += 1
         }
-        j = 0 as libc::c_int;
-        while j < 2 as libc::c_int {
-            (*(*cv).points.as_mut_ptr().offset(i as isize))[(3 as libc::c_int + j) as usize] =
+        j = 0 as i32;
+        while j < 2 as i32 {
+            (*(*cv).points.as_mut_ptr().offset(i as isize))[(3 as i32 + j) as usize] =
                 (*verts.offset(i as isize)).st[j as usize];
-            (*(*cv).points.as_mut_ptr().offset(i as isize))[(5 as libc::c_int + j) as usize] =
+            (*(*cv).points.as_mut_ptr().offset(i as isize))[(5 as i32 + j) as usize] =
                 (*verts.offset(i as isize)).lightmap[j as usize];
             j += 1
         }
@@ -1006,44 +1006,44 @@ unsafe extern "C" fn ParseFace(
             (*verts.offset(i as isize)).color.as_mut_ptr(),
             &mut *(*(*cv).points.as_mut_ptr().offset(i as isize))
                 .as_mut_ptr()
-                .offset(7 as libc::c_int as isize) as *mut libc::c_float
+                .offset(7 as i32 as isize) as *mut f32
                 as *mut crate::src::qcommon::q_shared::byte,
         );
         i += 1
     }
     indexes = indexes.offset((*ds).firstIndex as isize);
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < numIndexes {
         *((cv as *mut crate::src::qcommon::q_shared::byte).offset((*cv).ofsIndices as isize)
-            as *mut libc::c_int)
+            as *mut i32)
             .offset(i as isize) = *indexes.offset(i as isize);
         i += 1
     }
     // take the plane information from the lightmap vector
-    i = 0 as libc::c_int;
-    while i < 3 as libc::c_int {
-        (*cv).plane.normal[i as usize] = (*ds).lightmapVecs[2 as libc::c_int as usize][i as usize];
+    i = 0 as i32;
+    while i < 3 as i32 {
+        (*cv).plane.normal[i as usize] = (*ds).lightmapVecs[2 as i32 as usize][i as usize];
         i += 1
     }
-    (*cv).plane.dist = (*(*cv).points.as_mut_ptr().offset(0 as libc::c_int as isize))
-        [0 as libc::c_int as usize]
-        * (*cv).plane.normal[0 as libc::c_int as usize]
-        + (*(*cv).points.as_mut_ptr().offset(0 as libc::c_int as isize))[1 as libc::c_int as usize]
-            * (*cv).plane.normal[1 as libc::c_int as usize]
-        + (*(*cv).points.as_mut_ptr().offset(0 as libc::c_int as isize))[2 as libc::c_int as usize]
-            * (*cv).plane.normal[2 as libc::c_int as usize];
+    (*cv).plane.dist = (*(*cv).points.as_mut_ptr().offset(0 as i32 as isize))
+        [0 as i32 as usize]
+        * (*cv).plane.normal[0 as i32 as usize]
+        + (*(*cv).points.as_mut_ptr().offset(0 as i32 as isize))[1 as i32 as usize]
+            * (*cv).plane.normal[1 as i32 as usize]
+        + (*(*cv).points.as_mut_ptr().offset(0 as i32 as isize))[2 as i32 as usize]
+            * (*cv).plane.normal[2 as i32 as usize];
     crate::src::qcommon::q_math::SetPlaneSignbits(
         &mut (*cv).plane as *mut _ as *mut crate::src::qcommon::q_shared::cplane_s,
     );
     (*cv).plane.type_0 =
-        if (*cv).plane.normal[0 as libc::c_int as usize] as libc::c_double == 1.0f64 {
-            0 as libc::c_int
-        } else if (*cv).plane.normal[1 as libc::c_int as usize] as libc::c_double == 1.0f64 {
-            1 as libc::c_int
-        } else if (*cv).plane.normal[2 as libc::c_int as usize] as libc::c_double == 1.0f64 {
-            2 as libc::c_int
+        if (*cv).plane.normal[0 as i32 as usize] as f64 == 1.0f64 {
+            0 as i32
+        } else if (*cv).plane.normal[1 as i32 as usize] as f64 == 1.0f64 {
+            1 as i32
+        } else if (*cv).plane.normal[2 as i32 as usize] as f64 == 1.0f64 {
+            2 as i32
         } else {
-            3 as libc::c_int
+            3 as i32
         } as crate::src::qcommon::q_shared::byte;
     (*surf).data = cv as *mut crate::tr_local_h::surfaceType_t;
 }
@@ -1060,11 +1060,11 @@ unsafe extern "C" fn ParseMesh(
 ) {
     let mut grid: *mut crate::tr_local_h::srfGridMesh_t =
         0 as *mut crate::tr_local_h::srfGridMesh_t;
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
-    let mut width: libc::c_int = 0;
-    let mut height: libc::c_int = 0;
-    let mut numPoints: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
+    let mut width: i32 = 0;
+    let mut height: i32 = 0;
+    let mut numPoints: i32 = 0;
     let mut points: [crate::qfiles_h::drawVert_t; 1024] = [crate::qfiles_h::drawVert_t {
         xyz: [0.; 3],
         st: [0.; 2],
@@ -1072,13 +1072,13 @@ unsafe extern "C" fn ParseMesh(
         normal: [0.; 3],
         color: [0; 4],
     }; 1024];
-    let mut lightmapNum: libc::c_int = 0;
+    let mut lightmapNum: i32 = 0;
     let mut bounds: [crate::src::qcommon::q_shared::vec3_t; 2] = [[0.; 3]; 2];
     let mut tmpVec: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     static mut skipData: crate::tr_local_h::surfaceType_t = crate::tr_local_h::SF_SKIP;
     lightmapNum = (*ds).lightmapNum;
     // get fog volume
-    (*surf).fogIndex = (*ds).fogNum + 1 as libc::c_int;
+    (*surf).fogIndex = (*ds).fogNum + 1 as i32;
     // get shader value
     (*surf).shader = ShaderForShaderNum((*ds).shaderNum, lightmapNum);
     if (*crate::src::renderergl1::tr_init::r_singleShader).integer != 0
@@ -1088,7 +1088,7 @@ unsafe extern "C" fn ParseMesh(
     }
     // we may have a nodraw surface, because they might still need to
     // be around for movement clipping
-    if (*s_worldData.shaders.offset((*ds).shaderNum as isize)).surfaceFlags & 0x80 as libc::c_int
+    if (*s_worldData.shaders.offset((*ds).shaderNum as isize)).surfaceFlags & 0x80 as i32
         != 0
     {
         (*surf).data = &mut skipData;
@@ -1098,16 +1098,16 @@ unsafe extern "C" fn ParseMesh(
     height = (*ds).patchHeight;
     verts = verts.offset((*ds).firstVert as isize);
     numPoints = width * height;
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < numPoints {
-        j = 0 as libc::c_int;
-        while j < 3 as libc::c_int {
+        j = 0 as i32;
+        while j < 3 as i32 {
             points[i as usize].xyz[j as usize] = (*verts.offset(i as isize)).xyz[j as usize];
             points[i as usize].normal[j as usize] = (*verts.offset(i as isize)).normal[j as usize];
             j += 1
         }
-        j = 0 as libc::c_int;
-        while j < 2 as libc::c_int {
+        j = 0 as i32;
+        while j < 2 as i32 {
             points[i as usize].st[j as usize] = (*verts.offset(i as isize)).st[j as usize];
             points[i as usize].lightmap[j as usize] =
                 (*verts.offset(i as isize)).lightmap[j as usize];
@@ -1129,38 +1129,38 @@ unsafe extern "C" fn ParseMesh(
     // copy the level of detail origin, which is the center
     // of the group of all curves that must subdivide the same
     // to avoid cracking
-    i = 0 as libc::c_int;
-    while i < 3 as libc::c_int {
-        bounds[0 as libc::c_int as usize][i as usize] =
-            (*ds).lightmapVecs[0 as libc::c_int as usize][i as usize];
-        bounds[1 as libc::c_int as usize][i as usize] =
-            (*ds).lightmapVecs[1 as libc::c_int as usize][i as usize];
+    i = 0 as i32;
+    while i < 3 as i32 {
+        bounds[0 as i32 as usize][i as usize] =
+            (*ds).lightmapVecs[0 as i32 as usize][i as usize];
+        bounds[1 as i32 as usize][i as usize] =
+            (*ds).lightmapVecs[1 as i32 as usize][i as usize];
         i += 1
     }
-    bounds[1 as libc::c_int as usize][0 as libc::c_int as usize] = bounds
-        [0 as libc::c_int as usize][0 as libc::c_int as usize]
-        + bounds[1 as libc::c_int as usize][0 as libc::c_int as usize];
-    bounds[1 as libc::c_int as usize][1 as libc::c_int as usize] = bounds
-        [0 as libc::c_int as usize][1 as libc::c_int as usize]
-        + bounds[1 as libc::c_int as usize][1 as libc::c_int as usize];
-    bounds[1 as libc::c_int as usize][2 as libc::c_int as usize] = bounds
-        [0 as libc::c_int as usize][2 as libc::c_int as usize]
-        + bounds[1 as libc::c_int as usize][2 as libc::c_int as usize];
-    (*grid).lodOrigin[0 as libc::c_int as usize] =
-        bounds[1 as libc::c_int as usize][0 as libc::c_int as usize] * 0.5f32;
-    (*grid).lodOrigin[1 as libc::c_int as usize] =
-        bounds[1 as libc::c_int as usize][1 as libc::c_int as usize] * 0.5f32;
-    (*grid).lodOrigin[2 as libc::c_int as usize] =
-        bounds[1 as libc::c_int as usize][2 as libc::c_int as usize] * 0.5f32;
-    tmpVec[0 as libc::c_int as usize] = bounds[0 as libc::c_int as usize]
-        [0 as libc::c_int as usize]
-        - (*grid).lodOrigin[0 as libc::c_int as usize];
-    tmpVec[1 as libc::c_int as usize] = bounds[0 as libc::c_int as usize]
-        [1 as libc::c_int as usize]
-        - (*grid).lodOrigin[1 as libc::c_int as usize];
-    tmpVec[2 as libc::c_int as usize] = bounds[0 as libc::c_int as usize]
-        [2 as libc::c_int as usize]
-        - (*grid).lodOrigin[2 as libc::c_int as usize];
+    bounds[1 as i32 as usize][0 as i32 as usize] = bounds
+        [0 as i32 as usize][0 as i32 as usize]
+        + bounds[1 as i32 as usize][0 as i32 as usize];
+    bounds[1 as i32 as usize][1 as i32 as usize] = bounds
+        [0 as i32 as usize][1 as i32 as usize]
+        + bounds[1 as i32 as usize][1 as i32 as usize];
+    bounds[1 as i32 as usize][2 as i32 as usize] = bounds
+        [0 as i32 as usize][2 as i32 as usize]
+        + bounds[1 as i32 as usize][2 as i32 as usize];
+    (*grid).lodOrigin[0 as i32 as usize] =
+        bounds[1 as i32 as usize][0 as i32 as usize] * 0.5f32;
+    (*grid).lodOrigin[1 as i32 as usize] =
+        bounds[1 as i32 as usize][1 as i32 as usize] * 0.5f32;
+    (*grid).lodOrigin[2 as i32 as usize] =
+        bounds[1 as i32 as usize][2 as i32 as usize] * 0.5f32;
+    tmpVec[0 as i32 as usize] = bounds[0 as i32 as usize]
+        [0 as i32 as usize]
+        - (*grid).lodOrigin[0 as i32 as usize];
+    tmpVec[1 as i32 as usize] = bounds[0 as i32 as usize]
+        [1 as i32 as usize]
+        - (*grid).lodOrigin[1 as i32 as usize];
+    tmpVec[2 as i32 as usize] = bounds[0 as i32 as usize]
+        [2 as i32 as usize]
+        - (*grid).lodOrigin[2 as i32 as usize];
     (*grid).lodRadius =
         VectorLength(tmpVec.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
 }
@@ -1174,18 +1174,18 @@ unsafe extern "C" fn ParseTriSurf(
     mut ds: *mut crate::qfiles_h::dsurface_t,
     mut verts: *mut crate::qfiles_h::drawVert_t,
     mut surf: *mut crate::tr_local_h::msurface_t,
-    mut indexes: *mut libc::c_int,
+    mut indexes: *mut i32,
 ) {
     let mut tri: *mut crate::tr_local_h::srfTriangles_t =
         0 as *mut crate::tr_local_h::srfTriangles_t;
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
-    let mut numVerts: libc::c_int = 0;
-    let mut numIndexes: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
+    let mut numVerts: i32 = 0;
+    let mut numIndexes: i32 = 0;
     // get fog volume
-    (*surf).fogIndex = (*ds).fogNum + 1 as libc::c_int;
+    (*surf).fogIndex = (*ds).fogNum + 1 as i32;
     // get shader
-    (*surf).shader = ShaderForShaderNum((*ds).shaderNum, -(3 as libc::c_int));
+    (*surf).shader = ShaderForShaderNum((*ds).shaderNum, -(3 as i32));
     if (*crate::src::renderergl1::tr_init::r_singleShader).integer != 0
         && (*(*surf).shader).isSky as u64 == 0
     {
@@ -1204,26 +1204,26 @@ unsafe extern "C" fn ParseTriSurf(
             )
             .wrapping_add(
                 (numIndexes as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<libc::c_int>() as libc::c_ulong),
-            ) as libc::c_int,
+                    .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+            ) as i32,
         crate::src::qcommon::q_shared::h_low,
     ) as *mut crate::tr_local_h::srfTriangles_t;
     (*tri).surfaceType = crate::tr_local_h::SF_TRIANGLES;
     (*tri).numVerts = numVerts;
     (*tri).numIndexes = numIndexes;
-    (*tri).verts = tri.offset(1 as libc::c_int as isize) as *mut crate::qfiles_h::drawVert_t;
-    (*tri).indexes = (*tri).verts.offset((*tri).numVerts as isize) as *mut libc::c_int;
+    (*tri).verts = tri.offset(1 as i32 as isize) as *mut crate::qfiles_h::drawVert_t;
+    (*tri).indexes = (*tri).verts.offset((*tri).numVerts as isize) as *mut i32;
     (*surf).data = tri as *mut crate::tr_local_h::surfaceType_t;
     // copy vertexes
     crate::src::qcommon::q_math::ClearBounds(
-        (*tri).bounds[0 as libc::c_int as usize].as_mut_ptr(),
-        (*tri).bounds[1 as libc::c_int as usize].as_mut_ptr(),
+        (*tri).bounds[0 as i32 as usize].as_mut_ptr(),
+        (*tri).bounds[1 as i32 as usize].as_mut_ptr(),
     );
     verts = verts.offset((*ds).firstVert as isize);
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < numVerts {
-        j = 0 as libc::c_int;
-        while j < 3 as libc::c_int {
+        j = 0 as i32;
+        while j < 3 as i32 {
             (*(*tri).verts.offset(i as isize)).xyz[j as usize] =
                 (*verts.offset(i as isize)).xyz[j as usize];
             (*(*tri).verts.offset(i as isize)).normal[j as usize] =
@@ -1233,11 +1233,11 @@ unsafe extern "C" fn ParseTriSurf(
         crate::src::qcommon::q_math::AddPointToBounds(
             (*(*tri).verts.offset(i as isize)).xyz.as_mut_ptr()
                 as *const crate::src::qcommon::q_shared::vec_t,
-            (*tri).bounds[0 as libc::c_int as usize].as_mut_ptr(),
-            (*tri).bounds[1 as libc::c_int as usize].as_mut_ptr(),
+            (*tri).bounds[0 as i32 as usize].as_mut_ptr(),
+            (*tri).bounds[1 as i32 as usize].as_mut_ptr(),
         );
-        j = 0 as libc::c_int;
-        while j < 2 as libc::c_int {
+        j = 0 as i32;
+        while j < 2 as i32 {
             (*(*tri).verts.offset(i as isize)).st[j as usize] =
                 (*verts.offset(i as isize)).st[j as usize];
             (*(*tri).verts.offset(i as isize)).lightmap[j as usize] =
@@ -1252,16 +1252,16 @@ unsafe extern "C" fn ParseTriSurf(
     }
     // copy indexes
     indexes = indexes.offset((*ds).firstIndex as isize);
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < numIndexes {
         *(*tri).indexes.offset(i as isize) = *indexes.offset(i as isize);
-        if *(*tri).indexes.offset(i as isize) < 0 as libc::c_int
+        if *(*tri).indexes.offset(i as isize) < 0 as i32
             || *(*tri).indexes.offset(i as isize) >= numVerts
         {
             crate::src::renderergl1::tr_main::ri
                 .Error
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+                crate::src::qcommon::q_shared::ERR_DROP as i32,
                 b"Bad index in triangle surface\x00" as *const u8 as *const libc::c_char,
             );
         }
@@ -1278,14 +1278,14 @@ unsafe extern "C" fn ParseFlare(
     mut ds: *mut crate::qfiles_h::dsurface_t,
     mut _verts: *mut crate::qfiles_h::drawVert_t,
     mut surf: *mut crate::tr_local_h::msurface_t,
-    mut _indexes: *mut libc::c_int,
+    mut _indexes: *mut i32,
 ) {
     let mut flare: *mut crate::tr_local_h::srfFlare_t = 0 as *mut crate::tr_local_h::srfFlare_t;
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     // get fog volume
-    (*surf).fogIndex = (*ds).fogNum + 1 as libc::c_int;
+    (*surf).fogIndex = (*ds).fogNum + 1 as i32;
     // get shader
-    (*surf).shader = ShaderForShaderNum((*ds).shaderNum, -(3 as libc::c_int));
+    (*surf).shader = ShaderForShaderNum((*ds).shaderNum, -(3 as i32));
     if (*crate::src::renderergl1::tr_init::r_singleShader).integer != 0
         && (*(*surf).shader).isSky as u64 == 0
     {
@@ -1294,16 +1294,16 @@ unsafe extern "C" fn ParseFlare(
     flare = crate::src::renderergl1::tr_main::ri
         .Hunk_Alloc
         .expect("non-null function pointer")(
-        ::std::mem::size_of::<crate::tr_local_h::srfFlare_t>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<crate::tr_local_h::srfFlare_t>() as libc::c_ulong as i32,
         crate::src::qcommon::q_shared::h_low,
     ) as *mut crate::tr_local_h::srfFlare_t;
     (*flare).surfaceType = crate::tr_local_h::SF_FLARE;
     (*surf).data = flare as *mut crate::tr_local_h::surfaceType_t;
-    i = 0 as libc::c_int;
-    while i < 3 as libc::c_int {
+    i = 0 as i32;
+    while i < 3 as i32 {
         (*flare).origin[i as usize] = (*ds).lightmapOrigin[i as usize];
-        (*flare).color[i as usize] = (*ds).lightmapVecs[0 as libc::c_int as usize][i as usize];
-        (*flare).normal[i as usize] = (*ds).lightmapVecs[2 as libc::c_int as usize][i as usize];
+        (*flare).color[i as usize] = (*ds).lightmapVecs[0 as i32 as usize][i as usize];
+        (*flare).normal[i as usize] = (*ds).lightmapVecs[2 as i32 as usize][i as usize];
         i += 1
     }
 }
@@ -1318,37 +1318,37 @@ returns true if there are grid points merged on a width edge
 
 pub unsafe extern "C" fn R_MergedWidthPoints(
     mut grid: *mut crate::tr_local_h::srfGridMesh_t,
-    mut offset: libc::c_int,
-) -> libc::c_int {
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
-    i = 1 as libc::c_int;
-    while i < (*grid).width - 1 as libc::c_int {
-        j = i + 1 as libc::c_int;
-        while j < (*grid).width - 1 as libc::c_int {
+    mut offset: i32,
+) -> i32 {
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
+    i = 1 as i32;
+    while i < (*grid).width - 1 as i32 {
+        j = i + 1 as i32;
+        while j < (*grid).width - 1 as i32 {
             if !(crate::stdlib::fabs(
                 ((*(*grid).verts.as_mut_ptr().offset((i + offset) as isize)).xyz
-                    [0 as libc::c_int as usize]
+                    [0 as i32 as usize]
                     - (*(*grid).verts.as_mut_ptr().offset((j + offset) as isize)).xyz
-                        [0 as libc::c_int as usize]) as libc::c_double,
+                        [0 as i32 as usize]) as f64,
             ) > 0.1f64)
             {
                 if !(crate::stdlib::fabs(
                     ((*(*grid).verts.as_mut_ptr().offset((i + offset) as isize)).xyz
-                        [1 as libc::c_int as usize]
+                        [1 as i32 as usize]
                         - (*(*grid).verts.as_mut_ptr().offset((j + offset) as isize)).xyz
-                            [1 as libc::c_int as usize]) as libc::c_double,
+                            [1 as i32 as usize]) as f64,
                 ) > 0.1f64)
                 {
                     if !(crate::stdlib::fabs(
                         ((*(*grid).verts.as_mut_ptr().offset((i + offset) as isize)).xyz
-                            [2 as libc::c_int as usize]
+                            [2 as i32 as usize]
                             - (*(*grid).verts.as_mut_ptr().offset((j + offset) as isize)).xyz
-                                [2 as libc::c_int as usize])
-                            as libc::c_double,
+                                [2 as i32 as usize])
+                            as f64,
                     ) > 0.1f64)
                     {
-                        return crate::src::qcommon::q_shared::qtrue as libc::c_int;
+                        return crate::src::qcommon::q_shared::qtrue as i32;
                     }
                 }
             }
@@ -1356,7 +1356,7 @@ pub unsafe extern "C" fn R_MergedWidthPoints(
         }
         i += 1
     }
-    return crate::src::qcommon::q_shared::qfalse as libc::c_int;
+    return crate::src::qcommon::q_shared::qfalse as i32;
 }
 /*
 =================
@@ -1369,25 +1369,25 @@ returns true if there are grid points merged on a height edge
 
 pub unsafe extern "C" fn R_MergedHeightPoints(
     mut grid: *mut crate::tr_local_h::srfGridMesh_t,
-    mut offset: libc::c_int,
-) -> libc::c_int {
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
-    i = 1 as libc::c_int;
-    while i < (*grid).height - 1 as libc::c_int {
-        j = i + 1 as libc::c_int;
-        while j < (*grid).height - 1 as libc::c_int {
+    mut offset: i32,
+) -> i32 {
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
+    i = 1 as i32;
+    while i < (*grid).height - 1 as i32 {
+        j = i + 1 as i32;
+        while j < (*grid).height - 1 as i32 {
             if !(crate::stdlib::fabs(
                 ((*(*grid)
                     .verts
                     .as_mut_ptr()
                     .offset(((*grid).width * i + offset) as isize))
-                .xyz[0 as libc::c_int as usize]
+                .xyz[0 as i32 as usize]
                     - (*(*grid)
                         .verts
                         .as_mut_ptr()
                         .offset(((*grid).width * j + offset) as isize))
-                    .xyz[0 as libc::c_int as usize]) as libc::c_double,
+                    .xyz[0 as i32 as usize]) as f64,
             ) > 0.1f64)
             {
                 if !(crate::stdlib::fabs(
@@ -1395,12 +1395,12 @@ pub unsafe extern "C" fn R_MergedHeightPoints(
                         .verts
                         .as_mut_ptr()
                         .offset(((*grid).width * i + offset) as isize))
-                    .xyz[1 as libc::c_int as usize]
+                    .xyz[1 as i32 as usize]
                         - (*(*grid)
                             .verts
                             .as_mut_ptr()
                             .offset(((*grid).width * j + offset) as isize))
-                        .xyz[1 as libc::c_int as usize]) as libc::c_double,
+                        .xyz[1 as i32 as usize]) as f64,
                 ) > 0.1f64)
                 {
                     if !(crate::stdlib::fabs(
@@ -1408,16 +1408,16 @@ pub unsafe extern "C" fn R_MergedHeightPoints(
                             .verts
                             .as_mut_ptr()
                             .offset(((*grid).width * i + offset) as isize))
-                        .xyz[2 as libc::c_int as usize]
+                        .xyz[2 as i32 as usize]
                             - (*(*grid)
                                 .verts
                                 .as_mut_ptr()
                                 .offset(((*grid).width * j + offset) as isize))
-                            .xyz[2 as libc::c_int as usize])
-                            as libc::c_double,
+                            .xyz[2 as i32 as usize])
+                            as f64,
                     ) > 0.1f64)
                     {
-                        return crate::src::qcommon::q_shared::qtrue as libc::c_int;
+                        return crate::src::qcommon::q_shared::qtrue as i32;
                     }
                 }
             }
@@ -1425,7 +1425,7 @@ pub unsafe extern "C" fn R_MergedHeightPoints(
         }
         i += 1
     }
-    return crate::src::qcommon::q_shared::qfalse as libc::c_int;
+    return crate::src::qcommon::q_shared::qfalse as i32;
 }
 /*
 =================
@@ -1439,17 +1439,17 @@ FIXME: write generalized version that also avoids cracks between a patch and one
 #[no_mangle]
 
 pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
-    mut start: libc::c_int,
+    mut start: i32,
     mut grid1: *mut crate::tr_local_h::srfGridMesh_t,
 ) {
-    let mut j: libc::c_int = 0;
-    let mut k: libc::c_int = 0;
-    let mut l: libc::c_int = 0;
-    let mut m: libc::c_int = 0;
-    let mut n: libc::c_int = 0;
-    let mut offset1: libc::c_int = 0;
-    let mut offset2: libc::c_int = 0;
-    let mut touch: libc::c_int = 0;
+    let mut j: i32 = 0;
+    let mut k: i32 = 0;
+    let mut l: i32 = 0;
+    let mut m: i32 = 0;
+    let mut n: i32 = 0;
+    let mut offset1: i32 = 0;
+    let mut offset2: i32 = 0;
+    let mut touch: i32 = 0;
     let mut grid2: *mut crate::tr_local_h::srfGridMesh_t =
         0 as *mut crate::tr_local_h::srfGridMesh_t;
     j = start;
@@ -1458,48 +1458,48 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
         grid2 = (*s_worldData.surfaces.offset(j as isize)).data
             as *mut crate::tr_local_h::srfGridMesh_t;
         // if this surface is not a grid
-        if !((*grid2).surfaceType as libc::c_uint
-            != crate::tr_local_h::SF_GRID as libc::c_int as libc::c_uint)
+        if !((*grid2).surfaceType as u32
+            != crate::tr_local_h::SF_GRID as i32 as u32)
         {
             // if the LOD errors are already fixed for this patch
-            if !((*grid2).lodFixed == 2 as libc::c_int) {
+            if !((*grid2).lodFixed == 2 as i32) {
                 // grids in the same LOD group should have the exact same lod radius
                 if !((*grid1).lodRadius != (*grid2).lodRadius) {
                     // grids in the same LOD group should have the exact same lod origin
-                    if !((*grid1).lodOrigin[0 as libc::c_int as usize]
-                        != (*grid2).lodOrigin[0 as libc::c_int as usize])
+                    if !((*grid1).lodOrigin[0 as i32 as usize]
+                        != (*grid2).lodOrigin[0 as i32 as usize])
                     {
-                        if !((*grid1).lodOrigin[1 as libc::c_int as usize]
-                            != (*grid2).lodOrigin[1 as libc::c_int as usize])
+                        if !((*grid1).lodOrigin[1 as i32 as usize]
+                            != (*grid2).lodOrigin[1 as i32 as usize])
                         {
-                            if !((*grid1).lodOrigin[2 as libc::c_int as usize]
-                                != (*grid2).lodOrigin[2 as libc::c_int as usize])
+                            if !((*grid1).lodOrigin[2 as i32 as usize]
+                                != (*grid2).lodOrigin[2 as i32 as usize])
                             {
                                 //
-                                touch = crate::src::qcommon::q_shared::qfalse as libc::c_int;
-                                n = 0 as libc::c_int;
-                                while n < 2 as libc::c_int {
+                                touch = crate::src::qcommon::q_shared::qfalse as i32;
+                                n = 0 as i32;
+                                while n < 2 as i32 {
                                     //
                                     if n != 0 {
                                         offset1 =
-                                            ((*grid1).height - 1 as libc::c_int) * (*grid1).width
+                                            ((*grid1).height - 1 as i32) * (*grid1).width
                                     } else {
-                                        offset1 = 0 as libc::c_int
+                                        offset1 = 0 as i32
                                     }
                                     if !(R_MergedWidthPoints(grid1, offset1) != 0) {
-                                        k = 1 as libc::c_int;
-                                        while k < (*grid1).width - 1 as libc::c_int {
-                                            m = 0 as libc::c_int;
-                                            while m < 2 as libc::c_int {
+                                        k = 1 as i32;
+                                        while k < (*grid1).width - 1 as i32 {
+                                            m = 0 as i32;
+                                            while m < 2 as i32 {
                                                 if m != 0 {
-                                                    offset2 = ((*grid2).height - 1 as libc::c_int)
+                                                    offset2 = ((*grid2).height - 1 as i32)
                                                         * (*grid2).width
                                                 } else {
-                                                    offset2 = 0 as libc::c_int
+                                                    offset2 = 0 as i32
                                                 }
                                                 if !(R_MergedWidthPoints(grid2, offset2) != 0) {
-                                                    l = 1 as libc::c_int;
-                                                    while l < (*grid2).width - 1 as libc::c_int {
+                                                    l = 1 as i32;
+                                                    while l < (*grid2).width - 1 as i32 {
                                                         //
                                                         if !(crate::stdlib::fabs(
                                                             ((*(*grid1)
@@ -1507,7 +1507,7 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
                                                                 .as_mut_ptr()
                                                                 .offset((k + offset1) as isize))
                                                             .xyz
-                                                                [0 as libc::c_int as usize]
+                                                                [0 as i32 as usize]
                                                                 - (*(*grid2)
                                                                     .verts
                                                                     .as_mut_ptr()
@@ -1515,8 +1515,8 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
                                                                         (l + offset2) as isize,
                                                                     ))
                                                                 .xyz
-                                                                    [0 as libc::c_int as usize])
-                                                                as libc::c_double,
+                                                                    [0 as i32 as usize])
+                                                                as f64,
                                                         ) > 0.1f64)
                                                         {
                                                             if !(crate::stdlib::fabs(
@@ -1527,7 +1527,7 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
                                                                         (k + offset1) as isize,
                                                                     ))
                                                                 .xyz
-                                                                    [1 as libc::c_int as usize]
+                                                                    [1 as i32 as usize]
                                                                     - (*(*grid2)
                                                                         .verts
                                                                         .as_mut_ptr()
@@ -1535,8 +1535,8 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
                                                                             (l + offset2) as isize,
                                                                         ))
                                                                     .xyz
-                                                                        [1 as libc::c_int as usize])
-                                                                    as libc::c_double,
+                                                                        [1 as i32 as usize])
+                                                                    as f64,
                                                             ) > 0.1f64)
                                                             {
                                                                 if !(crate::stdlib::fabs(
@@ -1547,7 +1547,7 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
                                                                             (k + offset1) as isize,
                                                                         ))
                                                                     .xyz
-                                                                        [2 as libc::c_int as usize]
+                                                                        [2 as i32 as usize]
                                                                         - (*(*grid2)
                                                                             .verts
                                                                             .as_mut_ptr()
@@ -1556,9 +1556,9 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
                                                                                     as isize,
                                                                             ))
                                                                         .xyz
-                                                                            [2 as libc::c_int
+                                                                            [2 as i32
                                                                                 as usize])
-                                                                        as libc::c_double,
+                                                                        as f64,
                                                                 ) > 0.1f64)
                                                                 {
                                                                     // ok the points are equal and should have the same lod error
@@ -1571,7 +1571,7 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
                                                                     touch =
                                                                         crate::src::qcommon::q_shared::qtrue
                                                                             as
-                                                                            libc::c_int
+                                                                            i32
                                                                 }
                                                             }
                                                         }
@@ -1580,16 +1580,16 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
                                                 }
                                                 m += 1
                                             }
-                                            m = 0 as libc::c_int;
-                                            while m < 2 as libc::c_int {
+                                            m = 0 as i32;
+                                            while m < 2 as i32 {
                                                 if m != 0 {
-                                                    offset2 = (*grid2).width - 1 as libc::c_int
+                                                    offset2 = (*grid2).width - 1 as i32
                                                 } else {
-                                                    offset2 = 0 as libc::c_int
+                                                    offset2 = 0 as i32
                                                 }
                                                 if !(R_MergedHeightPoints(grid2, offset2) != 0) {
-                                                    l = 1 as libc::c_int;
-                                                    while l < (*grid2).height - 1 as libc::c_int {
+                                                    l = 1 as i32;
+                                                    while l < (*grid2).height - 1 as i32 {
                                                         //
                                                         if !(crate::stdlib::fabs(
                                                             ((*(*grid1)
@@ -1597,7 +1597,7 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
                                                                 .as_mut_ptr()
                                                                 .offset((k + offset1) as isize))
                                                             .xyz
-                                                                [0 as libc::c_int as usize]
+                                                                [0 as i32 as usize]
                                                                 - (*(*grid2)
                                                                     .verts
                                                                     .as_mut_ptr()
@@ -1607,8 +1607,8 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
                                                                             as isize,
                                                                     ))
                                                                 .xyz
-                                                                    [0 as libc::c_int as usize])
-                                                                as libc::c_double,
+                                                                    [0 as i32 as usize])
+                                                                as f64,
                                                         ) > 0.1f64)
                                                         {
                                                             if !(crate::stdlib::fabs(
@@ -1619,7 +1619,7 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
                                                                         (k + offset1) as isize,
                                                                     ))
                                                                 .xyz
-                                                                    [1 as libc::c_int as usize]
+                                                                    [1 as i32 as usize]
                                                                     - (*(*grid2)
                                                                         .verts
                                                                         .as_mut_ptr()
@@ -1629,8 +1629,8 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
                                                                                 as isize,
                                                                         ))
                                                                     .xyz
-                                                                        [1 as libc::c_int as usize])
-                                                                    as libc::c_double,
+                                                                        [1 as i32 as usize])
+                                                                    as f64,
                                                             ) > 0.1f64)
                                                             {
                                                                 if !(crate::stdlib::fabs(
@@ -1641,7 +1641,7 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
                                                                             (k + offset1) as isize,
                                                                         ))
                                                                     .xyz
-                                                                        [2 as libc::c_int as usize]
+                                                                        [2 as i32 as usize]
                                                                         - (*(*grid2)
                                                                             .verts
                                                                             .as_mut_ptr()
@@ -1651,9 +1651,9 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
                                                                                     as isize,
                                                                             ))
                                                                         .xyz
-                                                                            [2 as libc::c_int
+                                                                            [2 as i32
                                                                                 as usize])
-                                                                        as libc::c_double,
+                                                                        as f64,
                                                                 ) > 0.1f64)
                                                                 {
                                                                     // ok the points are equal and should have the same lod error
@@ -1666,7 +1666,7 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
                                                                     touch =
                                                                         crate::src::qcommon::q_shared::qtrue
                                                                             as
-                                                                            libc::c_int
+                                                                            i32
                                                                 }
                                                             }
                                                         }
@@ -1680,28 +1680,28 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
                                     }
                                     n += 1
                                 }
-                                n = 0 as libc::c_int;
-                                while n < 2 as libc::c_int {
+                                n = 0 as i32;
+                                while n < 2 as i32 {
                                     //
                                     if n != 0 {
-                                        offset1 = (*grid1).width - 1 as libc::c_int
+                                        offset1 = (*grid1).width - 1 as i32
                                     } else {
-                                        offset1 = 0 as libc::c_int
+                                        offset1 = 0 as i32
                                     }
                                     if !(R_MergedHeightPoints(grid1, offset1) != 0) {
-                                        k = 1 as libc::c_int;
-                                        while k < (*grid1).height - 1 as libc::c_int {
-                                            m = 0 as libc::c_int;
-                                            while m < 2 as libc::c_int {
+                                        k = 1 as i32;
+                                        while k < (*grid1).height - 1 as i32 {
+                                            m = 0 as i32;
+                                            while m < 2 as i32 {
                                                 if m != 0 {
-                                                    offset2 = ((*grid2).height - 1 as libc::c_int)
+                                                    offset2 = ((*grid2).height - 1 as i32)
                                                         * (*grid2).width
                                                 } else {
-                                                    offset2 = 0 as libc::c_int
+                                                    offset2 = 0 as i32
                                                 }
                                                 if !(R_MergedWidthPoints(grid2, offset2) != 0) {
-                                                    l = 1 as libc::c_int;
-                                                    while l < (*grid2).width - 1 as libc::c_int {
+                                                    l = 1 as i32;
+                                                    while l < (*grid2).width - 1 as i32 {
                                                         //
                                                         if !(crate::stdlib::fabs(
                                                             ((*(*grid1).verts.as_mut_ptr().offset(
@@ -1709,7 +1709,7 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
                                                                     as isize,
                                                             ))
                                                             .xyz
-                                                                [0 as libc::c_int as usize]
+                                                                [0 as i32 as usize]
                                                                 - (*(*grid2)
                                                                     .verts
                                                                     .as_mut_ptr()
@@ -1717,8 +1717,8 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
                                                                         (l + offset2) as isize,
                                                                     ))
                                                                 .xyz
-                                                                    [0 as libc::c_int as usize])
-                                                                as libc::c_double,
+                                                                    [0 as i32 as usize])
+                                                                as f64,
                                                         ) > 0.1f64)
                                                         {
                                                             if !(crate::stdlib::fabs(
@@ -1731,7 +1731,7 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
                                                                             as isize,
                                                                     ))
                                                                 .xyz
-                                                                    [1 as libc::c_int as usize]
+                                                                    [1 as i32 as usize]
                                                                     - (*(*grid2)
                                                                         .verts
                                                                         .as_mut_ptr()
@@ -1739,8 +1739,8 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
                                                                             (l + offset2) as isize,
                                                                         ))
                                                                     .xyz
-                                                                        [1 as libc::c_int as usize])
-                                                                    as libc::c_double,
+                                                                        [1 as i32 as usize])
+                                                                    as f64,
                                                             ) > 0.1f64)
                                                             {
                                                                 if !(crate::stdlib::fabs(
@@ -1753,7 +1753,7 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
                                                                                 as isize,
                                                                         ))
                                                                     .xyz
-                                                                        [2 as libc::c_int as usize]
+                                                                        [2 as i32 as usize]
                                                                         - (*(*grid2)
                                                                             .verts
                                                                             .as_mut_ptr()
@@ -1762,9 +1762,9 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
                                                                                     as isize,
                                                                             ))
                                                                         .xyz
-                                                                            [2 as libc::c_int
+                                                                            [2 as i32
                                                                                 as usize])
-                                                                        as libc::c_double,
+                                                                        as f64,
                                                                 ) > 0.1f64)
                                                                 {
                                                                     // ok the points are equal and should have the same lod error
@@ -1777,7 +1777,7 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
                                                                     touch =
                                                                         crate::src::qcommon::q_shared::qtrue
                                                                             as
-                                                                            libc::c_int
+                                                                            i32
                                                                 }
                                                             }
                                                         }
@@ -1786,16 +1786,16 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
                                                 }
                                                 m += 1
                                             }
-                                            m = 0 as libc::c_int;
-                                            while m < 2 as libc::c_int {
+                                            m = 0 as i32;
+                                            while m < 2 as i32 {
                                                 if m != 0 {
-                                                    offset2 = (*grid2).width - 1 as libc::c_int
+                                                    offset2 = (*grid2).width - 1 as i32
                                                 } else {
-                                                    offset2 = 0 as libc::c_int
+                                                    offset2 = 0 as i32
                                                 }
                                                 if !(R_MergedHeightPoints(grid2, offset2) != 0) {
-                                                    l = 1 as libc::c_int;
-                                                    while l < (*grid2).height - 1 as libc::c_int {
+                                                    l = 1 as i32;
+                                                    while l < (*grid2).height - 1 as i32 {
                                                         //
                                                         if !(crate::stdlib::fabs(
                                                             ((*(*grid1).verts.as_mut_ptr().offset(
@@ -1803,7 +1803,7 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
                                                                     as isize,
                                                             ))
                                                             .xyz
-                                                                [0 as libc::c_int as usize]
+                                                                [0 as i32 as usize]
                                                                 - (*(*grid2)
                                                                     .verts
                                                                     .as_mut_ptr()
@@ -1813,8 +1813,8 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
                                                                             as isize,
                                                                     ))
                                                                 .xyz
-                                                                    [0 as libc::c_int as usize])
-                                                                as libc::c_double,
+                                                                    [0 as i32 as usize])
+                                                                as f64,
                                                         ) > 0.1f64)
                                                         {
                                                             if !(crate::stdlib::fabs(
@@ -1827,7 +1827,7 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
                                                                             as isize,
                                                                     ))
                                                                 .xyz
-                                                                    [1 as libc::c_int as usize]
+                                                                    [1 as i32 as usize]
                                                                     - (*(*grid2)
                                                                         .verts
                                                                         .as_mut_ptr()
@@ -1837,8 +1837,8 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
                                                                                 as isize,
                                                                         ))
                                                                     .xyz
-                                                                        [1 as libc::c_int as usize])
-                                                                    as libc::c_double,
+                                                                        [1 as i32 as usize])
+                                                                    as f64,
                                                             ) > 0.1f64)
                                                             {
                                                                 if !(crate::stdlib::fabs(
@@ -1851,7 +1851,7 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
                                                                                 as isize,
                                                                         ))
                                                                     .xyz
-                                                                        [2 as libc::c_int as usize]
+                                                                        [2 as i32 as usize]
                                                                         - (*(*grid2)
                                                                             .verts
                                                                             .as_mut_ptr()
@@ -1861,9 +1861,9 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
                                                                                     as isize,
                                                                             ))
                                                                         .xyz
-                                                                            [2 as libc::c_int
+                                                                            [2 as i32
                                                                                 as usize])
-                                                                        as libc::c_double,
+                                                                        as f64,
                                                                 ) > 0.1f64)
                                                                 {
                                                                     // ok the points are equal and should have the same lod error
@@ -1876,7 +1876,7 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
                                                                     touch =
                                                                         crate::src::qcommon::q_shared::qtrue
                                                                             as
-                                                                            libc::c_int
+                                                                            i32
                                                                 }
                                                             }
                                                         }
@@ -1891,7 +1891,7 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
                                     n += 1
                                 }
                                 if touch != 0 {
-                                    (*grid2).lodFixed = 2 as libc::c_int;
+                                    (*grid2).lodFixed = 2 as i32;
                                     R_FixSharedVertexLodError_r(start, grid2);
                                     //NOTE: this would be correct but makes things really slow
                                     //grid2->lodFixed = 1;
@@ -1916,24 +1916,24 @@ If this is not the case this function will still do its job but won't fix the hi
 #[no_mangle]
 
 pub unsafe extern "C" fn R_FixSharedVertexLodError() {
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     let mut grid1: *mut crate::tr_local_h::srfGridMesh_t =
         0 as *mut crate::tr_local_h::srfGridMesh_t;
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < s_worldData.numsurfaces {
         //
         grid1 = (*s_worldData.surfaces.offset(i as isize)).data
             as *mut crate::tr_local_h::srfGridMesh_t;
         // if this surface is not a grid
-        if !((*grid1).surfaceType as libc::c_uint
-            != crate::tr_local_h::SF_GRID as libc::c_int as libc::c_uint)
+        if !((*grid1).surfaceType as u32
+            != crate::tr_local_h::SF_GRID as i32 as u32)
         {
             //
             if !((*grid1).lodFixed != 0) {
                 //
-                (*grid1).lodFixed = 2 as libc::c_int;
+                (*grid1).lodFixed = 2 as i32;
                 // recursively fix other patches in the same LOD group
-                R_FixSharedVertexLodError_r(i + 1 as libc::c_int, grid1);
+                R_FixSharedVertexLodError_r(i + 1 as i32, grid1);
             }
         }
         i += 1
@@ -1947,50 +1947,50 @@ R_StitchPatches
 #[no_mangle]
 
 pub unsafe extern "C" fn R_StitchPatches(
-    mut grid1num: libc::c_int,
-    mut grid2num: libc::c_int,
-) -> libc::c_int {
-    let mut v1: *mut libc::c_float = 0 as *mut libc::c_float;
-    let mut v2: *mut libc::c_float = 0 as *mut libc::c_float;
+    mut grid1num: i32,
+    mut grid2num: i32,
+) -> i32 {
+    let mut v1: *mut f32 = 0 as *mut f32;
+    let mut v2: *mut f32 = 0 as *mut f32;
     let mut grid1: *mut crate::tr_local_h::srfGridMesh_t =
         0 as *mut crate::tr_local_h::srfGridMesh_t;
     let mut grid2: *mut crate::tr_local_h::srfGridMesh_t =
         0 as *mut crate::tr_local_h::srfGridMesh_t;
-    let mut k: libc::c_int = 0;
-    let mut l: libc::c_int = 0;
-    let mut m: libc::c_int = 0;
-    let mut n: libc::c_int = 0;
-    let mut offset1: libc::c_int = 0;
-    let mut offset2: libc::c_int = 0;
-    let mut row: libc::c_int = 0;
-    let mut column: libc::c_int = 0;
+    let mut k: i32 = 0;
+    let mut l: i32 = 0;
+    let mut m: i32 = 0;
+    let mut n: i32 = 0;
+    let mut offset1: i32 = 0;
+    let mut offset2: i32 = 0;
+    let mut row: i32 = 0;
+    let mut column: i32 = 0;
     grid1 = (*s_worldData.surfaces.offset(grid1num as isize)).data
         as *mut crate::tr_local_h::srfGridMesh_t;
     grid2 = (*s_worldData.surfaces.offset(grid2num as isize)).data
         as *mut crate::tr_local_h::srfGridMesh_t;
-    n = 0 as libc::c_int;
-    while n < 2 as libc::c_int {
+    n = 0 as i32;
+    while n < 2 as i32 {
         //
         if n != 0 {
-            offset1 = ((*grid1).height - 1 as libc::c_int) * (*grid1).width
+            offset1 = ((*grid1).height - 1 as i32) * (*grid1).width
         } else {
-            offset1 = 0 as libc::c_int
+            offset1 = 0 as i32
         }
         if !(R_MergedWidthPoints(grid1, offset1) != 0) {
-            k = 0 as libc::c_int;
-            while k < (*grid1).width - 2 as libc::c_int {
-                m = 0 as libc::c_int;
-                while m < 2 as libc::c_int {
-                    if (*grid2).width >= 65 as libc::c_int {
+            k = 0 as i32;
+            while k < (*grid1).width - 2 as i32 {
+                m = 0 as i32;
+                while m < 2 as i32 {
+                    if (*grid2).width >= 65 as i32 {
                         break;
                     }
                     if m != 0 {
-                        offset2 = ((*grid2).height - 1 as libc::c_int) * (*grid2).width
+                        offset2 = ((*grid2).height - 1 as i32) * (*grid2).width
                     } else {
-                        offset2 = 0 as libc::c_int
+                        offset2 = 0 as i32
                     }
-                    l = 0 as libc::c_int;
-                    while l < (*grid2).width - 1 as libc::c_int {
+                    l = 0 as i32;
+                    while l < (*grid2).width - 1 as i32 {
                         //
                         v1 = (*(*grid1).verts.as_mut_ptr().offset((k + offset1) as isize))
                             .xyz
@@ -1999,51 +1999,51 @@ pub unsafe extern "C" fn R_StitchPatches(
                             .xyz
                             .as_mut_ptr();
                         if !(crate::stdlib::fabs(
-                            (*v1.offset(0 as libc::c_int as isize)
-                                - *v2.offset(0 as libc::c_int as isize))
-                                as libc::c_double,
+                            (*v1.offset(0 as i32 as isize)
+                                - *v2.offset(0 as i32 as isize))
+                                as f64,
                         ) > 0.1f64)
                         {
                             if !(crate::stdlib::fabs(
-                                (*v1.offset(1 as libc::c_int as isize)
-                                    - *v2.offset(1 as libc::c_int as isize))
-                                    as libc::c_double,
+                                (*v1.offset(1 as i32 as isize)
+                                    - *v2.offset(1 as i32 as isize))
+                                    as f64,
                             ) > 0.1f64)
                             {
                                 if !(crate::stdlib::fabs(
-                                    (*v1.offset(2 as libc::c_int as isize)
-                                        - *v2.offset(2 as libc::c_int as isize))
-                                        as libc::c_double,
+                                    (*v1.offset(2 as i32 as isize)
+                                        - *v2.offset(2 as i32 as isize))
+                                        as f64,
                                 ) > 0.1f64)
                                 {
                                     v1 = (*(*grid1)
                                         .verts
                                         .as_mut_ptr()
-                                        .offset((k + 2 as libc::c_int + offset1) as isize))
+                                        .offset((k + 2 as i32 + offset1) as isize))
                                     .xyz
                                     .as_mut_ptr();
                                     v2 = (*(*grid2)
                                         .verts
                                         .as_mut_ptr()
-                                        .offset((l + 1 as libc::c_int + offset2) as isize))
+                                        .offset((l + 1 as i32 + offset2) as isize))
                                     .xyz
                                     .as_mut_ptr();
                                     if !(crate::stdlib::fabs(
-                                        (*v1.offset(0 as libc::c_int as isize)
-                                            - *v2.offset(0 as libc::c_int as isize))
-                                            as libc::c_double,
+                                        (*v1.offset(0 as i32 as isize)
+                                            - *v2.offset(0 as i32 as isize))
+                                            as f64,
                                     ) > 0.1f64)
                                     {
                                         if !(crate::stdlib::fabs(
-                                            (*v1.offset(1 as libc::c_int as isize)
-                                                - *v2.offset(1 as libc::c_int as isize))
-                                                as libc::c_double,
+                                            (*v1.offset(1 as i32 as isize)
+                                                - *v2.offset(1 as i32 as isize))
+                                                as f64,
                                         ) > 0.1f64)
                                         {
                                             if !(crate::stdlib::fabs(
-                                                (*v1.offset(2 as libc::c_int as isize)
-                                                    - *v2.offset(2 as libc::c_int as isize))
-                                                    as libc::c_double,
+                                                (*v1.offset(2 as i32 as isize)
+                                                    - *v2.offset(2 as i32 as isize))
+                                                    as f64,
                                             ) > 0.1f64)
                                             {
                                                 //
@@ -2054,33 +2054,33 @@ pub unsafe extern "C" fn R_StitchPatches(
                                                 .xyz
                                                 .as_mut_ptr();
                                                 v2 = (*(*grid2).verts.as_mut_ptr().offset(
-                                                    (l + 1 as libc::c_int + offset2) as isize,
+                                                    (l + 1 as i32 + offset2) as isize,
                                                 ))
                                                 .xyz
                                                 .as_mut_ptr();
                                                 if !(crate::stdlib::fabs(
-                                                    (*v1.offset(0 as libc::c_int as isize)
-                                                        - *v2.offset(0 as libc::c_int as isize))
-                                                        as libc::c_double,
+                                                    (*v1.offset(0 as i32 as isize)
+                                                        - *v2.offset(0 as i32 as isize))
+                                                        as f64,
                                                 ) < 0.01f64
                                                     && crate::stdlib::fabs(
-                                                        (*v1.offset(1 as libc::c_int as isize)
-                                                            - *v2.offset(1 as libc::c_int as isize))
-                                                            as libc::c_double,
+                                                        (*v1.offset(1 as i32 as isize)
+                                                            - *v2.offset(1 as i32 as isize))
+                                                            as f64,
                                                     ) < 0.01f64
                                                     && crate::stdlib::fabs(
-                                                        (*v1.offset(2 as libc::c_int as isize)
-                                                            - *v2.offset(2 as libc::c_int as isize))
-                                                            as libc::c_double,
+                                                        (*v1.offset(2 as i32 as isize)
+                                                            - *v2.offset(2 as i32 as isize))
+                                                            as f64,
                                                     ) < 0.01f64)
                                                 {
                                                     //
                                                     //ri.Printf( PRINT_ALL, "found highest LoD crack between two patches\n" );
                                                     // insert column into grid2 right after after column l
                                                     if m != 0 {
-                                                        row = (*grid2).height - 1 as libc::c_int
+                                                        row = (*grid2).height - 1 as i32
                                                     } else {
-                                                        row = 0 as libc::c_int
+                                                        row = 0 as i32
                                                     }
                                                     grid2 =
                                                         
@@ -2088,13 +2088,13 @@ pub unsafe extern "C" fn R_StitchPatches(
                                                                            l +
                                                                                1
                                                                                    as
-                                                                                   libc::c_int,
+                                                                                   i32,
                                                                            row,
                                                                            (*(*grid1).verts.as_mut_ptr().offset((k
                                                                                                                      +
                                                                                                                      1
                                                                                                                          as
-                                                                                                                         libc::c_int
+                                                                                                                         i32
                                                                                                                      +
                                                                                                                      offset1)
                                                                                                                     as
@@ -2103,13 +2103,13 @@ pub unsafe extern "C" fn R_StitchPatches(
                                                                                                                +
                                                                                                                1
                                                                                                                    as
-                                                                                                                   libc::c_int)
+                                                                                                                   i32)
                                                                                                               as
                                                                                                               isize))
     as *mut crate::tr_local_h::srfGridMesh_s;
                                                     (*grid2).lodStitched =
                                                         crate::src::qcommon::q_shared::qfalse
-                                                            as libc::c_int;
+                                                            as i32;
                                                     let ref mut fresh1 = (*s_worldData
                                                         .surfaces
                                                         .offset(grid2num as isize))
@@ -2117,7 +2117,7 @@ pub unsafe extern "C" fn R_StitchPatches(
                                                     *fresh1 = grid2 as *mut libc::c_void
                                                         as *mut crate::tr_local_h::surfaceType_t;
                                                     return crate::src::qcommon::q_shared::qtrue
-                                                        as libc::c_int;
+                                                        as i32;
                                                 }
                                             }
                                         }
@@ -2129,18 +2129,18 @@ pub unsafe extern "C" fn R_StitchPatches(
                     }
                     m += 1
                 }
-                m = 0 as libc::c_int;
-                while m < 2 as libc::c_int {
-                    if (*grid2).height >= 65 as libc::c_int {
+                m = 0 as i32;
+                while m < 2 as i32 {
+                    if (*grid2).height >= 65 as i32 {
                         break;
                     }
                     if m != 0 {
-                        offset2 = (*grid2).width - 1 as libc::c_int
+                        offset2 = (*grid2).width - 1 as i32
                     } else {
-                        offset2 = 0 as libc::c_int
+                        offset2 = 0 as i32
                     }
-                    l = 0 as libc::c_int;
-                    while l < (*grid2).height - 1 as libc::c_int {
+                    l = 0 as i32;
+                    while l < (*grid2).height - 1 as i32 {
                         //
                         v1 = (*(*grid1).verts.as_mut_ptr().offset((k + offset1) as isize))
                             .xyz
@@ -2152,51 +2152,51 @@ pub unsafe extern "C" fn R_StitchPatches(
                         .xyz
                         .as_mut_ptr();
                         if !(crate::stdlib::fabs(
-                            (*v1.offset(0 as libc::c_int as isize)
-                                - *v2.offset(0 as libc::c_int as isize))
-                                as libc::c_double,
+                            (*v1.offset(0 as i32 as isize)
+                                - *v2.offset(0 as i32 as isize))
+                                as f64,
                         ) > 0.1f64)
                         {
                             if !(crate::stdlib::fabs(
-                                (*v1.offset(1 as libc::c_int as isize)
-                                    - *v2.offset(1 as libc::c_int as isize))
-                                    as libc::c_double,
+                                (*v1.offset(1 as i32 as isize)
+                                    - *v2.offset(1 as i32 as isize))
+                                    as f64,
                             ) > 0.1f64)
                             {
                                 if !(crate::stdlib::fabs(
-                                    (*v1.offset(2 as libc::c_int as isize)
-                                        - *v2.offset(2 as libc::c_int as isize))
-                                        as libc::c_double,
+                                    (*v1.offset(2 as i32 as isize)
+                                        - *v2.offset(2 as i32 as isize))
+                                        as f64,
                                 ) > 0.1f64)
                                 {
                                     v1 = (*(*grid1)
                                         .verts
                                         .as_mut_ptr()
-                                        .offset((k + 2 as libc::c_int + offset1) as isize))
+                                        .offset((k + 2 as i32 + offset1) as isize))
                                     .xyz
                                     .as_mut_ptr();
                                     v2 = (*(*grid2).verts.as_mut_ptr().offset(
-                                        ((*grid2).width * (l + 1 as libc::c_int) + offset2)
+                                        ((*grid2).width * (l + 1 as i32) + offset2)
                                             as isize,
                                     ))
                                     .xyz
                                     .as_mut_ptr();
                                     if !(crate::stdlib::fabs(
-                                        (*v1.offset(0 as libc::c_int as isize)
-                                            - *v2.offset(0 as libc::c_int as isize))
-                                            as libc::c_double,
+                                        (*v1.offset(0 as i32 as isize)
+                                            - *v2.offset(0 as i32 as isize))
+                                            as f64,
                                     ) > 0.1f64)
                                     {
                                         if !(crate::stdlib::fabs(
-                                            (*v1.offset(1 as libc::c_int as isize)
-                                                - *v2.offset(1 as libc::c_int as isize))
-                                                as libc::c_double,
+                                            (*v1.offset(1 as i32 as isize)
+                                                - *v2.offset(1 as i32 as isize))
+                                                as f64,
                                         ) > 0.1f64)
                                         {
                                             if !(crate::stdlib::fabs(
-                                                (*v1.offset(2 as libc::c_int as isize)
-                                                    - *v2.offset(2 as libc::c_int as isize))
-                                                    as libc::c_double,
+                                                (*v1.offset(2 as i32 as isize)
+                                                    - *v2.offset(2 as i32 as isize))
+                                                    as f64,
                                             ) > 0.1f64)
                                             {
                                                 //
@@ -2206,35 +2206,35 @@ pub unsafe extern "C" fn R_StitchPatches(
                                                 .xyz
                                                 .as_mut_ptr();
                                                 v2 = (*(*grid2).verts.as_mut_ptr().offset(
-                                                    ((*grid2).width * (l + 1 as libc::c_int)
+                                                    ((*grid2).width * (l + 1 as i32)
                                                         + offset2)
                                                         as isize,
                                                 ))
                                                 .xyz
                                                 .as_mut_ptr();
                                                 if !(crate::stdlib::fabs(
-                                                    (*v1.offset(0 as libc::c_int as isize)
-                                                        - *v2.offset(0 as libc::c_int as isize))
-                                                        as libc::c_double,
+                                                    (*v1.offset(0 as i32 as isize)
+                                                        - *v2.offset(0 as i32 as isize))
+                                                        as f64,
                                                 ) < 0.01f64
                                                     && crate::stdlib::fabs(
-                                                        (*v1.offset(1 as libc::c_int as isize)
-                                                            - *v2.offset(1 as libc::c_int as isize))
-                                                            as libc::c_double,
+                                                        (*v1.offset(1 as i32 as isize)
+                                                            - *v2.offset(1 as i32 as isize))
+                                                            as f64,
                                                     ) < 0.01f64
                                                     && crate::stdlib::fabs(
-                                                        (*v1.offset(2 as libc::c_int as isize)
-                                                            - *v2.offset(2 as libc::c_int as isize))
-                                                            as libc::c_double,
+                                                        (*v1.offset(2 as i32 as isize)
+                                                            - *v2.offset(2 as i32 as isize))
+                                                            as f64,
                                                     ) < 0.01f64)
                                                 {
                                                     //
                                                     //ri.Printf( PRINT_ALL, "found highest LoD crack between two patches\n" );
                                                     // insert row into grid2 right after after row l
                                                     if m != 0 {
-                                                        column = (*grid2).width - 1 as libc::c_int
+                                                        column = (*grid2).width - 1 as i32
                                                     } else {
-                                                        column = 0 as libc::c_int
+                                                        column = 0 as i32
                                                     }
                                                     grid2 =
                                                         
@@ -2242,13 +2242,13 @@ pub unsafe extern "C" fn R_StitchPatches(
                                                                         l +
                                                                             1
                                                                                 as
-                                                                                libc::c_int,
+                                                                                i32,
                                                                         column,
                                                                         (*(*grid1).verts.as_mut_ptr().offset((k
                                                                                                                   +
                                                                                                                   1
                                                                                                                       as
-                                                                                                                      libc::c_int
+                                                                                                                      i32
                                                                                                                   +
                                                                                                                   offset1)
                                                                                                                  as
@@ -2257,13 +2257,13 @@ pub unsafe extern "C" fn R_StitchPatches(
                                                                                                             +
                                                                                                             1
                                                                                                                 as
-                                                                                                                libc::c_int)
+                                                                                                                i32)
                                                                                                            as
                                                                                                            isize))
     as *mut crate::tr_local_h::srfGridMesh_s;
                                                     (*grid2).lodStitched =
                                                         crate::src::qcommon::q_shared::qfalse
-                                                            as libc::c_int;
+                                                            as i32;
                                                     let ref mut fresh2 = (*s_worldData
                                                         .surfaces
                                                         .offset(grid2num as isize))
@@ -2271,7 +2271,7 @@ pub unsafe extern "C" fn R_StitchPatches(
                                                     *fresh2 = grid2 as *mut libc::c_void
                                                         as *mut crate::tr_local_h::surfaceType_t;
                                                     return crate::src::qcommon::q_shared::qtrue
-                                                        as libc::c_int;
+                                                        as i32;
                                                 }
                                             }
                                         }
@@ -2283,34 +2283,34 @@ pub unsafe extern "C" fn R_StitchPatches(
                     }
                     m += 1
                 }
-                k += 2 as libc::c_int
+                k += 2 as i32
             }
         }
         n += 1
     }
-    n = 0 as libc::c_int;
-    while n < 2 as libc::c_int {
+    n = 0 as i32;
+    while n < 2 as i32 {
         //
         if n != 0 {
-            offset1 = (*grid1).width - 1 as libc::c_int
+            offset1 = (*grid1).width - 1 as i32
         } else {
-            offset1 = 0 as libc::c_int
+            offset1 = 0 as i32
         }
         if !(R_MergedHeightPoints(grid1, offset1) != 0) {
-            k = 0 as libc::c_int;
-            while k < (*grid1).height - 2 as libc::c_int {
-                m = 0 as libc::c_int;
-                while m < 2 as libc::c_int {
-                    if (*grid2).width >= 65 as libc::c_int {
+            k = 0 as i32;
+            while k < (*grid1).height - 2 as i32 {
+                m = 0 as i32;
+                while m < 2 as i32 {
+                    if (*grid2).width >= 65 as i32 {
                         break;
                     }
                     if m != 0 {
-                        offset2 = ((*grid2).height - 1 as libc::c_int) * (*grid2).width
+                        offset2 = ((*grid2).height - 1 as i32) * (*grid2).width
                     } else {
-                        offset2 = 0 as libc::c_int
+                        offset2 = 0 as i32
                     }
-                    l = 0 as libc::c_int;
-                    while l < (*grid2).width - 1 as libc::c_int {
+                    l = 0 as i32;
+                    while l < (*grid2).width - 1 as i32 {
                         //
                         v1 = (*(*grid1)
                             .verts
@@ -2322,25 +2322,25 @@ pub unsafe extern "C" fn R_StitchPatches(
                             .xyz
                             .as_mut_ptr();
                         if !(crate::stdlib::fabs(
-                            (*v1.offset(0 as libc::c_int as isize)
-                                - *v2.offset(0 as libc::c_int as isize))
-                                as libc::c_double,
+                            (*v1.offset(0 as i32 as isize)
+                                - *v2.offset(0 as i32 as isize))
+                                as f64,
                         ) > 0.1f64)
                         {
                             if !(crate::stdlib::fabs(
-                                (*v1.offset(1 as libc::c_int as isize)
-                                    - *v2.offset(1 as libc::c_int as isize))
-                                    as libc::c_double,
+                                (*v1.offset(1 as i32 as isize)
+                                    - *v2.offset(1 as i32 as isize))
+                                    as f64,
                             ) > 0.1f64)
                             {
                                 if !(crate::stdlib::fabs(
-                                    (*v1.offset(2 as libc::c_int as isize)
-                                        - *v2.offset(2 as libc::c_int as isize))
-                                        as libc::c_double,
+                                    (*v1.offset(2 as i32 as isize)
+                                        - *v2.offset(2 as i32 as isize))
+                                        as f64,
                                 ) > 0.1f64)
                                 {
                                     v1 = (*(*grid1).verts.as_mut_ptr().offset(
-                                        ((*grid1).width * (k + 2 as libc::c_int) + offset1)
+                                        ((*grid1).width * (k + 2 as i32) + offset1)
                                             as isize,
                                     ))
                                     .xyz
@@ -2348,25 +2348,25 @@ pub unsafe extern "C" fn R_StitchPatches(
                                     v2 = (*(*grid2)
                                         .verts
                                         .as_mut_ptr()
-                                        .offset((l + 1 as libc::c_int + offset2) as isize))
+                                        .offset((l + 1 as i32 + offset2) as isize))
                                     .xyz
                                     .as_mut_ptr();
                                     if !(crate::stdlib::fabs(
-                                        (*v1.offset(0 as libc::c_int as isize)
-                                            - *v2.offset(0 as libc::c_int as isize))
-                                            as libc::c_double,
+                                        (*v1.offset(0 as i32 as isize)
+                                            - *v2.offset(0 as i32 as isize))
+                                            as f64,
                                     ) > 0.1f64)
                                     {
                                         if !(crate::stdlib::fabs(
-                                            (*v1.offset(1 as libc::c_int as isize)
-                                                - *v2.offset(1 as libc::c_int as isize))
-                                                as libc::c_double,
+                                            (*v1.offset(1 as i32 as isize)
+                                                - *v2.offset(1 as i32 as isize))
+                                                as f64,
                                         ) > 0.1f64)
                                         {
                                             if !(crate::stdlib::fabs(
-                                                (*v1.offset(2 as libc::c_int as isize)
-                                                    - *v2.offset(2 as libc::c_int as isize))
-                                                    as libc::c_double,
+                                                (*v1.offset(2 as i32 as isize)
+                                                    - *v2.offset(2 as i32 as isize))
+                                                    as f64,
                                             ) > 0.1f64)
                                             {
                                                 //
@@ -2377,33 +2377,33 @@ pub unsafe extern "C" fn R_StitchPatches(
                                                 .xyz
                                                 .as_mut_ptr();
                                                 v2 = (*(*grid2).verts.as_mut_ptr().offset(
-                                                    (l + 1 as libc::c_int + offset2) as isize,
+                                                    (l + 1 as i32 + offset2) as isize,
                                                 ))
                                                 .xyz
                                                 .as_mut_ptr();
                                                 if !(crate::stdlib::fabs(
-                                                    (*v1.offset(0 as libc::c_int as isize)
-                                                        - *v2.offset(0 as libc::c_int as isize))
-                                                        as libc::c_double,
+                                                    (*v1.offset(0 as i32 as isize)
+                                                        - *v2.offset(0 as i32 as isize))
+                                                        as f64,
                                                 ) < 0.01f64
                                                     && crate::stdlib::fabs(
-                                                        (*v1.offset(1 as libc::c_int as isize)
-                                                            - *v2.offset(1 as libc::c_int as isize))
-                                                            as libc::c_double,
+                                                        (*v1.offset(1 as i32 as isize)
+                                                            - *v2.offset(1 as i32 as isize))
+                                                            as f64,
                                                     ) < 0.01f64
                                                     && crate::stdlib::fabs(
-                                                        (*v1.offset(2 as libc::c_int as isize)
-                                                            - *v2.offset(2 as libc::c_int as isize))
-                                                            as libc::c_double,
+                                                        (*v1.offset(2 as i32 as isize)
+                                                            - *v2.offset(2 as i32 as isize))
+                                                            as f64,
                                                     ) < 0.01f64)
                                                 {
                                                     //
                                                     //ri.Printf( PRINT_ALL, "found highest LoD crack between two patches\n" );
                                                     // insert column into grid2 right after after column l
                                                     if m != 0 {
-                                                        row = (*grid2).height - 1 as libc::c_int
+                                                        row = (*grid2).height - 1 as i32
                                                     } else {
-                                                        row = 0 as libc::c_int
+                                                        row = 0 as i32
                                                     }
                                                     grid2 =
                                                         
@@ -2411,7 +2411,7 @@ pub unsafe extern "C" fn R_StitchPatches(
                                                                            l +
                                                                                1
                                                                                    as
-                                                                                   libc::c_int,
+                                                                                   i32,
                                                                            row,
                                                                            (*(*grid1).verts.as_mut_ptr().offset(((*grid1).width
                                                                                                                      *
@@ -2419,7 +2419,7 @@ pub unsafe extern "C" fn R_StitchPatches(
                                                                                                                           +
                                                                                                                           1
                                                                                                                               as
-                                                                                                                              libc::c_int)
+                                                                                                                              i32)
                                                                                                                      +
                                                                                                                      offset1)
                                                                                                                     as
@@ -2428,13 +2428,13 @@ pub unsafe extern "C" fn R_StitchPatches(
                                                                                                                 +
                                                                                                                 1
                                                                                                                     as
-                                                                                                                    libc::c_int)
+                                                                                                                    i32)
                                                                                                                as
                                                                                                                isize))
     as *mut crate::tr_local_h::srfGridMesh_s;
                                                     (*grid2).lodStitched =
                                                         crate::src::qcommon::q_shared::qfalse
-                                                            as libc::c_int;
+                                                            as i32;
                                                     let ref mut fresh3 = (*s_worldData
                                                         .surfaces
                                                         .offset(grid2num as isize))
@@ -2442,7 +2442,7 @@ pub unsafe extern "C" fn R_StitchPatches(
                                                     *fresh3 = grid2 as *mut libc::c_void
                                                         as *mut crate::tr_local_h::surfaceType_t;
                                                     return crate::src::qcommon::q_shared::qtrue
-                                                        as libc::c_int;
+                                                        as i32;
                                                 }
                                             }
                                         }
@@ -2454,18 +2454,18 @@ pub unsafe extern "C" fn R_StitchPatches(
                     }
                     m += 1
                 }
-                m = 0 as libc::c_int;
-                while m < 2 as libc::c_int {
-                    if (*grid2).height >= 65 as libc::c_int {
+                m = 0 as i32;
+                while m < 2 as i32 {
+                    if (*grid2).height >= 65 as i32 {
                         break;
                     }
                     if m != 0 {
-                        offset2 = (*grid2).width - 1 as libc::c_int
+                        offset2 = (*grid2).width - 1 as i32
                     } else {
-                        offset2 = 0 as libc::c_int
+                        offset2 = 0 as i32
                     }
-                    l = 0 as libc::c_int;
-                    while l < (*grid2).height - 1 as libc::c_int {
+                    l = 0 as i32;
+                    while l < (*grid2).height - 1 as i32 {
                         //
                         v1 = (*(*grid1)
                             .verts
@@ -2480,51 +2480,51 @@ pub unsafe extern "C" fn R_StitchPatches(
                         .xyz
                         .as_mut_ptr();
                         if !(crate::stdlib::fabs(
-                            (*v1.offset(0 as libc::c_int as isize)
-                                - *v2.offset(0 as libc::c_int as isize))
-                                as libc::c_double,
+                            (*v1.offset(0 as i32 as isize)
+                                - *v2.offset(0 as i32 as isize))
+                                as f64,
                         ) > 0.1f64)
                         {
                             if !(crate::stdlib::fabs(
-                                (*v1.offset(1 as libc::c_int as isize)
-                                    - *v2.offset(1 as libc::c_int as isize))
-                                    as libc::c_double,
+                                (*v1.offset(1 as i32 as isize)
+                                    - *v2.offset(1 as i32 as isize))
+                                    as f64,
                             ) > 0.1f64)
                             {
                                 if !(crate::stdlib::fabs(
-                                    (*v1.offset(2 as libc::c_int as isize)
-                                        - *v2.offset(2 as libc::c_int as isize))
-                                        as libc::c_double,
+                                    (*v1.offset(2 as i32 as isize)
+                                        - *v2.offset(2 as i32 as isize))
+                                        as f64,
                                 ) > 0.1f64)
                                 {
                                     v1 = (*(*grid1).verts.as_mut_ptr().offset(
-                                        ((*grid1).width * (k + 2 as libc::c_int) + offset1)
+                                        ((*grid1).width * (k + 2 as i32) + offset1)
                                             as isize,
                                     ))
                                     .xyz
                                     .as_mut_ptr();
                                     v2 = (*(*grid2).verts.as_mut_ptr().offset(
-                                        ((*grid2).width * (l + 1 as libc::c_int) + offset2)
+                                        ((*grid2).width * (l + 1 as i32) + offset2)
                                             as isize,
                                     ))
                                     .xyz
                                     .as_mut_ptr();
                                     if !(crate::stdlib::fabs(
-                                        (*v1.offset(0 as libc::c_int as isize)
-                                            - *v2.offset(0 as libc::c_int as isize))
-                                            as libc::c_double,
+                                        (*v1.offset(0 as i32 as isize)
+                                            - *v2.offset(0 as i32 as isize))
+                                            as f64,
                                     ) > 0.1f64)
                                     {
                                         if !(crate::stdlib::fabs(
-                                            (*v1.offset(1 as libc::c_int as isize)
-                                                - *v2.offset(1 as libc::c_int as isize))
-                                                as libc::c_double,
+                                            (*v1.offset(1 as i32 as isize)
+                                                - *v2.offset(1 as i32 as isize))
+                                                as f64,
                                         ) > 0.1f64)
                                         {
                                             if !(crate::stdlib::fabs(
-                                                (*v1.offset(2 as libc::c_int as isize)
-                                                    - *v2.offset(2 as libc::c_int as isize))
-                                                    as libc::c_double,
+                                                (*v1.offset(2 as i32 as isize)
+                                                    - *v2.offset(2 as i32 as isize))
+                                                    as f64,
                                             ) > 0.1f64)
                                             {
                                                 //
@@ -2534,35 +2534,35 @@ pub unsafe extern "C" fn R_StitchPatches(
                                                 .xyz
                                                 .as_mut_ptr();
                                                 v2 = (*(*grid2).verts.as_mut_ptr().offset(
-                                                    ((*grid2).width * (l + 1 as libc::c_int)
+                                                    ((*grid2).width * (l + 1 as i32)
                                                         + offset2)
                                                         as isize,
                                                 ))
                                                 .xyz
                                                 .as_mut_ptr();
                                                 if !(crate::stdlib::fabs(
-                                                    (*v1.offset(0 as libc::c_int as isize)
-                                                        - *v2.offset(0 as libc::c_int as isize))
-                                                        as libc::c_double,
+                                                    (*v1.offset(0 as i32 as isize)
+                                                        - *v2.offset(0 as i32 as isize))
+                                                        as f64,
                                                 ) < 0.01f64
                                                     && crate::stdlib::fabs(
-                                                        (*v1.offset(1 as libc::c_int as isize)
-                                                            - *v2.offset(1 as libc::c_int as isize))
-                                                            as libc::c_double,
+                                                        (*v1.offset(1 as i32 as isize)
+                                                            - *v2.offset(1 as i32 as isize))
+                                                            as f64,
                                                     ) < 0.01f64
                                                     && crate::stdlib::fabs(
-                                                        (*v1.offset(2 as libc::c_int as isize)
-                                                            - *v2.offset(2 as libc::c_int as isize))
-                                                            as libc::c_double,
+                                                        (*v1.offset(2 as i32 as isize)
+                                                            - *v2.offset(2 as i32 as isize))
+                                                            as f64,
                                                     ) < 0.01f64)
                                                 {
                                                     //
                                                     //ri.Printf( PRINT_ALL, "found highest LoD crack between two patches\n" );
                                                     // insert row into grid2 right after after row l
                                                     if m != 0 {
-                                                        column = (*grid2).width - 1 as libc::c_int
+                                                        column = (*grid2).width - 1 as i32
                                                     } else {
-                                                        column = 0 as libc::c_int
+                                                        column = 0 as i32
                                                     }
                                                     grid2 =
                                                         
@@ -2570,7 +2570,7 @@ pub unsafe extern "C" fn R_StitchPatches(
                                                                         l +
                                                                             1
                                                                                 as
-                                                                                libc::c_int,
+                                                                                i32,
                                                                         column,
                                                                         (*(*grid1).verts.as_mut_ptr().offset(((*grid1).width
                                                                                                                   *
@@ -2578,7 +2578,7 @@ pub unsafe extern "C" fn R_StitchPatches(
                                                                                                                        +
                                                                                                                        1
                                                                                                                            as
-                                                                                                                           libc::c_int)
+                                                                                                                           i32)
                                                                                                                   +
                                                                                                                   offset1)
                                                                                                                  as
@@ -2587,13 +2587,13 @@ pub unsafe extern "C" fn R_StitchPatches(
                                                                                                              +
                                                                                                              1
                                                                                                                  as
-                                                                                                                 libc::c_int)
+                                                                                                                 i32)
                                                                                                             as
                                                                                                             isize))
     as *mut crate::tr_local_h::srfGridMesh_s;
                                                     (*grid2).lodStitched =
                                                         crate::src::qcommon::q_shared::qfalse
-                                                            as libc::c_int;
+                                                            as i32;
                                                     let ref mut fresh4 = (*s_worldData
                                                         .surfaces
                                                         .offset(grid2num as isize))
@@ -2601,7 +2601,7 @@ pub unsafe extern "C" fn R_StitchPatches(
                                                     *fresh4 = grid2 as *mut libc::c_void
                                                         as *mut crate::tr_local_h::surfaceType_t;
                                                     return crate::src::qcommon::q_shared::qtrue
-                                                        as libc::c_int;
+                                                        as i32;
                                                 }
                                             }
                                         }
@@ -2613,34 +2613,34 @@ pub unsafe extern "C" fn R_StitchPatches(
                     }
                     m += 1
                 }
-                k += 2 as libc::c_int
+                k += 2 as i32
             }
         }
         n += 1
     }
-    n = 0 as libc::c_int;
-    while n < 2 as libc::c_int {
+    n = 0 as i32;
+    while n < 2 as i32 {
         //
         if n != 0 {
-            offset1 = ((*grid1).height - 1 as libc::c_int) * (*grid1).width
+            offset1 = ((*grid1).height - 1 as i32) * (*grid1).width
         } else {
-            offset1 = 0 as libc::c_int
+            offset1 = 0 as i32
         }
         if !(R_MergedWidthPoints(grid1, offset1) != 0) {
-            k = (*grid1).width - 1 as libc::c_int;
-            while k > 1 as libc::c_int {
-                m = 0 as libc::c_int;
-                while m < 2 as libc::c_int {
-                    if grid2.is_null() || (*grid2).width >= 65 as libc::c_int {
+            k = (*grid1).width - 1 as i32;
+            while k > 1 as i32 {
+                m = 0 as i32;
+                while m < 2 as i32 {
+                    if grid2.is_null() || (*grid2).width >= 65 as i32 {
                         break;
                     }
                     if m != 0 {
-                        offset2 = ((*grid2).height - 1 as libc::c_int) * (*grid2).width
+                        offset2 = ((*grid2).height - 1 as i32) * (*grid2).width
                     } else {
-                        offset2 = 0 as libc::c_int
+                        offset2 = 0 as i32
                     }
-                    l = 0 as libc::c_int;
-                    while l < (*grid2).width - 1 as libc::c_int {
+                    l = 0 as i32;
+                    while l < (*grid2).width - 1 as i32 {
                         //
                         v1 = (*(*grid1).verts.as_mut_ptr().offset((k + offset1) as isize))
                             .xyz
@@ -2649,51 +2649,51 @@ pub unsafe extern "C" fn R_StitchPatches(
                             .xyz
                             .as_mut_ptr();
                         if !(crate::stdlib::fabs(
-                            (*v1.offset(0 as libc::c_int as isize)
-                                - *v2.offset(0 as libc::c_int as isize))
-                                as libc::c_double,
+                            (*v1.offset(0 as i32 as isize)
+                                - *v2.offset(0 as i32 as isize))
+                                as f64,
                         ) > 0.1f64)
                         {
                             if !(crate::stdlib::fabs(
-                                (*v1.offset(1 as libc::c_int as isize)
-                                    - *v2.offset(1 as libc::c_int as isize))
-                                    as libc::c_double,
+                                (*v1.offset(1 as i32 as isize)
+                                    - *v2.offset(1 as i32 as isize))
+                                    as f64,
                             ) > 0.1f64)
                             {
                                 if !(crate::stdlib::fabs(
-                                    (*v1.offset(2 as libc::c_int as isize)
-                                        - *v2.offset(2 as libc::c_int as isize))
-                                        as libc::c_double,
+                                    (*v1.offset(2 as i32 as isize)
+                                        - *v2.offset(2 as i32 as isize))
+                                        as f64,
                                 ) > 0.1f64)
                                 {
                                     v1 = (*(*grid1)
                                         .verts
                                         .as_mut_ptr()
-                                        .offset((k - 2 as libc::c_int + offset1) as isize))
+                                        .offset((k - 2 as i32 + offset1) as isize))
                                     .xyz
                                     .as_mut_ptr();
                                     v2 = (*(*grid2)
                                         .verts
                                         .as_mut_ptr()
-                                        .offset((l + 1 as libc::c_int + offset2) as isize))
+                                        .offset((l + 1 as i32 + offset2) as isize))
                                     .xyz
                                     .as_mut_ptr();
                                     if !(crate::stdlib::fabs(
-                                        (*v1.offset(0 as libc::c_int as isize)
-                                            - *v2.offset(0 as libc::c_int as isize))
-                                            as libc::c_double,
+                                        (*v1.offset(0 as i32 as isize)
+                                            - *v2.offset(0 as i32 as isize))
+                                            as f64,
                                     ) > 0.1f64)
                                     {
                                         if !(crate::stdlib::fabs(
-                                            (*v1.offset(1 as libc::c_int as isize)
-                                                - *v2.offset(1 as libc::c_int as isize))
-                                                as libc::c_double,
+                                            (*v1.offset(1 as i32 as isize)
+                                                - *v2.offset(1 as i32 as isize))
+                                                as f64,
                                         ) > 0.1f64)
                                         {
                                             if !(crate::stdlib::fabs(
-                                                (*v1.offset(2 as libc::c_int as isize)
-                                                    - *v2.offset(2 as libc::c_int as isize))
-                                                    as libc::c_double,
+                                                (*v1.offset(2 as i32 as isize)
+                                                    - *v2.offset(2 as i32 as isize))
+                                                    as f64,
                                             ) > 0.1f64)
                                             {
                                                 //
@@ -2704,33 +2704,33 @@ pub unsafe extern "C" fn R_StitchPatches(
                                                 .xyz
                                                 .as_mut_ptr();
                                                 v2 = (*(*grid2).verts.as_mut_ptr().offset(
-                                                    (l + 1 as libc::c_int + offset2) as isize,
+                                                    (l + 1 as i32 + offset2) as isize,
                                                 ))
                                                 .xyz
                                                 .as_mut_ptr();
                                                 if !(crate::stdlib::fabs(
-                                                    (*v1.offset(0 as libc::c_int as isize)
-                                                        - *v2.offset(0 as libc::c_int as isize))
-                                                        as libc::c_double,
+                                                    (*v1.offset(0 as i32 as isize)
+                                                        - *v2.offset(0 as i32 as isize))
+                                                        as f64,
                                                 ) < 0.01f64
                                                     && crate::stdlib::fabs(
-                                                        (*v1.offset(1 as libc::c_int as isize)
-                                                            - *v2.offset(1 as libc::c_int as isize))
-                                                            as libc::c_double,
+                                                        (*v1.offset(1 as i32 as isize)
+                                                            - *v2.offset(1 as i32 as isize))
+                                                            as f64,
                                                     ) < 0.01f64
                                                     && crate::stdlib::fabs(
-                                                        (*v1.offset(2 as libc::c_int as isize)
-                                                            - *v2.offset(2 as libc::c_int as isize))
-                                                            as libc::c_double,
+                                                        (*v1.offset(2 as i32 as isize)
+                                                            - *v2.offset(2 as i32 as isize))
+                                                            as f64,
                                                     ) < 0.01f64)
                                                 {
                                                     //
                                                     //ri.Printf( PRINT_ALL, "found highest LoD crack between two patches\n" );
                                                     // insert column into grid2 right after after column l
                                                     if m != 0 {
-                                                        row = (*grid2).height - 1 as libc::c_int
+                                                        row = (*grid2).height - 1 as i32
                                                     } else {
-                                                        row = 0 as libc::c_int
+                                                        row = 0 as i32
                                                     }
                                                     grid2 =
                                                         
@@ -2738,13 +2738,13 @@ pub unsafe extern "C" fn R_StitchPatches(
                                                                            l +
                                                                                1
                                                                                    as
-                                                                                   libc::c_int,
+                                                                                   i32,
                                                                            row,
                                                                            (*(*grid1).verts.as_mut_ptr().offset((k
                                                                                                                      -
                                                                                                                      1
                                                                                                                          as
-                                                                                                                         libc::c_int
+                                                                                                                         i32
                                                                                                                      +
                                                                                                                      offset1)
                                                                                                                     as
@@ -2753,13 +2753,13 @@ pub unsafe extern "C" fn R_StitchPatches(
                                                                                                                +
                                                                                                                1
                                                                                                                    as
-                                                                                                                   libc::c_int)
+                                                                                                                   i32)
                                                                                                               as
                                                                                                               isize))
     as *mut crate::tr_local_h::srfGridMesh_s;
                                                     (*grid2).lodStitched =
                                                         crate::src::qcommon::q_shared::qfalse
-                                                            as libc::c_int;
+                                                            as i32;
                                                     let ref mut fresh5 = (*s_worldData
                                                         .surfaces
                                                         .offset(grid2num as isize))
@@ -2767,7 +2767,7 @@ pub unsafe extern "C" fn R_StitchPatches(
                                                     *fresh5 = grid2 as *mut libc::c_void
                                                         as *mut crate::tr_local_h::surfaceType_t;
                                                     return crate::src::qcommon::q_shared::qtrue
-                                                        as libc::c_int;
+                                                        as i32;
                                                 }
                                             }
                                         }
@@ -2779,18 +2779,18 @@ pub unsafe extern "C" fn R_StitchPatches(
                     }
                     m += 1
                 }
-                m = 0 as libc::c_int;
-                while m < 2 as libc::c_int {
-                    if grid2.is_null() || (*grid2).height >= 65 as libc::c_int {
+                m = 0 as i32;
+                while m < 2 as i32 {
+                    if grid2.is_null() || (*grid2).height >= 65 as i32 {
                         break;
                     }
                     if m != 0 {
-                        offset2 = (*grid2).width - 1 as libc::c_int
+                        offset2 = (*grid2).width - 1 as i32
                     } else {
-                        offset2 = 0 as libc::c_int
+                        offset2 = 0 as i32
                     }
-                    l = 0 as libc::c_int;
-                    while l < (*grid2).height - 1 as libc::c_int {
+                    l = 0 as i32;
+                    while l < (*grid2).height - 1 as i32 {
                         //
                         v1 = (*(*grid1).verts.as_mut_ptr().offset((k + offset1) as isize))
                             .xyz
@@ -2802,51 +2802,51 @@ pub unsafe extern "C" fn R_StitchPatches(
                         .xyz
                         .as_mut_ptr();
                         if !(crate::stdlib::fabs(
-                            (*v1.offset(0 as libc::c_int as isize)
-                                - *v2.offset(0 as libc::c_int as isize))
-                                as libc::c_double,
+                            (*v1.offset(0 as i32 as isize)
+                                - *v2.offset(0 as i32 as isize))
+                                as f64,
                         ) > 0.1f64)
                         {
                             if !(crate::stdlib::fabs(
-                                (*v1.offset(1 as libc::c_int as isize)
-                                    - *v2.offset(1 as libc::c_int as isize))
-                                    as libc::c_double,
+                                (*v1.offset(1 as i32 as isize)
+                                    - *v2.offset(1 as i32 as isize))
+                                    as f64,
                             ) > 0.1f64)
                             {
                                 if !(crate::stdlib::fabs(
-                                    (*v1.offset(2 as libc::c_int as isize)
-                                        - *v2.offset(2 as libc::c_int as isize))
-                                        as libc::c_double,
+                                    (*v1.offset(2 as i32 as isize)
+                                        - *v2.offset(2 as i32 as isize))
+                                        as f64,
                                 ) > 0.1f64)
                                 {
                                     v1 = (*(*grid1)
                                         .verts
                                         .as_mut_ptr()
-                                        .offset((k - 2 as libc::c_int + offset1) as isize))
+                                        .offset((k - 2 as i32 + offset1) as isize))
                                     .xyz
                                     .as_mut_ptr();
                                     v2 = (*(*grid2).verts.as_mut_ptr().offset(
-                                        ((*grid2).width * (l + 1 as libc::c_int) + offset2)
+                                        ((*grid2).width * (l + 1 as i32) + offset2)
                                             as isize,
                                     ))
                                     .xyz
                                     .as_mut_ptr();
                                     if !(crate::stdlib::fabs(
-                                        (*v1.offset(0 as libc::c_int as isize)
-                                            - *v2.offset(0 as libc::c_int as isize))
-                                            as libc::c_double,
+                                        (*v1.offset(0 as i32 as isize)
+                                            - *v2.offset(0 as i32 as isize))
+                                            as f64,
                                     ) > 0.1f64)
                                     {
                                         if !(crate::stdlib::fabs(
-                                            (*v1.offset(1 as libc::c_int as isize)
-                                                - *v2.offset(1 as libc::c_int as isize))
-                                                as libc::c_double,
+                                            (*v1.offset(1 as i32 as isize)
+                                                - *v2.offset(1 as i32 as isize))
+                                                as f64,
                                         ) > 0.1f64)
                                         {
                                             if !(crate::stdlib::fabs(
-                                                (*v1.offset(2 as libc::c_int as isize)
-                                                    - *v2.offset(2 as libc::c_int as isize))
-                                                    as libc::c_double,
+                                                (*v1.offset(2 as i32 as isize)
+                                                    - *v2.offset(2 as i32 as isize))
+                                                    as f64,
                                             ) > 0.1f64)
                                             {
                                                 //
@@ -2856,35 +2856,35 @@ pub unsafe extern "C" fn R_StitchPatches(
                                                 .xyz
                                                 .as_mut_ptr();
                                                 v2 = (*(*grid2).verts.as_mut_ptr().offset(
-                                                    ((*grid2).width * (l + 1 as libc::c_int)
+                                                    ((*grid2).width * (l + 1 as i32)
                                                         + offset2)
                                                         as isize,
                                                 ))
                                                 .xyz
                                                 .as_mut_ptr();
                                                 if !(crate::stdlib::fabs(
-                                                    (*v1.offset(0 as libc::c_int as isize)
-                                                        - *v2.offset(0 as libc::c_int as isize))
-                                                        as libc::c_double,
+                                                    (*v1.offset(0 as i32 as isize)
+                                                        - *v2.offset(0 as i32 as isize))
+                                                        as f64,
                                                 ) < 0.01f64
                                                     && crate::stdlib::fabs(
-                                                        (*v1.offset(1 as libc::c_int as isize)
-                                                            - *v2.offset(1 as libc::c_int as isize))
-                                                            as libc::c_double,
+                                                        (*v1.offset(1 as i32 as isize)
+                                                            - *v2.offset(1 as i32 as isize))
+                                                            as f64,
                                                     ) < 0.01f64
                                                     && crate::stdlib::fabs(
-                                                        (*v1.offset(2 as libc::c_int as isize)
-                                                            - *v2.offset(2 as libc::c_int as isize))
-                                                            as libc::c_double,
+                                                        (*v1.offset(2 as i32 as isize)
+                                                            - *v2.offset(2 as i32 as isize))
+                                                            as f64,
                                                     ) < 0.01f64)
                                                 {
                                                     //
                                                     //ri.Printf( PRINT_ALL, "found highest LoD crack between two patches\n" );
                                                     // insert row into grid2 right after after row l
                                                     if m != 0 {
-                                                        column = (*grid2).width - 1 as libc::c_int
+                                                        column = (*grid2).width - 1 as i32
                                                     } else {
-                                                        column = 0 as libc::c_int
+                                                        column = 0 as i32
                                                     }
                                                     grid2 =
                                                         
@@ -2892,13 +2892,13 @@ pub unsafe extern "C" fn R_StitchPatches(
                                                                         l +
                                                                             1
                                                                                 as
-                                                                                libc::c_int,
+                                                                                i32,
                                                                         column,
                                                                         (*(*grid1).verts.as_mut_ptr().offset((k
                                                                                                                   -
                                                                                                                   1
                                                                                                                       as
-                                                                                                                      libc::c_int
+                                                                                                                      i32
                                                                                                                   +
                                                                                                                   offset1)
                                                                                                                  as
@@ -2907,7 +2907,7 @@ pub unsafe extern "C" fn R_StitchPatches(
                                                                                                             +
                                                                                                             1
                                                                                                                 as
-                                                                                                                libc::c_int)
+                                                                                                                i32)
                                                                                                            as
                                                                                                            isize))
     as *mut crate::tr_local_h::srfGridMesh_s;
@@ -2916,7 +2916,7 @@ pub unsafe extern "C" fn R_StitchPatches(
                                                     }
                                                     (*grid2).lodStitched =
                                                         crate::src::qcommon::q_shared::qfalse
-                                                            as libc::c_int;
+                                                            as i32;
                                                     let ref mut fresh6 = (*s_worldData
                                                         .surfaces
                                                         .offset(grid2num as isize))
@@ -2924,7 +2924,7 @@ pub unsafe extern "C" fn R_StitchPatches(
                                                     *fresh6 = grid2 as *mut libc::c_void
                                                         as *mut crate::tr_local_h::surfaceType_t;
                                                     return crate::src::qcommon::q_shared::qtrue
-                                                        as libc::c_int;
+                                                        as i32;
                                                 }
                                             }
                                         }
@@ -2936,34 +2936,34 @@ pub unsafe extern "C" fn R_StitchPatches(
                     }
                     m += 1
                 }
-                k -= 2 as libc::c_int
+                k -= 2 as i32
             }
         }
         n += 1
     }
-    n = 0 as libc::c_int;
-    while n < 2 as libc::c_int {
+    n = 0 as i32;
+    while n < 2 as i32 {
         //
         if n != 0 {
-            offset1 = (*grid1).width - 1 as libc::c_int
+            offset1 = (*grid1).width - 1 as i32
         } else {
-            offset1 = 0 as libc::c_int
+            offset1 = 0 as i32
         }
         if !(R_MergedHeightPoints(grid1, offset1) != 0) {
-            k = (*grid1).height - 1 as libc::c_int;
-            while k > 1 as libc::c_int {
-                m = 0 as libc::c_int;
-                while m < 2 as libc::c_int {
-                    if grid2.is_null() || (*grid2).width >= 65 as libc::c_int {
+            k = (*grid1).height - 1 as i32;
+            while k > 1 as i32 {
+                m = 0 as i32;
+                while m < 2 as i32 {
+                    if grid2.is_null() || (*grid2).width >= 65 as i32 {
                         break;
                     }
                     if m != 0 {
-                        offset2 = ((*grid2).height - 1 as libc::c_int) * (*grid2).width
+                        offset2 = ((*grid2).height - 1 as i32) * (*grid2).width
                     } else {
-                        offset2 = 0 as libc::c_int
+                        offset2 = 0 as i32
                     }
-                    l = 0 as libc::c_int;
-                    while l < (*grid2).width - 1 as libc::c_int {
+                    l = 0 as i32;
+                    while l < (*grid2).width - 1 as i32 {
                         //
                         v1 = (*(*grid1)
                             .verts
@@ -2975,25 +2975,25 @@ pub unsafe extern "C" fn R_StitchPatches(
                             .xyz
                             .as_mut_ptr();
                         if !(crate::stdlib::fabs(
-                            (*v1.offset(0 as libc::c_int as isize)
-                                - *v2.offset(0 as libc::c_int as isize))
-                                as libc::c_double,
+                            (*v1.offset(0 as i32 as isize)
+                                - *v2.offset(0 as i32 as isize))
+                                as f64,
                         ) > 0.1f64)
                         {
                             if !(crate::stdlib::fabs(
-                                (*v1.offset(1 as libc::c_int as isize)
-                                    - *v2.offset(1 as libc::c_int as isize))
-                                    as libc::c_double,
+                                (*v1.offset(1 as i32 as isize)
+                                    - *v2.offset(1 as i32 as isize))
+                                    as f64,
                             ) > 0.1f64)
                             {
                                 if !(crate::stdlib::fabs(
-                                    (*v1.offset(2 as libc::c_int as isize)
-                                        - *v2.offset(2 as libc::c_int as isize))
-                                        as libc::c_double,
+                                    (*v1.offset(2 as i32 as isize)
+                                        - *v2.offset(2 as i32 as isize))
+                                        as f64,
                                 ) > 0.1f64)
                                 {
                                     v1 = (*(*grid1).verts.as_mut_ptr().offset(
-                                        ((*grid1).width * (k - 2 as libc::c_int) + offset1)
+                                        ((*grid1).width * (k - 2 as i32) + offset1)
                                             as isize,
                                     ))
                                     .xyz
@@ -3001,25 +3001,25 @@ pub unsafe extern "C" fn R_StitchPatches(
                                     v2 = (*(*grid2)
                                         .verts
                                         .as_mut_ptr()
-                                        .offset((l + 1 as libc::c_int + offset2) as isize))
+                                        .offset((l + 1 as i32 + offset2) as isize))
                                     .xyz
                                     .as_mut_ptr();
                                     if !(crate::stdlib::fabs(
-                                        (*v1.offset(0 as libc::c_int as isize)
-                                            - *v2.offset(0 as libc::c_int as isize))
-                                            as libc::c_double,
+                                        (*v1.offset(0 as i32 as isize)
+                                            - *v2.offset(0 as i32 as isize))
+                                            as f64,
                                     ) > 0.1f64)
                                     {
                                         if !(crate::stdlib::fabs(
-                                            (*v1.offset(1 as libc::c_int as isize)
-                                                - *v2.offset(1 as libc::c_int as isize))
-                                                as libc::c_double,
+                                            (*v1.offset(1 as i32 as isize)
+                                                - *v2.offset(1 as i32 as isize))
+                                                as f64,
                                         ) > 0.1f64)
                                         {
                                             if !(crate::stdlib::fabs(
-                                                (*v1.offset(2 as libc::c_int as isize)
-                                                    - *v2.offset(2 as libc::c_int as isize))
-                                                    as libc::c_double,
+                                                (*v1.offset(2 as i32 as isize)
+                                                    - *v2.offset(2 as i32 as isize))
+                                                    as f64,
                                             ) > 0.1f64)
                                             {
                                                 //
@@ -3030,33 +3030,33 @@ pub unsafe extern "C" fn R_StitchPatches(
                                                 .xyz
                                                 .as_mut_ptr();
                                                 v2 = (*(*grid2).verts.as_mut_ptr().offset(
-                                                    (l + 1 as libc::c_int + offset2) as isize,
+                                                    (l + 1 as i32 + offset2) as isize,
                                                 ))
                                                 .xyz
                                                 .as_mut_ptr();
                                                 if !(crate::stdlib::fabs(
-                                                    (*v1.offset(0 as libc::c_int as isize)
-                                                        - *v2.offset(0 as libc::c_int as isize))
-                                                        as libc::c_double,
+                                                    (*v1.offset(0 as i32 as isize)
+                                                        - *v2.offset(0 as i32 as isize))
+                                                        as f64,
                                                 ) < 0.01f64
                                                     && crate::stdlib::fabs(
-                                                        (*v1.offset(1 as libc::c_int as isize)
-                                                            - *v2.offset(1 as libc::c_int as isize))
-                                                            as libc::c_double,
+                                                        (*v1.offset(1 as i32 as isize)
+                                                            - *v2.offset(1 as i32 as isize))
+                                                            as f64,
                                                     ) < 0.01f64
                                                     && crate::stdlib::fabs(
-                                                        (*v1.offset(2 as libc::c_int as isize)
-                                                            - *v2.offset(2 as libc::c_int as isize))
-                                                            as libc::c_double,
+                                                        (*v1.offset(2 as i32 as isize)
+                                                            - *v2.offset(2 as i32 as isize))
+                                                            as f64,
                                                     ) < 0.01f64)
                                                 {
                                                     //
                                                     //ri.Printf( PRINT_ALL, "found highest LoD crack between two patches\n" );
                                                     // insert column into grid2 right after after column l
                                                     if m != 0 {
-                                                        row = (*grid2).height - 1 as libc::c_int
+                                                        row = (*grid2).height - 1 as i32
                                                     } else {
-                                                        row = 0 as libc::c_int
+                                                        row = 0 as i32
                                                     }
                                                     grid2 =
                                                         
@@ -3064,7 +3064,7 @@ pub unsafe extern "C" fn R_StitchPatches(
                                                                            l +
                                                                                1
                                                                                    as
-                                                                                   libc::c_int,
+                                                                                   i32,
                                                                            row,
                                                                            (*(*grid1).verts.as_mut_ptr().offset(((*grid1).width
                                                                                                                      *
@@ -3072,7 +3072,7 @@ pub unsafe extern "C" fn R_StitchPatches(
                                                                                                                           -
                                                                                                                           1
                                                                                                                               as
-                                                                                                                              libc::c_int)
+                                                                                                                              i32)
                                                                                                                      +
                                                                                                                      offset1)
                                                                                                                     as
@@ -3081,13 +3081,13 @@ pub unsafe extern "C" fn R_StitchPatches(
                                                                                                                 +
                                                                                                                 1
                                                                                                                     as
-                                                                                                                    libc::c_int)
+                                                                                                                    i32)
                                                                                                                as
                                                                                                                isize))
     as *mut crate::tr_local_h::srfGridMesh_s;
                                                     (*grid2).lodStitched =
                                                         crate::src::qcommon::q_shared::qfalse
-                                                            as libc::c_int;
+                                                            as i32;
                                                     let ref mut fresh7 = (*s_worldData
                                                         .surfaces
                                                         .offset(grid2num as isize))
@@ -3095,7 +3095,7 @@ pub unsafe extern "C" fn R_StitchPatches(
                                                     *fresh7 = grid2 as *mut libc::c_void
                                                         as *mut crate::tr_local_h::surfaceType_t;
                                                     return crate::src::qcommon::q_shared::qtrue
-                                                        as libc::c_int;
+                                                        as i32;
                                                 }
                                             }
                                         }
@@ -3107,18 +3107,18 @@ pub unsafe extern "C" fn R_StitchPatches(
                     }
                     m += 1
                 }
-                m = 0 as libc::c_int;
-                while m < 2 as libc::c_int {
-                    if grid2.is_null() || (*grid2).height >= 65 as libc::c_int {
+                m = 0 as i32;
+                while m < 2 as i32 {
+                    if grid2.is_null() || (*grid2).height >= 65 as i32 {
                         break;
                     }
                     if m != 0 {
-                        offset2 = (*grid2).width - 1 as libc::c_int
+                        offset2 = (*grid2).width - 1 as i32
                     } else {
-                        offset2 = 0 as libc::c_int
+                        offset2 = 0 as i32
                     }
-                    l = 0 as libc::c_int;
-                    while l < (*grid2).height - 1 as libc::c_int {
+                    l = 0 as i32;
+                    while l < (*grid2).height - 1 as i32 {
                         //
                         v1 = (*(*grid1)
                             .verts
@@ -3133,51 +3133,51 @@ pub unsafe extern "C" fn R_StitchPatches(
                         .xyz
                         .as_mut_ptr();
                         if !(crate::stdlib::fabs(
-                            (*v1.offset(0 as libc::c_int as isize)
-                                - *v2.offset(0 as libc::c_int as isize))
-                                as libc::c_double,
+                            (*v1.offset(0 as i32 as isize)
+                                - *v2.offset(0 as i32 as isize))
+                                as f64,
                         ) > 0.1f64)
                         {
                             if !(crate::stdlib::fabs(
-                                (*v1.offset(1 as libc::c_int as isize)
-                                    - *v2.offset(1 as libc::c_int as isize))
-                                    as libc::c_double,
+                                (*v1.offset(1 as i32 as isize)
+                                    - *v2.offset(1 as i32 as isize))
+                                    as f64,
                             ) > 0.1f64)
                             {
                                 if !(crate::stdlib::fabs(
-                                    (*v1.offset(2 as libc::c_int as isize)
-                                        - *v2.offset(2 as libc::c_int as isize))
-                                        as libc::c_double,
+                                    (*v1.offset(2 as i32 as isize)
+                                        - *v2.offset(2 as i32 as isize))
+                                        as f64,
                                 ) > 0.1f64)
                                 {
                                     v1 = (*(*grid1).verts.as_mut_ptr().offset(
-                                        ((*grid1).width * (k - 2 as libc::c_int) + offset1)
+                                        ((*grid1).width * (k - 2 as i32) + offset1)
                                             as isize,
                                     ))
                                     .xyz
                                     .as_mut_ptr();
                                     v2 = (*(*grid2).verts.as_mut_ptr().offset(
-                                        ((*grid2).width * (l + 1 as libc::c_int) + offset2)
+                                        ((*grid2).width * (l + 1 as i32) + offset2)
                                             as isize,
                                     ))
                                     .xyz
                                     .as_mut_ptr();
                                     if !(crate::stdlib::fabs(
-                                        (*v1.offset(0 as libc::c_int as isize)
-                                            - *v2.offset(0 as libc::c_int as isize))
-                                            as libc::c_double,
+                                        (*v1.offset(0 as i32 as isize)
+                                            - *v2.offset(0 as i32 as isize))
+                                            as f64,
                                     ) > 0.1f64)
                                     {
                                         if !(crate::stdlib::fabs(
-                                            (*v1.offset(1 as libc::c_int as isize)
-                                                - *v2.offset(1 as libc::c_int as isize))
-                                                as libc::c_double,
+                                            (*v1.offset(1 as i32 as isize)
+                                                - *v2.offset(1 as i32 as isize))
+                                                as f64,
                                         ) > 0.1f64)
                                         {
                                             if !(crate::stdlib::fabs(
-                                                (*v1.offset(2 as libc::c_int as isize)
-                                                    - *v2.offset(2 as libc::c_int as isize))
-                                                    as libc::c_double,
+                                                (*v1.offset(2 as i32 as isize)
+                                                    - *v2.offset(2 as i32 as isize))
+                                                    as f64,
                                             ) > 0.1f64)
                                             {
                                                 //
@@ -3187,35 +3187,35 @@ pub unsafe extern "C" fn R_StitchPatches(
                                                 .xyz
                                                 .as_mut_ptr();
                                                 v2 = (*(*grid2).verts.as_mut_ptr().offset(
-                                                    ((*grid2).width * (l + 1 as libc::c_int)
+                                                    ((*grid2).width * (l + 1 as i32)
                                                         + offset2)
                                                         as isize,
                                                 ))
                                                 .xyz
                                                 .as_mut_ptr();
                                                 if !(crate::stdlib::fabs(
-                                                    (*v1.offset(0 as libc::c_int as isize)
-                                                        - *v2.offset(0 as libc::c_int as isize))
-                                                        as libc::c_double,
+                                                    (*v1.offset(0 as i32 as isize)
+                                                        - *v2.offset(0 as i32 as isize))
+                                                        as f64,
                                                 ) < 0.01f64
                                                     && crate::stdlib::fabs(
-                                                        (*v1.offset(1 as libc::c_int as isize)
-                                                            - *v2.offset(1 as libc::c_int as isize))
-                                                            as libc::c_double,
+                                                        (*v1.offset(1 as i32 as isize)
+                                                            - *v2.offset(1 as i32 as isize))
+                                                            as f64,
                                                     ) < 0.01f64
                                                     && crate::stdlib::fabs(
-                                                        (*v1.offset(2 as libc::c_int as isize)
-                                                            - *v2.offset(2 as libc::c_int as isize))
-                                                            as libc::c_double,
+                                                        (*v1.offset(2 as i32 as isize)
+                                                            - *v2.offset(2 as i32 as isize))
+                                                            as f64,
                                                     ) < 0.01f64)
                                                 {
                                                     //
                                                     //ri.Printf( PRINT_ALL, "found highest LoD crack between two patches\n" );
                                                     // insert row into grid2 right after after row l
                                                     if m != 0 {
-                                                        column = (*grid2).width - 1 as libc::c_int
+                                                        column = (*grid2).width - 1 as i32
                                                     } else {
-                                                        column = 0 as libc::c_int
+                                                        column = 0 as i32
                                                     }
                                                     grid2 =
                                                         
@@ -3223,7 +3223,7 @@ pub unsafe extern "C" fn R_StitchPatches(
                                                                         l +
                                                                             1
                                                                                 as
-                                                                                libc::c_int,
+                                                                                i32,
                                                                         column,
                                                                         (*(*grid1).verts.as_mut_ptr().offset(((*grid1).width
                                                                                                                   *
@@ -3231,7 +3231,7 @@ pub unsafe extern "C" fn R_StitchPatches(
                                                                                                                        -
                                                                                                                        1
                                                                                                                            as
-                                                                                                                           libc::c_int)
+                                                                                                                           i32)
                                                                                                                   +
                                                                                                                   offset1)
                                                                                                                  as
@@ -3240,13 +3240,13 @@ pub unsafe extern "C" fn R_StitchPatches(
                                                                                                              +
                                                                                                              1
                                                                                                                  as
-                                                                                                                 libc::c_int)
+                                                                                                                 i32)
                                                                                                             as
                                                                                                             isize))
     as *mut crate::tr_local_h::srfGridMesh_s;
                                                     (*grid2).lodStitched =
                                                         crate::src::qcommon::q_shared::qfalse
-                                                            as libc::c_int;
+                                                            as i32;
                                                     let ref mut fresh8 = (*s_worldData
                                                         .surfaces
                                                         .offset(grid2num as isize))
@@ -3254,7 +3254,7 @@ pub unsafe extern "C" fn R_StitchPatches(
                                                     *fresh8 = grid2 as *mut libc::c_void
                                                         as *mut crate::tr_local_h::surfaceType_t;
                                                     return crate::src::qcommon::q_shared::qtrue
-                                                        as libc::c_int;
+                                                        as i32;
                                                 }
                                             }
                                         }
@@ -3266,12 +3266,12 @@ pub unsafe extern "C" fn R_StitchPatches(
                     }
                     m += 1
                 }
-                k -= 2 as libc::c_int
+                k -= 2 as i32
             }
         }
         n += 1
     }
-    return crate::src::qcommon::q_shared::qfalse as libc::c_int;
+    return crate::src::qcommon::q_shared::qfalse as i32;
 }
 /*
 ===============
@@ -3288,36 +3288,36 @@ might still appear at that side.
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn R_TryStitchingPatch(mut grid1num: libc::c_int) -> libc::c_int {
-    let mut j: libc::c_int = 0;
-    let mut numstitches: libc::c_int = 0;
+pub unsafe extern "C" fn R_TryStitchingPatch(mut grid1num: i32) -> i32 {
+    let mut j: i32 = 0;
+    let mut numstitches: i32 = 0;
     let mut grid1: *mut crate::tr_local_h::srfGridMesh_t =
         0 as *mut crate::tr_local_h::srfGridMesh_t;
     let mut grid2: *mut crate::tr_local_h::srfGridMesh_t =
         0 as *mut crate::tr_local_h::srfGridMesh_t;
-    numstitches = 0 as libc::c_int;
+    numstitches = 0 as i32;
     grid1 = (*s_worldData.surfaces.offset(grid1num as isize)).data
         as *mut crate::tr_local_h::srfGridMesh_t;
-    j = 0 as libc::c_int;
+    j = 0 as i32;
     while j < s_worldData.numsurfaces {
         //
         grid2 = (*s_worldData.surfaces.offset(j as isize)).data
             as *mut crate::tr_local_h::srfGridMesh_t;
         // if this surface is not a grid
-        if !((*grid2).surfaceType as libc::c_uint
-            != crate::tr_local_h::SF_GRID as libc::c_int as libc::c_uint)
+        if !((*grid2).surfaceType as u32
+            != crate::tr_local_h::SF_GRID as i32 as u32)
         {
             // grids in the same LOD group should have the exact same lod radius
             if !((*grid1).lodRadius != (*grid2).lodRadius) {
                 // grids in the same LOD group should have the exact same lod origin
-                if !((*grid1).lodOrigin[0 as libc::c_int as usize]
-                    != (*grid2).lodOrigin[0 as libc::c_int as usize])
+                if !((*grid1).lodOrigin[0 as i32 as usize]
+                    != (*grid2).lodOrigin[0 as i32 as usize])
                 {
-                    if !((*grid1).lodOrigin[1 as libc::c_int as usize]
-                        != (*grid2).lodOrigin[1 as libc::c_int as usize])
+                    if !((*grid1).lodOrigin[1 as i32 as usize]
+                        != (*grid2).lodOrigin[1 as i32 as usize])
                     {
-                        if !((*grid1).lodOrigin[2 as libc::c_int as usize]
-                            != (*grid2).lodOrigin[2 as libc::c_int as usize])
+                        if !((*grid1).lodOrigin[2 as i32 as usize]
+                            != (*grid2).lodOrigin[2 as i32 as usize])
                         {
                             //
                             while R_StitchPatches(grid1num, j) != 0 {
@@ -3340,28 +3340,28 @@ R_StitchAllPatches
 #[no_mangle]
 
 pub unsafe extern "C" fn R_StitchAllPatches() {
-    let mut i: libc::c_int = 0;
-    let mut stitched: libc::c_int = 0;
-    let mut numstitches: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut stitched: i32 = 0;
+    let mut numstitches: i32 = 0;
     let mut grid1: *mut crate::tr_local_h::srfGridMesh_t =
         0 as *mut crate::tr_local_h::srfGridMesh_t;
-    numstitches = 0 as libc::c_int;
+    numstitches = 0 as i32;
     loop {
-        stitched = crate::src::qcommon::q_shared::qfalse as libc::c_int;
-        i = 0 as libc::c_int;
+        stitched = crate::src::qcommon::q_shared::qfalse as i32;
+        i = 0 as i32;
         while i < s_worldData.numsurfaces {
             //
             grid1 = (*s_worldData.surfaces.offset(i as isize)).data
                 as *mut crate::tr_local_h::srfGridMesh_t;
             // if this surface is not a grid
-            if !((*grid1).surfaceType as libc::c_uint
-                != crate::tr_local_h::SF_GRID as libc::c_int as libc::c_uint)
+            if !((*grid1).surfaceType as u32
+                != crate::tr_local_h::SF_GRID as i32 as u32)
             {
                 //
                 if !((*grid1).lodStitched != 0) {
                     //
-                    (*grid1).lodStitched = crate::src::qcommon::q_shared::qtrue as libc::c_int;
-                    stitched = crate::src::qcommon::q_shared::qtrue as libc::c_int;
+                    (*grid1).lodStitched = crate::src::qcommon::q_shared::qtrue as i32;
+                    stitched = crate::src::qcommon::q_shared::qtrue as i32;
                     //
                     numstitches += R_TryStitchingPatch(i)
                 }
@@ -3375,7 +3375,7 @@ pub unsafe extern "C" fn R_StitchAllPatches() {
     crate::src::renderergl1::tr_main::ri
         .Printf
         .expect("non-null function pointer")(
-        crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+        crate::src::qcommon::q_shared::PRINT_ALL as i32,
         b"stitched %d LoD cracks\n\x00" as *const u8 as *const libc::c_char,
         numstitches,
     );
@@ -3388,27 +3388,27 @@ R_MovePatchSurfacesToHunk
 #[no_mangle]
 
 pub unsafe extern "C" fn R_MovePatchSurfacesToHunk() {
-    let mut i: libc::c_int = 0;
-    let mut size: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut size: i32 = 0;
     let mut grid: *mut crate::tr_local_h::srfGridMesh_t =
         0 as *mut crate::tr_local_h::srfGridMesh_t;
     let mut hunkgrid: *mut crate::tr_local_h::srfGridMesh_t =
         0 as *mut crate::tr_local_h::srfGridMesh_t;
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < s_worldData.numsurfaces {
         //
         grid = (*s_worldData.surfaces.offset(i as isize)).data
             as *mut crate::tr_local_h::srfGridMesh_t;
         // if this surface is not a grid
-        if !((*grid).surfaceType as libc::c_uint
-            != crate::tr_local_h::SF_GRID as libc::c_int as libc::c_uint)
+        if !((*grid).surfaceType as u32
+            != crate::tr_local_h::SF_GRID as i32 as u32)
         {
             //
-            size = (((*grid).width * (*grid).height - 1 as libc::c_int) as libc::c_ulong)
+            size = (((*grid).width * (*grid).height - 1 as i32) as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<crate::qfiles_h::drawVert_t>() as libc::c_ulong)
                 .wrapping_add(
                     ::std::mem::size_of::<crate::tr_local_h::srfGridMesh_t>() as libc::c_ulong
-                ) as libc::c_int;
+                ) as i32;
             hunkgrid = crate::src::renderergl1::tr_main::ri
                 .Hunk_Alloc
                 .expect("non-null function pointer")(
@@ -3422,24 +3422,24 @@ pub unsafe extern "C" fn R_MovePatchSurfacesToHunk() {
             (*hunkgrid).widthLodError = crate::src::renderergl1::tr_main::ri
                 .Hunk_Alloc
                 .expect("non-null function pointer")(
-                (*grid).width * 4 as libc::c_int,
+                (*grid).width * 4 as i32,
                 crate::src::qcommon::q_shared::h_low,
-            ) as *mut libc::c_float;
+            ) as *mut f32;
             crate::stdlib::memcpy(
                 (*hunkgrid).widthLodError as *mut libc::c_void,
                 (*grid).widthLodError as *const libc::c_void,
-                ((*grid).width * 4 as libc::c_int) as libc::c_ulong,
+                ((*grid).width * 4 as i32) as libc::c_ulong,
             );
             (*hunkgrid).heightLodError = crate::src::renderergl1::tr_main::ri
                 .Hunk_Alloc
                 .expect("non-null function pointer")(
-                (*grid).height * 4 as libc::c_int,
+                (*grid).height * 4 as i32,
                 crate::src::qcommon::q_shared::h_low,
-            ) as *mut libc::c_float;
+            ) as *mut f32;
             crate::stdlib::memcpy(
                 (*hunkgrid).heightLodError as *mut libc::c_void,
                 (*grid).heightLodError as *const libc::c_void,
-                ((*grid).height * 4 as libc::c_int) as libc::c_ulong,
+                ((*grid).height * 4 as i32) as libc::c_ulong,
             );
             crate::src::renderergl1::tr_curve::R_FreeSurfaceGridMesh(
                 grid as *mut crate::tr_local_h::srfGridMesh_s,
@@ -3464,17 +3464,17 @@ unsafe extern "C" fn R_LoadSurfaces(
     let mut in_0: *mut crate::qfiles_h::dsurface_t = 0 as *mut crate::qfiles_h::dsurface_t;
     let mut out: *mut crate::tr_local_h::msurface_t = 0 as *mut crate::tr_local_h::msurface_t;
     let mut dv: *mut crate::qfiles_h::drawVert_t = 0 as *mut crate::qfiles_h::drawVert_t;
-    let mut indexes: *mut libc::c_int = 0 as *mut libc::c_int;
-    let mut count: libc::c_int = 0;
-    let mut numFaces: libc::c_int = 0;
-    let mut numMeshes: libc::c_int = 0;
-    let mut numTriSurfs: libc::c_int = 0;
-    let mut numFlares: libc::c_int = 0;
-    let mut i: libc::c_int = 0;
-    numFaces = 0 as libc::c_int;
-    numMeshes = 0 as libc::c_int;
-    numTriSurfs = 0 as libc::c_int;
-    numFlares = 0 as libc::c_int;
+    let mut indexes: *mut i32 = 0 as *mut i32;
+    let mut count: i32 = 0;
+    let mut numFaces: i32 = 0;
+    let mut numMeshes: i32 = 0;
+    let mut numTriSurfs: i32 = 0;
+    let mut numFlares: i32 = 0;
+    let mut i: i32 = 0;
+    numFaces = 0 as i32;
+    numMeshes = 0 as i32;
+    numTriSurfs = 0 as i32;
+    numFlares = 0 as i32;
     in_0 = fileBase.offset((*surfs).fileofs as isize) as *mut libc::c_void
         as *mut crate::qfiles_h::dsurface_t;
     if ((*surfs).filelen as libc::c_ulong)
@@ -3484,14 +3484,14 @@ unsafe extern "C" fn R_LoadSurfaces(
         crate::src::renderergl1::tr_main::ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"LoadMap: funny lump size in %s\x00" as *const u8 as *const libc::c_char,
             s_worldData.name.as_mut_ptr(),
         );
     }
     count = ((*surfs).filelen as libc::c_ulong)
         .wrapping_div(::std::mem::size_of::<crate::qfiles_h::dsurface_t>() as libc::c_ulong)
-        as libc::c_int;
+        as i32;
     dv = fileBase.offset((*verts).fileofs as isize) as *mut libc::c_void
         as *mut crate::qfiles_h::drawVert_t;
     if ((*verts).filelen as libc::c_ulong)
@@ -3501,21 +3501,21 @@ unsafe extern "C" fn R_LoadSurfaces(
         crate::src::renderergl1::tr_main::ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"LoadMap: funny lump size in %s\x00" as *const u8 as *const libc::c_char,
             s_worldData.name.as_mut_ptr(),
         );
     }
     indexes =
-        fileBase.offset((*indexLump).fileofs as isize) as *mut libc::c_void as *mut libc::c_int;
+        fileBase.offset((*indexLump).fileofs as isize) as *mut libc::c_void as *mut i32;
     if ((*indexLump).filelen as libc::c_ulong)
-        .wrapping_rem(::std::mem::size_of::<libc::c_int>() as libc::c_ulong)
+        .wrapping_rem(::std::mem::size_of::<i32>() as libc::c_ulong)
         != 0
     {
         crate::src::renderergl1::tr_main::ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"LoadMap: funny lump size in %s\x00" as *const u8 as *const libc::c_char,
             s_worldData.name.as_mut_ptr(),
         );
@@ -3525,12 +3525,12 @@ unsafe extern "C" fn R_LoadSurfaces(
         .expect("non-null function pointer")(
         (count as libc::c_ulong)
             .wrapping_mul(::std::mem::size_of::<crate::tr_local_h::msurface_t>() as libc::c_ulong)
-            as libc::c_int,
+            as i32,
         crate::src::qcommon::q_shared::h_low,
     ) as *mut crate::tr_local_h::msurface_t;
     s_worldData.surfaces = out;
     s_worldData.numsurfaces = count;
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < count {
         match (*in_0).surfaceType {
             2 => {
@@ -3553,7 +3553,7 @@ unsafe extern "C" fn R_LoadSurfaces(
                 crate::src::renderergl1::tr_main::ri
                     .Error
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+                    crate::src::qcommon::q_shared::ERR_DROP as i32,
                     b"Bad surfaceType\x00" as *const u8 as *const libc::c_char,
                 );
             }
@@ -3568,7 +3568,7 @@ unsafe extern "C" fn R_LoadSurfaces(
     crate::src::renderergl1::tr_main::ri
         .Printf
         .expect("non-null function pointer")(
-        crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+        crate::src::qcommon::q_shared::PRINT_ALL as i32,
         b"...loaded %d faces, %i meshes, %i trisurfs, %i flares\n\x00" as *const u8
             as *const libc::c_char,
         numFaces,
@@ -3586,9 +3586,9 @@ R_LoadSubmodels
 unsafe extern "C" fn R_LoadSubmodels(mut l: *mut crate::qfiles_h::lump_t) {
     let mut in_0: *mut crate::qfiles_h::dmodel_t = 0 as *mut crate::qfiles_h::dmodel_t;
     let mut out: *mut crate::tr_local_h::bmodel_t = 0 as *mut crate::tr_local_h::bmodel_t;
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
-    let mut count: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
+    let mut count: i32 = 0;
     in_0 = fileBase.offset((*l).fileofs as isize) as *mut libc::c_void
         as *mut crate::qfiles_h::dmodel_t;
     if ((*l).filelen as libc::c_ulong)
@@ -3598,24 +3598,24 @@ unsafe extern "C" fn R_LoadSubmodels(mut l: *mut crate::qfiles_h::lump_t) {
         crate::src::renderergl1::tr_main::ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"LoadMap: funny lump size in %s\x00" as *const u8 as *const libc::c_char,
             s_worldData.name.as_mut_ptr(),
         );
     }
     count = ((*l).filelen as libc::c_ulong)
         .wrapping_div(::std::mem::size_of::<crate::qfiles_h::dmodel_t>() as libc::c_ulong)
-        as libc::c_int;
+        as i32;
     out = crate::src::renderergl1::tr_main::ri
         .Hunk_Alloc
         .expect("non-null function pointer")(
         (count as libc::c_ulong)
             .wrapping_mul(::std::mem::size_of::<crate::tr_local_h::bmodel_t>() as libc::c_ulong)
-            as libc::c_int,
+            as i32,
         crate::src::qcommon::q_shared::h_low,
     ) as *mut crate::tr_local_h::bmodel_t;
     s_worldData.bmodels = out;
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < count {
         let mut model: *mut crate::tr_local_h::model_t = 0 as *mut crate::tr_local_h::model_t;
         model =
@@ -3625,7 +3625,7 @@ unsafe extern "C" fn R_LoadSubmodels(mut l: *mut crate::qfiles_h::lump_t) {
             crate::src::renderergl1::tr_main::ri
                 .Error
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+                crate::src::qcommon::q_shared::ERR_DROP as i32,
                 b"R_LoadSubmodels: R_AllocModel() failed\x00" as *const u8 as *const libc::c_char,
             );
         }
@@ -3633,14 +3633,14 @@ unsafe extern "C" fn R_LoadSubmodels(mut l: *mut crate::qfiles_h::lump_t) {
         (*model).bmodel = out;
         crate::src::qcommon::q_shared::Com_sprintf(
             (*model).name.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as libc::c_int,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
             b"*%d\x00" as *const u8 as *const libc::c_char,
             i,
         );
-        j = 0 as libc::c_int;
-        while j < 3 as libc::c_int {
-            (*out).bounds[0 as libc::c_int as usize][j as usize] = (*in_0).mins[j as usize];
-            (*out).bounds[1 as libc::c_int as usize][j as usize] = (*in_0).maxs[j as usize];
+        j = 0 as i32;
+        while j < 3 as i32 {
+            (*out).bounds[0 as i32 as usize][j as usize] = (*in_0).mins[j as usize];
+            (*out).bounds[1 as i32 as usize][j as usize] = (*in_0).maxs[j as usize];
             j += 1
         }
         (*out).firstSurface = s_worldData.surfaces.offset((*in_0).firstSurface as isize);
@@ -3662,11 +3662,11 @@ unsafe extern "C" fn R_SetParent(
     mut parent: *mut crate::tr_local_h::mnode_t,
 ) {
     (*node).parent = parent;
-    if (*node).contents != -(1 as libc::c_int) {
+    if (*node).contents != -(1 as i32) {
         return;
     }
-    R_SetParent((*node).children[0 as libc::c_int as usize], node);
-    R_SetParent((*node).children[1 as libc::c_int as usize], node);
+    R_SetParent((*node).children[0 as i32 as usize], node);
+    R_SetParent((*node).children[1 as i32 as usize], node);
 }
 /*
 =================
@@ -3678,14 +3678,14 @@ unsafe extern "C" fn R_LoadNodesAndLeafs(
     mut nodeLump: *mut crate::qfiles_h::lump_t,
     mut leafLump: *mut crate::qfiles_h::lump_t,
 ) {
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
-    let mut p: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
+    let mut p: i32 = 0;
     let mut in_0: *mut crate::qfiles_h::dnode_t = 0 as *mut crate::qfiles_h::dnode_t;
     let mut inLeaf: *mut crate::qfiles_h::dleaf_t = 0 as *mut crate::qfiles_h::dleaf_t;
     let mut out: *mut crate::tr_local_h::mnode_t = 0 as *mut crate::tr_local_h::mnode_t;
-    let mut numNodes: libc::c_int = 0;
-    let mut numLeafs: libc::c_int = 0;
+    let mut numNodes: i32 = 0;
+    let mut numLeafs: i32 = 0;
     in_0 = fileBase.offset((*nodeLump).fileofs as isize) as *mut libc::c_void
         as *mut crate::qfiles_h::dnode_t;
     if ((*nodeLump).filelen as libc::c_ulong)
@@ -3698,33 +3698,33 @@ unsafe extern "C" fn R_LoadNodesAndLeafs(
         crate::src::renderergl1::tr_main::ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"LoadMap: funny lump size in %s\x00" as *const u8 as *const libc::c_char,
             s_worldData.name.as_mut_ptr(),
         );
     }
     numNodes = ((*nodeLump).filelen as libc::c_ulong)
         .wrapping_div(::std::mem::size_of::<crate::qfiles_h::dnode_t>() as libc::c_ulong)
-        as libc::c_int;
+        as i32;
     numLeafs = ((*leafLump).filelen as libc::c_ulong)
         .wrapping_div(::std::mem::size_of::<crate::qfiles_h::dleaf_t>() as libc::c_ulong)
-        as libc::c_int;
+        as i32;
     out = crate::src::renderergl1::tr_main::ri
         .Hunk_Alloc
         .expect("non-null function pointer")(
         ((numNodes + numLeafs) as libc::c_ulong)
             .wrapping_mul(::std::mem::size_of::<crate::tr_local_h::mnode_t>() as libc::c_ulong)
-            as libc::c_int,
+            as i32,
         crate::src::qcommon::q_shared::h_low,
     ) as *mut crate::tr_local_h::mnode_t;
     s_worldData.nodes = out;
     s_worldData.numnodes = numNodes + numLeafs;
     s_worldData.numDecisionNodes = numNodes;
     // load nodes
-    i = 0 as libc::c_int; // differentiate from leafs
+    i = 0 as i32; // differentiate from leafs
     while i < numNodes {
-        j = 0 as libc::c_int;
-        while j < 3 as libc::c_int {
+        j = 0 as i32;
+        while j < 3 as i32 {
             (*out).mins[j as usize] =
                 (*in_0).mins[j as usize] as crate::src::qcommon::q_shared::vec_t;
             (*out).maxs[j as usize] =
@@ -3733,17 +3733,17 @@ unsafe extern "C" fn R_LoadNodesAndLeafs(
         }
         p = (*in_0).planeNum;
         (*out).plane = s_worldData.planes.offset(p as isize);
-        (*out).contents = -(1 as libc::c_int);
-        j = 0 as libc::c_int;
-        while j < 2 as libc::c_int {
+        (*out).contents = -(1 as i32);
+        j = 0 as i32;
+        while j < 2 as i32 {
             p = (*in_0).children[j as usize];
-            if p >= 0 as libc::c_int {
+            if p >= 0 as i32 {
                 (*out).children[j as usize] = s_worldData.nodes.offset(p as isize)
             } else {
                 (*out).children[j as usize] = s_worldData
                     .nodes
                     .offset(numNodes as isize)
-                    .offset((-(1 as libc::c_int) - p) as isize)
+                    .offset((-(1 as i32) - p) as isize)
             }
             j += 1
         }
@@ -3754,10 +3754,10 @@ unsafe extern "C" fn R_LoadNodesAndLeafs(
     // load leafs
     inLeaf = fileBase.offset((*leafLump).fileofs as isize) as *mut libc::c_void
         as *mut crate::qfiles_h::dleaf_t;
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < numLeafs {
-        j = 0 as libc::c_int;
-        while j < 3 as libc::c_int {
+        j = 0 as i32;
+        while j < 3 as i32 {
             (*out).mins[j as usize] =
                 (*inLeaf).mins[j as usize] as crate::src::qcommon::q_shared::vec_t;
             (*out).maxs[j as usize] =
@@ -3767,7 +3767,7 @@ unsafe extern "C" fn R_LoadNodesAndLeafs(
         (*out).cluster = (*inLeaf).cluster;
         (*out).area = (*inLeaf).area;
         if (*out).cluster >= s_worldData.numClusters {
-            s_worldData.numClusters = (*out).cluster + 1 as libc::c_int
+            s_worldData.numClusters = (*out).cluster + 1 as i32
         }
         (*out).firstmarksurface = s_worldData
             .marksurfaces
@@ -3788,8 +3788,8 @@ R_LoadShaders
 */
 
 unsafe extern "C" fn R_LoadShaders(mut l: *mut crate::qfiles_h::lump_t) {
-    let mut i: libc::c_int = 0;
-    let mut count: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut count: i32 = 0;
     let mut in_0: *mut crate::qfiles_h::dshader_t = 0 as *mut crate::qfiles_h::dshader_t;
     let mut out: *mut crate::qfiles_h::dshader_t = 0 as *mut crate::qfiles_h::dshader_t;
     in_0 = fileBase.offset((*l).fileofs as isize) as *mut libc::c_void
@@ -3801,20 +3801,20 @@ unsafe extern "C" fn R_LoadShaders(mut l: *mut crate::qfiles_h::lump_t) {
         crate::src::renderergl1::tr_main::ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"LoadMap: funny lump size in %s\x00" as *const u8 as *const libc::c_char,
             s_worldData.name.as_mut_ptr(),
         );
     }
     count = ((*l).filelen as libc::c_ulong)
         .wrapping_div(::std::mem::size_of::<crate::qfiles_h::dshader_t>() as libc::c_ulong)
-        as libc::c_int;
+        as i32;
     out = crate::src::renderergl1::tr_main::ri
         .Hunk_Alloc
         .expect("non-null function pointer")(
         (count as libc::c_ulong)
             .wrapping_mul(::std::mem::size_of::<crate::qfiles_h::dshader_t>() as libc::c_ulong)
-            as libc::c_int,
+            as i32,
         crate::src::qcommon::q_shared::h_low,
     ) as *mut crate::qfiles_h::dshader_t;
     s_worldData.shaders = out;
@@ -3825,7 +3825,7 @@ unsafe extern "C" fn R_LoadShaders(mut l: *mut crate::qfiles_h::lump_t) {
         (count as libc::c_ulong)
             .wrapping_mul(::std::mem::size_of::<crate::qfiles_h::dshader_t>() as libc::c_ulong),
     );
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < count {
         (*out.offset(i as isize)).surfaceFlags = (*out.offset(i as isize)).surfaceFlags;
         (*out.offset(i as isize)).contentFlags = (*out.offset(i as isize)).contentFlags;
@@ -3839,39 +3839,39 @@ R_LoadMarksurfaces
 */
 
 unsafe extern "C" fn R_LoadMarksurfaces(mut l: *mut crate::qfiles_h::lump_t) {
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
-    let mut count: libc::c_int = 0;
-    let mut in_0: *mut libc::c_int = 0 as *mut libc::c_int;
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
+    let mut count: i32 = 0;
+    let mut in_0: *mut i32 = 0 as *mut i32;
     let mut out: *mut *mut crate::tr_local_h::msurface_t =
         0 as *mut *mut crate::tr_local_h::msurface_t;
-    in_0 = fileBase.offset((*l).fileofs as isize) as *mut libc::c_void as *mut libc::c_int;
+    in_0 = fileBase.offset((*l).fileofs as isize) as *mut libc::c_void as *mut i32;
     if ((*l).filelen as libc::c_ulong)
-        .wrapping_rem(::std::mem::size_of::<libc::c_int>() as libc::c_ulong)
+        .wrapping_rem(::std::mem::size_of::<i32>() as libc::c_ulong)
         != 0
     {
         crate::src::renderergl1::tr_main::ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"LoadMap: funny lump size in %s\x00" as *const u8 as *const libc::c_char,
             s_worldData.name.as_mut_ptr(),
         );
     }
     count = ((*l).filelen as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<libc::c_int>() as libc::c_ulong)
-        as libc::c_int;
+        .wrapping_div(::std::mem::size_of::<i32>() as libc::c_ulong)
+        as i32;
     out = crate::src::renderergl1::tr_main::ri
         .Hunk_Alloc
         .expect("non-null function pointer")(
         (count as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
             *mut crate::tr_local_h::msurface_t,
-        >() as libc::c_ulong) as libc::c_int,
+        >() as libc::c_ulong) as i32,
         crate::src::qcommon::q_shared::h_low,
     ) as *mut *mut crate::tr_local_h::msurface_t;
     s_worldData.marksurfaces = out;
     s_worldData.nummarksurfaces = count;
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < count {
         j = *in_0.offset(i as isize);
         let ref mut fresh10 = *out.offset(i as isize);
@@ -3886,13 +3886,13 @@ R_LoadPlanes
 */
 
 unsafe extern "C" fn R_LoadPlanes(mut l: *mut crate::qfiles_h::lump_t) {
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
     let mut out: *mut crate::src::qcommon::q_shared::cplane_t =
         0 as *mut crate::src::qcommon::q_shared::cplane_t;
     let mut in_0: *mut crate::qfiles_h::dplane_t = 0 as *mut crate::qfiles_h::dplane_t;
-    let mut count: libc::c_int = 0;
-    let mut bits: libc::c_int = 0;
+    let mut count: i32 = 0;
+    let mut bits: i32 = 0;
     in_0 = fileBase.offset((*l).fileofs as isize) as *mut libc::c_void
         as *mut crate::qfiles_h::dplane_t;
     if ((*l).filelen as libc::c_ulong)
@@ -3902,44 +3902,44 @@ unsafe extern "C" fn R_LoadPlanes(mut l: *mut crate::qfiles_h::lump_t) {
         crate::src::renderergl1::tr_main::ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"LoadMap: funny lump size in %s\x00" as *const u8 as *const libc::c_char,
             s_worldData.name.as_mut_ptr(),
         );
     }
     count = ((*l).filelen as libc::c_ulong)
         .wrapping_div(::std::mem::size_of::<crate::qfiles_h::dplane_t>() as libc::c_ulong)
-        as libc::c_int;
+        as i32;
     out = crate::src::renderergl1::tr_main::ri
         .Hunk_Alloc
         .expect("non-null function pointer")(
-        ((count * 2 as libc::c_int) as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
+        ((count * 2 as i32) as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
             crate::src::qcommon::q_shared::cplane_t,
-        >() as libc::c_ulong) as libc::c_int,
+        >() as libc::c_ulong) as i32,
         crate::src::qcommon::q_shared::h_low,
     ) as *mut crate::src::qcommon::q_shared::cplane_t;
     s_worldData.planes = out;
     s_worldData.numplanes = count;
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < count {
-        bits = 0 as libc::c_int;
-        j = 0 as libc::c_int;
-        while j < 3 as libc::c_int {
+        bits = 0 as i32;
+        j = 0 as i32;
+        while j < 3 as i32 {
             (*out).normal[j as usize] = (*in_0).normal[j as usize];
-            if (*out).normal[j as usize] < 0 as libc::c_int as libc::c_float {
-                bits |= (1 as libc::c_int) << j
+            if (*out).normal[j as usize] < 0 as i32 as f32 {
+                bits |= (1 as i32) << j
             }
             j += 1
         }
         (*out).dist = (*in_0).dist;
-        (*out).type_0 = if (*out).normal[0 as libc::c_int as usize] as libc::c_double == 1.0f64 {
-            0 as libc::c_int
-        } else if (*out).normal[1 as libc::c_int as usize] as libc::c_double == 1.0f64 {
-            1 as libc::c_int
-        } else if (*out).normal[2 as libc::c_int as usize] as libc::c_double == 1.0f64 {
-            2 as libc::c_int
+        (*out).type_0 = if (*out).normal[0 as i32 as usize] as f64 == 1.0f64 {
+            0 as i32
+        } else if (*out).normal[1 as i32 as usize] as f64 == 1.0f64 {
+            1 as i32
+        } else if (*out).normal[2 as i32 as usize] as f64 == 1.0f64 {
+            2 as i32
         } else {
-            3 as libc::c_int
+            3 as i32
         } as crate::src::qcommon::q_shared::byte;
         (*out).signbits = bits as crate::src::qcommon::q_shared::byte;
         i += 1;
@@ -3959,20 +3959,20 @@ unsafe extern "C" fn R_LoadFogs(
     mut brushesLump: *mut crate::qfiles_h::lump_t,
     mut sidesLump: *mut crate::qfiles_h::lump_t,
 ) {
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     let mut out: *mut crate::tr_local_h::fog_t = 0 as *mut crate::tr_local_h::fog_t;
     let mut fogs: *mut crate::qfiles_h::dfog_t = 0 as *mut crate::qfiles_h::dfog_t;
     let mut brushes: *mut crate::qfiles_h::dbrush_t = 0 as *mut crate::qfiles_h::dbrush_t;
     let mut brush: *mut crate::qfiles_h::dbrush_t = 0 as *mut crate::qfiles_h::dbrush_t;
     let mut sides: *mut crate::qfiles_h::dbrushside_t = 0 as *mut crate::qfiles_h::dbrushside_t;
-    let mut count: libc::c_int = 0;
-    let mut brushesCount: libc::c_int = 0;
-    let mut sidesCount: libc::c_int = 0;
-    let mut sideNum: libc::c_int = 0;
-    let mut planeNum: libc::c_int = 0;
+    let mut count: i32 = 0;
+    let mut brushesCount: i32 = 0;
+    let mut sidesCount: i32 = 0;
+    let mut sideNum: i32 = 0;
+    let mut planeNum: i32 = 0;
     let mut shader: *mut crate::tr_local_h::shader_t = 0 as *mut crate::tr_local_h::shader_t;
-    let mut d: libc::c_float = 0.;
-    let mut firstSide: libc::c_int = 0;
+    let mut d: f32 = 0.;
+    let mut firstSide: i32 = 0;
     fogs =
         fileBase.offset((*l).fileofs as isize) as *mut libc::c_void as *mut crate::qfiles_h::dfog_t;
     if ((*l).filelen as libc::c_ulong)
@@ -3982,25 +3982,25 @@ unsafe extern "C" fn R_LoadFogs(
         crate::src::renderergl1::tr_main::ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"LoadMap: funny lump size in %s\x00" as *const u8 as *const libc::c_char,
             s_worldData.name.as_mut_ptr(),
         );
     }
     count = ((*l).filelen as libc::c_ulong)
         .wrapping_div(::std::mem::size_of::<crate::qfiles_h::dfog_t>() as libc::c_ulong)
-        as libc::c_int;
+        as i32;
     // create fog structures for them
-    s_worldData.numfogs = count + 1 as libc::c_int;
+    s_worldData.numfogs = count + 1 as i32;
     s_worldData.fogs = crate::src::renderergl1::tr_main::ri
         .Hunk_Alloc
         .expect("non-null function pointer")(
         (s_worldData.numfogs as libc::c_ulong)
             .wrapping_mul(::std::mem::size_of::<crate::tr_local_h::fog_t>() as libc::c_ulong)
-            as libc::c_int,
+            as i32,
         crate::src::qcommon::q_shared::h_low,
     ) as *mut crate::tr_local_h::fog_t;
-    out = s_worldData.fogs.offset(1 as libc::c_int as isize);
+    out = s_worldData.fogs.offset(1 as i32 as isize);
     if count == 0 {
         return;
     }
@@ -4013,14 +4013,14 @@ unsafe extern "C" fn R_LoadFogs(
         crate::src::renderergl1::tr_main::ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"LoadMap: funny lump size in %s\x00" as *const u8 as *const libc::c_char,
             s_worldData.name.as_mut_ptr(),
         );
     }
     brushesCount = ((*brushesLump).filelen as libc::c_ulong)
         .wrapping_div(::std::mem::size_of::<crate::qfiles_h::dbrush_t>() as libc::c_ulong)
-        as libc::c_int;
+        as i32;
     sides = fileBase.offset((*sidesLump).fileofs as isize) as *mut libc::c_void
         as *mut crate::qfiles_h::dbrushside_t;
     if ((*sidesLump).filelen as libc::c_ulong)
@@ -4030,99 +4030,99 @@ unsafe extern "C" fn R_LoadFogs(
         crate::src::renderergl1::tr_main::ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"LoadMap: funny lump size in %s\x00" as *const u8 as *const libc::c_char,
             s_worldData.name.as_mut_ptr(),
         );
     }
     sidesCount = ((*sidesLump).filelen as libc::c_ulong)
         .wrapping_div(::std::mem::size_of::<crate::qfiles_h::dbrushside_t>() as libc::c_ulong)
-        as libc::c_int;
-    i = 0 as libc::c_int;
+        as i32;
+    i = 0 as i32;
     while i < count {
         (*out).originalBrushNumber = (*fogs).brushNum;
-        if (*out).originalBrushNumber as libc::c_uint >= brushesCount as libc::c_uint {
+        if (*out).originalBrushNumber as u32 >= brushesCount as u32 {
             crate::src::renderergl1::tr_main::ri
                 .Error
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+                crate::src::qcommon::q_shared::ERR_DROP as i32,
                 b"fog brushNumber out of range\x00" as *const u8 as *const libc::c_char,
             );
         }
         brush = brushes.offset((*out).originalBrushNumber as isize);
         firstSide = (*brush).firstSide;
-        if firstSide as libc::c_uint > (sidesCount - 6 as libc::c_int) as libc::c_uint {
+        if firstSide as u32 > (sidesCount - 6 as i32) as u32 {
             crate::src::renderergl1::tr_main::ri
                 .Error
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+                crate::src::qcommon::q_shared::ERR_DROP as i32,
                 b"fog brush sideNumber out of range\x00" as *const u8 as *const libc::c_char,
             );
         }
         // brushes are always sorted with the axial sides first
-        sideNum = firstSide + 0 as libc::c_int;
+        sideNum = firstSide + 0 as i32;
         planeNum = (*sides.offset(sideNum as isize)).planeNum;
-        (*out).bounds[0 as libc::c_int as usize][0 as libc::c_int as usize] =
+        (*out).bounds[0 as i32 as usize][0 as i32 as usize] =
             -(*s_worldData.planes.offset(planeNum as isize)).dist;
-        sideNum = firstSide + 1 as libc::c_int;
+        sideNum = firstSide + 1 as i32;
         planeNum = (*sides.offset(sideNum as isize)).planeNum;
-        (*out).bounds[1 as libc::c_int as usize][0 as libc::c_int as usize] =
+        (*out).bounds[1 as i32 as usize][0 as i32 as usize] =
             (*s_worldData.planes.offset(planeNum as isize)).dist;
-        sideNum = firstSide + 2 as libc::c_int;
+        sideNum = firstSide + 2 as i32;
         planeNum = (*sides.offset(sideNum as isize)).planeNum;
-        (*out).bounds[0 as libc::c_int as usize][1 as libc::c_int as usize] =
+        (*out).bounds[0 as i32 as usize][1 as i32 as usize] =
             -(*s_worldData.planes.offset(planeNum as isize)).dist;
-        sideNum = firstSide + 3 as libc::c_int;
+        sideNum = firstSide + 3 as i32;
         planeNum = (*sides.offset(sideNum as isize)).planeNum;
-        (*out).bounds[1 as libc::c_int as usize][1 as libc::c_int as usize] =
+        (*out).bounds[1 as i32 as usize][1 as i32 as usize] =
             (*s_worldData.planes.offset(planeNum as isize)).dist;
-        sideNum = firstSide + 4 as libc::c_int;
+        sideNum = firstSide + 4 as i32;
         planeNum = (*sides.offset(sideNum as isize)).planeNum;
-        (*out).bounds[0 as libc::c_int as usize][2 as libc::c_int as usize] =
+        (*out).bounds[0 as i32 as usize][2 as i32 as usize] =
             -(*s_worldData.planes.offset(planeNum as isize)).dist;
-        sideNum = firstSide + 5 as libc::c_int;
+        sideNum = firstSide + 5 as i32;
         planeNum = (*sides.offset(sideNum as isize)).planeNum;
-        (*out).bounds[1 as libc::c_int as usize][2 as libc::c_int as usize] =
+        (*out).bounds[1 as i32 as usize][2 as i32 as usize] =
             (*s_worldData.planes.offset(planeNum as isize)).dist;
         // get information from the shader for fog parameters
         shader = crate::src::renderergl1::tr_shader::R_FindShader(
             (*fogs).shader.as_mut_ptr(),
-            -(1 as libc::c_int),
+            -(1 as i32),
             crate::src::qcommon::q_shared::qtrue,
         ) as *mut crate::tr_local_h::shader_s;
         (*out).parms = (*shader).fogParms;
         (*out).colorInt = crate::src::qcommon::q_math::ColorBytes4(
-            (*shader).fogParms.color[0 as libc::c_int as usize]
+            (*shader).fogParms.color[0 as i32 as usize]
                 * crate::src::renderergl1::tr_main::tr.identityLight,
-            (*shader).fogParms.color[1 as libc::c_int as usize]
+            (*shader).fogParms.color[1 as i32 as usize]
                 * crate::src::renderergl1::tr_main::tr.identityLight,
-            (*shader).fogParms.color[2 as libc::c_int as usize]
+            (*shader).fogParms.color[2 as i32 as usize]
                 * crate::src::renderergl1::tr_main::tr.identityLight,
-            1.0f64 as libc::c_float,
+            1.0f64 as f32,
         );
-        d = if (*shader).fogParms.depthForOpaque < 1 as libc::c_int as libc::c_float {
-            1 as libc::c_int as libc::c_float
+        d = if (*shader).fogParms.depthForOpaque < 1 as i32 as f32 {
+            1 as i32 as f32
         } else {
             (*shader).fogParms.depthForOpaque
         };
-        (*out).tcScale = 1.0f32 / (d * 8 as libc::c_int as libc::c_float);
+        (*out).tcScale = 1.0f32 / (d * 8 as i32 as f32);
         // set the gradient vector
         sideNum = (*fogs).visibleSide;
-        if sideNum == -(1 as libc::c_int) {
+        if sideNum == -(1 as i32) {
             (*out).hasSurface = crate::src::qcommon::q_shared::qfalse
         } else {
             (*out).hasSurface = crate::src::qcommon::q_shared::qtrue;
             planeNum = (*sides.offset((firstSide + sideNum) as isize)).planeNum;
-            (*out).surface[0 as libc::c_int as usize] = crate::src::qcommon::q_math::vec3_origin
-                [0 as libc::c_int as usize]
-                - (*s_worldData.planes.offset(planeNum as isize)).normal[0 as libc::c_int as usize];
-            (*out).surface[1 as libc::c_int as usize] = crate::src::qcommon::q_math::vec3_origin
-                [1 as libc::c_int as usize]
-                - (*s_worldData.planes.offset(planeNum as isize)).normal[1 as libc::c_int as usize];
-            (*out).surface[2 as libc::c_int as usize] = crate::src::qcommon::q_math::vec3_origin
-                [2 as libc::c_int as usize]
-                - (*s_worldData.planes.offset(planeNum as isize)).normal[2 as libc::c_int as usize];
-            (*out).surface[3 as libc::c_int as usize] =
+            (*out).surface[0 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin
+                [0 as i32 as usize]
+                - (*s_worldData.planes.offset(planeNum as isize)).normal[0 as i32 as usize];
+            (*out).surface[1 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin
+                [1 as i32 as usize]
+                - (*s_worldData.planes.offset(planeNum as isize)).normal[1 as i32 as usize];
+            (*out).surface[2 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin
+                [2 as i32 as usize]
+                - (*s_worldData.planes.offset(planeNum as isize)).normal[2 as i32 as usize];
+            (*out).surface[3 as i32 as usize] =
                 -(*s_worldData.planes.offset(planeNum as isize)).dist
         }
         out = out.offset(1);
@@ -4139,46 +4139,46 @@ R_LoadLightGrid
 #[no_mangle]
 
 pub unsafe extern "C" fn R_LoadLightGrid(mut l: *mut crate::qfiles_h::lump_t) {
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     let mut maxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut numGridPoints: libc::c_int = 0;
+    let mut numGridPoints: i32 = 0;
     let mut w: *mut crate::tr_local_h::world_t = 0 as *mut crate::tr_local_h::world_t;
-    let mut wMins: *mut libc::c_float = 0 as *mut libc::c_float;
-    let mut wMaxs: *mut libc::c_float = 0 as *mut libc::c_float;
+    let mut wMins: *mut f32 = 0 as *mut f32;
+    let mut wMaxs: *mut f32 = 0 as *mut f32;
     w = &mut s_worldData;
-    (*w).lightGridInverseSize[0 as libc::c_int as usize] =
-        1.0f32 / (*w).lightGridSize[0 as libc::c_int as usize];
-    (*w).lightGridInverseSize[1 as libc::c_int as usize] =
-        1.0f32 / (*w).lightGridSize[1 as libc::c_int as usize];
-    (*w).lightGridInverseSize[2 as libc::c_int as usize] =
-        1.0f32 / (*w).lightGridSize[2 as libc::c_int as usize];
-    wMins = (*(*w).bmodels.offset(0 as libc::c_int as isize)).bounds[0 as libc::c_int as usize]
+    (*w).lightGridInverseSize[0 as i32 as usize] =
+        1.0f32 / (*w).lightGridSize[0 as i32 as usize];
+    (*w).lightGridInverseSize[1 as i32 as usize] =
+        1.0f32 / (*w).lightGridSize[1 as i32 as usize];
+    (*w).lightGridInverseSize[2 as i32 as usize] =
+        1.0f32 / (*w).lightGridSize[2 as i32 as usize];
+    wMins = (*(*w).bmodels.offset(0 as i32 as isize)).bounds[0 as i32 as usize]
         .as_mut_ptr();
-    wMaxs = (*(*w).bmodels.offset(0 as libc::c_int as isize)).bounds[1 as libc::c_int as usize]
+    wMaxs = (*(*w).bmodels.offset(0 as i32 as isize)).bounds[1 as i32 as usize]
         .as_mut_ptr();
-    i = 0 as libc::c_int;
-    while i < 3 as libc::c_int {
-        (*w).lightGridOrigin[i as usize] = ((*w).lightGridSize[i as usize] as libc::c_double
+    i = 0 as i32;
+    while i < 3 as i32 {
+        (*w).lightGridOrigin[i as usize] = ((*w).lightGridSize[i as usize] as f64
             * crate::stdlib::ceil(
-                (*wMins.offset(i as isize) / (*w).lightGridSize[i as usize]) as libc::c_double,
+                (*wMins.offset(i as isize) / (*w).lightGridSize[i as usize]) as f64,
             )) as crate::src::qcommon::q_shared::vec_t;
-        maxs[i as usize] = ((*w).lightGridSize[i as usize] as libc::c_double
+        maxs[i as usize] = ((*w).lightGridSize[i as usize] as f64
             * crate::stdlib::floor(
-                (*wMaxs.offset(i as isize) / (*w).lightGridSize[i as usize]) as libc::c_double,
+                (*wMaxs.offset(i as isize) / (*w).lightGridSize[i as usize]) as f64,
             )) as crate::src::qcommon::q_shared::vec_t;
         (*w).lightGridBounds[i as usize] =
             ((maxs[i as usize] - (*w).lightGridOrigin[i as usize]) / (*w).lightGridSize[i as usize]
-                + 1 as libc::c_int as libc::c_float) as libc::c_int;
+                + 1 as i32 as f32) as i32;
         i += 1
     }
-    numGridPoints = (*w).lightGridBounds[0 as libc::c_int as usize]
-        * (*w).lightGridBounds[1 as libc::c_int as usize]
-        * (*w).lightGridBounds[2 as libc::c_int as usize];
-    if (*l).filelen != numGridPoints * 8 as libc::c_int {
+    numGridPoints = (*w).lightGridBounds[0 as i32 as usize]
+        * (*w).lightGridBounds[1 as i32 as usize]
+        * (*w).lightGridBounds[2 as i32 as usize];
+    if (*l).filelen != numGridPoints * 8 as i32 {
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_WARNING as libc::c_int,
+            crate::src::qcommon::q_shared::PRINT_WARNING as i32,
             b"WARNING: light grid mismatch\n\x00" as *const u8 as *const libc::c_char,
         );
         (*w).lightGridData = 0 as *mut crate::src::qcommon::q_shared::byte;
@@ -4195,19 +4195,19 @@ pub unsafe extern "C" fn R_LoadLightGrid(mut l: *mut crate::qfiles_h::lump_t) {
         (*l).filelen as libc::c_ulong,
     );
     // deal with overbright bits
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < numGridPoints {
         R_ColorShiftLightingBytes(
-            &mut *(*w).lightGridData.offset((i * 8 as libc::c_int) as isize),
-            &mut *(*w).lightGridData.offset((i * 8 as libc::c_int) as isize),
+            &mut *(*w).lightGridData.offset((i * 8 as i32) as isize),
+            &mut *(*w).lightGridData.offset((i * 8 as i32) as isize),
         );
         R_ColorShiftLightingBytes(
             &mut *(*w)
                 .lightGridData
-                .offset((i * 8 as libc::c_int + 3 as libc::c_int) as isize),
+                .offset((i * 8 as i32 + 3 as i32) as isize),
             &mut *(*w)
                 .lightGridData
-                .offset((i * 8 as libc::c_int + 3 as libc::c_int) as isize),
+                .offset((i * 8 as i32 + 3 as i32) as isize),
         );
         i += 1
     }
@@ -4227,25 +4227,25 @@ pub unsafe extern "C" fn R_LoadEntities(mut l: *mut crate::qfiles_h::lump_t) {
     let mut value: [libc::c_char; 1024] = [0; 1024];
     let mut w: *mut crate::tr_local_h::world_t = 0 as *mut crate::tr_local_h::world_t;
     w = &mut s_worldData;
-    (*w).lightGridSize[0 as libc::c_int as usize] =
-        64 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-    (*w).lightGridSize[1 as libc::c_int as usize] =
-        64 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-    (*w).lightGridSize[2 as libc::c_int as usize] =
-        128 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
+    (*w).lightGridSize[0 as i32 as usize] =
+        64 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*w).lightGridSize[1 as i32 as usize] =
+        64 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*w).lightGridSize[2 as i32 as usize] =
+        128 as i32 as crate::src::qcommon::q_shared::vec_t;
     p = fileBase.offset((*l).fileofs as isize) as *mut libc::c_char;
     // store for reference by the cgame
     (*w).entityString = crate::src::renderergl1::tr_main::ri
         .Hunk_Alloc
         .expect("non-null function pointer")(
-        (*l).filelen + 1 as libc::c_int,
+        (*l).filelen + 1 as i32,
         crate::src::qcommon::q_shared::h_low,
     ) as *mut libc::c_char;
     ::libc::strcpy((*w).entityString, p);
     (*w).entityParsePoint = (*w).entityString;
     token =
         crate::src::qcommon::q_shared::COM_ParseExt(&mut p, crate::src::qcommon::q_shared::qtrue);
-    if *token == 0 || *token as libc::c_int != '{' as i32 {
+    if *token == 0 || *token as i32 != '{' as i32 {
         return;
     }
     loop
@@ -4256,33 +4256,33 @@ pub unsafe extern "C" fn R_LoadEntities(mut l: *mut crate::qfiles_h::lump_t) {
             &mut p,
             crate::src::qcommon::q_shared::qtrue,
         );
-        if *token == 0 || *token as libc::c_int == '}' as i32 {
+        if *token == 0 || *token as i32 == '}' as i32 {
             break;
         }
         crate::src::qcommon::q_shared::Q_strncpyz(
             keyname.as_mut_ptr(),
             token,
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
         );
         // parse value
         token = crate::src::qcommon::q_shared::COM_ParseExt(
             &mut p,
             crate::src::qcommon::q_shared::qtrue,
         );
-        if *token == 0 || *token as libc::c_int == '}' as i32 {
+        if *token == 0 || *token as i32 == '}' as i32 {
             break;
         }
         crate::src::qcommon::q_shared::Q_strncpyz(
             value.as_mut_ptr(),
             token,
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
         );
         // check for remapping of shaders for vertex lighting
         s = b"vertexremapshader\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
         if crate::src::qcommon::q_shared::Q_strncmp(
             keyname.as_mut_ptr(),
             s,
-            crate::stdlib::strlen(s) as libc::c_int,
+            crate::stdlib::strlen(s) as i32,
         ) == 0
         {
             s = ::libc::strchr(value.as_mut_ptr(), ';' as i32);
@@ -4290,7 +4290,7 @@ pub unsafe extern "C" fn R_LoadEntities(mut l: *mut crate::qfiles_h::lump_t) {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_WARNING as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_WARNING as i32,
                     b"WARNING: no semi colon in vertexshaderremap \'%s\'\n\x00" as *const u8
                         as *const libc::c_char,
                     value.as_mut_ptr(),
@@ -4299,7 +4299,7 @@ pub unsafe extern "C" fn R_LoadEntities(mut l: *mut crate::qfiles_h::lump_t) {
             } else {
                 let fresh11 = s;
                 s = s.offset(1);
-                *fresh11 = 0 as libc::c_int as libc::c_char;
+                *fresh11 = 0 as i32 as libc::c_char;
                 if (*crate::src::renderergl1::tr_init::r_vertexLight).integer != 0 {
                     crate::src::renderergl1::tr_shader::R_RemapShader(
                         value.as_mut_ptr(),
@@ -4314,7 +4314,7 @@ pub unsafe extern "C" fn R_LoadEntities(mut l: *mut crate::qfiles_h::lump_t) {
             if crate::src::qcommon::q_shared::Q_strncmp(
                 keyname.as_mut_ptr(),
                 s,
-                crate::stdlib::strlen(s) as libc::c_int,
+                crate::stdlib::strlen(s) as i32,
             ) == 0
             {
                 s = ::libc::strchr(value.as_mut_ptr(), ';' as i32);
@@ -4322,7 +4322,7 @@ pub unsafe extern "C" fn R_LoadEntities(mut l: *mut crate::qfiles_h::lump_t) {
                     crate::src::renderergl1::tr_main::ri
                         .Printf
                         .expect("non-null function pointer")(
-                        crate::src::qcommon::q_shared::PRINT_WARNING as libc::c_int,
+                        crate::src::qcommon::q_shared::PRINT_WARNING as i32,
                         b"WARNING: no semi colon in shaderremap \'%s\'\n\x00" as *const u8
                             as *const libc::c_char,
                         value.as_mut_ptr(),
@@ -4331,7 +4331,7 @@ pub unsafe extern "C" fn R_LoadEntities(mut l: *mut crate::qfiles_h::lump_t) {
                 } else {
                     let fresh12 = s;
                     s = s.offset(1);
-                    *fresh12 = 0 as libc::c_int as libc::c_char;
+                    *fresh12 = 0 as i32 as libc::c_char;
                     crate::src::renderergl1::tr_shader::R_RemapShader(
                         value.as_mut_ptr(),
                         s,
@@ -4353,17 +4353,17 @@ pub unsafe extern "C" fn R_LoadEntities(mut l: *mut crate::qfiles_h::lump_t) {
                     &mut *(*w)
                         .lightGridSize
                         .as_mut_ptr()
-                        .offset(0 as libc::c_int as isize)
+                        .offset(0 as i32 as isize)
                         as *mut crate::src::qcommon::q_shared::vec_t,
                     &mut *(*w)
                         .lightGridSize
                         .as_mut_ptr()
-                        .offset(1 as libc::c_int as isize)
+                        .offset(1 as i32 as isize)
                         as *mut crate::src::qcommon::q_shared::vec_t,
                     &mut *(*w)
                         .lightGridSize
                         .as_mut_ptr()
-                        .offset(2 as libc::c_int as isize)
+                        .offset(2 as i32 as isize)
                         as *mut crate::src::qcommon::q_shared::vec_t,
                 );
             }
@@ -4379,12 +4379,12 @@ R_GetEntityToken
 
 pub unsafe extern "C" fn R_GetEntityToken(
     mut buffer: *mut libc::c_char,
-    mut size: libc::c_int,
+    mut size: i32,
 ) -> crate::src::qcommon::q_shared::qboolean {
     let mut s: *const libc::c_char = 0 as *const libc::c_char;
     s = crate::src::qcommon::q_shared::COM_Parse(&mut s_worldData.entityParsePoint);
     crate::src::qcommon::q_shared::Q_strncpyz(buffer, s, size);
-    if s_worldData.entityParsePoint.is_null() && *s.offset(0 as libc::c_int as isize) == 0 {
+    if s_worldData.entityParsePoint.is_null() && *s.offset(0 as i32 as isize) == 0 {
         s_worldData.entityParsePoint = s_worldData.entityString;
         return crate::src::qcommon::q_shared::qfalse;
     } else {
@@ -4719,7 +4719,7 @@ Called directly from cgame
 #[no_mangle]
 
 pub unsafe extern "C" fn RE_LoadWorldMap(mut name: *const libc::c_char) {
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     let mut header: *mut crate::qfiles_h::dheader_t = 0 as *mut crate::qfiles_h::dheader_t;
     let mut buffer: C2RustUnnamed_102 = C2RustUnnamed_102 {
         b: 0 as *mut crate::src::qcommon::q_shared::byte,
@@ -4730,16 +4730,16 @@ pub unsafe extern "C" fn RE_LoadWorldMap(mut name: *const libc::c_char) {
         crate::src::renderergl1::tr_main::ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"ERROR: attempted to redundantly load world map\x00" as *const u8
                 as *const libc::c_char,
         );
     }
     // set default sun direction to be used if it isn't
     // overridden by a shader
-    crate::src::renderergl1::tr_main::tr.sunDirection[0 as libc::c_int as usize] = 0.45f32;
-    crate::src::renderergl1::tr_main::tr.sunDirection[1 as libc::c_int as usize] = 0.3f32;
-    crate::src::renderergl1::tr_main::tr.sunDirection[2 as libc::c_int as usize] = 0.9f32;
+    crate::src::renderergl1::tr_main::tr.sunDirection[0 as i32 as usize] = 0.45f32;
+    crate::src::renderergl1::tr_main::tr.sunDirection[1 as i32 as usize] = 0.3f32;
+    crate::src::renderergl1::tr_main::tr.sunDirection[2 as i32 as usize] = 0.9f32;
     crate::src::qcommon::q_math::VectorNormalize(
         crate::src::renderergl1::tr_main::tr
             .sunDirection
@@ -4754,7 +4754,7 @@ pub unsafe extern "C" fn RE_LoadWorldMap(mut name: *const libc::c_char) {
         crate::src::renderergl1::tr_main::ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"RE_LoadWorldMap: %s not found\x00" as *const u8 as *const libc::c_char,
             name,
         );
@@ -4764,53 +4764,53 @@ pub unsafe extern "C" fn RE_LoadWorldMap(mut name: *const libc::c_char) {
     crate::src::renderergl1::tr_main::tr.world = 0 as *mut crate::tr_local_h::world_t;
     crate::stdlib::memset(
         &mut s_worldData as *mut crate::tr_local_h::world_t as *mut libc::c_void,
-        0 as libc::c_int,
+        0 as i32,
         ::std::mem::size_of::<crate::tr_local_h::world_t>() as libc::c_ulong,
     );
     crate::src::qcommon::q_shared::Q_strncpyz(
         s_worldData.name.as_mut_ptr(),
         name,
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
     );
     crate::src::qcommon::q_shared::Q_strncpyz(
         s_worldData.baseName.as_mut_ptr(),
         crate::src::qcommon::q_shared::COM_SkipPath(s_worldData.name.as_mut_ptr()),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
     );
     crate::src::qcommon::q_shared::COM_StripExtension(
         s_worldData.baseName.as_mut_ptr(),
         s_worldData.baseName.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
     );
     startMarker = crate::src::renderergl1::tr_main::ri
         .Hunk_Alloc
         .expect("non-null function pointer")(
-        0 as libc::c_int, crate::src::qcommon::q_shared::h_low
+        0 as i32, crate::src::qcommon::q_shared::h_low
     ) as *mut crate::src::qcommon::q_shared::byte;
-    c_gridVerts = 0 as libc::c_int;
+    c_gridVerts = 0 as i32;
     header = buffer.b as *mut crate::qfiles_h::dheader_t;
     fileBase = header as *mut crate::src::qcommon::q_shared::byte;
     i = (*header).version;
-    if i != 46 as libc::c_int {
+    if i != 46 as i32 {
         crate::src::renderergl1::tr_main::ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"RE_LoadWorldMap: %s has wrong version number (%i should be %i)\x00" as *const u8
                 as *const libc::c_char,
             name,
             i,
-            46 as libc::c_int,
+            46 as i32,
         );
     }
     // swap all the lumps
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while (i as libc::c_ulong)
         < (::std::mem::size_of::<crate::qfiles_h::dheader_t>() as libc::c_ulong)
-            .wrapping_div(4 as libc::c_int as libc::c_ulong)
+            .wrapping_div(4 as i32 as libc::c_ulong)
     {
-        *(header as *mut libc::c_int).offset(i as isize) =
-            *(header as *mut libc::c_int).offset(i as isize);
+        *(header as *mut i32).offset(i as isize) =
+            *(header as *mut i32).offset(i as isize);
         i += 1
     }
     // load into heap
@@ -4818,94 +4818,94 @@ pub unsafe extern "C" fn RE_LoadWorldMap(mut name: *const libc::c_char) {
         &mut *(*header)
             .lumps
             .as_mut_ptr()
-            .offset(1 as libc::c_int as isize),
+            .offset(1 as i32 as isize),
     );
     R_LoadLightmaps(
         &mut *(*header)
             .lumps
             .as_mut_ptr()
-            .offset(14 as libc::c_int as isize),
+            .offset(14 as i32 as isize),
     );
     R_LoadPlanes(
         &mut *(*header)
             .lumps
             .as_mut_ptr()
-            .offset(2 as libc::c_int as isize),
+            .offset(2 as i32 as isize),
     );
     R_LoadFogs(
         &mut *(*header)
             .lumps
             .as_mut_ptr()
-            .offset(12 as libc::c_int as isize),
+            .offset(12 as i32 as isize),
         &mut *(*header)
             .lumps
             .as_mut_ptr()
-            .offset(8 as libc::c_int as isize),
+            .offset(8 as i32 as isize),
         &mut *(*header)
             .lumps
             .as_mut_ptr()
-            .offset(9 as libc::c_int as isize),
+            .offset(9 as i32 as isize),
     );
     R_LoadSurfaces(
         &mut *(*header)
             .lumps
             .as_mut_ptr()
-            .offset(13 as libc::c_int as isize),
+            .offset(13 as i32 as isize),
         &mut *(*header)
             .lumps
             .as_mut_ptr()
-            .offset(10 as libc::c_int as isize),
+            .offset(10 as i32 as isize),
         &mut *(*header)
             .lumps
             .as_mut_ptr()
-            .offset(11 as libc::c_int as isize),
+            .offset(11 as i32 as isize),
     );
     R_LoadMarksurfaces(
         &mut *(*header)
             .lumps
             .as_mut_ptr()
-            .offset(5 as libc::c_int as isize),
+            .offset(5 as i32 as isize),
     );
     R_LoadNodesAndLeafs(
         &mut *(*header)
             .lumps
             .as_mut_ptr()
-            .offset(3 as libc::c_int as isize),
+            .offset(3 as i32 as isize),
         &mut *(*header)
             .lumps
             .as_mut_ptr()
-            .offset(4 as libc::c_int as isize),
+            .offset(4 as i32 as isize),
     );
     R_LoadSubmodels(
         &mut *(*header)
             .lumps
             .as_mut_ptr()
-            .offset(7 as libc::c_int as isize),
+            .offset(7 as i32 as isize),
     );
     R_LoadVisibility(
         &mut *(*header)
             .lumps
             .as_mut_ptr()
-            .offset(16 as libc::c_int as isize),
+            .offset(16 as i32 as isize),
     );
     R_LoadEntities(
         &mut *(*header)
             .lumps
             .as_mut_ptr()
-            .offset(0 as libc::c_int as isize),
+            .offset(0 as i32 as isize),
     );
     R_LoadLightGrid(
         &mut *(*header)
             .lumps
             .as_mut_ptr()
-            .offset(15 as libc::c_int as isize),
+            .offset(15 as i32 as isize),
     );
     s_worldData.dataSize = (crate::src::renderergl1::tr_main::ri
         .Hunk_Alloc
         .expect("non-null function pointer")(
-        0 as libc::c_int, crate::src::qcommon::q_shared::h_low
+        0 as i32, crate::src::qcommon::q_shared::h_low
     ) as *mut crate::src::qcommon::q_shared::byte)
-        .offset_from(startMarker) as libc::c_long as libc::c_int;
+        .offset_from(startMarker) as libc::c_long as i32;
     // only set tr.world now that we know the entire level has loaded properly
     crate::src::renderergl1::tr_main::tr.world = &mut s_worldData;
     crate::src::renderergl1::tr_main::ri

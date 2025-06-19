@@ -3,12 +3,12 @@ use ::libc;
 pub mod stdlib_h {
     #[inline]
 
-    pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> libc::c_int {
+    pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return ::libc::strtol(
             __nptr,
             0 as *mut libc::c_void as *mut *mut libc::c_char,
-            10 as libc::c_int,
-        ) as libc::c_int;
+            10 as i32,
+        ) as i32;
     }
 }
 
@@ -153,17 +153,17 @@ pub unsafe extern "C" fn G_WriteClientSessionData(mut client: *mut crate::g_loca
     let mut var: *const libc::c_char = 0 as *const libc::c_char;
     s = crate::src::qcommon::q_shared::va(
         b"%i %i %i %i %i %i %i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-        (*client).sess.sessionTeam as libc::c_uint,
+        (*client).sess.sessionTeam as u32,
         (*client).sess.spectatorNum,
-        (*client).sess.spectatorState as libc::c_uint,
+        (*client).sess.spectatorState as u32,
         (*client).sess.spectatorClient,
         (*client).sess.wins,
         (*client).sess.losses,
-        (*client).sess.teamLeader as libc::c_uint,
+        (*client).sess.teamLeader as u32,
     );
     var = crate::src::qcommon::q_shared::va(
         b"session%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-        client.offset_from(crate::src::game::g_main::level.clients) as libc::c_long as libc::c_int,
+        client.offset_from(crate::src::game::g_main::level.clients) as libc::c_long as i32,
     );
     crate::src::game::g_syscalls::trap_Cvar_Set(var, s);
 }
@@ -179,28 +179,28 @@ Called on a reconnect
 pub unsafe extern "C" fn G_ReadSessionData(mut client: *mut crate::g_local_h::gclient_t) {
     let mut s: [libc::c_char; 1024] = [0; 1024];
     let mut var: *const libc::c_char = 0 as *const libc::c_char;
-    let mut teamLeader: libc::c_int = 0;
-    let mut spectatorState: libc::c_int = 0;
-    let mut sessionTeam: libc::c_int = 0;
+    let mut teamLeader: i32 = 0;
+    let mut spectatorState: i32 = 0;
+    let mut sessionTeam: i32 = 0;
     var = crate::src::qcommon::q_shared::va(
         b"session%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-        client.offset_from(crate::src::game::g_main::level.clients) as libc::c_long as libc::c_int,
+        client.offset_from(crate::src::game::g_main::level.clients) as libc::c_long as i32,
     );
     crate::src::game::g_syscalls::trap_Cvar_VariableStringBuffer(
         var,
         s.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
     ::libc::sscanf(
         s.as_mut_ptr(),
         b"%i %i %i %i %i %i %i\x00" as *const u8 as *const libc::c_char,
-        &mut sessionTeam as *mut libc::c_int,
-        &mut (*client).sess.spectatorNum as *mut libc::c_int,
-        &mut spectatorState as *mut libc::c_int,
-        &mut (*client).sess.spectatorClient as *mut libc::c_int,
-        &mut (*client).sess.wins as *mut libc::c_int,
-        &mut (*client).sess.losses as *mut libc::c_int,
-        &mut teamLeader as *mut libc::c_int,
+        &mut sessionTeam as *mut i32,
+        &mut (*client).sess.spectatorNum as *mut i32,
+        &mut spectatorState as *mut i32,
+        &mut (*client).sess.spectatorClient as *mut i32,
+        &mut (*client).sess.wins as *mut i32,
+        &mut (*client).sess.losses as *mut i32,
+        &mut teamLeader as *mut i32,
     );
     (*client).sess.sessionTeam = sessionTeam as crate::bg_public_h::team_t;
     (*client).sess.spectatorState = spectatorState as crate::g_local_h::spectatorState_t;
@@ -229,11 +229,11 @@ pub unsafe extern "C" fn G_InitSessionData(
         b"teampref\x00" as *const u8 as *const libc::c_char,
     );
     // check for human's team preference set by start server menu
-    if *value.offset(0 as libc::c_int as isize) == 0
-        && crate::src::game::g_main::g_localTeamPref.string[0 as libc::c_int as usize]
-            as libc::c_int
+    if *value.offset(0 as i32 as isize) == 0
+        && crate::src::game::g_main::g_localTeamPref.string[0 as i32 as usize]
+            as i32
             != 0
-        && (*client).pers.localClient as libc::c_uint != 0
+        && (*client).pers.localClient as u32 != 0
     {
         value = crate::src::game::g_main::g_localTeamPref
             .string
@@ -245,11 +245,11 @@ pub unsafe extern "C" fn G_InitSessionData(
         );
     }
     // initial team determination
-    if crate::src::game::g_main::g_gametype.integer >= crate::bg_public_h::GT_TEAM as libc::c_int {
+    if crate::src::game::g_main::g_gametype.integer >= crate::bg_public_h::GT_TEAM as i32 {
         // always spawn as spectator in team games
         (*sess).sessionTeam = crate::bg_public_h::TEAM_SPECTATOR;
         (*sess).spectatorState = crate::g_local_h::SPECTATOR_FREE;
-        if *value.offset(0 as libc::c_int as isize) as libc::c_int != 0
+        if *value.offset(0 as i32 as isize) as i32 != 0
             || crate::src::game::g_main::g_teamAutoJoin.integer != 0
         {
             crate::src::game::g_cmds::SetTeam(
@@ -262,21 +262,21 @@ pub unsafe extern "C" fn G_InitSessionData(
             );
         }
     } else {
-        if *value.offset(0 as libc::c_int as isize) as libc::c_int == 's' as i32 {
+        if *value.offset(0 as i32 as isize) as i32 == 's' as i32 {
             // a willing spectator, not a waiting-in-line
             (*sess).sessionTeam = crate::bg_public_h::TEAM_SPECTATOR
         } else {
             match crate::src::game::g_main::g_gametype.integer {
                 1 => {
                     // if the game is full, go into a waiting mode
-                    if crate::src::game::g_main::level.numNonSpectatorClients >= 2 as libc::c_int {
+                    if crate::src::game::g_main::level.numNonSpectatorClients >= 2 as i32 {
                         (*sess).sessionTeam = crate::bg_public_h::TEAM_SPECTATOR
                     } else {
                         (*sess).sessionTeam = crate::bg_public_h::TEAM_FREE
                     }
                 }
                 0 | 2 | _ => {
-                    if crate::src::game::g_main::g_maxGameClients.integer > 0 as libc::c_int
+                    if crate::src::game::g_main::g_maxGameClients.integer > 0 as i32
                         && crate::src::game::g_main::level.numNonSpectatorClients
                             >= crate::src::game::g_main::g_maxGameClients.integer
                     {
@@ -302,11 +302,11 @@ G_InitWorldSession
 
 pub unsafe extern "C" fn G_InitWorldSession() {
     let mut s: [libc::c_char; 1024] = [0; 1024];
-    let mut gt: libc::c_int = 0;
+    let mut gt: i32 = 0;
     crate::src::game::g_syscalls::trap_Cvar_VariableStringBuffer(
         b"session\x00" as *const u8 as *const libc::c_char,
         s.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
     gt = atoi(s.as_mut_ptr());
     // if the gametype changed since the last session, don't use any
@@ -554,7 +554,7 @@ G_WriteSessionData
 #[no_mangle]
 
 pub unsafe extern "C" fn G_WriteSessionData() {
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     crate::src::game::g_syscalls::trap_Cvar_Set(
         b"session\x00" as *const u8 as *const libc::c_char,
         crate::src::qcommon::q_shared::va(
@@ -562,12 +562,12 @@ pub unsafe extern "C" fn G_WriteSessionData() {
             crate::src::game::g_main::g_gametype.integer,
         ),
     );
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < crate::src::game::g_main::level.maxclients {
         if (*crate::src::game::g_main::level.clients.offset(i as isize))
             .pers
-            .connected as libc::c_uint
-            == crate::g_local_h::CON_CONNECTED as libc::c_int as libc::c_uint
+            .connected as u32
+            == crate::g_local_h::CON_CONNECTED as i32 as u32
         {
             G_WriteClientSessionData(
                 &mut *crate::src::game::g_main::level.clients.offset(i as isize),

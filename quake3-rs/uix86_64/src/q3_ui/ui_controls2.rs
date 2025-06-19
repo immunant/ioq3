@@ -446,13 +446,13 @@ pub struct controls_t {
     pub togglemenu: crate::ui_local_h::menuaction_s,
     pub joyenable: crate::ui_local_h::menuradiobutton_s,
     pub joythreshold: crate::ui_local_h::menuslider_s,
-    pub section: libc::c_int,
+    pub section: i32,
     pub waitingforkey: crate::src::qcommon::q_shared::qboolean,
     pub playerModel: [libc::c_char; 64],
     pub playerViewangles: crate::src::qcommon::q_shared::vec3_t,
     pub playerMoveangles: crate::src::qcommon::q_shared::vec3_t,
-    pub playerLegs: libc::c_int,
-    pub playerTorso: libc::c_int,
+    pub playerLegs: i32,
+    pub playerTorso: i32,
     pub playerWeapon: crate::bg_public_h::weapon_t,
     pub playerChat: crate::src::qcommon::q_shared::qboolean,
     pub back: crate::ui_local_h::menubitmap_s,
@@ -463,8 +463,8 @@ pub struct controls_t {
 #[derive(Copy, Clone)]
 pub struct configcvar_t {
     pub name: *mut libc::c_char,
-    pub defaultvalue: libc::c_float,
-    pub value: libc::c_float,
+    pub defaultvalue: f32,
+    pub value: f32,
 }
 
 #[repr(C)]
@@ -472,12 +472,12 @@ pub struct configcvar_t {
 pub struct bind_t {
     pub command: *mut libc::c_char,
     pub label: *mut libc::c_char,
-    pub id: libc::c_int,
-    pub anim: libc::c_int,
-    pub defaultbind1: libc::c_int,
-    pub defaultbind2: libc::c_int,
-    pub bind1: libc::c_int,
-    pub bind2: libc::c_int,
+    pub id: i32,
+    pub anim: i32,
+    pub defaultbind1: i32,
+    pub defaultbind2: i32,
+    pub bind1: i32,
+    pub bind2: i32,
 }
 
 static mut s_controls: controls_t = controls_t {
@@ -513,7 +513,7 @@ static mut s_controls: controls_t = controls_t {
         },
         string: 0 as *const libc::c_char as *mut libc::c_char,
         style: 0,
-        color: 0 as *const libc::c_float as *mut libc::c_float,
+        color: 0 as *const f32 as *mut f32,
     },
     framel: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -540,7 +540,7 @@ static mut s_controls: controls_t = controls_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     framer: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -567,7 +567,7 @@ static mut s_controls: controls_t = controls_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     player: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -594,7 +594,7 @@ static mut s_controls: controls_t = controls_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     movement: crate::ui_local_h::menutext_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -617,7 +617,7 @@ static mut s_controls: controls_t = controls_t {
         },
         string: 0 as *const libc::c_char as *mut libc::c_char,
         style: 0,
-        color: 0 as *const libc::c_float as *mut libc::c_float,
+        color: 0 as *const f32 as *mut f32,
     },
     looking: crate::ui_local_h::menutext_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -640,7 +640,7 @@ static mut s_controls: controls_t = controls_t {
         },
         string: 0 as *const libc::c_char as *mut libc::c_char,
         style: 0,
-        color: 0 as *const libc::c_float as *mut libc::c_float,
+        color: 0 as *const f32 as *mut f32,
     },
     weapons: crate::ui_local_h::menutext_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -663,7 +663,7 @@ static mut s_controls: controls_t = controls_t {
         },
         string: 0 as *const libc::c_char as *mut libc::c_char,
         style: 0,
-        color: 0 as *const libc::c_float as *mut libc::c_float,
+        color: 0 as *const f32 as *mut f32,
     },
     misc: crate::ui_local_h::menutext_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -686,7 +686,7 @@ static mut s_controls: controls_t = controls_t {
         },
         string: 0 as *const libc::c_char as *mut libc::c_char,
         style: 0,
-        color: 0 as *const libc::c_float as *mut libc::c_float,
+        color: 0 as *const f32 as *mut f32,
     },
     walkforward: crate::ui_local_h::menuaction_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -1672,7 +1672,7 @@ static mut s_controls: controls_t = controls_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     name: crate::ui_local_h::menutext_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -1695,7 +1695,7 @@ static mut s_controls: controls_t = controls_t {
         },
         string: 0 as *const libc::c_char as *mut libc::c_char,
         style: 0,
-        color: 0 as *const libc::c_float as *mut libc::c_float,
+        color: 0 as *const f32 as *mut f32,
     },
 };
 
@@ -1707,12 +1707,12 @@ static mut g_bindings: [bind_t; 36] = [
         let mut init = bind_t {
             command: b"+scores\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             label: b"show scores\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            id: 0 as libc::c_int,
-            anim: 0 as libc::c_int,
-            defaultbind1: crate::keycodes_h::K_TAB as libc::c_int,
-            defaultbind2: -(1 as libc::c_int),
-            bind1: -(1 as libc::c_int),
-            bind2: -(1 as libc::c_int),
+            id: 0 as i32,
+            anim: 0 as i32,
+            defaultbind1: crate::keycodes_h::K_TAB as i32,
+            defaultbind2: -(1 as i32),
+            bind1: -(1 as i32),
+            bind2: -(1 as i32),
         };
         init
     },
@@ -1720,12 +1720,12 @@ static mut g_bindings: [bind_t; 36] = [
         let mut init = bind_t {
             command: b"+button2\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             label: b"use item\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            id: 1 as libc::c_int,
-            anim: 0 as libc::c_int,
-            defaultbind1: crate::keycodes_h::K_ENTER as libc::c_int,
-            defaultbind2: -(1 as libc::c_int),
-            bind1: -(1 as libc::c_int),
-            bind2: -(1 as libc::c_int),
+            id: 1 as i32,
+            anim: 0 as i32,
+            defaultbind1: crate::keycodes_h::K_ENTER as i32,
+            defaultbind2: -(1 as i32),
+            bind1: -(1 as i32),
+            bind2: -(1 as i32),
         };
         init
     },
@@ -1733,12 +1733,12 @@ static mut g_bindings: [bind_t; 36] = [
         let mut init = bind_t {
             command: b"+speed\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             label: b"run / walk\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            id: 2 as libc::c_int,
-            anim: 1 as libc::c_int,
-            defaultbind1: crate::keycodes_h::K_SHIFT as libc::c_int,
-            defaultbind2: -(1 as libc::c_int),
-            bind1: -(1 as libc::c_int),
-            bind2: -(1 as libc::c_int),
+            id: 2 as i32,
+            anim: 1 as i32,
+            defaultbind1: crate::keycodes_h::K_SHIFT as i32,
+            defaultbind2: -(1 as i32),
+            bind1: -(1 as i32),
+            bind2: -(1 as i32),
         };
         init
     },
@@ -1746,12 +1746,12 @@ static mut g_bindings: [bind_t; 36] = [
         let mut init = bind_t {
             command: b"+forward\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             label: b"walk forward\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            id: 3 as libc::c_int,
-            anim: 2 as libc::c_int,
-            defaultbind1: crate::keycodes_h::K_UPARROW as libc::c_int,
-            defaultbind2: -(1 as libc::c_int),
-            bind1: -(1 as libc::c_int),
-            bind2: -(1 as libc::c_int),
+            id: 3 as i32,
+            anim: 2 as i32,
+            defaultbind1: crate::keycodes_h::K_UPARROW as i32,
+            defaultbind2: -(1 as i32),
+            bind1: -(1 as i32),
+            bind2: -(1 as i32),
         };
         init
     },
@@ -1759,12 +1759,12 @@ static mut g_bindings: [bind_t; 36] = [
         let mut init = bind_t {
             command: b"+back\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             label: b"backpedal\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            id: 4 as libc::c_int,
-            anim: 3 as libc::c_int,
-            defaultbind1: crate::keycodes_h::K_DOWNARROW as libc::c_int,
-            defaultbind2: -(1 as libc::c_int),
-            bind1: -(1 as libc::c_int),
-            bind2: -(1 as libc::c_int),
+            id: 4 as i32,
+            anim: 3 as i32,
+            defaultbind1: crate::keycodes_h::K_DOWNARROW as i32,
+            defaultbind2: -(1 as i32),
+            bind1: -(1 as i32),
+            bind2: -(1 as i32),
         };
         init
     },
@@ -1772,12 +1772,12 @@ static mut g_bindings: [bind_t; 36] = [
         let mut init = bind_t {
             command: b"+moveleft\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             label: b"step left\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            id: 5 as libc::c_int,
-            anim: 6 as libc::c_int,
+            id: 5 as i32,
+            anim: 6 as i32,
             defaultbind1: ',' as i32,
-            defaultbind2: -(1 as libc::c_int),
-            bind1: -(1 as libc::c_int),
-            bind2: -(1 as libc::c_int),
+            defaultbind2: -(1 as i32),
+            bind1: -(1 as i32),
+            bind2: -(1 as i32),
         };
         init
     },
@@ -1785,12 +1785,12 @@ static mut g_bindings: [bind_t; 36] = [
         let mut init = bind_t {
             command: b"+moveright\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             label: b"step right\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            id: 6 as libc::c_int,
-            anim: 7 as libc::c_int,
+            id: 6 as i32,
+            anim: 7 as i32,
             defaultbind1: '.' as i32,
-            defaultbind2: -(1 as libc::c_int),
-            bind1: -(1 as libc::c_int),
-            bind2: -(1 as libc::c_int),
+            defaultbind2: -(1 as i32),
+            bind1: -(1 as i32),
+            bind2: -(1 as i32),
         };
         init
     },
@@ -1798,12 +1798,12 @@ static mut g_bindings: [bind_t; 36] = [
         let mut init = bind_t {
             command: b"+moveup\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             label: b"up / jump\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            id: 7 as libc::c_int,
-            anim: 4 as libc::c_int,
-            defaultbind1: crate::keycodes_h::K_SPACE as libc::c_int,
-            defaultbind2: -(1 as libc::c_int),
-            bind1: -(1 as libc::c_int),
-            bind2: -(1 as libc::c_int),
+            id: 7 as i32,
+            anim: 4 as i32,
+            defaultbind1: crate::keycodes_h::K_SPACE as i32,
+            defaultbind2: -(1 as i32),
+            bind1: -(1 as i32),
+            bind2: -(1 as i32),
         };
         init
     },
@@ -1811,12 +1811,12 @@ static mut g_bindings: [bind_t; 36] = [
         let mut init = bind_t {
             command: b"+movedown\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             label: b"down / crouch\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            id: 8 as libc::c_int,
-            anim: 5 as libc::c_int,
+            id: 8 as i32,
+            anim: 5 as i32,
             defaultbind1: 'c' as i32,
-            defaultbind2: -(1 as libc::c_int),
-            bind1: -(1 as libc::c_int),
-            bind2: -(1 as libc::c_int),
+            defaultbind2: -(1 as i32),
+            bind1: -(1 as i32),
+            bind2: -(1 as i32),
         };
         init
     },
@@ -1824,12 +1824,12 @@ static mut g_bindings: [bind_t; 36] = [
         let mut init = bind_t {
             command: b"+left\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             label: b"turn left\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            id: 9 as libc::c_int,
-            anim: 8 as libc::c_int,
-            defaultbind1: crate::keycodes_h::K_LEFTARROW as libc::c_int,
-            defaultbind2: -(1 as libc::c_int),
-            bind1: -(1 as libc::c_int),
-            bind2: -(1 as libc::c_int),
+            id: 9 as i32,
+            anim: 8 as i32,
+            defaultbind1: crate::keycodes_h::K_LEFTARROW as i32,
+            defaultbind2: -(1 as i32),
+            bind1: -(1 as i32),
+            bind2: -(1 as i32),
         };
         init
     },
@@ -1837,12 +1837,12 @@ static mut g_bindings: [bind_t; 36] = [
         let mut init = bind_t {
             command: b"+right\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             label: b"turn right\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            id: 10 as libc::c_int,
-            anim: 9 as libc::c_int,
-            defaultbind1: crate::keycodes_h::K_RIGHTARROW as libc::c_int,
-            defaultbind2: -(1 as libc::c_int),
-            bind1: -(1 as libc::c_int),
-            bind2: -(1 as libc::c_int),
+            id: 10 as i32,
+            anim: 9 as i32,
+            defaultbind1: crate::keycodes_h::K_RIGHTARROW as i32,
+            defaultbind2: -(1 as i32),
+            bind1: -(1 as i32),
+            bind2: -(1 as i32),
         };
         init
     },
@@ -1850,12 +1850,12 @@ static mut g_bindings: [bind_t; 36] = [
         let mut init = bind_t {
             command: b"+strafe\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             label: b"sidestep / turn\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            id: 11 as libc::c_int,
-            anim: 0 as libc::c_int,
-            defaultbind1: crate::keycodes_h::K_ALT as libc::c_int,
-            defaultbind2: -(1 as libc::c_int),
-            bind1: -(1 as libc::c_int),
-            bind2: -(1 as libc::c_int),
+            id: 11 as i32,
+            anim: 0 as i32,
+            defaultbind1: crate::keycodes_h::K_ALT as i32,
+            defaultbind2: -(1 as i32),
+            bind1: -(1 as i32),
+            bind2: -(1 as i32),
         };
         init
     },
@@ -1863,12 +1863,12 @@ static mut g_bindings: [bind_t; 36] = [
         let mut init = bind_t {
             command: b"+lookup\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             label: b"look up\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            id: 12 as libc::c_int,
-            anim: 10 as libc::c_int,
-            defaultbind1: crate::keycodes_h::K_PGDN as libc::c_int,
-            defaultbind2: -(1 as libc::c_int),
-            bind1: -(1 as libc::c_int),
-            bind2: -(1 as libc::c_int),
+            id: 12 as i32,
+            anim: 10 as i32,
+            defaultbind1: crate::keycodes_h::K_PGDN as i32,
+            defaultbind2: -(1 as i32),
+            bind1: -(1 as i32),
+            bind2: -(1 as i32),
         };
         init
     },
@@ -1876,12 +1876,12 @@ static mut g_bindings: [bind_t; 36] = [
         let mut init = bind_t {
             command: b"+lookdown\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             label: b"look down\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            id: 13 as libc::c_int,
-            anim: 11 as libc::c_int,
-            defaultbind1: crate::keycodes_h::K_DEL as libc::c_int,
-            defaultbind2: -(1 as libc::c_int),
-            bind1: -(1 as libc::c_int),
-            bind2: -(1 as libc::c_int),
+            id: 13 as i32,
+            anim: 11 as i32,
+            defaultbind1: crate::keycodes_h::K_DEL as i32,
+            defaultbind2: -(1 as i32),
+            bind1: -(1 as i32),
+            bind2: -(1 as i32),
         };
         init
     },
@@ -1889,12 +1889,12 @@ static mut g_bindings: [bind_t; 36] = [
         let mut init = bind_t {
             command: b"+mlook\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             label: b"mouse look\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            id: 14 as libc::c_int,
-            anim: 0 as libc::c_int,
+            id: 14 as i32,
+            anim: 0 as i32,
             defaultbind1: '/' as i32,
-            defaultbind2: -(1 as libc::c_int),
-            bind1: -(1 as libc::c_int),
-            bind2: -(1 as libc::c_int),
+            defaultbind2: -(1 as i32),
+            bind1: -(1 as i32),
+            bind2: -(1 as i32),
         };
         init
     },
@@ -1902,12 +1902,12 @@ static mut g_bindings: [bind_t; 36] = [
         let mut init = bind_t {
             command: b"centerview\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             label: b"center view\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            id: 15 as libc::c_int,
-            anim: 0 as libc::c_int,
-            defaultbind1: crate::keycodes_h::K_END as libc::c_int,
-            defaultbind2: -(1 as libc::c_int),
-            bind1: -(1 as libc::c_int),
-            bind2: -(1 as libc::c_int),
+            id: 15 as i32,
+            anim: 0 as i32,
+            defaultbind1: crate::keycodes_h::K_END as i32,
+            defaultbind2: -(1 as i32),
+            bind1: -(1 as i32),
+            bind2: -(1 as i32),
         };
         init
     },
@@ -1915,12 +1915,12 @@ static mut g_bindings: [bind_t; 36] = [
         let mut init = bind_t {
             command: b"+zoom\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             label: b"zoom view\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            id: 16 as libc::c_int,
-            anim: 0 as libc::c_int,
-            defaultbind1: -(1 as libc::c_int),
-            defaultbind2: -(1 as libc::c_int),
-            bind1: -(1 as libc::c_int),
-            bind2: -(1 as libc::c_int),
+            id: 16 as i32,
+            anim: 0 as i32,
+            defaultbind1: -(1 as i32),
+            defaultbind2: -(1 as i32),
+            bind1: -(1 as i32),
+            bind2: -(1 as i32),
         };
         init
     },
@@ -1928,12 +1928,12 @@ static mut g_bindings: [bind_t; 36] = [
         let mut init = bind_t {
             command: b"weapon 1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             label: b"gauntlet\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            id: 17 as libc::c_int,
-            anim: 12 as libc::c_int,
+            id: 17 as i32,
+            anim: 12 as i32,
             defaultbind1: '1' as i32,
-            defaultbind2: -(1 as libc::c_int),
-            bind1: -(1 as libc::c_int),
-            bind2: -(1 as libc::c_int),
+            defaultbind2: -(1 as i32),
+            bind1: -(1 as i32),
+            bind2: -(1 as i32),
         };
         init
     },
@@ -1941,12 +1941,12 @@ static mut g_bindings: [bind_t; 36] = [
         let mut init = bind_t {
             command: b"weapon 2\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             label: b"machinegun\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            id: 18 as libc::c_int,
-            anim: 13 as libc::c_int,
+            id: 18 as i32,
+            anim: 13 as i32,
             defaultbind1: '2' as i32,
-            defaultbind2: -(1 as libc::c_int),
-            bind1: -(1 as libc::c_int),
-            bind2: -(1 as libc::c_int),
+            defaultbind2: -(1 as i32),
+            bind1: -(1 as i32),
+            bind2: -(1 as i32),
         };
         init
     },
@@ -1954,12 +1954,12 @@ static mut g_bindings: [bind_t; 36] = [
         let mut init = bind_t {
             command: b"weapon 3\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             label: b"shotgun\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            id: 19 as libc::c_int,
-            anim: 14 as libc::c_int,
+            id: 19 as i32,
+            anim: 14 as i32,
             defaultbind1: '3' as i32,
-            defaultbind2: -(1 as libc::c_int),
-            bind1: -(1 as libc::c_int),
-            bind2: -(1 as libc::c_int),
+            defaultbind2: -(1 as i32),
+            bind1: -(1 as i32),
+            bind2: -(1 as i32),
         };
         init
     },
@@ -1967,12 +1967,12 @@ static mut g_bindings: [bind_t; 36] = [
         let mut init = bind_t {
             command: b"weapon 4\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             label: b"grenade launcher\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            id: 20 as libc::c_int,
-            anim: 15 as libc::c_int,
+            id: 20 as i32,
+            anim: 15 as i32,
             defaultbind1: '4' as i32,
-            defaultbind2: -(1 as libc::c_int),
-            bind1: -(1 as libc::c_int),
-            bind2: -(1 as libc::c_int),
+            defaultbind2: -(1 as i32),
+            bind1: -(1 as i32),
+            bind2: -(1 as i32),
         };
         init
     },
@@ -1980,12 +1980,12 @@ static mut g_bindings: [bind_t; 36] = [
         let mut init = bind_t {
             command: b"weapon 5\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             label: b"rocket launcher\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            id: 21 as libc::c_int,
-            anim: 16 as libc::c_int,
+            id: 21 as i32,
+            anim: 16 as i32,
             defaultbind1: '5' as i32,
-            defaultbind2: -(1 as libc::c_int),
-            bind1: -(1 as libc::c_int),
-            bind2: -(1 as libc::c_int),
+            defaultbind2: -(1 as i32),
+            bind1: -(1 as i32),
+            bind2: -(1 as i32),
         };
         init
     },
@@ -1993,12 +1993,12 @@ static mut g_bindings: [bind_t; 36] = [
         let mut init = bind_t {
             command: b"weapon 6\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             label: b"lightning\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            id: 22 as libc::c_int,
-            anim: 17 as libc::c_int,
+            id: 22 as i32,
+            anim: 17 as i32,
             defaultbind1: '6' as i32,
-            defaultbind2: -(1 as libc::c_int),
-            bind1: -(1 as libc::c_int),
-            bind2: -(1 as libc::c_int),
+            defaultbind2: -(1 as i32),
+            bind1: -(1 as i32),
+            bind2: -(1 as i32),
         };
         init
     },
@@ -2006,12 +2006,12 @@ static mut g_bindings: [bind_t; 36] = [
         let mut init = bind_t {
             command: b"weapon 7\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             label: b"railgun\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            id: 23 as libc::c_int,
-            anim: 18 as libc::c_int,
+            id: 23 as i32,
+            anim: 18 as i32,
             defaultbind1: '7' as i32,
-            defaultbind2: -(1 as libc::c_int),
-            bind1: -(1 as libc::c_int),
-            bind2: -(1 as libc::c_int),
+            defaultbind2: -(1 as i32),
+            bind1: -(1 as i32),
+            bind2: -(1 as i32),
         };
         init
     },
@@ -2019,12 +2019,12 @@ static mut g_bindings: [bind_t; 36] = [
         let mut init = bind_t {
             command: b"weapon 8\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             label: b"plasma gun\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            id: 24 as libc::c_int,
-            anim: 19 as libc::c_int,
+            id: 24 as i32,
+            anim: 19 as i32,
             defaultbind1: '8' as i32,
-            defaultbind2: -(1 as libc::c_int),
-            bind1: -(1 as libc::c_int),
-            bind2: -(1 as libc::c_int),
+            defaultbind2: -(1 as i32),
+            bind1: -(1 as i32),
+            bind2: -(1 as i32),
         };
         init
     },
@@ -2032,12 +2032,12 @@ static mut g_bindings: [bind_t; 36] = [
         let mut init = bind_t {
             command: b"weapon 9\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             label: b"BFG\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            id: 25 as libc::c_int,
-            anim: 20 as libc::c_int,
+            id: 25 as i32,
+            anim: 20 as i32,
             defaultbind1: '9' as i32,
-            defaultbind2: -(1 as libc::c_int),
-            bind1: -(1 as libc::c_int),
-            bind2: -(1 as libc::c_int),
+            defaultbind2: -(1 as i32),
+            bind1: -(1 as i32),
+            bind2: -(1 as i32),
         };
         init
     },
@@ -2045,12 +2045,12 @@ static mut g_bindings: [bind_t; 36] = [
         let mut init = bind_t {
             command: b"+attack\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             label: b"attack\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            id: 26 as libc::c_int,
-            anim: 22 as libc::c_int,
-            defaultbind1: crate::keycodes_h::K_CTRL as libc::c_int,
-            defaultbind2: -(1 as libc::c_int),
-            bind1: -(1 as libc::c_int),
-            bind2: -(1 as libc::c_int),
+            id: 26 as i32,
+            anim: 22 as i32,
+            defaultbind1: crate::keycodes_h::K_CTRL as i32,
+            defaultbind2: -(1 as i32),
+            bind1: -(1 as i32),
+            bind2: -(1 as i32),
         };
         init
     },
@@ -2058,12 +2058,12 @@ static mut g_bindings: [bind_t; 36] = [
         let mut init = bind_t {
             command: b"weapprev\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             label: b"prev weapon\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            id: 27 as libc::c_int,
-            anim: 0 as libc::c_int,
+            id: 27 as i32,
+            anim: 0 as i32,
             defaultbind1: '[' as i32,
-            defaultbind2: -(1 as libc::c_int),
-            bind1: -(1 as libc::c_int),
-            bind2: -(1 as libc::c_int),
+            defaultbind2: -(1 as i32),
+            bind1: -(1 as i32),
+            bind2: -(1 as i32),
         };
         init
     },
@@ -2071,12 +2071,12 @@ static mut g_bindings: [bind_t; 36] = [
         let mut init = bind_t {
             command: b"weapnext\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             label: b"next weapon\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            id: 28 as libc::c_int,
-            anim: 0 as libc::c_int,
+            id: 28 as i32,
+            anim: 0 as i32,
             defaultbind1: ']' as i32,
-            defaultbind2: -(1 as libc::c_int),
-            bind1: -(1 as libc::c_int),
-            bind2: -(1 as libc::c_int),
+            defaultbind2: -(1 as i32),
+            bind1: -(1 as i32),
+            bind2: -(1 as i32),
         };
         init
     },
@@ -2084,12 +2084,12 @@ static mut g_bindings: [bind_t; 36] = [
         let mut init = bind_t {
             command: b"+button3\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             label: b"gesture\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            id: 29 as libc::c_int,
-            anim: 23 as libc::c_int,
-            defaultbind1: crate::keycodes_h::K_MOUSE3 as libc::c_int,
-            defaultbind2: -(1 as libc::c_int),
-            bind1: -(1 as libc::c_int),
-            bind2: -(1 as libc::c_int),
+            id: 29 as i32,
+            anim: 23 as i32,
+            defaultbind1: crate::keycodes_h::K_MOUSE3 as i32,
+            defaultbind2: -(1 as i32),
+            bind1: -(1 as i32),
+            bind2: -(1 as i32),
         };
         init
     },
@@ -2097,12 +2097,12 @@ static mut g_bindings: [bind_t; 36] = [
         let mut init = bind_t {
             command: b"messagemode\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             label: b"chat\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            id: 30 as libc::c_int,
-            anim: 25 as libc::c_int,
+            id: 30 as i32,
+            anim: 25 as i32,
             defaultbind1: 't' as i32,
-            defaultbind2: -(1 as libc::c_int),
-            bind1: -(1 as libc::c_int),
-            bind2: -(1 as libc::c_int),
+            defaultbind2: -(1 as i32),
+            bind1: -(1 as i32),
+            bind2: -(1 as i32),
         };
         init
     },
@@ -2110,12 +2110,12 @@ static mut g_bindings: [bind_t; 36] = [
         let mut init = bind_t {
             command: b"messagemode2\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             label: b"chat - team\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            id: 31 as libc::c_int,
-            anim: 25 as libc::c_int,
-            defaultbind1: -(1 as libc::c_int),
-            defaultbind2: -(1 as libc::c_int),
-            bind1: -(1 as libc::c_int),
-            bind2: -(1 as libc::c_int),
+            id: 31 as i32,
+            anim: 25 as i32,
+            defaultbind1: -(1 as i32),
+            defaultbind2: -(1 as i32),
+            bind1: -(1 as i32),
+            bind2: -(1 as i32),
         };
         init
     },
@@ -2123,12 +2123,12 @@ static mut g_bindings: [bind_t; 36] = [
         let mut init = bind_t {
             command: b"messagemode3\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             label: b"chat - target\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            id: 32 as libc::c_int,
-            anim: 25 as libc::c_int,
-            defaultbind1: -(1 as libc::c_int),
-            defaultbind2: -(1 as libc::c_int),
-            bind1: -(1 as libc::c_int),
-            bind2: -(1 as libc::c_int),
+            id: 32 as i32,
+            anim: 25 as i32,
+            defaultbind1: -(1 as i32),
+            defaultbind2: -(1 as i32),
+            bind1: -(1 as i32),
+            bind2: -(1 as i32),
         };
         init
     },
@@ -2136,12 +2136,12 @@ static mut g_bindings: [bind_t; 36] = [
         let mut init = bind_t {
             command: b"messagemode4\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             label: b"chat - attacker\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            id: 33 as libc::c_int,
-            anim: 25 as libc::c_int,
-            defaultbind1: -(1 as libc::c_int),
-            defaultbind2: -(1 as libc::c_int),
-            bind1: -(1 as libc::c_int),
-            bind2: -(1 as libc::c_int),
+            id: 33 as i32,
+            anim: 25 as i32,
+            defaultbind1: -(1 as i32),
+            defaultbind2: -(1 as i32),
+            bind1: -(1 as i32),
+            bind2: -(1 as i32),
         };
         init
     },
@@ -2149,12 +2149,12 @@ static mut g_bindings: [bind_t; 36] = [
         let mut init = bind_t {
             command: b"togglemenu\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             label: b"toggle menu\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            id: 34 as libc::c_int,
-            anim: 0 as libc::c_int,
-            defaultbind1: crate::keycodes_h::K_ESCAPE as libc::c_int,
-            defaultbind2: -(1 as libc::c_int),
-            bind1: -(1 as libc::c_int),
-            bind2: -(1 as libc::c_int),
+            id: 34 as i32,
+            anim: 0 as i32,
+            defaultbind1: crate::keycodes_h::K_ESCAPE as i32,
+            defaultbind2: -(1 as i32),
+            bind1: -(1 as i32),
+            bind2: -(1 as i32),
         };
         init
     },
@@ -2162,12 +2162,12 @@ static mut g_bindings: [bind_t; 36] = [
         let mut init = bind_t {
             command: 0 as *const libc::c_void as *mut libc::c_void as *mut libc::c_char,
             label: 0 as *const libc::c_void as *mut libc::c_void as *mut libc::c_char,
-            id: 0 as libc::c_int,
-            anim: 0 as libc::c_int,
-            defaultbind1: -(1 as libc::c_int),
-            defaultbind2: -(1 as libc::c_int),
-            bind1: -(1 as libc::c_int),
-            bind2: -(1 as libc::c_int),
+            id: 0 as i32,
+            anim: 0 as i32,
+            defaultbind1: -(1 as i32),
+            defaultbind2: -(1 as i32),
+            bind1: -(1 as i32),
+            bind2: -(1 as i32),
         };
         init
     },
@@ -2177,72 +2177,72 @@ static mut g_configcvars: [configcvar_t; 9] = [
     {
         let mut init = configcvar_t {
             name: b"cl_run\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            defaultvalue: 0 as libc::c_int as libc::c_float,
-            value: 0 as libc::c_int as libc::c_float,
+            defaultvalue: 0 as i32 as f32,
+            value: 0 as i32 as f32,
         };
         init
     },
     {
         let mut init = configcvar_t {
             name: b"m_pitch\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            defaultvalue: 0 as libc::c_int as libc::c_float,
-            value: 0 as libc::c_int as libc::c_float,
+            defaultvalue: 0 as i32 as f32,
+            value: 0 as i32 as f32,
         };
         init
     },
     {
         let mut init = configcvar_t {
             name: b"cg_autoswitch\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            defaultvalue: 0 as libc::c_int as libc::c_float,
-            value: 0 as libc::c_int as libc::c_float,
+            defaultvalue: 0 as i32 as f32,
+            value: 0 as i32 as f32,
         };
         init
     },
     {
         let mut init = configcvar_t {
             name: b"sensitivity\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            defaultvalue: 0 as libc::c_int as libc::c_float,
-            value: 0 as libc::c_int as libc::c_float,
+            defaultvalue: 0 as i32 as f32,
+            value: 0 as i32 as f32,
         };
         init
     },
     {
         let mut init = configcvar_t {
             name: b"in_joystick\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            defaultvalue: 0 as libc::c_int as libc::c_float,
-            value: 0 as libc::c_int as libc::c_float,
+            defaultvalue: 0 as i32 as f32,
+            value: 0 as i32 as f32,
         };
         init
     },
     {
         let mut init = configcvar_t {
             name: b"joy_threshold\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            defaultvalue: 0 as libc::c_int as libc::c_float,
-            value: 0 as libc::c_int as libc::c_float,
+            defaultvalue: 0 as i32 as f32,
+            value: 0 as i32 as f32,
         };
         init
     },
     {
         let mut init = configcvar_t {
             name: b"m_filter\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            defaultvalue: 0 as libc::c_int as libc::c_float,
-            value: 0 as libc::c_int as libc::c_float,
+            defaultvalue: 0 as i32 as f32,
+            value: 0 as i32 as f32,
         };
         init
     },
     {
         let mut init = configcvar_t {
             name: b"cl_freelook\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            defaultvalue: 0 as libc::c_int as libc::c_float,
-            value: 0 as libc::c_int as libc::c_float,
+            defaultvalue: 0 as i32 as f32,
+            value: 0 as i32 as f32,
         };
         init
     },
     {
         let mut init = configcvar_t {
             name: 0 as *const libc::c_char as *mut libc::c_char,
-            defaultvalue: 0 as libc::c_int as libc::c_float,
-            value: 0 as libc::c_int as libc::c_float,
+            defaultvalue: 0 as i32 as f32,
+            value: 0 as i32 as f32,
         };
         init
     },
@@ -2299,12 +2299,12 @@ Controls_GetCvarDefault
 =================
 */
 
-unsafe extern "C" fn Controls_GetCvarDefault(mut name: *mut libc::c_char) -> libc::c_float {
+unsafe extern "C" fn Controls_GetCvarDefault(mut name: *mut libc::c_char) -> f32 {
     let mut cvarptr: *mut configcvar_t = 0 as *mut configcvar_t;
     cvarptr = g_configcvars.as_mut_ptr();
     loop {
         if (*cvarptr).name.is_null() {
-            return 0 as libc::c_int as libc::c_float;
+            return 0 as i32 as f32;
         }
         if ::libc::strcmp((*cvarptr).name, name) == 0 {
             break;
@@ -2319,12 +2319,12 @@ Controls_GetCvarValue
 =================
 */
 
-unsafe extern "C" fn Controls_GetCvarValue(mut name: *mut libc::c_char) -> libc::c_float {
+unsafe extern "C" fn Controls_GetCvarValue(mut name: *mut libc::c_char) -> f32 {
     let mut cvarptr: *mut configcvar_t = 0 as *mut configcvar_t;
     cvarptr = g_configcvars.as_mut_ptr();
     loop {
         if (*cvarptr).name.is_null() {
-            return 0 as libc::c_int as libc::c_float;
+            return 0 as i32 as f32;
         }
         if ::libc::strcmp((*cvarptr).name, name) == 0 {
             break;
@@ -2339,60 +2339,60 @@ Controls_UpdateModel
 =================
 */
 
-unsafe extern "C" fn Controls_UpdateModel(mut anim: libc::c_int) {
-    s_controls.playerViewangles[2 as libc::c_int as usize] =
-        0 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-    s_controls.playerViewangles[1 as libc::c_int as usize] =
-        s_controls.playerViewangles[2 as libc::c_int as usize];
-    s_controls.playerViewangles[0 as libc::c_int as usize] =
-        s_controls.playerViewangles[1 as libc::c_int as usize];
-    s_controls.playerMoveangles[2 as libc::c_int as usize] =
-        0 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-    s_controls.playerMoveangles[1 as libc::c_int as usize] =
-        s_controls.playerMoveangles[2 as libc::c_int as usize];
-    s_controls.playerMoveangles[0 as libc::c_int as usize] =
-        s_controls.playerMoveangles[1 as libc::c_int as usize];
-    s_controls.playerViewangles[1 as libc::c_int as usize] =
-        (180 as libc::c_int - 30 as libc::c_int) as crate::src::qcommon::q_shared::vec_t;
-    s_controls.playerMoveangles[1 as libc::c_int as usize] =
-        s_controls.playerViewangles[1 as libc::c_int as usize];
-    s_controls.playerLegs = crate::bg_public_h::LEGS_IDLE as libc::c_int;
-    s_controls.playerTorso = crate::bg_public_h::TORSO_STAND as libc::c_int;
+unsafe extern "C" fn Controls_UpdateModel(mut anim: i32) {
+    s_controls.playerViewangles[2 as i32 as usize] =
+        0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    s_controls.playerViewangles[1 as i32 as usize] =
+        s_controls.playerViewangles[2 as i32 as usize];
+    s_controls.playerViewangles[0 as i32 as usize] =
+        s_controls.playerViewangles[1 as i32 as usize];
+    s_controls.playerMoveangles[2 as i32 as usize] =
+        0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    s_controls.playerMoveangles[1 as i32 as usize] =
+        s_controls.playerMoveangles[2 as i32 as usize];
+    s_controls.playerMoveangles[0 as i32 as usize] =
+        s_controls.playerMoveangles[1 as i32 as usize];
+    s_controls.playerViewangles[1 as i32 as usize] =
+        (180 as i32 - 30 as i32) as crate::src::qcommon::q_shared::vec_t;
+    s_controls.playerMoveangles[1 as i32 as usize] =
+        s_controls.playerViewangles[1 as i32 as usize];
+    s_controls.playerLegs = crate::bg_public_h::LEGS_IDLE as i32;
+    s_controls.playerTorso = crate::bg_public_h::TORSO_STAND as i32;
     s_controls.playerWeapon = crate::bg_public_h::WP_NUM_WEAPONS;
     s_controls.playerChat = crate::src::qcommon::q_shared::qfalse;
     match anim {
-        1 => s_controls.playerLegs = crate::bg_public_h::LEGS_RUN as libc::c_int,
-        2 => s_controls.playerLegs = crate::bg_public_h::LEGS_WALK as libc::c_int,
-        3 => s_controls.playerLegs = crate::bg_public_h::LEGS_BACK as libc::c_int,
-        4 => s_controls.playerLegs = crate::bg_public_h::LEGS_JUMP as libc::c_int,
-        5 => s_controls.playerLegs = crate::bg_public_h::LEGS_IDLECR as libc::c_int,
+        1 => s_controls.playerLegs = crate::bg_public_h::LEGS_RUN as i32,
+        2 => s_controls.playerLegs = crate::bg_public_h::LEGS_WALK as i32,
+        3 => s_controls.playerLegs = crate::bg_public_h::LEGS_BACK as i32,
+        4 => s_controls.playerLegs = crate::bg_public_h::LEGS_JUMP as i32,
+        5 => s_controls.playerLegs = crate::bg_public_h::LEGS_IDLECR as i32,
         8 => {
-            s_controls.playerViewangles[1 as libc::c_int as usize] +=
-                90 as libc::c_int as libc::c_float
+            s_controls.playerViewangles[1 as i32 as usize] +=
+                90 as i32 as f32
         }
         9 => {
-            s_controls.playerViewangles[1 as libc::c_int as usize] -=
-                90 as libc::c_int as libc::c_float
+            s_controls.playerViewangles[1 as i32 as usize] -=
+                90 as i32 as f32
         }
         6 => {
-            s_controls.playerLegs = crate::bg_public_h::LEGS_WALK as libc::c_int;
-            s_controls.playerMoveangles[1 as libc::c_int as usize] = s_controls.playerViewangles
-                [1 as libc::c_int as usize]
-                + 90 as libc::c_int as libc::c_float
+            s_controls.playerLegs = crate::bg_public_h::LEGS_WALK as i32;
+            s_controls.playerMoveangles[1 as i32 as usize] = s_controls.playerViewangles
+                [1 as i32 as usize]
+                + 90 as i32 as f32
         }
         7 => {
-            s_controls.playerLegs = crate::bg_public_h::LEGS_WALK as libc::c_int;
-            s_controls.playerMoveangles[1 as libc::c_int as usize] = s_controls.playerViewangles
-                [1 as libc::c_int as usize]
-                - 90 as libc::c_int as libc::c_float
+            s_controls.playerLegs = crate::bg_public_h::LEGS_WALK as i32;
+            s_controls.playerMoveangles[1 as i32 as usize] = s_controls.playerViewangles
+                [1 as i32 as usize]
+                - 90 as i32 as f32
         }
         10 => {
-            s_controls.playerViewangles[0 as libc::c_int as usize] =
-                -(45 as libc::c_int) as crate::src::qcommon::q_shared::vec_t
+            s_controls.playerViewangles[0 as i32 as usize] =
+                -(45 as i32) as crate::src::qcommon::q_shared::vec_t
         }
         11 => {
-            s_controls.playerViewangles[0 as libc::c_int as usize] =
-                45 as libc::c_int as crate::src::qcommon::q_shared::vec_t
+            s_controls.playerViewangles[0 as i32 as usize] =
+                45 as i32 as crate::src::qcommon::q_shared::vec_t
         }
         12 => s_controls.playerWeapon = crate::bg_public_h::WP_GAUNTLET,
         13 => s_controls.playerWeapon = crate::bg_public_h::WP_MACHINEGUN,
@@ -2404,11 +2404,11 @@ unsafe extern "C" fn Controls_UpdateModel(mut anim: libc::c_int) {
         19 => s_controls.playerWeapon = crate::bg_public_h::WP_PLASMAGUN,
         20 => s_controls.playerWeapon = crate::bg_public_h::WP_BFG,
         21 => s_controls.playerWeapon = crate::bg_public_h::WP_GRAPPLING_HOOK,
-        22 => s_controls.playerTorso = crate::bg_public_h::TORSO_ATTACK as libc::c_int,
-        23 => s_controls.playerTorso = crate::bg_public_h::TORSO_GESTURE as libc::c_int,
+        22 => s_controls.playerTorso = crate::bg_public_h::TORSO_ATTACK as i32,
+        23 => s_controls.playerTorso = crate::bg_public_h::TORSO_GESTURE as i32,
         24 => {
-            s_controls.playerLegs = crate::bg_public_h::BOTH_DEATH1 as libc::c_int;
-            s_controls.playerTorso = crate::bg_public_h::BOTH_DEATH1 as libc::c_int;
+            s_controls.playerLegs = crate::bg_public_h::BOTH_DEATH1 as i32;
+            s_controls.playerTorso = crate::bg_public_h::BOTH_DEATH1 as i32;
             s_controls.playerWeapon = crate::bg_public_h::WP_NONE
         }
         25 => s_controls.playerChat = crate::src::qcommon::q_shared::qtrue,
@@ -2431,120 +2431,120 @@ Controls_Update
 */
 
 unsafe extern "C" fn Controls_Update() {
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
-    let mut y: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
+    let mut y: i32 = 0;
     let mut controls: *mut *mut crate::ui_local_h::menucommon_s =
         0 as *mut *mut crate::ui_local_h::menucommon_s;
     let mut control: *mut crate::ui_local_h::menucommon_s =
         0 as *mut crate::ui_local_h::menucommon_s;
     // disable all controls in all groups
-    i = 0 as libc::c_int;
-    while i < 4 as libc::c_int {
+    i = 0 as i32;
+    while i < 4 as i32 {
         controls = g_controls[i as usize];
-        j = 0 as libc::c_int;
+        j = 0 as i32;
         loop {
             control = *controls.offset(j as isize);
             if control.is_null() {
                 break;
             }
             (*control).flags |=
-                0x1000 as libc::c_int as libc::c_uint | 0x4000 as libc::c_int as libc::c_uint;
+                0x1000 as i32 as u32 | 0x4000 as i32 as u32;
             j += 1
         }
         i += 1
     }
     controls = g_controls[s_controls.section as usize];
     // enable controls in active group (and count number of items for vertical centering)
-    j = 0 as libc::c_int;
+    j = 0 as i32;
     loop {
         control = *controls.offset(j as isize);
         if control.is_null() {
             break;
         }
-        (*control).flags &= !(0x2000 as libc::c_int as libc::c_uint
-            | 0x1000 as libc::c_int as libc::c_uint
-            | 0x4000 as libc::c_int as libc::c_uint);
+        (*control).flags &= !(0x2000 as i32 as u32
+            | 0x1000 as i32 as u32
+            | 0x4000 as i32 as u32);
         j += 1
     }
     // position controls
-    y = (480 as libc::c_int - j * 16 as libc::c_int) / 2 as libc::c_int;
-    j = 0 as libc::c_int;
+    y = (480 as i32 - j * 16 as i32) / 2 as i32;
+    j = 0 as i32;
     loop {
         control = *controls.offset(j as isize);
         if control.is_null() {
             break;
         }
-        (*control).x = 320 as libc::c_int;
+        (*control).x = 320 as i32;
         (*control).y = y;
-        (*control).left = 320 as libc::c_int - 19 as libc::c_int * 8 as libc::c_int;
-        (*control).right = 320 as libc::c_int + 21 as libc::c_int * 8 as libc::c_int;
+        (*control).left = 320 as i32 - 19 as i32 * 8 as i32;
+        (*control).right = 320 as i32 + 21 as i32 * 8 as i32;
         (*control).top = y;
-        (*control).bottom = y + 16 as libc::c_int;
+        (*control).bottom = y + 16 as i32;
         j += 1;
-        y += 16 as libc::c_int
+        y += 16 as i32
     }
     if s_controls.waitingforkey as u64 != 0 {
         // disable everybody
-        i = 0 as libc::c_int;
+        i = 0 as i32;
         while i < s_controls.menu.nitems {
             (*(s_controls.menu.items[i as usize] as *mut crate::ui_local_h::menucommon_s)).flags |=
-                0x2000 as libc::c_int as libc::c_uint;
+                0x2000 as i32 as u32;
             i += 1
         }
         // enable action item
         (*(s_controls.menu.items[s_controls.menu.cursor as usize]
             as *mut crate::ui_local_h::menucommon_s))
-            .flags &= !(0x2000 as libc::c_int as libc::c_uint);
+            .flags &= !(0x2000 as i32 as u32);
         // don't gray out player's name
-        s_controls.name.generic.flags &= !(0x2000 as libc::c_int as libc::c_uint);
+        s_controls.name.generic.flags &= !(0x2000 as i32 as u32);
         return;
     }
     // enable everybody
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < s_controls.menu.nitems {
         (*(s_controls.menu.items[i as usize] as *mut crate::ui_local_h::menucommon_s)).flags &=
-            !(0x2000 as libc::c_int as libc::c_uint);
+            !(0x2000 as i32 as u32);
         i += 1
     }
     // makes sure flags are right on the group selection controls
-    s_controls.looking.generic.flags &= !(0x2000 as libc::c_int as libc::c_uint
-        | 0x40 as libc::c_int as libc::c_uint
-        | 0x80 as libc::c_int as libc::c_uint);
-    s_controls.movement.generic.flags &= !(0x2000 as libc::c_int as libc::c_uint
-        | 0x40 as libc::c_int as libc::c_uint
-        | 0x80 as libc::c_int as libc::c_uint);
-    s_controls.weapons.generic.flags &= !(0x2000 as libc::c_int as libc::c_uint
-        | 0x40 as libc::c_int as libc::c_uint
-        | 0x80 as libc::c_int as libc::c_uint);
-    s_controls.misc.generic.flags &= !(0x2000 as libc::c_int as libc::c_uint
-        | 0x40 as libc::c_int as libc::c_uint
-        | 0x80 as libc::c_int as libc::c_uint);
-    s_controls.looking.generic.flags |= 0x100 as libc::c_int as libc::c_uint;
-    s_controls.movement.generic.flags |= 0x100 as libc::c_int as libc::c_uint;
-    s_controls.weapons.generic.flags |= 0x100 as libc::c_int as libc::c_uint;
-    s_controls.misc.generic.flags |= 0x100 as libc::c_int as libc::c_uint;
+    s_controls.looking.generic.flags &= !(0x2000 as i32 as u32
+        | 0x40 as i32 as u32
+        | 0x80 as i32 as u32);
+    s_controls.movement.generic.flags &= !(0x2000 as i32 as u32
+        | 0x40 as i32 as u32
+        | 0x80 as i32 as u32);
+    s_controls.weapons.generic.flags &= !(0x2000 as i32 as u32
+        | 0x40 as i32 as u32
+        | 0x80 as i32 as u32);
+    s_controls.misc.generic.flags &= !(0x2000 as i32 as u32
+        | 0x40 as i32 as u32
+        | 0x80 as i32 as u32);
+    s_controls.looking.generic.flags |= 0x100 as i32 as u32;
+    s_controls.movement.generic.flags |= 0x100 as i32 as u32;
+    s_controls.weapons.generic.flags |= 0x100 as i32 as u32;
+    s_controls.misc.generic.flags |= 0x100 as i32 as u32;
     // set buttons
     match s_controls.section {
         0 => {
-            s_controls.movement.generic.flags &= !(0x100 as libc::c_int as libc::c_uint);
+            s_controls.movement.generic.flags &= !(0x100 as i32 as u32);
             s_controls.movement.generic.flags |=
-                0x40 as libc::c_int as libc::c_uint | 0x80 as libc::c_int as libc::c_uint
+                0x40 as i32 as u32 | 0x80 as i32 as u32
         }
         1 => {
-            s_controls.looking.generic.flags &= !(0x100 as libc::c_int as libc::c_uint);
+            s_controls.looking.generic.flags &= !(0x100 as i32 as u32);
             s_controls.looking.generic.flags |=
-                0x40 as libc::c_int as libc::c_uint | 0x80 as libc::c_int as libc::c_uint
+                0x40 as i32 as u32 | 0x80 as i32 as u32
         }
         2 => {
-            s_controls.weapons.generic.flags &= !(0x100 as libc::c_int as libc::c_uint);
+            s_controls.weapons.generic.flags &= !(0x100 as i32 as u32);
             s_controls.weapons.generic.flags |=
-                0x40 as libc::c_int as libc::c_uint | 0x80 as libc::c_int as libc::c_uint
+                0x40 as i32 as u32 | 0x80 as i32 as u32
         }
         3 => {
-            s_controls.misc.generic.flags &= !(0x100 as libc::c_int as libc::c_uint);
+            s_controls.misc.generic.flags &= !(0x100 as i32 as u32);
             s_controls.misc.generic.flags |=
-                0x40 as libc::c_int as libc::c_uint | 0x80 as libc::c_int as libc::c_uint
+                0x40 as i32 as u32 | 0x80 as i32 as u32
         }
         _ => {}
     };
@@ -2557,10 +2557,10 @@ Controls_DrawKeyBinding
 
 unsafe extern "C" fn Controls_DrawKeyBinding(mut self_0: *mut libc::c_void) {
     let mut a: *mut crate::ui_local_h::menuaction_s = 0 as *mut crate::ui_local_h::menuaction_s;
-    let mut x: libc::c_int = 0;
-    let mut y: libc::c_int = 0;
-    let mut b1: libc::c_int = 0;
-    let mut b2: libc::c_int = 0;
+    let mut x: i32 = 0;
+    let mut y: i32 = 0;
+    let mut b1: i32 = 0;
+    let mut b2: i32 = 0;
     let mut c: crate::src::qcommon::q_shared::qboolean = crate::src::qcommon::q_shared::qfalse;
     let mut name: [libc::c_char; 32] = [0; 32];
     let mut name2: [libc::c_char; 32] = [0; 32];
@@ -2569,9 +2569,9 @@ unsafe extern "C" fn Controls_DrawKeyBinding(mut self_0: *mut libc::c_void) {
     y = (*a).generic.y;
     c = (crate::src::q3_ui::ui_qmenu::Menu_ItemAtCursor(
         (*a).generic.parent as *mut crate::ui_local_h::_tag_menuframework,
-    ) == a as *mut libc::c_void) as libc::c_int as crate::src::qcommon::q_shared::qboolean;
+    ) == a as *mut libc::c_void) as i32 as crate::src::qcommon::q_shared::qboolean;
     b1 = g_bindings[(*a).generic.id as usize].bind1;
-    if b1 == -(1 as libc::c_int) {
+    if b1 == -(1 as i32) {
         ::libc::strcpy(
             name.as_mut_ptr(),
             b"???\x00" as *const u8 as *const libc::c_char,
@@ -2580,15 +2580,15 @@ unsafe extern "C" fn Controls_DrawKeyBinding(mut self_0: *mut libc::c_void) {
         crate::src::ui::ui_syscalls::trap_Key_KeynumToStringBuf(
             b1,
             name.as_mut_ptr(),
-            32 as libc::c_int,
+            32 as i32,
         );
         crate::src::qcommon::q_shared::Q_strupr(name.as_mut_ptr());
         b2 = g_bindings[(*a).generic.id as usize].bind2;
-        if b2 != -(1 as libc::c_int) {
+        if b2 != -(1 as i32) {
             crate::src::ui::ui_syscalls::trap_Key_KeynumToStringBuf(
                 b2,
                 name2.as_mut_ptr(),
-                32 as libc::c_int,
+                32 as i32,
             );
             crate::src::qcommon::q_shared::Q_strupr(name2.as_mut_ptr());
             ::libc::strcat(
@@ -2600,24 +2600,24 @@ unsafe extern "C" fn Controls_DrawKeyBinding(mut self_0: *mut libc::c_void) {
     }
     if c as u64 != 0 {
         crate::src::q3_ui::ui_atoms::UI_FillRect(
-            (*a).generic.left as libc::c_float,
-            (*a).generic.top as libc::c_float,
-            ((*a).generic.right - (*a).generic.left + 1 as libc::c_int) as libc::c_float,
-            ((*a).generic.bottom - (*a).generic.top + 1 as libc::c_int) as libc::c_float,
+            (*a).generic.left as f32,
+            (*a).generic.top as f32,
+            ((*a).generic.right - (*a).generic.left + 1 as i32) as f32,
+            ((*a).generic.bottom - (*a).generic.top + 1 as i32) as f32,
             crate::src::q3_ui::ui_qmenu::listbar_color.as_mut_ptr(),
         );
         crate::src::q3_ui::ui_atoms::UI_DrawString(
-            x - 8 as libc::c_int,
+            x - 8 as i32,
             y,
             g_bindings[(*a).generic.id as usize].label,
-            0x2 as libc::c_int | 0x10 as libc::c_int,
+            0x2 as i32 | 0x10 as i32,
             crate::src::q3_ui::ui_qmenu::text_color_highlight.as_mut_ptr(),
         );
         crate::src::q3_ui::ui_atoms::UI_DrawString(
-            x + 8 as libc::c_int,
+            x + 8 as i32,
             y,
             name.as_mut_ptr(),
-            0 as libc::c_int | 0x10 as libc::c_int | 0x4000 as libc::c_int,
+            0 as i32 | 0x10 as i32 | 0x4000 as i32,
             crate::src::q3_ui::ui_qmenu::text_color_highlight.as_mut_ptr(),
         );
         if s_controls.waitingforkey as u64 != 0 {
@@ -2625,67 +2625,67 @@ unsafe extern "C" fn Controls_DrawKeyBinding(mut self_0: *mut libc::c_void) {
                 x,
                 y,
                 '=' as i32,
-                0x1 as libc::c_int | 0x1000 as libc::c_int | 0x10 as libc::c_int,
+                0x1 as i32 | 0x1000 as i32 | 0x10 as i32,
                 crate::src::q3_ui::ui_qmenu::text_color_highlight.as_mut_ptr(),
             );
             crate::src::q3_ui::ui_atoms::UI_DrawString(
-                (640 as libc::c_int as libc::c_double * 0.50f64) as libc::c_int,
-                (480 as libc::c_int as libc::c_double * 0.80f64) as libc::c_int,
+                (640 as i32 as f64 * 0.50f64) as i32,
+                (480 as i32 as f64 * 0.80f64) as i32,
                 b"Waiting for new key ... ESCAPE to cancel\x00" as *const u8 as *const libc::c_char,
-                0x10 as libc::c_int | 0x1 as libc::c_int | 0x4000 as libc::c_int,
+                0x10 as i32 | 0x1 as i32 | 0x4000 as i32,
                 crate::src::qcommon::q_math::colorWhite.as_mut_ptr(),
             );
         } else {
             crate::src::q3_ui::ui_atoms::UI_DrawChar(
                 x,
                 y,
-                13 as libc::c_int,
-                0x1 as libc::c_int | 0x1000 as libc::c_int | 0x10 as libc::c_int,
+                13 as i32,
+                0x1 as i32 | 0x1000 as i32 | 0x10 as i32,
                 crate::src::q3_ui::ui_qmenu::text_color_highlight.as_mut_ptr(),
             );
             crate::src::q3_ui::ui_atoms::UI_DrawString(
-                (640 as libc::c_int as libc::c_double * 0.50f64) as libc::c_int,
-                (480 as libc::c_int as libc::c_double * 0.78f64) as libc::c_int,
+                (640 as i32 as f64 * 0.50f64) as i32,
+                (480 as i32 as f64 * 0.78f64) as i32,
                 b"Press ENTER or CLICK to change\x00" as *const u8 as *const libc::c_char,
-                0x10 as libc::c_int | 0x1 as libc::c_int,
+                0x10 as i32 | 0x1 as i32,
                 crate::src::qcommon::q_math::colorWhite.as_mut_ptr(),
             );
             crate::src::q3_ui::ui_atoms::UI_DrawString(
-                (640 as libc::c_int as libc::c_double * 0.50f64) as libc::c_int,
-                (480 as libc::c_int as libc::c_double * 0.82f64) as libc::c_int,
+                (640 as i32 as f64 * 0.50f64) as i32,
+                (480 as i32 as f64 * 0.82f64) as i32,
                 b"Press BACKSPACE to clear\x00" as *const u8 as *const libc::c_char,
-                0x10 as libc::c_int | 0x1 as libc::c_int,
+                0x10 as i32 | 0x1 as i32,
                 crate::src::qcommon::q_math::colorWhite.as_mut_ptr(),
             );
         }
-    } else if (*a).generic.flags & 0x2000 as libc::c_int as libc::c_uint != 0 {
+    } else if (*a).generic.flags & 0x2000 as i32 as u32 != 0 {
         crate::src::q3_ui::ui_atoms::UI_DrawString(
-            x - 8 as libc::c_int,
+            x - 8 as i32,
             y,
             g_bindings[(*a).generic.id as usize].label,
-            0x2 as libc::c_int | 0x10 as libc::c_int,
+            0x2 as i32 | 0x10 as i32,
             crate::src::q3_ui::ui_qmenu::text_color_disabled.as_mut_ptr(),
         );
         crate::src::q3_ui::ui_atoms::UI_DrawString(
-            x + 8 as libc::c_int,
+            x + 8 as i32,
             y,
             name.as_mut_ptr(),
-            0 as libc::c_int | 0x10 as libc::c_int,
+            0 as i32 | 0x10 as i32,
             crate::src::q3_ui::ui_qmenu::text_color_disabled.as_mut_ptr(),
         );
     } else {
         crate::src::q3_ui::ui_atoms::UI_DrawString(
-            x - 8 as libc::c_int,
+            x - 8 as i32,
             y,
             g_bindings[(*a).generic.id as usize].label,
-            0x2 as libc::c_int | 0x10 as libc::c_int,
+            0x2 as i32 | 0x10 as i32,
             controls_binding_color.as_mut_ptr(),
         );
         crate::src::q3_ui::ui_atoms::UI_DrawString(
-            x + 8 as libc::c_int,
+            x + 8 as i32,
             y,
             name.as_mut_ptr(),
-            0 as libc::c_int | 0x10 as libc::c_int,
+            0 as i32 | 0x10 as i32,
             controls_binding_color.as_mut_ptr(),
         );
     };
@@ -2698,10 +2698,10 @@ Controls_StatusBar
 
 unsafe extern "C" fn Controls_StatusBar(mut _self_0: *mut libc::c_void) {
     crate::src::q3_ui::ui_atoms::UI_DrawString(
-        (640 as libc::c_int as libc::c_double * 0.50f64) as libc::c_int,
-        (480 as libc::c_int as libc::c_double * 0.80f64) as libc::c_int,
+        (640 as i32 as f64 * 0.50f64) as i32,
+        (480 as i32 as f64 * 0.80f64) as i32,
         b"Use Arrow Keys or CLICK to change\x00" as *const u8 as *const libc::c_char,
-        0x10 as libc::c_int | 0x1 as libc::c_int,
+        0x10 as i32 | 0x1 as i32,
         crate::src::qcommon::q_math::colorWhite.as_mut_ptr(),
     );
 }
@@ -2717,24 +2717,24 @@ unsafe extern "C" fn Controls_DrawPlayer(mut self_0: *mut libc::c_void) {
     crate::src::ui::ui_syscalls::trap_Cvar_VariableStringBuffer(
         b"model\x00" as *const u8 as *const libc::c_char,
         buf.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
     );
-    if ::libc::strcmp(buf.as_mut_ptr(), s_controls.playerModel.as_mut_ptr()) != 0 as libc::c_int {
+    if ::libc::strcmp(buf.as_mut_ptr(), s_controls.playerModel.as_mut_ptr()) != 0 as i32 {
         crate::src::q3_ui::ui_players::UI_PlayerInfo_SetModel(
             &mut s_controls.playerinfo as *mut _ as *mut crate::ui_local_h::playerInfo_t,
             buf.as_mut_ptr(),
         );
         ::libc::strcpy(s_controls.playerModel.as_mut_ptr(), buf.as_mut_ptr());
-        Controls_UpdateModel(0 as libc::c_int);
+        Controls_UpdateModel(0 as i32);
     }
     b = self_0 as *mut crate::ui_local_h::menubitmap_s;
     crate::src::q3_ui::ui_players::UI_DrawPlayer(
-        (*b).generic.x as libc::c_float,
-        (*b).generic.y as libc::c_float,
-        (*b).width as libc::c_float,
-        (*b).height as libc::c_float,
+        (*b).generic.x as f32,
+        (*b).generic.y as f32,
+        (*b).width as f32,
+        (*b).height as f32,
         &mut s_controls.playerinfo as *mut _ as *mut crate::ui_local_h::playerInfo_t,
-        crate::src::q3_ui::ui_atoms::uis.realtime / 2 as libc::c_int,
+        crate::src::q3_ui::ui_atoms::uis.realtime / 2 as i32,
     );
 }
 /*
@@ -2745,23 +2745,23 @@ Controls_GetKeyAssignment
 
 unsafe extern "C" fn Controls_GetKeyAssignment(
     mut command: *mut libc::c_char,
-    mut twokeys: *mut libc::c_int,
+    mut twokeys: *mut i32,
 ) {
-    let mut count: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
+    let mut count: i32 = 0;
+    let mut j: i32 = 0;
     let mut b: [libc::c_char; 256] = [0; 256];
-    let ref mut fresh0 = *twokeys.offset(1 as libc::c_int as isize);
-    *fresh0 = -(1 as libc::c_int);
-    *twokeys.offset(0 as libc::c_int as isize) = *fresh0;
-    count = 0 as libc::c_int;
-    j = 0 as libc::c_int;
-    while j < 256 as libc::c_int {
-        crate::src::ui::ui_syscalls::trap_Key_GetBindingBuf(j, b.as_mut_ptr(), 256 as libc::c_int);
-        if !(*b.as_mut_ptr() as libc::c_int == 0 as libc::c_int) {
+    let ref mut fresh0 = *twokeys.offset(1 as i32 as isize);
+    *fresh0 = -(1 as i32);
+    *twokeys.offset(0 as i32 as isize) = *fresh0;
+    count = 0 as i32;
+    j = 0 as i32;
+    while j < 256 as i32 {
+        crate::src::ui::ui_syscalls::trap_Key_GetBindingBuf(j, b.as_mut_ptr(), 256 as i32);
+        if !(*b.as_mut_ptr() as i32 == 0 as i32) {
             if crate::src::qcommon::q_shared::Q_stricmp(b.as_mut_ptr(), command) == 0 {
                 *twokeys.offset(count as isize) = j;
                 count += 1;
-                if count == 2 as libc::c_int {
+                if count == 2 as i32 {
                     break;
                 }
             }
@@ -2776,55 +2776,55 @@ Controls_GetConfig
 */
 
 unsafe extern "C" fn Controls_GetConfig() {
-    let mut twokeys: [libc::c_int; 2] = [0; 2];
+    let mut twokeys: [i32; 2] = [0; 2];
     let mut bindptr: *mut bind_t = 0 as *mut bind_t;
     // put the bindings into a local store
     bindptr = g_bindings.as_mut_ptr();
     // iterate each command, get its numeric binding
     while !(*bindptr).label.is_null() {
         Controls_GetKeyAssignment((*bindptr).command, twokeys.as_mut_ptr());
-        (*bindptr).bind1 = twokeys[0 as libc::c_int as usize];
-        (*bindptr).bind2 = twokeys[1 as libc::c_int as usize];
+        (*bindptr).bind1 = twokeys[0 as i32 as usize];
+        (*bindptr).bind2 = twokeys[1 as i32 as usize];
         bindptr = bindptr.offset(1)
     }
     s_controls.invertmouse.curvalue = (Controls_GetCvarValue(
         b"m_pitch\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-    ) < 0 as libc::c_int as libc::c_float) as libc::c_int;
+    ) < 0 as i32 as f32) as i32;
     s_controls.smoothmouse.curvalue = crate::src::q3_ui::ui_atoms::UI_ClampCvar(
-        0 as libc::c_int as libc::c_float,
-        1 as libc::c_int as libc::c_float,
+        0 as i32 as f32,
+        1 as i32 as f32,
         Controls_GetCvarValue(
             b"m_filter\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         ),
-    ) as libc::c_int;
+    ) as i32;
     s_controls.alwaysrun.curvalue = crate::src::q3_ui::ui_atoms::UI_ClampCvar(
-        0 as libc::c_int as libc::c_float,
-        1 as libc::c_int as libc::c_float,
+        0 as i32 as f32,
+        1 as i32 as f32,
         Controls_GetCvarValue(
             b"cl_run\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         ),
-    ) as libc::c_int;
+    ) as i32;
     s_controls.autoswitch.curvalue = crate::src::q3_ui::ui_atoms::UI_ClampCvar(
-        0 as libc::c_int as libc::c_float,
-        1 as libc::c_int as libc::c_float,
+        0 as i32 as f32,
+        1 as i32 as f32,
         Controls_GetCvarValue(
             b"cg_autoswitch\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         ),
-    ) as libc::c_int;
+    ) as i32;
     s_controls.sensitivity.curvalue = crate::src::q3_ui::ui_atoms::UI_ClampCvar(
-        2 as libc::c_int as libc::c_float,
-        30 as libc::c_int as libc::c_float,
+        2 as i32 as f32,
+        30 as i32 as f32,
         Controls_GetCvarValue(
             b"sensitivity\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         ),
     );
     s_controls.joyenable.curvalue = crate::src::q3_ui::ui_atoms::UI_ClampCvar(
-        0 as libc::c_int as libc::c_float,
-        1 as libc::c_int as libc::c_float,
+        0 as i32 as f32,
+        1 as i32 as f32,
         Controls_GetCvarValue(
             b"in_joystick\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         ),
-    ) as libc::c_int;
+    ) as i32;
     s_controls.joythreshold.curvalue = crate::src::q3_ui::ui_atoms::UI_ClampCvar(
         0.05f32,
         0.75f32,
@@ -2833,12 +2833,12 @@ unsafe extern "C" fn Controls_GetConfig() {
         ),
     );
     s_controls.freelook.curvalue = crate::src::q3_ui::ui_atoms::UI_ClampCvar(
-        0 as libc::c_int as libc::c_float,
-        1 as libc::c_int as libc::c_float,
+        0 as i32 as f32,
+        1 as i32 as f32,
         Controls_GetCvarValue(
             b"cl_freelook\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         ),
-    ) as libc::c_int;
+    ) as i32;
 }
 /*
 =================
@@ -2852,9 +2852,9 @@ unsafe extern "C" fn Controls_SetConfig() {
     bindptr = g_bindings.as_mut_ptr();
     // iterate each command, get its numeric binding
     while !(*bindptr).label.is_null() {
-        if (*bindptr).bind1 != -(1 as libc::c_int) {
+        if (*bindptr).bind1 != -(1 as i32) {
             crate::src::ui::ui_syscalls::trap_Key_SetBinding((*bindptr).bind1, (*bindptr).command);
-            if (*bindptr).bind2 != -(1 as libc::c_int) {
+            if (*bindptr).bind2 != -(1 as i32) {
                 crate::src::ui::ui_syscalls::trap_Key_SetBinding(
                     (*bindptr).bind2,
                     (*bindptr).command,
@@ -2868,27 +2868,27 @@ unsafe extern "C" fn Controls_SetConfig() {
             b"m_pitch\x00" as *const u8 as *const libc::c_char,
             -crate::stdlib::fabs(crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
                 b"m_pitch\x00" as *const u8 as *const libc::c_char,
-            ) as libc::c_double) as libc::c_float,
+            ) as f64) as f32,
         );
     } else {
         crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
             b"m_pitch\x00" as *const u8 as *const libc::c_char,
             crate::stdlib::fabs(crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
                 b"m_pitch\x00" as *const u8 as *const libc::c_char,
-            ) as libc::c_double) as libc::c_float,
+            ) as f64) as f32,
         );
     }
     crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
         b"m_filter\x00" as *const u8 as *const libc::c_char,
-        s_controls.smoothmouse.curvalue as libc::c_float,
+        s_controls.smoothmouse.curvalue as f32,
     );
     crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
         b"cl_run\x00" as *const u8 as *const libc::c_char,
-        s_controls.alwaysrun.curvalue as libc::c_float,
+        s_controls.alwaysrun.curvalue as f32,
     );
     crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
         b"cg_autoswitch\x00" as *const u8 as *const libc::c_char,
-        s_controls.autoswitch.curvalue as libc::c_float,
+        s_controls.autoswitch.curvalue as f32,
     );
     crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
         b"sensitivity\x00" as *const u8 as *const libc::c_char,
@@ -2896,7 +2896,7 @@ unsafe extern "C" fn Controls_SetConfig() {
     );
     crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
         b"in_joystick\x00" as *const u8 as *const libc::c_char,
-        s_controls.joyenable.curvalue as libc::c_float,
+        s_controls.joyenable.curvalue as f32,
     );
     crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
         b"joy_threshold\x00" as *const u8 as *const libc::c_char,
@@ -2904,10 +2904,10 @@ unsafe extern "C" fn Controls_SetConfig() {
     );
     crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
         b"cl_freelook\x00" as *const u8 as *const libc::c_char,
-        s_controls.freelook.curvalue as libc::c_float,
+        s_controls.freelook.curvalue as f32,
     );
     crate::src::ui::ui_syscalls::trap_Cmd_ExecuteText(
-        crate::src::qcommon::q_shared::EXEC_APPEND as libc::c_int,
+        crate::src::qcommon::q_shared::EXEC_APPEND as i32,
         b"in_restart\n\x00" as *const u8 as *const libc::c_char,
     );
 }
@@ -2929,28 +2929,28 @@ unsafe extern "C" fn Controls_SetDefaults() {
     }
     s_controls.invertmouse.curvalue = (Controls_GetCvarDefault(
         b"m_pitch\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-    ) < 0 as libc::c_int as libc::c_float) as libc::c_int;
+    ) < 0 as i32 as f32) as i32;
     s_controls.smoothmouse.curvalue = Controls_GetCvarDefault(
         b"m_filter\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-    ) as libc::c_int;
+    ) as i32;
     s_controls.alwaysrun.curvalue = Controls_GetCvarDefault(
         b"cl_run\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-    ) as libc::c_int;
+    ) as i32;
     s_controls.autoswitch.curvalue = Controls_GetCvarDefault(
         b"cg_autoswitch\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-    ) as libc::c_int;
+    ) as i32;
     s_controls.sensitivity.curvalue = Controls_GetCvarDefault(
         b"sensitivity\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
     );
     s_controls.joyenable.curvalue = Controls_GetCvarDefault(
         b"in_joystick\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-    ) as libc::c_int;
+    ) as i32;
     s_controls.joythreshold.curvalue = Controls_GetCvarDefault(
         b"joy_threshold\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
     );
     s_controls.freelook.curvalue = Controls_GetCvarDefault(
         b"cl_freelook\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-    ) as libc::c_int;
+    ) as i32;
 }
 /*
 =================
@@ -2959,11 +2959,11 @@ Controls_MenuKey
 */
 
 unsafe extern "C" fn Controls_MenuKey(
-    mut key: libc::c_int,
+    mut key: i32,
 ) -> crate::src::qcommon::q_shared::sfxHandle_t {
     let mut current_block: u64;
-    let mut id: libc::c_int = 0;
-    let mut _i: libc::c_int = 0;
+    let mut id: i32 = 0;
+    let mut _i: i32 = 0;
     let mut found: crate::src::qcommon::q_shared::qboolean = crate::src::qcommon::q_shared::qfalse;
     let mut bindptr: *mut bind_t = 0 as *mut bind_t;
     found = crate::src::qcommon::q_shared::qfalse;
@@ -2979,7 +2979,7 @@ unsafe extern "C" fn Controls_MenuKey(
                         current_block = 14059375994042912985;
                     }
                     _ => {
-                        key = -(1 as libc::c_int);
+                        key = -(1 as i32);
                         current_block = 15904375183555213903;
                     }
                 }
@@ -2994,7 +2994,7 @@ unsafe extern "C" fn Controls_MenuKey(
                         current_block = 14059375994042912985;
                     }
                     _ => {
-                        key = -(1 as libc::c_int);
+                        key = -(1 as i32);
                         current_block = 15904375183555213903;
                     }
                 }
@@ -3003,7 +3003,7 @@ unsafe extern "C" fn Controls_MenuKey(
                 current_block = 14059375994042912985;
             }
         }
-    } else if key & 1024 as libc::c_int != 0 {
+    } else if key & 1024 as i32 != 0 {
         current_block = 14059375994042912985;
     } else {
         match key {
@@ -3023,17 +3023,17 @@ unsafe extern "C" fn Controls_MenuKey(
     match current_block {
         15904375183555213903 => {
             s_controls.changesmade = crate::src::qcommon::q_shared::qtrue;
-            if key != -(1 as libc::c_int) {
+            if key != -(1 as i32) {
                 // remove from any other bind
                 bindptr = g_bindings.as_mut_ptr();
-                _i = 0 as libc::c_int;
+                _i = 0 as i32;
                 while !(*bindptr).label.is_null() {
                     if (*bindptr).bind2 == key {
-                        (*bindptr).bind2 = -(1 as libc::c_int)
+                        (*bindptr).bind2 = -(1 as i32)
                     }
                     if (*bindptr).bind1 == key {
                         (*bindptr).bind1 = (*bindptr).bind2;
-                        (*bindptr).bind2 = -(1 as libc::c_int)
+                        (*bindptr).bind2 = -(1 as i32)
                     }
                     _i += 1;
                     bindptr = bindptr.offset(1)
@@ -3044,28 +3044,28 @@ unsafe extern "C" fn Controls_MenuKey(
                 as *mut crate::ui_local_h::menucommon_s))
                 .id;
             bindptr = g_bindings.as_mut_ptr();
-            _i = 0 as libc::c_int;
+            _i = 0 as i32;
             while !(*bindptr).label.is_null() {
                 if (*bindptr).id == id {
                     found = crate::src::qcommon::q_shared::qtrue;
-                    if key == -(1 as libc::c_int) {
-                        if (*bindptr).bind1 != -(1 as libc::c_int) {
+                    if key == -(1 as i32) {
+                        if (*bindptr).bind1 != -(1 as i32) {
                             crate::src::ui::ui_syscalls::trap_Key_SetBinding(
                                 (*bindptr).bind1,
                                 b"\x00" as *const u8 as *const libc::c_char,
                             );
-                            (*bindptr).bind1 = -(1 as libc::c_int)
+                            (*bindptr).bind1 = -(1 as i32)
                         }
-                        if (*bindptr).bind2 != -(1 as libc::c_int) {
+                        if (*bindptr).bind2 != -(1 as i32) {
                             crate::src::ui::ui_syscalls::trap_Key_SetBinding(
                                 (*bindptr).bind2,
                                 b"\x00" as *const u8 as *const libc::c_char,
                             );
-                            (*bindptr).bind2 = -(1 as libc::c_int)
+                            (*bindptr).bind2 = -(1 as i32)
                         }
-                    } else if (*bindptr).bind1 == -(1 as libc::c_int) {
+                    } else if (*bindptr).bind1 == -(1 as i32) {
                         (*bindptr).bind1 = key
-                    } else if (*bindptr).bind1 != key && (*bindptr).bind2 == -(1 as libc::c_int) {
+                    } else if (*bindptr).bind1 != key && (*bindptr).bind2 == -(1 as i32) {
                         (*bindptr).bind2 = key
                     } else {
                         crate::src::ui::ui_syscalls::trap_Key_SetBinding(
@@ -3077,7 +3077,7 @@ unsafe extern "C" fn Controls_MenuKey(
                             b"\x00" as *const u8 as *const libc::c_char,
                         );
                         (*bindptr).bind1 = key;
-                        (*bindptr).bind2 = -(1 as libc::c_int)
+                        (*bindptr).bind2 = -(1 as i32)
                     }
                     break;
                 } else {
@@ -3122,17 +3122,17 @@ Controls_ResetDefaults_Draw
 
 unsafe extern "C" fn Controls_ResetDefaults_Draw() {
     crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
-        640 as libc::c_int / 2 as libc::c_int,
-        356 as libc::c_int + 27 as libc::c_int * 0 as libc::c_int,
+        640 as i32 / 2 as i32,
+        356 as i32 + 27 as i32 * 0 as i32,
         b"WARNING: This will reset all\x00" as *const u8 as *const libc::c_char,
-        0x1 as libc::c_int | 0x10 as libc::c_int,
+        0x1 as i32 | 0x10 as i32,
         crate::src::q3_ui::ui_qmenu::color_yellow.as_mut_ptr(),
     );
     crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
-        640 as libc::c_int / 2 as libc::c_int,
-        356 as libc::c_int + 27 as libc::c_int * 1 as libc::c_int,
+        640 as i32 / 2 as i32,
+        356 as i32 + 27 as i32 * 1 as i32,
         b"controls to their default values.\x00" as *const u8 as *const libc::c_char,
-        0x1 as libc::c_int | 0x10 as libc::c_int,
+        0x1 as i32 | 0x10 as i32,
         crate::src::q3_ui::ui_qmenu::color_yellow.as_mut_ptr(),
     );
 }
@@ -3142,34 +3142,34 @@ Controls_MenuEvent
 =================
 */
 
-unsafe extern "C" fn Controls_MenuEvent(mut ptr: *mut libc::c_void, mut event: libc::c_int) {
+unsafe extern "C" fn Controls_MenuEvent(mut ptr: *mut libc::c_void, mut event: i32) {
     match (*(ptr as *mut crate::ui_local_h::menucommon_s)).id {
         100 => {
-            if event == 3 as libc::c_int {
-                s_controls.section = 0 as libc::c_int;
+            if event == 3 as i32 {
+                s_controls.section = 0 as i32;
                 Controls_Update();
             }
         }
         101 => {
-            if event == 3 as libc::c_int {
-                s_controls.section = 1 as libc::c_int;
+            if event == 3 as i32 {
+                s_controls.section = 1 as i32;
                 Controls_Update();
             }
         }
         102 => {
-            if event == 3 as libc::c_int {
-                s_controls.section = 2 as libc::c_int;
+            if event == 3 as i32 {
+                s_controls.section = 2 as i32;
                 Controls_Update();
             }
         }
         103 => {
-            if event == 3 as libc::c_int {
-                s_controls.section = 3 as libc::c_int;
+            if event == 3 as i32 {
+                s_controls.section = 3 as i32;
                 Controls_Update();
             }
         }
         104 => {
-            if event == 3 as libc::c_int {
+            if event == 3 as i32 {
                 crate::src::q3_ui::ui_confirm::UI_ConfirmMenu(
                     b"SET TO DEFAULTS?\x00" as *const u8 as *const libc::c_char,
                     Some(Controls_ResetDefaults_Draw as unsafe extern "C" fn() -> ()),
@@ -3183,7 +3183,7 @@ unsafe extern "C" fn Controls_MenuEvent(mut ptr: *mut libc::c_void, mut event: l
             }
         }
         105 => {
-            if event == 3 as libc::c_int {
+            if event == 3 as i32 {
                 if s_controls.changesmade as u64 != 0 {
                     Controls_SetConfig();
                 }
@@ -3191,18 +3191,18 @@ unsafe extern "C" fn Controls_MenuEvent(mut ptr: *mut libc::c_void, mut event: l
             }
         }
         106 => {
-            if event == 3 as libc::c_int {
+            if event == 3 as i32 {
                 Controls_SetConfig();
                 crate::src::q3_ui::ui_atoms::UI_PopMenu();
             }
         }
         107 => {
-            if event == 3 as libc::c_int {
+            if event == 3 as i32 {
                 crate::src::q3_ui::ui_atoms::UI_PopMenu();
             }
         }
         35 | 39 | 36 | 42 | 37 | 38 | 40 | 41 => {
-            if event == 3 as libc::c_int {
+            if event == 3 as i32 {
                 s_controls.changesmade = crate::src::qcommon::q_shared::qtrue
             }
         }
@@ -3215,14 +3215,14 @@ Controls_ActionEvent
 =================
 */
 
-unsafe extern "C" fn Controls_ActionEvent(mut ptr: *mut libc::c_void, mut event: libc::c_int) {
-    if event == 2 as libc::c_int {
-        Controls_UpdateModel(0 as libc::c_int);
-    } else if event == 1 as libc::c_int {
+unsafe extern "C" fn Controls_ActionEvent(mut ptr: *mut libc::c_void, mut event: i32) {
+    if event == 2 as i32 {
+        Controls_UpdateModel(0 as i32);
+    } else if event == 1 as i32 {
         Controls_UpdateModel(
             g_bindings[(*(ptr as *mut crate::ui_local_h::menucommon_s)).id as usize].anim,
         );
-    } else if event == 3 as libc::c_int && s_controls.waitingforkey as u64 == 0 {
+    } else if event == 3 as i32 && s_controls.waitingforkey as u64 == 0 {
         s_controls.waitingforkey = crate::src::qcommon::q_shared::qtrue;
         Controls_Update();
     };
@@ -3236,7 +3236,7 @@ Controls_InitModel
 unsafe extern "C" fn Controls_InitModel() {
     crate::stdlib::memset(
         &mut s_controls.playerinfo as *mut crate::ui_local_h::playerInfo_t as *mut libc::c_void,
-        0 as libc::c_int,
+        0 as i32,
         ::std::mem::size_of::<crate::ui_local_h::playerInfo_t>() as libc::c_ulong,
     );
     crate::src::q3_ui::ui_players::UI_PlayerInfo_SetModel(
@@ -3245,7 +3245,7 @@ unsafe extern "C" fn Controls_InitModel() {
             b"model\x00" as *const u8 as *const libc::c_char,
         ),
     );
-    Controls_UpdateModel(0 as libc::c_int);
+    Controls_UpdateModel(0 as i32);
 }
 /*
 =================
@@ -3257,13 +3257,13 @@ unsafe extern "C" fn Controls_InitWeapons() {
     let mut item: *mut crate::bg_public_h::gitem_t = 0 as *mut crate::bg_public_h::gitem_t;
     item = crate::src::game::bg_misc::bg_itemlist
         .as_mut_ptr()
-        .offset(1 as libc::c_int as isize);
+        .offset(1 as i32 as isize);
     while !(*item).classname.is_null() {
-        if !((*item).giType as libc::c_uint
-            != crate::bg_public_h::IT_WEAPON as libc::c_int as libc::c_uint)
+        if !((*item).giType as u32
+            != crate::bg_public_h::IT_WEAPON as i32 as u32)
         {
             crate::src::ui::ui_syscalls::trap_R_RegisterModel(
-                (*item).world_model[0 as libc::c_int as usize],
+                (*item).world_model[0 as i32 as usize],
             );
         }
         item = item.offset(1)
@@ -3280,591 +3280,591 @@ unsafe extern "C" fn Controls_MenuInit() {
     // zero set all our globals
     crate::stdlib::memset(
         &mut s_controls as *mut controls_t as *mut libc::c_void,
-        0 as libc::c_int,
+        0 as i32,
         ::std::mem::size_of::<controls_t>() as libc::c_ulong,
     );
     Controls_Cache();
     s_controls.menu.key = Some(
         Controls_MenuKey
-            as unsafe extern "C" fn(_: libc::c_int) -> crate::src::qcommon::q_shared::sfxHandle_t,
+            as unsafe extern "C" fn(_: i32) -> crate::src::qcommon::q_shared::sfxHandle_t,
     );
     s_controls.menu.wrapAround = crate::src::qcommon::q_shared::qtrue;
     s_controls.menu.fullscreen = crate::src::qcommon::q_shared::qtrue;
-    s_controls.banner.generic.type_0 = 10 as libc::c_int;
-    s_controls.banner.generic.flags = 0x8 as libc::c_int as libc::c_uint;
-    s_controls.banner.generic.x = 320 as libc::c_int;
-    s_controls.banner.generic.y = 16 as libc::c_int;
+    s_controls.banner.generic.type_0 = 10 as i32;
+    s_controls.banner.generic.flags = 0x8 as i32 as u32;
+    s_controls.banner.generic.x = 320 as i32;
+    s_controls.banner.generic.y = 16 as i32;
     s_controls.banner.string =
         b"CONTROLS\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     s_controls.banner.color = crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr();
-    s_controls.banner.style = 0x1 as libc::c_int;
-    s_controls.framel.generic.type_0 = 6 as libc::c_int;
+    s_controls.banner.style = 0x1 as i32;
+    s_controls.framel.generic.type_0 = 6 as i32;
     s_controls.framel.generic.name = b"menu/art/frame2_l\x00" as *const u8 as *const libc::c_char;
     s_controls.framel.generic.flags =
-        0x4 as libc::c_int as libc::c_uint | 0x4000 as libc::c_int as libc::c_uint;
-    s_controls.framel.generic.x = 0 as libc::c_int;
-    s_controls.framel.generic.y = 78 as libc::c_int;
-    s_controls.framel.width = 256 as libc::c_int;
-    s_controls.framel.height = 329 as libc::c_int;
-    s_controls.framer.generic.type_0 = 6 as libc::c_int;
+        0x4 as i32 as u32 | 0x4000 as i32 as u32;
+    s_controls.framel.generic.x = 0 as i32;
+    s_controls.framel.generic.y = 78 as i32;
+    s_controls.framel.width = 256 as i32;
+    s_controls.framel.height = 329 as i32;
+    s_controls.framer.generic.type_0 = 6 as i32;
     s_controls.framer.generic.name = b"menu/art/frame1_r\x00" as *const u8 as *const libc::c_char;
     s_controls.framer.generic.flags =
-        0x4 as libc::c_int as libc::c_uint | 0x4000 as libc::c_int as libc::c_uint;
-    s_controls.framer.generic.x = 376 as libc::c_int;
-    s_controls.framer.generic.y = 76 as libc::c_int;
-    s_controls.framer.width = 256 as libc::c_int;
-    s_controls.framer.height = 334 as libc::c_int;
-    s_controls.looking.generic.type_0 = 9 as libc::c_int;
+        0x4 as i32 as u32 | 0x4000 as i32 as u32;
+    s_controls.framer.generic.x = 376 as i32;
+    s_controls.framer.generic.y = 76 as i32;
+    s_controls.framer.width = 256 as i32;
+    s_controls.framer.height = 334 as i32;
+    s_controls.looking.generic.type_0 = 9 as i32;
     s_controls.looking.generic.flags =
-        0x10 as libc::c_int as libc::c_uint | 0x100 as libc::c_int as libc::c_uint;
-    s_controls.looking.generic.id = 101 as libc::c_int;
+        0x10 as i32 as u32 | 0x100 as i32 as u32;
+    s_controls.looking.generic.id = 101 as i32;
     s_controls.looking.generic.callback = Some(
-        Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    s_controls.looking.generic.x = 152 as libc::c_int;
-    s_controls.looking.generic.y = 240 as libc::c_int - 2 as libc::c_int * 27 as libc::c_int;
+    s_controls.looking.generic.x = 152 as i32;
+    s_controls.looking.generic.y = 240 as i32 - 2 as i32 * 27 as i32;
     s_controls.looking.string =
         b"LOOK\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    s_controls.looking.style = 0x2 as libc::c_int;
+    s_controls.looking.style = 0x2 as i32;
     s_controls.looking.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
-    s_controls.movement.generic.type_0 = 9 as libc::c_int;
+    s_controls.movement.generic.type_0 = 9 as i32;
     s_controls.movement.generic.flags =
-        0x10 as libc::c_int as libc::c_uint | 0x100 as libc::c_int as libc::c_uint;
-    s_controls.movement.generic.id = 100 as libc::c_int;
+        0x10 as i32 as u32 | 0x100 as i32 as u32;
+    s_controls.movement.generic.id = 100 as i32;
     s_controls.movement.generic.callback = Some(
-        Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    s_controls.movement.generic.x = 152 as libc::c_int;
-    s_controls.movement.generic.y = 240 as libc::c_int - 27 as libc::c_int;
+    s_controls.movement.generic.x = 152 as i32;
+    s_controls.movement.generic.y = 240 as i32 - 27 as i32;
     s_controls.movement.string =
         b"MOVE\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    s_controls.movement.style = 0x2 as libc::c_int;
+    s_controls.movement.style = 0x2 as i32;
     s_controls.movement.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
-    s_controls.weapons.generic.type_0 = 9 as libc::c_int;
+    s_controls.weapons.generic.type_0 = 9 as i32;
     s_controls.weapons.generic.flags =
-        0x10 as libc::c_int as libc::c_uint | 0x100 as libc::c_int as libc::c_uint;
-    s_controls.weapons.generic.id = 102 as libc::c_int;
+        0x10 as i32 as u32 | 0x100 as i32 as u32;
+    s_controls.weapons.generic.id = 102 as i32;
     s_controls.weapons.generic.callback = Some(
-        Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    s_controls.weapons.generic.x = 152 as libc::c_int;
-    s_controls.weapons.generic.y = 240 as libc::c_int;
+    s_controls.weapons.generic.x = 152 as i32;
+    s_controls.weapons.generic.y = 240 as i32;
     s_controls.weapons.string =
         b"SHOOT\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    s_controls.weapons.style = 0x2 as libc::c_int;
+    s_controls.weapons.style = 0x2 as i32;
     s_controls.weapons.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
-    s_controls.misc.generic.type_0 = 9 as libc::c_int;
+    s_controls.misc.generic.type_0 = 9 as i32;
     s_controls.misc.generic.flags =
-        0x10 as libc::c_int as libc::c_uint | 0x100 as libc::c_int as libc::c_uint;
-    s_controls.misc.generic.id = 103 as libc::c_int;
+        0x10 as i32 as u32 | 0x100 as i32 as u32;
+    s_controls.misc.generic.id = 103 as i32;
     s_controls.misc.generic.callback = Some(
-        Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    s_controls.misc.generic.x = 152 as libc::c_int;
-    s_controls.misc.generic.y = 240 as libc::c_int + 27 as libc::c_int;
+    s_controls.misc.generic.x = 152 as i32;
+    s_controls.misc.generic.y = 240 as i32 + 27 as i32;
     s_controls.misc.string = b"MISC\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    s_controls.misc.style = 0x2 as libc::c_int;
+    s_controls.misc.style = 0x2 as i32;
     s_controls.misc.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
-    s_controls.back.generic.type_0 = 6 as libc::c_int;
+    s_controls.back.generic.type_0 = 6 as i32;
     s_controls.back.generic.name = b"menu/art/back_0\x00" as *const u8 as *const libc::c_char;
     s_controls.back.generic.flags =
-        0x4 as libc::c_int as libc::c_uint | 0x100 as libc::c_int as libc::c_uint;
-    s_controls.back.generic.x = 0 as libc::c_int;
-    s_controls.back.generic.y = 480 as libc::c_int - 64 as libc::c_int;
-    s_controls.back.generic.id = 105 as libc::c_int;
+        0x4 as i32 as u32 | 0x100 as i32 as u32;
+    s_controls.back.generic.x = 0 as i32;
+    s_controls.back.generic.y = 480 as i32 - 64 as i32;
+    s_controls.back.generic.id = 105 as i32;
     s_controls.back.generic.callback = Some(
-        Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    s_controls.back.width = 128 as libc::c_int;
-    s_controls.back.height = 64 as libc::c_int;
+    s_controls.back.width = 128 as i32;
+    s_controls.back.height = 64 as i32;
     s_controls.back.focuspic =
         b"menu/art/back_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    s_controls.player.generic.type_0 = 6 as libc::c_int;
-    s_controls.player.generic.flags = 0x4000 as libc::c_int as libc::c_uint;
+    s_controls.player.generic.type_0 = 6 as i32;
+    s_controls.player.generic.flags = 0x4000 as i32 as u32;
     s_controls.player.generic.ownerdraw =
         Some(Controls_DrawPlayer as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_controls.player.generic.x = 400 as libc::c_int;
-    s_controls.player.generic.y = -(40 as libc::c_int);
-    s_controls.player.width = 32 as libc::c_int * 10 as libc::c_int;
-    s_controls.player.height = 56 as libc::c_int * 10 as libc::c_int;
-    s_controls.walkforward.generic.type_0 = 2 as libc::c_int;
-    s_controls.walkforward.generic.flags = 0x4 as libc::c_int as libc::c_uint
-        | 0x100 as libc::c_int as libc::c_uint
-        | 0x2000 as libc::c_int as libc::c_uint
-        | 0x1000 as libc::c_int as libc::c_uint;
+    s_controls.player.generic.x = 400 as i32;
+    s_controls.player.generic.y = -(40 as i32);
+    s_controls.player.width = 32 as i32 * 10 as i32;
+    s_controls.player.height = 56 as i32 * 10 as i32;
+    s_controls.walkforward.generic.type_0 = 2 as i32;
+    s_controls.walkforward.generic.flags = 0x4 as i32 as u32
+        | 0x100 as i32 as u32
+        | 0x2000 as i32 as u32
+        | 0x1000 as i32 as u32;
     s_controls.walkforward.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     s_controls.walkforward.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_controls.walkforward.generic.id = 3 as libc::c_int;
-    s_controls.backpedal.generic.type_0 = 2 as libc::c_int;
-    s_controls.backpedal.generic.flags = 0x4 as libc::c_int as libc::c_uint
-        | 0x100 as libc::c_int as libc::c_uint
-        | 0x2000 as libc::c_int as libc::c_uint
-        | 0x1000 as libc::c_int as libc::c_uint;
+    s_controls.walkforward.generic.id = 3 as i32;
+    s_controls.backpedal.generic.type_0 = 2 as i32;
+    s_controls.backpedal.generic.flags = 0x4 as i32 as u32
+        | 0x100 as i32 as u32
+        | 0x2000 as i32 as u32
+        | 0x1000 as i32 as u32;
     s_controls.backpedal.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     s_controls.backpedal.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_controls.backpedal.generic.id = 4 as libc::c_int;
-    s_controls.stepleft.generic.type_0 = 2 as libc::c_int;
-    s_controls.stepleft.generic.flags = 0x4 as libc::c_int as libc::c_uint
-        | 0x100 as libc::c_int as libc::c_uint
-        | 0x2000 as libc::c_int as libc::c_uint
-        | 0x1000 as libc::c_int as libc::c_uint;
+    s_controls.backpedal.generic.id = 4 as i32;
+    s_controls.stepleft.generic.type_0 = 2 as i32;
+    s_controls.stepleft.generic.flags = 0x4 as i32 as u32
+        | 0x100 as i32 as u32
+        | 0x2000 as i32 as u32
+        | 0x1000 as i32 as u32;
     s_controls.stepleft.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     s_controls.stepleft.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_controls.stepleft.generic.id = 5 as libc::c_int;
-    s_controls.stepright.generic.type_0 = 2 as libc::c_int;
-    s_controls.stepright.generic.flags = 0x4 as libc::c_int as libc::c_uint
-        | 0x100 as libc::c_int as libc::c_uint
-        | 0x2000 as libc::c_int as libc::c_uint
-        | 0x1000 as libc::c_int as libc::c_uint;
+    s_controls.stepleft.generic.id = 5 as i32;
+    s_controls.stepright.generic.type_0 = 2 as i32;
+    s_controls.stepright.generic.flags = 0x4 as i32 as u32
+        | 0x100 as i32 as u32
+        | 0x2000 as i32 as u32
+        | 0x1000 as i32 as u32;
     s_controls.stepright.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     s_controls.stepright.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_controls.stepright.generic.id = 6 as libc::c_int;
-    s_controls.moveup.generic.type_0 = 2 as libc::c_int;
-    s_controls.moveup.generic.flags = 0x4 as libc::c_int as libc::c_uint
-        | 0x100 as libc::c_int as libc::c_uint
-        | 0x2000 as libc::c_int as libc::c_uint
-        | 0x1000 as libc::c_int as libc::c_uint;
+    s_controls.stepright.generic.id = 6 as i32;
+    s_controls.moveup.generic.type_0 = 2 as i32;
+    s_controls.moveup.generic.flags = 0x4 as i32 as u32
+        | 0x100 as i32 as u32
+        | 0x2000 as i32 as u32
+        | 0x1000 as i32 as u32;
     s_controls.moveup.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     s_controls.moveup.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_controls.moveup.generic.id = 7 as libc::c_int;
-    s_controls.movedown.generic.type_0 = 2 as libc::c_int;
-    s_controls.movedown.generic.flags = 0x4 as libc::c_int as libc::c_uint
-        | 0x100 as libc::c_int as libc::c_uint
-        | 0x2000 as libc::c_int as libc::c_uint
-        | 0x1000 as libc::c_int as libc::c_uint;
+    s_controls.moveup.generic.id = 7 as i32;
+    s_controls.movedown.generic.type_0 = 2 as i32;
+    s_controls.movedown.generic.flags = 0x4 as i32 as u32
+        | 0x100 as i32 as u32
+        | 0x2000 as i32 as u32
+        | 0x1000 as i32 as u32;
     s_controls.movedown.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     s_controls.movedown.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_controls.movedown.generic.id = 8 as libc::c_int;
-    s_controls.turnleft.generic.type_0 = 2 as libc::c_int;
-    s_controls.turnleft.generic.flags = 0x4 as libc::c_int as libc::c_uint
-        | 0x100 as libc::c_int as libc::c_uint
-        | 0x2000 as libc::c_int as libc::c_uint
-        | 0x1000 as libc::c_int as libc::c_uint;
+    s_controls.movedown.generic.id = 8 as i32;
+    s_controls.turnleft.generic.type_0 = 2 as i32;
+    s_controls.turnleft.generic.flags = 0x4 as i32 as u32
+        | 0x100 as i32 as u32
+        | 0x2000 as i32 as u32
+        | 0x1000 as i32 as u32;
     s_controls.turnleft.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     s_controls.turnleft.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_controls.turnleft.generic.id = 9 as libc::c_int;
-    s_controls.turnright.generic.type_0 = 2 as libc::c_int;
-    s_controls.turnright.generic.flags = 0x4 as libc::c_int as libc::c_uint
-        | 0x100 as libc::c_int as libc::c_uint
-        | 0x2000 as libc::c_int as libc::c_uint
-        | 0x1000 as libc::c_int as libc::c_uint;
+    s_controls.turnleft.generic.id = 9 as i32;
+    s_controls.turnright.generic.type_0 = 2 as i32;
+    s_controls.turnright.generic.flags = 0x4 as i32 as u32
+        | 0x100 as i32 as u32
+        | 0x2000 as i32 as u32
+        | 0x1000 as i32 as u32;
     s_controls.turnright.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     s_controls.turnright.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_controls.turnright.generic.id = 10 as libc::c_int;
-    s_controls.sidestep.generic.type_0 = 2 as libc::c_int;
-    s_controls.sidestep.generic.flags = 0x4 as libc::c_int as libc::c_uint
-        | 0x100 as libc::c_int as libc::c_uint
-        | 0x2000 as libc::c_int as libc::c_uint
-        | 0x1000 as libc::c_int as libc::c_uint;
+    s_controls.turnright.generic.id = 10 as i32;
+    s_controls.sidestep.generic.type_0 = 2 as i32;
+    s_controls.sidestep.generic.flags = 0x4 as i32 as u32
+        | 0x100 as i32 as u32
+        | 0x2000 as i32 as u32
+        | 0x1000 as i32 as u32;
     s_controls.sidestep.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     s_controls.sidestep.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_controls.sidestep.generic.id = 11 as libc::c_int;
-    s_controls.run.generic.type_0 = 2 as libc::c_int;
-    s_controls.run.generic.flags = 0x4 as libc::c_int as libc::c_uint
-        | 0x100 as libc::c_int as libc::c_uint
-        | 0x2000 as libc::c_int as libc::c_uint
-        | 0x1000 as libc::c_int as libc::c_uint;
+    s_controls.sidestep.generic.id = 11 as i32;
+    s_controls.run.generic.type_0 = 2 as i32;
+    s_controls.run.generic.flags = 0x4 as i32 as u32
+        | 0x100 as i32 as u32
+        | 0x2000 as i32 as u32
+        | 0x1000 as i32 as u32;
     s_controls.run.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     s_controls.run.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_controls.run.generic.id = 2 as libc::c_int;
-    s_controls.chainsaw.generic.type_0 = 2 as libc::c_int;
-    s_controls.chainsaw.generic.flags = 0x4 as libc::c_int as libc::c_uint
-        | 0x100 as libc::c_int as libc::c_uint
-        | 0x2000 as libc::c_int as libc::c_uint
-        | 0x1000 as libc::c_int as libc::c_uint;
+    s_controls.run.generic.id = 2 as i32;
+    s_controls.chainsaw.generic.type_0 = 2 as i32;
+    s_controls.chainsaw.generic.flags = 0x4 as i32 as u32
+        | 0x100 as i32 as u32
+        | 0x2000 as i32 as u32
+        | 0x1000 as i32 as u32;
     s_controls.chainsaw.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     s_controls.chainsaw.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_controls.chainsaw.generic.id = 17 as libc::c_int;
-    s_controls.machinegun.generic.type_0 = 2 as libc::c_int;
-    s_controls.machinegun.generic.flags = 0x4 as libc::c_int as libc::c_uint
-        | 0x100 as libc::c_int as libc::c_uint
-        | 0x2000 as libc::c_int as libc::c_uint
-        | 0x1000 as libc::c_int as libc::c_uint;
+    s_controls.chainsaw.generic.id = 17 as i32;
+    s_controls.machinegun.generic.type_0 = 2 as i32;
+    s_controls.machinegun.generic.flags = 0x4 as i32 as u32
+        | 0x100 as i32 as u32
+        | 0x2000 as i32 as u32
+        | 0x1000 as i32 as u32;
     s_controls.machinegun.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     s_controls.machinegun.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_controls.machinegun.generic.id = 18 as libc::c_int;
-    s_controls.shotgun.generic.type_0 = 2 as libc::c_int;
-    s_controls.shotgun.generic.flags = 0x4 as libc::c_int as libc::c_uint
-        | 0x100 as libc::c_int as libc::c_uint
-        | 0x2000 as libc::c_int as libc::c_uint
-        | 0x1000 as libc::c_int as libc::c_uint;
+    s_controls.machinegun.generic.id = 18 as i32;
+    s_controls.shotgun.generic.type_0 = 2 as i32;
+    s_controls.shotgun.generic.flags = 0x4 as i32 as u32
+        | 0x100 as i32 as u32
+        | 0x2000 as i32 as u32
+        | 0x1000 as i32 as u32;
     s_controls.shotgun.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     s_controls.shotgun.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_controls.shotgun.generic.id = 19 as libc::c_int;
-    s_controls.grenadelauncher.generic.type_0 = 2 as libc::c_int;
-    s_controls.grenadelauncher.generic.flags = 0x4 as libc::c_int as libc::c_uint
-        | 0x100 as libc::c_int as libc::c_uint
-        | 0x2000 as libc::c_int as libc::c_uint
-        | 0x1000 as libc::c_int as libc::c_uint;
+    s_controls.shotgun.generic.id = 19 as i32;
+    s_controls.grenadelauncher.generic.type_0 = 2 as i32;
+    s_controls.grenadelauncher.generic.flags = 0x4 as i32 as u32
+        | 0x100 as i32 as u32
+        | 0x2000 as i32 as u32
+        | 0x1000 as i32 as u32;
     s_controls.grenadelauncher.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     s_controls.grenadelauncher.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_controls.grenadelauncher.generic.id = 20 as libc::c_int;
-    s_controls.rocketlauncher.generic.type_0 = 2 as libc::c_int;
-    s_controls.rocketlauncher.generic.flags = 0x4 as libc::c_int as libc::c_uint
-        | 0x100 as libc::c_int as libc::c_uint
-        | 0x2000 as libc::c_int as libc::c_uint
-        | 0x1000 as libc::c_int as libc::c_uint;
+    s_controls.grenadelauncher.generic.id = 20 as i32;
+    s_controls.rocketlauncher.generic.type_0 = 2 as i32;
+    s_controls.rocketlauncher.generic.flags = 0x4 as i32 as u32
+        | 0x100 as i32 as u32
+        | 0x2000 as i32 as u32
+        | 0x1000 as i32 as u32;
     s_controls.rocketlauncher.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     s_controls.rocketlauncher.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_controls.rocketlauncher.generic.id = 21 as libc::c_int;
-    s_controls.lightning.generic.type_0 = 2 as libc::c_int;
-    s_controls.lightning.generic.flags = 0x4 as libc::c_int as libc::c_uint
-        | 0x100 as libc::c_int as libc::c_uint
-        | 0x2000 as libc::c_int as libc::c_uint
-        | 0x1000 as libc::c_int as libc::c_uint;
+    s_controls.rocketlauncher.generic.id = 21 as i32;
+    s_controls.lightning.generic.type_0 = 2 as i32;
+    s_controls.lightning.generic.flags = 0x4 as i32 as u32
+        | 0x100 as i32 as u32
+        | 0x2000 as i32 as u32
+        | 0x1000 as i32 as u32;
     s_controls.lightning.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     s_controls.lightning.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_controls.lightning.generic.id = 22 as libc::c_int;
-    s_controls.railgun.generic.type_0 = 2 as libc::c_int;
-    s_controls.railgun.generic.flags = 0x4 as libc::c_int as libc::c_uint
-        | 0x100 as libc::c_int as libc::c_uint
-        | 0x2000 as libc::c_int as libc::c_uint
-        | 0x1000 as libc::c_int as libc::c_uint;
+    s_controls.lightning.generic.id = 22 as i32;
+    s_controls.railgun.generic.type_0 = 2 as i32;
+    s_controls.railgun.generic.flags = 0x4 as i32 as u32
+        | 0x100 as i32 as u32
+        | 0x2000 as i32 as u32
+        | 0x1000 as i32 as u32;
     s_controls.railgun.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     s_controls.railgun.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_controls.railgun.generic.id = 23 as libc::c_int;
-    s_controls.plasma.generic.type_0 = 2 as libc::c_int;
-    s_controls.plasma.generic.flags = 0x4 as libc::c_int as libc::c_uint
-        | 0x100 as libc::c_int as libc::c_uint
-        | 0x2000 as libc::c_int as libc::c_uint
-        | 0x1000 as libc::c_int as libc::c_uint;
+    s_controls.railgun.generic.id = 23 as i32;
+    s_controls.plasma.generic.type_0 = 2 as i32;
+    s_controls.plasma.generic.flags = 0x4 as i32 as u32
+        | 0x100 as i32 as u32
+        | 0x2000 as i32 as u32
+        | 0x1000 as i32 as u32;
     s_controls.plasma.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     s_controls.plasma.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_controls.plasma.generic.id = 24 as libc::c_int;
-    s_controls.bfg.generic.type_0 = 2 as libc::c_int;
-    s_controls.bfg.generic.flags = 0x4 as libc::c_int as libc::c_uint
-        | 0x100 as libc::c_int as libc::c_uint
-        | 0x2000 as libc::c_int as libc::c_uint
-        | 0x1000 as libc::c_int as libc::c_uint;
+    s_controls.plasma.generic.id = 24 as i32;
+    s_controls.bfg.generic.type_0 = 2 as i32;
+    s_controls.bfg.generic.flags = 0x4 as i32 as u32
+        | 0x100 as i32 as u32
+        | 0x2000 as i32 as u32
+        | 0x1000 as i32 as u32;
     s_controls.bfg.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     s_controls.bfg.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_controls.bfg.generic.id = 25 as libc::c_int;
-    s_controls.attack.generic.type_0 = 2 as libc::c_int;
-    s_controls.attack.generic.flags = 0x4 as libc::c_int as libc::c_uint
-        | 0x100 as libc::c_int as libc::c_uint
-        | 0x2000 as libc::c_int as libc::c_uint
-        | 0x1000 as libc::c_int as libc::c_uint;
+    s_controls.bfg.generic.id = 25 as i32;
+    s_controls.attack.generic.type_0 = 2 as i32;
+    s_controls.attack.generic.flags = 0x4 as i32 as u32
+        | 0x100 as i32 as u32
+        | 0x2000 as i32 as u32
+        | 0x1000 as i32 as u32;
     s_controls.attack.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     s_controls.attack.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_controls.attack.generic.id = 26 as libc::c_int;
-    s_controls.prevweapon.generic.type_0 = 2 as libc::c_int;
-    s_controls.prevweapon.generic.flags = 0x4 as libc::c_int as libc::c_uint
-        | 0x100 as libc::c_int as libc::c_uint
-        | 0x2000 as libc::c_int as libc::c_uint
-        | 0x1000 as libc::c_int as libc::c_uint;
+    s_controls.attack.generic.id = 26 as i32;
+    s_controls.prevweapon.generic.type_0 = 2 as i32;
+    s_controls.prevweapon.generic.flags = 0x4 as i32 as u32
+        | 0x100 as i32 as u32
+        | 0x2000 as i32 as u32
+        | 0x1000 as i32 as u32;
     s_controls.prevweapon.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     s_controls.prevweapon.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_controls.prevweapon.generic.id = 27 as libc::c_int;
-    s_controls.nextweapon.generic.type_0 = 2 as libc::c_int;
-    s_controls.nextweapon.generic.flags = 0x4 as libc::c_int as libc::c_uint
-        | 0x100 as libc::c_int as libc::c_uint
-        | 0x2000 as libc::c_int as libc::c_uint
-        | 0x1000 as libc::c_int as libc::c_uint;
+    s_controls.prevweapon.generic.id = 27 as i32;
+    s_controls.nextweapon.generic.type_0 = 2 as i32;
+    s_controls.nextweapon.generic.flags = 0x4 as i32 as u32
+        | 0x100 as i32 as u32
+        | 0x2000 as i32 as u32
+        | 0x1000 as i32 as u32;
     s_controls.nextweapon.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     s_controls.nextweapon.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_controls.nextweapon.generic.id = 28 as libc::c_int;
-    s_controls.lookup.generic.type_0 = 2 as libc::c_int;
-    s_controls.lookup.generic.flags = 0x4 as libc::c_int as libc::c_uint
-        | 0x100 as libc::c_int as libc::c_uint
-        | 0x2000 as libc::c_int as libc::c_uint
-        | 0x1000 as libc::c_int as libc::c_uint;
+    s_controls.nextweapon.generic.id = 28 as i32;
+    s_controls.lookup.generic.type_0 = 2 as i32;
+    s_controls.lookup.generic.flags = 0x4 as i32 as u32
+        | 0x100 as i32 as u32
+        | 0x2000 as i32 as u32
+        | 0x1000 as i32 as u32;
     s_controls.lookup.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     s_controls.lookup.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_controls.lookup.generic.id = 12 as libc::c_int;
-    s_controls.lookdown.generic.type_0 = 2 as libc::c_int;
-    s_controls.lookdown.generic.flags = 0x4 as libc::c_int as libc::c_uint
-        | 0x100 as libc::c_int as libc::c_uint
-        | 0x2000 as libc::c_int as libc::c_uint
-        | 0x1000 as libc::c_int as libc::c_uint;
+    s_controls.lookup.generic.id = 12 as i32;
+    s_controls.lookdown.generic.type_0 = 2 as i32;
+    s_controls.lookdown.generic.flags = 0x4 as i32 as u32
+        | 0x100 as i32 as u32
+        | 0x2000 as i32 as u32
+        | 0x1000 as i32 as u32;
     s_controls.lookdown.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     s_controls.lookdown.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_controls.lookdown.generic.id = 13 as libc::c_int;
-    s_controls.mouselook.generic.type_0 = 2 as libc::c_int;
-    s_controls.mouselook.generic.flags = 0x4 as libc::c_int as libc::c_uint
-        | 0x80 as libc::c_int as libc::c_uint
-        | 0x2000 as libc::c_int as libc::c_uint
-        | 0x1000 as libc::c_int as libc::c_uint;
+    s_controls.lookdown.generic.id = 13 as i32;
+    s_controls.mouselook.generic.type_0 = 2 as i32;
+    s_controls.mouselook.generic.flags = 0x4 as i32 as u32
+        | 0x80 as i32 as u32
+        | 0x2000 as i32 as u32
+        | 0x1000 as i32 as u32;
     s_controls.mouselook.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     s_controls.mouselook.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_controls.mouselook.generic.id = 14 as libc::c_int;
-    s_controls.freelook.generic.type_0 = 5 as libc::c_int;
-    s_controls.freelook.generic.flags = 0x2 as libc::c_int as libc::c_uint;
-    s_controls.freelook.generic.x = 640 as libc::c_int / 2 as libc::c_int;
+    s_controls.mouselook.generic.id = 14 as i32;
+    s_controls.freelook.generic.type_0 = 5 as i32;
+    s_controls.freelook.generic.flags = 0x2 as i32 as u32;
+    s_controls.freelook.generic.x = 640 as i32 / 2 as i32;
     s_controls.freelook.generic.name = b"free look\x00" as *const u8 as *const libc::c_char;
-    s_controls.freelook.generic.id = 35 as libc::c_int;
+    s_controls.freelook.generic.id = 35 as i32;
     s_controls.freelook.generic.callback = Some(
-        Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     s_controls.freelook.generic.statusbar =
         Some(Controls_StatusBar as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_controls.centerview.generic.type_0 = 2 as libc::c_int;
-    s_controls.centerview.generic.flags = 0x4 as libc::c_int as libc::c_uint
-        | 0x100 as libc::c_int as libc::c_uint
-        | 0x2000 as libc::c_int as libc::c_uint
-        | 0x1000 as libc::c_int as libc::c_uint;
+    s_controls.centerview.generic.type_0 = 2 as i32;
+    s_controls.centerview.generic.flags = 0x4 as i32 as u32
+        | 0x100 as i32 as u32
+        | 0x2000 as i32 as u32
+        | 0x1000 as i32 as u32;
     s_controls.centerview.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     s_controls.centerview.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_controls.centerview.generic.id = 15 as libc::c_int;
-    s_controls.zoomview.generic.type_0 = 2 as libc::c_int;
-    s_controls.zoomview.generic.flags = 0x4 as libc::c_int as libc::c_uint
-        | 0x100 as libc::c_int as libc::c_uint
-        | 0x2000 as libc::c_int as libc::c_uint
-        | 0x1000 as libc::c_int as libc::c_uint;
+    s_controls.centerview.generic.id = 15 as i32;
+    s_controls.zoomview.generic.type_0 = 2 as i32;
+    s_controls.zoomview.generic.flags = 0x4 as i32 as u32
+        | 0x100 as i32 as u32
+        | 0x2000 as i32 as u32
+        | 0x1000 as i32 as u32;
     s_controls.zoomview.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     s_controls.zoomview.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_controls.zoomview.generic.id = 16 as libc::c_int;
-    s_controls.useitem.generic.type_0 = 2 as libc::c_int;
-    s_controls.useitem.generic.flags = 0x4 as libc::c_int as libc::c_uint
-        | 0x100 as libc::c_int as libc::c_uint
-        | 0x2000 as libc::c_int as libc::c_uint
-        | 0x1000 as libc::c_int as libc::c_uint;
+    s_controls.zoomview.generic.id = 16 as i32;
+    s_controls.useitem.generic.type_0 = 2 as i32;
+    s_controls.useitem.generic.flags = 0x4 as i32 as u32
+        | 0x100 as i32 as u32
+        | 0x2000 as i32 as u32
+        | 0x1000 as i32 as u32;
     s_controls.useitem.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     s_controls.useitem.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_controls.useitem.generic.id = 1 as libc::c_int;
-    s_controls.showscores.generic.type_0 = 2 as libc::c_int;
-    s_controls.showscores.generic.flags = 0x4 as libc::c_int as libc::c_uint
-        | 0x100 as libc::c_int as libc::c_uint
-        | 0x2000 as libc::c_int as libc::c_uint
-        | 0x1000 as libc::c_int as libc::c_uint;
+    s_controls.useitem.generic.id = 1 as i32;
+    s_controls.showscores.generic.type_0 = 2 as i32;
+    s_controls.showscores.generic.flags = 0x4 as i32 as u32
+        | 0x100 as i32 as u32
+        | 0x2000 as i32 as u32
+        | 0x1000 as i32 as u32;
     s_controls.showscores.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     s_controls.showscores.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_controls.showscores.generic.id = 0 as libc::c_int;
-    s_controls.invertmouse.generic.type_0 = 5 as libc::c_int;
-    s_controls.invertmouse.generic.flags = 0x2 as libc::c_int as libc::c_uint;
-    s_controls.invertmouse.generic.x = 640 as libc::c_int / 2 as libc::c_int;
+    s_controls.showscores.generic.id = 0 as i32;
+    s_controls.invertmouse.generic.type_0 = 5 as i32;
+    s_controls.invertmouse.generic.flags = 0x2 as i32 as u32;
+    s_controls.invertmouse.generic.x = 640 as i32 / 2 as i32;
     s_controls.invertmouse.generic.name = b"invert mouse\x00" as *const u8 as *const libc::c_char;
-    s_controls.invertmouse.generic.id = 36 as libc::c_int;
+    s_controls.invertmouse.generic.id = 36 as i32;
     s_controls.invertmouse.generic.callback = Some(
-        Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     s_controls.invertmouse.generic.statusbar =
         Some(Controls_StatusBar as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_controls.smoothmouse.generic.type_0 = 5 as libc::c_int;
-    s_controls.smoothmouse.generic.flags = 0x2 as libc::c_int as libc::c_uint;
-    s_controls.smoothmouse.generic.x = 640 as libc::c_int / 2 as libc::c_int;
+    s_controls.smoothmouse.generic.type_0 = 5 as i32;
+    s_controls.smoothmouse.generic.flags = 0x2 as i32 as u32;
+    s_controls.smoothmouse.generic.x = 640 as i32 / 2 as i32;
     s_controls.smoothmouse.generic.name = b"smooth mouse\x00" as *const u8 as *const libc::c_char;
-    s_controls.smoothmouse.generic.id = 42 as libc::c_int;
+    s_controls.smoothmouse.generic.id = 42 as i32;
     s_controls.smoothmouse.generic.callback = Some(
-        Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     s_controls.smoothmouse.generic.statusbar =
         Some(Controls_StatusBar as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_controls.alwaysrun.generic.type_0 = 5 as libc::c_int;
-    s_controls.alwaysrun.generic.flags = 0x2 as libc::c_int as libc::c_uint;
-    s_controls.alwaysrun.generic.x = 640 as libc::c_int / 2 as libc::c_int;
+    s_controls.alwaysrun.generic.type_0 = 5 as i32;
+    s_controls.alwaysrun.generic.flags = 0x2 as i32 as u32;
+    s_controls.alwaysrun.generic.x = 640 as i32 / 2 as i32;
     s_controls.alwaysrun.generic.name = b"always run\x00" as *const u8 as *const libc::c_char;
-    s_controls.alwaysrun.generic.id = 37 as libc::c_int;
+    s_controls.alwaysrun.generic.id = 37 as i32;
     s_controls.alwaysrun.generic.callback = Some(
-        Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     s_controls.alwaysrun.generic.statusbar =
         Some(Controls_StatusBar as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_controls.autoswitch.generic.type_0 = 5 as libc::c_int;
-    s_controls.autoswitch.generic.flags = 0x2 as libc::c_int as libc::c_uint;
-    s_controls.autoswitch.generic.x = 640 as libc::c_int / 2 as libc::c_int;
+    s_controls.autoswitch.generic.type_0 = 5 as i32;
+    s_controls.autoswitch.generic.flags = 0x2 as i32 as u32;
+    s_controls.autoswitch.generic.x = 640 as i32 / 2 as i32;
     s_controls.autoswitch.generic.name =
         b"autoswitch weapons\x00" as *const u8 as *const libc::c_char;
-    s_controls.autoswitch.generic.id = 38 as libc::c_int;
+    s_controls.autoswitch.generic.id = 38 as i32;
     s_controls.autoswitch.generic.callback = Some(
-        Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     s_controls.autoswitch.generic.statusbar =
         Some(Controls_StatusBar as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_controls.sensitivity.generic.type_0 = 1 as libc::c_int;
-    s_controls.sensitivity.generic.x = 640 as libc::c_int / 2 as libc::c_int;
-    s_controls.sensitivity.generic.flags = 0x2 as libc::c_int as libc::c_uint;
+    s_controls.sensitivity.generic.type_0 = 1 as i32;
+    s_controls.sensitivity.generic.x = 640 as i32 / 2 as i32;
+    s_controls.sensitivity.generic.flags = 0x2 as i32 as u32;
     s_controls.sensitivity.generic.name = b"mouse speed\x00" as *const u8 as *const libc::c_char;
-    s_controls.sensitivity.generic.id = 39 as libc::c_int;
+    s_controls.sensitivity.generic.id = 39 as i32;
     s_controls.sensitivity.generic.callback = Some(
-        Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    s_controls.sensitivity.minvalue = 2 as libc::c_int as libc::c_float;
-    s_controls.sensitivity.maxvalue = 30 as libc::c_int as libc::c_float;
+    s_controls.sensitivity.minvalue = 2 as i32 as f32;
+    s_controls.sensitivity.maxvalue = 30 as i32 as f32;
     s_controls.sensitivity.generic.statusbar =
         Some(Controls_StatusBar as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_controls.gesture.generic.type_0 = 2 as libc::c_int;
-    s_controls.gesture.generic.flags = 0x4 as libc::c_int as libc::c_uint
-        | 0x100 as libc::c_int as libc::c_uint
-        | 0x2000 as libc::c_int as libc::c_uint
-        | 0x1000 as libc::c_int as libc::c_uint;
+    s_controls.gesture.generic.type_0 = 2 as i32;
+    s_controls.gesture.generic.flags = 0x4 as i32 as u32
+        | 0x100 as i32 as u32
+        | 0x2000 as i32 as u32
+        | 0x1000 as i32 as u32;
     s_controls.gesture.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     s_controls.gesture.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_controls.gesture.generic.id = 29 as libc::c_int;
-    s_controls.chat.generic.type_0 = 2 as libc::c_int;
-    s_controls.chat.generic.flags = 0x4 as libc::c_int as libc::c_uint
-        | 0x100 as libc::c_int as libc::c_uint
-        | 0x2000 as libc::c_int as libc::c_uint
-        | 0x1000 as libc::c_int as libc::c_uint;
+    s_controls.gesture.generic.id = 29 as i32;
+    s_controls.chat.generic.type_0 = 2 as i32;
+    s_controls.chat.generic.flags = 0x4 as i32 as u32
+        | 0x100 as i32 as u32
+        | 0x2000 as i32 as u32
+        | 0x1000 as i32 as u32;
     s_controls.chat.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     s_controls.chat.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_controls.chat.generic.id = 30 as libc::c_int;
-    s_controls.chat2.generic.type_0 = 2 as libc::c_int;
-    s_controls.chat2.generic.flags = 0x4 as libc::c_int as libc::c_uint
-        | 0x100 as libc::c_int as libc::c_uint
-        | 0x2000 as libc::c_int as libc::c_uint
-        | 0x1000 as libc::c_int as libc::c_uint;
+    s_controls.chat.generic.id = 30 as i32;
+    s_controls.chat2.generic.type_0 = 2 as i32;
+    s_controls.chat2.generic.flags = 0x4 as i32 as u32
+        | 0x100 as i32 as u32
+        | 0x2000 as i32 as u32
+        | 0x1000 as i32 as u32;
     s_controls.chat2.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     s_controls.chat2.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_controls.chat2.generic.id = 31 as libc::c_int;
-    s_controls.chat3.generic.type_0 = 2 as libc::c_int;
-    s_controls.chat3.generic.flags = 0x4 as libc::c_int as libc::c_uint
-        | 0x100 as libc::c_int as libc::c_uint
-        | 0x2000 as libc::c_int as libc::c_uint
-        | 0x1000 as libc::c_int as libc::c_uint;
+    s_controls.chat2.generic.id = 31 as i32;
+    s_controls.chat3.generic.type_0 = 2 as i32;
+    s_controls.chat3.generic.flags = 0x4 as i32 as u32
+        | 0x100 as i32 as u32
+        | 0x2000 as i32 as u32
+        | 0x1000 as i32 as u32;
     s_controls.chat3.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     s_controls.chat3.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_controls.chat3.generic.id = 32 as libc::c_int;
-    s_controls.chat4.generic.type_0 = 2 as libc::c_int;
-    s_controls.chat4.generic.flags = 0x4 as libc::c_int as libc::c_uint
-        | 0x100 as libc::c_int as libc::c_uint
-        | 0x2000 as libc::c_int as libc::c_uint
-        | 0x1000 as libc::c_int as libc::c_uint;
+    s_controls.chat3.generic.id = 32 as i32;
+    s_controls.chat4.generic.type_0 = 2 as i32;
+    s_controls.chat4.generic.flags = 0x4 as i32 as u32
+        | 0x100 as i32 as u32
+        | 0x2000 as i32 as u32
+        | 0x1000 as i32 as u32;
     s_controls.chat4.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     s_controls.chat4.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_controls.chat4.generic.id = 33 as libc::c_int;
-    s_controls.togglemenu.generic.type_0 = 2 as libc::c_int;
-    s_controls.togglemenu.generic.flags = 0x4 as libc::c_int as libc::c_uint
-        | 0x100 as libc::c_int as libc::c_uint
-        | 0x2000 as libc::c_int as libc::c_uint
-        | 0x1000 as libc::c_int as libc::c_uint;
+    s_controls.chat4.generic.id = 33 as i32;
+    s_controls.togglemenu.generic.type_0 = 2 as i32;
+    s_controls.togglemenu.generic.flags = 0x4 as i32 as u32
+        | 0x100 as i32 as u32
+        | 0x2000 as i32 as u32
+        | 0x1000 as i32 as u32;
     s_controls.togglemenu.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     s_controls.togglemenu.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_controls.togglemenu.generic.id = 34 as libc::c_int;
-    s_controls.joyenable.generic.type_0 = 5 as libc::c_int;
-    s_controls.joyenable.generic.flags = 0x2 as libc::c_int as libc::c_uint;
-    s_controls.joyenable.generic.x = 640 as libc::c_int / 2 as libc::c_int;
+    s_controls.togglemenu.generic.id = 34 as i32;
+    s_controls.joyenable.generic.type_0 = 5 as i32;
+    s_controls.joyenable.generic.flags = 0x2 as i32 as u32;
+    s_controls.joyenable.generic.x = 640 as i32 / 2 as i32;
     s_controls.joyenable.generic.name = b"joystick\x00" as *const u8 as *const libc::c_char;
-    s_controls.joyenable.generic.id = 40 as libc::c_int;
+    s_controls.joyenable.generic.id = 40 as i32;
     s_controls.joyenable.generic.callback = Some(
-        Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     s_controls.joyenable.generic.statusbar =
         Some(Controls_StatusBar as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_controls.joythreshold.generic.type_0 = 1 as libc::c_int;
-    s_controls.joythreshold.generic.x = 640 as libc::c_int / 2 as libc::c_int;
-    s_controls.joythreshold.generic.flags = 0x2 as libc::c_int as libc::c_uint;
+    s_controls.joythreshold.generic.type_0 = 1 as i32;
+    s_controls.joythreshold.generic.x = 640 as i32 / 2 as i32;
+    s_controls.joythreshold.generic.flags = 0x2 as i32 as u32;
     s_controls.joythreshold.generic.name =
         b"joystick threshold\x00" as *const u8 as *const libc::c_char;
-    s_controls.joythreshold.generic.id = 41 as libc::c_int;
+    s_controls.joythreshold.generic.id = 41 as i32;
     s_controls.joythreshold.generic.callback = Some(
-        Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     s_controls.joythreshold.minvalue = 0.05f32;
     s_controls.joythreshold.maxvalue = 0.75f32;
     s_controls.joythreshold.generic.statusbar =
         Some(Controls_StatusBar as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_controls.name.generic.type_0 = 9 as libc::c_int;
+    s_controls.name.generic.type_0 = 9 as i32;
     s_controls.name.generic.flags =
-        0x8 as libc::c_int as libc::c_uint | 0x4000 as libc::c_int as libc::c_uint;
-    s_controls.name.generic.x = 320 as libc::c_int;
-    s_controls.name.generic.y = 440 as libc::c_int;
+        0x8 as i32 as u32 | 0x4000 as i32 as u32;
+    s_controls.name.generic.x = 320 as i32;
+    s_controls.name.generic.y = 440 as i32;
     s_controls.name.string = playername.as_mut_ptr();
-    s_controls.name.style = 0x1 as libc::c_int;
+    s_controls.name.style = 0x1 as i32;
     s_controls.name.color = crate::src::q3_ui::ui_qmenu::text_color_normal.as_mut_ptr();
     crate::src::q3_ui::ui_qmenu::Menu_AddItem(
         &mut s_controls.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
@@ -4085,7 +4085,7 @@ unsafe extern "C" fn Controls_MenuInit() {
     crate::src::ui::ui_syscalls::trap_Cvar_VariableStringBuffer(
         b"name\x00" as *const u8 as *const libc::c_char,
         s_controls.name.string,
-        16 as libc::c_int,
+        16 as i32,
     );
     crate::src::qcommon::q_shared::Q_CleanStr(s_controls.name.string);
     // initialize the configurable cvars
@@ -4097,7 +4097,7 @@ unsafe extern "C" fn Controls_MenuInit() {
     // intialize the weapons
     Controls_InitWeapons();
     // initial default section
-    s_controls.section = 1 as libc::c_int;
+    s_controls.section = 1 as i32;
     // update the ui
     Controls_Update();
 }

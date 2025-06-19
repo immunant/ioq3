@@ -3,18 +3,18 @@
 pub struct entityShared_t {
     pub unused: crate::src::qcommon::q_shared::entityState_t,
     pub linked: crate::src::qcommon::q_shared::qboolean,
-    pub linkcount: libc::c_int,
-    pub svFlags: libc::c_int,
-    pub singleClient: libc::c_int,
+    pub linkcount: i32,
+    pub svFlags: i32,
+    pub singleClient: i32,
     pub bmodel: crate::src::qcommon::q_shared::qboolean,
     pub mins: crate::src::qcommon::q_shared::vec3_t,
     pub maxs: crate::src::qcommon::q_shared::vec3_t,
-    pub contents: libc::c_int,
+    pub contents: i32,
     pub absmin: crate::src::qcommon::q_shared::vec3_t,
     pub absmax: crate::src::qcommon::q_shared::vec3_t,
     pub currentOrigin: crate::src::qcommon::q_shared::vec3_t,
     pub currentAngles: crate::src::qcommon::q_shared::vec3_t,
-    pub ownerNum: libc::c_int,
+    pub ownerNum: i32,
 }
 pub const G_PRINT: crate::bg_public_h::C2RustUnnamed_0 = 0;
 pub const G_ERROR: crate::bg_public_h::C2RustUnnamed_0 = 1;

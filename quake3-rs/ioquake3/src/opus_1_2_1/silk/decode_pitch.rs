@@ -40,63 +40,63 @@ POSSIBILITY OF SUCH DAMAGE.
 
 pub unsafe extern "C" fn silk_decode_pitch(
     mut lagIndex: crate::opus_types_h::opus_int16,
-    mut contourIndex: libc::c_schar,
-    mut pitch_lags: *mut libc::c_int,
-    Fs_kHz: libc::c_int,
-    nb_subfr: libc::c_int,
+    mut contourIndex: i8,
+    mut pitch_lags: *mut i32,
+    Fs_kHz: i32,
+    nb_subfr: i32,
 )
 /* I    number of sub frames                                        */
 {
-    let mut lag: libc::c_int = 0;
-    let mut k: libc::c_int = 0;
-    let mut min_lag: libc::c_int = 0;
-    let mut max_lag: libc::c_int = 0;
-    let mut cbk_size: libc::c_int = 0;
-    let mut Lag_CB_ptr: *const libc::c_schar = 0 as *const libc::c_schar;
-    if Fs_kHz == 8 as libc::c_int {
-        if nb_subfr == 4 as libc::c_int {
+    let mut lag: i32 = 0;
+    let mut k: i32 = 0;
+    let mut min_lag: i32 = 0;
+    let mut max_lag: i32 = 0;
+    let mut cbk_size: i32 = 0;
+    let mut Lag_CB_ptr: *const i8 = 0 as *const i8;
+    if Fs_kHz == 8 as i32 {
+        if nb_subfr == 4 as i32 {
             Lag_CB_ptr = &*(*crate::src::opus_1_2_1::silk::pitch_est_tables::silk_CB_lags_stage2
                 .as_ptr()
-                .offset(0 as libc::c_int as isize))
+                .offset(0 as i32 as isize))
             .as_ptr()
-            .offset(0 as libc::c_int as isize) as *const libc::c_schar;
-            cbk_size = 11 as libc::c_int
+            .offset(0 as i32 as isize) as *const i8;
+            cbk_size = 11 as i32
         } else {
             Lag_CB_ptr =
                 &*(*crate::src::opus_1_2_1::silk::pitch_est_tables::silk_CB_lags_stage2_10_ms
                     .as_ptr()
-                    .offset(0 as libc::c_int as isize))
+                    .offset(0 as i32 as isize))
                 .as_ptr()
-                .offset(0 as libc::c_int as isize) as *const libc::c_schar;
-            cbk_size = 3 as libc::c_int
+                .offset(0 as i32 as isize) as *const i8;
+            cbk_size = 3 as i32
         }
-    } else if nb_subfr == 4 as libc::c_int {
+    } else if nb_subfr == 4 as i32 {
         Lag_CB_ptr = &*(*crate::src::opus_1_2_1::silk::pitch_est_tables::silk_CB_lags_stage3
             .as_ptr()
-            .offset(0 as libc::c_int as isize))
+            .offset(0 as i32 as isize))
         .as_ptr()
-        .offset(0 as libc::c_int as isize) as *const libc::c_schar;
-        cbk_size = 34 as libc::c_int
+        .offset(0 as i32 as isize) as *const i8;
+        cbk_size = 34 as i32
     } else {
         Lag_CB_ptr = &*(*crate::src::opus_1_2_1::silk::pitch_est_tables::silk_CB_lags_stage3_10_ms
             .as_ptr()
-            .offset(0 as libc::c_int as isize))
+            .offset(0 as i32 as isize))
         .as_ptr()
-        .offset(0 as libc::c_int as isize) as *const libc::c_schar;
-        cbk_size = 12 as libc::c_int
+        .offset(0 as i32 as isize) as *const i8;
+        cbk_size = 12 as i32
     }
-    min_lag = 2 as libc::c_int as crate::opus_types_h::opus_int16
+    min_lag = 2 as i32 as crate::opus_types_h::opus_int16
         as crate::opus_types_h::opus_int32
         * Fs_kHz as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32;
-    max_lag = 18 as libc::c_int as crate::opus_types_h::opus_int16
+    max_lag = 18 as i32 as crate::opus_types_h::opus_int16
         as crate::opus_types_h::opus_int32
         * Fs_kHz as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32;
-    lag = min_lag + lagIndex as libc::c_int;
-    k = 0 as libc::c_int;
+    lag = min_lag + lagIndex as i32;
+    k = 0 as i32;
     while k < nb_subfr {
         *pitch_lags.offset(k as isize) = lag
-            + *Lag_CB_ptr.offset((k * cbk_size + contourIndex as libc::c_int) as isize)
-                as libc::c_int;
+            + *Lag_CB_ptr.offset((k * cbk_size + contourIndex as i32) as isize)
+                as i32;
         *pitch_lags.offset(k as isize) = if min_lag > max_lag {
             if *pitch_lags.offset(k as isize) > min_lag {
                 min_lag

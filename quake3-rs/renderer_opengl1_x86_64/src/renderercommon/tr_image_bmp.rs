@@ -38,21 +38,21 @@ pub union C2RustUnnamed_82 {
 #[derive(Copy, Clone)]
 pub struct BMPHeader_t {
     pub id: [libc::c_char; 2],
-    pub fileSize: libc::c_uint,
-    pub reserved0: libc::c_uint,
-    pub bitmapDataOffset: libc::c_uint,
-    pub bitmapHeaderSize: libc::c_uint,
-    pub width: libc::c_uint,
-    pub height: libc::c_uint,
-    pub planes: libc::c_ushort,
-    pub bitsPerPixel: libc::c_ushort,
-    pub compression: libc::c_uint,
-    pub bitmapDataSize: libc::c_uint,
-    pub hRes: libc::c_uint,
-    pub vRes: libc::c_uint,
-    pub colors: libc::c_uint,
-    pub importantColors: libc::c_uint,
-    pub palette: [[libc::c_uchar; 4]; 256],
+    pub fileSize: u32,
+    pub reserved0: u32,
+    pub bitmapDataOffset: u32,
+    pub bitmapHeaderSize: u32,
+    pub width: u32,
+    pub height: u32,
+    pub planes: u16,
+    pub bitsPerPixel: u16,
+    pub compression: u32,
+    pub bitmapDataSize: u32,
+    pub hRes: u32,
+    pub vRes: u32,
+    pub colors: u32,
+    pub importantColors: u32,
+    pub palette: [[u8; 4]; 256],
 }
 /*
 ===========================================================================
@@ -120,16 +120,16 @@ IMAGE LOADERS
 pub unsafe extern "C" fn R_LoadBMP(
     mut name: *const libc::c_char,
     mut pic: *mut *mut crate::src::qcommon::q_shared::byte,
-    mut width: *mut libc::c_int,
-    mut height: *mut libc::c_int,
+    mut width: *mut i32,
+    mut height: *mut i32,
 ) {
-    let mut columns: libc::c_int = 0;
-    let mut rows: libc::c_int = 0;
-    let mut numPixels: libc::c_uint = 0;
+    let mut columns: i32 = 0;
+    let mut rows: i32 = 0;
+    let mut numPixels: u32 = 0;
     let mut pixbuf: *mut crate::src::qcommon::q_shared::byte =
         0 as *mut crate::src::qcommon::q_shared::byte;
-    let mut row: libc::c_int = 0;
-    let mut column: libc::c_int = 0;
+    let mut row: i32 = 0;
+    let mut column: i32 = 0;
     let mut buf_p: *mut crate::src::qcommon::q_shared::byte =
         0 as *mut crate::src::qcommon::q_shared::byte;
     let mut end: *mut crate::src::qcommon::q_shared::byte =
@@ -137,7 +137,7 @@ pub unsafe extern "C" fn R_LoadBMP(
     let mut buffer: C2RustUnnamed_82 = C2RustUnnamed_82 {
         b: 0 as *mut crate::src::qcommon::q_shared::byte,
     };
-    let mut length: libc::c_int = 0;
+    let mut length: i32 = 0;
     let mut bmpHeader: BMPHeader_t = BMPHeader_t {
         id: [0; 2],
         fileSize: 0,
@@ -160,10 +160,10 @@ pub unsafe extern "C" fn R_LoadBMP(
         0 as *mut crate::src::qcommon::q_shared::byte;
     *pic = 0 as *mut crate::src::qcommon::q_shared::byte;
     if !width.is_null() {
-        *width = 0 as libc::c_int
+        *width = 0 as i32
     }
     if !height.is_null() {
-        *height = 0 as libc::c_int
+        *height = 0 as i32
     }
     //
     // load the file
@@ -171,15 +171,15 @@ pub unsafe extern "C" fn R_LoadBMP(
     length = crate::src::renderergl1::tr_main::ri
         .FS_ReadFile
         .expect("non-null function pointer")(name as *mut libc::c_char, &mut buffer.v)
-        as libc::c_int;
-    if buffer.b.is_null() || length < 0 as libc::c_int {
+        as i32;
+    if buffer.b.is_null() || length < 0 as i32 {
         return;
     }
-    if length < 54 as libc::c_int {
+    if length < 54 as i32 {
         crate::src::renderergl1::tr_main::ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"LoadBMP: header too short (%s)\x00" as *const u8 as *const libc::c_char,
             name,
         );
@@ -188,47 +188,47 @@ pub unsafe extern "C" fn R_LoadBMP(
     end = buffer.b.offset(length as isize);
     let fresh0 = buf_p;
     buf_p = buf_p.offset(1);
-    bmpHeader.id[0 as libc::c_int as usize] = *fresh0 as libc::c_char;
+    bmpHeader.id[0 as i32 as usize] = *fresh0 as libc::c_char;
     let fresh1 = buf_p;
     buf_p = buf_p.offset(1);
-    bmpHeader.id[1 as libc::c_int as usize] = *fresh1 as libc::c_char;
-    bmpHeader.fileSize = *(buf_p as *mut libc::c_int) as libc::c_uint;
-    buf_p = buf_p.offset(4 as libc::c_int as isize);
-    bmpHeader.reserved0 = *(buf_p as *mut libc::c_int) as libc::c_uint;
-    buf_p = buf_p.offset(4 as libc::c_int as isize);
-    bmpHeader.bitmapDataOffset = *(buf_p as *mut libc::c_int) as libc::c_uint;
-    buf_p = buf_p.offset(4 as libc::c_int as isize);
-    bmpHeader.bitmapHeaderSize = *(buf_p as *mut libc::c_int) as libc::c_uint;
-    buf_p = buf_p.offset(4 as libc::c_int as isize);
-    bmpHeader.width = *(buf_p as *mut libc::c_int) as libc::c_uint;
-    buf_p = buf_p.offset(4 as libc::c_int as isize);
-    bmpHeader.height = *(buf_p as *mut libc::c_int) as libc::c_uint;
-    buf_p = buf_p.offset(4 as libc::c_int as isize);
-    bmpHeader.planes = *(buf_p as *mut libc::c_short) as libc::c_ushort;
-    buf_p = buf_p.offset(2 as libc::c_int as isize);
-    bmpHeader.bitsPerPixel = *(buf_p as *mut libc::c_short) as libc::c_ushort;
-    buf_p = buf_p.offset(2 as libc::c_int as isize);
-    bmpHeader.compression = *(buf_p as *mut libc::c_int) as libc::c_uint;
-    buf_p = buf_p.offset(4 as libc::c_int as isize);
-    bmpHeader.bitmapDataSize = *(buf_p as *mut libc::c_int) as libc::c_uint;
-    buf_p = buf_p.offset(4 as libc::c_int as isize);
-    bmpHeader.hRes = *(buf_p as *mut libc::c_int) as libc::c_uint;
-    buf_p = buf_p.offset(4 as libc::c_int as isize);
-    bmpHeader.vRes = *(buf_p as *mut libc::c_int) as libc::c_uint;
-    buf_p = buf_p.offset(4 as libc::c_int as isize);
-    bmpHeader.colors = *(buf_p as *mut libc::c_int) as libc::c_uint;
-    buf_p = buf_p.offset(4 as libc::c_int as isize);
-    bmpHeader.importantColors = *(buf_p as *mut libc::c_int) as libc::c_uint;
-    buf_p = buf_p.offset(4 as libc::c_int as isize);
-    if bmpHeader.bitsPerPixel as libc::c_int == 8 as libc::c_int {
+    bmpHeader.id[1 as i32 as usize] = *fresh1 as libc::c_char;
+    bmpHeader.fileSize = *(buf_p as *mut i32) as u32;
+    buf_p = buf_p.offset(4 as i32 as isize);
+    bmpHeader.reserved0 = *(buf_p as *mut i32) as u32;
+    buf_p = buf_p.offset(4 as i32 as isize);
+    bmpHeader.bitmapDataOffset = *(buf_p as *mut i32) as u32;
+    buf_p = buf_p.offset(4 as i32 as isize);
+    bmpHeader.bitmapHeaderSize = *(buf_p as *mut i32) as u32;
+    buf_p = buf_p.offset(4 as i32 as isize);
+    bmpHeader.width = *(buf_p as *mut i32) as u32;
+    buf_p = buf_p.offset(4 as i32 as isize);
+    bmpHeader.height = *(buf_p as *mut i32) as u32;
+    buf_p = buf_p.offset(4 as i32 as isize);
+    bmpHeader.planes = *(buf_p as *mut i16) as u16;
+    buf_p = buf_p.offset(2 as i32 as isize);
+    bmpHeader.bitsPerPixel = *(buf_p as *mut i16) as u16;
+    buf_p = buf_p.offset(2 as i32 as isize);
+    bmpHeader.compression = *(buf_p as *mut i32) as u32;
+    buf_p = buf_p.offset(4 as i32 as isize);
+    bmpHeader.bitmapDataSize = *(buf_p as *mut i32) as u32;
+    buf_p = buf_p.offset(4 as i32 as isize);
+    bmpHeader.hRes = *(buf_p as *mut i32) as u32;
+    buf_p = buf_p.offset(4 as i32 as isize);
+    bmpHeader.vRes = *(buf_p as *mut i32) as u32;
+    buf_p = buf_p.offset(4 as i32 as isize);
+    bmpHeader.colors = *(buf_p as *mut i32) as u32;
+    buf_p = buf_p.offset(4 as i32 as isize);
+    bmpHeader.importantColors = *(buf_p as *mut i32) as u32;
+    buf_p = buf_p.offset(4 as i32 as isize);
+    if bmpHeader.bitsPerPixel as i32 == 8 as i32 {
         if buf_p
-            .offset(::std::mem::size_of::<[[libc::c_uchar; 4]; 256]>() as libc::c_ulong as isize)
+            .offset(::std::mem::size_of::<[[u8; 4]; 256]>() as libc::c_ulong as isize)
             > end
         {
             crate::src::renderergl1::tr_main::ri
                 .Error
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+                crate::src::qcommon::q_shared::ERR_DROP as i32,
                 b"LoadBMP: header too short (%s)\x00" as *const u8 as *const libc::c_char,
                 name,
             );
@@ -236,36 +236,36 @@ pub unsafe extern "C" fn R_LoadBMP(
         crate::stdlib::memcpy(
             bmpHeader.palette.as_mut_ptr() as *mut libc::c_void,
             buf_p as *const libc::c_void,
-            ::std::mem::size_of::<[[libc::c_uchar; 4]; 256]>() as libc::c_ulong,
+            ::std::mem::size_of::<[[u8; 4]; 256]>() as libc::c_ulong,
         );
     }
     if buffer.b.offset(bmpHeader.bitmapDataOffset as isize) > end {
         crate::src::renderergl1::tr_main::ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"LoadBMP: invalid offset value in header (%s)\x00" as *const u8 as *const libc::c_char,
             name,
         );
     }
     buf_p = buffer.b.offset(bmpHeader.bitmapDataOffset as isize);
-    if bmpHeader.id[0 as libc::c_int as usize] as libc::c_int != 'B' as i32
-        && bmpHeader.id[1 as libc::c_int as usize] as libc::c_int != 'M' as i32
+    if bmpHeader.id[0 as i32 as usize] as i32 != 'B' as i32
+        && bmpHeader.id[1 as i32 as usize] as i32 != 'M' as i32
     {
         crate::src::renderergl1::tr_main::ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"LoadBMP: only Windows-style BMP files supported (%s)\x00" as *const u8
                 as *const libc::c_char,
             name,
         );
     }
-    if bmpHeader.fileSize != length as libc::c_uint {
+    if bmpHeader.fileSize != length as u32 {
         crate::src::renderergl1::tr_main::ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"LoadBMP: header size does not match file size (%u vs. %u) (%s)\x00" as *const u8
                 as *const libc::c_char,
             bmpHeader.fileSize,
@@ -273,73 +273,73 @@ pub unsafe extern "C" fn R_LoadBMP(
             name,
         );
     }
-    if bmpHeader.compression != 0 as libc::c_int as libc::c_uint {
+    if bmpHeader.compression != 0 as i32 as u32 {
         crate::src::renderergl1::tr_main::ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"LoadBMP: only uncompressed BMP files supported (%s)\x00" as *const u8
                 as *const libc::c_char,
             name,
         );
     }
-    if (bmpHeader.bitsPerPixel as libc::c_int) < 8 as libc::c_int {
+    if (bmpHeader.bitsPerPixel as i32) < 8 as i32 {
         crate::src::renderergl1::tr_main::ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"LoadBMP: monochrome and 4-bit BMP files not supported (%s)\x00" as *const u8
                 as *const libc::c_char,
             name,
         );
     }
-    match bmpHeader.bitsPerPixel as libc::c_int {
+    match bmpHeader.bitsPerPixel as i32 {
         8 | 16 | 24 | 32 => {}
         _ => {
             crate::src::renderergl1::tr_main::ri
                 .Error
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+                crate::src::qcommon::q_shared::ERR_DROP as i32,
                 b"LoadBMP: illegal pixel_size \'%hu\' in file \'%s\'\x00" as *const u8
                     as *const libc::c_char,
-                bmpHeader.bitsPerPixel as libc::c_int,
+                bmpHeader.bitsPerPixel as i32,
                 name,
             );
         }
     }
-    columns = bmpHeader.width as libc::c_int;
-    rows = bmpHeader.height as libc::c_int;
-    if rows < 0 as libc::c_int {
+    columns = bmpHeader.width as i32;
+    rows = bmpHeader.height as i32;
+    if rows < 0 as i32 {
         rows = -rows
     }
-    numPixels = (columns * rows) as libc::c_uint;
-    if columns <= 0 as libc::c_int
+    numPixels = (columns * rows) as u32;
+    if columns <= 0 as i32
         || rows == 0
-        || numPixels > 0x1fffffff as libc::c_int as libc::c_uint
+        || numPixels > 0x1fffffff as i32 as u32
         || numPixels
-            .wrapping_mul(4 as libc::c_int as libc::c_uint)
-            .wrapping_div(columns as libc::c_uint)
-            .wrapping_div(4 as libc::c_int as libc::c_uint)
-            != rows as libc::c_uint
+            .wrapping_mul(4 as i32 as u32)
+            .wrapping_div(columns as u32)
+            .wrapping_div(4 as i32 as u32)
+            != rows as u32
     {
         crate::src::renderergl1::tr_main::ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"LoadBMP: %s has an invalid image size\x00" as *const u8 as *const libc::c_char,
             name,
         );
     }
     if buf_p.offset(
         numPixels
-            .wrapping_mul(bmpHeader.bitsPerPixel as libc::c_uint)
-            .wrapping_div(8 as libc::c_int as libc::c_uint) as isize,
+            .wrapping_mul(bmpHeader.bitsPerPixel as u32)
+            .wrapping_div(8 as i32 as u32) as isize,
     ) > end
     {
         crate::src::renderergl1::tr_main::ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"LoadBMP: file truncated (%s)\x00" as *const u8 as *const libc::c_char,
             name,
         );
@@ -353,60 +353,60 @@ pub unsafe extern "C" fn R_LoadBMP(
     bmpRGBA = crate::src::renderergl1::tr_main::ri
         .Malloc
         .expect("non-null function pointer")(
-        numPixels.wrapping_mul(4 as libc::c_int as libc::c_uint) as libc::c_int,
+        numPixels.wrapping_mul(4 as i32 as u32) as i32,
     ) as *mut crate::src::qcommon::q_shared::byte;
     *pic = bmpRGBA;
-    row = rows - 1 as libc::c_int;
-    while row >= 0 as libc::c_int {
-        pixbuf = bmpRGBA.offset((row * columns * 4 as libc::c_int) as isize);
-        column = 0 as libc::c_int;
+    row = rows - 1 as i32;
+    while row >= 0 as i32 {
+        pixbuf = bmpRGBA.offset((row * columns * 4 as i32) as isize);
+        column = 0 as i32;
         while column < columns {
-            let mut red: libc::c_uchar = 0;
-            let mut green: libc::c_uchar = 0;
-            let mut blue: libc::c_uchar = 0;
-            let mut alpha: libc::c_uchar = 0;
-            let mut palIndex: libc::c_int = 0;
-            let mut shortPixel: libc::c_ushort = 0;
-            match bmpHeader.bitsPerPixel as libc::c_int {
+            let mut red: u8 = 0;
+            let mut green: u8 = 0;
+            let mut blue: u8 = 0;
+            let mut alpha: u8 = 0;
+            let mut palIndex: i32 = 0;
+            let mut shortPixel: u16 = 0;
+            match bmpHeader.bitsPerPixel as i32 {
                 8 => {
                     let fresh2 = buf_p;
                     buf_p = buf_p.offset(1);
-                    palIndex = *fresh2 as libc::c_int;
+                    palIndex = *fresh2 as i32;
                     let fresh3 = pixbuf;
                     pixbuf = pixbuf.offset(1);
-                    *fresh3 = bmpHeader.palette[palIndex as usize][2 as libc::c_int as usize];
+                    *fresh3 = bmpHeader.palette[palIndex as usize][2 as i32 as usize];
                     let fresh4 = pixbuf;
                     pixbuf = pixbuf.offset(1);
-                    *fresh4 = bmpHeader.palette[palIndex as usize][1 as libc::c_int as usize];
+                    *fresh4 = bmpHeader.palette[palIndex as usize][1 as i32 as usize];
                     let fresh5 = pixbuf;
                     pixbuf = pixbuf.offset(1);
-                    *fresh5 = bmpHeader.palette[palIndex as usize][0 as libc::c_int as usize];
+                    *fresh5 = bmpHeader.palette[palIndex as usize][0 as i32 as usize];
                     let fresh6 = pixbuf;
                     pixbuf = pixbuf.offset(1);
-                    *fresh6 = 0xff as libc::c_int as crate::src::qcommon::q_shared::byte
+                    *fresh6 = 0xff as i32 as crate::src::qcommon::q_shared::byte
                 }
                 16 => {
-                    shortPixel = *(pixbuf as *mut libc::c_ushort);
-                    pixbuf = pixbuf.offset(2 as libc::c_int as isize);
+                    shortPixel = *(pixbuf as *mut u16);
+                    pixbuf = pixbuf.offset(2 as i32 as isize);
                     let fresh7 = pixbuf;
                     pixbuf = pixbuf.offset(1);
-                    *fresh7 = ((shortPixel as libc::c_int
-                        & (31 as libc::c_int) << 10 as libc::c_int)
-                        >> 7 as libc::c_int)
+                    *fresh7 = ((shortPixel as i32
+                        & (31 as i32) << 10 as i32)
+                        >> 7 as i32)
                         as crate::src::qcommon::q_shared::byte;
                     let fresh8 = pixbuf;
                     pixbuf = pixbuf.offset(1);
-                    *fresh8 = ((shortPixel as libc::c_int
-                        & (31 as libc::c_int) << 5 as libc::c_int)
-                        >> 2 as libc::c_int)
+                    *fresh8 = ((shortPixel as i32
+                        & (31 as i32) << 5 as i32)
+                        >> 2 as i32)
                         as crate::src::qcommon::q_shared::byte;
                     let fresh9 = pixbuf;
                     pixbuf = pixbuf.offset(1);
-                    *fresh9 = ((shortPixel as libc::c_int & 31 as libc::c_int) << 3 as libc::c_int)
+                    *fresh9 = ((shortPixel as i32 & 31 as i32) << 3 as i32)
                         as crate::src::qcommon::q_shared::byte;
                     let fresh10 = pixbuf;
                     pixbuf = pixbuf.offset(1);
-                    *fresh10 = 0xff as libc::c_int as crate::src::qcommon::q_shared::byte
+                    *fresh10 = 0xff as i32 as crate::src::qcommon::q_shared::byte
                 }
                 24 => {
                     let fresh11 = buf_p;
@@ -429,7 +429,7 @@ pub unsafe extern "C" fn R_LoadBMP(
                     *fresh16 = blue;
                     let fresh17 = pixbuf;
                     pixbuf = pixbuf.offset(1);
-                    *fresh17 = 255 as libc::c_int as crate::src::qcommon::q_shared::byte
+                    *fresh17 = 255 as i32 as crate::src::qcommon::q_shared::byte
                 }
                 32 => {
                     let fresh18 = buf_p;

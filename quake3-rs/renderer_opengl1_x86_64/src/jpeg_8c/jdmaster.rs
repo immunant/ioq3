@@ -216,7 +216,7 @@ pub type my_master_ptr = *mut my_decomp_master;
 #[derive(Copy, Clone)]
 pub struct my_decomp_master {
     pub pub_0: crate::jpegint_h::jpeg_decomp_master,
-    pub pass_number: libc::c_int,
+    pub pass_number: i32,
     pub using_merged_upsample: crate::jmorecfg_h::boolean,
     pub quantizer_1pass: *mut crate::jpegint_h::jpeg_color_quantizer,
     pub quantizer_2pass: *mut crate::jpegint_h::jpeg_color_quantizer,
@@ -231,46 +231,46 @@ unsafe extern "C" fn use_merged_upsample(
 ) -> crate::jmorecfg_h::boolean {
     /* Merging is the equivalent of plain box-filter upsampling */
     if (*cinfo).do_fancy_upsampling != 0 || (*cinfo).CCIR601_sampling != 0 {
-        return 0 as libc::c_int;
+        return 0 as i32;
     }
     /* jdmerge.c only supports YCC=>RGB color conversion */
-    if (*cinfo).jpeg_color_space as libc::c_uint
-        != crate::jpeglib_h::JCS_YCbCr as libc::c_int as libc::c_uint
-        || (*cinfo).num_components != 3 as libc::c_int
-        || (*cinfo).out_color_space as libc::c_uint
-            != crate::jpeglib_h::JCS_RGB as libc::c_int as libc::c_uint
-        || (*cinfo).out_color_components != 3 as libc::c_int
+    if (*cinfo).jpeg_color_space as u32
+        != crate::jpeglib_h::JCS_YCbCr as i32 as u32
+        || (*cinfo).num_components != 3 as i32
+        || (*cinfo).out_color_space as u32
+            != crate::jpeglib_h::JCS_RGB as i32 as u32
+        || (*cinfo).out_color_components != 3 as i32
     {
-        return 0 as libc::c_int;
+        return 0 as i32;
     }
     /* and it only handles 2h1v or 2h2v sampling ratios */
-    if (*(*cinfo).comp_info.offset(0 as libc::c_int as isize)).h_samp_factor != 2 as libc::c_int
-        || (*(*cinfo).comp_info.offset(1 as libc::c_int as isize)).h_samp_factor != 1 as libc::c_int
-        || (*(*cinfo).comp_info.offset(2 as libc::c_int as isize)).h_samp_factor != 1 as libc::c_int
-        || (*(*cinfo).comp_info.offset(0 as libc::c_int as isize)).v_samp_factor > 2 as libc::c_int
-        || (*(*cinfo).comp_info.offset(1 as libc::c_int as isize)).v_samp_factor != 1 as libc::c_int
-        || (*(*cinfo).comp_info.offset(2 as libc::c_int as isize)).v_samp_factor != 1 as libc::c_int
+    if (*(*cinfo).comp_info.offset(0 as i32 as isize)).h_samp_factor != 2 as i32
+        || (*(*cinfo).comp_info.offset(1 as i32 as isize)).h_samp_factor != 1 as i32
+        || (*(*cinfo).comp_info.offset(2 as i32 as isize)).h_samp_factor != 1 as i32
+        || (*(*cinfo).comp_info.offset(0 as i32 as isize)).v_samp_factor > 2 as i32
+        || (*(*cinfo).comp_info.offset(1 as i32 as isize)).v_samp_factor != 1 as i32
+        || (*(*cinfo).comp_info.offset(2 as i32 as isize)).v_samp_factor != 1 as i32
     {
-        return 0 as libc::c_int;
+        return 0 as i32;
     }
     /* furthermore, it doesn't work if we've scaled the IDCTs differently */
-    if (*(*cinfo).comp_info.offset(0 as libc::c_int as isize)).DCT_h_scaled_size
+    if (*(*cinfo).comp_info.offset(0 as i32 as isize)).DCT_h_scaled_size
         != (*cinfo).min_DCT_h_scaled_size
-        || (*(*cinfo).comp_info.offset(1 as libc::c_int as isize)).DCT_h_scaled_size
+        || (*(*cinfo).comp_info.offset(1 as i32 as isize)).DCT_h_scaled_size
             != (*cinfo).min_DCT_h_scaled_size
-        || (*(*cinfo).comp_info.offset(2 as libc::c_int as isize)).DCT_h_scaled_size
+        || (*(*cinfo).comp_info.offset(2 as i32 as isize)).DCT_h_scaled_size
             != (*cinfo).min_DCT_h_scaled_size
-        || (*(*cinfo).comp_info.offset(0 as libc::c_int as isize)).DCT_v_scaled_size
+        || (*(*cinfo).comp_info.offset(0 as i32 as isize)).DCT_v_scaled_size
             != (*cinfo).min_DCT_v_scaled_size
-        || (*(*cinfo).comp_info.offset(1 as libc::c_int as isize)).DCT_v_scaled_size
+        || (*(*cinfo).comp_info.offset(1 as i32 as isize)).DCT_v_scaled_size
             != (*cinfo).min_DCT_v_scaled_size
-        || (*(*cinfo).comp_info.offset(2 as libc::c_int as isize)).DCT_v_scaled_size
+        || (*(*cinfo).comp_info.offset(2 as i32 as isize)).DCT_v_scaled_size
             != (*cinfo).min_DCT_v_scaled_size
     {
-        return 0 as libc::c_int;
+        return 0 as i32;
     }
     /* ??? also need to test for upsample-time rescaling, when & if supported */
-    return 1 as libc::c_int;
+    return 1 as i32;
     /* by golly, it'll work... */
 }
 /*
@@ -288,13 +288,13 @@ pub unsafe extern "C" fn jpeg_calc_output_dimensions(
  * This function is used for full decompression.
  */
 {
-    let mut ci: libc::c_int = 0;
+    let mut ci: i32 = 0;
     let mut compptr: *mut crate::jpeglib_h::jpeg_component_info =
         0 as *mut crate::jpeglib_h::jpeg_component_info;
     /* Prevent application from calling me at wrong times */
-    if (*cinfo).global_state != 202 as libc::c_int {
-        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_STATE as libc::c_int;
-        (*(*cinfo).err).msg_parm.i[0 as libc::c_int as usize] = (*cinfo).global_state;
+    if (*cinfo).global_state != 202 as i32 {
+        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_STATE as i32;
+        (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = (*cinfo).global_state;
         Some(
             (*(*cinfo).err)
                 .error_exit
@@ -311,40 +311,40 @@ pub unsafe extern "C" fn jpeg_calc_output_dimensions(
      * This saves time if the upsampler gets to use 1:1 scaling.
      * Note this code adapts subsampling ratios which are powers of 2.
      */
-    ci = 0 as libc::c_int;
+    ci = 0 as i32;
     compptr = (*cinfo).comp_info;
     while ci < (*cinfo).num_components {
-        let mut ssize: libc::c_int = 1 as libc::c_int;
+        let mut ssize: i32 = 1 as i32;
         while (*cinfo).min_DCT_h_scaled_size * ssize
             <= (if (*cinfo).do_fancy_upsampling != 0 {
-                8 as libc::c_int
+                8 as i32
             } else {
-                (8 as libc::c_int) / 2 as libc::c_int
+                (8 as i32) / 2 as i32
             })
-            && (*cinfo).max_h_samp_factor % ((*compptr).h_samp_factor * ssize * 2 as libc::c_int)
-                == 0 as libc::c_int
+            && (*cinfo).max_h_samp_factor % ((*compptr).h_samp_factor * ssize * 2 as i32)
+                == 0 as i32
         {
-            ssize = ssize * 2 as libc::c_int
+            ssize = ssize * 2 as i32
         }
         (*compptr).DCT_h_scaled_size = (*cinfo).min_DCT_h_scaled_size * ssize;
-        ssize = 1 as libc::c_int;
+        ssize = 1 as i32;
         while (*cinfo).min_DCT_v_scaled_size * ssize
             <= (if (*cinfo).do_fancy_upsampling != 0 {
-                8 as libc::c_int
+                8 as i32
             } else {
-                (8 as libc::c_int) / 2 as libc::c_int
+                (8 as i32) / 2 as i32
             })
-            && (*cinfo).max_v_samp_factor % ((*compptr).v_samp_factor * ssize * 2 as libc::c_int)
-                == 0 as libc::c_int
+            && (*cinfo).max_v_samp_factor % ((*compptr).v_samp_factor * ssize * 2 as i32)
+                == 0 as i32
         {
-            ssize = ssize * 2 as libc::c_int
+            ssize = ssize * 2 as i32
         }
         (*compptr).DCT_v_scaled_size = (*cinfo).min_DCT_v_scaled_size * ssize;
         /* We don't support IDCT ratios larger than 2. */
-        if (*compptr).DCT_h_scaled_size > (*compptr).DCT_v_scaled_size * 2 as libc::c_int {
-            (*compptr).DCT_h_scaled_size = (*compptr).DCT_v_scaled_size * 2 as libc::c_int
-        } else if (*compptr).DCT_v_scaled_size > (*compptr).DCT_h_scaled_size * 2 as libc::c_int {
-            (*compptr).DCT_v_scaled_size = (*compptr).DCT_h_scaled_size * 2 as libc::c_int
+        if (*compptr).DCT_h_scaled_size > (*compptr).DCT_v_scaled_size * 2 as i32 {
+            (*compptr).DCT_h_scaled_size = (*compptr).DCT_v_scaled_size * 2 as i32
+        } else if (*compptr).DCT_v_scaled_size > (*compptr).DCT_h_scaled_size * 2 as i32 {
+            (*compptr).DCT_v_scaled_size = (*compptr).DCT_h_scaled_size * 2 as i32
         }
         ci += 1;
         compptr = compptr.offset(1)
@@ -352,7 +352,7 @@ pub unsafe extern "C" fn jpeg_calc_output_dimensions(
     /* Recompute downsampled dimensions of components;
      * application needs to know these if using raw downsampled data.
      */
-    ci = 0 as libc::c_int;
+    ci = 0 as i32;
     compptr = (*cinfo).comp_info;
     while ci < (*cinfo).num_components {
         /* Size in samples, after IDCT scaling */
@@ -372,20 +372,20 @@ pub unsafe extern "C" fn jpeg_calc_output_dimensions(
     /* IDCT_SCALING_SUPPORTED */
     /* Report number of components in selected colorspace. */
     /* Probably this should be in the color conversion module... */
-    match (*cinfo).out_color_space as libc::c_uint {
-        1 => (*cinfo).out_color_components = 1 as libc::c_int,
+    match (*cinfo).out_color_space as u32 {
+        1 => (*cinfo).out_color_components = 1 as i32,
         2 | 3 => {
             /* else share code with YCbCr */
-            (*cinfo).out_color_components = 3 as libc::c_int
+            (*cinfo).out_color_components = 3 as i32
         }
-        4 | 5 => (*cinfo).out_color_components = 4 as libc::c_int,
+        4 | 5 => (*cinfo).out_color_components = 4 as i32,
         _ => {
             /* else must be same colorspace as in file */
             (*cinfo).out_color_components = (*cinfo).num_components
         }
     }
     (*cinfo).output_components = if (*cinfo).quantize_colors != 0 {
-        1 as libc::c_int
+        1 as i32
     } else {
         (*cinfo).out_color_components
     };
@@ -393,7 +393,7 @@ pub unsafe extern "C" fn jpeg_calc_output_dimensions(
     if use_merged_upsample(cinfo) != 0 {
         (*cinfo).rec_outbuf_height = (*cinfo).max_v_samp_factor
     } else {
-        (*cinfo).rec_outbuf_height = 1 as libc::c_int
+        (*cinfo).rec_outbuf_height = 1 as i32
     };
 }
 /*
@@ -443,7 +443,7 @@ unsafe extern "C" fn prepare_range_limit_table(mut cinfo: crate::jpeglib_h::j_de
 /* Allocate and fill in the sample_range_limit table */
 {
     let mut table: *mut crate::jmorecfg_h::JSAMPLE = 0 as *mut crate::jmorecfg_h::JSAMPLE; /* allow negative subscripts of simple table */
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     table = Some(
         (*(*cinfo).mem)
             .alloc_small
@@ -451,49 +451,49 @@ unsafe extern "C" fn prepare_range_limit_table(mut cinfo: crate::jpeglib_h::j_de
     )
     .expect("non-null function pointer")(
         cinfo as crate::jpeglib_h::j_common_ptr,
-        1 as libc::c_int,
-        ((5 as libc::c_int * (255 as libc::c_int + 1 as libc::c_int) + 128 as libc::c_int)
+        1 as i32,
+        ((5 as i32 * (255 as i32 + 1 as i32) + 128 as i32)
             as libc::c_ulong)
             .wrapping_mul(::std::mem::size_of::<crate::jmorecfg_h::JSAMPLE>() as libc::c_ulong),
     ) as *mut crate::jmorecfg_h::JSAMPLE;
-    table = table.offset((255 as libc::c_int + 1 as libc::c_int) as isize);
+    table = table.offset((255 as i32 + 1 as i32) as isize);
     (*cinfo).sample_range_limit = table;
     /* First segment of "simple" table: limit[x] = 0 for x < 0 */
     crate::stdlib::memset(
-        table.offset(-((255 as libc::c_int + 1 as libc::c_int) as isize)) as *mut libc::c_void,
-        0 as libc::c_int,
-        ((255 as libc::c_int + 1 as libc::c_int) as libc::c_ulong)
+        table.offset(-((255 as i32 + 1 as i32) as isize)) as *mut libc::c_void,
+        0 as i32,
+        ((255 as i32 + 1 as i32) as libc::c_ulong)
             .wrapping_mul(::std::mem::size_of::<crate::jmorecfg_h::JSAMPLE>() as libc::c_ulong),
     );
     /* Main part of "simple" table: limit[x] = x */
-    i = 0 as libc::c_int; /* Point to where post-IDCT table starts */
-    while i <= 255 as libc::c_int {
+    i = 0 as i32; /* Point to where post-IDCT table starts */
+    while i <= 255 as i32 {
         *table.offset(i as isize) = i as crate::jmorecfg_h::JSAMPLE;
         i += 1
     }
-    table = table.offset(128 as libc::c_int as isize);
+    table = table.offset(128 as i32 as isize);
     /* End of simple table, rest of first half of post-IDCT table */
-    i = 128 as libc::c_int;
-    while i < 2 as libc::c_int * (255 as libc::c_int + 1 as libc::c_int) {
-        *table.offset(i as isize) = 255 as libc::c_int as crate::jmorecfg_h::JSAMPLE;
+    i = 128 as i32;
+    while i < 2 as i32 * (255 as i32 + 1 as i32) {
+        *table.offset(i as isize) = 255 as i32 as crate::jmorecfg_h::JSAMPLE;
         i += 1
     }
     /* Second half of post-IDCT table */
     crate::stdlib::memset(
-        table.offset((2 as libc::c_int * (255 as libc::c_int + 1 as libc::c_int)) as isize)
+        table.offset((2 as i32 * (255 as i32 + 1 as i32)) as isize)
             as *mut libc::c_void,
-        0 as libc::c_int,
-        ((2 as libc::c_int * (255 as libc::c_int + 1 as libc::c_int) - 128 as libc::c_int)
+        0 as i32,
+        ((2 as i32 * (255 as i32 + 1 as i32) - 128 as i32)
             as libc::c_ulong)
             .wrapping_mul(::std::mem::size_of::<crate::jmorecfg_h::JSAMPLE>() as libc::c_ulong),
     );
     crate::stdlib::memcpy(
         table.offset(
-            (4 as libc::c_int * (255 as libc::c_int + 1 as libc::c_int) - 128 as libc::c_int)
+            (4 as i32 * (255 as i32 + 1 as i32) - 128 as i32)
                 as isize,
         ) as *mut libc::c_void,
         (*cinfo).sample_range_limit as *const libc::c_void,
-        (128 as libc::c_int as libc::c_ulong)
+        (128 as i32 as libc::c_ulong)
             .wrapping_mul(::std::mem::size_of::<crate::jmorecfg_h::JSAMPLE>() as libc::c_ulong),
     );
 }
@@ -521,7 +521,7 @@ unsafe extern "C" fn master_selection(mut cinfo: crate::jpeglib_h::j_decompress_
         (*cinfo).output_width as libc::c_long * (*cinfo).out_color_components as libc::c_long;
     jd_samplesperrow = samplesperrow as crate::jmorecfg_h::JDIMENSION;
     if jd_samplesperrow as libc::c_long != samplesperrow {
-        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_WIDTH_OVERFLOW as libc::c_int;
+        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_WIDTH_OVERFLOW as i32;
         Some(
             (*(*cinfo).err)
                 .error_exit
@@ -530,20 +530,20 @@ unsafe extern "C" fn master_selection(mut cinfo: crate::jpeglib_h::j_decompress_
         .expect("non-null function pointer")(cinfo as crate::jpeglib_h::j_common_ptr);
     }
     /* Initialize my private state */
-    (*master).pass_number = 0 as libc::c_int;
+    (*master).pass_number = 0 as i32;
     (*master).using_merged_upsample = use_merged_upsample(cinfo);
     /* Color quantizer selection */
     (*master).quantizer_1pass = 0 as *mut crate::jpegint_h::jpeg_color_quantizer;
     (*master).quantizer_2pass = 0 as *mut crate::jpegint_h::jpeg_color_quantizer;
     /* No mode changes if not using buffered-image mode. */
     if (*cinfo).quantize_colors == 0 || (*cinfo).buffered_image == 0 {
-        (*cinfo).enable_1pass_quant = 0 as libc::c_int;
-        (*cinfo).enable_external_quant = 0 as libc::c_int;
-        (*cinfo).enable_2pass_quant = 0 as libc::c_int
+        (*cinfo).enable_1pass_quant = 0 as i32;
+        (*cinfo).enable_external_quant = 0 as i32;
+        (*cinfo).enable_2pass_quant = 0 as i32
     }
     if (*cinfo).quantize_colors != 0 {
         if (*cinfo).raw_data_out != 0 {
-            (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_NOTIMPL as libc::c_int;
+            (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_NOTIMPL as i32;
             Some(
                 (*(*cinfo).err)
                     .error_exit
@@ -556,17 +556,17 @@ unsafe extern "C" fn master_selection(mut cinfo: crate::jpeglib_h::j_decompress_
         /* If both quantizers are initialized, the 2-pass one is left active;
          * this is necessary for starting with quantization to an external map.
          */
-        if (*cinfo).out_color_components != 3 as libc::c_int {
-            (*cinfo).enable_1pass_quant = 1 as libc::c_int;
-            (*cinfo).enable_external_quant = 0 as libc::c_int;
-            (*cinfo).enable_2pass_quant = 0 as libc::c_int;
+        if (*cinfo).out_color_components != 3 as i32 {
+            (*cinfo).enable_1pass_quant = 1 as i32;
+            (*cinfo).enable_external_quant = 0 as i32;
+            (*cinfo).enable_2pass_quant = 0 as i32;
             (*cinfo).colormap = 0 as crate::jpeglib_h::JSAMPARRAY
         } else if !(*cinfo).colormap.is_null() {
-            (*cinfo).enable_external_quant = 1 as libc::c_int
+            (*cinfo).enable_external_quant = 1 as i32
         } else if (*cinfo).two_pass_quantize != 0 {
-            (*cinfo).enable_2pass_quant = 1 as libc::c_int
+            (*cinfo).enable_2pass_quant = 1 as i32
         } else {
-            (*cinfo).enable_1pass_quant = 1 as libc::c_int
+            (*cinfo).enable_1pass_quant = 1 as i32
         }
         if (*cinfo).enable_1pass_quant != 0 {
             crate::src::jpeg_8c::jquant1::jinit_1pass_quantizer(
@@ -619,7 +619,7 @@ unsafe extern "C" fn master_selection(mut cinfo: crate::jpeglib_h::j_decompress_
     }
     /* Initialize principal buffer controllers. */
     use_c_buffer = ((*(*cinfo).inputctl).has_multiple_scans != 0 || (*cinfo).buffered_image != 0)
-        as libc::c_int;
+        as i32;
     crate::src::jpeg_8c::jdcoefct::jinit_d_coef_controller(
         cinfo as *mut crate::jpeglib_h::jpeg_decompress_struct,
         use_c_buffer,
@@ -627,7 +627,7 @@ unsafe extern "C" fn master_selection(mut cinfo: crate::jpeglib_h::j_decompress_
     if (*cinfo).raw_data_out == 0 {
         crate::src::jpeg_8c::jdmainct::jinit_d_main_controller(
             cinfo as *mut crate::jpeglib_h::jpeg_decompress_struct,
-            0 as libc::c_int,
+            0 as i32,
         );
     }
     /* We can now tell the memory manager to allocate virtual arrays. */
@@ -652,11 +652,11 @@ unsafe extern "C" fn master_selection(mut cinfo: crate::jpeglib_h::j_decompress_
         && (*cinfo).buffered_image == 0
         && (*(*cinfo).inputctl).has_multiple_scans != 0
     {
-        let mut nscans: libc::c_int = 0;
+        let mut nscans: i32 = 0;
         /* Estimate number of scans to set pass_limit. */
         if (*cinfo).progressive_mode != 0 {
             /* Arbitrarily estimate 2 interleaved DC scans + 3 AC scans/component. */
-            nscans = 2 as libc::c_int + 3 as libc::c_int * (*cinfo).num_components
+            nscans = 2 as i32 + 3 as i32 * (*cinfo).num_components
         } else {
             /* For a nonprogressive multiscan file, estimate 1 scan per component. */
             nscans = (*cinfo).num_components
@@ -664,11 +664,11 @@ unsafe extern "C" fn master_selection(mut cinfo: crate::jpeglib_h::j_decompress_
         (*(*cinfo).progress).pass_counter = 0 as libc::c_long;
         (*(*cinfo).progress).pass_limit =
             (*cinfo).total_iMCU_rows as libc::c_long * nscans as libc::c_long;
-        (*(*cinfo).progress).completed_passes = 0 as libc::c_int;
+        (*(*cinfo).progress).completed_passes = 0 as i32;
         (*(*cinfo).progress).total_passes = if (*cinfo).enable_2pass_quant != 0 {
-            3 as libc::c_int
+            3 as i32
         } else {
-            2 as libc::c_int
+            2 as i32
         };
         /* Count the input pass as done */
         (*master).pass_number += 1
@@ -688,13 +688,13 @@ unsafe extern "C" fn prepare_for_output_pass(mut cinfo: crate::jpeglib_h::j_deco
     let mut master: my_master_ptr = (*cinfo).master as my_master_ptr;
     if (*master).pub_0.is_dummy_pass != 0 {
         /* Final pass of 2-pass quantization */
-        (*master).pub_0.is_dummy_pass = 0 as libc::c_int;
+        (*master).pub_0.is_dummy_pass = 0 as i32;
         Some(
             (*(*cinfo).cquantize)
                 .start_pass
                 .expect("non-null function pointer"),
         )
-        .expect("non-null function pointer")(cinfo, 0 as libc::c_int);
+        .expect("non-null function pointer")(cinfo, 0 as i32);
         Some(
             (*(*cinfo).post)
                 .start_pass
@@ -713,12 +713,12 @@ unsafe extern "C" fn prepare_for_output_pass(mut cinfo: crate::jpeglib_h::j_deco
             /* Select new quantization method */
             if (*cinfo).two_pass_quantize != 0 && (*cinfo).enable_2pass_quant != 0 {
                 (*cinfo).cquantize = (*master).quantizer_2pass;
-                (*master).pub_0.is_dummy_pass = 1 as libc::c_int
+                (*master).pub_0.is_dummy_pass = 1 as i32
             } else if (*cinfo).enable_1pass_quant != 0 {
                 (*cinfo).cquantize = (*master).quantizer_1pass
             } else {
                 (*(*cinfo).err).msg_code =
-                    crate::src::jpeg_8c::jerror::JERR_MODE_CHANGE as libc::c_int;
+                    crate::src::jpeg_8c::jerror::JERR_MODE_CHANGE as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
@@ -774,9 +774,9 @@ unsafe extern "C" fn prepare_for_output_pass(mut cinfo: crate::jpeglib_h::j_deco
             .expect("non-null function pointer")(
                 cinfo,
                 if (*master).pub_0.is_dummy_pass != 0 {
-                    crate::jpegint_h::JBUF_SAVE_AND_PASS as libc::c_int
+                    crate::jpegint_h::JBUF_SAVE_AND_PASS as i32
                 } else {
-                    crate::jpegint_h::JBUF_PASS_THRU as libc::c_int
+                    crate::jpegint_h::JBUF_PASS_THRU as i32
                 } as crate::jpegint_h::J_BUF_MODE,
             );
             Some(
@@ -794,18 +794,18 @@ unsafe extern "C" fn prepare_for_output_pass(mut cinfo: crate::jpeglib_h::j_deco
         (*(*cinfo).progress).completed_passes = (*master).pass_number;
         (*(*cinfo).progress).total_passes = (*master).pass_number
             + (if (*master).pub_0.is_dummy_pass != 0 {
-                2 as libc::c_int
+                2 as i32
             } else {
-                1 as libc::c_int
+                1 as i32
             });
         /* In buffered-image mode, we assume one more output pass if EOI not
          * yet reached, but no more passes if EOI has been reached.
          */
         if (*cinfo).buffered_image != 0 && (*(*cinfo).inputctl).eoi_reached == 0 {
             (*(*cinfo).progress).total_passes += if (*cinfo).enable_2pass_quant != 0 {
-                2 as libc::c_int
+                2 as i32
             } else {
-                1 as libc::c_int
+                1 as i32
             }
         }
     };
@@ -834,9 +834,9 @@ unsafe extern "C" fn finish_output_pass(mut cinfo: crate::jpeglib_h::j_decompres
 pub unsafe extern "C" fn jpeg_new_colormap(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
     let mut master: my_master_ptr = (*cinfo).master as my_master_ptr;
     /* Prevent application from calling me at wrong times */
-    if (*cinfo).global_state != 207 as libc::c_int {
-        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_STATE as libc::c_int;
-        (*(*cinfo).err).msg_parm.i[0 as libc::c_int as usize] = (*cinfo).global_state;
+    if (*cinfo).global_state != 207 as i32 {
+        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_STATE as i32;
+        (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = (*cinfo).global_state;
         Some(
             (*(*cinfo).err)
                 .error_exit
@@ -857,9 +857,9 @@ pub unsafe extern "C" fn jpeg_new_colormap(mut cinfo: crate::jpeglib_h::j_decomp
                 .expect("non-null function pointer"),
         )
         .expect("non-null function pointer")(cinfo);
-        (*master).pub_0.is_dummy_pass = 0 as libc::c_int
+        (*master).pub_0.is_dummy_pass = 0 as i32
     } else {
-        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_MODE_CHANGE as libc::c_int;
+        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_MODE_CHANGE as i32;
         Some(
             (*(*cinfo).err)
                 .error_exit
@@ -886,7 +886,7 @@ pub unsafe extern "C" fn jinit_master_decompress(mut cinfo: crate::jpeglib_h::j_
     )
     .expect("non-null function pointer")(
         cinfo as crate::jpeglib_h::j_common_ptr,
-        1 as libc::c_int,
+        1 as i32,
         ::std::mem::size_of::<my_decomp_master>() as libc::c_ulong,
     ) as my_master_ptr;
     (*cinfo).master = master as *mut crate::jpegint_h::jpeg_decomp_master;
@@ -897,6 +897,6 @@ pub unsafe extern "C" fn jinit_master_decompress(mut cinfo: crate::jpeglib_h::j_
     (*master).pub_0.finish_output_pass = Some(
         finish_output_pass as unsafe extern "C" fn(_: crate::jpeglib_h::j_decompress_ptr) -> (),
     );
-    (*master).pub_0.is_dummy_pass = 0 as libc::c_int;
+    (*master).pub_0.is_dummy_pass = 0 as i32;
     master_selection(cinfo);
 }

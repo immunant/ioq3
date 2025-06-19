@@ -98,7 +98,7 @@ pub unsafe extern "C" fn jinit_compress_master(mut cinfo: crate::jpeglib_h::j_co
     /* Initialize master control (includes parameter checking/processing) */
     crate::src::jpeg_8c::jcmaster::jinit_c_master_control(
         cinfo as *mut crate::jpeglib_h::jpeg_compress_struct,
-        0 as libc::c_int,
+        0 as i32,
     );
     /* Preprocessing */
     if (*cinfo).raw_data_in == 0 {
@@ -110,7 +110,7 @@ pub unsafe extern "C" fn jinit_compress_master(mut cinfo: crate::jpeglib_h::j_co
         );
         crate::src::jpeg_8c::jcprepct::jinit_c_prep_controller(
             cinfo as *mut crate::jpeglib_h::jpeg_compress_struct,
-            0 as libc::c_int,
+            0 as i32,
         );
     }
     /* Forward DCT */
@@ -130,11 +130,11 @@ pub unsafe extern "C" fn jinit_compress_master(mut cinfo: crate::jpeglib_h::j_co
     /* Need a full-image coefficient buffer in any multi-pass mode. */
     crate::src::jpeg_8c::jccoefct::jinit_c_coef_controller(
         cinfo as *mut crate::jpeglib_h::jpeg_compress_struct,
-        ((*cinfo).num_scans > 1 as libc::c_int || (*cinfo).optimize_coding != 0) as libc::c_int,
+        ((*cinfo).num_scans > 1 as i32 || (*cinfo).optimize_coding != 0) as i32,
     );
     crate::src::jpeg_8c::jcmainct::jinit_c_main_controller(
         cinfo as *mut crate::jpeglib_h::jpeg_compress_struct,
-        0 as libc::c_int,
+        0 as i32,
     );
     crate::src::jpeg_8c::jcmarker::jinit_marker_writer(
         cinfo as *mut crate::jpeglib_h::jpeg_compress_struct,

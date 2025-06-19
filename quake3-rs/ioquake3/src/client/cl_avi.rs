@@ -100,23 +100,23 @@ pub struct aviFileData_s {
     pub fileOpen: crate::src::qcommon::q_shared::qboolean,
     pub f: crate::src::qcommon::q_shared::fileHandle_t,
     pub fileName: [libc::c_char; 64],
-    pub fileSize: libc::c_int,
-    pub moviOffset: libc::c_int,
-    pub moviSize: libc::c_int,
+    pub fileSize: i32,
+    pub moviOffset: i32,
+    pub moviSize: i32,
     pub idxF: crate::src::qcommon::q_shared::fileHandle_t,
-    pub numIndices: libc::c_int,
-    pub frameRate: libc::c_int,
-    pub framePeriod: libc::c_int,
-    pub width: libc::c_int,
-    pub height: libc::c_int,
-    pub numVideoFrames: libc::c_int,
-    pub maxRecordSize: libc::c_int,
+    pub numIndices: i32,
+    pub frameRate: i32,
+    pub framePeriod: i32,
+    pub width: i32,
+    pub height: i32,
+    pub numVideoFrames: i32,
+    pub maxRecordSize: i32,
     pub motionJpeg: crate::src::qcommon::q_shared::qboolean,
     pub audio: crate::src::qcommon::q_shared::qboolean,
     pub a: audioFormat_t,
-    pub numAudioFrames: libc::c_int,
-    pub chunkStack: [libc::c_int; 16],
-    pub chunkStackTop: libc::c_int,
+    pub numAudioFrames: i32,
+    pub chunkStack: [i32; 16],
+    pub chunkStackTop: i32,
     pub cBuffer: *mut crate::src::qcommon::q_shared::byte,
     pub eBuffer: *mut crate::src::qcommon::q_shared::byte,
 }
@@ -126,12 +126,12 @@ pub type audioFormat_t = audioFormat_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct audioFormat_s {
-    pub rate: libc::c_int,
-    pub format: libc::c_int,
-    pub channels: libc::c_int,
-    pub bits: libc::c_int,
-    pub sampleSize: libc::c_int,
-    pub totalBytes: libc::c_int,
+    pub rate: i32,
+    pub format: i32,
+    pub channels: i32,
+    pub bits: i32,
+    pub sampleSize: i32,
+    pub totalBytes: i32,
 }
 
 static mut afd: aviFileData_t = aviFileData_t {
@@ -170,7 +170,7 @@ static mut afd: aviFileData_t = aviFileData_t {
 
 static mut buffer: [crate::src::qcommon::q_shared::byte; 2048] = [0; 2048];
 
-static mut bufIndex: libc::c_int = 0;
+static mut bufIndex: i32 = 0;
 /*
 ===============
 SafeFS_Write
@@ -180,12 +180,12 @@ SafeFS_Write
 
 unsafe extern "C" fn SafeFS_Write(
     mut buffer_0: *const libc::c_void,
-    mut len: libc::c_int,
+    mut len: i32,
     mut f: crate::src::qcommon::q_shared::fileHandle_t,
 ) {
     if crate::src::qcommon::files::FS_Write(buffer_0, len, f) < len {
         crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"Failed to write avi file\x00" as *const u8 as *const libc::c_char,
         );
     };
@@ -204,8 +204,8 @@ unsafe extern "C" fn WRITE_STRING(mut s: *const libc::c_char) {
         s as *const libc::c_void,
         crate::stdlib::strlen(s),
     );
-    bufIndex = (bufIndex as libc::c_ulong).wrapping_add(crate::stdlib::strlen(s)) as libc::c_int
-        as libc::c_int;
+    bufIndex = (bufIndex as libc::c_ulong).wrapping_add(crate::stdlib::strlen(s)) as i32
+        as i32;
 }
 /*
 ===============
@@ -214,16 +214,16 @@ WRITE_4BYTES
 */
 #[inline]
 
-unsafe extern "C" fn WRITE_4BYTES(mut x: libc::c_int) {
-    buffer[(bufIndex + 0 as libc::c_int) as usize] =
-        (x >> 0 as libc::c_int & 0xff as libc::c_int) as crate::src::qcommon::q_shared::byte;
-    buffer[(bufIndex + 1 as libc::c_int) as usize] =
-        (x >> 8 as libc::c_int & 0xff as libc::c_int) as crate::src::qcommon::q_shared::byte;
-    buffer[(bufIndex + 2 as libc::c_int) as usize] =
-        (x >> 16 as libc::c_int & 0xff as libc::c_int) as crate::src::qcommon::q_shared::byte;
-    buffer[(bufIndex + 3 as libc::c_int) as usize] =
-        (x >> 24 as libc::c_int & 0xff as libc::c_int) as crate::src::qcommon::q_shared::byte;
-    bufIndex += 4 as libc::c_int;
+unsafe extern "C" fn WRITE_4BYTES(mut x: i32) {
+    buffer[(bufIndex + 0 as i32) as usize] =
+        (x >> 0 as i32 & 0xff as i32) as crate::src::qcommon::q_shared::byte;
+    buffer[(bufIndex + 1 as i32) as usize] =
+        (x >> 8 as i32 & 0xff as i32) as crate::src::qcommon::q_shared::byte;
+    buffer[(bufIndex + 2 as i32) as usize] =
+        (x >> 16 as i32 & 0xff as i32) as crate::src::qcommon::q_shared::byte;
+    buffer[(bufIndex + 3 as i32) as usize] =
+        (x >> 24 as i32 & 0xff as i32) as crate::src::qcommon::q_shared::byte;
+    bufIndex += 4 as i32;
 }
 /*
 ===============
@@ -232,12 +232,12 @@ WRITE_2BYTES
 */
 #[inline]
 
-unsafe extern "C" fn WRITE_2BYTES(mut x: libc::c_int) {
-    buffer[(bufIndex + 0 as libc::c_int) as usize] =
-        (x >> 0 as libc::c_int & 0xff as libc::c_int) as crate::src::qcommon::q_shared::byte;
-    buffer[(bufIndex + 1 as libc::c_int) as usize] =
-        (x >> 8 as libc::c_int & 0xff as libc::c_int) as crate::src::qcommon::q_shared::byte;
-    bufIndex += 2 as libc::c_int;
+unsafe extern "C" fn WRITE_2BYTES(mut x: i32) {
+    buffer[(bufIndex + 0 as i32) as usize] =
+        (x >> 0 as i32 & 0xff as i32) as crate::src::qcommon::q_shared::byte;
+    buffer[(bufIndex + 1 as i32) as usize] =
+        (x >> 8 as i32 & 0xff as i32) as crate::src::qcommon::q_shared::byte;
+    bufIndex += 2 as i32;
 }
 /*
 ===============
@@ -247,16 +247,16 @@ START_CHUNK
 #[inline]
 
 unsafe extern "C" fn START_CHUNK(mut s: *const libc::c_char) {
-    if afd.chunkStackTop == 16 as libc::c_int {
+    if afd.chunkStackTop == 16 as i32 {
         crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"ERROR: Top of chunkstack breached\x00" as *const u8 as *const libc::c_char,
         );
     }
     afd.chunkStack[afd.chunkStackTop as usize] = bufIndex;
     afd.chunkStackTop += 1;
     WRITE_STRING(s);
-    WRITE_4BYTES(0 as libc::c_int);
+    WRITE_4BYTES(0 as i32);
 }
 /*
 ===============
@@ -266,20 +266,20 @@ END_CHUNK
 #[inline]
 
 unsafe extern "C" fn END_CHUNK() {
-    let mut endIndex: libc::c_int = bufIndex;
-    if afd.chunkStackTop <= 0 as libc::c_int {
+    let mut endIndex: i32 = bufIndex;
+    if afd.chunkStackTop <= 0 as i32 {
         crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"ERROR: Bottom of chunkstack breached\x00" as *const u8 as *const libc::c_char,
         );
     }
     afd.chunkStackTop -= 1;
     bufIndex = afd.chunkStack[afd.chunkStackTop as usize];
-    bufIndex += 4 as libc::c_int;
-    WRITE_4BYTES(endIndex - bufIndex - 4 as libc::c_int);
+    bufIndex += 4 as i32;
+    WRITE_4BYTES(endIndex - bufIndex - 4 as i32);
     bufIndex = endIndex;
     bufIndex =
-        bufIndex + 2 as libc::c_int - 1 as libc::c_int & !(2 as libc::c_int - 1 as libc::c_int);
+        bufIndex + 2 as i32 - 1 as i32 & !(2 as i32 - 1 as i32);
 }
 /*
 ===============
@@ -289,111 +289,111 @@ CL_WriteAVIHeader
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_WriteAVIHeader() {
-    bufIndex = 0 as libc::c_int; //"avih" "chunk" size
-    afd.chunkStackTop = 0 as libc::c_int; //dwMicroSecPerFrame
+    bufIndex = 0 as i32; //"avih" "chunk" size
+    afd.chunkStackTop = 0 as i32; //dwMicroSecPerFrame
     START_CHUNK(b"RIFF\x00" as *const u8 as *const libc::c_char); //dwMaxBytesPerSec
     WRITE_STRING(b"AVI \x00" as *const u8 as *const libc::c_char); //dwReserved1
     START_CHUNK(b"LIST\x00" as *const u8 as *const libc::c_char); //dwFlags bits HAS_INDEX and IS_INTERLEAVED
     WRITE_STRING(b"hdrl\x00" as *const u8 as *const libc::c_char); //dwTotalFrames
     WRITE_STRING(b"avih\x00" as *const u8 as *const libc::c_char); //dwInitialFrame
-    WRITE_4BYTES(56 as libc::c_int);
+    WRITE_4BYTES(56 as i32);
     WRITE_4BYTES(afd.framePeriod);
     WRITE_4BYTES(afd.maxRecordSize * afd.frameRate);
-    WRITE_4BYTES(0 as libc::c_int);
-    WRITE_4BYTES(0x110 as libc::c_int);
+    WRITE_4BYTES(0 as i32);
+    WRITE_4BYTES(0x110 as i32);
     WRITE_4BYTES(afd.numVideoFrames);
-    WRITE_4BYTES(0 as libc::c_int);
+    WRITE_4BYTES(0 as i32);
     if afd.audio as u64 != 0 {
         //dwStreams
-        WRITE_4BYTES(2 as libc::c_int); //dwSuggestedBufferSize
+        WRITE_4BYTES(2 as i32); //dwSuggestedBufferSize
     } else {
-        WRITE_4BYTES(1 as libc::c_int); //dwWidth
+        WRITE_4BYTES(1 as i32); //dwWidth
     } //dwHeight
     WRITE_4BYTES(afd.maxRecordSize); //dwReserved[ 0 ]
     WRITE_4BYTES(afd.width); //dwReserved[ 1 ]
     WRITE_4BYTES(afd.height); //dwReserved[ 2 ]
-    WRITE_4BYTES(0 as libc::c_int); //dwReserved[ 3 ]
-    WRITE_4BYTES(0 as libc::c_int);
-    WRITE_4BYTES(0 as libc::c_int);
-    WRITE_4BYTES(0 as libc::c_int);
+    WRITE_4BYTES(0 as i32); //dwReserved[ 3 ]
+    WRITE_4BYTES(0 as i32);
+    WRITE_4BYTES(0 as i32);
+    WRITE_4BYTES(0 as i32);
     START_CHUNK(b"LIST\x00" as *const u8 as *const libc::c_char);
     WRITE_STRING(b"strl\x00" as *const u8 as *const libc::c_char);
     WRITE_STRING(b"strh\x00" as *const u8 as *const libc::c_char);
     //biClrImportant
-    WRITE_4BYTES(56 as libc::c_int); //"strh" "chunk" size
+    WRITE_4BYTES(56 as i32); //"strh" "chunk" size
     WRITE_STRING(b"vids\x00" as *const u8 as *const libc::c_char); // BI_RGB
     if afd.motionJpeg as u64 != 0 {
         WRITE_STRING(b"MJPG\x00" as *const u8 as *const libc::c_char); //dwFlags
     } else {
-        WRITE_4BYTES(0 as libc::c_int); //dwPriority
+        WRITE_4BYTES(0 as i32); //dwPriority
     } //dwInitialFrame
-    WRITE_4BYTES(0 as libc::c_int); //dwTimescale
-    WRITE_4BYTES(0 as libc::c_int); //dwDataRate
-    WRITE_4BYTES(0 as libc::c_int); //dwStartTime
-    WRITE_4BYTES(1 as libc::c_int); //dwDataLength
+    WRITE_4BYTES(0 as i32); //dwTimescale
+    WRITE_4BYTES(0 as i32); //dwDataRate
+    WRITE_4BYTES(0 as i32); //dwStartTime
+    WRITE_4BYTES(1 as i32); //dwDataLength
     WRITE_4BYTES(afd.frameRate); //dwSuggestedBufferSize
-    WRITE_4BYTES(0 as libc::c_int); //dwQuality
+    WRITE_4BYTES(0 as i32); //dwQuality
     WRITE_4BYTES(afd.numVideoFrames); //dwSampleSize
     WRITE_4BYTES(afd.maxRecordSize); //rcFrame
-    WRITE_4BYTES(-(1 as libc::c_int)); //rcFrame
-    WRITE_4BYTES(0 as libc::c_int); //rcFrame
-    WRITE_2BYTES(0 as libc::c_int); //rcFrame
-    WRITE_2BYTES(0 as libc::c_int); //"strf" "chunk" size
+    WRITE_4BYTES(-(1 as i32)); //rcFrame
+    WRITE_4BYTES(0 as i32); //rcFrame
+    WRITE_2BYTES(0 as i32); //rcFrame
+    WRITE_2BYTES(0 as i32); //"strf" "chunk" size
     WRITE_2BYTES(afd.width); //biSize
     WRITE_2BYTES(afd.height); //biWidth
     WRITE_STRING(b"strf\x00" as *const u8 as *const libc::c_char); //biHeight
-    WRITE_4BYTES(40 as libc::c_int); //biPlanes
-    WRITE_4BYTES(40 as libc::c_int); //biBitCount
+    WRITE_4BYTES(40 as i32); //biPlanes
+    WRITE_4BYTES(40 as i32); //biBitCount
     WRITE_4BYTES(afd.width);
     WRITE_4BYTES(afd.height);
-    WRITE_2BYTES(1 as libc::c_int);
-    WRITE_2BYTES(24 as libc::c_int);
+    WRITE_2BYTES(1 as i32);
+    WRITE_2BYTES(24 as i32);
     if afd.motionJpeg as u64 != 0 {
         //biCompression
         WRITE_STRING(b"MJPG\x00" as *const u8 as *const libc::c_char);
         WRITE_4BYTES(afd.width * afd.height);
     //biSizeImage
     } else {
-        WRITE_4BYTES(0 as libc::c_int);
-        WRITE_4BYTES(afd.width * afd.height * 3 as libc::c_int); // BI_RGB
+        WRITE_4BYTES(0 as i32);
+        WRITE_4BYTES(afd.width * afd.height * 3 as i32); // BI_RGB
                                                                  //biSizeImage
     } //biXPelsPetMeter
-    WRITE_4BYTES(0 as libc::c_int); //biYPelsPetMeter
-    WRITE_4BYTES(0 as libc::c_int); //biClrUsed
-    WRITE_4BYTES(0 as libc::c_int);
-    WRITE_4BYTES(0 as libc::c_int);
+    WRITE_4BYTES(0 as i32); //biYPelsPetMeter
+    WRITE_4BYTES(0 as i32); //biClrUsed
+    WRITE_4BYTES(0 as i32);
+    WRITE_4BYTES(0 as i32);
     END_CHUNK();
     if afd.audio as u64 != 0 {
         START_CHUNK(b"LIST\x00" as *const u8 as *const libc::c_char);
         WRITE_STRING(b"strl\x00" as *const u8 as *const libc::c_char);
         WRITE_STRING(b"strh\x00" as *const u8 as *const libc::c_char);
         //cbSize
-        WRITE_4BYTES(56 as libc::c_int); //"strh" "chunk" size
+        WRITE_4BYTES(56 as i32); //"strh" "chunk" size
         WRITE_STRING(b"auds\x00" as *const u8 as *const libc::c_char); //FCC
-        WRITE_4BYTES(0 as libc::c_int); //dwFlags
-        WRITE_4BYTES(0 as libc::c_int); //dwPriority
-        WRITE_4BYTES(0 as libc::c_int); //dwInitialFrame
-        WRITE_4BYTES(0 as libc::c_int); //dwTimescale
+        WRITE_4BYTES(0 as i32); //dwFlags
+        WRITE_4BYTES(0 as i32); //dwPriority
+        WRITE_4BYTES(0 as i32); //dwInitialFrame
+        WRITE_4BYTES(0 as i32); //dwTimescale
         WRITE_4BYTES(afd.a.sampleSize); //dwDataRate
         WRITE_4BYTES(afd.a.sampleSize * afd.a.rate); //dwStartTime
-        WRITE_4BYTES(0 as libc::c_int); //dwDataLength
+        WRITE_4BYTES(0 as i32); //dwDataLength
         WRITE_4BYTES(afd.a.totalBytes / afd.a.sampleSize); //dwSuggestedBufferSize
-        WRITE_4BYTES(0 as libc::c_int); //dwQuality
-        WRITE_4BYTES(-(1 as libc::c_int)); //dwSampleSize
+        WRITE_4BYTES(0 as i32); //dwQuality
+        WRITE_4BYTES(-(1 as i32)); //dwSampleSize
         WRITE_4BYTES(afd.a.sampleSize); //rcFrame
-        WRITE_2BYTES(0 as libc::c_int); //rcFrame
-        WRITE_2BYTES(0 as libc::c_int); //rcFrame
-        WRITE_2BYTES(0 as libc::c_int); //rcFrame
-        WRITE_2BYTES(0 as libc::c_int); //"strf" "chunk" size
+        WRITE_2BYTES(0 as i32); //rcFrame
+        WRITE_2BYTES(0 as i32); //rcFrame
+        WRITE_2BYTES(0 as i32); //rcFrame
+        WRITE_2BYTES(0 as i32); //"strf" "chunk" size
         WRITE_STRING(b"strf\x00" as *const u8 as *const libc::c_char); //wFormatTag
-        WRITE_4BYTES(18 as libc::c_int); //nChannels
+        WRITE_4BYTES(18 as i32); //nChannels
         WRITE_2BYTES(afd.a.format); //nSamplesPerSec
         WRITE_2BYTES(afd.a.channels); //nAvgBytesPerSec
         WRITE_4BYTES(afd.a.rate); //nBlockAlign
         WRITE_4BYTES(afd.a.sampleSize * afd.a.rate); //wBitsPerSample
         WRITE_2BYTES(afd.a.sampleSize);
         WRITE_2BYTES(afd.a.bits);
-        WRITE_2BYTES(0 as libc::c_int);
+        WRITE_2BYTES(0 as i32);
         END_CHUNK();
     }
     END_CHUNK();
@@ -419,35 +419,35 @@ pub unsafe extern "C" fn CL_OpenAVIForWriting(
     }
     crate::stdlib::memset(
         &mut afd as *mut aviFileData_t as *mut libc::c_void,
-        0 as libc::c_int,
+        0 as i32,
         ::std::mem::size_of::<aviFileData_t>() as libc::c_ulong,
     );
     // Don't start if a framerate has not been chosen
-    if (*crate::src::client::cl_main::cl_aviFrameRate).integer <= 0 as libc::c_int {
+    if (*crate::src::client::cl_main::cl_aviFrameRate).integer <= 0 as i32 {
         crate::src::qcommon::common::Com_Printf(
             b"^1cl_aviFrameRate must be >= 1\n\x00" as *const u8 as *const libc::c_char,
         );
         return crate::src::qcommon::q_shared::qfalse;
     }
     afd.f = crate::src::qcommon::files::FS_FOpenFileWrite(fileName);
-    if afd.f <= 0 as libc::c_int {
+    if afd.f <= 0 as i32 {
         return crate::src::qcommon::q_shared::qfalse;
     }
     afd.idxF = crate::src::qcommon::files::FS_FOpenFileWrite(crate::src::qcommon::q_shared::va(
         b"%s.index.dat\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         fileName,
     ));
-    if afd.idxF <= 0 as libc::c_int {
+    if afd.idxF <= 0 as i32 {
         crate::src::qcommon::files::FS_FCloseFile(afd.f);
         return crate::src::qcommon::q_shared::qfalse;
     }
     crate::src::qcommon::q_shared::Q_strncpyz(
         afd.fileName.as_mut_ptr(),
         fileName,
-        64 as libc::c_int,
+        64 as i32,
     );
     afd.frameRate = (*crate::src::client::cl_main::cl_aviFrameRate).integer;
-    afd.framePeriod = (1000000.0f32 / afd.frameRate as libc::c_float) as libc::c_int;
+    afd.framePeriod = (1000000.0f32 / afd.frameRate as f32) as i32;
     afd.width = crate::src::client::cl_main::cls.glconfig.vidWidth;
     afd.height = crate::src::client::cl_main::cls.glconfig.vidHeight;
     if (*crate::src::client::cl_main::cl_aviMotionJpeg).integer != 0 {
@@ -459,27 +459,27 @@ pub unsafe extern "C" fn CL_OpenAVIForWriting(
     // Allocate a bit more space for the capture buffer to account for possible
     // padding at the end of pixel lines, and padding for alignment
     afd.cBuffer = crate::src::qcommon::common::Z_Malloc(
-        (afd.width * 3 as libc::c_int + 16 as libc::c_int - 1 as libc::c_int) * afd.height
-            + 16 as libc::c_int
-            - 1 as libc::c_int,
+        (afd.width * 3 as i32 + 16 as i32 - 1 as i32) * afd.height
+            + 16 as i32
+            - 1 as i32,
     ) as *mut crate::src::qcommon::q_shared::byte;
     // raw avi files have pixel lines start on 4-byte boundaries
     afd.eBuffer = crate::src::qcommon::common::Z_Malloc(
-        (afd.width * 3 as libc::c_int + 4 as libc::c_int - 1 as libc::c_int
-            & !(4 as libc::c_int - 1 as libc::c_int))
+        (afd.width * 3 as i32 + 4 as i32 - 1 as i32
+            & !(4 as i32 - 1 as i32))
             * afd.height,
     ) as *mut crate::src::qcommon::q_shared::byte;
     afd.a.rate = crate::src::client::snd_dma::dma.speed;
-    afd.a.format = 1 as libc::c_int;
+    afd.a.format = 1 as i32;
     afd.a.channels = crate::src::client::snd_dma::dma.channels;
     /* !!! FIXME: if CL_WriteAVIAudioFrame() is ever called from somewhere other
     !!! FIXME:  than S_TransferStereo16(), we will need to handle/convert
     !!! FIXME:  float32 samples for AVI writing. */
     afd.a.bits = crate::src::client::snd_dma::dma.samplebits;
-    afd.a.sampleSize = afd.a.bits / 8 as libc::c_int * afd.a.channels;
+    afd.a.sampleSize = afd.a.bits / 8 as i32 * afd.a.channels;
     if afd.a.rate % afd.frameRate != 0 {
-        let mut suggestRate: libc::c_int = afd.frameRate;
-        while afd.a.rate % suggestRate != 0 && suggestRate >= 1 as libc::c_int {
+        let mut suggestRate: i32 = afd.frameRate;
+        while afd.a.rate % suggestRate != 0 && suggestRate >= 1 as i32 {
             suggestRate -= 1
         }
         crate::src::qcommon::common::Com_Printf(
@@ -500,7 +500,7 @@ pub unsafe extern "C" fn CL_OpenAVIForWriting(
         b"OpenAL\x00" as *const u8 as *const libc::c_char,
     ) != 0
     {
-        if afd.a.bits != 16 as libc::c_int || afd.a.channels != 2 as libc::c_int {
+        if afd.a.bits != 16 as i32 || afd.a.channels != 2 as i32 {
             crate::src::qcommon::common::Com_Printf(
                 b"^3WARNING: Audio format of %d bit/%d channels not supported\x00" as *const u8
                     as *const libc::c_char,
@@ -521,14 +521,14 @@ pub unsafe extern "C" fn CL_OpenAVIForWriting(
     CL_WriteAVIHeader(); // For the "movi"
     SafeFS_Write(buffer.as_mut_ptr() as *const libc::c_void, bufIndex, afd.f);
     afd.fileSize = bufIndex;
-    bufIndex = 0 as libc::c_int;
+    bufIndex = 0 as i32;
     START_CHUNK(b"idx1\x00" as *const u8 as *const libc::c_char);
     SafeFS_Write(
         buffer.as_mut_ptr() as *const libc::c_void,
         bufIndex,
         afd.idxF,
     );
-    afd.moviSize = 4 as libc::c_int;
+    afd.moviSize = 4 as i32;
     afd.fileOpen = crate::src::qcommon::q_shared::qtrue;
     return crate::src::qcommon::q_shared::qtrue;
 }
@@ -539,15 +539,15 @@ CL_CheckFileSize
 */
 
 unsafe extern "C" fn CL_CheckFileSize(
-    mut bytesToAdd: libc::c_int,
+    mut bytesToAdd: i32,
 ) -> crate::src::qcommon::q_shared::qboolean {
-    let mut newFileSize: libc::c_uint = 0; // The index size
+    let mut newFileSize: u32 = 0; // The index size
     newFileSize =
-        (afd.fileSize + bytesToAdd + afd.numIndices * 16 as libc::c_int + 4 as libc::c_int)
-            as libc::c_uint;
+        (afd.fileSize + bytesToAdd + afd.numIndices * 16 as i32 + 4 as i32)
+            as u32;
     // I assume all the operating systems
     // we target can handle a 2Gb file
-    if newFileSize > 2147483647 as libc::c_int as libc::c_uint {
+    if newFileSize > 2147483647 as i32 as u32 {
         // Close the current file...
         CL_CloseAVI();
         // ...And open a new one
@@ -568,15 +568,15 @@ CL_WriteAVIVideoFrame
 
 pub unsafe extern "C" fn CL_WriteAVIVideoFrame(
     mut imageBuffer: *const crate::src::qcommon::q_shared::byte,
-    mut size: libc::c_int,
+    mut size: i32,
 ) {
-    let mut chunkOffset: libc::c_int = afd.fileSize - afd.moviOffset - 8 as libc::c_int;
-    let mut chunkSize: libc::c_int = 8 as libc::c_int + size;
-    let mut paddingSize: libc::c_int = (size + 2 as libc::c_int - 1 as libc::c_int
-        & !(2 as libc::c_int - 1 as libc::c_int))
+    let mut chunkOffset: i32 = afd.fileSize - afd.moviOffset - 8 as i32;
+    let mut chunkSize: i32 = 8 as i32 + size;
+    let mut paddingSize: i32 = (size + 2 as i32 - 1 as i32
+        & !(2 as i32 - 1 as i32))
         - size;
     let mut padding: [crate::src::qcommon::q_shared::byte; 4] = [
-        0 as libc::c_int as crate::src::qcommon::q_shared::byte,
+        0 as i32 as crate::src::qcommon::q_shared::byte,
         0,
         0,
         0,
@@ -585,15 +585,15 @@ pub unsafe extern "C" fn CL_WriteAVIVideoFrame(
         return;
     }
     // Chunk header + contents + padding
-    if CL_CheckFileSize(8 as libc::c_int + size + 2 as libc::c_int) as u64 != 0 {
+    if CL_CheckFileSize(8 as i32 + size + 2 as i32) as u64 != 0 {
         return;
     }
-    bufIndex = 0 as libc::c_int;
+    bufIndex = 0 as i32;
     WRITE_STRING(b"00dc\x00" as *const u8 as *const libc::c_char);
     WRITE_4BYTES(size);
     SafeFS_Write(
         buffer.as_mut_ptr() as *const libc::c_void,
-        8 as libc::c_int,
+        8 as i32,
         afd.f,
     );
     SafeFS_Write(imageBuffer as *const libc::c_void, size, afd.f);
@@ -609,14 +609,14 @@ pub unsafe extern "C" fn CL_WriteAVIVideoFrame(
         afd.maxRecordSize = size
     }
     // Index
-    bufIndex = 0 as libc::c_int; //dwIdentifier
+    bufIndex = 0 as i32; //dwIdentifier
     WRITE_STRING(b"00dc\x00" as *const u8 as *const libc::c_char); //dwFlags (all frames are KeyFrames)
-    WRITE_4BYTES(0x10 as libc::c_int); //dwOffset
+    WRITE_4BYTES(0x10 as i32); //dwOffset
     WRITE_4BYTES(chunkOffset); //dwLength
     WRITE_4BYTES(size);
     SafeFS_Write(
         buffer.as_mut_ptr() as *const libc::c_void,
-        16 as libc::c_int,
+        16 as i32,
         afd.idxF,
     );
     afd.numIndices += 1;
@@ -630,10 +630,10 @@ CL_WriteAVIAudioFrame
 
 pub unsafe extern "C" fn CL_WriteAVIAudioFrame(
     mut pcmBuffer: *const crate::src::qcommon::q_shared::byte,
-    mut size: libc::c_int,
+    mut size: i32,
 ) {
     static mut pcmCaptureBuffer: [crate::src::qcommon::q_shared::byte; 44100] = [
-        0 as libc::c_int as crate::src::qcommon::q_shared::byte,
+        0 as i32 as crate::src::qcommon::q_shared::byte,
         0,
         0,
         0,
@@ -44734,7 +44734,7 @@ pub unsafe extern "C" fn CL_WriteAVIAudioFrame(
         0,
         0,
     ];
-    static mut bytesInBuffer: libc::c_int = 0 as libc::c_int;
+    static mut bytesInBuffer: i32 = 0 as i32;
     if afd.audio as u64 == 0 {
         return;
     }
@@ -44742,15 +44742,15 @@ pub unsafe extern "C" fn CL_WriteAVIAudioFrame(
         return;
     }
     // Chunk header + contents + padding
-    if CL_CheckFileSize(8 as libc::c_int + bytesInBuffer + size + 2 as libc::c_int) as u64 != 0 {
+    if CL_CheckFileSize(8 as i32 + bytesInBuffer + size + 2 as i32) as u64 != 0 {
         return;
     }
-    if bytesInBuffer + size > 44100 as libc::c_int {
+    if bytesInBuffer + size > 44100 as i32 {
         crate::src::qcommon::common::Com_Printf(
             b"^3WARNING: Audio capture buffer overflow -- truncating\n\x00" as *const u8
                 as *const libc::c_char,
         );
-        size = 44100 as libc::c_int - bytesInBuffer
+        size = 44100 as i32 - bytesInBuffer
     }
     crate::stdlib::memcpy(
         &mut *pcmCaptureBuffer.as_mut_ptr().offset(bytesInBuffer as isize)
@@ -44762,27 +44762,27 @@ pub unsafe extern "C" fn CL_WriteAVIAudioFrame(
     // Only write if we have a frame's worth of audio
     if bytesInBuffer
         >= crate::stdlib::ceil(
-            (afd.a.rate as libc::c_float / afd.frameRate as libc::c_float) as libc::c_double,
-        ) as libc::c_int
+            (afd.a.rate as f32 / afd.frameRate as f32) as f64,
+        ) as i32
             * afd.a.sampleSize
     {
-        let mut chunkOffset: libc::c_int = afd.fileSize - afd.moviOffset - 8 as libc::c_int;
-        let mut chunkSize: libc::c_int = 8 as libc::c_int + bytesInBuffer;
-        let mut paddingSize: libc::c_int = (bytesInBuffer + 2 as libc::c_int - 1 as libc::c_int
-            & !(2 as libc::c_int - 1 as libc::c_int))
+        let mut chunkOffset: i32 = afd.fileSize - afd.moviOffset - 8 as i32;
+        let mut chunkSize: i32 = 8 as i32 + bytesInBuffer;
+        let mut paddingSize: i32 = (bytesInBuffer + 2 as i32 - 1 as i32
+            & !(2 as i32 - 1 as i32))
             - bytesInBuffer;
         let mut padding: [crate::src::qcommon::q_shared::byte; 4] = [
-            0 as libc::c_int as crate::src::qcommon::q_shared::byte,
+            0 as i32 as crate::src::qcommon::q_shared::byte,
             0,
             0,
             0,
         ];
-        bufIndex = 0 as libc::c_int;
+        bufIndex = 0 as i32;
         WRITE_STRING(b"01wb\x00" as *const u8 as *const libc::c_char);
         WRITE_4BYTES(bytesInBuffer);
         SafeFS_Write(
             buffer.as_mut_ptr() as *const libc::c_void,
-            8 as libc::c_int,
+            8 as i32,
             afd.f,
         );
         SafeFS_Write(
@@ -44800,18 +44800,18 @@ pub unsafe extern "C" fn CL_WriteAVIAudioFrame(
         afd.moviSize += chunkSize + paddingSize;
         afd.a.totalBytes += bytesInBuffer;
         // Index
-        bufIndex = 0 as libc::c_int; //dwIdentifier
+        bufIndex = 0 as i32; //dwIdentifier
         WRITE_STRING(b"01wb\x00" as *const u8 as *const libc::c_char); //dwFlags
-        WRITE_4BYTES(0 as libc::c_int); //dwOffset
+        WRITE_4BYTES(0 as i32); //dwOffset
         WRITE_4BYTES(chunkOffset); //dwLength
         WRITE_4BYTES(bytesInBuffer);
         SafeFS_Write(
             buffer.as_mut_ptr() as *const libc::c_void,
-            16 as libc::c_int,
+            16 as i32,
             afd.idxF,
         );
         afd.numIndices += 1;
-        bytesInBuffer = 0 as libc::c_int
+        bytesInBuffer = 0 as i32
     };
 }
 /*
@@ -44846,8 +44846,8 @@ Closes the AVI file and writes an index chunk
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_CloseAVI() -> crate::src::qcommon::q_shared::qboolean {
-    let mut indexRemainder: libc::c_int = 0;
-    let mut indexSize: libc::c_int = afd.numIndices * 16 as libc::c_int;
+    let mut indexRemainder: i32 = 0;
+    let mut indexSize: i32 = afd.numIndices * 16 as i32;
     let mut idxFileName: *const libc::c_char = crate::src::qcommon::q_shared::va(
         b"%s.index.dat\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         afd.fileName.as_mut_ptr(),
@@ -44859,10 +44859,10 @@ pub unsafe extern "C" fn CL_CloseAVI() -> crate::src::qcommon::q_shared::qboolea
     afd.fileOpen = crate::src::qcommon::q_shared::qfalse;
     crate::src::qcommon::files::FS_Seek(
         afd.idxF,
-        4 as libc::c_int as libc::c_long,
-        crate::src::qcommon::q_shared::FS_SEEK_SET as libc::c_int,
+        4 as i32 as libc::c_long,
+        crate::src::qcommon::q_shared::FS_SEEK_SET as i32,
     );
-    bufIndex = 0 as libc::c_int;
+    bufIndex = 0 as i32;
     WRITE_4BYTES(indexSize);
     SafeFS_Write(
         buffer.as_mut_ptr() as *const libc::c_void,
@@ -44876,26 +44876,26 @@ pub unsafe extern "C" fn CL_CloseAVI() -> crate::src::qcommon::q_shared::qboolea
         idxFileName,
         &mut afd.idxF,
         crate::src::qcommon::q_shared::qtrue,
-    ) as libc::c_int;
-    if indexSize <= 0 as libc::c_int {
+    ) as i32;
+    if indexSize <= 0 as i32 {
         crate::src::qcommon::files::FS_FCloseFile(afd.f);
         return crate::src::qcommon::q_shared::qfalse;
     }
     indexRemainder = indexSize;
     // Append index to end of avi file
-    while indexRemainder > 2048 as libc::c_int {
+    while indexRemainder > 2048 as i32 {
         crate::src::qcommon::files::FS_Read(
             buffer.as_mut_ptr() as *mut libc::c_void,
-            2048 as libc::c_int,
+            2048 as i32,
             afd.idxF,
         );
         SafeFS_Write(
             buffer.as_mut_ptr() as *const libc::c_void,
-            2048 as libc::c_int,
+            2048 as i32,
             afd.f,
         );
-        afd.fileSize += 2048 as libc::c_int;
-        indexRemainder -= 2048 as libc::c_int
+        afd.fileSize += 2048 as i32;
+        indexRemainder -= 2048 as i32
     }
     crate::src::qcommon::files::FS_Read(
         buffer.as_mut_ptr() as *mut libc::c_void,
@@ -44914,13 +44914,13 @@ pub unsafe extern "C" fn CL_CloseAVI() -> crate::src::qcommon::q_shared::qboolea
     // Write the real header
     crate::src::qcommon::files::FS_Seek(
         afd.f,
-        0 as libc::c_int as libc::c_long,
-        crate::src::qcommon::q_shared::FS_SEEK_SET as libc::c_int,
+        0 as i32 as libc::c_long,
+        crate::src::qcommon::q_shared::FS_SEEK_SET as i32,
     ); // "RIFF" size
     CL_WriteAVIHeader(); // Skip "LIST"
-    bufIndex = 4 as libc::c_int;
-    WRITE_4BYTES(afd.fileSize - 8 as libc::c_int);
-    bufIndex = afd.moviOffset + 4 as libc::c_int;
+    bufIndex = 4 as i32;
+    WRITE_4BYTES(afd.fileSize - 8 as i32);
+    bufIndex = afd.moviOffset + 4 as i32;
     WRITE_4BYTES(afd.moviSize);
     SafeFS_Write(buffer.as_mut_ptr() as *const libc::c_void, bufIndex, afd.f);
     crate::src::qcommon::common::Z_Free(afd.cBuffer as *mut libc::c_void);

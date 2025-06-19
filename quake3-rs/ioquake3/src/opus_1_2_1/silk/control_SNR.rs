@@ -139,36 +139,36 @@ POSSIBILITY OF SUCH DAMAGE.
 pub unsafe extern "C" fn silk_control_SNR(
     mut psEncC: *mut crate::structs_h::silk_encoder_state,
     mut TargetRate_bps: crate::opus_types_h::opus_int32,
-) -> libc::c_int
+) -> i32
 /* I    Target max bitrate (bps)                    */ {
-    let mut k: libc::c_int = 0;
-    let mut ret: libc::c_int = 0 as libc::c_int;
+    let mut k: i32 = 0;
+    let mut ret: i32 = 0 as i32;
     let mut frac_Q6: crate::opus_types_h::opus_int32 = 0;
     let mut rateTable: *const crate::opus_types_h::opus_int32 =
         0 as *const crate::opus_types_h::opus_int32;
     /* Set bitrate/coding quality */
-    TargetRate_bps = if 5000 as libc::c_int > 80000 as libc::c_int {
-        if TargetRate_bps > 5000 as libc::c_int {
-            5000 as libc::c_int
-        } else if TargetRate_bps < 80000 as libc::c_int {
-            80000 as libc::c_int
+    TargetRate_bps = if 5000 as i32 > 80000 as i32 {
+        if TargetRate_bps > 5000 as i32 {
+            5000 as i32
+        } else if TargetRate_bps < 80000 as i32 {
+            80000 as i32
         } else {
             TargetRate_bps
         }
-    } else if TargetRate_bps > 80000 as libc::c_int {
-        80000 as libc::c_int
-    } else if TargetRate_bps < 5000 as libc::c_int {
-        5000 as libc::c_int
+    } else if TargetRate_bps > 80000 as i32 {
+        80000 as i32
+    } else if TargetRate_bps < 5000 as i32 {
+        5000 as i32
     } else {
         TargetRate_bps
     };
     if TargetRate_bps != (*psEncC).TargetRate_bps {
         (*psEncC).TargetRate_bps = TargetRate_bps;
         /* If new TargetRate_bps, translate to SNR_dB value */
-        if (*psEncC).fs_kHz == 8 as libc::c_int {
+        if (*psEncC).fs_kHz == 8 as i32 {
             rateTable =
                 crate::src::opus_1_2_1::silk::tables_other::silk_TargetRate_table_NB.as_ptr()
-        } else if (*psEncC).fs_kHz == 12 as libc::c_int {
+        } else if (*psEncC).fs_kHz == 12 as i32 {
             rateTable =
                 crate::src::opus_1_2_1::silk::tables_other::silk_TargetRate_table_MB.as_ptr()
         } else {
@@ -176,30 +176,30 @@ pub unsafe extern "C" fn silk_control_SNR(
                 crate::src::opus_1_2_1::silk::tables_other::silk_TargetRate_table_WB.as_ptr()
         }
         /* Reduce bitrate for 10 ms modes in these calculations */
-        if (*psEncC).nb_subfr == 2 as libc::c_int {
-            TargetRate_bps -= 2200 as libc::c_int
+        if (*psEncC).nb_subfr == 2 as i32 {
+            TargetRate_bps -= 2200 as i32
         }
         /* Find bitrate interval in table and interpolate */
-        k = 1 as libc::c_int;
-        while k < 8 as libc::c_int {
+        k = 1 as i32;
+        while k < 8 as i32 {
             if TargetRate_bps <= *rateTable.offset(k as isize) {
-                frac_Q6 = (((TargetRate_bps - *rateTable.offset((k - 1 as libc::c_int) as isize))
+                frac_Q6 = (((TargetRate_bps - *rateTable.offset((k - 1 as i32) as isize))
                     as crate::opus_types_h::opus_uint32)
-                    << 6 as libc::c_int)
+                    << 6 as i32)
                     as crate::opus_types_h::opus_int32
                     / (*rateTable.offset(k as isize)
-                        - *rateTable.offset((k - 1 as libc::c_int) as isize));
+                        - *rateTable.offset((k - 1 as i32) as isize));
                 (*psEncC).SNR_dB_Q7 =
                     ((crate::src::opus_1_2_1::silk::tables_other::silk_SNR_table_Q1
-                        [(k - 1 as libc::c_int) as usize]
+                        [(k - 1 as i32) as usize]
                         as crate::opus_types_h::opus_uint32)
-                        << 6 as libc::c_int) as crate::opus_types_h::opus_int32
+                        << 6 as i32) as crate::opus_types_h::opus_int32
                         + frac_Q6
                             * (crate::src::opus_1_2_1::silk::tables_other::silk_SNR_table_Q1
-                                [k as usize] as libc::c_int
+                                [k as usize] as i32
                                 - crate::src::opus_1_2_1::silk::tables_other::silk_SNR_table_Q1
-                                    [(k - 1 as libc::c_int) as usize]
-                                    as libc::c_int);
+                                    [(k - 1 as i32) as usize]
+                                    as i32);
                 break;
             } else {
                 k += 1

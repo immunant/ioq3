@@ -35,7 +35,7 @@ pub struct cvarTable_t {
     pub vmCvar: *mut crate::src::qcommon::q_shared::vmCvar_t,
     pub cvarName: *mut libc::c_char,
     pub defaultString: *mut libc::c_char,
-    pub cvarFlags: libc::c_int,
+    pub cvarFlags: i32,
 }
 /*
 ===========================================================================
@@ -77,51 +77,51 @@ This must be the very first function compiled into the .qvm file
 #[no_mangle]
 
 pub unsafe extern "C" fn vmMain(
-    mut command: libc::c_int,
-    mut arg0: libc::c_int,
-    mut arg1: libc::c_int,
-    mut _arg2: libc::c_int,
-    mut _arg3: libc::c_int,
-    mut _arg4: libc::c_int,
-    mut _arg5: libc::c_int,
-    mut _arg6: libc::c_int,
-    mut _arg7: libc::c_int,
-    mut _arg8: libc::c_int,
-    mut _arg9: libc::c_int,
-    mut _arg10: libc::c_int,
-    mut _arg11: libc::c_int,
+    mut command: i32,
+    mut arg0: i32,
+    mut arg1: i32,
+    mut _arg2: i32,
+    mut _arg3: i32,
+    mut _arg4: i32,
+    mut _arg5: i32,
+    mut _arg6: i32,
+    mut _arg7: i32,
+    mut _arg8: i32,
+    mut _arg9: i32,
+    mut _arg10: i32,
+    mut _arg11: i32,
 ) -> crate::stdlib::intptr_t {
     match command {
         0 => {
-            return 4 as libc::c_int as crate::stdlib::intptr_t;
+            return 4 as i32 as crate::stdlib::intptr_t;
             // change this to qfalse for mods!
         }
         1 => {
             crate::src::q3_ui::ui_atoms::UI_Init();
-            return 0 as libc::c_int as crate::stdlib::intptr_t;
+            return 0 as i32 as crate::stdlib::intptr_t;
         }
         2 => {
             crate::src::q3_ui::ui_atoms::UI_Shutdown();
-            return 0 as libc::c_int as crate::stdlib::intptr_t;
+            return 0 as i32 as crate::stdlib::intptr_t;
         }
         3 => {
             crate::src::q3_ui::ui_atoms::UI_KeyEvent(arg0, arg1);
-            return 0 as libc::c_int as crate::stdlib::intptr_t;
+            return 0 as i32 as crate::stdlib::intptr_t;
         }
         4 => {
             crate::src::q3_ui::ui_atoms::UI_MouseEvent(arg0, arg1);
-            return 0 as libc::c_int as crate::stdlib::intptr_t;
+            return 0 as i32 as crate::stdlib::intptr_t;
         }
         5 => {
             crate::src::q3_ui::ui_atoms::UI_Refresh(arg0);
-            return 0 as libc::c_int as crate::stdlib::intptr_t;
+            return 0 as i32 as crate::stdlib::intptr_t;
         }
         6 => return crate::src::q3_ui::ui_atoms::UI_IsFullscreen() as crate::stdlib::intptr_t,
         7 => {
             crate::src::q3_ui::ui_atoms::UI_SetActiveMenu(
                 arg0 as crate::ui_public_h::uiMenuCommand_t,
             );
-            return 0 as libc::c_int as crate::stdlib::intptr_t;
+            return 0 as i32 as crate::stdlib::intptr_t;
         }
         8 => {
             return crate::src::q3_ui::ui_atoms::UI_ConsoleCommand(arg0) as crate::stdlib::intptr_t
@@ -130,15 +130,15 @@ pub unsafe extern "C" fn vmMain(
             crate::src::q3_ui::ui_connect::UI_DrawConnectScreen(
                 arg0 as crate::src::qcommon::q_shared::qboolean,
             );
-            return 0 as libc::c_int as crate::stdlib::intptr_t;
+            return 0 as i32 as crate::stdlib::intptr_t;
         }
         10 => {
             // mod authors need to observe this
-            return crate::src::qcommon::q_shared::qtrue as libc::c_int as crate::stdlib::intptr_t;
+            return crate::src::qcommon::q_shared::qtrue as i32 as crate::stdlib::intptr_t;
         }
         _ => {}
     }
-    return -(1 as libc::c_int) as crate::stdlib::intptr_t;
+    return -(1 as i32) as crate::stdlib::intptr_t;
 }
 #[no_mangle]
 
@@ -630,7 +630,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                 cvarName: b"ui_ffa_fraglimit\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"20\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x1 as libc::c_int,
+                cvarFlags: 0x1 as i32,
             };
             init
         },
@@ -641,7 +641,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                 cvarName: b"ui_ffa_timelimit\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x1 as libc::c_int,
+                cvarFlags: 0x1 as i32,
             };
             init
         },
@@ -652,7 +652,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                 cvarName: b"ui_tourney_fraglimit\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x1 as libc::c_int,
+                cvarFlags: 0x1 as i32,
             };
             init
         },
@@ -663,7 +663,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                 cvarName: b"ui_tourney_timelimit\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"15\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x1 as libc::c_int,
+                cvarFlags: 0x1 as i32,
             };
             init
         },
@@ -674,7 +674,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                 cvarName: b"ui_team_fraglimit\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x1 as libc::c_int,
+                cvarFlags: 0x1 as i32,
             };
             init
         },
@@ -685,7 +685,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                 cvarName: b"ui_team_timelimit\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"20\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x1 as libc::c_int,
+                cvarFlags: 0x1 as i32,
             };
             init
         },
@@ -696,7 +696,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                 cvarName: b"ui_team_friendly\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x1 as libc::c_int,
+                cvarFlags: 0x1 as i32,
             };
             init
         },
@@ -707,7 +707,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                 cvarName: b"ui_ctf_capturelimit\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"8\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x1 as libc::c_int,
+                cvarFlags: 0x1 as i32,
             };
             init
         },
@@ -718,7 +718,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                 cvarName: b"ui_ctf_timelimit\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"30\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x1 as libc::c_int,
+                cvarFlags: 0x1 as i32,
             };
             init
         },
@@ -729,7 +729,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                 cvarName: b"ui_ctf_friendly\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x1 as libc::c_int,
+                cvarFlags: 0x1 as i32,
             };
             init
         },
@@ -740,7 +740,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                 cvarName: b"g_arenasFile\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x10 as libc::c_int | 0x40 as libc::c_int,
+                cvarFlags: 0x10 as i32 | 0x40 as i32,
             };
             init
         },
@@ -751,7 +751,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                 cvarName: b"g_botsFile\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x10 as libc::c_int | 0x40 as libc::c_int,
+                cvarFlags: 0x10 as i32 | 0x40 as i32,
             };
             init
         },
@@ -762,7 +762,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                 cvarName: b"g_spScores1\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x1 as libc::c_int,
+                cvarFlags: 0x1 as i32,
             };
             init
         },
@@ -773,7 +773,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                 cvarName: b"g_spScores2\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x1 as libc::c_int,
+                cvarFlags: 0x1 as i32,
             };
             init
         },
@@ -784,7 +784,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                 cvarName: b"g_spScores3\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x1 as libc::c_int,
+                cvarFlags: 0x1 as i32,
             };
             init
         },
@@ -795,7 +795,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                 cvarName: b"g_spScores4\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x1 as libc::c_int,
+                cvarFlags: 0x1 as i32,
             };
             init
         },
@@ -806,7 +806,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                 cvarName: b"g_spScores5\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x1 as libc::c_int,
+                cvarFlags: 0x1 as i32,
             };
             init
         },
@@ -817,7 +817,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                 cvarName: b"g_spAwards\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x1 as libc::c_int,
+                cvarFlags: 0x1 as i32,
             };
             init
         },
@@ -828,7 +828,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                 cvarName: b"g_spVideos\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x1 as libc::c_int,
+                cvarFlags: 0x1 as i32,
             };
             init
         },
@@ -838,7 +838,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                     as *mut crate::src::qcommon::q_shared::vmCvar_t,
                 cvarName: b"g_spSkill\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"2\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x1 as libc::c_int | 0x20 as libc::c_int,
+                cvarFlags: 0x1 as i32 | 0x20 as i32,
             };
             init
         },
@@ -849,7 +849,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                 cvarName: b"ui_spSelection\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x40 as libc::c_int,
+                cvarFlags: 0x40 as i32,
             };
             init
         },
@@ -860,7 +860,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                 cvarName: b"ui_browserMaster\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x1 as libc::c_int,
+                cvarFlags: 0x1 as i32,
             };
             init
         },
@@ -871,7 +871,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                 cvarName: b"ui_browserGameType\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x1 as libc::c_int,
+                cvarFlags: 0x1 as i32,
             };
             init
         },
@@ -882,7 +882,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                 cvarName: b"ui_browserSortKey\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"4\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x1 as libc::c_int,
+                cvarFlags: 0x1 as i32,
             };
             init
         },
@@ -893,7 +893,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                 cvarName: b"ui_browserShowFull\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x1 as libc::c_int,
+                cvarFlags: 0x1 as i32,
             };
             init
         },
@@ -904,7 +904,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                 cvarName: b"ui_browserShowEmpty\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x1 as libc::c_int,
+                cvarFlags: 0x1 as i32,
             };
             init
         },
@@ -915,7 +915,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                 cvarName: b"cg_brassTime\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"2500\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x1 as libc::c_int,
+                cvarFlags: 0x1 as i32,
             };
             init
         },
@@ -926,7 +926,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                 cvarName: b"cg_drawCrosshair\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"4\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x1 as libc::c_int,
+                cvarFlags: 0x1 as i32,
             };
             init
         },
@@ -937,7 +937,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                 cvarName: b"cg_drawCrosshairNames\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x1 as libc::c_int,
+                cvarFlags: 0x1 as i32,
             };
             init
         },
@@ -947,7 +947,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                     as *mut crate::src::qcommon::q_shared::vmCvar_t,
                 cvarName: b"cg_marks\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x1 as libc::c_int,
+                cvarFlags: 0x1 as i32,
             };
             init
         },
@@ -957,7 +957,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                     as *mut crate::src::qcommon::q_shared::vmCvar_t,
                 cvarName: b"server1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x1 as libc::c_int,
+                cvarFlags: 0x1 as i32,
             };
             init
         },
@@ -967,7 +967,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                     as *mut crate::src::qcommon::q_shared::vmCvar_t,
                 cvarName: b"server2\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x1 as libc::c_int,
+                cvarFlags: 0x1 as i32,
             };
             init
         },
@@ -977,7 +977,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                     as *mut crate::src::qcommon::q_shared::vmCvar_t,
                 cvarName: b"server3\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x1 as libc::c_int,
+                cvarFlags: 0x1 as i32,
             };
             init
         },
@@ -987,7 +987,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                     as *mut crate::src::qcommon::q_shared::vmCvar_t,
                 cvarName: b"server4\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x1 as libc::c_int,
+                cvarFlags: 0x1 as i32,
             };
             init
         },
@@ -997,7 +997,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                     as *mut crate::src::qcommon::q_shared::vmCvar_t,
                 cvarName: b"server5\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x1 as libc::c_int,
+                cvarFlags: 0x1 as i32,
             };
             init
         },
@@ -1007,7 +1007,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                     as *mut crate::src::qcommon::q_shared::vmCvar_t,
                 cvarName: b"server6\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x1 as libc::c_int,
+                cvarFlags: 0x1 as i32,
             };
             init
         },
@@ -1017,7 +1017,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                     as *mut crate::src::qcommon::q_shared::vmCvar_t,
                 cvarName: b"server7\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x1 as libc::c_int,
+                cvarFlags: 0x1 as i32,
             };
             init
         },
@@ -1027,7 +1027,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                     as *mut crate::src::qcommon::q_shared::vmCvar_t,
                 cvarName: b"server8\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x1 as libc::c_int,
+                cvarFlags: 0x1 as i32,
             };
             init
         },
@@ -1037,7 +1037,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                     as *mut crate::src::qcommon::q_shared::vmCvar_t,
                 cvarName: b"server9\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x1 as libc::c_int,
+                cvarFlags: 0x1 as i32,
             };
             init
         },
@@ -1047,7 +1047,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                     as *mut crate::src::qcommon::q_shared::vmCvar_t,
                 cvarName: b"server10\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x1 as libc::c_int,
+                cvarFlags: 0x1 as i32,
             };
             init
         },
@@ -1057,7 +1057,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                     as *mut crate::src::qcommon::q_shared::vmCvar_t,
                 cvarName: b"server11\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x1 as libc::c_int,
+                cvarFlags: 0x1 as i32,
             };
             init
         },
@@ -1067,7 +1067,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                     as *mut crate::src::qcommon::q_shared::vmCvar_t,
                 cvarName: b"server12\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x1 as libc::c_int,
+                cvarFlags: 0x1 as i32,
             };
             init
         },
@@ -1077,7 +1077,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                     as *mut crate::src::qcommon::q_shared::vmCvar_t,
                 cvarName: b"server13\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x1 as libc::c_int,
+                cvarFlags: 0x1 as i32,
             };
             init
         },
@@ -1087,7 +1087,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                     as *mut crate::src::qcommon::q_shared::vmCvar_t,
                 cvarName: b"server14\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x1 as libc::c_int,
+                cvarFlags: 0x1 as i32,
             };
             init
         },
@@ -1097,7 +1097,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                     as *mut crate::src::qcommon::q_shared::vmCvar_t,
                 cvarName: b"server15\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x1 as libc::c_int,
+                cvarFlags: 0x1 as i32,
             };
             init
         },
@@ -1107,7 +1107,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                     as *mut crate::src::qcommon::q_shared::vmCvar_t,
                 cvarName: b"server16\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x1 as libc::c_int,
+                cvarFlags: 0x1 as i32,
             };
             init
         },
@@ -1118,7 +1118,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                 cvarName: b"ui_cdkeychecked\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x40 as libc::c_int,
+                cvarFlags: 0x40 as i32,
             };
             init
         },
@@ -1128,7 +1128,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                     as *mut crate::src::qcommon::q_shared::vmCvar_t,
                 cvarName: b"ui_ioq3\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0x40 as libc::c_int,
+                cvarFlags: 0x40 as i32,
             };
             init
         },
@@ -1139,7 +1139,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
                 cvarName: b"g_localTeamPref\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                cvarFlags: 0 as libc::c_int,
+                cvarFlags: 0 as i32,
             };
             init
         },
@@ -1147,7 +1147,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
 };
 // Initialized in run_static_initializers
 
-static mut cvarTableSize: libc::c_int = 0;
+static mut cvarTableSize: i32 = 0;
 /*
 =================
 UI_RegisterCvars
@@ -1156,9 +1156,9 @@ UI_RegisterCvars
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_RegisterCvars() {
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     let mut cv: *mut cvarTable_t = 0 as *mut cvarTable_t;
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     cv = cvarTable.as_mut_ptr();
     while i < cvarTableSize {
         crate::src::ui::ui_syscalls::trap_Cvar_Register(
@@ -1223,9 +1223,9 @@ UI_UpdateCvars
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_UpdateCvars() {
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     let mut cv: *mut cvarTable_t = 0 as *mut cvarTable_t;
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     cv = cvarTable.as_mut_ptr();
     while i < cvarTableSize {
         if !(*cv).vmCvar.is_null() {
@@ -1240,7 +1240,7 @@ pub unsafe extern "C" fn UI_UpdateCvars() {
 unsafe extern "C" fn run_static_initializers() {
     cvarTableSize = (::std::mem::size_of::<[cvarTable_t; 49]>() as libc::c_ulong)
         .wrapping_div(::std::mem::size_of::<cvarTable_t>() as libc::c_ulong)
-        as libc::c_int
+        as i32
 }
 #[used]
 #[cfg_attr(target_os = "linux", link_section = ".init_array")]

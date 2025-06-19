@@ -3,7 +3,7 @@ use ::libc;
 pub mod stdlib_float_h {
     #[inline]
 
-    pub unsafe extern "C" fn atof(mut __nptr: *const libc::c_char) -> libc::c_double {
+    pub unsafe extern "C" fn atof(mut __nptr: *const libc::c_char) -> f64 {
         return ::libc::strtod(__nptr, 0 as *mut libc::c_void as *mut *mut libc::c_char);
     }
 }
@@ -11,12 +11,12 @@ pub mod stdlib_float_h {
 pub mod stdlib_h {
     #[inline]
 
-    pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> libc::c_int {
+    pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return ::libc::strtol(
             __nptr,
             0 as *mut libc::c_void as *mut *mut libc::c_char,
-            10 as libc::c_int,
-        ) as libc::c_int;
+            10 as i32,
+        ) as i32;
     }
 }
 pub use crate::stddef_h::size_t;
@@ -250,7 +250,7 @@ pub struct field_t {
     pub type_0: fieldtype_t,
 }
 
-pub type fieldtype_t = libc::c_uint;
+pub type fieldtype_t = u32;
 
 pub const F_ANGLEHACK: fieldtype_t = 4;
 
@@ -290,19 +290,19 @@ pub unsafe extern "C" fn G_SpawnString(
     mut defaultString: *const libc::c_char,
     mut out: *mut *mut libc::c_char,
 ) -> crate::src::qcommon::q_shared::qboolean {
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     if crate::src::game::g_main::level.spawning as u64 == 0 {
         *out = defaultString as *mut libc::c_char
         //		G_Error( "G_SpawnString() called while not spawning" );
     }
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < crate::src::game::g_main::level.numSpawnVars {
         if crate::src::qcommon::q_shared::Q_stricmp(
             key,
-            crate::src::game::g_main::level.spawnVars[i as usize][0 as libc::c_int as usize],
+            crate::src::game::g_main::level.spawnVars[i as usize][0 as i32 as usize],
         ) == 0
         {
-            *out = crate::src::game::g_main::level.spawnVars[i as usize][1 as libc::c_int as usize];
+            *out = crate::src::game::g_main::level.spawnVars[i as usize][1 as i32 as usize];
             return crate::src::qcommon::q_shared::qtrue;
         }
         i += 1
@@ -315,13 +315,13 @@ pub unsafe extern "C" fn G_SpawnString(
 pub unsafe extern "C" fn G_SpawnFloat(
     mut key: *const libc::c_char,
     mut defaultString: *const libc::c_char,
-    mut out: *mut libc::c_float,
+    mut out: *mut f32,
 ) -> crate::src::qcommon::q_shared::qboolean {
     let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut present: crate::src::qcommon::q_shared::qboolean =
         crate::src::qcommon::q_shared::qfalse;
     present = G_SpawnString(key, defaultString, &mut s);
-    *out = atof(s) as libc::c_float;
+    *out = atof(s) as f32;
     return present;
 }
 #[no_mangle]
@@ -329,7 +329,7 @@ pub unsafe extern "C" fn G_SpawnFloat(
 pub unsafe extern "C" fn G_SpawnInt(
     mut key: *const libc::c_char,
     mut defaultString: *const libc::c_char,
-    mut out: *mut libc::c_int,
+    mut out: *mut i32,
 ) -> crate::src::qcommon::q_shared::qboolean {
     let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut present: crate::src::qcommon::q_shared::qboolean =
@@ -343,7 +343,7 @@ pub unsafe extern "C" fn G_SpawnInt(
 pub unsafe extern "C" fn G_SpawnVector(
     mut key: *const libc::c_char,
     mut defaultString: *const libc::c_char,
-    mut out: *mut libc::c_float,
+    mut out: *mut f32,
 ) -> crate::src::qcommon::q_shared::qboolean {
     let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut present: crate::src::qcommon::q_shared::qboolean =
@@ -352,9 +352,9 @@ pub unsafe extern "C" fn G_SpawnVector(
     ::libc::sscanf(
         s,
         b"%f %f %f\x00" as *const u8 as *const libc::c_char,
-        &mut *out.offset(0 as libc::c_int as isize) as *mut libc::c_float,
-        &mut *out.offset(1 as libc::c_int as isize) as *mut libc::c_float,
-        &mut *out.offset(2 as libc::c_int as isize) as *mut libc::c_float,
+        &mut *out.offset(0 as i32 as isize) as *mut f32,
+        &mut *out.offset(1 as i32 as isize) as *mut f32,
+        &mut *out.offset(2 as i32 as isize) as *mut f32,
     );
     return present;
 }
@@ -901,7 +901,7 @@ pub unsafe extern "C" fn G_CallSpawn(
     // check item spawn functions
     item = crate::src::game::bg_misc::bg_itemlist
         .as_mut_ptr()
-        .offset(1 as libc::c_int as isize);
+        .offset(1 as i32 as isize);
     while !(*item).classname.is_null() {
         if ::libc::strcmp((*item).classname, (*ent).classname) == 0 {
             crate::src::game::g_items::G_SpawnItem(
@@ -941,18 +941,18 @@ so message texts can be multi-line
 pub unsafe extern "C" fn G_NewString(mut string: *const libc::c_char) -> *mut libc::c_char {
     let mut newb: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut new_p: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut i: libc::c_int = 0;
-    let mut l: libc::c_int = 0;
-    l = crate::stdlib::strlen(string).wrapping_add(1 as libc::c_int as libc::c_ulong)
-        as libc::c_int;
+    let mut i: i32 = 0;
+    let mut l: i32 = 0;
+    l = crate::stdlib::strlen(string).wrapping_add(1 as i32 as libc::c_ulong)
+        as i32;
     newb = crate::src::game::g_mem::G_Alloc(l) as *mut libc::c_char;
     new_p = newb;
     // turn \n into a real linefeed
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < l {
-        if *string.offset(i as isize) as libc::c_int == '\\' as i32 && i < l - 1 as libc::c_int {
+        if *string.offset(i as isize) as i32 == '\\' as i32 && i < l - 1 as i32 {
             i += 1;
-            if *string.offset(i as isize) as libc::c_int == 'n' as i32 {
+            if *string.offset(i as isize) as i32 == 'n' as i32 {
                 let fresh0 = new_p;
                 new_p = new_p.offset(1);
                 *fresh0 = '\n' as i32 as libc::c_char
@@ -988,14 +988,14 @@ pub unsafe extern "C" fn G_ParseField(
     let mut f: *mut field_t = 0 as *mut field_t;
     let mut b: *mut crate::src::qcommon::q_shared::byte =
         0 as *mut crate::src::qcommon::q_shared::byte;
-    let mut v: libc::c_float = 0.;
+    let mut v: f32 = 0.;
     let mut vec: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     f = fields.as_mut_ptr();
     while !(*f).name.is_null() {
         if crate::src::qcommon::q_shared::Q_stricmp((*f).name, key) == 0 {
             // found it
             b = ent as *mut crate::src::qcommon::q_shared::byte;
-            match (*f).type_0 as libc::c_uint {
+            match (*f).type_0 as u32 {
                 2 => {
                     let ref mut fresh3 = *(b.offset((*f).ofs as isize) as *mut *mut libc::c_char);
                     *fresh3 = G_NewString(value)
@@ -1004,33 +1004,33 @@ pub unsafe extern "C" fn G_ParseField(
                     ::libc::sscanf(
                         value,
                         b"%f %f %f\x00" as *const u8 as *const libc::c_char,
-                        &mut *vec.as_mut_ptr().offset(0 as libc::c_int as isize)
+                        &mut *vec.as_mut_ptr().offset(0 as i32 as isize)
                             as *mut crate::src::qcommon::q_shared::vec_t,
-                        &mut *vec.as_mut_ptr().offset(1 as libc::c_int as isize)
+                        &mut *vec.as_mut_ptr().offset(1 as i32 as isize)
                             as *mut crate::src::qcommon::q_shared::vec_t,
-                        &mut *vec.as_mut_ptr().offset(2 as libc::c_int as isize)
+                        &mut *vec.as_mut_ptr().offset(2 as i32 as isize)
                             as *mut crate::src::qcommon::q_shared::vec_t,
                     );
-                    *(b.offset((*f).ofs as isize) as *mut libc::c_float)
-                        .offset(0 as libc::c_int as isize) = vec[0 as libc::c_int as usize];
-                    *(b.offset((*f).ofs as isize) as *mut libc::c_float)
-                        .offset(1 as libc::c_int as isize) = vec[1 as libc::c_int as usize];
-                    *(b.offset((*f).ofs as isize) as *mut libc::c_float)
-                        .offset(2 as libc::c_int as isize) = vec[2 as libc::c_int as usize]
+                    *(b.offset((*f).ofs as isize) as *mut f32)
+                        .offset(0 as i32 as isize) = vec[0 as i32 as usize];
+                    *(b.offset((*f).ofs as isize) as *mut f32)
+                        .offset(1 as i32 as isize) = vec[1 as i32 as usize];
+                    *(b.offset((*f).ofs as isize) as *mut f32)
+                        .offset(2 as i32 as isize) = vec[2 as i32 as usize]
                 }
-                0 => *(b.offset((*f).ofs as isize) as *mut libc::c_int) = atoi(value),
+                0 => *(b.offset((*f).ofs as isize) as *mut i32) = atoi(value),
                 1 => {
-                    *(b.offset((*f).ofs as isize) as *mut libc::c_float) =
-                        atof(value) as libc::c_float
+                    *(b.offset((*f).ofs as isize) as *mut f32) =
+                        atof(value) as f32
                 }
                 4 => {
-                    v = atof(value) as libc::c_float;
-                    *(b.offset((*f).ofs as isize) as *mut libc::c_float)
-                        .offset(0 as libc::c_int as isize) = 0 as libc::c_int as libc::c_float;
-                    *(b.offset((*f).ofs as isize) as *mut libc::c_float)
-                        .offset(1 as libc::c_int as isize) = v;
-                    *(b.offset((*f).ofs as isize) as *mut libc::c_float)
-                        .offset(2 as libc::c_int as isize) = 0 as libc::c_int as libc::c_float
+                    v = atof(value) as f32;
+                    *(b.offset((*f).ofs as isize) as *mut f32)
+                        .offset(0 as i32 as isize) = 0 as i32 as f32;
+                    *(b.offset((*f).ofs as isize) as *mut f32)
+                        .offset(1 as i32 as isize) = v;
+                    *(b.offset((*f).ofs as isize) as *mut f32)
+                        .offset(2 as i32 as isize) = 0 as i32 as f32
                 }
                 _ => {}
             }
@@ -1050,7 +1050,7 @@ level.spawnVars[], then call the class specific spawn function
 #[no_mangle]
 
 pub unsafe extern "C" fn G_SpawnGEntityFromSpawnVars() {
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     let mut ent: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
     let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut value: *mut libc::c_char = 0 as *mut libc::c_char;
@@ -1067,18 +1067,18 @@ pub unsafe extern "C" fn G_SpawnGEntityFromSpawnVars() {
     ];
     // get the next free entity
     ent = crate::src::game::g_utils::G_Spawn() as *mut crate::g_local_h::gentity_s;
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < crate::src::game::g_main::level.numSpawnVars {
         G_ParseField(
-            crate::src::game::g_main::level.spawnVars[i as usize][0 as libc::c_int as usize],
-            crate::src::game::g_main::level.spawnVars[i as usize][1 as libc::c_int as usize],
+            crate::src::game::g_main::level.spawnVars[i as usize][0 as i32 as usize],
+            crate::src::game::g_main::level.spawnVars[i as usize][1 as i32 as usize],
             ent,
         );
         i += 1
     }
     // check for "notsingle" flag
     if crate::src::game::g_main::g_gametype.integer
-        == crate::bg_public_h::GT_SINGLE_PLAYER as libc::c_int
+        == crate::bg_public_h::GT_SINGLE_PLAYER as i32
     {
         G_SpawnInt(
             b"notsingle\x00" as *const u8 as *const libc::c_char,
@@ -1086,7 +1086,7 @@ pub unsafe extern "C" fn G_SpawnGEntityFromSpawnVars() {
             &mut i,
         );
         if i != 0 {
-            if (*ent).s.eType == crate::bg_public_h::ET_MOVER as libc::c_int {
+            if (*ent).s.eType == crate::bg_public_h::ET_MOVER as i32 {
                 crate::src::game::g_syscalls::trap_LinkEntity(
                     ent as *mut crate::g_local_h::gentity_s,
                 );
@@ -1100,14 +1100,14 @@ pub unsafe extern "C" fn G_SpawnGEntityFromSpawnVars() {
         }
     }
     // check for "notteam" flag (GT_FFA, GT_TOURNAMENT, GT_SINGLE_PLAYER)
-    if crate::src::game::g_main::g_gametype.integer >= crate::bg_public_h::GT_TEAM as libc::c_int {
+    if crate::src::game::g_main::g_gametype.integer >= crate::bg_public_h::GT_TEAM as i32 {
         G_SpawnInt(
             b"notteam\x00" as *const u8 as *const libc::c_char,
             b"0\x00" as *const u8 as *const libc::c_char,
             &mut i,
         );
         if i != 0 {
-            if (*ent).s.eType == crate::bg_public_h::ET_MOVER as libc::c_int {
+            if (*ent).s.eType == crate::bg_public_h::ET_MOVER as i32 {
                 crate::src::game::g_syscalls::trap_LinkEntity(
                     ent as *mut crate::g_local_h::gentity_s,
                 );
@@ -1126,7 +1126,7 @@ pub unsafe extern "C" fn G_SpawnGEntityFromSpawnVars() {
             &mut i,
         );
         if i != 0 {
-            if (*ent).s.eType == crate::bg_public_h::ET_MOVER as libc::c_int {
+            if (*ent).s.eType == crate::bg_public_h::ET_MOVER as i32 {
                 crate::src::game::g_syscalls::trap_LinkEntity(
                     ent as *mut crate::g_local_h::gentity_s,
                 );
@@ -1145,7 +1145,7 @@ pub unsafe extern "C" fn G_SpawnGEntityFromSpawnVars() {
         &mut i,
     );
     if i != 0 {
-        if (*ent).s.eType == crate::bg_public_h::ET_MOVER as libc::c_int {
+        if (*ent).s.eType == crate::bg_public_h::ET_MOVER as i32 {
             crate::src::game::g_syscalls::trap_LinkEntity(ent as *mut crate::g_local_h::gentity_s);
             crate::src::game::g_syscalls::trap_AdjustAreaPortalState(
                 ent as *mut crate::g_local_h::gentity_s,
@@ -1162,14 +1162,14 @@ pub unsafe extern "C" fn G_SpawnGEntityFromSpawnVars() {
     ) as u64
         != 0
     {
-        if crate::src::game::g_main::g_gametype.integer >= crate::bg_public_h::GT_FFA as libc::c_int
+        if crate::src::game::g_main::g_gametype.integer >= crate::bg_public_h::GT_FFA as i32
             && crate::src::game::g_main::g_gametype.integer
-                < crate::bg_public_h::GT_MAX_GAME_TYPE as libc::c_int
+                < crate::bg_public_h::GT_MAX_GAME_TYPE as i32
         {
             gametypeName = gametypeNames[crate::src::game::g_main::g_gametype.integer as usize];
             s = ::libc::strstr(value, gametypeName);
             if s.is_null() {
-                if (*ent).s.eType == crate::bg_public_h::ET_MOVER as libc::c_int {
+                if (*ent).s.eType == crate::bg_public_h::ET_MOVER as i32 {
                     crate::src::game::g_syscalls::trap_LinkEntity(
                         ent as *mut crate::g_local_h::gentity_s,
                     );
@@ -1184,12 +1184,12 @@ pub unsafe extern "C" fn G_SpawnGEntityFromSpawnVars() {
         }
     }
     // move editor origin to pos
-    (*ent).s.pos.trBase[0 as libc::c_int as usize] = (*ent).s.origin[0 as libc::c_int as usize];
-    (*ent).s.pos.trBase[1 as libc::c_int as usize] = (*ent).s.origin[1 as libc::c_int as usize];
-    (*ent).s.pos.trBase[2 as libc::c_int as usize] = (*ent).s.origin[2 as libc::c_int as usize];
-    (*ent).r.currentOrigin[0 as libc::c_int as usize] = (*ent).s.origin[0 as libc::c_int as usize];
-    (*ent).r.currentOrigin[1 as libc::c_int as usize] = (*ent).s.origin[1 as libc::c_int as usize];
-    (*ent).r.currentOrigin[2 as libc::c_int as usize] = (*ent).s.origin[2 as libc::c_int as usize];
+    (*ent).s.pos.trBase[0 as i32 as usize] = (*ent).s.origin[0 as i32 as usize];
+    (*ent).s.pos.trBase[1 as i32 as usize] = (*ent).s.origin[1 as i32 as usize];
+    (*ent).s.pos.trBase[2 as i32 as usize] = (*ent).s.origin[2 as i32 as usize];
+    (*ent).r.currentOrigin[0 as i32 as usize] = (*ent).s.origin[0 as i32 as usize];
+    (*ent).r.currentOrigin[1 as i32 as usize] = (*ent).s.origin[1 as i32 as usize];
+    (*ent).r.currentOrigin[2 as i32 as usize] = (*ent).s.origin[2 as i32 as usize];
     // if we didn't get a classname, don't bother spawning anything
     if G_CallSpawn(ent) as u64 == 0 {
         crate::src::game::g_utils::G_FreeEntity(ent as *mut crate::g_local_h::gentity_s);
@@ -1203,10 +1203,10 @@ G_AddSpawnVarToken
 #[no_mangle]
 
 pub unsafe extern "C" fn G_AddSpawnVarToken(mut string: *const libc::c_char) -> *mut libc::c_char {
-    let mut l: libc::c_int = 0;
+    let mut l: i32 = 0;
     let mut dest: *mut libc::c_char = 0 as *mut libc::c_char;
-    l = crate::stdlib::strlen(string) as libc::c_int;
-    if crate::src::game::g_main::level.numSpawnVarChars + l + 1 as libc::c_int > 4096 as libc::c_int
+    l = crate::stdlib::strlen(string) as i32;
+    if crate::src::game::g_main::level.numSpawnVarChars + l + 1 as i32 > 4096 as i32
     {
         crate::src::game::g_main::G_Error(
             b"G_AddSpawnVarToken: MAX_SPAWN_VARS_CHARS\x00" as *const u8 as *const libc::c_char,
@@ -1219,9 +1219,9 @@ pub unsafe extern "C" fn G_AddSpawnVarToken(mut string: *const libc::c_char) -> 
     crate::stdlib::memcpy(
         dest as *mut libc::c_void,
         string as *const libc::c_void,
-        (l + 1 as libc::c_int) as libc::c_ulong,
+        (l + 1 as i32) as libc::c_ulong,
     );
-    crate::src::game::g_main::level.numSpawnVarChars += l + 1 as libc::c_int;
+    crate::src::game::g_main::level.numSpawnVarChars += l + 1 as i32;
     return dest;
 }
 /*
@@ -1239,19 +1239,19 @@ This does not actually spawn an entity.
 pub unsafe extern "C" fn G_ParseSpawnVars() -> crate::src::qcommon::q_shared::qboolean {
     let mut keyname: [libc::c_char; 1024] = [0; 1024];
     let mut com_token: [libc::c_char; 1024] = [0; 1024];
-    crate::src::game::g_main::level.numSpawnVars = 0 as libc::c_int;
-    crate::src::game::g_main::level.numSpawnVarChars = 0 as libc::c_int;
+    crate::src::game::g_main::level.numSpawnVars = 0 as i32;
+    crate::src::game::g_main::level.numSpawnVarChars = 0 as i32;
     // parse the opening brace
     if crate::src::game::g_syscalls::trap_GetEntityToken(
         com_token.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     ) as u64
         == 0
     {
         // end of spawn string
         return crate::src::qcommon::q_shared::qfalse;
     }
-    if com_token[0 as libc::c_int as usize] as libc::c_int != '{' as i32 {
+    if com_token[0 as i32 as usize] as i32 != '{' as i32 {
         crate::src::game::g_main::G_Error(
             b"G_ParseSpawnVars: found %s when expecting {\x00" as *const u8 as *const libc::c_char,
             com_token.as_mut_ptr(),
@@ -1263,7 +1263,7 @@ pub unsafe extern "C" fn G_ParseSpawnVars() -> crate::src::qcommon::q_shared::qb
     {
         if crate::src::game::g_syscalls::trap_GetEntityToken(
             keyname.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
         ) as u64
             == 0
         {
@@ -1272,13 +1272,13 @@ pub unsafe extern "C" fn G_ParseSpawnVars() -> crate::src::qcommon::q_shared::qb
                     as *const libc::c_char,
             );
         }
-        if keyname[0 as libc::c_int as usize] as libc::c_int == '}' as i32 {
+        if keyname[0 as i32 as usize] as i32 == '}' as i32 {
             break;
         }
         // parse value
         if crate::src::game::g_syscalls::trap_GetEntityToken(
             com_token.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
         ) as u64
             == 0
         {
@@ -1287,22 +1287,22 @@ pub unsafe extern "C" fn G_ParseSpawnVars() -> crate::src::qcommon::q_shared::qb
                     as *const libc::c_char,
             );
         }
-        if com_token[0 as libc::c_int as usize] as libc::c_int == '}' as i32 {
+        if com_token[0 as i32 as usize] as i32 == '}' as i32 {
             crate::src::game::g_main::G_Error(
                 b"G_ParseSpawnVars: closing brace without data\x00" as *const u8
                     as *const libc::c_char,
             );
         }
-        if crate::src::game::g_main::level.numSpawnVars == 64 as libc::c_int {
+        if crate::src::game::g_main::level.numSpawnVars == 64 as i32 {
             crate::src::game::g_main::G_Error(
                 b"G_ParseSpawnVars: MAX_SPAWN_VARS\x00" as *const u8 as *const libc::c_char,
             );
         }
         crate::src::game::g_main::level.spawnVars
-            [crate::src::game::g_main::level.numSpawnVars as usize][0 as libc::c_int as usize] =
+            [crate::src::game::g_main::level.numSpawnVars as usize][0 as i32 as usize] =
             G_AddSpawnVarToken(keyname.as_mut_ptr());
         crate::src::game::g_main::level.spawnVars
-            [crate::src::game::g_main::level.numSpawnVars as usize][1 as libc::c_int as usize] =
+            [crate::src::game::g_main::level.numSpawnVars as usize][1 as i32 as usize] =
             G_AddSpawnVarToken(com_token.as_mut_ptr());
         crate::src::game::g_main::level.numSpawnVars += 1
     }
@@ -1336,11 +1336,11 @@ pub unsafe extern "C" fn SP_worldspawn() {
     }
     // make some data visible to connecting client
     crate::src::game::g_syscalls::trap_SetConfigstring(
-        20 as libc::c_int,
+        20 as i32,
         b"baseq3-1\x00" as *const u8 as *const libc::c_char,
     ); // map specific message
     crate::src::game::g_syscalls::trap_SetConfigstring(
-        21 as libc::c_int,
+        21 as i32,
         crate::src::qcommon::q_shared::va(
             b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             crate::src::game::g_main::level.startTime,
@@ -1351,15 +1351,15 @@ pub unsafe extern "C" fn SP_worldspawn() {
         b"\x00" as *const u8 as *const libc::c_char,
         &mut s,
     );
-    crate::src::game::g_syscalls::trap_SetConfigstring(2 as libc::c_int, s);
+    crate::src::game::g_syscalls::trap_SetConfigstring(2 as i32, s);
     G_SpawnString(
         b"message\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
         &mut s,
     );
-    crate::src::game::g_syscalls::trap_SetConfigstring(3 as libc::c_int, s);
+    crate::src::game::g_syscalls::trap_SetConfigstring(3 as i32, s);
     crate::src::game::g_syscalls::trap_SetConfigstring(
-        4 as libc::c_int,
+        4 as i32,
         crate::src::game::g_main::g_motd.string.as_mut_ptr(),
     );
     G_SpawnString(
@@ -1390,30 +1390,30 @@ pub unsafe extern "C" fn SP_worldspawn() {
         s,
     );
     crate::src::game::g_main::g_entities
-        [(((1 as libc::c_int) << 10 as libc::c_int) - 2 as libc::c_int) as usize]
+        [(((1 as i32) << 10 as i32) - 2 as i32) as usize]
         .s
-        .number = ((1 as libc::c_int) << 10 as libc::c_int) - 2 as libc::c_int;
+        .number = ((1 as i32) << 10 as i32) - 2 as i32;
     crate::src::game::g_main::g_entities
-        [(((1 as libc::c_int) << 10 as libc::c_int) - 2 as libc::c_int) as usize]
+        [(((1 as i32) << 10 as i32) - 2 as i32) as usize]
         .r
-        .ownerNum = ((1 as libc::c_int) << 10 as libc::c_int) - 1 as libc::c_int;
+        .ownerNum = ((1 as i32) << 10 as i32) - 1 as i32;
     crate::src::game::g_main::g_entities
-        [(((1 as libc::c_int) << 10 as libc::c_int) - 2 as libc::c_int) as usize]
+        [(((1 as i32) << 10 as i32) - 2 as i32) as usize]
         .classname = b"worldspawn\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     crate::src::game::g_main::g_entities
-        [(((1 as libc::c_int) << 10 as libc::c_int) - 1 as libc::c_int) as usize]
+        [(((1 as i32) << 10 as i32) - 1 as i32) as usize]
         .s
-        .number = ((1 as libc::c_int) << 10 as libc::c_int) - 1 as libc::c_int;
+        .number = ((1 as i32) << 10 as i32) - 1 as i32;
     crate::src::game::g_main::g_entities
-        [(((1 as libc::c_int) << 10 as libc::c_int) - 1 as libc::c_int) as usize]
+        [(((1 as i32) << 10 as i32) - 1 as i32) as usize]
         .r
-        .ownerNum = ((1 as libc::c_int) << 10 as libc::c_int) - 1 as libc::c_int;
+        .ownerNum = ((1 as i32) << 10 as i32) - 1 as i32;
     crate::src::game::g_main::g_entities
-        [(((1 as libc::c_int) << 10 as libc::c_int) - 1 as libc::c_int) as usize]
+        [(((1 as i32) << 10 as i32) - 1 as i32) as usize]
         .classname = b"nothing\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     // see if we want a warmup time
     crate::src::game::g_syscalls::trap_SetConfigstring(
-        5 as libc::c_int,
+        5 as i32,
         b"\x00" as *const u8 as *const libc::c_char,
     );
     if crate::src::game::g_main::g_restarted.integer != 0 {
@@ -1421,12 +1421,12 @@ pub unsafe extern "C" fn SP_worldspawn() {
             b"g_restarted\x00" as *const u8 as *const libc::c_char,
             b"0\x00" as *const u8 as *const libc::c_char,
         );
-        crate::src::game::g_main::level.warmupTime = 0 as libc::c_int
+        crate::src::game::g_main::level.warmupTime = 0 as i32
     } else if crate::src::game::g_main::g_doWarmup.integer != 0 {
         // Turn it on
-        crate::src::game::g_main::level.warmupTime = -(1 as libc::c_int);
+        crate::src::game::g_main::level.warmupTime = -(1 as i32);
         crate::src::game::g_syscalls::trap_SetConfigstring(
-            5 as libc::c_int,
+            5 as i32,
             crate::src::qcommon::q_shared::va(
                 b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 crate::src::game::g_main::level.warmupTime,
@@ -1612,7 +1612,7 @@ Parses textual entity definitions out of an entstring and spawns gentities.
 pub unsafe extern "C" fn G_SpawnEntitiesFromString() {
     // allow calls to G_Spawn*()
     crate::src::game::g_main::level.spawning = crate::src::qcommon::q_shared::qtrue;
-    crate::src::game::g_main::level.numSpawnVars = 0 as libc::c_int;
+    crate::src::game::g_main::level.numSpawnVars = 0 as i32;
     // the worldspawn is not an actual entity, but it still
     // has a "spawn" function to perform any global setup
     // needed by a level (setting configstrings or cvars, etc)
@@ -1671,7 +1671,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"spawnflags\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut crate::g_local_h::gentity_t)).spawnflags as *mut libc::c_int
+                ofs: &mut (*(0 as *mut crate::g_local_h::gentity_t)).spawnflags as *mut i32
                     as crate::stddef_h::size_t,
                 type_0: F_INT,
             };
@@ -1680,7 +1680,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"speed\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut crate::g_local_h::gentity_t)).speed as *mut libc::c_float
+                ofs: &mut (*(0 as *mut crate::g_local_h::gentity_t)).speed as *mut f32
                     as crate::stddef_h::size_t,
                 type_0: F_FLOAT,
             };
@@ -1725,7 +1725,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"wait\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut crate::g_local_h::gentity_t)).wait as *mut libc::c_float
+                ofs: &mut (*(0 as *mut crate::g_local_h::gentity_t)).wait as *mut f32
                     as crate::stddef_h::size_t,
                 type_0: F_FLOAT,
             };
@@ -1734,7 +1734,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"random\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut crate::g_local_h::gentity_t)).random as *mut libc::c_float
+                ofs: &mut (*(0 as *mut crate::g_local_h::gentity_t)).random as *mut f32
                     as crate::stddef_h::size_t,
                 type_0: F_FLOAT,
             };
@@ -1743,7 +1743,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"count\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut crate::g_local_h::gentity_t)).count as *mut libc::c_int
+                ofs: &mut (*(0 as *mut crate::g_local_h::gentity_t)).count as *mut i32
                     as crate::stddef_h::size_t,
                 type_0: F_INT,
             };
@@ -1752,7 +1752,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"health\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut crate::g_local_h::gentity_t)).health as *mut libc::c_int
+                ofs: &mut (*(0 as *mut crate::g_local_h::gentity_t)).health as *mut i32
                     as crate::stddef_h::size_t,
                 type_0: F_INT,
             };
@@ -1761,7 +1761,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"dmg\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut crate::g_local_h::gentity_t)).damage as *mut libc::c_int
+                ofs: &mut (*(0 as *mut crate::g_local_h::gentity_t)).damage as *mut i32
                     as crate::stddef_h::size_t,
                 type_0: F_INT,
             };

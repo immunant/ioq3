@@ -259,64 +259,64 @@ POSSIBILITY OF SUCH DAMAGE.
 pub unsafe extern "C" fn silk_NLSF_VQ(
     mut err_Q24: *mut crate::opus_types_h::opus_int32,
     mut in_Q15: *const crate::opus_types_h::opus_int16,
-    mut pCB_Q8: *const libc::c_uchar,
+    mut pCB_Q8: *const u8,
     mut pWght_Q9: *const crate::opus_types_h::opus_int16,
-    K: libc::c_int,
-    LPC_order: libc::c_int,
+    K: i32,
+    LPC_order: i32,
 )
 /* I    Number of LPCs                              */
 {
-    let mut i: libc::c_int = 0;
-    let mut m: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut m: i32 = 0;
     let mut diff_Q15: crate::opus_types_h::opus_int32 = 0;
     let mut diffw_Q24: crate::opus_types_h::opus_int32 = 0;
     let mut sum_error_Q24: crate::opus_types_h::opus_int32 = 0;
     let mut pred_Q24: crate::opus_types_h::opus_int32 = 0;
     let mut w_Q9_ptr: *const crate::opus_types_h::opus_int16 =
         0 as *const crate::opus_types_h::opus_int16;
-    let mut cb_Q8_ptr: *const libc::c_uchar = 0 as *const libc::c_uchar;
+    let mut cb_Q8_ptr: *const u8 = 0 as *const u8;
     /* Loop over codebook */
     cb_Q8_ptr = pCB_Q8;
     w_Q9_ptr = pWght_Q9;
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < K {
-        sum_error_Q24 = 0 as libc::c_int;
-        pred_Q24 = 0 as libc::c_int;
-        m = LPC_order - 2 as libc::c_int;
-        while m >= 0 as libc::c_int {
+        sum_error_Q24 = 0 as i32;
+        pred_Q24 = 0 as i32;
+        m = LPC_order - 2 as i32;
+        while m >= 0 as i32 {
             /* Compute weighted absolute predictive quantization error for index m + 1 */
-            diff_Q15 = *in_Q15.offset((m + 1 as libc::c_int) as isize) as libc::c_int
-                - ((*cb_Q8_ptr.offset((m + 1 as libc::c_int) as isize)
+            diff_Q15 = *in_Q15.offset((m + 1 as i32) as isize) as i32
+                - ((*cb_Q8_ptr.offset((m + 1 as i32) as isize)
                     as crate::opus_types_h::opus_int32
                     as crate::opus_types_h::opus_uint32)
-                    << 7 as libc::c_int) as crate::opus_types_h::opus_int32; /* range: [ -32767 : 32767 ]*/
+                    << 7 as i32) as crate::opus_types_h::opus_int32; /* range: [ -32767 : 32767 ]*/
             diffw_Q24 = diff_Q15 as crate::opus_types_h::opus_int16
                 as crate::opus_types_h::opus_int32
-                * *w_Q9_ptr.offset((m + 1 as libc::c_int) as isize)
+                * *w_Q9_ptr.offset((m + 1 as i32) as isize)
                     as crate::opus_types_h::opus_int32;
             sum_error_Q24 = sum_error_Q24
-                + (if diffw_Q24 - (pred_Q24 >> 1 as libc::c_int) > 0 as libc::c_int {
-                    (diffw_Q24) - (pred_Q24 >> 1 as libc::c_int)
+                + (if diffw_Q24 - (pred_Q24 >> 1 as i32) > 0 as i32 {
+                    (diffw_Q24) - (pred_Q24 >> 1 as i32)
                 } else {
-                    -(diffw_Q24 - (pred_Q24 >> 1 as libc::c_int))
+                    -(diffw_Q24 - (pred_Q24 >> 1 as i32))
                 });
             pred_Q24 = diffw_Q24;
             /* Compute weighted absolute predictive quantization error for index m */
-            diff_Q15 = *in_Q15.offset(m as isize) as libc::c_int
+            diff_Q15 = *in_Q15.offset(m as isize) as i32
                 - ((*cb_Q8_ptr.offset(m as isize) as crate::opus_types_h::opus_int32
                     as crate::opus_types_h::opus_uint32)
-                    << 7 as libc::c_int) as crate::opus_types_h::opus_int32; /* range: [ -32767 : 32767 ]*/
+                    << 7 as i32) as crate::opus_types_h::opus_int32; /* range: [ -32767 : 32767 ]*/
             diffw_Q24 = diff_Q15 as crate::opus_types_h::opus_int16
                 as crate::opus_types_h::opus_int32
                 * *w_Q9_ptr.offset(m as isize) as crate::opus_types_h::opus_int32;
             sum_error_Q24 = sum_error_Q24
-                + (if diffw_Q24 - (pred_Q24 >> 1 as libc::c_int) > 0 as libc::c_int {
-                    (diffw_Q24) - (pred_Q24 >> 1 as libc::c_int)
+                + (if diffw_Q24 - (pred_Q24 >> 1 as i32) > 0 as i32 {
+                    (diffw_Q24) - (pred_Q24 >> 1 as i32)
                 } else {
-                    -(diffw_Q24 - (pred_Q24 >> 1 as libc::c_int))
+                    -(diffw_Q24 - (pred_Q24 >> 1 as i32))
                 });
             pred_Q24 = diffw_Q24;
-            m -= 2 as libc::c_int
+            m -= 2 as i32
         }
         *err_Q24.offset(i as isize) = sum_error_Q24;
         cb_Q8_ptr = cb_Q8_ptr.offset(LPC_order as isize);

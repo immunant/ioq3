@@ -179,175 +179,175 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_VQ_WMat_EC_c(
-    mut ind: *mut libc::c_schar,
+    mut ind: *mut i8,
     mut res_nrg_Q15: *mut crate::opus_types_h::opus_int32,
     mut rate_dist_Q8: *mut crate::opus_types_h::opus_int32,
-    mut gain_Q7: *mut libc::c_int,
+    mut gain_Q7: *mut i32,
     mut XX_Q17: *const crate::opus_types_h::opus_int32,
     mut xX_Q17: *const crate::opus_types_h::opus_int32,
-    mut cb_Q7: *const libc::c_schar,
-    mut cb_gain_Q7: *const libc::c_uchar,
-    mut cl_Q5: *const libc::c_uchar,
-    subfr_len: libc::c_int,
+    mut cb_Q7: *const i8,
+    mut cb_gain_Q7: *const u8,
+    mut cl_Q5: *const u8,
+    subfr_len: i32,
     max_gain_Q7: crate::opus_types_h::opus_int32,
-    L: libc::c_int,
+    L: i32,
 )
 /* I    number of vectors in codebook               */
 {
-    let mut k: libc::c_int = 0;
-    let mut gain_tmp_Q7: libc::c_int = 0;
-    let mut cb_row_Q7: *const libc::c_schar = 0 as *const libc::c_schar;
+    let mut k: i32 = 0;
+    let mut gain_tmp_Q7: i32 = 0;
+    let mut cb_row_Q7: *const i8 = 0 as *const i8;
     let mut neg_xX_Q24: [crate::opus_types_h::opus_int32; 5] = [0; 5];
     let mut sum1_Q15: crate::opus_types_h::opus_int32 = 0;
     let mut sum2_Q24: crate::opus_types_h::opus_int32 = 0;
     let mut bits_res_Q8: crate::opus_types_h::opus_int32 = 0;
     let mut bits_tot_Q8: crate::opus_types_h::opus_int32 = 0;
     /* Negate and convert to new Q domain */
-    neg_xX_Q24[0 as libc::c_int as usize] =
-        -(((*xX_Q17.offset(0 as libc::c_int as isize) as crate::opus_types_h::opus_uint32)
-            << 7 as libc::c_int) as crate::opus_types_h::opus_int32);
-    neg_xX_Q24[1 as libc::c_int as usize] =
-        -(((*xX_Q17.offset(1 as libc::c_int as isize) as crate::opus_types_h::opus_uint32)
-            << 7 as libc::c_int) as crate::opus_types_h::opus_int32);
-    neg_xX_Q24[2 as libc::c_int as usize] =
-        -(((*xX_Q17.offset(2 as libc::c_int as isize) as crate::opus_types_h::opus_uint32)
-            << 7 as libc::c_int) as crate::opus_types_h::opus_int32);
-    neg_xX_Q24[3 as libc::c_int as usize] =
-        -(((*xX_Q17.offset(3 as libc::c_int as isize) as crate::opus_types_h::opus_uint32)
-            << 7 as libc::c_int) as crate::opus_types_h::opus_int32);
-    neg_xX_Q24[4 as libc::c_int as usize] =
-        -(((*xX_Q17.offset(4 as libc::c_int as isize) as crate::opus_types_h::opus_uint32)
-            << 7 as libc::c_int) as crate::opus_types_h::opus_int32);
+    neg_xX_Q24[0 as i32 as usize] =
+        -(((*xX_Q17.offset(0 as i32 as isize) as crate::opus_types_h::opus_uint32)
+            << 7 as i32) as crate::opus_types_h::opus_int32);
+    neg_xX_Q24[1 as i32 as usize] =
+        -(((*xX_Q17.offset(1 as i32 as isize) as crate::opus_types_h::opus_uint32)
+            << 7 as i32) as crate::opus_types_h::opus_int32);
+    neg_xX_Q24[2 as i32 as usize] =
+        -(((*xX_Q17.offset(2 as i32 as isize) as crate::opus_types_h::opus_uint32)
+            << 7 as i32) as crate::opus_types_h::opus_int32);
+    neg_xX_Q24[3 as i32 as usize] =
+        -(((*xX_Q17.offset(3 as i32 as isize) as crate::opus_types_h::opus_uint32)
+            << 7 as i32) as crate::opus_types_h::opus_int32);
+    neg_xX_Q24[4 as i32 as usize] =
+        -(((*xX_Q17.offset(4 as i32 as isize) as crate::opus_types_h::opus_uint32)
+            << 7 as i32) as crate::opus_types_h::opus_int32);
     /* Loop over codebook */
-    *rate_dist_Q8 = 0x7fffffff as libc::c_int;
-    *res_nrg_Q15 = 0x7fffffff as libc::c_int;
+    *rate_dist_Q8 = 0x7fffffff as i32;
+    *res_nrg_Q15 = 0x7fffffff as i32;
     cb_row_Q7 = cb_Q7;
     /* In things go really bad, at least *ind is set to something safe. */
-    *ind = 0 as libc::c_int as libc::c_schar;
-    k = 0 as libc::c_int;
+    *ind = 0 as i32 as i8;
+    k = 0 as i32;
     while k < L {
         let mut penalty: crate::opus_types_h::opus_int32 = 0;
-        gain_tmp_Q7 = *cb_gain_Q7.offset(k as isize) as libc::c_int;
+        gain_tmp_Q7 = *cb_gain_Q7.offset(k as isize) as i32;
         /* Weighted rate */
         /* Quantization error: 1 - 2 * xX * cb + cb' * XX * cb */
         sum1_Q15 = (1.001f64
-            * ((1 as libc::c_int as libc::c_longlong) << 15 as libc::c_int) as libc::c_double
+            * ((1 as i32 as i64) << 15 as i32) as f64
             + 0.5f64) as crate::opus_types_h::opus_int32;
         /* Penalty for too large gain */
-        penalty = (((if gain_tmp_Q7 - max_gain_Q7 > 0 as libc::c_int {
+        penalty = (((if gain_tmp_Q7 - max_gain_Q7 > 0 as i32 {
             (gain_tmp_Q7) - max_gain_Q7
         } else {
-            0 as libc::c_int
+            0 as i32
         }) as crate::opus_types_h::opus_uint32)
-            << 11 as libc::c_int) as crate::opus_types_h::opus_int32;
+            << 11 as i32) as crate::opus_types_h::opus_int32;
         /* first row of XX_Q17 */
-        sum2_Q24 = neg_xX_Q24[0 as libc::c_int as usize]
-            + *XX_Q17.offset(1 as libc::c_int as isize)
-                * *cb_row_Q7.offset(1 as libc::c_int as isize) as libc::c_int;
+        sum2_Q24 = neg_xX_Q24[0 as i32 as usize]
+            + *XX_Q17.offset(1 as i32 as isize)
+                * *cb_row_Q7.offset(1 as i32 as isize) as i32;
         sum2_Q24 = sum2_Q24
-            + *XX_Q17.offset(2 as libc::c_int as isize)
-                * *cb_row_Q7.offset(2 as libc::c_int as isize) as libc::c_int;
+            + *XX_Q17.offset(2 as i32 as isize)
+                * *cb_row_Q7.offset(2 as i32 as isize) as i32;
         sum2_Q24 = sum2_Q24
-            + *XX_Q17.offset(3 as libc::c_int as isize)
-                * *cb_row_Q7.offset(3 as libc::c_int as isize) as libc::c_int;
+            + *XX_Q17.offset(3 as i32 as isize)
+                * *cb_row_Q7.offset(3 as i32 as isize) as i32;
         sum2_Q24 = sum2_Q24
-            + *XX_Q17.offset(4 as libc::c_int as isize)
-                * *cb_row_Q7.offset(4 as libc::c_int as isize) as libc::c_int;
-        sum2_Q24 = ((sum2_Q24 as crate::opus_types_h::opus_uint32) << 1 as libc::c_int)
+            + *XX_Q17.offset(4 as i32 as isize)
+                * *cb_row_Q7.offset(4 as i32 as isize) as i32;
+        sum2_Q24 = ((sum2_Q24 as crate::opus_types_h::opus_uint32) << 1 as i32)
             as crate::opus_types_h::opus_int32;
         sum2_Q24 = sum2_Q24
-            + *XX_Q17.offset(0 as libc::c_int as isize)
-                * *cb_row_Q7.offset(0 as libc::c_int as isize) as libc::c_int;
-        sum1_Q15 = (sum1_Q15 as libc::c_longlong
-            + (sum2_Q24 as libc::c_longlong
-                * *cb_row_Q7.offset(0 as libc::c_int as isize) as crate::opus_types_h::opus_int16
-                    as libc::c_longlong
-                >> 16 as libc::c_int)) as crate::opus_types_h::opus_int32;
+            + *XX_Q17.offset(0 as i32 as isize)
+                * *cb_row_Q7.offset(0 as i32 as isize) as i32;
+        sum1_Q15 = (sum1_Q15 as i64
+            + (sum2_Q24 as i64
+                * *cb_row_Q7.offset(0 as i32 as isize) as crate::opus_types_h::opus_int16
+                    as i64
+                >> 16 as i32)) as crate::opus_types_h::opus_int32;
         /* second row of XX_Q17 */
-        sum2_Q24 = neg_xX_Q24[1 as libc::c_int as usize]
-            + *XX_Q17.offset(7 as libc::c_int as isize)
-                * *cb_row_Q7.offset(2 as libc::c_int as isize) as libc::c_int;
+        sum2_Q24 = neg_xX_Q24[1 as i32 as usize]
+            + *XX_Q17.offset(7 as i32 as isize)
+                * *cb_row_Q7.offset(2 as i32 as isize) as i32;
         sum2_Q24 = sum2_Q24
-            + *XX_Q17.offset(8 as libc::c_int as isize)
-                * *cb_row_Q7.offset(3 as libc::c_int as isize) as libc::c_int;
+            + *XX_Q17.offset(8 as i32 as isize)
+                * *cb_row_Q7.offset(3 as i32 as isize) as i32;
         sum2_Q24 = sum2_Q24
-            + *XX_Q17.offset(9 as libc::c_int as isize)
-                * *cb_row_Q7.offset(4 as libc::c_int as isize) as libc::c_int;
-        sum2_Q24 = ((sum2_Q24 as crate::opus_types_h::opus_uint32) << 1 as libc::c_int)
+            + *XX_Q17.offset(9 as i32 as isize)
+                * *cb_row_Q7.offset(4 as i32 as isize) as i32;
+        sum2_Q24 = ((sum2_Q24 as crate::opus_types_h::opus_uint32) << 1 as i32)
             as crate::opus_types_h::opus_int32;
         sum2_Q24 = sum2_Q24
-            + *XX_Q17.offset(6 as libc::c_int as isize)
-                * *cb_row_Q7.offset(1 as libc::c_int as isize) as libc::c_int;
-        sum1_Q15 = (sum1_Q15 as libc::c_longlong
-            + (sum2_Q24 as libc::c_longlong
-                * *cb_row_Q7.offset(1 as libc::c_int as isize) as crate::opus_types_h::opus_int16
-                    as libc::c_longlong
-                >> 16 as libc::c_int)) as crate::opus_types_h::opus_int32;
+            + *XX_Q17.offset(6 as i32 as isize)
+                * *cb_row_Q7.offset(1 as i32 as isize) as i32;
+        sum1_Q15 = (sum1_Q15 as i64
+            + (sum2_Q24 as i64
+                * *cb_row_Q7.offset(1 as i32 as isize) as crate::opus_types_h::opus_int16
+                    as i64
+                >> 16 as i32)) as crate::opus_types_h::opus_int32;
         /* third row of XX_Q17 */
-        sum2_Q24 = neg_xX_Q24[2 as libc::c_int as usize]
-            + *XX_Q17.offset(13 as libc::c_int as isize)
-                * *cb_row_Q7.offset(3 as libc::c_int as isize) as libc::c_int;
+        sum2_Q24 = neg_xX_Q24[2 as i32 as usize]
+            + *XX_Q17.offset(13 as i32 as isize)
+                * *cb_row_Q7.offset(3 as i32 as isize) as i32;
         sum2_Q24 = sum2_Q24
-            + *XX_Q17.offset(14 as libc::c_int as isize)
-                * *cb_row_Q7.offset(4 as libc::c_int as isize) as libc::c_int;
-        sum2_Q24 = ((sum2_Q24 as crate::opus_types_h::opus_uint32) << 1 as libc::c_int)
+            + *XX_Q17.offset(14 as i32 as isize)
+                * *cb_row_Q7.offset(4 as i32 as isize) as i32;
+        sum2_Q24 = ((sum2_Q24 as crate::opus_types_h::opus_uint32) << 1 as i32)
             as crate::opus_types_h::opus_int32;
         sum2_Q24 = sum2_Q24
-            + *XX_Q17.offset(12 as libc::c_int as isize)
-                * *cb_row_Q7.offset(2 as libc::c_int as isize) as libc::c_int;
-        sum1_Q15 = (sum1_Q15 as libc::c_longlong
-            + (sum2_Q24 as libc::c_longlong
-                * *cb_row_Q7.offset(2 as libc::c_int as isize) as crate::opus_types_h::opus_int16
-                    as libc::c_longlong
-                >> 16 as libc::c_int)) as crate::opus_types_h::opus_int32;
+            + *XX_Q17.offset(12 as i32 as isize)
+                * *cb_row_Q7.offset(2 as i32 as isize) as i32;
+        sum1_Q15 = (sum1_Q15 as i64
+            + (sum2_Q24 as i64
+                * *cb_row_Q7.offset(2 as i32 as isize) as crate::opus_types_h::opus_int16
+                    as i64
+                >> 16 as i32)) as crate::opus_types_h::opus_int32;
         /* fourth row of XX_Q17 */
-        sum2_Q24 = neg_xX_Q24[3 as libc::c_int as usize]
-            + *XX_Q17.offset(19 as libc::c_int as isize)
-                * *cb_row_Q7.offset(4 as libc::c_int as isize) as libc::c_int;
-        sum2_Q24 = ((sum2_Q24 as crate::opus_types_h::opus_uint32) << 1 as libc::c_int)
+        sum2_Q24 = neg_xX_Q24[3 as i32 as usize]
+            + *XX_Q17.offset(19 as i32 as isize)
+                * *cb_row_Q7.offset(4 as i32 as isize) as i32;
+        sum2_Q24 = ((sum2_Q24 as crate::opus_types_h::opus_uint32) << 1 as i32)
             as crate::opus_types_h::opus_int32;
         sum2_Q24 = sum2_Q24
-            + *XX_Q17.offset(18 as libc::c_int as isize)
-                * *cb_row_Q7.offset(3 as libc::c_int as isize) as libc::c_int;
-        sum1_Q15 = (sum1_Q15 as libc::c_longlong
-            + (sum2_Q24 as libc::c_longlong
-                * *cb_row_Q7.offset(3 as libc::c_int as isize) as crate::opus_types_h::opus_int16
-                    as libc::c_longlong
-                >> 16 as libc::c_int)) as crate::opus_types_h::opus_int32;
+            + *XX_Q17.offset(18 as i32 as isize)
+                * *cb_row_Q7.offset(3 as i32 as isize) as i32;
+        sum1_Q15 = (sum1_Q15 as i64
+            + (sum2_Q24 as i64
+                * *cb_row_Q7.offset(3 as i32 as isize) as crate::opus_types_h::opus_int16
+                    as i64
+                >> 16 as i32)) as crate::opus_types_h::opus_int32;
         /* last row of XX_Q17 */
-        sum2_Q24 = ((neg_xX_Q24[4 as libc::c_int as usize] as crate::opus_types_h::opus_uint32)
-            << 1 as libc::c_int) as crate::opus_types_h::opus_int32;
+        sum2_Q24 = ((neg_xX_Q24[4 as i32 as usize] as crate::opus_types_h::opus_uint32)
+            << 1 as i32) as crate::opus_types_h::opus_int32;
         sum2_Q24 = sum2_Q24
-            + *XX_Q17.offset(24 as libc::c_int as isize)
-                * *cb_row_Q7.offset(4 as libc::c_int as isize) as libc::c_int;
-        sum1_Q15 = (sum1_Q15 as libc::c_longlong
-            + (sum2_Q24 as libc::c_longlong
-                * *cb_row_Q7.offset(4 as libc::c_int as isize) as crate::opus_types_h::opus_int16
-                    as libc::c_longlong
-                >> 16 as libc::c_int)) as crate::opus_types_h::opus_int32;
+            + *XX_Q17.offset(24 as i32 as isize)
+                * *cb_row_Q7.offset(4 as i32 as isize) as i32;
+        sum1_Q15 = (sum1_Q15 as i64
+            + (sum2_Q24 as i64
+                * *cb_row_Q7.offset(4 as i32 as isize) as crate::opus_types_h::opus_int16
+                    as i64
+                >> 16 as i32)) as crate::opus_types_h::opus_int32;
         /* find best */
-        if sum1_Q15 >= 0 as libc::c_int {
+        if sum1_Q15 >= 0 as i32 {
             /* Translate residual energy to bits using high-rate assumption (6 dB ==> 1 bit/sample) */
             bits_res_Q8 = subfr_len as crate::opus_types_h::opus_int16
                 as crate::opus_types_h::opus_int32
                 * (crate::src::opus_1_2_1::silk::lin2log::silk_lin2log(sum1_Q15 + penalty)
-                    - ((15 as libc::c_int) << 7 as libc::c_int))
+                    - ((15 as i32) << 7 as i32))
                     as crate::opus_types_h::opus_int16
                     as crate::opus_types_h::opus_int32;
             /* In the following line we reduce the codelength component by half ("-1"); seems to slghtly improve quality */
             bits_tot_Q8 = bits_res_Q8
                 + ((*cl_Q5.offset(k as isize) as crate::opus_types_h::opus_uint32)
-                    << 3 as libc::c_int - 1 as libc::c_int)
+                    << 3 as i32 - 1 as i32)
                     as crate::opus_types_h::opus_int32;
             if bits_tot_Q8 <= *rate_dist_Q8 {
                 *rate_dist_Q8 = bits_tot_Q8;
                 *res_nrg_Q15 = sum1_Q15 + penalty;
-                *ind = k as libc::c_schar;
+                *ind = k as i8;
                 *gain_Q7 = gain_tmp_Q7
             }
         }
         /* Go to next cbk vector */
-        cb_row_Q7 = cb_row_Q7.offset(5 as libc::c_int as isize);
+        cb_row_Q7 = cb_row_Q7.offset(5 as i32 as isize);
         k += 1
     }
 }

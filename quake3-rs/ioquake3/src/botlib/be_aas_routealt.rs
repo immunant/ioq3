@@ -62,10 +62,10 @@ pub mod q_shared_h {
         mut v: *const crate::src::qcommon::q_shared::vec_t,
     ) -> crate::src::qcommon::q_shared::vec_t {
         return crate::stdlib::sqrt(
-            (*v.offset(0 as libc::c_int as isize) * *v.offset(0 as libc::c_int as isize)
-                + *v.offset(1 as libc::c_int as isize) * *v.offset(1 as libc::c_int as isize)
-                + *v.offset(2 as libc::c_int as isize) * *v.offset(2 as libc::c_int as isize))
-                as libc::c_double,
+            (*v.offset(0 as i32 as isize) * *v.offset(0 as i32 as isize)
+                + *v.offset(1 as i32 as isize) * *v.offset(1 as i32 as isize)
+                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize))
+                as f64,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
 
@@ -164,9 +164,9 @@ pub type midrangearea_t = midrangearea_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct midrangearea_s {
-    pub valid: libc::c_int,
-    pub starttime: libc::c_ushort,
-    pub goaltime: libc::c_ushort,
+    pub valid: i32,
+    pub starttime: u16,
+    pub goaltime: u16,
 }
 #[no_mangle]
 
@@ -174,10 +174,10 @@ pub static mut midrangeareas: *mut midrangearea_t =
     0 as *const midrangearea_t as *mut midrangearea_t;
 #[no_mangle]
 
-pub static mut clusterareas: *mut libc::c_int = 0 as *const libc::c_int as *mut libc::c_int;
+pub static mut clusterareas: *mut i32 = 0 as *const i32 as *mut i32;
 #[no_mangle]
 
-pub static mut numclusterareas: libc::c_int = 0;
+pub static mut numclusterareas: i32 = 0;
 //===========================================================================
 //
 // Parameter:				-
@@ -186,9 +186,9 @@ pub static mut numclusterareas: libc::c_int = 0;
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_AltRoutingFloodCluster_r(mut areanum: libc::c_int) {
-    let mut i: libc::c_int = 0;
-    let mut otherareanum: libc::c_int = 0;
+pub unsafe extern "C" fn AAS_AltRoutingFloodCluster_r(mut areanum: i32) {
+    let mut i: i32 = 0;
+    let mut otherareanum: i32 = 0;
     let mut area: *mut crate::aasfile_h::aas_area_t = 0 as *mut crate::aasfile_h::aas_area_t;
     let mut face: *mut crate::aasfile_h::aas_face_t = 0 as *mut crate::aasfile_h::aas_face_t;
     //add the current area to the areas of the current cluster
@@ -196,17 +196,17 @@ pub unsafe extern "C" fn AAS_AltRoutingFloodCluster_r(mut areanum: libc::c_int) 
     numclusterareas += 1;
     //remove the area from the mid range areas
     (*midrangeareas.offset(areanum as isize)).valid =
-        crate::src::qcommon::q_shared::qfalse as libc::c_int;
+        crate::src::qcommon::q_shared::qfalse as i32;
     //flood to other areas through the faces of this area
     area = &mut *crate::src::botlib::be_aas_main::aasworld
         .areas
         .offset(areanum as isize) as *mut crate::aasfile_h::aas_area_t;
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < (*area).numfaces {
         face = &mut *crate::src::botlib::be_aas_main::aasworld
             .faces
             .offset(
-                (::libc::abs as unsafe extern "C" fn(_: libc::c_int) -> libc::c_int)(
+                (::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(
                     *crate::src::botlib::be_aas_main::aasworld
                         .faceindex
                         .offset(((*area).firstface + i) as isize),
@@ -243,28 +243,28 @@ pub unsafe extern "C" fn AAS_AltRoutingFloodCluster_r(mut areanum: libc::c_int) 
 
 pub unsafe extern "C" fn AAS_AlternativeRouteGoals(
     mut start: *mut crate::src::qcommon::q_shared::vec_t,
-    mut startareanum: libc::c_int,
+    mut startareanum: i32,
     mut _goal: *mut crate::src::qcommon::q_shared::vec_t,
-    mut goalareanum: libc::c_int,
-    mut travelflags: libc::c_int,
+    mut goalareanum: i32,
+    mut travelflags: i32,
     mut altroutegoals: *mut crate::be_aas_h::aas_altroutegoal_t,
-    mut maxaltroutegoals: libc::c_int,
-    mut type_0: libc::c_int,
-) -> libc::c_int {
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
-    let mut bestareanum: libc::c_int = 0;
-    let mut numaltroutegoals: libc::c_int = 0;
-    let mut nummidrangeareas: libc::c_int = 0;
-    let mut starttime: libc::c_int = 0;
-    let mut goaltime: libc::c_int = 0;
-    let mut goaltraveltime: libc::c_int = 0;
-    let mut dist: libc::c_float = 0.;
-    let mut bestdist: libc::c_float = 0.;
+    mut maxaltroutegoals: i32,
+    mut type_0: i32,
+) -> i32 {
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
+    let mut bestareanum: i32 = 0;
+    let mut numaltroutegoals: i32 = 0;
+    let mut nummidrangeareas: i32 = 0;
+    let mut starttime: i32 = 0;
+    let mut goaltime: i32 = 0;
+    let mut goaltraveltime: i32 = 0;
+    let mut dist: f32 = 0.;
+    let mut bestdist: f32 = 0.;
     let mut mid: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     if startareanum == 0 || goalareanum == 0 {
-        return 0 as libc::c_int;
+        return 0 as i32;
     }
     //travel time towards the goal area
     goaltraveltime = crate::src::botlib::be_aas_route::AAS_AreaTravelTimeToGoalArea(
@@ -276,33 +276,33 @@ pub unsafe extern "C" fn AAS_AlternativeRouteGoals(
     //clear the midrange areas
     crate::stdlib::memset(
         midrangeareas as *mut libc::c_void,
-        0 as libc::c_int,
+        0 as i32,
         (crate::src::botlib::be_aas_main::aasworld.numareas as libc::c_ulong)
             .wrapping_mul(::std::mem::size_of::<midrangearea_t>() as libc::c_ulong),
     );
-    numaltroutegoals = 0 as libc::c_int;
+    numaltroutegoals = 0 as i32;
     //
-    nummidrangeareas = 0 as libc::c_int;
+    nummidrangeareas = 0 as i32;
     let mut current_block_13: u64;
     //
-    i = 1 as libc::c_int; //end for
+    i = 1 as i32; //end for
     while i < crate::src::botlib::be_aas_main::aasworld.numareas {
         //
-        if type_0 & 1 as libc::c_int == 0 {
-            if !(type_0 & 2 as libc::c_int != 0
+        if type_0 & 1 as i32 == 0 {
+            if !(type_0 & 2 as i32 != 0
                 && (*crate::src::botlib::be_aas_main::aasworld
                     .areasettings
                     .offset(i as isize))
                 .contents
-                    & 8 as libc::c_int
+                    & 8 as i32
                     != 0)
             {
-                if !(type_0 & 4 as libc::c_int != 0
+                if !(type_0 & 4 as i32 != 0
                     && (*crate::src::botlib::be_aas_main::aasworld
                         .areasettings
                         .offset(i as isize))
                     .contents
-                        & 512 as libc::c_int
+                        & 512 as i32
                         != 0)
                 {
                     current_block_13 = 8515828400728868193; //end if
@@ -331,8 +331,8 @@ pub unsafe extern "C" fn AAS_AlternativeRouteGoals(
                     );
                     if !(starttime == 0) {
                         //if the travel time from the start to the area is greater than the shortest goal travel time
-                        if !(starttime as libc::c_float
-                            > 1.1f64 as libc::c_float * goaltraveltime as libc::c_float)
+                        if !(starttime as f32
+                            > 1.1f64 as f32 * goaltraveltime as f32)
                         {
                             //travel time from the area to the goal area
                             goaltime =
@@ -344,16 +344,16 @@ pub unsafe extern "C" fn AAS_AlternativeRouteGoals(
                                 );
                             if !(goaltime == 0) {
                                 //if the travel time from the area to the goal is greater than the shortest goal travel time
-                                if !(goaltime as libc::c_float
-                                    > 0.8f64 as libc::c_float * goaltraveltime as libc::c_float)
+                                if !(goaltime as f32
+                                    > 0.8f64 as f32 * goaltraveltime as f32)
                                 {
                                     //this is a mid range area
                                     (*midrangeareas.offset(i as isize)).valid =
-                                        crate::src::qcommon::q_shared::qtrue as libc::c_int;
+                                        crate::src::qcommon::q_shared::qtrue as i32;
                                     (*midrangeareas.offset(i as isize)).starttime =
-                                        starttime as libc::c_ushort;
+                                        starttime as u16;
                                     (*midrangeareas.offset(i as isize)).goaltime =
-                                        goaltime as libc::c_ushort;
+                                        goaltime as u16;
                                     crate::src::botlib::l_log::Log_Write(
                                         b"%d midrange area %d\x00" as *const u8
                                             as *const libc::c_char
@@ -373,66 +373,66 @@ pub unsafe extern "C" fn AAS_AlternativeRouteGoals(
         i += 1
     }
     //
-    i = 1 as libc::c_int; //end for
+    i = 1 as i32; //end for
     while i < crate::src::botlib::be_aas_main::aasworld.numareas {
         if !((*midrangeareas.offset(i as isize)).valid == 0) {
             //get the areas in one cluster
-            numclusterareas = 0 as libc::c_int;
+            numclusterareas = 0 as i32;
             AAS_AltRoutingFloodCluster_r(i);
             //now we've got a cluster with areas through which an alternative route could go
             //get the 'center' of the cluster
-            mid[2 as libc::c_int as usize] =
-                0 as libc::c_int as crate::src::qcommon::q_shared::vec_t; //end for
-            mid[1 as libc::c_int as usize] = mid[2 as libc::c_int as usize];
-            mid[0 as libc::c_int as usize] = mid[1 as libc::c_int as usize];
-            j = 0 as libc::c_int;
+            mid[2 as i32 as usize] =
+                0 as i32 as crate::src::qcommon::q_shared::vec_t; //end for
+            mid[1 as i32 as usize] = mid[2 as i32 as usize];
+            mid[0 as i32 as usize] = mid[1 as i32 as usize];
+            j = 0 as i32;
             while j < numclusterareas {
-                mid[0 as libc::c_int as usize] = mid[0 as libc::c_int as usize]
+                mid[0 as i32 as usize] = mid[0 as i32 as usize]
                     + (*crate::src::botlib::be_aas_main::aasworld
                         .areas
                         .offset(*clusterareas.offset(j as isize) as isize))
-                    .center[0 as libc::c_int as usize];
-                mid[1 as libc::c_int as usize] = mid[1 as libc::c_int as usize]
+                    .center[0 as i32 as usize];
+                mid[1 as i32 as usize] = mid[1 as i32 as usize]
                     + (*crate::src::botlib::be_aas_main::aasworld
                         .areas
                         .offset(*clusterareas.offset(j as isize) as isize))
-                    .center[1 as libc::c_int as usize];
-                mid[2 as libc::c_int as usize] = mid[2 as libc::c_int as usize]
+                    .center[1 as i32 as usize];
+                mid[2 as i32 as usize] = mid[2 as i32 as usize]
                     + (*crate::src::botlib::be_aas_main::aasworld
                         .areas
                         .offset(*clusterareas.offset(j as isize) as isize))
-                    .center[2 as libc::c_int as usize];
+                    .center[2 as i32 as usize];
                 j += 1
             }
-            mid[0 as libc::c_int as usize] = (mid[0 as libc::c_int as usize] as libc::c_double
-                * (1.0f64 / numclusterareas as libc::c_double))
+            mid[0 as i32 as usize] = (mid[0 as i32 as usize] as f64
+                * (1.0f64 / numclusterareas as f64))
                 as crate::src::qcommon::q_shared::vec_t;
-            mid[1 as libc::c_int as usize] = (mid[1 as libc::c_int as usize] as libc::c_double
-                * (1.0f64 / numclusterareas as libc::c_double))
+            mid[1 as i32 as usize] = (mid[1 as i32 as usize] as f64
+                * (1.0f64 / numclusterareas as f64))
                 as crate::src::qcommon::q_shared::vec_t;
-            mid[2 as libc::c_int as usize] = (mid[2 as libc::c_int as usize] as libc::c_double
-                * (1.0f64 / numclusterareas as libc::c_double))
+            mid[2 as i32 as usize] = (mid[2 as i32 as usize] as f64
+                * (1.0f64 / numclusterareas as f64))
                 as crate::src::qcommon::q_shared::vec_t;
             //get the area closest to the center of the cluster
-            bestdist = 999999 as libc::c_int as libc::c_float; //end for
-            bestareanum = 0 as libc::c_int;
-            j = 0 as libc::c_int;
+            bestdist = 999999 as i32 as f32; //end for
+            bestareanum = 0 as i32;
+            j = 0 as i32;
             while j < numclusterareas {
-                dir[0 as libc::c_int as usize] = mid[0 as libc::c_int as usize]
+                dir[0 as i32 as usize] = mid[0 as i32 as usize]
                     - (*crate::src::botlib::be_aas_main::aasworld
                         .areas
                         .offset(*clusterareas.offset(j as isize) as isize))
-                    .center[0 as libc::c_int as usize];
-                dir[1 as libc::c_int as usize] = mid[1 as libc::c_int as usize]
+                    .center[0 as i32 as usize];
+                dir[1 as i32 as usize] = mid[1 as i32 as usize]
                     - (*crate::src::botlib::be_aas_main::aasworld
                         .areas
                         .offset(*clusterareas.offset(j as isize) as isize))
-                    .center[1 as libc::c_int as usize];
-                dir[2 as libc::c_int as usize] = mid[2 as libc::c_int as usize]
+                    .center[1 as i32 as usize];
+                dir[2 as i32 as usize] = mid[2 as i32 as usize]
                     - (*crate::src::botlib::be_aas_main::aasworld
                         .areas
                         .offset(*clusterareas.offset(j as isize) as isize))
-                    .center[2 as libc::c_int as usize];
+                    .center[2 as i32 as usize];
                 dist =
                     VectorLength(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
                 if dist < bestdist {
@@ -444,30 +444,30 @@ pub unsafe extern "C" fn AAS_AlternativeRouteGoals(
             }
             //now we've got an area for an alternative route
             //FIXME: add alternative goal origin
-            (*altroutegoals.offset(numaltroutegoals as isize)).origin[0 as libc::c_int as usize] =
+            (*altroutegoals.offset(numaltroutegoals as isize)).origin[0 as i32 as usize] =
                 (*crate::src::botlib::be_aas_main::aasworld
                     .areas
                     .offset(bestareanum as isize))
-                .center[0 as libc::c_int as usize];
-            (*altroutegoals.offset(numaltroutegoals as isize)).origin[1 as libc::c_int as usize] =
+                .center[0 as i32 as usize];
+            (*altroutegoals.offset(numaltroutegoals as isize)).origin[1 as i32 as usize] =
                 (*crate::src::botlib::be_aas_main::aasworld
                     .areas
                     .offset(bestareanum as isize))
-                .center[1 as libc::c_int as usize];
-            (*altroutegoals.offset(numaltroutegoals as isize)).origin[2 as libc::c_int as usize] =
+                .center[1 as i32 as usize];
+            (*altroutegoals.offset(numaltroutegoals as isize)).origin[2 as i32 as usize] =
                 (*crate::src::botlib::be_aas_main::aasworld
                     .areas
                     .offset(bestareanum as isize))
-                .center[2 as libc::c_int as usize];
+                .center[2 as i32 as usize];
             (*altroutegoals.offset(numaltroutegoals as isize)).areanum = bestareanum;
             (*altroutegoals.offset(numaltroutegoals as isize)).starttraveltime =
                 (*midrangeareas.offset(bestareanum as isize)).starttime;
             (*altroutegoals.offset(numaltroutegoals as isize)).goaltraveltime =
                 (*midrangeareas.offset(bestareanum as isize)).goaltime;
             (*altroutegoals.offset(numaltroutegoals as isize)).extratraveltime =
-                ((*midrangeareas.offset(bestareanum as isize)).starttime as libc::c_int
-                    + (*midrangeareas.offset(bestareanum as isize)).goaltime as libc::c_int
-                    - goaltraveltime) as libc::c_ushort;
+                ((*midrangeareas.offset(bestareanum as isize)).starttime as i32
+                    + (*midrangeareas.offset(bestareanum as isize)).goaltime as i32
+                    - goaltraveltime) as u16;
             numaltroutegoals += 1;
             //
             //don't return more than the maximum alternative route goals
@@ -501,8 +501,8 @@ pub unsafe extern "C" fn AAS_InitAlternativeRouting() {
     }
     clusterareas = crate::src::botlib::l_memory::GetMemory(
         (crate::src::botlib::be_aas_main::aasworld.numareas as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<libc::c_int>() as libc::c_ulong),
-    ) as *mut libc::c_int;
+            .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+    ) as *mut i32;
 }
 /*
 ===========================================================================
@@ -579,7 +579,7 @@ pub unsafe extern "C" fn AAS_ShutdownAlternativeRouting() {
     if !clusterareas.is_null() {
         crate::src::botlib::l_memory::FreeMemory(clusterareas as *mut libc::c_void);
     }
-    clusterareas = 0 as *mut libc::c_int;
-    numclusterareas = 0 as libc::c_int;
+    clusterareas = 0 as *mut i32;
+    numclusterareas = 0 as i32;
 }
 //end of the function AAS_ShutdownAlternativeRouting

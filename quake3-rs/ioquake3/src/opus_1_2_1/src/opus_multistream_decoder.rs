@@ -18,15 +18,15 @@ pub mod opus_private_h {
     /* Make sure everything is properly aligned. */
     #[inline]
 
-    pub unsafe extern "C" fn align(mut i: libc::c_int) -> libc::c_int {
-        let mut alignment: libc::c_uint = 8 as libc::c_ulong as libc::c_uint;
+    pub unsafe extern "C" fn align(mut i: i32) -> i32 {
+        let mut alignment: u32 = 8 as libc::c_ulong as u32;
         /* Optimizing compilers should optimize div and multiply into and
         for all sensible alignment values. */
-        return (i as libc::c_uint)
+        return (i as u32)
             .wrapping_add(alignment)
-            .wrapping_sub(1 as libc::c_int as libc::c_uint)
+            .wrapping_sub(1 as i32 as u32)
             .wrapping_div(alignment)
-            .wrapping_mul(alignment) as libc::c_int;
+            .wrapping_mul(alignment) as i32;
     }
 
     /* OPUS_PRIVATE_H */
@@ -88,22 +88,22 @@ pub mod float_cast_h {
     /* With GCC, when SSE is available, the fastest conversion is cvtss2si. */
     #[inline]
 
-    pub unsafe extern "C" fn float2int(mut x: libc::c_float) -> crate::opus_types_h::opus_int32 {
+    pub unsafe extern "C" fn float2int(mut x: f32) -> crate::opus_types_h::opus_int32 {
         return _mm_cvt_ss2si(_mm_set_ss(x));
     }
     #[inline]
 
-    pub unsafe extern "C" fn FLOAT2INT16(mut x: libc::c_float) -> crate::opus_types_h::opus_int16 {
+    pub unsafe extern "C" fn FLOAT2INT16(mut x: f32) -> crate::opus_types_h::opus_int16 {
         x = x * 32768.0f32;
-        x = if x > -(32768 as libc::c_int) as libc::c_float {
+        x = if x > -(32768 as i32) as f32 {
             x
         } else {
-            -(32768 as libc::c_int) as libc::c_float
+            -(32768 as i32) as f32
         };
-        x = if x < 32767 as libc::c_int as libc::c_float {
+        x = if x < 32767 as i32 as f32 {
             x
         } else {
-            32767 as libc::c_int as libc::c_float
+            32767 as i32 as f32
         };
         return float2int(x) as crate::opus_types_h::opus_int16;
     }
@@ -239,11 +239,11 @@ pub struct OpusMSDecoder {
 pub type opus_copy_channel_out_func = Option<
     unsafe extern "C" fn(
         _: *mut libc::c_void,
-        _: libc::c_int,
-        _: libc::c_int,
+        _: i32,
+        _: i32,
         _: *const crate::arch_h::opus_val16,
-        _: libc::c_int,
-        _: libc::c_int,
+        _: i32,
+        _: i32,
     ) -> (),
 >;
 /* Decoder states go here */
@@ -251,21 +251,21 @@ pub type opus_copy_channel_out_func = Option<
 #[no_mangle]
 
 pub unsafe extern "C" fn opus_multistream_decoder_get_size(
-    mut nb_streams: libc::c_int,
-    mut nb_coupled_streams: libc::c_int,
+    mut nb_streams: i32,
+    mut nb_coupled_streams: i32,
 ) -> crate::opus_types_h::opus_int32 {
-    let mut coupled_size: libc::c_int = 0;
-    let mut mono_size: libc::c_int = 0;
-    if nb_streams < 1 as libc::c_int
+    let mut coupled_size: i32 = 0;
+    let mut mono_size: i32 = 0;
+    if nb_streams < 1 as i32
         || nb_coupled_streams > nb_streams
-        || nb_coupled_streams < 0 as libc::c_int
+        || nb_coupled_streams < 0 as i32
     {
-        return 0 as libc::c_int;
+        return 0 as i32;
     }
     coupled_size =
-        crate::src::opus_1_2_1::src::opus_decoder::opus_decoder_get_size(2 as libc::c_int);
-    mono_size = crate::src::opus_1_2_1::src::opus_decoder::opus_decoder_get_size(1 as libc::c_int);
-    return align(::std::mem::size_of::<OpusMSDecoder>() as libc::c_ulong as libc::c_int)
+        crate::src::opus_1_2_1::src::opus_decoder::opus_decoder_get_size(2 as i32);
+    mono_size = crate::src::opus_1_2_1::src::opus_decoder::opus_decoder_get_size(1 as i32);
+    return align(::std::mem::size_of::<OpusMSDecoder>() as libc::c_ulong as i32)
         + nb_coupled_streams * align(coupled_size)
         + (nb_streams - nb_coupled_streams) * align(mono_size);
 }
@@ -274,29 +274,29 @@ pub unsafe extern "C" fn opus_multistream_decoder_get_size(
 pub unsafe extern "C" fn opus_multistream_decoder_init(
     mut st: *mut OpusMSDecoder,
     mut Fs: crate::opus_types_h::opus_int32,
-    mut channels: libc::c_int,
-    mut streams: libc::c_int,
-    mut coupled_streams: libc::c_int,
-    mut mapping: *const libc::c_uchar,
-) -> libc::c_int {
-    let mut coupled_size: libc::c_int = 0;
-    let mut mono_size: libc::c_int = 0;
-    let mut i: libc::c_int = 0;
-    let mut ret: libc::c_int = 0;
+    mut channels: i32,
+    mut streams: i32,
+    mut coupled_streams: i32,
+    mut mapping: *const u8,
+) -> i32 {
+    let mut coupled_size: i32 = 0;
+    let mut mono_size: i32 = 0;
+    let mut i: i32 = 0;
+    let mut ret: i32 = 0;
     let mut ptr: *mut libc::c_char = 0 as *mut libc::c_char;
-    if channels > 255 as libc::c_int
-        || channels < 1 as libc::c_int
+    if channels > 255 as i32
+        || channels < 1 as i32
         || coupled_streams > streams
-        || streams < 1 as libc::c_int
-        || coupled_streams < 0 as libc::c_int
-        || streams > 255 as libc::c_int - coupled_streams
+        || streams < 1 as i32
+        || coupled_streams < 0 as i32
+        || streams > 255 as i32 - coupled_streams
     {
-        return -(1 as libc::c_int);
+        return -(1 as i32);
     }
     (*st).layout.nb_channels = channels;
     (*st).layout.nb_streams = streams;
     (*st).layout.nb_coupled_streams = coupled_streams;
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < (*st).layout.nb_channels {
         (*st).layout.mapping[i as usize] = *mapping.offset(i as isize);
         i += 1
@@ -305,22 +305,22 @@ pub unsafe extern "C" fn opus_multistream_decoder_init(
         &mut (*st).layout as *mut _ as *const crate::opus_private_h::ChannelLayout,
     ) == 0
     {
-        return -(1 as libc::c_int);
+        return -(1 as i32);
     }
     ptr = (st as *mut libc::c_char).offset(align(
-        ::std::mem::size_of::<OpusMSDecoder>() as libc::c_ulong as libc::c_int
+        ::std::mem::size_of::<OpusMSDecoder>() as libc::c_ulong as i32
     ) as isize);
     coupled_size =
-        crate::src::opus_1_2_1::src::opus_decoder::opus_decoder_get_size(2 as libc::c_int);
-    mono_size = crate::src::opus_1_2_1::src::opus_decoder::opus_decoder_get_size(1 as libc::c_int);
-    i = 0 as libc::c_int;
+        crate::src::opus_1_2_1::src::opus_decoder::opus_decoder_get_size(2 as i32);
+    mono_size = crate::src::opus_1_2_1::src::opus_decoder::opus_decoder_get_size(1 as i32);
+    i = 0 as i32;
     while i < (*st).layout.nb_coupled_streams {
         ret = crate::src::opus_1_2_1::src::opus_decoder::opus_decoder_init(
             ptr as *mut crate::src::opus_1_2_1::src::opus_decoder::OpusDecoder,
             Fs,
-            2 as libc::c_int,
+            2 as i32,
         );
-        if ret != 0 as libc::c_int {
+        if ret != 0 as i32 {
             return ret;
         }
         ptr = ptr.offset(align(coupled_size) as isize);
@@ -330,37 +330,37 @@ pub unsafe extern "C" fn opus_multistream_decoder_init(
         ret = crate::src::opus_1_2_1::src::opus_decoder::opus_decoder_init(
             ptr as *mut crate::src::opus_1_2_1::src::opus_decoder::OpusDecoder,
             Fs,
-            1 as libc::c_int,
+            1 as i32,
         );
-        if ret != 0 as libc::c_int {
+        if ret != 0 as i32 {
             return ret;
         }
         ptr = ptr.offset(align(mono_size) as isize);
         i += 1
     }
-    return 0 as libc::c_int;
+    return 0 as i32;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn opus_multistream_decoder_create(
     mut Fs: crate::opus_types_h::opus_int32,
-    mut channels: libc::c_int,
-    mut streams: libc::c_int,
-    mut coupled_streams: libc::c_int,
-    mut mapping: *const libc::c_uchar,
-    mut error: *mut libc::c_int,
+    mut channels: i32,
+    mut streams: i32,
+    mut coupled_streams: i32,
+    mut mapping: *const u8,
+    mut error: *mut i32,
 ) -> *mut OpusMSDecoder {
-    let mut ret: libc::c_int = 0;
+    let mut ret: i32 = 0;
     let mut st: *mut OpusMSDecoder = 0 as *mut OpusMSDecoder;
-    if channels > 255 as libc::c_int
-        || channels < 1 as libc::c_int
+    if channels > 255 as i32
+        || channels < 1 as i32
         || coupled_streams > streams
-        || streams < 1 as libc::c_int
-        || coupled_streams < 0 as libc::c_int
-        || streams > 255 as libc::c_int - coupled_streams
+        || streams < 1 as i32
+        || coupled_streams < 0 as i32
+        || streams > 255 as i32 - coupled_streams
     {
         if !error.is_null() {
-            *error = -(1 as libc::c_int)
+            *error = -(1 as i32)
         }
         return 0 as *mut OpusMSDecoder;
     }
@@ -369,7 +369,7 @@ pub unsafe extern "C" fn opus_multistream_decoder_create(
     ) as *mut OpusMSDecoder;
     if st.is_null() {
         if !error.is_null() {
-            *error = -(7 as libc::c_int)
+            *error = -(7 as i32)
         }
         return 0 as *mut OpusMSDecoder;
     }
@@ -377,7 +377,7 @@ pub unsafe extern "C" fn opus_multistream_decoder_create(
     if !error.is_null() {
         *error = ret
     }
-    if ret != 0 as libc::c_int {
+    if ret != 0 as i32 {
         opus_free(st as *mut libc::c_void);
         st = 0 as *mut OpusMSDecoder
     }
@@ -385,34 +385,34 @@ pub unsafe extern "C" fn opus_multistream_decoder_create(
 }
 
 unsafe extern "C" fn opus_multistream_packet_validate(
-    mut data: *const libc::c_uchar,
+    mut data: *const u8,
     mut len: crate::opus_types_h::opus_int32,
-    mut nb_streams: libc::c_int,
+    mut nb_streams: i32,
     mut Fs: crate::opus_types_h::opus_int32,
-) -> libc::c_int {
-    let mut s: libc::c_int = 0;
-    let mut count: libc::c_int = 0;
-    let mut toc: libc::c_uchar = 0;
+) -> i32 {
+    let mut s: i32 = 0;
+    let mut count: i32 = 0;
+    let mut toc: u8 = 0;
     let mut size: [crate::opus_types_h::opus_int16; 48] = [0; 48];
-    let mut samples: libc::c_int = 0 as libc::c_int;
+    let mut samples: i32 = 0 as i32;
     let mut packet_offset: crate::opus_types_h::opus_int32 = 0;
-    s = 0 as libc::c_int;
+    s = 0 as i32;
     while s < nb_streams {
-        let mut tmp_samples: libc::c_int = 0;
-        if len <= 0 as libc::c_int {
-            return -(4 as libc::c_int);
+        let mut tmp_samples: i32 = 0;
+        if len <= 0 as i32 {
+            return -(4 as i32);
         }
         count = crate::src::opus_1_2_1::src::opus::opus_packet_parse_impl(
             data,
             len,
-            (s != nb_streams - 1 as libc::c_int) as libc::c_int,
+            (s != nb_streams - 1 as i32) as i32,
             &mut toc,
-            0 as *mut *const libc::c_uchar,
+            0 as *mut *const u8,
             size.as_mut_ptr(),
-            0 as *mut libc::c_int,
+            0 as *mut i32,
             &mut packet_offset,
         );
-        if count < 0 as libc::c_int {
+        if count < 0 as i32 {
             return count;
         }
         tmp_samples = crate::src::opus_1_2_1::src::opus_decoder::opus_packet_get_nb_samples(
@@ -420,8 +420,8 @@ unsafe extern "C" fn opus_multistream_packet_validate(
             packet_offset,
             Fs,
         );
-        if s != 0 as libc::c_int && samples != tmp_samples {
-            return -(4 as libc::c_int);
+        if s != 0 as i32 && samples != tmp_samples {
+            return -(4 as i32);
         }
         samples = tmp_samples;
         data = data.offset(packet_offset as isize);
@@ -433,85 +433,85 @@ unsafe extern "C" fn opus_multistream_packet_validate(
 
 unsafe extern "C" fn opus_multistream_decode_native(
     mut st: *mut OpusMSDecoder,
-    mut data: *const libc::c_uchar,
+    mut data: *const u8,
     mut len: crate::opus_types_h::opus_int32,
     mut pcm: *mut libc::c_void,
     mut copy_channel_out: opus_copy_channel_out_func,
-    mut frame_size: libc::c_int,
-    mut decode_fec: libc::c_int,
-    mut soft_clip: libc::c_int,
-) -> libc::c_int {
+    mut frame_size: i32,
+    mut decode_fec: i32,
+    mut soft_clip: i32,
+) -> i32 {
     let mut Fs: crate::opus_types_h::opus_int32 = 0;
-    let mut coupled_size: libc::c_int = 0;
-    let mut mono_size: libc::c_int = 0;
-    let mut s: libc::c_int = 0;
-    let mut c: libc::c_int = 0;
+    let mut coupled_size: i32 = 0;
+    let mut mono_size: i32 = 0;
+    let mut s: i32 = 0;
+    let mut c: i32 = 0;
     let mut ptr: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut do_plc: libc::c_int = 0 as libc::c_int;
+    let mut do_plc: i32 = 0 as i32;
     let mut buf: *mut crate::arch_h::opus_val16 = 0 as *mut crate::arch_h::opus_val16;
     /* Limit frame_size to avoid excessive stack allocations. */
     opus_multistream_decoder_ctl(
         st,
-        4029 as libc::c_int,
+        4029 as i32,
         (&mut Fs as *mut crate::opus_types_h::opus_int32).offset(
             (&mut Fs as *mut crate::opus_types_h::opus_int32)
                 .offset_from(&mut Fs as *mut crate::opus_types_h::opus_int32)
                 as libc::c_long as isize,
         ),
     );
-    frame_size = if frame_size < Fs / 25 as libc::c_int * 3 as libc::c_int {
+    frame_size = if frame_size < Fs / 25 as i32 * 3 as i32 {
         frame_size
     } else {
-        (Fs / 25 as libc::c_int) * 3 as libc::c_int
+        (Fs / 25 as i32) * 3 as i32
     };
     let mut fresh0 = ::std::vec::from_elem(
         0,
         (::std::mem::size_of::<crate::arch_h::opus_val16>() as libc::c_ulong)
-            .wrapping_mul((2 as libc::c_int * frame_size) as libc::c_ulong) as usize,
+            .wrapping_mul((2 as i32 * frame_size) as libc::c_ulong) as usize,
     );
     buf = fresh0.as_mut_ptr() as *mut crate::arch_h::opus_val16;
     ptr = (st as *mut libc::c_char).offset(align(
-        ::std::mem::size_of::<OpusMSDecoder>() as libc::c_ulong as libc::c_int
+        ::std::mem::size_of::<OpusMSDecoder>() as libc::c_ulong as i32
     ) as isize);
     coupled_size =
-        crate::src::opus_1_2_1::src::opus_decoder::opus_decoder_get_size(2 as libc::c_int);
-    mono_size = crate::src::opus_1_2_1::src::opus_decoder::opus_decoder_get_size(1 as libc::c_int);
-    if len == 0 as libc::c_int {
-        do_plc = 1 as libc::c_int
+        crate::src::opus_1_2_1::src::opus_decoder::opus_decoder_get_size(2 as i32);
+    mono_size = crate::src::opus_1_2_1::src::opus_decoder::opus_decoder_get_size(1 as i32);
+    if len == 0 as i32 {
+        do_plc = 1 as i32
     }
-    if len < 0 as libc::c_int {
-        return -(1 as libc::c_int);
+    if len < 0 as i32 {
+        return -(1 as i32);
     }
-    if do_plc == 0 && len < 2 as libc::c_int * (*st).layout.nb_streams - 1 as libc::c_int {
-        return -(4 as libc::c_int);
+    if do_plc == 0 && len < 2 as i32 * (*st).layout.nb_streams - 1 as i32 {
+        return -(4 as i32);
     }
     if do_plc == 0 {
-        let mut ret: libc::c_int =
+        let mut ret: i32 =
             opus_multistream_packet_validate(data, len, (*st).layout.nb_streams, Fs);
-        if ret < 0 as libc::c_int {
+        if ret < 0 as i32 {
             return ret;
         } else {
             if ret > frame_size {
-                return -(2 as libc::c_int);
+                return -(2 as i32);
             }
         }
     }
-    s = 0 as libc::c_int;
+    s = 0 as i32;
     while s < (*st).layout.nb_streams {
         let mut dec: *mut crate::src::opus_1_2_1::src::opus_decoder::OpusDecoder =
             0 as *mut crate::src::opus_1_2_1::src::opus_decoder::OpusDecoder;
         let mut packet_offset: crate::opus_types_h::opus_int32 = 0;
-        let mut ret_0: libc::c_int = 0;
+        let mut ret_0: i32 = 0;
         dec = ptr as *mut crate::src::opus_1_2_1::src::opus_decoder::OpusDecoder;
         ptr = ptr.offset(if s < (*st).layout.nb_coupled_streams {
             align(coupled_size)
         } else {
             align(mono_size)
         } as isize);
-        if do_plc == 0 && len <= 0 as libc::c_int {
-            return -(3 as libc::c_int);
+        if do_plc == 0 && len <= 0 as i32 {
+            return -(3 as i32);
         }
-        packet_offset = 0 as libc::c_int;
+        packet_offset = 0 as i32;
         ret_0 = crate::src::opus_1_2_1::src::opus_decoder::opus_decode_native(
             dec,
             data,
@@ -519,20 +519,20 @@ unsafe extern "C" fn opus_multistream_decode_native(
             buf,
             frame_size,
             decode_fec,
-            (s != (*st).layout.nb_streams - 1 as libc::c_int) as libc::c_int,
+            (s != (*st).layout.nb_streams - 1 as i32) as i32,
             &mut packet_offset,
             soft_clip,
         );
         data = data.offset(packet_offset as isize);
         len -= packet_offset;
-        if ret_0 <= 0 as libc::c_int {
+        if ret_0 <= 0 as i32 {
             return ret_0;
         }
         frame_size = ret_0;
         if s < (*st).layout.nb_coupled_streams {
-            let mut chan: libc::c_int = 0;
-            let mut prev: libc::c_int = 0;
-            prev = -(1 as libc::c_int);
+            let mut chan: i32 = 0;
+            let mut prev: i32 = 0;
+            prev = -(1 as i32);
             loop
             /* Copy "left" audio to the channel(s) where it belongs */
             {
@@ -541,7 +541,7 @@ unsafe extern "C" fn opus_multistream_decode_native(
                     s,
                     prev,
                 );
-                if !(chan != -(1 as libc::c_int)) {
+                if !(chan != -(1 as i32)) {
                     break;
                 }
                 Some(copy_channel_out.expect("non-null function pointer"))
@@ -550,12 +550,12 @@ unsafe extern "C" fn opus_multistream_decode_native(
                     (*st).layout.nb_channels,
                     chan,
                     buf,
-                    2 as libc::c_int,
+                    2 as i32,
                     frame_size,
                 );
                 prev = chan
             }
-            prev = -(1 as libc::c_int);
+            prev = -(1 as i32);
             loop
             /* Copy "right" audio to the channel(s) where it belongs */
             {
@@ -564,7 +564,7 @@ unsafe extern "C" fn opus_multistream_decode_native(
                     s,
                     prev,
                 );
-                if !(chan != -(1 as libc::c_int)) {
+                if !(chan != -(1 as i32)) {
                     break;
                 }
                 Some(copy_channel_out.expect("non-null function pointer"))
@@ -572,16 +572,16 @@ unsafe extern "C" fn opus_multistream_decode_native(
                     pcm,
                     (*st).layout.nb_channels,
                     chan,
-                    buf.offset(1 as libc::c_int as isize),
-                    2 as libc::c_int,
+                    buf.offset(1 as i32 as isize),
+                    2 as i32,
                     frame_size,
                 );
                 prev = chan
             }
         } else {
-            let mut chan_0: libc::c_int = 0;
-            let mut prev_0: libc::c_int = 0;
-            prev_0 = -(1 as libc::c_int);
+            let mut chan_0: i32 = 0;
+            let mut prev_0: i32 = 0;
+            prev_0 = -(1 as i32);
             loop
             /* Copy audio to the channel(s) where it belongs */
             {
@@ -590,7 +590,7 @@ unsafe extern "C" fn opus_multistream_decode_native(
                     s,
                     prev_0,
                 );
-                if !(chan_0 != -(1 as libc::c_int)) {
+                if !(chan_0 != -(1 as i32)) {
                     break;
                 }
                 Some(copy_channel_out.expect("non-null function pointer"))
@@ -599,7 +599,7 @@ unsafe extern "C" fn opus_multistream_decode_native(
                     (*st).layout.nb_channels,
                     chan_0,
                     buf,
-                    1 as libc::c_int,
+                    1 as i32,
                     frame_size,
                 );
                 prev_0 = chan_0
@@ -608,16 +608,16 @@ unsafe extern "C" fn opus_multistream_decode_native(
         s += 1
     }
     /* Handle muted channels */
-    c = 0 as libc::c_int;
+    c = 0 as i32;
     while c < (*st).layout.nb_channels {
-        if (*st).layout.mapping[c as usize] as libc::c_int == 255 as libc::c_int {
+        if (*st).layout.mapping[c as usize] as i32 == 255 as i32 {
             Some(copy_channel_out.expect("non-null function pointer"))
                 .expect("non-null function pointer")(
                 pcm,
                 (*st).layout.nb_channels,
                 c,
                 0 as *const crate::arch_h::opus_val16,
-                0 as libc::c_int,
+                0 as i32,
                 frame_size,
             );
         }
@@ -628,27 +628,27 @@ unsafe extern "C" fn opus_multistream_decode_native(
 
 unsafe extern "C" fn opus_copy_channel_out_float(
     mut dst: *mut libc::c_void,
-    mut dst_stride: libc::c_int,
-    mut dst_channel: libc::c_int,
+    mut dst_stride: i32,
+    mut dst_channel: i32,
     mut src: *const crate::arch_h::opus_val16,
-    mut src_stride: libc::c_int,
-    mut frame_size: libc::c_int,
+    mut src_stride: i32,
+    mut frame_size: i32,
 ) {
-    let mut float_dst: *mut libc::c_float = 0 as *mut libc::c_float;
+    let mut float_dst: *mut f32 = 0 as *mut f32;
     let mut i: crate::opus_types_h::opus_int32 = 0;
-    float_dst = dst as *mut libc::c_float;
+    float_dst = dst as *mut f32;
     if !src.is_null() {
-        i = 0 as libc::c_int;
+        i = 0 as i32;
         while i < frame_size {
             *float_dst.offset((i * dst_stride + dst_channel) as isize) =
                 *src.offset((i * src_stride) as isize);
             i += 1
         }
     } else {
-        i = 0 as libc::c_int;
+        i = 0 as i32;
         while i < frame_size {
             *float_dst.offset((i * dst_stride + dst_channel) as isize) =
-                0 as libc::c_int as libc::c_float;
+                0 as i32 as f32;
             i += 1
         }
     };
@@ -656,28 +656,28 @@ unsafe extern "C" fn opus_copy_channel_out_float(
 
 unsafe extern "C" fn opus_copy_channel_out_short(
     mut dst: *mut libc::c_void,
-    mut dst_stride: libc::c_int,
-    mut dst_channel: libc::c_int,
+    mut dst_stride: i32,
+    mut dst_channel: i32,
     mut src: *const crate::arch_h::opus_val16,
-    mut src_stride: libc::c_int,
-    mut frame_size: libc::c_int,
+    mut src_stride: i32,
+    mut frame_size: i32,
 ) {
     let mut short_dst: *mut crate::opus_types_h::opus_int16 =
         0 as *mut crate::opus_types_h::opus_int16;
     let mut i: crate::opus_types_h::opus_int32 = 0;
     short_dst = dst as *mut crate::opus_types_h::opus_int16;
     if !src.is_null() {
-        i = 0 as libc::c_int;
+        i = 0 as i32;
         while i < frame_size {
             *short_dst.offset((i * dst_stride + dst_channel) as isize) =
                 FLOAT2INT16(*src.offset((i * src_stride) as isize));
             i += 1
         }
     } else {
-        i = 0 as libc::c_int;
+        i = 0 as i32;
         while i < frame_size {
             *short_dst.offset((i * dst_stride + dst_channel) as isize) =
-                0 as libc::c_int as crate::opus_types_h::opus_int16;
+                0 as i32 as crate::opus_types_h::opus_int16;
             i += 1
         }
     };
@@ -686,12 +686,12 @@ unsafe extern "C" fn opus_copy_channel_out_short(
 
 pub unsafe extern "C" fn opus_multistream_decode(
     mut st: *mut OpusMSDecoder,
-    mut data: *const libc::c_uchar,
+    mut data: *const u8,
     mut len: crate::opus_types_h::opus_int32,
     mut pcm: *mut crate::opus_types_h::opus_int16,
-    mut frame_size: libc::c_int,
-    mut decode_fec: libc::c_int,
-) -> libc::c_int {
+    mut frame_size: i32,
+    mut decode_fec: i32,
+) -> i32 {
     return opus_multistream_decode_native(
         st,
         data,
@@ -701,28 +701,28 @@ pub unsafe extern "C" fn opus_multistream_decode(
             opus_copy_channel_out_short
                 as unsafe extern "C" fn(
                     _: *mut libc::c_void,
-                    _: libc::c_int,
-                    _: libc::c_int,
+                    _: i32,
+                    _: i32,
                     _: *const crate::arch_h::opus_val16,
-                    _: libc::c_int,
-                    _: libc::c_int,
+                    _: i32,
+                    _: i32,
                 ) -> (),
         ),
         frame_size,
         decode_fec,
-        1 as libc::c_int,
+        1 as i32,
     );
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn opus_multistream_decode_float(
     mut st: *mut OpusMSDecoder,
-    mut data: *const libc::c_uchar,
+    mut data: *const u8,
     mut len: crate::opus_types_h::opus_int32,
-    mut pcm: *mut libc::c_float,
-    mut frame_size: libc::c_int,
-    mut decode_fec: libc::c_int,
-) -> libc::c_int {
+    mut pcm: *mut f32,
+    mut frame_size: i32,
+    mut decode_fec: i32,
+) -> i32 {
     return opus_multistream_decode_native(
         st,
         data,
@@ -732,37 +732,37 @@ pub unsafe extern "C" fn opus_multistream_decode_float(
             opus_copy_channel_out_float
                 as unsafe extern "C" fn(
                     _: *mut libc::c_void,
-                    _: libc::c_int,
-                    _: libc::c_int,
+                    _: i32,
+                    _: i32,
                     _: *const crate::arch_h::opus_val16,
-                    _: libc::c_int,
-                    _: libc::c_int,
+                    _: i32,
+                    _: i32,
                 ) -> (),
         ),
         frame_size,
         decode_fec,
-        0 as libc::c_int,
+        0 as i32,
     );
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn opus_multistream_decoder_ctl(
     mut st: *mut OpusMSDecoder,
-    mut request: libc::c_int,
+    mut request: i32,
     mut args: ...
-) -> libc::c_int {
+) -> i32 {
     let mut current_block: u64;
     let mut ap: ::std::ffi::VaListImpl;
-    let mut coupled_size: libc::c_int = 0;
-    let mut mono_size: libc::c_int = 0;
+    let mut coupled_size: i32 = 0;
+    let mut mono_size: i32 = 0;
     let mut ptr: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut ret: libc::c_int = 0 as libc::c_int;
+    let mut ret: i32 = 0 as i32;
     ap = args.clone();
     coupled_size =
-        crate::src::opus_1_2_1::src::opus_decoder::opus_decoder_get_size(2 as libc::c_int);
-    mono_size = crate::src::opus_1_2_1::src::opus_decoder::opus_decoder_get_size(1 as libc::c_int);
+        crate::src::opus_1_2_1::src::opus_decoder::opus_decoder_get_size(2 as i32);
+    mono_size = crate::src::opus_1_2_1::src::opus_decoder::opus_decoder_get_size(1 as i32);
     ptr = (st as *mut libc::c_char).offset(align(
-        ::std::mem::size_of::<OpusMSDecoder>() as libc::c_ulong as libc::c_int
+        ::std::mem::size_of::<OpusMSDecoder>() as libc::c_ulong as i32
     ) as isize);
     match request {
         4009 | 4029 | 4045 | 4039 | 4047 => {
@@ -777,7 +777,7 @@ pub unsafe extern "C" fn opus_multistream_decoder_ctl(
             current_block = 7330218953828964527;
         }
         4031 => {
-            let mut s: libc::c_int = 0;
+            let mut s: i32 = 0;
             let mut value_0: *mut crate::opus_types_h::opus_uint32 =
                 ap.as_va_list()
                     .arg::<*mut crate::opus_types_h::opus_uint32>();
@@ -785,8 +785,8 @@ pub unsafe extern "C" fn opus_multistream_decoder_ctl(
             if value_0.is_null() {
                 current_block = 14298507163138330979;
             } else {
-                *value_0 = 0 as libc::c_int as crate::opus_types_h::opus_uint32;
-                s = 0 as libc::c_int;
+                *value_0 = 0 as i32 as crate::opus_types_h::opus_uint32;
+                s = 0 as i32;
                 while s < (*st).layout.nb_streams {
                     let mut dec_0: *mut crate::src::opus_1_2_1::src::opus_decoder::OpusDecoder =
                         0 as *mut crate::src::opus_1_2_1::src::opus_decoder::OpusDecoder;
@@ -801,7 +801,7 @@ pub unsafe extern "C" fn opus_multistream_decoder_ctl(
                         request,
                         &mut tmp as *mut crate::opus_types_h::opus_uint32,
                     );
-                    if ret != 0 as libc::c_int {
+                    if ret != 0 as i32 {
                         break;
                     }
                     *value_0 ^= tmp;
@@ -811,8 +811,8 @@ pub unsafe extern "C" fn opus_multistream_decoder_ctl(
             }
         }
         4028 => {
-            let mut s_0: libc::c_int = 0;
-            s_0 = 0 as libc::c_int;
+            let mut s_0: i32 = 0;
+            s_0 = 0 as i32;
             while s_0 < (*st).layout.nb_streams {
                 let mut dec_1: *mut crate::src::opus_1_2_1::src::opus_decoder::OpusDecoder =
                     0 as *mut crate::src::opus_1_2_1::src::opus_decoder::OpusDecoder;
@@ -824,9 +824,9 @@ pub unsafe extern "C" fn opus_multistream_decoder_ctl(
                 }
                 ret = crate::src::opus_1_2_1::src::opus_decoder::opus_decoder_ctl(
                     dec_1,
-                    4028 as libc::c_int,
+                    4028 as i32,
                 );
-                if ret != 0 as libc::c_int {
+                if ret != 0 as i32 {
                     break;
                 }
                 s_0 += 1
@@ -834,13 +834,13 @@ pub unsafe extern "C" fn opus_multistream_decoder_ctl(
             current_block = 7330218953828964527;
         }
         5122 => {
-            let mut s_1: libc::c_int = 0;
+            let mut s_1: i32 = 0;
             let mut stream_id: crate::opus_types_h::opus_int32 = 0;
             let mut value_1: *mut *mut crate::src::opus_1_2_1::src::opus_decoder::OpusDecoder =
                 0 as *mut *mut crate::src::opus_1_2_1::src::opus_decoder::OpusDecoder;
             stream_id = ap.as_va_list().arg::<crate::opus_types_h::opus_int32>();
-            if stream_id < 0 as libc::c_int || stream_id >= (*st).layout.nb_streams {
-                ret = -(1 as libc::c_int)
+            if stream_id < 0 as i32 || stream_id >= (*st).layout.nb_streams {
+                ret = -(1 as i32)
             }
             value_1 = ap
                 .as_va_list()
@@ -848,7 +848,7 @@ pub unsafe extern "C" fn opus_multistream_decoder_ctl(
             if value_1.is_null() {
                 current_block = 14298507163138330979;
             } else {
-                s_1 = 0 as libc::c_int;
+                s_1 = 0 as i32;
                 while s_1 < stream_id {
                     if s_1 < (*st).layout.nb_coupled_streams {
                         ptr = ptr.offset(align(coupled_size) as isize)
@@ -862,11 +862,11 @@ pub unsafe extern "C" fn opus_multistream_decoder_ctl(
             }
         }
         4034 | 4046 => {
-            let mut s_2: libc::c_int = 0;
+            let mut s_2: i32 = 0;
             /* This works for int32 params */
             let mut value_2: crate::opus_types_h::opus_int32 =
                 ap.as_va_list().arg::<crate::opus_types_h::opus_int32>();
-            s_2 = 0 as libc::c_int;
+            s_2 = 0 as i32;
             while s_2 < (*st).layout.nb_streams {
                 let mut dec_2: *mut crate::src::opus_1_2_1::src::opus_decoder::OpusDecoder =
                     0 as *mut crate::src::opus_1_2_1::src::opus_decoder::OpusDecoder;
@@ -879,7 +879,7 @@ pub unsafe extern "C" fn opus_multistream_decoder_ctl(
                 ret = crate::src::opus_1_2_1::src::opus_decoder::opus_decoder_ctl(
                     dec_2, request, value_2,
                 );
-                if ret != 0 as libc::c_int {
+                if ret != 0 as i32 {
                     break;
                 }
                 s_2 += 1
@@ -887,12 +887,12 @@ pub unsafe extern "C" fn opus_multistream_decoder_ctl(
             current_block = 7330218953828964527;
         }
         _ => {
-            ret = -(5 as libc::c_int);
+            ret = -(5 as i32);
             current_block = 7330218953828964527;
         }
     }
     match current_block {
-        14298507163138330979 => return -(1 as libc::c_int),
+        14298507163138330979 => return -(1 as i32),
         _ => return ret,
     };
 }

@@ -80,7 +80,7 @@ static mut saveConfig: saveConfig_t = saveConfig_t {
         },
         string: 0 as *const libc::c_char as *mut libc::c_char,
         style: 0,
-        color: 0 as *const libc::c_float as *mut libc::c_float,
+        color: 0 as *const f32 as *mut f32,
     },
     background: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -107,7 +107,7 @@ static mut saveConfig: saveConfig_t = saveConfig_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     savename: crate::ui_local_h::menufield_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -161,7 +161,7 @@ static mut saveConfig: saveConfig_t = saveConfig_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     save: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -188,7 +188,7 @@ static mut saveConfig: saveConfig_t = saveConfig_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
 };
 /*
@@ -199,9 +199,9 @@ UI_SaveConfigMenu_BackEvent
 
 unsafe extern "C" fn UI_SaveConfigMenu_BackEvent(
     mut _ptr: *mut libc::c_void,
-    mut event: libc::c_int,
+    mut event: i32,
 ) {
-    if event != 3 as libc::c_int {
+    if event != 3 as i32 {
         return;
     }
     crate::src::q3_ui::ui_atoms::UI_PopMenu();
@@ -214,22 +214,22 @@ UI_SaveConfigMenu_SaveEvent
 
 unsafe extern "C" fn UI_SaveConfigMenu_SaveEvent(
     mut _ptr: *mut libc::c_void,
-    mut event: libc::c_int,
+    mut event: i32,
 ) {
     let mut configname: [libc::c_char; 64] = [0; 64];
-    if event != 3 as libc::c_int {
+    if event != 3 as i32 {
         return;
     }
-    if saveConfig.savename.field.buffer[0 as libc::c_int as usize] == 0 {
+    if saveConfig.savename.field.buffer[0 as i32 as usize] == 0 {
         return;
     }
     crate::src::qcommon::q_shared::COM_StripExtension(
         saveConfig.savename.field.buffer.as_mut_ptr(),
         configname.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
     );
     crate::src::ui::ui_syscalls::trap_Cmd_ExecuteText(
-        crate::src::qcommon::q_shared::EXEC_APPEND as libc::c_int,
+        crate::src::qcommon::q_shared::EXEC_APPEND as i32,
         crate::src::qcommon::q_shared::va(
             b"writeconfig %s.cfg\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             configname.as_mut_ptr(),
@@ -245,31 +245,31 @@ UI_SaveConfigMenu_SavenameDraw
 
 unsafe extern "C" fn UI_SaveConfigMenu_SavenameDraw(mut self_0: *mut libc::c_void) {
     let mut f: *mut crate::ui_local_h::menufield_s = 0 as *mut crate::ui_local_h::menufield_s;
-    let mut style: libc::c_int = 0;
-    let mut color: *mut libc::c_float = 0 as *mut libc::c_float;
+    let mut style: i32 = 0;
+    let mut color: *mut f32 = 0 as *mut f32;
     f = self_0 as *mut crate::ui_local_h::menufield_s;
     if f == crate::src::q3_ui::ui_qmenu::Menu_ItemAtCursor(
         &mut saveConfig.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
     ) as *mut crate::ui_local_h::menufield_s
     {
-        style = 0 as libc::c_int | 0x4000 as libc::c_int | 0x10 as libc::c_int;
+        style = 0 as i32 | 0x4000 as i32 | 0x10 as i32;
         color = crate::src::q3_ui::ui_qmenu::text_color_highlight.as_mut_ptr()
     } else {
-        style = 0 as libc::c_int | 0x10 as libc::c_int;
+        style = 0 as i32 | 0x10 as i32;
         color = crate::src::qcommon::q_math::colorRed.as_mut_ptr()
     }
     crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
-        320 as libc::c_int,
-        192 as libc::c_int,
+        320 as i32,
+        192 as i32,
         b"Enter filename:\x00" as *const u8 as *const libc::c_char,
-        0x1 as libc::c_int | 0x10 as libc::c_int,
+        0x1 as i32 | 0x10 as i32,
         crate::src::q3_ui::ui_qmenu::color_orange.as_mut_ptr(),
     );
     crate::src::q3_ui::ui_atoms::UI_FillRect(
-        (*f).generic.x as libc::c_float,
-        (*f).generic.y as libc::c_float,
-        ((*f).field.widthInChars * 8 as libc::c_int) as libc::c_float,
-        16 as libc::c_int as libc::c_float,
+        (*f).generic.x as f32,
+        (*f).generic.y as f32,
+        ((*f).field.widthInChars * 8 as i32) as f32,
+        16 as i32 as f32,
         crate::src::qcommon::q_math::colorBlack.as_mut_ptr(),
     );
     crate::src::q3_ui::ui_mfield::MField_Draw(
@@ -289,69 +289,69 @@ UI_SaveConfigMenu_Init
 unsafe extern "C" fn UI_SaveConfigMenu_Init() {
     crate::stdlib::memset(
         &mut saveConfig as *mut saveConfig_t as *mut libc::c_void,
-        0 as libc::c_int,
+        0 as i32,
         ::std::mem::size_of::<saveConfig_t>() as libc::c_ulong,
     );
     UI_SaveConfigMenu_Cache();
     saveConfig.menu.wrapAround = crate::src::qcommon::q_shared::qtrue;
     saveConfig.menu.fullscreen = crate::src::qcommon::q_shared::qtrue;
-    saveConfig.banner.generic.type_0 = 10 as libc::c_int;
-    saveConfig.banner.generic.x = 320 as libc::c_int;
-    saveConfig.banner.generic.y = 16 as libc::c_int;
+    saveConfig.banner.generic.type_0 = 10 as i32;
+    saveConfig.banner.generic.x = 320 as i32;
+    saveConfig.banner.generic.y = 16 as i32;
     saveConfig.banner.string =
         b"SAVE CONFIG\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     saveConfig.banner.color = crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr();
-    saveConfig.banner.style = 0x1 as libc::c_int;
-    saveConfig.background.generic.type_0 = 6 as libc::c_int;
+    saveConfig.banner.style = 0x1 as i32;
+    saveConfig.background.generic.type_0 = 6 as i32;
     saveConfig.background.generic.name =
         b"menu/art/cut_frame\x00" as *const u8 as *const libc::c_char;
-    saveConfig.background.generic.flags = 0x4000 as libc::c_int as libc::c_uint;
-    saveConfig.background.generic.x = 142 as libc::c_int;
-    saveConfig.background.generic.y = 118 as libc::c_int;
-    saveConfig.background.width = 359 as libc::c_int;
-    saveConfig.background.height = 256 as libc::c_int;
-    saveConfig.savename.generic.type_0 = 4 as libc::c_int;
+    saveConfig.background.generic.flags = 0x4000 as i32 as u32;
+    saveConfig.background.generic.x = 142 as i32;
+    saveConfig.background.generic.y = 118 as i32;
+    saveConfig.background.width = 359 as i32;
+    saveConfig.background.height = 256 as i32;
+    saveConfig.savename.generic.type_0 = 4 as i32;
     saveConfig.savename.generic.flags =
-        0x8000 as libc::c_int as libc::c_uint | 0x80000 as libc::c_int as libc::c_uint;
+        0x8000 as i32 as u32 | 0x80000 as i32 as u32;
     saveConfig.savename.generic.ownerdraw =
         Some(UI_SaveConfigMenu_SavenameDraw as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    saveConfig.savename.field.widthInChars = 20 as libc::c_int;
-    saveConfig.savename.field.maxchars = 20 as libc::c_int;
-    saveConfig.savename.generic.x = 240 as libc::c_int;
-    saveConfig.savename.generic.y = 155 as libc::c_int + 72 as libc::c_int;
-    saveConfig.savename.generic.left = 240 as libc::c_int;
-    saveConfig.savename.generic.top = 155 as libc::c_int + 72 as libc::c_int;
-    saveConfig.savename.generic.right = 233 as libc::c_int + 20 as libc::c_int * 8 as libc::c_int;
+    saveConfig.savename.field.widthInChars = 20 as i32;
+    saveConfig.savename.field.maxchars = 20 as i32;
+    saveConfig.savename.generic.x = 240 as i32;
+    saveConfig.savename.generic.y = 155 as i32 + 72 as i32;
+    saveConfig.savename.generic.left = 240 as i32;
+    saveConfig.savename.generic.top = 155 as i32 + 72 as i32;
+    saveConfig.savename.generic.right = 233 as i32 + 20 as i32 * 8 as i32;
     saveConfig.savename.generic.bottom =
-        155 as libc::c_int + 72 as libc::c_int + 16 as libc::c_int + 2 as libc::c_int;
-    saveConfig.back.generic.type_0 = 6 as libc::c_int;
+        155 as i32 + 72 as i32 + 16 as i32 + 2 as i32;
+    saveConfig.back.generic.type_0 = 6 as i32;
     saveConfig.back.generic.name = b"menu/art/back_0\x00" as *const u8 as *const libc::c_char;
     saveConfig.back.generic.flags =
-        0x4 as libc::c_int as libc::c_uint | 0x100 as libc::c_int as libc::c_uint;
-    saveConfig.back.generic.id = 11 as libc::c_int;
+        0x4 as i32 as u32 | 0x100 as i32 as u32;
+    saveConfig.back.generic.id = 11 as i32;
     saveConfig.back.generic.callback = Some(
         UI_SaveConfigMenu_BackEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    saveConfig.back.generic.x = 0 as libc::c_int;
-    saveConfig.back.generic.y = 480 as libc::c_int - 64 as libc::c_int;
-    saveConfig.back.width = 128 as libc::c_int;
-    saveConfig.back.height = 64 as libc::c_int;
+    saveConfig.back.generic.x = 0 as i32;
+    saveConfig.back.generic.y = 480 as i32 - 64 as i32;
+    saveConfig.back.width = 128 as i32;
+    saveConfig.back.height = 64 as i32;
     saveConfig.back.focuspic =
         b"menu/art/back_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    saveConfig.save.generic.type_0 = 6 as libc::c_int;
+    saveConfig.save.generic.type_0 = 6 as i32;
     saveConfig.save.generic.name = b"menu/art/save_0\x00" as *const u8 as *const libc::c_char;
     saveConfig.save.generic.flags =
-        0x10 as libc::c_int as libc::c_uint | 0x100 as libc::c_int as libc::c_uint;
-    saveConfig.save.generic.id = 12 as libc::c_int;
+        0x10 as i32 as u32 | 0x100 as i32 as u32;
+    saveConfig.save.generic.id = 12 as i32;
     saveConfig.save.generic.callback = Some(
         UI_SaveConfigMenu_SaveEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    saveConfig.save.generic.x = 640 as libc::c_int;
-    saveConfig.save.generic.y = 480 as libc::c_int - 64 as libc::c_int;
-    saveConfig.save.width = 128 as libc::c_int;
-    saveConfig.save.height = 64 as libc::c_int;
+    saveConfig.save.generic.x = 640 as i32;
+    saveConfig.save.generic.y = 480 as i32 - 64 as i32;
+    saveConfig.save.width = 128 as i32;
+    saveConfig.save.height = 64 as i32;
     saveConfig.save.focuspic =
         b"menu/art/save_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     crate::src::q3_ui::ui_qmenu::Menu_AddItem(

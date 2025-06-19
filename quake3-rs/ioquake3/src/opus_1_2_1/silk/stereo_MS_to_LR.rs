@@ -84,15 +84,15 @@ pub unsafe extern "C" fn silk_stereo_MS_to_LR(
     mut x1: *mut crate::opus_types_h::opus_int16,
     mut x2: *mut crate::opus_types_h::opus_int16,
     mut pred_Q13: *const crate::opus_types_h::opus_int32,
-    mut fs_kHz: libc::c_int,
-    mut frame_length: libc::c_int,
+    mut fs_kHz: i32,
+    mut frame_length: i32,
 )
 /* I    Number of samples                           */
 {
-    let mut n: libc::c_int = 0;
-    let mut denom_Q16: libc::c_int = 0;
-    let mut delta0_Q13: libc::c_int = 0;
-    let mut delta1_Q13: libc::c_int = 0;
+    let mut n: i32 = 0;
+    let mut denom_Q16: i32 = 0;
+    let mut delta0_Q13: i32 = 0;
+    let mut delta1_Q13: i32 = 0;
     let mut sum: crate::opus_types_h::opus_int32 = 0;
     let mut diff: crate::opus_types_h::opus_int32 = 0;
     let mut pred0_Q13: crate::opus_types_h::opus_int32 = 0;
@@ -100,186 +100,186 @@ pub unsafe extern "C" fn silk_stereo_MS_to_LR(
     /* Buffering */
     crate::stdlib::memcpy(x1 as *mut libc::c_void,
            (*state).sMid.as_mut_ptr() as *const libc::c_void,
-           (2 as libc::c_int as
+           (2 as i32 as
                 libc::c_ulong).wrapping_mul(::std::mem::size_of::<crate::opus_types_h::opus_int16>()
                                                 as libc::c_ulong));
     crate::stdlib::memcpy(x2 as *mut libc::c_void,
            (*state).sSide.as_mut_ptr() as *const libc::c_void,
-           (2 as libc::c_int as
+           (2 as i32 as
                 libc::c_ulong).wrapping_mul(::std::mem::size_of::<crate::opus_types_h::opus_int16>()
                                                 as libc::c_ulong));
     crate::stdlib::memcpy((*state).sMid.as_mut_ptr() as *mut libc::c_void,
            &mut *x1.offset(frame_length as isize) as *mut crate::opus_types_h::opus_int16 as
                *const libc::c_void,
-           (2 as libc::c_int as
+           (2 as i32 as
                 libc::c_ulong).wrapping_mul(::std::mem::size_of::<crate::opus_types_h::opus_int16>()
                                                 as libc::c_ulong));
     crate::stdlib::memcpy((*state).sSide.as_mut_ptr() as *mut libc::c_void,
            &mut *x2.offset(frame_length as isize) as *mut crate::opus_types_h::opus_int16 as
                *const libc::c_void,
-           (2 as libc::c_int as
+           (2 as i32 as
                 libc::c_ulong).wrapping_mul(::std::mem::size_of::<crate::opus_types_h::opus_int16>()
                                                 as libc::c_ulong));
     /* Interpolate predictors and add prediction to side channel */
     pred0_Q13 =
-        (*state).pred_prev_Q13[0 as libc::c_int as usize] as crate::opus_types_h::opus_int32; /* Q11 */
+        (*state).pred_prev_Q13[0 as i32 as usize] as crate::opus_types_h::opus_int32; /* Q11 */
     pred1_Q13 =
-        (*state).pred_prev_Q13[1 as libc::c_int as usize] as crate::opus_types_h::opus_int32; /* Q8  */
-    denom_Q16 = ((1 as libc::c_int) << 16 as libc::c_int) / (8 as libc::c_int * fs_kHz); /* Q8  */
-    delta0_Q13 = if 16 as libc::c_int == 1 as libc::c_int {
-        ((*pred_Q13.offset(0 as libc::c_int as isize)
-            - (*state).pred_prev_Q13[0 as libc::c_int as usize] as libc::c_int)
+        (*state).pred_prev_Q13[1 as i32 as usize] as crate::opus_types_h::opus_int32; /* Q8  */
+    denom_Q16 = ((1 as i32) << 16 as i32) / (8 as i32 * fs_kHz); /* Q8  */
+    delta0_Q13 = if 16 as i32 == 1 as i32 {
+        ((*pred_Q13.offset(0 as i32 as isize)
+            - (*state).pred_prev_Q13[0 as i32 as usize] as i32)
             as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
             * denom_Q16 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
-            >> 1 as libc::c_int)
-            + ((*pred_Q13.offset(0 as libc::c_int as isize)
-                - (*state).pred_prev_Q13[0 as libc::c_int as usize] as libc::c_int)
+            >> 1 as i32)
+            + ((*pred_Q13.offset(0 as i32 as isize)
+                - (*state).pred_prev_Q13[0 as i32 as usize] as i32)
                 as crate::opus_types_h::opus_int16
                 as crate::opus_types_h::opus_int32
                 * denom_Q16 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
-                & 1 as libc::c_int)
+                & 1 as i32)
     } else {
-        (((*pred_Q13.offset(0 as libc::c_int as isize)
-            - (*state).pred_prev_Q13[0 as libc::c_int as usize] as libc::c_int)
+        (((*pred_Q13.offset(0 as i32 as isize)
+            - (*state).pred_prev_Q13[0 as i32 as usize] as i32)
             as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
             * denom_Q16 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
-            >> 16 as libc::c_int - 1 as libc::c_int)
-            + 1 as libc::c_int)
-            >> 1 as libc::c_int
+            >> 16 as i32 - 1 as i32)
+            + 1 as i32)
+            >> 1 as i32
     }; /* Q11 */
-    delta1_Q13 = if 16 as libc::c_int == 1 as libc::c_int {
-        ((*pred_Q13.offset(1 as libc::c_int as isize)
-            - (*state).pred_prev_Q13[1 as libc::c_int as usize] as libc::c_int)
+    delta1_Q13 = if 16 as i32 == 1 as i32 {
+        ((*pred_Q13.offset(1 as i32 as isize)
+            - (*state).pred_prev_Q13[1 as i32 as usize] as i32)
             as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
             * denom_Q16 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
-            >> 1 as libc::c_int)
-            + ((*pred_Q13.offset(1 as libc::c_int as isize)
-                - (*state).pred_prev_Q13[1 as libc::c_int as usize] as libc::c_int)
+            >> 1 as i32)
+            + ((*pred_Q13.offset(1 as i32 as isize)
+                - (*state).pred_prev_Q13[1 as i32 as usize] as i32)
                 as crate::opus_types_h::opus_int16
                 as crate::opus_types_h::opus_int32
                 * denom_Q16 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
-                & 1 as libc::c_int)
+                & 1 as i32)
     } else {
-        (((*pred_Q13.offset(1 as libc::c_int as isize)
-            - (*state).pred_prev_Q13[1 as libc::c_int as usize] as libc::c_int)
+        (((*pred_Q13.offset(1 as i32 as isize)
+            - (*state).pred_prev_Q13[1 as i32 as usize] as i32)
             as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
             * denom_Q16 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
-            >> 16 as libc::c_int - 1 as libc::c_int)
-            + 1 as libc::c_int)
-            >> 1 as libc::c_int
+            >> 16 as i32 - 1 as i32)
+            + 1 as i32)
+            >> 1 as i32
     }; /* Q8  */
-    n = 0 as libc::c_int; /* Q8  */
-    while n < 8 as libc::c_int * fs_kHz {
+    n = 0 as i32; /* Q8  */
+    while n < 8 as i32 * fs_kHz {
         pred0_Q13 += delta0_Q13;
         pred1_Q13 += delta1_Q13;
-        sum = (((*x1.offset(n as isize) as libc::c_int
-            + *x1.offset((n + 2 as libc::c_int) as isize) as libc::c_int
-            + ((*x1.offset((n + 1 as libc::c_int) as isize) as crate::opus_types_h::opus_uint32)
-                << 1 as libc::c_int) as crate::opus_types_h::opus_int32)
+        sum = (((*x1.offset(n as isize) as i32
+            + *x1.offset((n + 2 as i32) as isize) as i32
+            + ((*x1.offset((n + 1 as i32) as isize) as crate::opus_types_h::opus_uint32)
+                << 1 as i32) as crate::opus_types_h::opus_int32)
             as crate::opus_types_h::opus_uint32)
-            << 9 as libc::c_int) as crate::opus_types_h::opus_int32;
-        sum = (((*x2.offset((n + 1 as libc::c_int) as isize) as crate::opus_types_h::opus_int32
+            << 9 as i32) as crate::opus_types_h::opus_int32;
+        sum = (((*x2.offset((n + 1 as i32) as isize) as crate::opus_types_h::opus_int32
             as crate::opus_types_h::opus_uint32)
-            << 8 as libc::c_int) as crate::opus_types_h::opus_int32
-            as libc::c_longlong
-            + (sum as libc::c_longlong
-                * pred0_Q13 as crate::opus_types_h::opus_int16 as libc::c_longlong
-                >> 16 as libc::c_int)) as crate::opus_types_h::opus_int32;
-        sum = (sum as libc::c_longlong
-            + (((*x1.offset((n + 1 as libc::c_int) as isize) as crate::opus_types_h::opus_int32
+            << 8 as i32) as crate::opus_types_h::opus_int32
+            as i64
+            + (sum as i64
+                * pred0_Q13 as crate::opus_types_h::opus_int16 as i64
+                >> 16 as i32)) as crate::opus_types_h::opus_int32;
+        sum = (sum as i64
+            + (((*x1.offset((n + 1 as i32) as isize) as crate::opus_types_h::opus_int32
                 as crate::opus_types_h::opus_uint32)
-                << 11 as libc::c_int) as crate::opus_types_h::opus_int32
-                as libc::c_longlong
-                * pred1_Q13 as crate::opus_types_h::opus_int16 as libc::c_longlong
-                >> 16 as libc::c_int)) as crate::opus_types_h::opus_int32;
-        *x2.offset((n + 1 as libc::c_int) as isize) = if (if 8 as libc::c_int == 1 as libc::c_int {
-            (sum >> 1 as libc::c_int) + (sum & 1 as libc::c_int)
+                << 11 as i32) as crate::opus_types_h::opus_int32
+                as i64
+                * pred1_Q13 as crate::opus_types_h::opus_int16 as i64
+                >> 16 as i32)) as crate::opus_types_h::opus_int32;
+        *x2.offset((n + 1 as i32) as isize) = if (if 8 as i32 == 1 as i32 {
+            (sum >> 1 as i32) + (sum & 1 as i32)
         } else {
-            ((sum >> 8 as libc::c_int - 1 as libc::c_int) + 1 as libc::c_int) >> 1 as libc::c_int
-        }) > 0x7fff as libc::c_int
+            ((sum >> 8 as i32 - 1 as i32) + 1 as i32) >> 1 as i32
+        }) > 0x7fff as i32
         {
-            0x7fff as libc::c_int
-        } else if (if 8 as libc::c_int == 1 as libc::c_int {
-            (sum >> 1 as libc::c_int) + (sum & 1 as libc::c_int)
+            0x7fff as i32
+        } else if (if 8 as i32 == 1 as i32 {
+            (sum >> 1 as i32) + (sum & 1 as i32)
         } else {
-            ((sum >> 8 as libc::c_int - 1 as libc::c_int) + 1 as libc::c_int) >> 1 as libc::c_int
-        }) < 0x8000 as libc::c_int as crate::opus_types_h::opus_int16 as libc::c_int
+            ((sum >> 8 as i32 - 1 as i32) + 1 as i32) >> 1 as i32
+        }) < 0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
         {
-            0x8000 as libc::c_int as crate::opus_types_h::opus_int16 as libc::c_int
-        } else if 8 as libc::c_int == 1 as libc::c_int {
-            (sum >> 1 as libc::c_int) + (sum & 1 as libc::c_int)
+            0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+        } else if 8 as i32 == 1 as i32 {
+            (sum >> 1 as i32) + (sum & 1 as i32)
         } else {
-            ((sum >> 8 as libc::c_int - 1 as libc::c_int) + 1 as libc::c_int) >> 1 as libc::c_int
+            ((sum >> 8 as i32 - 1 as i32) + 1 as i32) >> 1 as i32
         } as crate::opus_types_h::opus_int16;
         n += 1
     }
-    pred0_Q13 = *pred_Q13.offset(0 as libc::c_int as isize);
-    pred1_Q13 = *pred_Q13.offset(1 as libc::c_int as isize);
-    n = 8 as libc::c_int * fs_kHz;
+    pred0_Q13 = *pred_Q13.offset(0 as i32 as isize);
+    pred1_Q13 = *pred_Q13.offset(1 as i32 as isize);
+    n = 8 as i32 * fs_kHz;
     while n < frame_length {
-        sum = (((*x1.offset(n as isize) as libc::c_int
-            + *x1.offset((n + 2 as libc::c_int) as isize) as libc::c_int
-            + ((*x1.offset((n + 1 as libc::c_int) as isize) as crate::opus_types_h::opus_uint32)
-                << 1 as libc::c_int) as crate::opus_types_h::opus_int32)
+        sum = (((*x1.offset(n as isize) as i32
+            + *x1.offset((n + 2 as i32) as isize) as i32
+            + ((*x1.offset((n + 1 as i32) as isize) as crate::opus_types_h::opus_uint32)
+                << 1 as i32) as crate::opus_types_h::opus_int32)
             as crate::opus_types_h::opus_uint32)
-            << 9 as libc::c_int) as crate::opus_types_h::opus_int32;
-        sum = (((*x2.offset((n + 1 as libc::c_int) as isize) as crate::opus_types_h::opus_int32
+            << 9 as i32) as crate::opus_types_h::opus_int32;
+        sum = (((*x2.offset((n + 1 as i32) as isize) as crate::opus_types_h::opus_int32
             as crate::opus_types_h::opus_uint32)
-            << 8 as libc::c_int) as crate::opus_types_h::opus_int32
-            as libc::c_longlong
-            + (sum as libc::c_longlong
-                * pred0_Q13 as crate::opus_types_h::opus_int16 as libc::c_longlong
-                >> 16 as libc::c_int)) as crate::opus_types_h::opus_int32;
-        sum = (sum as libc::c_longlong
-            + (((*x1.offset((n + 1 as libc::c_int) as isize) as crate::opus_types_h::opus_int32
+            << 8 as i32) as crate::opus_types_h::opus_int32
+            as i64
+            + (sum as i64
+                * pred0_Q13 as crate::opus_types_h::opus_int16 as i64
+                >> 16 as i32)) as crate::opus_types_h::opus_int32;
+        sum = (sum as i64
+            + (((*x1.offset((n + 1 as i32) as isize) as crate::opus_types_h::opus_int32
                 as crate::opus_types_h::opus_uint32)
-                << 11 as libc::c_int) as crate::opus_types_h::opus_int32
-                as libc::c_longlong
-                * pred1_Q13 as crate::opus_types_h::opus_int16 as libc::c_longlong
-                >> 16 as libc::c_int)) as crate::opus_types_h::opus_int32;
-        *x2.offset((n + 1 as libc::c_int) as isize) = if (if 8 as libc::c_int == 1 as libc::c_int {
-            (sum >> 1 as libc::c_int) + (sum & 1 as libc::c_int)
+                << 11 as i32) as crate::opus_types_h::opus_int32
+                as i64
+                * pred1_Q13 as crate::opus_types_h::opus_int16 as i64
+                >> 16 as i32)) as crate::opus_types_h::opus_int32;
+        *x2.offset((n + 1 as i32) as isize) = if (if 8 as i32 == 1 as i32 {
+            (sum >> 1 as i32) + (sum & 1 as i32)
         } else {
-            ((sum >> 8 as libc::c_int - 1 as libc::c_int) + 1 as libc::c_int) >> 1 as libc::c_int
-        }) > 0x7fff as libc::c_int
+            ((sum >> 8 as i32 - 1 as i32) + 1 as i32) >> 1 as i32
+        }) > 0x7fff as i32
         {
-            0x7fff as libc::c_int
-        } else if (if 8 as libc::c_int == 1 as libc::c_int {
-            (sum >> 1 as libc::c_int) + (sum & 1 as libc::c_int)
+            0x7fff as i32
+        } else if (if 8 as i32 == 1 as i32 {
+            (sum >> 1 as i32) + (sum & 1 as i32)
         } else {
-            ((sum >> 8 as libc::c_int - 1 as libc::c_int) + 1 as libc::c_int) >> 1 as libc::c_int
-        }) < 0x8000 as libc::c_int as crate::opus_types_h::opus_int16 as libc::c_int
+            ((sum >> 8 as i32 - 1 as i32) + 1 as i32) >> 1 as i32
+        }) < 0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
         {
-            0x8000 as libc::c_int as crate::opus_types_h::opus_int16 as libc::c_int
-        } else if 8 as libc::c_int == 1 as libc::c_int {
-            (sum >> 1 as libc::c_int) + (sum & 1 as libc::c_int)
+            0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+        } else if 8 as i32 == 1 as i32 {
+            (sum >> 1 as i32) + (sum & 1 as i32)
         } else {
-            ((sum >> 8 as libc::c_int - 1 as libc::c_int) + 1 as libc::c_int) >> 1 as libc::c_int
+            ((sum >> 8 as i32 - 1 as i32) + 1 as i32) >> 1 as i32
         } as crate::opus_types_h::opus_int16;
         n += 1
     }
-    (*state).pred_prev_Q13[0 as libc::c_int as usize] =
-        *pred_Q13.offset(0 as libc::c_int as isize) as crate::opus_types_h::opus_int16;
-    (*state).pred_prev_Q13[1 as libc::c_int as usize] =
-        *pred_Q13.offset(1 as libc::c_int as isize) as crate::opus_types_h::opus_int16;
+    (*state).pred_prev_Q13[0 as i32 as usize] =
+        *pred_Q13.offset(0 as i32 as isize) as crate::opus_types_h::opus_int16;
+    (*state).pred_prev_Q13[1 as i32 as usize] =
+        *pred_Q13.offset(1 as i32 as isize) as crate::opus_types_h::opus_int16;
     /* Convert to left/right signals */
-    n = 0 as libc::c_int;
+    n = 0 as i32;
     while n < frame_length {
-        sum = *x1.offset((n + 1 as libc::c_int) as isize) as libc::c_int
-            + *x2.offset((n + 1 as libc::c_int) as isize) as crate::opus_types_h::opus_int32;
-        diff = *x1.offset((n + 1 as libc::c_int) as isize) as libc::c_int
-            - *x2.offset((n + 1 as libc::c_int) as isize) as crate::opus_types_h::opus_int32;
-        *x1.offset((n + 1 as libc::c_int) as isize) = if sum > 0x7fff as libc::c_int {
-            0x7fff as libc::c_int
-        } else if sum < 0x8000 as libc::c_int as crate::opus_types_h::opus_int16 as libc::c_int {
-            0x8000 as libc::c_int as crate::opus_types_h::opus_int16 as libc::c_int
+        sum = *x1.offset((n + 1 as i32) as isize) as i32
+            + *x2.offset((n + 1 as i32) as isize) as crate::opus_types_h::opus_int32;
+        diff = *x1.offset((n + 1 as i32) as isize) as i32
+            - *x2.offset((n + 1 as i32) as isize) as crate::opus_types_h::opus_int32;
+        *x1.offset((n + 1 as i32) as isize) = if sum > 0x7fff as i32 {
+            0x7fff as i32
+        } else if sum < 0x8000 as i32 as crate::opus_types_h::opus_int16 as i32 {
+            0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
         } else {
             sum
         } as crate::opus_types_h::opus_int16;
-        *x2.offset((n + 1 as libc::c_int) as isize) = if diff > 0x7fff as libc::c_int {
-            0x7fff as libc::c_int
-        } else if diff < 0x8000 as libc::c_int as crate::opus_types_h::opus_int16 as libc::c_int {
-            0x8000 as libc::c_int as crate::opus_types_h::opus_int16 as libc::c_int
+        *x2.offset((n + 1 as i32) as isize) = if diff > 0x7fff as i32 {
+            0x7fff as i32
+        } else if diff < 0x8000 as i32 as crate::opus_types_h::opus_int16 as i32 {
+            0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
         } else {
             diff
         } as crate::opus_types_h::opus_int16;

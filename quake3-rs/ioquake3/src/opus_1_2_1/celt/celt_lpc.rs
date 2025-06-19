@@ -40,14 +40,14 @@ pub mod pitch_h {
         mut x: *const crate::arch_h::opus_val16,
         mut y: *const crate::arch_h::opus_val16,
         mut sum: *mut crate::arch_h::opus_val32,
-        mut len: libc::c_int,
+        mut len: i32,
     ) {
-        let mut j: libc::c_int = 0; /* gcc doesn't realize that y_3 can't be used uninitialized */
+        let mut j: i32 = 0; /* gcc doesn't realize that y_3 can't be used uninitialized */
         let mut y_0: crate::arch_h::opus_val16 = 0.;
         let mut y_1: crate::arch_h::opus_val16 = 0.;
         let mut y_2: crate::arch_h::opus_val16 = 0.;
         let mut y_3: crate::arch_h::opus_val16 = 0.;
-        y_3 = 0 as libc::c_int as crate::arch_h::opus_val16;
+        y_3 = 0 as i32 as crate::arch_h::opus_val16;
         let fresh0 = y;
         y = y.offset(1);
         y_0 = *fresh0;
@@ -57,8 +57,8 @@ pub mod pitch_h {
         let fresh2 = y;
         y = y.offset(1);
         y_2 = *fresh2;
-        j = 0 as libc::c_int;
-        while j < len - 3 as libc::c_int {
+        j = 0 as i32;
+        while j < len - 3 as i32 {
             let mut tmp: crate::arch_h::opus_val16 = 0.;
             let fresh3 = x;
             x = x.offset(1);
@@ -66,57 +66,57 @@ pub mod pitch_h {
             let fresh4 = y;
             y = y.offset(1);
             y_3 = *fresh4;
-            *sum.offset(0 as libc::c_int as isize) =
-                *sum.offset(0 as libc::c_int as isize) + tmp * y_0;
-            *sum.offset(1 as libc::c_int as isize) =
-                *sum.offset(1 as libc::c_int as isize) + tmp * y_1;
-            *sum.offset(2 as libc::c_int as isize) =
-                *sum.offset(2 as libc::c_int as isize) + tmp * y_2;
-            *sum.offset(3 as libc::c_int as isize) =
-                *sum.offset(3 as libc::c_int as isize) + tmp * y_3;
+            *sum.offset(0 as i32 as isize) =
+                *sum.offset(0 as i32 as isize) + tmp * y_0;
+            *sum.offset(1 as i32 as isize) =
+                *sum.offset(1 as i32 as isize) + tmp * y_1;
+            *sum.offset(2 as i32 as isize) =
+                *sum.offset(2 as i32 as isize) + tmp * y_2;
+            *sum.offset(3 as i32 as isize) =
+                *sum.offset(3 as i32 as isize) + tmp * y_3;
             let fresh5 = x;
             x = x.offset(1);
             tmp = *fresh5;
             let fresh6 = y;
             y = y.offset(1);
             y_0 = *fresh6;
-            *sum.offset(0 as libc::c_int as isize) =
-                *sum.offset(0 as libc::c_int as isize) + tmp * y_1;
-            *sum.offset(1 as libc::c_int as isize) =
-                *sum.offset(1 as libc::c_int as isize) + tmp * y_2;
-            *sum.offset(2 as libc::c_int as isize) =
-                *sum.offset(2 as libc::c_int as isize) + tmp * y_3;
-            *sum.offset(3 as libc::c_int as isize) =
-                *sum.offset(3 as libc::c_int as isize) + tmp * y_0;
+            *sum.offset(0 as i32 as isize) =
+                *sum.offset(0 as i32 as isize) + tmp * y_1;
+            *sum.offset(1 as i32 as isize) =
+                *sum.offset(1 as i32 as isize) + tmp * y_2;
+            *sum.offset(2 as i32 as isize) =
+                *sum.offset(2 as i32 as isize) + tmp * y_3;
+            *sum.offset(3 as i32 as isize) =
+                *sum.offset(3 as i32 as isize) + tmp * y_0;
             let fresh7 = x;
             x = x.offset(1);
             tmp = *fresh7;
             let fresh8 = y;
             y = y.offset(1);
             y_1 = *fresh8;
-            *sum.offset(0 as libc::c_int as isize) =
-                *sum.offset(0 as libc::c_int as isize) + tmp * y_2;
-            *sum.offset(1 as libc::c_int as isize) =
-                *sum.offset(1 as libc::c_int as isize) + tmp * y_3;
-            *sum.offset(2 as libc::c_int as isize) =
-                *sum.offset(2 as libc::c_int as isize) + tmp * y_0;
-            *sum.offset(3 as libc::c_int as isize) =
-                *sum.offset(3 as libc::c_int as isize) + tmp * y_1;
+            *sum.offset(0 as i32 as isize) =
+                *sum.offset(0 as i32 as isize) + tmp * y_2;
+            *sum.offset(1 as i32 as isize) =
+                *sum.offset(1 as i32 as isize) + tmp * y_3;
+            *sum.offset(2 as i32 as isize) =
+                *sum.offset(2 as i32 as isize) + tmp * y_0;
+            *sum.offset(3 as i32 as isize) =
+                *sum.offset(3 as i32 as isize) + tmp * y_1;
             let fresh9 = x;
             x = x.offset(1);
             tmp = *fresh9;
             let fresh10 = y;
             y = y.offset(1);
             y_2 = *fresh10;
-            *sum.offset(0 as libc::c_int as isize) =
-                *sum.offset(0 as libc::c_int as isize) + tmp * y_3;
-            *sum.offset(1 as libc::c_int as isize) =
-                *sum.offset(1 as libc::c_int as isize) + tmp * y_0;
-            *sum.offset(2 as libc::c_int as isize) =
-                *sum.offset(2 as libc::c_int as isize) + tmp * y_1;
-            *sum.offset(3 as libc::c_int as isize) =
-                *sum.offset(3 as libc::c_int as isize) + tmp * y_2;
-            j += 4 as libc::c_int
+            *sum.offset(0 as i32 as isize) =
+                *sum.offset(0 as i32 as isize) + tmp * y_3;
+            *sum.offset(1 as i32 as isize) =
+                *sum.offset(1 as i32 as isize) + tmp * y_0;
+            *sum.offset(2 as i32 as isize) =
+                *sum.offset(2 as i32 as isize) + tmp * y_1;
+            *sum.offset(3 as i32 as isize) =
+                *sum.offset(3 as i32 as isize) + tmp * y_2;
+            j += 4 as i32
         }
         let fresh11 = j;
         j = j + 1;
@@ -127,14 +127,14 @@ pub mod pitch_h {
             let fresh13 = y;
             y = y.offset(1);
             y_3 = *fresh13;
-            *sum.offset(0 as libc::c_int as isize) =
-                *sum.offset(0 as libc::c_int as isize) + tmp_0 * y_0;
-            *sum.offset(1 as libc::c_int as isize) =
-                *sum.offset(1 as libc::c_int as isize) + tmp_0 * y_1;
-            *sum.offset(2 as libc::c_int as isize) =
-                *sum.offset(2 as libc::c_int as isize) + tmp_0 * y_2;
-            *sum.offset(3 as libc::c_int as isize) =
-                *sum.offset(3 as libc::c_int as isize) + tmp_0 * y_3
+            *sum.offset(0 as i32 as isize) =
+                *sum.offset(0 as i32 as isize) + tmp_0 * y_0;
+            *sum.offset(1 as i32 as isize) =
+                *sum.offset(1 as i32 as isize) + tmp_0 * y_1;
+            *sum.offset(2 as i32 as isize) =
+                *sum.offset(2 as i32 as isize) + tmp_0 * y_2;
+            *sum.offset(3 as i32 as isize) =
+                *sum.offset(3 as i32 as isize) + tmp_0 * y_3
         }
         let fresh14 = j;
         j = j + 1;
@@ -145,14 +145,14 @@ pub mod pitch_h {
             let fresh16 = y;
             y = y.offset(1);
             y_0 = *fresh16;
-            *sum.offset(0 as libc::c_int as isize) =
-                *sum.offset(0 as libc::c_int as isize) + tmp_1 * y_1;
-            *sum.offset(1 as libc::c_int as isize) =
-                *sum.offset(1 as libc::c_int as isize) + tmp_1 * y_2;
-            *sum.offset(2 as libc::c_int as isize) =
-                *sum.offset(2 as libc::c_int as isize) + tmp_1 * y_3;
-            *sum.offset(3 as libc::c_int as isize) =
-                *sum.offset(3 as libc::c_int as isize) + tmp_1 * y_0
+            *sum.offset(0 as i32 as isize) =
+                *sum.offset(0 as i32 as isize) + tmp_1 * y_1;
+            *sum.offset(1 as i32 as isize) =
+                *sum.offset(1 as i32 as isize) + tmp_1 * y_2;
+            *sum.offset(2 as i32 as isize) =
+                *sum.offset(2 as i32 as isize) + tmp_1 * y_3;
+            *sum.offset(3 as i32 as isize) =
+                *sum.offset(3 as i32 as isize) + tmp_1 * y_0
         }
         if j < len {
             let fresh17 = x;
@@ -161,14 +161,14 @@ pub mod pitch_h {
             let fresh18 = y;
             y = y.offset(1);
             y_1 = *fresh18;
-            *sum.offset(0 as libc::c_int as isize) =
-                *sum.offset(0 as libc::c_int as isize) + tmp_2 * y_2;
-            *sum.offset(1 as libc::c_int as isize) =
-                *sum.offset(1 as libc::c_int as isize) + tmp_2 * y_3;
-            *sum.offset(2 as libc::c_int as isize) =
-                *sum.offset(2 as libc::c_int as isize) + tmp_2 * y_0;
-            *sum.offset(3 as libc::c_int as isize) =
-                *sum.offset(3 as libc::c_int as isize) + tmp_2 * y_1
+            *sum.offset(0 as i32 as isize) =
+                *sum.offset(0 as i32 as isize) + tmp_2 * y_2;
+            *sum.offset(1 as i32 as isize) =
+                *sum.offset(1 as i32 as isize) + tmp_2 * y_3;
+            *sum.offset(2 as i32 as isize) =
+                *sum.offset(2 as i32 as isize) + tmp_2 * y_0;
+            *sum.offset(3 as i32 as isize) =
+                *sum.offset(3 as i32 as isize) + tmp_2 * y_1
         };
     }
 }
@@ -234,45 +234,45 @@ Written by Jean-Marc Valin */
 pub unsafe extern "C" fn _celt_lpc(
     mut _lpc: *mut crate::arch_h::opus_val16,
     mut ac: *const crate::arch_h::opus_val32,
-    mut p: libc::c_int,
+    mut p: i32,
 ) {
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
     let mut r: crate::arch_h::opus_val32 = 0.;
-    let mut error: crate::arch_h::opus_val32 = *ac.offset(0 as libc::c_int as isize);
-    let mut lpc: *mut libc::c_float = _lpc;
+    let mut error: crate::arch_h::opus_val32 = *ac.offset(0 as i32 as isize);
+    let mut lpc: *mut f32 = _lpc;
     crate::stdlib::memset(
         lpc as *mut libc::c_void,
-        0 as libc::c_int,
-        (p as libc::c_ulong).wrapping_mul(::std::mem::size_of::<libc::c_float>() as libc::c_ulong),
+        0 as i32,
+        (p as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
     );
-    if *ac.offset(0 as libc::c_int as isize) != 0 as libc::c_int as libc::c_float {
-        i = 0 as libc::c_int;
+    if *ac.offset(0 as i32 as isize) != 0 as i32 as f32 {
+        i = 0 as i32;
         while i < p {
             /* Sum up this iteration's reflection coefficient */
-            let mut rr: crate::arch_h::opus_val32 = 0 as libc::c_int as crate::arch_h::opus_val32;
-            j = 0 as libc::c_int;
+            let mut rr: crate::arch_h::opus_val32 = 0 as i32 as crate::arch_h::opus_val32;
+            j = 0 as i32;
             while j < i {
                 rr += *lpc.offset(j as isize) * *ac.offset((i - j) as isize);
                 j += 1
             }
-            rr += *ac.offset((i + 1 as libc::c_int) as isize);
+            rr += *ac.offset((i + 1 as i32) as isize);
             r = -(rr / error);
             /*  Update LPC coefficients and total error */
             *lpc.offset(i as isize) = r;
-            j = 0 as libc::c_int;
-            while j < i + 1 as libc::c_int >> 1 as libc::c_int {
+            j = 0 as i32;
+            while j < i + 1 as i32 >> 1 as i32 {
                 let mut tmp1: crate::arch_h::opus_val32 = 0.;
                 let mut tmp2: crate::arch_h::opus_val32 = 0.;
                 tmp1 = *lpc.offset(j as isize);
-                tmp2 = *lpc.offset((i - 1 as libc::c_int - j) as isize);
+                tmp2 = *lpc.offset((i - 1 as i32 - j) as isize);
                 *lpc.offset(j as isize) = tmp1 + r * tmp2;
-                *lpc.offset((i - 1 as libc::c_int - j) as isize) = tmp2 + r * tmp1;
+                *lpc.offset((i - 1 as i32 - j) as isize) = tmp2 + r * tmp1;
                 j += 1
             }
             error = error - r * r * error;
             /* Bail out once we get 30 dB gain */
-            if error < 0.001f32 * *ac.offset(0 as libc::c_int as isize) {
+            if error < 0.001f32 * *ac.offset(0 as i32 as isize) {
                 break;
             }
             i += 1
@@ -285,12 +285,12 @@ pub unsafe extern "C" fn celt_fir_c(
     mut x: *const crate::arch_h::opus_val16,
     mut num: *const crate::arch_h::opus_val16,
     mut y: *mut crate::arch_h::opus_val16,
-    mut N: libc::c_int,
-    mut ord: libc::c_int,
-    mut _arch: libc::c_int,
+    mut N: i32,
+    mut ord: i32,
+    mut _arch: i32,
 ) {
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
     let mut rnum: *mut crate::arch_h::opus_val16 = 0 as *mut crate::arch_h::opus_val16;
     let mut fresh19 = ::std::vec::from_elem(
         0,
@@ -298,33 +298,33 @@ pub unsafe extern "C" fn celt_fir_c(
             .wrapping_mul(ord as libc::c_ulong) as usize,
     );
     rnum = fresh19.as_mut_ptr() as *mut crate::arch_h::opus_val16;
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < ord {
-        *rnum.offset(i as isize) = *num.offset((ord - i - 1 as libc::c_int) as isize);
+        *rnum.offset(i as isize) = *num.offset((ord - i - 1 as i32) as isize);
         i += 1
     }
-    i = 0 as libc::c_int;
-    while i < N - 3 as libc::c_int {
+    i = 0 as i32;
+    while i < N - 3 as i32 {
         let mut sum: [crate::arch_h::opus_val32; 4] = [0.; 4];
-        sum[0 as libc::c_int as usize] = *x.offset(i as isize);
-        sum[1 as libc::c_int as usize] = *x.offset((i + 1 as libc::c_int) as isize);
-        sum[2 as libc::c_int as usize] = *x.offset((i + 2 as libc::c_int) as isize);
-        sum[3 as libc::c_int as usize] = *x.offset((i + 3 as libc::c_int) as isize);
+        sum[0 as i32 as usize] = *x.offset(i as isize);
+        sum[1 as i32 as usize] = *x.offset((i + 1 as i32) as isize);
+        sum[2 as i32 as usize] = *x.offset((i + 2 as i32) as isize);
+        sum[3 as i32 as usize] = *x.offset((i + 3 as i32) as isize);
         xcorr_kernel_c(
             rnum,
             x.offset(i as isize).offset(-(ord as isize)),
             sum.as_mut_ptr(),
             ord,
         );
-        *y.offset(i as isize) = sum[0 as libc::c_int as usize];
-        *y.offset((i + 1 as libc::c_int) as isize) = sum[1 as libc::c_int as usize];
-        *y.offset((i + 2 as libc::c_int) as isize) = sum[2 as libc::c_int as usize];
-        *y.offset((i + 3 as libc::c_int) as isize) = sum[3 as libc::c_int as usize];
-        i += 4 as libc::c_int
+        *y.offset(i as isize) = sum[0 as i32 as usize];
+        *y.offset((i + 1 as i32) as isize) = sum[1 as i32 as usize];
+        *y.offset((i + 2 as i32) as isize) = sum[2 as i32 as usize];
+        *y.offset((i + 3 as i32) as isize) = sum[3 as i32 as usize];
+        i += 4 as i32
     }
     while i < N {
         let mut sum_0: crate::arch_h::opus_val32 = *x.offset(i as isize);
-        j = 0 as libc::c_int;
+        j = 0 as i32;
         while j < ord {
             sum_0 = sum_0 + *rnum.offset(j as isize) * *x.offset((i + j - ord) as isize);
             j += 1
@@ -339,13 +339,13 @@ pub unsafe extern "C" fn celt_iir(
     mut _x: *const crate::arch_h::opus_val32,
     mut den: *const crate::arch_h::opus_val16,
     mut _y: *mut crate::arch_h::opus_val32,
-    mut N: libc::c_int,
-    mut ord: libc::c_int,
+    mut N: i32,
+    mut ord: i32,
     mut mem: *mut crate::arch_h::opus_val16,
-    mut _arch: libc::c_int,
+    mut _arch: i32,
 ) {
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
     let mut rden: *mut crate::arch_h::opus_val16 = 0 as *mut crate::arch_h::opus_val16;
     let mut y: *mut crate::arch_h::opus_val16 = 0 as *mut crate::arch_h::opus_val16;
     let mut fresh20 = ::std::vec::from_elem(
@@ -360,58 +360,58 @@ pub unsafe extern "C" fn celt_iir(
             .wrapping_mul((N + ord) as libc::c_ulong) as usize,
     );
     y = fresh21.as_mut_ptr() as *mut crate::arch_h::opus_val16;
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < ord {
-        *rden.offset(i as isize) = *den.offset((ord - i - 1 as libc::c_int) as isize);
+        *rden.offset(i as isize) = *den.offset((ord - i - 1 as i32) as isize);
         i += 1
     }
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < ord {
-        *y.offset(i as isize) = -*mem.offset((ord - i - 1 as libc::c_int) as isize);
+        *y.offset(i as isize) = -*mem.offset((ord - i - 1 as i32) as isize);
         i += 1
     }
     while i < N + ord {
-        *y.offset(i as isize) = 0 as libc::c_int as crate::arch_h::opus_val16;
+        *y.offset(i as isize) = 0 as i32 as crate::arch_h::opus_val16;
         i += 1
     }
-    i = 0 as libc::c_int;
-    while i < N - 3 as libc::c_int {
+    i = 0 as i32;
+    while i < N - 3 as i32 {
         /* Unroll by 4 as if it were an FIR filter */
         let mut sum: [crate::arch_h::opus_val32; 4] = [0.; 4];
-        sum[0 as libc::c_int as usize] = *_x.offset(i as isize);
-        sum[1 as libc::c_int as usize] = *_x.offset((i + 1 as libc::c_int) as isize);
-        sum[2 as libc::c_int as usize] = *_x.offset((i + 2 as libc::c_int) as isize);
-        sum[3 as libc::c_int as usize] = *_x.offset((i + 3 as libc::c_int) as isize);
+        sum[0 as i32 as usize] = *_x.offset(i as isize);
+        sum[1 as i32 as usize] = *_x.offset((i + 1 as i32) as isize);
+        sum[2 as i32 as usize] = *_x.offset((i + 2 as i32) as isize);
+        sum[3 as i32 as usize] = *_x.offset((i + 3 as i32) as isize);
         xcorr_kernel_c(rden, y.offset(i as isize), sum.as_mut_ptr(), ord);
         /* Patch up the result to compensate for the fact that this is an IIR */
-        *y.offset((i + ord) as isize) = -sum[0 as libc::c_int as usize];
-        *_y.offset(i as isize) = sum[0 as libc::c_int as usize];
-        sum[1 as libc::c_int as usize] = sum[1 as libc::c_int as usize]
-            + *y.offset((i + ord) as isize) * *den.offset(0 as libc::c_int as isize);
-        *y.offset((i + ord + 1 as libc::c_int) as isize) = -sum[1 as libc::c_int as usize];
-        *_y.offset((i + 1 as libc::c_int) as isize) = sum[1 as libc::c_int as usize];
-        sum[2 as libc::c_int as usize] = sum[2 as libc::c_int as usize]
-            + *y.offset((i + ord + 1 as libc::c_int) as isize)
-                * *den.offset(0 as libc::c_int as isize);
-        sum[2 as libc::c_int as usize] = sum[2 as libc::c_int as usize]
-            + *y.offset((i + ord) as isize) * *den.offset(1 as libc::c_int as isize);
-        *y.offset((i + ord + 2 as libc::c_int) as isize) = -sum[2 as libc::c_int as usize];
-        *_y.offset((i + 2 as libc::c_int) as isize) = sum[2 as libc::c_int as usize];
-        sum[3 as libc::c_int as usize] = sum[3 as libc::c_int as usize]
-            + *y.offset((i + ord + 2 as libc::c_int) as isize)
-                * *den.offset(0 as libc::c_int as isize);
-        sum[3 as libc::c_int as usize] = sum[3 as libc::c_int as usize]
-            + *y.offset((i + ord + 1 as libc::c_int) as isize)
-                * *den.offset(1 as libc::c_int as isize);
-        sum[3 as libc::c_int as usize] = sum[3 as libc::c_int as usize]
-            + *y.offset((i + ord) as isize) * *den.offset(2 as libc::c_int as isize);
-        *y.offset((i + ord + 3 as libc::c_int) as isize) = -sum[3 as libc::c_int as usize];
-        *_y.offset((i + 3 as libc::c_int) as isize) = sum[3 as libc::c_int as usize];
-        i += 4 as libc::c_int
+        *y.offset((i + ord) as isize) = -sum[0 as i32 as usize];
+        *_y.offset(i as isize) = sum[0 as i32 as usize];
+        sum[1 as i32 as usize] = sum[1 as i32 as usize]
+            + *y.offset((i + ord) as isize) * *den.offset(0 as i32 as isize);
+        *y.offset((i + ord + 1 as i32) as isize) = -sum[1 as i32 as usize];
+        *_y.offset((i + 1 as i32) as isize) = sum[1 as i32 as usize];
+        sum[2 as i32 as usize] = sum[2 as i32 as usize]
+            + *y.offset((i + ord + 1 as i32) as isize)
+                * *den.offset(0 as i32 as isize);
+        sum[2 as i32 as usize] = sum[2 as i32 as usize]
+            + *y.offset((i + ord) as isize) * *den.offset(1 as i32 as isize);
+        *y.offset((i + ord + 2 as i32) as isize) = -sum[2 as i32 as usize];
+        *_y.offset((i + 2 as i32) as isize) = sum[2 as i32 as usize];
+        sum[3 as i32 as usize] = sum[3 as i32 as usize]
+            + *y.offset((i + ord + 2 as i32) as isize)
+                * *den.offset(0 as i32 as isize);
+        sum[3 as i32 as usize] = sum[3 as i32 as usize]
+            + *y.offset((i + ord + 1 as i32) as isize)
+                * *den.offset(1 as i32 as isize);
+        sum[3 as i32 as usize] = sum[3 as i32 as usize]
+            + *y.offset((i + ord) as isize) * *den.offset(2 as i32 as isize);
+        *y.offset((i + ord + 3 as i32) as isize) = -sum[3 as i32 as usize];
+        *_y.offset((i + 3 as i32) as isize) = sum[3 as i32 as usize];
+        i += 4 as i32
     }
     while i < N {
         let mut sum_0: crate::arch_h::opus_val32 = *_x.offset(i as isize);
-        j = 0 as libc::c_int;
+        j = 0 as i32;
         while j < ord {
             sum_0 -= *rden.offset(j as isize) * *y.offset((i + j) as isize);
             j += 1
@@ -420,9 +420,9 @@ pub unsafe extern "C" fn celt_iir(
         *_y.offset(i as isize) = sum_0;
         i += 1
     }
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < ord {
-        *mem.offset(i as isize) = *_y.offset((N - i - 1 as libc::c_int) as isize);
+        *mem.offset(i as isize) = *_y.offset((N - i - 1 as i32) as isize);
         i += 1
     }
 }
@@ -432,16 +432,16 @@ pub unsafe extern "C" fn _celt_autocorr(
     mut x: *const crate::arch_h::opus_val16,
     mut ac: *mut crate::arch_h::opus_val32,
     mut window: *const crate::arch_h::opus_val16,
-    mut overlap: libc::c_int,
-    mut lag: libc::c_int,
-    mut n: libc::c_int,
-    mut arch: libc::c_int,
-) -> libc::c_int {
+    mut overlap: i32,
+    mut lag: i32,
+    mut n: i32,
+    mut arch: i32,
+) -> i32 {
     let mut d: crate::arch_h::opus_val32 = 0.;
-    let mut i: libc::c_int = 0;
-    let mut k: libc::c_int = 0;
-    let mut fastN: libc::c_int = n - lag;
-    let mut shift: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut k: i32 = 0;
+    let mut fastN: i32 = n - lag;
+    let mut shift: i32 = 0;
     let mut xptr: *const crate::arch_h::opus_val16 = 0 as *const crate::arch_h::opus_val16;
     let mut xx: *mut crate::arch_h::opus_val16 = 0 as *mut crate::arch_h::opus_val16;
     let mut fresh22 = ::std::vec::from_elem(
@@ -450,36 +450,36 @@ pub unsafe extern "C" fn _celt_autocorr(
             .wrapping_mul(n as libc::c_ulong) as usize,
     );
     xx = fresh22.as_mut_ptr() as *mut crate::arch_h::opus_val16;
-    if overlap == 0 as libc::c_int {
+    if overlap == 0 as i32 {
         xptr = x
     } else {
-        i = 0 as libc::c_int;
+        i = 0 as i32;
         while i < n {
             *xx.offset(i as isize) = *x.offset(i as isize);
             i += 1
         }
-        i = 0 as libc::c_int;
+        i = 0 as i32;
         while i < overlap {
             *xx.offset(i as isize) = *x.offset(i as isize) * *window.offset(i as isize);
-            *xx.offset((n - i - 1 as libc::c_int) as isize) =
-                *x.offset((n - i - 1 as libc::c_int) as isize) * *window.offset(i as isize);
+            *xx.offset((n - i - 1 as i32) as isize) =
+                *x.offset((n - i - 1 as i32) as isize) * *window.offset(i as isize);
             i += 1
         }
         xptr = xx
     }
-    shift = 0 as libc::c_int;
+    shift = 0 as i32;
     crate::src::opus_1_2_1::celt::pitch::celt_pitch_xcorr_c(
         xptr,
         xptr,
         ac,
         fastN,
-        lag + 1 as libc::c_int,
+        lag + 1 as i32,
         arch,
     );
-    k = 0 as libc::c_int;
+    k = 0 as i32;
     while k <= lag {
         i = k + fastN;
-        d = 0 as libc::c_int as crate::arch_h::opus_val32;
+        d = 0 as i32 as crate::arch_h::opus_val32;
         while i < n {
             d = d + *xptr.offset(i as isize) * *xptr.offset((i - k) as isize);
             i += 1

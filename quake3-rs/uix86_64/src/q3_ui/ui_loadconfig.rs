@@ -324,7 +324,7 @@ static mut s_configs: configs_t = configs_t {
         },
         string: 0 as *const libc::c_char as *mut libc::c_char,
         style: 0,
-        color: 0 as *const libc::c_float as *mut libc::c_float,
+        color: 0 as *const f32 as *mut f32,
     },
     framel: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -351,7 +351,7 @@ static mut s_configs: configs_t = configs_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     framer: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -378,7 +378,7 @@ static mut s_configs: configs_t = configs_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     list: crate::ui_local_h::menulist_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -434,7 +434,7 @@ static mut s_configs: configs_t = configs_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     left: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -461,7 +461,7 @@ static mut s_configs: configs_t = configs_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     right: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -488,7 +488,7 @@ static mut s_configs: configs_t = configs_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     back: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -515,7 +515,7 @@ static mut s_configs: configs_t = configs_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     go: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -542,7 +542,7 @@ static mut s_configs: configs_t = configs_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     names: [0; 2048],
     configlist: [0 as *const libc::c_char as *mut libc::c_char; 128],
@@ -553,14 +553,14 @@ LoadConfig_MenuEvent
 ===============
 */
 
-unsafe extern "C" fn LoadConfig_MenuEvent(mut ptr: *mut libc::c_void, mut event: libc::c_int) {
-    if event != 3 as libc::c_int {
+unsafe extern "C" fn LoadConfig_MenuEvent(mut ptr: *mut libc::c_void, mut event: i32) {
+    if event != 3 as i32 {
         return;
     }
     match (*(ptr as *mut crate::ui_local_h::menucommon_s)).id {
         11 => {
             crate::src::ui::ui_syscalls::trap_Cmd_ExecuteText(
-                crate::src::qcommon::q_shared::EXEC_APPEND as libc::c_int,
+                crate::src::qcommon::q_shared::EXEC_APPEND as i32,
                 crate::src::qcommon::q_shared::va(
                     b"exec %s\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     *s_configs
@@ -577,13 +577,13 @@ unsafe extern "C" fn LoadConfig_MenuEvent(mut ptr: *mut libc::c_void, mut event:
         13 => {
             crate::src::q3_ui::ui_qmenu::ScrollList_Key(
                 &mut s_configs.list as *mut _ as *mut crate::ui_local_h::menulist_s,
-                crate::keycodes_h::K_LEFTARROW as libc::c_int,
+                crate::keycodes_h::K_LEFTARROW as i32,
             );
         }
         14 => {
             crate::src::q3_ui::ui_qmenu::ScrollList_Key(
                 &mut s_configs.list as *mut _ as *mut crate::ui_local_h::menulist_s,
-                crate::keycodes_h::K_RIGHTARROW as libc::c_int,
+                crate::keycodes_h::K_RIGHTARROW as i32,
             );
         }
         _ => {}
@@ -596,151 +596,151 @@ LoadConfig_MenuInit
 */
 
 unsafe extern "C" fn LoadConfig_MenuInit() {
-    let mut i: libc::c_int = 0;
-    let mut len: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut len: i32 = 0;
     let mut configname: *mut libc::c_char = 0 as *mut libc::c_char;
     UI_LoadConfig_Cache();
     crate::stdlib::memset(
         &mut s_configs as *mut configs_t as *mut libc::c_void,
-        0 as libc::c_int,
+        0 as i32,
         ::std::mem::size_of::<configs_t>() as libc::c_ulong,
     );
     s_configs.menu.wrapAround = crate::src::qcommon::q_shared::qtrue;
     s_configs.menu.fullscreen = crate::src::qcommon::q_shared::qtrue;
-    s_configs.banner.generic.type_0 = 10 as libc::c_int;
-    s_configs.banner.generic.x = 320 as libc::c_int;
-    s_configs.banner.generic.y = 16 as libc::c_int;
+    s_configs.banner.generic.type_0 = 10 as i32;
+    s_configs.banner.generic.x = 320 as i32;
+    s_configs.banner.generic.y = 16 as i32;
     s_configs.banner.string =
         b"LOAD CONFIG\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     s_configs.banner.color = crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr();
-    s_configs.banner.style = 0x1 as libc::c_int;
-    s_configs.framel.generic.type_0 = 6 as libc::c_int;
+    s_configs.banner.style = 0x1 as i32;
+    s_configs.framel.generic.type_0 = 6 as i32;
     s_configs.framel.generic.name = b"menu/art/frame2_l\x00" as *const u8 as *const libc::c_char;
-    s_configs.framel.generic.flags = 0x4000 as libc::c_int as libc::c_uint;
-    s_configs.framel.generic.x = 0 as libc::c_int;
-    s_configs.framel.generic.y = 78 as libc::c_int;
-    s_configs.framel.width = 256 as libc::c_int;
-    s_configs.framel.height = 329 as libc::c_int;
-    s_configs.framer.generic.type_0 = 6 as libc::c_int;
+    s_configs.framel.generic.flags = 0x4000 as i32 as u32;
+    s_configs.framel.generic.x = 0 as i32;
+    s_configs.framel.generic.y = 78 as i32;
+    s_configs.framel.width = 256 as i32;
+    s_configs.framel.height = 329 as i32;
+    s_configs.framer.generic.type_0 = 6 as i32;
     s_configs.framer.generic.name = b"menu/art/frame1_r\x00" as *const u8 as *const libc::c_char;
-    s_configs.framer.generic.flags = 0x4000 as libc::c_int as libc::c_uint;
-    s_configs.framer.generic.x = 376 as libc::c_int;
-    s_configs.framer.generic.y = 76 as libc::c_int;
-    s_configs.framer.width = 256 as libc::c_int;
-    s_configs.framer.height = 334 as libc::c_int;
-    s_configs.arrows.generic.type_0 = 6 as libc::c_int;
+    s_configs.framer.generic.flags = 0x4000 as i32 as u32;
+    s_configs.framer.generic.x = 376 as i32;
+    s_configs.framer.generic.y = 76 as i32;
+    s_configs.framer.width = 256 as i32;
+    s_configs.framer.height = 334 as i32;
+    s_configs.arrows.generic.type_0 = 6 as i32;
     s_configs.arrows.generic.name =
         b"menu/art/arrows_horz_0\x00" as *const u8 as *const libc::c_char;
-    s_configs.arrows.generic.flags = 0x4000 as libc::c_int as libc::c_uint;
-    s_configs.arrows.generic.x = 320 as libc::c_int - 128 as libc::c_int / 2 as libc::c_int;
-    s_configs.arrows.generic.y = 400 as libc::c_int;
-    s_configs.arrows.width = 128 as libc::c_int;
-    s_configs.arrows.height = 48 as libc::c_int;
-    s_configs.left.generic.type_0 = 6 as libc::c_int;
-    s_configs.left.generic.flags = 0x4 as libc::c_int as libc::c_uint
-        | 0x100 as libc::c_int as libc::c_uint
-        | 0x800 as libc::c_int as libc::c_uint;
-    s_configs.left.generic.x = 320 as libc::c_int - 128 as libc::c_int / 2 as libc::c_int;
-    s_configs.left.generic.y = 400 as libc::c_int;
-    s_configs.left.generic.id = 13 as libc::c_int;
+    s_configs.arrows.generic.flags = 0x4000 as i32 as u32;
+    s_configs.arrows.generic.x = 320 as i32 - 128 as i32 / 2 as i32;
+    s_configs.arrows.generic.y = 400 as i32;
+    s_configs.arrows.width = 128 as i32;
+    s_configs.arrows.height = 48 as i32;
+    s_configs.left.generic.type_0 = 6 as i32;
+    s_configs.left.generic.flags = 0x4 as i32 as u32
+        | 0x100 as i32 as u32
+        | 0x800 as i32 as u32;
+    s_configs.left.generic.x = 320 as i32 - 128 as i32 / 2 as i32;
+    s_configs.left.generic.y = 400 as i32;
+    s_configs.left.generic.id = 13 as i32;
     s_configs.left.generic.callback = Some(
-        LoadConfig_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        LoadConfig_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    s_configs.left.width = 128 as libc::c_int / 2 as libc::c_int;
-    s_configs.left.height = 48 as libc::c_int;
+    s_configs.left.width = 128 as i32 / 2 as i32;
+    s_configs.left.height = 48 as i32;
     s_configs.left.focuspic =
         b"menu/art/arrows_horz_left\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    s_configs.right.generic.type_0 = 6 as libc::c_int;
-    s_configs.right.generic.flags = 0x4 as libc::c_int as libc::c_uint
-        | 0x100 as libc::c_int as libc::c_uint
-        | 0x800 as libc::c_int as libc::c_uint;
-    s_configs.right.generic.x = 320 as libc::c_int;
-    s_configs.right.generic.y = 400 as libc::c_int;
-    s_configs.right.generic.id = 14 as libc::c_int;
+    s_configs.right.generic.type_0 = 6 as i32;
+    s_configs.right.generic.flags = 0x4 as i32 as u32
+        | 0x100 as i32 as u32
+        | 0x800 as i32 as u32;
+    s_configs.right.generic.x = 320 as i32;
+    s_configs.right.generic.y = 400 as i32;
+    s_configs.right.generic.id = 14 as i32;
     s_configs.right.generic.callback = Some(
-        LoadConfig_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        LoadConfig_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    s_configs.right.width = 128 as libc::c_int / 2 as libc::c_int;
-    s_configs.right.height = 48 as libc::c_int;
+    s_configs.right.width = 128 as i32 / 2 as i32;
+    s_configs.right.height = 48 as i32;
     s_configs.right.focuspic =
         b"menu/art/arrows_horz_right\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    s_configs.back.generic.type_0 = 6 as libc::c_int;
+    s_configs.back.generic.type_0 = 6 as i32;
     s_configs.back.generic.name = b"menu/art/back_0\x00" as *const u8 as *const libc::c_char;
     s_configs.back.generic.flags =
-        0x4 as libc::c_int as libc::c_uint | 0x100 as libc::c_int as libc::c_uint;
-    s_configs.back.generic.id = 10 as libc::c_int;
+        0x4 as i32 as u32 | 0x100 as i32 as u32;
+    s_configs.back.generic.id = 10 as i32;
     s_configs.back.generic.callback = Some(
-        LoadConfig_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        LoadConfig_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    s_configs.back.generic.x = 0 as libc::c_int;
-    s_configs.back.generic.y = 480 as libc::c_int - 64 as libc::c_int;
-    s_configs.back.width = 128 as libc::c_int;
-    s_configs.back.height = 64 as libc::c_int;
+    s_configs.back.generic.x = 0 as i32;
+    s_configs.back.generic.y = 480 as i32 - 64 as i32;
+    s_configs.back.width = 128 as i32;
+    s_configs.back.height = 64 as i32;
     s_configs.back.focuspic =
         b"menu/art/back_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    s_configs.go.generic.type_0 = 6 as libc::c_int;
+    s_configs.go.generic.type_0 = 6 as i32;
     s_configs.go.generic.name = b"menu/art/load_0\x00" as *const u8 as *const libc::c_char;
     s_configs.go.generic.flags =
-        0x10 as libc::c_int as libc::c_uint | 0x100 as libc::c_int as libc::c_uint;
-    s_configs.go.generic.id = 11 as libc::c_int;
+        0x10 as i32 as u32 | 0x100 as i32 as u32;
+    s_configs.go.generic.id = 11 as i32;
     s_configs.go.generic.callback = Some(
-        LoadConfig_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        LoadConfig_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    s_configs.go.generic.x = 640 as libc::c_int;
-    s_configs.go.generic.y = 480 as libc::c_int - 64 as libc::c_int;
-    s_configs.go.width = 128 as libc::c_int;
-    s_configs.go.height = 64 as libc::c_int;
+    s_configs.go.generic.x = 640 as i32;
+    s_configs.go.generic.y = 480 as i32 - 64 as i32;
+    s_configs.go.width = 128 as i32;
+    s_configs.go.height = 64 as i32;
     s_configs.go.focuspic =
         b"menu/art/load_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     // scan for configs
-    s_configs.list.generic.type_0 = 8 as libc::c_int;
-    s_configs.list.generic.flags = 0x100 as libc::c_int as libc::c_uint;
+    s_configs.list.generic.type_0 = 8 as i32;
+    s_configs.list.generic.flags = 0x100 as i32 as u32;
     s_configs.list.generic.callback = Some(
-        LoadConfig_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        LoadConfig_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    s_configs.list.generic.id = 12 as libc::c_int;
-    s_configs.list.generic.x = 118 as libc::c_int;
-    s_configs.list.generic.y = 130 as libc::c_int;
-    s_configs.list.width = 16 as libc::c_int;
-    s_configs.list.height = 14 as libc::c_int;
+    s_configs.list.generic.id = 12 as i32;
+    s_configs.list.generic.x = 118 as i32;
+    s_configs.list.generic.y = 130 as i32;
+    s_configs.list.width = 16 as i32;
+    s_configs.list.height = 14 as i32;
     s_configs.list.numitems = crate::src::ui::ui_syscalls::trap_FS_GetFileList(
         b"\x00" as *const u8 as *const libc::c_char,
         b"cfg\x00" as *const u8 as *const libc::c_char,
         s_configs.names.as_mut_ptr(),
-        128 as libc::c_int * 16 as libc::c_int,
+        128 as i32 * 16 as i32,
     );
     s_configs.list.itemnames = s_configs.configlist.as_mut_ptr() as *mut *const libc::c_char;
-    s_configs.list.columns = 3 as libc::c_int;
+    s_configs.list.columns = 3 as i32;
     if s_configs.list.numitems == 0 {
         ::libc::strcpy(
             s_configs.names.as_mut_ptr(),
             b"No Files Found.\x00" as *const u8 as *const libc::c_char,
         );
-        s_configs.list.numitems = 1 as libc::c_int;
+        s_configs.list.numitems = 1 as i32;
         //degenerate case, not selectable
         s_configs.go.generic.flags |=
-            0x4000 as libc::c_int as libc::c_uint | 0x1000 as libc::c_int as libc::c_uint
-    } else if s_configs.list.numitems > 128 as libc::c_int {
-        s_configs.list.numitems = 128 as libc::c_int
+            0x4000 as i32 as u32 | 0x1000 as i32 as u32
+    } else if s_configs.list.numitems > 128 as i32 {
+        s_configs.list.numitems = 128 as i32
     }
     configname = s_configs.names.as_mut_ptr();
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < s_configs.list.numitems {
         let ref mut fresh0 = *s_configs.list.itemnames.offset(i as isize);
         *fresh0 = configname;
         // strip extension
-        len = crate::stdlib::strlen(configname) as libc::c_int;
+        len = crate::stdlib::strlen(configname) as i32;
         if crate::src::qcommon::q_shared::Q_stricmp(
             configname
                 .offset(len as isize)
-                .offset(-(4 as libc::c_int as isize)),
+                .offset(-(4 as i32 as isize)),
             b".cfg\x00" as *const u8 as *const libc::c_char,
         ) == 0
         {
-            *configname.offset((len - 4 as libc::c_int) as isize) = '\u{0}' as i32 as libc::c_char
+            *configname.offset((len - 4 as i32) as isize) = '\u{0}' as i32 as libc::c_char
         }
         crate::src::qcommon::q_shared::Q_strupr(configname);
-        configname = configname.offset((len + 1 as libc::c_int) as isize);
+        configname = configname.offset((len + 1 as i32) as isize);
         i += 1
     }
     crate::src::q3_ui::ui_qmenu::Menu_AddItem(

@@ -128,28 +128,28 @@ POSSIBILITY OF SUCH DAMAGE.
 pub unsafe extern "C" fn silk_find_pred_coefs_FLP(
     mut psEnc: *mut crate::structs_FLP_h::silk_encoder_state_FLP,
     mut psEncCtrl: *mut crate::structs_FLP_h::silk_encoder_control_FLP,
-    mut res_pitch: *const libc::c_float,
-    mut x: *const libc::c_float,
-    mut condCoding: libc::c_int,
+    mut res_pitch: *const f32,
+    mut x: *const f32,
+    mut condCoding: i32,
 )
 /* I    The type of conditional coding to use       */
 {
-    let mut i: libc::c_int = 0;
-    let mut XXLTP: [libc::c_float; 100] = [0.; 100];
-    let mut xXLTP: [libc::c_float; 20] = [0.; 20];
-    let mut invGains: [libc::c_float; 4] = [0.; 4];
+    let mut i: i32 = 0;
+    let mut XXLTP: [f32; 100] = [0.; 100];
+    let mut xXLTP: [f32; 20] = [0.; 20];
+    let mut invGains: [f32; 4] = [0.; 4];
     let mut NLSF_Q15: [crate::opus_types_h::opus_int16; 16] = [0; 16];
-    let mut x_ptr: *const libc::c_float = 0 as *const libc::c_float;
-    let mut x_pre_ptr: *mut libc::c_float = 0 as *mut libc::c_float;
-    let mut LPC_in_pre: [libc::c_float; 384] = [0.; 384];
-    let mut minInvGain: libc::c_float = 0.;
+    let mut x_ptr: *const f32 = 0 as *const f32;
+    let mut x_pre_ptr: *mut f32 = 0 as *mut f32;
+    let mut LPC_in_pre: [f32; 384] = [0.; 384];
+    let mut minInvGain: f32 = 0.;
     /* Weighting for weighted least squares */
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < (*psEnc).sCmn.nb_subfr {
         invGains[i as usize] = 1.0f32 / (*psEncCtrl).Gains[i as usize];
         i += 1
     }
-    if (*psEnc).sCmn.indices.signalType as libc::c_int == 2 as libc::c_int {
+    if (*psEnc).sCmn.indices.signalType as i32 == 2 as i32 {
         /* *********/
         /* VOICED */
         /* *********/
@@ -158,7 +158,7 @@ pub unsafe extern "C" fn silk_find_pred_coefs_FLP(
             XXLTP.as_mut_ptr(),
             xXLTP.as_mut_ptr(),
             res_pitch,
-            (*psEncCtrl).pitchL.as_mut_ptr() as *const libc::c_int,
+            (*psEncCtrl).pitchL.as_mut_ptr() as *const i32,
             (*psEnc).sCmn.subfr_length,
             (*psEnc).sCmn.nb_subfr,
         );
@@ -168,8 +168,8 @@ pub unsafe extern "C" fn silk_find_pred_coefs_FLP(
             &mut (*psEnc).sCmn.indices.PERIndex,
             &mut (*psEnc).sCmn.sum_log_gain_Q7,
             &mut (*psEncCtrl).LTPredCodGain,
-            XXLTP.as_mut_ptr() as *const libc::c_float,
-            xXLTP.as_mut_ptr() as *const libc::c_float,
+            XXLTP.as_mut_ptr() as *const f32,
+            xXLTP.as_mut_ptr() as *const f32,
             (*psEnc).sCmn.subfr_length,
             (*psEnc).sCmn.nb_subfr,
             (*psEnc).sCmn.arch,
@@ -182,9 +182,9 @@ pub unsafe extern "C" fn silk_find_pred_coefs_FLP(
         crate::src::opus_1_2_1::silk::float::LTP_analysis_filter_FLP::silk_LTP_analysis_filter_FLP(
             LPC_in_pre.as_mut_ptr(),
             x.offset(-((*psEnc).sCmn.predictLPCOrder as isize)),
-            (*psEncCtrl).LTPCoef.as_mut_ptr() as *const libc::c_float,
-            (*psEncCtrl).pitchL.as_mut_ptr() as *const libc::c_int,
-            invGains.as_mut_ptr() as *const libc::c_float,
+            (*psEncCtrl).LTPCoef.as_mut_ptr() as *const f32,
+            (*psEncCtrl).pitchL.as_mut_ptr() as *const i32,
+            invGains.as_mut_ptr() as *const f32,
             (*psEnc).sCmn.subfr_length,
             (*psEnc).sCmn.nb_subfr,
             (*psEnc).sCmn.predictLPCOrder,
@@ -199,7 +199,7 @@ pub unsafe extern "C" fn silk_find_pred_coefs_FLP(
         /* Create signal with prepended subframes, scaled by inverse gains */
         x_ptr = x.offset(-((*psEnc).sCmn.predictLPCOrder as isize));
         x_pre_ptr = LPC_in_pre.as_mut_ptr();
-        i = 0 as libc::c_int;
+        i = 0 as i32;
         while i < (*psEnc).sCmn.nb_subfr {
             crate::src::opus_1_2_1::silk::float::scale_copy_vector_FLP::silk_scale_copy_vector_FLP(
                 x_pre_ptr,
@@ -214,21 +214,21 @@ pub unsafe extern "C" fn silk_find_pred_coefs_FLP(
         }
         crate::stdlib::memset(
             (*psEncCtrl).LTPCoef.as_mut_ptr() as *mut libc::c_void,
-            0 as libc::c_int,
-            (((*psEnc).sCmn.nb_subfr * 5 as libc::c_int) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<libc::c_float>() as libc::c_ulong),
+            0 as i32,
+            (((*psEnc).sCmn.nb_subfr * 5 as i32) as libc::c_ulong)
+                .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
         );
         (*psEncCtrl).LTPredCodGain = 0.0f32;
-        (*psEnc).sCmn.sum_log_gain_Q7 = 0 as libc::c_int
+        (*psEnc).sCmn.sum_log_gain_Q7 = 0 as i32
     }
     /* Limit on total predictive coding gain */
     if (*psEnc).sCmn.first_frame_after_reset != 0 {
         minInvGain = 1.0f32 / 1e2f32
     } else {
         minInvGain = crate::stdlib::pow(
-            2 as libc::c_int as libc::c_double,
-            ((*psEncCtrl).LTPredCodGain / 3 as libc::c_int as libc::c_float) as libc::c_double,
-        ) as libc::c_float
+            2 as i32 as f64,
+            ((*psEncCtrl).LTPredCodGain / 3 as i32 as f32) as f64,
+        ) as f32
             / 1e4f32;
         minInvGain /= 0.25f32 + 0.75f32 * (*psEncCtrl).coding_quality
     }
@@ -236,7 +236,7 @@ pub unsafe extern "C" fn silk_find_pred_coefs_FLP(
     crate::src::opus_1_2_1::silk::float::find_LPC_FLP::silk_find_LPC_FLP(
         &mut (*psEnc).sCmn as *mut _ as *mut crate::structs_h::silk_encoder_state,
         NLSF_Q15.as_mut_ptr(),
-        LPC_in_pre.as_mut_ptr() as *const libc::c_float,
+        LPC_in_pre.as_mut_ptr() as *const f32,
         minInvGain,
     );
     /* Quantize LSFs */
@@ -249,9 +249,9 @@ pub unsafe extern "C" fn silk_find_pred_coefs_FLP(
     /* Calculate residual energy using quantized LPC coefficients */
     crate::src::opus_1_2_1::silk::float::residual_energy_FLP::silk_residual_energy_FLP(
         (*psEncCtrl).ResNrg.as_mut_ptr(),
-        LPC_in_pre.as_mut_ptr() as *const libc::c_float,
+        LPC_in_pre.as_mut_ptr() as *const f32,
         (*psEncCtrl).PredCoef.as_mut_ptr(),
-        (*psEncCtrl).Gains.as_mut_ptr() as *const libc::c_float,
+        (*psEncCtrl).Gains.as_mut_ptr() as *const f32,
         (*psEnc).sCmn.subfr_length,
         (*psEnc).sCmn.nb_subfr,
         (*psEnc).sCmn.predictLPCOrder,

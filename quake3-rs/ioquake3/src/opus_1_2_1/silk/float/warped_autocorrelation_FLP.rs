@@ -86,36 +86,36 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_warped_autocorrelation_FLP(
-    mut corr: *mut libc::c_float,
-    mut input: *const libc::c_float,
-    warping: libc::c_float,
-    length: libc::c_int,
-    order: libc::c_int,
+    mut corr: *mut f32,
+    mut input: *const f32,
+    warping: f32,
+    length: i32,
+    order: i32,
 )
 /* I    Correlation order (even)                    */
 {
-    let mut n: libc::c_int = 0;
-    let mut i: libc::c_int = 0;
-    let mut tmp1: libc::c_double = 0.;
-    let mut tmp2: libc::c_double = 0.;
-    let mut state: [libc::c_double; 25] = [
-        0 as libc::c_int as libc::c_double,
-        0 as libc::c_int as libc::c_double,
-        0 as libc::c_int as libc::c_double,
-        0 as libc::c_int as libc::c_double,
-        0 as libc::c_int as libc::c_double,
-        0 as libc::c_int as libc::c_double,
-        0 as libc::c_int as libc::c_double,
-        0 as libc::c_int as libc::c_double,
-        0 as libc::c_int as libc::c_double,
-        0 as libc::c_int as libc::c_double,
-        0 as libc::c_int as libc::c_double,
-        0 as libc::c_int as libc::c_double,
-        0 as libc::c_int as libc::c_double,
-        0 as libc::c_int as libc::c_double,
-        0 as libc::c_int as libc::c_double,
-        0 as libc::c_int as libc::c_double,
-        0 as libc::c_int as libc::c_double,
+    let mut n: i32 = 0;
+    let mut i: i32 = 0;
+    let mut tmp1: f64 = 0.;
+    let mut tmp2: f64 = 0.;
+    let mut state: [f64; 25] = [
+        0 as i32 as f64,
+        0 as i32 as f64,
+        0 as i32 as f64,
+        0 as i32 as f64,
+        0 as i32 as f64,
+        0 as i32 as f64,
+        0 as i32 as f64,
+        0 as i32 as f64,
+        0 as i32 as f64,
+        0 as i32 as f64,
+        0 as i32 as f64,
+        0 as i32 as f64,
+        0 as i32 as f64,
+        0 as i32 as f64,
+        0 as i32 as f64,
+        0 as i32 as f64,
+        0 as i32 as f64,
         0.,
         0.,
         0.,
@@ -125,24 +125,24 @@ pub unsafe extern "C" fn silk_warped_autocorrelation_FLP(
         0.,
         0.,
     ];
-    let mut C: [libc::c_double; 25] = [
-        0 as libc::c_int as libc::c_double,
-        0 as libc::c_int as libc::c_double,
-        0 as libc::c_int as libc::c_double,
-        0 as libc::c_int as libc::c_double,
-        0 as libc::c_int as libc::c_double,
-        0 as libc::c_int as libc::c_double,
-        0 as libc::c_int as libc::c_double,
-        0 as libc::c_int as libc::c_double,
-        0 as libc::c_int as libc::c_double,
-        0 as libc::c_int as libc::c_double,
-        0 as libc::c_int as libc::c_double,
-        0 as libc::c_int as libc::c_double,
-        0 as libc::c_int as libc::c_double,
-        0 as libc::c_int as libc::c_double,
-        0 as libc::c_int as libc::c_double,
-        0 as libc::c_int as libc::c_double,
-        0 as libc::c_int as libc::c_double,
+    let mut C: [f64; 25] = [
+        0 as i32 as f64,
+        0 as i32 as f64,
+        0 as i32 as f64,
+        0 as i32 as f64,
+        0 as i32 as f64,
+        0 as i32 as f64,
+        0 as i32 as f64,
+        0 as i32 as f64,
+        0 as i32 as f64,
+        0 as i32 as f64,
+        0 as i32 as f64,
+        0 as i32 as f64,
+        0 as i32 as f64,
+        0 as i32 as f64,
+        0 as i32 as f64,
+        0 as i32 as f64,
+        0 as i32 as f64,
         0.,
         0.,
         0.,
@@ -154,32 +154,32 @@ pub unsafe extern "C" fn silk_warped_autocorrelation_FLP(
     ];
     /* Order must be even */
     /* Loop over samples */
-    n = 0 as libc::c_int;
+    n = 0 as i32;
     while n < length {
-        tmp1 = *input.offset(n as isize) as libc::c_double;
+        tmp1 = *input.offset(n as isize) as f64;
         /* Loop over allpass sections */
-        i = 0 as libc::c_int;
+        i = 0 as i32;
         while i < order {
             /* Output of allpass section */
             tmp2 = state[i as usize]
-                + warping as libc::c_double * (state[(i + 1 as libc::c_int) as usize] - tmp1);
+                + warping as f64 * (state[(i + 1 as i32) as usize] - tmp1);
             state[i as usize] = tmp1;
-            C[i as usize] += state[0 as libc::c_int as usize] * tmp1;
+            C[i as usize] += state[0 as i32 as usize] * tmp1;
             /* Output of allpass section */
-            tmp1 = state[(i + 1 as libc::c_int) as usize]
-                + warping as libc::c_double * (state[(i + 2 as libc::c_int) as usize] - tmp2);
-            state[(i + 1 as libc::c_int) as usize] = tmp2;
-            C[(i + 1 as libc::c_int) as usize] += state[0 as libc::c_int as usize] * tmp2;
-            i += 2 as libc::c_int
+            tmp1 = state[(i + 1 as i32) as usize]
+                + warping as f64 * (state[(i + 2 as i32) as usize] - tmp2);
+            state[(i + 1 as i32) as usize] = tmp2;
+            C[(i + 1 as i32) as usize] += state[0 as i32 as usize] * tmp2;
+            i += 2 as i32
         }
         state[order as usize] = tmp1;
-        C[order as usize] += state[0 as libc::c_int as usize] * tmp1;
+        C[order as usize] += state[0 as i32 as usize] * tmp1;
         n += 1
     }
     /* Copy correlations in silk_float output format */
-    i = 0 as libc::c_int;
-    while i < order + 1 as libc::c_int {
-        *corr.offset(i as isize) = C[i as usize] as libc::c_float;
+    i = 0 as i32;
+    while i < order + 1 as i32 {
+        *corr.offset(i as isize) = C[i as usize] as f32;
         i += 1
     }
 }

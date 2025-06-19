@@ -81,7 +81,7 @@ static mut s_mods: mods_t = mods_t {
         },
         string: 0 as *const libc::c_char as *mut libc::c_char,
         style: 0,
-        color: 0 as *const libc::c_float as *mut libc::c_float,
+        color: 0 as *const f32 as *mut f32,
     },
     framel: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -108,7 +108,7 @@ static mut s_mods: mods_t = mods_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     framer: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -135,7 +135,7 @@ static mut s_mods: mods_t = mods_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     list: crate::ui_local_h::menulist_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -191,7 +191,7 @@ static mut s_mods: mods_t = mods_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     go: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -218,7 +218,7 @@ static mut s_mods: mods_t = mods_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     description: [0; 3072],
     fs_game: [0; 1024],
@@ -233,8 +233,8 @@ UI_Mods_MenuEvent
 ===============
 */
 
-unsafe extern "C" fn UI_Mods_MenuEvent(mut ptr: *mut libc::c_void, mut event: libc::c_int) {
-    if event != 3 as libc::c_int {
+unsafe extern "C" fn UI_Mods_MenuEvent(mut ptr: *mut libc::c_void, mut event: i32) {
+    if event != 3 as i32 {
         return;
     }
     match (*(ptr as *mut crate::ui_local_h::menucommon_s)).id {
@@ -244,7 +244,7 @@ unsafe extern "C" fn UI_Mods_MenuEvent(mut ptr: *mut libc::c_void, mut event: li
                 s_mods.fs_gameList[s_mods.list.curvalue as usize],
             );
             crate::src::ui::ui_syscalls::trap_Cmd_ExecuteText(
-                crate::src::qcommon::q_shared::EXEC_APPEND as libc::c_int,
+                crate::src::qcommon::q_shared::EXEC_APPEND as i32,
                 b"vid_restart;\x00" as *const u8 as *const libc::c_char,
             );
             crate::src::q3_ui::ui_atoms::UI_PopMenu();
@@ -266,17 +266,17 @@ unsafe extern "C" fn UI_Mods_ParseInfos(
     mut modDesc: *mut libc::c_char,
 ) {
     s_mods.fs_gameList[s_mods.list.numitems as usize] = s_mods.fs_gamePtr;
-    crate::src::qcommon::q_shared::Q_strncpyz(s_mods.fs_gamePtr, modDir, 16 as libc::c_int);
+    crate::src::qcommon::q_shared::Q_strncpyz(s_mods.fs_gamePtr, modDir, 16 as i32);
     s_mods.descriptionList[s_mods.list.numitems as usize] = s_mods.descriptionPtr;
-    crate::src::qcommon::q_shared::Q_strncpyz(s_mods.descriptionPtr, modDesc, 48 as libc::c_int);
+    crate::src::qcommon::q_shared::Q_strncpyz(s_mods.descriptionPtr, modDesc, 48 as i32);
     let ref mut fresh0 = *s_mods.list.itemnames.offset(s_mods.list.numitems as isize);
     *fresh0 = s_mods.descriptionPtr;
     s_mods.descriptionPtr = s_mods.descriptionPtr.offset(
-        crate::stdlib::strlen(s_mods.descriptionPtr).wrapping_add(1 as libc::c_int as libc::c_ulong)
+        crate::stdlib::strlen(s_mods.descriptionPtr).wrapping_add(1 as i32 as libc::c_ulong)
             as isize,
     );
     s_mods.fs_gamePtr = s_mods.fs_gamePtr.offset(
-        crate::stdlib::strlen(s_mods.fs_gamePtr).wrapping_add(1 as libc::c_int as libc::c_ulong)
+        crate::stdlib::strlen(s_mods.fs_gamePtr).wrapping_add(1 as i32 as libc::c_ulong)
             as isize,
     );
     s_mods.list.numitems += 1;
@@ -288,40 +288,40 @@ UI_Mods_LoadMods
 */
 
 unsafe extern "C" fn UI_Mods_LoadMods() {
-    let mut numdirs: libc::c_int = 0;
+    let mut numdirs: i32 = 0;
     let mut dirlist: [libc::c_char; 2048] = [0; 2048];
     let mut dirptr: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut descptr: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut i: libc::c_int = 0;
-    let mut dirlen: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut dirlen: i32 = 0;
     s_mods.list.itemnames = s_mods.descriptionList.as_mut_ptr() as *mut *const libc::c_char;
     s_mods.descriptionPtr = s_mods.description.as_mut_ptr();
     s_mods.fs_gamePtr = s_mods.fs_game.as_mut_ptr();
     // always start off with baseq3
-    s_mods.list.numitems = 1 as libc::c_int;
-    s_mods.descriptionList[0 as libc::c_int as usize] =
+    s_mods.list.numitems = 1 as i32;
+    s_mods.descriptionList[0 as i32 as usize] =
         b"Quake III Arena\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    let ref mut fresh1 = *s_mods.list.itemnames.offset(0 as libc::c_int as isize);
-    *fresh1 = s_mods.descriptionList[0 as libc::c_int as usize];
-    s_mods.fs_gameList[0 as libc::c_int as usize] =
+    let ref mut fresh1 = *s_mods.list.itemnames.offset(0 as i32 as isize);
+    *fresh1 = s_mods.descriptionList[0 as i32 as usize];
+    s_mods.fs_gameList[0 as i32 as usize] =
         b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     numdirs = crate::src::ui::ui_syscalls::trap_FS_GetFileList(
         b"$modlist\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
         dirlist.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 2048]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 2048]>() as libc::c_ulong as i32,
     );
     dirptr = dirlist.as_mut_ptr();
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < numdirs {
-        dirlen = crate::stdlib::strlen(dirptr).wrapping_add(1 as libc::c_int as libc::c_ulong)
-            as libc::c_int;
+        dirlen = crate::stdlib::strlen(dirptr).wrapping_add(1 as i32 as libc::c_ulong)
+            as i32;
         descptr = dirptr.offset(dirlen as isize);
         UI_Mods_ParseInfos(dirptr, descptr);
         dirptr = dirptr.offset(
             (dirlen as libc::c_ulong)
                 .wrapping_add(crate::stdlib::strlen(descptr))
-                .wrapping_add(1 as libc::c_int as libc::c_ulong) as isize,
+                .wrapping_add(1 as i32 as libc::c_ulong) as isize,
         );
         i += 1
     }
@@ -329,8 +329,8 @@ unsafe extern "C" fn UI_Mods_LoadMods() {
         b"%i mods parsed\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         s_mods.list.numitems,
     ));
-    if s_mods.list.numitems > 64 as libc::c_int {
-        s_mods.list.numitems = 64 as libc::c_int
+    if s_mods.list.numitems > 64 as i32 {
+        s_mods.list.numitems = 64 as i32
     };
 }
 /*
@@ -343,68 +343,68 @@ unsafe extern "C" fn UI_Mods_MenuInit() {
     UI_ModsMenu_Cache();
     crate::stdlib::memset(
         &mut s_mods as *mut mods_t as *mut libc::c_void,
-        0 as libc::c_int,
+        0 as i32,
         ::std::mem::size_of::<mods_t>() as libc::c_ulong,
     );
     s_mods.menu.wrapAround = crate::src::qcommon::q_shared::qtrue;
     s_mods.menu.fullscreen = crate::src::qcommon::q_shared::qtrue;
-    s_mods.banner.generic.type_0 = 10 as libc::c_int;
-    s_mods.banner.generic.x = 320 as libc::c_int;
-    s_mods.banner.generic.y = 16 as libc::c_int;
+    s_mods.banner.generic.type_0 = 10 as i32;
+    s_mods.banner.generic.x = 320 as i32;
+    s_mods.banner.generic.y = 16 as i32;
     s_mods.banner.string = b"MODS\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     s_mods.banner.color = crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr();
-    s_mods.banner.style = 0x1 as libc::c_int;
-    s_mods.framel.generic.type_0 = 6 as libc::c_int;
+    s_mods.banner.style = 0x1 as i32;
+    s_mods.framel.generic.type_0 = 6 as i32;
     s_mods.framel.generic.name = b"menu/art/frame2_l\x00" as *const u8 as *const libc::c_char;
-    s_mods.framel.generic.flags = 0x4000 as libc::c_int as libc::c_uint;
-    s_mods.framel.generic.x = 0 as libc::c_int;
-    s_mods.framel.generic.y = 78 as libc::c_int;
-    s_mods.framel.width = 256 as libc::c_int;
-    s_mods.framel.height = 329 as libc::c_int;
-    s_mods.framer.generic.type_0 = 6 as libc::c_int;
+    s_mods.framel.generic.flags = 0x4000 as i32 as u32;
+    s_mods.framel.generic.x = 0 as i32;
+    s_mods.framel.generic.y = 78 as i32;
+    s_mods.framel.width = 256 as i32;
+    s_mods.framel.height = 329 as i32;
+    s_mods.framer.generic.type_0 = 6 as i32;
     s_mods.framer.generic.name = b"menu/art/frame1_r\x00" as *const u8 as *const libc::c_char;
-    s_mods.framer.generic.flags = 0x4000 as libc::c_int as libc::c_uint;
-    s_mods.framer.generic.x = 376 as libc::c_int;
-    s_mods.framer.generic.y = 76 as libc::c_int;
-    s_mods.framer.width = 256 as libc::c_int;
-    s_mods.framer.height = 334 as libc::c_int;
-    s_mods.back.generic.type_0 = 6 as libc::c_int;
+    s_mods.framer.generic.flags = 0x4000 as i32 as u32;
+    s_mods.framer.generic.x = 376 as i32;
+    s_mods.framer.generic.y = 76 as i32;
+    s_mods.framer.width = 256 as i32;
+    s_mods.framer.height = 334 as i32;
+    s_mods.back.generic.type_0 = 6 as i32;
     s_mods.back.generic.name = b"menu/art/back_0\x00" as *const u8 as *const libc::c_char;
     s_mods.back.generic.flags =
-        0x4 as libc::c_int as libc::c_uint | 0x100 as libc::c_int as libc::c_uint;
-    s_mods.back.generic.id = 10 as libc::c_int;
+        0x4 as i32 as u32 | 0x100 as i32 as u32;
+    s_mods.back.generic.id = 10 as i32;
     s_mods.back.generic.callback =
-        Some(UI_Mods_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> ());
-    s_mods.back.generic.x = 0 as libc::c_int;
-    s_mods.back.generic.y = 480 as libc::c_int - 64 as libc::c_int;
-    s_mods.back.width = 128 as libc::c_int;
-    s_mods.back.height = 64 as libc::c_int;
+        Some(UI_Mods_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
+    s_mods.back.generic.x = 0 as i32;
+    s_mods.back.generic.y = 480 as i32 - 64 as i32;
+    s_mods.back.width = 128 as i32;
+    s_mods.back.height = 64 as i32;
     s_mods.back.focuspic =
         b"menu/art/back_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    s_mods.go.generic.type_0 = 6 as libc::c_int;
+    s_mods.go.generic.type_0 = 6 as i32;
     s_mods.go.generic.name = b"menu/art/load_0\x00" as *const u8 as *const libc::c_char;
     s_mods.go.generic.flags =
-        0x10 as libc::c_int as libc::c_uint | 0x100 as libc::c_int as libc::c_uint;
-    s_mods.go.generic.id = 11 as libc::c_int;
+        0x10 as i32 as u32 | 0x100 as i32 as u32;
+    s_mods.go.generic.id = 11 as i32;
     s_mods.go.generic.callback =
-        Some(UI_Mods_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> ());
-    s_mods.go.generic.x = 640 as libc::c_int;
-    s_mods.go.generic.y = 480 as libc::c_int - 64 as libc::c_int;
-    s_mods.go.width = 128 as libc::c_int;
-    s_mods.go.height = 64 as libc::c_int;
+        Some(UI_Mods_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
+    s_mods.go.generic.x = 640 as i32;
+    s_mods.go.generic.y = 480 as i32 - 64 as i32;
+    s_mods.go.width = 128 as i32;
+    s_mods.go.height = 64 as i32;
     s_mods.go.focuspic =
         b"menu/art/load_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     // scan for mods
-    s_mods.list.generic.type_0 = 8 as libc::c_int;
+    s_mods.list.generic.type_0 = 8 as i32;
     s_mods.list.generic.flags =
-        0x100 as libc::c_int as libc::c_uint | 0x8 as libc::c_int as libc::c_uint;
+        0x100 as i32 as u32 | 0x8 as i32 as u32;
     s_mods.list.generic.callback =
-        Some(UI_Mods_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> ());
-    s_mods.list.generic.id = 12 as libc::c_int;
-    s_mods.list.generic.x = 320 as libc::c_int;
-    s_mods.list.generic.y = 130 as libc::c_int;
-    s_mods.list.width = 48 as libc::c_int;
-    s_mods.list.height = 14 as libc::c_int;
+        Some(UI_Mods_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
+    s_mods.list.generic.id = 12 as i32;
+    s_mods.list.generic.x = 320 as i32;
+    s_mods.list.generic.y = 130 as i32;
+    s_mods.list.width = 48 as i32;
+    s_mods.list.height = 14 as i32;
     UI_Mods_LoadMods();
     crate::src::q3_ui::ui_qmenu::Menu_AddItem(
         &mut s_mods.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,

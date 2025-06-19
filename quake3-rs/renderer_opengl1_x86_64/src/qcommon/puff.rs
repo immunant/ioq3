@@ -66,18 +66,18 @@ unsafe extern "C" fn bits(
     val = (*s).bitbuf; /* out of input */
     while (*s).bitcnt < need {
         if (*s).incnt == (*s).inlen {
-            crate::stdlib::longjmp((*s).env.as_mut_ptr(), 1 as libc::c_int); /* load eight bits */
+            crate::stdlib::longjmp((*s).env.as_mut_ptr(), 1 as i32); /* load eight bits */
         }
         let fresh0 = (*s).incnt;
         (*s).incnt = (*s).incnt.wrapping_add(1);
         val |= (*(*s).in_0.offset(fresh0 as isize) as crate::stdlib::int32_t) << (*s).bitcnt;
-        (*s).bitcnt += 8 as libc::c_int
+        (*s).bitcnt += 8 as i32
     }
     /* drop need bits and update buffer, always zero to seven bits left */
     (*s).bitbuf = val >> need;
     (*s).bitcnt -= need;
     /* return need bits, zeroing the bits above that */
-    return (val as libc::c_long & ((1 as libc::c_long) << need) - 1 as libc::c_int as libc::c_long)
+    return (val as libc::c_long & ((1 as libc::c_long) << need) - 1 as i32 as libc::c_long)
         as crate::stdlib::int32_t;
 }
 /*
@@ -101,11 +101,11 @@ unsafe extern "C" fn bits(
 unsafe extern "C" fn stored(mut s: *mut state) -> crate::stdlib::int32_t {
     let mut len: crate::stdlib::uint32_t = 0; /* length of stored block */
     /* discard leftover bits from current byte (assumes s->bitcnt < 8) */
-    (*s).bitbuf = 0 as libc::c_int;
-    (*s).bitcnt = 0 as libc::c_int;
+    (*s).bitbuf = 0 as i32;
+    (*s).bitcnt = 0 as i32;
     /* get length and check against its one's complement */
-    if (*s).incnt.wrapping_add(4 as libc::c_int as libc::c_uint) > (*s).inlen {
-        return 2 as libc::c_int;
+    if (*s).incnt.wrapping_add(4 as i32 as u32) > (*s).inlen {
+        return 2 as i32;
     } /* not enough input */
     let fresh1 = (*s).incnt; /* didn't match complement! */
     (*s).incnt = (*s).incnt.wrapping_add(1);
@@ -113,27 +113,27 @@ unsafe extern "C" fn stored(mut s: *mut state) -> crate::stdlib::int32_t {
     let fresh2 = (*s).incnt;
     (*s).incnt = (*s).incnt.wrapping_add(1);
     len |=
-        ((*(*s).in_0.offset(fresh2 as isize) as libc::c_int) << 8 as libc::c_int) as libc::c_uint;
+        ((*(*s).in_0.offset(fresh2 as isize) as i32) << 8 as i32) as u32;
     let fresh3 = (*s).incnt;
     (*s).incnt = (*s).incnt.wrapping_add(1);
-    if *(*s).in_0.offset(fresh3 as isize) as libc::c_uint
-        != !len & 0xff as libc::c_int as libc::c_uint
+    if *(*s).in_0.offset(fresh3 as isize) as u32
+        != !len & 0xff as i32 as u32
         || {
             let fresh4 = (*s).incnt;
             (*s).incnt = (*s).incnt.wrapping_add(1);
-            (*(*s).in_0.offset(fresh4 as isize) as libc::c_uint)
-                != !len >> 8 as libc::c_int & 0xff as libc::c_int as libc::c_uint
+            (*(*s).in_0.offset(fresh4 as isize) as u32)
+                != !len >> 8 as i32 & 0xff as i32 as u32
         }
     {
-        return -(2 as libc::c_int);
+        return -(2 as i32);
     }
     /* copy len bytes from in to out */
     if (*s).incnt.wrapping_add(len) > (*s).inlen {
-        return 2 as libc::c_int;
+        return 2 as i32;
     } /* not enough input */
     if !(*s).out.is_null() {
         if (*s).outcnt.wrapping_add(len) > (*s).outlen {
-            return 1 as libc::c_int;
+            return 1 as i32;
         } /* not enough output space */
         loop {
             let fresh5 = len;
@@ -149,13 +149,13 @@ unsafe extern "C" fn stored(mut s: *mut state) -> crate::stdlib::int32_t {
         }
     } else {
         /* just scanning */
-        (*s).outcnt = ((*s).outcnt as libc::c_uint).wrapping_add(len) as crate::stdlib::uint32_t
+        (*s).outcnt = ((*s).outcnt as u32).wrapping_add(len) as crate::stdlib::uint32_t
             as crate::stdlib::uint32_t;
-        (*s).incnt = ((*s).incnt as libc::c_uint).wrapping_add(len) as crate::stdlib::uint32_t
+        (*s).incnt = ((*s).incnt as u32).wrapping_add(len) as crate::stdlib::uint32_t
             as crate::stdlib::uint32_t
     }
     /* done with a valid stored block */
-    return 0 as libc::c_int;
+    return 0 as i32;
 }
 /* canonically ordered symbols */
 /*
@@ -193,11 +193,11 @@ unsafe extern "C" fn decode(mut s: *mut state, mut h: *mut huffman) -> crate::st
     let mut next: *mut crate::stdlib::int16_t = 0 as *mut crate::stdlib::int16_t; /* next number of codes */
     bitbuf = (*s).bitbuf;
     left = (*s).bitcnt;
-    index = 0 as libc::c_int;
+    index = 0 as i32;
     first = index;
     code = first;
-    len = 1 as libc::c_int;
-    next = (*h).count.offset(1 as libc::c_int as isize);
+    len = 1 as i32;
+    next = (*h).count.offset(1 as i32 as isize);
     loop {
         loop {
             let fresh8 = left;
@@ -205,39 +205,39 @@ unsafe extern "C" fn decode(mut s: *mut state, mut h: *mut huffman) -> crate::st
             if !(fresh8 != 0) {
                 break;
             }
-            code |= bitbuf & 1 as libc::c_int;
-            bitbuf >>= 1 as libc::c_int;
+            code |= bitbuf & 1 as i32;
+            bitbuf >>= 1 as i32;
             let fresh9 = next;
             next = next.offset(1);
             count = *fresh9 as crate::stdlib::int32_t;
             if code < first + count {
                 /* if length len, return symbol */
                 (*s).bitbuf = bitbuf; /* else update for next length */
-                (*s).bitcnt = (*s).bitcnt - len & 7 as libc::c_int; /* out of input */
+                (*s).bitcnt = (*s).bitcnt - len & 7 as i32; /* out of input */
                 return *(*h).symbol.offset((index + (code - first)) as isize)
                     as crate::stdlib::int32_t;
             }
             index += count;
             first += count;
-            first <<= 1 as libc::c_int;
-            code <<= 1 as libc::c_int;
+            first <<= 1 as i32;
+            code <<= 1 as i32;
             len += 1
         }
-        left = 15 as libc::c_int + 1 as libc::c_int - len;
-        if left == 0 as libc::c_int {
+        left = 15 as i32 + 1 as i32 - len;
+        if left == 0 as i32 {
             break;
         }
         if (*s).incnt == (*s).inlen {
-            crate::stdlib::longjmp((*s).env.as_mut_ptr(), 1 as libc::c_int);
+            crate::stdlib::longjmp((*s).env.as_mut_ptr(), 1 as i32);
         }
         let fresh10 = (*s).incnt;
         (*s).incnt = (*s).incnt.wrapping_add(1);
         bitbuf = *(*s).in_0.offset(fresh10 as isize) as crate::stdlib::int32_t;
-        if left > 8 as libc::c_int {
-            left = 8 as libc::c_int
+        if left > 8 as i32 {
+            left = 8 as i32
         }
     }
-    return -(9 as libc::c_int);
+    return -(9 as i32);
     /* ran out of codes */
 }
 /*
@@ -283,39 +283,39 @@ unsafe extern "C" fn construct(
     let mut left: crate::stdlib::int32_t = 0; /* number of possible codes left of current length */
     let mut offs: [crate::stdlib::int16_t; 16] = [0; 16]; /* offsets in symbol table for each length */
     /* count number of codes of each length */
-    len = 0 as libc::c_int; /* assumes lengths are within bounds */
-    while len <= 15 as libc::c_int {
-        *(*h).count.offset(len as isize) = 0 as libc::c_int as crate::stdlib::int16_t; /* complete, but decode() will fail */
+    len = 0 as i32; /* assumes lengths are within bounds */
+    while len <= 15 as i32 {
+        *(*h).count.offset(len as isize) = 0 as i32 as crate::stdlib::int16_t; /* complete, but decode() will fail */
         len += 1
     }
-    symbol = 0 as libc::c_int;
+    symbol = 0 as i32;
     while symbol < n {
         let ref mut fresh11 = *(*h).count.offset(*length.offset(symbol as isize) as isize);
         *fresh11 += 1;
         symbol += 1
     }
-    if *(*h).count.offset(0 as libc::c_int as isize) as libc::c_int == n {
+    if *(*h).count.offset(0 as i32 as isize) as i32 == n {
         /* no codes! */
-        return 0 as libc::c_int;
+        return 0 as i32;
     }
     /* check for an over-subscribed or incomplete set of lengths */
-    left = 1 as libc::c_int; /* one possible code of zero length */
-    len = 1 as libc::c_int; /* left > 0 means incomplete */
-    while len <= 15 as libc::c_int {
-        left <<= 1 as libc::c_int; /* one more bit, double codes left */
+    left = 1 as i32; /* one possible code of zero length */
+    len = 1 as i32; /* left > 0 means incomplete */
+    while len <= 15 as i32 {
+        left <<= 1 as i32; /* one more bit, double codes left */
         /* over-subscribed--return negative */
-        left -= *(*h).count.offset(len as isize) as libc::c_int; /* deduct count from possible codes */
-        if left < 0 as libc::c_int {
+        left -= *(*h).count.offset(len as isize) as i32; /* deduct count from possible codes */
+        if left < 0 as i32 {
             return left;
         }
         len += 1
     }
     /* generate offsets into symbol table for each length for sorting */
-    offs[1 as libc::c_int as usize] = 0 as libc::c_int as crate::stdlib::int16_t;
-    len = 1 as libc::c_int;
-    while len < 15 as libc::c_int {
-        offs[(len + 1 as libc::c_int) as usize] = (offs[len as usize] as libc::c_int
-            + *(*h).count.offset(len as isize) as libc::c_int)
+    offs[1 as i32 as usize] = 0 as i32 as crate::stdlib::int16_t;
+    len = 1 as i32;
+    while len < 15 as i32 {
+        offs[(len + 1 as i32) as usize] = (offs[len as usize] as i32
+            + *(*h).count.offset(len as isize) as i32)
             as crate::stdlib::int16_t;
         len += 1
     }
@@ -323,9 +323,9 @@ unsafe extern "C" fn construct(
      * put symbols in table sorted by length, by symbol order within each
      * length
      */
-    symbol = 0 as libc::c_int;
+    symbol = 0 as i32;
     while symbol < n {
-        if *length.offset(symbol as isize) as libc::c_int != 0 as libc::c_int {
+        if *length.offset(symbol as isize) as i32 != 0 as i32 {
             let fresh12 = offs[*length.offset(symbol as isize) as usize];
             offs[*length.offset(symbol as isize) as usize] =
                 offs[*length.offset(symbol as isize) as usize] + 1;
@@ -401,172 +401,172 @@ unsafe extern "C" fn codes(
     let mut len: crate::stdlib::int32_t = 0; /* length for copy */
     let mut dist: crate::stdlib::uint32_t = 0; /* distance for copy */
     static mut lens: [crate::stdlib::int16_t; 29] = [
-        3 as libc::c_int as crate::stdlib::int16_t,
-        4 as libc::c_int as crate::stdlib::int16_t,
-        5 as libc::c_int as crate::stdlib::int16_t,
-        6 as libc::c_int as crate::stdlib::int16_t,
-        7 as libc::c_int as crate::stdlib::int16_t,
-        8 as libc::c_int as crate::stdlib::int16_t,
-        9 as libc::c_int as crate::stdlib::int16_t,
-        10 as libc::c_int as crate::stdlib::int16_t,
-        11 as libc::c_int as crate::stdlib::int16_t,
-        13 as libc::c_int as crate::stdlib::int16_t,
-        15 as libc::c_int as crate::stdlib::int16_t,
-        17 as libc::c_int as crate::stdlib::int16_t,
-        19 as libc::c_int as crate::stdlib::int16_t,
-        23 as libc::c_int as crate::stdlib::int16_t,
-        27 as libc::c_int as crate::stdlib::int16_t,
-        31 as libc::c_int as crate::stdlib::int16_t,
-        35 as libc::c_int as crate::stdlib::int16_t,
-        43 as libc::c_int as crate::stdlib::int16_t,
-        51 as libc::c_int as crate::stdlib::int16_t,
-        59 as libc::c_int as crate::stdlib::int16_t,
-        67 as libc::c_int as crate::stdlib::int16_t,
-        83 as libc::c_int as crate::stdlib::int16_t,
-        99 as libc::c_int as crate::stdlib::int16_t,
-        115 as libc::c_int as crate::stdlib::int16_t,
-        131 as libc::c_int as crate::stdlib::int16_t,
-        163 as libc::c_int as crate::stdlib::int16_t,
-        195 as libc::c_int as crate::stdlib::int16_t,
-        227 as libc::c_int as crate::stdlib::int16_t,
-        258 as libc::c_int as crate::stdlib::int16_t,
+        3 as i32 as crate::stdlib::int16_t,
+        4 as i32 as crate::stdlib::int16_t,
+        5 as i32 as crate::stdlib::int16_t,
+        6 as i32 as crate::stdlib::int16_t,
+        7 as i32 as crate::stdlib::int16_t,
+        8 as i32 as crate::stdlib::int16_t,
+        9 as i32 as crate::stdlib::int16_t,
+        10 as i32 as crate::stdlib::int16_t,
+        11 as i32 as crate::stdlib::int16_t,
+        13 as i32 as crate::stdlib::int16_t,
+        15 as i32 as crate::stdlib::int16_t,
+        17 as i32 as crate::stdlib::int16_t,
+        19 as i32 as crate::stdlib::int16_t,
+        23 as i32 as crate::stdlib::int16_t,
+        27 as i32 as crate::stdlib::int16_t,
+        31 as i32 as crate::stdlib::int16_t,
+        35 as i32 as crate::stdlib::int16_t,
+        43 as i32 as crate::stdlib::int16_t,
+        51 as i32 as crate::stdlib::int16_t,
+        59 as i32 as crate::stdlib::int16_t,
+        67 as i32 as crate::stdlib::int16_t,
+        83 as i32 as crate::stdlib::int16_t,
+        99 as i32 as crate::stdlib::int16_t,
+        115 as i32 as crate::stdlib::int16_t,
+        131 as i32 as crate::stdlib::int16_t,
+        163 as i32 as crate::stdlib::int16_t,
+        195 as i32 as crate::stdlib::int16_t,
+        227 as i32 as crate::stdlib::int16_t,
+        258 as i32 as crate::stdlib::int16_t,
     ];
     static mut lext: [crate::stdlib::int16_t; 29] = [
-        0 as libc::c_int as crate::stdlib::int16_t,
-        0 as libc::c_int as crate::stdlib::int16_t,
-        0 as libc::c_int as crate::stdlib::int16_t,
-        0 as libc::c_int as crate::stdlib::int16_t,
-        0 as libc::c_int as crate::stdlib::int16_t,
-        0 as libc::c_int as crate::stdlib::int16_t,
-        0 as libc::c_int as crate::stdlib::int16_t,
-        0 as libc::c_int as crate::stdlib::int16_t,
-        1 as libc::c_int as crate::stdlib::int16_t,
-        1 as libc::c_int as crate::stdlib::int16_t,
-        1 as libc::c_int as crate::stdlib::int16_t,
-        1 as libc::c_int as crate::stdlib::int16_t,
-        2 as libc::c_int as crate::stdlib::int16_t,
-        2 as libc::c_int as crate::stdlib::int16_t,
-        2 as libc::c_int as crate::stdlib::int16_t,
-        2 as libc::c_int as crate::stdlib::int16_t,
-        3 as libc::c_int as crate::stdlib::int16_t,
-        3 as libc::c_int as crate::stdlib::int16_t,
-        3 as libc::c_int as crate::stdlib::int16_t,
-        3 as libc::c_int as crate::stdlib::int16_t,
-        4 as libc::c_int as crate::stdlib::int16_t,
-        4 as libc::c_int as crate::stdlib::int16_t,
-        4 as libc::c_int as crate::stdlib::int16_t,
-        4 as libc::c_int as crate::stdlib::int16_t,
-        5 as libc::c_int as crate::stdlib::int16_t,
-        5 as libc::c_int as crate::stdlib::int16_t,
-        5 as libc::c_int as crate::stdlib::int16_t,
-        5 as libc::c_int as crate::stdlib::int16_t,
-        0 as libc::c_int as crate::stdlib::int16_t,
+        0 as i32 as crate::stdlib::int16_t,
+        0 as i32 as crate::stdlib::int16_t,
+        0 as i32 as crate::stdlib::int16_t,
+        0 as i32 as crate::stdlib::int16_t,
+        0 as i32 as crate::stdlib::int16_t,
+        0 as i32 as crate::stdlib::int16_t,
+        0 as i32 as crate::stdlib::int16_t,
+        0 as i32 as crate::stdlib::int16_t,
+        1 as i32 as crate::stdlib::int16_t,
+        1 as i32 as crate::stdlib::int16_t,
+        1 as i32 as crate::stdlib::int16_t,
+        1 as i32 as crate::stdlib::int16_t,
+        2 as i32 as crate::stdlib::int16_t,
+        2 as i32 as crate::stdlib::int16_t,
+        2 as i32 as crate::stdlib::int16_t,
+        2 as i32 as crate::stdlib::int16_t,
+        3 as i32 as crate::stdlib::int16_t,
+        3 as i32 as crate::stdlib::int16_t,
+        3 as i32 as crate::stdlib::int16_t,
+        3 as i32 as crate::stdlib::int16_t,
+        4 as i32 as crate::stdlib::int16_t,
+        4 as i32 as crate::stdlib::int16_t,
+        4 as i32 as crate::stdlib::int16_t,
+        4 as i32 as crate::stdlib::int16_t,
+        5 as i32 as crate::stdlib::int16_t,
+        5 as i32 as crate::stdlib::int16_t,
+        5 as i32 as crate::stdlib::int16_t,
+        5 as i32 as crate::stdlib::int16_t,
+        0 as i32 as crate::stdlib::int16_t,
     ];
     static mut dists: [crate::stdlib::int16_t; 30] = [
-        1 as libc::c_int as crate::stdlib::int16_t,
-        2 as libc::c_int as crate::stdlib::int16_t,
-        3 as libc::c_int as crate::stdlib::int16_t,
-        4 as libc::c_int as crate::stdlib::int16_t,
-        5 as libc::c_int as crate::stdlib::int16_t,
-        7 as libc::c_int as crate::stdlib::int16_t,
-        9 as libc::c_int as crate::stdlib::int16_t,
-        13 as libc::c_int as crate::stdlib::int16_t,
-        17 as libc::c_int as crate::stdlib::int16_t,
-        25 as libc::c_int as crate::stdlib::int16_t,
-        33 as libc::c_int as crate::stdlib::int16_t,
-        49 as libc::c_int as crate::stdlib::int16_t,
-        65 as libc::c_int as crate::stdlib::int16_t,
-        97 as libc::c_int as crate::stdlib::int16_t,
-        129 as libc::c_int as crate::stdlib::int16_t,
-        193 as libc::c_int as crate::stdlib::int16_t,
-        257 as libc::c_int as crate::stdlib::int16_t,
-        385 as libc::c_int as crate::stdlib::int16_t,
-        513 as libc::c_int as crate::stdlib::int16_t,
-        769 as libc::c_int as crate::stdlib::int16_t,
-        1025 as libc::c_int as crate::stdlib::int16_t,
-        1537 as libc::c_int as crate::stdlib::int16_t,
-        2049 as libc::c_int as crate::stdlib::int16_t,
-        3073 as libc::c_int as crate::stdlib::int16_t,
-        4097 as libc::c_int as crate::stdlib::int16_t,
-        6145 as libc::c_int as crate::stdlib::int16_t,
-        8193 as libc::c_int as crate::stdlib::int16_t,
-        12289 as libc::c_int as crate::stdlib::int16_t,
-        16385 as libc::c_int as crate::stdlib::int16_t,
-        24577 as libc::c_int as crate::stdlib::int16_t,
+        1 as i32 as crate::stdlib::int16_t,
+        2 as i32 as crate::stdlib::int16_t,
+        3 as i32 as crate::stdlib::int16_t,
+        4 as i32 as crate::stdlib::int16_t,
+        5 as i32 as crate::stdlib::int16_t,
+        7 as i32 as crate::stdlib::int16_t,
+        9 as i32 as crate::stdlib::int16_t,
+        13 as i32 as crate::stdlib::int16_t,
+        17 as i32 as crate::stdlib::int16_t,
+        25 as i32 as crate::stdlib::int16_t,
+        33 as i32 as crate::stdlib::int16_t,
+        49 as i32 as crate::stdlib::int16_t,
+        65 as i32 as crate::stdlib::int16_t,
+        97 as i32 as crate::stdlib::int16_t,
+        129 as i32 as crate::stdlib::int16_t,
+        193 as i32 as crate::stdlib::int16_t,
+        257 as i32 as crate::stdlib::int16_t,
+        385 as i32 as crate::stdlib::int16_t,
+        513 as i32 as crate::stdlib::int16_t,
+        769 as i32 as crate::stdlib::int16_t,
+        1025 as i32 as crate::stdlib::int16_t,
+        1537 as i32 as crate::stdlib::int16_t,
+        2049 as i32 as crate::stdlib::int16_t,
+        3073 as i32 as crate::stdlib::int16_t,
+        4097 as i32 as crate::stdlib::int16_t,
+        6145 as i32 as crate::stdlib::int16_t,
+        8193 as i32 as crate::stdlib::int16_t,
+        12289 as i32 as crate::stdlib::int16_t,
+        16385 as i32 as crate::stdlib::int16_t,
+        24577 as i32 as crate::stdlib::int16_t,
     ];
     static mut dext: [crate::stdlib::int16_t; 30] = [
-        0 as libc::c_int as crate::stdlib::int16_t,
-        0 as libc::c_int as crate::stdlib::int16_t,
-        0 as libc::c_int as crate::stdlib::int16_t,
-        0 as libc::c_int as crate::stdlib::int16_t,
-        1 as libc::c_int as crate::stdlib::int16_t,
-        1 as libc::c_int as crate::stdlib::int16_t,
-        2 as libc::c_int as crate::stdlib::int16_t,
-        2 as libc::c_int as crate::stdlib::int16_t,
-        3 as libc::c_int as crate::stdlib::int16_t,
-        3 as libc::c_int as crate::stdlib::int16_t,
-        4 as libc::c_int as crate::stdlib::int16_t,
-        4 as libc::c_int as crate::stdlib::int16_t,
-        5 as libc::c_int as crate::stdlib::int16_t,
-        5 as libc::c_int as crate::stdlib::int16_t,
-        6 as libc::c_int as crate::stdlib::int16_t,
-        6 as libc::c_int as crate::stdlib::int16_t,
-        7 as libc::c_int as crate::stdlib::int16_t,
-        7 as libc::c_int as crate::stdlib::int16_t,
-        8 as libc::c_int as crate::stdlib::int16_t,
-        8 as libc::c_int as crate::stdlib::int16_t,
-        9 as libc::c_int as crate::stdlib::int16_t,
-        9 as libc::c_int as crate::stdlib::int16_t,
-        10 as libc::c_int as crate::stdlib::int16_t,
-        10 as libc::c_int as crate::stdlib::int16_t,
-        11 as libc::c_int as crate::stdlib::int16_t,
-        11 as libc::c_int as crate::stdlib::int16_t,
-        12 as libc::c_int as crate::stdlib::int16_t,
-        12 as libc::c_int as crate::stdlib::int16_t,
-        13 as libc::c_int as crate::stdlib::int16_t,
-        13 as libc::c_int as crate::stdlib::int16_t,
+        0 as i32 as crate::stdlib::int16_t,
+        0 as i32 as crate::stdlib::int16_t,
+        0 as i32 as crate::stdlib::int16_t,
+        0 as i32 as crate::stdlib::int16_t,
+        1 as i32 as crate::stdlib::int16_t,
+        1 as i32 as crate::stdlib::int16_t,
+        2 as i32 as crate::stdlib::int16_t,
+        2 as i32 as crate::stdlib::int16_t,
+        3 as i32 as crate::stdlib::int16_t,
+        3 as i32 as crate::stdlib::int16_t,
+        4 as i32 as crate::stdlib::int16_t,
+        4 as i32 as crate::stdlib::int16_t,
+        5 as i32 as crate::stdlib::int16_t,
+        5 as i32 as crate::stdlib::int16_t,
+        6 as i32 as crate::stdlib::int16_t,
+        6 as i32 as crate::stdlib::int16_t,
+        7 as i32 as crate::stdlib::int16_t,
+        7 as i32 as crate::stdlib::int16_t,
+        8 as i32 as crate::stdlib::int16_t,
+        8 as i32 as crate::stdlib::int16_t,
+        9 as i32 as crate::stdlib::int16_t,
+        9 as i32 as crate::stdlib::int16_t,
+        10 as i32 as crate::stdlib::int16_t,
+        10 as i32 as crate::stdlib::int16_t,
+        11 as i32 as crate::stdlib::int16_t,
+        11 as i32 as crate::stdlib::int16_t,
+        12 as i32 as crate::stdlib::int16_t,
+        12 as i32 as crate::stdlib::int16_t,
+        13 as i32 as crate::stdlib::int16_t,
+        13 as i32 as crate::stdlib::int16_t,
     ];
     loop
     /* decode literals and length/distance pairs */
     {
         symbol = decode(s, lencode); /* end of block symbol */
-        if symbol < 0 as libc::c_int {
+        if symbol < 0 as i32 {
             return symbol;
         } /* invalid symbol */
-        if symbol < 256 as libc::c_int {
+        if symbol < 256 as i32 {
             /* literal: symbol is the byte */
             /* write out the literal */
             if !(*s).out.is_null() {
                 if (*s).outcnt == (*s).outlen {
-                    return 1 as libc::c_int;
+                    return 1 as i32;
                 }
                 *(*s).out.offset((*s).outcnt as isize) = symbol as crate::stdlib::uint8_t
             }
             (*s).outcnt = (*s).outcnt.wrapping_add(1)
-        } else if symbol > 256 as libc::c_int {
+        } else if symbol > 256 as i32 {
             /* length */
             /* get and compute length */
-            symbol -= 257 as libc::c_int; /* invalid fixed code */
-            if symbol >= 29 as libc::c_int {
-                return -(9 as libc::c_int);
+            symbol -= 257 as i32; /* invalid fixed code */
+            if symbol >= 29 as i32 {
+                return -(9 as i32);
             }
-            len = lens[symbol as usize] as libc::c_int
+            len = lens[symbol as usize] as i32
                 + bits(s, lext[symbol as usize] as crate::stdlib::int32_t);
             /* get and check distance */
             symbol = decode(s, distcode); /* invalid symbol */
-            if symbol < 0 as libc::c_int {
+            if symbol < 0 as i32 {
                 return symbol;
             } /* distance too far back */
-            dist = (dists[symbol as usize] as libc::c_int
+            dist = (dists[symbol as usize] as i32
                 + bits(s, dext[symbol as usize] as crate::stdlib::int32_t))
                 as crate::stdlib::uint32_t;
             if dist > (*s).outcnt {
-                return -(10 as libc::c_int);
+                return -(10 as i32);
             }
             /* copy length bytes from distance bytes back */
             if !(*s).out.is_null() {
-                if (*s).outcnt.wrapping_add(len as libc::c_uint) > (*s).outlen {
-                    return 1 as libc::c_int;
+                if (*s).outcnt.wrapping_add(len as u32) > (*s).outlen {
+                    return 1 as i32;
                 }
                 loop {
                     let fresh13 = len;
@@ -579,17 +579,17 @@ unsafe extern "C" fn codes(
                     (*s).outcnt = (*s).outcnt.wrapping_add(1)
                 }
             } else {
-                (*s).outcnt = ((*s).outcnt as libc::c_uint).wrapping_add(len as libc::c_uint)
+                (*s).outcnt = ((*s).outcnt as u32).wrapping_add(len as u32)
                     as crate::stdlib::uint32_t
                     as crate::stdlib::uint32_t
             }
         }
-        if !(symbol != 256 as libc::c_int) {
+        if !(symbol != 256 as i32) {
             break;
         }
     }
     /* done with a valid fixed or dynamic block */
-    return 0 as libc::c_int;
+    return 0 as i32;
 }
 /*
  * Process a fixed codes block.
@@ -617,7 +617,7 @@ unsafe extern "C" fn codes(
  */
 
 unsafe extern "C" fn fixed(mut s: *mut state) -> crate::stdlib::int32_t {
-    static mut virgin: crate::stdlib::int32_t = 1 as libc::c_int;
+    static mut virgin: crate::stdlib::int32_t = 1 as i32;
     static mut lencnt: [crate::stdlib::int16_t; 16] = [0; 16];
     static mut lensym: [crate::stdlib::int16_t; 288] = [0; 288];
     static mut distcnt: [crate::stdlib::int16_t; 16] = [0; 16];
@@ -645,33 +645,33 @@ unsafe extern "C" fn fixed(mut s: *mut state) -> crate::stdlib::int32_t {
         let mut symbol: crate::stdlib::int32_t = 0;
         let mut lengths: [crate::stdlib::int16_t; 288] = [0; 288];
         /* literal/length table */
-        symbol = 0 as libc::c_int;
-        while symbol < 144 as libc::c_int {
-            lengths[symbol as usize] = 8 as libc::c_int as crate::stdlib::int16_t;
+        symbol = 0 as i32;
+        while symbol < 144 as i32 {
+            lengths[symbol as usize] = 8 as i32 as crate::stdlib::int16_t;
             symbol += 1
         }
-        while symbol < 256 as libc::c_int {
-            lengths[symbol as usize] = 9 as libc::c_int as crate::stdlib::int16_t;
+        while symbol < 256 as i32 {
+            lengths[symbol as usize] = 9 as i32 as crate::stdlib::int16_t;
             symbol += 1
         }
-        while symbol < 280 as libc::c_int {
-            lengths[symbol as usize] = 7 as libc::c_int as crate::stdlib::int16_t;
+        while symbol < 280 as i32 {
+            lengths[symbol as usize] = 7 as i32 as crate::stdlib::int16_t;
             symbol += 1
         }
-        while symbol < 288 as libc::c_int {
-            lengths[symbol as usize] = 8 as libc::c_int as crate::stdlib::int16_t;
+        while symbol < 288 as i32 {
+            lengths[symbol as usize] = 8 as i32 as crate::stdlib::int16_t;
             symbol += 1
         }
-        construct(&mut lencode, lengths.as_mut_ptr(), 288 as libc::c_int);
+        construct(&mut lencode, lengths.as_mut_ptr(), 288 as i32);
         /* distance table */
-        symbol = 0 as libc::c_int;
-        while symbol < 30 as libc::c_int {
-            lengths[symbol as usize] = 5 as libc::c_int as crate::stdlib::int16_t;
+        symbol = 0 as i32;
+        while symbol < 30 as i32 {
+            lengths[symbol as usize] = 5 as i32 as crate::stdlib::int16_t;
             symbol += 1
         }
-        construct(&mut distcode, lengths.as_mut_ptr(), 30 as libc::c_int);
+        construct(&mut distcode, lengths.as_mut_ptr(), 30 as i32);
         /* do this just once */
-        virgin = 0 as libc::c_int
+        virgin = 0 as i32
     }
     /* decode data until end-of-block code */
     return codes(s, &mut lencode, &mut distcode);
@@ -790,79 +790,79 @@ unsafe extern "C" fn dynamic(mut s: *mut state) -> crate::stdlib::int32_t {
         init
     };
     static mut order: [crate::stdlib::int16_t; 19] = [
-        16 as libc::c_int as crate::stdlib::int16_t,
-        17 as libc::c_int as crate::stdlib::int16_t,
-        18 as libc::c_int as crate::stdlib::int16_t,
-        0 as libc::c_int as crate::stdlib::int16_t,
-        8 as libc::c_int as crate::stdlib::int16_t,
-        7 as libc::c_int as crate::stdlib::int16_t,
-        9 as libc::c_int as crate::stdlib::int16_t,
-        6 as libc::c_int as crate::stdlib::int16_t,
-        10 as libc::c_int as crate::stdlib::int16_t,
-        5 as libc::c_int as crate::stdlib::int16_t,
-        11 as libc::c_int as crate::stdlib::int16_t,
-        4 as libc::c_int as crate::stdlib::int16_t,
-        12 as libc::c_int as crate::stdlib::int16_t,
-        3 as libc::c_int as crate::stdlib::int16_t,
-        13 as libc::c_int as crate::stdlib::int16_t,
-        2 as libc::c_int as crate::stdlib::int16_t,
-        14 as libc::c_int as crate::stdlib::int16_t,
-        1 as libc::c_int as crate::stdlib::int16_t,
-        15 as libc::c_int as crate::stdlib::int16_t,
+        16 as i32 as crate::stdlib::int16_t,
+        17 as i32 as crate::stdlib::int16_t,
+        18 as i32 as crate::stdlib::int16_t,
+        0 as i32 as crate::stdlib::int16_t,
+        8 as i32 as crate::stdlib::int16_t,
+        7 as i32 as crate::stdlib::int16_t,
+        9 as i32 as crate::stdlib::int16_t,
+        6 as i32 as crate::stdlib::int16_t,
+        10 as i32 as crate::stdlib::int16_t,
+        5 as i32 as crate::stdlib::int16_t,
+        11 as i32 as crate::stdlib::int16_t,
+        4 as i32 as crate::stdlib::int16_t,
+        12 as i32 as crate::stdlib::int16_t,
+        3 as i32 as crate::stdlib::int16_t,
+        13 as i32 as crate::stdlib::int16_t,
+        2 as i32 as crate::stdlib::int16_t,
+        14 as i32 as crate::stdlib::int16_t,
+        1 as i32 as crate::stdlib::int16_t,
+        15 as i32 as crate::stdlib::int16_t,
     ];
     /* get number of lengths in each table, check lengths */
-    nlen = bits(s, 5 as libc::c_int) + 257 as libc::c_int; /* bad counts */
-    ndist = bits(s, 5 as libc::c_int) + 1 as libc::c_int;
-    ncode = bits(s, 4 as libc::c_int) + 4 as libc::c_int;
-    if nlen > 286 as libc::c_int || ndist > 30 as libc::c_int {
-        return -(3 as libc::c_int);
+    nlen = bits(s, 5 as i32) + 257 as i32; /* bad counts */
+    ndist = bits(s, 5 as i32) + 1 as i32;
+    ncode = bits(s, 4 as i32) + 4 as i32;
+    if nlen > 286 as i32 || ndist > 30 as i32 {
+        return -(3 as i32);
     }
     /* read code length code lengths (really), missing lengths are zero */
-    index = 0 as libc::c_int;
+    index = 0 as i32;
     while index < ncode {
         lengths[order[index as usize] as usize] =
-            bits(s, 3 as libc::c_int) as crate::stdlib::int16_t;
+            bits(s, 3 as i32) as crate::stdlib::int16_t;
         index += 1
     }
-    while index < 19 as libc::c_int {
-        lengths[order[index as usize] as usize] = 0 as libc::c_int as crate::stdlib::int16_t;
+    while index < 19 as i32 {
+        lengths[order[index as usize] as usize] = 0 as i32 as crate::stdlib::int16_t;
         index += 1
     }
     /* build huffman table for code lengths codes (use lencode temporarily) */
-    err = construct(&mut lencode, lengths.as_mut_ptr(), 19 as libc::c_int); /* require complete code set here */
-    if err != 0 as libc::c_int {
-        return -(4 as libc::c_int);
+    err = construct(&mut lencode, lengths.as_mut_ptr(), 19 as i32); /* require complete code set here */
+    if err != 0 as i32 {
+        return -(4 as i32);
     }
     /* read length/literal and distance code length tables */
-    index = 0 as libc::c_int; /* decoded value */
+    index = 0 as i32; /* decoded value */
     while index < nlen + ndist {
         let mut symbol: crate::stdlib::int32_t = 0; /* last length to repeat */
         let mut len: crate::stdlib::int32_t = 0;
         symbol = decode(s, &mut lencode);
-        if symbol < 16 as libc::c_int {
+        if symbol < 16 as i32 {
             /* length in 0..15 */
             let fresh14 = index;
             index = index + 1;
             lengths[fresh14 as usize] = symbol as crate::stdlib::int16_t
         } else {
             /* repeat instruction */
-            len = 0 as libc::c_int; /* assume repeating zeros */
-            if symbol == 16 as libc::c_int {
+            len = 0 as i32; /* assume repeating zeros */
+            if symbol == 16 as i32 {
                 /* repeat last length 3..6 times */
-                if index == 0 as libc::c_int {
-                    return -(5 as libc::c_int);
+                if index == 0 as i32 {
+                    return -(5 as i32);
                 } /* no last length! */
-                len = lengths[(index - 1 as libc::c_int) as usize] as crate::stdlib::int32_t; /* last length */
-                symbol = 3 as libc::c_int + bits(s, 2 as libc::c_int)
-            } else if symbol == 17 as libc::c_int {
+                len = lengths[(index - 1 as i32) as usize] as crate::stdlib::int32_t; /* last length */
+                symbol = 3 as i32 + bits(s, 2 as i32)
+            } else if symbol == 17 as i32 {
                 /* repeat zero 3..10 times */
-                symbol = 3 as libc::c_int + bits(s, 3 as libc::c_int)
+                symbol = 3 as i32 + bits(s, 3 as i32)
             } else {
                 /* == 18, repeat zero 11..138 times */
-                symbol = 11 as libc::c_int + bits(s, 7 as libc::c_int)
+                symbol = 11 as i32 + bits(s, 7 as i32)
             } /* too many lengths! */
             if index + symbol > nlen + ndist {
-                return -(6 as libc::c_int);
+                return -(6 as i32);
             }
             loop {
                 let fresh15 = symbol;
@@ -879,12 +879,12 @@ unsafe extern "C" fn dynamic(mut s: *mut state) -> crate::stdlib::int32_t {
     }
     /* build huffman table for literal/length codes */
     err = construct(&mut lencode, lengths.as_mut_ptr(), nlen); /* only allow incomplete codes if just one code */
-    if err < 0 as libc::c_int
-        || err > 0 as libc::c_int
-            && nlen - *lencode.count.offset(0 as libc::c_int as isize) as libc::c_int
-                != 1 as libc::c_int
+    if err < 0 as i32
+        || err > 0 as i32
+            && nlen - *lencode.count.offset(0 as i32 as isize) as i32
+                != 1 as i32
     {
-        return -(7 as libc::c_int);
+        return -(7 as i32);
     }
     /* build huffman table for distance codes */
     err = construct(
@@ -892,12 +892,12 @@ unsafe extern "C" fn dynamic(mut s: *mut state) -> crate::stdlib::int32_t {
         lengths.as_mut_ptr().offset(nlen as isize),
         ndist,
     ); /* only allow incomplete codes if just one code */
-    if err < 0 as libc::c_int
-        || err > 0 as libc::c_int
-            && ndist - *distcode.count.offset(0 as libc::c_int as isize) as libc::c_int
-                != 1 as libc::c_int
+    if err < 0 as i32
+        || err > 0 as i32
+            && ndist - *distcode.count.offset(0 as i32 as isize) as i32
+                != 1 as i32
     {
-        return -(8 as libc::c_int);
+        return -(8 as i32);
     }
     /* decode data until end-of-block code */
     return codes(s, &mut lencode, &mut distcode);
@@ -1005,34 +1005,34 @@ pub unsafe extern "C" fn puff(
     /* initialize output state */
     s.out = dest; /* ignored if dest is NULL */
     s.outlen = *destlen;
-    s.outcnt = 0 as libc::c_int as crate::stdlib::uint32_t;
+    s.outcnt = 0 as i32 as crate::stdlib::uint32_t;
     /* initialize input state */
     s.in_0 = source;
     s.inlen = *sourcelen;
-    s.incnt = 0 as libc::c_int as crate::stdlib::uint32_t;
-    s.bitbuf = 0 as libc::c_int;
-    s.bitcnt = 0 as libc::c_int;
+    s.incnt = 0 as i32 as crate::stdlib::uint32_t;
+    s.bitbuf = 0 as i32;
+    s.bitcnt = 0 as i32;
     /* return if bits() or decode() tries to read past available input */
-    if crate::stdlib::_setjmp(s.env.as_mut_ptr()) != 0 as libc::c_int {
+    if crate::stdlib::_setjmp(s.env.as_mut_ptr()) != 0 as i32 {
         /* if came back here via longjmp() */
-        err = 2 as libc::c_int
+        err = 2 as i32
     } else {
         loop
         /* then skip do-loop, return error */
         /* process blocks until last block or error */
         {
-            last = bits(&mut s, 1 as libc::c_int); /* one if last block */
-            type_0 = bits(&mut s, 2 as libc::c_int); /* block type 0..3 */
-            err = if type_0 == 0 as libc::c_int {
+            last = bits(&mut s, 1 as i32); /* one if last block */
+            type_0 = bits(&mut s, 2 as i32); /* block type 0..3 */
+            err = if type_0 == 0 as i32 {
                 stored(&mut s)
-            } else if type_0 == 1 as libc::c_int {
+            } else if type_0 == 1 as i32 {
                 fixed(&mut s)
-            } else if type_0 == 2 as libc::c_int {
+            } else if type_0 == 2 as i32 {
                 dynamic(&mut s)
             } else {
-                -(1 as libc::c_int)
+                -(1 as i32)
             }; /* type == 3, invalid */
-            if err != 0 as libc::c_int {
+            if err != 0 as i32 {
                 break;
             }
             if !(last == 0) {
@@ -1042,7 +1042,7 @@ pub unsafe extern "C" fn puff(
         }
     }
     /* update the lengths and return */
-    if err <= 0 as libc::c_int {
+    if err <= 0 as i32 {
         *destlen = s.outcnt;
         *sourcelen = s.incnt
     }

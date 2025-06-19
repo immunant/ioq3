@@ -113,35 +113,35 @@ POSSIBILITY OF SUCH DAMAGE.
 pub unsafe extern "C" fn silk_LTP_scale_ctrl_FLP(
     mut psEnc: *mut crate::structs_FLP_h::silk_encoder_state_FLP,
     mut psEncCtrl: *mut crate::structs_FLP_h::silk_encoder_control_FLP,
-    mut condCoding: libc::c_int,
+    mut condCoding: i32,
 )
 /* I    The type of conditional coding to use       */
 {
-    let mut round_loss: libc::c_int = 0;
-    if condCoding == 0 as libc::c_int {
+    let mut round_loss: i32 = 0;
+    if condCoding == 0 as i32 {
         /* Only scale if first frame in packet */
         round_loss = (*psEnc).sCmn.PacketLoss_perc + (*psEnc).sCmn.nFramesPerPacket;
         (*psEnc).sCmn.indices.LTP_scaleIndex = if 0.0f32 > 2.0f32 {
-            if round_loss as libc::c_float * (*psEncCtrl).LTPredCodGain * 0.1f32 > 0.0f32 {
+            if round_loss as f32 * (*psEncCtrl).LTPredCodGain * 0.1f32 > 0.0f32 {
                 0.0f32
-            } else if round_loss as libc::c_float * (*psEncCtrl).LTPredCodGain * 0.1f32 < 2.0f32 {
+            } else if round_loss as f32 * (*psEncCtrl).LTPredCodGain * 0.1f32 < 2.0f32 {
                 2.0f32
             } else {
-                (round_loss as libc::c_float * (*psEncCtrl).LTPredCodGain) * 0.1f32
+                (round_loss as f32 * (*psEncCtrl).LTPredCodGain) * 0.1f32
             }
-        } else if round_loss as libc::c_float * (*psEncCtrl).LTPredCodGain * 0.1f32 > 2.0f32 {
+        } else if round_loss as f32 * (*psEncCtrl).LTPredCodGain * 0.1f32 > 2.0f32 {
             2.0f32
-        } else if round_loss as libc::c_float * (*psEncCtrl).LTPredCodGain * 0.1f32 < 0.0f32 {
+        } else if round_loss as f32 * (*psEncCtrl).LTPredCodGain * 0.1f32 < 0.0f32 {
             0.0f32
         } else {
-            (round_loss as libc::c_float * (*psEncCtrl).LTPredCodGain) * 0.1f32
-        } as libc::c_schar
+            (round_loss as f32 * (*psEncCtrl).LTPredCodGain) * 0.1f32
+        } as i8
     } else {
         /* Default is minimum scaling */
-        (*psEnc).sCmn.indices.LTP_scaleIndex = 0 as libc::c_int as libc::c_schar
+        (*psEnc).sCmn.indices.LTP_scaleIndex = 0 as i32 as i8
     }
     (*psEncCtrl).LTP_scale = crate::src::opus_1_2_1::silk::tables_other::silk_LTPScales_table_Q14
         [(*psEnc).sCmn.indices.LTP_scaleIndex as usize]
-        as libc::c_float
+        as f32
         / 16384.0f32;
 }

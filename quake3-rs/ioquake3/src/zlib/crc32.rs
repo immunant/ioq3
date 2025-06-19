@@ -2103,7 +2103,7 @@ pub use crate::zconf_h::Bytef;
 /* Find a four-byte integer type for crc32_little() and crc32_big(). */
 /* need ANSI C limits.h to determine sizes */
 
-pub type u4 = libc::c_uint;
+pub type u4 = u32;
 /*
      Combine two CRC-32 check values into one.  For two sequences of bytes,
    seq1 and seq2 with lengths len1 and len2, CRC-32 check values were
@@ -2135,8 +2135,8 @@ pub unsafe extern "C" fn get_crc_table() -> *const crate::zconf_h::uLongf {
 
 pub unsafe extern "C" fn crc32(
     mut crc: libc::c_ulong,
-    mut buf: *const libc::c_uchar,
-    mut len: libc::c_uint,
+    mut buf: *const u8,
+    mut len: u32,
 ) -> crate::zconf_h::uLong {
     if buf.is_null() {
         return 0 as libc::c_ulong;
@@ -2146,8 +2146,8 @@ pub unsafe extern "C" fn crc32(
         == ::std::mem::size_of::<crate::stddef_h::ptrdiff_t>() as libc::c_ulong
     {
         let mut endian: u4 = 0;
-        endian = 1 as libc::c_int as u4;
-        if *(&mut endian as *mut u4 as *mut libc::c_uchar) != 0 {
+        endian = 1 as i32 as u4;
+        if *(&mut endian as *mut u4 as *mut u8) != 0 {
             return crc32_little(crc, buf, len);
         } else {
             return crc32_big(crc, buf, len);
@@ -2155,56 +2155,56 @@ pub unsafe extern "C" fn crc32(
     }
     /* BYFOUR */
     crc = crc ^ 0xffffffff as libc::c_ulong;
-    while len >= 8 as libc::c_int as libc::c_uint {
+    while len >= 8 as i32 as u32 {
         let fresh0 = buf;
         buf = buf.offset(1);
-        crc = crc_table[0 as libc::c_int as usize]
-            [((crc as libc::c_int ^ *fresh0 as libc::c_int) & 0xff as libc::c_int) as usize]
-            ^ crc >> 8 as libc::c_int;
+        crc = crc_table[0 as i32 as usize]
+            [((crc as i32 ^ *fresh0 as i32) & 0xff as i32) as usize]
+            ^ crc >> 8 as i32;
         let fresh1 = buf;
         buf = buf.offset(1);
-        crc = crc_table[0 as libc::c_int as usize]
-            [((crc as libc::c_int ^ *fresh1 as libc::c_int) & 0xff as libc::c_int) as usize]
-            ^ crc >> 8 as libc::c_int;
+        crc = crc_table[0 as i32 as usize]
+            [((crc as i32 ^ *fresh1 as i32) & 0xff as i32) as usize]
+            ^ crc >> 8 as i32;
         let fresh2 = buf;
         buf = buf.offset(1);
-        crc = crc_table[0 as libc::c_int as usize]
-            [((crc as libc::c_int ^ *fresh2 as libc::c_int) & 0xff as libc::c_int) as usize]
-            ^ crc >> 8 as libc::c_int;
+        crc = crc_table[0 as i32 as usize]
+            [((crc as i32 ^ *fresh2 as i32) & 0xff as i32) as usize]
+            ^ crc >> 8 as i32;
         let fresh3 = buf;
         buf = buf.offset(1);
-        crc = crc_table[0 as libc::c_int as usize]
-            [((crc as libc::c_int ^ *fresh3 as libc::c_int) & 0xff as libc::c_int) as usize]
-            ^ crc >> 8 as libc::c_int;
+        crc = crc_table[0 as i32 as usize]
+            [((crc as i32 ^ *fresh3 as i32) & 0xff as i32) as usize]
+            ^ crc >> 8 as i32;
         let fresh4 = buf;
         buf = buf.offset(1);
-        crc = crc_table[0 as libc::c_int as usize]
-            [((crc as libc::c_int ^ *fresh4 as libc::c_int) & 0xff as libc::c_int) as usize]
-            ^ crc >> 8 as libc::c_int;
+        crc = crc_table[0 as i32 as usize]
+            [((crc as i32 ^ *fresh4 as i32) & 0xff as i32) as usize]
+            ^ crc >> 8 as i32;
         let fresh5 = buf;
         buf = buf.offset(1);
-        crc = crc_table[0 as libc::c_int as usize]
-            [((crc as libc::c_int ^ *fresh5 as libc::c_int) & 0xff as libc::c_int) as usize]
-            ^ crc >> 8 as libc::c_int;
+        crc = crc_table[0 as i32 as usize]
+            [((crc as i32 ^ *fresh5 as i32) & 0xff as i32) as usize]
+            ^ crc >> 8 as i32;
         let fresh6 = buf;
         buf = buf.offset(1);
-        crc = crc_table[0 as libc::c_int as usize]
-            [((crc as libc::c_int ^ *fresh6 as libc::c_int) & 0xff as libc::c_int) as usize]
-            ^ crc >> 8 as libc::c_int;
+        crc = crc_table[0 as i32 as usize]
+            [((crc as i32 ^ *fresh6 as i32) & 0xff as i32) as usize]
+            ^ crc >> 8 as i32;
         let fresh7 = buf;
         buf = buf.offset(1);
-        crc = crc_table[0 as libc::c_int as usize]
-            [((crc as libc::c_int ^ *fresh7 as libc::c_int) & 0xff as libc::c_int) as usize]
-            ^ crc >> 8 as libc::c_int;
-        len = len.wrapping_sub(8 as libc::c_int as libc::c_uint)
+        crc = crc_table[0 as i32 as usize]
+            [((crc as i32 ^ *fresh7 as i32) & 0xff as i32) as usize]
+            ^ crc >> 8 as i32;
+        len = len.wrapping_sub(8 as i32 as u32)
     }
     if len != 0 {
         loop {
             let fresh8 = buf;
             buf = buf.offset(1);
-            crc = crc_table[0 as libc::c_int as usize]
-                [((crc as libc::c_int ^ *fresh8 as libc::c_int) & 0xff as libc::c_int) as usize]
-                ^ crc >> 8 as libc::c_int;
+            crc = crc_table[0 as i32 as usize]
+                [((crc as i32 ^ *fresh8 as i32) & 0xff as i32) as usize]
+                ^ crc >> 8 as i32;
             len = len.wrapping_sub(1);
             if !(len != 0) {
                 break;
@@ -2221,135 +2221,135 @@ pub unsafe extern "C" fn crc32(
 
 unsafe extern "C" fn crc32_little(
     mut crc: libc::c_ulong,
-    mut buf: *const libc::c_uchar,
-    mut len: libc::c_uint,
+    mut buf: *const u8,
+    mut len: u32,
 ) -> libc::c_ulong {
     let mut c: u4 = 0;
     let mut buf4: *const u4 = 0 as *const u4;
     c = crc as u4;
     c = !c;
-    while len != 0 && buf as crate::stddef_h::ptrdiff_t & 3 as libc::c_int as libc::c_long != 0 {
+    while len != 0 && buf as crate::stddef_h::ptrdiff_t & 3 as i32 as libc::c_long != 0 {
         let fresh9 = buf;
         buf = buf.offset(1);
-        c = (crc_table[0 as libc::c_int as usize]
-            [((c ^ *fresh9 as libc::c_uint) & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ (c >> 8 as libc::c_int) as libc::c_ulong) as u4;
+        c = (crc_table[0 as i32 as usize]
+            [((c ^ *fresh9 as u32) & 0xff as i32 as u32) as usize]
+            ^ (c >> 8 as i32) as libc::c_ulong) as u4;
         len = len.wrapping_sub(1)
     }
     buf4 = buf as *const libc::c_void as *const u4;
-    while len >= 32 as libc::c_int as libc::c_uint {
+    while len >= 32 as i32 as u32 {
         let fresh10 = buf4;
         buf4 = buf4.offset(1);
         c ^= *fresh10;
-        c = (crc_table[3 as libc::c_int as usize]
-            [(c & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[2 as libc::c_int as usize]
-                [(c >> 8 as libc::c_int & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[1 as libc::c_int as usize]
-                [(c >> 16 as libc::c_int & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[0 as libc::c_int as usize][(c >> 24 as libc::c_int) as usize])
+        c = (crc_table[3 as i32 as usize]
+            [(c & 0xff as i32 as u32) as usize]
+            ^ crc_table[2 as i32 as usize]
+                [(c >> 8 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[1 as i32 as usize]
+                [(c >> 16 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[0 as i32 as usize][(c >> 24 as i32) as usize])
             as u4;
         let fresh11 = buf4;
         buf4 = buf4.offset(1);
         c ^= *fresh11;
-        c = (crc_table[3 as libc::c_int as usize]
-            [(c & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[2 as libc::c_int as usize]
-                [(c >> 8 as libc::c_int & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[1 as libc::c_int as usize]
-                [(c >> 16 as libc::c_int & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[0 as libc::c_int as usize][(c >> 24 as libc::c_int) as usize])
+        c = (crc_table[3 as i32 as usize]
+            [(c & 0xff as i32 as u32) as usize]
+            ^ crc_table[2 as i32 as usize]
+                [(c >> 8 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[1 as i32 as usize]
+                [(c >> 16 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[0 as i32 as usize][(c >> 24 as i32) as usize])
             as u4;
         let fresh12 = buf4;
         buf4 = buf4.offset(1);
         c ^= *fresh12;
-        c = (crc_table[3 as libc::c_int as usize]
-            [(c & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[2 as libc::c_int as usize]
-                [(c >> 8 as libc::c_int & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[1 as libc::c_int as usize]
-                [(c >> 16 as libc::c_int & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[0 as libc::c_int as usize][(c >> 24 as libc::c_int) as usize])
+        c = (crc_table[3 as i32 as usize]
+            [(c & 0xff as i32 as u32) as usize]
+            ^ crc_table[2 as i32 as usize]
+                [(c >> 8 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[1 as i32 as usize]
+                [(c >> 16 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[0 as i32 as usize][(c >> 24 as i32) as usize])
             as u4;
         let fresh13 = buf4;
         buf4 = buf4.offset(1);
         c ^= *fresh13;
-        c = (crc_table[3 as libc::c_int as usize]
-            [(c & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[2 as libc::c_int as usize]
-                [(c >> 8 as libc::c_int & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[1 as libc::c_int as usize]
-                [(c >> 16 as libc::c_int & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[0 as libc::c_int as usize][(c >> 24 as libc::c_int) as usize])
+        c = (crc_table[3 as i32 as usize]
+            [(c & 0xff as i32 as u32) as usize]
+            ^ crc_table[2 as i32 as usize]
+                [(c >> 8 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[1 as i32 as usize]
+                [(c >> 16 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[0 as i32 as usize][(c >> 24 as i32) as usize])
             as u4;
         let fresh14 = buf4;
         buf4 = buf4.offset(1);
         c ^= *fresh14;
-        c = (crc_table[3 as libc::c_int as usize]
-            [(c & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[2 as libc::c_int as usize]
-                [(c >> 8 as libc::c_int & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[1 as libc::c_int as usize]
-                [(c >> 16 as libc::c_int & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[0 as libc::c_int as usize][(c >> 24 as libc::c_int) as usize])
+        c = (crc_table[3 as i32 as usize]
+            [(c & 0xff as i32 as u32) as usize]
+            ^ crc_table[2 as i32 as usize]
+                [(c >> 8 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[1 as i32 as usize]
+                [(c >> 16 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[0 as i32 as usize][(c >> 24 as i32) as usize])
             as u4;
         let fresh15 = buf4;
         buf4 = buf4.offset(1);
         c ^= *fresh15;
-        c = (crc_table[3 as libc::c_int as usize]
-            [(c & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[2 as libc::c_int as usize]
-                [(c >> 8 as libc::c_int & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[1 as libc::c_int as usize]
-                [(c >> 16 as libc::c_int & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[0 as libc::c_int as usize][(c >> 24 as libc::c_int) as usize])
+        c = (crc_table[3 as i32 as usize]
+            [(c & 0xff as i32 as u32) as usize]
+            ^ crc_table[2 as i32 as usize]
+                [(c >> 8 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[1 as i32 as usize]
+                [(c >> 16 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[0 as i32 as usize][(c >> 24 as i32) as usize])
             as u4;
         let fresh16 = buf4;
         buf4 = buf4.offset(1);
         c ^= *fresh16;
-        c = (crc_table[3 as libc::c_int as usize]
-            [(c & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[2 as libc::c_int as usize]
-                [(c >> 8 as libc::c_int & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[1 as libc::c_int as usize]
-                [(c >> 16 as libc::c_int & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[0 as libc::c_int as usize][(c >> 24 as libc::c_int) as usize])
+        c = (crc_table[3 as i32 as usize]
+            [(c & 0xff as i32 as u32) as usize]
+            ^ crc_table[2 as i32 as usize]
+                [(c >> 8 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[1 as i32 as usize]
+                [(c >> 16 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[0 as i32 as usize][(c >> 24 as i32) as usize])
             as u4;
         let fresh17 = buf4;
         buf4 = buf4.offset(1);
         c ^= *fresh17;
-        c = (crc_table[3 as libc::c_int as usize]
-            [(c & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[2 as libc::c_int as usize]
-                [(c >> 8 as libc::c_int & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[1 as libc::c_int as usize]
-                [(c >> 16 as libc::c_int & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[0 as libc::c_int as usize][(c >> 24 as libc::c_int) as usize])
+        c = (crc_table[3 as i32 as usize]
+            [(c & 0xff as i32 as u32) as usize]
+            ^ crc_table[2 as i32 as usize]
+                [(c >> 8 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[1 as i32 as usize]
+                [(c >> 16 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[0 as i32 as usize][(c >> 24 as i32) as usize])
             as u4;
-        len = len.wrapping_sub(32 as libc::c_int as libc::c_uint)
+        len = len.wrapping_sub(32 as i32 as u32)
     }
-    while len >= 4 as libc::c_int as libc::c_uint {
+    while len >= 4 as i32 as u32 {
         let fresh18 = buf4;
         buf4 = buf4.offset(1);
         c ^= *fresh18;
-        c = (crc_table[3 as libc::c_int as usize]
-            [(c & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[2 as libc::c_int as usize]
-                [(c >> 8 as libc::c_int & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[1 as libc::c_int as usize]
-                [(c >> 16 as libc::c_int & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[0 as libc::c_int as usize][(c >> 24 as libc::c_int) as usize])
+        c = (crc_table[3 as i32 as usize]
+            [(c & 0xff as i32 as u32) as usize]
+            ^ crc_table[2 as i32 as usize]
+                [(c >> 8 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[1 as i32 as usize]
+                [(c >> 16 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[0 as i32 as usize][(c >> 24 as i32) as usize])
             as u4;
-        len = len.wrapping_sub(4 as libc::c_int as libc::c_uint)
+        len = len.wrapping_sub(4 as i32 as u32)
     }
-    buf = buf4 as *const libc::c_uchar;
+    buf = buf4 as *const u8;
     if len != 0 {
         loop {
             let fresh19 = buf;
             buf = buf.offset(1);
-            c = (crc_table[0 as libc::c_int as usize]
-                [((c ^ *fresh19 as libc::c_uint) & 0xff as libc::c_int as libc::c_uint) as usize]
-                ^ (c >> 8 as libc::c_int) as libc::c_ulong) as u4;
+            c = (crc_table[0 as i32 as usize]
+                [((c ^ *fresh19 as u32) & 0xff as i32 as u32) as usize]
+                ^ (c >> 8 as i32) as libc::c_ulong) as u4;
             len = len.wrapping_sub(1);
             if !(len != 0) {
                 break;
@@ -2364,131 +2364,131 @@ unsafe extern "C" fn crc32_little(
 
 unsafe extern "C" fn crc32_big(
     mut crc: libc::c_ulong,
-    mut buf: *const libc::c_uchar,
-    mut len: libc::c_uint,
+    mut buf: *const u8,
+    mut len: u32,
 ) -> libc::c_ulong {
     let mut c: u4 = 0;
     let mut buf4: *const u4 = 0 as *const u4;
-    c = (crc as u4 >> 24 as libc::c_int)
-        .wrapping_add(crc as u4 >> 8 as libc::c_int & 0xff00 as libc::c_int as libc::c_uint)
-        .wrapping_add((crc as u4 & 0xff00 as libc::c_int as libc::c_uint) << 8 as libc::c_int)
-        .wrapping_add((crc as u4 & 0xff as libc::c_int as libc::c_uint) << 24 as libc::c_int);
+    c = (crc as u4 >> 24 as i32)
+        .wrapping_add(crc as u4 >> 8 as i32 & 0xff00 as i32 as u32)
+        .wrapping_add((crc as u4 & 0xff00 as i32 as u32) << 8 as i32)
+        .wrapping_add((crc as u4 & 0xff as i32 as u32) << 24 as i32);
     c = !c;
-    while len != 0 && buf as crate::stddef_h::ptrdiff_t & 3 as libc::c_int as libc::c_long != 0 {
+    while len != 0 && buf as crate::stddef_h::ptrdiff_t & 3 as i32 as libc::c_long != 0 {
         let fresh20 = buf;
         buf = buf.offset(1);
-        c = (crc_table[4 as libc::c_int as usize]
-            [(c >> 24 as libc::c_int ^ *fresh20 as libc::c_uint) as usize]
-            ^ (c << 8 as libc::c_int) as libc::c_ulong) as u4;
+        c = (crc_table[4 as i32 as usize]
+            [(c >> 24 as i32 ^ *fresh20 as u32) as usize]
+            ^ (c << 8 as i32) as libc::c_ulong) as u4;
         len = len.wrapping_sub(1)
     }
     buf4 = buf as *const libc::c_void as *const u4;
     buf4 = buf4.offset(-1);
-    while len >= 32 as libc::c_int as libc::c_uint {
+    while len >= 32 as i32 as u32 {
         buf4 = buf4.offset(1);
         c ^= *buf4;
-        c = (crc_table[4 as libc::c_int as usize]
-            [(c & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[5 as libc::c_int as usize]
-                [(c >> 8 as libc::c_int & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[6 as libc::c_int as usize]
-                [(c >> 16 as libc::c_int & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[7 as libc::c_int as usize][(c >> 24 as libc::c_int) as usize])
+        c = (crc_table[4 as i32 as usize]
+            [(c & 0xff as i32 as u32) as usize]
+            ^ crc_table[5 as i32 as usize]
+                [(c >> 8 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[6 as i32 as usize]
+                [(c >> 16 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[7 as i32 as usize][(c >> 24 as i32) as usize])
             as u4;
         buf4 = buf4.offset(1);
         c ^= *buf4;
-        c = (crc_table[4 as libc::c_int as usize]
-            [(c & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[5 as libc::c_int as usize]
-                [(c >> 8 as libc::c_int & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[6 as libc::c_int as usize]
-                [(c >> 16 as libc::c_int & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[7 as libc::c_int as usize][(c >> 24 as libc::c_int) as usize])
+        c = (crc_table[4 as i32 as usize]
+            [(c & 0xff as i32 as u32) as usize]
+            ^ crc_table[5 as i32 as usize]
+                [(c >> 8 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[6 as i32 as usize]
+                [(c >> 16 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[7 as i32 as usize][(c >> 24 as i32) as usize])
             as u4;
         buf4 = buf4.offset(1);
         c ^= *buf4;
-        c = (crc_table[4 as libc::c_int as usize]
-            [(c & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[5 as libc::c_int as usize]
-                [(c >> 8 as libc::c_int & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[6 as libc::c_int as usize]
-                [(c >> 16 as libc::c_int & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[7 as libc::c_int as usize][(c >> 24 as libc::c_int) as usize])
+        c = (crc_table[4 as i32 as usize]
+            [(c & 0xff as i32 as u32) as usize]
+            ^ crc_table[5 as i32 as usize]
+                [(c >> 8 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[6 as i32 as usize]
+                [(c >> 16 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[7 as i32 as usize][(c >> 24 as i32) as usize])
             as u4;
         buf4 = buf4.offset(1);
         c ^= *buf4;
-        c = (crc_table[4 as libc::c_int as usize]
-            [(c & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[5 as libc::c_int as usize]
-                [(c >> 8 as libc::c_int & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[6 as libc::c_int as usize]
-                [(c >> 16 as libc::c_int & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[7 as libc::c_int as usize][(c >> 24 as libc::c_int) as usize])
+        c = (crc_table[4 as i32 as usize]
+            [(c & 0xff as i32 as u32) as usize]
+            ^ crc_table[5 as i32 as usize]
+                [(c >> 8 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[6 as i32 as usize]
+                [(c >> 16 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[7 as i32 as usize][(c >> 24 as i32) as usize])
             as u4;
         buf4 = buf4.offset(1);
         c ^= *buf4;
-        c = (crc_table[4 as libc::c_int as usize]
-            [(c & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[5 as libc::c_int as usize]
-                [(c >> 8 as libc::c_int & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[6 as libc::c_int as usize]
-                [(c >> 16 as libc::c_int & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[7 as libc::c_int as usize][(c >> 24 as libc::c_int) as usize])
+        c = (crc_table[4 as i32 as usize]
+            [(c & 0xff as i32 as u32) as usize]
+            ^ crc_table[5 as i32 as usize]
+                [(c >> 8 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[6 as i32 as usize]
+                [(c >> 16 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[7 as i32 as usize][(c >> 24 as i32) as usize])
             as u4;
         buf4 = buf4.offset(1);
         c ^= *buf4;
-        c = (crc_table[4 as libc::c_int as usize]
-            [(c & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[5 as libc::c_int as usize]
-                [(c >> 8 as libc::c_int & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[6 as libc::c_int as usize]
-                [(c >> 16 as libc::c_int & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[7 as libc::c_int as usize][(c >> 24 as libc::c_int) as usize])
+        c = (crc_table[4 as i32 as usize]
+            [(c & 0xff as i32 as u32) as usize]
+            ^ crc_table[5 as i32 as usize]
+                [(c >> 8 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[6 as i32 as usize]
+                [(c >> 16 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[7 as i32 as usize][(c >> 24 as i32) as usize])
             as u4;
         buf4 = buf4.offset(1);
         c ^= *buf4;
-        c = (crc_table[4 as libc::c_int as usize]
-            [(c & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[5 as libc::c_int as usize]
-                [(c >> 8 as libc::c_int & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[6 as libc::c_int as usize]
-                [(c >> 16 as libc::c_int & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[7 as libc::c_int as usize][(c >> 24 as libc::c_int) as usize])
+        c = (crc_table[4 as i32 as usize]
+            [(c & 0xff as i32 as u32) as usize]
+            ^ crc_table[5 as i32 as usize]
+                [(c >> 8 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[6 as i32 as usize]
+                [(c >> 16 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[7 as i32 as usize][(c >> 24 as i32) as usize])
             as u4;
         buf4 = buf4.offset(1);
         c ^= *buf4;
-        c = (crc_table[4 as libc::c_int as usize]
-            [(c & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[5 as libc::c_int as usize]
-                [(c >> 8 as libc::c_int & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[6 as libc::c_int as usize]
-                [(c >> 16 as libc::c_int & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[7 as libc::c_int as usize][(c >> 24 as libc::c_int) as usize])
+        c = (crc_table[4 as i32 as usize]
+            [(c & 0xff as i32 as u32) as usize]
+            ^ crc_table[5 as i32 as usize]
+                [(c >> 8 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[6 as i32 as usize]
+                [(c >> 16 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[7 as i32 as usize][(c >> 24 as i32) as usize])
             as u4;
-        len = len.wrapping_sub(32 as libc::c_int as libc::c_uint)
+        len = len.wrapping_sub(32 as i32 as u32)
     }
-    while len >= 4 as libc::c_int as libc::c_uint {
+    while len >= 4 as i32 as u32 {
         buf4 = buf4.offset(1);
         c ^= *buf4;
-        c = (crc_table[4 as libc::c_int as usize]
-            [(c & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[5 as libc::c_int as usize]
-                [(c >> 8 as libc::c_int & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[6 as libc::c_int as usize]
-                [(c >> 16 as libc::c_int & 0xff as libc::c_int as libc::c_uint) as usize]
-            ^ crc_table[7 as libc::c_int as usize][(c >> 24 as libc::c_int) as usize])
+        c = (crc_table[4 as i32 as usize]
+            [(c & 0xff as i32 as u32) as usize]
+            ^ crc_table[5 as i32 as usize]
+                [(c >> 8 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[6 as i32 as usize]
+                [(c >> 16 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[7 as i32 as usize][(c >> 24 as i32) as usize])
             as u4;
-        len = len.wrapping_sub(4 as libc::c_int as libc::c_uint)
+        len = len.wrapping_sub(4 as i32 as u32)
     }
     buf4 = buf4.offset(1);
-    buf = buf4 as *const libc::c_uchar;
+    buf = buf4 as *const u8;
     if len != 0 {
         loop {
             let fresh21 = buf;
             buf = buf.offset(1);
-            c = (crc_table[4 as libc::c_int as usize]
-                [(c >> 24 as libc::c_int ^ *fresh21 as libc::c_uint) as usize]
-                ^ (c << 8 as libc::c_int) as libc::c_ulong) as u4;
+            c = (crc_table[4 as i32 as usize]
+                [(c >> 24 as i32 ^ *fresh21 as u32) as usize]
+                ^ (c << 8 as i32) as libc::c_ulong) as u4;
             len = len.wrapping_sub(1);
             if !(len != 0) {
                 break;
@@ -2496,10 +2496,10 @@ unsafe extern "C" fn crc32_big(
         }
     }
     c = !c;
-    return (c >> 24 as libc::c_int)
-        .wrapping_add(c >> 8 as libc::c_int & 0xff00 as libc::c_int as libc::c_uint)
-        .wrapping_add((c & 0xff00 as libc::c_int as libc::c_uint) << 8 as libc::c_int)
-        .wrapping_add((c & 0xff as libc::c_int as libc::c_uint) << 24 as libc::c_int)
+    return (c >> 24 as i32)
+        .wrapping_add(c >> 8 as i32 & 0xff00 as i32 as u32)
+        .wrapping_add((c & 0xff00 as i32 as u32) << 8 as i32)
+        .wrapping_add((c & 0xff as i32 as u32) << 24 as i32)
         as libc::c_ulong;
 }
 /* BYFOUR */
@@ -2512,12 +2512,12 @@ unsafe extern "C" fn gf2_matrix_times(
     mut vec: libc::c_ulong,
 ) -> libc::c_ulong {
     let mut sum: libc::c_ulong = 0;
-    sum = 0 as libc::c_int as libc::c_ulong;
+    sum = 0 as i32 as libc::c_ulong;
     while vec != 0 {
-        if vec & 1 as libc::c_int as libc::c_ulong != 0 {
+        if vec & 1 as i32 as libc::c_ulong != 0 {
             sum ^= *mat
         }
-        vec >>= 1 as libc::c_int;
+        vec >>= 1 as i32;
         mat = mat.offset(1)
     }
     return sum;
@@ -2528,9 +2528,9 @@ unsafe extern "C" fn gf2_matrix_square(
     mut square: *mut libc::c_ulong,
     mut mat: *mut libc::c_ulong,
 ) {
-    let mut n: libc::c_int = 0;
-    n = 0 as libc::c_int;
-    while n < 32 as libc::c_int {
+    let mut n: i32 = 0;
+    n = 0 as i32;
+    while n < 32 as i32 {
         *square.offset(n as isize) = gf2_matrix_times(mat, *mat.offset(n as isize));
         n += 1
     }
@@ -3177,21 +3177,21 @@ pub unsafe extern "C" fn crc32_combine(
     mut crc2: crate::zconf_h::uLong,
     mut len2: crate::stdlib::off_t,
 ) -> crate::zconf_h::uLong {
-    let mut n: libc::c_int = 0; /* even-power-of-two zeros operator */
+    let mut n: i32 = 0; /* even-power-of-two zeros operator */
     let mut row: libc::c_ulong = 0; /* odd-power-of-two zeros operator */
     let mut even: [libc::c_ulong; 32] = [0; 32];
     let mut odd: [libc::c_ulong; 32] = [0; 32];
     /* degenerate case */
-    if len2 == 0 as libc::c_int as libc::c_long {
+    if len2 == 0 as i32 as libc::c_long {
         return crc1;
     }
     /* put operator for one zero bit in odd */
-    odd[0 as libc::c_int as usize] = 0xedb88320 as libc::c_long as libc::c_ulong; /* CRC-32 polynomial */
-    row = 1 as libc::c_int as libc::c_ulong;
-    n = 1 as libc::c_int;
-    while n < 32 as libc::c_int {
+    odd[0 as i32 as usize] = 0xedb88320 as libc::c_long as libc::c_ulong; /* CRC-32 polynomial */
+    row = 1 as i32 as libc::c_ulong;
+    n = 1 as i32;
+    while n < 32 as i32 {
         odd[n as usize] = row;
-        row <<= 1 as libc::c_int;
+        row <<= 1 as i32;
         n += 1
     }
     /* put operator for two zero bits in even */
@@ -3204,21 +3204,21 @@ pub unsafe extern "C" fn crc32_combine(
       /* apply zeros operator for this bit of len2 */
     {
         gf2_matrix_square(even.as_mut_ptr(), odd.as_mut_ptr());
-        if len2 & 1 as libc::c_int as libc::c_long != 0 {
+        if len2 & 1 as i32 as libc::c_long != 0 {
             crc1 = gf2_matrix_times(even.as_mut_ptr(), crc1)
         }
-        len2 >>= 1 as libc::c_int;
+        len2 >>= 1 as i32;
         /* if no more bits set, then done */
-        if len2 == 0 as libc::c_int as libc::c_long {
+        if len2 == 0 as i32 as libc::c_long {
             break;
         }
         /* another iteration of the loop with odd and even swapped */
         gf2_matrix_square(odd.as_mut_ptr(), even.as_mut_ptr());
-        if len2 & 1 as libc::c_int as libc::c_long != 0 {
+        if len2 & 1 as i32 as libc::c_long != 0 {
             crc1 = gf2_matrix_times(odd.as_mut_ptr(), crc1)
         }
-        len2 >>= 1 as libc::c_int;
-        if !(len2 != 0 as libc::c_int as libc::c_long) {
+        len2 >>= 1 as i32;
+        if !(len2 != 0 as i32 as libc::c_long) {
             break;
         }
         /* if no more bits set, then done */

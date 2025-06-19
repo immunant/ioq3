@@ -36,7 +36,7 @@ pub const PERS_DEFEND_COUNT: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 11
 pub const PERS_ASSIST_COUNT: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 12;
 pub const PERS_GAUNTLET_FRAG_COUNT: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 13;
 pub const PERS_CAPTURES: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 14;
-pub type powerup_t = libc::c_uint;
+pub type powerup_t = u32;
 pub const PW_NONE: powerup_t = 0;
 pub const PW_QUAD: powerup_t = 1;
 pub const PW_BATTLESUIT: powerup_t = 2;
@@ -53,7 +53,7 @@ pub const PW_DOUBLER: powerup_t = 12;
 pub const PW_AMMOREGEN: powerup_t = 13;
 pub const PW_INVULNERABILITY: powerup_t = 14;
 pub const PW_NUM_POWERUPS: powerup_t = 15;
-pub type holdable_t = libc::c_uint;
+pub type holdable_t = u32;
 pub const HI_NONE: holdable_t = 0;
 pub const HI_TELEPORTER: holdable_t = 1;
 pub const HI_MEDKIT: holdable_t = 2;
@@ -61,7 +61,7 @@ pub const HI_KAMIKAZE: holdable_t = 3;
 pub const HI_PORTAL: holdable_t = 4;
 pub const HI_INVULNERABILITY: holdable_t = 5;
 pub const HI_NUM_HOLDABLE: holdable_t = 6;
-pub type weapon_t = libc::c_uint;
+pub type weapon_t = u32;
 pub const WP_NONE: weapon_t = 0;
 pub const WP_GAUNTLET: weapon_t = 1;
 pub const WP_MACHINEGUN: weapon_t = 2;
@@ -199,20 +199,20 @@ pub type animation_t = animation_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct animation_s {
-    pub firstFrame: libc::c_int,
-    pub numFrames: libc::c_int,
-    pub loopFrames: libc::c_int,
-    pub frameLerp: libc::c_int,
-    pub initialLerp: libc::c_int,
-    pub reversed: libc::c_int,
-    pub flipflop: libc::c_int,
+    pub firstFrame: i32,
+    pub numFrames: i32,
+    pub loopFrames: i32,
+    pub frameLerp: i32,
+    pub initialLerp: i32,
+    pub reversed: i32,
+    pub flipflop: i32,
 }
 pub const TEAM_FREE: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 0;
 pub const TEAM_RED: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 1;
 pub const TEAM_BLUE: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 2;
 pub const TEAM_SPECTATOR: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 3;
 pub const TEAM_NUM_TEAMS: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 4;
-pub type itemType_t = libc::c_uint;
+pub type itemType_t = u32;
 pub const IT_BAD: itemType_t = 0;
 pub const IT_WEAPON: itemType_t = 1;
 pub const IT_AMMO: itemType_t = 2;
@@ -231,9 +231,9 @@ pub struct gitem_s {
     pub world_model: [*mut libc::c_char; 4],
     pub icon: *mut libc::c_char,
     pub pickup_name: *mut libc::c_char,
-    pub quantity: libc::c_int,
+    pub quantity: i32,
     pub giType: itemType_t,
-    pub giTag: libc::c_int,
+    pub giTag: i32,
     pub precaches: *mut libc::c_char,
     pub sounds: *mut libc::c_char,
 }

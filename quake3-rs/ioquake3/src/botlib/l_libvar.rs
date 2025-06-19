@@ -39,9 +39,9 @@ pub type libvar_t = crate::src::botlib::l_libvar::libvar_s;
 pub struct libvar_s {
     pub name: *mut libc::c_char,
     pub string: *mut libc::c_char,
-    pub flags: libc::c_int,
+    pub flags: i32,
     pub modified: crate::src::qcommon::q_shared::qboolean,
-    pub value: libc::c_float,
+    pub value: f32,
     pub next: *mut crate::src::botlib::l_libvar::libvar_s,
 }
 use ::libc;
@@ -94,28 +94,28 @@ pub static mut libvarlist: *mut crate::src::botlib::l_libvar::libvar_t = 0
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn LibVarStringValue(mut string: *const libc::c_char) -> libc::c_float {
-    let mut dotfound: libc::c_int = 0 as libc::c_int; //end while
-    let mut value: libc::c_float = 0 as libc::c_int as libc::c_float; //end if
+pub unsafe extern "C" fn LibVarStringValue(mut string: *const libc::c_char) -> f32 {
+    let mut dotfound: i32 = 0 as i32; //end while
+    let mut value: f32 = 0 as i32 as f32; //end if
     while *string != 0 {
-        if (*string as libc::c_int) < '0' as i32 || *string as libc::c_int > '9' as i32 {
-            if dotfound != 0 || *string as libc::c_int != '.' as i32 {
-                return 0 as libc::c_int as libc::c_float;
+        if (*string as i32) < '0' as i32 || *string as i32 > '9' as i32 {
+            if dotfound != 0 || *string as i32 != '.' as i32 {
+                return 0 as i32 as f32;
             } else {
-                dotfound = 10 as libc::c_int; //end if
+                dotfound = 10 as i32; //end if
                 string = string.offset(1)
             }
             //end if
         } //end else
         if dotfound != 0 {
             value = value
-                + (*string as libc::c_int - '0' as i32) as libc::c_float
-                    / dotfound as libc::c_float; //end if
-            dotfound *= 10 as libc::c_int
+                + (*string as i32 - '0' as i32) as f32
+                    / dotfound as f32; //end if
+            dotfound *= 10 as i32
         } else {
-            value = (value as libc::c_double * 10.0f64
-                + (*string as libc::c_int - '0' as i32) as libc::c_float as libc::c_double)
-                as libc::c_float
+            value = (value as f64 * 10.0f64
+                + (*string as i32 - '0' as i32) as f32 as f64)
+                as f32
         }
         string = string.offset(1)
     }
@@ -140,11 +140,11 @@ pub unsafe extern "C" fn LibVarAlloc(
     >() as libc::c_ulong) as *mut crate::src::botlib::l_libvar::libvar_t;
     crate::stdlib::memset(
         v as *mut libc::c_void,
-        0 as libc::c_int,
+        0 as i32,
         ::std::mem::size_of::<crate::src::botlib::l_libvar::libvar_t>() as libc::c_ulong,
     );
     (*v).name = crate::src::botlib::l_memory::GetMemory(
-        crate::stdlib::strlen(var_name).wrapping_add(1 as libc::c_int as libc::c_ulong),
+        crate::stdlib::strlen(var_name).wrapping_add(1 as i32 as libc::c_ulong),
     ) as *mut libc::c_char;
     ::libc::strcpy((*v).name, var_name);
     //add the variable in the list
@@ -245,14 +245,14 @@ pub unsafe extern "C" fn LibVarGetString(mut var_name: *const libc::c_char) -> *
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn LibVarGetValue(mut var_name: *const libc::c_char) -> libc::c_float {
+pub unsafe extern "C" fn LibVarGetValue(mut var_name: *const libc::c_char) -> f32 {
     let mut v: *mut crate::src::botlib::l_libvar::libvar_t =
         0 as *mut crate::src::botlib::l_libvar::libvar_t; //end if
     v = LibVarGet(var_name);
     if !v.is_null() {
         return (*v).value;
     } else {
-        return 0 as libc::c_int as libc::c_float;
+        return 0 as i32 as f32;
     };
     //end else
 }
@@ -280,7 +280,7 @@ pub unsafe extern "C" fn LibVar(
     v = LibVarAlloc(var_name);
     //variable string
     (*v).string = crate::src::botlib::l_memory::GetMemory(
-        crate::stdlib::strlen(value).wrapping_add(1 as libc::c_int as libc::c_ulong),
+        crate::stdlib::strlen(value).wrapping_add(1 as i32 as libc::c_ulong),
     ) as *mut libc::c_char;
     ::libc::strcpy((*v).string, value);
     //the value
@@ -322,7 +322,7 @@ pub unsafe extern "C" fn LibVarString(
 pub unsafe extern "C" fn LibVarValue(
     mut var_name: *const libc::c_char,
     mut value: *const libc::c_char,
-) -> libc::c_float {
+) -> f32 {
     let mut v: *mut crate::src::botlib::l_libvar::libvar_t =
         0 as *mut crate::src::botlib::l_libvar::libvar_t;
     v = LibVar(var_name, value);
@@ -352,7 +352,7 @@ pub unsafe extern "C" fn LibVarSet(
     }
     //variable string
     (*v).string = crate::src::botlib::l_memory::GetMemory(
-        crate::stdlib::strlen(value).wrapping_add(1 as libc::c_int as libc::c_ulong),
+        crate::stdlib::strlen(value).wrapping_add(1 as i32 as libc::c_ulong),
     ) as *mut libc::c_char;
     ::libc::strcpy((*v).string, value);
     //the value

@@ -3,7 +3,7 @@ use ::libc;
 pub mod stdlib_float_h {
     #[inline]
 
-    pub unsafe extern "C" fn atof(mut __nptr: *const libc::c_char) -> libc::c_double {
+    pub unsafe extern "C" fn atof(mut __nptr: *const libc::c_char) -> f64 {
         return ::libc::strtod(__nptr, 0 as *mut libc::c_void as *mut *mut libc::c_char);
     }
 }
@@ -261,11 +261,11 @@ pub use crate::src::cgame::cg_weapons::CG_RegisterItemVisuals;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct lagometer_t {
-    pub frameSamples: [libc::c_int; 128],
-    pub frameCount: libc::c_int,
-    pub snapshotFlags: [libc::c_int; 128],
-    pub snapshotSamples: [libc::c_int; 128],
-    pub snapshotCount: libc::c_int,
+    pub frameSamples: [i32; 128],
+    pub frameCount: i32,
+    pub snapshotFlags: [i32; 128],
+    pub snapshotSamples: [i32; 128],
+    pub snapshotCount: i32,
 }
 /*
 ===========================================================================
@@ -293,13 +293,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // active (after loading) gameplay
 #[no_mangle]
 
-pub static mut drawTeamOverlayModificationCount: libc::c_int = -(1 as libc::c_int);
+pub static mut drawTeamOverlayModificationCount: i32 = -(1 as i32);
 #[no_mangle]
 
-pub static mut sortedTeamPlayers: [libc::c_int; 32] = [0; 32];
+pub static mut sortedTeamPlayers: [i32; 32] = [0; 32];
 #[no_mangle]
 
-pub static mut numSortedTeamPlayers: libc::c_int = 0;
+pub static mut numSortedTeamPlayers: i32 = 0;
 #[no_mangle]
 
 pub static mut systemChat: [libc::c_char; 256] = [0; 256];
@@ -318,67 +318,67 @@ Draws large numbers for status bar and powerups
 */
 
 unsafe extern "C" fn CG_DrawField(
-    mut x: libc::c_int,
-    mut y: libc::c_int,
-    mut width: libc::c_int,
-    mut value: libc::c_int,
+    mut x: i32,
+    mut y: i32,
+    mut width: i32,
+    mut value: i32,
 ) {
     let mut num: [libc::c_char; 16] = [0; 16];
     let mut ptr: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut l: libc::c_int = 0;
-    let mut frame: libc::c_int = 0;
-    if width < 1 as libc::c_int {
+    let mut l: i32 = 0;
+    let mut frame: i32 = 0;
+    if width < 1 as i32 {
         return;
     }
     // draw number string
-    if width > 5 as libc::c_int {
-        width = 5 as libc::c_int
+    if width > 5 as i32 {
+        width = 5 as i32
     }
     match width {
         1 => {
-            value = if value > 9 as libc::c_int {
-                9 as libc::c_int
+            value = if value > 9 as i32 {
+                9 as i32
             } else {
                 value
             };
-            value = if value < 0 as libc::c_int {
-                0 as libc::c_int
+            value = if value < 0 as i32 {
+                0 as i32
             } else {
                 value
             }
         }
         2 => {
-            value = if value > 99 as libc::c_int {
-                99 as libc::c_int
+            value = if value > 99 as i32 {
+                99 as i32
             } else {
                 value
             };
-            value = if value < -(9 as libc::c_int) {
-                -(9 as libc::c_int)
+            value = if value < -(9 as i32) {
+                -(9 as i32)
             } else {
                 value
             }
         }
         3 => {
-            value = if value > 999 as libc::c_int {
-                999 as libc::c_int
+            value = if value > 999 as i32 {
+                999 as i32
             } else {
                 value
             };
-            value = if value < -(99 as libc::c_int) {
-                -(99 as libc::c_int)
+            value = if value < -(99 as i32) {
+                -(99 as i32)
             } else {
                 value
             }
         }
         4 => {
-            value = if value > 9999 as libc::c_int {
-                9999 as libc::c_int
+            value = if value > 9999 as i32 {
+                9999 as i32
             } else {
                 value
             };
-            value = if value < -(999 as libc::c_int) {
-                -(999 as libc::c_int)
+            value = if value < -(999 as i32) {
+                -(999 as i32)
             } else {
                 value
             }
@@ -387,30 +387,30 @@ unsafe extern "C" fn CG_DrawField(
     }
     Com_sprintf(
         num.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as i32,
         b"%i\x00" as *const u8 as *const libc::c_char,
         value,
     );
-    l = crate::stdlib::strlen(num.as_mut_ptr()) as libc::c_int;
+    l = crate::stdlib::strlen(num.as_mut_ptr()) as i32;
     if l > width {
         l = width
     }
-    x += 2 as libc::c_int + 32 as libc::c_int * (width - l);
+    x += 2 as i32 + 32 as i32 * (width - l);
     ptr = num.as_mut_ptr();
-    while *ptr as libc::c_int != 0 && l != 0 {
-        if *ptr as libc::c_int == '-' as i32 {
-            frame = 10 as libc::c_int
+    while *ptr as i32 != 0 && l != 0 {
+        if *ptr as i32 == '-' as i32 {
+            frame = 10 as i32
         } else {
-            frame = *ptr as libc::c_int - '0' as i32
+            frame = *ptr as i32 - '0' as i32
         }
         CG_DrawPic(
-            x as libc::c_float,
-            y as libc::c_float,
-            32 as libc::c_int as libc::c_float,
-            48 as libc::c_int as libc::c_float,
+            x as f32,
+            y as f32,
+            32 as i32 as f32,
+            48 as i32 as f32,
             cgs.media.numberShaders[frame as usize],
         );
-        x += 32 as libc::c_int;
+        x += 32 as i32;
         ptr = ptr.offset(1);
         l -= 1
     }
@@ -425,10 +425,10 @@ CG_Draw3DModel
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_Draw3DModel(
-    mut x: libc::c_float,
-    mut y: libc::c_float,
-    mut w: libc::c_float,
-    mut h: libc::c_float,
+    mut x: f32,
+    mut y: f32,
+    mut w: f32,
+    mut h: f32,
     mut model: qhandle_t,
     mut skin: qhandle_t,
     mut origin: *mut vec_t,
@@ -476,29 +476,29 @@ pub unsafe extern "C" fn CG_Draw3DModel(
     CG_AdjustFrom640(&mut x, &mut y, &mut w, &mut h);
     crate::stdlib::memset(
         &mut refdef as *mut refdef_t as *mut libc::c_void,
-        0 as libc::c_int,
+        0 as i32,
         ::std::mem::size_of::<refdef_t>() as libc::c_ulong,
     );
     crate::stdlib::memset(
         &mut ent as *mut refEntity_t as *mut libc::c_void,
-        0 as libc::c_int,
+        0 as i32,
         ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
     );
     AnglesToAxis(angles as *const vec_t, ent.axis.as_mut_ptr());
-    ent.origin[0 as libc::c_int as usize] = *origin.offset(0 as libc::c_int as isize);
-    ent.origin[1 as libc::c_int as usize] = *origin.offset(1 as libc::c_int as isize);
-    ent.origin[2 as libc::c_int as usize] = *origin.offset(2 as libc::c_int as isize);
+    ent.origin[0 as i32 as usize] = *origin.offset(0 as i32 as isize);
+    ent.origin[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
+    ent.origin[2 as i32 as usize] = *origin.offset(2 as i32 as isize);
     ent.hModel = model;
     ent.customSkin = skin;
-    ent.renderfx = 0x40 as libc::c_int;
-    refdef.rdflags = 0x1 as libc::c_int;
+    ent.renderfx = 0x40 as i32;
+    refdef.rdflags = 0x1 as i32;
     AxisClear(refdef.viewaxis.as_mut_ptr());
-    refdef.fov_x = 30 as libc::c_int as libc::c_float;
-    refdef.fov_y = 30 as libc::c_int as libc::c_float;
-    refdef.x = x as libc::c_int;
-    refdef.y = y as libc::c_int;
-    refdef.width = w as libc::c_int;
-    refdef.height = h as libc::c_int;
+    refdef.fov_x = 30 as i32 as f32;
+    refdef.fov_y = 30 as i32 as f32;
+    refdef.x = x as i32;
+    refdef.y = y as i32;
+    refdef.width = w as i32;
+    refdef.height = h as i32;
     refdef.time = cg.time;
     crate::src::cgame::cg_syscalls::trap_R_ClearScene();
     crate::src::cgame::cg_syscalls::trap_R_AddRefEntityToScene(
@@ -516,16 +516,16 @@ Used for both the status bar and the scoreboard
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_DrawHead(
-    mut x: libc::c_float,
-    mut y: libc::c_float,
-    mut w: libc::c_float,
-    mut h: libc::c_float,
-    mut clientNum: libc::c_int,
+    mut x: f32,
+    mut y: f32,
+    mut w: f32,
+    mut h: f32,
+    mut clientNum: i32,
     mut headAngles: *mut vec_t,
 ) {
     let mut cm: clipHandle_t = 0;
     let mut ci: *mut crate::cg_local_h::clientInfo_t = 0 as *mut crate::cg_local_h::clientInfo_t;
-    let mut len: libc::c_float = 0.;
+    let mut len: f32 = 0.;
     let mut origin: vec3_t = [0.; 3];
     let mut mins: vec3_t = [0.; 3];
     let mut maxs: vec3_t = [0.; 3];
@@ -542,25 +542,25 @@ pub unsafe extern "C" fn CG_DrawHead(
             mins.as_mut_ptr(),
             maxs.as_mut_ptr(),
         );
-        origin[2 as libc::c_int as usize] = (-0.5f64
-            * (mins[2 as libc::c_int as usize] + maxs[2 as libc::c_int as usize]) as libc::c_double)
+        origin[2 as i32 as usize] = (-0.5f64
+            * (mins[2 as i32 as usize] + maxs[2 as i32 as usize]) as f64)
             as vec_t;
-        origin[1 as libc::c_int as usize] = (0.5f64
-            * (mins[1 as libc::c_int as usize] + maxs[1 as libc::c_int as usize]) as libc::c_double)
+        origin[1 as i32 as usize] = (0.5f64
+            * (mins[1 as i32 as usize] + maxs[1 as i32 as usize]) as f64)
             as vec_t;
         // calculate distance so the head nearly fills the box
         // assume heads are taller than wide
         len = (0.7f64
-            * (maxs[2 as libc::c_int as usize] - mins[2 as libc::c_int as usize]) as libc::c_double)
-            as libc::c_float; // len / tan( fov/2 )
-        origin[0 as libc::c_int as usize] = (len as libc::c_double / 0.268f64) as vec_t;
+            * (maxs[2 as i32 as usize] - mins[2 as i32 as usize]) as f64)
+            as f32; // len / tan( fov/2 )
+        origin[0 as i32 as usize] = (len as f64 / 0.268f64) as vec_t;
         // allow per-model tweaking
-        origin[0 as libc::c_int as usize] =
-            origin[0 as libc::c_int as usize] + (*ci).headOffset[0 as libc::c_int as usize];
-        origin[1 as libc::c_int as usize] =
-            origin[1 as libc::c_int as usize] + (*ci).headOffset[1 as libc::c_int as usize];
-        origin[2 as libc::c_int as usize] =
-            origin[2 as libc::c_int as usize] + (*ci).headOffset[2 as libc::c_int as usize];
+        origin[0 as i32 as usize] =
+            origin[0 as i32 as usize] + (*ci).headOffset[0 as i32 as usize];
+        origin[1 as i32 as usize] =
+            origin[1 as i32 as usize] + (*ci).headOffset[1 as i32 as usize];
+        origin[2 as i32 as usize] =
+            origin[2 as i32 as usize] + (*ci).headOffset[2 as i32 as usize];
         CG_Draw3DModel(
             x,
             y,
@@ -589,24 +589,24 @@ Used for both the status bar and the scoreboard
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_DrawFlagModel(
-    mut x: libc::c_float,
-    mut y: libc::c_float,
-    mut w: libc::c_float,
-    mut h: libc::c_float,
-    mut team: libc::c_int,
+    mut x: f32,
+    mut y: f32,
+    mut w: f32,
+    mut h: f32,
+    mut team: i32,
     mut force2D: qboolean,
 ) {
     let mut cm: qhandle_t = 0;
-    let mut len: libc::c_float = 0.;
+    let mut len: f32 = 0.;
     let mut origin: vec3_t = [0.; 3];
     let mut angles: vec3_t = [0.; 3];
     let mut mins: vec3_t = [0.; 3];
     let mut maxs: vec3_t = [0.; 3];
     let mut handle: qhandle_t = 0;
     if force2D as u64 == 0 && cg_draw3dIcons.integer != 0 {
-        angles[2 as libc::c_int as usize] = 0 as libc::c_int as vec_t;
-        angles[1 as libc::c_int as usize] = angles[2 as libc::c_int as usize];
-        angles[0 as libc::c_int as usize] = angles[1 as libc::c_int as usize];
+        angles[2 as i32 as usize] = 0 as i32 as vec_t;
+        angles[1 as i32 as usize] = angles[2 as i32 as usize];
+        angles[0 as i32 as usize] = angles[1 as i32 as usize];
         cm = cgs.media.redFlagModel;
         // offset the origin y and z to center the flag
         crate::src::cgame::cg_syscalls::trap_R_ModelBounds(
@@ -614,26 +614,26 @@ pub unsafe extern "C" fn CG_DrawFlagModel(
             mins.as_mut_ptr(),
             maxs.as_mut_ptr(),
         );
-        origin[2 as libc::c_int as usize] = (-0.5f64
-            * (mins[2 as libc::c_int as usize] + maxs[2 as libc::c_int as usize]) as libc::c_double)
+        origin[2 as i32 as usize] = (-0.5f64
+            * (mins[2 as i32 as usize] + maxs[2 as i32 as usize]) as f64)
             as vec_t;
-        origin[1 as libc::c_int as usize] = (0.5f64
-            * (mins[1 as libc::c_int as usize] + maxs[1 as libc::c_int as usize]) as libc::c_double)
+        origin[1 as i32 as usize] = (0.5f64
+            * (mins[1 as i32 as usize] + maxs[1 as i32 as usize]) as f64)
             as vec_t;
         // calculate distance so the flag nearly fills the box
         // assume heads are taller than wide
         len = (0.5f64
-            * (maxs[2 as libc::c_int as usize] - mins[2 as libc::c_int as usize]) as libc::c_double)
-            as libc::c_float; // len / tan( fov/2 )
-        origin[0 as libc::c_int as usize] = (len as libc::c_double / 0.268f64) as vec_t;
-        angles[1 as libc::c_int as usize] = (60 as libc::c_int as libc::c_double
-            * crate::stdlib::sin(cg.time as libc::c_double / 2000.0f64))
+            * (maxs[2 as i32 as usize] - mins[2 as i32 as usize]) as f64)
+            as f32; // len / tan( fov/2 )
+        origin[0 as i32 as usize] = (len as f64 / 0.268f64) as vec_t;
+        angles[1 as i32 as usize] = (60 as i32 as f64
+            * crate::stdlib::sin(cg.time as f64 / 2000.0f64))
             as vec_t;
-        if team == crate::bg_public_h::TEAM_RED as libc::c_int {
+        if team == crate::bg_public_h::TEAM_RED as i32 {
             handle = cgs.media.redFlagModel
-        } else if team == crate::bg_public_h::TEAM_BLUE as libc::c_int {
+        } else if team == crate::bg_public_h::TEAM_BLUE as i32 {
             handle = cgs.media.blueFlagModel
-        } else if team == crate::bg_public_h::TEAM_FREE as libc::c_int {
+        } else if team == crate::bg_public_h::TEAM_FREE as i32 {
             handle = cgs.media.neutralFlagModel
         } else {
             return;
@@ -644,19 +644,19 @@ pub unsafe extern "C" fn CG_DrawFlagModel(
             w,
             h,
             handle,
-            0 as libc::c_int,
+            0 as i32,
             origin.as_mut_ptr(),
             angles.as_mut_ptr(),
         );
     } else if cg_drawIcons.integer != 0 {
         let mut item: *mut crate::bg_public_h::gitem_t = 0 as *mut crate::bg_public_h::gitem_t;
-        if team == crate::bg_public_h::TEAM_RED as libc::c_int {
+        if team == crate::bg_public_h::TEAM_RED as i32 {
             item = crate::src::game::bg_misc::BG_FindItemForPowerup(crate::bg_public_h::PW_REDFLAG)
                 as *mut crate::bg_public_h::gitem_s
-        } else if team == crate::bg_public_h::TEAM_BLUE as libc::c_int {
+        } else if team == crate::bg_public_h::TEAM_BLUE as i32 {
             item = crate::src::game::bg_misc::BG_FindItemForPowerup(crate::bg_public_h::PW_BLUEFLAG)
                 as *mut crate::bg_public_h::gitem_s
-        } else if team == crate::bg_public_h::TEAM_FREE as libc::c_int {
+        } else if team == crate::bg_public_h::TEAM_FREE as i32 {
             item =
                 crate::src::game::bg_misc::BG_FindItemForPowerup(crate::bg_public_h::PW_NEUTRALFLAG)
                     as *mut crate::bg_public_h::gitem_s
@@ -683,101 +683,101 @@ CG_DrawStatusBarHead
 ================
 */
 
-unsafe extern "C" fn CG_DrawStatusBarHead(mut x: libc::c_float) {
+unsafe extern "C" fn CG_DrawStatusBarHead(mut x: f32) {
     let mut angles: vec3_t = [0.; 3];
-    let mut size: libc::c_float = 0.;
-    let mut stretch: libc::c_float = 0.;
-    let mut frac: libc::c_float = 0.;
-    angles[2 as libc::c_int as usize] = 0 as libc::c_int as vec_t;
-    angles[1 as libc::c_int as usize] = angles[2 as libc::c_int as usize];
-    angles[0 as libc::c_int as usize] = angles[1 as libc::c_int as usize];
+    let mut size: f32 = 0.;
+    let mut stretch: f32 = 0.;
+    let mut frac: f32 = 0.;
+    angles[2 as i32 as usize] = 0 as i32 as vec_t;
+    angles[1 as i32 as usize] = angles[2 as i32 as usize];
+    angles[0 as i32 as usize] = angles[1 as i32 as usize];
     if cg.damageTime != 0.
-        && cg.time as libc::c_float - cg.damageTime < 500 as libc::c_int as libc::c_float
+        && cg.time as f32 - cg.damageTime < 500 as i32 as f32
     {
-        frac = (cg.time as libc::c_float - cg.damageTime) / 500 as libc::c_int as libc::c_float;
-        size = (48 as libc::c_int as libc::c_double
+        frac = (cg.time as f32 - cg.damageTime) / 500 as i32 as f32;
+        size = (48 as i32 as f64
             * 1.25f64
-            * (1.5f64 - frac as libc::c_double * 0.5f64)) as libc::c_float;
-        stretch = (size as libc::c_double - 48 as libc::c_int as libc::c_double * 1.25f64)
-            as libc::c_float;
+            * (1.5f64 - frac as f64 * 0.5f64)) as f32;
+        stretch = (size as f64 - 48 as i32 as f64 * 1.25f64)
+            as f32;
         // kick in the direction of damage
-        x = (x as libc::c_double
-            - (stretch as libc::c_double * 0.5f64
-                + (cg.damageX * stretch) as libc::c_double * 0.5f64)) as libc::c_float;
+        x = (x as f64
+            - (stretch as f64 * 0.5f64
+                + (cg.damageX * stretch) as f64 * 0.5f64)) as f32;
         cg.headStartYaw =
-            180 as libc::c_int as libc::c_float + cg.damageX * 45 as libc::c_int as libc::c_float;
-        cg.headEndYaw = (180 as libc::c_int as libc::c_double
-            + 20 as libc::c_int as libc::c_double
+            180 as i32 as f32 + cg.damageX * 45 as i32 as f32;
+        cg.headEndYaw = (180 as i32 as f64
+            + 20 as i32 as f64
                 * crate::stdlib::cos(
                     2.0f64
-                        * (((::libc::rand() & 0x7fff as libc::c_int) as libc::c_float
-                            / 0x7fff as libc::c_int as libc::c_float)
-                            as libc::c_double
+                        * (((::libc::rand() & 0x7fff as i32) as f32
+                            / 0x7fff as i32 as f32)
+                            as f64
                             - 0.5f64)
                         * 3.14159265358979323846f64,
-                )) as libc::c_float;
-        cg.headEndPitch = (5 as libc::c_int as libc::c_double
+                )) as f32;
+        cg.headEndPitch = (5 as i32 as f64
             * crate::stdlib::cos(
                 2.0f64
-                    * (((::libc::rand() & 0x7fff as libc::c_int) as libc::c_float
-                        / 0x7fff as libc::c_int as libc::c_float)
-                        as libc::c_double
+                    * (((::libc::rand() & 0x7fff as i32) as f32
+                        / 0x7fff as i32 as f32)
+                        as f64
                         - 0.5f64)
                     * 3.14159265358979323846f64,
-            )) as libc::c_float;
+            )) as f32;
         cg.headStartTime = cg.time;
-        cg.headEndTime = ((cg.time + 100 as libc::c_int) as libc::c_float
-            + (::libc::rand() & 0x7fff as libc::c_int) as libc::c_float
-                / 0x7fff as libc::c_int as libc::c_float
-                * 2000 as libc::c_int as libc::c_float) as libc::c_int
+        cg.headEndTime = ((cg.time + 100 as i32) as f32
+            + (::libc::rand() & 0x7fff as i32) as f32
+                / 0x7fff as i32 as f32
+                * 2000 as i32 as f32) as i32
     } else {
         if cg.time >= cg.headEndTime {
             // select a new head angle
             cg.headStartYaw = cg.headEndYaw;
             cg.headStartPitch = cg.headEndPitch;
             cg.headStartTime = cg.headEndTime;
-            cg.headEndTime = ((cg.time + 100 as libc::c_int) as libc::c_float
-                + (::libc::rand() & 0x7fff as libc::c_int) as libc::c_float
-                    / 0x7fff as libc::c_int as libc::c_float
-                    * 2000 as libc::c_int as libc::c_float)
-                as libc::c_int;
-            cg.headEndYaw = (180 as libc::c_int as libc::c_double
-                + 20 as libc::c_int as libc::c_double
+            cg.headEndTime = ((cg.time + 100 as i32) as f32
+                + (::libc::rand() & 0x7fff as i32) as f32
+                    / 0x7fff as i32 as f32
+                    * 2000 as i32 as f32)
+                as i32;
+            cg.headEndYaw = (180 as i32 as f64
+                + 20 as i32 as f64
                     * crate::stdlib::cos(
                         2.0f64
-                            * (((::libc::rand() & 0x7fff as libc::c_int) as libc::c_float
-                                / 0x7fff as libc::c_int as libc::c_float)
-                                as libc::c_double
+                            * (((::libc::rand() & 0x7fff as i32) as f32
+                                / 0x7fff as i32 as f32)
+                                as f64
                                 - 0.5f64)
                             * 3.14159265358979323846f64,
-                    )) as libc::c_float;
-            cg.headEndPitch = (5 as libc::c_int as libc::c_double
+                    )) as f32;
+            cg.headEndPitch = (5 as i32 as f64
                 * crate::stdlib::cos(
                     2.0f64
-                        * (((::libc::rand() & 0x7fff as libc::c_int) as libc::c_float
-                            / 0x7fff as libc::c_int as libc::c_float)
-                            as libc::c_double
+                        * (((::libc::rand() & 0x7fff as i32) as f32
+                            / 0x7fff as i32 as f32)
+                            as f64
                             - 0.5f64)
                         * 3.14159265358979323846f64,
-                )) as libc::c_float
+                )) as f32
         }
-        size = (48 as libc::c_int as libc::c_double * 1.25f64) as libc::c_float
+        size = (48 as i32 as f64 * 1.25f64) as f32
     }
     // if the server was frozen for a while we may have a bad head start time
     if cg.headStartTime > cg.time {
         cg.headStartTime = cg.time
     }
-    frac = (cg.time - cg.headStartTime) as libc::c_float
-        / (cg.headEndTime - cg.headStartTime) as libc::c_float;
+    frac = (cg.time - cg.headStartTime) as f32
+        / (cg.headEndTime - cg.headStartTime) as f32;
     frac = frac
         * frac
-        * (3 as libc::c_int as libc::c_float - 2 as libc::c_int as libc::c_float * frac);
-    angles[1 as libc::c_int as usize] = cg.headStartYaw + (cg.headEndYaw - cg.headStartYaw) * frac;
-    angles[0 as libc::c_int as usize] =
+        * (3 as i32 as f32 - 2 as i32 as f32 * frac);
+    angles[1 as i32 as usize] = cg.headStartYaw + (cg.headEndYaw - cg.headStartYaw) * frac;
+    angles[0 as i32 as usize] =
         cg.headStartPitch + (cg.headEndPitch - cg.headStartPitch) * frac;
     CG_DrawHead(
         x,
-        480 as libc::c_int as libc::c_float - size,
+        480 as i32 as f32 - size,
         size,
         size,
         (*cg.snap).ps.clientNum,
@@ -792,12 +792,12 @@ CG_DrawStatusBarFlag
 ================
 */
 
-unsafe extern "C" fn CG_DrawStatusBarFlag(mut x: libc::c_float, mut team: libc::c_int) {
+unsafe extern "C" fn CG_DrawStatusBarFlag(mut x: f32, mut team: i32) {
     CG_DrawFlagModel(
         x,
-        (480 as libc::c_int - 48 as libc::c_int) as libc::c_float,
-        48 as libc::c_int as libc::c_float,
-        48 as libc::c_int as libc::c_float,
+        (480 as i32 - 48 as i32) as f32,
+        48 as i32 as f32,
+        48 as i32 as f32,
         team,
         qfalse,
     );
@@ -812,35 +812,35 @@ CG_DrawTeamBackground
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_DrawTeamBackground(
-    mut x: libc::c_int,
-    mut y: libc::c_int,
-    mut w: libc::c_int,
-    mut h: libc::c_int,
-    mut alpha: libc::c_float,
-    mut team: libc::c_int,
+    mut x: i32,
+    mut y: i32,
+    mut w: i32,
+    mut h: i32,
+    mut alpha: f32,
+    mut team: i32,
 ) {
     let mut hcolor: vec4_t = [0.; 4];
-    hcolor[3 as libc::c_int as usize] = alpha;
-    if team == crate::bg_public_h::TEAM_RED as libc::c_int {
-        hcolor[0 as libc::c_int as usize] = 1 as libc::c_int as vec_t;
-        hcolor[1 as libc::c_int as usize] = 0 as libc::c_int as vec_t;
-        hcolor[2 as libc::c_int as usize] = 0 as libc::c_int as vec_t
-    } else if team == crate::bg_public_h::TEAM_BLUE as libc::c_int {
-        hcolor[0 as libc::c_int as usize] = 0 as libc::c_int as vec_t;
-        hcolor[1 as libc::c_int as usize] = 0 as libc::c_int as vec_t;
-        hcolor[2 as libc::c_int as usize] = 1 as libc::c_int as vec_t
+    hcolor[3 as i32 as usize] = alpha;
+    if team == crate::bg_public_h::TEAM_RED as i32 {
+        hcolor[0 as i32 as usize] = 1 as i32 as vec_t;
+        hcolor[1 as i32 as usize] = 0 as i32 as vec_t;
+        hcolor[2 as i32 as usize] = 0 as i32 as vec_t
+    } else if team == crate::bg_public_h::TEAM_BLUE as i32 {
+        hcolor[0 as i32 as usize] = 0 as i32 as vec_t;
+        hcolor[1 as i32 as usize] = 0 as i32 as vec_t;
+        hcolor[2 as i32 as usize] = 1 as i32 as vec_t
     } else {
         return;
     }
     crate::src::cgame::cg_syscalls::trap_R_SetColor(hcolor.as_mut_ptr());
     CG_DrawPic(
-        x as libc::c_float,
-        y as libc::c_float,
-        w as libc::c_float,
-        h as libc::c_float,
+        x as f32,
+        y as f32,
+        w as f32,
+        h as f32,
         cgs.media.teamStatusBar,
     );
-    crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const libc::c_float);
+    crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const f32);
 }
 /*
 ================
@@ -850,111 +850,111 @@ CG_DrawStatusBar
 */
 
 unsafe extern "C" fn CG_DrawStatusBar() {
-    let mut color: libc::c_int = 0; // health > 100
+    let mut color: i32 = 0; // health > 100
     let mut cent: *mut crate::cg_local_h::centity_t = 0 as *mut crate::cg_local_h::centity_t;
     let mut ps: *mut playerState_t = 0 as *mut playerState_t;
-    let mut value: libc::c_int = 0;
+    let mut value: i32 = 0;
     let mut hcolor: vec4_t = [0.; 4];
     let mut angles: vec3_t = [0.; 3];
     let mut origin: vec3_t = [0.; 3];
-    static mut colors: [[libc::c_float; 4]; 4] = [
+    static mut colors: [[f32; 4]; 4] = [
         [1.0f32, 0.69f32, 0.0f32, 1.0f32],
         [1.0f32, 0.2f32, 0.2f32, 1.0f32],
         [0.5f32, 0.5f32, 0.5f32, 1.0f32],
         [1.0f32, 1.0f32, 1.0f32, 1.0f32],
     ];
-    if cg_drawStatus.integer == 0 as libc::c_int {
+    if cg_drawStatus.integer == 0 as i32 {
         return;
     }
     // draw the team background
     CG_DrawTeamBackground(
-        0 as libc::c_int,
-        420 as libc::c_int,
-        640 as libc::c_int,
-        60 as libc::c_int,
+        0 as i32,
+        420 as i32,
+        640 as i32,
+        60 as i32,
         0.33f32,
-        (*cg.snap).ps.persistant[crate::bg_public_h::PERS_TEAM as libc::c_int as usize],
+        (*cg.snap).ps.persistant[crate::bg_public_h::PERS_TEAM as i32 as usize],
     );
     cent = &mut *cg_entities
         .as_mut_ptr()
         .offset((*cg.snap).ps.clientNum as isize) as *mut crate::cg_local_h::centity_t;
     ps = &mut (*cg.snap).ps;
-    angles[2 as libc::c_int as usize] = 0 as libc::c_int as vec_t;
-    angles[1 as libc::c_int as usize] = angles[2 as libc::c_int as usize];
-    angles[0 as libc::c_int as usize] = angles[1 as libc::c_int as usize];
+    angles[2 as i32 as usize] = 0 as i32 as vec_t;
+    angles[1 as i32 as usize] = angles[2 as i32 as usize];
+    angles[0 as i32 as usize] = angles[1 as i32 as usize];
     // draw any 3D icons first, so the changes back to 2D are minimized
     if (*cent).currentState.weapon != 0
         && cg_weapons[(*cent).currentState.weapon as usize].ammoModel != 0
     {
-        origin[0 as libc::c_int as usize] = 70 as libc::c_int as vec_t;
-        origin[1 as libc::c_int as usize] = 0 as libc::c_int as vec_t;
-        origin[2 as libc::c_int as usize] = 0 as libc::c_int as vec_t;
-        angles[1 as libc::c_int as usize] = (90 as libc::c_int as libc::c_double
-            + 20 as libc::c_int as libc::c_double
-                * crate::stdlib::sin(cg.time as libc::c_double / 1000.0f64))
+        origin[0 as i32 as usize] = 70 as i32 as vec_t;
+        origin[1 as i32 as usize] = 0 as i32 as vec_t;
+        origin[2 as i32 as usize] = 0 as i32 as vec_t;
+        angles[1 as i32 as usize] = (90 as i32 as f64
+            + 20 as i32 as f64
+                * crate::stdlib::sin(cg.time as f64 / 1000.0f64))
             as vec_t;
         CG_Draw3DModel(
-            (32 as libc::c_int * 3 as libc::c_int + 4 as libc::c_int) as libc::c_float,
-            432 as libc::c_int as libc::c_float,
-            48 as libc::c_int as libc::c_float,
-            48 as libc::c_int as libc::c_float,
+            (32 as i32 * 3 as i32 + 4 as i32) as f32,
+            432 as i32 as f32,
+            48 as i32 as f32,
+            48 as i32 as f32,
             cg_weapons[(*cent).currentState.weapon as usize].ammoModel,
-            0 as libc::c_int,
+            0 as i32,
             origin.as_mut_ptr(),
             angles.as_mut_ptr(),
         );
     }
     CG_DrawStatusBarHead(
-        (185 as libc::c_int + 32 as libc::c_int * 3 as libc::c_int + 4 as libc::c_int)
-            as libc::c_float,
+        (185 as i32 + 32 as i32 * 3 as i32 + 4 as i32)
+            as f32,
     );
-    if cg.predictedPlayerState.powerups[crate::bg_public_h::PW_REDFLAG as libc::c_int as usize] != 0
+    if cg.predictedPlayerState.powerups[crate::bg_public_h::PW_REDFLAG as i32 as usize] != 0
     {
         CG_DrawStatusBarFlag(
-            (185 as libc::c_int
-                + 32 as libc::c_int * 3 as libc::c_int
-                + 4 as libc::c_int
-                + 48 as libc::c_int) as libc::c_float,
-            crate::bg_public_h::TEAM_RED as libc::c_int,
+            (185 as i32
+                + 32 as i32 * 3 as i32
+                + 4 as i32
+                + 48 as i32) as f32,
+            crate::bg_public_h::TEAM_RED as i32,
         );
     } else if cg.predictedPlayerState.powerups
-        [crate::bg_public_h::PW_BLUEFLAG as libc::c_int as usize]
+        [crate::bg_public_h::PW_BLUEFLAG as i32 as usize]
         != 0
     {
         CG_DrawStatusBarFlag(
-            (185 as libc::c_int
-                + 32 as libc::c_int * 3 as libc::c_int
-                + 4 as libc::c_int
-                + 48 as libc::c_int) as libc::c_float,
-            crate::bg_public_h::TEAM_BLUE as libc::c_int,
+            (185 as i32
+                + 32 as i32 * 3 as i32
+                + 4 as i32
+                + 48 as i32) as f32,
+            crate::bg_public_h::TEAM_BLUE as i32,
         );
     } else if cg.predictedPlayerState.powerups
-        [crate::bg_public_h::PW_NEUTRALFLAG as libc::c_int as usize]
+        [crate::bg_public_h::PW_NEUTRALFLAG as i32 as usize]
         != 0
     {
         CG_DrawStatusBarFlag(
-            (185 as libc::c_int
-                + 32 as libc::c_int * 3 as libc::c_int
-                + 4 as libc::c_int
-                + 48 as libc::c_int) as libc::c_float,
-            crate::bg_public_h::TEAM_FREE as libc::c_int,
+            (185 as i32
+                + 32 as i32 * 3 as i32
+                + 4 as i32
+                + 48 as i32) as f32,
+            crate::bg_public_h::TEAM_FREE as i32,
         );
     }
-    if (*ps).stats[crate::bg_public_h::STAT_ARMOR as libc::c_int as usize] != 0 {
-        origin[0 as libc::c_int as usize] = 90 as libc::c_int as vec_t;
-        origin[1 as libc::c_int as usize] = 0 as libc::c_int as vec_t;
-        origin[2 as libc::c_int as usize] = -(10 as libc::c_int) as vec_t;
-        angles[1 as libc::c_int as usize] = (((cg.time & 2047 as libc::c_int) * 360 as libc::c_int)
-            as libc::c_double
+    if (*ps).stats[crate::bg_public_h::STAT_ARMOR as i32 as usize] != 0 {
+        origin[0 as i32 as usize] = 90 as i32 as vec_t;
+        origin[1 as i32 as usize] = 0 as i32 as vec_t;
+        origin[2 as i32 as usize] = -(10 as i32) as vec_t;
+        angles[1 as i32 as usize] = (((cg.time & 2047 as i32) * 360 as i32)
+            as f64
             / 2048.0f64) as vec_t;
         CG_Draw3DModel(
-            (370 as libc::c_int + 32 as libc::c_int * 3 as libc::c_int + 4 as libc::c_int)
-                as libc::c_float,
-            432 as libc::c_int as libc::c_float,
-            48 as libc::c_int as libc::c_float,
-            48 as libc::c_int as libc::c_float,
+            (370 as i32 + 32 as i32 * 3 as i32 + 4 as i32)
+                as f32,
+            432 as i32 as f32,
+            48 as i32 as f32,
+            48 as i32 as f32,
             cgs.media.armorModel,
-            0 as libc::c_int,
+            0 as i32,
             origin.as_mut_ptr(),
             angles.as_mut_ptr(),
         );
@@ -964,39 +964,39 @@ unsafe extern "C" fn CG_DrawStatusBar() {
     //
     if (*cent).currentState.weapon != 0 {
         value = (*ps).ammo[(*cent).currentState.weapon as usize];
-        if value > -(1 as libc::c_int) {
+        if value > -(1 as i32) {
             if cg.predictedPlayerState.weaponstate
-                == crate::bg_public_h::WEAPON_FIRING as libc::c_int
-                && cg.predictedPlayerState.weaponTime > 100 as libc::c_int
+                == crate::bg_public_h::WEAPON_FIRING as i32
+                && cg.predictedPlayerState.weaponTime > 100 as i32
             {
                 // draw as dark grey when reloading
-                color = 2 as libc::c_int
+                color = 2 as i32
             // dark grey
-            } else if value >= 0 as libc::c_int {
-                color = 0 as libc::c_int
+            } else if value >= 0 as i32 {
+                color = 0 as i32
             // green
             } else {
-                color = 1 as libc::c_int
+                color = 1 as i32
                 // red
             }
             crate::src::cgame::cg_syscalls::trap_R_SetColor(colors[color as usize].as_mut_ptr());
             CG_DrawField(
-                0 as libc::c_int,
-                432 as libc::c_int,
-                3 as libc::c_int,
+                0 as i32,
+                432 as i32,
+                3 as i32,
                 value,
             );
-            crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const libc::c_float);
+            crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const f32);
             // if we didn't draw a 3D icon, draw a 2D icon for ammo
             if cg_draw3dIcons.integer == 0 && cg_drawIcons.integer != 0 {
                 let mut icon: qhandle_t = 0;
                 icon = cg_weapons[cg.predictedPlayerState.weapon as usize].ammoIcon;
                 if icon != 0 {
                     CG_DrawPic(
-                        (32 as libc::c_int * 3 as libc::c_int + 4 as libc::c_int) as libc::c_float,
-                        432 as libc::c_int as libc::c_float,
-                        48 as libc::c_int as libc::c_float,
-                        48 as libc::c_int as libc::c_float,
+                        (32 as i32 * 3 as i32 + 4 as i32) as f32,
+                        432 as i32 as f32,
+                        48 as i32 as f32,
+                        48 as i32 as f32,
                         icon,
                     );
                 }
@@ -1006,31 +1006,31 @@ unsafe extern "C" fn CG_DrawStatusBar() {
     //
     // health
     //
-    value = (*ps).stats[crate::bg_public_h::STAT_HEALTH as libc::c_int as usize];
-    if value > 100 as libc::c_int {
+    value = (*ps).stats[crate::bg_public_h::STAT_HEALTH as i32 as usize];
+    if value > 100 as i32 {
         crate::src::cgame::cg_syscalls::trap_R_SetColor(
-            colors[3 as libc::c_int as usize].as_mut_ptr(),
+            colors[3 as i32 as usize].as_mut_ptr(),
         );
     // white
-    } else if value > 25 as libc::c_int {
+    } else if value > 25 as i32 {
         crate::src::cgame::cg_syscalls::trap_R_SetColor(
-            colors[0 as libc::c_int as usize].as_mut_ptr(),
+            colors[0 as i32 as usize].as_mut_ptr(),
         );
     // green
-    } else if value > 0 as libc::c_int {
-        color = cg.time >> 8 as libc::c_int & 1 as libc::c_int; // flash
+    } else if value > 0 as i32 {
+        color = cg.time >> 8 as i32 & 1 as i32; // flash
         crate::src::cgame::cg_syscalls::trap_R_SetColor(colors[color as usize].as_mut_ptr());
     } else {
         crate::src::cgame::cg_syscalls::trap_R_SetColor(
-            colors[1 as libc::c_int as usize].as_mut_ptr(),
+            colors[1 as i32 as usize].as_mut_ptr(),
         );
         // red
     }
     // stretch the health up when taking damage
     CG_DrawField(
-        185 as libc::c_int,
-        432 as libc::c_int,
-        3 as libc::c_int,
+        185 as i32,
+        432 as i32,
+        3 as i32,
         value,
     );
     CG_ColorForHealth(hcolor.as_mut_ptr());
@@ -1038,26 +1038,26 @@ unsafe extern "C" fn CG_DrawStatusBar() {
     //
     // armor
     //
-    value = (*ps).stats[crate::bg_public_h::STAT_ARMOR as libc::c_int as usize];
-    if value > 0 as libc::c_int {
+    value = (*ps).stats[crate::bg_public_h::STAT_ARMOR as i32 as usize];
+    if value > 0 as i32 {
         crate::src::cgame::cg_syscalls::trap_R_SetColor(
-            colors[0 as libc::c_int as usize].as_mut_ptr(),
+            colors[0 as i32 as usize].as_mut_ptr(),
         );
         CG_DrawField(
-            370 as libc::c_int,
-            432 as libc::c_int,
-            3 as libc::c_int,
+            370 as i32,
+            432 as i32,
+            3 as i32,
             value,
         );
-        crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const libc::c_float);
+        crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const f32);
         // if we didn't draw a 3D icon, draw a 2D icon for armor
         if cg_draw3dIcons.integer == 0 && cg_drawIcons.integer != 0 {
             CG_DrawPic(
-                (370 as libc::c_int + 32 as libc::c_int * 3 as libc::c_int + 4 as libc::c_int)
-                    as libc::c_float,
-                432 as libc::c_int as libc::c_float,
-                48 as libc::c_int as libc::c_float,
-                48 as libc::c_int as libc::c_float,
+                (370 as i32 + 32 as i32 * 3 as i32 + 4 as i32)
+                    as f32,
+                432 as i32 as f32,
+                48 as i32 as f32,
+                48 as i32 as f32,
                 cgs.media.armorIcon,
             );
         }
@@ -1077,15 +1077,15 @@ CG_DrawAttacker
 ================
 */
 
-unsafe extern "C" fn CG_DrawAttacker(mut y: libc::c_float) -> libc::c_float {
-    let mut t: libc::c_int = 0;
-    let mut size: libc::c_float = 0.;
+unsafe extern "C" fn CG_DrawAttacker(mut y: f32) -> f32 {
+    let mut t: i32 = 0;
+    let mut size: f32 = 0.;
     let mut angles: vec3_t = [0.; 3];
     let mut info: *const libc::c_char = 0 as *const libc::c_char;
     let mut name: *const libc::c_char = 0 as *const libc::c_char;
-    let mut clientNum: libc::c_int = 0;
-    if cg.predictedPlayerState.stats[crate::bg_public_h::STAT_HEALTH as libc::c_int as usize]
-        <= 0 as libc::c_int
+    let mut clientNum: i32 = 0;
+    if cg.predictedPlayerState.stats[crate::bg_public_h::STAT_HEALTH as i32 as usize]
+        <= 0 as i32
     {
         return y;
     }
@@ -1093,44 +1093,44 @@ unsafe extern "C" fn CG_DrawAttacker(mut y: libc::c_float) -> libc::c_float {
         return y;
     }
     clientNum = cg.predictedPlayerState.persistant
-        [crate::bg_public_h::PERS_ATTACKER as libc::c_int as usize];
-    if clientNum < 0 as libc::c_int
-        || clientNum >= 64 as libc::c_int
+        [crate::bg_public_h::PERS_ATTACKER as i32 as usize];
+    if clientNum < 0 as i32
+        || clientNum >= 64 as i32
         || clientNum == (*cg.snap).ps.clientNum
     {
         return y;
     }
     if cgs.clientinfo[clientNum as usize].infoValid as u64 == 0 {
-        cg.attackerTime = 0 as libc::c_int;
+        cg.attackerTime = 0 as i32;
         return y;
     }
     t = cg.time - cg.attackerTime;
-    if t > 10000 as libc::c_int {
-        cg.attackerTime = 0 as libc::c_int;
+    if t > 10000 as i32 {
+        cg.attackerTime = 0 as i32;
         return y;
     }
-    size = (48 as libc::c_int as libc::c_double * 1.25f64) as libc::c_float;
-    angles[0 as libc::c_int as usize] = 0 as libc::c_int as vec_t;
-    angles[1 as libc::c_int as usize] = 180 as libc::c_int as vec_t;
-    angles[2 as libc::c_int as usize] = 0 as libc::c_int as vec_t;
+    size = (48 as i32 as f64 * 1.25f64) as f32;
+    angles[0 as i32 as usize] = 0 as i32 as vec_t;
+    angles[1 as i32 as usize] = 180 as i32 as vec_t;
+    angles[2 as i32 as usize] = 0 as i32 as vec_t;
     CG_DrawHead(
-        640 as libc::c_int as libc::c_float - size,
+        640 as i32 as f32 - size,
         y,
         size,
         size,
         clientNum,
         angles.as_mut_ptr(),
     );
-    info = CG_ConfigString(32 as libc::c_int + 256 as libc::c_int + 256 as libc::c_int + clientNum);
+    info = CG_ConfigString(32 as i32 + 256 as i32 + 256 as i32 + clientNum);
     name = Info_ValueForKey(info, b"n\x00" as *const u8 as *const libc::c_char);
     y += size;
     CG_DrawBigString(
-        640 as libc::c_int - Q_PrintStrlen(name) * 16 as libc::c_int,
-        y as libc::c_int,
+        640 as i32 - Q_PrintStrlen(name) * 16 as i32,
+        y as i32,
         name,
-        0.5f64 as libc::c_float,
+        0.5f64 as f32,
     );
-    return y + 16 as libc::c_int as libc::c_float + 2 as libc::c_int as libc::c_float;
+    return y + 16 as i32 as f32 + 2 as i32 as f32;
 }
 /*
 ==================
@@ -1138,68 +1138,68 @@ CG_DrawSnapshot
 ==================
 */
 
-unsafe extern "C" fn CG_DrawSnapshot(mut y: libc::c_float) -> libc::c_float {
+unsafe extern "C" fn CG_DrawSnapshot(mut y: f32) -> f32 {
     let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut w: libc::c_int = 0;
+    let mut w: i32 = 0;
     s = va(
         b"time:%i snap:%i cmd:%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         (*cg.snap).serverTime,
         cg.latestSnapshotNum,
         cgs.serverCommandSequence,
     );
-    w = CG_DrawStrlen(s) * 16 as libc::c_int;
+    w = CG_DrawStrlen(s) * 16 as i32;
     CG_DrawBigString(
-        635 as libc::c_int - w,
-        (y + 2 as libc::c_int as libc::c_float) as libc::c_int,
+        635 as i32 - w,
+        (y + 2 as i32 as f32) as i32,
         s,
         1.0f32,
     );
-    return y + 16 as libc::c_int as libc::c_float + 4 as libc::c_int as libc::c_float;
+    return y + 16 as i32 as f32 + 4 as i32 as f32;
 }
 
-unsafe extern "C" fn CG_DrawFPS(mut y: libc::c_float) -> libc::c_float {
+unsafe extern "C" fn CG_DrawFPS(mut y: f32) -> f32 {
     let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut w: libc::c_int = 0;
-    static mut previousTimes: [libc::c_int; 4] = [0; 4];
-    static mut index: libc::c_int = 0;
-    let mut i: libc::c_int = 0;
-    let mut total: libc::c_int = 0;
-    let mut fps: libc::c_int = 0;
-    static mut previous: libc::c_int = 0;
-    let mut t: libc::c_int = 0;
-    let mut frameTime: libc::c_int = 0;
+    let mut w: i32 = 0;
+    static mut previousTimes: [i32; 4] = [0; 4];
+    static mut index: i32 = 0;
+    let mut i: i32 = 0;
+    let mut total: i32 = 0;
+    let mut fps: i32 = 0;
+    static mut previous: i32 = 0;
+    let mut t: i32 = 0;
+    let mut frameTime: i32 = 0;
     // don't use serverTime, because that will be drifting to
     // correct for internet lag changes, timescales, timedemos, etc
     t = crate::src::cgame::cg_syscalls::trap_Milliseconds();
     frameTime = t - previous;
     previous = t;
-    previousTimes[(index % 4 as libc::c_int) as usize] = frameTime;
+    previousTimes[(index % 4 as i32) as usize] = frameTime;
     index += 1;
-    if index > 4 as libc::c_int {
+    if index > 4 as i32 {
         // average multiple frames together to smooth changes out a bit
-        total = 0 as libc::c_int;
-        i = 0 as libc::c_int;
-        while i < 4 as libc::c_int {
+        total = 0 as i32;
+        i = 0 as i32;
+        while i < 4 as i32 {
             total += previousTimes[i as usize];
             i += 1
         }
         if total == 0 {
-            total = 1 as libc::c_int
+            total = 1 as i32
         }
-        fps = 1000 as libc::c_int * 4 as libc::c_int / total;
+        fps = 1000 as i32 * 4 as i32 / total;
         s = va(
             b"%ifps\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             fps,
         );
-        w = CG_DrawStrlen(s) * 16 as libc::c_int;
+        w = CG_DrawStrlen(s) * 16 as i32;
         CG_DrawBigString(
-            635 as libc::c_int - w,
-            (y + 2 as libc::c_int as libc::c_float) as libc::c_int,
+            635 as i32 - w,
+            (y + 2 as i32 as f32) as i32,
             s,
             1.0f32,
         );
     }
-    return y + 16 as libc::c_int as libc::c_float + 4 as libc::c_int as libc::c_float;
+    return y + 16 as i32 as f32 + 4 as i32 as f32;
 }
 /*
 =================
@@ -1207,33 +1207,33 @@ CG_DrawTimer
 =================
 */
 
-unsafe extern "C" fn CG_DrawTimer(mut y: libc::c_float) -> libc::c_float {
+unsafe extern "C" fn CG_DrawTimer(mut y: f32) -> f32 {
     let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut w: libc::c_int = 0;
-    let mut mins: libc::c_int = 0;
-    let mut seconds: libc::c_int = 0;
-    let mut tens: libc::c_int = 0;
-    let mut msec: libc::c_int = 0;
+    let mut w: i32 = 0;
+    let mut mins: i32 = 0;
+    let mut seconds: i32 = 0;
+    let mut tens: i32 = 0;
+    let mut msec: i32 = 0;
     msec = cg.time - cgs.levelStartTime;
-    seconds = msec / 1000 as libc::c_int;
-    mins = seconds / 60 as libc::c_int;
-    seconds -= mins * 60 as libc::c_int;
-    tens = seconds / 10 as libc::c_int;
-    seconds -= tens * 10 as libc::c_int;
+    seconds = msec / 1000 as i32;
+    mins = seconds / 60 as i32;
+    seconds -= mins * 60 as i32;
+    tens = seconds / 10 as i32;
+    seconds -= tens * 10 as i32;
     s = va(
         b"%i:%i%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         mins,
         tens,
         seconds,
     );
-    w = CG_DrawStrlen(s) * 16 as libc::c_int;
+    w = CG_DrawStrlen(s) * 16 as i32;
     CG_DrawBigString(
-        635 as libc::c_int - w,
-        (y + 2 as libc::c_int as libc::c_float) as libc::c_int,
+        635 as i32 - w,
+        (y + 2 as i32 as f32) as i32,
         s,
         1.0f32,
     );
-    return y + 16 as libc::c_int as libc::c_float + 4 as libc::c_int as libc::c_float;
+    return y + 16 as i32 as f32 + 4 as i32 as f32;
 }
 /*
 =================
@@ -1242,56 +1242,56 @@ CG_DrawTeamOverlay
 */
 
 unsafe extern "C" fn CG_DrawTeamOverlay(
-    mut y: libc::c_float,
+    mut y: f32,
     mut right: qboolean,
     mut upper: qboolean,
-) -> libc::c_float {
-    let mut x: libc::c_int = 0;
-    let mut w: libc::c_int = 0;
-    let mut h: libc::c_int = 0;
-    let mut xx: libc::c_int = 0;
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
-    let mut len: libc::c_int = 0;
+) -> f32 {
+    let mut x: i32 = 0;
+    let mut w: i32 = 0;
+    let mut h: i32 = 0;
+    let mut xx: i32 = 0;
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
+    let mut len: i32 = 0;
     let mut p: *const libc::c_char = 0 as *const libc::c_char;
     let mut hcolor: vec4_t = [0.; 4];
-    let mut pwidth: libc::c_int = 0;
-    let mut lwidth: libc::c_int = 0;
-    let mut plyrs: libc::c_int = 0;
+    let mut pwidth: i32 = 0;
+    let mut lwidth: i32 = 0;
+    let mut plyrs: i32 = 0;
     let mut st: [libc::c_char; 16] = [0; 16];
     let mut ci: *mut crate::cg_local_h::clientInfo_t = 0 as *mut crate::cg_local_h::clientInfo_t;
     let mut item: *mut crate::bg_public_h::gitem_t = 0 as *mut crate::bg_public_h::gitem_t;
-    let mut ret_y: libc::c_int = 0;
-    let mut count: libc::c_int = 0;
+    let mut ret_y: i32 = 0;
+    let mut count: i32 = 0;
     if cg_drawTeamOverlay.integer == 0 {
         return y;
     }
-    if (*cg.snap).ps.persistant[crate::bg_public_h::PERS_TEAM as libc::c_int as usize]
-        != crate::bg_public_h::TEAM_RED as libc::c_int
-        && (*cg.snap).ps.persistant[crate::bg_public_h::PERS_TEAM as libc::c_int as usize]
-            != crate::bg_public_h::TEAM_BLUE as libc::c_int
+    if (*cg.snap).ps.persistant[crate::bg_public_h::PERS_TEAM as i32 as usize]
+        != crate::bg_public_h::TEAM_RED as i32
+        && (*cg.snap).ps.persistant[crate::bg_public_h::PERS_TEAM as i32 as usize]
+            != crate::bg_public_h::TEAM_BLUE as i32
     {
         return y;
         // Not on any team
     }
-    plyrs = 0 as libc::c_int;
+    plyrs = 0 as i32;
     // max player name width
-    pwidth = 0 as libc::c_int;
-    count = if numSortedTeamPlayers > 8 as libc::c_int {
-        8 as libc::c_int
+    pwidth = 0 as i32;
+    count = if numSortedTeamPlayers > 8 as i32 {
+        8 as i32
     } else {
         numSortedTeamPlayers
     };
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < count {
         ci = cgs
             .clientinfo
             .as_mut_ptr()
             .offset(sortedTeamPlayers[i as usize] as isize);
-        if (*ci).infoValid as libc::c_uint != 0
-            && (*ci).team as libc::c_uint
-                == (*cg.snap).ps.persistant[crate::bg_public_h::PERS_TEAM as libc::c_int as usize]
-                    as libc::c_uint
+        if (*ci).infoValid as u32 != 0
+            && (*ci).team as u32
+                == (*cg.snap).ps.persistant[crate::bg_public_h::PERS_TEAM as i32 as usize]
+                    as u32
         {
             plyrs += 1;
             len = CG_DrawStrlen((*ci).name.as_mut_ptr());
@@ -1304,17 +1304,17 @@ unsafe extern "C" fn CG_DrawTeamOverlay(
     if plyrs == 0 {
         return y;
     }
-    if pwidth > 12 as libc::c_int {
-        pwidth = 12 as libc::c_int
+    if pwidth > 12 as i32 {
+        pwidth = 12 as i32
     }
     // max location name width
-    lwidth = 0 as libc::c_int; // if ( cg.snap->ps.persistant[PERS_TEAM] == TEAM_BLUE )
-    i = 1 as libc::c_int;
-    while i < 64 as libc::c_int {
+    lwidth = 0 as i32; // if ( cg.snap->ps.persistant[PERS_TEAM] == TEAM_BLUE )
+    i = 1 as i32;
+    while i < 64 as i32 {
         p = CG_ConfigString(
-            32 as libc::c_int + 256 as libc::c_int + 256 as libc::c_int + 64 as libc::c_int + i,
+            32 as i32 + 256 as i32 + 256 as i32 + 64 as i32 + i,
         );
-        if !p.is_null() && *p as libc::c_int != 0 {
+        if !p.is_null() && *p as i32 != 0 {
             len = CG_DrawStrlen(p);
             if len > lwidth {
                 lwidth = len
@@ -1322,77 +1322,77 @@ unsafe extern "C" fn CG_DrawTeamOverlay(
         }
         i += 1
     }
-    if lwidth > 16 as libc::c_int {
-        lwidth = 16 as libc::c_int
+    if lwidth > 16 as i32 {
+        lwidth = 16 as i32
     }
-    w = (pwidth + lwidth + 4 as libc::c_int + 7 as libc::c_int) * 8 as libc::c_int;
+    w = (pwidth + lwidth + 4 as i32 + 7 as i32) * 8 as i32;
     if right as u64 != 0 {
-        x = 640 as libc::c_int - w
+        x = 640 as i32 - w
     } else {
-        x = 0 as libc::c_int
+        x = 0 as i32
     }
-    h = plyrs * (16 as libc::c_int / 2 as libc::c_int);
+    h = plyrs * (16 as i32 / 2 as i32);
     if upper as u64 != 0 {
-        ret_y = (y + h as libc::c_float) as libc::c_int
+        ret_y = (y + h as f32) as i32
     } else {
-        y -= h as libc::c_float;
-        ret_y = y as libc::c_int
+        y -= h as f32;
+        ret_y = y as i32
     }
-    if (*cg.snap).ps.persistant[crate::bg_public_h::PERS_TEAM as libc::c_int as usize]
-        == crate::bg_public_h::TEAM_RED as libc::c_int
+    if (*cg.snap).ps.persistant[crate::bg_public_h::PERS_TEAM as i32 as usize]
+        == crate::bg_public_h::TEAM_RED as i32
     {
-        hcolor[0 as libc::c_int as usize] = 1.0f32;
-        hcolor[1 as libc::c_int as usize] = 0.0f32;
-        hcolor[2 as libc::c_int as usize] = 0.0f32;
-        hcolor[3 as libc::c_int as usize] = 0.33f32
+        hcolor[0 as i32 as usize] = 1.0f32;
+        hcolor[1 as i32 as usize] = 0.0f32;
+        hcolor[2 as i32 as usize] = 0.0f32;
+        hcolor[3 as i32 as usize] = 0.33f32
     } else {
-        hcolor[0 as libc::c_int as usize] = 0.0f32;
-        hcolor[1 as libc::c_int as usize] = 0.0f32;
-        hcolor[2 as libc::c_int as usize] = 1.0f32;
-        hcolor[3 as libc::c_int as usize] = 0.33f32
+        hcolor[0 as i32 as usize] = 0.0f32;
+        hcolor[1 as i32 as usize] = 0.0f32;
+        hcolor[2 as i32 as usize] = 1.0f32;
+        hcolor[3 as i32 as usize] = 0.33f32
     }
     crate::src::cgame::cg_syscalls::trap_R_SetColor(hcolor.as_mut_ptr());
     CG_DrawPic(
-        x as libc::c_float,
+        x as f32,
         y,
-        w as libc::c_float,
-        h as libc::c_float,
+        w as f32,
+        h as f32,
         cgs.media.teamStatusBar,
     );
-    crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const libc::c_float);
-    i = 0 as libc::c_int;
+    crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const f32);
+    i = 0 as i32;
     while i < count {
         ci = cgs
             .clientinfo
             .as_mut_ptr()
             .offset(sortedTeamPlayers[i as usize] as isize);
-        if (*ci).infoValid as libc::c_uint != 0
-            && (*ci).team as libc::c_uint
-                == (*cg.snap).ps.persistant[crate::bg_public_h::PERS_TEAM as libc::c_int as usize]
-                    as libc::c_uint
+        if (*ci).infoValid as u32 != 0
+            && (*ci).team as u32
+                == (*cg.snap).ps.persistant[crate::bg_public_h::PERS_TEAM as i32 as usize]
+                    as u32
         {
-            hcolor[3 as libc::c_int as usize] = 1.0f64 as vec_t;
-            hcolor[2 as libc::c_int as usize] = hcolor[3 as libc::c_int as usize];
-            hcolor[1 as libc::c_int as usize] = hcolor[2 as libc::c_int as usize];
-            hcolor[0 as libc::c_int as usize] = hcolor[1 as libc::c_int as usize];
-            xx = x + 8 as libc::c_int;
+            hcolor[3 as i32 as usize] = 1.0f64 as vec_t;
+            hcolor[2 as i32 as usize] = hcolor[3 as i32 as usize];
+            hcolor[1 as i32 as usize] = hcolor[2 as i32 as usize];
+            hcolor[0 as i32 as usize] = hcolor[1 as i32 as usize];
+            xx = x + 8 as i32;
             CG_DrawStringExt(
                 xx,
-                y as libc::c_int,
+                y as i32,
                 (*ci).name.as_mut_ptr(),
                 hcolor.as_mut_ptr(),
                 qfalse,
                 qfalse,
-                8 as libc::c_int,
-                16 as libc::c_int / 2 as libc::c_int,
-                12 as libc::c_int,
+                8 as i32,
+                16 as i32 / 2 as i32,
+                12 as i32,
             );
             if lwidth != 0 {
                 p = CG_ConfigString(
-                    32 as libc::c_int
-                        + 256 as libc::c_int
-                        + 256 as libc::c_int
-                        + 64 as libc::c_int
+                    32 as i32
+                        + 256 as i32
+                        + 256 as i32
+                        + 64 as i32
                         + (*ci).location,
                 );
                 if p.is_null() || *p == 0 {
@@ -1403,58 +1403,58 @@ unsafe extern "C" fn CG_DrawTeamOverlay(
                 //					len = lwidth;
                 //				xx = x + TINYCHAR_WIDTH * 2 + TINYCHAR_WIDTH * pwidth +
                 //					((lwidth/2 - len/2) * TINYCHAR_WIDTH);
-                xx = x + 8 as libc::c_int * 2 as libc::c_int + 8 as libc::c_int * pwidth;
+                xx = x + 8 as i32 * 2 as i32 + 8 as i32 * pwidth;
                 CG_DrawStringExt(
                     xx,
-                    y as libc::c_int,
+                    y as i32,
                     p,
                     hcolor.as_mut_ptr(),
                     qfalse,
                     qfalse,
-                    8 as libc::c_int,
-                    16 as libc::c_int / 2 as libc::c_int,
-                    16 as libc::c_int,
+                    8 as i32,
+                    16 as i32 / 2 as i32,
+                    16 as i32,
                 );
             }
             CG_GetColorForHealth((*ci).health, (*ci).armor, hcolor.as_mut_ptr());
             Com_sprintf(
                 st.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as libc::c_int,
+                ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as i32,
                 b"%3i %3i\x00" as *const u8 as *const libc::c_char,
                 (*ci).health,
                 (*ci).armor,
             );
             xx = x
-                + 8 as libc::c_int * 3 as libc::c_int
-                + 8 as libc::c_int * pwidth
-                + 8 as libc::c_int * lwidth;
+                + 8 as i32 * 3 as i32
+                + 8 as i32 * pwidth
+                + 8 as i32 * lwidth;
             CG_DrawStringExt(
                 xx,
-                y as libc::c_int,
+                y as i32,
                 st.as_mut_ptr(),
                 hcolor.as_mut_ptr(),
                 qfalse,
                 qfalse,
-                8 as libc::c_int,
-                16 as libc::c_int / 2 as libc::c_int,
-                0 as libc::c_int,
+                8 as i32,
+                16 as i32 / 2 as i32,
+                0 as i32,
             );
             // draw weapon icon
-            xx += 8 as libc::c_int * 3 as libc::c_int;
+            xx += 8 as i32 * 3 as i32;
             if cg_weapons[(*ci).curWeapon as usize].weaponIcon != 0 {
                 CG_DrawPic(
-                    xx as libc::c_float,
+                    xx as f32,
                     y,
-                    8 as libc::c_int as libc::c_float,
-                    (16 as libc::c_int / 2 as libc::c_int) as libc::c_float,
+                    8 as i32 as f32,
+                    (16 as i32 / 2 as i32) as f32,
                     cg_weapons[(*ci).curWeapon as usize].weaponIcon,
                 );
             } else {
                 CG_DrawPic(
-                    xx as libc::c_float,
+                    xx as f32,
                     y,
-                    8 as libc::c_int as libc::c_float,
-                    (16 as libc::c_int / 2 as libc::c_int) as libc::c_float,
+                    8 as i32 as f32,
+                    (16 as i32 / 2 as i32) as f32,
                     cgs.media.deferShader,
                 );
             }
@@ -1462,36 +1462,36 @@ unsafe extern "C" fn CG_DrawTeamOverlay(
             if right as u64 != 0 {
                 xx = x
             } else {
-                xx = x + w - 8 as libc::c_int
+                xx = x + w - 8 as i32
             }
-            j = 0 as libc::c_int;
-            while j <= crate::bg_public_h::PW_NUM_POWERUPS as libc::c_int {
-                if (*ci).powerups & (1 as libc::c_int) << j != 0 {
+            j = 0 as i32;
+            while j <= crate::bg_public_h::PW_NUM_POWERUPS as i32 {
+                if (*ci).powerups & (1 as i32) << j != 0 {
                     item = crate::src::game::bg_misc::BG_FindItemForPowerup(
                         j as crate::bg_public_h::powerup_t,
                     ) as *mut crate::bg_public_h::gitem_s;
                     if !item.is_null() {
                         CG_DrawPic(
-                            xx as libc::c_float,
+                            xx as f32,
                             y,
-                            8 as libc::c_int as libc::c_float,
-                            (16 as libc::c_int / 2 as libc::c_int) as libc::c_float,
+                            8 as i32 as f32,
+                            (16 as i32 / 2 as i32) as f32,
                             crate::src::cgame::cg_syscalls::trap_R_RegisterShader((*item).icon),
                         );
                         if right as u64 != 0 {
-                            xx -= 8 as libc::c_int
+                            xx -= 8 as i32
                         } else {
-                            xx += 8 as libc::c_int
+                            xx += 8 as i32
                         }
                     }
                 }
                 j += 1
             }
-            y += (16 as libc::c_int / 2 as libc::c_int) as libc::c_float
+            y += (16 as i32 / 2 as i32) as f32
         }
         i += 1
     }
-    return ret_y as libc::c_float;
+    return ret_y as f32;
     //#endif
 }
 /*
@@ -1502,10 +1502,10 @@ CG_DrawUpperRight
 */
 
 unsafe extern "C" fn CG_DrawUpperRight(mut stereoFrame: stereoFrame_t) {
-    let mut y: libc::c_float = 0.;
-    y = 0 as libc::c_int as libc::c_float;
-    if cgs.gametype as libc::c_uint >= crate::bg_public_h::GT_TEAM as libc::c_int as libc::c_uint
-        && cg_drawTeamOverlay.integer == 1 as libc::c_int
+    let mut y: f32 = 0.;
+    y = 0 as i32 as f32;
+    if cgs.gametype as u32 >= crate::bg_public_h::GT_TEAM as i32 as u32
+        && cg_drawTeamOverlay.integer == 1 as i32
     {
         y = CG_DrawTeamOverlay(y, qtrue, qtrue)
     }
@@ -1513,8 +1513,8 @@ unsafe extern "C" fn CG_DrawUpperRight(mut stereoFrame: stereoFrame_t) {
         y = CG_DrawSnapshot(y)
     }
     if cg_drawFPS.integer != 0
-        && (stereoFrame as libc::c_uint == STEREO_CENTER as libc::c_int as libc::c_uint
-            || stereoFrame as libc::c_uint == STEREO_RIGHT as libc::c_int as libc::c_uint)
+        && (stereoFrame as u32 == STEREO_CENTER as i32 as u32
+            || stereoFrame as u32 == STEREO_RIGHT as i32 as u32)
     {
         y = CG_DrawFPS(y)
     }
@@ -1540,119 +1540,119 @@ Draw the small two score display
 =================
 */
 
-unsafe extern "C" fn CG_DrawScores(mut y: libc::c_float) -> libc::c_float {
+unsafe extern "C" fn CG_DrawScores(mut y: f32) -> f32 {
     let mut s: *const libc::c_char = 0 as *const libc::c_char;
-    let mut s1: libc::c_int = 0;
-    let mut s2: libc::c_int = 0;
-    let mut score: libc::c_int = 0;
-    let mut x: libc::c_int = 0;
-    let mut w: libc::c_int = 0;
-    let mut v: libc::c_int = 0;
+    let mut s1: i32 = 0;
+    let mut s2: i32 = 0;
+    let mut score: i32 = 0;
+    let mut x: i32 = 0;
+    let mut w: i32 = 0;
+    let mut v: i32 = 0;
     let mut color: vec4_t = [0.; 4];
-    let mut y1: libc::c_float = 0.;
+    let mut y1: f32 = 0.;
     let mut item: *mut crate::bg_public_h::gitem_t = 0 as *mut crate::bg_public_h::gitem_t;
     s1 = cgs.scores1;
     s2 = cgs.scores2;
-    y -= (16 as libc::c_int + 8 as libc::c_int) as libc::c_float;
+    y -= (16 as i32 + 8 as i32) as f32;
     y1 = y;
     // draw from the right side to left
-    if cgs.gametype as libc::c_uint >= crate::bg_public_h::GT_TEAM as libc::c_int as libc::c_uint {
-        x = 640 as libc::c_int;
-        color[0 as libc::c_int as usize] = 0.0f32;
-        color[1 as libc::c_int as usize] = 0.0f32;
-        color[2 as libc::c_int as usize] = 1.0f32;
-        color[3 as libc::c_int as usize] = 0.33f32;
+    if cgs.gametype as u32 >= crate::bg_public_h::GT_TEAM as i32 as u32 {
+        x = 640 as i32;
+        color[0 as i32 as usize] = 0.0f32;
+        color[1 as i32 as usize] = 0.0f32;
+        color[2 as i32 as usize] = 1.0f32;
+        color[3 as i32 as usize] = 0.33f32;
         s = va(
             b"%2i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             s2,
         );
-        w = CG_DrawStrlen(s) * 16 as libc::c_int + 8 as libc::c_int;
+        w = CG_DrawStrlen(s) * 16 as i32 + 8 as i32;
         x -= w;
         CG_FillRect(
-            x as libc::c_float,
-            y - 4 as libc::c_int as libc::c_float,
-            w as libc::c_float,
-            (16 as libc::c_int + 8 as libc::c_int) as libc::c_float,
+            x as f32,
+            y - 4 as i32 as f32,
+            w as f32,
+            (16 as i32 + 8 as i32) as f32,
             color.as_mut_ptr(),
         );
-        if (*cg.snap).ps.persistant[crate::bg_public_h::PERS_TEAM as libc::c_int as usize]
-            == crate::bg_public_h::TEAM_BLUE as libc::c_int
+        if (*cg.snap).ps.persistant[crate::bg_public_h::PERS_TEAM as i32 as usize]
+            == crate::bg_public_h::TEAM_BLUE as i32
         {
             CG_DrawPic(
-                x as libc::c_float,
-                y - 4 as libc::c_int as libc::c_float,
-                w as libc::c_float,
-                (16 as libc::c_int + 8 as libc::c_int) as libc::c_float,
+                x as f32,
+                y - 4 as i32 as f32,
+                w as f32,
+                (16 as i32 + 8 as i32) as f32,
                 cgs.media.selectShader,
             );
         }
-        CG_DrawBigString(x + 4 as libc::c_int, y as libc::c_int, s, 1.0f32);
-        if cgs.gametype as libc::c_uint == crate::bg_public_h::GT_CTF as libc::c_int as libc::c_uint
+        CG_DrawBigString(x + 4 as i32, y as i32, s, 1.0f32);
+        if cgs.gametype as u32 == crate::bg_public_h::GT_CTF as i32 as u32
         {
             // Display flag status
             item = crate::src::game::bg_misc::BG_FindItemForPowerup(crate::bg_public_h::PW_BLUEFLAG)
                 as *mut crate::bg_public_h::gitem_s;
             if !item.is_null() {
-                y1 = y - 16 as libc::c_int as libc::c_float - 8 as libc::c_int as libc::c_float;
-                if cgs.blueflag >= 0 as libc::c_int && cgs.blueflag <= 2 as libc::c_int {
+                y1 = y - 16 as i32 as f32 - 8 as i32 as f32;
+                if cgs.blueflag >= 0 as i32 && cgs.blueflag <= 2 as i32 {
                     CG_DrawPic(
-                        x as libc::c_float,
-                        y1 - 4 as libc::c_int as libc::c_float,
-                        w as libc::c_float,
-                        (16 as libc::c_int + 8 as libc::c_int) as libc::c_float,
+                        x as f32,
+                        y1 - 4 as i32 as f32,
+                        w as f32,
+                        (16 as i32 + 8 as i32) as f32,
                         cgs.media.blueFlagShader[cgs.blueflag as usize],
                     );
                 }
             }
         }
-        color[0 as libc::c_int as usize] = 1.0f32;
-        color[1 as libc::c_int as usize] = 0.0f32;
-        color[2 as libc::c_int as usize] = 0.0f32;
-        color[3 as libc::c_int as usize] = 0.33f32;
+        color[0 as i32 as usize] = 1.0f32;
+        color[1 as i32 as usize] = 0.0f32;
+        color[2 as i32 as usize] = 0.0f32;
+        color[3 as i32 as usize] = 0.33f32;
         s = va(
             b"%2i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             s1,
         );
-        w = CG_DrawStrlen(s) * 16 as libc::c_int + 8 as libc::c_int;
+        w = CG_DrawStrlen(s) * 16 as i32 + 8 as i32;
         x -= w;
         CG_FillRect(
-            x as libc::c_float,
-            y - 4 as libc::c_int as libc::c_float,
-            w as libc::c_float,
-            (16 as libc::c_int + 8 as libc::c_int) as libc::c_float,
+            x as f32,
+            y - 4 as i32 as f32,
+            w as f32,
+            (16 as i32 + 8 as i32) as f32,
             color.as_mut_ptr(),
         );
-        if (*cg.snap).ps.persistant[crate::bg_public_h::PERS_TEAM as libc::c_int as usize]
-            == crate::bg_public_h::TEAM_RED as libc::c_int
+        if (*cg.snap).ps.persistant[crate::bg_public_h::PERS_TEAM as i32 as usize]
+            == crate::bg_public_h::TEAM_RED as i32
         {
             CG_DrawPic(
-                x as libc::c_float,
-                y - 4 as libc::c_int as libc::c_float,
-                w as libc::c_float,
-                (16 as libc::c_int + 8 as libc::c_int) as libc::c_float,
+                x as f32,
+                y - 4 as i32 as f32,
+                w as f32,
+                (16 as i32 + 8 as i32) as f32,
                 cgs.media.selectShader,
             );
         }
-        CG_DrawBigString(x + 4 as libc::c_int, y as libc::c_int, s, 1.0f32);
-        if cgs.gametype as libc::c_uint == crate::bg_public_h::GT_CTF as libc::c_int as libc::c_uint
+        CG_DrawBigString(x + 4 as i32, y as i32, s, 1.0f32);
+        if cgs.gametype as u32 == crate::bg_public_h::GT_CTF as i32 as u32
         {
             // Display flag status
             item = crate::src::game::bg_misc::BG_FindItemForPowerup(crate::bg_public_h::PW_REDFLAG)
                 as *mut crate::bg_public_h::gitem_s;
             if !item.is_null() {
-                y1 = y - 16 as libc::c_int as libc::c_float - 8 as libc::c_int as libc::c_float;
-                if cgs.redflag >= 0 as libc::c_int && cgs.redflag <= 2 as libc::c_int {
+                y1 = y - 16 as i32 as f32 - 8 as i32 as f32;
+                if cgs.redflag >= 0 as i32 && cgs.redflag <= 2 as i32 {
                     CG_DrawPic(
-                        x as libc::c_float,
-                        y1 - 4 as libc::c_int as libc::c_float,
-                        w as libc::c_float,
-                        (16 as libc::c_int + 8 as libc::c_int) as libc::c_float,
+                        x as f32,
+                        y1 - 4 as i32 as f32,
+                        w as f32,
+                        (16 as i32 + 8 as i32) as f32,
                         cgs.media.redFlagShader[cgs.redflag as usize],
                     );
                 }
             }
         }
-        if cgs.gametype as libc::c_uint >= crate::bg_public_h::GT_CTF as libc::c_int as libc::c_uint
+        if cgs.gametype as u32 >= crate::bg_public_h::GT_CTF as i32 as u32
         {
             v = cgs.capturelimit
         } else {
@@ -1663,116 +1663,116 @@ unsafe extern "C" fn CG_DrawScores(mut y: libc::c_float) -> libc::c_float {
                 b"%2i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 v,
             );
-            w = CG_DrawStrlen(s) * 16 as libc::c_int + 8 as libc::c_int;
+            w = CG_DrawStrlen(s) * 16 as i32 + 8 as i32;
             x -= w;
-            CG_DrawBigString(x + 4 as libc::c_int, y as libc::c_int, s, 1.0f32);
+            CG_DrawBigString(x + 4 as i32, y as i32, s, 1.0f32);
         }
     } else {
         let mut spectator: qboolean = qfalse;
-        x = 640 as libc::c_int;
-        score = (*cg.snap).ps.persistant[crate::bg_public_h::PERS_SCORE as libc::c_int as usize];
+        x = 640 as i32;
+        score = (*cg.snap).ps.persistant[crate::bg_public_h::PERS_SCORE as i32 as usize];
         spectator = ((*cg.snap).ps.persistant
-            [crate::bg_public_h::PERS_TEAM as libc::c_int as usize]
-            == crate::bg_public_h::TEAM_SPECTATOR as libc::c_int) as libc::c_int
+            [crate::bg_public_h::PERS_TEAM as i32 as usize]
+            == crate::bg_public_h::TEAM_SPECTATOR as i32) as i32
             as qboolean;
         // always show your score in the second box if not in first place
         if s1 != score {
             s2 = score
         }
-        if s2 != -(9999 as libc::c_int) {
+        if s2 != -(9999 as i32) {
             s = va(
                 b"%2i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 s2,
             );
-            w = CG_DrawStrlen(s) * 16 as libc::c_int + 8 as libc::c_int;
+            w = CG_DrawStrlen(s) * 16 as i32 + 8 as i32;
             x -= w;
             if spectator as u64 == 0 && score == s2 && score != s1 {
-                color[0 as libc::c_int as usize] = 1.0f32;
-                color[1 as libc::c_int as usize] = 0.0f32;
-                color[2 as libc::c_int as usize] = 0.0f32;
-                color[3 as libc::c_int as usize] = 0.33f32;
+                color[0 as i32 as usize] = 1.0f32;
+                color[1 as i32 as usize] = 0.0f32;
+                color[2 as i32 as usize] = 0.0f32;
+                color[3 as i32 as usize] = 0.33f32;
                 CG_FillRect(
-                    x as libc::c_float,
-                    y - 4 as libc::c_int as libc::c_float,
-                    w as libc::c_float,
-                    (16 as libc::c_int + 8 as libc::c_int) as libc::c_float,
+                    x as f32,
+                    y - 4 as i32 as f32,
+                    w as f32,
+                    (16 as i32 + 8 as i32) as f32,
                     color.as_mut_ptr(),
                 );
                 CG_DrawPic(
-                    x as libc::c_float,
-                    y - 4 as libc::c_int as libc::c_float,
-                    w as libc::c_float,
-                    (16 as libc::c_int + 8 as libc::c_int) as libc::c_float,
+                    x as f32,
+                    y - 4 as i32 as f32,
+                    w as f32,
+                    (16 as i32 + 8 as i32) as f32,
                     cgs.media.selectShader,
                 );
             } else {
-                color[0 as libc::c_int as usize] = 0.5f32;
-                color[1 as libc::c_int as usize] = 0.5f32;
-                color[2 as libc::c_int as usize] = 0.5f32;
-                color[3 as libc::c_int as usize] = 0.33f32;
+                color[0 as i32 as usize] = 0.5f32;
+                color[1 as i32 as usize] = 0.5f32;
+                color[2 as i32 as usize] = 0.5f32;
+                color[3 as i32 as usize] = 0.33f32;
                 CG_FillRect(
-                    x as libc::c_float,
-                    y - 4 as libc::c_int as libc::c_float,
-                    w as libc::c_float,
-                    (16 as libc::c_int + 8 as libc::c_int) as libc::c_float,
+                    x as f32,
+                    y - 4 as i32 as f32,
+                    w as f32,
+                    (16 as i32 + 8 as i32) as f32,
                     color.as_mut_ptr(),
                 );
             }
-            CG_DrawBigString(x + 4 as libc::c_int, y as libc::c_int, s, 1.0f32);
+            CG_DrawBigString(x + 4 as i32, y as i32, s, 1.0f32);
         }
         // first place
-        if s1 != -(9999 as libc::c_int) {
+        if s1 != -(9999 as i32) {
             s = va(
                 b"%2i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 s1,
             );
-            w = CG_DrawStrlen(s) * 16 as libc::c_int + 8 as libc::c_int;
+            w = CG_DrawStrlen(s) * 16 as i32 + 8 as i32;
             x -= w;
             if spectator as u64 == 0 && score == s1 {
-                color[0 as libc::c_int as usize] = 0.0f32;
-                color[1 as libc::c_int as usize] = 0.0f32;
-                color[2 as libc::c_int as usize] = 1.0f32;
-                color[3 as libc::c_int as usize] = 0.33f32;
+                color[0 as i32 as usize] = 0.0f32;
+                color[1 as i32 as usize] = 0.0f32;
+                color[2 as i32 as usize] = 1.0f32;
+                color[3 as i32 as usize] = 0.33f32;
                 CG_FillRect(
-                    x as libc::c_float,
-                    y - 4 as libc::c_int as libc::c_float,
-                    w as libc::c_float,
-                    (16 as libc::c_int + 8 as libc::c_int) as libc::c_float,
+                    x as f32,
+                    y - 4 as i32 as f32,
+                    w as f32,
+                    (16 as i32 + 8 as i32) as f32,
                     color.as_mut_ptr(),
                 );
                 CG_DrawPic(
-                    x as libc::c_float,
-                    y - 4 as libc::c_int as libc::c_float,
-                    w as libc::c_float,
-                    (16 as libc::c_int + 8 as libc::c_int) as libc::c_float,
+                    x as f32,
+                    y - 4 as i32 as f32,
+                    w as f32,
+                    (16 as i32 + 8 as i32) as f32,
                     cgs.media.selectShader,
                 );
             } else {
-                color[0 as libc::c_int as usize] = 0.5f32;
-                color[1 as libc::c_int as usize] = 0.5f32;
-                color[2 as libc::c_int as usize] = 0.5f32;
-                color[3 as libc::c_int as usize] = 0.33f32;
+                color[0 as i32 as usize] = 0.5f32;
+                color[1 as i32 as usize] = 0.5f32;
+                color[2 as i32 as usize] = 0.5f32;
+                color[3 as i32 as usize] = 0.33f32;
                 CG_FillRect(
-                    x as libc::c_float,
-                    y - 4 as libc::c_int as libc::c_float,
-                    w as libc::c_float,
-                    (16 as libc::c_int + 8 as libc::c_int) as libc::c_float,
+                    x as f32,
+                    y - 4 as i32 as f32,
+                    w as f32,
+                    (16 as i32 + 8 as i32) as f32,
                     color.as_mut_ptr(),
                 );
             }
-            CG_DrawBigString(x + 4 as libc::c_int, y as libc::c_int, s, 1.0f32);
+            CG_DrawBigString(x + 4 as i32, y as i32, s, 1.0f32);
         }
         if cgs.fraglimit != 0 {
             s = va(
                 b"%2i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cgs.fraglimit,
             );
-            w = CG_DrawStrlen(s) * 16 as libc::c_int + 8 as libc::c_int;
+            w = CG_DrawStrlen(s) * 16 as i32 + 8 as i32;
             x -= w;
-            CG_DrawBigString(x + 4 as libc::c_int, y as libc::c_int, s, 1.0f32);
+            CG_DrawBigString(x + 4 as i32, y as i32, s, 1.0f32);
         }
     }
-    return y1 - 8 as libc::c_int as libc::c_float;
+    return y1 - 8 as i32 as f32;
 }
 // MISSIONPACK
 /*
@@ -1781,46 +1781,46 @@ CG_DrawPowerups
 ================
 */
 
-unsafe extern "C" fn CG_DrawPowerups(mut y: libc::c_float) -> libc::c_float {
-    let mut sorted: [libc::c_int; 16] = [0; 16];
-    let mut sortedTime: [libc::c_int; 16] = [0; 16];
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
-    let mut k: libc::c_int = 0;
-    let mut active: libc::c_int = 0;
+unsafe extern "C" fn CG_DrawPowerups(mut y: f32) -> f32 {
+    let mut sorted: [i32; 16] = [0; 16];
+    let mut sortedTime: [i32; 16] = [0; 16];
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
+    let mut k: i32 = 0;
+    let mut active: i32 = 0;
     let mut ps: *mut playerState_t = 0 as *mut playerState_t;
-    let mut t: libc::c_int = 0;
+    let mut t: i32 = 0;
     let mut item: *mut crate::bg_public_h::gitem_t = 0 as *mut crate::bg_public_h::gitem_t;
-    let mut x: libc::c_int = 0;
-    let mut color: libc::c_int = 0;
-    let mut size: libc::c_float = 0.;
-    let mut f: libc::c_float = 0.;
-    static mut colors: [[libc::c_float; 4]; 2] = [
+    let mut x: i32 = 0;
+    let mut color: i32 = 0;
+    let mut size: f32 = 0.;
+    let mut f: f32 = 0.;
+    static mut colors: [[f32; 4]; 2] = [
         [0.2f32, 1.0f32, 0.2f32, 1.0f32],
         [1.0f32, 0.2f32, 0.2f32, 1.0f32],
     ];
     ps = &mut (*cg.snap).ps;
-    if (*ps).stats[crate::bg_public_h::STAT_HEALTH as libc::c_int as usize] <= 0 as libc::c_int {
+    if (*ps).stats[crate::bg_public_h::STAT_HEALTH as i32 as usize] <= 0 as i32 {
         return y;
     }
     // sort the list by time remaining
-    active = 0 as libc::c_int;
-    i = 0 as libc::c_int;
-    while i < 16 as libc::c_int {
+    active = 0 as i32;
+    i = 0 as i32;
+    while i < 16 as i32 {
         if !((*ps).powerups[i as usize] == 0) {
             // ZOID--don't draw if the power up has unlimited time
             // This is true of the CTF flags
-            if !((*ps).powerups[i as usize] == 2147483647 as libc::c_int) {
+            if !((*ps).powerups[i as usize] == 2147483647 as i32) {
                 t = (*ps).powerups[i as usize] - cg.time;
-                if !(t <= 0 as libc::c_int) {
+                if !(t <= 0 as i32) {
                     // insert into the list
-                    j = 0 as libc::c_int;
+                    j = 0 as i32;
                     while j < active {
                         if sortedTime[j as usize] >= t {
-                            k = active - 1 as libc::c_int;
+                            k = active - 1 as i32;
                             while k >= j {
-                                sorted[(k + 1 as libc::c_int) as usize] = sorted[k as usize];
-                                sortedTime[(k + 1 as libc::c_int) as usize] =
+                                sorted[(k + 1 as i32) as usize] = sorted[k as usize];
+                                sortedTime[(k + 1 as i32) as usize] =
                                     sortedTime[k as usize];
                                 k -= 1
                             }
@@ -1838,52 +1838,52 @@ unsafe extern "C" fn CG_DrawPowerups(mut y: libc::c_float) -> libc::c_float {
         i += 1
     }
     // draw the icons and timers
-    x = 640 as libc::c_int - 48 as libc::c_int - 32 as libc::c_int * 2 as libc::c_int;
-    i = 0 as libc::c_int;
+    x = 640 as i32 - 48 as i32 - 32 as i32 * 2 as i32;
+    i = 0 as i32;
     while i < active {
         item = crate::src::game::bg_misc::BG_FindItemForPowerup(
             sorted[i as usize] as crate::bg_public_h::powerup_t,
         ) as *mut crate::bg_public_h::gitem_s;
         if !item.is_null() {
-            color = 1 as libc::c_int;
-            y -= 48 as libc::c_int as libc::c_float;
+            color = 1 as i32;
+            y -= 48 as i32 as f32;
             crate::src::cgame::cg_syscalls::trap_R_SetColor(colors[color as usize].as_mut_ptr());
             CG_DrawField(
                 x,
-                y as libc::c_int,
-                2 as libc::c_int,
-                sortedTime[i as usize] / 1000 as libc::c_int,
+                y as i32,
+                2 as i32,
+                sortedTime[i as usize] / 1000 as i32,
             );
             t = (*ps).powerups[sorted[i as usize] as usize];
-            if t - cg.time >= 5 as libc::c_int * 1000 as libc::c_int {
-                crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const libc::c_float);
+            if t - cg.time >= 5 as i32 * 1000 as i32 {
+                crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const f32);
             } else {
                 let mut modulate: vec4_t = [0.; 4];
-                f = (t - cg.time) as libc::c_float / 1000 as libc::c_int as libc::c_float;
-                f -= f as libc::c_int as libc::c_float;
-                modulate[3 as libc::c_int as usize] = f;
-                modulate[2 as libc::c_int as usize] = modulate[3 as libc::c_int as usize];
-                modulate[1 as libc::c_int as usize] = modulate[2 as libc::c_int as usize];
-                modulate[0 as libc::c_int as usize] = modulate[1 as libc::c_int as usize];
+                f = (t - cg.time) as f32 / 1000 as i32 as f32;
+                f -= f as i32 as f32;
+                modulate[3 as i32 as usize] = f;
+                modulate[2 as i32 as usize] = modulate[3 as i32 as usize];
+                modulate[1 as i32 as usize] = modulate[2 as i32 as usize];
+                modulate[0 as i32 as usize] = modulate[1 as i32 as usize];
                 crate::src::cgame::cg_syscalls::trap_R_SetColor(modulate.as_mut_ptr());
             }
             if cg.powerupActive == sorted[i as usize]
-                && cg.time - cg.powerupTime < 200 as libc::c_int
+                && cg.time - cg.powerupTime < 200 as i32
             {
                 f = (1.0f64
-                    - ((cg.time as libc::c_float - cg.powerupTime as libc::c_float)
-                        / 200 as libc::c_int as libc::c_float)
-                        as libc::c_double) as libc::c_float;
-                size = (48 as libc::c_int as libc::c_double
-                    * (1.0f64 + (1.5f64 - 1.0f64) * f as libc::c_double))
-                    as libc::c_float
+                    - ((cg.time as f32 - cg.powerupTime as f32)
+                        / 200 as i32 as f32)
+                        as f64) as f32;
+                size = (48 as i32 as f64
+                    * (1.0f64 + (1.5f64 - 1.0f64) * f as f64))
+                    as f32
             } else {
-                size = 48 as libc::c_int as libc::c_float
+                size = 48 as i32 as f32
             }
             CG_DrawPic(
-                640 as libc::c_int as libc::c_float - size,
-                y + (48 as libc::c_int / 2 as libc::c_int) as libc::c_float
-                    - size / 2 as libc::c_int as libc::c_float,
+                640 as i32 as f32 - size,
+                y + (48 as i32 / 2 as i32) as f32
+                    - size / 2 as i32 as f32,
                 size,
                 size,
                 crate::src::cgame::cg_syscalls::trap_R_RegisterShader((*item).icon),
@@ -1891,7 +1891,7 @@ unsafe extern "C" fn CG_DrawPowerups(mut y: libc::c_float) -> libc::c_float {
         }
         i += 1
     }
-    crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const libc::c_float);
+    crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const f32);
     return y;
 }
 // MISSIONPACK
@@ -1903,10 +1903,10 @@ CG_DrawLowerRight
 */
 
 unsafe extern "C" fn CG_DrawLowerRight() {
-    let mut y: libc::c_float = 0.;
-    y = (480 as libc::c_int - 48 as libc::c_int) as libc::c_float;
-    if cgs.gametype as libc::c_uint >= crate::bg_public_h::GT_TEAM as libc::c_int as libc::c_uint
-        && cg_drawTeamOverlay.integer == 2 as libc::c_int
+    let mut y: f32 = 0.;
+    y = (480 as i32 - 48 as i32) as f32;
+    if cgs.gametype as u32 >= crate::bg_public_h::GT_TEAM as i32 as u32
+        && cg_drawTeamOverlay.integer == 2 as i32
     {
         y = CG_DrawTeamOverlay(y, qtrue, qfalse)
     }
@@ -1920,38 +1920,38 @@ CG_DrawPickupItem
 ===================
 */
 
-unsafe extern "C" fn CG_DrawPickupItem(mut y: libc::c_int) -> libc::c_int {
-    let mut value: libc::c_int = 0;
-    let mut fadeColor: *mut libc::c_float = 0 as *mut libc::c_float;
-    if (*cg.snap).ps.stats[crate::bg_public_h::STAT_HEALTH as libc::c_int as usize]
-        <= 0 as libc::c_int
+unsafe extern "C" fn CG_DrawPickupItem(mut y: i32) -> i32 {
+    let mut value: i32 = 0;
+    let mut fadeColor: *mut f32 = 0 as *mut f32;
+    if (*cg.snap).ps.stats[crate::bg_public_h::STAT_HEALTH as i32 as usize]
+        <= 0 as i32
     {
         return y;
     }
-    y -= 48 as libc::c_int;
+    y -= 48 as i32;
     value = cg.itemPickup;
     if value != 0 {
-        fadeColor = CG_FadeColor(cg.itemPickupTime, 3000 as libc::c_int);
+        fadeColor = CG_FadeColor(cg.itemPickupTime, 3000 as i32);
         if !fadeColor.is_null() {
             crate::src::cgame::cg_weapons::CG_RegisterItemVisuals(value);
             crate::src::cgame::cg_syscalls::trap_R_SetColor(fadeColor);
             CG_DrawPic(
-                8 as libc::c_int as libc::c_float,
-                y as libc::c_float,
-                48 as libc::c_int as libc::c_float,
-                48 as libc::c_int as libc::c_float,
+                8 as i32 as f32,
+                y as f32,
+                48 as i32 as f32,
+                48 as i32 as f32,
                 cg_items[value as usize].icon,
             );
             CG_DrawBigString(
-                48 as libc::c_int + 16 as libc::c_int,
-                y + (48 as libc::c_int / 2 as libc::c_int - 16 as libc::c_int / 2 as libc::c_int),
+                48 as i32 + 16 as i32,
+                y + (48 as i32 / 2 as i32 - 16 as i32 / 2 as i32),
                 (*crate::src::game::bg_misc::bg_itemlist
                     .as_mut_ptr()
                     .offset(value as isize))
                 .pickup_name,
-                *fadeColor.offset(0 as libc::c_int as isize),
+                *fadeColor.offset(0 as i32 as isize),
             );
-            crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const libc::c_float);
+            crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const f32);
         }
     }
     return y;
@@ -1965,14 +1965,14 @@ CG_DrawLowerLeft
 */
 
 unsafe extern "C" fn CG_DrawLowerLeft() {
-    let mut y: libc::c_float = 0.;
-    y = (480 as libc::c_int - 48 as libc::c_int) as libc::c_float;
-    if cgs.gametype as libc::c_uint >= crate::bg_public_h::GT_TEAM as libc::c_int as libc::c_uint
-        && cg_drawTeamOverlay.integer == 3 as libc::c_int
+    let mut y: f32 = 0.;
+    y = (480 as i32 - 48 as i32) as f32;
+    if cgs.gametype as u32 >= crate::bg_public_h::GT_TEAM as i32 as u32
+        && cg_drawTeamOverlay.integer == 3 as i32
     {
         y = CG_DrawTeamOverlay(y, qfalse, qfalse)
     }
-    CG_DrawPickupItem(y as libc::c_int);
+    CG_DrawPickupItem(y as i32);
 }
 // MISSIONPACK
 //===========================================================================================
@@ -1983,17 +1983,17 @@ CG_DrawTeamInfo
 */
 
 unsafe extern "C" fn CG_DrawTeamInfo() {
-    let mut h: libc::c_int = 0;
-    let mut i: libc::c_int = 0;
+    let mut h: i32 = 0;
+    let mut i: i32 = 0;
     let mut hcolor: vec4_t = [0.; 4];
-    let mut chatHeight: libc::c_int = 0;
+    let mut chatHeight: i32 = 0;
     // bottom end
-    if cg_teamChatHeight.integer < 8 as libc::c_int {
+    if cg_teamChatHeight.integer < 8 as i32 {
         chatHeight = cg_teamChatHeight.integer
     } else {
-        chatHeight = 8 as libc::c_int
+        chatHeight = 8 as i32
     } // disabled
-    if chatHeight <= 0 as libc::c_int {
+    if chatHeight <= 0 as i32 {
         return;
     }
     if cgs.teamLastChatPos != cgs.teamChatPos {
@@ -2002,52 +2002,52 @@ unsafe extern "C" fn CG_DrawTeamInfo() {
         {
             cgs.teamLastChatPos += 1
         }
-        h = (cgs.teamChatPos - cgs.teamLastChatPos) * (16 as libc::c_int / 2 as libc::c_int);
-        if cgs.clientinfo[cg.clientNum as usize].team as libc::c_uint
-            == crate::bg_public_h::TEAM_RED as libc::c_int as libc::c_uint
+        h = (cgs.teamChatPos - cgs.teamLastChatPos) * (16 as i32 / 2 as i32);
+        if cgs.clientinfo[cg.clientNum as usize].team as u32
+            == crate::bg_public_h::TEAM_RED as i32 as u32
         {
-            hcolor[0 as libc::c_int as usize] = 1.0f32;
-            hcolor[1 as libc::c_int as usize] = 0.0f32;
-            hcolor[2 as libc::c_int as usize] = 0.0f32;
-            hcolor[3 as libc::c_int as usize] = 0.33f32
-        } else if cgs.clientinfo[cg.clientNum as usize].team as libc::c_uint
-            == crate::bg_public_h::TEAM_BLUE as libc::c_int as libc::c_uint
+            hcolor[0 as i32 as usize] = 1.0f32;
+            hcolor[1 as i32 as usize] = 0.0f32;
+            hcolor[2 as i32 as usize] = 0.0f32;
+            hcolor[3 as i32 as usize] = 0.33f32
+        } else if cgs.clientinfo[cg.clientNum as usize].team as u32
+            == crate::bg_public_h::TEAM_BLUE as i32 as u32
         {
-            hcolor[0 as libc::c_int as usize] = 0.0f32;
-            hcolor[1 as libc::c_int as usize] = 0.0f32;
-            hcolor[2 as libc::c_int as usize] = 1.0f32;
-            hcolor[3 as libc::c_int as usize] = 0.33f32
+            hcolor[0 as i32 as usize] = 0.0f32;
+            hcolor[1 as i32 as usize] = 0.0f32;
+            hcolor[2 as i32 as usize] = 1.0f32;
+            hcolor[3 as i32 as usize] = 0.33f32
         } else {
-            hcolor[0 as libc::c_int as usize] = 0.0f32;
-            hcolor[1 as libc::c_int as usize] = 1.0f32;
-            hcolor[2 as libc::c_int as usize] = 0.0f32;
-            hcolor[3 as libc::c_int as usize] = 0.33f32
+            hcolor[0 as i32 as usize] = 0.0f32;
+            hcolor[1 as i32 as usize] = 1.0f32;
+            hcolor[2 as i32 as usize] = 0.0f32;
+            hcolor[3 as i32 as usize] = 0.33f32
         }
         crate::src::cgame::cg_syscalls::trap_R_SetColor(hcolor.as_mut_ptr());
         CG_DrawPic(
-            0 as libc::c_int as libc::c_float,
-            (420 as libc::c_int - h) as libc::c_float,
-            640 as libc::c_int as libc::c_float,
-            h as libc::c_float,
+            0 as i32 as f32,
+            (420 as i32 - h) as f32,
+            640 as i32 as f32,
+            h as f32,
             cgs.media.teamStatusBar,
         );
-        crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const libc::c_float);
-        hcolor[2 as libc::c_int as usize] = 1.0f32;
-        hcolor[1 as libc::c_int as usize] = hcolor[2 as libc::c_int as usize];
-        hcolor[0 as libc::c_int as usize] = hcolor[1 as libc::c_int as usize];
-        hcolor[3 as libc::c_int as usize] = 1.0f32;
-        i = cgs.teamChatPos - 1 as libc::c_int;
+        crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const f32);
+        hcolor[2 as i32 as usize] = 1.0f32;
+        hcolor[1 as i32 as usize] = hcolor[2 as i32 as usize];
+        hcolor[0 as i32 as usize] = hcolor[1 as i32 as usize];
+        hcolor[3 as i32 as usize] = 1.0f32;
+        i = cgs.teamChatPos - 1 as i32;
         while i >= cgs.teamLastChatPos {
             CG_DrawStringExt(
-                0 as libc::c_int + 8 as libc::c_int,
-                420 as libc::c_int - (cgs.teamChatPos - i) * (16 as libc::c_int / 2 as libc::c_int),
+                0 as i32 + 8 as i32,
+                420 as i32 - (cgs.teamChatPos - i) * (16 as i32 / 2 as i32),
                 cgs.teamChatMsgs[(i % chatHeight) as usize].as_mut_ptr(),
                 hcolor.as_mut_ptr(),
                 qfalse,
                 qfalse,
-                8 as libc::c_int,
-                16 as libc::c_int / 2 as libc::c_int,
-                0 as libc::c_int,
+                8 as i32,
+                16 as i32 / 2 as i32,
+                0 as i32,
             );
             i -= 1
         }
@@ -2061,15 +2061,15 @@ CG_DrawHoldableItem
 */
 
 unsafe extern "C" fn CG_DrawHoldableItem() {
-    let mut value: libc::c_int = 0;
-    value = (*cg.snap).ps.stats[crate::bg_public_h::STAT_HOLDABLE_ITEM as libc::c_int as usize];
+    let mut value: i32 = 0;
+    value = (*cg.snap).ps.stats[crate::bg_public_h::STAT_HOLDABLE_ITEM as i32 as usize];
     if value != 0 {
         crate::src::cgame::cg_weapons::CG_RegisterItemVisuals(value);
         CG_DrawPic(
-            (640 as libc::c_int - 48 as libc::c_int) as libc::c_float,
-            ((480 as libc::c_int - 48 as libc::c_int) / 2 as libc::c_int) as libc::c_float,
-            48 as libc::c_int as libc::c_float,
-            48 as libc::c_int as libc::c_float,
+            (640 as i32 - 48 as i32) as f32,
+            ((480 as i32 - 48 as i32) / 2 as i32) as f32,
+            48 as i32 as f32,
+            48 as i32 as f32,
             cg_items[value as usize].icon,
         );
     };
@@ -2083,31 +2083,31 @@ CG_DrawReward
 */
 
 unsafe extern "C" fn CG_DrawReward() {
-    let mut color: *mut libc::c_float = 0 as *mut libc::c_float;
-    let mut i: libc::c_int = 0;
-    let mut count: libc::c_int = 0;
-    let mut x: libc::c_float = 0.;
-    let mut y: libc::c_float = 0.;
+    let mut color: *mut f32 = 0 as *mut f32;
+    let mut i: i32 = 0;
+    let mut count: i32 = 0;
+    let mut x: f32 = 0.;
+    let mut y: f32 = 0.;
     let mut buf: [libc::c_char; 32] = [0; 32];
     if cg_drawRewards.integer == 0 {
         return;
     }
-    color = CG_FadeColor(cg.rewardTime, 3000 as libc::c_int);
+    color = CG_FadeColor(cg.rewardTime, 3000 as i32);
     if color.is_null() {
-        if cg.rewardStack > 0 as libc::c_int {
-            i = 0 as libc::c_int;
+        if cg.rewardStack > 0 as i32 {
+            i = 0 as i32;
             while i < cg.rewardStack {
-                cg.rewardSound[i as usize] = cg.rewardSound[(i + 1 as libc::c_int) as usize];
-                cg.rewardShader[i as usize] = cg.rewardShader[(i + 1 as libc::c_int) as usize];
-                cg.rewardCount[i as usize] = cg.rewardCount[(i + 1 as libc::c_int) as usize];
+                cg.rewardSound[i as usize] = cg.rewardSound[(i + 1 as i32) as usize];
+                cg.rewardShader[i as usize] = cg.rewardShader[(i + 1 as i32) as usize];
+                cg.rewardCount[i as usize] = cg.rewardCount[(i + 1 as i32) as usize];
                 i += 1
             }
             cg.rewardTime = cg.time;
             cg.rewardStack -= 1;
-            color = CG_FadeColor(cg.rewardTime, 3000 as libc::c_int);
+            color = CG_FadeColor(cg.rewardTime, 3000 as i32);
             crate::src::cgame::cg_syscalls::trap_S_StartLocalSound(
-                cg.rewardSound[0 as libc::c_int as usize],
-                CHAN_ANNOUNCER as libc::c_int,
+                cg.rewardSound[0 as i32 as usize],
+                CHAN_ANNOUNCER as i32,
             );
         } else {
             return;
@@ -2128,53 +2128,53 @@ unsafe extern "C" fn CG_DrawReward() {
 
     count = cg.rewardCount[0] - count*10;		// number of small rewards to draw
     */
-    if cg.rewardCount[0 as libc::c_int as usize] >= 10 as libc::c_int {
-        y = 56 as libc::c_int as libc::c_float;
-        x = (320 as libc::c_int - 48 as libc::c_int / 2 as libc::c_int) as libc::c_float;
+    if cg.rewardCount[0 as i32 as usize] >= 10 as i32 {
+        y = 56 as i32 as f32;
+        x = (320 as i32 - 48 as i32 / 2 as i32) as f32;
         CG_DrawPic(
             x,
             y,
-            (48 as libc::c_int - 4 as libc::c_int) as libc::c_float,
-            (48 as libc::c_int - 4 as libc::c_int) as libc::c_float,
-            cg.rewardShader[0 as libc::c_int as usize],
+            (48 as i32 - 4 as i32) as f32,
+            (48 as i32 - 4 as i32) as f32,
+            cg.rewardShader[0 as i32 as usize],
         );
         Com_sprintf(
             buf.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as libc::c_int,
+            ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
             b"%d\x00" as *const u8 as *const libc::c_char,
-            cg.rewardCount[0 as libc::c_int as usize],
+            cg.rewardCount[0 as i32 as usize],
         );
-        x = ((640 as libc::c_int - 8 as libc::c_int * CG_DrawStrlen(buf.as_mut_ptr()))
-            / 2 as libc::c_int) as libc::c_float;
+        x = ((640 as i32 - 8 as i32 * CG_DrawStrlen(buf.as_mut_ptr()))
+            / 2 as i32) as f32;
         CG_DrawStringExt(
-            x as libc::c_int,
-            (y + 48 as libc::c_int as libc::c_float) as libc::c_int,
+            x as i32,
+            (y + 48 as i32 as f32) as i32,
             buf.as_mut_ptr(),
             color,
             qfalse,
             qtrue,
-            8 as libc::c_int,
-            16 as libc::c_int,
-            0 as libc::c_int,
+            8 as i32,
+            16 as i32,
+            0 as i32,
         );
     } else {
-        count = cg.rewardCount[0 as libc::c_int as usize];
-        y = 56 as libc::c_int as libc::c_float;
-        x = (320 as libc::c_int - count * 48 as libc::c_int / 2 as libc::c_int) as libc::c_float;
-        i = 0 as libc::c_int;
+        count = cg.rewardCount[0 as i32 as usize];
+        y = 56 as i32 as f32;
+        x = (320 as i32 - count * 48 as i32 / 2 as i32) as f32;
+        i = 0 as i32;
         while i < count {
             CG_DrawPic(
                 x,
                 y,
-                (48 as libc::c_int - 4 as libc::c_int) as libc::c_float,
-                (48 as libc::c_int - 4 as libc::c_int) as libc::c_float,
-                cg.rewardShader[0 as libc::c_int as usize],
+                (48 as i32 - 4 as i32) as f32,
+                (48 as i32 - 4 as i32) as f32,
+                cg.rewardShader[0 as i32 as usize],
             );
-            x += 48 as libc::c_int as libc::c_float;
+            x += 48 as i32 as f32;
             i += 1
         }
     }
-    crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const libc::c_float);
+    crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const f32);
 }
 #[no_mangle]
 
@@ -2195,10 +2195,10 @@ Adds the current interpolate / extrapolate bar for this frame
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_AddLagometerFrameInfo() {
-    let mut offset: libc::c_int = 0;
+    let mut offset: i32 = 0;
     offset = cg.time - cg.latestSnapshotTime;
     lagometer.frameSamples
-        [(lagometer.frameCount & 128 as libc::c_int - 1 as libc::c_int) as usize] = offset;
+        [(lagometer.frameCount & 128 as i32 - 1 as i32) as usize] = offset;
     lagometer.frameCount += 1;
 }
 /*
@@ -2219,16 +2219,16 @@ pub unsafe extern "C" fn CG_AddLagometerSnapshotInfo(
     // dropped packet
     if snap.is_null() {
         lagometer.snapshotSamples
-            [(lagometer.snapshotCount & 128 as libc::c_int - 1 as libc::c_int) as usize] =
-            -(1 as libc::c_int);
+            [(lagometer.snapshotCount & 128 as i32 - 1 as i32) as usize] =
+            -(1 as i32);
         lagometer.snapshotCount += 1;
         return;
     }
     // add this snapshot's info
     lagometer.snapshotSamples
-        [(lagometer.snapshotCount & 128 as libc::c_int - 1 as libc::c_int) as usize] = (*snap).ping;
+        [(lagometer.snapshotCount & 128 as i32 - 1 as i32) as usize] = (*snap).ping;
     lagometer.snapshotFlags
-        [(lagometer.snapshotCount & 128 as libc::c_int - 1 as libc::c_int) as usize] =
+        [(lagometer.snapshotCount & 128 as i32 - 1 as i32) as usize] =
         (*snap).snapFlags;
     lagometer.snapshotCount += 1;
 }
@@ -2241,9 +2241,9 @@ Should we draw something differnet for long lag vs no packets?
 */
 
 unsafe extern "C" fn CG_DrawDisconnect() {
-    let mut x: libc::c_float = 0.;
-    let mut y: libc::c_float = 0.;
-    let mut cmdNum: libc::c_int = 0;
+    let mut x: f32 = 0.;
+    let mut y: f32 = 0.;
+    let mut cmdNum: i32 = 0;
     let mut cmd: usercmd_t = usercmd_t {
         serverTime: 0,
         angles: [0; 3],
@@ -2254,10 +2254,10 @@ unsafe extern "C" fn CG_DrawDisconnect() {
         upmove: 0,
     };
     let mut s: *const libc::c_char = 0 as *const libc::c_char;
-    let mut w: libc::c_int = 0;
+    let mut w: i32 = 0;
     // draw the phone jack if we are completely past our buffers
-    cmdNum = crate::src::cgame::cg_syscalls::trap_GetCurrentCmdNumber() - 64 as libc::c_int
-        + 1 as libc::c_int;
+    cmdNum = crate::src::cgame::cg_syscalls::trap_GetCurrentCmdNumber() - 64 as i32
+        + 1 as i32;
     crate::src::cgame::cg_syscalls::trap_GetUserCmd(cmdNum, &mut cmd as *mut _ as *mut usercmd_s);
     if cmd.serverTime <= (*cg.snap).ps.commandTime || cmd.serverTime > cg.time {
         // special check for map_restart
@@ -2265,24 +2265,24 @@ unsafe extern "C" fn CG_DrawDisconnect() {
     }
     // also add text in center of screen
     s = b"Connection Interrupted\x00" as *const u8 as *const libc::c_char;
-    w = CG_DrawStrlen(s) * 16 as libc::c_int;
+    w = CG_DrawStrlen(s) * 16 as i32;
     CG_DrawBigString(
-        320 as libc::c_int - w / 2 as libc::c_int,
-        100 as libc::c_int,
+        320 as i32 - w / 2 as i32,
+        100 as i32,
         s,
         1.0f32,
     );
     // blink the icon
-    if cg.time >> 9 as libc::c_int & 1 as libc::c_int != 0 {
+    if cg.time >> 9 as i32 & 1 as i32 != 0 {
         return;
     }
-    x = (640 as libc::c_int - 48 as libc::c_int) as libc::c_float;
-    y = (480 as libc::c_int - 48 as libc::c_int) as libc::c_float;
+    x = (640 as i32 - 48 as i32) as f32;
+    y = (480 as i32 - 48 as i32) as f32;
     CG_DrawPic(
         x,
         y,
-        48 as libc::c_int as libc::c_float,
-        48 as libc::c_int as libc::c_float,
+        48 as i32 as f32,
+        48 as i32 as f32,
         crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
             b"gfx/2d/net.tga\x00" as *const u8 as *const libc::c_char,
         ),
@@ -2295,56 +2295,56 @@ CG_DrawLagometer
 */
 
 unsafe extern "C" fn CG_DrawLagometer() {
-    let mut a: libc::c_int = 0;
-    let mut x: libc::c_int = 0;
-    let mut y: libc::c_int = 0;
-    let mut i: libc::c_int = 0;
-    let mut v: libc::c_float = 0.;
-    let mut ax: libc::c_float = 0.;
-    let mut ay: libc::c_float = 0.;
-    let mut aw: libc::c_float = 0.;
-    let mut ah: libc::c_float = 0.;
-    let mut mid: libc::c_float = 0.;
-    let mut range: libc::c_float = 0.;
-    let mut color: libc::c_int = 0;
-    let mut vscale: libc::c_float = 0.;
-    if cg_lagometer.integer == 0 || cgs.localServer as libc::c_uint != 0 {
+    let mut a: i32 = 0;
+    let mut x: i32 = 0;
+    let mut y: i32 = 0;
+    let mut i: i32 = 0;
+    let mut v: f32 = 0.;
+    let mut ax: f32 = 0.;
+    let mut ay: f32 = 0.;
+    let mut aw: f32 = 0.;
+    let mut ah: f32 = 0.;
+    let mut mid: f32 = 0.;
+    let mut range: f32 = 0.;
+    let mut color: i32 = 0;
+    let mut vscale: f32 = 0.;
+    if cg_lagometer.integer == 0 || cgs.localServer as u32 != 0 {
         CG_DrawDisconnect();
         return;
     }
     //
     // draw the graph
     //
-    x = 640 as libc::c_int - 48 as libc::c_int;
-    y = 480 as libc::c_int - 48 as libc::c_int;
-    crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const libc::c_float);
+    x = 640 as i32 - 48 as i32;
+    y = 480 as i32 - 48 as i32;
+    crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const f32);
     CG_DrawPic(
-        x as libc::c_float,
-        y as libc::c_float,
-        48 as libc::c_int as libc::c_float,
-        48 as libc::c_int as libc::c_float,
+        x as f32,
+        y as f32,
+        48 as i32 as f32,
+        48 as i32 as f32,
         cgs.media.lagometerShader,
     );
-    ax = x as libc::c_float;
-    ay = y as libc::c_float;
-    aw = 48 as libc::c_int as libc::c_float;
-    ah = 48 as libc::c_int as libc::c_float;
+    ax = x as f32;
+    ay = y as f32;
+    aw = 48 as i32 as f32;
+    ah = 48 as i32 as f32;
     CG_AdjustFrom640(&mut ax, &mut ay, &mut aw, &mut ah);
-    color = -(1 as libc::c_int);
-    range = ah / 3 as libc::c_int as libc::c_float;
+    color = -(1 as i32);
+    range = ah / 3 as i32 as f32;
     mid = ay + range;
-    vscale = range / 300 as libc::c_int as libc::c_float;
+    vscale = range / 300 as i32 as f32;
     // draw the frame interpoalte / extrapolate graph
-    a = 0 as libc::c_int;
-    while (a as libc::c_float) < aw {
-        i = lagometer.frameCount - 1 as libc::c_int - a & 128 as libc::c_int - 1 as libc::c_int;
-        v = lagometer.frameSamples[i as usize] as libc::c_float;
+    a = 0 as i32;
+    while (a as f32) < aw {
+        i = lagometer.frameCount - 1 as i32 - a & 128 as i32 - 1 as i32;
+        v = lagometer.frameSamples[i as usize] as f32;
         v *= vscale;
-        if v > 0 as libc::c_int as libc::c_float {
-            if color != 1 as libc::c_int {
-                color = 1 as libc::c_int;
+        if v > 0 as i32 as f32 {
+            if color != 1 as i32 {
+                color = 1 as i32;
                 crate::src::cgame::cg_syscalls::trap_R_SetColor(
-                    g_color_table[('3' as i32 - '0' as i32 & 0x7 as libc::c_int) as usize]
+                    g_color_table[('3' as i32 - '0' as i32 & 0x7 as i32) as usize]
                         .as_mut_ptr(),
                 );
             }
@@ -2352,21 +2352,21 @@ unsafe extern "C" fn CG_DrawLagometer() {
                 v = range
             }
             crate::src::cgame::cg_syscalls::trap_R_DrawStretchPic(
-                ax + aw - a as libc::c_float,
+                ax + aw - a as f32,
                 mid - v,
-                1 as libc::c_int as libc::c_float,
+                1 as i32 as f32,
                 v,
-                0 as libc::c_int as libc::c_float,
-                0 as libc::c_int as libc::c_float,
-                0 as libc::c_int as libc::c_float,
-                0 as libc::c_int as libc::c_float,
+                0 as i32 as f32,
+                0 as i32 as f32,
+                0 as i32 as f32,
+                0 as i32 as f32,
                 cgs.media.whiteShader,
             );
-        } else if v < 0 as libc::c_int as libc::c_float {
-            if color != 2 as libc::c_int {
-                color = 2 as libc::c_int;
+        } else if v < 0 as i32 as f32 {
+            if color != 2 as i32 {
+                color = 2 as i32;
                 crate::src::cgame::cg_syscalls::trap_R_SetColor(
-                    g_color_table[('4' as i32 - '0' as i32 & 0x7 as libc::c_int) as usize]
+                    g_color_table[('4' as i32 - '0' as i32 & 0x7 as i32) as usize]
                         .as_mut_ptr(),
                 );
             }
@@ -2375,39 +2375,39 @@ unsafe extern "C" fn CG_DrawLagometer() {
                 v = range
             }
             crate::src::cgame::cg_syscalls::trap_R_DrawStretchPic(
-                ax + aw - a as libc::c_float,
+                ax + aw - a as f32,
                 mid,
-                1 as libc::c_int as libc::c_float,
+                1 as i32 as f32,
                 v,
-                0 as libc::c_int as libc::c_float,
-                0 as libc::c_int as libc::c_float,
-                0 as libc::c_int as libc::c_float,
-                0 as libc::c_int as libc::c_float,
+                0 as i32 as f32,
+                0 as i32 as f32,
+                0 as i32 as f32,
+                0 as i32 as f32,
                 cgs.media.whiteShader,
             );
         }
         a += 1
     }
     // draw the snapshot latency / drop graph
-    range = ah / 2 as libc::c_int as libc::c_float; // YELLOW for rate delay
-    vscale = range / 900 as libc::c_int as libc::c_float; // RED for dropped snapshots
-    a = 0 as libc::c_int;
-    while (a as libc::c_float) < aw {
-        i = lagometer.snapshotCount - 1 as libc::c_int - a & 128 as libc::c_int - 1 as libc::c_int;
-        v = lagometer.snapshotSamples[i as usize] as libc::c_float;
-        if v > 0 as libc::c_int as libc::c_float {
-            if lagometer.snapshotFlags[i as usize] & 1 as libc::c_int != 0 {
-                if color != 5 as libc::c_int {
-                    color = 5 as libc::c_int;
+    range = ah / 2 as i32 as f32; // YELLOW for rate delay
+    vscale = range / 900 as i32 as f32; // RED for dropped snapshots
+    a = 0 as i32;
+    while (a as f32) < aw {
+        i = lagometer.snapshotCount - 1 as i32 - a & 128 as i32 - 1 as i32;
+        v = lagometer.snapshotSamples[i as usize] as f32;
+        if v > 0 as i32 as f32 {
+            if lagometer.snapshotFlags[i as usize] & 1 as i32 != 0 {
+                if color != 5 as i32 {
+                    color = 5 as i32;
                     crate::src::cgame::cg_syscalls::trap_R_SetColor(
-                        g_color_table[('3' as i32 - '0' as i32 & 0x7 as libc::c_int) as usize]
+                        g_color_table[('3' as i32 - '0' as i32 & 0x7 as i32) as usize]
                             .as_mut_ptr(),
                     );
                 }
-            } else if color != 3 as libc::c_int {
-                color = 3 as libc::c_int;
+            } else if color != 3 as i32 {
+                color = 3 as i32;
                 crate::src::cgame::cg_syscalls::trap_R_SetColor(
-                    g_color_table[('2' as i32 - '0' as i32 & 0x7 as libc::c_int) as usize]
+                    g_color_table[('2' as i32 - '0' as i32 & 0x7 as i32) as usize]
                         .as_mut_ptr(),
                 );
             }
@@ -2416,45 +2416,45 @@ unsafe extern "C" fn CG_DrawLagometer() {
                 v = range
             }
             crate::src::cgame::cg_syscalls::trap_R_DrawStretchPic(
-                ax + aw - a as libc::c_float,
+                ax + aw - a as f32,
                 ay + ah - v,
-                1 as libc::c_int as libc::c_float,
+                1 as i32 as f32,
                 v,
-                0 as libc::c_int as libc::c_float,
-                0 as libc::c_int as libc::c_float,
-                0 as libc::c_int as libc::c_float,
-                0 as libc::c_int as libc::c_float,
+                0 as i32 as f32,
+                0 as i32 as f32,
+                0 as i32 as f32,
+                0 as i32 as f32,
                 cgs.media.whiteShader,
             );
-        } else if v < 0 as libc::c_int as libc::c_float {
-            if color != 4 as libc::c_int {
-                color = 4 as libc::c_int;
+        } else if v < 0 as i32 as f32 {
+            if color != 4 as i32 {
+                color = 4 as i32;
                 crate::src::cgame::cg_syscalls::trap_R_SetColor(
-                    g_color_table[('1' as i32 - '0' as i32 & 0x7 as libc::c_int) as usize]
+                    g_color_table[('1' as i32 - '0' as i32 & 0x7 as i32) as usize]
                         .as_mut_ptr(),
                 );
             }
             crate::src::cgame::cg_syscalls::trap_R_DrawStretchPic(
-                ax + aw - a as libc::c_float,
+                ax + aw - a as f32,
                 ay + ah - range,
-                1 as libc::c_int as libc::c_float,
+                1 as i32 as f32,
                 range,
-                0 as libc::c_int as libc::c_float,
-                0 as libc::c_int as libc::c_float,
-                0 as libc::c_int as libc::c_float,
-                0 as libc::c_int as libc::c_float,
+                0 as i32 as f32,
+                0 as i32 as f32,
+                0 as i32 as f32,
+                0 as i32 as f32,
                 cgs.media.whiteShader,
             );
         }
         a += 1
     }
-    crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const libc::c_float);
+    crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const f32);
     if cg_nopredict.integer != 0 || cg_synchronousClients.integer != 0 {
         CG_DrawBigString(
             x,
             y,
             b"snc\x00" as *const u8 as *const libc::c_char,
-            1.0f64 as libc::c_float,
+            1.0f64 as f32,
         );
     }
     CG_DrawDisconnect();
@@ -2478,23 +2478,23 @@ for a few moments
 
 pub unsafe extern "C" fn CG_CenterPrint(
     mut str: *const libc::c_char,
-    mut y: libc::c_int,
-    mut charWidth: libc::c_int,
+    mut y: i32,
+    mut charWidth: i32,
 ) {
     let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
     Q_strncpyz(
         cg.centerPrint.as_mut_ptr(),
         str,
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
     cg.centerPrintTime = cg.time;
     cg.centerPrintY = y;
     cg.centerPrintCharWidth = charWidth;
     // count the number of lines for centering
-    cg.centerPrintLines = 1 as libc::c_int;
+    cg.centerPrintLines = 1 as i32;
     s = cg.centerPrint.as_mut_ptr();
     while *s != 0 {
-        if *s as libc::c_int == '\n' as i32 {
+        if *s as i32 == '\n' as i32 {
             cg.centerPrintLines += 1
         }
         s = s.offset(1)
@@ -2508,39 +2508,39 @@ CG_DrawCenterString
 
 unsafe extern "C" fn CG_DrawCenterString() {
     let mut start: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut l: libc::c_int = 0;
-    let mut x: libc::c_int = 0;
-    let mut y: libc::c_int = 0;
-    let mut w: libc::c_int = 0;
-    let mut color: *mut libc::c_float = 0 as *mut libc::c_float;
+    let mut l: i32 = 0;
+    let mut x: i32 = 0;
+    let mut y: i32 = 0;
+    let mut w: i32 = 0;
+    let mut color: *mut f32 = 0 as *mut f32;
     if cg.centerPrintTime == 0 {
         return;
     }
     color = CG_FadeColor(
         cg.centerPrintTime,
-        (1000 as libc::c_int as libc::c_float * cg_centertime.value) as libc::c_int,
+        (1000 as i32 as f32 * cg_centertime.value) as i32,
     );
     if color.is_null() {
         return;
     }
     crate::src::cgame::cg_syscalls::trap_R_SetColor(color);
     start = cg.centerPrint.as_mut_ptr();
-    y = cg.centerPrintY - cg.centerPrintLines * 16 as libc::c_int / 2 as libc::c_int;
+    y = cg.centerPrintY - cg.centerPrintLines * 16 as i32 / 2 as i32;
     loop {
         let mut linebuffer: [libc::c_char; 1024] = [0; 1024];
-        l = 0 as libc::c_int;
-        while l < 50 as libc::c_int {
+        l = 0 as i32;
+        while l < 50 as i32 {
             if *start.offset(l as isize) == 0
-                || *start.offset(l as isize) as libc::c_int == '\n' as i32
+                || *start.offset(l as isize) as i32 == '\n' as i32
             {
                 break;
             }
             linebuffer[l as usize] = *start.offset(l as isize);
             l += 1
         }
-        linebuffer[l as usize] = 0 as libc::c_int as libc::c_char;
+        linebuffer[l as usize] = 0 as i32 as libc::c_char;
         w = cg.centerPrintCharWidth * CG_DrawStrlen(linebuffer.as_mut_ptr());
-        x = (640 as libc::c_int - w) / 2 as libc::c_int;
+        x = (640 as i32 - w) / 2 as i32;
         CG_DrawStringExt(
             x,
             y,
@@ -2549,12 +2549,12 @@ unsafe extern "C" fn CG_DrawCenterString() {
             qfalse,
             qtrue,
             cg.centerPrintCharWidth,
-            (cg.centerPrintCharWidth as libc::c_double * 1.5f64) as libc::c_int,
-            0 as libc::c_int,
+            (cg.centerPrintCharWidth as f64 * 1.5f64) as i32,
+            0 as i32,
         );
-        y = (y as libc::c_double + cg.centerPrintCharWidth as libc::c_double * 1.5f64)
-            as libc::c_int;
-        while *start as libc::c_int != 0 && *start as libc::c_int != '\n' as i32 {
+        y = (y as f64 + cg.centerPrintCharWidth as f64 * 1.5f64)
+            as i32;
+        while *start as i32 != 0 && *start as i32 != '\n' as i32 {
             start = start.offset(1)
         }
         if *start == 0 {
@@ -2562,7 +2562,7 @@ unsafe extern "C" fn CG_DrawCenterString() {
         }
         start = start.offset(1)
     }
-    crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const libc::c_float);
+    crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const f32);
 }
 /*
 ================================================================================
@@ -2578,18 +2578,18 @@ CG_DrawCrosshair
 */
 
 unsafe extern "C" fn CG_DrawCrosshair() {
-    let mut w: libc::c_float = 0.;
-    let mut h: libc::c_float = 0.;
+    let mut w: f32 = 0.;
+    let mut h: f32 = 0.;
     let mut hShader: qhandle_t = 0;
-    let mut f: libc::c_float = 0.;
-    let mut x: libc::c_float = 0.;
-    let mut y: libc::c_float = 0.;
-    let mut ca: libc::c_int = 0;
+    let mut f: f32 = 0.;
+    let mut x: f32 = 0.;
+    let mut y: f32 = 0.;
+    let mut ca: i32 = 0;
     if cg_drawCrosshair.integer == 0 {
         return;
     }
-    if (*cg.snap).ps.persistant[crate::bg_public_h::PERS_TEAM as libc::c_int as usize]
-        == crate::bg_public_h::TEAM_SPECTATOR as libc::c_int
+    if (*cg.snap).ps.persistant[crate::bg_public_h::PERS_TEAM as i32 as usize]
+        == crate::bg_public_h::TEAM_SPECTATOR as i32
     {
         return;
     }
@@ -2602,41 +2602,41 @@ unsafe extern "C" fn CG_DrawCrosshair() {
         CG_ColorForHealth(hcolor.as_mut_ptr());
         crate::src::cgame::cg_syscalls::trap_R_SetColor(hcolor.as_mut_ptr());
     } else {
-        crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const libc::c_float);
+        crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const f32);
     }
     h = cg_crosshairSize.value;
     w = h;
     // pulse the size of the crosshair when picking up items
-    f = (cg.time - cg.itemPickupBlendTime) as libc::c_float;
-    if f > 0 as libc::c_int as libc::c_float && f < 200 as libc::c_int as libc::c_float {
-        f /= 200 as libc::c_int as libc::c_float;
-        w *= 1 as libc::c_int as libc::c_float + f;
-        h *= 1 as libc::c_int as libc::c_float + f
+    f = (cg.time - cg.itemPickupBlendTime) as f32;
+    if f > 0 as i32 as f32 && f < 200 as i32 as f32 {
+        f /= 200 as i32 as f32;
+        w *= 1 as i32 as f32 + f;
+        h *= 1 as i32 as f32 + f
     }
-    x = cg_crosshairX.integer as libc::c_float;
-    y = cg_crosshairY.integer as libc::c_float;
+    x = cg_crosshairX.integer as f32;
+    y = cg_crosshairY.integer as f32;
     CG_AdjustFrom640(&mut x, &mut y, &mut w, &mut h);
     ca = cg_drawCrosshair.integer;
-    if ca < 0 as libc::c_int {
-        ca = 0 as libc::c_int
+    if ca < 0 as i32 {
+        ca = 0 as i32
     }
-    hShader = cgs.media.crosshairShader[(ca % 10 as libc::c_int) as usize];
+    hShader = cgs.media.crosshairShader[(ca % 10 as i32) as usize];
     crate::src::cgame::cg_syscalls::trap_R_DrawStretchPic(
-        ((x + cg.refdef.x as libc::c_float) as libc::c_double
-            + 0.5f64 * (cg.refdef.width as libc::c_float - w) as libc::c_double)
-            as libc::c_float,
-        ((y + cg.refdef.y as libc::c_float) as libc::c_double
-            + 0.5f64 * (cg.refdef.height as libc::c_float - h) as libc::c_double)
-            as libc::c_float,
+        ((x + cg.refdef.x as f32) as f64
+            + 0.5f64 * (cg.refdef.width as f32 - w) as f64)
+            as f32,
+        ((y + cg.refdef.y as f32) as f64
+            + 0.5f64 * (cg.refdef.height as f32 - h) as f64)
+            as f32,
         w,
         h,
-        0 as libc::c_int as libc::c_float,
-        0 as libc::c_int as libc::c_float,
-        1 as libc::c_int as libc::c_float,
-        1 as libc::c_int as libc::c_float,
+        0 as i32 as f32,
+        0 as i32 as f32,
+        1 as i32 as f32,
+        1 as i32 as f32,
         hShader,
     );
-    crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const libc::c_float);
+    crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const f32);
 }
 /*
 =================
@@ -2645,10 +2645,10 @@ CG_DrawCrosshair3D
 */
 
 unsafe extern "C" fn CG_DrawCrosshair3D() {
-    let mut w: libc::c_float = 0.;
+    let mut w: f32 = 0.;
     let mut hShader: qhandle_t = 0;
-    let mut f: libc::c_float = 0.;
-    let mut ca: libc::c_int = 0;
+    let mut f: f32 = 0.;
+    let mut ca: i32 = 0;
     let mut trace: trace_t = trace_t {
         allsolid: qfalse,
         startsolid: qfalse,
@@ -2666,10 +2666,10 @@ unsafe extern "C" fn CG_DrawCrosshair3D() {
         entityNum: 0,
     };
     let mut endpos: vec3_t = [0.; 3];
-    let mut stereoSep: libc::c_float = 0.;
-    let mut zProj: libc::c_float = 0.;
-    let mut maxdist: libc::c_float = 0.;
-    let mut xmax: libc::c_float = 0.;
+    let mut stereoSep: f32 = 0.;
+    let mut zProj: f32 = 0.;
+    let mut maxdist: f32 = 0.;
+    let mut xmax: f32 = 0.;
     let mut rendererinfos: [libc::c_char; 128] = [0; 128];
     let mut ent: refEntity_t = refEntity_t {
         reType: RT_MODEL,
@@ -2696,8 +2696,8 @@ unsafe extern "C" fn CG_DrawCrosshair3D() {
     if cg_drawCrosshair.integer == 0 {
         return;
     }
-    if (*cg.snap).ps.persistant[crate::bg_public_h::PERS_TEAM as libc::c_int as usize]
-        == crate::bg_public_h::TEAM_SPECTATOR as libc::c_int
+    if (*cg.snap).ps.persistant[crate::bg_public_h::PERS_TEAM as i32 as usize]
+        == crate::bg_public_h::TEAM_SPECTATOR as i32
     {
         return;
     }
@@ -2706,16 +2706,16 @@ unsafe extern "C" fn CG_DrawCrosshair3D() {
     }
     w = cg_crosshairSize.value;
     // pulse the size of the crosshair when picking up items
-    f = (cg.time - cg.itemPickupBlendTime) as libc::c_float;
-    if f > 0 as libc::c_int as libc::c_float && f < 200 as libc::c_int as libc::c_float {
-        f /= 200 as libc::c_int as libc::c_float;
-        w *= 1 as libc::c_int as libc::c_float + f
+    f = (cg.time - cg.itemPickupBlendTime) as f32;
+    if f > 0 as i32 as f32 && f < 200 as i32 as f32 {
+        f /= 200 as i32 as f32;
+        w *= 1 as i32 as f32 + f
     }
     ca = cg_drawCrosshair.integer;
-    if ca < 0 as libc::c_int {
-        ca = 0 as libc::c_int
+    if ca < 0 as i32 {
+        ca = 0 as i32
     }
-    hShader = cgs.media.crosshairShader[(ca % 10 as libc::c_int) as usize];
+    hShader = cgs.media.crosshairShader[(ca % 10 as i32) as usize];
     // Use a different method rendering the crosshair so players don't see two of them when
     // focusing their eyes at distant objects with high stereo separation
     // We are going to trace to the next shootable object and place the crosshair in front of it.
@@ -2723,50 +2723,50 @@ unsafe extern "C" fn CG_DrawCrosshair3D() {
     crate::src::cgame::cg_syscalls::trap_Cvar_VariableStringBuffer(
         b"r_zProj\x00" as *const u8 as *const libc::c_char,
         rendererinfos.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong as i32,
     );
-    zProj = atof(rendererinfos.as_mut_ptr()) as libc::c_float;
+    zProj = atof(rendererinfos.as_mut_ptr()) as f32;
     crate::src::cgame::cg_syscalls::trap_Cvar_VariableStringBuffer(
         b"r_stereoSeparation\x00" as *const u8 as *const libc::c_char,
         rendererinfos.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong as i32,
     );
-    stereoSep = (zProj as libc::c_double / atof(rendererinfos.as_mut_ptr())) as libc::c_float;
-    xmax = (zProj as libc::c_double
+    stereoSep = (zProj as f64 / atof(rendererinfos.as_mut_ptr())) as f32;
+    xmax = (zProj as f64
         * crate::stdlib::tan(
-            cg.refdef.fov_x as libc::c_double * 3.14159265358979323846f64
-                / 360.0f32 as libc::c_double,
-        )) as libc::c_float;
+            cg.refdef.fov_x as f64 * 3.14159265358979323846f64
+                / 360.0f32 as f64,
+        )) as f32;
     // let the trace run through until a change in stereo separation of the crosshair becomes less than one pixel.
-    maxdist = cgs.glconfig.vidWidth as libc::c_float * stereoSep * zProj
-        / (2 as libc::c_int as libc::c_float * xmax);
-    endpos[0 as libc::c_int as usize] = cg.refdef.vieworg[0 as libc::c_int as usize]
-        + cg.refdef.viewaxis[0 as libc::c_int as usize][0 as libc::c_int as usize] * maxdist;
-    endpos[1 as libc::c_int as usize] = cg.refdef.vieworg[1 as libc::c_int as usize]
-        + cg.refdef.viewaxis[0 as libc::c_int as usize][1 as libc::c_int as usize] * maxdist;
-    endpos[2 as libc::c_int as usize] = cg.refdef.vieworg[2 as libc::c_int as usize]
-        + cg.refdef.viewaxis[0 as libc::c_int as usize][2 as libc::c_int as usize] * maxdist;
+    maxdist = cgs.glconfig.vidWidth as f32 * stereoSep * zProj
+        / (2 as i32 as f32 * xmax);
+    endpos[0 as i32 as usize] = cg.refdef.vieworg[0 as i32 as usize]
+        + cg.refdef.viewaxis[0 as i32 as usize][0 as i32 as usize] * maxdist;
+    endpos[1 as i32 as usize] = cg.refdef.vieworg[1 as i32 as usize]
+        + cg.refdef.viewaxis[0 as i32 as usize][1 as i32 as usize] * maxdist;
+    endpos[2 as i32 as usize] = cg.refdef.vieworg[2 as i32 as usize]
+        + cg.refdef.viewaxis[0 as i32 as usize][2 as i32 as usize] * maxdist;
     crate::src::cgame::cg_predict::CG_Trace(
         &mut trace as *mut _ as *mut trace_t,
         cg.refdef.vieworg.as_mut_ptr() as *const vec_t,
         0 as *const vec_t,
         0 as *const vec_t,
         endpos.as_mut_ptr() as *const vec_t,
-        0 as libc::c_int,
-        1 as libc::c_int | 0x2000000 as libc::c_int | 0x4000000 as libc::c_int,
+        0 as i32,
+        1 as i32 | 0x2000000 as i32 | 0x4000000 as i32,
     );
     crate::stdlib::memset(
         &mut ent as *mut refEntity_t as *mut libc::c_void,
-        0 as libc::c_int,
+        0 as i32,
         ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
     );
     ent.reType = RT_SPRITE;
-    ent.renderfx = 0x8 as libc::c_int | 0x10 as libc::c_int;
-    ent.origin[0 as libc::c_int as usize] = trace.endpos[0 as libc::c_int as usize];
-    ent.origin[1 as libc::c_int as usize] = trace.endpos[1 as libc::c_int as usize];
-    ent.origin[2 as libc::c_int as usize] = trace.endpos[2 as libc::c_int as usize];
+    ent.renderfx = 0x8 as i32 | 0x10 as i32;
+    ent.origin[0 as i32 as usize] = trace.endpos[0 as i32 as usize];
+    ent.origin[1 as i32 as usize] = trace.endpos[1 as i32 as usize];
+    ent.origin[2 as i32 as usize] = trace.endpos[2 as i32 as usize];
     // scale the crosshair so it appears the same size for all distances
-    ent.radius = w / 640 as libc::c_int as libc::c_float * xmax * trace.fraction * maxdist / zProj;
+    ent.radius = w / 640 as i32 as f32 * xmax * trace.fraction * maxdist / zProj;
     ent.customShader = hShader;
     crate::src::cgame::cg_syscalls::trap_R_AddRefEntityToScene(
         &mut ent as *mut _ as *const refEntity_t,
@@ -2797,19 +2797,19 @@ unsafe extern "C" fn CG_ScanForCrosshairEntity() {
     };
     let mut start: vec3_t = [0.; 3];
     let mut end: vec3_t = [0.; 3];
-    let mut content: libc::c_int = 0;
-    start[0 as libc::c_int as usize] = cg.refdef.vieworg[0 as libc::c_int as usize];
-    start[1 as libc::c_int as usize] = cg.refdef.vieworg[1 as libc::c_int as usize];
-    start[2 as libc::c_int as usize] = cg.refdef.vieworg[2 as libc::c_int as usize];
-    end[0 as libc::c_int as usize] = start[0 as libc::c_int as usize]
-        + cg.refdef.viewaxis[0 as libc::c_int as usize][0 as libc::c_int as usize]
-            * 131072 as libc::c_int as libc::c_float;
-    end[1 as libc::c_int as usize] = start[1 as libc::c_int as usize]
-        + cg.refdef.viewaxis[0 as libc::c_int as usize][1 as libc::c_int as usize]
-            * 131072 as libc::c_int as libc::c_float;
-    end[2 as libc::c_int as usize] = start[2 as libc::c_int as usize]
-        + cg.refdef.viewaxis[0 as libc::c_int as usize][2 as libc::c_int as usize]
-            * 131072 as libc::c_int as libc::c_float;
+    let mut content: i32 = 0;
+    start[0 as i32 as usize] = cg.refdef.vieworg[0 as i32 as usize];
+    start[1 as i32 as usize] = cg.refdef.vieworg[1 as i32 as usize];
+    start[2 as i32 as usize] = cg.refdef.vieworg[2 as i32 as usize];
+    end[0 as i32 as usize] = start[0 as i32 as usize]
+        + cg.refdef.viewaxis[0 as i32 as usize][0 as i32 as usize]
+            * 131072 as i32 as f32;
+    end[1 as i32 as usize] = start[1 as i32 as usize]
+        + cg.refdef.viewaxis[0 as i32 as usize][1 as i32 as usize]
+            * 131072 as i32 as f32;
+    end[2 as i32 as usize] = start[2 as i32 as usize]
+        + cg.refdef.viewaxis[0 as i32 as usize][2 as i32 as usize]
+            * 131072 as i32 as f32;
     crate::src::cgame::cg_predict::CG_Trace(
         &mut trace as *mut _ as *mut trace_t,
         start.as_mut_ptr() as *const vec_t,
@@ -2817,22 +2817,22 @@ unsafe extern "C" fn CG_ScanForCrosshairEntity() {
         vec3_origin.as_mut_ptr() as *const vec_t,
         end.as_mut_ptr() as *const vec_t,
         (*cg.snap).ps.clientNum,
-        1 as libc::c_int | 0x2000000 as libc::c_int,
+        1 as i32 | 0x2000000 as i32,
     );
-    if trace.entityNum >= 64 as libc::c_int {
+    if trace.entityNum >= 64 as i32 {
         return;
     }
     // if the player is in fog, don't show it
     content = crate::src::cgame::cg_predict::CG_PointContents(
         trace.endpos.as_mut_ptr() as *const vec_t,
-        0 as libc::c_int,
+        0 as i32,
     );
-    if content & 64 as libc::c_int != 0 {
+    if content & 64 as i32 != 0 {
         return;
     }
     // if the player is invisible, don't show it
     if cg_entities[trace.entityNum as usize].currentState.powerups
-        & (1 as libc::c_int) << crate::bg_public_h::PW_INVIS as libc::c_int
+        & (1 as i32) << crate::bg_public_h::PW_INVIS as i32
         != 0
     {
         return;
@@ -2848,9 +2848,9 @@ CG_DrawCrosshairNames
 */
 
 unsafe extern "C" fn CG_DrawCrosshairNames() {
-    let mut color: *mut libc::c_float = 0 as *mut libc::c_float;
+    let mut color: *mut f32 = 0 as *mut f32;
     let mut name: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut w: libc::c_float = 0.;
+    let mut w: f32 = 0.;
     if cg_drawCrosshair.integer == 0 {
         return;
     }
@@ -2863,23 +2863,23 @@ unsafe extern "C" fn CG_DrawCrosshairNames() {
     // scan the known entities to see if the crosshair is sighted on one
     CG_ScanForCrosshairEntity();
     // draw the name of the player being looked at
-    color = CG_FadeColor(cg.crosshairClientTime, 1000 as libc::c_int);
+    color = CG_FadeColor(cg.crosshairClientTime, 1000 as i32);
     if color.is_null() {
-        crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const libc::c_float);
+        crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const f32);
         return;
     }
     name = cgs.clientinfo[cg.crosshairClientNum as usize]
         .name
         .as_mut_ptr();
-    w = (CG_DrawStrlen(name) * 16 as libc::c_int) as libc::c_float;
+    w = (CG_DrawStrlen(name) * 16 as i32) as f32;
     CG_DrawBigString(
-        (320 as libc::c_int as libc::c_float - w / 2 as libc::c_int as libc::c_float)
-            as libc::c_int,
-        170 as libc::c_int,
+        (320 as i32 as f32 - w / 2 as i32 as f32)
+            as i32,
+        170 as i32,
         name,
-        *color.offset(3 as libc::c_int as isize) * 0.5f32,
+        *color.offset(3 as i32 as isize) * 0.5f32,
     );
-    crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const libc::c_float);
+    crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const f32);
 }
 //==============================================================================
 /*
@@ -2890,26 +2890,26 @@ CG_DrawSpectator
 
 unsafe extern "C" fn CG_DrawSpectator() {
     CG_DrawBigString(
-        320 as libc::c_int - 9 as libc::c_int * 8 as libc::c_int,
-        440 as libc::c_int,
+        320 as i32 - 9 as i32 * 8 as i32,
+        440 as i32,
         b"SPECTATOR\x00" as *const u8 as *const libc::c_char,
         1.0f32,
     );
-    if cgs.gametype as libc::c_uint
-        == crate::bg_public_h::GT_TOURNAMENT as libc::c_int as libc::c_uint
+    if cgs.gametype as u32
+        == crate::bg_public_h::GT_TOURNAMENT as i32 as u32
     {
         CG_DrawBigString(
-            320 as libc::c_int - 15 as libc::c_int * 8 as libc::c_int,
-            460 as libc::c_int,
+            320 as i32 - 15 as i32 * 8 as i32,
+            460 as i32,
             b"waiting to play\x00" as *const u8 as *const libc::c_char,
             1.0f32,
         );
-    } else if cgs.gametype as libc::c_uint
-        >= crate::bg_public_h::GT_TEAM as libc::c_int as libc::c_uint
+    } else if cgs.gametype as u32
+        >= crate::bg_public_h::GT_TEAM as i32 as u32
     {
         CG_DrawBigString(
-            320 as libc::c_int - 39 as libc::c_int * 8 as libc::c_int,
-            460 as libc::c_int,
+            320 as i32 - 39 as i32 * 8 as i32,
+            460 as i32,
             b"press ESC and use the JOIN menu to play\x00" as *const u8 as *const libc::c_char,
             1.0f32,
         );
@@ -2923,7 +2923,7 @@ CG_DrawVote
 
 unsafe extern "C" fn CG_DrawVote() {
     let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut sec: libc::c_int = 0;
+    let mut sec: i32 = 0;
     if cgs.voteTime == 0 {
         return;
     }
@@ -2932,12 +2932,12 @@ unsafe extern "C" fn CG_DrawVote() {
         cgs.voteModified = qfalse;
         crate::src::cgame::cg_syscalls::trap_S_StartLocalSound(
             cgs.media.talkSound,
-            CHAN_LOCAL_SOUND as libc::c_int,
+            CHAN_LOCAL_SOUND as i32,
         );
     }
-    sec = (30000 as libc::c_int - (cg.time - cgs.voteTime)) / 1000 as libc::c_int;
-    if sec < 0 as libc::c_int {
-        sec = 0 as libc::c_int
+    sec = (30000 as i32 - (cg.time - cgs.voteTime)) / 1000 as i32;
+    if sec < 0 as i32 {
+        sec = 0 as i32
     }
     s = va(
         b"VOTE(%i):%s yes:%i no:%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2946,7 +2946,7 @@ unsafe extern "C" fn CG_DrawVote() {
         cgs.voteYes,
         cgs.voteNo,
     );
-    CG_DrawSmallString(0 as libc::c_int, 58 as libc::c_int, s, 1.0f32);
+    CG_DrawSmallString(0 as i32, 58 as i32, s, 1.0f32);
 }
 /*
 =================
@@ -2956,16 +2956,16 @@ CG_DrawTeamVote
 
 unsafe extern "C" fn CG_DrawTeamVote() {
     let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut sec: libc::c_int = 0;
-    let mut cs_offset: libc::c_int = 0;
-    if cgs.clientinfo[cg.clientNum as usize].team as libc::c_uint
-        == crate::bg_public_h::TEAM_RED as libc::c_int as libc::c_uint
+    let mut sec: i32 = 0;
+    let mut cs_offset: i32 = 0;
+    if cgs.clientinfo[cg.clientNum as usize].team as u32
+        == crate::bg_public_h::TEAM_RED as i32 as u32
     {
-        cs_offset = 0 as libc::c_int
-    } else if cgs.clientinfo[cg.clientNum as usize].team as libc::c_uint
-        == crate::bg_public_h::TEAM_BLUE as libc::c_int as libc::c_uint
+        cs_offset = 0 as i32
+    } else if cgs.clientinfo[cg.clientNum as usize].team as u32
+        == crate::bg_public_h::TEAM_BLUE as i32 as u32
     {
-        cs_offset = 1 as libc::c_int
+        cs_offset = 1 as i32
     } else {
         return;
     }
@@ -2977,13 +2977,13 @@ unsafe extern "C" fn CG_DrawTeamVote() {
         cgs.teamVoteModified[cs_offset as usize] = qfalse;
         crate::src::cgame::cg_syscalls::trap_S_StartLocalSound(
             cgs.media.talkSound,
-            CHAN_LOCAL_SOUND as libc::c_int,
+            CHAN_LOCAL_SOUND as i32,
         );
     }
-    sec = (30000 as libc::c_int - (cg.time - cgs.teamVoteTime[cs_offset as usize]))
-        / 1000 as libc::c_int;
-    if sec < 0 as libc::c_int {
-        sec = 0 as libc::c_int
+    sec = (30000 as i32 - (cg.time - cgs.teamVoteTime[cs_offset as usize]))
+        / 1000 as i32;
+    if sec < 0 as i32 {
+        sec = 0 as i32
     }
     s = va(
         b"TEAMVOTE(%i):%s yes:%i no:%i\x00" as *const u8 as *const libc::c_char
@@ -2993,7 +2993,7 @@ unsafe extern "C" fn CG_DrawTeamVote() {
         cgs.teamVoteYes[cs_offset as usize],
         cgs.teamVoteNo[cs_offset as usize],
     );
-    CG_DrawSmallString(0 as libc::c_int, 90 as libc::c_int, s, 1.0f32);
+    CG_DrawSmallString(0 as i32, 90 as i32, s, 1.0f32);
 }
 
 unsafe extern "C" fn CG_DrawScoreboard() -> qboolean {
@@ -3007,8 +3007,8 @@ CG_DrawIntermission
 
 unsafe extern "C" fn CG_DrawIntermission() {
     //	int key;
-    if cgs.gametype as libc::c_uint
-        == crate::bg_public_h::GT_SINGLE_PLAYER as libc::c_int as libc::c_uint
+    if cgs.gametype as u32
+        == crate::bg_public_h::GT_SINGLE_PLAYER as i32 as u32
     {
         CG_DrawCenterString();
         return;
@@ -3023,37 +3023,37 @@ CG_DrawFollow
 */
 
 unsafe extern "C" fn CG_DrawFollow() -> qboolean {
-    let mut x: libc::c_float = 0.;
+    let mut x: f32 = 0.;
     let mut color: vec4_t = [0.; 4];
     let mut name: *const libc::c_char = 0 as *const libc::c_char;
-    if (*cg.snap).ps.pm_flags & 4096 as libc::c_int == 0 {
+    if (*cg.snap).ps.pm_flags & 4096 as i32 == 0 {
         return qfalse;
     }
-    color[0 as libc::c_int as usize] = 1 as libc::c_int as vec_t;
-    color[1 as libc::c_int as usize] = 1 as libc::c_int as vec_t;
-    color[2 as libc::c_int as usize] = 1 as libc::c_int as vec_t;
-    color[3 as libc::c_int as usize] = 1 as libc::c_int as vec_t;
+    color[0 as i32 as usize] = 1 as i32 as vec_t;
+    color[1 as i32 as usize] = 1 as i32 as vec_t;
+    color[2 as i32 as usize] = 1 as i32 as vec_t;
+    color[3 as i32 as usize] = 1 as i32 as vec_t;
     CG_DrawBigString(
-        320 as libc::c_int - 9 as libc::c_int * 8 as libc::c_int,
-        24 as libc::c_int,
+        320 as i32 - 9 as i32 * 8 as i32,
+        24 as i32,
         b"following\x00" as *const u8 as *const libc::c_char,
         1.0f32,
     );
     name = cgs.clientinfo[(*cg.snap).ps.clientNum as usize]
         .name
         .as_mut_ptr();
-    x = (0.5f64 * (640 as libc::c_int - 32 as libc::c_int * CG_DrawStrlen(name)) as libc::c_double)
-        as libc::c_float;
+    x = (0.5f64 * (640 as i32 - 32 as i32 * CG_DrawStrlen(name)) as f64)
+        as f32;
     CG_DrawStringExt(
-        x as libc::c_int,
-        40 as libc::c_int,
+        x as i32,
+        40 as i32,
         name,
         color.as_mut_ptr(),
         qtrue,
         qtrue,
-        32 as libc::c_int,
-        48 as libc::c_int,
-        0 as libc::c_int,
+        32 as i32,
+        48 as i32,
+        0 as i32,
     );
     return qtrue;
 }
@@ -3065,22 +3065,22 @@ CG_DrawAmmoWarning
 
 unsafe extern "C" fn CG_DrawAmmoWarning() {
     let mut s: *const libc::c_char = 0 as *const libc::c_char;
-    let mut w: libc::c_int = 0;
-    if cg_drawAmmoWarning.integer == 0 as libc::c_int {
+    let mut w: i32 = 0;
+    if cg_drawAmmoWarning.integer == 0 as i32 {
         return;
     }
     if cg.lowAmmoWarning == 0 {
         return;
     }
-    if cg.lowAmmoWarning == 2 as libc::c_int {
+    if cg.lowAmmoWarning == 2 as i32 {
         s = b"OUT OF AMMO\x00" as *const u8 as *const libc::c_char
     } else {
         s = b"LOW AMMO WARNING\x00" as *const u8 as *const libc::c_char
     }
-    w = CG_DrawStrlen(s) * 16 as libc::c_int;
+    w = CG_DrawStrlen(s) * 16 as i32;
     CG_DrawBigString(
-        320 as libc::c_int - w / 2 as libc::c_int,
-        64 as libc::c_int,
+        320 as i32 - w / 2 as i32,
+        64 as i32,
         s,
         1.0f32,
     );
@@ -3092,10 +3092,10 @@ CG_DrawWarmup
 */
 
 unsafe extern "C" fn CG_DrawWarmup() {
-    let mut w: libc::c_int = 0;
-    let mut sec: libc::c_int = 0;
-    let mut i: libc::c_int = 0;
-    let mut cw: libc::c_int = 0;
+    let mut w: i32 = 0;
+    let mut sec: i32 = 0;
+    let mut i: i32 = 0;
+    let mut cw: i32 = 0;
     let mut ci1: *mut crate::cg_local_h::clientInfo_t = 0 as *mut crate::cg_local_h::clientInfo_t;
     let mut ci2: *mut crate::cg_local_h::clientInfo_t = 0 as *mut crate::cg_local_h::clientInfo_t;
     let mut s: *const libc::c_char = 0 as *const libc::c_char;
@@ -3103,29 +3103,29 @@ unsafe extern "C" fn CG_DrawWarmup() {
     if sec == 0 {
         return;
     }
-    if sec < 0 as libc::c_int {
+    if sec < 0 as i32 {
         s = b"Waiting for players\x00" as *const u8 as *const libc::c_char;
-        w = CG_DrawStrlen(s) * 16 as libc::c_int;
+        w = CG_DrawStrlen(s) * 16 as i32;
         CG_DrawBigString(
-            320 as libc::c_int - w / 2 as libc::c_int,
-            24 as libc::c_int,
+            320 as i32 - w / 2 as i32,
+            24 as i32,
             s,
             1.0f32,
         );
-        cg.warmupCount = 0 as libc::c_int;
+        cg.warmupCount = 0 as i32;
         return;
     }
-    if cgs.gametype as libc::c_uint
-        == crate::bg_public_h::GT_TOURNAMENT as libc::c_int as libc::c_uint
+    if cgs.gametype as u32
+        == crate::bg_public_h::GT_TOURNAMENT as i32 as u32
     {
         // find the two active players
         ci1 = 0 as *mut crate::cg_local_h::clientInfo_t;
         ci2 = 0 as *mut crate::cg_local_h::clientInfo_t;
-        i = 0 as libc::c_int;
+        i = 0 as i32;
         while i < cgs.maxclients {
-            if cgs.clientinfo[i as usize].infoValid as libc::c_uint != 0
-                && cgs.clientinfo[i as usize].team as libc::c_uint
-                    == crate::bg_public_h::TEAM_FREE as libc::c_int as libc::c_uint
+            if cgs.clientinfo[i as usize].infoValid as u32 != 0
+                && cgs.clientinfo[i as usize].team as u32
+                    == crate::bg_public_h::TEAM_FREE as i32 as u32
             {
                 if ci1.is_null() {
                     ci1 = &mut *cgs.clientinfo.as_mut_ptr().offset(i as isize)
@@ -3144,64 +3144,64 @@ unsafe extern "C" fn CG_DrawWarmup() {
                 (*ci2).name.as_mut_ptr(),
             );
             w = CG_DrawStrlen(s);
-            if w > 640 as libc::c_int / 32 as libc::c_int {
-                cw = 640 as libc::c_int / w
+            if w > 640 as i32 / 32 as i32 {
+                cw = 640 as i32 / w
             } else {
-                cw = 32 as libc::c_int
+                cw = 32 as i32
             }
             CG_DrawStringExt(
-                320 as libc::c_int - w * cw / 2 as libc::c_int,
-                20 as libc::c_int,
+                320 as i32 - w * cw / 2 as i32,
+                20 as i32,
                 s,
                 colorWhite.as_mut_ptr(),
                 qfalse,
                 qtrue,
                 cw,
-                (cw as libc::c_float * 1.5f32) as libc::c_int,
-                0 as libc::c_int,
+                (cw as f32 * 1.5f32) as i32,
+                0 as i32,
             );
         }
     } else {
-        if cgs.gametype as libc::c_uint == crate::bg_public_h::GT_FFA as libc::c_int as libc::c_uint
+        if cgs.gametype as u32 == crate::bg_public_h::GT_FFA as i32 as u32
         {
             s = b"Free For All\x00" as *const u8 as *const libc::c_char
-        } else if cgs.gametype as libc::c_uint
-            == crate::bg_public_h::GT_TEAM as libc::c_int as libc::c_uint
+        } else if cgs.gametype as u32
+            == crate::bg_public_h::GT_TEAM as i32 as u32
         {
             s = b"Team Deathmatch\x00" as *const u8 as *const libc::c_char
-        } else if cgs.gametype as libc::c_uint
-            == crate::bg_public_h::GT_CTF as libc::c_int as libc::c_uint
+        } else if cgs.gametype as u32
+            == crate::bg_public_h::GT_CTF as i32 as u32
         {
             s = b"Capture the Flag\x00" as *const u8 as *const libc::c_char
         } else {
             s = b"\x00" as *const u8 as *const libc::c_char
         }
         w = CG_DrawStrlen(s);
-        if w > 640 as libc::c_int / 32 as libc::c_int {
-            cw = 640 as libc::c_int / w
+        if w > 640 as i32 / 32 as i32 {
+            cw = 640 as i32 / w
         } else {
-            cw = 32 as libc::c_int
+            cw = 32 as i32
         }
         CG_DrawStringExt(
-            320 as libc::c_int - w * cw / 2 as libc::c_int,
-            25 as libc::c_int,
+            320 as i32 - w * cw / 2 as i32,
+            25 as i32,
             s,
             colorWhite.as_mut_ptr(),
             qfalse,
             qtrue,
             cw,
-            (cw as libc::c_float * 1.1f32) as libc::c_int,
-            0 as libc::c_int,
+            (cw as f32 * 1.1f32) as i32,
+            0 as i32,
         );
     }
-    sec = (sec - cg.time) / 1000 as libc::c_int;
-    if sec < 0 as libc::c_int {
-        cg.warmup = 0 as libc::c_int;
-        sec = 0 as libc::c_int
+    sec = (sec - cg.time) / 1000 as i32;
+    if sec < 0 as i32 {
+        cg.warmup = 0 as i32;
+        sec = 0 as i32
     }
     s = va(
         b"Starts in: %i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-        sec + 1 as libc::c_int,
+        sec + 1 as i32,
     );
     if sec != cg.warmupCount {
         cg.warmupCount = sec;
@@ -3209,41 +3209,41 @@ unsafe extern "C" fn CG_DrawWarmup() {
             0 => {
                 crate::src::cgame::cg_syscalls::trap_S_StartLocalSound(
                     cgs.media.count1Sound,
-                    CHAN_ANNOUNCER as libc::c_int,
+                    CHAN_ANNOUNCER as i32,
                 );
             }
             1 => {
                 crate::src::cgame::cg_syscalls::trap_S_StartLocalSound(
                     cgs.media.count2Sound,
-                    CHAN_ANNOUNCER as libc::c_int,
+                    CHAN_ANNOUNCER as i32,
                 );
             }
             2 => {
                 crate::src::cgame::cg_syscalls::trap_S_StartLocalSound(
                     cgs.media.count3Sound,
-                    CHAN_ANNOUNCER as libc::c_int,
+                    CHAN_ANNOUNCER as i32,
                 );
             }
             _ => {}
         }
     }
     match cg.warmupCount {
-        0 => cw = 28 as libc::c_int,
-        1 => cw = 24 as libc::c_int,
-        2 => cw = 20 as libc::c_int,
-        _ => cw = 16 as libc::c_int,
+        0 => cw = 28 as i32,
+        1 => cw = 24 as i32,
+        2 => cw = 20 as i32,
+        _ => cw = 16 as i32,
     }
     w = CG_DrawStrlen(s);
     CG_DrawStringExt(
-        320 as libc::c_int - w * cw / 2 as libc::c_int,
-        70 as libc::c_int,
+        320 as i32 - w * cw / 2 as i32,
+        70 as i32,
         s,
         colorWhite.as_mut_ptr(),
         qfalse,
         qtrue,
         cw,
-        (cw as libc::c_double * 1.5f64) as libc::c_int,
-        0 as libc::c_int,
+        (cw as f64 * 1.5f64) as i32,
+        0 as i32,
     );
 }
 //==================================================================================
@@ -3258,10 +3258,10 @@ unsafe extern "C" fn CG_Draw2D(mut stereoFrame: stereoFrame_t) {
     if cg.levelShot as u64 != 0 {
         return;
     }
-    if cg_draw2D.integer == 0 as libc::c_int {
+    if cg_draw2D.integer == 0 as i32 {
         return;
     }
-    if (*cg.snap).ps.pm_type == crate::bg_public_h::PM_INTERMISSION as libc::c_int {
+    if (*cg.snap).ps.pm_type == crate::bg_public_h::PM_INTERMISSION as i32 {
         CG_DrawIntermission();
         return;
     }
@@ -3270,21 +3270,21 @@ unsafe extern "C" fn CG_Draw2D(mut stereoFrame: stereoFrame_t) {
             return;
         }
     */
-    if (*cg.snap).ps.persistant[crate::bg_public_h::PERS_TEAM as libc::c_int as usize]
-        == crate::bg_public_h::TEAM_SPECTATOR as libc::c_int
+    if (*cg.snap).ps.persistant[crate::bg_public_h::PERS_TEAM as i32 as usize]
+        == crate::bg_public_h::TEAM_SPECTATOR as i32
     {
         CG_DrawSpectator();
-        if stereoFrame as libc::c_uint == STEREO_CENTER as libc::c_int as libc::c_uint {
+        if stereoFrame as u32 == STEREO_CENTER as i32 as u32 {
             CG_DrawCrosshair();
         }
         CG_DrawCrosshairNames();
     } else if cg.showScores as u64 == 0
-        && (*cg.snap).ps.stats[crate::bg_public_h::STAT_HEALTH as libc::c_int as usize]
-            > 0 as libc::c_int
+        && (*cg.snap).ps.stats[crate::bg_public_h::STAT_HEALTH as i32 as usize]
+            > 0 as i32
     {
         CG_DrawStatusBar();
         CG_DrawAmmoWarning();
-        if stereoFrame as libc::c_uint == STEREO_CENTER as libc::c_int as libc::c_uint {
+        if stereoFrame as u32 == STEREO_CENTER as i32 as u32 {
             CG_DrawCrosshair();
         }
         CG_DrawCrosshairNames();
@@ -3292,7 +3292,7 @@ unsafe extern "C" fn CG_Draw2D(mut stereoFrame: stereoFrame_t) {
         CG_DrawHoldableItem();
         CG_DrawReward();
     }
-    if cgs.gametype as libc::c_uint >= crate::bg_public_h::GT_TEAM as libc::c_int as libc::c_uint {
+    if cgs.gametype as u32 >= crate::bg_public_h::GT_TEAM as i32 as u32 {
         CG_DrawTeamInfo();
     }
     CG_DrawVote();
@@ -3327,16 +3327,16 @@ pub unsafe extern "C" fn CG_DrawActive(mut stereoView: stereoFrame_t) {
         return;
     }
     // optionally draw the tournement scoreboard instead
-    if (*cg.snap).ps.persistant[crate::bg_public_h::PERS_TEAM as libc::c_int as usize]
-        == crate::bg_public_h::TEAM_SPECTATOR as libc::c_int
-        && (*cg.snap).ps.pm_flags & 8192 as libc::c_int != 0
+    if (*cg.snap).ps.persistant[crate::bg_public_h::PERS_TEAM as i32 as usize]
+        == crate::bg_public_h::TEAM_SPECTATOR as i32
+        && (*cg.snap).ps.pm_flags & 8192 as i32 != 0
     {
         crate::src::cgame::cg_scoreboard::CG_DrawTourneyScoreboard();
         return;
     }
     // clear around the rendered view if sized down
     CG_TileClear();
-    if stereoView as libc::c_uint != STEREO_CENTER as libc::c_int as libc::c_uint {
+    if stereoView as u32 != STEREO_CENTER as i32 as u32 {
         CG_DrawCrosshair3D();
     }
     // draw 3D view

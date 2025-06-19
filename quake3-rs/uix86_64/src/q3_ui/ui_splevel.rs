@@ -3,12 +3,12 @@ use ::libc;
 pub mod stdlib_h {
     #[inline]
 
-    pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> libc::c_int {
+    pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return ::libc::strtol(
             __nptr,
             0 as *mut libc::c_void as *mut *mut libc::c_char,
-            10 as libc::c_int,
-        ) as libc::c_int;
+            10 as i32,
+        ) as i32;
     }
 }
 
@@ -127,19 +127,19 @@ pub struct levelMenuInfo_t {
     pub item_null: crate::ui_local_h::menubitmap_s,
     pub reinit: crate::src::qcommon::q_shared::qboolean,
     pub selectedArenaInfo: *const libc::c_char,
-    pub numMaps: libc::c_int,
+    pub numMaps: i32,
     pub levelPicNames: [[libc::c_char; 64]; 4],
     pub levelNames: [[libc::c_char; 16]; 4],
-    pub levelScores: [libc::c_int; 4],
-    pub levelScoresSkill: [libc::c_int; 4],
+    pub levelScores: [i32; 4],
+    pub levelScoresSkill: [i32; 4],
     pub levelSelectedPic: crate::src::qcommon::q_shared::qhandle_t,
     pub levelFocusPic: crate::src::qcommon::q_shared::qhandle_t,
     pub levelCompletePic: [crate::src::qcommon::q_shared::qhandle_t; 5],
     pub playerModel: [libc::c_char; 64],
     pub playerPicName: [libc::c_char; 64],
-    pub awardLevels: [libc::c_int; 6],
+    pub awardLevels: [i32; 6],
     pub awardSounds: [crate::src::qcommon::q_shared::sfxHandle_t; 6],
-    pub numBots: libc::c_int,
+    pub numBots: i32,
     pub botPics: [crate::src::qcommon::q_shared::qhandle_t; 7],
     pub botNames: [[libc::c_char; 10]; 7],
 }
@@ -177,7 +177,7 @@ static mut levelMenuInfo: levelMenuInfo_t = levelMenuInfo_t {
         },
         string: 0 as *const libc::c_char as *mut libc::c_char,
         style: 0,
-        color: 0 as *const libc::c_float as *mut libc::c_float,
+        color: 0 as *const f32 as *mut f32,
     },
     item_leftarrow: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -204,7 +204,7 @@ static mut levelMenuInfo: levelMenuInfo_t = levelMenuInfo_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     item_maps: [crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -231,7 +231,7 @@ static mut levelMenuInfo: levelMenuInfo_t = levelMenuInfo_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     }; 4],
     item_rightarrow: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -258,7 +258,7 @@ static mut levelMenuInfo: levelMenuInfo_t = levelMenuInfo_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     item_player: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -285,7 +285,7 @@ static mut levelMenuInfo: levelMenuInfo_t = levelMenuInfo_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     item_awards: [crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -312,7 +312,7 @@ static mut levelMenuInfo: levelMenuInfo_t = levelMenuInfo_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     }; 6],
     item_back: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -339,7 +339,7 @@ static mut levelMenuInfo: levelMenuInfo_t = levelMenuInfo_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     item_reset: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -366,7 +366,7 @@ static mut levelMenuInfo: levelMenuInfo_t = levelMenuInfo_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     item_custom: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -393,7 +393,7 @@ static mut levelMenuInfo: levelMenuInfo_t = levelMenuInfo_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     item_next: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -420,7 +420,7 @@ static mut levelMenuInfo: levelMenuInfo_t = levelMenuInfo_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     item_null: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -447,7 +447,7 @@ static mut levelMenuInfo: levelMenuInfo_t = levelMenuInfo_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     reinit: crate::src::qcommon::q_shared::qfalse,
     selectedArenaInfo: 0 as *const libc::c_char,
@@ -468,21 +468,21 @@ static mut levelMenuInfo: levelMenuInfo_t = levelMenuInfo_t {
     botNames: [[0; 10]; 7],
 };
 
-static mut selectedArenaSet: libc::c_int = 0;
+static mut selectedArenaSet: i32 = 0;
 
-static mut selectedArena: libc::c_int = 0;
+static mut selectedArena: i32 = 0;
 
-static mut currentSet: libc::c_int = 0;
+static mut currentSet: i32 = 0;
 
-static mut currentGame: libc::c_int = 0;
+static mut currentGame: i32 = 0;
 
-static mut trainingTier: libc::c_int = 0;
+static mut trainingTier: i32 = 0;
 
-static mut finalTier: libc::c_int = 0;
+static mut finalTier: i32 = 0;
 
-static mut minTier: libc::c_int = 0;
+static mut minTier: i32 = 0;
 
-static mut maxTier: libc::c_int = 0;
+static mut maxTier: i32 = 0;
 /*
 =================
 PlayerIcon
@@ -492,14 +492,14 @@ PlayerIcon
 unsafe extern "C" fn PlayerIcon(
     mut modelAndSkin: *const libc::c_char,
     mut iconName: *mut libc::c_char,
-    mut iconNameMaxSize: libc::c_int,
+    mut iconNameMaxSize: i32,
 ) {
     let mut skin: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut model: [libc::c_char; 64] = [0; 64];
     crate::src::qcommon::q_shared::Q_strncpyz(
         model.as_mut_ptr(),
         modelAndSkin,
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
     );
     skin = ::libc::strrchr(model.as_mut_ptr(), '/' as i32);
     if !skin.is_null() {
@@ -520,7 +520,7 @@ unsafe extern "C" fn PlayerIcon(
         && crate::src::qcommon::q_shared::Q_stricmp(
             skin,
             b"default\x00" as *const u8 as *const libc::c_char,
-        ) != 0 as libc::c_int
+        ) != 0 as i32
     {
         crate::src::qcommon::q_shared::Com_sprintf(
             iconName,
@@ -543,7 +543,7 @@ unsafe extern "C" fn PlayerIconHandle(
     PlayerIcon(
         modelAndSkin,
         iconName.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
     );
     return crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(iconName.as_mut_ptr());
 }
@@ -558,7 +558,7 @@ unsafe extern "C" fn UI_SPLevelMenu_SetBots() {
     let mut bot: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut botInfo: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut bots: [libc::c_char; 1024] = [0; 1024];
-    levelMenuInfo.numBots = 0 as libc::c_int;
+    levelMenuInfo.numBots = 0 as i32;
     if selectedArenaSet > currentSet {
         return;
     }
@@ -568,12 +568,12 @@ unsafe extern "C" fn UI_SPLevelMenu_SetBots() {
             levelMenuInfo.selectedArenaInfo,
             b"bots\x00" as *const u8 as *const libc::c_char,
         ),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
-    p = &mut *bots.as_mut_ptr().offset(0 as libc::c_int as isize) as *mut libc::c_char;
-    while *p as libc::c_int != 0 && levelMenuInfo.numBots < 7 as libc::c_int {
+    p = &mut *bots.as_mut_ptr().offset(0 as i32 as isize) as *mut libc::c_char;
+    while *p as i32 != 0 && levelMenuInfo.numBots < 7 as i32 {
         //skip spaces
-        while *p as libc::c_int != 0 && *p as libc::c_int == ' ' as i32 {
+        while *p as i32 != 0 && *p as i32 == ' ' as i32 {
             p = p.offset(1)
         }
         if *p == 0 {
@@ -582,13 +582,13 @@ unsafe extern "C" fn UI_SPLevelMenu_SetBots() {
         // mark start of bot name
         bot = p;
         // skip until space of null
-        while *p as libc::c_int != 0 && *p as libc::c_int != ' ' as i32 {
+        while *p as i32 != 0 && *p as i32 != ' ' as i32 {
             p = p.offset(1)
         }
         if *p != 0 {
             let fresh1 = p;
             p = p.offset(1);
-            *fresh1 = 0 as libc::c_int as libc::c_char
+            *fresh1 = 0 as i32 as libc::c_char
         }
         botInfo = crate::src::q3_ui::ui_gameinfo::UI_GetBotInfoByName(bot);
         if botInfo.is_null() {
@@ -606,14 +606,14 @@ unsafe extern "C" fn UI_SPLevelMenu_SetBots() {
                     botInfo,
                     b"name\x00" as *const u8 as *const libc::c_char,
                 ),
-                10 as libc::c_int,
+                10 as i32,
             );
         } else {
-            levelMenuInfo.botPics[levelMenuInfo.numBots as usize] = 0 as libc::c_int;
+            levelMenuInfo.botPics[levelMenuInfo.numBots as usize] = 0 as i32;
             crate::src::qcommon::q_shared::Q_strncpyz(
                 levelMenuInfo.botNames[levelMenuInfo.numBots as usize].as_mut_ptr(),
                 bot,
-                10 as libc::c_int,
+                10 as i32,
             );
         }
         crate::src::qcommon::q_shared::Q_CleanStr(
@@ -629,8 +629,8 @@ UI_SPLevelMenu_SetMenuItems
 */
 
 unsafe extern "C" fn UI_SPLevelMenu_SetMenuArena(
-    mut n: libc::c_int,
-    mut level: libc::c_int,
+    mut n: i32,
+    mut level: i32,
     mut arenaInfo: *const libc::c_char,
 ) {
     let mut map: [libc::c_char; 64] = [0; 64];
@@ -640,12 +640,12 @@ unsafe extern "C" fn UI_SPLevelMenu_SetMenuArena(
             arenaInfo,
             b"map\x00" as *const u8 as *const libc::c_char,
         ),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
     );
     crate::src::qcommon::q_shared::Q_strncpyz(
         levelMenuInfo.levelNames[n as usize].as_mut_ptr(),
         map.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as i32,
     );
     crate::src::qcommon::q_shared::Q_strupr(levelMenuInfo.levelNames[n as usize].as_mut_ptr());
     crate::src::q3_ui::ui_gameinfo::UI_GetBestScore(
@@ -656,12 +656,12 @@ unsafe extern "C" fn UI_SPLevelMenu_SetMenuArena(
             .as_mut_ptr()
             .offset(n as isize),
     );
-    if levelMenuInfo.levelScores[n as usize] > 8 as libc::c_int {
-        levelMenuInfo.levelScores[n as usize] = 8 as libc::c_int
+    if levelMenuInfo.levelScores[n as usize] > 8 as i32 {
+        levelMenuInfo.levelScores[n as usize] = 8 as i32
     }
     crate::src::qcommon::q_shared::Com_sprintf(
         levelMenuInfo.levelPicNames[n as usize].as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
         b"levelshots/%s.tga\x00" as *const u8 as *const libc::c_char,
         map.as_mut_ptr(),
     );
@@ -674,32 +674,32 @@ unsafe extern "C" fn UI_SPLevelMenu_SetMenuArena(
             b"menu/art/unknownmap\x00" as *const u8 as *const libc::c_char,
         );
     }
-    levelMenuInfo.item_maps[n as usize].shader = 0 as libc::c_int;
+    levelMenuInfo.item_maps[n as usize].shader = 0 as i32;
     if selectedArenaSet > currentSet {
-        levelMenuInfo.item_maps[n as usize].generic.flags |= 0x2000 as libc::c_int as libc::c_uint
+        levelMenuInfo.item_maps[n as usize].generic.flags |= 0x2000 as i32 as u32
     } else {
         levelMenuInfo.item_maps[n as usize].generic.flags &=
-            !(0x2000 as libc::c_int as libc::c_uint)
+            !(0x2000 as i32 as u32)
     }
-    levelMenuInfo.item_maps[n as usize].generic.flags &= !(0x4000 as libc::c_int as libc::c_uint);
+    levelMenuInfo.item_maps[n as usize].generic.flags &= !(0x4000 as i32 as u32);
 }
 
 unsafe extern "C" fn UI_SPLevelMenu_SetMenuItems() {
-    let mut n: libc::c_int = 0;
-    let mut level: libc::c_int = 0;
+    let mut n: i32 = 0;
+    let mut level: i32 = 0;
     let mut arenaInfo: *const libc::c_char = 0 as *const libc::c_char;
     if selectedArenaSet > currentSet {
-        selectedArena = -(1 as libc::c_int)
-    } else if selectedArena == -(1 as libc::c_int) {
-        selectedArena = 0 as libc::c_int
+        selectedArena = -(1 as i32)
+    } else if selectedArena == -(1 as i32) {
+        selectedArena = 0 as i32
     }
     if selectedArenaSet == trainingTier || selectedArenaSet == finalTier {
-        selectedArena = 0 as libc::c_int
+        selectedArena = 0 as i32
     }
-    if selectedArena != -(1 as libc::c_int) {
+    if selectedArena != -(1 as i32) {
         crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
             b"ui_spSelection\x00" as *const u8 as *const libc::c_char,
-            (selectedArenaSet * 4 as libc::c_int + selectedArena) as libc::c_float,
+            (selectedArenaSet * 4 as i32 + selectedArena) as f32,
         );
     }
     if selectedArenaSet == trainingTier {
@@ -710,38 +710,38 @@ unsafe extern "C" fn UI_SPLevelMenu_SetMenuItems() {
             arenaInfo,
             b"num\x00" as *const u8 as *const libc::c_char,
         ));
-        UI_SPLevelMenu_SetMenuArena(0 as libc::c_int, level, arenaInfo);
+        UI_SPLevelMenu_SetMenuArena(0 as i32, level, arenaInfo);
         levelMenuInfo.selectedArenaInfo = arenaInfo;
-        levelMenuInfo.item_maps[0 as libc::c_int as usize].generic.x = 256 as libc::c_int;
+        levelMenuInfo.item_maps[0 as i32 as usize].generic.x = 256 as i32;
         crate::src::q3_ui::ui_qmenu::Bitmap_Init(
             &mut *levelMenuInfo
                 .item_maps
                 .as_mut_ptr()
-                .offset(0 as libc::c_int as isize) as *mut _
+                .offset(0 as i32 as isize) as *mut _
                 as *mut crate::ui_local_h::menubitmap_s,
         );
-        levelMenuInfo.item_maps[0 as libc::c_int as usize]
+        levelMenuInfo.item_maps[0 as i32 as usize]
             .generic
-            .bottom += 32 as libc::c_int;
-        levelMenuInfo.numMaps = 1 as libc::c_int;
-        levelMenuInfo.item_maps[1 as libc::c_int as usize]
+            .bottom += 32 as i32;
+        levelMenuInfo.numMaps = 1 as i32;
+        levelMenuInfo.item_maps[1 as i32 as usize]
             .generic
-            .flags |= 0x4000 as libc::c_int as libc::c_uint;
-        levelMenuInfo.item_maps[2 as libc::c_int as usize]
+            .flags |= 0x4000 as i32 as u32;
+        levelMenuInfo.item_maps[2 as i32 as usize]
             .generic
-            .flags |= 0x4000 as libc::c_int as libc::c_uint;
-        levelMenuInfo.item_maps[3 as libc::c_int as usize]
+            .flags |= 0x4000 as i32 as u32;
+        levelMenuInfo.item_maps[3 as i32 as usize]
             .generic
-            .flags |= 0x4000 as libc::c_int as libc::c_uint;
-        levelMenuInfo.levelPicNames[1 as libc::c_int as usize][0 as libc::c_int as usize] =
-            0 as libc::c_int as libc::c_char;
-        levelMenuInfo.levelPicNames[2 as libc::c_int as usize][0 as libc::c_int as usize] =
-            0 as libc::c_int as libc::c_char;
-        levelMenuInfo.levelPicNames[3 as libc::c_int as usize][0 as libc::c_int as usize] =
-            0 as libc::c_int as libc::c_char;
-        levelMenuInfo.item_maps[1 as libc::c_int as usize].shader = 0 as libc::c_int;
-        levelMenuInfo.item_maps[2 as libc::c_int as usize].shader = 0 as libc::c_int;
-        levelMenuInfo.item_maps[3 as libc::c_int as usize].shader = 0 as libc::c_int
+            .flags |= 0x4000 as i32 as u32;
+        levelMenuInfo.levelPicNames[1 as i32 as usize][0 as i32 as usize] =
+            0 as i32 as libc::c_char;
+        levelMenuInfo.levelPicNames[2 as i32 as usize][0 as i32 as usize] =
+            0 as i32 as libc::c_char;
+        levelMenuInfo.levelPicNames[3 as i32 as usize][0 as i32 as usize] =
+            0 as i32 as libc::c_char;
+        levelMenuInfo.item_maps[1 as i32 as usize].shader = 0 as i32;
+        levelMenuInfo.item_maps[2 as i32 as usize].shader = 0 as i32;
+        levelMenuInfo.item_maps[3 as i32 as usize].shader = 0 as i32
     } else if selectedArenaSet == finalTier {
         arenaInfo = crate::src::q3_ui::ui_gameinfo::UI_GetSpecialArenaInfo(
             b"final\x00" as *const u8 as *const libc::c_char,
@@ -750,79 +750,79 @@ unsafe extern "C" fn UI_SPLevelMenu_SetMenuItems() {
             arenaInfo,
             b"num\x00" as *const u8 as *const libc::c_char,
         ));
-        UI_SPLevelMenu_SetMenuArena(0 as libc::c_int, level, arenaInfo);
+        UI_SPLevelMenu_SetMenuArena(0 as i32, level, arenaInfo);
         levelMenuInfo.selectedArenaInfo = arenaInfo;
-        levelMenuInfo.item_maps[0 as libc::c_int as usize].generic.x = 256 as libc::c_int;
+        levelMenuInfo.item_maps[0 as i32 as usize].generic.x = 256 as i32;
         crate::src::q3_ui::ui_qmenu::Bitmap_Init(
             &mut *levelMenuInfo
                 .item_maps
                 .as_mut_ptr()
-                .offset(0 as libc::c_int as isize) as *mut _
+                .offset(0 as i32 as isize) as *mut _
                 as *mut crate::ui_local_h::menubitmap_s,
         );
-        levelMenuInfo.item_maps[0 as libc::c_int as usize]
+        levelMenuInfo.item_maps[0 as i32 as usize]
             .generic
-            .bottom += 32 as libc::c_int;
-        levelMenuInfo.numMaps = 1 as libc::c_int;
-        levelMenuInfo.item_maps[1 as libc::c_int as usize]
+            .bottom += 32 as i32;
+        levelMenuInfo.numMaps = 1 as i32;
+        levelMenuInfo.item_maps[1 as i32 as usize]
             .generic
-            .flags |= 0x4000 as libc::c_int as libc::c_uint;
-        levelMenuInfo.item_maps[2 as libc::c_int as usize]
+            .flags |= 0x4000 as i32 as u32;
+        levelMenuInfo.item_maps[2 as i32 as usize]
             .generic
-            .flags |= 0x4000 as libc::c_int as libc::c_uint;
-        levelMenuInfo.item_maps[3 as libc::c_int as usize]
+            .flags |= 0x4000 as i32 as u32;
+        levelMenuInfo.item_maps[3 as i32 as usize]
             .generic
-            .flags |= 0x4000 as libc::c_int as libc::c_uint;
-        levelMenuInfo.levelPicNames[1 as libc::c_int as usize][0 as libc::c_int as usize] =
-            0 as libc::c_int as libc::c_char;
-        levelMenuInfo.levelPicNames[2 as libc::c_int as usize][0 as libc::c_int as usize] =
-            0 as libc::c_int as libc::c_char;
-        levelMenuInfo.levelPicNames[3 as libc::c_int as usize][0 as libc::c_int as usize] =
-            0 as libc::c_int as libc::c_char;
-        levelMenuInfo.item_maps[1 as libc::c_int as usize].shader = 0 as libc::c_int;
-        levelMenuInfo.item_maps[2 as libc::c_int as usize].shader = 0 as libc::c_int;
-        levelMenuInfo.item_maps[3 as libc::c_int as usize].shader = 0 as libc::c_int
+            .flags |= 0x4000 as i32 as u32;
+        levelMenuInfo.levelPicNames[1 as i32 as usize][0 as i32 as usize] =
+            0 as i32 as libc::c_char;
+        levelMenuInfo.levelPicNames[2 as i32 as usize][0 as i32 as usize] =
+            0 as i32 as libc::c_char;
+        levelMenuInfo.levelPicNames[3 as i32 as usize][0 as i32 as usize] =
+            0 as i32 as libc::c_char;
+        levelMenuInfo.item_maps[1 as i32 as usize].shader = 0 as i32;
+        levelMenuInfo.item_maps[2 as i32 as usize].shader = 0 as i32;
+        levelMenuInfo.item_maps[3 as i32 as usize].shader = 0 as i32
     } else {
-        levelMenuInfo.item_maps[0 as libc::c_int as usize].generic.x = 46 as libc::c_int;
+        levelMenuInfo.item_maps[0 as i32 as usize].generic.x = 46 as i32;
         crate::src::q3_ui::ui_qmenu::Bitmap_Init(
             &mut *levelMenuInfo
                 .item_maps
                 .as_mut_ptr()
-                .offset(0 as libc::c_int as isize) as *mut _
+                .offset(0 as i32 as isize) as *mut _
                 as *mut crate::ui_local_h::menubitmap_s,
         );
-        levelMenuInfo.item_maps[0 as libc::c_int as usize]
+        levelMenuInfo.item_maps[0 as i32 as usize]
             .generic
-            .bottom += 18 as libc::c_int;
-        levelMenuInfo.numMaps = 4 as libc::c_int;
-        n = 0 as libc::c_int;
-        while n < 4 as libc::c_int {
-            level = selectedArenaSet * 4 as libc::c_int + n;
+            .bottom += 18 as i32;
+        levelMenuInfo.numMaps = 4 as i32;
+        n = 0 as i32;
+        while n < 4 as i32 {
+            level = selectedArenaSet * 4 as i32 + n;
             arenaInfo = crate::src::q3_ui::ui_gameinfo::UI_GetArenaInfoByNumber(level);
             UI_SPLevelMenu_SetMenuArena(n, level, arenaInfo);
             n += 1
         }
-        if selectedArena != -(1 as libc::c_int) {
+        if selectedArena != -(1 as i32) {
             levelMenuInfo.selectedArenaInfo =
                 crate::src::q3_ui::ui_gameinfo::UI_GetArenaInfoByNumber(
-                    selectedArenaSet * 4 as libc::c_int + selectedArena,
+                    selectedArenaSet * 4 as i32 + selectedArena,
                 )
         }
     }
     // enable/disable arrows when they are valid/invalid
     if selectedArenaSet == minTier {
         levelMenuInfo.item_leftarrow.generic.flags |=
-            0x4000 as libc::c_int as libc::c_uint | 0x1000 as libc::c_int as libc::c_uint
+            0x4000 as i32 as u32 | 0x1000 as i32 as u32
     } else {
         levelMenuInfo.item_leftarrow.generic.flags &=
-            !(0x4000 as libc::c_int as libc::c_uint | 0x1000 as libc::c_int as libc::c_uint)
+            !(0x4000 as i32 as u32 | 0x1000 as i32 as u32)
     }
     if selectedArenaSet == maxTier {
         levelMenuInfo.item_rightarrow.generic.flags |=
-            0x4000 as libc::c_int as libc::c_uint | 0x1000 as libc::c_int as libc::c_uint
+            0x4000 as i32 as u32 | 0x1000 as i32 as u32
     } else {
         levelMenuInfo.item_rightarrow.generic.flags &=
-            !(0x4000 as libc::c_int as libc::c_uint | 0x1000 as libc::c_int as libc::c_uint)
+            !(0x4000 as i32 as u32 | 0x1000 as i32 as u32)
     }
     UI_SPLevelMenu_SetBots();
 }
@@ -834,31 +834,31 @@ UI_SPLevelMenu_ResetEvent
 
 unsafe extern "C" fn UI_SPLevelMenu_ResetDraw() {
     crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
-        640 as libc::c_int / 2 as libc::c_int,
-        356 as libc::c_int + 27 as libc::c_int * 0 as libc::c_int,
+        640 as i32 / 2 as i32,
+        356 as i32 + 27 as i32 * 0 as i32,
         b"WARNING: This resets all of the\x00" as *const u8 as *const libc::c_char,
-        0x1 as libc::c_int | 0x10 as libc::c_int,
+        0x1 as i32 | 0x10 as i32,
         crate::src::q3_ui::ui_qmenu::color_yellow.as_mut_ptr(),
     );
     crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
-        640 as libc::c_int / 2 as libc::c_int,
-        356 as libc::c_int + 27 as libc::c_int * 1 as libc::c_int,
+        640 as i32 / 2 as i32,
+        356 as i32 + 27 as i32 * 1 as i32,
         b"single player game variables.\x00" as *const u8 as *const libc::c_char,
-        0x1 as libc::c_int | 0x10 as libc::c_int,
+        0x1 as i32 | 0x10 as i32,
         crate::src::q3_ui::ui_qmenu::color_yellow.as_mut_ptr(),
     );
     crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
-        640 as libc::c_int / 2 as libc::c_int,
-        356 as libc::c_int + 27 as libc::c_int * 2 as libc::c_int,
+        640 as i32 / 2 as i32,
+        356 as i32 + 27 as i32 * 2 as i32,
         b"Do this only if you want to\x00" as *const u8 as *const libc::c_char,
-        0x1 as libc::c_int | 0x10 as libc::c_int,
+        0x1 as i32 | 0x10 as i32,
         crate::src::q3_ui::ui_qmenu::color_yellow.as_mut_ptr(),
     );
     crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
-        640 as libc::c_int / 2 as libc::c_int,
-        356 as libc::c_int + 27 as libc::c_int * 3 as libc::c_int,
+        640 as i32 / 2 as i32,
+        356 as i32 + 27 as i32 * 3 as i32,
         b"start over from the beginning.\x00" as *const u8 as *const libc::c_char,
-        0x1 as libc::c_int | 0x10 as libc::c_int,
+        0x1 as i32 | 0x10 as i32,
         crate::src::q3_ui::ui_qmenu::color_yellow.as_mut_ptr(),
     );
 }
@@ -878,12 +878,12 @@ unsafe extern "C" fn UI_SPLevelMenu_ResetAction(
     {
         crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
             b"ui_spSelection\x00" as *const u8 as *const libc::c_char,
-            -(4 as libc::c_int) as libc::c_float,
+            -(4 as i32) as f32,
         );
     } else {
         crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
             b"ui_spSelection\x00" as *const u8 as *const libc::c_char,
-            0 as libc::c_int as libc::c_float,
+            0 as i32 as f32,
         );
     }
     // make the level select menu re-initialize
@@ -893,9 +893,9 @@ unsafe extern "C" fn UI_SPLevelMenu_ResetAction(
 
 unsafe extern "C" fn UI_SPLevelMenu_ResetEvent(
     mut _ptr: *mut libc::c_void,
-    mut event: libc::c_int,
+    mut event: i32,
 ) {
-    if event != 3 as libc::c_int {
+    if event != 3 as i32 {
         return;
     }
     crate::src::q3_ui::ui_confirm::UI_ConfirmMenu(
@@ -915,22 +915,22 @@ UI_SPLevelMenu_LevelEvent
 
 unsafe extern "C" fn UI_SPLevelMenu_LevelEvent(
     mut ptr: *mut libc::c_void,
-    mut notification: libc::c_int,
+    mut notification: i32,
 ) {
-    if notification != 3 as libc::c_int {
+    if notification != 3 as i32 {
         return;
     }
     if selectedArenaSet == trainingTier || selectedArenaSet == finalTier {
         return;
     }
-    selectedArena = (*(ptr as *mut crate::ui_local_h::menucommon_s)).id - 11 as libc::c_int;
+    selectedArena = (*(ptr as *mut crate::ui_local_h::menucommon_s)).id - 11 as i32;
     levelMenuInfo.selectedArenaInfo = crate::src::q3_ui::ui_gameinfo::UI_GetArenaInfoByNumber(
-        selectedArenaSet * 4 as libc::c_int + selectedArena,
+        selectedArenaSet * 4 as i32 + selectedArena,
     );
     UI_SPLevelMenu_SetBots();
     crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
         b"ui_spSelection\x00" as *const u8 as *const libc::c_char,
-        (selectedArenaSet * 4 as libc::c_int + selectedArena) as libc::c_float,
+        (selectedArenaSet * 4 as i32 + selectedArena) as f32,
     );
 }
 /*
@@ -941,9 +941,9 @@ UI_SPLevelMenu_LeftArrowEvent
 
 unsafe extern "C" fn UI_SPLevelMenu_LeftArrowEvent(
     mut _ptr: *mut libc::c_void,
-    mut notification: libc::c_int,
+    mut notification: i32,
 ) {
-    if notification != 3 as libc::c_int {
+    if notification != 3 as i32 {
         return;
     }
     if selectedArenaSet == minTier {
@@ -960,9 +960,9 @@ UI_SPLevelMenu_RightArrowEvent
 
 unsafe extern "C" fn UI_SPLevelMenu_RightArrowEvent(
     mut _ptr: *mut libc::c_void,
-    mut notification: libc::c_int,
+    mut notification: i32,
 ) {
-    if notification != 3 as libc::c_int {
+    if notification != 3 as i32 {
         return;
     }
     if selectedArenaSet == maxTier {
@@ -979,9 +979,9 @@ UI_SPLevelMenu_PlayerEvent
 
 unsafe extern "C" fn UI_SPLevelMenu_PlayerEvent(
     mut _ptr: *mut libc::c_void,
-    mut notification: libc::c_int,
+    mut notification: i32,
 ) {
-    if notification != 3 as libc::c_int {
+    if notification != 3 as i32 {
         return;
     }
     crate::src::q3_ui::ui_playersettings::UI_PlayerSettingsMenu();
@@ -994,16 +994,16 @@ UI_SPLevelMenu_AwardEvent
 
 unsafe extern "C" fn UI_SPLevelMenu_AwardEvent(
     mut ptr: *mut libc::c_void,
-    mut notification: libc::c_int,
+    mut notification: i32,
 ) {
-    let mut n: libc::c_int = 0;
-    if notification != 3 as libc::c_int {
+    let mut n: i32 = 0;
+    if notification != 3 as i32 {
         return;
     }
-    n = (*(ptr as *mut crate::ui_local_h::menucommon_s)).id - 17 as libc::c_int;
+    n = (*(ptr as *mut crate::ui_local_h::menucommon_s)).id - 17 as i32;
     crate::src::ui::ui_syscalls::trap_S_StartLocalSound(
         levelMenuInfo.awardSounds[n as usize],
-        crate::src::qcommon::q_shared::CHAN_ANNOUNCER as libc::c_int,
+        crate::src::qcommon::q_shared::CHAN_ANNOUNCER as i32,
     );
 }
 /*
@@ -1014,16 +1014,16 @@ UI_SPLevelMenu_NextEvent
 
 unsafe extern "C" fn UI_SPLevelMenu_NextEvent(
     mut _ptr: *mut libc::c_void,
-    mut notification: libc::c_int,
+    mut notification: i32,
 ) {
-    if notification != 3 as libc::c_int {
+    if notification != 3 as i32 {
         return;
     }
     if selectedArenaSet > currentSet {
         return;
     }
-    if selectedArena == -(1 as libc::c_int) {
-        selectedArena = 0 as libc::c_int
+    if selectedArena == -(1 as i32) {
+        selectedArena = 0 as i32
     }
     crate::src::q3_ui::ui_spskill::UI_SPSkillMenu(levelMenuInfo.selectedArenaInfo);
 }
@@ -1035,13 +1035,13 @@ UI_SPLevelMenu_BackEvent
 
 unsafe extern "C" fn UI_SPLevelMenu_BackEvent(
     mut _ptr: *mut libc::c_void,
-    mut notification: libc::c_int,
+    mut notification: i32,
 ) {
-    if notification != 3 as libc::c_int {
+    if notification != 3 as i32 {
         return;
     }
-    if selectedArena == -(1 as libc::c_int) {
-        selectedArena = 0 as libc::c_int
+    if selectedArena == -(1 as i32) {
+        selectedArena = 0 as i32
     }
     crate::src::q3_ui::ui_atoms::UI_PopMenu();
 }
@@ -1053,9 +1053,9 @@ UI_SPLevelMenu_CustomEvent
 
 unsafe extern "C" fn UI_SPLevelMenu_CustomEvent(
     mut _ptr: *mut libc::c_void,
-    mut notification: libc::c_int,
+    mut notification: i32,
 ) {
-    if notification != 3 as libc::c_int {
+    if notification != 3 as i32 {
         return;
     }
     crate::src::q3_ui::ui_startserver::UI_StartServerMenu(crate::src::qcommon::q_shared::qfalse);
@@ -1067,14 +1067,14 @@ UI_SPLevelMenu_MenuDraw
 */
 
 unsafe extern "C" fn UI_SPLevelMenu_MenuDraw() {
-    let mut n: libc::c_int = 0;
-    let mut i: libc::c_int = 0;
-    let mut x: libc::c_int = 0;
-    let mut y: libc::c_int = 0;
+    let mut n: i32 = 0;
+    let mut i: i32 = 0;
+    let mut x: i32 = 0;
+    let mut y: i32 = 0;
     let mut color: crate::src::qcommon::q_shared::vec4_t = [0.; 4];
-    let mut level: libc::c_int = 0;
+    let mut level: i32 = 0;
     //	int				fraglimit;
-    let mut pad: libc::c_int = 0;
+    let mut pad: i32 = 0;
     let mut buf: [libc::c_char; 1024] = [0; 1024];
     let mut string: [libc::c_char; 64] = [0; 64];
     if levelMenuInfo.reinit as u64 != 0 {
@@ -1086,87 +1086,87 @@ unsafe extern "C" fn UI_SPLevelMenu_MenuDraw() {
     crate::src::ui::ui_syscalls::trap_Cvar_VariableStringBuffer(
         b"name\x00" as *const u8 as *const libc::c_char,
         string.as_mut_ptr(),
-        32 as libc::c_int,
+        32 as i32,
     );
     crate::src::qcommon::q_shared::Q_CleanStr(string.as_mut_ptr());
     crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
-        320 as libc::c_int,
-        314 as libc::c_int,
+        320 as i32,
+        314 as i32,
         string.as_mut_ptr(),
-        0x1 as libc::c_int | 0x10 as libc::c_int,
+        0x1 as i32 | 0x10 as i32,
         crate::src::q3_ui::ui_qmenu::color_orange.as_mut_ptr(),
     );
     // check for model changes
     crate::src::ui::ui_syscalls::trap_Cvar_VariableStringBuffer(
         b"model\x00" as *const u8 as *const libc::c_char,
         buf.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
     if crate::src::qcommon::q_shared::Q_stricmp(
         buf.as_mut_ptr(),
         levelMenuInfo.playerModel.as_mut_ptr(),
-    ) != 0 as libc::c_int
+    ) != 0 as i32
     {
         crate::src::qcommon::q_shared::Q_strncpyz(
             levelMenuInfo.playerModel.as_mut_ptr(),
             buf.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as libc::c_int,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
         );
         PlayerIcon(
             levelMenuInfo.playerModel.as_mut_ptr(),
             levelMenuInfo.playerPicName.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as libc::c_int,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
         );
-        levelMenuInfo.item_player.shader = 0 as libc::c_int
+        levelMenuInfo.item_player.shader = 0 as i32
     }
     // standard menu drawing
     crate::src::q3_ui::ui_qmenu::Menu_Draw(
         &mut levelMenuInfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
     );
     // draw player award levels
-    y = 314 as libc::c_int + 26 as libc::c_int;
-    i = 0 as libc::c_int;
-    n = 0 as libc::c_int;
-    while n < 6 as libc::c_int {
+    y = 314 as i32 + 26 as i32;
+    i = 0 as i32;
+    n = 0 as i32;
+    while n < 6 as i32 {
         level = levelMenuInfo.awardLevels[n as usize];
-        if level > 0 as libc::c_int {
-            if i & 1 as libc::c_int != 0 {
-                x = 224 as libc::c_int
-                    - (i - 1 as libc::c_int) / 2 as libc::c_int
-                        * (48 as libc::c_int + 16 as libc::c_int)
+        if level > 0 as i32 {
+            if i & 1 as i32 != 0 {
+                x = 224 as i32
+                    - (i - 1 as i32) / 2 as i32
+                        * (48 as i32 + 16 as i32)
             } else {
-                x = 368 as libc::c_int
-                    + i / 2 as libc::c_int * (48 as libc::c_int + 16 as libc::c_int)
+                x = 368 as i32
+                    + i / 2 as i32 * (48 as i32 + 16 as i32)
             }
             i += 1;
-            if !(level == 1 as libc::c_int) {
-                if level >= 1000000 as libc::c_int {
+            if !(level == 1 as i32) {
+                if level >= 1000000 as i32 {
                     crate::src::qcommon::q_shared::Com_sprintf(
                         string.as_mut_ptr(),
-                        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as libc::c_int,
+                        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
                         b"%im\x00" as *const u8 as *const libc::c_char,
-                        level / 1000000 as libc::c_int,
+                        level / 1000000 as i32,
                     );
-                } else if level >= 1000 as libc::c_int {
+                } else if level >= 1000 as i32 {
                     crate::src::qcommon::q_shared::Com_sprintf(
                         string.as_mut_ptr(),
-                        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as libc::c_int,
+                        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
                         b"%ik\x00" as *const u8 as *const libc::c_char,
-                        level / 1000 as libc::c_int,
+                        level / 1000 as i32,
                     );
                 } else {
                     crate::src::qcommon::q_shared::Com_sprintf(
                         string.as_mut_ptr(),
-                        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as libc::c_int,
+                        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
                         b"%i\x00" as *const u8 as *const libc::c_char,
                         level,
                     );
                 }
                 crate::src::q3_ui::ui_atoms::UI_DrawString(
-                    x + 24 as libc::c_int,
-                    y + 48 as libc::c_int,
+                    x + 24 as i32,
+                    y + 48 as i32,
                     string.as_mut_ptr(),
-                    0x1 as libc::c_int,
+                    0x1 as i32,
                     crate::src::q3_ui::ui_qmenu::color_yellow.as_mut_ptr(),
                 );
             }
@@ -1174,71 +1174,71 @@ unsafe extern "C" fn UI_SPLevelMenu_MenuDraw() {
         n += 1
     }
     crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
-        18 as libc::c_int,
-        38 as libc::c_int,
+        18 as i32,
+        38 as i32,
         crate::src::qcommon::q_shared::va(
             b"Tier %i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            selectedArenaSet + 1 as libc::c_int,
+            selectedArenaSet + 1 as i32,
         ),
-        0 as libc::c_int | 0x10 as libc::c_int,
+        0 as i32 | 0x10 as i32,
         crate::src::q3_ui::ui_qmenu::color_orange.as_mut_ptr(),
     );
-    n = 0 as libc::c_int;
+    n = 0 as i32;
     while n < levelMenuInfo.numMaps {
         x = levelMenuInfo.item_maps[n as usize].generic.x;
         y = levelMenuInfo.item_maps[n as usize].generic.y;
         crate::src::q3_ui::ui_atoms::UI_FillRect(
-            x as libc::c_float,
-            (y + 96 as libc::c_int) as libc::c_float,
-            128 as libc::c_int as libc::c_float,
-            18 as libc::c_int as libc::c_float,
+            x as f32,
+            (y + 96 as i32) as f32,
+            128 as i32 as f32,
+            18 as i32 as f32,
             crate::src::q3_ui::ui_qmenu::color_black.as_mut_ptr(),
         );
         n += 1
     }
     if selectedArenaSet > currentSet {
         crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
-            320 as libc::c_int,
-            216 as libc::c_int,
+            320 as i32,
+            216 as i32,
             b"ACCESS DENIED\x00" as *const u8 as *const libc::c_char,
-            0x1 as libc::c_int | 0x20 as libc::c_int,
+            0x1 as i32 | 0x20 as i32,
             crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr(),
         );
         return;
     }
     // show levelshots for levels of current tier
-    color[0 as libc::c_int as usize] =
-        crate::src::q3_ui::ui_qmenu::color_white[0 as libc::c_int as usize];
-    color[1 as libc::c_int as usize] =
-        crate::src::q3_ui::ui_qmenu::color_white[1 as libc::c_int as usize];
-    color[2 as libc::c_int as usize] =
-        crate::src::q3_ui::ui_qmenu::color_white[2 as libc::c_int as usize];
-    color[3 as libc::c_int as usize] =
-        crate::src::q3_ui::ui_qmenu::color_white[3 as libc::c_int as usize];
-    color[3 as libc::c_int as usize] = (0.5f64
+    color[0 as i32 as usize] =
+        crate::src::q3_ui::ui_qmenu::color_white[0 as i32 as usize];
+    color[1 as i32 as usize] =
+        crate::src::q3_ui::ui_qmenu::color_white[1 as i32 as usize];
+    color[2 as i32 as usize] =
+        crate::src::q3_ui::ui_qmenu::color_white[2 as i32 as usize];
+    color[3 as i32 as usize] =
+        crate::src::q3_ui::ui_qmenu::color_white[3 as i32 as usize];
+    color[3 as i32 as usize] = (0.5f64
         + 0.5f64
             * crate::stdlib::sin(
-                (crate::src::q3_ui::ui_atoms::uis.realtime / 75 as libc::c_int) as libc::c_double,
+                (crate::src::q3_ui::ui_atoms::uis.realtime / 75 as i32) as f64,
             )) as crate::src::qcommon::q_shared::vec_t;
-    n = 0 as libc::c_int;
+    n = 0 as i32;
     while n < levelMenuInfo.numMaps {
         x = levelMenuInfo.item_maps[n as usize].generic.x;
         y = levelMenuInfo.item_maps[n as usize].generic.y;
         crate::src::q3_ui::ui_atoms::UI_DrawString(
-            x + 64 as libc::c_int,
-            y + 96 as libc::c_int,
+            x + 64 as i32,
+            y + 96 as i32,
             levelMenuInfo.levelNames[n as usize].as_mut_ptr(),
-            0x1 as libc::c_int | 0x10 as libc::c_int,
+            0x1 as i32 | 0x10 as i32,
             crate::src::q3_ui::ui_qmenu::color_orange.as_mut_ptr(),
         );
-        if levelMenuInfo.levelScores[n as usize] == 1 as libc::c_int {
+        if levelMenuInfo.levelScores[n as usize] == 1 as i32 {
             crate::src::q3_ui::ui_atoms::UI_DrawHandlePic(
-                x as libc::c_float,
-                y as libc::c_float,
-                128 as libc::c_int as libc::c_float,
-                96 as libc::c_int as libc::c_float,
+                x as f32,
+                y as f32,
+                128 as i32 as f32,
+                96 as i32 as f32,
                 levelMenuInfo.levelCompletePic
-                    [(levelMenuInfo.levelScoresSkill[n as usize] - 1 as libc::c_int) as usize],
+                    [(levelMenuInfo.levelScoresSkill[n as usize] - 1 as i32) as usize],
             );
         }
         if n == selectedArena {
@@ -1250,13 +1250,13 @@ unsafe extern "C" fn UI_SPLevelMenu_MenuDraw() {
                 crate::src::ui::ui_syscalls::trap_R_SetColor(color.as_mut_ptr());
             }
             crate::src::q3_ui::ui_atoms::UI_DrawHandlePic(
-                (x - 1 as libc::c_int) as libc::c_float,
-                (y - 1 as libc::c_int) as libc::c_float,
-                130 as libc::c_int as libc::c_float,
-                (130 as libc::c_int - 14 as libc::c_int) as libc::c_float,
+                (x - 1 as i32) as f32,
+                (y - 1 as i32) as f32,
+                130 as i32 as f32,
+                (130 as i32 - 14 as i32) as f32,
                 levelMenuInfo.levelSelectedPic,
             );
-            crate::src::ui::ui_syscalls::trap_R_SetColor(0 as *const libc::c_float);
+            crate::src::ui::ui_syscalls::trap_R_SetColor(0 as *const f32);
         } else if crate::src::q3_ui::ui_qmenu::Menu_ItemAtCursor(
             &mut levelMenuInfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
         ) == &mut *levelMenuInfo.item_maps.as_mut_ptr().offset(n as isize)
@@ -1264,30 +1264,30 @@ unsafe extern "C" fn UI_SPLevelMenu_MenuDraw() {
         {
             crate::src::ui::ui_syscalls::trap_R_SetColor(color.as_mut_ptr());
             crate::src::q3_ui::ui_atoms::UI_DrawHandlePic(
-                (x - 31 as libc::c_int) as libc::c_float,
-                (y - 30 as libc::c_int) as libc::c_float,
-                256 as libc::c_int as libc::c_float,
-                (256 as libc::c_int - 27 as libc::c_int) as libc::c_float,
+                (x - 31 as i32) as f32,
+                (y - 30 as i32) as f32,
+                256 as i32 as f32,
+                (256 as i32 - 27 as i32) as f32,
                 levelMenuInfo.levelFocusPic,
             );
-            crate::src::ui::ui_syscalls::trap_R_SetColor(0 as *const libc::c_float);
+            crate::src::ui::ui_syscalls::trap_R_SetColor(0 as *const f32);
         }
         n += 1
     }
     // show map name and long name of selected level
-    y = 192 as libc::c_int;
+    y = 192 as i32;
     crate::src::qcommon::q_shared::Q_strncpyz(
         buf.as_mut_ptr(),
         crate::src::qcommon::q_shared::Info_ValueForKey(
             levelMenuInfo.selectedArenaInfo,
             b"map\x00" as *const u8 as *const libc::c_char,
         ),
-        20 as libc::c_int,
+        20 as i32,
     );
     crate::src::qcommon::q_shared::Q_strupr(buf.as_mut_ptr());
     crate::src::qcommon::q_shared::Com_sprintf(
         string.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
         b"%s: %s\x00" as *const u8 as *const libc::c_char,
         buf.as_mut_ptr(),
         crate::src::qcommon::q_shared::Info_ValueForKey(
@@ -1296,50 +1296,50 @@ unsafe extern "C" fn UI_SPLevelMenu_MenuDraw() {
         ),
     );
     crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
-        320 as libc::c_int,
+        320 as i32,
         y,
         string.as_mut_ptr(),
-        0x1 as libc::c_int | 0x10 as libc::c_int,
+        0x1 as i32 | 0x10 as i32,
         crate::src::q3_ui::ui_qmenu::color_orange.as_mut_ptr(),
     );
     //	fraglimit = atoi( Info_ValueForKey( levelMenuInfo.selectedArenaInfo, "fraglimit" ) );
     //	UI_DrawString( 18, 212, va("Frags %i", fraglimit) , UI_LEFT|UI_SMALLFONT, color_orange );
     // draw bot opponents
-    y += 24 as libc::c_int;
-    pad = (7 as libc::c_int - levelMenuInfo.numBots) * (64 as libc::c_int + 26 as libc::c_int)
-        / 2 as libc::c_int;
-    n = 0 as libc::c_int;
+    y += 24 as i32;
+    pad = (7 as i32 - levelMenuInfo.numBots) * (64 as i32 + 26 as i32)
+        / 2 as i32;
+    n = 0 as i32;
     while n < levelMenuInfo.numBots {
-        x = 18 as libc::c_int + pad + (64 as libc::c_int + 26 as libc::c_int) * n;
+        x = 18 as i32 + pad + (64 as i32 + 26 as i32) * n;
         if levelMenuInfo.botPics[n as usize] != 0 {
             crate::src::q3_ui::ui_atoms::UI_DrawHandlePic(
-                x as libc::c_float,
-                y as libc::c_float,
-                64 as libc::c_int as libc::c_float,
-                64 as libc::c_int as libc::c_float,
+                x as f32,
+                y as f32,
+                64 as i32 as f32,
+                64 as i32 as f32,
                 levelMenuInfo.botPics[n as usize],
             );
         } else {
             crate::src::q3_ui::ui_atoms::UI_FillRect(
-                x as libc::c_float,
-                y as libc::c_float,
-                64 as libc::c_int as libc::c_float,
-                64 as libc::c_int as libc::c_float,
+                x as f32,
+                y as f32,
+                64 as i32 as f32,
+                64 as i32 as f32,
                 crate::src::q3_ui::ui_qmenu::color_black.as_mut_ptr(),
             );
             crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
-                x + 22 as libc::c_int,
-                y + 18 as libc::c_int,
+                x + 22 as i32,
+                y + 18 as i32,
                 b"?\x00" as *const u8 as *const libc::c_char,
-                0x20 as libc::c_int,
+                0x20 as i32,
                 crate::src::q3_ui::ui_qmenu::color_orange.as_mut_ptr(),
             );
         }
         crate::src::q3_ui::ui_atoms::UI_DrawString(
             x,
-            y + 64 as libc::c_int,
+            y + 64 as i32,
             levelMenuInfo.botNames[n as usize].as_mut_ptr(),
-            0x10 as libc::c_int | 0 as libc::c_int,
+            0x10 as i32 | 0 as i32,
             crate::src::q3_ui::ui_qmenu::color_orange.as_mut_ptr(),
         );
         n += 1
@@ -1353,7 +1353,7 @@ UI_SPLevelMenu_Cache
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_SPLevelMenu_Cache() {
-    let mut n: libc::c_int = 0;
+    let mut n: i32 = 0;
     crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
         b"menu/art/maps_select\x00" as *const u8 as *const libc::c_char,
     );
@@ -1408,8 +1408,8 @@ pub unsafe extern "C" fn UI_SPLevelMenu_Cache() {
     crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
         b"menu/art/skirmish_1\x00" as *const u8 as *const libc::c_char,
     );
-    n = 0 as libc::c_int;
-    while n < 6 as libc::c_int {
+    n = 0 as i32;
+    while n < 6 as i32 {
         crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
             *crate::src::q3_ui::ui_sppostgame::ui_medalPicNames
                 .as_mut_ptr()
@@ -1429,23 +1429,23 @@ pub unsafe extern "C" fn UI_SPLevelMenu_Cache() {
     levelMenuInfo.levelFocusPic = crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
         b"menu/art/maps_select\x00" as *const u8 as *const libc::c_char,
     );
-    levelMenuInfo.levelCompletePic[0 as libc::c_int as usize] =
+    levelMenuInfo.levelCompletePic[0 as i32 as usize] =
         crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
             b"menu/art/level_complete1\x00" as *const u8 as *const libc::c_char,
         );
-    levelMenuInfo.levelCompletePic[1 as libc::c_int as usize] =
+    levelMenuInfo.levelCompletePic[1 as i32 as usize] =
         crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
             b"menu/art/level_complete2\x00" as *const u8 as *const libc::c_char,
         );
-    levelMenuInfo.levelCompletePic[2 as libc::c_int as usize] =
+    levelMenuInfo.levelCompletePic[2 as i32 as usize] =
         crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
             b"menu/art/level_complete3\x00" as *const u8 as *const libc::c_char,
         );
-    levelMenuInfo.levelCompletePic[3 as libc::c_int as usize] =
+    levelMenuInfo.levelCompletePic[3 as i32 as usize] =
         crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
             b"menu/art/level_complete4\x00" as *const u8 as *const libc::c_char,
         );
-    levelMenuInfo.levelCompletePic[4 as libc::c_int as usize] =
+    levelMenuInfo.levelCompletePic[4 as i32 as usize] =
         crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
             b"menu/art/level_complete5\x00" as *const u8 as *const libc::c_char,
         );
@@ -1457,16 +1457,16 @@ UI_SPLevelMenu_Init
 */
 
 unsafe extern "C" fn UI_SPLevelMenu_Init() {
-    let mut skill: libc::c_int = 0;
-    let mut n: libc::c_int = 0;
-    let mut x: libc::c_int = 0;
-    let mut y: libc::c_int = 0;
-    let mut count: libc::c_int = 0;
+    let mut skill: i32 = 0;
+    let mut n: i32 = 0;
+    let mut x: i32 = 0;
+    let mut y: i32 = 0;
+    let mut count: i32 = 0;
     let mut buf: [libc::c_char; 64] = [0; 64];
     skill = crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
         b"g_spSkill\x00" as *const u8 as *const libc::c_char,
-    ) as libc::c_int;
-    if skill < 1 as libc::c_int || skill > 5 as libc::c_int {
+    ) as i32;
+    if skill < 1 as i32 || skill > 5 as i32 {
         crate::src::ui::ui_syscalls::trap_Cvar_Set(
             b"g_spSkill\x00" as *const u8 as *const libc::c_char,
             b"2\x00" as *const u8 as *const libc::c_char,
@@ -1474,279 +1474,279 @@ unsafe extern "C" fn UI_SPLevelMenu_Init() {
     }
     crate::stdlib::memset(
         &mut levelMenuInfo as *mut levelMenuInfo_t as *mut libc::c_void,
-        0 as libc::c_int,
+        0 as i32,
         ::std::mem::size_of::<levelMenuInfo_t>() as libc::c_ulong,
     );
     levelMenuInfo.menu.fullscreen = crate::src::qcommon::q_shared::qtrue;
     levelMenuInfo.menu.wrapAround = crate::src::qcommon::q_shared::qtrue;
     levelMenuInfo.menu.draw = Some(UI_SPLevelMenu_MenuDraw as unsafe extern "C" fn() -> ());
     UI_SPLevelMenu_Cache();
-    levelMenuInfo.item_banner.generic.type_0 = 10 as libc::c_int;
-    levelMenuInfo.item_banner.generic.x = 320 as libc::c_int;
-    levelMenuInfo.item_banner.generic.y = 16 as libc::c_int;
+    levelMenuInfo.item_banner.generic.type_0 = 10 as i32;
+    levelMenuInfo.item_banner.generic.x = 320 as i32;
+    levelMenuInfo.item_banner.generic.y = 16 as i32;
     levelMenuInfo.item_banner.string =
         b"CHOOSE LEVEL\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     levelMenuInfo.item_banner.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
-    levelMenuInfo.item_banner.style = 0x1 as libc::c_int;
-    levelMenuInfo.item_leftarrow.generic.type_0 = 6 as libc::c_int;
+    levelMenuInfo.item_banner.style = 0x1 as i32;
+    levelMenuInfo.item_leftarrow.generic.type_0 = 6 as i32;
     levelMenuInfo.item_leftarrow.generic.name =
         b"menu/art/narrow_0\x00" as *const u8 as *const libc::c_char;
     levelMenuInfo.item_leftarrow.generic.flags =
-        0x4 as libc::c_int as libc::c_uint | 0x100 as libc::c_int as libc::c_uint;
-    levelMenuInfo.item_leftarrow.generic.x = 18 as libc::c_int;
-    levelMenuInfo.item_leftarrow.generic.y = 64 as libc::c_int;
+        0x4 as i32 as u32 | 0x100 as i32 as u32;
+    levelMenuInfo.item_leftarrow.generic.x = 18 as i32;
+    levelMenuInfo.item_leftarrow.generic.y = 64 as i32;
     levelMenuInfo.item_leftarrow.generic.callback = Some(
         UI_SPLevelMenu_LeftArrowEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    levelMenuInfo.item_leftarrow.generic.id = 10 as libc::c_int;
-    levelMenuInfo.item_leftarrow.width = 16 as libc::c_int;
-    levelMenuInfo.item_leftarrow.height = 114 as libc::c_int;
+    levelMenuInfo.item_leftarrow.generic.id = 10 as i32;
+    levelMenuInfo.item_leftarrow.width = 16 as i32;
+    levelMenuInfo.item_leftarrow.height = 114 as i32;
     levelMenuInfo.item_leftarrow.focuspic =
         b"menu/art/narrow_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    levelMenuInfo.item_maps[0 as libc::c_int as usize]
+    levelMenuInfo.item_maps[0 as i32 as usize]
         .generic
-        .type_0 = 6 as libc::c_int;
-    levelMenuInfo.item_maps[0 as libc::c_int as usize]
+        .type_0 = 6 as i32;
+    levelMenuInfo.item_maps[0 as i32 as usize]
         .generic
-        .name = levelMenuInfo.levelPicNames[0 as libc::c_int as usize].as_mut_ptr();
-    levelMenuInfo.item_maps[0 as libc::c_int as usize]
+        .name = levelMenuInfo.levelPicNames[0 as i32 as usize].as_mut_ptr();
+    levelMenuInfo.item_maps[0 as i32 as usize]
         .generic
-        .flags = 0x4 as libc::c_int as libc::c_uint;
-    levelMenuInfo.item_maps[0 as libc::c_int as usize].generic.x = 46 as libc::c_int;
-    levelMenuInfo.item_maps[0 as libc::c_int as usize].generic.y = 64 as libc::c_int;
-    levelMenuInfo.item_maps[0 as libc::c_int as usize]
+        .flags = 0x4 as i32 as u32;
+    levelMenuInfo.item_maps[0 as i32 as usize].generic.x = 46 as i32;
+    levelMenuInfo.item_maps[0 as i32 as usize].generic.y = 64 as i32;
+    levelMenuInfo.item_maps[0 as i32 as usize]
         .generic
-        .id = 11 as libc::c_int;
-    levelMenuInfo.item_maps[0 as libc::c_int as usize]
-        .generic
-        .callback = Some(
-        UI_SPLevelMenu_LevelEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
-    );
-    levelMenuInfo.item_maps[0 as libc::c_int as usize].width = 128 as libc::c_int;
-    levelMenuInfo.item_maps[0 as libc::c_int as usize].height = 96 as libc::c_int;
-    levelMenuInfo.item_maps[1 as libc::c_int as usize]
-        .generic
-        .type_0 = 6 as libc::c_int;
-    levelMenuInfo.item_maps[1 as libc::c_int as usize]
-        .generic
-        .name = levelMenuInfo.levelPicNames[1 as libc::c_int as usize].as_mut_ptr();
-    levelMenuInfo.item_maps[1 as libc::c_int as usize]
-        .generic
-        .flags = 0x4 as libc::c_int as libc::c_uint;
-    levelMenuInfo.item_maps[1 as libc::c_int as usize].generic.x = 186 as libc::c_int;
-    levelMenuInfo.item_maps[1 as libc::c_int as usize].generic.y = 64 as libc::c_int;
-    levelMenuInfo.item_maps[1 as libc::c_int as usize]
-        .generic
-        .id = 12 as libc::c_int;
-    levelMenuInfo.item_maps[1 as libc::c_int as usize]
+        .id = 11 as i32;
+    levelMenuInfo.item_maps[0 as i32 as usize]
         .generic
         .callback = Some(
         UI_SPLevelMenu_LevelEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    levelMenuInfo.item_maps[1 as libc::c_int as usize].width = 128 as libc::c_int;
-    levelMenuInfo.item_maps[1 as libc::c_int as usize].height = 96 as libc::c_int;
-    levelMenuInfo.item_maps[2 as libc::c_int as usize]
+    levelMenuInfo.item_maps[0 as i32 as usize].width = 128 as i32;
+    levelMenuInfo.item_maps[0 as i32 as usize].height = 96 as i32;
+    levelMenuInfo.item_maps[1 as i32 as usize]
         .generic
-        .type_0 = 6 as libc::c_int;
-    levelMenuInfo.item_maps[2 as libc::c_int as usize]
+        .type_0 = 6 as i32;
+    levelMenuInfo.item_maps[1 as i32 as usize]
         .generic
-        .name = levelMenuInfo.levelPicNames[2 as libc::c_int as usize].as_mut_ptr();
-    levelMenuInfo.item_maps[2 as libc::c_int as usize]
+        .name = levelMenuInfo.levelPicNames[1 as i32 as usize].as_mut_ptr();
+    levelMenuInfo.item_maps[1 as i32 as usize]
         .generic
-        .flags = 0x4 as libc::c_int as libc::c_uint;
-    levelMenuInfo.item_maps[2 as libc::c_int as usize].generic.x = 326 as libc::c_int;
-    levelMenuInfo.item_maps[2 as libc::c_int as usize].generic.y = 64 as libc::c_int;
-    levelMenuInfo.item_maps[2 as libc::c_int as usize]
+        .flags = 0x4 as i32 as u32;
+    levelMenuInfo.item_maps[1 as i32 as usize].generic.x = 186 as i32;
+    levelMenuInfo.item_maps[1 as i32 as usize].generic.y = 64 as i32;
+    levelMenuInfo.item_maps[1 as i32 as usize]
         .generic
-        .id = 13 as libc::c_int;
-    levelMenuInfo.item_maps[2 as libc::c_int as usize]
+        .id = 12 as i32;
+    levelMenuInfo.item_maps[1 as i32 as usize]
         .generic
         .callback = Some(
         UI_SPLevelMenu_LevelEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    levelMenuInfo.item_maps[2 as libc::c_int as usize].width = 128 as libc::c_int;
-    levelMenuInfo.item_maps[2 as libc::c_int as usize].height = 96 as libc::c_int;
-    levelMenuInfo.item_maps[3 as libc::c_int as usize]
+    levelMenuInfo.item_maps[1 as i32 as usize].width = 128 as i32;
+    levelMenuInfo.item_maps[1 as i32 as usize].height = 96 as i32;
+    levelMenuInfo.item_maps[2 as i32 as usize]
         .generic
-        .type_0 = 6 as libc::c_int;
-    levelMenuInfo.item_maps[3 as libc::c_int as usize]
+        .type_0 = 6 as i32;
+    levelMenuInfo.item_maps[2 as i32 as usize]
         .generic
-        .name = levelMenuInfo.levelPicNames[3 as libc::c_int as usize].as_mut_ptr();
-    levelMenuInfo.item_maps[3 as libc::c_int as usize]
+        .name = levelMenuInfo.levelPicNames[2 as i32 as usize].as_mut_ptr();
+    levelMenuInfo.item_maps[2 as i32 as usize]
         .generic
-        .flags = 0x4 as libc::c_int as libc::c_uint;
-    levelMenuInfo.item_maps[3 as libc::c_int as usize].generic.x = 466 as libc::c_int;
-    levelMenuInfo.item_maps[3 as libc::c_int as usize].generic.y = 64 as libc::c_int;
-    levelMenuInfo.item_maps[3 as libc::c_int as usize]
+        .flags = 0x4 as i32 as u32;
+    levelMenuInfo.item_maps[2 as i32 as usize].generic.x = 326 as i32;
+    levelMenuInfo.item_maps[2 as i32 as usize].generic.y = 64 as i32;
+    levelMenuInfo.item_maps[2 as i32 as usize]
         .generic
-        .id = 14 as libc::c_int;
-    levelMenuInfo.item_maps[3 as libc::c_int as usize]
+        .id = 13 as i32;
+    levelMenuInfo.item_maps[2 as i32 as usize]
         .generic
         .callback = Some(
         UI_SPLevelMenu_LevelEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    levelMenuInfo.item_maps[3 as libc::c_int as usize].width = 128 as libc::c_int;
-    levelMenuInfo.item_maps[3 as libc::c_int as usize].height = 96 as libc::c_int;
-    levelMenuInfo.item_rightarrow.generic.type_0 = 6 as libc::c_int;
+    levelMenuInfo.item_maps[2 as i32 as usize].width = 128 as i32;
+    levelMenuInfo.item_maps[2 as i32 as usize].height = 96 as i32;
+    levelMenuInfo.item_maps[3 as i32 as usize]
+        .generic
+        .type_0 = 6 as i32;
+    levelMenuInfo.item_maps[3 as i32 as usize]
+        .generic
+        .name = levelMenuInfo.levelPicNames[3 as i32 as usize].as_mut_ptr();
+    levelMenuInfo.item_maps[3 as i32 as usize]
+        .generic
+        .flags = 0x4 as i32 as u32;
+    levelMenuInfo.item_maps[3 as i32 as usize].generic.x = 466 as i32;
+    levelMenuInfo.item_maps[3 as i32 as usize].generic.y = 64 as i32;
+    levelMenuInfo.item_maps[3 as i32 as usize]
+        .generic
+        .id = 14 as i32;
+    levelMenuInfo.item_maps[3 as i32 as usize]
+        .generic
+        .callback = Some(
+        UI_SPLevelMenu_LevelEvent
+            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
+    );
+    levelMenuInfo.item_maps[3 as i32 as usize].width = 128 as i32;
+    levelMenuInfo.item_maps[3 as i32 as usize].height = 96 as i32;
+    levelMenuInfo.item_rightarrow.generic.type_0 = 6 as i32;
     levelMenuInfo.item_rightarrow.generic.name =
         b"menu/art/narrow_0\x00" as *const u8 as *const libc::c_char;
     levelMenuInfo.item_rightarrow.generic.flags =
-        0x4 as libc::c_int as libc::c_uint | 0x100 as libc::c_int as libc::c_uint;
-    levelMenuInfo.item_rightarrow.generic.x = 606 as libc::c_int;
-    levelMenuInfo.item_rightarrow.generic.y = 64 as libc::c_int;
+        0x4 as i32 as u32 | 0x100 as i32 as u32;
+    levelMenuInfo.item_rightarrow.generic.x = 606 as i32;
+    levelMenuInfo.item_rightarrow.generic.y = 64 as i32;
     levelMenuInfo.item_rightarrow.generic.callback = Some(
         UI_SPLevelMenu_RightArrowEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    levelMenuInfo.item_rightarrow.generic.id = 15 as libc::c_int;
-    levelMenuInfo.item_rightarrow.width = -(16 as libc::c_int);
-    levelMenuInfo.item_rightarrow.height = 114 as libc::c_int;
+    levelMenuInfo.item_rightarrow.generic.id = 15 as i32;
+    levelMenuInfo.item_rightarrow.width = -(16 as i32);
+    levelMenuInfo.item_rightarrow.height = 114 as i32;
     levelMenuInfo.item_rightarrow.focuspic =
         b"menu/art/narrow_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     crate::src::ui::ui_syscalls::trap_Cvar_VariableStringBuffer(
         b"model\x00" as *const u8 as *const libc::c_char,
         levelMenuInfo.playerModel.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
     );
     PlayerIcon(
         levelMenuInfo.playerModel.as_mut_ptr(),
         levelMenuInfo.playerPicName.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
     );
-    levelMenuInfo.item_player.generic.type_0 = 6 as libc::c_int;
+    levelMenuInfo.item_player.generic.type_0 = 6 as i32;
     levelMenuInfo.item_player.generic.name = levelMenuInfo.playerPicName.as_mut_ptr();
     levelMenuInfo.item_player.generic.flags =
-        0x4 as libc::c_int as libc::c_uint | 0x800 as libc::c_int as libc::c_uint;
-    levelMenuInfo.item_player.generic.x = 288 as libc::c_int;
-    levelMenuInfo.item_player.generic.y = 314 as libc::c_int + 26 as libc::c_int;
-    levelMenuInfo.item_player.generic.id = 16 as libc::c_int;
+        0x4 as i32 as u32 | 0x800 as i32 as u32;
+    levelMenuInfo.item_player.generic.x = 288 as i32;
+    levelMenuInfo.item_player.generic.y = 314 as i32 + 26 as i32;
+    levelMenuInfo.item_player.generic.id = 16 as i32;
     levelMenuInfo.item_player.generic.callback = Some(
         UI_SPLevelMenu_PlayerEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    levelMenuInfo.item_player.width = 64 as libc::c_int;
-    levelMenuInfo.item_player.height = 64 as libc::c_int;
-    n = 0 as libc::c_int;
-    while n < 6 as libc::c_int {
+    levelMenuInfo.item_player.width = 64 as i32;
+    levelMenuInfo.item_player.height = 64 as i32;
+    n = 0 as i32;
+    while n < 6 as i32 {
         levelMenuInfo.awardLevels[n as usize] = crate::src::q3_ui::ui_gameinfo::UI_GetAwardLevel(n);
         n += 1
     }
-    levelMenuInfo.awardLevels[crate::ui_local_h::AWARD_FRAGS as libc::c_int as usize] = 100
-        as libc::c_int
-        * (levelMenuInfo.awardLevels[crate::ui_local_h::AWARD_FRAGS as libc::c_int as usize]
-            / 100 as libc::c_int);
-    y = 314 as libc::c_int + 26 as libc::c_int;
-    count = 0 as libc::c_int;
-    n = 0 as libc::c_int;
-    while n < 6 as libc::c_int {
+    levelMenuInfo.awardLevels[crate::ui_local_h::AWARD_FRAGS as i32 as usize] = 100
+        as i32
+        * (levelMenuInfo.awardLevels[crate::ui_local_h::AWARD_FRAGS as i32 as usize]
+            / 100 as i32);
+    y = 314 as i32 + 26 as i32;
+    count = 0 as i32;
+    n = 0 as i32;
+    while n < 6 as i32 {
         if levelMenuInfo.awardLevels[n as usize] != 0 {
-            if count & 1 as libc::c_int != 0 {
-                x = 224 as libc::c_int
-                    - (count - 1 as libc::c_int) / 2 as libc::c_int
-                        * (48 as libc::c_int + 16 as libc::c_int)
+            if count & 1 as i32 != 0 {
+                x = 224 as i32
+                    - (count - 1 as i32) / 2 as i32
+                        * (48 as i32 + 16 as i32)
             } else {
-                x = 368 as libc::c_int
-                    + count / 2 as libc::c_int * (48 as libc::c_int + 16 as libc::c_int)
+                x = 368 as i32
+                    + count / 2 as i32 * (48 as i32 + 16 as i32)
             }
-            levelMenuInfo.item_awards[count as usize].generic.type_0 = 6 as libc::c_int;
+            levelMenuInfo.item_awards[count as usize].generic.type_0 = 6 as i32;
             levelMenuInfo.item_awards[count as usize].generic.name =
                 *crate::src::q3_ui::ui_sppostgame::ui_medalPicNames
                     .as_mut_ptr()
                     .offset(n as isize);
-            levelMenuInfo.item_awards[count as usize].generic.flags = 0x4 as libc::c_int
-                as libc::c_uint
-                | 0x100000 as libc::c_int as libc::c_uint
-                | 0x800 as libc::c_int as libc::c_uint;
+            levelMenuInfo.item_awards[count as usize].generic.flags = 0x4 as i32
+                as u32
+                | 0x100000 as i32 as u32
+                | 0x800 as i32 as u32;
             levelMenuInfo.item_awards[count as usize].generic.x = x;
             levelMenuInfo.item_awards[count as usize].generic.y = y;
-            levelMenuInfo.item_awards[count as usize].generic.id = 17 as libc::c_int + n;
+            levelMenuInfo.item_awards[count as usize].generic.id = 17 as i32 + n;
             levelMenuInfo.item_awards[count as usize].generic.callback = Some(
                 UI_SPLevelMenu_AwardEvent
-                    as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+                    as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
             );
-            levelMenuInfo.item_awards[count as usize].width = 48 as libc::c_int;
-            levelMenuInfo.item_awards[count as usize].height = 48 as libc::c_int;
+            levelMenuInfo.item_awards[count as usize].width = 48 as i32;
+            levelMenuInfo.item_awards[count as usize].height = 48 as i32;
             count += 1
         }
         n += 1
     }
-    levelMenuInfo.item_back.generic.type_0 = 6 as libc::c_int;
+    levelMenuInfo.item_back.generic.type_0 = 6 as i32;
     levelMenuInfo.item_back.generic.name =
         b"menu/art/back_0\x00" as *const u8 as *const libc::c_char;
     levelMenuInfo.item_back.generic.flags =
-        0x4 as libc::c_int as libc::c_uint | 0x100 as libc::c_int as libc::c_uint;
-    levelMenuInfo.item_back.generic.x = 0 as libc::c_int;
-    levelMenuInfo.item_back.generic.y = 480 as libc::c_int - 64 as libc::c_int;
+        0x4 as i32 as u32 | 0x100 as i32 as u32;
+    levelMenuInfo.item_back.generic.x = 0 as i32;
+    levelMenuInfo.item_back.generic.y = 480 as i32 - 64 as i32;
     levelMenuInfo.item_back.generic.callback = Some(
         UI_SPLevelMenu_BackEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    levelMenuInfo.item_back.generic.id = 23 as libc::c_int;
-    levelMenuInfo.item_back.width = 128 as libc::c_int;
-    levelMenuInfo.item_back.height = 64 as libc::c_int;
+    levelMenuInfo.item_back.generic.id = 23 as i32;
+    levelMenuInfo.item_back.width = 128 as i32;
+    levelMenuInfo.item_back.height = 64 as i32;
     levelMenuInfo.item_back.focuspic =
         b"menu/art/back_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    levelMenuInfo.item_reset.generic.type_0 = 6 as libc::c_int;
+    levelMenuInfo.item_reset.generic.type_0 = 6 as i32;
     levelMenuInfo.item_reset.generic.name =
         b"menu/art/reset_0\x00" as *const u8 as *const libc::c_char;
     levelMenuInfo.item_reset.generic.flags =
-        0x4 as libc::c_int as libc::c_uint | 0x100 as libc::c_int as libc::c_uint;
-    levelMenuInfo.item_reset.generic.x = 170 as libc::c_int;
-    levelMenuInfo.item_reset.generic.y = 480 as libc::c_int - 64 as libc::c_int;
+        0x4 as i32 as u32 | 0x100 as i32 as u32;
+    levelMenuInfo.item_reset.generic.x = 170 as i32;
+    levelMenuInfo.item_reset.generic.y = 480 as i32 - 64 as i32;
     levelMenuInfo.item_reset.generic.callback = Some(
         UI_SPLevelMenu_ResetEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    levelMenuInfo.item_reset.generic.id = 24 as libc::c_int;
-    levelMenuInfo.item_reset.width = 128 as libc::c_int;
-    levelMenuInfo.item_reset.height = 64 as libc::c_int;
+    levelMenuInfo.item_reset.generic.id = 24 as i32;
+    levelMenuInfo.item_reset.width = 128 as i32;
+    levelMenuInfo.item_reset.height = 64 as i32;
     levelMenuInfo.item_reset.focuspic =
         b"menu/art/reset_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    levelMenuInfo.item_custom.generic.type_0 = 6 as libc::c_int;
+    levelMenuInfo.item_custom.generic.type_0 = 6 as i32;
     levelMenuInfo.item_custom.generic.name =
         b"menu/art/skirmish_0\x00" as *const u8 as *const libc::c_char;
     levelMenuInfo.item_custom.generic.flags =
-        0x4 as libc::c_int as libc::c_uint | 0x100 as libc::c_int as libc::c_uint;
-    levelMenuInfo.item_custom.generic.x = 342 as libc::c_int;
-    levelMenuInfo.item_custom.generic.y = 480 as libc::c_int - 64 as libc::c_int;
+        0x4 as i32 as u32 | 0x100 as i32 as u32;
+    levelMenuInfo.item_custom.generic.x = 342 as i32;
+    levelMenuInfo.item_custom.generic.y = 480 as i32 - 64 as i32;
     levelMenuInfo.item_custom.generic.callback = Some(
         UI_SPLevelMenu_CustomEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    levelMenuInfo.item_custom.generic.id = 25 as libc::c_int;
-    levelMenuInfo.item_custom.width = 128 as libc::c_int;
-    levelMenuInfo.item_custom.height = 64 as libc::c_int;
+    levelMenuInfo.item_custom.generic.id = 25 as i32;
+    levelMenuInfo.item_custom.width = 128 as i32;
+    levelMenuInfo.item_custom.height = 64 as i32;
     levelMenuInfo.item_custom.focuspic =
         b"menu/art/skirmish_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    levelMenuInfo.item_next.generic.type_0 = 6 as libc::c_int;
+    levelMenuInfo.item_next.generic.type_0 = 6 as i32;
     levelMenuInfo.item_next.generic.name =
         b"menu/art/fight_0\x00" as *const u8 as *const libc::c_char;
     levelMenuInfo.item_next.generic.flags =
-        0x10 as libc::c_int as libc::c_uint | 0x100 as libc::c_int as libc::c_uint;
-    levelMenuInfo.item_next.generic.x = 640 as libc::c_int;
-    levelMenuInfo.item_next.generic.y = 480 as libc::c_int - 64 as libc::c_int;
+        0x10 as i32 as u32 | 0x100 as i32 as u32;
+    levelMenuInfo.item_next.generic.x = 640 as i32;
+    levelMenuInfo.item_next.generic.y = 480 as i32 - 64 as i32;
     levelMenuInfo.item_next.generic.callback = Some(
         UI_SPLevelMenu_NextEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    levelMenuInfo.item_next.generic.id = 26 as libc::c_int;
-    levelMenuInfo.item_next.width = 128 as libc::c_int;
-    levelMenuInfo.item_next.height = 64 as libc::c_int;
+    levelMenuInfo.item_next.generic.id = 26 as i32;
+    levelMenuInfo.item_next.width = 128 as i32;
+    levelMenuInfo.item_next.height = 64 as i32;
     levelMenuInfo.item_next.focuspic =
         b"menu/art/fight_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    levelMenuInfo.item_null.generic.type_0 = 6 as libc::c_int;
-    levelMenuInfo.item_null.generic.flags = 0x4 as libc::c_int as libc::c_uint
-        | 0x800 as libc::c_int as libc::c_uint
-        | 0x100000 as libc::c_int as libc::c_uint;
-    levelMenuInfo.item_null.generic.x = 0 as libc::c_int;
-    levelMenuInfo.item_null.generic.y = 0 as libc::c_int;
-    levelMenuInfo.item_null.width = 640 as libc::c_int;
-    levelMenuInfo.item_null.height = 480 as libc::c_int;
+    levelMenuInfo.item_null.generic.type_0 = 6 as i32;
+    levelMenuInfo.item_null.generic.flags = 0x4 as i32 as u32
+        | 0x800 as i32 as u32
+        | 0x100000 as i32 as u32;
+    levelMenuInfo.item_null.generic.x = 0 as i32;
+    levelMenuInfo.item_null.generic.y = 0 as i32;
+    levelMenuInfo.item_null.width = 640 as i32;
+    levelMenuInfo.item_null.height = 480 as i32;
     crate::src::q3_ui::ui_qmenu::Menu_AddItem(
         &mut levelMenuInfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
         &mut levelMenuInfo.item_banner as *mut crate::ui_local_h::menutext_s as *mut libc::c_void,
@@ -1761,7 +1761,7 @@ unsafe extern "C" fn UI_SPLevelMenu_Init() {
         &mut *levelMenuInfo
             .item_maps
             .as_mut_ptr()
-            .offset(0 as libc::c_int as isize) as *mut crate::ui_local_h::menubitmap_s
+            .offset(0 as i32 as isize) as *mut crate::ui_local_h::menubitmap_s
             as *mut libc::c_void,
     );
     crate::src::q3_ui::ui_qmenu::Menu_AddItem(
@@ -1769,7 +1769,7 @@ unsafe extern "C" fn UI_SPLevelMenu_Init() {
         &mut *levelMenuInfo
             .item_maps
             .as_mut_ptr()
-            .offset(1 as libc::c_int as isize) as *mut crate::ui_local_h::menubitmap_s
+            .offset(1 as i32 as isize) as *mut crate::ui_local_h::menubitmap_s
             as *mut libc::c_void,
     );
     crate::src::q3_ui::ui_qmenu::Menu_AddItem(
@@ -1777,7 +1777,7 @@ unsafe extern "C" fn UI_SPLevelMenu_Init() {
         &mut *levelMenuInfo
             .item_maps
             .as_mut_ptr()
-            .offset(2 as libc::c_int as isize) as *mut crate::ui_local_h::menubitmap_s
+            .offset(2 as i32 as isize) as *mut crate::ui_local_h::menubitmap_s
             as *mut libc::c_void,
     );
     crate::src::q3_ui::ui_qmenu::Menu_AddItem(
@@ -1785,21 +1785,21 @@ unsafe extern "C" fn UI_SPLevelMenu_Init() {
         &mut *levelMenuInfo
             .item_maps
             .as_mut_ptr()
-            .offset(3 as libc::c_int as isize) as *mut crate::ui_local_h::menubitmap_s
+            .offset(3 as i32 as isize) as *mut crate::ui_local_h::menubitmap_s
             as *mut libc::c_void,
     );
-    levelMenuInfo.item_maps[0 as libc::c_int as usize]
+    levelMenuInfo.item_maps[0 as i32 as usize]
         .generic
-        .bottom += 18 as libc::c_int;
-    levelMenuInfo.item_maps[1 as libc::c_int as usize]
+        .bottom += 18 as i32;
+    levelMenuInfo.item_maps[1 as i32 as usize]
         .generic
-        .bottom += 18 as libc::c_int;
-    levelMenuInfo.item_maps[2 as libc::c_int as usize]
+        .bottom += 18 as i32;
+    levelMenuInfo.item_maps[2 as i32 as usize]
         .generic
-        .bottom += 18 as libc::c_int;
-    levelMenuInfo.item_maps[3 as libc::c_int as usize]
+        .bottom += 18 as i32;
+    levelMenuInfo.item_maps[3 as i32 as usize]
         .generic
-        .bottom += 18 as libc::c_int;
+        .bottom += 18 as i32;
     crate::src::q3_ui::ui_qmenu::Menu_AddItem(
         &mut levelMenuInfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
         &mut levelMenuInfo.item_rightarrow as *mut crate::ui_local_h::menubitmap_s
@@ -1809,7 +1809,7 @@ unsafe extern "C" fn UI_SPLevelMenu_Init() {
         &mut levelMenuInfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
         &mut levelMenuInfo.item_player as *mut crate::ui_local_h::menubitmap_s as *mut libc::c_void,
     );
-    n = 0 as libc::c_int;
+    n = 0 as i32;
     while n < count {
         crate::src::q3_ui::ui_qmenu::Menu_AddItem(
             &mut levelMenuInfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
@@ -1841,12 +1841,12 @@ unsafe extern "C" fn UI_SPLevelMenu_Init() {
     crate::src::ui::ui_syscalls::trap_Cvar_VariableStringBuffer(
         b"ui_spSelection\x00" as *const u8 as *const libc::c_char,
         buf.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
     );
     if *buf.as_mut_ptr() != 0 {
         n = atoi(buf.as_mut_ptr());
-        selectedArenaSet = n / 4 as libc::c_int;
-        selectedArena = n % 4 as libc::c_int
+        selectedArenaSet = n / 4 as i32;
+        selectedArena = n % 4 as i32
     } else {
         selectedArenaSet = currentSet;
         selectedArena = currentGame
@@ -1861,10 +1861,10 @@ UI_SPLevelMenu
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_SPLevelMenu() {
-    let mut level: libc::c_int = 0;
-    let mut trainingLevel: libc::c_int = 0;
+    let mut level: i32 = 0;
+    let mut trainingLevel: i32 = 0;
     let mut arenaInfo: *const libc::c_char = 0 as *const libc::c_char;
-    trainingTier = -(1 as libc::c_int);
+    trainingTier = -(1 as i32);
     arenaInfo = crate::src::q3_ui::ui_gameinfo::UI_GetSpecialArenaInfo(
         b"training\x00" as *const u8 as *const libc::c_char,
     );
@@ -1875,8 +1875,8 @@ pub unsafe extern "C" fn UI_SPLevelMenu() {
             b"num\x00" as *const u8 as *const libc::c_char,
         ))
     } else {
-        minTier = 0 as libc::c_int;
-        trainingLevel = -(2 as libc::c_int)
+        minTier = 0 as i32;
+        trainingLevel = -(2 as i32)
     }
     finalTier = crate::src::q3_ui::ui_gameinfo::UI_GetNumSPTiers();
     arenaInfo = crate::src::q3_ui::ui_gameinfo::UI_GetSpecialArenaInfo(
@@ -1885,24 +1885,24 @@ pub unsafe extern "C" fn UI_SPLevelMenu() {
     if !arenaInfo.is_null() {
         maxTier = finalTier
     } else {
-        maxTier = finalTier - 1 as libc::c_int;
+        maxTier = finalTier - 1 as i32;
         if maxTier < minTier {
             maxTier = minTier
         }
     }
     level = crate::src::q3_ui::ui_gameinfo::UI_GetCurrentGame();
-    if level == -(1 as libc::c_int) {
-        level = crate::src::q3_ui::ui_gameinfo::UI_GetNumSPArenas() - 1 as libc::c_int;
+    if level == -(1 as i32) {
+        level = crate::src::q3_ui::ui_gameinfo::UI_GetNumSPArenas() - 1 as i32;
         if maxTier == finalTier {
             level += 1
         }
     }
     if level == trainingLevel {
-        currentSet = -(1 as libc::c_int);
-        currentGame = 0 as libc::c_int
+        currentSet = -(1 as i32);
+        currentGame = 0 as i32
     } else {
-        currentSet = level / 4 as libc::c_int;
-        currentGame = level % 4 as libc::c_int
+        currentSet = level / 4 as i32;
+        currentGame = level % 4 as i32
     }
     UI_SPLevelMenu_Init();
     crate::src::q3_ui::ui_atoms::UI_PushMenu(
@@ -1921,8 +1921,8 @@ UI_SPLevelMenu_f
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_SPLevelMenu_f() {
-    crate::src::ui::ui_syscalls::trap_Key_SetCatcher(0x2 as libc::c_int);
-    crate::src::q3_ui::ui_atoms::uis.menusp = 0 as libc::c_int;
+    crate::src::ui::ui_syscalls::trap_Key_SetCatcher(0x2 as i32);
+    crate::src::q3_ui::ui_atoms::uis.menusp = 0 as i32;
     UI_SPLevelMenu();
 }
 /*

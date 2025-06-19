@@ -1,4 +1,4 @@
-pub type J_BUF_MODE = libc::c_uint;
+pub type J_BUF_MODE = u32;
 pub const JBUF_PASS_THRU: J_BUF_MODE = 0;
 pub const JBUF_SAVE_SOURCE: J_BUF_MODE = 1;
 pub const JBUF_CRANK_DEST: J_BUF_MODE = 2;
@@ -65,7 +65,7 @@ pub struct jpeg_color_converter {
             _: crate::jpeglib_h::JSAMPARRAY,
             _: crate::jpeglib_h::JSAMPIMAGE,
             _: crate::jmorecfg_h::JDIMENSION,
-            _: libc::c_int,
+            _: i32,
         ) -> (),
     >,
 }
@@ -129,12 +129,12 @@ pub struct jpeg_marker_writer {
     pub write_marker_header: Option<
         unsafe extern "C" fn(
             _: crate::jpeglib_h::j_compress_ptr,
-            _: libc::c_int,
-            _: libc::c_uint,
+            _: i32,
+            _: u32,
         ) -> (),
     >,
     pub write_marker_byte:
-        Option<unsafe extern "C" fn(_: crate::jpeglib_h::j_compress_ptr, _: libc::c_int) -> ()>,
+        Option<unsafe extern "C" fn(_: crate::jpeglib_h::j_compress_ptr, _: i32) -> ()>,
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -149,7 +149,7 @@ pub struct jpeg_decomp_master {
 #[derive(Copy, Clone)]
 pub struct jpeg_input_controller {
     pub consume_input:
-        Option<unsafe extern "C" fn(_: crate::jpeglib_h::j_decompress_ptr) -> libc::c_int>,
+        Option<unsafe extern "C" fn(_: crate::jpeglib_h::j_decompress_ptr) -> i32>,
     pub reset_input_controller:
         Option<unsafe extern "C" fn(_: crate::jpeglib_h::j_decompress_ptr) -> ()>,
     pub start_input_pass: Option<unsafe extern "C" fn(_: crate::jpeglib_h::j_decompress_ptr) -> ()>,
@@ -177,14 +177,14 @@ pub struct jpeg_d_main_controller {
 pub struct jpeg_d_coef_controller {
     pub start_input_pass: Option<unsafe extern "C" fn(_: crate::jpeglib_h::j_decompress_ptr) -> ()>,
     pub consume_data:
-        Option<unsafe extern "C" fn(_: crate::jpeglib_h::j_decompress_ptr) -> libc::c_int>,
+        Option<unsafe extern "C" fn(_: crate::jpeglib_h::j_decompress_ptr) -> i32>,
     pub start_output_pass:
         Option<unsafe extern "C" fn(_: crate::jpeglib_h::j_decompress_ptr) -> ()>,
     pub decompress_data: Option<
         unsafe extern "C" fn(
             _: crate::jpeglib_h::j_decompress_ptr,
             _: crate::jpeglib_h::JSAMPIMAGE,
-        ) -> libc::c_int,
+        ) -> i32,
     >,
     pub coef_arrays: *mut crate::jpeglib_h::jvirt_barray_ptr,
 }
@@ -211,12 +211,12 @@ pub struct jpeg_marker_reader {
     pub reset_marker_reader:
         Option<unsafe extern "C" fn(_: crate::jpeglib_h::j_decompress_ptr) -> ()>,
     pub read_markers:
-        Option<unsafe extern "C" fn(_: crate::jpeglib_h::j_decompress_ptr) -> libc::c_int>,
+        Option<unsafe extern "C" fn(_: crate::jpeglib_h::j_decompress_ptr) -> i32>,
     pub read_restart_marker: crate::jpeglib_h::jpeg_marker_parser_method,
     pub saw_SOI: crate::jmorecfg_h::boolean,
     pub saw_SOF: crate::jmorecfg_h::boolean,
-    pub next_restart_num: libc::c_int,
-    pub discarded_bytes: libc::c_uint,
+    pub next_restart_num: i32,
+    pub discarded_bytes: u32,
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -271,7 +271,7 @@ pub struct jpeg_color_deconverter {
             _: crate::jpeglib_h::JSAMPIMAGE,
             _: crate::jmorecfg_h::JDIMENSION,
             _: crate::jpeglib_h::JSAMPARRAY,
-            _: libc::c_int,
+            _: i32,
         ) -> (),
     >,
 }
@@ -289,7 +289,7 @@ pub struct jpeg_color_quantizer {
             _: crate::jpeglib_h::j_decompress_ptr,
             _: crate::jpeglib_h::JSAMPARRAY,
             _: crate::jpeglib_h::JSAMPARRAY,
-            _: libc::c_int,
+            _: i32,
         ) -> (),
     >,
     pub finish_pass: Option<unsafe extern "C" fn(_: crate::jpeglib_h::j_decompress_ptr) -> ()>,

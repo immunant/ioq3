@@ -5,9 +5,9 @@ pub mod sdl_icon_h {
 
     pub static mut CLIENT_WINDOW_ICON: crate::sdl_icon_h::C2RustUnnamed_152 = {
         let mut init = crate::sdl_icon_h::C2RustUnnamed_152 {
-            width: 32 as libc::c_int as libc::c_uint,
-            height: 32 as libc::c_int as libc::c_uint,
-            bytes_per_pixel: 4 as libc::c_int as libc::c_uint,
+            width: 32 as i32 as u32,
+            height: 32 as i32 as u32,
+            bytes_per_pixel: 4 as i32 as u32,
             pixel_data: [
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -544,7 +544,7 @@ pub const RSERR_INVALID_MODE: rserr_t = 2;
 
 pub const RSERR_INVALID_FULLSCREEN: rserr_t = 1;
 
-pub type rserr_t = libc::c_uint;
+pub type rserr_t = u32;
 
 pub const RSERR_UNKNOWN: rserr_t = 3;
 
@@ -576,16 +576,16 @@ pub static mut r_sdlDriver: *mut crate::src::qcommon::q_shared::cvar_t =
     0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
 #[no_mangle]
 
-pub static mut qglMajorVersion: libc::c_int = 0;
+pub static mut qglMajorVersion: i32 = 0;
 #[no_mangle]
 
-pub static mut qglMinorVersion: libc::c_int = 0;
+pub static mut qglMinorVersion: i32 = 0;
 #[no_mangle]
 
-pub static mut qglesMajorVersion: libc::c_int = 0;
+pub static mut qglesMajorVersion: i32 = 0;
 #[no_mangle]
 
-pub static mut qglesMinorVersion: libc::c_int = 0;
+pub static mut qglesMinorVersion: i32 = 0;
 #[no_mangle]
 
 pub static mut qglActiveTextureARB: Option<unsafe extern "C" fn(_: crate::stdlib::GLenum) -> ()> =
@@ -1099,7 +1099,7 @@ pub unsafe extern "C" fn GLimp_Shutdown() {
     crate::src::renderergl1::tr_main::ri
         .IN_Shutdown
         .expect("non-null function pointer")();
-    crate::stdlib::SDL_QuitSubSystem(0x20 as libc::c_uint);
+    crate::stdlib::SDL_QuitSubSystem(0x20 as u32);
 }
 /*
 ===============
@@ -1130,25 +1130,25 @@ GLimp_CompareModes
 unsafe extern "C" fn GLimp_CompareModes(
     mut a: *const libc::c_void,
     mut b: *const libc::c_void,
-) -> libc::c_int {
-    let ASPECT_EPSILON: libc::c_float = 0.001f32;
+) -> i32 {
+    let ASPECT_EPSILON: f32 = 0.001f32;
     let mut modeA: *mut crate::stdlib::SDL_Rect = a as *mut crate::stdlib::SDL_Rect;
     let mut modeB: *mut crate::stdlib::SDL_Rect = b as *mut crate::stdlib::SDL_Rect;
-    let mut aspectA: libc::c_float = (*modeA).w as libc::c_float / (*modeA).h as libc::c_float;
-    let mut aspectB: libc::c_float = (*modeB).w as libc::c_float / (*modeB).h as libc::c_float;
-    let mut areaA: libc::c_int = (*modeA).w * (*modeA).h;
-    let mut areaB: libc::c_int = (*modeB).w * (*modeB).h;
-    let mut aspectDiffA: libc::c_float = crate::stdlib::fabs(
-        (aspectA - crate::src::renderergl1::tr_init::displayAspect) as libc::c_double,
-    ) as libc::c_float;
-    let mut aspectDiffB: libc::c_float = crate::stdlib::fabs(
-        (aspectB - crate::src::renderergl1::tr_init::displayAspect) as libc::c_double,
-    ) as libc::c_float;
-    let mut aspectDiffsDiff: libc::c_float = aspectDiffA - aspectDiffB;
+    let mut aspectA: f32 = (*modeA).w as f32 / (*modeA).h as f32;
+    let mut aspectB: f32 = (*modeB).w as f32 / (*modeB).h as f32;
+    let mut areaA: i32 = (*modeA).w * (*modeA).h;
+    let mut areaB: i32 = (*modeB).w * (*modeB).h;
+    let mut aspectDiffA: f32 = crate::stdlib::fabs(
+        (aspectA - crate::src::renderergl1::tr_init::displayAspect) as f64,
+    ) as f32;
+    let mut aspectDiffB: f32 = crate::stdlib::fabs(
+        (aspectB - crate::src::renderergl1::tr_init::displayAspect) as f64,
+    ) as f32;
+    let mut aspectDiffsDiff: f32 = aspectDiffA - aspectDiffB;
     if aspectDiffsDiff > ASPECT_EPSILON {
-        return 1 as libc::c_int;
+        return 1 as i32;
     } else if aspectDiffsDiff < -ASPECT_EPSILON {
-        return -(1 as libc::c_int);
+        return -(1 as i32);
     } else {
         return areaA - areaB;
     };
@@ -1160,10 +1160,10 @@ GLimp_DetectAvailableModes
 */
 
 unsafe extern "C" fn GLimp_DetectAvailableModes() {
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
     let mut buf: [libc::c_char; 1024] = [
-        0 as libc::c_int as libc::c_char,
+        0 as i32 as libc::c_char,
         0,
         0,
         0,
@@ -2188,9 +2188,9 @@ unsafe extern "C" fn GLimp_DetectAvailableModes() {
         0,
         0,
     ];
-    let mut numSDLModes: libc::c_int = 0;
+    let mut numSDLModes: i32 = 0;
     let mut modes: *mut crate::stdlib::SDL_Rect = 0 as *mut crate::stdlib::SDL_Rect;
-    let mut numModes: libc::c_int = 0 as libc::c_int;
+    let mut numModes: i32 = 0 as i32;
     let mut windowMode: crate::stdlib::SDL_DisplayMode = crate::stdlib::SDL_DisplayMode {
         format: 0,
         w: 0,
@@ -2198,12 +2198,12 @@ unsafe extern "C" fn GLimp_DetectAvailableModes() {
         refresh_rate: 0,
         driverdata: 0 as *mut libc::c_void,
     };
-    let mut display: libc::c_int = crate::stdlib::SDL_GetWindowDisplayIndex(SDL_window);
-    if display < 0 as libc::c_int {
+    let mut display: i32 = crate::stdlib::SDL_GetWindowDisplayIndex(SDL_window);
+    if display < 0 as i32 {
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_WARNING as libc::c_int,
+            crate::src::qcommon::q_shared::PRINT_WARNING as i32,
             b"Couldn\'t get window display index, no resolutions detected: %s\n\x00" as *const u8
                 as *const libc::c_char,
             crate::stdlib::SDL_GetError(),
@@ -2211,13 +2211,13 @@ unsafe extern "C" fn GLimp_DetectAvailableModes() {
         return;
     }
     numSDLModes = crate::stdlib::SDL_GetNumDisplayModes(display);
-    if crate::stdlib::SDL_GetWindowDisplayMode(SDL_window, &mut windowMode) < 0 as libc::c_int
-        || numSDLModes <= 0 as libc::c_int
+    if crate::stdlib::SDL_GetWindowDisplayMode(SDL_window, &mut windowMode) < 0 as i32
+        || numSDLModes <= 0 as i32
     {
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_WARNING as libc::c_int,
+            crate::src::qcommon::q_shared::PRINT_WARNING as i32,
             b"Couldn\'t get window display mode, no resolutions detected: %s\n\x00" as *const u8
                 as *const libc::c_char,
             crate::stdlib::SDL_GetError(),
@@ -2232,11 +2232,11 @@ unsafe extern "C" fn GLimp_DetectAvailableModes() {
         crate::src::renderergl1::tr_main::ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_FATAL as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_FATAL as i32,
             b"Out of memory\x00" as *const u8 as *const libc::c_char,
         );
     }
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < numSDLModes {
         let mut mode: crate::stdlib::SDL_DisplayMode = crate::stdlib::SDL_DisplayMode {
             format: 0,
@@ -2245,12 +2245,12 @@ unsafe extern "C" fn GLimp_DetectAvailableModes() {
             refresh_rate: 0,
             driverdata: 0 as *mut libc::c_void,
         };
-        if !(crate::stdlib::SDL_GetDisplayMode(display, i, &mut mode) < 0 as libc::c_int) {
+        if !(crate::stdlib::SDL_GetDisplayMode(display, i, &mut mode) < 0 as i32) {
             if mode.w == 0 || mode.h == 0 {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"Display supports any resolution\n\x00" as *const u8 as *const libc::c_char,
                 );
                 crate::stdlib::SDL_free(modes as *mut libc::c_void);
@@ -2259,7 +2259,7 @@ unsafe extern "C" fn GLimp_DetectAvailableModes() {
             if !(windowMode.format != mode.format) {
                 // SDL can give the same resolution with different refresh rates.
                 // Only list resolution once.
-                j = 0 as libc::c_int;
+                j = 0 as i32;
                 while j < numModes {
                     if mode.w == (*modes.offset(j as isize)).w
                         && mode.h == (*modes.offset(j as isize)).h
@@ -2277,7 +2277,7 @@ unsafe extern "C" fn GLimp_DetectAvailableModes() {
         }
         i += 1
     }
-    if numModes > 1 as libc::c_int {
+    if numModes > 1 as i32 {
         crate::stdlib::qsort(
             modes as *mut libc::c_void,
             numModes as crate::stddef_h::size_t,
@@ -2287,11 +2287,11 @@ unsafe extern "C" fn GLimp_DetectAvailableModes() {
                     as unsafe extern "C" fn(
                         _: *const libc::c_void,
                         _: *const libc::c_void,
-                    ) -> libc::c_int,
+                    ) -> i32,
             ),
         );
     }
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < numModes {
         let mut newModeString: *const libc::c_char = crate::src::qcommon::q_shared::va(
             b"%ux%u \x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2299,20 +2299,20 @@ unsafe extern "C" fn GLimp_DetectAvailableModes() {
             (*modes.offset(i as isize)).h,
         );
         if crate::stdlib::strlen(newModeString)
-            < (::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int
+            < (::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32
                 as libc::c_ulong)
                 .wrapping_sub(crate::stdlib::strlen(buf.as_mut_ptr()))
         {
             crate::src::qcommon::q_shared::Q_strcat(
                 buf.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+                ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
                 newModeString,
             );
         } else {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_WARNING as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_WARNING as i32,
                 b"Skipping mode %ux%u, buffer too small\n\x00" as *const u8 as *const libc::c_char,
                 (*modes.offset(i as isize)).w,
                 (*modes.offset(i as isize)).h,
@@ -2321,12 +2321,12 @@ unsafe extern "C" fn GLimp_DetectAvailableModes() {
         i += 1
     }
     if *buf.as_mut_ptr() != 0 {
-        buf[crate::stdlib::strlen(buf.as_mut_ptr()).wrapping_sub(1 as libc::c_int as libc::c_ulong)
-            as usize] = 0 as libc::c_int as libc::c_char;
+        buf[crate::stdlib::strlen(buf.as_mut_ptr()).wrapping_sub(1 as i32 as libc::c_ulong)
+            as usize] = 0 as i32 as libc::c_char;
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+            crate::src::qcommon::q_shared::PRINT_ALL as i32,
             b"Available modes: \'%s\'\n\x00" as *const u8 as *const libc::c_char,
             buf.as_mut_ptr(),
         );
@@ -2362,7 +2362,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+            crate::src::qcommon::q_shared::PRINT_ALL as i32,
             b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
             b"glGetString\x00" as *const u8 as *const libc::c_char,
         );
@@ -2370,53 +2370,53 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
     }
     if qglGetString.is_none() {
         crate::src::renderergl1::tr_subs::Com_Error(
-            crate::src::qcommon::q_shared::ERR_FATAL as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_FATAL as i32,
             b"glGetString is NULL\x00" as *const u8 as *const libc::c_char,
         );
     }
     version = qglGetString.expect("non-null function pointer")(
-        0x1f02 as libc::c_int as crate::stdlib::GLenum,
+        0x1f02 as i32 as crate::stdlib::GLenum,
     ) as *const libc::c_char;
     if version.is_null() {
         crate::src::renderergl1::tr_subs::Com_Error(
-            crate::src::qcommon::q_shared::ERR_FATAL as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_FATAL as i32,
             b"GL_VERSION is NULL\n\x00" as *const u8 as *const libc::c_char,
         );
     }
     if crate::src::qcommon::q_shared::Q_stricmpn(
         b"OpenGL ES\x00" as *const u8 as *const libc::c_char,
         version,
-        9 as libc::c_int,
-    ) == 0 as libc::c_int
+        9 as i32,
+    ) == 0 as i32
     {
         let mut profile: [libc::c_char; 6] = [0; 6];
         ::libc::sscanf(
             version,
             b"OpenGL %5s %d.%d\x00" as *const u8 as *const libc::c_char,
             profile.as_mut_ptr(),
-            &mut qglesMajorVersion as *mut libc::c_int,
-            &mut qglesMinorVersion as *mut libc::c_int,
+            &mut qglesMajorVersion as *mut i32,
+            &mut qglesMinorVersion as *mut i32,
         );
         // common lite profile (no floating point) is not supported
         if crate::src::qcommon::q_shared::Q_stricmp(
             profile.as_mut_ptr(),
             b"ES-CL\x00" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
-            qglesMajorVersion = 0 as libc::c_int;
-            qglesMinorVersion = 0 as libc::c_int
+            qglesMajorVersion = 0 as i32;
+            qglesMinorVersion = 0 as i32
         }
     } else {
         ::libc::sscanf(
             version,
             b"%d.%d\x00" as *const u8 as *const libc::c_char,
-            &mut qglMajorVersion as *mut libc::c_int,
-            &mut qglMinorVersion as *mut libc::c_int,
+            &mut qglMajorVersion as *mut i32,
+            &mut qglMinorVersion as *mut i32,
         );
     }
     if fixedFunction as u64 != 0 {
-        if qglMajorVersion > 1 as libc::c_int
-            || qglMajorVersion == 1 as libc::c_int && qglMinorVersion >= 2 as libc::c_int
+        if qglMajorVersion > 1 as i32
+            || qglMajorVersion == 1 as i32 && qglMinorVersion >= 2 as i32
         {
             qglBindTexture = ::std::mem::transmute::<
                 *mut libc::c_void,
@@ -2428,7 +2428,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glBindTexture\x00" as *const u8 as *const libc::c_char,
                 );
@@ -2444,7 +2444,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glBlendFunc\x00" as *const u8 as *const libc::c_char,
                 );
@@ -2460,7 +2460,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glClearColor\x00" as *const u8 as *const libc::c_char,
                 );
@@ -2475,7 +2475,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glClear\x00" as *const u8 as *const libc::c_char,
                 );
@@ -2491,7 +2491,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glClearStencil\x00" as *const u8 as *const libc::c_char,
                 );
@@ -2507,7 +2507,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glColorMask\x00" as *const u8 as *const libc::c_char,
                 );
@@ -2523,7 +2523,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glCopyTexSubImage2D\x00" as *const u8 as *const libc::c_char,
                 );
@@ -2539,7 +2539,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glCullFace\x00" as *const u8 as *const libc::c_char,
                 );
@@ -2555,7 +2555,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glDeleteTextures\x00" as *const u8 as *const libc::c_char,
                 );
@@ -2571,7 +2571,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glDepthFunc\x00" as *const u8 as *const libc::c_char,
                 );
@@ -2587,7 +2587,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glDepthMask\x00" as *const u8 as *const libc::c_char,
                 );
@@ -2603,7 +2603,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glDisable\x00" as *const u8 as *const libc::c_char,
                 );
@@ -2619,7 +2619,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glDrawArrays\x00" as *const u8 as *const libc::c_char,
                 );
@@ -2635,7 +2635,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glDrawElements\x00" as *const u8 as *const libc::c_char,
                 );
@@ -2650,7 +2650,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glEnable\x00" as *const u8 as *const libc::c_char,
                 );
@@ -2665,7 +2665,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glFinish\x00" as *const u8 as *const libc::c_char,
                 );
@@ -2680,7 +2680,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glFlush\x00" as *const u8 as *const libc::c_char,
                 );
@@ -2696,7 +2696,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glGenTextures\x00" as *const u8 as *const libc::c_char,
                 );
@@ -2712,7 +2712,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glGetBooleanv\x00" as *const u8 as *const libc::c_char,
                 );
@@ -2728,7 +2728,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glGetError\x00" as *const u8 as *const libc::c_char,
                 );
@@ -2744,7 +2744,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glGetIntegerv\x00" as *const u8 as *const libc::c_char,
                 );
@@ -2760,7 +2760,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glGetString\x00" as *const u8 as *const libc::c_char,
                 );
@@ -2776,7 +2776,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glLineWidth\x00" as *const u8 as *const libc::c_char,
                 );
@@ -2792,7 +2792,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glPolygonOffset\x00" as *const u8 as *const libc::c_char,
                 );
@@ -2808,7 +2808,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glReadPixels\x00" as *const u8 as *const libc::c_char,
                 );
@@ -2824,7 +2824,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glScissor\x00" as *const u8 as *const libc::c_char,
                 );
@@ -2840,7 +2840,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glStencilFunc\x00" as *const u8 as *const libc::c_char,
                 );
@@ -2856,7 +2856,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glStencilMask\x00" as *const u8 as *const libc::c_char,
                 );
@@ -2872,7 +2872,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glStencilOp\x00" as *const u8 as *const libc::c_char,
                 );
@@ -2888,7 +2888,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glTexImage2D\x00" as *const u8 as *const libc::c_char,
                 );
@@ -2904,7 +2904,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glTexParameterf\x00" as *const u8 as *const libc::c_char,
                 );
@@ -2920,7 +2920,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glTexParameteri\x00" as *const u8 as *const libc::c_char,
                 );
@@ -2936,7 +2936,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glTexSubImage2D\x00" as *const u8 as *const libc::c_char,
                 );
@@ -2952,7 +2952,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glTranslatef\x00" as *const u8 as *const libc::c_char,
                 );
@@ -2968,7 +2968,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glViewport\x00" as *const u8 as *const libc::c_char,
                 );
@@ -2984,7 +2984,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glAlphaFunc\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3000,7 +3000,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glColor4f\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3016,7 +3016,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glColorPointer\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3032,7 +3032,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glDisableClientState\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3048,7 +3048,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glEnableClientState\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3064,7 +3064,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glLoadIdentity\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3080,7 +3080,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glLoadMatrixf\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3096,7 +3096,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glMatrixMode\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3112,7 +3112,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glPopMatrix\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3128,7 +3128,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glPushMatrix\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3144,7 +3144,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glShadeModel\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3160,7 +3160,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glTexCoordPointer\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3176,7 +3176,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glTexEnvf\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3192,7 +3192,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glVertexPointer\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3208,7 +3208,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glClearDepth\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3224,7 +3224,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glDepthRange\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3240,7 +3240,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glDrawBuffer\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3256,7 +3256,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glPolygonMode\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3272,7 +3272,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glArrayElement\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3287,7 +3287,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glBegin\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3303,7 +3303,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glClipPlane\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3319,7 +3319,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glColor3f\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3335,7 +3335,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glColor4ubv\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3350,7 +3350,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glEnd\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3366,7 +3366,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glFrustum\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3381,7 +3381,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glOrtho\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3397,7 +3397,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glTexCoord2f\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3413,7 +3413,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glTexCoord2fv\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3429,7 +3429,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glVertex2f\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3445,7 +3445,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glVertex3f\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3461,13 +3461,13 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glVertex3fv\x00" as *const u8 as *const libc::c_char,
                 );
                 success = crate::src::qcommon::q_shared::qfalse
             }
-        } else if qglesMajorVersion == 1 as libc::c_int && qglesMinorVersion >= 1 as libc::c_int {
+        } else if qglesMajorVersion == 1 as i32 && qglesMinorVersion >= 1 as i32 {
             // OpenGL ES 1.1 (2.0 is not backward compatible)
             qglBindTexture = ::std::mem::transmute::<
                 *mut libc::c_void,
@@ -3479,7 +3479,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glBindTexture\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3495,7 +3495,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glBlendFunc\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3511,7 +3511,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glClearColor\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3526,7 +3526,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glClear\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3542,7 +3542,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glClearStencil\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3558,7 +3558,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glColorMask\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3574,7 +3574,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glCopyTexSubImage2D\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3590,7 +3590,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glCullFace\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3606,7 +3606,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glDeleteTextures\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3622,7 +3622,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glDepthFunc\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3638,7 +3638,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glDepthMask\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3654,7 +3654,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glDisable\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3670,7 +3670,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glDrawArrays\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3686,7 +3686,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glDrawElements\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3701,7 +3701,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glEnable\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3716,7 +3716,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glFinish\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3731,7 +3731,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glFlush\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3747,7 +3747,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glGenTextures\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3763,7 +3763,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glGetBooleanv\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3779,7 +3779,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glGetError\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3795,7 +3795,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glGetIntegerv\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3811,7 +3811,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glGetString\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3827,7 +3827,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glLineWidth\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3843,7 +3843,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glPolygonOffset\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3859,7 +3859,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glReadPixels\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3875,7 +3875,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glScissor\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3891,7 +3891,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glStencilFunc\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3907,7 +3907,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glStencilMask\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3923,7 +3923,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glStencilOp\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3939,7 +3939,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glTexImage2D\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3955,7 +3955,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glTexParameterf\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3971,7 +3971,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glTexParameteri\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3987,7 +3987,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glTexSubImage2D\x00" as *const u8 as *const libc::c_char,
                 );
@@ -4003,7 +4003,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glTranslatef\x00" as *const u8 as *const libc::c_char,
                 );
@@ -4019,7 +4019,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glViewport\x00" as *const u8 as *const libc::c_char,
                 );
@@ -4035,7 +4035,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glAlphaFunc\x00" as *const u8 as *const libc::c_char,
                 );
@@ -4051,7 +4051,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glColor4f\x00" as *const u8 as *const libc::c_char,
                 );
@@ -4067,7 +4067,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glColorPointer\x00" as *const u8 as *const libc::c_char,
                 );
@@ -4083,7 +4083,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glDisableClientState\x00" as *const u8 as *const libc::c_char,
                 );
@@ -4099,7 +4099,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glEnableClientState\x00" as *const u8 as *const libc::c_char,
                 );
@@ -4115,7 +4115,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glLoadIdentity\x00" as *const u8 as *const libc::c_char,
                 );
@@ -4131,7 +4131,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glLoadMatrixf\x00" as *const u8 as *const libc::c_char,
                 );
@@ -4147,7 +4147,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glMatrixMode\x00" as *const u8 as *const libc::c_char,
                 );
@@ -4163,7 +4163,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glPopMatrix\x00" as *const u8 as *const libc::c_char,
                 );
@@ -4179,7 +4179,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glPushMatrix\x00" as *const u8 as *const libc::c_char,
                 );
@@ -4195,7 +4195,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glShadeModel\x00" as *const u8 as *const libc::c_char,
                 );
@@ -4211,7 +4211,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glTexCoordPointer\x00" as *const u8 as *const libc::c_char,
                 );
@@ -4227,7 +4227,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glTexEnvf\x00" as *const u8 as *const libc::c_char,
                 );
@@ -4243,7 +4243,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glVertexPointer\x00" as *const u8 as *const libc::c_char,
                 );
@@ -4259,7 +4259,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glClearDepthf\x00" as *const u8 as *const libc::c_char,
                 );
@@ -4275,7 +4275,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glDepthRangef\x00" as *const u8 as *const libc::c_char,
                 );
@@ -4291,7 +4291,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glClipPlanef\x00" as *const u8 as *const libc::c_char,
                 );
@@ -4307,7 +4307,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glFrustumf\x00" as *const u8 as *const libc::c_char,
                 );
@@ -4322,7 +4322,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glOrthof\x00" as *const u8 as *const libc::c_char,
                 );
@@ -4330,20 +4330,20 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             }
             // error so this doesn't segfault due to NULL desktop GL functions being used
             crate::src::renderergl1::tr_subs::Com_Error(
-                crate::src::qcommon::q_shared::ERR_FATAL as libc::c_int,
+                crate::src::qcommon::q_shared::ERR_FATAL as i32,
                 b"Unsupported OpenGL Version: %s\n\x00" as *const u8 as *const libc::c_char,
                 version,
             );
         } else {
             crate::src::renderergl1::tr_subs::Com_Error(
-                crate::src::qcommon::q_shared::ERR_FATAL as libc::c_int,
+                crate::src::qcommon::q_shared::ERR_FATAL as i32,
                 b"Unsupported OpenGL Version (%s), OpenGL 1.2 is required\n\x00" as *const u8
                     as *const libc::c_char,
                 version,
             );
         }
-    } else if qglMajorVersion > 2 as libc::c_int
-        || qglMajorVersion == 2 as libc::c_int && qglMinorVersion >= 0 as libc::c_int
+    } else if qglMajorVersion > 2 as i32
+        || qglMajorVersion == 2 as i32 && qglMinorVersion >= 0 as i32
     {
         qglBindTexture = ::std::mem::transmute::<
             *mut libc::c_void,
@@ -4355,7 +4355,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glBindTexture\x00" as *const u8 as *const libc::c_char,
             );
@@ -4371,7 +4371,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glBlendFunc\x00" as *const u8 as *const libc::c_char,
             );
@@ -4387,7 +4387,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glClearColor\x00" as *const u8 as *const libc::c_char,
             );
@@ -4402,7 +4402,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glClear\x00" as *const u8 as *const libc::c_char,
             );
@@ -4418,7 +4418,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glClearStencil\x00" as *const u8 as *const libc::c_char,
             );
@@ -4434,7 +4434,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glColorMask\x00" as *const u8 as *const libc::c_char,
             );
@@ -4450,7 +4450,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glCopyTexSubImage2D\x00" as *const u8 as *const libc::c_char,
             );
@@ -4465,7 +4465,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glCullFace\x00" as *const u8 as *const libc::c_char,
             );
@@ -4481,7 +4481,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDeleteTextures\x00" as *const u8 as *const libc::c_char,
             );
@@ -4497,7 +4497,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDepthFunc\x00" as *const u8 as *const libc::c_char,
             );
@@ -4513,7 +4513,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDepthMask\x00" as *const u8 as *const libc::c_char,
             );
@@ -4528,7 +4528,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDisable\x00" as *const u8 as *const libc::c_char,
             );
@@ -4544,7 +4544,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDrawArrays\x00" as *const u8 as *const libc::c_char,
             );
@@ -4560,7 +4560,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDrawElements\x00" as *const u8 as *const libc::c_char,
             );
@@ -4575,7 +4575,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glEnable\x00" as *const u8 as *const libc::c_char,
             );
@@ -4590,7 +4590,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glFinish\x00" as *const u8 as *const libc::c_char,
             );
@@ -4605,7 +4605,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glFlush\x00" as *const u8 as *const libc::c_char,
             );
@@ -4621,7 +4621,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGenTextures\x00" as *const u8 as *const libc::c_char,
             );
@@ -4637,7 +4637,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetBooleanv\x00" as *const u8 as *const libc::c_char,
             );
@@ -4652,7 +4652,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetError\x00" as *const u8 as *const libc::c_char,
             );
@@ -4668,7 +4668,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetIntegerv\x00" as *const u8 as *const libc::c_char,
             );
@@ -4684,7 +4684,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetString\x00" as *const u8 as *const libc::c_char,
             );
@@ -4700,7 +4700,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glLineWidth\x00" as *const u8 as *const libc::c_char,
             );
@@ -4716,7 +4716,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glPolygonOffset\x00" as *const u8 as *const libc::c_char,
             );
@@ -4732,7 +4732,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glReadPixels\x00" as *const u8 as *const libc::c_char,
             );
@@ -4747,7 +4747,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glScissor\x00" as *const u8 as *const libc::c_char,
             );
@@ -4763,7 +4763,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glStencilFunc\x00" as *const u8 as *const libc::c_char,
             );
@@ -4779,7 +4779,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glStencilMask\x00" as *const u8 as *const libc::c_char,
             );
@@ -4795,7 +4795,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glStencilOp\x00" as *const u8 as *const libc::c_char,
             );
@@ -4811,7 +4811,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glTexImage2D\x00" as *const u8 as *const libc::c_char,
             );
@@ -4827,7 +4827,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glTexParameterf\x00" as *const u8 as *const libc::c_char,
             );
@@ -4843,7 +4843,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glTexParameteri\x00" as *const u8 as *const libc::c_char,
             );
@@ -4859,7 +4859,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glTexSubImage2D\x00" as *const u8 as *const libc::c_char,
             );
@@ -4875,7 +4875,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glTranslatef\x00" as *const u8 as *const libc::c_char,
             );
@@ -4890,7 +4890,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glViewport\x00" as *const u8 as *const libc::c_char,
             );
@@ -4906,7 +4906,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glClearDepth\x00" as *const u8 as *const libc::c_char,
             );
@@ -4922,7 +4922,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDepthRange\x00" as *const u8 as *const libc::c_char,
             );
@@ -4938,7 +4938,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDrawBuffer\x00" as *const u8 as *const libc::c_char,
             );
@@ -4954,7 +4954,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glPolygonMode\x00" as *const u8 as *const libc::c_char,
             );
@@ -4970,7 +4970,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glActiveTexture\x00" as *const u8 as *const libc::c_char,
             );
@@ -4986,7 +4986,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glCompressedTexImage2D\x00" as *const u8 as *const libc::c_char,
             );
@@ -5002,7 +5002,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glCompressedTexSubImage2D\x00" as *const u8 as *const libc::c_char,
             );
@@ -5018,7 +5018,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glBindBuffer\x00" as *const u8 as *const libc::c_char,
             );
@@ -5034,7 +5034,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDeleteBuffers\x00" as *const u8 as *const libc::c_char,
             );
@@ -5050,7 +5050,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGenBuffers\x00" as *const u8 as *const libc::c_char,
             );
@@ -5066,7 +5066,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glBufferData\x00" as *const u8 as *const libc::c_char,
             );
@@ -5082,7 +5082,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glBufferSubData\x00" as *const u8 as *const libc::c_char,
             );
@@ -5098,7 +5098,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glAttachShader\x00" as *const u8 as *const libc::c_char,
             );
@@ -5114,7 +5114,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glBindAttribLocation\x00" as *const u8 as *const libc::c_char,
             );
@@ -5130,7 +5130,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glCompileShader\x00" as *const u8 as *const libc::c_char,
             );
@@ -5146,7 +5146,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glCreateProgram\x00" as *const u8 as *const libc::c_char,
             );
@@ -5162,7 +5162,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glCreateShader\x00" as *const u8 as *const libc::c_char,
             );
@@ -5178,7 +5178,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDeleteProgram\x00" as *const u8 as *const libc::c_char,
             );
@@ -5194,7 +5194,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDeleteShader\x00" as *const u8 as *const libc::c_char,
             );
@@ -5210,7 +5210,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDetachShader\x00" as *const u8 as *const libc::c_char,
             );
@@ -5226,7 +5226,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDisableVertexAttribArray\x00" as *const u8 as *const libc::c_char,
             );
@@ -5242,7 +5242,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glEnableVertexAttribArray\x00" as *const u8 as *const libc::c_char,
             );
@@ -5258,7 +5258,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetActiveUniform\x00" as *const u8 as *const libc::c_char,
             );
@@ -5274,7 +5274,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetProgramiv\x00" as *const u8 as *const libc::c_char,
             );
@@ -5290,7 +5290,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetProgramInfoLog\x00" as *const u8 as *const libc::c_char,
             );
@@ -5306,7 +5306,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetShaderiv\x00" as *const u8 as *const libc::c_char,
             );
@@ -5322,7 +5322,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetShaderInfoLog\x00" as *const u8 as *const libc::c_char,
             );
@@ -5338,7 +5338,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetShaderSource\x00" as *const u8 as *const libc::c_char,
             );
@@ -5354,7 +5354,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetUniformLocation\x00" as *const u8 as *const libc::c_char,
             );
@@ -5370,7 +5370,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glLinkProgram\x00" as *const u8 as *const libc::c_char,
             );
@@ -5386,7 +5386,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glShaderSource\x00" as *const u8 as *const libc::c_char,
             );
@@ -5402,7 +5402,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glUseProgram\x00" as *const u8 as *const libc::c_char,
             );
@@ -5418,7 +5418,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glUniform1f\x00" as *const u8 as *const libc::c_char,
             );
@@ -5434,7 +5434,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glUniform2f\x00" as *const u8 as *const libc::c_char,
             );
@@ -5450,7 +5450,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glUniform3f\x00" as *const u8 as *const libc::c_char,
             );
@@ -5466,7 +5466,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glUniform4f\x00" as *const u8 as *const libc::c_char,
             );
@@ -5482,7 +5482,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glUniform1i\x00" as *const u8 as *const libc::c_char,
             );
@@ -5498,7 +5498,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glUniform1fv\x00" as *const u8 as *const libc::c_char,
             );
@@ -5514,7 +5514,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glUniformMatrix4fv\x00" as *const u8 as *const libc::c_char,
             );
@@ -5530,7 +5530,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glValidateProgram\x00" as *const u8 as *const libc::c_char,
             );
@@ -5546,14 +5546,14 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glVertexAttribPointer\x00" as *const u8 as *const libc::c_char,
             );
             success = crate::src::qcommon::q_shared::qfalse
         }
-    } else if qglesMajorVersion > 2 as libc::c_int
-        || qglesMajorVersion == 2 as libc::c_int && qglesMinorVersion >= 0 as libc::c_int
+    } else if qglesMajorVersion > 2 as i32
+        || qglesMajorVersion == 2 as i32 && qglesMinorVersion >= 0 as i32
     {
         qglBindTexture = ::std::mem::transmute::<
             *mut libc::c_void,
@@ -5565,7 +5565,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glBindTexture\x00" as *const u8 as *const libc::c_char,
             );
@@ -5581,7 +5581,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glBlendFunc\x00" as *const u8 as *const libc::c_char,
             );
@@ -5597,7 +5597,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glClearColor\x00" as *const u8 as *const libc::c_char,
             );
@@ -5612,7 +5612,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glClear\x00" as *const u8 as *const libc::c_char,
             );
@@ -5628,7 +5628,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glClearStencil\x00" as *const u8 as *const libc::c_char,
             );
@@ -5644,7 +5644,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glColorMask\x00" as *const u8 as *const libc::c_char,
             );
@@ -5660,7 +5660,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glCopyTexSubImage2D\x00" as *const u8 as *const libc::c_char,
             );
@@ -5675,7 +5675,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glCullFace\x00" as *const u8 as *const libc::c_char,
             );
@@ -5691,7 +5691,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDeleteTextures\x00" as *const u8 as *const libc::c_char,
             );
@@ -5707,7 +5707,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDepthFunc\x00" as *const u8 as *const libc::c_char,
             );
@@ -5723,7 +5723,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDepthMask\x00" as *const u8 as *const libc::c_char,
             );
@@ -5738,7 +5738,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDisable\x00" as *const u8 as *const libc::c_char,
             );
@@ -5754,7 +5754,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDrawArrays\x00" as *const u8 as *const libc::c_char,
             );
@@ -5770,7 +5770,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDrawElements\x00" as *const u8 as *const libc::c_char,
             );
@@ -5785,7 +5785,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glEnable\x00" as *const u8 as *const libc::c_char,
             );
@@ -5800,7 +5800,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glFinish\x00" as *const u8 as *const libc::c_char,
             );
@@ -5815,7 +5815,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glFlush\x00" as *const u8 as *const libc::c_char,
             );
@@ -5831,7 +5831,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGenTextures\x00" as *const u8 as *const libc::c_char,
             );
@@ -5847,7 +5847,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetBooleanv\x00" as *const u8 as *const libc::c_char,
             );
@@ -5862,7 +5862,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetError\x00" as *const u8 as *const libc::c_char,
             );
@@ -5878,7 +5878,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetIntegerv\x00" as *const u8 as *const libc::c_char,
             );
@@ -5894,7 +5894,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetString\x00" as *const u8 as *const libc::c_char,
             );
@@ -5910,7 +5910,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glLineWidth\x00" as *const u8 as *const libc::c_char,
             );
@@ -5926,7 +5926,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glPolygonOffset\x00" as *const u8 as *const libc::c_char,
             );
@@ -5942,7 +5942,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glReadPixels\x00" as *const u8 as *const libc::c_char,
             );
@@ -5957,7 +5957,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glScissor\x00" as *const u8 as *const libc::c_char,
             );
@@ -5973,7 +5973,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glStencilFunc\x00" as *const u8 as *const libc::c_char,
             );
@@ -5989,7 +5989,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glStencilMask\x00" as *const u8 as *const libc::c_char,
             );
@@ -6005,7 +6005,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glStencilOp\x00" as *const u8 as *const libc::c_char,
             );
@@ -6021,7 +6021,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glTexImage2D\x00" as *const u8 as *const libc::c_char,
             );
@@ -6037,7 +6037,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glTexParameterf\x00" as *const u8 as *const libc::c_char,
             );
@@ -6053,7 +6053,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glTexParameteri\x00" as *const u8 as *const libc::c_char,
             );
@@ -6069,7 +6069,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glTexSubImage2D\x00" as *const u8 as *const libc::c_char,
             );
@@ -6085,7 +6085,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glTranslatef\x00" as *const u8 as *const libc::c_char,
             );
@@ -6100,7 +6100,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glViewport\x00" as *const u8 as *const libc::c_char,
             );
@@ -6116,7 +6116,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glClearDepthf\x00" as *const u8 as *const libc::c_char,
             );
@@ -6132,7 +6132,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDepthRangef\x00" as *const u8 as *const libc::c_char,
             );
@@ -6148,7 +6148,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glActiveTexture\x00" as *const u8 as *const libc::c_char,
             );
@@ -6164,7 +6164,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glCompressedTexImage2D\x00" as *const u8 as *const libc::c_char,
             );
@@ -6180,7 +6180,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glCompressedTexSubImage2D\x00" as *const u8 as *const libc::c_char,
             );
@@ -6196,7 +6196,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glBindBuffer\x00" as *const u8 as *const libc::c_char,
             );
@@ -6212,7 +6212,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDeleteBuffers\x00" as *const u8 as *const libc::c_char,
             );
@@ -6228,7 +6228,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGenBuffers\x00" as *const u8 as *const libc::c_char,
             );
@@ -6244,7 +6244,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glBufferData\x00" as *const u8 as *const libc::c_char,
             );
@@ -6260,7 +6260,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glBufferSubData\x00" as *const u8 as *const libc::c_char,
             );
@@ -6276,7 +6276,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glAttachShader\x00" as *const u8 as *const libc::c_char,
             );
@@ -6292,7 +6292,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glBindAttribLocation\x00" as *const u8 as *const libc::c_char,
             );
@@ -6308,7 +6308,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glCompileShader\x00" as *const u8 as *const libc::c_char,
             );
@@ -6324,7 +6324,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glCreateProgram\x00" as *const u8 as *const libc::c_char,
             );
@@ -6340,7 +6340,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glCreateShader\x00" as *const u8 as *const libc::c_char,
             );
@@ -6356,7 +6356,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDeleteProgram\x00" as *const u8 as *const libc::c_char,
             );
@@ -6372,7 +6372,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDeleteShader\x00" as *const u8 as *const libc::c_char,
             );
@@ -6388,7 +6388,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDetachShader\x00" as *const u8 as *const libc::c_char,
             );
@@ -6404,7 +6404,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDisableVertexAttribArray\x00" as *const u8 as *const libc::c_char,
             );
@@ -6420,7 +6420,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glEnableVertexAttribArray\x00" as *const u8 as *const libc::c_char,
             );
@@ -6436,7 +6436,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetActiveUniform\x00" as *const u8 as *const libc::c_char,
             );
@@ -6452,7 +6452,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetProgramiv\x00" as *const u8 as *const libc::c_char,
             );
@@ -6468,7 +6468,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetProgramInfoLog\x00" as *const u8 as *const libc::c_char,
             );
@@ -6484,7 +6484,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetShaderiv\x00" as *const u8 as *const libc::c_char,
             );
@@ -6500,7 +6500,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetShaderInfoLog\x00" as *const u8 as *const libc::c_char,
             );
@@ -6516,7 +6516,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetShaderSource\x00" as *const u8 as *const libc::c_char,
             );
@@ -6532,7 +6532,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetUniformLocation\x00" as *const u8 as *const libc::c_char,
             );
@@ -6548,7 +6548,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glLinkProgram\x00" as *const u8 as *const libc::c_char,
             );
@@ -6564,7 +6564,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glShaderSource\x00" as *const u8 as *const libc::c_char,
             );
@@ -6580,7 +6580,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glUseProgram\x00" as *const u8 as *const libc::c_char,
             );
@@ -6596,7 +6596,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glUniform1f\x00" as *const u8 as *const libc::c_char,
             );
@@ -6612,7 +6612,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glUniform2f\x00" as *const u8 as *const libc::c_char,
             );
@@ -6628,7 +6628,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glUniform3f\x00" as *const u8 as *const libc::c_char,
             );
@@ -6644,7 +6644,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glUniform4f\x00" as *const u8 as *const libc::c_char,
             );
@@ -6660,7 +6660,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glUniform1i\x00" as *const u8 as *const libc::c_char,
             );
@@ -6676,7 +6676,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glUniform1fv\x00" as *const u8 as *const libc::c_char,
             );
@@ -6692,7 +6692,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glUniformMatrix4fv\x00" as *const u8 as *const libc::c_char,
             );
@@ -6708,7 +6708,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glValidateProgram\x00" as *const u8 as *const libc::c_char,
             );
@@ -6724,7 +6724,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glVertexAttribPointer\x00" as *const u8 as *const libc::c_char,
             );
@@ -6732,22 +6732,22 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
         }
         // error so this doesn't segfault due to NULL desktop GL functions being used
         crate::src::renderergl1::tr_subs::Com_Error(
-            crate::src::qcommon::q_shared::ERR_FATAL as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_FATAL as i32,
             b"Unsupported OpenGL Version: %s\n\x00" as *const u8 as *const libc::c_char,
             version,
         );
     } else {
         crate::src::renderergl1::tr_subs::Com_Error(
-            crate::src::qcommon::q_shared::ERR_FATAL as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_FATAL as i32,
             b"Unsupported OpenGL Version (%s), OpenGL 2.0 is required\n\x00" as *const u8
                 as *const libc::c_char,
             version,
         );
     }
-    if qglMajorVersion > 3 as libc::c_int
-        || qglMajorVersion == 3 as libc::c_int && qglMinorVersion >= 0 as libc::c_int
-        || (qglesMajorVersion > 3 as libc::c_int
-            || qglesMajorVersion == 3 as libc::c_int && qglesMinorVersion >= 0 as libc::c_int)
+    if qglMajorVersion > 3 as i32
+        || qglMajorVersion == 3 as i32 && qglMinorVersion >= 0 as i32
+        || (qglesMajorVersion > 3 as i32
+            || qglesMajorVersion == 3 as i32 && qglesMinorVersion >= 0 as i32)
     {
         qglGetStringi = ::std::mem::transmute::<
             *mut libc::c_void,
@@ -6759,7 +6759,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetStringi\x00" as *const u8 as *const libc::c_char,
             );
@@ -6777,10 +6777,10 @@ Clear addresses for OpenGL functions.
 */
 
 unsafe extern "C" fn GLimp_ClearProcAddresses() {
-    qglMajorVersion = 0 as libc::c_int;
-    qglMinorVersion = 0 as libc::c_int;
-    qglesMajorVersion = 0 as libc::c_int;
-    qglesMinorVersion = 0 as libc::c_int;
+    qglMajorVersion = 0 as i32;
+    qglMinorVersion = 0 as i32;
+    qglesMajorVersion = 0 as i32;
+    qglesMinorVersion = 0 as i32;
     qglBindTexture = None;
     qglBlendFunc = None;
     qglClearColor = None;
@@ -6946,21 +6946,21 @@ GLimp_SetMode
 */
 
 unsafe extern "C" fn GLimp_SetMode(
-    mut mode: libc::c_int,
+    mut mode: i32,
     mut fullscreen: crate::src::qcommon::q_shared::qboolean,
     mut noborder: crate::src::qcommon::q_shared::qboolean,
     mut fixedFunction: crate::src::qcommon::q_shared::qboolean,
-) -> libc::c_int {
+) -> i32 {
     let mut glstring: *const libc::c_char = 0 as *const libc::c_char;
-    let mut perChannelColorBits: libc::c_int = 0;
-    let mut colorBits: libc::c_int = 0;
-    let mut depthBits: libc::c_int = 0;
-    let mut stencilBits: libc::c_int = 0;
-    let mut samples: libc::c_int = 0;
-    let mut i: libc::c_int = 0 as libc::c_int;
+    let mut perChannelColorBits: i32 = 0;
+    let mut colorBits: i32 = 0;
+    let mut depthBits: i32 = 0;
+    let mut stencilBits: i32 = 0;
+    let mut samples: i32 = 0;
+    let mut i: i32 = 0 as i32;
     let mut icon: *mut crate::stdlib::SDL_Surface = 0 as *mut crate::stdlib::SDL_Surface;
-    let mut flags: crate::stdlib::Uint32 = (crate::stdlib::SDL_WINDOW_SHOWN as libc::c_int
-        | crate::stdlib::SDL_WINDOW_OPENGL as libc::c_int)
+    let mut flags: crate::stdlib::Uint32 = (crate::stdlib::SDL_WINDOW_SHOWN as i32
+        | crate::stdlib::SDL_WINDOW_OPENGL as i32)
         as crate::stdlib::Uint32;
     let mut desktopMode: crate::stdlib::SDL_DisplayMode = crate::stdlib::SDL_DisplayMode {
         format: 0,
@@ -6969,70 +6969,70 @@ unsafe extern "C" fn GLimp_SetMode(
         refresh_rate: 0,
         driverdata: 0 as *mut libc::c_void,
     };
-    let mut display: libc::c_int = 0 as libc::c_int;
-    let mut x: libc::c_int =
-        (0x1fff0000 as libc::c_uint | 0 as libc::c_int as libc::c_uint) as libc::c_int;
-    let mut y: libc::c_int =
-        (0x1fff0000 as libc::c_uint | 0 as libc::c_int as libc::c_uint) as libc::c_int;
+    let mut display: i32 = 0 as i32;
+    let mut x: i32 =
+        (0x1fff0000 as u32 | 0 as i32 as u32) as i32;
+    let mut y: i32 =
+        (0x1fff0000 as u32 | 0 as i32 as u32) as i32;
     crate::src::renderergl1::tr_main::ri
         .Printf
         .expect("non-null function pointer")(
-        crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+        crate::src::qcommon::q_shared::PRINT_ALL as i32,
         b"Initializing OpenGL display\n\x00" as *const u8 as *const libc::c_char,
     );
     if (*r_allowResize).integer != 0 {
-        flags |= crate::stdlib::SDL_WINDOW_RESIZABLE as libc::c_int as libc::c_uint
+        flags |= crate::stdlib::SDL_WINDOW_RESIZABLE as i32 as u32
     }
     icon = crate::stdlib::SDL_CreateRGBSurfaceFrom(
         CLIENT_WINDOW_ICON.pixel_data.as_ptr() as *mut libc::c_void,
-        CLIENT_WINDOW_ICON.width as libc::c_int,
-        CLIENT_WINDOW_ICON.height as libc::c_int,
+        CLIENT_WINDOW_ICON.width as i32,
+        CLIENT_WINDOW_ICON.height as i32,
         CLIENT_WINDOW_ICON
             .bytes_per_pixel
-            .wrapping_mul(8 as libc::c_int as libc::c_uint) as libc::c_int,
+            .wrapping_mul(8 as i32 as u32) as i32,
         CLIENT_WINDOW_ICON
             .bytes_per_pixel
-            .wrapping_mul(CLIENT_WINDOW_ICON.width) as libc::c_int,
-        0xff as libc::c_int as crate::stdlib::Uint32,
-        0xff00 as libc::c_int as crate::stdlib::Uint32,
-        0xff0000 as libc::c_int as crate::stdlib::Uint32,
-        0xff000000 as libc::c_uint,
+            .wrapping_mul(CLIENT_WINDOW_ICON.width) as i32,
+        0xff as i32 as crate::stdlib::Uint32,
+        0xff00 as i32 as crate::stdlib::Uint32,
+        0xff0000 as i32 as crate::stdlib::Uint32,
+        0xff000000 as u32,
     );
     // If a window exists, note its display index
     if !SDL_window.is_null() {
         display = crate::stdlib::SDL_GetWindowDisplayIndex(SDL_window);
-        if display < 0 as libc::c_int {
+        if display < 0 as i32 {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_DEVELOPER as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_DEVELOPER as i32,
                 b"SDL_GetWindowDisplayIndex() failed: %s\n\x00" as *const u8 as *const libc::c_char,
                 crate::stdlib::SDL_GetError(),
             );
         }
     }
-    if display >= 0 as libc::c_int
-        && crate::stdlib::SDL_GetDesktopDisplayMode(display, &mut desktopMode) == 0 as libc::c_int
+    if display >= 0 as i32
+        && crate::stdlib::SDL_GetDesktopDisplayMode(display, &mut desktopMode) == 0 as i32
     {
         crate::src::renderergl1::tr_init::displayAspect =
-            desktopMode.w as libc::c_float / desktopMode.h as libc::c_float;
+            desktopMode.w as f32 / desktopMode.h as f32;
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+            crate::src::qcommon::q_shared::PRINT_ALL as i32,
             b"Display aspect: %.3f\n\x00" as *const u8 as *const libc::c_char,
-            crate::src::renderergl1::tr_init::displayAspect as libc::c_double,
+            crate::src::renderergl1::tr_init::displayAspect as f64,
         );
     } else {
         crate::stdlib::memset(
             &mut desktopMode as *mut crate::stdlib::SDL_DisplayMode as *mut libc::c_void,
-            0 as libc::c_int,
+            0 as i32,
             ::std::mem::size_of::<crate::stdlib::SDL_DisplayMode>() as libc::c_ulong,
         );
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+            crate::src::qcommon::q_shared::PRINT_ALL as i32,
             b"Cannot determine display aspect, assuming 1.333\n\x00" as *const u8
                 as *const libc::c_char,
         );
@@ -7040,29 +7040,29 @@ unsafe extern "C" fn GLimp_SetMode(
     crate::src::renderergl1::tr_main::ri
         .Printf
         .expect("non-null function pointer")(
-        crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+        crate::src::qcommon::q_shared::PRINT_ALL as i32,
         b"...setting mode %d:\x00" as *const u8 as *const libc::c_char,
         mode,
     );
-    if mode == -(2 as libc::c_int) {
+    if mode == -(2 as i32) {
         // use desktop video resolution
-        if desktopMode.h > 0 as libc::c_int {
+        if desktopMode.h > 0 as i32 {
             crate::src::renderergl1::tr_init::glConfig.vidWidth = desktopMode.w;
             crate::src::renderergl1::tr_init::glConfig.vidHeight = desktopMode.h
         } else {
-            crate::src::renderergl1::tr_init::glConfig.vidWidth = 640 as libc::c_int;
-            crate::src::renderergl1::tr_init::glConfig.vidHeight = 480 as libc::c_int;
+            crate::src::renderergl1::tr_init::glConfig.vidWidth = 640 as i32;
+            crate::src::renderergl1::tr_init::glConfig.vidHeight = 480 as i32;
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"Cannot determine display resolution, assuming 640x480\n\x00" as *const u8
                     as *const libc::c_char,
             );
         }
         crate::src::renderergl1::tr_init::glConfig.windowAspect =
-            crate::src::renderergl1::tr_init::glConfig.vidWidth as libc::c_float
-                / crate::src::renderergl1::tr_init::glConfig.vidHeight as libc::c_float
+            crate::src::renderergl1::tr_init::glConfig.vidWidth as f32
+                / crate::src::renderergl1::tr_init::glConfig.vidHeight as f32
     } else if crate::src::renderergl1::tr_init::R_GetModeInfo(
         &mut crate::src::renderergl1::tr_init::glConfig.vidWidth,
         &mut crate::src::renderergl1::tr_init::glConfig.vidHeight,
@@ -7074,25 +7074,25 @@ unsafe extern "C" fn GLimp_SetMode(
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+            crate::src::qcommon::q_shared::PRINT_ALL as i32,
             b" invalid mode\n\x00" as *const u8 as *const libc::c_char,
         );
-        return RSERR_INVALID_MODE as libc::c_int;
+        return RSERR_INVALID_MODE as i32;
     }
     crate::src::renderergl1::tr_main::ri
         .Printf
         .expect("non-null function pointer")(
-        crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+        crate::src::qcommon::q_shared::PRINT_ALL as i32,
         b" %d %d\n\x00" as *const u8 as *const libc::c_char,
         crate::src::renderergl1::tr_init::glConfig.vidWidth,
         crate::src::renderergl1::tr_init::glConfig.vidHeight,
     );
     // Center window
     if (*r_centerWindow).integer != 0 && fullscreen as u64 == 0 {
-        x = desktopMode.w / 2 as libc::c_int
-            - crate::src::renderergl1::tr_init::glConfig.vidWidth / 2 as libc::c_int;
-        y = desktopMode.h / 2 as libc::c_int
-            - crate::src::renderergl1::tr_init::glConfig.vidHeight / 2 as libc::c_int
+        x = desktopMode.w / 2 as i32
+            - crate::src::renderergl1::tr_init::glConfig.vidWidth / 2 as i32;
+        y = desktopMode.h / 2 as i32
+            - crate::src::renderergl1::tr_init::glConfig.vidHeight / 2 as i32
     }
     // Destroy existing state if it exists
     if !SDL_glContext.is_null() {
@@ -7105,7 +7105,7 @@ unsafe extern "C" fn GLimp_SetMode(
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_DEVELOPER as libc::c_int,
+            crate::src::qcommon::q_shared::PRINT_DEVELOPER as i32,
             b"Existing window at %dx%d before being destroyed\n\x00" as *const u8
                 as *const libc::c_char,
             x,
@@ -7115,53 +7115,53 @@ unsafe extern "C" fn GLimp_SetMode(
         SDL_window = 0 as *mut crate::stdlib::SDL_Window
     }
     if fullscreen as u64 != 0 {
-        flags |= crate::stdlib::SDL_WINDOW_FULLSCREEN as libc::c_int as libc::c_uint;
+        flags |= crate::stdlib::SDL_WINDOW_FULLSCREEN as i32 as u32;
         crate::src::renderergl1::tr_init::glConfig.isFullscreen =
             crate::src::qcommon::q_shared::qtrue
     } else {
         if noborder as u64 != 0 {
-            flags |= crate::stdlib::SDL_WINDOW_BORDERLESS as libc::c_int as libc::c_uint
+            flags |= crate::stdlib::SDL_WINDOW_BORDERLESS as i32 as u32
         }
         crate::src::renderergl1::tr_init::glConfig.isFullscreen =
             crate::src::qcommon::q_shared::qfalse
     }
-    colorBits = (*crate::src::renderergl1::tr_init::r_colorbits).value as libc::c_int;
-    if colorBits == 0 || colorBits >= 32 as libc::c_int {
-        colorBits = 24 as libc::c_int
+    colorBits = (*crate::src::renderergl1::tr_init::r_colorbits).value as i32;
+    if colorBits == 0 || colorBits >= 32 as i32 {
+        colorBits = 24 as i32
     }
     if (*crate::src::renderergl1::tr_init::r_depthbits).value == 0. {
-        depthBits = 24 as libc::c_int
+        depthBits = 24 as i32
     } else {
-        depthBits = (*crate::src::renderergl1::tr_init::r_depthbits).value as libc::c_int
+        depthBits = (*crate::src::renderergl1::tr_init::r_depthbits).value as i32
     }
-    stencilBits = (*crate::src::renderergl1::tr_init::r_stencilbits).value as libc::c_int;
-    samples = (*crate::src::renderergl1::tr_init::r_ext_multisample).value as libc::c_int;
+    stencilBits = (*crate::src::renderergl1::tr_init::r_stencilbits).value as i32;
+    samples = (*crate::src::renderergl1::tr_init::r_ext_multisample).value as i32;
     let mut current_block_184: u64;
-    i = 0 as libc::c_int;
-    while i < 16 as libc::c_int {
-        let mut testColorBits: libc::c_int = 0;
-        let mut testDepthBits: libc::c_int = 0;
-        let mut testStencilBits: libc::c_int = 0;
-        let mut realColorBits: [libc::c_int; 3] = [0; 3];
+    i = 0 as i32;
+    while i < 16 as i32 {
+        let mut testColorBits: i32 = 0;
+        let mut testDepthBits: i32 = 0;
+        let mut testStencilBits: i32 = 0;
+        let mut realColorBits: [i32; 3] = [0; 3];
         // 0 - default
         // 1 - minus colorBits
         // 2 - minus depthBits
         // 3 - minus stencil
-        if i % 4 as libc::c_int == 0 as libc::c_int && i != 0 {
+        if i % 4 as i32 == 0 as i32 && i != 0 {
             let mut current_block_75: u64;
             // one pass, reduce
-            match i / 4 as libc::c_int {
+            match i / 4 as i32 {
                 2 => {
-                    if colorBits == 24 as libc::c_int {
-                        colorBits = 16 as libc::c_int
+                    if colorBits == 24 as i32 {
+                        colorBits = 16 as i32
                     }
                     current_block_75 = 10778260831612459202;
                 }
                 1 => {
-                    if depthBits == 24 as libc::c_int {
-                        depthBits = 16 as libc::c_int
-                    } else if depthBits == 16 as libc::c_int {
-                        depthBits = 8 as libc::c_int
+                    if depthBits == 24 as i32 {
+                        depthBits = 16 as i32
+                    } else if depthBits == 16 as i32 {
+                        depthBits = 8 as i32
                     }
                     current_block_75 = 13735627286979930116;
                 }
@@ -7174,10 +7174,10 @@ unsafe extern "C" fn GLimp_SetMode(
             }
             match current_block_75 {
                 13735627286979930116 => {
-                    if stencilBits == 24 as libc::c_int {
-                        stencilBits = 16 as libc::c_int
-                    } else if stencilBits == 16 as libc::c_int {
-                        stencilBits = 8 as libc::c_int
+                    if stencilBits == 24 as i32 {
+                        stencilBits = 16 as i32
+                    } else if stencilBits == 16 as i32 {
+                        stencilBits = 8 as i32
                     }
                 }
                 _ => {}
@@ -7186,34 +7186,34 @@ unsafe extern "C" fn GLimp_SetMode(
         testColorBits = colorBits;
         testDepthBits = depthBits;
         testStencilBits = stencilBits;
-        if i % 4 as libc::c_int == 3 as libc::c_int {
+        if i % 4 as i32 == 3 as i32 {
             // reduce colorBits
-            if testColorBits == 24 as libc::c_int {
-                testColorBits = 16 as libc::c_int
+            if testColorBits == 24 as i32 {
+                testColorBits = 16 as i32
             }
         }
-        if i % 4 as libc::c_int == 2 as libc::c_int {
+        if i % 4 as i32 == 2 as i32 {
             // reduce depthBits
-            if testDepthBits == 24 as libc::c_int {
-                testDepthBits = 16 as libc::c_int
-            } else if testDepthBits == 16 as libc::c_int {
-                testDepthBits = 8 as libc::c_int
+            if testDepthBits == 24 as i32 {
+                testDepthBits = 16 as i32
+            } else if testDepthBits == 16 as i32 {
+                testDepthBits = 8 as i32
             }
         }
-        if i % 4 as libc::c_int == 1 as libc::c_int {
+        if i % 4 as i32 == 1 as i32 {
             // reduce stencilBits
-            if testStencilBits == 24 as libc::c_int {
-                testStencilBits = 16 as libc::c_int
-            } else if testStencilBits == 16 as libc::c_int {
-                testStencilBits = 8 as libc::c_int
+            if testStencilBits == 24 as i32 {
+                testStencilBits = 16 as i32
+            } else if testStencilBits == 16 as i32 {
+                testStencilBits = 8 as i32
             } else {
-                testStencilBits = 0 as libc::c_int
+                testStencilBits = 0 as i32
             }
         }
-        if testColorBits == 24 as libc::c_int {
-            perChannelColorBits = 8 as libc::c_int
+        if testColorBits == 24 as i32 {
+            perChannelColorBits = 8 as i32
         } else {
-            perChannelColorBits = 4 as libc::c_int
+            perChannelColorBits = 4 as i32
         }
         /* Fix for SGIs grabbing too many bits of color */
         crate::stdlib::SDL_GL_SetAttribute(crate::stdlib::SDL_GL_RED_SIZE, perChannelColorBits);
@@ -7224,22 +7224,22 @@ unsafe extern "C" fn GLimp_SetMode(
         crate::stdlib::SDL_GL_SetAttribute(
             crate::stdlib::SDL_GL_MULTISAMPLEBUFFERS,
             if samples != 0 {
-                1 as libc::c_int
+                1 as i32
             } else {
-                0 as libc::c_int
+                0 as i32
             },
         );
         crate::stdlib::SDL_GL_SetAttribute(crate::stdlib::SDL_GL_MULTISAMPLESAMPLES, samples);
         if (*crate::src::renderergl1::tr_init::r_stereoEnabled).integer != 0 {
             crate::src::renderergl1::tr_init::glConfig.stereoEnabled =
                 crate::src::qcommon::q_shared::qtrue;
-            crate::stdlib::SDL_GL_SetAttribute(crate::stdlib::SDL_GL_STEREO, 1 as libc::c_int);
+            crate::stdlib::SDL_GL_SetAttribute(crate::stdlib::SDL_GL_STEREO, 1 as i32);
         } else {
             crate::src::renderergl1::tr_init::glConfig.stereoEnabled =
                 crate::src::qcommon::q_shared::qfalse;
-            crate::stdlib::SDL_GL_SetAttribute(crate::stdlib::SDL_GL_STEREO, 0 as libc::c_int);
+            crate::stdlib::SDL_GL_SetAttribute(crate::stdlib::SDL_GL_STEREO, 0 as i32);
         }
-        crate::stdlib::SDL_GL_SetAttribute(crate::stdlib::SDL_GL_DOUBLEBUFFER, 1 as libc::c_int);
+        crate::stdlib::SDL_GL_SetAttribute(crate::stdlib::SDL_GL_DOUBLEBUFFER, 1 as i32);
         // if multisampling is enabled on X11, this causes create window to fail.
         SDL_window = crate::stdlib::SDL_CreateWindow(
             b"ioquake3\x00" as *const u8 as *const libc::c_char,
@@ -7253,7 +7253,7 @@ unsafe extern "C" fn GLimp_SetMode(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_DEVELOPER as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_DEVELOPER as i32,
                 b"SDL_CreateWindow failed: %s\n\x00" as *const u8 as *const libc::c_char,
                 crate::stdlib::SDL_GetError(),
             );
@@ -7268,12 +7268,12 @@ unsafe extern "C" fn GLimp_SetMode(
                 };
                 match testColorBits {
                     16 => {
-                        mode_0.format = crate::stdlib::SDL_PIXELFORMAT_RGB565 as libc::c_int
+                        mode_0.format = crate::stdlib::SDL_PIXELFORMAT_RGB565 as i32
                             as crate::stdlib::Uint32;
                         current_block_184 = 1425453989644512380;
                     }
                     24 => {
-                        mode_0.format = crate::stdlib::SDL_PIXELFORMAT_RGB24 as libc::c_int
+                        mode_0.format = crate::stdlib::SDL_PIXELFORMAT_RGB24 as i32
                             as crate::stdlib::Uint32;
                         current_block_184 = 1425453989644512380;
                     }
@@ -7281,7 +7281,7 @@ unsafe extern "C" fn GLimp_SetMode(
                         crate::src::renderergl1::tr_main::ri
                             .Printf
                             .expect("non-null function pointer")(
-                            crate::src::qcommon::q_shared::PRINT_DEVELOPER as libc::c_int,
+                            crate::src::qcommon::q_shared::PRINT_DEVELOPER as i32,
                             b"testColorBits is %d, can\'t fullscreen\n\x00" as *const u8
                                 as *const libc::c_char,
                             testColorBits,
@@ -7304,12 +7304,12 @@ unsafe extern "C" fn GLimp_SetMode(
                             crate::src::renderergl1::tr_init::glConfig.displayFrequency;
                         mode_0.driverdata = 0 as *mut libc::c_void;
                         if crate::stdlib::SDL_SetWindowDisplayMode(SDL_window, &mut mode_0)
-                            < 0 as libc::c_int
+                            < 0 as i32
                         {
                             crate::src::renderergl1::tr_main::ri
                                 .Printf
                                 .expect("non-null function pointer")(
-                                crate::src::qcommon::q_shared::PRINT_DEVELOPER as libc::c_int,
+                                crate::src::qcommon::q_shared::PRINT_DEVELOPER as i32,
                                 b"SDL_SetWindowDisplayMode failed: %s\n\x00" as *const u8
                                     as *const libc::c_char,
                                 crate::stdlib::SDL_GetError(),
@@ -7328,9 +7328,9 @@ unsafe extern "C" fn GLimp_SetMode(
                 _ => {
                     crate::stdlib::SDL_SetWindowIcon(SDL_window, icon);
                     if fixedFunction as u64 == 0 {
-                        let mut profileMask: libc::c_int = 0;
-                        let mut majorVersion: libc::c_int = 0;
-                        let mut minorVersion: libc::c_int = 0;
+                        let mut profileMask: i32 = 0;
+                        let mut majorVersion: i32 = 0;
+                        let mut minorVersion: i32 = 0;
                         crate::stdlib::SDL_GL_GetAttribute(
                             crate::stdlib::SDL_GL_CONTEXT_PROFILE_MASK,
                             &mut profileMask,
@@ -7346,28 +7346,28 @@ unsafe extern "C" fn GLimp_SetMode(
                         crate::src::renderergl1::tr_main::ri
                             .Printf
                             .expect("non-null function pointer")(
-                            crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                            crate::src::qcommon::q_shared::PRINT_ALL as i32,
                             b"Trying to get an OpenGL 3.2 core context\n\x00" as *const u8
                                 as *const libc::c_char,
                         );
                         crate::stdlib::SDL_GL_SetAttribute(
                             crate::stdlib::SDL_GL_CONTEXT_PROFILE_MASK,
-                            crate::stdlib::SDL_GL_CONTEXT_PROFILE_CORE as libc::c_int,
+                            crate::stdlib::SDL_GL_CONTEXT_PROFILE_CORE as i32,
                         );
                         crate::stdlib::SDL_GL_SetAttribute(
                             crate::stdlib::SDL_GL_CONTEXT_MAJOR_VERSION,
-                            3 as libc::c_int,
+                            3 as i32,
                         );
                         crate::stdlib::SDL_GL_SetAttribute(
                             crate::stdlib::SDL_GL_CONTEXT_MINOR_VERSION,
-                            2 as libc::c_int,
+                            2 as i32,
                         );
                         SDL_glContext = crate::stdlib::SDL_GL_CreateContext(SDL_window);
                         if SDL_glContext.is_null() {
                             crate::src::renderergl1::tr_main::ri
                                 .Printf
                                 .expect("non-null function pointer")(
-                                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                                 b"SDL_GL_CreateContext failed: %s\n\x00" as *const u8
                                     as *const libc::c_char,
                                 crate::stdlib::SDL_GetError(),
@@ -7375,7 +7375,7 @@ unsafe extern "C" fn GLimp_SetMode(
                             crate::src::renderergl1::tr_main::ri
                                 .Printf
                                 .expect("non-null function pointer")(
-                                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                                 b"Reverting to default context\n\x00" as *const u8
                                     as *const libc::c_char,
                             );
@@ -7396,18 +7396,18 @@ unsafe extern "C" fn GLimp_SetMode(
                             crate::src::renderergl1::tr_main::ri
                                 .Printf
                                 .expect("non-null function pointer")(
-                                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                                 b"SDL_GL_CreateContext succeeded.\n\x00" as *const u8
                                     as *const libc::c_char,
                             );
                             if GLimp_GetProcAddresses(fixedFunction) as u64 != 0 {
                                 renderer = qglGetString.expect("non-null function pointer")(
-                                    0x1f01 as libc::c_int as crate::stdlib::GLenum,
+                                    0x1f01 as i32 as crate::stdlib::GLenum,
                                 ) as *const libc::c_char
                             } else {
                                 crate::src::renderergl1::tr_main::ri.Printf.expect("non-null function pointer")(crate::src::qcommon::q_shared::PRINT_ALL
                                                                                   as
-                                                                                  libc::c_int,
+                                                                                  i32,
                                                                               b"GLimp_GetProcAddresses() failed for OpenGL 3.2 core context\n\x00"
                                                                                   as
                                                                                   *const u8
@@ -7432,7 +7432,7 @@ unsafe extern "C" fn GLimp_SetMode(
                                     crate::src::renderergl1::tr_main::ri
                                         .Printf
                                         .expect("non-null function pointer")(
-                                        crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                                        crate::src::qcommon::q_shared::PRINT_ALL as i32,
                                         b"GL_RENDERER is %s, rejecting context\n\x00" as *const u8
                                             as *const libc::c_char,
                                         renderer,
@@ -7464,7 +7464,7 @@ unsafe extern "C" fn GLimp_SetMode(
                             crate::src::renderergl1::tr_main::ri
                                 .Printf
                                 .expect("non-null function pointer")(
-                                crate::src::qcommon::q_shared::PRINT_DEVELOPER as libc::c_int,
+                                crate::src::qcommon::q_shared::PRINT_DEVELOPER as i32,
                                 b"SDL_GL_CreateContext failed: %s\n\x00" as *const u8
                                     as *const libc::c_char,
                                 crate::stdlib::SDL_GetError(),
@@ -7476,7 +7476,7 @@ unsafe extern "C" fn GLimp_SetMode(
                             crate::src::renderergl1::tr_main::ri
                                 .Printf
                                 .expect("non-null function pointer")(
-                                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                                 b"GLimp_GetProcAddresses() failed\n\x00" as *const u8
                                     as *const libc::c_char,
                             );
@@ -7496,23 +7496,23 @@ unsafe extern "C" fn GLimp_SetMode(
                         5597585068398118923 => {}
                         _ => {
                             qglClearColor.expect("non-null function pointer")(
-                                0 as libc::c_int as crate::stdlib::GLclampf,
-                                0 as libc::c_int as crate::stdlib::GLclampf,
-                                0 as libc::c_int as crate::stdlib::GLclampf,
-                                1 as libc::c_int as crate::stdlib::GLclampf,
+                                0 as i32 as crate::stdlib::GLclampf,
+                                0 as i32 as crate::stdlib::GLclampf,
+                                0 as i32 as crate::stdlib::GLclampf,
+                                1 as i32 as crate::stdlib::GLclampf,
                             );
                             qglClear.expect("non-null function pointer")(
-                                0x4000 as libc::c_int as crate::stdlib::GLbitfield,
+                                0x4000 as i32 as crate::stdlib::GLbitfield,
                             );
                             crate::stdlib::SDL_GL_SwapWindow(SDL_window);
                             if crate::stdlib::SDL_GL_SetSwapInterval(
                                 (*crate::src::renderergl1::tr_init::r_swapInterval).integer,
-                            ) == -(1 as libc::c_int)
+                            ) == -(1 as i32)
                             {
                                 crate::src::renderergl1::tr_main::ri
                                     .Printf
                                     .expect("non-null function pointer")(
-                                    crate::src::qcommon::q_shared::PRINT_DEVELOPER as libc::c_int,
+                                    crate::src::qcommon::q_shared::PRINT_DEVELOPER as i32,
                                     b"SDL_GL_SetSwapInterval failed: %s\n\x00" as *const u8
                                         as *const libc::c_char,
                                     crate::stdlib::SDL_GetError(),
@@ -7520,15 +7520,15 @@ unsafe extern "C" fn GLimp_SetMode(
                             }
                             crate::stdlib::SDL_GL_GetAttribute(
                                 crate::stdlib::SDL_GL_RED_SIZE,
-                                &mut *realColorBits.as_mut_ptr().offset(0 as libc::c_int as isize),
+                                &mut *realColorBits.as_mut_ptr().offset(0 as i32 as isize),
                             );
                             crate::stdlib::SDL_GL_GetAttribute(
                                 crate::stdlib::SDL_GL_GREEN_SIZE,
-                                &mut *realColorBits.as_mut_ptr().offset(1 as libc::c_int as isize),
+                                &mut *realColorBits.as_mut_ptr().offset(1 as i32 as isize),
                             );
                             crate::stdlib::SDL_GL_GetAttribute(
                                 crate::stdlib::SDL_GL_BLUE_SIZE,
-                                &mut *realColorBits.as_mut_ptr().offset(2 as libc::c_int as isize),
+                                &mut *realColorBits.as_mut_ptr().offset(2 as i32 as isize),
                             );
                             crate::stdlib::SDL_GL_GetAttribute(
                                 crate::stdlib::SDL_GL_DEPTH_SIZE,
@@ -7539,13 +7539,13 @@ unsafe extern "C" fn GLimp_SetMode(
                                 &mut crate::src::renderergl1::tr_init::glConfig.stencilBits,
                             );
                             crate::src::renderergl1::tr_init::glConfig.colorBits = realColorBits
-                                [0 as libc::c_int as usize]
-                                + realColorBits[1 as libc::c_int as usize]
-                                + realColorBits[2 as libc::c_int as usize];
+                                [0 as i32 as usize]
+                                + realColorBits[1 as i32 as usize]
+                                + realColorBits[2 as i32 as usize];
                             crate::src::renderergl1::tr_main::ri
                                 .Printf
                                 .expect("non-null function pointer")(
-                                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                                 b"Using %d color bits, %d depth, %d stencil display.\n\x00"
                                     as *const u8
                                     as *const libc::c_char,
@@ -7566,23 +7566,23 @@ unsafe extern "C" fn GLimp_SetMode(
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+            crate::src::qcommon::q_shared::PRINT_ALL as i32,
             b"Couldn\'t get a visual\n\x00" as *const u8 as *const libc::c_char,
         );
-        return RSERR_INVALID_MODE as libc::c_int;
+        return RSERR_INVALID_MODE as i32;
     }
     GLimp_DetectAvailableModes();
     glstring = qglGetString.expect("non-null function pointer")(
-        0x1f01 as libc::c_int as crate::stdlib::GLenum,
+        0x1f01 as i32 as crate::stdlib::GLenum,
     ) as *mut libc::c_char;
     crate::src::renderergl1::tr_main::ri
         .Printf
         .expect("non-null function pointer")(
-        crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+        crate::src::qcommon::q_shared::PRINT_ALL as i32,
         b"GL_RENDERER: %s\n\x00" as *const u8 as *const libc::c_char,
         glstring,
     );
-    return RSERR_OK as libc::c_int;
+    return RSERR_OK as i32;
 }
 /*
 ===============
@@ -7591,19 +7591,19 @@ GLimp_StartDriverAndSetMode
 */
 
 unsafe extern "C" fn GLimp_StartDriverAndSetMode(
-    mut mode: libc::c_int,
+    mut mode: i32,
     mut fullscreen: crate::src::qcommon::q_shared::qboolean,
     mut noborder: crate::src::qcommon::q_shared::qboolean,
     mut gl3Core: crate::src::qcommon::q_shared::qboolean,
 ) -> crate::src::qcommon::q_shared::qboolean {
     let mut err: rserr_t = RSERR_OK;
-    if crate::stdlib::SDL_WasInit(0x20 as libc::c_uint) == 0 {
+    if crate::stdlib::SDL_WasInit(0x20 as u32) == 0 {
         let mut driverName: *const libc::c_char = 0 as *const libc::c_char;
-        if crate::stdlib::SDL_Init(0x20 as libc::c_uint) != 0 as libc::c_int {
+        if crate::stdlib::SDL_Init(0x20 as u32) != 0 as i32 {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"SDL_Init( SDL_INIT_VIDEO ) FAILED (%s)\n\x00" as *const u8 as *const libc::c_char,
                 crate::stdlib::SDL_GetError(),
             );
@@ -7613,7 +7613,7 @@ unsafe extern "C" fn GLimp_StartDriverAndSetMode(
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+            crate::src::qcommon::q_shared::PRINT_ALL as i32,
             b"SDL using driver \"%s\"\n\x00" as *const u8 as *const libc::c_char,
             driverName,
         );
@@ -7624,7 +7624,7 @@ unsafe extern "C" fn GLimp_StartDriverAndSetMode(
             driverName,
         );
     }
-    if fullscreen as libc::c_uint != 0
+    if fullscreen as u32 != 0
         && crate::src::renderergl1::tr_main::ri
             .Cvar_VariableIntegerValue
             .expect("non-null function pointer")(
@@ -7634,7 +7634,7 @@ unsafe extern "C" fn GLimp_StartDriverAndSetMode(
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+            crate::src::qcommon::q_shared::PRINT_ALL as i32,
             b"Fullscreen not allowed with in_nograb 1\n\x00" as *const u8 as *const libc::c_char,
         );
         crate::src::renderergl1::tr_main::ri
@@ -7648,12 +7648,12 @@ unsafe extern "C" fn GLimp_StartDriverAndSetMode(
         fullscreen = crate::src::qcommon::q_shared::qfalse
     }
     err = GLimp_SetMode(mode, fullscreen, noborder, gl3Core) as rserr_t;
-    match err as libc::c_uint {
+    match err as u32 {
         1 => {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"...WARNING: fullscreen unavailable in this mode\n\x00" as *const u8
                     as *const libc::c_char,
             );
@@ -7663,7 +7663,7 @@ unsafe extern "C" fn GLimp_StartDriverAndSetMode(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"...WARNING: could not set the given mode (%d)\n\x00" as *const u8
                     as *const libc::c_char,
                 mode,
@@ -7687,7 +7687,7 @@ unsafe extern "C" fn GLimp_InitExtensions(
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+            crate::src::qcommon::q_shared::PRINT_ALL as i32,
             b"* IGNORING OPENGL EXTENSIONS *\n\x00" as *const u8 as *const libc::c_char,
         );
         return;
@@ -7695,18 +7695,18 @@ unsafe extern "C" fn GLimp_InitExtensions(
     crate::src::renderergl1::tr_main::ri
         .Printf
         .expect("non-null function pointer")(
-        crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+        crate::src::qcommon::q_shared::PRINT_ALL as i32,
         b"Initializing OpenGL extensions\n\x00" as *const u8 as *const libc::c_char,
     );
     crate::src::renderergl1::tr_init::glConfig.textureCompression = crate::tr_types_h::TC_NONE;
     // GL_EXT_texture_compression_s3tc
     if crate::stdlib::SDL_GL_ExtensionSupported(
         b"GL_ARB_texture_compression\x00" as *const u8 as *const libc::c_char,
-    ) as libc::c_uint
+    ) as u32
         != 0
         && crate::stdlib::SDL_GL_ExtensionSupported(
             b"GL_EXT_texture_compression_s3tc\x00" as *const u8 as *const libc::c_char,
-        ) as libc::c_uint
+        ) as u32
             != 0
     {
         if (*crate::src::renderergl1::tr_init::r_ext_compressed_textures).value != 0. {
@@ -7715,7 +7715,7 @@ unsafe extern "C" fn GLimp_InitExtensions(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"...using GL_EXT_texture_compression_s3tc\n\x00" as *const u8
                     as *const libc::c_char,
             );
@@ -7723,7 +7723,7 @@ unsafe extern "C" fn GLimp_InitExtensions(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"...ignoring GL_EXT_texture_compression_s3tc\n\x00" as *const u8
                     as *const libc::c_char,
             );
@@ -7732,14 +7732,14 @@ unsafe extern "C" fn GLimp_InitExtensions(
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+            crate::src::qcommon::q_shared::PRINT_ALL as i32,
             b"...GL_EXT_texture_compression_s3tc not found\n\x00" as *const u8
                 as *const libc::c_char,
         );
     }
     // GL_S3_s3tc ... legacy extension before GL_EXT_texture_compression_s3tc.
-    if crate::src::renderergl1::tr_init::glConfig.textureCompression as libc::c_uint
-        == crate::tr_types_h::TC_NONE as libc::c_int as libc::c_uint
+    if crate::src::renderergl1::tr_init::glConfig.textureCompression as u32
+        == crate::tr_types_h::TC_NONE as i32 as u32
     {
         if crate::stdlib::SDL_GL_ExtensionSupported(
             b"GL_S3_s3tc\x00" as *const u8 as *const libc::c_char,
@@ -7752,14 +7752,14 @@ unsafe extern "C" fn GLimp_InitExtensions(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"...using GL_S3_s3tc\n\x00" as *const u8 as *const libc::c_char,
                 );
             } else {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"...ignoring GL_S3_s3tc\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
@@ -7767,7 +7767,7 @@ unsafe extern "C" fn GLimp_InitExtensions(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"...GL_S3_s3tc not found\n\x00" as *const u8 as *const libc::c_char,
             );
         }
@@ -7788,7 +7788,7 @@ unsafe extern "C" fn GLimp_InitExtensions(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"...using GL_EXT_texture_env_add\n\x00" as *const u8 as *const libc::c_char,
                 );
             } else {
@@ -7797,7 +7797,7 @@ unsafe extern "C" fn GLimp_InitExtensions(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"...ignoring GL_EXT_texture_env_add\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
@@ -7805,7 +7805,7 @@ unsafe extern "C" fn GLimp_InitExtensions(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"...GL_EXT_texture_env_add not found\n\x00" as *const u8 as *const libc::c_char,
             );
         }
@@ -7844,18 +7844,18 @@ unsafe extern "C" fn GLimp_InitExtensions(
                     b"glClientActiveTextureARB\x00" as *const u8 as *const libc::c_char,
                 ));
                 if qglActiveTextureARB.is_some() {
-                    let mut glint: crate::stdlib::GLint = 0 as libc::c_int;
+                    let mut glint: crate::stdlib::GLint = 0 as i32;
                     qglGetIntegerv.expect("non-null function pointer")(
-                        0x84e2 as libc::c_int as crate::stdlib::GLenum,
+                        0x84e2 as i32 as crate::stdlib::GLenum,
                         &mut glint,
                     );
                     crate::src::renderergl1::tr_init::glConfig.numTextureUnits = glint;
-                    if crate::src::renderergl1::tr_init::glConfig.numTextureUnits > 1 as libc::c_int
+                    if crate::src::renderergl1::tr_init::glConfig.numTextureUnits > 1 as i32
                     {
                         crate::src::renderergl1::tr_main::ri
                             .Printf
                             .expect("non-null function pointer")(
-                            crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                            crate::src::qcommon::q_shared::PRINT_ALL as i32,
                             b"...using GL_ARB_multitexture\n\x00" as *const u8
                                 as *const libc::c_char,
                         );
@@ -7866,7 +7866,7 @@ unsafe extern "C" fn GLimp_InitExtensions(
                         crate::src::renderergl1::tr_main::ri
                             .Printf
                             .expect("non-null function pointer")(
-                            crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                            crate::src::qcommon::q_shared::PRINT_ALL as i32,
                             b"...not using GL_ARB_multitexture, < 2 texture units\n\x00"
                                 as *const u8 as *const libc::c_char,
                         );
@@ -7876,7 +7876,7 @@ unsafe extern "C" fn GLimp_InitExtensions(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"...ignoring GL_ARB_multitexture\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
@@ -7884,7 +7884,7 @@ unsafe extern "C" fn GLimp_InitExtensions(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"...GL_ARB_multitexture not found\n\x00" as *const u8 as *const libc::c_char,
             );
         }
@@ -7898,7 +7898,7 @@ unsafe extern "C" fn GLimp_InitExtensions(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"...using GL_EXT_compiled_vertex_array\n\x00" as *const u8
                         as *const libc::c_char,
                 );
@@ -7923,7 +7923,7 @@ unsafe extern "C" fn GLimp_InitExtensions(
                     crate::src::renderergl1::tr_main::ri
                         .Error
                         .expect("non-null function pointer")(
-                        crate::src::qcommon::q_shared::ERR_FATAL as libc::c_int,
+                        crate::src::qcommon::q_shared::ERR_FATAL as i32,
                         b"bad getprocaddress\x00" as *const u8 as *const libc::c_char,
                     );
                 }
@@ -7931,7 +7931,7 @@ unsafe extern "C" fn GLimp_InitExtensions(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"...ignoring GL_EXT_compiled_vertex_array\n\x00" as *const u8
                         as *const libc::c_char,
                 );
@@ -7940,7 +7940,7 @@ unsafe extern "C" fn GLimp_InitExtensions(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"...GL_EXT_compiled_vertex_array not found\n\x00" as *const u8
                     as *const libc::c_char,
             );
@@ -7955,24 +7955,24 @@ unsafe extern "C" fn GLimp_InitExtensions(
     {
         if (*crate::src::renderergl1::tr_init::r_ext_texture_filter_anisotropic).integer != 0 {
             qglGetIntegerv.expect("non-null function pointer")(
-                0x84ff as libc::c_int as crate::stdlib::GLenum,
-                &mut crate::src::renderergl1::tr_init::maxAnisotropy as *mut libc::c_int
+                0x84ff as i32 as crate::stdlib::GLenum,
+                &mut crate::src::renderergl1::tr_init::maxAnisotropy as *mut i32
                     as *mut crate::stdlib::GLint,
             );
-            if crate::src::renderergl1::tr_init::maxAnisotropy <= 0 as libc::c_int {
+            if crate::src::renderergl1::tr_init::maxAnisotropy <= 0 as i32 {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"...GL_EXT_texture_filter_anisotropic not properly supported!\n\x00"
                         as *const u8 as *const libc::c_char,
                 );
-                crate::src::renderergl1::tr_init::maxAnisotropy = 0 as libc::c_int
+                crate::src::renderergl1::tr_init::maxAnisotropy = 0 as i32
             } else {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"...using GL_EXT_texture_filter_anisotropic (max: %i)\n\x00" as *const u8
                         as *const libc::c_char,
                     crate::src::renderergl1::tr_init::maxAnisotropy,
@@ -7984,7 +7984,7 @@ unsafe extern "C" fn GLimp_InitExtensions(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"...ignoring GL_EXT_texture_filter_anisotropic\n\x00" as *const u8
                     as *const libc::c_char,
             );
@@ -7993,7 +7993,7 @@ unsafe extern "C" fn GLimp_InitExtensions(
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+            crate::src::qcommon::q_shared::PRINT_ALL as i32,
             b"...GL_EXT_texture_filter_anisotropic not found\n\x00" as *const u8
                 as *const libc::c_char,
         );
@@ -8015,7 +8015,7 @@ pub unsafe extern "C" fn GLimp_Init(mut fixedFunction: crate::src::qcommon::q_sh
     crate::src::renderergl1::tr_main::ri
         .Printf
         .expect("non-null function pointer")(
-        crate::src::qcommon::q_shared::PRINT_DEVELOPER as libc::c_int,
+        crate::src::qcommon::q_shared::PRINT_DEVELOPER as i32,
         b"Glimp_Init( )\n\x00" as *const u8 as *const libc::c_char,
     );
     r_allowSoftwareGL = crate::src::renderergl1::tr_main::ri
@@ -8023,28 +8023,28 @@ pub unsafe extern "C" fn GLimp_Init(mut fixedFunction: crate::src::qcommon::q_sh
         .expect("non-null function pointer")(
         b"r_allowSoftwareGL\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
-        0x20 as libc::c_int,
+        0x20 as i32,
     );
     r_sdlDriver = crate::src::renderergl1::tr_main::ri
         .Cvar_Get
         .expect("non-null function pointer")(
         b"r_sdlDriver\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
-        0x40 as libc::c_int,
+        0x40 as i32,
     );
     r_allowResize = crate::src::renderergl1::tr_main::ri
         .Cvar_Get
         .expect("non-null function pointer")(
         b"r_allowResize\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
-        0x1 as libc::c_int | 0x20 as libc::c_int,
+        0x1 as i32 | 0x20 as i32,
     );
     r_centerWindow = crate::src::renderergl1::tr_main::ri
         .Cvar_Get
         .expect("non-null function pointer")(
         b"r_centerWindow\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
-        0x1 as libc::c_int | 0x20 as libc::c_int,
+        0x1 as i32 | 0x20 as i32,
     );
     if crate::src::renderergl1::tr_main::ri
         .Cvar_VariableIntegerValue
@@ -8058,7 +8058,7 @@ pub unsafe extern "C" fn GLimp_Init(mut fixedFunction: crate::src::qcommon::q_sh
             b"r_mode\x00" as *const u8 as *const libc::c_char,
             crate::src::qcommon::q_shared::va(
                 b"%d\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                3 as libc::c_int,
+                3 as i32,
             ),
         );
         crate::src::renderergl1::tr_main::ri
@@ -8108,18 +8108,18 @@ pub unsafe extern "C" fn GLimp_Init(mut fixedFunction: crate::src::qcommon::q_sh
             != 0)
         {
             // Finally, try the default screen resolution
-            if (*crate::src::renderergl1::tr_init::r_mode).integer != 3 as libc::c_int {
+            if (*crate::src::renderergl1::tr_init::r_mode).integer != 3 as i32 {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
                     b"Setting r_mode %d failed, falling back on r_mode %d\n\x00" as *const u8
                         as *const libc::c_char,
                     (*crate::src::renderergl1::tr_init::r_mode).integer,
-                    3 as libc::c_int,
+                    3 as i32,
                 );
                 if GLimp_StartDriverAndSetMode(
-                    3 as libc::c_int,
+                    3 as i32,
                     crate::src::qcommon::q_shared::qfalse,
                     crate::src::qcommon::q_shared::qfalse,
                     fixedFunction,
@@ -8140,7 +8140,7 @@ pub unsafe extern "C" fn GLimp_Init(mut fixedFunction: crate::src::qcommon::q_sh
                     crate::src::renderergl1::tr_main::ri
                         .Error
                         .expect("non-null function pointer")(
-                        crate::src::qcommon::q_shared::ERR_FATAL as libc::c_int,
+                        crate::src::qcommon::q_shared::ERR_FATAL as i32,
                         b"GLimp_Init() - could not load OpenGL subsystem\x00" as *const u8
                             as *const libc::c_char,
                     );
@@ -8154,38 +8154,38 @@ pub unsafe extern "C" fn GLimp_Init(mut fixedFunction: crate::src::qcommon::q_sh
     // Only using SDL_SetWindowBrightness to determine if hardware gamma is supported
     crate::src::renderergl1::tr_init::glConfig.deviceSupportsGamma =
         ((*crate::src::renderergl1::tr_init::r_ignorehwgamma).integer == 0
-            && crate::stdlib::SDL_SetWindowBrightness(SDL_window, 1.0f32) >= 0 as libc::c_int)
-            as libc::c_int as crate::src::qcommon::q_shared::qboolean;
+            && crate::stdlib::SDL_SetWindowBrightness(SDL_window, 1.0f32) >= 0 as i32)
+            as i32 as crate::src::qcommon::q_shared::qboolean;
     // get our config strings
     crate::src::qcommon::q_shared::Q_strncpyz(
         crate::src::renderergl1::tr_init::glConfig
             .vendor_string
             .as_mut_ptr(),
         qglGetString.expect("non-null function pointer")(
-            0x1f00 as libc::c_int as crate::stdlib::GLenum,
+            0x1f00 as i32 as crate::stdlib::GLenum,
         ) as *mut libc::c_char,
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
     crate::src::qcommon::q_shared::Q_strncpyz(
         crate::src::renderergl1::tr_init::glConfig
             .renderer_string
             .as_mut_ptr(),
         qglGetString.expect("non-null function pointer")(
-            0x1f01 as libc::c_int as crate::stdlib::GLenum,
+            0x1f01 as i32 as crate::stdlib::GLenum,
         ) as *mut libc::c_char,
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
     if *crate::src::renderergl1::tr_init::glConfig
         .renderer_string
-        .as_mut_ptr() as libc::c_int
+        .as_mut_ptr() as i32
         != 0
         && crate::src::renderergl1::tr_init::glConfig.renderer_string[crate::stdlib::strlen(
             crate::src::renderergl1::tr_init::glConfig
                 .renderer_string
                 .as_mut_ptr(),
         )
-        .wrapping_sub(1 as libc::c_int as libc::c_ulong)
-            as usize] as libc::c_int
+        .wrapping_sub(1 as i32 as libc::c_ulong)
+            as usize] as i32
             == '\n' as i32
     {
         crate::src::renderergl1::tr_init::glConfig.renderer_string[crate::stdlib::strlen(
@@ -8193,48 +8193,48 @@ pub unsafe extern "C" fn GLimp_Init(mut fixedFunction: crate::src::qcommon::q_sh
                 .renderer_string
                 .as_mut_ptr(),
         )
-        .wrapping_sub(1 as libc::c_int as libc::c_ulong)
-            as usize] = 0 as libc::c_int as libc::c_char
+        .wrapping_sub(1 as i32 as libc::c_ulong)
+            as usize] = 0 as i32 as libc::c_char
     }
     crate::src::qcommon::q_shared::Q_strncpyz(
         crate::src::renderergl1::tr_init::glConfig
             .version_string
             .as_mut_ptr(),
         qglGetString.expect("non-null function pointer")(
-            0x1f02 as libc::c_int as crate::stdlib::GLenum,
+            0x1f02 as i32 as crate::stdlib::GLenum,
         ) as *mut libc::c_char,
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
     // manually create extension list if using OpenGL 3
     if qglGetStringi.is_some() {
-        let mut i: libc::c_int = 0;
-        let mut numExtensions: libc::c_int = 0;
-        let mut extensionLength: libc::c_int = 0;
-        let mut listLength: libc::c_int = 0;
+        let mut i: i32 = 0;
+        let mut numExtensions: i32 = 0;
+        let mut extensionLength: i32 = 0;
+        let mut listLength: i32 = 0;
         let mut extension: *const libc::c_char = 0 as *const libc::c_char;
         qglGetIntegerv.expect("non-null function pointer")(
-            0x821d as libc::c_int as crate::stdlib::GLenum,
+            0x821d as i32 as crate::stdlib::GLenum,
             &mut numExtensions,
         );
-        listLength = 0 as libc::c_int;
-        i = 0 as libc::c_int;
+        listLength = 0 as i32;
+        i = 0 as i32;
         while i < numExtensions {
             extension = qglGetStringi.expect("non-null function pointer")(
-                0x1f03 as libc::c_int as crate::stdlib::GLenum,
+                0x1f03 as i32 as crate::stdlib::GLenum,
                 i as crate::stdlib::GLuint,
             ) as *mut libc::c_char;
-            extensionLength = crate::stdlib::strlen(extension) as libc::c_int;
-            if (listLength + extensionLength + 1 as libc::c_int) as libc::c_ulong
+            extensionLength = crate::stdlib::strlen(extension) as i32;
+            if (listLength + extensionLength + 1 as i32) as libc::c_ulong
                 >= ::std::mem::size_of::<[libc::c_char; 8192]>() as libc::c_ulong
             {
                 break;
             }
-            if i > 0 as libc::c_int {
+            if i > 0 as i32 {
                 crate::src::qcommon::q_shared::Q_strcat(
                     crate::src::renderergl1::tr_init::glConfig
                         .extensions_string
                         .as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 8192]>() as libc::c_ulong as libc::c_int,
+                    ::std::mem::size_of::<[libc::c_char; 8192]>() as libc::c_ulong as i32,
                     b" \x00" as *const u8 as *const libc::c_char,
                 );
                 listLength += 1
@@ -8243,7 +8243,7 @@ pub unsafe extern "C" fn GLimp_Init(mut fixedFunction: crate::src::qcommon::q_sh
                 crate::src::renderergl1::tr_init::glConfig
                     .extensions_string
                     .as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 8192]>() as libc::c_ulong as libc::c_int,
+                ::std::mem::size_of::<[libc::c_char; 8192]>() as libc::c_ulong as i32,
                 extension,
             );
             listLength += extensionLength;
@@ -8255,9 +8255,9 @@ pub unsafe extern "C" fn GLimp_Init(mut fixedFunction: crate::src::qcommon::q_sh
                 .extensions_string
                 .as_mut_ptr(),
             qglGetString.expect("non-null function pointer")(
-                0x1f03 as libc::c_int as crate::stdlib::GLenum,
+                0x1f03 as i32 as crate::stdlib::GLenum,
             ) as *mut libc::c_char,
-            ::std::mem::size_of::<[libc::c_char; 8192]>() as libc::c_ulong as libc::c_int,
+            ::std::mem::size_of::<[libc::c_char; 8192]>() as libc::c_ulong as i32,
         );
     }
     // initialize extensions
@@ -8267,7 +8267,7 @@ pub unsafe extern "C" fn GLimp_Init(mut fixedFunction: crate::src::qcommon::q_sh
         .expect("non-null function pointer")(
         b"r_availableModes\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
-        0x40 as libc::c_int,
+        0x40 as i32,
     );
     // This depends on SDL_INIT_VIDEO, hence having it here
     crate::src::renderergl1::tr_main::ri
@@ -8356,20 +8356,20 @@ pub unsafe extern "C" fn GLimp_EndFrame() {
     if crate::src::qcommon::q_shared::Q_stricmp(
         (*crate::src::renderergl1::tr_init::r_drawBuffer).string,
         b"GL_FRONT\x00" as *const u8 as *const libc::c_char,
-    ) != 0 as libc::c_int
+    ) != 0 as i32
     {
         crate::stdlib::SDL_GL_SwapWindow(SDL_window);
     }
     if (*crate::src::renderergl1::tr_init::r_fullscreen).modified as u64 != 0 {
-        let mut fullscreen: libc::c_int = 0;
+        let mut fullscreen: i32 = 0;
         let mut needToToggle: crate::src::qcommon::q_shared::qboolean =
             crate::src::qcommon::q_shared::qfalse;
         let mut sdlToggled: crate::src::qcommon::q_shared::qboolean =
             crate::src::qcommon::q_shared::qfalse;
         // Find out the current state
         fullscreen = (crate::stdlib::SDL_GetWindowFlags(SDL_window)
-            & crate::stdlib::SDL_WINDOW_FULLSCREEN as libc::c_int as libc::c_uint
-            != 0) as libc::c_int;
+            & crate::stdlib::SDL_WINDOW_FULLSCREEN as i32 as u32
+            != 0) as i32;
         if (*crate::src::renderergl1::tr_init::r_fullscreen).integer != 0
             && crate::src::renderergl1::tr_main::ri
                 .Cvar_VariableIntegerValue
@@ -8380,7 +8380,7 @@ pub unsafe extern "C" fn GLimp_EndFrame() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_ALL as i32,
                 b"Fullscreen not allowed with in_nograb 1\n\x00" as *const u8
                     as *const libc::c_char,
             );
@@ -8395,21 +8395,21 @@ pub unsafe extern "C" fn GLimp_EndFrame() {
         }
         // Is the state we want different from the current state?
         needToToggle = (((*crate::src::renderergl1::tr_init::r_fullscreen).integer != 0)
-            as libc::c_int
-            != fullscreen) as libc::c_int
+            as i32
+            != fullscreen) as i32
             as crate::src::qcommon::q_shared::qboolean;
         if needToToggle as u64 != 0 {
             sdlToggled = (crate::stdlib::SDL_SetWindowFullscreen(
                 SDL_window,
                 (*crate::src::renderergl1::tr_init::r_fullscreen).integer as crate::stdlib::Uint32,
-            ) >= 0 as libc::c_int) as libc::c_int
+            ) >= 0 as i32) as i32
                 as crate::src::qcommon::q_shared::qboolean;
             // SDL_WM_ToggleFullScreen didn't work, so do it the slow way
             if sdlToggled as u64 == 0 {
                 crate::src::renderergl1::tr_main::ri
                     .Cmd_ExecuteText
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::EXEC_APPEND as libc::c_int,
+                    crate::src::qcommon::q_shared::EXEC_APPEND as i32,
                     b"vid_restart\n\x00" as *const u8 as *const libc::c_char,
                 );
             }

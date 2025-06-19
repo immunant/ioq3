@@ -330,37 +330,37 @@ POSSIBILITY OF SUCH DAMAGE.
 pub unsafe extern "C" fn silk_decode_pulses(
     mut psRangeDec: *mut crate::src::opus_1_2_1::celt::entcode::ec_dec,
     mut pulses: *mut crate::opus_types_h::opus_int16,
-    signalType: libc::c_int,
-    quantOffsetType: libc::c_int,
-    frame_length: libc::c_int,
+    signalType: i32,
+    quantOffsetType: i32,
+    frame_length: i32,
 )
 /* I    Frame length                                */
 {
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
-    let mut k: libc::c_int = 0;
-    let mut iter: libc::c_int = 0;
-    let mut abs_q: libc::c_int = 0;
-    let mut nLS: libc::c_int = 0;
-    let mut RateLevelIndex: libc::c_int = 0;
-    let mut sum_pulses: [libc::c_int; 20] = [0; 20];
-    let mut nLshifts: [libc::c_int; 20] = [0; 20];
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
+    let mut k: i32 = 0;
+    let mut iter: i32 = 0;
+    let mut abs_q: i32 = 0;
+    let mut nLS: i32 = 0;
+    let mut RateLevelIndex: i32 = 0;
+    let mut sum_pulses: [i32; 20] = [0; 20];
+    let mut nLshifts: [i32; 20] = [0; 20];
     let mut pulses_ptr: *mut crate::opus_types_h::opus_int16 =
         0 as *mut crate::opus_types_h::opus_int16;
-    let mut cdf_ptr: *const libc::c_uchar = 0 as *const libc::c_uchar;
+    let mut cdf_ptr: *const u8 = 0 as *const u8;
     /* ********************/
     /* Decode rate level */
     /* ********************/
     RateLevelIndex = crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
         psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
         crate::src::opus_1_2_1::silk::tables_pulses_per_block::silk_rate_levels_iCDF
-            [(signalType >> 1 as libc::c_int) as usize]
+            [(signalType >> 1 as i32) as usize]
             .as_ptr(),
-        8 as libc::c_int as libc::c_uint,
+        8 as i32 as u32,
     );
     /* Calculate number of shell blocks */
-    iter = frame_length >> 4 as libc::c_int;
-    if (iter * 16 as libc::c_int) < frame_length {
+    iter = frame_length >> 4 as i32;
+    if (iter * 16 as i32) < frame_length {
         /* Make sure only happens for 10 ms @ 12 kHz */
         iter += 1
     }
@@ -370,25 +370,25 @@ pub unsafe extern "C" fn silk_decode_pulses(
     cdf_ptr = crate::src::opus_1_2_1::silk::tables_pulses_per_block::silk_pulses_per_block_iCDF
         [RateLevelIndex as usize]
         .as_ptr();
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < iter {
-        nLshifts[i as usize] = 0 as libc::c_int;
+        nLshifts[i as usize] = 0 as i32;
         sum_pulses[i as usize] = crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
             psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
             cdf_ptr,
-            8 as libc::c_int as libc::c_uint,
+            8 as i32 as u32,
         );
         /* LSB indication */
-        while sum_pulses[i as usize] == 16 as libc::c_int + 1 as libc::c_int {
+        while sum_pulses[i as usize] == 16 as i32 + 1 as i32 {
             nLshifts[i as usize] += 1;
             /* When we've already got 10 LSBs, we shift the table to not allow (SILK_MAX_PULSES + 1) */
             sum_pulses[i as usize] = crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
                 psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
                 crate::src::opus_1_2_1::silk::tables_pulses_per_block::silk_pulses_per_block_iCDF
-                    [(10 as libc::c_int - 1 as libc::c_int) as usize]
+                    [(10 as i32 - 1 as i32) as usize]
                     .as_ptr()
-                    .offset((nLshifts[i as usize] == 10 as libc::c_int) as libc::c_int as isize),
-                8 as libc::c_int as libc::c_uint,
+                    .offset((nLshifts[i as usize] == 10 as i32) as i32 as isize),
+                8 as i32 as u32,
             )
         }
         i += 1
@@ -396,13 +396,13 @@ pub unsafe extern "C" fn silk_decode_pulses(
     /* **************************************************/
     /* Shell decoding                                  */
     /* **************************************************/
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < iter {
-        if sum_pulses[i as usize] > 0 as libc::c_int {
+        if sum_pulses[i as usize] > 0 as i32 {
             crate::src::opus_1_2_1::silk::shell_coder::silk_shell_decoder(
                 &mut *pulses.offset(
                     (i as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
-                        * 16 as libc::c_int as crate::opus_types_h::opus_int16
+                        * 16 as i32 as crate::opus_types_h::opus_int16
                             as crate::opus_types_h::opus_int32) as isize,
                 ),
                 psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
@@ -412,11 +412,11 @@ pub unsafe extern "C" fn silk_decode_pulses(
             crate::stdlib::memset(
                 &mut *pulses.offset(
                     (i as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
-                        * 16 as libc::c_int as crate::opus_types_h::opus_int16
+                        * 16 as i32 as crate::opus_types_h::opus_int16
                             as crate::opus_types_h::opus_int32) as isize,
                 ) as *mut crate::opus_types_h::opus_int16 as *mut libc::c_void,
-                0 as libc::c_int,
-                (16 as libc::c_int as libc::c_ulong)
+                0 as i32,
+                (16 as i32 as libc::c_ulong)
                     .wrapping_mul(
                         ::std::mem::size_of::<crate::opus_types_h::opus_int16>() as libc::c_ulong
                     ),
@@ -427,26 +427,26 @@ pub unsafe extern "C" fn silk_decode_pulses(
     /* **************************************************/
     /* LSB Decoding                                    */
     /* **************************************************/
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < iter {
-        if nLshifts[i as usize] > 0 as libc::c_int {
+        if nLshifts[i as usize] > 0 as i32 {
             nLS = nLshifts[i as usize];
             pulses_ptr = &mut *pulses.offset(
                 (i as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
-                    * 16 as libc::c_int as crate::opus_types_h::opus_int16
+                    * 16 as i32 as crate::opus_types_h::opus_int16
                         as crate::opus_types_h::opus_int32) as isize,
             ) as *mut crate::opus_types_h::opus_int16;
-            k = 0 as libc::c_int;
-            while k < 16 as libc::c_int {
-                abs_q = *pulses_ptr.offset(k as isize) as libc::c_int;
-                j = 0 as libc::c_int;
+            k = 0 as i32;
+            while k < 16 as i32 {
+                abs_q = *pulses_ptr.offset(k as isize) as i32;
+                j = 0 as i32;
                 while j < nLS {
-                    abs_q = ((abs_q as crate::opus_types_h::opus_uint32) << 1 as libc::c_int)
+                    abs_q = ((abs_q as crate::opus_types_h::opus_uint32) << 1 as i32)
                         as crate::opus_types_h::opus_int32;
                     abs_q += crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
                         psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
                         crate::src::opus_1_2_1::silk::tables_other::silk_lsb_iCDF.as_ptr(),
-                        8 as libc::c_int as libc::c_uint,
+                        8 as i32 as u32,
                     );
                     j += 1
                 }
@@ -454,7 +454,7 @@ pub unsafe extern "C" fn silk_decode_pulses(
                 k += 1
             }
             /* Mark the number of pulses non-zero for sign decoding. */
-            sum_pulses[i as usize] |= nLS << 5 as libc::c_int
+            sum_pulses[i as usize] |= nLS << 5 as i32
         }
         i += 1
     }
@@ -467,6 +467,6 @@ pub unsafe extern "C" fn silk_decode_pulses(
         frame_length,
         signalType,
         quantOffsetType,
-        sum_pulses.as_mut_ptr() as *const libc::c_int,
+        sum_pulses.as_mut_ptr() as *const i32,
     );
 }

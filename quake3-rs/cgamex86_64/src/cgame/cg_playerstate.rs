@@ -8,10 +8,10 @@ pub mod q_shared_h {
         mut v: *const crate::src::qcommon::q_shared::vec_t,
     ) -> crate::src::qcommon::q_shared::vec_t {
         return crate::stdlib::sqrt(
-            (*v.offset(0 as libc::c_int as isize) * *v.offset(0 as libc::c_int as isize)
-                + *v.offset(1 as libc::c_int as isize) * *v.offset(1 as libc::c_int as isize)
-                + *v.offset(2 as libc::c_int as isize) * *v.offset(2 as libc::c_int as isize))
-                as libc::c_double,
+            (*v.offset(0 as i32 as isize) * *v.offset(0 as i32 as isize)
+                + *v.offset(1 as i32 as isize) * *v.offset(1 as i32 as isize)
+                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize))
+                as f64,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
 
@@ -224,30 +224,30 @@ If the ammo has gone low enough to generate the warning, play a sound
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_CheckAmmo() {
-    let mut i: libc::c_int = 0;
-    let mut total: libc::c_int = 0;
-    let mut previous: libc::c_int = 0;
-    let mut weapons: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut total: i32 = 0;
+    let mut previous: i32 = 0;
+    let mut weapons: i32 = 0;
     // see about how many seconds of ammo we have remaining
     weapons = (*crate::src::cgame::cg_main::cg.snap).ps.stats
-        [crate::bg_public_h::STAT_WEAPONS as libc::c_int as usize];
-    total = 0 as libc::c_int;
-    i = crate::bg_public_h::WP_MACHINEGUN as libc::c_int;
-    while i < crate::bg_public_h::WP_NUM_WEAPONS as libc::c_int {
-        if !(weapons & (1 as libc::c_int) << i == 0) {
-            if !((*crate::src::cgame::cg_main::cg.snap).ps.ammo[i as usize] < 0 as libc::c_int) {
+        [crate::bg_public_h::STAT_WEAPONS as i32 as usize];
+    total = 0 as i32;
+    i = crate::bg_public_h::WP_MACHINEGUN as i32;
+    while i < crate::bg_public_h::WP_NUM_WEAPONS as i32 {
+        if !(weapons & (1 as i32) << i == 0) {
+            if !((*crate::src::cgame::cg_main::cg.snap).ps.ammo[i as usize] < 0 as i32) {
                 match i {
                     5 | 4 | 7 | 3 => {
                         total += (*crate::src::cgame::cg_main::cg.snap).ps.ammo[i as usize]
-                            * 1000 as libc::c_int
+                            * 1000 as i32
                     }
                     _ => {
                         total += (*crate::src::cgame::cg_main::cg.snap).ps.ammo[i as usize]
-                            * 200 as libc::c_int
+                            * 200 as i32
                     }
                 }
-                if total >= 5000 as libc::c_int {
-                    crate::src::cgame::cg_main::cg.lowAmmoWarning = 0 as libc::c_int;
+                if total >= 5000 as i32 {
+                    crate::src::cgame::cg_main::cg.lowAmmoWarning = 0 as i32;
                     return;
                 }
             }
@@ -255,16 +255,16 @@ pub unsafe extern "C" fn CG_CheckAmmo() {
         i += 1
     }
     previous = crate::src::cgame::cg_main::cg.lowAmmoWarning;
-    if total == 0 as libc::c_int {
-        crate::src::cgame::cg_main::cg.lowAmmoWarning = 2 as libc::c_int
+    if total == 0 as i32 {
+        crate::src::cgame::cg_main::cg.lowAmmoWarning = 2 as i32
     } else {
-        crate::src::cgame::cg_main::cg.lowAmmoWarning = 1 as libc::c_int
+        crate::src::cgame::cg_main::cg.lowAmmoWarning = 1 as i32
     }
     // play a sound on transitions
     if crate::src::cgame::cg_main::cg.lowAmmoWarning != previous {
         crate::src::cgame::cg_syscalls::trap_S_StartLocalSound(
             crate::src::cgame::cg_main::cgs.media.noAmmoSound,
-            crate::src::qcommon::q_shared::CHAN_LOCAL_SOUND as libc::c_int,
+            crate::src::qcommon::q_shared::CHAN_LOCAL_SOUND as i32,
         );
     };
 }
@@ -276,133 +276,133 @@ CG_DamageFeedback
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_DamageFeedback(
-    mut yawByte: libc::c_int,
-    mut pitchByte: libc::c_int,
-    mut damage: libc::c_int,
+    mut yawByte: i32,
+    mut pitchByte: i32,
+    mut damage: i32,
 ) {
-    let mut left: libc::c_float = 0.;
-    let mut front: libc::c_float = 0.;
-    let mut up: libc::c_float = 0.;
-    let mut kick: libc::c_float = 0.;
-    let mut health: libc::c_int = 0;
-    let mut scale: libc::c_float = 0.;
+    let mut left: f32 = 0.;
+    let mut front: f32 = 0.;
+    let mut up: f32 = 0.;
+    let mut kick: f32 = 0.;
+    let mut health: i32 = 0;
+    let mut scale: f32 = 0.;
     let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut angles: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut dist: libc::c_float = 0.;
-    let mut yaw: libc::c_float = 0.;
-    let mut pitch: libc::c_float = 0.;
+    let mut dist: f32 = 0.;
+    let mut yaw: f32 = 0.;
+    let mut pitch: f32 = 0.;
     // show the attacking player's head and name in corner
     crate::src::cgame::cg_main::cg.attackerTime = crate::src::cgame::cg_main::cg.time;
     // the lower on health you are, the greater the view kick will be
     health = (*crate::src::cgame::cg_main::cg.snap).ps.stats
-        [crate::bg_public_h::STAT_HEALTH as libc::c_int as usize];
-    if health < 40 as libc::c_int {
-        scale = 1 as libc::c_int as libc::c_float
+        [crate::bg_public_h::STAT_HEALTH as i32 as usize];
+    if health < 40 as i32 {
+        scale = 1 as i32 as f32
     } else {
-        scale = (40.0f64 / health as libc::c_double) as libc::c_float
+        scale = (40.0f64 / health as f64) as f32
     }
-    kick = damage as libc::c_float * scale;
-    if kick < 5 as libc::c_int as libc::c_float {
-        kick = 5 as libc::c_int as libc::c_float
+    kick = damage as f32 * scale;
+    if kick < 5 as i32 as f32 {
+        kick = 5 as i32 as f32
     }
-    if kick > 10 as libc::c_int as libc::c_float {
-        kick = 10 as libc::c_int as libc::c_float
+    if kick > 10 as i32 as f32 {
+        kick = 10 as i32 as f32
     }
     // if yaw and pitch are both 255, make the damage always centered (falling, etc)
-    if yawByte == 255 as libc::c_int && pitchByte == 255 as libc::c_int {
-        crate::src::cgame::cg_main::cg.damageX = 0 as libc::c_int as libc::c_float;
-        crate::src::cgame::cg_main::cg.damageY = 0 as libc::c_int as libc::c_float;
-        crate::src::cgame::cg_main::cg.v_dmg_roll = 0 as libc::c_int as libc::c_float;
+    if yawByte == 255 as i32 && pitchByte == 255 as i32 {
+        crate::src::cgame::cg_main::cg.damageX = 0 as i32 as f32;
+        crate::src::cgame::cg_main::cg.damageY = 0 as i32 as f32;
+        crate::src::cgame::cg_main::cg.v_dmg_roll = 0 as i32 as f32;
         crate::src::cgame::cg_main::cg.v_dmg_pitch = -kick
     } else {
         // positional
-        pitch = (pitchByte as libc::c_double / 255.0f64 * 360 as libc::c_int as libc::c_double)
-            as libc::c_float;
-        yaw = (yawByte as libc::c_double / 255.0f64 * 360 as libc::c_int as libc::c_double)
-            as libc::c_float;
-        angles[0 as libc::c_int as usize] = pitch;
-        angles[1 as libc::c_int as usize] = yaw;
-        angles[2 as libc::c_int as usize] =
-            0 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
+        pitch = (pitchByte as f64 / 255.0f64 * 360 as i32 as f64)
+            as f32;
+        yaw = (yawByte as f64 / 255.0f64 * 360 as i32 as f64)
+            as f32;
+        angles[0 as i32 as usize] = pitch;
+        angles[1 as i32 as usize] = yaw;
+        angles[2 as i32 as usize] =
+            0 as i32 as crate::src::qcommon::q_shared::vec_t;
         crate::src::qcommon::q_math::AngleVectors(
             angles.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
             dir.as_mut_ptr(),
             0 as *mut crate::src::qcommon::q_shared::vec_t,
             0 as *mut crate::src::qcommon::q_shared::vec_t,
         );
-        dir[0 as libc::c_int as usize] = crate::src::qcommon::q_math::vec3_origin
-            [0 as libc::c_int as usize]
-            - dir[0 as libc::c_int as usize];
-        dir[1 as libc::c_int as usize] = crate::src::qcommon::q_math::vec3_origin
-            [1 as libc::c_int as usize]
-            - dir[1 as libc::c_int as usize];
-        dir[2 as libc::c_int as usize] = crate::src::qcommon::q_math::vec3_origin
-            [2 as libc::c_int as usize]
-            - dir[2 as libc::c_int as usize];
-        front = dir[0 as libc::c_int as usize]
-            * crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as libc::c_int as usize]
-                [0 as libc::c_int as usize]
-            + dir[1 as libc::c_int as usize]
-                * crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as libc::c_int as usize]
-                    [1 as libc::c_int as usize]
-            + dir[2 as libc::c_int as usize]
-                * crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as libc::c_int as usize]
-                    [2 as libc::c_int as usize];
-        left = dir[0 as libc::c_int as usize]
-            * crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as libc::c_int as usize]
-                [0 as libc::c_int as usize]
-            + dir[1 as libc::c_int as usize]
-                * crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as libc::c_int as usize]
-                    [1 as libc::c_int as usize]
-            + dir[2 as libc::c_int as usize]
-                * crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as libc::c_int as usize]
-                    [2 as libc::c_int as usize];
-        up = dir[0 as libc::c_int as usize]
-            * crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as libc::c_int as usize]
-                [0 as libc::c_int as usize]
-            + dir[1 as libc::c_int as usize]
-                * crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as libc::c_int as usize]
-                    [1 as libc::c_int as usize]
-            + dir[2 as libc::c_int as usize]
-                * crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as libc::c_int as usize]
-                    [2 as libc::c_int as usize];
-        dir[0 as libc::c_int as usize] = front;
-        dir[1 as libc::c_int as usize] = left;
-        dir[2 as libc::c_int as usize] = 0 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
+        dir[0 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin
+            [0 as i32 as usize]
+            - dir[0 as i32 as usize];
+        dir[1 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin
+            [1 as i32 as usize]
+            - dir[1 as i32 as usize];
+        dir[2 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin
+            [2 as i32 as usize]
+            - dir[2 as i32 as usize];
+        front = dir[0 as i32 as usize]
+            * crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize]
+                [0 as i32 as usize]
+            + dir[1 as i32 as usize]
+                * crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize]
+                    [1 as i32 as usize]
+            + dir[2 as i32 as usize]
+                * crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize]
+                    [2 as i32 as usize];
+        left = dir[0 as i32 as usize]
+            * crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize]
+                [0 as i32 as usize]
+            + dir[1 as i32 as usize]
+                * crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize]
+                    [1 as i32 as usize]
+            + dir[2 as i32 as usize]
+                * crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize]
+                    [2 as i32 as usize];
+        up = dir[0 as i32 as usize]
+            * crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize]
+                [0 as i32 as usize]
+            + dir[1 as i32 as usize]
+                * crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize]
+                    [1 as i32 as usize]
+            + dir[2 as i32 as usize]
+                * crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize]
+                    [2 as i32 as usize];
+        dir[0 as i32 as usize] = front;
+        dir[1 as i32 as usize] = left;
+        dir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
         dist = VectorLength(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
-        if (dist as libc::c_double) < 0.1f64 {
+        if (dist as f64) < 0.1f64 {
             dist = 0.1f32
         }
         crate::src::cgame::cg_main::cg.v_dmg_roll = kick * left;
         crate::src::cgame::cg_main::cg.v_dmg_pitch = -kick * front;
-        if front as libc::c_double <= 0.1f64 {
+        if front as f64 <= 0.1f64 {
             front = 0.1f32
         }
         crate::src::cgame::cg_main::cg.damageX = -left / front;
         crate::src::cgame::cg_main::cg.damageY = up / dist
     }
     // clamp the position
-    if crate::src::cgame::cg_main::cg.damageX as libc::c_double > 1.0f64 {
-        crate::src::cgame::cg_main::cg.damageX = 1.0f64 as libc::c_float
+    if crate::src::cgame::cg_main::cg.damageX as f64 > 1.0f64 {
+        crate::src::cgame::cg_main::cg.damageX = 1.0f64 as f32
     }
-    if (crate::src::cgame::cg_main::cg.damageX as libc::c_double) < -1.0f64 {
-        crate::src::cgame::cg_main::cg.damageX = -1.0f64 as libc::c_float
+    if (crate::src::cgame::cg_main::cg.damageX as f64) < -1.0f64 {
+        crate::src::cgame::cg_main::cg.damageX = -1.0f64 as f32
     }
-    if crate::src::cgame::cg_main::cg.damageY as libc::c_double > 1.0f64 {
-        crate::src::cgame::cg_main::cg.damageY = 1.0f64 as libc::c_float
+    if crate::src::cgame::cg_main::cg.damageY as f64 > 1.0f64 {
+        crate::src::cgame::cg_main::cg.damageY = 1.0f64 as f32
     }
-    if (crate::src::cgame::cg_main::cg.damageY as libc::c_double) < -1.0f64 {
-        crate::src::cgame::cg_main::cg.damageY = -1.0f64 as libc::c_float
+    if (crate::src::cgame::cg_main::cg.damageY as f64) < -1.0f64 {
+        crate::src::cgame::cg_main::cg.damageY = -1.0f64 as f32
     }
     // don't let the screen flashes vary as much
-    if kick > 10 as libc::c_int as libc::c_float {
-        kick = 10 as libc::c_int as libc::c_float
+    if kick > 10 as i32 as f32 {
+        kick = 10 as i32 as f32
     }
     crate::src::cgame::cg_main::cg.damageValue = kick;
     crate::src::cgame::cg_main::cg.v_dmg_time =
-        (crate::src::cgame::cg_main::cg.time + 500 as libc::c_int) as libc::c_float;
+        (crate::src::cgame::cg_main::cg.time + 500 as i32) as f32;
     crate::src::cgame::cg_main::cg.damageTime =
-        (*crate::src::cgame::cg_main::cg.snap).serverTime as libc::c_float;
+        (*crate::src::cgame::cg_main::cg.snap).serverTime as f32;
 }
 /*
 ================
@@ -432,8 +432,8 @@ pub unsafe extern "C" fn CG_CheckPlayerstateEvents(
     mut ps: *mut crate::src::qcommon::q_shared::playerState_t,
     mut ops: *mut crate::src::qcommon::q_shared::playerState_t,
 ) {
-    let mut i: libc::c_int = 0; // cg_entities[ ps->clientNum ];
-    let mut event: libc::c_int = 0;
+    let mut i: i32 = 0; // cg_entities[ ps->clientNum ];
+    let mut event: i32 = 0;
     let mut cent: *mut crate::cg_local_h::centity_t = 0 as *mut crate::cg_local_h::centity_t;
     if (*ps).externalEvent != 0 && (*ps).externalEvent != (*ops).externalEvent {
         cent = &mut *crate::src::cgame::cg_main::cg_entities
@@ -448,24 +448,24 @@ pub unsafe extern "C" fn CG_CheckPlayerstateEvents(
     }
     cent = &mut crate::src::cgame::cg_main::cg.predictedPlayerEntity;
     // go through the predictable events buffer
-    i = (*ps).eventSequence - 2 as libc::c_int;
+    i = (*ps).eventSequence - 2 as i32;
     while i < (*ps).eventSequence {
         // if we have a new predictable event
         if i >= (*ops).eventSequence
-            || i > (*ops).eventSequence - 2 as libc::c_int
-                && (*ps).events[(i & 2 as libc::c_int - 1 as libc::c_int) as usize]
-                    != (*ops).events[(i & 2 as libc::c_int - 1 as libc::c_int) as usize]
+            || i > (*ops).eventSequence - 2 as i32
+                && (*ps).events[(i & 2 as i32 - 1 as i32) as usize]
+                    != (*ops).events[(i & 2 as i32 - 1 as i32) as usize]
         {
-            event = (*ps).events[(i & 2 as libc::c_int - 1 as libc::c_int) as usize];
+            event = (*ps).events[(i & 2 as i32 - 1 as i32) as usize];
             (*cent).currentState.event = event;
             (*cent).currentState.eventParm =
-                (*ps).eventParms[(i & 2 as libc::c_int - 1 as libc::c_int) as usize];
+                (*ps).eventParms[(i & 2 as i32 - 1 as i32) as usize];
             crate::src::cgame::cg_event::CG_EntityEvent(
                 cent as *mut crate::cg_local_h::centity_s,
                 (*cent).lerpOrigin.as_mut_ptr(),
             );
             crate::src::cgame::cg_main::cg.predictableEvents
-                [(i & 16 as libc::c_int - 1 as libc::c_int) as usize] = event;
+                [(i & 16 as i32 - 1 as i32) as usize] = event;
             crate::src::cgame::cg_main::cg.eventSequence += 1
         }
         i += 1
@@ -481,31 +481,31 @@ CG_CheckChangedPredictableEvents
 pub unsafe extern "C" fn CG_CheckChangedPredictableEvents(
     mut ps: *mut crate::src::qcommon::q_shared::playerState_t,
 ) {
-    let mut i: libc::c_int = 0;
-    let mut event: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut event: i32 = 0;
     let mut cent: *mut crate::cg_local_h::centity_t = 0 as *mut crate::cg_local_h::centity_t;
     cent = &mut crate::src::cgame::cg_main::cg.predictedPlayerEntity;
-    i = (*ps).eventSequence - 2 as libc::c_int;
+    i = (*ps).eventSequence - 2 as i32;
     while i < (*ps).eventSequence {
         //
         if !(i >= crate::src::cgame::cg_main::cg.eventSequence) {
             // if this event is not further back in than the maximum predictable events we remember
-            if i > crate::src::cgame::cg_main::cg.eventSequence - 16 as libc::c_int {
+            if i > crate::src::cgame::cg_main::cg.eventSequence - 16 as i32 {
                 // if the new playerstate event is different from a previously predicted one
-                if (*ps).events[(i & 2 as libc::c_int - 1 as libc::c_int) as usize]
+                if (*ps).events[(i & 2 as i32 - 1 as i32) as usize]
                     != crate::src::cgame::cg_main::cg.predictableEvents
-                        [(i & 16 as libc::c_int - 1 as libc::c_int) as usize]
+                        [(i & 16 as i32 - 1 as i32) as usize]
                 {
-                    event = (*ps).events[(i & 2 as libc::c_int - 1 as libc::c_int) as usize];
+                    event = (*ps).events[(i & 2 as i32 - 1 as i32) as usize];
                     (*cent).currentState.event = event;
                     (*cent).currentState.eventParm =
-                        (*ps).eventParms[(i & 2 as libc::c_int - 1 as libc::c_int) as usize];
+                        (*ps).eventParms[(i & 2 as i32 - 1 as i32) as usize];
                     crate::src::cgame::cg_event::CG_EntityEvent(
                         cent as *mut crate::cg_local_h::centity_s,
                         (*cent).lerpOrigin.as_mut_ptr(),
                     );
                     crate::src::cgame::cg_main::cg.predictableEvents
-                        [(i & 16 as libc::c_int - 1 as libc::c_int) as usize] = event;
+                        [(i & 16 as i32 - 1 as i32) as usize] = event;
                     if crate::src::cgame::cg_main::cg_showmiss.integer != 0 {
                         crate::src::cgame::cg_main::CG_Printf(
                             b"WARNING: changed predicted event\n\x00" as *const u8
@@ -527,9 +527,9 @@ pushReward
 unsafe extern "C" fn pushReward(
     mut sfx: crate::src::qcommon::q_shared::sfxHandle_t,
     mut shader: crate::src::qcommon::q_shared::qhandle_t,
-    mut rewardCount: libc::c_int,
+    mut rewardCount: i32,
 ) {
-    if crate::src::cgame::cg_main::cg.rewardStack < 10 as libc::c_int - 1 as libc::c_int {
+    if crate::src::cgame::cg_main::cg.rewardStack < 10 as i32 - 1 as i32 {
         crate::src::cgame::cg_main::cg.rewardStack += 1;
         crate::src::cgame::cg_main::cg.rewardSound
             [crate::src::cgame::cg_main::cg.rewardStack as usize] = sfx;
@@ -550,40 +550,40 @@ pub unsafe extern "C" fn CG_CheckLocalSounds(
     mut ps: *mut crate::src::qcommon::q_shared::playerState_t,
     mut ops: *mut crate::src::qcommon::q_shared::playerState_t,
 ) {
-    let mut highScore: libc::c_int = 0;
-    let mut reward: libc::c_int = 0;
+    let mut highScore: i32 = 0;
+    let mut reward: i32 = 0;
     let mut sfx: crate::src::qcommon::q_shared::sfxHandle_t = 0;
     // don't play the sounds if the player just changed teams
-    if (*ps).persistant[crate::bg_public_h::PERS_TEAM as libc::c_int as usize]
-        != (*ops).persistant[crate::bg_public_h::PERS_TEAM as libc::c_int as usize]
+    if (*ps).persistant[crate::bg_public_h::PERS_TEAM as i32 as usize]
+        != (*ops).persistant[crate::bg_public_h::PERS_TEAM as i32 as usize]
     {
         return;
     }
     // hit changes
-    if (*ps).persistant[crate::bg_public_h::PERS_HITS as libc::c_int as usize]
-        > (*ops).persistant[crate::bg_public_h::PERS_HITS as libc::c_int as usize]
+    if (*ps).persistant[crate::bg_public_h::PERS_HITS as i32 as usize]
+        > (*ops).persistant[crate::bg_public_h::PERS_HITS as i32 as usize]
     {
         crate::src::cgame::cg_syscalls::trap_S_StartLocalSound(
             crate::src::cgame::cg_main::cgs.media.hitSound,
-            crate::src::qcommon::q_shared::CHAN_LOCAL_SOUND as libc::c_int,
+            crate::src::qcommon::q_shared::CHAN_LOCAL_SOUND as i32,
         );
-    } else if (*ps).persistant[crate::bg_public_h::PERS_HITS as libc::c_int as usize]
-        < (*ops).persistant[crate::bg_public_h::PERS_HITS as libc::c_int as usize]
+    } else if (*ps).persistant[crate::bg_public_h::PERS_HITS as i32 as usize]
+        < (*ops).persistant[crate::bg_public_h::PERS_HITS as i32 as usize]
     {
         crate::src::cgame::cg_syscalls::trap_S_StartLocalSound(
             crate::src::cgame::cg_main::cgs.media.hitTeamSound,
-            crate::src::qcommon::q_shared::CHAN_LOCAL_SOUND as libc::c_int,
+            crate::src::qcommon::q_shared::CHAN_LOCAL_SOUND as i32,
         );
     }
     // health changes of more than -1 should make pain sounds
-    if (*ps).stats[crate::bg_public_h::STAT_HEALTH as libc::c_int as usize]
-        < (*ops).stats[crate::bg_public_h::STAT_HEALTH as libc::c_int as usize] - 1 as libc::c_int
+    if (*ps).stats[crate::bg_public_h::STAT_HEALTH as i32 as usize]
+        < (*ops).stats[crate::bg_public_h::STAT_HEALTH as i32 as usize] - 1 as i32
     {
-        if (*ps).stats[crate::bg_public_h::STAT_HEALTH as libc::c_int as usize] > 0 as libc::c_int {
+        if (*ps).stats[crate::bg_public_h::STAT_HEALTH as i32 as usize] > 0 as i32 {
             crate::src::cgame::cg_event::CG_PainEvent(
                 &mut crate::src::cgame::cg_main::cg.predictedPlayerEntity as *mut _
                     as *mut crate::cg_local_h::centity_s,
-                (*ps).stats[crate::bg_public_h::STAT_HEALTH as libc::c_int as usize],
+                (*ps).stats[crate::bg_public_h::STAT_HEALTH as i32 as usize],
             );
         }
     }
@@ -592,127 +592,127 @@ pub unsafe extern "C" fn CG_CheckLocalSounds(
         return;
     }
     // reward sounds
-    reward = crate::src::qcommon::q_shared::qfalse as libc::c_int;
-    if (*ps).persistant[crate::bg_public_h::PERS_CAPTURES as libc::c_int as usize]
-        != (*ops).persistant[crate::bg_public_h::PERS_CAPTURES as libc::c_int as usize]
+    reward = crate::src::qcommon::q_shared::qfalse as i32;
+    if (*ps).persistant[crate::bg_public_h::PERS_CAPTURES as i32 as usize]
+        != (*ops).persistant[crate::bg_public_h::PERS_CAPTURES as i32 as usize]
     {
         pushReward(
             crate::src::cgame::cg_main::cgs.media.captureAwardSound,
             crate::src::cgame::cg_main::cgs.media.medalCapture,
-            (*ps).persistant[crate::bg_public_h::PERS_CAPTURES as libc::c_int as usize],
+            (*ps).persistant[crate::bg_public_h::PERS_CAPTURES as i32 as usize],
         );
-        reward = crate::src::qcommon::q_shared::qtrue as libc::c_int
+        reward = crate::src::qcommon::q_shared::qtrue as i32
         //Com_Printf("capture\n");
     }
-    if (*ps).persistant[crate::bg_public_h::PERS_IMPRESSIVE_COUNT as libc::c_int as usize]
-        != (*ops).persistant[crate::bg_public_h::PERS_IMPRESSIVE_COUNT as libc::c_int as usize]
+    if (*ps).persistant[crate::bg_public_h::PERS_IMPRESSIVE_COUNT as i32 as usize]
+        != (*ops).persistant[crate::bg_public_h::PERS_IMPRESSIVE_COUNT as i32 as usize]
     {
         sfx = crate::src::cgame::cg_main::cgs.media.impressiveSound;
         pushReward(
             sfx,
             crate::src::cgame::cg_main::cgs.media.medalImpressive,
-            (*ps).persistant[crate::bg_public_h::PERS_IMPRESSIVE_COUNT as libc::c_int as usize],
+            (*ps).persistant[crate::bg_public_h::PERS_IMPRESSIVE_COUNT as i32 as usize],
         );
-        reward = crate::src::qcommon::q_shared::qtrue as libc::c_int
+        reward = crate::src::qcommon::q_shared::qtrue as i32
         //Com_Printf("impressive\n");
     }
-    if (*ps).persistant[crate::bg_public_h::PERS_EXCELLENT_COUNT as libc::c_int as usize]
-        != (*ops).persistant[crate::bg_public_h::PERS_EXCELLENT_COUNT as libc::c_int as usize]
+    if (*ps).persistant[crate::bg_public_h::PERS_EXCELLENT_COUNT as i32 as usize]
+        != (*ops).persistant[crate::bg_public_h::PERS_EXCELLENT_COUNT as i32 as usize]
     {
         sfx = crate::src::cgame::cg_main::cgs.media.excellentSound;
         pushReward(
             sfx,
             crate::src::cgame::cg_main::cgs.media.medalExcellent,
-            (*ps).persistant[crate::bg_public_h::PERS_EXCELLENT_COUNT as libc::c_int as usize],
+            (*ps).persistant[crate::bg_public_h::PERS_EXCELLENT_COUNT as i32 as usize],
         );
-        reward = crate::src::qcommon::q_shared::qtrue as libc::c_int
+        reward = crate::src::qcommon::q_shared::qtrue as i32
         //Com_Printf("excellent\n");
     }
-    if (*ps).persistant[crate::bg_public_h::PERS_GAUNTLET_FRAG_COUNT as libc::c_int as usize]
-        != (*ops).persistant[crate::bg_public_h::PERS_GAUNTLET_FRAG_COUNT as libc::c_int as usize]
+    if (*ps).persistant[crate::bg_public_h::PERS_GAUNTLET_FRAG_COUNT as i32 as usize]
+        != (*ops).persistant[crate::bg_public_h::PERS_GAUNTLET_FRAG_COUNT as i32 as usize]
     {
         sfx = crate::src::cgame::cg_main::cgs.media.humiliationSound;
         pushReward(
             sfx,
             crate::src::cgame::cg_main::cgs.media.medalGauntlet,
-            (*ps).persistant[crate::bg_public_h::PERS_GAUNTLET_FRAG_COUNT as libc::c_int as usize],
+            (*ps).persistant[crate::bg_public_h::PERS_GAUNTLET_FRAG_COUNT as i32 as usize],
         );
-        reward = crate::src::qcommon::q_shared::qtrue as libc::c_int
+        reward = crate::src::qcommon::q_shared::qtrue as i32
         //Com_Printf("gauntlet frag\n");
     }
-    if (*ps).persistant[crate::bg_public_h::PERS_DEFEND_COUNT as libc::c_int as usize]
-        != (*ops).persistant[crate::bg_public_h::PERS_DEFEND_COUNT as libc::c_int as usize]
+    if (*ps).persistant[crate::bg_public_h::PERS_DEFEND_COUNT as i32 as usize]
+        != (*ops).persistant[crate::bg_public_h::PERS_DEFEND_COUNT as i32 as usize]
     {
         pushReward(
             crate::src::cgame::cg_main::cgs.media.defendSound,
             crate::src::cgame::cg_main::cgs.media.medalDefend,
-            (*ps).persistant[crate::bg_public_h::PERS_DEFEND_COUNT as libc::c_int as usize],
+            (*ps).persistant[crate::bg_public_h::PERS_DEFEND_COUNT as i32 as usize],
         );
-        reward = crate::src::qcommon::q_shared::qtrue as libc::c_int
+        reward = crate::src::qcommon::q_shared::qtrue as i32
         //Com_Printf("defend\n");
     }
-    if (*ps).persistant[crate::bg_public_h::PERS_ASSIST_COUNT as libc::c_int as usize]
-        != (*ops).persistant[crate::bg_public_h::PERS_ASSIST_COUNT as libc::c_int as usize]
+    if (*ps).persistant[crate::bg_public_h::PERS_ASSIST_COUNT as i32 as usize]
+        != (*ops).persistant[crate::bg_public_h::PERS_ASSIST_COUNT as i32 as usize]
     {
         pushReward(
             crate::src::cgame::cg_main::cgs.media.assistSound,
             crate::src::cgame::cg_main::cgs.media.medalAssist,
-            (*ps).persistant[crate::bg_public_h::PERS_ASSIST_COUNT as libc::c_int as usize],
+            (*ps).persistant[crate::bg_public_h::PERS_ASSIST_COUNT as i32 as usize],
         );
-        reward = crate::src::qcommon::q_shared::qtrue as libc::c_int
+        reward = crate::src::qcommon::q_shared::qtrue as i32
         //Com_Printf("assist\n");
     }
     // if any of the player event bits changed
-    if (*ps).persistant[crate::bg_public_h::PERS_PLAYEREVENTS as libc::c_int as usize]
-        != (*ops).persistant[crate::bg_public_h::PERS_PLAYEREVENTS as libc::c_int as usize]
+    if (*ps).persistant[crate::bg_public_h::PERS_PLAYEREVENTS as i32 as usize]
+        != (*ops).persistant[crate::bg_public_h::PERS_PLAYEREVENTS as i32 as usize]
     {
-        if (*ps).persistant[crate::bg_public_h::PERS_PLAYEREVENTS as libc::c_int as usize]
-            & 0x1 as libc::c_int
-            != (*ops).persistant[crate::bg_public_h::PERS_PLAYEREVENTS as libc::c_int as usize]
-                & 0x1 as libc::c_int
+        if (*ps).persistant[crate::bg_public_h::PERS_PLAYEREVENTS as i32 as usize]
+            & 0x1 as i32
+            != (*ops).persistant[crate::bg_public_h::PERS_PLAYEREVENTS as i32 as usize]
+                & 0x1 as i32
         {
             crate::src::cgame::cg_syscalls::trap_S_StartLocalSound(
                 crate::src::cgame::cg_main::cgs.media.deniedSound,
-                crate::src::qcommon::q_shared::CHAN_ANNOUNCER as libc::c_int,
+                crate::src::qcommon::q_shared::CHAN_ANNOUNCER as i32,
             );
-        } else if (*ps).persistant[crate::bg_public_h::PERS_PLAYEREVENTS as libc::c_int as usize]
-            & 0x2 as libc::c_int
-            != (*ops).persistant[crate::bg_public_h::PERS_PLAYEREVENTS as libc::c_int as usize]
-                & 0x2 as libc::c_int
+        } else if (*ps).persistant[crate::bg_public_h::PERS_PLAYEREVENTS as i32 as usize]
+            & 0x2 as i32
+            != (*ops).persistant[crate::bg_public_h::PERS_PLAYEREVENTS as i32 as usize]
+                & 0x2 as i32
         {
             crate::src::cgame::cg_syscalls::trap_S_StartLocalSound(
                 crate::src::cgame::cg_main::cgs.media.humiliationSound,
-                crate::src::qcommon::q_shared::CHAN_ANNOUNCER as libc::c_int,
+                crate::src::qcommon::q_shared::CHAN_ANNOUNCER as i32,
             );
-        } else if (*ps).persistant[crate::bg_public_h::PERS_PLAYEREVENTS as libc::c_int as usize]
-            & 0x4 as libc::c_int
-            != (*ops).persistant[crate::bg_public_h::PERS_PLAYEREVENTS as libc::c_int as usize]
-                & 0x4 as libc::c_int
+        } else if (*ps).persistant[crate::bg_public_h::PERS_PLAYEREVENTS as i32 as usize]
+            & 0x4 as i32
+            != (*ops).persistant[crate::bg_public_h::PERS_PLAYEREVENTS as i32 as usize]
+                & 0x4 as i32
         {
             crate::src::cgame::cg_syscalls::trap_S_StartLocalSound(
                 crate::src::cgame::cg_main::cgs.media.holyShitSound,
-                crate::src::qcommon::q_shared::CHAN_ANNOUNCER as libc::c_int,
+                crate::src::qcommon::q_shared::CHAN_ANNOUNCER as i32,
             );
         }
-        reward = crate::src::qcommon::q_shared::qtrue as libc::c_int
+        reward = crate::src::qcommon::q_shared::qtrue as i32
     }
     // check for flag pickup
-    if crate::src::cgame::cg_main::cgs.gametype as libc::c_uint
-        > crate::bg_public_h::GT_TEAM as libc::c_int as libc::c_uint
+    if crate::src::cgame::cg_main::cgs.gametype as u32
+        > crate::bg_public_h::GT_TEAM as i32 as u32
     {
-        if (*ps).powerups[crate::bg_public_h::PW_REDFLAG as libc::c_int as usize]
-            != (*ops).powerups[crate::bg_public_h::PW_REDFLAG as libc::c_int as usize]
-            && (*ps).powerups[crate::bg_public_h::PW_REDFLAG as libc::c_int as usize] != 0
-            || (*ps).powerups[crate::bg_public_h::PW_BLUEFLAG as libc::c_int as usize]
-                != (*ops).powerups[crate::bg_public_h::PW_BLUEFLAG as libc::c_int as usize]
-                && (*ps).powerups[crate::bg_public_h::PW_BLUEFLAG as libc::c_int as usize] != 0
-            || (*ps).powerups[crate::bg_public_h::PW_NEUTRALFLAG as libc::c_int as usize]
-                != (*ops).powerups[crate::bg_public_h::PW_NEUTRALFLAG as libc::c_int as usize]
-                && (*ps).powerups[crate::bg_public_h::PW_NEUTRALFLAG as libc::c_int as usize] != 0
+        if (*ps).powerups[crate::bg_public_h::PW_REDFLAG as i32 as usize]
+            != (*ops).powerups[crate::bg_public_h::PW_REDFLAG as i32 as usize]
+            && (*ps).powerups[crate::bg_public_h::PW_REDFLAG as i32 as usize] != 0
+            || (*ps).powerups[crate::bg_public_h::PW_BLUEFLAG as i32 as usize]
+                != (*ops).powerups[crate::bg_public_h::PW_BLUEFLAG as i32 as usize]
+                && (*ps).powerups[crate::bg_public_h::PW_BLUEFLAG as i32 as usize] != 0
+            || (*ps).powerups[crate::bg_public_h::PW_NEUTRALFLAG as i32 as usize]
+                != (*ops).powerups[crate::bg_public_h::PW_NEUTRALFLAG as i32 as usize]
+                && (*ps).powerups[crate::bg_public_h::PW_NEUTRALFLAG as i32 as usize] != 0
         {
             crate::src::cgame::cg_syscalls::trap_S_StartLocalSound(
                 crate::src::cgame::cg_main::cgs.media.youHaveFlagSound,
-                crate::src::qcommon::q_shared::CHAN_ANNOUNCER as libc::c_int,
+                crate::src::qcommon::q_shared::CHAN_ANNOUNCER as i32,
             );
         }
     }
@@ -721,29 +721,29 @@ pub unsafe extern "C" fn CG_CheckLocalSounds(
         //
         if crate::src::cgame::cg_main::cg.warmup == 0 {
             // never play lead changes during warmup
-            if (*ps).persistant[crate::bg_public_h::PERS_RANK as libc::c_int as usize]
-                != (*ops).persistant[crate::bg_public_h::PERS_RANK as libc::c_int as usize]
+            if (*ps).persistant[crate::bg_public_h::PERS_RANK as i32 as usize]
+                != (*ops).persistant[crate::bg_public_h::PERS_RANK as i32 as usize]
             {
-                if (crate::src::cgame::cg_main::cgs.gametype as libc::c_uint)
-                    < crate::bg_public_h::GT_TEAM as libc::c_int as libc::c_uint
+                if (crate::src::cgame::cg_main::cgs.gametype as u32)
+                    < crate::bg_public_h::GT_TEAM as i32 as u32
                 {
-                    if (*ps).persistant[crate::bg_public_h::PERS_RANK as libc::c_int as usize]
-                        == 0 as libc::c_int
+                    if (*ps).persistant[crate::bg_public_h::PERS_RANK as i32 as usize]
+                        == 0 as i32
                     {
                         crate::src::cgame::cg_view::CG_AddBufferedSound(
                             crate::src::cgame::cg_main::cgs.media.takenLeadSound,
                         );
                     } else if (*ps).persistant
-                        [crate::bg_public_h::PERS_RANK as libc::c_int as usize]
-                        == 0x4000 as libc::c_int
+                        [crate::bg_public_h::PERS_RANK as i32 as usize]
+                        == 0x4000 as i32
                     {
                         crate::src::cgame::cg_view::CG_AddBufferedSound(
                             crate::src::cgame::cg_main::cgs.media.tiedLeadSound,
                         );
                     } else if (*ops).persistant
-                        [crate::bg_public_h::PERS_RANK as libc::c_int as usize]
-                        & !(0x4000 as libc::c_int)
-                        == 0 as libc::c_int
+                        [crate::bg_public_h::PERS_RANK as i32 as usize]
+                        & !(0x4000 as i32)
+                        == 0 as i32
                     {
                         crate::src::cgame::cg_view::CG_AddBufferedSound(
                             crate::src::cgame::cg_main::cgs.media.lostLeadSound,
@@ -754,78 +754,78 @@ pub unsafe extern "C" fn CG_CheckLocalSounds(
         }
     }
     // timelimit warnings
-    if crate::src::cgame::cg_main::cgs.timelimit > 0 as libc::c_int {
-        let mut msec: libc::c_int = 0;
+    if crate::src::cgame::cg_main::cgs.timelimit > 0 as i32 {
+        let mut msec: i32 = 0;
         msec = crate::src::cgame::cg_main::cg.time - crate::src::cgame::cg_main::cgs.levelStartTime;
-        if crate::src::cgame::cg_main::cg.timelimitWarnings & 4 as libc::c_int == 0
+        if crate::src::cgame::cg_main::cg.timelimitWarnings & 4 as i32 == 0
             && msec
-                > (crate::src::cgame::cg_main::cgs.timelimit * 60 as libc::c_int + 2 as libc::c_int)
-                    * 1000 as libc::c_int
+                > (crate::src::cgame::cg_main::cgs.timelimit * 60 as i32 + 2 as i32)
+                    * 1000 as i32
         {
             crate::src::cgame::cg_main::cg.timelimitWarnings |=
-                1 as libc::c_int | 2 as libc::c_int | 4 as libc::c_int;
+                1 as i32 | 2 as i32 | 4 as i32;
             crate::src::cgame::cg_syscalls::trap_S_StartLocalSound(
                 crate::src::cgame::cg_main::cgs.media.suddenDeathSound,
-                crate::src::qcommon::q_shared::CHAN_ANNOUNCER as libc::c_int,
+                crate::src::qcommon::q_shared::CHAN_ANNOUNCER as i32,
             );
-        } else if crate::src::cgame::cg_main::cg.timelimitWarnings & 2 as libc::c_int == 0
+        } else if crate::src::cgame::cg_main::cg.timelimitWarnings & 2 as i32 == 0
             && msec
-                > (crate::src::cgame::cg_main::cgs.timelimit - 1 as libc::c_int)
-                    * 60 as libc::c_int
-                    * 1000 as libc::c_int
+                > (crate::src::cgame::cg_main::cgs.timelimit - 1 as i32)
+                    * 60 as i32
+                    * 1000 as i32
         {
-            crate::src::cgame::cg_main::cg.timelimitWarnings |= 1 as libc::c_int | 2 as libc::c_int;
+            crate::src::cgame::cg_main::cg.timelimitWarnings |= 1 as i32 | 2 as i32;
             crate::src::cgame::cg_syscalls::trap_S_StartLocalSound(
                 crate::src::cgame::cg_main::cgs.media.oneMinuteSound,
-                crate::src::qcommon::q_shared::CHAN_ANNOUNCER as libc::c_int,
+                crate::src::qcommon::q_shared::CHAN_ANNOUNCER as i32,
             );
-        } else if crate::src::cgame::cg_main::cgs.timelimit > 5 as libc::c_int
-            && crate::src::cgame::cg_main::cg.timelimitWarnings & 1 as libc::c_int == 0
+        } else if crate::src::cgame::cg_main::cgs.timelimit > 5 as i32
+            && crate::src::cgame::cg_main::cg.timelimitWarnings & 1 as i32 == 0
             && msec
-                > (crate::src::cgame::cg_main::cgs.timelimit - 5 as libc::c_int)
-                    * 60 as libc::c_int
-                    * 1000 as libc::c_int
+                > (crate::src::cgame::cg_main::cgs.timelimit - 5 as i32)
+                    * 60 as i32
+                    * 1000 as i32
         {
-            crate::src::cgame::cg_main::cg.timelimitWarnings |= 1 as libc::c_int;
+            crate::src::cgame::cg_main::cg.timelimitWarnings |= 1 as i32;
             crate::src::cgame::cg_syscalls::trap_S_StartLocalSound(
                 crate::src::cgame::cg_main::cgs.media.fiveMinuteSound,
-                crate::src::qcommon::q_shared::CHAN_ANNOUNCER as libc::c_int,
+                crate::src::qcommon::q_shared::CHAN_ANNOUNCER as i32,
             );
         }
     }
     // fraglimit warnings
-    if crate::src::cgame::cg_main::cgs.fraglimit > 0 as libc::c_int
-        && (crate::src::cgame::cg_main::cgs.gametype as libc::c_uint)
-            < crate::bg_public_h::GT_CTF as libc::c_int as libc::c_uint
+    if crate::src::cgame::cg_main::cgs.fraglimit > 0 as i32
+        && (crate::src::cgame::cg_main::cgs.gametype as u32)
+            < crate::bg_public_h::GT_CTF as i32 as u32
     {
         highScore = crate::src::cgame::cg_main::cgs.scores1;
-        if crate::src::cgame::cg_main::cgs.gametype as libc::c_uint
-            == crate::bg_public_h::GT_TEAM as libc::c_int as libc::c_uint
+        if crate::src::cgame::cg_main::cgs.gametype as u32
+            == crate::bg_public_h::GT_TEAM as i32 as u32
             && crate::src::cgame::cg_main::cgs.scores2 > highScore
         {
             highScore = crate::src::cgame::cg_main::cgs.scores2
         }
-        if crate::src::cgame::cg_main::cg.fraglimitWarnings & 4 as libc::c_int == 0
-            && highScore == crate::src::cgame::cg_main::cgs.fraglimit - 1 as libc::c_int
+        if crate::src::cgame::cg_main::cg.fraglimitWarnings & 4 as i32 == 0
+            && highScore == crate::src::cgame::cg_main::cgs.fraglimit - 1 as i32
         {
             crate::src::cgame::cg_main::cg.fraglimitWarnings |=
-                1 as libc::c_int | 2 as libc::c_int | 4 as libc::c_int;
+                1 as i32 | 2 as i32 | 4 as i32;
             crate::src::cgame::cg_view::CG_AddBufferedSound(
                 crate::src::cgame::cg_main::cgs.media.oneFragSound,
             );
-        } else if crate::src::cgame::cg_main::cgs.fraglimit > 2 as libc::c_int
-            && crate::src::cgame::cg_main::cg.fraglimitWarnings & 2 as libc::c_int == 0
-            && highScore == crate::src::cgame::cg_main::cgs.fraglimit - 2 as libc::c_int
+        } else if crate::src::cgame::cg_main::cgs.fraglimit > 2 as i32
+            && crate::src::cgame::cg_main::cg.fraglimitWarnings & 2 as i32 == 0
+            && highScore == crate::src::cgame::cg_main::cgs.fraglimit - 2 as i32
         {
-            crate::src::cgame::cg_main::cg.fraglimitWarnings |= 1 as libc::c_int | 2 as libc::c_int;
+            crate::src::cgame::cg_main::cg.fraglimitWarnings |= 1 as i32 | 2 as i32;
             crate::src::cgame::cg_view::CG_AddBufferedSound(
                 crate::src::cgame::cg_main::cgs.media.twoFragSound,
             );
-        } else if crate::src::cgame::cg_main::cgs.fraglimit > 3 as libc::c_int
-            && crate::src::cgame::cg_main::cg.fraglimitWarnings & 1 as libc::c_int == 0
-            && highScore == crate::src::cgame::cg_main::cgs.fraglimit - 3 as libc::c_int
+        } else if crate::src::cgame::cg_main::cgs.fraglimit > 3 as i32
+            && crate::src::cgame::cg_main::cg.fraglimitWarnings & 1 as i32 == 0
+            && highScore == crate::src::cgame::cg_main::cgs.fraglimit - 3 as i32
         {
-            crate::src::cgame::cg_main::cg.fraglimitWarnings |= 1 as libc::c_int;
+            crate::src::cgame::cg_main::cg.fraglimitWarnings |= 1 as i32;
             crate::src::cgame::cg_view::CG_AddBufferedSound(
                 crate::src::cgame::cg_main::cgs.media.threeFragSound,
             );
@@ -1109,8 +1109,8 @@ pub unsafe extern "C" fn CG_TransitionPlayerState(
         CG_DamageFeedback((*ps).damageYaw, (*ps).damagePitch, (*ps).damageCount);
     }
     // respawning
-    if (*ps).persistant[crate::bg_public_h::PERS_SPAWN_COUNT as libc::c_int as usize]
-        != (*ops).persistant[crate::bg_public_h::PERS_SPAWN_COUNT as libc::c_int as usize]
+    if (*ps).persistant[crate::bg_public_h::PERS_SPAWN_COUNT as i32 as usize]
+        != (*ops).persistant[crate::bg_public_h::PERS_SPAWN_COUNT as i32 as usize]
     {
         CG_Respawn();
     }
@@ -1119,9 +1119,9 @@ pub unsafe extern "C" fn CG_TransitionPlayerState(
         crate::src::cgame::cg_main::cg.mapRestart = crate::src::qcommon::q_shared::qfalse
     }
     if (*crate::src::cgame::cg_main::cg.snap).ps.pm_type
-        != crate::bg_public_h::PM_INTERMISSION as libc::c_int
-        && (*ps).persistant[crate::bg_public_h::PERS_TEAM as libc::c_int as usize]
-            != crate::bg_public_h::TEAM_SPECTATOR as libc::c_int
+        != crate::bg_public_h::PM_INTERMISSION as i32
+        && (*ps).persistant[crate::bg_public_h::PERS_TEAM as i32 as usize]
+            != crate::bg_public_h::TEAM_SPECTATOR as i32
     {
         CG_CheckLocalSounds(ps, ops);
     }
@@ -1132,7 +1132,7 @@ pub unsafe extern "C" fn CG_TransitionPlayerState(
     // smooth the ducking viewheight change
     if (*ps).viewheight != (*ops).viewheight {
         crate::src::cgame::cg_main::cg.duckChange =
-            ((*ps).viewheight - (*ops).viewheight) as libc::c_float;
+            ((*ps).viewheight - (*ops).viewheight) as f32;
         crate::src::cgame::cg_main::cg.duckTime = crate::src::cgame::cg_main::cg.time
     };
 }

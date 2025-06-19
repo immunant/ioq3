@@ -117,68 +117,68 @@ POSSIBILITY OF SUCH DAMAGE.
 
 pub unsafe extern "C" fn check_control_input(
     mut encControl: *mut crate::control_h::silk_EncControlStruct,
-) -> libc::c_int
+) -> i32
 /* I    Control structure                           */ {
-    if (*encControl).API_sampleRate != 8000 as libc::c_int
-        && (*encControl).API_sampleRate != 12000 as libc::c_int
-        && (*encControl).API_sampleRate != 16000 as libc::c_int
-        && (*encControl).API_sampleRate != 24000 as libc::c_int
-        && (*encControl).API_sampleRate != 32000 as libc::c_int
-        && (*encControl).API_sampleRate != 44100 as libc::c_int
-        && (*encControl).API_sampleRate != 48000 as libc::c_int
-        || (*encControl).desiredInternalSampleRate != 8000 as libc::c_int
-            && (*encControl).desiredInternalSampleRate != 12000 as libc::c_int
-            && (*encControl).desiredInternalSampleRate != 16000 as libc::c_int
-        || (*encControl).maxInternalSampleRate != 8000 as libc::c_int
-            && (*encControl).maxInternalSampleRate != 12000 as libc::c_int
-            && (*encControl).maxInternalSampleRate != 16000 as libc::c_int
-        || (*encControl).minInternalSampleRate != 8000 as libc::c_int
-            && (*encControl).minInternalSampleRate != 12000 as libc::c_int
-            && (*encControl).minInternalSampleRate != 16000 as libc::c_int
+    if (*encControl).API_sampleRate != 8000 as i32
+        && (*encControl).API_sampleRate != 12000 as i32
+        && (*encControl).API_sampleRate != 16000 as i32
+        && (*encControl).API_sampleRate != 24000 as i32
+        && (*encControl).API_sampleRate != 32000 as i32
+        && (*encControl).API_sampleRate != 44100 as i32
+        && (*encControl).API_sampleRate != 48000 as i32
+        || (*encControl).desiredInternalSampleRate != 8000 as i32
+            && (*encControl).desiredInternalSampleRate != 12000 as i32
+            && (*encControl).desiredInternalSampleRate != 16000 as i32
+        || (*encControl).maxInternalSampleRate != 8000 as i32
+            && (*encControl).maxInternalSampleRate != 12000 as i32
+            && (*encControl).maxInternalSampleRate != 16000 as i32
+        || (*encControl).minInternalSampleRate != 8000 as i32
+            && (*encControl).minInternalSampleRate != 12000 as i32
+            && (*encControl).minInternalSampleRate != 16000 as i32
         || (*encControl).minInternalSampleRate > (*encControl).desiredInternalSampleRate
         || (*encControl).maxInternalSampleRate < (*encControl).desiredInternalSampleRate
         || (*encControl).minInternalSampleRate > (*encControl).maxInternalSampleRate
     {
-        return -(102 as libc::c_int);
+        return -(102 as i32);
     }
-    if (*encControl).payloadSize_ms != 10 as libc::c_int
-        && (*encControl).payloadSize_ms != 20 as libc::c_int
-        && (*encControl).payloadSize_ms != 40 as libc::c_int
-        && (*encControl).payloadSize_ms != 60 as libc::c_int
+    if (*encControl).payloadSize_ms != 10 as i32
+        && (*encControl).payloadSize_ms != 20 as i32
+        && (*encControl).payloadSize_ms != 40 as i32
+        && (*encControl).payloadSize_ms != 60 as i32
     {
-        return -(103 as libc::c_int);
+        return -(103 as i32);
     }
-    if (*encControl).packetLossPercentage < 0 as libc::c_int
-        || (*encControl).packetLossPercentage > 100 as libc::c_int
+    if (*encControl).packetLossPercentage < 0 as i32
+        || (*encControl).packetLossPercentage > 100 as i32
     {
-        return -(105 as libc::c_int);
+        return -(105 as i32);
     }
-    if (*encControl).useDTX < 0 as libc::c_int || (*encControl).useDTX > 1 as libc::c_int {
-        return -(108 as libc::c_int);
+    if (*encControl).useDTX < 0 as i32 || (*encControl).useDTX > 1 as i32 {
+        return -(108 as i32);
     }
-    if (*encControl).useCBR < 0 as libc::c_int || (*encControl).useCBR > 1 as libc::c_int {
-        return -(109 as libc::c_int);
+    if (*encControl).useCBR < 0 as i32 || (*encControl).useCBR > 1 as i32 {
+        return -(109 as i32);
     }
-    if (*encControl).useInBandFEC < 0 as libc::c_int
-        || (*encControl).useInBandFEC > 1 as libc::c_int
+    if (*encControl).useInBandFEC < 0 as i32
+        || (*encControl).useInBandFEC > 1 as i32
     {
-        return -(107 as libc::c_int);
+        return -(107 as i32);
     }
-    if (*encControl).nChannelsAPI < 1 as libc::c_int
-        || (*encControl).nChannelsAPI > 2 as libc::c_int
+    if (*encControl).nChannelsAPI < 1 as i32
+        || (*encControl).nChannelsAPI > 2 as i32
     {
-        return -(111 as libc::c_int);
+        return -(111 as i32);
     }
-    if (*encControl).nChannelsInternal < 1 as libc::c_int
-        || (*encControl).nChannelsInternal > 2 as libc::c_int
+    if (*encControl).nChannelsInternal < 1 as i32
+        || (*encControl).nChannelsInternal > 2 as i32
     {
-        return -(111 as libc::c_int);
+        return -(111 as i32);
     }
     if (*encControl).nChannelsInternal > (*encControl).nChannelsAPI {
-        return -(111 as libc::c_int);
+        return -(111 as i32);
     }
-    if (*encControl).complexity < 0 as libc::c_int || (*encControl).complexity > 10 as libc::c_int {
-        return -(106 as libc::c_int);
+    if (*encControl).complexity < 0 as i32 || (*encControl).complexity > 10 as i32 {
+        return -(106 as i32);
     }
-    return 0 as libc::c_int;
+    return 0 as i32;
 }

@@ -15,7 +15,7 @@ function: window functions
 
 ********************************************************************/
 
-static mut vwin64: [libc::c_float; 32] = [
+static mut vwin64: [f32; 32] = [
     0.0009460463f32,
     0.0085006468f32,
     0.0235352254f32,
@@ -50,7 +50,7 @@ static mut vwin64: [libc::c_float; 32] = [
     0.9999995525f32,
 ];
 
-static mut vwin128: [libc::c_float; 64] = [
+static mut vwin128: [f32; 64] = [
     0.0002365472f32,
     0.0021280687f32,
     0.0059065254f32,
@@ -117,7 +117,7 @@ static mut vwin128: [libc::c_float; 64] = [
     0.9999999720f32,
 ];
 
-static mut vwin256: [libc::c_float; 128] = [
+static mut vwin256: [f32; 128] = [
     0.0000591390f32,
     0.0005321979f32,
     0.0014780301f32,
@@ -248,7 +248,7 @@ static mut vwin256: [libc::c_float; 128] = [
     0.9999999983f32,
 ];
 
-static mut vwin512: [libc::c_float; 256] = [
+static mut vwin512: [f32; 256] = [
     0.0000147849f32,
     0.0001330607f32,
     0.0003695946f32,
@@ -507,7 +507,7 @@ static mut vwin512: [libc::c_float; 256] = [
     0.9999999999f32,
 ];
 
-static mut vwin1024: [libc::c_float; 512] = [
+static mut vwin1024: [f32; 512] = [
     0.0000036962f32,
     0.0000332659f32,
     0.0000924041f32,
@@ -1022,7 +1022,7 @@ static mut vwin1024: [libc::c_float; 512] = [
     1.0000000000f32,
 ];
 
-static mut vwin2048: [libc::c_float; 1024] = [
+static mut vwin2048: [f32; 1024] = [
     0.0000009241f32,
     0.0000083165f32,
     0.0000231014f32,
@@ -2049,7 +2049,7 @@ static mut vwin2048: [libc::c_float; 1024] = [
     1.0000000000f32,
 ];
 
-static mut vwin4096: [libc::c_float; 2048] = [
+static mut vwin4096: [f32; 2048] = [
     0.0000002310f32,
     0.0000020791f32,
     0.0000057754f32,
@@ -4100,7 +4100,7 @@ static mut vwin4096: [libc::c_float; 2048] = [
     1.0000000000f32,
 ];
 
-static mut vwin8192: [libc::c_float; 4096] = [
+static mut vwin8192: [f32; 4096] = [
     0.0000000578f32,
     0.0000005198f32,
     0.0000014438f32,
@@ -8199,7 +8199,7 @@ static mut vwin8192: [libc::c_float; 4096] = [
     1.0000000000f32,
 ];
 
-static mut vwin: [*const libc::c_float; 8] = unsafe {
+static mut vwin: [*const f32; 8] = unsafe {
     [
         vwin64.as_ptr(),
         vwin128.as_ptr(),
@@ -8228,48 +8228,48 @@ function: window functions
 ********************************************************************/
 #[no_mangle]
 
-pub unsafe extern "C" fn _vorbis_window_get(mut n: libc::c_int) -> *const libc::c_float {
+pub unsafe extern "C" fn _vorbis_window_get(mut n: i32) -> *const f32 {
     return vwin[n as usize];
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn _vorbis_apply_window(
-    mut d: *mut libc::c_float,
-    mut winno: *mut libc::c_int,
+    mut d: *mut f32,
+    mut winno: *mut i32,
     mut blocksizes: *mut libc::c_long,
-    mut lW: libc::c_int,
-    mut W: libc::c_int,
-    mut nW: libc::c_int,
+    mut lW: i32,
+    mut W: i32,
+    mut nW: i32,
 ) {
-    lW = if W != 0 { lW } else { 0 as libc::c_int };
-    nW = if W != 0 { nW } else { 0 as libc::c_int };
-    let mut windowLW: *const libc::c_float = vwin[*winno.offset(lW as isize) as usize];
-    let mut windowNW: *const libc::c_float = vwin[*winno.offset(nW as isize) as usize];
+    lW = if W != 0 { lW } else { 0 as i32 };
+    nW = if W != 0 { nW } else { 0 as i32 };
+    let mut windowLW: *const f32 = vwin[*winno.offset(lW as isize) as usize];
+    let mut windowNW: *const f32 = vwin[*winno.offset(nW as isize) as usize];
     let mut n: libc::c_long = *blocksizes.offset(W as isize);
     let mut ln: libc::c_long = *blocksizes.offset(lW as isize);
     let mut rn: libc::c_long = *blocksizes.offset(nW as isize);
     let mut leftbegin: libc::c_long =
-        n / 4 as libc::c_int as libc::c_long - ln / 4 as libc::c_int as libc::c_long;
-    let mut leftend: libc::c_long = leftbegin + ln / 2 as libc::c_int as libc::c_long;
-    let mut rightbegin: libc::c_long = n / 2 as libc::c_int as libc::c_long
-        + n / 4 as libc::c_int as libc::c_long
-        - rn / 4 as libc::c_int as libc::c_long;
-    let mut rightend: libc::c_long = rightbegin + rn / 2 as libc::c_int as libc::c_long;
-    let mut i: libc::c_int = 0;
-    let mut p: libc::c_int = 0;
-    i = 0 as libc::c_int;
+        n / 4 as i32 as libc::c_long - ln / 4 as i32 as libc::c_long;
+    let mut leftend: libc::c_long = leftbegin + ln / 2 as i32 as libc::c_long;
+    let mut rightbegin: libc::c_long = n / 2 as i32 as libc::c_long
+        + n / 4 as i32 as libc::c_long
+        - rn / 4 as i32 as libc::c_long;
+    let mut rightend: libc::c_long = rightbegin + rn / 2 as i32 as libc::c_long;
+    let mut i: i32 = 0;
+    let mut p: i32 = 0;
+    i = 0 as i32;
     while (i as libc::c_long) < leftbegin {
         *d.offset(i as isize) = 0.0f32;
         i += 1
     }
-    p = 0 as libc::c_int;
+    p = 0 as i32;
     while (i as libc::c_long) < leftend {
         *d.offset(i as isize) *= *windowLW.offset(p as isize);
         i += 1;
         p += 1
     }
-    i = rightbegin as libc::c_int;
-    p = (rn / 2 as libc::c_int as libc::c_long - 1 as libc::c_int as libc::c_long) as libc::c_int;
+    i = rightbegin as i32;
+    p = (rn / 2 as i32 as libc::c_long - 1 as i32 as libc::c_long) as i32;
     while (i as libc::c_long) < rightend {
         *d.offset(i as isize) *= *windowNW.offset(p as isize);
         i += 1;

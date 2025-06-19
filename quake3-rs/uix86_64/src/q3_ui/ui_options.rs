@@ -84,7 +84,7 @@ static mut s_options: optionsmenu_t = optionsmenu_t {
         },
         string: 0 as *const libc::c_char as *mut libc::c_char,
         style: 0,
-        color: 0 as *const libc::c_float as *mut libc::c_float,
+        color: 0 as *const f32 as *mut f32,
     },
     framel: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -111,7 +111,7 @@ static mut s_options: optionsmenu_t = optionsmenu_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     framer: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -138,7 +138,7 @@ static mut s_options: optionsmenu_t = optionsmenu_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     graphics: crate::ui_local_h::menutext_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -161,7 +161,7 @@ static mut s_options: optionsmenu_t = optionsmenu_t {
         },
         string: 0 as *const libc::c_char as *mut libc::c_char,
         style: 0,
-        color: 0 as *const libc::c_float as *mut libc::c_float,
+        color: 0 as *const f32 as *mut f32,
     },
     display: crate::ui_local_h::menutext_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -184,7 +184,7 @@ static mut s_options: optionsmenu_t = optionsmenu_t {
         },
         string: 0 as *const libc::c_char as *mut libc::c_char,
         style: 0,
-        color: 0 as *const libc::c_float as *mut libc::c_float,
+        color: 0 as *const f32 as *mut f32,
     },
     sound: crate::ui_local_h::menutext_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -207,7 +207,7 @@ static mut s_options: optionsmenu_t = optionsmenu_t {
         },
         string: 0 as *const libc::c_char as *mut libc::c_char,
         style: 0,
-        color: 0 as *const libc::c_float as *mut libc::c_float,
+        color: 0 as *const f32 as *mut f32,
     },
     network: crate::ui_local_h::menutext_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -230,7 +230,7 @@ static mut s_options: optionsmenu_t = optionsmenu_t {
         },
         string: 0 as *const libc::c_char as *mut libc::c_char,
         style: 0,
-        color: 0 as *const libc::c_float as *mut libc::c_float,
+        color: 0 as *const f32 as *mut f32,
     },
     back: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -257,7 +257,7 @@ static mut s_options: optionsmenu_t = optionsmenu_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
 };
 /*
@@ -266,8 +266,8 @@ Options_Event
 =================
 */
 
-unsafe extern "C" fn Options_Event(mut ptr: *mut libc::c_void, mut event: libc::c_int) {
-    if event != 3 as libc::c_int {
+unsafe extern "C" fn Options_Event(mut ptr: *mut libc::c_void, mut event: i32) {
+    if event != 3 as i32 {
         return;
     }
     match (*(ptr as *mut crate::ui_local_h::menucommon_s)).id {
@@ -318,7 +318,7 @@ Options_MenuInit
 #[no_mangle]
 
 pub unsafe extern "C" fn Options_MenuInit() {
-    let mut y: libc::c_int = 0;
+    let mut y: i32 = 0;
     let mut cstate: crate::ui_public_h::uiClientState_t = crate::ui_public_h::uiClientState_t {
         connState: crate::src::qcommon::q_shared::CA_UNINITIALIZED,
         connectPacketCount: 0,
@@ -329,7 +329,7 @@ pub unsafe extern "C" fn Options_MenuInit() {
     };
     crate::stdlib::memset(
         &mut s_options as *mut optionsmenu_t as *mut libc::c_void,
-        0 as libc::c_int,
+        0 as i32,
         ::std::mem::size_of::<optionsmenu_t>() as libc::c_ulong,
     );
     SystemConfig_Cache();
@@ -337,97 +337,97 @@ pub unsafe extern "C" fn Options_MenuInit() {
     crate::src::ui::ui_syscalls::trap_GetClientState(
         &mut cstate as *mut _ as *mut crate::ui_public_h::uiClientState_t,
     );
-    if cstate.connState as libc::c_uint
-        >= crate::src::qcommon::q_shared::CA_CONNECTED as libc::c_int as libc::c_uint
+    if cstate.connState as u32
+        >= crate::src::qcommon::q_shared::CA_CONNECTED as i32 as u32
     {
         s_options.menu.fullscreen = crate::src::qcommon::q_shared::qfalse
     } else {
         s_options.menu.fullscreen = crate::src::qcommon::q_shared::qtrue
     }
-    s_options.banner.generic.type_0 = 10 as libc::c_int;
-    s_options.banner.generic.flags = 0x8 as libc::c_int as libc::c_uint;
-    s_options.banner.generic.x = 320 as libc::c_int;
-    s_options.banner.generic.y = 16 as libc::c_int;
+    s_options.banner.generic.type_0 = 10 as i32;
+    s_options.banner.generic.flags = 0x8 as i32 as u32;
+    s_options.banner.generic.x = 320 as i32;
+    s_options.banner.generic.y = 16 as i32;
     s_options.banner.string =
         b"SYSTEM SETUP\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     s_options.banner.color = crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr();
-    s_options.banner.style = 0x1 as libc::c_int;
-    s_options.framel.generic.type_0 = 6 as libc::c_int;
+    s_options.banner.style = 0x1 as i32;
+    s_options.framel.generic.type_0 = 6 as i32;
     s_options.framel.generic.name = b"menu/art/frame2_l\x00" as *const u8 as *const libc::c_char;
-    s_options.framel.generic.flags = 0x4000 as libc::c_int as libc::c_uint;
-    s_options.framel.generic.x = 8 as libc::c_int;
-    s_options.framel.generic.y = 76 as libc::c_int;
-    s_options.framel.width = 256 as libc::c_int;
-    s_options.framel.height = 334 as libc::c_int;
-    s_options.framer.generic.type_0 = 6 as libc::c_int;
+    s_options.framel.generic.flags = 0x4000 as i32 as u32;
+    s_options.framel.generic.x = 8 as i32;
+    s_options.framel.generic.y = 76 as i32;
+    s_options.framel.width = 256 as i32;
+    s_options.framel.height = 334 as i32;
+    s_options.framer.generic.type_0 = 6 as i32;
     s_options.framer.generic.name = b"menu/art/frame1_r\x00" as *const u8 as *const libc::c_char;
-    s_options.framer.generic.flags = 0x4000 as libc::c_int as libc::c_uint;
-    s_options.framer.generic.x = 376 as libc::c_int;
-    s_options.framer.generic.y = 76 as libc::c_int;
-    s_options.framer.width = 256 as libc::c_int;
-    s_options.framer.height = 334 as libc::c_int;
-    y = 168 as libc::c_int;
-    s_options.graphics.generic.type_0 = 9 as libc::c_int;
+    s_options.framer.generic.flags = 0x4000 as i32 as u32;
+    s_options.framer.generic.x = 376 as i32;
+    s_options.framer.generic.y = 76 as i32;
+    s_options.framer.width = 256 as i32;
+    s_options.framer.height = 334 as i32;
+    y = 168 as i32;
+    s_options.graphics.generic.type_0 = 9 as i32;
     s_options.graphics.generic.flags =
-        0x8 as libc::c_int as libc::c_uint | 0x100 as libc::c_int as libc::c_uint;
+        0x8 as i32 as u32 | 0x100 as i32 as u32;
     s_options.graphics.generic.callback =
-        Some(Options_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> ());
-    s_options.graphics.generic.id = 10 as libc::c_int;
-    s_options.graphics.generic.x = 320 as libc::c_int;
+        Some(Options_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
+    s_options.graphics.generic.id = 10 as i32;
+    s_options.graphics.generic.x = 320 as i32;
     s_options.graphics.generic.y = y;
     s_options.graphics.string =
         b"GRAPHICS\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     s_options.graphics.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
-    s_options.graphics.style = 0x1 as libc::c_int;
-    y += 34 as libc::c_int;
-    s_options.display.generic.type_0 = 9 as libc::c_int;
+    s_options.graphics.style = 0x1 as i32;
+    y += 34 as i32;
+    s_options.display.generic.type_0 = 9 as i32;
     s_options.display.generic.flags =
-        0x8 as libc::c_int as libc::c_uint | 0x100 as libc::c_int as libc::c_uint;
+        0x8 as i32 as u32 | 0x100 as i32 as u32;
     s_options.display.generic.callback =
-        Some(Options_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> ());
-    s_options.display.generic.id = 11 as libc::c_int;
-    s_options.display.generic.x = 320 as libc::c_int;
+        Some(Options_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
+    s_options.display.generic.id = 11 as i32;
+    s_options.display.generic.x = 320 as i32;
     s_options.display.generic.y = y;
     s_options.display.string =
         b"DISPLAY\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     s_options.display.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
-    s_options.display.style = 0x1 as libc::c_int;
-    y += 34 as libc::c_int;
-    s_options.sound.generic.type_0 = 9 as libc::c_int;
+    s_options.display.style = 0x1 as i32;
+    y += 34 as i32;
+    s_options.sound.generic.type_0 = 9 as i32;
     s_options.sound.generic.flags =
-        0x8 as libc::c_int as libc::c_uint | 0x100 as libc::c_int as libc::c_uint;
+        0x8 as i32 as u32 | 0x100 as i32 as u32;
     s_options.sound.generic.callback =
-        Some(Options_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> ());
-    s_options.sound.generic.id = 12 as libc::c_int;
-    s_options.sound.generic.x = 320 as libc::c_int;
+        Some(Options_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
+    s_options.sound.generic.id = 12 as i32;
+    s_options.sound.generic.x = 320 as i32;
     s_options.sound.generic.y = y;
     s_options.sound.string = b"SOUND\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     s_options.sound.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
-    s_options.sound.style = 0x1 as libc::c_int;
-    y += 34 as libc::c_int;
-    s_options.network.generic.type_0 = 9 as libc::c_int;
+    s_options.sound.style = 0x1 as i32;
+    y += 34 as i32;
+    s_options.network.generic.type_0 = 9 as i32;
     s_options.network.generic.flags =
-        0x8 as libc::c_int as libc::c_uint | 0x100 as libc::c_int as libc::c_uint;
+        0x8 as i32 as u32 | 0x100 as i32 as u32;
     s_options.network.generic.callback =
-        Some(Options_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> ());
-    s_options.network.generic.id = 13 as libc::c_int;
-    s_options.network.generic.x = 320 as libc::c_int;
+        Some(Options_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
+    s_options.network.generic.id = 13 as i32;
+    s_options.network.generic.x = 320 as i32;
     s_options.network.generic.y = y;
     s_options.network.string =
         b"NETWORK\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     s_options.network.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
-    s_options.network.style = 0x1 as libc::c_int;
-    s_options.back.generic.type_0 = 6 as libc::c_int;
+    s_options.network.style = 0x1 as i32;
+    s_options.back.generic.type_0 = 6 as i32;
     s_options.back.generic.name = b"menu/art/back_0\x00" as *const u8 as *const libc::c_char;
     s_options.back.generic.flags =
-        0x4 as libc::c_int as libc::c_uint | 0x100 as libc::c_int as libc::c_uint;
+        0x4 as i32 as u32 | 0x100 as i32 as u32;
     s_options.back.generic.callback =
-        Some(Options_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> ());
-    s_options.back.generic.id = 14 as libc::c_int;
-    s_options.back.generic.x = 0 as libc::c_int;
-    s_options.back.generic.y = 480 as libc::c_int - 64 as libc::c_int;
-    s_options.back.width = 128 as libc::c_int;
-    s_options.back.height = 64 as libc::c_int;
+        Some(Options_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
+    s_options.back.generic.id = 14 as i32;
+    s_options.back.generic.x = 0 as i32;
+    s_options.back.generic.y = 480 as i32 - 64 as i32;
+    s_options.back.width = 128 as i32;
+    s_options.back.height = 64 as i32;
     s_options.back.focuspic =
         b"menu/art/back_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     crate::src::q3_ui::ui_qmenu::Menu_AddItem(

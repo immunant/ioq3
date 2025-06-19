@@ -159,43 +159,43 @@ pub unsafe extern "C" fn silk_log2lin(
 /* I  input on log scale                                            */ {
     let mut out: crate::opus_types_h::opus_int32 = 0;
     let mut frac_Q7: crate::opus_types_h::opus_int32 = 0;
-    if inLog_Q7 < 0 as libc::c_int {
-        return 0 as libc::c_int;
+    if inLog_Q7 < 0 as i32 {
+        return 0 as i32;
     } else {
-        if inLog_Q7 >= 3967 as libc::c_int {
-            return 0x7fffffff as libc::c_int;
+        if inLog_Q7 >= 3967 as i32 {
+            return 0x7fffffff as i32;
         }
     }
-    out = ((1 as libc::c_int as crate::opus_types_h::opus_uint32) << (inLog_Q7 >> 7 as libc::c_int))
+    out = ((1 as i32 as crate::opus_types_h::opus_uint32) << (inLog_Q7 >> 7 as i32))
         as crate::opus_types_h::opus_int32;
-    frac_Q7 = inLog_Q7 & 0x7f as libc::c_int;
-    if inLog_Q7 < 2048 as libc::c_int {
+    frac_Q7 = inLog_Q7 & 0x7f as i32;
+    if inLog_Q7 < 2048 as i32 {
         /* Piece-wise parabolic approximation */
         out = out
             + (out
-                * (frac_Q7 as libc::c_longlong
+                * (frac_Q7 as i64
                     + ((frac_Q7 as crate::opus_types_h::opus_int16
                         as crate::opus_types_h::opus_int32
-                        * (128 as libc::c_int - frac_Q7) as crate::opus_types_h::opus_int16
+                        * (128 as i32 - frac_Q7) as crate::opus_types_h::opus_int16
                             as crate::opus_types_h::opus_int32)
-                        as libc::c_longlong
-                        * -(174 as libc::c_int) as crate::opus_types_h::opus_int16
-                            as libc::c_longlong
-                        >> 16 as libc::c_int)) as crate::opus_types_h::opus_int32
-                >> 7 as libc::c_int)
+                        as i64
+                        * -(174 as i32) as crate::opus_types_h::opus_int16
+                            as i64
+                        >> 16 as i32)) as crate::opus_types_h::opus_int32
+                >> 7 as i32)
     } else {
         /* Piece-wise parabolic approximation */
         out = out
-            + (out >> 7 as libc::c_int)
-                * (frac_Q7 as libc::c_longlong
+            + (out >> 7 as i32)
+                * (frac_Q7 as i64
                     + ((frac_Q7 as crate::opus_types_h::opus_int16
                         as crate::opus_types_h::opus_int32
-                        * (128 as libc::c_int - frac_Q7) as crate::opus_types_h::opus_int16
+                        * (128 as i32 - frac_Q7) as crate::opus_types_h::opus_int16
                             as crate::opus_types_h::opus_int32)
-                        as libc::c_longlong
-                        * -(174 as libc::c_int) as crate::opus_types_h::opus_int16
-                            as libc::c_longlong
-                        >> 16 as libc::c_int)) as crate::opus_types_h::opus_int32
+                        as i64
+                        * -(174 as i32) as crate::opus_types_h::opus_int16
+                            as i64
+                        >> 16 as i32)) as crate::opus_types_h::opus_int32
     }
     return out;
 }

@@ -93,7 +93,7 @@ static mut displayOptionsInfo: displayOptionsInfo_t = displayOptionsInfo_t {
         },
         string: 0 as *const libc::c_char as *mut libc::c_char,
         style: 0,
-        color: 0 as *const libc::c_float as *mut libc::c_float,
+        color: 0 as *const f32 as *mut f32,
     },
     framel: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -120,7 +120,7 @@ static mut displayOptionsInfo: displayOptionsInfo_t = displayOptionsInfo_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     framer: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -147,7 +147,7 @@ static mut displayOptionsInfo: displayOptionsInfo_t = displayOptionsInfo_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     graphics: crate::ui_local_h::menutext_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -170,7 +170,7 @@ static mut displayOptionsInfo: displayOptionsInfo_t = displayOptionsInfo_t {
         },
         string: 0 as *const libc::c_char as *mut libc::c_char,
         style: 0,
-        color: 0 as *const libc::c_float as *mut libc::c_float,
+        color: 0 as *const f32 as *mut f32,
     },
     display: crate::ui_local_h::menutext_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -193,7 +193,7 @@ static mut displayOptionsInfo: displayOptionsInfo_t = displayOptionsInfo_t {
         },
         string: 0 as *const libc::c_char as *mut libc::c_char,
         style: 0,
-        color: 0 as *const libc::c_float as *mut libc::c_float,
+        color: 0 as *const f32 as *mut f32,
     },
     sound: crate::ui_local_h::menutext_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -216,7 +216,7 @@ static mut displayOptionsInfo: displayOptionsInfo_t = displayOptionsInfo_t {
         },
         string: 0 as *const libc::c_char as *mut libc::c_char,
         style: 0,
-        color: 0 as *const libc::c_float as *mut libc::c_float,
+        color: 0 as *const f32 as *mut f32,
     },
     network: crate::ui_local_h::menutext_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -239,7 +239,7 @@ static mut displayOptionsInfo: displayOptionsInfo_t = displayOptionsInfo_t {
         },
         string: 0 as *const libc::c_char as *mut libc::c_char,
         style: 0,
-        color: 0 as *const libc::c_float as *mut libc::c_float,
+        color: 0 as *const f32 as *mut f32,
     },
     brightness: crate::ui_local_h::menuslider_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -314,7 +314,7 @@ static mut displayOptionsInfo: displayOptionsInfo_t = displayOptionsInfo_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
 };
 /*
@@ -325,9 +325,9 @@ UI_DisplayOptionsMenu_Event
 
 unsafe extern "C" fn UI_DisplayOptionsMenu_Event(
     mut ptr: *mut libc::c_void,
-    mut event: libc::c_int,
+    mut event: i32,
 ) {
-    if event != 3 as libc::c_int {
+    if event != 3 as i32 {
         return;
     }
     match (*(ptr as *mut crate::ui_local_h::menucommon_s)).id {
@@ -352,7 +352,7 @@ unsafe extern "C" fn UI_DisplayOptionsMenu_Event(
         15 => {
             crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
                 b"cg_viewsize\x00" as *const u8 as *const libc::c_char,
-                displayOptionsInfo.screensize.curvalue * 10 as libc::c_int as libc::c_float,
+                displayOptionsInfo.screensize.curvalue * 10 as i32 as f32,
             );
         }
         16 => {
@@ -368,146 +368,146 @@ UI_DisplayOptionsMenu_Init
 */
 
 unsafe extern "C" fn UI_DisplayOptionsMenu_Init() {
-    let mut y: libc::c_int = 0;
+    let mut y: i32 = 0;
     crate::stdlib::memset(
         &mut displayOptionsInfo as *mut displayOptionsInfo_t as *mut libc::c_void,
-        0 as libc::c_int,
+        0 as i32,
         ::std::mem::size_of::<displayOptionsInfo_t>() as libc::c_ulong,
     );
     UI_DisplayOptionsMenu_Cache();
     displayOptionsInfo.menu.wrapAround = crate::src::qcommon::q_shared::qtrue;
     displayOptionsInfo.menu.fullscreen = crate::src::qcommon::q_shared::qtrue;
-    displayOptionsInfo.banner.generic.type_0 = 10 as libc::c_int;
-    displayOptionsInfo.banner.generic.flags = 0x8 as libc::c_int as libc::c_uint;
-    displayOptionsInfo.banner.generic.x = 320 as libc::c_int;
-    displayOptionsInfo.banner.generic.y = 16 as libc::c_int;
+    displayOptionsInfo.banner.generic.type_0 = 10 as i32;
+    displayOptionsInfo.banner.generic.flags = 0x8 as i32 as u32;
+    displayOptionsInfo.banner.generic.x = 320 as i32;
+    displayOptionsInfo.banner.generic.y = 16 as i32;
     displayOptionsInfo.banner.string =
         b"SYSTEM SETUP\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     displayOptionsInfo.banner.color = crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr();
-    displayOptionsInfo.banner.style = 0x1 as libc::c_int;
-    displayOptionsInfo.framel.generic.type_0 = 6 as libc::c_int;
+    displayOptionsInfo.banner.style = 0x1 as i32;
+    displayOptionsInfo.framel.generic.type_0 = 6 as i32;
     displayOptionsInfo.framel.generic.name =
         b"menu/art/frame2_l\x00" as *const u8 as *const libc::c_char;
-    displayOptionsInfo.framel.generic.flags = 0x4000 as libc::c_int as libc::c_uint;
-    displayOptionsInfo.framel.generic.x = 0 as libc::c_int;
-    displayOptionsInfo.framel.generic.y = 78 as libc::c_int;
-    displayOptionsInfo.framel.width = 256 as libc::c_int;
-    displayOptionsInfo.framel.height = 329 as libc::c_int;
-    displayOptionsInfo.framer.generic.type_0 = 6 as libc::c_int;
+    displayOptionsInfo.framel.generic.flags = 0x4000 as i32 as u32;
+    displayOptionsInfo.framel.generic.x = 0 as i32;
+    displayOptionsInfo.framel.generic.y = 78 as i32;
+    displayOptionsInfo.framel.width = 256 as i32;
+    displayOptionsInfo.framel.height = 329 as i32;
+    displayOptionsInfo.framer.generic.type_0 = 6 as i32;
     displayOptionsInfo.framer.generic.name =
         b"menu/art/frame1_r\x00" as *const u8 as *const libc::c_char;
-    displayOptionsInfo.framer.generic.flags = 0x4000 as libc::c_int as libc::c_uint;
-    displayOptionsInfo.framer.generic.x = 376 as libc::c_int;
-    displayOptionsInfo.framer.generic.y = 76 as libc::c_int;
-    displayOptionsInfo.framer.width = 256 as libc::c_int;
-    displayOptionsInfo.framer.height = 334 as libc::c_int;
-    displayOptionsInfo.graphics.generic.type_0 = 9 as libc::c_int;
+    displayOptionsInfo.framer.generic.flags = 0x4000 as i32 as u32;
+    displayOptionsInfo.framer.generic.x = 376 as i32;
+    displayOptionsInfo.framer.generic.y = 76 as i32;
+    displayOptionsInfo.framer.width = 256 as i32;
+    displayOptionsInfo.framer.height = 334 as i32;
+    displayOptionsInfo.graphics.generic.type_0 = 9 as i32;
     displayOptionsInfo.graphics.generic.flags =
-        0x10 as libc::c_int as libc::c_uint | 0x100 as libc::c_int as libc::c_uint;
-    displayOptionsInfo.graphics.generic.id = 10 as libc::c_int;
+        0x10 as i32 as u32 | 0x100 as i32 as u32;
+    displayOptionsInfo.graphics.generic.id = 10 as i32;
     displayOptionsInfo.graphics.generic.callback = Some(
         UI_DisplayOptionsMenu_Event
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    displayOptionsInfo.graphics.generic.x = 216 as libc::c_int;
+    displayOptionsInfo.graphics.generic.x = 216 as i32;
     displayOptionsInfo.graphics.generic.y =
-        240 as libc::c_int - 2 as libc::c_int * 27 as libc::c_int;
+        240 as i32 - 2 as i32 * 27 as i32;
     displayOptionsInfo.graphics.string =
         b"GRAPHICS\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    displayOptionsInfo.graphics.style = 0x2 as libc::c_int;
+    displayOptionsInfo.graphics.style = 0x2 as i32;
     displayOptionsInfo.graphics.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
-    displayOptionsInfo.display.generic.type_0 = 9 as libc::c_int;
-    displayOptionsInfo.display.generic.flags = 0x10 as libc::c_int as libc::c_uint;
-    displayOptionsInfo.display.generic.id = 11 as libc::c_int;
+    displayOptionsInfo.display.generic.type_0 = 9 as i32;
+    displayOptionsInfo.display.generic.flags = 0x10 as i32 as u32;
+    displayOptionsInfo.display.generic.id = 11 as i32;
     displayOptionsInfo.display.generic.callback = Some(
         UI_DisplayOptionsMenu_Event
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    displayOptionsInfo.display.generic.x = 216 as libc::c_int;
-    displayOptionsInfo.display.generic.y = 240 as libc::c_int - 27 as libc::c_int;
+    displayOptionsInfo.display.generic.x = 216 as i32;
+    displayOptionsInfo.display.generic.y = 240 as i32 - 27 as i32;
     displayOptionsInfo.display.string =
         b"DISPLAY\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    displayOptionsInfo.display.style = 0x2 as libc::c_int;
+    displayOptionsInfo.display.style = 0x2 as i32;
     displayOptionsInfo.display.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
-    displayOptionsInfo.sound.generic.type_0 = 9 as libc::c_int;
+    displayOptionsInfo.sound.generic.type_0 = 9 as i32;
     displayOptionsInfo.sound.generic.flags =
-        0x10 as libc::c_int as libc::c_uint | 0x100 as libc::c_int as libc::c_uint;
-    displayOptionsInfo.sound.generic.id = 12 as libc::c_int;
+        0x10 as i32 as u32 | 0x100 as i32 as u32;
+    displayOptionsInfo.sound.generic.id = 12 as i32;
     displayOptionsInfo.sound.generic.callback = Some(
         UI_DisplayOptionsMenu_Event
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    displayOptionsInfo.sound.generic.x = 216 as libc::c_int;
-    displayOptionsInfo.sound.generic.y = 240 as libc::c_int;
+    displayOptionsInfo.sound.generic.x = 216 as i32;
+    displayOptionsInfo.sound.generic.y = 240 as i32;
     displayOptionsInfo.sound.string =
         b"SOUND\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    displayOptionsInfo.sound.style = 0x2 as libc::c_int;
+    displayOptionsInfo.sound.style = 0x2 as i32;
     displayOptionsInfo.sound.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
-    displayOptionsInfo.network.generic.type_0 = 9 as libc::c_int;
+    displayOptionsInfo.network.generic.type_0 = 9 as i32;
     displayOptionsInfo.network.generic.flags =
-        0x10 as libc::c_int as libc::c_uint | 0x100 as libc::c_int as libc::c_uint;
-    displayOptionsInfo.network.generic.id = 13 as libc::c_int;
+        0x10 as i32 as u32 | 0x100 as i32 as u32;
+    displayOptionsInfo.network.generic.id = 13 as i32;
     displayOptionsInfo.network.generic.callback = Some(
         UI_DisplayOptionsMenu_Event
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    displayOptionsInfo.network.generic.x = 216 as libc::c_int;
-    displayOptionsInfo.network.generic.y = 240 as libc::c_int + 27 as libc::c_int;
+    displayOptionsInfo.network.generic.x = 216 as i32;
+    displayOptionsInfo.network.generic.y = 240 as i32 + 27 as i32;
     displayOptionsInfo.network.string =
         b"NETWORK\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    displayOptionsInfo.network.style = 0x2 as libc::c_int;
+    displayOptionsInfo.network.style = 0x2 as i32;
     displayOptionsInfo.network.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
-    y = 240 as libc::c_int - 1 as libc::c_int * (16 as libc::c_int + 2 as libc::c_int);
-    displayOptionsInfo.brightness.generic.type_0 = 1 as libc::c_int;
+    y = 240 as i32 - 1 as i32 * (16 as i32 + 2 as i32);
+    displayOptionsInfo.brightness.generic.type_0 = 1 as i32;
     displayOptionsInfo.brightness.generic.name =
         b"Brightness:\x00" as *const u8 as *const libc::c_char;
     displayOptionsInfo.brightness.generic.flags =
-        0x100 as libc::c_int as libc::c_uint | 0x2 as libc::c_int as libc::c_uint;
+        0x100 as i32 as u32 | 0x2 as i32 as u32;
     displayOptionsInfo.brightness.generic.callback = Some(
         UI_DisplayOptionsMenu_Event
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    displayOptionsInfo.brightness.generic.id = 14 as libc::c_int;
-    displayOptionsInfo.brightness.generic.x = 400 as libc::c_int;
+    displayOptionsInfo.brightness.generic.id = 14 as i32;
+    displayOptionsInfo.brightness.generic.x = 400 as i32;
     displayOptionsInfo.brightness.generic.y = y;
-    displayOptionsInfo.brightness.minvalue = 5 as libc::c_int as libc::c_float;
-    displayOptionsInfo.brightness.maxvalue = 20 as libc::c_int as libc::c_float;
+    displayOptionsInfo.brightness.minvalue = 5 as i32 as f32;
+    displayOptionsInfo.brightness.maxvalue = 20 as i32 as f32;
     if crate::src::q3_ui::ui_atoms::uis
         .glconfig
         .deviceSupportsGamma as u64
         == 0
     {
-        displayOptionsInfo.brightness.generic.flags |= 0x2000 as libc::c_int as libc::c_uint
+        displayOptionsInfo.brightness.generic.flags |= 0x2000 as i32 as u32
     }
-    y += 16 as libc::c_int + 2 as libc::c_int;
-    displayOptionsInfo.screensize.generic.type_0 = 1 as libc::c_int;
+    y += 16 as i32 + 2 as i32;
+    displayOptionsInfo.screensize.generic.type_0 = 1 as i32;
     displayOptionsInfo.screensize.generic.name =
         b"Screen Size:\x00" as *const u8 as *const libc::c_char;
     displayOptionsInfo.screensize.generic.flags =
-        0x100 as libc::c_int as libc::c_uint | 0x2 as libc::c_int as libc::c_uint;
+        0x100 as i32 as u32 | 0x2 as i32 as u32;
     displayOptionsInfo.screensize.generic.callback = Some(
         UI_DisplayOptionsMenu_Event
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    displayOptionsInfo.screensize.generic.id = 15 as libc::c_int;
-    displayOptionsInfo.screensize.generic.x = 400 as libc::c_int;
+    displayOptionsInfo.screensize.generic.id = 15 as i32;
+    displayOptionsInfo.screensize.generic.x = 400 as i32;
     displayOptionsInfo.screensize.generic.y = y;
-    displayOptionsInfo.screensize.minvalue = 3 as libc::c_int as libc::c_float;
-    displayOptionsInfo.screensize.maxvalue = 10 as libc::c_int as libc::c_float;
-    displayOptionsInfo.back.generic.type_0 = 6 as libc::c_int;
+    displayOptionsInfo.screensize.minvalue = 3 as i32 as f32;
+    displayOptionsInfo.screensize.maxvalue = 10 as i32 as f32;
+    displayOptionsInfo.back.generic.type_0 = 6 as i32;
     displayOptionsInfo.back.generic.name =
         b"menu/art/back_0\x00" as *const u8 as *const libc::c_char;
     displayOptionsInfo.back.generic.flags =
-        0x4 as libc::c_int as libc::c_uint | 0x100 as libc::c_int as libc::c_uint;
+        0x4 as i32 as u32 | 0x100 as i32 as u32;
     displayOptionsInfo.back.generic.callback = Some(
         UI_DisplayOptionsMenu_Event
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    displayOptionsInfo.back.generic.id = 16 as libc::c_int;
-    displayOptionsInfo.back.generic.x = 0 as libc::c_int;
-    displayOptionsInfo.back.generic.y = 480 as libc::c_int - 64 as libc::c_int;
-    displayOptionsInfo.back.width = 128 as libc::c_int;
-    displayOptionsInfo.back.height = 64 as libc::c_int;
+    displayOptionsInfo.back.generic.id = 16 as i32;
+    displayOptionsInfo.back.generic.x = 0 as i32;
+    displayOptionsInfo.back.generic.y = 480 as i32 - 64 as i32;
+    displayOptionsInfo.back.width = 128 as i32;
+    displayOptionsInfo.back.height = 64 as i32;
     displayOptionsInfo.back.focuspic =
         b"menu/art/back_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     crate::src::q3_ui::ui_qmenu::Menu_AddItem(
@@ -554,10 +554,10 @@ unsafe extern "C" fn UI_DisplayOptionsMenu_Init() {
     );
     displayOptionsInfo.brightness.curvalue = crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
         b"r_gamma\x00" as *const u8 as *const libc::c_char,
-    ) * 10 as libc::c_int as libc::c_float;
+    ) * 10 as i32 as f32;
     displayOptionsInfo.screensize.curvalue = crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
         b"cg_viewsize\x00" as *const u8 as *const libc::c_char,
-    ) / 10 as libc::c_int as libc::c_float;
+    ) / 10 as i32 as f32;
 }
 /*
 ===============

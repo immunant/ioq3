@@ -1,39 +1,39 @@
 use ::libc;
 
-static mut s_noise_table: [libc::c_float; 256] = [0.; 256];
+static mut s_noise_table: [f32; 256] = [0.; 256];
 
-static mut s_noise_perm: [libc::c_int; 256] = [0; 256];
+static mut s_noise_perm: [i32; 256] = [0; 256];
 
 unsafe extern "C" fn GetNoiseValue(
-    mut x: libc::c_int,
-    mut y: libc::c_int,
-    mut z: libc::c_int,
-    mut t: libc::c_int,
-) -> libc::c_float {
-    let mut index: libc::c_int = s_noise_perm[(x + s_noise_perm[(y + s_noise_perm[(z + s_noise_perm
-        [(t & 256 as libc::c_int - 1 as libc::c_int) as usize]
-        & 256 as libc::c_int - 1 as libc::c_int)
+    mut x: i32,
+    mut y: i32,
+    mut z: i32,
+    mut t: i32,
+) -> f32 {
+    let mut index: i32 = s_noise_perm[(x + s_noise_perm[(y + s_noise_perm[(z + s_noise_perm
+        [(t & 256 as i32 - 1 as i32) as usize]
+        & 256 as i32 - 1 as i32)
         as usize]
-        & 256 as libc::c_int - 1 as libc::c_int)
+        & 256 as i32 - 1 as i32)
         as usize]
-        & 256 as libc::c_int - 1 as libc::c_int)
+        & 256 as i32 - 1 as i32)
         as usize];
     return s_noise_table[index as usize];
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn R_NoiseInit() {
-    let mut i: libc::c_int = 0;
-    i = 0 as libc::c_int;
-    while i < 256 as libc::c_int {
-        s_noise_table[i as usize] = ((::libc::rand() as libc::c_float
-            / 2147483647 as libc::c_int as libc::c_float)
-            as libc::c_double
+    let mut i: i32 = 0;
+    i = 0 as i32;
+    while i < 256 as i32 {
+        s_noise_table[i as usize] = ((::libc::rand() as f32
+            / 2147483647 as i32 as f32)
+            as f64
             * 2.0f64
-            - 1.0f64) as libc::c_float;
+            - 1.0f64) as f32;
         s_noise_perm[i as usize] =
-            (::libc::rand() as libc::c_float / 2147483647 as libc::c_int as libc::c_float
-                * 255 as libc::c_int as libc::c_float) as libc::c_uchar as libc::c_int;
+            (::libc::rand() as f32 / 2147483647 as i32 as f32
+                * 255 as i32 as f32) as u8 as i32;
         i += 1
     }
 }
@@ -93,68 +93,68 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #[no_mangle]
 
 pub unsafe extern "C" fn R_NoiseGet4f(
-    mut x: libc::c_float,
-    mut y: libc::c_float,
-    mut z: libc::c_float,
-    mut t: libc::c_double,
-) -> libc::c_float {
-    let mut i: libc::c_int = 0;
-    let mut ix: libc::c_int = 0;
-    let mut iy: libc::c_int = 0;
-    let mut iz: libc::c_int = 0;
-    let mut it: libc::c_int = 0;
-    let mut fx: libc::c_float = 0.;
-    let mut fy: libc::c_float = 0.;
-    let mut fz: libc::c_float = 0.;
-    let mut ft: libc::c_float = 0.;
-    let mut front: [libc::c_float; 4] = [0.; 4];
-    let mut back: [libc::c_float; 4] = [0.; 4];
-    let mut fvalue: libc::c_float = 0.;
-    let mut bvalue: libc::c_float = 0.;
-    let mut value: [libc::c_float; 2] = [0.; 2];
-    let mut finalvalue: libc::c_float = 0.;
-    ix = crate::stdlib::floor(x as libc::c_double) as libc::c_int;
-    fx = x - ix as libc::c_float;
-    iy = crate::stdlib::floor(y as libc::c_double) as libc::c_int;
-    fy = y - iy as libc::c_float;
-    iz = crate::stdlib::floor(z as libc::c_double) as libc::c_int;
-    fz = z - iz as libc::c_float;
-    it = crate::stdlib::floor(t) as libc::c_int;
-    ft = (t - it as libc::c_double) as libc::c_float;
-    i = 0 as libc::c_int;
-    while i < 2 as libc::c_int {
-        front[0 as libc::c_int as usize] = GetNoiseValue(ix, iy, iz, it + i);
-        front[1 as libc::c_int as usize] = GetNoiseValue(ix + 1 as libc::c_int, iy, iz, it + i);
-        front[2 as libc::c_int as usize] = GetNoiseValue(ix, iy + 1 as libc::c_int, iz, it + i);
-        front[3 as libc::c_int as usize] =
-            GetNoiseValue(ix + 1 as libc::c_int, iy + 1 as libc::c_int, iz, it + i);
-        back[0 as libc::c_int as usize] = GetNoiseValue(ix, iy, iz + 1 as libc::c_int, it + i);
-        back[1 as libc::c_int as usize] =
-            GetNoiseValue(ix + 1 as libc::c_int, iy, iz + 1 as libc::c_int, it + i);
-        back[2 as libc::c_int as usize] =
-            GetNoiseValue(ix, iy + 1 as libc::c_int, iz + 1 as libc::c_int, it + i);
-        back[3 as libc::c_int as usize] = GetNoiseValue(
-            ix + 1 as libc::c_int,
-            iy + 1 as libc::c_int,
-            iz + 1 as libc::c_int,
+    mut x: f32,
+    mut y: f32,
+    mut z: f32,
+    mut t: f64,
+) -> f32 {
+    let mut i: i32 = 0;
+    let mut ix: i32 = 0;
+    let mut iy: i32 = 0;
+    let mut iz: i32 = 0;
+    let mut it: i32 = 0;
+    let mut fx: f32 = 0.;
+    let mut fy: f32 = 0.;
+    let mut fz: f32 = 0.;
+    let mut ft: f32 = 0.;
+    let mut front: [f32; 4] = [0.; 4];
+    let mut back: [f32; 4] = [0.; 4];
+    let mut fvalue: f32 = 0.;
+    let mut bvalue: f32 = 0.;
+    let mut value: [f32; 2] = [0.; 2];
+    let mut finalvalue: f32 = 0.;
+    ix = crate::stdlib::floor(x as f64) as i32;
+    fx = x - ix as f32;
+    iy = crate::stdlib::floor(y as f64) as i32;
+    fy = y - iy as f32;
+    iz = crate::stdlib::floor(z as f64) as i32;
+    fz = z - iz as f32;
+    it = crate::stdlib::floor(t) as i32;
+    ft = (t - it as f64) as f32;
+    i = 0 as i32;
+    while i < 2 as i32 {
+        front[0 as i32 as usize] = GetNoiseValue(ix, iy, iz, it + i);
+        front[1 as i32 as usize] = GetNoiseValue(ix + 1 as i32, iy, iz, it + i);
+        front[2 as i32 as usize] = GetNoiseValue(ix, iy + 1 as i32, iz, it + i);
+        front[3 as i32 as usize] =
+            GetNoiseValue(ix + 1 as i32, iy + 1 as i32, iz, it + i);
+        back[0 as i32 as usize] = GetNoiseValue(ix, iy, iz + 1 as i32, it + i);
+        back[1 as i32 as usize] =
+            GetNoiseValue(ix + 1 as i32, iy, iz + 1 as i32, it + i);
+        back[2 as i32 as usize] =
+            GetNoiseValue(ix, iy + 1 as i32, iz + 1 as i32, it + i);
+        back[3 as i32 as usize] = GetNoiseValue(
+            ix + 1 as i32,
+            iy + 1 as i32,
+            iz + 1 as i32,
             it + i,
         );
-        fvalue = (front[0 as libc::c_int as usize] * (1.0f32 - fx)
-            + front[1 as libc::c_int as usize] * fx)
+        fvalue = (front[0 as i32 as usize] * (1.0f32 - fx)
+            + front[1 as i32 as usize] * fx)
             * (1.0f32 - fy)
-            + (front[2 as libc::c_int as usize] * (1.0f32 - fx)
-                + front[3 as libc::c_int as usize] * fx)
+            + (front[2 as i32 as usize] * (1.0f32 - fx)
+                + front[3 as i32 as usize] * fx)
                 * fy;
-        bvalue = (back[0 as libc::c_int as usize] * (1.0f32 - fx)
-            + back[1 as libc::c_int as usize] * fx)
+        bvalue = (back[0 as i32 as usize] * (1.0f32 - fx)
+            + back[1 as i32 as usize] * fx)
             * (1.0f32 - fy)
-            + (back[2 as libc::c_int as usize] * (1.0f32 - fx)
-                + back[3 as libc::c_int as usize] * fx)
+            + (back[2 as i32 as usize] * (1.0f32 - fx)
+                + back[3 as i32 as usize] * fx)
                 * fy;
         value[i as usize] = fvalue * (1.0f32 - fz) + bvalue * fz;
         i += 1
     }
     finalvalue =
-        value[0 as libc::c_int as usize] * (1.0f32 - ft) + value[1 as libc::c_int as usize] * ft;
+        value[0 as i32 as usize] * (1.0f32 - ft) + value[1 as i32 as usize] * ft;
     return finalvalue;
 }

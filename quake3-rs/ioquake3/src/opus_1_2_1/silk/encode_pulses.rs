@@ -43,25 +43,25 @@ POSSIBILITY OF SUCH DAMAGE.
 #[inline]
 
 unsafe extern "C" fn combine_and_check(
-    mut pulses_comb: *mut libc::c_int,
-    mut pulses_in: *const libc::c_int,
-    mut max_pulses: libc::c_int,
-    mut len: libc::c_int,
-) -> libc::c_int
+    mut pulses_comb: *mut i32,
+    mut pulses_in: *const i32,
+    mut max_pulses: i32,
+    mut len: i32,
+) -> i32
 /* I    number of output values        */ {
-    let mut k: libc::c_int = 0;
-    let mut sum: libc::c_int = 0;
-    k = 0 as libc::c_int;
+    let mut k: i32 = 0;
+    let mut sum: i32 = 0;
+    k = 0 as i32;
     while k < len {
-        sum = *pulses_in.offset((2 as libc::c_int * k) as isize)
-            + *pulses_in.offset((2 as libc::c_int * k + 1 as libc::c_int) as isize);
+        sum = *pulses_in.offset((2 as i32 * k) as isize)
+            + *pulses_in.offset((2 as i32 * k + 1 as i32) as isize);
         if sum > max_pulses {
-            return 1 as libc::c_int;
+            return 1 as i32;
         }
         *pulses_comb.offset(k as isize) = sum;
         k += 1
     }
-    return 0 as libc::c_int;
+    return 0 as i32;
 }
 /* **********************************************************************
 Copyright (c) 2006-2011, Skype Limited. All rights reserved.
@@ -161,137 +161,137 @@ POSSIBILITY OF SUCH DAMAGE.
 
 pub unsafe extern "C" fn silk_encode_pulses(
     mut psRangeEnc: *mut crate::src::opus_1_2_1::celt::entcode::ec_enc,
-    signalType: libc::c_int,
-    quantOffsetType: libc::c_int,
-    mut pulses: *mut libc::c_schar,
-    frame_length: libc::c_int,
+    signalType: i32,
+    quantOffsetType: i32,
+    mut pulses: *mut i8,
+    frame_length: i32,
 )
 /* I    Frame length                                */
 {
-    let mut i: libc::c_int = 0; /* Fixing Valgrind reported problem*/
-    let mut k: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
-    let mut iter: libc::c_int = 0;
-    let mut bit: libc::c_int = 0;
-    let mut nLS: libc::c_int = 0;
-    let mut scale_down: libc::c_int = 0;
-    let mut RateLevelIndex: libc::c_int = 0 as libc::c_int;
+    let mut i: i32 = 0; /* Fixing Valgrind reported problem*/
+    let mut k: i32 = 0;
+    let mut j: i32 = 0;
+    let mut iter: i32 = 0;
+    let mut bit: i32 = 0;
+    let mut nLS: i32 = 0;
+    let mut scale_down: i32 = 0;
+    let mut RateLevelIndex: i32 = 0 as i32;
     let mut abs_q: crate::opus_types_h::opus_int32 = 0;
     let mut minSumBits_Q5: crate::opus_types_h::opus_int32 = 0;
     let mut sumBits_Q5: crate::opus_types_h::opus_int32 = 0;
-    let mut abs_pulses: *mut libc::c_int = 0 as *mut libc::c_int;
-    let mut sum_pulses: *mut libc::c_int = 0 as *mut libc::c_int;
-    let mut nRshifts: *mut libc::c_int = 0 as *mut libc::c_int;
-    let mut pulses_comb: [libc::c_int; 8] = [0; 8];
-    let mut abs_pulses_ptr: *mut libc::c_int = 0 as *mut libc::c_int;
-    let mut pulses_ptr: *const libc::c_schar = 0 as *const libc::c_schar;
-    let mut cdf_ptr: *const libc::c_uchar = 0 as *const libc::c_uchar;
-    let mut nBits_ptr: *const libc::c_uchar = 0 as *const libc::c_uchar;
+    let mut abs_pulses: *mut i32 = 0 as *mut i32;
+    let mut sum_pulses: *mut i32 = 0 as *mut i32;
+    let mut nRshifts: *mut i32 = 0 as *mut i32;
+    let mut pulses_comb: [i32; 8] = [0; 8];
+    let mut abs_pulses_ptr: *mut i32 = 0 as *mut i32;
+    let mut pulses_ptr: *const i8 = 0 as *const i8;
+    let mut cdf_ptr: *const u8 = 0 as *const u8;
+    let mut nBits_ptr: *const u8 = 0 as *const u8;
     crate::stdlib::memset(
         pulses_comb.as_mut_ptr() as *mut libc::c_void,
-        0 as libc::c_int,
-        (8 as libc::c_int as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<libc::c_int>() as libc::c_ulong),
+        0 as i32,
+        (8 as i32 as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
     );
     /* ***************************/
     /* Prepare for shell coding */
     /* ***************************/
     /* Calculate number of shell blocks */
-    iter = frame_length >> 4 as libc::c_int;
-    if (iter * 16 as libc::c_int) < frame_length {
+    iter = frame_length >> 4 as i32;
+    if (iter * 16 as i32) < frame_length {
         /* Make sure only happens for 10 ms @ 12 kHz */
         iter += 1;
         crate::stdlib::memset(
-            &mut *pulses.offset(frame_length as isize) as *mut libc::c_schar as *mut libc::c_void,
-            0 as libc::c_int,
-            (16 as libc::c_int as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<libc::c_schar>() as libc::c_ulong),
+            &mut *pulses.offset(frame_length as isize) as *mut i8 as *mut libc::c_void,
+            0 as i32,
+            (16 as i32 as libc::c_ulong)
+                .wrapping_mul(::std::mem::size_of::<i8>() as libc::c_ulong),
         );
     }
     /* Take the absolute value of the pulses */
     let mut fresh0 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<libc::c_int>() as libc::c_ulong)
-            .wrapping_mul((iter * 16 as libc::c_int) as libc::c_ulong) as usize,
+        (::std::mem::size_of::<i32>() as libc::c_ulong)
+            .wrapping_mul((iter * 16 as i32) as libc::c_ulong) as usize,
     );
-    abs_pulses = fresh0.as_mut_ptr() as *mut libc::c_int;
-    i = 0 as libc::c_int;
-    while i < iter * 16 as libc::c_int {
-        *abs_pulses.offset((i + 0 as libc::c_int) as isize) =
-            if *pulses.offset((i + 0 as libc::c_int) as isize) as libc::c_int > 0 as libc::c_int {
-                *pulses.offset((i + 0 as libc::c_int) as isize) as libc::c_int
+    abs_pulses = fresh0.as_mut_ptr() as *mut i32;
+    i = 0 as i32;
+    while i < iter * 16 as i32 {
+        *abs_pulses.offset((i + 0 as i32) as isize) =
+            if *pulses.offset((i + 0 as i32) as isize) as i32 > 0 as i32 {
+                *pulses.offset((i + 0 as i32) as isize) as i32
             } else {
-                -(*pulses.offset((i + 0 as libc::c_int) as isize) as libc::c_int)
+                -(*pulses.offset((i + 0 as i32) as isize) as i32)
             };
-        *abs_pulses.offset((i + 1 as libc::c_int) as isize) =
-            if *pulses.offset((i + 1 as libc::c_int) as isize) as libc::c_int > 0 as libc::c_int {
-                *pulses.offset((i + 1 as libc::c_int) as isize) as libc::c_int
+        *abs_pulses.offset((i + 1 as i32) as isize) =
+            if *pulses.offset((i + 1 as i32) as isize) as i32 > 0 as i32 {
+                *pulses.offset((i + 1 as i32) as isize) as i32
             } else {
-                -(*pulses.offset((i + 1 as libc::c_int) as isize) as libc::c_int)
+                -(*pulses.offset((i + 1 as i32) as isize) as i32)
             };
-        *abs_pulses.offset((i + 2 as libc::c_int) as isize) =
-            if *pulses.offset((i + 2 as libc::c_int) as isize) as libc::c_int > 0 as libc::c_int {
-                *pulses.offset((i + 2 as libc::c_int) as isize) as libc::c_int
+        *abs_pulses.offset((i + 2 as i32) as isize) =
+            if *pulses.offset((i + 2 as i32) as isize) as i32 > 0 as i32 {
+                *pulses.offset((i + 2 as i32) as isize) as i32
             } else {
-                -(*pulses.offset((i + 2 as libc::c_int) as isize) as libc::c_int)
+                -(*pulses.offset((i + 2 as i32) as isize) as i32)
             };
-        *abs_pulses.offset((i + 3 as libc::c_int) as isize) =
-            if *pulses.offset((i + 3 as libc::c_int) as isize) as libc::c_int > 0 as libc::c_int {
-                *pulses.offset((i + 3 as libc::c_int) as isize) as libc::c_int
+        *abs_pulses.offset((i + 3 as i32) as isize) =
+            if *pulses.offset((i + 3 as i32) as isize) as i32 > 0 as i32 {
+                *pulses.offset((i + 3 as i32) as isize) as i32
             } else {
-                -(*pulses.offset((i + 3 as libc::c_int) as isize) as libc::c_int)
+                -(*pulses.offset((i + 3 as i32) as isize) as i32)
             };
-        i += 4 as libc::c_int
+        i += 4 as i32
     }
     /* Calc sum pulses per shell code frame */
     let mut fresh1 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<libc::c_int>() as libc::c_ulong).wrapping_mul(iter as libc::c_ulong)
+        (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(iter as libc::c_ulong)
             as usize,
     );
-    sum_pulses = fresh1.as_mut_ptr() as *mut libc::c_int;
+    sum_pulses = fresh1.as_mut_ptr() as *mut i32;
     let mut fresh2 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<libc::c_int>() as libc::c_ulong).wrapping_mul(iter as libc::c_ulong)
+        (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(iter as libc::c_ulong)
             as usize,
     );
-    nRshifts = fresh2.as_mut_ptr() as *mut libc::c_int;
+    nRshifts = fresh2.as_mut_ptr() as *mut i32;
     abs_pulses_ptr = abs_pulses;
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < iter {
-        *nRshifts.offset(i as isize) = 0 as libc::c_int;
+        *nRshifts.offset(i as isize) = 0 as i32;
         loop {
             /* 1+1 -> 2 */
             scale_down = combine_and_check(
                 pulses_comb.as_mut_ptr(),
                 abs_pulses_ptr,
                 crate::src::opus_1_2_1::silk::tables_pulses_per_block::silk_max_pulses_table
-                    [0 as libc::c_int as usize] as libc::c_int,
-                8 as libc::c_int,
+                    [0 as i32 as usize] as i32,
+                8 as i32,
             );
             /* 2+2 -> 4 */
             scale_down += combine_and_check(
                 pulses_comb.as_mut_ptr(),
                 pulses_comb.as_mut_ptr(),
                 crate::src::opus_1_2_1::silk::tables_pulses_per_block::silk_max_pulses_table
-                    [1 as libc::c_int as usize] as libc::c_int,
-                4 as libc::c_int,
+                    [1 as i32 as usize] as i32,
+                4 as i32,
             );
             /* 4+4 -> 8 */
             scale_down += combine_and_check(
                 pulses_comb.as_mut_ptr(),
                 pulses_comb.as_mut_ptr(),
                 crate::src::opus_1_2_1::silk::tables_pulses_per_block::silk_max_pulses_table
-                    [2 as libc::c_int as usize] as libc::c_int,
-                2 as libc::c_int,
+                    [2 as i32 as usize] as i32,
+                2 as i32,
             );
             /* 8+8 -> 16 */
             scale_down += combine_and_check(
                 &mut *sum_pulses.offset(i as isize),
                 pulses_comb.as_mut_ptr(),
                 crate::src::opus_1_2_1::silk::tables_pulses_per_block::silk_max_pulses_table
-                    [3 as libc::c_int as usize] as libc::c_int,
-                1 as libc::c_int,
+                    [3 as i32 as usize] as i32,
+                1 as i32,
             );
             if !(scale_down != 0) {
                 break;
@@ -299,38 +299,38 @@ pub unsafe extern "C" fn silk_encode_pulses(
             /* We need to downscale the quantization signal */
             let ref mut fresh3 = *nRshifts.offset(i as isize);
             *fresh3 += 1;
-            k = 0 as libc::c_int;
-            while k < 16 as libc::c_int {
+            k = 0 as i32;
+            while k < 16 as i32 {
                 *abs_pulses_ptr.offset(k as isize) =
-                    *abs_pulses_ptr.offset(k as isize) >> 1 as libc::c_int;
+                    *abs_pulses_ptr.offset(k as isize) >> 1 as i32;
                 k += 1
             }
         }
-        abs_pulses_ptr = abs_pulses_ptr.offset(16 as libc::c_int as isize);
+        abs_pulses_ptr = abs_pulses_ptr.offset(16 as i32 as isize);
         i += 1
     }
     /* *************/
     /* Rate level */
     /* *************/
     /* find rate level that leads to fewest bits for coding of pulses per block info */
-    minSumBits_Q5 = 0x7fffffff as libc::c_int;
-    k = 0 as libc::c_int;
-    while k < 10 as libc::c_int - 1 as libc::c_int {
+    minSumBits_Q5 = 0x7fffffff as i32;
+    k = 0 as i32;
+    while k < 10 as i32 - 1 as i32 {
         nBits_ptr =
             crate::src::opus_1_2_1::silk::tables_pulses_per_block::silk_pulses_per_block_BITS_Q5
                 [k as usize]
                 .as_ptr();
         sumBits_Q5 = crate::src::opus_1_2_1::silk::tables_pulses_per_block::silk_rate_levels_BITS_Q5
-            [(signalType >> 1 as libc::c_int) as usize][k as usize]
+            [(signalType >> 1 as i32) as usize][k as usize]
             as crate::opus_types_h::opus_int32;
-        i = 0 as libc::c_int;
+        i = 0 as i32;
         while i < iter {
-            if *nRshifts.offset(i as isize) > 0 as libc::c_int {
-                sumBits_Q5 += *nBits_ptr.offset((16 as libc::c_int + 1 as libc::c_int) as isize)
-                    as libc::c_int
+            if *nRshifts.offset(i as isize) > 0 as i32 {
+                sumBits_Q5 += *nBits_ptr.offset((16 as i32 + 1 as i32) as isize)
+                    as i32
             } else {
                 sumBits_Q5 +=
-                    *nBits_ptr.offset(*sum_pulses.offset(i as isize) as isize) as libc::c_int
+                    *nBits_ptr.offset(*sum_pulses.offset(i as isize) as isize) as i32
             }
             i += 1
         }
@@ -344,9 +344,9 @@ pub unsafe extern "C" fn silk_encode_pulses(
         psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
         RateLevelIndex,
         crate::src::opus_1_2_1::silk::tables_pulses_per_block::silk_rate_levels_iCDF
-            [(signalType >> 1 as libc::c_int) as usize]
+            [(signalType >> 1 as i32) as usize]
             .as_ptr(),
-        8 as libc::c_int as libc::c_uint,
+        8 as i32 as u32,
     );
     /* **************************************************/
     /* Sum-Weighted-Pulses Encoding                    */
@@ -354,38 +354,38 @@ pub unsafe extern "C" fn silk_encode_pulses(
     cdf_ptr = crate::src::opus_1_2_1::silk::tables_pulses_per_block::silk_pulses_per_block_iCDF
         [RateLevelIndex as usize]
         .as_ptr();
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < iter {
-        if *nRshifts.offset(i as isize) == 0 as libc::c_int {
+        if *nRshifts.offset(i as isize) == 0 as i32 {
             crate::src::opus_1_2_1::celt::entenc::ec_enc_icdf(
                 psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
                 *sum_pulses.offset(i as isize),
                 cdf_ptr,
-                8 as libc::c_int as libc::c_uint,
+                8 as i32 as u32,
             );
         } else {
             crate::src::opus_1_2_1::celt::entenc::ec_enc_icdf(
                 psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
-                16 as libc::c_int + 1 as libc::c_int,
+                16 as i32 + 1 as i32,
                 cdf_ptr,
-                8 as libc::c_int as libc::c_uint,
+                8 as i32 as u32,
             );
-            k = 0 as libc::c_int;
-            while k < *nRshifts.offset(i as isize) - 1 as libc::c_int {
-                crate::src::opus_1_2_1::celt::entenc::ec_enc_icdf(psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx, 16 as libc::c_int + 1 as libc::c_int,
-                            crate::src::opus_1_2_1::silk::tables_pulses_per_block::silk_pulses_per_block_iCDF[(10 as libc::c_int -
-                                                            1 as libc::c_int)
+            k = 0 as i32;
+            while k < *nRshifts.offset(i as isize) - 1 as i32 {
+                crate::src::opus_1_2_1::celt::entenc::ec_enc_icdf(psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx, 16 as i32 + 1 as i32,
+                            crate::src::opus_1_2_1::silk::tables_pulses_per_block::silk_pulses_per_block_iCDF[(10 as i32 -
+                                                            1 as i32)
                                                            as usize].as_ptr(),
-                            8 as libc::c_int as libc::c_uint);
+                            8 as i32 as u32);
                 k += 1
             }
             crate::src::opus_1_2_1::celt::entenc::ec_enc_icdf(
                 psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
                 *sum_pulses.offset(i as isize),
                 crate::src::opus_1_2_1::silk::tables_pulses_per_block::silk_pulses_per_block_iCDF
-                    [(10 as libc::c_int - 1 as libc::c_int) as usize]
+                    [(10 as i32 - 1 as i32) as usize]
                     .as_ptr(),
-                8 as libc::c_int as libc::c_uint,
+                8 as i32 as u32,
             );
         }
         i += 1
@@ -393,12 +393,12 @@ pub unsafe extern "C" fn silk_encode_pulses(
     /* *****************/
     /* Shell Encoding */
     /* *****************/
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < iter {
-        if *sum_pulses.offset(i as isize) > 0 as libc::c_int {
+        if *sum_pulses.offset(i as isize) > 0 as i32 {
             crate::src::opus_1_2_1::silk::shell_coder::silk_shell_encoder(
                 psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
-                &mut *abs_pulses.offset((i * 16 as libc::c_int) as isize),
+                &mut *abs_pulses.offset((i * 16 as i32) as isize),
             );
         }
         i += 1
@@ -406,36 +406,36 @@ pub unsafe extern "C" fn silk_encode_pulses(
     /* ***************/
     /* LSB Encoding */
     /* ***************/
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < iter {
-        if *nRshifts.offset(i as isize) > 0 as libc::c_int {
+        if *nRshifts.offset(i as isize) > 0 as i32 {
             pulses_ptr =
-                &mut *pulses.offset((i * 16 as libc::c_int) as isize) as *mut libc::c_schar;
-            nLS = *nRshifts.offset(i as isize) - 1 as libc::c_int;
-            k = 0 as libc::c_int;
-            while k < 16 as libc::c_int {
-                abs_q = if *pulses_ptr.offset(k as isize) as libc::c_int > 0 as libc::c_int {
-                    *pulses_ptr.offset(k as isize) as libc::c_int
+                &mut *pulses.offset((i * 16 as i32) as isize) as *mut i8;
+            nLS = *nRshifts.offset(i as isize) - 1 as i32;
+            k = 0 as i32;
+            while k < 16 as i32 {
+                abs_q = if *pulses_ptr.offset(k as isize) as i32 > 0 as i32 {
+                    *pulses_ptr.offset(k as isize) as i32
                 } else {
-                    -(*pulses_ptr.offset(k as isize) as libc::c_int)
-                } as libc::c_schar as crate::opus_types_h::opus_int32;
+                    -(*pulses_ptr.offset(k as isize) as i32)
+                } as i8 as crate::opus_types_h::opus_int32;
                 j = nLS;
-                while j > 0 as libc::c_int {
-                    bit = abs_q >> j & 1 as libc::c_int;
+                while j > 0 as i32 {
+                    bit = abs_q >> j & 1 as i32;
                     crate::src::opus_1_2_1::celt::entenc::ec_enc_icdf(
                         psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
                         bit,
                         crate::src::opus_1_2_1::silk::tables_other::silk_lsb_iCDF.as_ptr(),
-                        8 as libc::c_int as libc::c_uint,
+                        8 as i32 as u32,
                     );
                     j -= 1
                 }
-                bit = abs_q & 1 as libc::c_int;
+                bit = abs_q & 1 as i32;
                 crate::src::opus_1_2_1::celt::entenc::ec_enc_icdf(
                     psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
                     bit,
                     crate::src::opus_1_2_1::silk::tables_other::silk_lsb_iCDF.as_ptr(),
-                    8 as libc::c_int as libc::c_uint,
+                    8 as i32 as u32,
                 );
                 k += 1
             }
@@ -447,10 +447,10 @@ pub unsafe extern "C" fn silk_encode_pulses(
     /* ***************/
     crate::src::opus_1_2_1::silk::code_signs::silk_encode_signs(
         psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
-        pulses as *const libc::c_schar,
+        pulses as *const i8,
         frame_length,
         signalType,
         quantOffsetType,
-        sum_pulses as *const libc::c_int,
+        sum_pulses as *const i32,
     );
 }

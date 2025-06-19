@@ -36,127 +36,127 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub static mut silk_TargetRate_table_NB: [crate::opus_types_h::opus_int32; 8] = [
-    0 as libc::c_int,
-    8000 as libc::c_int,
-    9400 as libc::c_int,
-    11500 as libc::c_int,
-    13500 as libc::c_int,
-    17500 as libc::c_int,
-    25000 as libc::c_int,
-    80000 as libc::c_int,
+    0 as i32,
+    8000 as i32,
+    9400 as i32,
+    11500 as i32,
+    13500 as i32,
+    17500 as i32,
+    25000 as i32,
+    80000 as i32,
 ];
 #[no_mangle]
 
 pub static mut silk_TargetRate_table_MB: [crate::opus_types_h::opus_int32; 8] = [
-    0 as libc::c_int,
-    9000 as libc::c_int,
-    12000 as libc::c_int,
-    14500 as libc::c_int,
-    18500 as libc::c_int,
-    24500 as libc::c_int,
-    35500 as libc::c_int,
-    80000 as libc::c_int,
+    0 as i32,
+    9000 as i32,
+    12000 as i32,
+    14500 as i32,
+    18500 as i32,
+    24500 as i32,
+    35500 as i32,
+    80000 as i32,
 ];
 #[no_mangle]
 
 pub static mut silk_TargetRate_table_WB: [crate::opus_types_h::opus_int32; 8] = [
-    0 as libc::c_int,
-    10500 as libc::c_int,
-    14000 as libc::c_int,
-    17000 as libc::c_int,
-    21500 as libc::c_int,
-    28500 as libc::c_int,
-    42000 as libc::c_int,
-    80000 as libc::c_int,
+    0 as i32,
+    10500 as i32,
+    14000 as i32,
+    17000 as i32,
+    21500 as i32,
+    28500 as i32,
+    42000 as i32,
+    80000 as i32,
 ];
 #[no_mangle]
 
 pub static mut silk_SNR_table_Q1: [crate::opus_types_h::opus_int16; 8] = [
-    18 as libc::c_int as crate::opus_types_h::opus_int16,
-    29 as libc::c_int as crate::opus_types_h::opus_int16,
-    38 as libc::c_int as crate::opus_types_h::opus_int16,
-    40 as libc::c_int as crate::opus_types_h::opus_int16,
-    46 as libc::c_int as crate::opus_types_h::opus_int16,
-    52 as libc::c_int as crate::opus_types_h::opus_int16,
-    62 as libc::c_int as crate::opus_types_h::opus_int16,
-    84 as libc::c_int as crate::opus_types_h::opus_int16,
+    18 as i32 as crate::opus_types_h::opus_int16,
+    29 as i32 as crate::opus_types_h::opus_int16,
+    38 as i32 as crate::opus_types_h::opus_int16,
+    40 as i32 as crate::opus_types_h::opus_int16,
+    46 as i32 as crate::opus_types_h::opus_int16,
+    52 as i32 as crate::opus_types_h::opus_int16,
+    62 as i32 as crate::opus_types_h::opus_int16,
+    84 as i32 as crate::opus_types_h::opus_int16,
 ];
 /* Tables for stereo predictor coding */
 #[no_mangle]
 
 pub static mut silk_stereo_pred_quant_Q13: [crate::opus_types_h::opus_int16; 16] = [
-    -(13732 as libc::c_int) as crate::opus_types_h::opus_int16,
-    -(10050 as libc::c_int) as crate::opus_types_h::opus_int16,
-    -(8266 as libc::c_int) as crate::opus_types_h::opus_int16,
-    -(7526 as libc::c_int) as crate::opus_types_h::opus_int16,
-    -(6500 as libc::c_int) as crate::opus_types_h::opus_int16,
-    -(5000 as libc::c_int) as crate::opus_types_h::opus_int16,
-    -(2950 as libc::c_int) as crate::opus_types_h::opus_int16,
-    -(820 as libc::c_int) as crate::opus_types_h::opus_int16,
-    820 as libc::c_int as crate::opus_types_h::opus_int16,
-    2950 as libc::c_int as crate::opus_types_h::opus_int16,
-    5000 as libc::c_int as crate::opus_types_h::opus_int16,
-    6500 as libc::c_int as crate::opus_types_h::opus_int16,
-    7526 as libc::c_int as crate::opus_types_h::opus_int16,
-    8266 as libc::c_int as crate::opus_types_h::opus_int16,
-    10050 as libc::c_int as crate::opus_types_h::opus_int16,
-    13732 as libc::c_int as crate::opus_types_h::opus_int16,
+    -(13732 as i32) as crate::opus_types_h::opus_int16,
+    -(10050 as i32) as crate::opus_types_h::opus_int16,
+    -(8266 as i32) as crate::opus_types_h::opus_int16,
+    -(7526 as i32) as crate::opus_types_h::opus_int16,
+    -(6500 as i32) as crate::opus_types_h::opus_int16,
+    -(5000 as i32) as crate::opus_types_h::opus_int16,
+    -(2950 as i32) as crate::opus_types_h::opus_int16,
+    -(820 as i32) as crate::opus_types_h::opus_int16,
+    820 as i32 as crate::opus_types_h::opus_int16,
+    2950 as i32 as crate::opus_types_h::opus_int16,
+    5000 as i32 as crate::opus_types_h::opus_int16,
+    6500 as i32 as crate::opus_types_h::opus_int16,
+    7526 as i32 as crate::opus_types_h::opus_int16,
+    8266 as i32 as crate::opus_types_h::opus_int16,
+    10050 as i32 as crate::opus_types_h::opus_int16,
+    13732 as i32 as crate::opus_types_h::opus_int16,
 ];
 #[no_mangle]
 
-pub static mut silk_stereo_pred_joint_iCDF: [libc::c_uchar; 25] = [
-    249 as libc::c_int as libc::c_uchar,
-    247 as libc::c_int as libc::c_uchar,
-    246 as libc::c_int as libc::c_uchar,
-    245 as libc::c_int as libc::c_uchar,
-    244 as libc::c_int as libc::c_uchar,
-    234 as libc::c_int as libc::c_uchar,
-    210 as libc::c_int as libc::c_uchar,
-    202 as libc::c_int as libc::c_uchar,
-    201 as libc::c_int as libc::c_uchar,
-    200 as libc::c_int as libc::c_uchar,
-    197 as libc::c_int as libc::c_uchar,
-    174 as libc::c_int as libc::c_uchar,
-    82 as libc::c_int as libc::c_uchar,
-    59 as libc::c_int as libc::c_uchar,
-    56 as libc::c_int as libc::c_uchar,
-    55 as libc::c_int as libc::c_uchar,
-    54 as libc::c_int as libc::c_uchar,
-    46 as libc::c_int as libc::c_uchar,
-    22 as libc::c_int as libc::c_uchar,
-    12 as libc::c_int as libc::c_uchar,
-    11 as libc::c_int as libc::c_uchar,
-    10 as libc::c_int as libc::c_uchar,
-    9 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    0 as libc::c_int as libc::c_uchar,
+pub static mut silk_stereo_pred_joint_iCDF: [u8; 25] = [
+    249 as i32 as u8,
+    247 as i32 as u8,
+    246 as i32 as u8,
+    245 as i32 as u8,
+    244 as i32 as u8,
+    234 as i32 as u8,
+    210 as i32 as u8,
+    202 as i32 as u8,
+    201 as i32 as u8,
+    200 as i32 as u8,
+    197 as i32 as u8,
+    174 as i32 as u8,
+    82 as i32 as u8,
+    59 as i32 as u8,
+    56 as i32 as u8,
+    55 as i32 as u8,
+    54 as i32 as u8,
+    46 as i32 as u8,
+    22 as i32 as u8,
+    12 as i32 as u8,
+    11 as i32 as u8,
+    10 as i32 as u8,
+    9 as i32 as u8,
+    7 as i32 as u8,
+    0 as i32 as u8,
 ];
 #[no_mangle]
 
-pub static mut silk_stereo_only_code_mid_iCDF: [libc::c_uchar; 2] = [
-    64 as libc::c_int as libc::c_uchar,
-    0 as libc::c_int as libc::c_uchar,
+pub static mut silk_stereo_only_code_mid_iCDF: [u8; 2] = [
+    64 as i32 as u8,
+    0 as i32 as u8,
 ];
 /* Tables for LBRR flags */
 
-static mut silk_LBRR_flags_2_iCDF: [libc::c_uchar; 3] = [
-    203 as libc::c_int as libc::c_uchar,
-    150 as libc::c_int as libc::c_uchar,
-    0 as libc::c_int as libc::c_uchar,
+static mut silk_LBRR_flags_2_iCDF: [u8; 3] = [
+    203 as i32 as u8,
+    150 as i32 as u8,
+    0 as i32 as u8,
 ];
 
-static mut silk_LBRR_flags_3_iCDF: [libc::c_uchar; 7] = [
-    215 as libc::c_int as libc::c_uchar,
-    195 as libc::c_int as libc::c_uchar,
-    166 as libc::c_int as libc::c_uchar,
-    125 as libc::c_int as libc::c_uchar,
-    110 as libc::c_int as libc::c_uchar,
-    82 as libc::c_int as libc::c_uchar,
-    0 as libc::c_int as libc::c_uchar,
+static mut silk_LBRR_flags_3_iCDF: [u8; 7] = [
+    215 as i32 as u8,
+    195 as i32 as u8,
+    166 as i32 as u8,
+    125 as i32 as u8,
+    110 as i32 as u8,
+    82 as i32 as u8,
+    0 as i32 as u8,
 ];
 #[no_mangle]
 
-pub static mut silk_LBRR_flags_iCDF_ptr: [*const libc::c_uchar; 2] = unsafe {
+pub static mut silk_LBRR_flags_iCDF_ptr: [*const u8; 2] = unsafe {
     [
         silk_LBRR_flags_2_iCDF.as_ptr(),
         silk_LBRR_flags_3_iCDF.as_ptr(),
@@ -165,121 +165,121 @@ pub static mut silk_LBRR_flags_iCDF_ptr: [*const libc::c_uchar; 2] = unsafe {
 /* Table for LSB coding */
 #[no_mangle]
 
-pub static mut silk_lsb_iCDF: [libc::c_uchar; 2] = [
-    120 as libc::c_int as libc::c_uchar,
-    0 as libc::c_int as libc::c_uchar,
+pub static mut silk_lsb_iCDF: [u8; 2] = [
+    120 as i32 as u8,
+    0 as i32 as u8,
 ];
 /* Tables for LTPScale */
 #[no_mangle]
 
-pub static mut silk_LTPscale_iCDF: [libc::c_uchar; 3] = [
-    128 as libc::c_int as libc::c_uchar,
-    64 as libc::c_int as libc::c_uchar,
-    0 as libc::c_int as libc::c_uchar,
+pub static mut silk_LTPscale_iCDF: [u8; 3] = [
+    128 as i32 as u8,
+    64 as i32 as u8,
+    0 as i32 as u8,
 ];
 /* Tables for signal type and offset coding */
 #[no_mangle]
 
-pub static mut silk_type_offset_VAD_iCDF: [libc::c_uchar; 4] = [
-    232 as libc::c_int as libc::c_uchar,
-    158 as libc::c_int as libc::c_uchar,
-    10 as libc::c_int as libc::c_uchar,
-    0 as libc::c_int as libc::c_uchar,
+pub static mut silk_type_offset_VAD_iCDF: [u8; 4] = [
+    232 as i32 as u8,
+    158 as i32 as u8,
+    10 as i32 as u8,
+    0 as i32 as u8,
 ];
 #[no_mangle]
 
-pub static mut silk_type_offset_no_VAD_iCDF: [libc::c_uchar; 2] = [
-    230 as libc::c_int as libc::c_uchar,
-    0 as libc::c_int as libc::c_uchar,
+pub static mut silk_type_offset_no_VAD_iCDF: [u8; 2] = [
+    230 as i32 as u8,
+    0 as i32 as u8,
 ];
 /* Tables for NLSF interpolation factor */
 #[no_mangle]
 
-pub static mut silk_NLSF_interpolation_factor_iCDF: [libc::c_uchar; 5] = [
-    243 as libc::c_int as libc::c_uchar,
-    221 as libc::c_int as libc::c_uchar,
-    192 as libc::c_int as libc::c_uchar,
-    181 as libc::c_int as libc::c_uchar,
-    0 as libc::c_int as libc::c_uchar,
+pub static mut silk_NLSF_interpolation_factor_iCDF: [u8; 5] = [
+    243 as i32 as u8,
+    221 as i32 as u8,
+    192 as i32 as u8,
+    181 as i32 as u8,
+    0 as i32 as u8,
 ];
 /* Quantization offsets */
 #[no_mangle]
 
 pub static mut silk_Quantization_Offsets_Q10: [[crate::opus_types_h::opus_int16; 2]; 2] = [
     [
-        100 as libc::c_int as crate::opus_types_h::opus_int16,
-        240 as libc::c_int as crate::opus_types_h::opus_int16,
+        100 as i32 as crate::opus_types_h::opus_int16,
+        240 as i32 as crate::opus_types_h::opus_int16,
     ],
     [
-        32 as libc::c_int as crate::opus_types_h::opus_int16,
-        100 as libc::c_int as crate::opus_types_h::opus_int16,
+        32 as i32 as crate::opus_types_h::opus_int16,
+        100 as i32 as crate::opus_types_h::opus_int16,
     ],
 ];
 /* Table for LTPScale */
 #[no_mangle]
 
 pub static mut silk_LTPScales_table_Q14: [crate::opus_types_h::opus_int16; 3] = [
-    15565 as libc::c_int as crate::opus_types_h::opus_int16,
-    12288 as libc::c_int as crate::opus_types_h::opus_int16,
-    8192 as libc::c_int as crate::opus_types_h::opus_int16,
+    15565 as i32 as crate::opus_types_h::opus_int16,
+    12288 as i32 as crate::opus_types_h::opus_int16,
+    8192 as i32 as crate::opus_types_h::opus_int16,
 ];
 /* Uniform entropy tables */
 #[no_mangle]
 
-pub static mut silk_uniform3_iCDF: [libc::c_uchar; 3] = [
-    171 as libc::c_int as libc::c_uchar,
-    85 as libc::c_int as libc::c_uchar,
-    0 as libc::c_int as libc::c_uchar,
+pub static mut silk_uniform3_iCDF: [u8; 3] = [
+    171 as i32 as u8,
+    85 as i32 as u8,
+    0 as i32 as u8,
 ];
 #[no_mangle]
 
-pub static mut silk_uniform4_iCDF: [libc::c_uchar; 4] = [
-    192 as libc::c_int as libc::c_uchar,
-    128 as libc::c_int as libc::c_uchar,
-    64 as libc::c_int as libc::c_uchar,
-    0 as libc::c_int as libc::c_uchar,
+pub static mut silk_uniform4_iCDF: [u8; 4] = [
+    192 as i32 as u8,
+    128 as i32 as u8,
+    64 as i32 as u8,
+    0 as i32 as u8,
 ];
 #[no_mangle]
 
-pub static mut silk_uniform5_iCDF: [libc::c_uchar; 5] = [
-    205 as libc::c_int as libc::c_uchar,
-    154 as libc::c_int as libc::c_uchar,
-    102 as libc::c_int as libc::c_uchar,
-    51 as libc::c_int as libc::c_uchar,
-    0 as libc::c_int as libc::c_uchar,
+pub static mut silk_uniform5_iCDF: [u8; 5] = [
+    205 as i32 as u8,
+    154 as i32 as u8,
+    102 as i32 as u8,
+    51 as i32 as u8,
+    0 as i32 as u8,
 ];
 #[no_mangle]
 
-pub static mut silk_uniform6_iCDF: [libc::c_uchar; 6] = [
-    213 as libc::c_int as libc::c_uchar,
-    171 as libc::c_int as libc::c_uchar,
-    128 as libc::c_int as libc::c_uchar,
-    85 as libc::c_int as libc::c_uchar,
-    43 as libc::c_int as libc::c_uchar,
-    0 as libc::c_int as libc::c_uchar,
+pub static mut silk_uniform6_iCDF: [u8; 6] = [
+    213 as i32 as u8,
+    171 as i32 as u8,
+    128 as i32 as u8,
+    85 as i32 as u8,
+    43 as i32 as u8,
+    0 as i32 as u8,
 ];
 #[no_mangle]
 
-pub static mut silk_uniform8_iCDF: [libc::c_uchar; 8] = [
-    224 as libc::c_int as libc::c_uchar,
-    192 as libc::c_int as libc::c_uchar,
-    160 as libc::c_int as libc::c_uchar,
-    128 as libc::c_int as libc::c_uchar,
-    96 as libc::c_int as libc::c_uchar,
-    64 as libc::c_int as libc::c_uchar,
-    32 as libc::c_int as libc::c_uchar,
-    0 as libc::c_int as libc::c_uchar,
+pub static mut silk_uniform8_iCDF: [u8; 8] = [
+    224 as i32 as u8,
+    192 as i32 as u8,
+    160 as i32 as u8,
+    128 as i32 as u8,
+    96 as i32 as u8,
+    64 as i32 as u8,
+    32 as i32 as u8,
+    0 as i32 as u8,
 ];
 #[no_mangle]
 
-pub static mut silk_NLSF_EXT_iCDF: [libc::c_uchar; 7] = [
-    100 as libc::c_int as libc::c_uchar,
-    40 as libc::c_int as libc::c_uchar,
-    16 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    3 as libc::c_int as libc::c_uchar,
-    1 as libc::c_int as libc::c_uchar,
-    0 as libc::c_int as libc::c_uchar,
+pub static mut silk_NLSF_EXT_iCDF: [u8; 7] = [
+    100 as i32 as u8,
+    40 as i32 as u8,
+    16 as i32 as u8,
+    7 as i32 as u8,
+    3 as i32 as u8,
+    1 as i32 as u8,
+    0 as i32 as u8,
 ];
 /*  Elliptic/Cauer filters designed with 0.1 dB passband ripple,
 80 dB minimum stopband attenuation, and
@@ -289,38 +289,38 @@ pub static mut silk_NLSF_EXT_iCDF: [libc::c_uchar; 7] = [
 
 pub static mut silk_Transition_LP_B_Q28: [[crate::opus_types_h::opus_int32; 3]; 5] = [
     [
-        250767114 as libc::c_int,
-        501534038 as libc::c_int,
-        250767114 as libc::c_int,
+        250767114 as i32,
+        501534038 as i32,
+        250767114 as i32,
     ],
     [
-        209867381 as libc::c_int,
-        419732057 as libc::c_int,
-        209867381 as libc::c_int,
+        209867381 as i32,
+        419732057 as i32,
+        209867381 as i32,
     ],
     [
-        170987846 as libc::c_int,
-        341967853 as libc::c_int,
-        170987846 as libc::c_int,
+        170987846 as i32,
+        341967853 as i32,
+        170987846 as i32,
     ],
     [
-        131531482 as libc::c_int,
-        263046905 as libc::c_int,
-        131531482 as libc::c_int,
+        131531482 as i32,
+        263046905 as i32,
+        131531482 as i32,
     ],
     [
-        89306658 as libc::c_int,
-        178584282 as libc::c_int,
-        89306658 as libc::c_int,
+        89306658 as i32,
+        178584282 as i32,
+        89306658 as i32,
     ],
 ];
 /* Interpolation points for filter coefficients used in the bandwidth transition smoother */
 #[no_mangle]
 
 pub static mut silk_Transition_LP_A_Q28: [[crate::opus_types_h::opus_int32; 2]; 5] = [
-    [506393414 as libc::c_int, 239854379 as libc::c_int],
-    [411067935 as libc::c_int, 169683996 as libc::c_int],
-    [306733530 as libc::c_int, 116694253 as libc::c_int],
-    [185807084 as libc::c_int, 77959395 as libc::c_int],
-    [35497197 as libc::c_int, 57401098 as libc::c_int],
+    [506393414 as i32, 239854379 as i32],
+    [411067935 as i32, 169683996 as i32],
+    [306733530 as i32, 116694253 as i32],
+    [185807084 as i32, 77959395 as i32],
+    [35497197 as i32, 57401098 as i32],
 ];

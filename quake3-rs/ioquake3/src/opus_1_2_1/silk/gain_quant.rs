@@ -48,7 +48,7 @@ pub mod SigProc_FIX_h {
     /* silk_min() versions with typecast in the function call */
     #[inline]
 
-    pub unsafe extern "C" fn silk_min_int(mut a: libc::c_int, mut b: libc::c_int) -> libc::c_int {
+    pub unsafe extern "C" fn silk_min_int(mut a: i32, mut b: i32) -> i32 {
         return if a < b { a } else { b };
     }
     #[inline]
@@ -62,7 +62,7 @@ pub mod SigProc_FIX_h {
     /* silk_min() versions with typecast in the function call */
     #[inline]
 
-    pub unsafe extern "C" fn silk_max_int(mut a: libc::c_int, mut b: libc::c_int) -> libc::c_int {
+    pub unsafe extern "C" fn silk_max_int(mut a: i32, mut b: i32) -> i32 {
         return if a > b { a } else { b };
     }
 
@@ -99,138 +99,138 @@ pub use crate::src::opus_1_2_1::silk::log2lin::silk_log2lin;
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_gains_quant(
-    mut ind: *mut libc::c_schar,
+    mut ind: *mut i8,
     mut gain_Q16: *mut crate::opus_types_h::opus_int32,
-    mut prev_ind: *mut libc::c_schar,
-    conditional: libc::c_int,
-    nb_subfr: libc::c_int,
+    mut prev_ind: *mut i8,
+    conditional: i32,
+    nb_subfr: i32,
 )
 /* I    number of subframes                         */
 {
-    let mut k: libc::c_int = 0;
-    let mut double_step_size_threshold: libc::c_int = 0;
-    k = 0 as libc::c_int;
+    let mut k: i32 = 0;
+    let mut double_step_size_threshold: i32 = 0;
+    k = 0 as i32;
     while k < nb_subfr {
         /* Convert to log scale, scale, floor() */
-        *ind.offset(k as isize) = ((65536 as libc::c_int * (64 as libc::c_int - 1 as libc::c_int)
-            / ((88 as libc::c_int - 2 as libc::c_int) * 128 as libc::c_int / 6 as libc::c_int))
-            as libc::c_longlong
+        *ind.offset(k as isize) = ((65536 as i32 * (64 as i32 - 1 as i32)
+            / ((88 as i32 - 2 as i32) * 128 as i32 / 6 as i32))
+            as i64
             * (crate::src::opus_1_2_1::silk::lin2log::silk_lin2log(*gain_Q16.offset(k as isize))
-                - (2 as libc::c_int * 128 as libc::c_int / 6 as libc::c_int
-                    + 16 as libc::c_int * 128 as libc::c_int))
-                as crate::opus_types_h::opus_int16 as libc::c_longlong
-            >> 16 as libc::c_int)
-            as crate::opus_types_h::opus_int32 as libc::c_schar;
+                - (2 as i32 * 128 as i32 / 6 as i32
+                    + 16 as i32 * 128 as i32))
+                as crate::opus_types_h::opus_int16 as i64
+            >> 16 as i32)
+            as crate::opus_types_h::opus_int32 as i8;
         /* 3967 = 31 in Q7 */
-        if (*ind.offset(k as isize) as libc::c_int) < *prev_ind as libc::c_int {
+        if (*ind.offset(k as isize) as i32) < *prev_ind as i32 {
             let ref mut fresh0 = *ind.offset(k as isize);
             *fresh0 += 1
         }
-        *ind.offset(k as isize) = if 0 as libc::c_int > 64 as libc::c_int - 1 as libc::c_int {
-            if *ind.offset(k as isize) as libc::c_int > 0 as libc::c_int {
-                0 as libc::c_int
-            } else if (*ind.offset(k as isize) as libc::c_int)
-                < 64 as libc::c_int - 1 as libc::c_int
+        *ind.offset(k as isize) = if 0 as i32 > 64 as i32 - 1 as i32 {
+            if *ind.offset(k as isize) as i32 > 0 as i32 {
+                0 as i32
+            } else if (*ind.offset(k as isize) as i32)
+                < 64 as i32 - 1 as i32
             {
-                (64 as libc::c_int) - 1 as libc::c_int
+                (64 as i32) - 1 as i32
             } else {
-                *ind.offset(k as isize) as libc::c_int
+                *ind.offset(k as isize) as i32
             }
-        } else if *ind.offset(k as isize) as libc::c_int > 64 as libc::c_int - 1 as libc::c_int {
-            (64 as libc::c_int) - 1 as libc::c_int
-        } else if (*ind.offset(k as isize) as libc::c_int) < 0 as libc::c_int {
-            0 as libc::c_int
+        } else if *ind.offset(k as isize) as i32 > 64 as i32 - 1 as i32 {
+            (64 as i32) - 1 as i32
+        } else if (*ind.offset(k as isize) as i32) < 0 as i32 {
+            0 as i32
         } else {
-            *ind.offset(k as isize) as libc::c_int
-        } as libc::c_schar;
-        if k == 0 as libc::c_int && conditional == 0 as libc::c_int {
+            *ind.offset(k as isize) as i32
+        } as i8;
+        if k == 0 as i32 && conditional == 0 as i32 {
             /* Round towards previous quantized gain (hysteresis) */
             /* Compute delta indices and limit */
             /* Full index */
-            *ind.offset(k as isize) = if *prev_ind as libc::c_int + -(4 as libc::c_int)
-                > 64 as libc::c_int - 1 as libc::c_int
+            *ind.offset(k as isize) = if *prev_ind as i32 + -(4 as i32)
+                > 64 as i32 - 1 as i32
             {
-                if *ind.offset(k as isize) as libc::c_int
-                    > *prev_ind as libc::c_int + -(4 as libc::c_int)
+                if *ind.offset(k as isize) as i32
+                    > *prev_ind as i32 + -(4 as i32)
                 {
-                    (*prev_ind as libc::c_int) + -(4 as libc::c_int)
-                } else if (*ind.offset(k as isize) as libc::c_int)
-                    < 64 as libc::c_int - 1 as libc::c_int
+                    (*prev_ind as i32) + -(4 as i32)
+                } else if (*ind.offset(k as isize) as i32)
+                    < 64 as i32 - 1 as i32
                 {
-                    (64 as libc::c_int) - 1 as libc::c_int
+                    (64 as i32) - 1 as i32
                 } else {
-                    *ind.offset(k as isize) as libc::c_int
+                    *ind.offset(k as isize) as i32
                 }
-            } else if *ind.offset(k as isize) as libc::c_int > 64 as libc::c_int - 1 as libc::c_int
+            } else if *ind.offset(k as isize) as i32 > 64 as i32 - 1 as i32
             {
-                (64 as libc::c_int) - 1 as libc::c_int
-            } else if (*ind.offset(k as isize) as libc::c_int)
-                < *prev_ind as libc::c_int + -(4 as libc::c_int)
+                (64 as i32) - 1 as i32
+            } else if (*ind.offset(k as isize) as i32)
+                < *prev_ind as i32 + -(4 as i32)
             {
-                (*prev_ind as libc::c_int) + -(4 as libc::c_int)
+                (*prev_ind as i32) + -(4 as i32)
             } else {
-                *ind.offset(k as isize) as libc::c_int
-            } as libc::c_schar;
+                *ind.offset(k as isize) as i32
+            } as i8;
             *prev_ind = *ind.offset(k as isize)
         } else {
             /* Delta index */
-            *ind.offset(k as isize) = (*ind.offset(k as isize) as libc::c_int
-                - *prev_ind as libc::c_int) as libc::c_schar;
+            *ind.offset(k as isize) = (*ind.offset(k as isize) as i32
+                - *prev_ind as i32) as i8;
             /* Double the quantization step size for large gain increases, so that the max gain level can be reached */
             double_step_size_threshold =
-                2 as libc::c_int * 36 as libc::c_int - 64 as libc::c_int + *prev_ind as libc::c_int;
-            if *ind.offset(k as isize) as libc::c_int > double_step_size_threshold {
+                2 as i32 * 36 as i32 - 64 as i32 + *prev_ind as i32;
+            if *ind.offset(k as isize) as i32 > double_step_size_threshold {
                 *ind.offset(k as isize) = (double_step_size_threshold
-                    + (*ind.offset(k as isize) as libc::c_int - double_step_size_threshold
-                        + 1 as libc::c_int
-                        >> 1 as libc::c_int))
-                    as libc::c_schar
+                    + (*ind.offset(k as isize) as i32 - double_step_size_threshold
+                        + 1 as i32
+                        >> 1 as i32))
+                    as i8
             }
-            *ind.offset(k as isize) = if -(4 as libc::c_int) > 36 as libc::c_int {
-                if *ind.offset(k as isize) as libc::c_int > -(4 as libc::c_int) {
-                    -(4 as libc::c_int)
-                } else if (*ind.offset(k as isize) as libc::c_int) < 36 as libc::c_int {
-                    36 as libc::c_int
+            *ind.offset(k as isize) = if -(4 as i32) > 36 as i32 {
+                if *ind.offset(k as isize) as i32 > -(4 as i32) {
+                    -(4 as i32)
+                } else if (*ind.offset(k as isize) as i32) < 36 as i32 {
+                    36 as i32
                 } else {
-                    *ind.offset(k as isize) as libc::c_int
+                    *ind.offset(k as isize) as i32
                 }
-            } else if *ind.offset(k as isize) as libc::c_int > 36 as libc::c_int {
-                36 as libc::c_int
-            } else if (*ind.offset(k as isize) as libc::c_int) < -(4 as libc::c_int) {
-                -(4 as libc::c_int)
+            } else if *ind.offset(k as isize) as i32 > 36 as i32 {
+                36 as i32
+            } else if (*ind.offset(k as isize) as i32) < -(4 as i32) {
+                -(4 as i32)
             } else {
-                *ind.offset(k as isize) as libc::c_int
-            } as libc::c_schar;
+                *ind.offset(k as isize) as i32
+            } as i8;
             /* Accumulate deltas */
-            if *ind.offset(k as isize) as libc::c_int > double_step_size_threshold {
-                *prev_ind = (*prev_ind as libc::c_int
+            if *ind.offset(k as isize) as i32 > double_step_size_threshold {
+                *prev_ind = (*prev_ind as i32
                     + (((*ind.offset(k as isize) as crate::opus_types_h::opus_uint32)
-                        << 1 as libc::c_int)
+                        << 1 as i32)
                         as crate::opus_types_h::opus_int32
-                        - double_step_size_threshold)) as libc::c_schar;
+                        - double_step_size_threshold)) as i8;
                 *prev_ind = silk_min_int(
-                    *prev_ind as libc::c_int,
-                    64 as libc::c_int - 1 as libc::c_int,
-                ) as libc::c_schar
+                    *prev_ind as i32,
+                    64 as i32 - 1 as i32,
+                ) as i8
             } else {
-                *prev_ind = (*prev_ind as libc::c_int + *ind.offset(k as isize) as libc::c_int)
-                    as libc::c_schar
+                *prev_ind = (*prev_ind as i32 + *ind.offset(k as isize) as i32)
+                    as i8
             }
             /* Shift to make non-negative */
             let ref mut fresh1 = *ind.offset(k as isize);
-            *fresh1 = (*fresh1 as libc::c_int - -(4 as libc::c_int)) as libc::c_schar
+            *fresh1 = (*fresh1 as i32 - -(4 as i32)) as i8
         }
         *gain_Q16.offset(k as isize) =
             crate::src::opus_1_2_1::silk::log2lin::silk_log2lin(silk_min_32(
-                ((65536 as libc::c_int
-                    * ((88 as libc::c_int - 2 as libc::c_int) * 128 as libc::c_int
-                        / 6 as libc::c_int)
-                    / (64 as libc::c_int - 1 as libc::c_int)) as libc::c_longlong
-                    * *prev_ind as crate::opus_types_h::opus_int16 as libc::c_longlong
-                    >> 16 as libc::c_int) as crate::opus_types_h::opus_int32
-                    + (2 as libc::c_int * 128 as libc::c_int / 6 as libc::c_int
-                        + 16 as libc::c_int * 128 as libc::c_int),
-                3967 as libc::c_int,
+                ((65536 as i32
+                    * ((88 as i32 - 2 as i32) * 128 as i32
+                        / 6 as i32)
+                    / (64 as i32 - 1 as i32)) as i64
+                    * *prev_ind as crate::opus_types_h::opus_int16 as i64
+                    >> 16 as i32) as crate::opus_types_h::opus_int32
+                    + (2 as i32 * 128 as i32 / 6 as i32
+                        + 16 as i32 * 128 as i32),
+                3967 as i32,
             ));
         k += 1
     }
@@ -241,66 +241,66 @@ pub unsafe extern "C" fn silk_gains_quant(
 
 pub unsafe extern "C" fn silk_gains_dequant(
     mut gain_Q16: *mut crate::opus_types_h::opus_int32,
-    mut ind: *const libc::c_schar,
-    mut prev_ind: *mut libc::c_schar,
-    conditional: libc::c_int,
-    nb_subfr: libc::c_int,
+    mut ind: *const i8,
+    mut prev_ind: *mut i8,
+    conditional: i32,
+    nb_subfr: i32,
 )
 /* I    number of subframes                          */
 {
-    let mut k: libc::c_int = 0;
-    let mut ind_tmp: libc::c_int = 0;
-    let mut double_step_size_threshold: libc::c_int = 0;
-    k = 0 as libc::c_int;
+    let mut k: i32 = 0;
+    let mut ind_tmp: i32 = 0;
+    let mut double_step_size_threshold: i32 = 0;
+    k = 0 as i32;
     while k < nb_subfr {
-        if k == 0 as libc::c_int && conditional == 0 as libc::c_int {
+        if k == 0 as i32 && conditional == 0 as i32 {
             /* Gain index is not allowed to go down more than 16 steps (~21.8 dB) */
             *prev_ind = silk_max_int(
-                *ind.offset(k as isize) as libc::c_int,
-                *prev_ind as libc::c_int - 16 as libc::c_int,
-            ) as libc::c_schar
+                *ind.offset(k as isize) as i32,
+                *prev_ind as i32 - 16 as i32,
+            ) as i8
         } else {
             /* Delta index */
-            ind_tmp = *ind.offset(k as isize) as libc::c_int + -(4 as libc::c_int);
+            ind_tmp = *ind.offset(k as isize) as i32 + -(4 as i32);
             /* Accumulate deltas */
             double_step_size_threshold =
-                2 as libc::c_int * 36 as libc::c_int - 64 as libc::c_int + *prev_ind as libc::c_int;
+                2 as i32 * 36 as i32 - 64 as i32 + *prev_ind as i32;
             if ind_tmp > double_step_size_threshold {
-                *prev_ind = (*prev_ind as libc::c_int
-                    + (((ind_tmp as crate::opus_types_h::opus_uint32) << 1 as libc::c_int)
+                *prev_ind = (*prev_ind as i32
+                    + (((ind_tmp as crate::opus_types_h::opus_uint32) << 1 as i32)
                         as crate::opus_types_h::opus_int32
-                        - double_step_size_threshold)) as libc::c_schar
+                        - double_step_size_threshold)) as i8
             } else {
-                *prev_ind = (*prev_ind as libc::c_int + ind_tmp) as libc::c_schar
+                *prev_ind = (*prev_ind as i32 + ind_tmp) as i8
             }
         }
-        *prev_ind = if 0 as libc::c_int > 64 as libc::c_int - 1 as libc::c_int {
-            if *prev_ind as libc::c_int > 0 as libc::c_int {
-                0 as libc::c_int
-            } else if (*prev_ind as libc::c_int) < 64 as libc::c_int - 1 as libc::c_int {
-                (64 as libc::c_int) - 1 as libc::c_int
+        *prev_ind = if 0 as i32 > 64 as i32 - 1 as i32 {
+            if *prev_ind as i32 > 0 as i32 {
+                0 as i32
+            } else if (*prev_ind as i32) < 64 as i32 - 1 as i32 {
+                (64 as i32) - 1 as i32
             } else {
-                *prev_ind as libc::c_int
+                *prev_ind as i32
             }
-        } else if *prev_ind as libc::c_int > 64 as libc::c_int - 1 as libc::c_int {
-            (64 as libc::c_int) - 1 as libc::c_int
-        } else if (*prev_ind as libc::c_int) < 0 as libc::c_int {
-            0 as libc::c_int
+        } else if *prev_ind as i32 > 64 as i32 - 1 as i32 {
+            (64 as i32) - 1 as i32
+        } else if (*prev_ind as i32) < 0 as i32 {
+            0 as i32
         } else {
-            *prev_ind as libc::c_int
-        } as libc::c_schar;
+            *prev_ind as i32
+        } as i8;
         /* 3967 = 31 in Q7 */
         *gain_Q16.offset(k as isize) =
             crate::src::opus_1_2_1::silk::log2lin::silk_log2lin(silk_min_32(
-                ((65536 as libc::c_int
-                    * ((88 as libc::c_int - 2 as libc::c_int) * 128 as libc::c_int
-                        / 6 as libc::c_int)
-                    / (64 as libc::c_int - 1 as libc::c_int)) as libc::c_longlong
-                    * *prev_ind as crate::opus_types_h::opus_int16 as libc::c_longlong
-                    >> 16 as libc::c_int) as crate::opus_types_h::opus_int32
-                    + (2 as libc::c_int * 128 as libc::c_int / 6 as libc::c_int
-                        + 16 as libc::c_int * 128 as libc::c_int),
-                3967 as libc::c_int,
+                ((65536 as i32
+                    * ((88 as i32 - 2 as i32) * 128 as i32
+                        / 6 as i32)
+                    / (64 as i32 - 1 as i32)) as i64
+                    * *prev_ind as crate::opus_types_h::opus_int16 as i64
+                    >> 16 as i32) as crate::opus_types_h::opus_int32
+                    + (2 as i32 * 128 as i32 / 6 as i32
+                        + 16 as i32 * 128 as i32),
+                3967 as i32,
             ));
         k += 1
     }
@@ -428,17 +428,17 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_gains_ID(
-    mut ind: *const libc::c_schar,
-    nb_subfr: libc::c_int,
+    mut ind: *const i8,
+    nb_subfr: i32,
 ) -> crate::opus_types_h::opus_int32
 /* I    number of subframes                         */ {
-    let mut k: libc::c_int = 0;
+    let mut k: i32 = 0;
     let mut gainsID: crate::opus_types_h::opus_int32 = 0;
-    gainsID = 0 as libc::c_int;
-    k = 0 as libc::c_int;
+    gainsID = 0 as i32;
+    k = 0 as i32;
     while k < nb_subfr {
-        gainsID = *ind.offset(k as isize) as libc::c_int
-            + ((gainsID as crate::opus_types_h::opus_uint32) << 8 as libc::c_int)
+        gainsID = *ind.offset(k as isize) as i32
+            + ((gainsID as crate::opus_types_h::opus_uint32) << 8 as i32)
                 as crate::opus_types_h::opus_int32;
         k += 1
     }

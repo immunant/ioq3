@@ -3,12 +3,12 @@ use ::libc;
 pub mod stdlib_h {
     #[inline]
 
-    pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> libc::c_int {
+    pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return ::libc::strtol(
             __nptr,
             0 as *mut libc::c_void as *mut *mut libc::c_char,
-            10 as libc::c_int,
-        ) as libc::c_int;
+            10 as i32,
+        ) as i32;
     }
 }
 
@@ -230,10 +230,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // cl.input.c  -- builds an intended movement command to send to the server
 #[no_mangle]
 
-pub static mut frame_msec: libc::c_uint = 0;
+pub static mut frame_msec: u32 = 0;
 #[no_mangle]
 
-pub static mut old_com_frameTime: libc::c_int = 0;
+pub static mut old_com_frameTime: i32 = 0;
 /*
 ===============================================================================
 
@@ -399,23 +399,23 @@ pub unsafe extern "C" fn IN_MLookUp() {
 #[no_mangle]
 
 pub unsafe extern "C" fn IN_KeyDown(mut b: *mut crate::client_h::kbutton_t) {
-    let mut k: libc::c_int = 0;
+    let mut k: i32 = 0;
     let mut c: *mut libc::c_char = 0 as *mut libc::c_char;
-    c = crate::src::qcommon::cmd::Cmd_Argv(1 as libc::c_int);
-    if *c.offset(0 as libc::c_int as isize) != 0 {
+    c = crate::src::qcommon::cmd::Cmd_Argv(1 as i32);
+    if *c.offset(0 as i32 as isize) != 0 {
         k = atoi(c)
     } else {
-        k = -(1 as libc::c_int)
+        k = -(1 as i32)
         // typed manually at the console for continuous down
     }
-    if k == (*b).down[0 as libc::c_int as usize] || k == (*b).down[1 as libc::c_int as usize] {
+    if k == (*b).down[0 as i32 as usize] || k == (*b).down[1 as i32 as usize] {
         return;
         // repeating key
     }
-    if (*b).down[0 as libc::c_int as usize] == 0 {
-        (*b).down[0 as libc::c_int as usize] = k
-    } else if (*b).down[1 as libc::c_int as usize] == 0 {
-        (*b).down[1 as libc::c_int as usize] = k
+    if (*b).down[0 as i32 as usize] == 0 {
+        (*b).down[0 as i32 as usize] = k
+    } else if (*b).down[1 as i32 as usize] == 0 {
+        (*b).down[1 as i32 as usize] = k
     } else {
         crate::src::qcommon::common::Com_Printf(
             b"Three keys down for a button!\n\x00" as *const u8 as *const libc::c_char,
@@ -427,49 +427,49 @@ pub unsafe extern "C" fn IN_KeyDown(mut b: *mut crate::client_h::kbutton_t) {
         // still down
     }
     // save timestamp for partial frame summing
-    c = crate::src::qcommon::cmd::Cmd_Argv(2 as libc::c_int);
-    (*b).downtime = atoi(c) as libc::c_uint;
+    c = crate::src::qcommon::cmd::Cmd_Argv(2 as i32);
+    (*b).downtime = atoi(c) as u32;
     (*b).active = crate::src::qcommon::q_shared::qtrue;
     (*b).wasPressed = crate::src::qcommon::q_shared::qtrue;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn IN_KeyUp(mut b: *mut crate::client_h::kbutton_t) {
-    let mut k: libc::c_int = 0;
+    let mut k: i32 = 0;
     let mut c: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut uptime: libc::c_uint = 0;
-    c = crate::src::qcommon::cmd::Cmd_Argv(1 as libc::c_int);
-    if *c.offset(0 as libc::c_int as isize) != 0 {
+    let mut uptime: u32 = 0;
+    c = crate::src::qcommon::cmd::Cmd_Argv(1 as i32);
+    if *c.offset(0 as i32 as isize) != 0 {
         k = atoi(c)
     } else {
         // typed manually at the console, assume for unsticking, so clear all
-        (*b).down[1 as libc::c_int as usize] = 0 as libc::c_int;
-        (*b).down[0 as libc::c_int as usize] = (*b).down[1 as libc::c_int as usize];
+        (*b).down[1 as i32 as usize] = 0 as i32;
+        (*b).down[0 as i32 as usize] = (*b).down[1 as i32 as usize];
         (*b).active = crate::src::qcommon::q_shared::qfalse;
         return;
     }
-    if (*b).down[0 as libc::c_int as usize] == k {
-        (*b).down[0 as libc::c_int as usize] = 0 as libc::c_int
-    } else if (*b).down[1 as libc::c_int as usize] == k {
-        (*b).down[1 as libc::c_int as usize] = 0 as libc::c_int
+    if (*b).down[0 as i32 as usize] == k {
+        (*b).down[0 as i32 as usize] = 0 as i32
+    } else if (*b).down[1 as i32 as usize] == k {
+        (*b).down[1 as i32 as usize] = 0 as i32
     } else {
         return;
         // key up without coresponding down (menu pass through)
     }
-    if (*b).down[0 as libc::c_int as usize] != 0 || (*b).down[1 as libc::c_int as usize] != 0 {
+    if (*b).down[0 as i32 as usize] != 0 || (*b).down[1 as i32 as usize] != 0 {
         return;
         // some other key is still holding it down
     }
     (*b).active = crate::src::qcommon::q_shared::qfalse;
     // save timestamp for partial frame summing
-    c = crate::src::qcommon::cmd::Cmd_Argv(2 as libc::c_int);
-    uptime = atoi(c) as libc::c_uint;
+    c = crate::src::qcommon::cmd::Cmd_Argv(2 as i32);
+    uptime = atoi(c) as u32;
     if uptime != 0 {
         (*b).msec = (*b).msec.wrapping_add(uptime.wrapping_sub((*b).downtime))
     } else {
         (*b).msec = (*b)
             .msec
-            .wrapping_add(frame_msec.wrapping_div(2 as libc::c_int as libc::c_uint))
+            .wrapping_add(frame_msec.wrapping_div(2 as i32 as u32))
     }
     (*b).active = crate::src::qcommon::q_shared::qfalse;
 }
@@ -482,29 +482,29 @@ Returns the fraction of the frame that the key was down
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CL_KeyState(mut key: *mut crate::client_h::kbutton_t) -> libc::c_float {
-    let mut val: libc::c_float = 0.;
-    let mut msec: libc::c_int = 0;
-    msec = (*key).msec as libc::c_int;
-    (*key).msec = 0 as libc::c_int as libc::c_uint;
+pub unsafe extern "C" fn CL_KeyState(mut key: *mut crate::client_h::kbutton_t) -> f32 {
+    let mut val: f32 = 0.;
+    let mut msec: i32 = 0;
+    msec = (*key).msec as i32;
+    (*key).msec = 0 as i32 as u32;
     if (*key).active as u64 != 0 {
         // still down
         if (*key).downtime == 0 {
             msec = crate::src::qcommon::common::com_frameTime
         } else {
-            msec = (msec as libc::c_uint).wrapping_add(
-                (crate::src::qcommon::common::com_frameTime as libc::c_uint)
+            msec = (msec as u32).wrapping_add(
+                (crate::src::qcommon::common::com_frameTime as u32)
                     .wrapping_sub((*key).downtime),
-            ) as libc::c_int as libc::c_int
+            ) as i32 as i32
         }
-        (*key).downtime = crate::src::qcommon::common::com_frameTime as libc::c_uint
+        (*key).downtime = crate::src::qcommon::common::com_frameTime as u32
     }
-    val = msec as libc::c_float / frame_msec as libc::c_float;
-    if val < 0 as libc::c_int as libc::c_float {
-        val = 0 as libc::c_int as libc::c_float
+    val = msec as f32 / frame_msec as f32;
+    if val < 0 as i32 as f32 {
+        val = 0 as i32 as f32
     }
-    if val > 1 as libc::c_int as libc::c_float {
-        val = 1 as libc::c_int as libc::c_float
+    if val > 1 as i32 as f32 {
+        val = 1 as i32 as f32
     }
     return val;
 }
@@ -649,170 +649,170 @@ pub unsafe extern "C" fn IN_VoipRecordUp() {
 #[no_mangle]
 
 pub unsafe extern "C" fn IN_Button0Down() {
-    IN_KeyDown(&mut *in_buttons.as_mut_ptr().offset(0 as libc::c_int as isize));
+    IN_KeyDown(&mut *in_buttons.as_mut_ptr().offset(0 as i32 as isize));
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn IN_Button0Up() {
-    IN_KeyUp(&mut *in_buttons.as_mut_ptr().offset(0 as libc::c_int as isize));
+    IN_KeyUp(&mut *in_buttons.as_mut_ptr().offset(0 as i32 as isize));
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn IN_Button1Down() {
-    IN_KeyDown(&mut *in_buttons.as_mut_ptr().offset(1 as libc::c_int as isize));
+    IN_KeyDown(&mut *in_buttons.as_mut_ptr().offset(1 as i32 as isize));
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn IN_Button1Up() {
-    IN_KeyUp(&mut *in_buttons.as_mut_ptr().offset(1 as libc::c_int as isize));
+    IN_KeyUp(&mut *in_buttons.as_mut_ptr().offset(1 as i32 as isize));
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn IN_Button2Down() {
-    IN_KeyDown(&mut *in_buttons.as_mut_ptr().offset(2 as libc::c_int as isize));
+    IN_KeyDown(&mut *in_buttons.as_mut_ptr().offset(2 as i32 as isize));
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn IN_Button2Up() {
-    IN_KeyUp(&mut *in_buttons.as_mut_ptr().offset(2 as libc::c_int as isize));
+    IN_KeyUp(&mut *in_buttons.as_mut_ptr().offset(2 as i32 as isize));
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn IN_Button3Down() {
-    IN_KeyDown(&mut *in_buttons.as_mut_ptr().offset(3 as libc::c_int as isize));
+    IN_KeyDown(&mut *in_buttons.as_mut_ptr().offset(3 as i32 as isize));
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn IN_Button3Up() {
-    IN_KeyUp(&mut *in_buttons.as_mut_ptr().offset(3 as libc::c_int as isize));
+    IN_KeyUp(&mut *in_buttons.as_mut_ptr().offset(3 as i32 as isize));
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn IN_Button4Down() {
-    IN_KeyDown(&mut *in_buttons.as_mut_ptr().offset(4 as libc::c_int as isize));
+    IN_KeyDown(&mut *in_buttons.as_mut_ptr().offset(4 as i32 as isize));
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn IN_Button4Up() {
-    IN_KeyUp(&mut *in_buttons.as_mut_ptr().offset(4 as libc::c_int as isize));
+    IN_KeyUp(&mut *in_buttons.as_mut_ptr().offset(4 as i32 as isize));
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn IN_Button5Down() {
-    IN_KeyDown(&mut *in_buttons.as_mut_ptr().offset(5 as libc::c_int as isize));
+    IN_KeyDown(&mut *in_buttons.as_mut_ptr().offset(5 as i32 as isize));
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn IN_Button5Up() {
-    IN_KeyUp(&mut *in_buttons.as_mut_ptr().offset(5 as libc::c_int as isize));
+    IN_KeyUp(&mut *in_buttons.as_mut_ptr().offset(5 as i32 as isize));
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn IN_Button6Down() {
-    IN_KeyDown(&mut *in_buttons.as_mut_ptr().offset(6 as libc::c_int as isize));
+    IN_KeyDown(&mut *in_buttons.as_mut_ptr().offset(6 as i32 as isize));
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn IN_Button6Up() {
-    IN_KeyUp(&mut *in_buttons.as_mut_ptr().offset(6 as libc::c_int as isize));
+    IN_KeyUp(&mut *in_buttons.as_mut_ptr().offset(6 as i32 as isize));
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn IN_Button7Down() {
-    IN_KeyDown(&mut *in_buttons.as_mut_ptr().offset(7 as libc::c_int as isize));
+    IN_KeyDown(&mut *in_buttons.as_mut_ptr().offset(7 as i32 as isize));
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn IN_Button7Up() {
-    IN_KeyUp(&mut *in_buttons.as_mut_ptr().offset(7 as libc::c_int as isize));
+    IN_KeyUp(&mut *in_buttons.as_mut_ptr().offset(7 as i32 as isize));
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn IN_Button8Down() {
-    IN_KeyDown(&mut *in_buttons.as_mut_ptr().offset(8 as libc::c_int as isize));
+    IN_KeyDown(&mut *in_buttons.as_mut_ptr().offset(8 as i32 as isize));
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn IN_Button8Up() {
-    IN_KeyUp(&mut *in_buttons.as_mut_ptr().offset(8 as libc::c_int as isize));
+    IN_KeyUp(&mut *in_buttons.as_mut_ptr().offset(8 as i32 as isize));
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn IN_Button9Down() {
-    IN_KeyDown(&mut *in_buttons.as_mut_ptr().offset(9 as libc::c_int as isize));
+    IN_KeyDown(&mut *in_buttons.as_mut_ptr().offset(9 as i32 as isize));
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn IN_Button9Up() {
-    IN_KeyUp(&mut *in_buttons.as_mut_ptr().offset(9 as libc::c_int as isize));
+    IN_KeyUp(&mut *in_buttons.as_mut_ptr().offset(9 as i32 as isize));
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn IN_Button10Down() {
-    IN_KeyDown(&mut *in_buttons.as_mut_ptr().offset(10 as libc::c_int as isize));
+    IN_KeyDown(&mut *in_buttons.as_mut_ptr().offset(10 as i32 as isize));
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn IN_Button10Up() {
-    IN_KeyUp(&mut *in_buttons.as_mut_ptr().offset(10 as libc::c_int as isize));
+    IN_KeyUp(&mut *in_buttons.as_mut_ptr().offset(10 as i32 as isize));
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn IN_Button11Down() {
-    IN_KeyDown(&mut *in_buttons.as_mut_ptr().offset(11 as libc::c_int as isize));
+    IN_KeyDown(&mut *in_buttons.as_mut_ptr().offset(11 as i32 as isize));
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn IN_Button11Up() {
-    IN_KeyUp(&mut *in_buttons.as_mut_ptr().offset(11 as libc::c_int as isize));
+    IN_KeyUp(&mut *in_buttons.as_mut_ptr().offset(11 as i32 as isize));
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn IN_Button12Down() {
-    IN_KeyDown(&mut *in_buttons.as_mut_ptr().offset(12 as libc::c_int as isize));
+    IN_KeyDown(&mut *in_buttons.as_mut_ptr().offset(12 as i32 as isize));
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn IN_Button12Up() {
-    IN_KeyUp(&mut *in_buttons.as_mut_ptr().offset(12 as libc::c_int as isize));
+    IN_KeyUp(&mut *in_buttons.as_mut_ptr().offset(12 as i32 as isize));
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn IN_Button13Down() {
-    IN_KeyDown(&mut *in_buttons.as_mut_ptr().offset(13 as libc::c_int as isize));
+    IN_KeyDown(&mut *in_buttons.as_mut_ptr().offset(13 as i32 as isize));
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn IN_Button13Up() {
-    IN_KeyUp(&mut *in_buttons.as_mut_ptr().offset(13 as libc::c_int as isize));
+    IN_KeyUp(&mut *in_buttons.as_mut_ptr().offset(13 as i32 as isize));
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn IN_Button14Down() {
-    IN_KeyDown(&mut *in_buttons.as_mut_ptr().offset(14 as libc::c_int as isize));
+    IN_KeyDown(&mut *in_buttons.as_mut_ptr().offset(14 as i32 as isize));
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn IN_Button14Up() {
-    IN_KeyUp(&mut *in_buttons.as_mut_ptr().offset(14 as libc::c_int as isize));
+    IN_KeyUp(&mut *in_buttons.as_mut_ptr().offset(14 as i32 as isize));
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn IN_Button15Down() {
-    IN_KeyDown(&mut *in_buttons.as_mut_ptr().offset(15 as libc::c_int as isize));
+    IN_KeyDown(&mut *in_buttons.as_mut_ptr().offset(15 as i32 as isize));
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn IN_Button15Up() {
-    IN_KeyUp(&mut *in_buttons.as_mut_ptr().offset(15 as libc::c_int as isize));
+    IN_KeyUp(&mut *in_buttons.as_mut_ptr().offset(15 as i32 as isize));
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn IN_CenterView() {
-    crate::src::client::cl_main::cl.viewangles[0 as libc::c_int as usize] =
-        -(crate::src::client::cl_main::cl.snap.ps.delta_angles[0 as libc::c_int as usize]
-            as libc::c_double
-            * (360.0f64 / 65536 as libc::c_int as libc::c_double))
+    crate::src::client::cl_main::cl.viewangles[0 as i32 as usize] =
+        -(crate::src::client::cl_main::cl.snap.ps.delta_angles[0 as i32 as usize]
+            as f64
+            * (360.0f64 / 65536 as i32 as f64))
             as crate::src::qcommon::q_shared::vec_t;
 }
 //==========================================================================
@@ -842,24 +842,24 @@ Moves the local angle positions
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_AdjustAngles() {
-    let mut speed: libc::c_float = 0.;
+    let mut speed: f32 = 0.;
     if in_speed.active as u64 != 0 {
         speed = (0.001f64
-            * crate::src::client::cl_main::cls.frametime as libc::c_double
-            * (*cl_anglespeedkey).value as libc::c_double) as libc::c_float
+            * crate::src::client::cl_main::cls.frametime as f64
+            * (*cl_anglespeedkey).value as f64) as f32
     } else {
-        speed = (0.001f64 * crate::src::client::cl_main::cls.frametime as libc::c_double)
-            as libc::c_float
+        speed = (0.001f64 * crate::src::client::cl_main::cls.frametime as f64)
+            as f32
     }
     if in_strafe.active as u64 == 0 {
-        crate::src::client::cl_main::cl.viewangles[1 as libc::c_int as usize] -=
+        crate::src::client::cl_main::cl.viewangles[1 as i32 as usize] -=
             speed * (*cl_yawspeed).value * CL_KeyState(&mut in_right);
-        crate::src::client::cl_main::cl.viewangles[1 as libc::c_int as usize] +=
+        crate::src::client::cl_main::cl.viewangles[1 as i32 as usize] +=
             speed * (*cl_yawspeed).value * CL_KeyState(&mut in_left)
     }
-    crate::src::client::cl_main::cl.viewangles[0 as libc::c_int as usize] -=
+    crate::src::client::cl_main::cl.viewangles[0 as i32 as usize] -=
         speed * (*cl_pitchspeed).value * CL_KeyState(&mut in_lookup);
-    crate::src::client::cl_main::cl.viewangles[0 as libc::c_int as usize] +=
+    crate::src::client::cl_main::cl.viewangles[0 as i32 as usize] +=
         speed * (*cl_pitchspeed).value * CL_KeyState(&mut in_lookdown);
 }
 /*
@@ -872,43 +872,43 @@ Sets the usercmd_t based on key states
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_KeyMove(mut cmd: *mut crate::src::qcommon::q_shared::usercmd_t) {
-    let mut movespeed: libc::c_int = 0;
-    let mut forward: libc::c_int = 0;
-    let mut side: libc::c_int = 0;
-    let mut up: libc::c_int = 0;
+    let mut movespeed: i32 = 0;
+    let mut forward: i32 = 0;
+    let mut side: i32 = 0;
+    let mut up: i32 = 0;
     //
     // adjust for speed key / running
     // the walking flag is to keep animations consistent
     // even during acceleration and develeration
     //
-    if in_speed.active as libc::c_uint ^ (*cl_run).integer as libc::c_uint != 0 {
-        movespeed = 127 as libc::c_int;
-        (*cmd).buttons &= !(16 as libc::c_int)
+    if in_speed.active as u32 ^ (*cl_run).integer as u32 != 0 {
+        movespeed = 127 as i32;
+        (*cmd).buttons &= !(16 as i32)
     } else {
-        (*cmd).buttons |= 16 as libc::c_int;
-        movespeed = 64 as libc::c_int
+        (*cmd).buttons |= 16 as i32;
+        movespeed = 64 as i32
     }
-    forward = 0 as libc::c_int;
-    side = 0 as libc::c_int;
-    up = 0 as libc::c_int;
+    forward = 0 as i32;
+    side = 0 as i32;
+    up = 0 as i32;
     if in_strafe.active as u64 != 0 {
-        side = (side as libc::c_float + movespeed as libc::c_float * CL_KeyState(&mut in_right))
-            as libc::c_int;
-        side = (side as libc::c_float - movespeed as libc::c_float * CL_KeyState(&mut in_left))
-            as libc::c_int
+        side = (side as f32 + movespeed as f32 * CL_KeyState(&mut in_right))
+            as i32;
+        side = (side as f32 - movespeed as f32 * CL_KeyState(&mut in_left))
+            as i32
     }
-    side = (side as libc::c_float + movespeed as libc::c_float * CL_KeyState(&mut in_moveright))
-        as libc::c_int;
-    side = (side as libc::c_float - movespeed as libc::c_float * CL_KeyState(&mut in_moveleft))
-        as libc::c_int;
+    side = (side as f32 + movespeed as f32 * CL_KeyState(&mut in_moveright))
+        as i32;
+    side = (side as f32 - movespeed as f32 * CL_KeyState(&mut in_moveleft))
+        as i32;
     up =
-        (up as libc::c_float + movespeed as libc::c_float * CL_KeyState(&mut in_up)) as libc::c_int;
-    up = (up as libc::c_float - movespeed as libc::c_float * CL_KeyState(&mut in_down))
-        as libc::c_int;
-    forward = (forward as libc::c_float + movespeed as libc::c_float * CL_KeyState(&mut in_forward))
-        as libc::c_int;
-    forward = (forward as libc::c_float - movespeed as libc::c_float * CL_KeyState(&mut in_back))
-        as libc::c_int;
+        (up as f32 + movespeed as f32 * CL_KeyState(&mut in_up)) as i32;
+    up = (up as f32 - movespeed as f32 * CL_KeyState(&mut in_down))
+        as i32;
+    forward = (forward as f32 + movespeed as f32 * CL_KeyState(&mut in_forward))
+        as i32;
+    forward = (forward as f32 - movespeed as f32 * CL_KeyState(&mut in_back))
+        as i32;
     (*cmd).forwardmove = crate::src::qcommon::q_math::ClampChar(forward);
     (*cmd).rightmove = crate::src::qcommon::q_math::ClampChar(side);
     (*cmd).upmove = crate::src::qcommon::q_math::ClampChar(up);
@@ -921,21 +921,21 @@ CL_MouseEvent
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_MouseEvent(
-    mut dx: libc::c_int,
-    mut dy: libc::c_int,
-    mut _time: libc::c_int,
+    mut dx: i32,
+    mut dy: i32,
+    mut _time: i32,
 ) {
-    if crate::src::client::cl_keys::Key_GetCatcher() & 0x2 as libc::c_int != 0 {
+    if crate::src::client::cl_keys::Key_GetCatcher() & 0x2 as i32 != 0 {
         crate::src::qcommon::vm::VM_Call(
             crate::src::client::cl_ui::uivm,
-            crate::ui_public_h::UI_MOUSE_EVENT as libc::c_int,
+            crate::ui_public_h::UI_MOUSE_EVENT as i32,
             dx,
             dy,
         );
-    } else if crate::src::client::cl_keys::Key_GetCatcher() & 0x8 as libc::c_int != 0 {
+    } else if crate::src::client::cl_keys::Key_GetCatcher() & 0x8 as i32 != 0 {
         crate::src::qcommon::vm::VM_Call(
             crate::src::client::cl_main::cgvm,
-            crate::cg_public_h::CG_MOUSE_EVENT as libc::c_int,
+            crate::cg_public_h::CG_MOUSE_EVENT as i32,
             dx,
             dy,
         );
@@ -956,13 +956,13 @@ Joystick values stay set until changed
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_JoystickEvent(
-    mut axis: libc::c_int,
-    mut value: libc::c_int,
-    mut _time: libc::c_int,
+    mut axis: i32,
+    mut value: i32,
+    mut _time: i32,
 ) {
-    if axis < 0 as libc::c_int || axis >= 16 as libc::c_int {
+    if axis < 0 as i32 || axis >= 16 as i32 {
         crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"CL_JoystickEvent: bad axis %i\x00" as *const u8 as *const libc::c_char,
             axis,
         );
@@ -977,62 +977,62 @@ CL_JoystickMove
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_JoystickMove(mut cmd: *mut crate::src::qcommon::q_shared::usercmd_t) {
-    let mut anglespeed: libc::c_float = 0.;
-    let mut yaw: libc::c_float = (*crate::src::client::cl_main::j_yaw).value
+    let mut anglespeed: f32 = 0.;
+    let mut yaw: f32 = (*crate::src::client::cl_main::j_yaw).value
         * crate::src::client::cl_main::cl.joystickAxis
             [(*crate::src::client::cl_main::j_yaw_axis).integer as usize]
-            as libc::c_float;
-    let mut right: libc::c_float = (*crate::src::client::cl_main::j_side).value
+            as f32;
+    let mut right: f32 = (*crate::src::client::cl_main::j_side).value
         * crate::src::client::cl_main::cl.joystickAxis
             [(*crate::src::client::cl_main::j_side_axis).integer as usize]
-            as libc::c_float;
-    let mut forward: libc::c_float = (*crate::src::client::cl_main::j_forward).value
+            as f32;
+    let mut forward: f32 = (*crate::src::client::cl_main::j_forward).value
         * crate::src::client::cl_main::cl.joystickAxis
             [(*crate::src::client::cl_main::j_forward_axis).integer as usize]
-            as libc::c_float;
-    let mut pitch: libc::c_float = (*crate::src::client::cl_main::j_pitch).value
+            as f32;
+    let mut pitch: f32 = (*crate::src::client::cl_main::j_pitch).value
         * crate::src::client::cl_main::cl.joystickAxis
             [(*crate::src::client::cl_main::j_pitch_axis).integer as usize]
-            as libc::c_float;
-    let mut up: libc::c_float = (*crate::src::client::cl_main::j_up).value
+            as f32;
+    let mut up: f32 = (*crate::src::client::cl_main::j_up).value
         * crate::src::client::cl_main::cl.joystickAxis
-            [(*crate::src::client::cl_main::j_up_axis).integer as usize] as libc::c_float;
-    if in_speed.active as libc::c_uint ^ (*cl_run).integer as libc::c_uint == 0 {
-        (*cmd).buttons |= 16 as libc::c_int
+            [(*crate::src::client::cl_main::j_up_axis).integer as usize] as f32;
+    if in_speed.active as u32 ^ (*cl_run).integer as u32 == 0 {
+        (*cmd).buttons |= 16 as i32
     }
     if in_speed.active as u64 != 0 {
         anglespeed = (0.001f64
-            * crate::src::client::cl_main::cls.frametime as libc::c_double
-            * (*cl_anglespeedkey).value as libc::c_double) as libc::c_float
+            * crate::src::client::cl_main::cls.frametime as f64
+            * (*cl_anglespeedkey).value as f64) as f32
     } else {
-        anglespeed = (0.001f64 * crate::src::client::cl_main::cls.frametime as libc::c_double)
-            as libc::c_float
+        anglespeed = (0.001f64 * crate::src::client::cl_main::cls.frametime as f64)
+            as f32
     }
     if in_strafe.active as u64 == 0 {
-        crate::src::client::cl_main::cl.viewangles[1 as libc::c_int as usize] += anglespeed * yaw;
+        crate::src::client::cl_main::cl.viewangles[1 as i32 as usize] += anglespeed * yaw;
         (*cmd).rightmove = crate::src::qcommon::q_math::ClampChar(
-            (*cmd).rightmove as libc::c_int + right as libc::c_int,
+            (*cmd).rightmove as i32 + right as i32,
         )
     } else {
-        crate::src::client::cl_main::cl.viewangles[1 as libc::c_int as usize] += anglespeed * right;
+        crate::src::client::cl_main::cl.viewangles[1 as i32 as usize] += anglespeed * right;
         (*cmd).rightmove = crate::src::qcommon::q_math::ClampChar(
-            (*cmd).rightmove as libc::c_int + yaw as libc::c_int,
+            (*cmd).rightmove as i32 + yaw as i32,
         )
     }
     if in_mlooking as u64 != 0 {
-        crate::src::client::cl_main::cl.viewangles[0 as libc::c_int as usize] +=
+        crate::src::client::cl_main::cl.viewangles[0 as i32 as usize] +=
             anglespeed * forward;
         (*cmd).forwardmove = crate::src::qcommon::q_math::ClampChar(
-            (*cmd).forwardmove as libc::c_int + pitch as libc::c_int,
+            (*cmd).forwardmove as i32 + pitch as i32,
         )
     } else {
-        crate::src::client::cl_main::cl.viewangles[0 as libc::c_int as usize] += anglespeed * pitch;
+        crate::src::client::cl_main::cl.viewangles[0 as i32 as usize] += anglespeed * pitch;
         (*cmd).forwardmove = crate::src::qcommon::q_math::ClampChar(
-            (*cmd).forwardmove as libc::c_int + forward as libc::c_int,
+            (*cmd).forwardmove as i32 + forward as i32,
         )
     }
     (*cmd).upmove =
-        crate::src::qcommon::q_math::ClampChar((*cmd).upmove as libc::c_int + up as libc::c_int);
+        crate::src::qcommon::q_math::ClampChar((*cmd).upmove as i32 + up as i32);
 }
 /*
 =================
@@ -1042,39 +1042,39 @@ CL_MouseMove
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_MouseMove(mut cmd: *mut crate::src::qcommon::q_shared::usercmd_t) {
-    let mut mx: libc::c_float = 0.;
-    let mut my: libc::c_float = 0.;
+    let mut mx: f32 = 0.;
+    let mut my: f32 = 0.;
     // allow mouse smoothing
     if (*crate::src::client::cl_main::m_filter).integer != 0 {
-        mx = (crate::src::client::cl_main::cl.mouseDx[0 as libc::c_int as usize]
-            + crate::src::client::cl_main::cl.mouseDx[1 as libc::c_int as usize])
-            as libc::c_float
+        mx = (crate::src::client::cl_main::cl.mouseDx[0 as i32 as usize]
+            + crate::src::client::cl_main::cl.mouseDx[1 as i32 as usize])
+            as f32
             * 0.5f32;
-        my = (crate::src::client::cl_main::cl.mouseDy[0 as libc::c_int as usize]
-            + crate::src::client::cl_main::cl.mouseDy[1 as libc::c_int as usize])
-            as libc::c_float
+        my = (crate::src::client::cl_main::cl.mouseDy[0 as i32 as usize]
+            + crate::src::client::cl_main::cl.mouseDy[1 as i32 as usize])
+            as f32
             * 0.5f32
     } else {
         mx = crate::src::client::cl_main::cl.mouseDx
-            [crate::src::client::cl_main::cl.mouseIndex as usize] as libc::c_float;
+            [crate::src::client::cl_main::cl.mouseIndex as usize] as f32;
         my = crate::src::client::cl_main::cl.mouseDy
-            [crate::src::client::cl_main::cl.mouseIndex as usize] as libc::c_float
+            [crate::src::client::cl_main::cl.mouseIndex as usize] as f32
     }
-    crate::src::client::cl_main::cl.mouseIndex ^= 1 as libc::c_int;
+    crate::src::client::cl_main::cl.mouseIndex ^= 1 as i32;
     crate::src::client::cl_main::cl.mouseDx[crate::src::client::cl_main::cl.mouseIndex as usize] =
-        0 as libc::c_int;
+        0 as i32;
     crate::src::client::cl_main::cl.mouseDy[crate::src::client::cl_main::cl.mouseIndex as usize] =
-        0 as libc::c_int;
+        0 as i32;
     if mx == 0.0f32 && my == 0.0f32 {
         return;
     }
     if (*crate::src::client::cl_main::cl_mouseAccel).value != 0.0f32 {
-        if (*crate::src::client::cl_main::cl_mouseAccelStyle).integer == 0 as libc::c_int {
-            let mut accelSensitivity: libc::c_float = 0.;
-            let mut rate: libc::c_float = 0.;
-            rate = (crate::stdlib::sqrt((mx * mx + my * my) as libc::c_double)
-                / frame_msec as libc::c_float as libc::c_double)
-                as libc::c_float;
+        if (*crate::src::client::cl_main::cl_mouseAccelStyle).integer == 0 as i32 {
+            let mut accelSensitivity: f32 = 0.;
+            let mut rate: f32 = 0.;
+            rate = (crate::stdlib::sqrt((mx * mx + my * my) as f64)
+                / frame_msec as f32 as f64)
+                as f32;
             accelSensitivity = (*crate::src::client::cl_main::cl_sensitivity).value
                 + rate * (*crate::src::client::cl_main::cl_mouseAccel).value;
             mx *= accelSensitivity;
@@ -1082,55 +1082,55 @@ pub unsafe extern "C" fn CL_MouseMove(mut cmd: *mut crate::src::qcommon::q_share
             if (*crate::src::client::cl_main::cl_showMouseRate).integer != 0 {
                 crate::src::qcommon::common::Com_Printf(
                     b"rate: %f, accelSensitivity: %f\n\x00" as *const u8 as *const libc::c_char,
-                    rate as libc::c_double,
-                    accelSensitivity as libc::c_double,
+                    rate as f64,
+                    accelSensitivity as f64,
                 );
             }
         } else {
-            let mut rate_0: [libc::c_float; 2] = [0.; 2];
-            let mut power: [libc::c_float; 2] = [0.; 2];
+            let mut rate_0: [f32; 2] = [0.; 2];
+            let mut power: [f32; 2] = [0.; 2];
             // sensitivity remains pretty much unchanged at low speeds
             // cl_mouseAccel is a power value to how the acceleration is shaped
             // cl_mouseAccelOffset is the rate for which the acceleration will have doubled the non accelerated amplification
             // NOTE: decouple the config cvars for independent acceleration setup along X and Y?
-            rate_0[0 as libc::c_int as usize] = (crate::stdlib::fabs(mx as libc::c_double)
-                / frame_msec as libc::c_float as libc::c_double)
-                as libc::c_float;
-            rate_0[1 as libc::c_int as usize] = (crate::stdlib::fabs(my as libc::c_double)
-                / frame_msec as libc::c_float as libc::c_double)
-                as libc::c_float;
-            power[0 as libc::c_int as usize] = crate::stdlib::powf(
-                rate_0[0 as libc::c_int as usize]
+            rate_0[0 as i32 as usize] = (crate::stdlib::fabs(mx as f64)
+                / frame_msec as f32 as f64)
+                as f32;
+            rate_0[1 as i32 as usize] = (crate::stdlib::fabs(my as f64)
+                / frame_msec as f32 as f64)
+                as f32;
+            power[0 as i32 as usize] = crate::stdlib::powf(
+                rate_0[0 as i32 as usize]
                     / (*crate::src::client::cl_main::cl_mouseAccelOffset).value,
                 (*crate::src::client::cl_main::cl_mouseAccel).value,
             );
-            power[1 as libc::c_int as usize] = crate::stdlib::powf(
-                rate_0[1 as libc::c_int as usize]
+            power[1 as i32 as usize] = crate::stdlib::powf(
+                rate_0[1 as i32 as usize]
                     / (*crate::src::client::cl_main::cl_mouseAccelOffset).value,
                 (*crate::src::client::cl_main::cl_mouseAccel).value,
             );
             mx = (*crate::src::client::cl_main::cl_sensitivity).value
                 * (mx
-                    + (if mx < 0 as libc::c_int as libc::c_float {
-                        -power[0 as libc::c_int as usize]
+                    + (if mx < 0 as i32 as f32 {
+                        -power[0 as i32 as usize]
                     } else {
-                        power[0 as libc::c_int as usize]
+                        power[0 as i32 as usize]
                     }) * (*crate::src::client::cl_main::cl_mouseAccelOffset).value);
             my = (*crate::src::client::cl_main::cl_sensitivity).value
                 * (my
-                    + (if my < 0 as libc::c_int as libc::c_float {
-                        -power[1 as libc::c_int as usize]
+                    + (if my < 0 as i32 as f32 {
+                        -power[1 as i32 as usize]
                     } else {
-                        power[1 as libc::c_int as usize]
+                        power[1 as i32 as usize]
                     }) * (*crate::src::client::cl_main::cl_mouseAccelOffset).value);
             if (*crate::src::client::cl_main::cl_showMouseRate).integer != 0 {
                 crate::src::qcommon::common::Com_Printf(
                     b"ratex: %f, ratey: %f, powx: %f, powy: %f\n\x00" as *const u8
                         as *const libc::c_char,
-                    rate_0[0 as libc::c_int as usize] as libc::c_double,
-                    rate_0[1 as libc::c_int as usize] as libc::c_double,
-                    power[0 as libc::c_int as usize] as libc::c_double,
-                    power[1 as libc::c_int as usize] as libc::c_double,
+                    rate_0[0 as i32 as usize] as f64,
+                    rate_0[1 as i32 as usize] as f64,
+                    power[0 as i32 as usize] as f64,
+                    power[1 as i32 as usize] as f64,
                 );
             }
         }
@@ -1144,23 +1144,23 @@ pub unsafe extern "C" fn CL_MouseMove(mut cmd: *mut crate::src::qcommon::q_share
     // add mouse X/Y movement to cmd
     if in_strafe.active as u64 != 0 {
         (*cmd).rightmove = crate::src::qcommon::q_math::ClampChar(
-            ((*cmd).rightmove as libc::c_int as libc::c_float
-                + (*crate::src::client::cl_main::m_side).value * mx) as libc::c_int,
+            ((*cmd).rightmove as i32 as f32
+                + (*crate::src::client::cl_main::m_side).value * mx) as i32,
         )
     } else {
-        crate::src::client::cl_main::cl.viewangles[1 as libc::c_int as usize] -=
+        crate::src::client::cl_main::cl.viewangles[1 as i32 as usize] -=
             (*crate::src::client::cl_main::m_yaw).value * mx
     }
-    if (in_mlooking as libc::c_uint != 0
+    if (in_mlooking as u32 != 0
         || (*crate::src::client::cl_main::cl_freelook).integer != 0)
         && in_strafe.active as u64 == 0
     {
-        crate::src::client::cl_main::cl.viewangles[0 as libc::c_int as usize] +=
+        crate::src::client::cl_main::cl.viewangles[0 as i32 as usize] +=
             (*crate::src::client::cl_main::m_pitch).value * my
     } else {
         (*cmd).forwardmove = crate::src::qcommon::q_math::ClampChar(
-            ((*cmd).forwardmove as libc::c_int as libc::c_float
-                - (*crate::src::client::cl_main::m_forward).value * my) as libc::c_int,
+            ((*cmd).forwardmove as i32 as f32
+                - (*crate::src::client::cl_main::m_forward).value * my) as i32,
         )
     };
 }
@@ -1172,31 +1172,31 @@ CL_CmdButtons
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_CmdButtons(mut cmd: *mut crate::src::qcommon::q_shared::usercmd_t) {
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     //
     // figure button bits
     // send a button bit even if the key was pressed and released in
     // less than a frame
     //
-    i = 0 as libc::c_int;
-    while i < 15 as libc::c_int {
-        if in_buttons[i as usize].active as libc::c_uint != 0
-            || in_buttons[i as usize].wasPressed as libc::c_uint != 0
+    i = 0 as i32;
+    while i < 15 as i32 {
+        if in_buttons[i as usize].active as u32 != 0
+            || in_buttons[i as usize].wasPressed as u32 != 0
         {
-            (*cmd).buttons |= (1 as libc::c_int) << i
+            (*cmd).buttons |= (1 as i32) << i
         }
         in_buttons[i as usize].wasPressed = crate::src::qcommon::q_shared::qfalse;
         i += 1
     }
     if crate::src::client::cl_keys::Key_GetCatcher() != 0 {
-        (*cmd).buttons |= 2 as libc::c_int
+        (*cmd).buttons |= 2 as i32
     }
     // allow the game to know if any key at all is
     // currently pressed, even if it isn't bound to anything
     if crate::src::client::cl_keys::anykeydown != 0
-        && crate::src::client::cl_keys::Key_GetCatcher() == 0 as libc::c_int
+        && crate::src::client::cl_keys::Key_GetCatcher() == 0 as i32
     {
-        (*cmd).buttons |= 2048 as libc::c_int
+        (*cmd).buttons |= 2048 as i32
     };
 }
 /*
@@ -1207,20 +1207,20 @@ CL_FinishMove
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_FinishMove(mut cmd: *mut crate::src::qcommon::q_shared::usercmd_t) {
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     // copy the state that the cgame is currently sending
     (*cmd).weapon =
         crate::src::client::cl_main::cl.cgameUserCmdValue as crate::src::qcommon::q_shared::byte;
     // send the current server time so the amount of movement
     // can be determined without allowing cheating
     (*cmd).serverTime = crate::src::client::cl_main::cl.serverTime;
-    i = 0 as libc::c_int;
-    while i < 3 as libc::c_int {
+    i = 0 as i32;
+    while i < 3 as i32 {
         (*cmd).angles[i as usize] = (crate::src::client::cl_main::cl.viewangles[i as usize]
-            * 65536 as libc::c_int as libc::c_float
-            / 360 as libc::c_int as libc::c_float)
-            as libc::c_int
-            & 65535 as libc::c_int;
+            * 65536 as i32 as f32
+            / 360 as i32 as f32)
+            as i32
+            & 65535 as i32;
         i += 1
     }
 }
@@ -1243,17 +1243,17 @@ pub unsafe extern "C" fn CL_CreateCmd() -> crate::src::qcommon::q_shared::usercm
             upmove: 0,
         };
     let mut oldAngles: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    oldAngles[0 as libc::c_int as usize] =
-        crate::src::client::cl_main::cl.viewangles[0 as libc::c_int as usize];
-    oldAngles[1 as libc::c_int as usize] =
-        crate::src::client::cl_main::cl.viewangles[1 as libc::c_int as usize];
-    oldAngles[2 as libc::c_int as usize] =
-        crate::src::client::cl_main::cl.viewangles[2 as libc::c_int as usize];
+    oldAngles[0 as i32 as usize] =
+        crate::src::client::cl_main::cl.viewangles[0 as i32 as usize];
+    oldAngles[1 as i32 as usize] =
+        crate::src::client::cl_main::cl.viewangles[1 as i32 as usize];
+    oldAngles[2 as i32 as usize] =
+        crate::src::client::cl_main::cl.viewangles[2 as i32 as usize];
     // keyboard angle adjustment
     CL_AdjustAngles();
     crate::stdlib::memset(
         &mut cmd as *mut crate::src::qcommon::q_shared::usercmd_t as *mut libc::c_void,
-        0 as libc::c_int,
+        0 as i32,
         ::std::mem::size_of::<crate::src::qcommon::q_shared::usercmd_t>() as libc::c_ulong,
     );
     CL_CmdButtons(&mut cmd);
@@ -1264,34 +1264,34 @@ pub unsafe extern "C" fn CL_CreateCmd() -> crate::src::qcommon::q_shared::usercm
     // get basic movement from joystick
     CL_JoystickMove(&mut cmd);
     // check to make sure the angles haven't wrapped
-    if crate::src::client::cl_main::cl.viewangles[0 as libc::c_int as usize]
-        - oldAngles[0 as libc::c_int as usize]
-        > 90 as libc::c_int as libc::c_float
+    if crate::src::client::cl_main::cl.viewangles[0 as i32 as usize]
+        - oldAngles[0 as i32 as usize]
+        > 90 as i32 as f32
     {
-        crate::src::client::cl_main::cl.viewangles[0 as libc::c_int as usize] =
-            oldAngles[0 as libc::c_int as usize] + 90 as libc::c_int as libc::c_float
-    } else if oldAngles[0 as libc::c_int as usize]
-        - crate::src::client::cl_main::cl.viewangles[0 as libc::c_int as usize]
-        > 90 as libc::c_int as libc::c_float
+        crate::src::client::cl_main::cl.viewangles[0 as i32 as usize] =
+            oldAngles[0 as i32 as usize] + 90 as i32 as f32
+    } else if oldAngles[0 as i32 as usize]
+        - crate::src::client::cl_main::cl.viewangles[0 as i32 as usize]
+        > 90 as i32 as f32
     {
-        crate::src::client::cl_main::cl.viewangles[0 as libc::c_int as usize] =
-            oldAngles[0 as libc::c_int as usize] - 90 as libc::c_int as libc::c_float
+        crate::src::client::cl_main::cl.viewangles[0 as i32 as usize] =
+            oldAngles[0 as i32 as usize] - 90 as i32 as f32
     }
     // store out the final values
     CL_FinishMove(&mut cmd);
     // draw debug graphs of turning for mouse testing
     if (*crate::src::client::cl_main::cl_debugMove).integer != 0 {
-        if (*crate::src::client::cl_main::cl_debugMove).integer == 1 as libc::c_int {
+        if (*crate::src::client::cl_main::cl_debugMove).integer == 1 as i32 {
             crate::src::client::cl_scrn::SCR_DebugGraph(crate::stdlib::fabs(
-                (crate::src::client::cl_main::cl.viewangles[1 as libc::c_int as usize]
-                    - oldAngles[1 as libc::c_int as usize]) as libc::c_double,
-            ) as libc::c_float);
+                (crate::src::client::cl_main::cl.viewangles[1 as i32 as usize]
+                    - oldAngles[1 as i32 as usize]) as f64,
+            ) as f32);
         }
-        if (*crate::src::client::cl_main::cl_debugMove).integer == 2 as libc::c_int {
+        if (*crate::src::client::cl_main::cl_debugMove).integer == 2 as i32 {
             crate::src::client::cl_scrn::SCR_DebugGraph(crate::stdlib::fabs(
-                (crate::src::client::cl_main::cl.viewangles[0 as libc::c_int as usize]
-                    - oldAngles[0 as libc::c_int as usize]) as libc::c_double,
-            ) as libc::c_float);
+                (crate::src::client::cl_main::cl.viewangles[0 as i32 as usize]
+                    - oldAngles[0 as i32 as usize]) as f64,
+            ) as f32);
         }
     }
     return cmd;
@@ -1306,28 +1306,28 @@ Create a new usercmd_t structure for this frame
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_CreateNewCommands() {
-    let mut cmdNum: libc::c_int = 0;
+    let mut cmdNum: i32 = 0;
     // no need to create usercmds until we have a gamestate
-    if (crate::src::client::cl_main::clc.state as libc::c_uint)
-        < crate::src::qcommon::q_shared::CA_PRIMED as libc::c_int as libc::c_uint
+    if (crate::src::client::cl_main::clc.state as u32)
+        < crate::src::qcommon::q_shared::CA_PRIMED as i32 as u32
     {
         return;
     }
-    frame_msec = (crate::src::qcommon::common::com_frameTime - old_com_frameTime) as libc::c_uint;
+    frame_msec = (crate::src::qcommon::common::com_frameTime - old_com_frameTime) as u32;
     // if running over 1000fps, act as if each frame is 1ms
     // prevents divisions by zero
-    if frame_msec < 1 as libc::c_int as libc::c_uint {
-        frame_msec = 1 as libc::c_int as libc::c_uint
+    if frame_msec < 1 as i32 as u32 {
+        frame_msec = 1 as i32 as u32
     }
     // if running less than 5fps, truncate the extra time to prevent
     // unexpected moves after a hitch
-    if frame_msec > 200 as libc::c_int as libc::c_uint {
-        frame_msec = 200 as libc::c_int as libc::c_uint
+    if frame_msec > 200 as i32 as u32 {
+        frame_msec = 200 as i32 as u32
     }
     old_com_frameTime = crate::src::qcommon::common::com_frameTime;
     // generate a command for this frame
     crate::src::client::cl_main::cl.cmdNumber += 1;
-    cmdNum = crate::src::client::cl_main::cl.cmdNumber & 64 as libc::c_int - 1 as libc::c_int;
+    cmdNum = crate::src::client::cl_main::cl.cmdNumber & 64 as i32 - 1 as i32;
     crate::src::client::cl_main::cl.cmds[cmdNum as usize] = CL_CreateCmd();
 }
 /*
@@ -1344,39 +1344,39 @@ getting more delta compression will reduce total bandwidth.
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_ReadyToSendPacket() -> crate::src::qcommon::q_shared::qboolean {
-    let mut oldPacketNum: libc::c_int = 0;
-    let mut delta: libc::c_int = 0;
+    let mut oldPacketNum: i32 = 0;
+    let mut delta: i32 = 0;
     // don't send anything if playing back a demo
-    if crate::src::client::cl_main::clc.demoplaying as libc::c_uint != 0
-        || crate::src::client::cl_main::clc.state as libc::c_uint
-            == crate::src::qcommon::q_shared::CA_CINEMATIC as libc::c_int as libc::c_uint
+    if crate::src::client::cl_main::clc.demoplaying as u32 != 0
+        || crate::src::client::cl_main::clc.state as u32
+            == crate::src::qcommon::q_shared::CA_CINEMATIC as i32 as u32
     {
         return crate::src::qcommon::q_shared::qfalse;
     }
     // If we are downloading, we send no less than 50ms between packets
     if *crate::src::client::cl_main::clc
         .downloadTempName
-        .as_mut_ptr() as libc::c_int
+        .as_mut_ptr() as i32
         != 0
         && crate::src::client::cl_main::cls.realtime
             - crate::src::client::cl_main::clc.lastPacketSentTime
-            < 50 as libc::c_int
+            < 50 as i32
     {
         return crate::src::qcommon::q_shared::qfalse;
     }
     // if we don't have a valid gamestate yet, only send
     // one packet a second
-    if crate::src::client::cl_main::clc.state as libc::c_uint
-        != crate::src::qcommon::q_shared::CA_ACTIVE as libc::c_int as libc::c_uint
-        && crate::src::client::cl_main::clc.state as libc::c_uint
-            != crate::src::qcommon::q_shared::CA_PRIMED as libc::c_int as libc::c_uint
+    if crate::src::client::cl_main::clc.state as u32
+        != crate::src::qcommon::q_shared::CA_ACTIVE as i32 as u32
+        && crate::src::client::cl_main::clc.state as u32
+            != crate::src::qcommon::q_shared::CA_PRIMED as i32 as u32
         && *crate::src::client::cl_main::clc
             .downloadTempName
             .as_mut_ptr()
             == 0
         && crate::src::client::cl_main::cls.realtime
             - crate::src::client::cl_main::clc.lastPacketSentTime
-            < 1000 as libc::c_int
+            < 1000 as i32
     {
         return crate::src::qcommon::q_shared::qfalse;
     }
@@ -1384,8 +1384,8 @@ pub unsafe extern "C" fn CL_ReadyToSendPacket() -> crate::src::qcommon::q_shared
     if crate::src::client::cl_main::clc
         .netchan
         .remoteAddress
-        .type_0 as libc::c_uint
-        == crate::qcommon_h::NA_LOOPBACK as libc::c_int as libc::c_uint
+        .type_0 as u32
+        == crate::qcommon_h::NA_LOOPBACK as i32 as u32
     {
         return crate::src::qcommon::q_shared::qtrue;
     }
@@ -1393,28 +1393,28 @@ pub unsafe extern "C" fn CL_ReadyToSendPacket() -> crate::src::qcommon::q_shared
     if (*crate::src::client::cl_main::cl_lanForcePackets).integer != 0
         && crate::src::qcommon::net_ip::Sys_IsLANAddress(
             crate::src::client::cl_main::clc.netchan.remoteAddress as crate::qcommon_h::netadr_t,
-        ) as libc::c_uint
+        ) as u32
             != 0
     {
         return crate::src::qcommon::q_shared::qtrue;
     }
     // check for exceeding cl_maxpackets
-    if (*crate::src::client::cl_main::cl_maxpackets).integer < 15 as libc::c_int {
+    if (*crate::src::client::cl_main::cl_maxpackets).integer < 15 as i32 {
         crate::src::qcommon::cvar::Cvar_Set(
             b"cl_maxpackets\x00" as *const u8 as *const libc::c_char,
             b"15\x00" as *const u8 as *const libc::c_char,
         );
-    } else if (*crate::src::client::cl_main::cl_maxpackets).integer > 125 as libc::c_int {
+    } else if (*crate::src::client::cl_main::cl_maxpackets).integer > 125 as i32 {
         crate::src::qcommon::cvar::Cvar_Set(
             b"cl_maxpackets\x00" as *const u8 as *const libc::c_char,
             b"125\x00" as *const u8 as *const libc::c_char,
         );
     }
-    oldPacketNum = crate::src::client::cl_main::clc.netchan.outgoingSequence - 1 as libc::c_int
-        & 32 as libc::c_int - 1 as libc::c_int;
+    oldPacketNum = crate::src::client::cl_main::clc.netchan.outgoingSequence - 1 as i32
+        & 32 as i32 - 1 as i32;
     delta = crate::src::client::cl_main::cls.realtime
         - crate::src::client::cl_main::cl.outPackets[oldPacketNum as usize].p_realtime;
-    if delta < 1000 as libc::c_int / (*crate::src::client::cl_main::cl_maxpackets).integer {
+    if delta < 1000 as i32 / (*crate::src::client::cl_main::cl_maxpackets).integer {
         // the accumulated commands will go out in the next packet
         return crate::src::qcommon::q_shared::qfalse;
     }
@@ -1455,8 +1455,8 @@ pub unsafe extern "C" fn CL_WritePacket() {
         bit: 0,
     };
     let mut data: [crate::src::qcommon::q_shared::byte; 16384] = [0; 16384];
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
     let mut cmd: *mut crate::src::qcommon::q_shared::usercmd_t =
         0 as *mut crate::src::qcommon::q_shared::usercmd_t;
     let mut oldcmd: *mut crate::src::qcommon::q_shared::usercmd_t =
@@ -1471,20 +1471,20 @@ pub unsafe extern "C" fn CL_WritePacket() {
             rightmove: 0,
             upmove: 0,
         };
-    let mut packetNum: libc::c_int = 0;
-    let mut oldPacketNum: libc::c_int = 0;
-    let mut count: libc::c_int = 0;
-    let mut key: libc::c_int = 0;
+    let mut packetNum: i32 = 0;
+    let mut oldPacketNum: i32 = 0;
+    let mut count: i32 = 0;
+    let mut key: i32 = 0;
     // don't send anything if playing back a demo
-    if crate::src::client::cl_main::clc.demoplaying as libc::c_uint != 0
-        || crate::src::client::cl_main::clc.state as libc::c_uint
-            == crate::src::qcommon::q_shared::CA_CINEMATIC as libc::c_int as libc::c_uint
+    if crate::src::client::cl_main::clc.demoplaying as u32 != 0
+        || crate::src::client::cl_main::clc.state as u32
+            == crate::src::qcommon::q_shared::CA_CINEMATIC as i32 as u32
     {
         return;
     }
     crate::stdlib::memset(
         &mut nullcmd as *mut crate::src::qcommon::q_shared::usercmd_t as *mut libc::c_void,
-        0 as libc::c_int,
+        0 as i32,
         ::std::mem::size_of::<crate::src::qcommon::q_shared::usercmd_t>() as libc::c_ulong,
     );
     oldcmd = &mut nullcmd;
@@ -1492,7 +1492,7 @@ pub unsafe extern "C" fn CL_WritePacket() {
         &mut buf as *mut _ as *mut crate::qcommon_h::msg_t,
         data.as_mut_ptr(),
         ::std::mem::size_of::<[crate::src::qcommon::q_shared::byte; 16384]>() as libc::c_ulong
-            as libc::c_int,
+            as i32,
     );
     crate::src::qcommon::msg::MSG_Bitstream(&mut buf as *mut _ as *mut crate::qcommon_h::msg_t);
     // write the current serverId so the server
@@ -1514,11 +1514,11 @@ pub unsafe extern "C" fn CL_WritePacket() {
         crate::src::client::cl_main::clc.serverCommandSequence,
     );
     // write any unacknowledged clientCommands
-    i = crate::src::client::cl_main::clc.reliableAcknowledge + 1 as libc::c_int;
+    i = crate::src::client::cl_main::clc.reliableAcknowledge + 1 as i32;
     while i <= crate::src::client::cl_main::clc.reliableSequence {
         crate::src::qcommon::msg::MSG_WriteByte(
             &mut buf as *mut _ as *mut crate::qcommon_h::msg_t,
-            crate::qcommon_h::clc_clientCommand as libc::c_int,
+            crate::qcommon_h::clc_clientCommand as i32,
         );
         crate::src::qcommon::msg::MSG_WriteLong(
             &mut buf as *mut _ as *mut crate::qcommon_h::msg_t,
@@ -1527,7 +1527,7 @@ pub unsafe extern "C" fn CL_WritePacket() {
         crate::src::qcommon::msg::MSG_WriteString(
             &mut buf as *mut _ as *mut crate::qcommon_h::msg_t,
             crate::src::client::cl_main::clc.reliableCommands
-                [(i & 64 as libc::c_int - 1 as libc::c_int) as usize]
+                [(i & 64 as i32 - 1 as i32) as usize]
                 .as_mut_ptr(),
         );
         i += 1
@@ -1535,46 +1535,46 @@ pub unsafe extern "C" fn CL_WritePacket() {
     // we want to send all the usercmds that were generated in the last
     // few packet, so even if a couple packets are dropped in a row,
     // all the cmds will make it to the server
-    if (*crate::src::client::cl_main::cl_packetdup).integer < 0 as libc::c_int {
+    if (*crate::src::client::cl_main::cl_packetdup).integer < 0 as i32 {
         crate::src::qcommon::cvar::Cvar_Set(
             b"cl_packetdup\x00" as *const u8 as *const libc::c_char,
             b"0\x00" as *const u8 as *const libc::c_char,
         );
-    } else if (*crate::src::client::cl_main::cl_packetdup).integer > 5 as libc::c_int {
+    } else if (*crate::src::client::cl_main::cl_packetdup).integer > 5 as i32 {
         crate::src::qcommon::cvar::Cvar_Set(
             b"cl_packetdup\x00" as *const u8 as *const libc::c_char,
             b"5\x00" as *const u8 as *const libc::c_char,
         );
     }
     oldPacketNum = crate::src::client::cl_main::clc.netchan.outgoingSequence
-        - 1 as libc::c_int
+        - 1 as i32
         - (*crate::src::client::cl_main::cl_packetdup).integer
-        & 32 as libc::c_int - 1 as libc::c_int;
+        & 32 as i32 - 1 as i32;
     count = crate::src::client::cl_main::cl.cmdNumber
         - crate::src::client::cl_main::cl.outPackets[oldPacketNum as usize].p_cmdNumber;
-    if count > 32 as libc::c_int {
-        count = 32 as libc::c_int;
+    if count > 32 as i32 {
+        count = 32 as i32;
         crate::src::qcommon::common::Com_Printf(
             b"MAX_PACKET_USERCMDS\n\x00" as *const u8 as *const libc::c_char,
         );
     }
-    if crate::src::client::cl_main::clc.voipOutgoingDataSize > 0 as libc::c_int {
-        if crate::src::client::cl_main::clc.voipFlags as libc::c_int & 0x1 as libc::c_int != 0
+    if crate::src::client::cl_main::clc.voipOutgoingDataSize > 0 as i32 {
+        if crate::src::client::cl_main::clc.voipFlags as i32 & 0x1 as i32 != 0
             || crate::src::qcommon::common::Com_IsVoipTarget(
                 crate::src::client::cl_main::clc.voipTargets.as_mut_ptr(),
                 ::std::mem::size_of::<[crate::stdlib::uint8_t; 8]>() as libc::c_ulong
-                    as libc::c_int,
-                -(1 as libc::c_int),
-            ) as libc::c_uint
+                    as i32,
+                -(1 as i32),
+            ) as u32
                 != 0
         {
             crate::src::qcommon::msg::MSG_WriteByte(
                 &mut buf as *mut _ as *mut crate::qcommon_h::msg_t,
-                crate::qcommon_h::clc_voipOpus as libc::c_int,
+                crate::qcommon_h::clc_voipOpus as i32,
             );
             crate::src::qcommon::msg::MSG_WriteByte(
                 &mut buf as *mut _ as *mut crate::qcommon_h::msg_t,
-                crate::src::client::cl_main::clc.voipOutgoingGeneration as libc::c_int,
+                crate::src::client::cl_main::clc.voipOutgoingGeneration as i32,
             );
             crate::src::qcommon::msg::MSG_WriteLong(
                 &mut buf as *mut _ as *mut crate::qcommon_h::msg_t,
@@ -1588,11 +1588,11 @@ pub unsafe extern "C" fn CL_WritePacket() {
                 &mut buf as *mut _ as *mut crate::qcommon_h::msg_t,
                 crate::src::client::cl_main::clc.voipTargets.as_mut_ptr() as *const libc::c_void,
                 ::std::mem::size_of::<[crate::stdlib::uint8_t; 8]>() as libc::c_ulong
-                    as libc::c_int,
+                    as i32,
             );
             crate::src::qcommon::msg::MSG_WriteByte(
                 &mut buf as *mut _ as *mut crate::qcommon_h::msg_t,
-                crate::src::client::cl_main::clc.voipFlags as libc::c_int,
+                crate::src::client::cl_main::clc.voipFlags as i32,
             );
             crate::src::qcommon::msg::MSG_WriteShort(
                 &mut buf as *mut _ as *mut crate::qcommon_h::msg_t,
@@ -1609,10 +1609,10 @@ pub unsafe extern "C" fn CL_WritePacket() {
             //  this VoIP data so it gets to disk; the server doesn't send it
             //  back to us, and we might as well eliminate concerns about dropped
             //  and misordered packets here.
-            if crate::src::client::cl_main::clc.demorecording as libc::c_uint != 0
+            if crate::src::client::cl_main::clc.demorecording as u32 != 0
                 && crate::src::client::cl_main::clc.demowaiting as u64 == 0
             {
-                let voipSize: libc::c_int = crate::src::client::cl_main::clc.voipOutgoingDataSize;
+                let voipSize: i32 = crate::src::client::cl_main::clc.voipOutgoingDataSize;
                 let mut fakemsg: crate::qcommon_h::msg_t = crate::qcommon_h::msg_t {
                     allowoverflow: crate::src::qcommon::q_shared::qfalse,
                     overflowed: crate::src::qcommon::q_shared::qfalse,
@@ -1628,7 +1628,7 @@ pub unsafe extern "C" fn CL_WritePacket() {
                     &mut fakemsg as *mut _ as *mut crate::qcommon_h::msg_t,
                     fakedata.as_mut_ptr(),
                     ::std::mem::size_of::<[crate::src::qcommon::q_shared::byte; 16384]>()
-                        as libc::c_ulong as libc::c_int,
+                        as libc::c_ulong as i32,
                 );
                 crate::src::qcommon::msg::MSG_Bitstream(
                     &mut fakemsg as *mut _ as *mut crate::qcommon_h::msg_t,
@@ -1639,7 +1639,7 @@ pub unsafe extern "C" fn CL_WritePacket() {
                 );
                 crate::src::qcommon::msg::MSG_WriteByte(
                     &mut fakemsg as *mut _ as *mut crate::qcommon_h::msg_t,
-                    crate::qcommon_h::svc_voipOpus as libc::c_int,
+                    crate::qcommon_h::svc_voipOpus as i32,
                 );
                 crate::src::qcommon::msg::MSG_WriteShort(
                     &mut fakemsg as *mut _ as *mut crate::qcommon_h::msg_t,
@@ -1647,7 +1647,7 @@ pub unsafe extern "C" fn CL_WritePacket() {
                 );
                 crate::src::qcommon::msg::MSG_WriteByte(
                     &mut fakemsg as *mut _ as *mut crate::qcommon_h::msg_t,
-                    crate::src::client::cl_main::clc.voipOutgoingGeneration as libc::c_int,
+                    crate::src::client::cl_main::clc.voipOutgoingGeneration as i32,
                 );
                 crate::src::qcommon::msg::MSG_WriteLong(
                     &mut fakemsg as *mut _ as *mut crate::qcommon_h::msg_t,
@@ -1663,8 +1663,8 @@ pub unsafe extern "C" fn CL_WritePacket() {
                 );
                 crate::src::qcommon::msg::MSG_WriteBits(
                     &mut fakemsg as *mut _ as *mut crate::qcommon_h::msg_t,
-                    crate::src::client::cl_main::clc.voipFlags as libc::c_int,
-                    2 as libc::c_int,
+                    crate::src::client::cl_main::clc.voipFlags as i32,
+                    2 as i32,
                 );
                 crate::src::qcommon::msg::MSG_WriteData(
                     &mut fakemsg as *mut _ as *mut crate::qcommon_h::msg_t,
@@ -1675,24 +1675,24 @@ pub unsafe extern "C" fn CL_WritePacket() {
                 );
                 crate::src::qcommon::msg::MSG_WriteByte(
                     &mut fakemsg as *mut _ as *mut crate::qcommon_h::msg_t,
-                    crate::qcommon_h::svc_EOF as libc::c_int,
+                    crate::qcommon_h::svc_EOF as i32,
                 );
                 crate::src::client::cl_main::CL_WriteDemoMessage(
                     &mut fakemsg as *mut _ as *mut crate::qcommon_h::msg_t,
-                    0 as libc::c_int,
+                    0 as i32,
                 );
             }
             crate::src::client::cl_main::clc.voipOutgoingSequence +=
                 crate::src::client::cl_main::clc.voipOutgoingDataFrames;
-            crate::src::client::cl_main::clc.voipOutgoingDataSize = 0 as libc::c_int;
-            crate::src::client::cl_main::clc.voipOutgoingDataFrames = 0 as libc::c_int
+            crate::src::client::cl_main::clc.voipOutgoingDataSize = 0 as i32;
+            crate::src::client::cl_main::clc.voipOutgoingDataFrames = 0 as i32
         } else {
             // We have data, but no targets. Silently discard all data
-            crate::src::client::cl_main::clc.voipOutgoingDataSize = 0 as libc::c_int;
-            crate::src::client::cl_main::clc.voipOutgoingDataFrames = 0 as libc::c_int
+            crate::src::client::cl_main::clc.voipOutgoingDataSize = 0 as i32;
+            crate::src::client::cl_main::clc.voipOutgoingDataFrames = 0 as i32
         }
     }
-    if count >= 1 as libc::c_int {
+    if count >= 1 as i32 {
         if (*crate::src::client::cl_main::cl_showSend).integer != 0 {
             crate::src::qcommon::common::Com_Printf(
                 b"(%i)\x00" as *const u8 as *const libc::c_char,
@@ -1702,18 +1702,18 @@ pub unsafe extern "C" fn CL_WritePacket() {
         // begin a client move command
         if (*crate::src::client::cl_main::cl_nodelta).integer != 0
             || crate::src::client::cl_main::cl.snap.valid as u64 == 0
-            || crate::src::client::cl_main::clc.demowaiting as libc::c_uint != 0
+            || crate::src::client::cl_main::clc.demowaiting as u32 != 0
             || crate::src::client::cl_main::clc.serverMessageSequence
                 != crate::src::client::cl_main::cl.snap.messageNum
         {
             crate::src::qcommon::msg::MSG_WriteByte(
                 &mut buf as *mut _ as *mut crate::qcommon_h::msg_t,
-                crate::qcommon_h::clc_moveNoDelta as libc::c_int,
+                crate::qcommon_h::clc_moveNoDelta as i32,
             );
         } else {
             crate::src::qcommon::msg::MSG_WriteByte(
                 &mut buf as *mut _ as *mut crate::qcommon_h::msg_t,
-                crate::qcommon_h::clc_move as libc::c_int,
+                crate::qcommon_h::clc_move as i32,
             );
         }
         // write the command count
@@ -1729,16 +1729,16 @@ pub unsafe extern "C" fn CL_WritePacket() {
         key ^= crate::src::qcommon::msg::MSG_HashKey(
             crate::src::client::cl_main::clc.serverCommands[(crate::src::client::cl_main::clc
                 .serverCommandSequence
-                & 64 as libc::c_int - 1 as libc::c_int)
+                & 64 as i32 - 1 as i32)
                 as usize]
                 .as_mut_ptr(),
-            32 as libc::c_int,
+            32 as i32,
         );
         // write all the commands, including the predicted command
-        i = 0 as libc::c_int;
+        i = 0 as i32;
         while i < count {
-            j = crate::src::client::cl_main::cl.cmdNumber - count + i + 1 as libc::c_int
-                & 64 as libc::c_int - 1 as libc::c_int;
+            j = crate::src::client::cl_main::cl.cmdNumber - count + i + 1 as i32
+                & 64 as i32 - 1 as i32;
             cmd = &mut *crate::src::client::cl_main::cl
                 .cmds
                 .as_mut_ptr()
@@ -1758,7 +1758,7 @@ pub unsafe extern "C" fn CL_WritePacket() {
     // deliver the message
     //
     packetNum = crate::src::client::cl_main::clc.netchan.outgoingSequence
-        & 32 as libc::c_int - 1 as libc::c_int;
+        & 32 as i32 - 1 as i32;
     crate::src::client::cl_main::cl.outPackets[packetNum as usize].p_realtime =
         crate::src::client::cl_main::cls.realtime;
     crate::src::client::cl_main::cl.outPackets[packetNum as usize].p_serverTime =
@@ -1788,8 +1788,8 @@ Called every frame to builds and sends a command packet to the server.
 
 pub unsafe extern "C" fn CL_SendCmd() {
     // don't send any message if not connected
-    if (crate::src::client::cl_main::clc.state as libc::c_uint)
-        < crate::src::qcommon::q_shared::CA_CONNECTED as libc::c_int as libc::c_uint
+    if (crate::src::client::cl_main::clc.state as u32)
+        < crate::src::qcommon::q_shared::CA_CONNECTED as i32 as u32
     {
         return;
     }
@@ -2066,12 +2066,12 @@ pub unsafe extern "C" fn CL_InitInput() {
     crate::src::client::cl_main::cl_nodelta = crate::src::qcommon::cvar::Cvar_Get(
         b"cl_nodelta\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
-        0 as libc::c_int,
+        0 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s;
     crate::src::client::cl_main::cl_debugMove = crate::src::qcommon::cvar::Cvar_Get(
         b"cl_debugMove\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
-        0 as libc::c_int,
+        0 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s;
 }
 /*

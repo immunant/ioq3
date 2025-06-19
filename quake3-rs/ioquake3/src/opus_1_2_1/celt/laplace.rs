@@ -15,81 +15,81 @@ pub use crate::src::opus_1_2_1::celt::entcode::ec_window;
 /* When called, decay is positive and at most 11456. */
 
 unsafe extern "C" fn ec_laplace_get_freq1(
-    mut fs0: libc::c_uint,
-    mut decay: libc::c_int,
-) -> libc::c_uint {
-    let mut ft: libc::c_uint = 0;
-    ft = ((32768 as libc::c_int
-        - ((1 as libc::c_int) << 0 as libc::c_int) * (2 as libc::c_int * 16 as libc::c_int))
-        as libc::c_uint)
+    mut fs0: u32,
+    mut decay: i32,
+) -> u32 {
+    let mut ft: u32 = 0;
+    ft = ((32768 as i32
+        - ((1 as i32) << 0 as i32) * (2 as i32 * 16 as i32))
+        as u32)
         .wrapping_sub(fs0);
-    return ft.wrapping_mul((16384 as libc::c_int - decay) as libc::c_uint) >> 15 as libc::c_int;
+    return ft.wrapping_mul((16384 as i32 - decay) as u32) >> 15 as i32;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn ec_laplace_encode(
     mut enc: *mut crate::src::opus_1_2_1::celt::entcode::ec_enc,
-    mut value: *mut libc::c_int,
-    mut fs: libc::c_uint,
-    mut decay: libc::c_int,
+    mut value: *mut i32,
+    mut fs: u32,
+    mut decay: i32,
 ) {
-    let mut fl: libc::c_uint = 0;
-    let mut val: libc::c_int = *value;
-    fl = 0 as libc::c_int as libc::c_uint;
+    let mut fl: u32 = 0;
+    let mut val: i32 = *value;
+    fl = 0 as i32 as u32;
     if val != 0 {
-        let mut s: libc::c_int = 0;
-        let mut i: libc::c_int = 0;
-        s = -((val < 0 as libc::c_int) as libc::c_int);
+        let mut s: i32 = 0;
+        let mut i: i32 = 0;
+        s = -((val < 0 as i32) as i32);
         val = val + s ^ s;
         fl = fs;
         fs = ec_laplace_get_freq1(fs, decay);
         /* Search the decaying part of the PDF.*/
-        i = 1 as libc::c_int;
-        while fs > 0 as libc::c_int as libc::c_uint && i < val {
-            fs = fs.wrapping_mul(2 as libc::c_int as libc::c_uint);
+        i = 1 as i32;
+        while fs > 0 as i32 as u32 && i < val {
+            fs = fs.wrapping_mul(2 as i32 as u32);
             fl = fl.wrapping_add(fs.wrapping_add(
-                (2 as libc::c_int * ((1 as libc::c_int) << 0 as libc::c_int)) as libc::c_uint,
+                (2 as i32 * ((1 as i32) << 0 as i32)) as u32,
             ));
-            fs = fs.wrapping_mul(decay as libc::c_uint) >> 15 as libc::c_int;
+            fs = fs.wrapping_mul(decay as u32) >> 15 as i32;
             i += 1
         }
         /* Everything beyond that has probability LAPLACE_MINP. */
         if fs == 0 {
-            let mut di: libc::c_int = 0;
-            let mut ndi_max: libc::c_int = 0;
-            ndi_max = ((32768 as libc::c_int as libc::c_uint)
+            let mut di: i32 = 0;
+            let mut ndi_max: i32 = 0;
+            ndi_max = ((32768 as i32 as u32)
                 .wrapping_sub(fl)
-                .wrapping_add(((1 as libc::c_int) << 0 as libc::c_int) as libc::c_uint)
-                .wrapping_sub(1 as libc::c_int as libc::c_uint)
-                >> 0 as libc::c_int) as libc::c_int;
-            ndi_max = ndi_max - s >> 1 as libc::c_int;
-            di = if val - i < ndi_max - 1 as libc::c_int {
+                .wrapping_add(((1 as i32) << 0 as i32) as u32)
+                .wrapping_sub(1 as i32 as u32)
+                >> 0 as i32) as i32;
+            ndi_max = ndi_max - s >> 1 as i32;
+            di = if val - i < ndi_max - 1 as i32 {
                 (val) - i
             } else {
-                (ndi_max) - 1 as libc::c_int
+                (ndi_max) - 1 as i32
             };
             fl = fl.wrapping_add(
-                ((2 as libc::c_int * di + 1 as libc::c_int + s)
-                    * ((1 as libc::c_int) << 0 as libc::c_int)) as libc::c_uint,
+                ((2 as i32 * di + 1 as i32 + s)
+                    * ((1 as i32) << 0 as i32)) as u32,
             );
-            fs = if (((1 as libc::c_int) << 0 as libc::c_int) as libc::c_uint)
-                < (32768 as libc::c_int as libc::c_uint).wrapping_sub(fl)
+            fs = if (((1 as i32) << 0 as i32) as u32)
+                < (32768 as i32 as u32).wrapping_sub(fl)
             {
-                ((1 as libc::c_int) << 0 as libc::c_int) as libc::c_uint
+                ((1 as i32) << 0 as i32) as u32
             } else {
-                (32768 as libc::c_int as libc::c_uint).wrapping_sub(fl)
+                (32768 as i32 as u32).wrapping_sub(fl)
             };
             *value = i + di + s ^ s
         } else {
-            fs = fs.wrapping_add(((1 as libc::c_int) << 0 as libc::c_int) as libc::c_uint);
-            fl = fl.wrapping_add(fs & !s as libc::c_uint)
+            fs = fs.wrapping_add(((1 as i32) << 0 as i32) as u32);
+            fl = fl.wrapping_add(fs & !s as u32)
         }
     }
     crate::src::opus_1_2_1::celt::entenc::ec_encode_bin(
         enc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
         fl,
         fl.wrapping_add(fs),
-        15 as libc::c_int as libc::c_uint,
+        15 as i32 as u32,
     );
 }
 /* Copyright (c) 2007 CSIRO
@@ -137,44 +137,44 @@ Written by Jean-Marc Valin */
 
 pub unsafe extern "C" fn ec_laplace_decode(
     mut dec: *mut crate::src::opus_1_2_1::celt::entcode::ec_dec,
-    mut fs: libc::c_uint,
-    mut decay: libc::c_int,
-) -> libc::c_int {
-    let mut val: libc::c_int = 0 as libc::c_int;
-    let mut fl: libc::c_uint = 0;
-    let mut fm: libc::c_uint = 0;
+    mut fs: u32,
+    mut decay: i32,
+) -> i32 {
+    let mut val: i32 = 0 as i32;
+    let mut fl: u32 = 0;
+    let mut fm: u32 = 0;
     fm = crate::src::opus_1_2_1::celt::entdec::ec_decode_bin(
         dec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
-        15 as libc::c_int as libc::c_uint,
+        15 as i32 as u32,
     );
-    fl = 0 as libc::c_int as libc::c_uint;
+    fl = 0 as i32 as u32;
     if fm >= fs {
         val += 1;
         fl = fs;
         fs = ec_laplace_get_freq1(fs, decay)
-            .wrapping_add(((1 as libc::c_int) << 0 as libc::c_int) as libc::c_uint);
+            .wrapping_add(((1 as i32) << 0 as i32) as u32);
         /* Search the decaying part of the PDF.*/
-        while fs > ((1 as libc::c_int) << 0 as libc::c_int) as libc::c_uint
-            && fm >= fl.wrapping_add((2 as libc::c_int as libc::c_uint).wrapping_mul(fs))
+        while fs > ((1 as i32) << 0 as i32) as u32
+            && fm >= fl.wrapping_add((2 as i32 as u32).wrapping_mul(fs))
         {
-            fs = fs.wrapping_mul(2 as libc::c_int as libc::c_uint);
+            fs = fs.wrapping_mul(2 as i32 as u32);
             fl = fl.wrapping_add(fs);
             fs = fs
                 .wrapping_sub(
-                    (2 as libc::c_int * ((1 as libc::c_int) << 0 as libc::c_int)) as libc::c_uint,
+                    (2 as i32 * ((1 as i32) << 0 as i32)) as u32,
                 )
-                .wrapping_mul(decay as libc::c_uint)
-                >> 15 as libc::c_int;
-            fs = fs.wrapping_add(((1 as libc::c_int) << 0 as libc::c_int) as libc::c_uint);
+                .wrapping_mul(decay as u32)
+                >> 15 as i32;
+            fs = fs.wrapping_add(((1 as i32) << 0 as i32) as u32);
             val += 1
         }
         /* Everything beyond that has probability LAPLACE_MINP. */
-        if fs <= ((1 as libc::c_int) << 0 as libc::c_int) as libc::c_uint {
-            let mut di: libc::c_int = 0;
-            di = (fm.wrapping_sub(fl) >> 0 as libc::c_int + 1 as libc::c_int) as libc::c_int;
+        if fs <= ((1 as i32) << 0 as i32) as u32 {
+            let mut di: i32 = 0;
+            di = (fm.wrapping_sub(fl) >> 0 as i32 + 1 as i32) as i32;
             val += di;
             fl = fl.wrapping_add(
-                (2 as libc::c_int * di * ((1 as libc::c_int) << 0 as libc::c_int)) as libc::c_uint,
+                (2 as i32 * di * ((1 as i32) << 0 as i32)) as u32,
             )
         }
         if fm < fl.wrapping_add(fs) {
@@ -186,12 +186,12 @@ pub unsafe extern "C" fn ec_laplace_decode(
     crate::src::opus_1_2_1::celt::entdec::ec_dec_update(
         dec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
         fl,
-        if fl.wrapping_add(fs) < 32768 as libc::c_int as libc::c_uint {
+        if fl.wrapping_add(fs) < 32768 as i32 as u32 {
             fl.wrapping_add(fs)
         } else {
-            32768 as libc::c_int as libc::c_uint
+            32768 as i32 as u32
         },
-        32768 as libc::c_int as libc::c_uint,
+        32768 as i32 as u32,
     );
     return val;
 }

@@ -47,7 +47,7 @@ pub type logfile_t = logfile_s;
 pub struct logfile_s {
     pub filename: [libc::c_char; 1024],
     pub fp: *mut crate::stdlib::FILE,
-    pub numwrites: libc::c_int,
+    pub numwrites: i32,
 }
 
 static mut logfile: logfile_t = logfile_t {
@@ -106,7 +106,7 @@ pub unsafe extern "C" fn Log_Open(mut filename: *mut libc::c_char) {
         crate::src::botlib::be_interface::botimport
             .Print
             .expect("non-null function pointer")(
-            1 as libc::c_int,
+            1 as i32,
             b"openlog <filename>\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         ); //end if
         return;
@@ -115,7 +115,7 @@ pub unsafe extern "C" fn Log_Open(mut filename: *mut libc::c_char) {
         crate::src::botlib::be_interface::botimport
             .Print
             .expect("non-null function pointer")(
-            3 as libc::c_int,
+            3 as i32,
             b"log file %s is already opened\n\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             logfile.filename.as_mut_ptr(),
@@ -136,7 +136,7 @@ pub unsafe extern "C" fn Log_Open(mut filename: *mut libc::c_char) {
         crate::src::botlib::be_interface::botimport
             .Print
             .expect("non-null function pointer")(
-            3 as libc::c_int,
+            3 as i32,
             b"can\'t open the log file %s\n\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             filename,
@@ -146,12 +146,12 @@ pub unsafe extern "C" fn Log_Open(mut filename: *mut libc::c_char) {
     crate::src::qcommon::q_shared::Q_strncpyz(
         logfile.filename.as_mut_ptr(),
         filename,
-        1024 as libc::c_int,
+        1024 as i32,
     );
     crate::src::botlib::be_interface::botimport
         .Print
         .expect("non-null function pointer")(
-        1 as libc::c_int,
+        1 as i32,
         b"Opened log %s\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         logfile.filename.as_mut_ptr(),
     );
@@ -174,7 +174,7 @@ pub unsafe extern "C" fn Log_Close() {
         crate::src::botlib::be_interface::botimport
             .Print
             .expect("non-null function pointer")(
-            3 as libc::c_int,
+            3 as i32,
             b"can\'t close log file %s\n\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             logfile.filename.as_mut_ptr(),
@@ -185,7 +185,7 @@ pub unsafe extern "C" fn Log_Close() {
     crate::src::botlib::be_interface::botimport
         .Print
         .expect("non-null function pointer")(
-        1 as libc::c_int,
+        1 as i32,
         b"Closed log %s\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         logfile.filename.as_mut_ptr(),
     );
@@ -245,15 +245,15 @@ pub unsafe extern "C" fn Log_WriteTimeStamped(mut fmt: *mut libc::c_char, mut ar
         b"%d   %02d:%02d:%02d:%02d   \x00" as *const u8 as *const libc::c_char,
         logfile.numwrites,
         (crate::src::botlib::be_interface::botlibglobals.time
-            / 60 as libc::c_int as libc::c_float
-            / 60 as libc::c_int as libc::c_float) as libc::c_int,
-        (crate::src::botlib::be_interface::botlibglobals.time / 60 as libc::c_int as libc::c_float)
-            as libc::c_int,
-        crate::src::botlib::be_interface::botlibglobals.time as libc::c_int,
-        (crate::src::botlib::be_interface::botlibglobals.time * 100 as libc::c_int as libc::c_float)
-            as libc::c_int
-            - crate::src::botlib::be_interface::botlibglobals.time as libc::c_int
-                * 100 as libc::c_int,
+            / 60 as i32 as f32
+            / 60 as i32 as f32) as i32,
+        (crate::src::botlib::be_interface::botlibglobals.time / 60 as i32 as f32)
+            as i32,
+        crate::src::botlib::be_interface::botlibglobals.time as i32,
+        (crate::src::botlib::be_interface::botlibglobals.time * 100 as i32 as f32)
+            as i32
+            - crate::src::botlib::be_interface::botlibglobals.time as i32
+                * 100 as i32,
     );
     ap = args.clone();
     crate::stdlib::vfprintf(logfile.fp, fmt, ap.as_va_list());

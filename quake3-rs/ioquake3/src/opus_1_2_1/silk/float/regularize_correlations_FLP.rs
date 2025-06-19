@@ -29,19 +29,19 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_regularize_correlations_FLP(
-    mut XX: *mut libc::c_float,
-    mut xx: *mut libc::c_float,
-    noise: libc::c_float,
-    D: libc::c_int,
+    mut XX: *mut f32,
+    mut xx: *mut f32,
+    noise: f32,
+    D: i32,
 )
 /* I    Dimension of XX                             */
 {
-    let mut i: libc::c_int = 0;
-    i = 0 as libc::c_int;
+    let mut i: i32 = 0;
+    i = 0 as i32;
     while i < D {
-        *(&mut *XX.offset(0 as libc::c_int as isize) as *mut libc::c_float)
+        *(&mut *XX.offset(0 as i32 as isize) as *mut f32)
             .offset((i * D + i) as isize) += noise;
         i += 1
     }
-    *xx.offset(0 as libc::c_int as isize) += noise;
+    *xx.offset(0 as i32 as isize) += noise;
 }

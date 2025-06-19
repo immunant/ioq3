@@ -1,5 +1,5 @@
 // =============== BEGIN inflate_h ================
-pub type inflate_mode = libc::c_uint;
+pub type inflate_mode = u32;
 
 pub const HEAD: crate::src::zlib::inflate::inflate_mode = 0;
 
@@ -65,35 +65,35 @@ pub const SYNC: crate::src::zlib::inflate::inflate_mode = 29;
 #[derive(Copy, Clone)]
 pub struct inflate_state {
     pub mode: crate::src::zlib::inflate::inflate_mode,
-    pub last: libc::c_int,
-    pub wrap: libc::c_int,
-    pub havedict: libc::c_int,
-    pub flags: libc::c_int,
-    pub dmax: libc::c_uint,
+    pub last: i32,
+    pub wrap: i32,
+    pub havedict: i32,
+    pub flags: i32,
+    pub dmax: u32,
     pub check: libc::c_ulong,
     pub total: libc::c_ulong,
     pub head: crate::zlib_h::gz_headerp,
-    pub wbits: libc::c_uint,
-    pub wsize: libc::c_uint,
-    pub whave: libc::c_uint,
-    pub write: libc::c_uint,
-    pub window: *mut libc::c_uchar,
+    pub wbits: u32,
+    pub wsize: u32,
+    pub whave: u32,
+    pub write: u32,
+    pub window: *mut u8,
     pub hold: libc::c_ulong,
-    pub bits: libc::c_uint,
-    pub length: libc::c_uint,
-    pub offset: libc::c_uint,
-    pub extra: libc::c_uint,
+    pub bits: u32,
+    pub length: u32,
+    pub offset: u32,
+    pub extra: u32,
     pub lencode: *const crate::src::zlib::inftrees::code,
     pub distcode: *const crate::src::zlib::inftrees::code,
-    pub lenbits: libc::c_uint,
-    pub distbits: libc::c_uint,
-    pub ncode: libc::c_uint,
-    pub nlen: libc::c_uint,
-    pub ndist: libc::c_uint,
-    pub have: libc::c_uint,
+    pub lenbits: u32,
+    pub distbits: u32,
+    pub ncode: u32,
+    pub nlen: u32,
+    pub ndist: u32,
+    pub have: u32,
     pub next: *mut crate::src::zlib::inftrees::code,
-    pub lens: [libc::c_ushort; 320],
-    pub work: [libc::c_ushort; 288],
+    pub lens: [u16; 320],
+    pub work: [u16; 288],
     pub codes: [crate::src::zlib::inftrees::code; 2048],
 }
 use ::libc;
@@ -123,81 +123,81 @@ pub use crate::zlib_h::z_stream_s;
 pub use crate::zlib_h::z_streamp;
 #[no_mangle]
 
-pub unsafe extern "C" fn inflateReset(mut strm: crate::zlib_h::z_streamp) -> libc::c_int {
+pub unsafe extern "C" fn inflateReset(mut strm: crate::zlib_h::z_streamp) -> i32 {
     let mut state: *mut crate::src::zlib::inflate::inflate_state =
         0 as *mut crate::src::zlib::inflate::inflate_state; /* to support ill-conceived Java test suite */
     if strm.is_null() || (*strm).state.is_null() {
-        return -(2 as libc::c_int);
+        return -(2 as i32);
     } /* in case we return an error */
     state = (*strm).state as *mut crate::src::zlib::inflate::inflate_state;
-    (*state).total = 0 as libc::c_int as libc::c_ulong;
+    (*state).total = 0 as i32 as libc::c_ulong;
     (*strm).total_out = (*state).total;
     (*strm).total_in = (*strm).total_out;
     (*strm).msg = 0 as *mut libc::c_char;
-    (*strm).adler = 1 as libc::c_int as crate::zconf_h::uLong;
+    (*strm).adler = 1 as i32 as crate::zconf_h::uLong;
     (*state).mode = crate::src::zlib::inflate::HEAD;
-    (*state).last = 0 as libc::c_int;
-    (*state).havedict = 0 as libc::c_int;
-    (*state).dmax = 32768 as libc::c_uint;
+    (*state).last = 0 as i32;
+    (*state).havedict = 0 as i32;
+    (*state).dmax = 32768 as u32;
     (*state).head = 0 as crate::zlib_h::gz_headerp;
-    (*state).wsize = 0 as libc::c_int as libc::c_uint;
-    (*state).whave = 0 as libc::c_int as libc::c_uint;
-    (*state).write = 0 as libc::c_int as libc::c_uint;
-    (*state).hold = 0 as libc::c_int as libc::c_ulong;
-    (*state).bits = 0 as libc::c_int as libc::c_uint;
+    (*state).wsize = 0 as i32 as u32;
+    (*state).whave = 0 as i32 as u32;
+    (*state).write = 0 as i32 as u32;
+    (*state).hold = 0 as i32 as libc::c_ulong;
+    (*state).bits = 0 as i32 as u32;
     (*state).next = (*state).codes.as_mut_ptr();
     (*state).distcode = (*state).next;
     (*state).lencode = (*state).distcode;
-    return 0 as libc::c_int;
+    return 0 as i32;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn inflatePrime(
     mut strm: crate::zlib_h::z_streamp,
-    mut bits: libc::c_int,
-    mut value: libc::c_int,
-) -> libc::c_int {
+    mut bits: i32,
+    mut value: i32,
+) -> i32 {
     let mut state: *mut crate::src::zlib::inflate::inflate_state =
         0 as *mut crate::src::zlib::inflate::inflate_state;
     if strm.is_null() || (*strm).state.is_null() {
-        return -(2 as libc::c_int);
+        return -(2 as i32);
     }
     state = (*strm).state as *mut crate::src::zlib::inflate::inflate_state;
-    if bits > 16 as libc::c_int
-        || (*state).bits.wrapping_add(bits as libc::c_uint) > 32 as libc::c_int as libc::c_uint
+    if bits > 16 as i32
+        || (*state).bits.wrapping_add(bits as u32) > 32 as i32 as u32
     {
-        return -(2 as libc::c_int);
+        return -(2 as i32);
     }
     value = (value as libc::c_long
-        & ((1 as libc::c_long) << bits) - 1 as libc::c_int as libc::c_long)
-        as libc::c_int;
+        & ((1 as libc::c_long) << bits) - 1 as i32 as libc::c_long)
+        as i32;
     (*state).hold = (*state)
         .hold
         .wrapping_add((value << (*state).bits) as libc::c_ulong);
-    (*state).bits = (*state).bits.wrapping_add(bits as libc::c_uint);
-    return 0 as libc::c_int;
+    (*state).bits = (*state).bits.wrapping_add(bits as u32);
+    return 0 as i32;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn inflateInit2_(
     mut strm: crate::zlib_h::z_streamp,
-    mut windowBits: libc::c_int,
+    mut windowBits: i32,
     mut version: *const libc::c_char,
-    mut stream_size: libc::c_int,
-) -> libc::c_int {
+    mut stream_size: i32,
+) -> i32 {
     let mut state: *mut crate::src::zlib::inflate::inflate_state =
         0 as *mut crate::src::zlib::inflate::inflate_state;
     if version.is_null()
-        || *version.offset(0 as libc::c_int as isize) as libc::c_int
+        || *version.offset(0 as i32 as isize) as i32
             != (*::std::mem::transmute::<&[u8; 6], &[libc::c_char; 6]>(b"1.2.3\x00"))
-                [0 as libc::c_int as usize] as libc::c_int
+                [0 as i32 as usize] as i32
         || stream_size
-            != ::std::mem::size_of::<crate::zlib_h::z_stream>() as libc::c_ulong as libc::c_int
+            != ::std::mem::size_of::<crate::zlib_h::z_stream>() as libc::c_ulong as i32
     {
-        return -(6 as libc::c_int);
+        return -(6 as i32);
     }
     if strm.is_null() {
-        return -(2 as libc::c_int);
+        return -(2 as i32);
     }
     (*strm).msg = 0 as *mut libc::c_char;
     if (*strm).zalloc.is_none() {
@@ -205,8 +205,8 @@ pub unsafe extern "C" fn inflateInit2_(
             crate::src::zlib::zutil::zcalloc
                 as unsafe extern "C" fn(
                     _: crate::zconf_h::voidpf,
-                    _: libc::c_uint,
-                    _: libc::c_uint,
+                    _: u32,
+                    _: u32,
                 ) -> crate::zconf_h::voidpf,
         );
         (*strm).opaque = 0 as crate::zconf_h::voidpf
@@ -220,30 +220,30 @@ pub unsafe extern "C" fn inflateInit2_(
     state = Some((*strm).zalloc.expect("non-null function pointer"))
         .expect("non-null function pointer")(
         (*strm).opaque,
-        1 as libc::c_int as crate::zconf_h::uInt,
+        1 as i32 as crate::zconf_h::uInt,
         ::std::mem::size_of::<crate::src::zlib::inflate::inflate_state>() as libc::c_ulong
             as crate::zconf_h::uInt,
     ) as *mut crate::src::zlib::inflate::inflate_state;
     if state.is_null() {
-        return -(4 as libc::c_int);
+        return -(4 as i32);
     }
     (*strm).state = state as *mut crate::zlib_h::internal_state;
-    if windowBits < 0 as libc::c_int {
-        (*state).wrap = 0 as libc::c_int;
+    if windowBits < 0 as i32 {
+        (*state).wrap = 0 as i32;
         windowBits = -windowBits
     } else {
-        (*state).wrap = (windowBits >> 4 as libc::c_int) + 1 as libc::c_int
+        (*state).wrap = (windowBits >> 4 as i32) + 1 as i32
     }
-    if windowBits < 8 as libc::c_int || windowBits > 15 as libc::c_int {
+    if windowBits < 8 as i32 || windowBits > 15 as i32 {
         Some((*strm).zfree.expect("non-null function pointer")).expect("non-null function pointer")(
             (*strm).opaque,
             state as crate::zconf_h::voidpf,
         );
         (*strm).state = 0 as *mut crate::zlib_h::internal_state;
-        return -(2 as libc::c_int);
+        return -(2 as i32);
     }
-    (*state).wbits = windowBits as libc::c_uint;
-    (*state).window = 0 as *mut libc::c_uchar;
+    (*state).wbits = windowBits as u32;
+    (*state).window = 0 as *mut u8;
     return inflateReset(strm);
 }
 #[no_mangle]
@@ -251,9 +251,9 @@ pub unsafe extern "C" fn inflateInit2_(
 pub unsafe extern "C" fn inflateInit_(
     mut strm: crate::zlib_h::z_streamp,
     mut version: *const libc::c_char,
-    mut stream_size: libc::c_int,
-) -> libc::c_int {
-    return inflateInit2_(strm, 15 as libc::c_int, version, stream_size);
+    mut stream_size: i32,
+) -> i32 {
+    return inflateInit2_(strm, 15 as i32, version, stream_size);
 }
 /* inflate.c -- zlib decompression
  * Copyright (C) 1995-2005 Mark Adler
@@ -358,4097 +358,4097 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
     static mut lenfix: [crate::src::zlib::inftrees::code; 512] = [
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 96 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 0 as libc::c_int as libc::c_ushort,
+                op: 96 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 0 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 80 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 80 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 16 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 16 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 20 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 115 as libc::c_int as libc::c_ushort,
+                op: 20 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 115 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 18 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 31 as libc::c_int as libc::c_ushort,
+                op: 18 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 31 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 112 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 112 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 48 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 48 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 192 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 192 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 16 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 10 as libc::c_int as libc::c_ushort,
+                op: 16 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 10 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 96 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 96 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 32 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 32 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 160 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 160 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 0 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 0 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 128 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 128 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 64 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 64 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 224 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 224 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 16 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 6 as libc::c_int as libc::c_ushort,
+                op: 16 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 6 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 88 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 88 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 24 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 24 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 144 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 144 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 19 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 59 as libc::c_int as libc::c_ushort,
+                op: 19 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 59 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 120 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 120 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 56 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 56 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 208 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 208 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 17 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 17 as libc::c_int as libc::c_ushort,
+                op: 17 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 17 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 104 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 104 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 40 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 40 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 176 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 176 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 8 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 8 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 136 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 136 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 72 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 72 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 240 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 240 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 16 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 4 as libc::c_int as libc::c_ushort,
+                op: 16 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 4 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 84 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 84 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 20 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 20 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 21 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 227 as libc::c_int as libc::c_ushort,
+                op: 21 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 227 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 19 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 43 as libc::c_int as libc::c_ushort,
+                op: 19 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 43 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 116 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 116 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 52 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 52 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 200 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 200 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 17 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 13 as libc::c_int as libc::c_ushort,
+                op: 17 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 13 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 100 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 100 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 36 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 36 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 168 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 168 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 4 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 4 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 132 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 132 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 68 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 68 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 232 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 232 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 16 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 8 as libc::c_int as libc::c_ushort,
+                op: 16 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 8 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 92 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 92 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 28 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 28 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 152 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 152 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 20 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 83 as libc::c_int as libc::c_ushort,
+                op: 20 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 83 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 124 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 124 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 60 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 60 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 216 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 216 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 18 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 23 as libc::c_int as libc::c_ushort,
+                op: 18 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 23 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 108 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 108 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 44 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 44 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 184 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 184 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 12 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 12 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 140 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 140 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 76 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 76 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 248 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 248 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 16 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 3 as libc::c_int as libc::c_ushort,
+                op: 16 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 3 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 82 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 82 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 18 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 18 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 21 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 163 as libc::c_int as libc::c_ushort,
+                op: 21 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 163 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 19 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 35 as libc::c_int as libc::c_ushort,
+                op: 19 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 35 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 114 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 114 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 50 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 50 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 196 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 196 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 17 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 11 as libc::c_int as libc::c_ushort,
+                op: 17 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 11 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 98 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 98 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 34 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 34 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 164 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 164 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 2 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 2 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 130 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 130 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 66 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 66 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 228 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 228 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 16 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 7 as libc::c_int as libc::c_ushort,
+                op: 16 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 7 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 90 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 90 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 26 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 26 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 148 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 148 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 20 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 67 as libc::c_int as libc::c_ushort,
+                op: 20 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 67 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 122 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 122 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 58 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 58 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 212 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 212 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 18 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 19 as libc::c_int as libc::c_ushort,
+                op: 18 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 19 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 106 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 106 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 42 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 42 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 180 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 180 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 10 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 10 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 138 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 138 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 74 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 74 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 244 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 244 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 16 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 5 as libc::c_int as libc::c_ushort,
+                op: 16 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 5 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 86 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 86 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 22 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 22 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 64 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 0 as libc::c_int as libc::c_ushort,
+                op: 64 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 0 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 19 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 51 as libc::c_int as libc::c_ushort,
+                op: 19 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 51 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 118 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 118 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 54 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 54 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 204 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 204 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 17 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 15 as libc::c_int as libc::c_ushort,
+                op: 17 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 15 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 102 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 102 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 38 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 38 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 172 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 172 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 6 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 6 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 134 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 134 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 70 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 70 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 236 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 236 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 16 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 9 as libc::c_int as libc::c_ushort,
+                op: 16 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 9 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 94 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 94 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 30 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 30 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 156 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 156 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 20 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 99 as libc::c_int as libc::c_ushort,
+                op: 20 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 99 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 126 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 126 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 62 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 62 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 220 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 220 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 18 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 27 as libc::c_int as libc::c_ushort,
+                op: 18 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 27 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 110 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 110 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 46 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 46 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 188 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 188 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 14 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 14 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 142 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 142 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 78 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 78 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 252 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 252 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 96 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 0 as libc::c_int as libc::c_ushort,
+                op: 96 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 0 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 81 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 81 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 17 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 17 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 21 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 131 as libc::c_int as libc::c_ushort,
+                op: 21 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 131 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 18 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 31 as libc::c_int as libc::c_ushort,
+                op: 18 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 31 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 113 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 113 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 49 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 49 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 194 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 194 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 16 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 10 as libc::c_int as libc::c_ushort,
+                op: 16 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 10 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 97 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 97 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 33 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 33 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 162 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 162 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 1 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 1 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 129 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 129 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 65 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 65 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 226 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 226 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 16 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 6 as libc::c_int as libc::c_ushort,
+                op: 16 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 6 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 89 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 89 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 25 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 25 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 146 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 146 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 19 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 59 as libc::c_int as libc::c_ushort,
+                op: 19 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 59 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 121 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 121 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 57 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 57 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 210 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 210 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 17 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 17 as libc::c_int as libc::c_ushort,
+                op: 17 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 17 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 105 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 105 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 41 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 41 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 178 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 178 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 9 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 9 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 137 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 137 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 73 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 73 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 242 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 242 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 16 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 4 as libc::c_int as libc::c_ushort,
+                op: 16 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 4 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 85 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 85 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 21 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 21 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 16 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 258 as libc::c_int as libc::c_ushort,
+                op: 16 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 258 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 19 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 43 as libc::c_int as libc::c_ushort,
+                op: 19 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 43 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 117 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 117 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 53 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 53 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 202 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 202 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 17 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 13 as libc::c_int as libc::c_ushort,
+                op: 17 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 13 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 101 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 101 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 37 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 37 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 170 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 170 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 5 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 5 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 133 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 133 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 69 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 69 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 234 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 234 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 16 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 8 as libc::c_int as libc::c_ushort,
+                op: 16 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 8 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 93 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 93 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 29 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 29 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 154 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 154 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 20 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 83 as libc::c_int as libc::c_ushort,
+                op: 20 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 83 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 125 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 125 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 61 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 61 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 218 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 218 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 18 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 23 as libc::c_int as libc::c_ushort,
+                op: 18 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 23 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 109 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 109 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 45 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 45 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 186 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 186 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 13 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 13 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 141 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 141 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 77 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 77 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 250 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 250 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 16 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 3 as libc::c_int as libc::c_ushort,
+                op: 16 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 3 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 83 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 83 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 19 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 19 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 21 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 195 as libc::c_int as libc::c_ushort,
+                op: 21 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 195 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 19 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 35 as libc::c_int as libc::c_ushort,
+                op: 19 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 35 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 115 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 115 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 51 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 51 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 198 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 198 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 17 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 11 as libc::c_int as libc::c_ushort,
+                op: 17 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 11 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 99 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 99 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 35 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 35 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 166 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 166 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 3 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 3 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 131 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 131 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 67 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 67 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 230 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 230 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 16 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 7 as libc::c_int as libc::c_ushort,
+                op: 16 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 7 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 91 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 91 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 27 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 27 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 150 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 150 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 20 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 67 as libc::c_int as libc::c_ushort,
+                op: 20 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 67 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 123 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 123 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 59 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 59 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 214 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 214 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 18 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 19 as libc::c_int as libc::c_ushort,
+                op: 18 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 19 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 107 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 107 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 43 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 43 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 182 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 182 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 11 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 11 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 139 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 139 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 75 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 75 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 246 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 246 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 16 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 5 as libc::c_int as libc::c_ushort,
+                op: 16 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 5 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 87 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 87 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 23 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 23 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 64 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 0 as libc::c_int as libc::c_ushort,
+                op: 64 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 0 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 19 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 51 as libc::c_int as libc::c_ushort,
+                op: 19 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 51 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 119 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 119 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 55 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 55 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 206 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 206 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 17 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 15 as libc::c_int as libc::c_ushort,
+                op: 17 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 15 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 103 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 103 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 39 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 39 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 174 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 174 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 7 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 7 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 135 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 135 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 71 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 71 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 238 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 238 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 16 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 9 as libc::c_int as libc::c_ushort,
+                op: 16 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 9 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 95 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 95 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 31 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 31 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 158 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 158 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 20 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 99 as libc::c_int as libc::c_ushort,
+                op: 20 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 99 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 127 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 127 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 63 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 63 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 222 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 222 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 18 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 27 as libc::c_int as libc::c_ushort,
+                op: 18 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 27 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 111 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 111 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 47 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 47 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 190 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 190 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 15 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 15 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 143 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 143 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 79 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 79 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 254 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 254 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 96 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 0 as libc::c_int as libc::c_ushort,
+                op: 96 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 0 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 80 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 80 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 16 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 16 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 20 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 115 as libc::c_int as libc::c_ushort,
+                op: 20 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 115 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 18 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 31 as libc::c_int as libc::c_ushort,
+                op: 18 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 31 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 112 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 112 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 48 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 48 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 193 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 193 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 16 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 10 as libc::c_int as libc::c_ushort,
+                op: 16 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 10 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 96 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 96 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 32 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 32 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 161 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 161 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 0 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 0 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 128 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 128 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 64 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 64 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 225 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 225 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 16 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 6 as libc::c_int as libc::c_ushort,
+                op: 16 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 6 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 88 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 88 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 24 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 24 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 145 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 145 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 19 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 59 as libc::c_int as libc::c_ushort,
+                op: 19 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 59 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 120 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 120 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 56 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 56 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 209 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 209 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 17 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 17 as libc::c_int as libc::c_ushort,
+                op: 17 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 17 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 104 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 104 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 40 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 40 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 177 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 177 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 8 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 8 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 136 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 136 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 72 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 72 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 241 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 241 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 16 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 4 as libc::c_int as libc::c_ushort,
+                op: 16 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 4 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 84 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 84 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 20 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 20 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 21 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 227 as libc::c_int as libc::c_ushort,
+                op: 21 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 227 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 19 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 43 as libc::c_int as libc::c_ushort,
+                op: 19 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 43 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 116 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 116 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 52 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 52 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 201 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 201 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 17 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 13 as libc::c_int as libc::c_ushort,
+                op: 17 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 13 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 100 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 100 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 36 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 36 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 169 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 169 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 4 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 4 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 132 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 132 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 68 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 68 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 233 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 233 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 16 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 8 as libc::c_int as libc::c_ushort,
+                op: 16 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 8 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 92 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 92 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 28 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 28 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 153 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 153 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 20 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 83 as libc::c_int as libc::c_ushort,
+                op: 20 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 83 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 124 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 124 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 60 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 60 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 217 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 217 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 18 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 23 as libc::c_int as libc::c_ushort,
+                op: 18 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 23 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 108 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 108 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 44 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 44 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 185 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 185 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 12 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 12 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 140 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 140 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 76 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 76 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 249 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 249 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 16 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 3 as libc::c_int as libc::c_ushort,
+                op: 16 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 3 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 82 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 82 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 18 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 18 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 21 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 163 as libc::c_int as libc::c_ushort,
+                op: 21 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 163 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 19 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 35 as libc::c_int as libc::c_ushort,
+                op: 19 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 35 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 114 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 114 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 50 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 50 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 197 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 197 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 17 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 11 as libc::c_int as libc::c_ushort,
+                op: 17 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 11 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 98 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 98 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 34 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 34 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 165 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 165 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 2 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 2 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 130 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 130 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 66 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 66 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 229 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 229 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 16 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 7 as libc::c_int as libc::c_ushort,
+                op: 16 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 7 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 90 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 90 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 26 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 26 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 149 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 149 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 20 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 67 as libc::c_int as libc::c_ushort,
+                op: 20 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 67 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 122 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 122 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 58 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 58 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 213 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 213 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 18 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 19 as libc::c_int as libc::c_ushort,
+                op: 18 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 19 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 106 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 106 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 42 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 42 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 181 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 181 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 10 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 10 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 138 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 138 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 74 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 74 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 245 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 245 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 16 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 5 as libc::c_int as libc::c_ushort,
+                op: 16 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 5 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 86 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 86 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 22 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 22 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 64 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 0 as libc::c_int as libc::c_ushort,
+                op: 64 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 0 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 19 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 51 as libc::c_int as libc::c_ushort,
+                op: 19 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 51 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 118 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 118 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 54 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 54 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 205 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 205 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 17 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 15 as libc::c_int as libc::c_ushort,
+                op: 17 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 15 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 102 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 102 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 38 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 38 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 173 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 173 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 6 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 6 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 134 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 134 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 70 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 70 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 237 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 237 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 16 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 9 as libc::c_int as libc::c_ushort,
+                op: 16 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 9 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 94 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 94 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 30 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 30 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 157 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 157 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 20 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 99 as libc::c_int as libc::c_ushort,
+                op: 20 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 99 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 126 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 126 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 62 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 62 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 221 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 221 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 18 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 27 as libc::c_int as libc::c_ushort,
+                op: 18 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 27 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 110 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 110 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 46 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 46 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 189 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 189 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 14 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 14 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 142 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 142 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 78 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 78 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 253 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 253 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 96 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 0 as libc::c_int as libc::c_ushort,
+                op: 96 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 0 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 81 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 81 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 17 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 17 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 21 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 131 as libc::c_int as libc::c_ushort,
+                op: 21 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 131 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 18 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 31 as libc::c_int as libc::c_ushort,
+                op: 18 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 31 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 113 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 113 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 49 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 49 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 195 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 195 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 16 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 10 as libc::c_int as libc::c_ushort,
+                op: 16 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 10 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 97 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 97 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 33 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 33 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 163 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 163 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 1 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 1 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 129 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 129 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 65 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 65 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 227 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 227 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 16 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 6 as libc::c_int as libc::c_ushort,
+                op: 16 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 6 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 89 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 89 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 25 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 25 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 147 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 147 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 19 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 59 as libc::c_int as libc::c_ushort,
+                op: 19 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 59 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 121 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 121 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 57 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 57 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 211 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 211 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 17 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 17 as libc::c_int as libc::c_ushort,
+                op: 17 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 17 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 105 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 105 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 41 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 41 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 179 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 179 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 9 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 9 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 137 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 137 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 73 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 73 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 243 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 243 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 16 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 4 as libc::c_int as libc::c_ushort,
+                op: 16 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 4 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 85 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 85 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 21 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 21 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 16 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 258 as libc::c_int as libc::c_ushort,
+                op: 16 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 258 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 19 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 43 as libc::c_int as libc::c_ushort,
+                op: 19 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 43 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 117 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 117 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 53 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 53 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 203 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 203 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 17 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 13 as libc::c_int as libc::c_ushort,
+                op: 17 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 13 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 101 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 101 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 37 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 37 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 171 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 171 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 5 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 5 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 133 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 133 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 69 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 69 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 235 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 235 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 16 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 8 as libc::c_int as libc::c_ushort,
+                op: 16 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 8 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 93 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 93 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 29 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 29 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 155 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 155 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 20 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 83 as libc::c_int as libc::c_ushort,
+                op: 20 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 83 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 125 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 125 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 61 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 61 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 219 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 219 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 18 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 23 as libc::c_int as libc::c_ushort,
+                op: 18 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 23 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 109 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 109 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 45 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 45 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 187 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 187 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 13 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 13 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 141 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 141 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 77 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 77 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 251 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 251 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 16 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 3 as libc::c_int as libc::c_ushort,
+                op: 16 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 3 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 83 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 83 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 19 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 19 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 21 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 195 as libc::c_int as libc::c_ushort,
+                op: 21 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 195 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 19 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 35 as libc::c_int as libc::c_ushort,
+                op: 19 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 35 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 115 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 115 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 51 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 51 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 199 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 199 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 17 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 11 as libc::c_int as libc::c_ushort,
+                op: 17 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 11 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 99 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 99 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 35 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 35 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 167 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 167 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 3 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 3 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 131 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 131 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 67 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 67 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 231 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 231 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 16 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 7 as libc::c_int as libc::c_ushort,
+                op: 16 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 7 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 91 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 91 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 27 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 27 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 151 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 151 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 20 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 67 as libc::c_int as libc::c_ushort,
+                op: 20 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 67 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 123 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 123 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 59 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 59 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 215 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 215 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 18 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 19 as libc::c_int as libc::c_ushort,
+                op: 18 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 19 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 107 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 107 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 43 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 43 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 183 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 183 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 11 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 11 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 139 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 139 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 75 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 75 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 247 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 247 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 16 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 5 as libc::c_int as libc::c_ushort,
+                op: 16 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 5 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 87 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 87 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 23 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 23 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 64 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 0 as libc::c_int as libc::c_ushort,
+                op: 64 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 0 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 19 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 51 as libc::c_int as libc::c_ushort,
+                op: 19 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 51 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 119 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 119 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 55 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 55 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 207 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 207 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 17 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 15 as libc::c_int as libc::c_ushort,
+                op: 17 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 15 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 103 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 103 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 39 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 39 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 175 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 175 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 7 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 7 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 135 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 135 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 71 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 71 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 239 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 239 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 16 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 9 as libc::c_int as libc::c_ushort,
+                op: 16 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 9 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 95 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 95 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 31 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 31 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 159 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 159 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 20 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 99 as libc::c_int as libc::c_ushort,
+                op: 20 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 99 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 127 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 127 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 63 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 63 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 223 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 223 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 18 as libc::c_int as libc::c_uchar,
-                bits: 7 as libc::c_int as libc::c_uchar,
-                val: 27 as libc::c_int as libc::c_ushort,
+                op: 18 as i32 as u8,
+                bits: 7 as i32 as u8,
+                val: 27 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 111 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 111 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 47 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 47 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 191 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 191 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 15 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 15 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 143 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 143 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 8 as libc::c_int as libc::c_uchar,
-                val: 79 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 8 as i32 as u8,
+                val: 79 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 0 as libc::c_int as libc::c_uchar,
-                bits: 9 as libc::c_int as libc::c_uchar,
-                val: 255 as libc::c_int as libc::c_ushort,
+                op: 0 as i32 as u8,
+                bits: 9 as i32 as u8,
+                val: 255 as i32 as u16,
             };
             init
         },
@@ -4456,257 +4456,257 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
     static mut distfix: [crate::src::zlib::inftrees::code; 32] = [
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 16 as libc::c_int as libc::c_uchar,
-                bits: 5 as libc::c_int as libc::c_uchar,
-                val: 1 as libc::c_int as libc::c_ushort,
+                op: 16 as i32 as u8,
+                bits: 5 as i32 as u8,
+                val: 1 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 23 as libc::c_int as libc::c_uchar,
-                bits: 5 as libc::c_int as libc::c_uchar,
-                val: 257 as libc::c_int as libc::c_ushort,
+                op: 23 as i32 as u8,
+                bits: 5 as i32 as u8,
+                val: 257 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 19 as libc::c_int as libc::c_uchar,
-                bits: 5 as libc::c_int as libc::c_uchar,
-                val: 17 as libc::c_int as libc::c_ushort,
+                op: 19 as i32 as u8,
+                bits: 5 as i32 as u8,
+                val: 17 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 27 as libc::c_int as libc::c_uchar,
-                bits: 5 as libc::c_int as libc::c_uchar,
-                val: 4097 as libc::c_int as libc::c_ushort,
+                op: 27 as i32 as u8,
+                bits: 5 as i32 as u8,
+                val: 4097 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 17 as libc::c_int as libc::c_uchar,
-                bits: 5 as libc::c_int as libc::c_uchar,
-                val: 5 as libc::c_int as libc::c_ushort,
+                op: 17 as i32 as u8,
+                bits: 5 as i32 as u8,
+                val: 5 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 25 as libc::c_int as libc::c_uchar,
-                bits: 5 as libc::c_int as libc::c_uchar,
-                val: 1025 as libc::c_int as libc::c_ushort,
+                op: 25 as i32 as u8,
+                bits: 5 as i32 as u8,
+                val: 1025 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 21 as libc::c_int as libc::c_uchar,
-                bits: 5 as libc::c_int as libc::c_uchar,
-                val: 65 as libc::c_int as libc::c_ushort,
+                op: 21 as i32 as u8,
+                bits: 5 as i32 as u8,
+                val: 65 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 29 as libc::c_int as libc::c_uchar,
-                bits: 5 as libc::c_int as libc::c_uchar,
-                val: 16385 as libc::c_int as libc::c_ushort,
+                op: 29 as i32 as u8,
+                bits: 5 as i32 as u8,
+                val: 16385 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 16 as libc::c_int as libc::c_uchar,
-                bits: 5 as libc::c_int as libc::c_uchar,
-                val: 3 as libc::c_int as libc::c_ushort,
+                op: 16 as i32 as u8,
+                bits: 5 as i32 as u8,
+                val: 3 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 24 as libc::c_int as libc::c_uchar,
-                bits: 5 as libc::c_int as libc::c_uchar,
-                val: 513 as libc::c_int as libc::c_ushort,
+                op: 24 as i32 as u8,
+                bits: 5 as i32 as u8,
+                val: 513 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 20 as libc::c_int as libc::c_uchar,
-                bits: 5 as libc::c_int as libc::c_uchar,
-                val: 33 as libc::c_int as libc::c_ushort,
+                op: 20 as i32 as u8,
+                bits: 5 as i32 as u8,
+                val: 33 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 28 as libc::c_int as libc::c_uchar,
-                bits: 5 as libc::c_int as libc::c_uchar,
-                val: 8193 as libc::c_int as libc::c_ushort,
+                op: 28 as i32 as u8,
+                bits: 5 as i32 as u8,
+                val: 8193 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 18 as libc::c_int as libc::c_uchar,
-                bits: 5 as libc::c_int as libc::c_uchar,
-                val: 9 as libc::c_int as libc::c_ushort,
+                op: 18 as i32 as u8,
+                bits: 5 as i32 as u8,
+                val: 9 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 26 as libc::c_int as libc::c_uchar,
-                bits: 5 as libc::c_int as libc::c_uchar,
-                val: 2049 as libc::c_int as libc::c_ushort,
+                op: 26 as i32 as u8,
+                bits: 5 as i32 as u8,
+                val: 2049 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 22 as libc::c_int as libc::c_uchar,
-                bits: 5 as libc::c_int as libc::c_uchar,
-                val: 129 as libc::c_int as libc::c_ushort,
+                op: 22 as i32 as u8,
+                bits: 5 as i32 as u8,
+                val: 129 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 64 as libc::c_int as libc::c_uchar,
-                bits: 5 as libc::c_int as libc::c_uchar,
-                val: 0 as libc::c_int as libc::c_ushort,
+                op: 64 as i32 as u8,
+                bits: 5 as i32 as u8,
+                val: 0 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 16 as libc::c_int as libc::c_uchar,
-                bits: 5 as libc::c_int as libc::c_uchar,
-                val: 2 as libc::c_int as libc::c_ushort,
+                op: 16 as i32 as u8,
+                bits: 5 as i32 as u8,
+                val: 2 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 23 as libc::c_int as libc::c_uchar,
-                bits: 5 as libc::c_int as libc::c_uchar,
-                val: 385 as libc::c_int as libc::c_ushort,
+                op: 23 as i32 as u8,
+                bits: 5 as i32 as u8,
+                val: 385 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 19 as libc::c_int as libc::c_uchar,
-                bits: 5 as libc::c_int as libc::c_uchar,
-                val: 25 as libc::c_int as libc::c_ushort,
+                op: 19 as i32 as u8,
+                bits: 5 as i32 as u8,
+                val: 25 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 27 as libc::c_int as libc::c_uchar,
-                bits: 5 as libc::c_int as libc::c_uchar,
-                val: 6145 as libc::c_int as libc::c_ushort,
+                op: 27 as i32 as u8,
+                bits: 5 as i32 as u8,
+                val: 6145 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 17 as libc::c_int as libc::c_uchar,
-                bits: 5 as libc::c_int as libc::c_uchar,
-                val: 7 as libc::c_int as libc::c_ushort,
+                op: 17 as i32 as u8,
+                bits: 5 as i32 as u8,
+                val: 7 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 25 as libc::c_int as libc::c_uchar,
-                bits: 5 as libc::c_int as libc::c_uchar,
-                val: 1537 as libc::c_int as libc::c_ushort,
+                op: 25 as i32 as u8,
+                bits: 5 as i32 as u8,
+                val: 1537 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 21 as libc::c_int as libc::c_uchar,
-                bits: 5 as libc::c_int as libc::c_uchar,
-                val: 97 as libc::c_int as libc::c_ushort,
+                op: 21 as i32 as u8,
+                bits: 5 as i32 as u8,
+                val: 97 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 29 as libc::c_int as libc::c_uchar,
-                bits: 5 as libc::c_int as libc::c_uchar,
-                val: 24577 as libc::c_int as libc::c_ushort,
+                op: 29 as i32 as u8,
+                bits: 5 as i32 as u8,
+                val: 24577 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 16 as libc::c_int as libc::c_uchar,
-                bits: 5 as libc::c_int as libc::c_uchar,
-                val: 4 as libc::c_int as libc::c_ushort,
+                op: 16 as i32 as u8,
+                bits: 5 as i32 as u8,
+                val: 4 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 24 as libc::c_int as libc::c_uchar,
-                bits: 5 as libc::c_int as libc::c_uchar,
-                val: 769 as libc::c_int as libc::c_ushort,
+                op: 24 as i32 as u8,
+                bits: 5 as i32 as u8,
+                val: 769 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 20 as libc::c_int as libc::c_uchar,
-                bits: 5 as libc::c_int as libc::c_uchar,
-                val: 49 as libc::c_int as libc::c_ushort,
+                op: 20 as i32 as u8,
+                bits: 5 as i32 as u8,
+                val: 49 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 28 as libc::c_int as libc::c_uchar,
-                bits: 5 as libc::c_int as libc::c_uchar,
-                val: 12289 as libc::c_int as libc::c_ushort,
+                op: 28 as i32 as u8,
+                bits: 5 as i32 as u8,
+                val: 12289 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 18 as libc::c_int as libc::c_uchar,
-                bits: 5 as libc::c_int as libc::c_uchar,
-                val: 13 as libc::c_int as libc::c_ushort,
+                op: 18 as i32 as u8,
+                bits: 5 as i32 as u8,
+                val: 13 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 26 as libc::c_int as libc::c_uchar,
-                bits: 5 as libc::c_int as libc::c_uchar,
-                val: 3073 as libc::c_int as libc::c_ushort,
+                op: 26 as i32 as u8,
+                bits: 5 as i32 as u8,
+                val: 3073 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 22 as libc::c_int as libc::c_uchar,
-                bits: 5 as libc::c_int as libc::c_uchar,
-                val: 193 as libc::c_int as libc::c_ushort,
+                op: 22 as i32 as u8,
+                bits: 5 as i32 as u8,
+                val: 193 as i32 as u16,
             };
             init
         },
         {
             let mut init = crate::src::zlib::inftrees::code {
-                op: 64 as libc::c_int as libc::c_uchar,
-                bits: 5 as libc::c_int as libc::c_uchar,
-                val: 0 as libc::c_int as libc::c_ushort,
+                op: 64 as i32 as u8,
+                bits: 5 as i32 as u8,
+                val: 0 as i32 as u16,
             };
             init
         },
@@ -4714,9 +4714,9 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
     /* !BUILDFIXED */
     /* BUILDFIXED */
     (*state).lencode = lenfix.as_ptr();
-    (*state).lenbits = 9 as libc::c_int as libc::c_uint;
+    (*state).lenbits = 9 as i32 as u32;
     (*state).distcode = distfix.as_ptr();
-    (*state).distbits = 5 as libc::c_int as libc::c_uint;
+    (*state).distbits = 5 as i32 as u32;
 }
 /* MAKEFIXED */
 /*
@@ -4736,30 +4736,30 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
 
 unsafe extern "C" fn updatewindow(
     mut strm: crate::zlib_h::z_streamp,
-    mut out: libc::c_uint,
-) -> libc::c_int {
+    mut out: u32,
+) -> i32 {
     let mut state: *mut crate::src::zlib::inflate::inflate_state =
         0 as *mut crate::src::zlib::inflate::inflate_state;
-    let mut copy: libc::c_uint = 0;
-    let mut dist: libc::c_uint = 0;
+    let mut copy: u32 = 0;
+    let mut dist: u32 = 0;
     state = (*strm).state as *mut crate::src::zlib::inflate::inflate_state;
     /* if it hasn't been done already, allocate space for the window */
     if (*state).window.is_null() {
         (*state).window = Some((*strm).zalloc.expect("non-null function pointer"))
             .expect("non-null function pointer")(
             (*strm).opaque,
-            (1 as libc::c_uint) << (*state).wbits,
-            ::std::mem::size_of::<libc::c_uchar>() as libc::c_ulong as crate::zconf_h::uInt,
-        ) as *mut libc::c_uchar;
+            (1 as u32) << (*state).wbits,
+            ::std::mem::size_of::<u8>() as libc::c_ulong as crate::zconf_h::uInt,
+        ) as *mut u8;
         if (*state).window.is_null() {
-            return 1 as libc::c_int;
+            return 1 as i32;
         }
     }
     /* if window not in use yet, initialize */
-    if (*state).wsize == 0 as libc::c_int as libc::c_uint {
-        (*state).wsize = (1 as libc::c_uint) << (*state).wbits;
-        (*state).write = 0 as libc::c_int as libc::c_uint;
-        (*state).whave = 0 as libc::c_int as libc::c_uint
+    if (*state).wsize == 0 as i32 as u32 {
+        (*state).wsize = (1 as u32) << (*state).wbits;
+        (*state).write = 0 as i32 as u32;
+        (*state).whave = 0 as i32 as u32
     }
     /* copy state->wsize or less output bytes into the circular window */
     copy = out.wrapping_sub((*strm).avail_out);
@@ -4769,7 +4769,7 @@ unsafe extern "C" fn updatewindow(
             (*strm).next_out.offset(-((*state).wsize as isize)) as *const libc::c_void,
             (*state).wsize as libc::c_ulong,
         );
-        (*state).write = 0 as libc::c_int as libc::c_uint;
+        (*state).write = 0 as i32 as u32;
         (*state).whave = (*state).wsize
     } else {
         dist = (*state).wsize.wrapping_sub((*state).write);
@@ -4793,14 +4793,14 @@ unsafe extern "C" fn updatewindow(
         } else {
             (*state).write = (*state).write.wrapping_add(dist);
             if (*state).write == (*state).wsize {
-                (*state).write = 0 as libc::c_int as libc::c_uint
+                (*state).write = 0 as i32 as u32
             }
             if (*state).whave < (*state).wsize {
                 (*state).whave = (*state).whave.wrapping_add(dist)
             }
         }
     }
-    return 0 as libc::c_int;
+    return 0 as i32;
 }
 /* Macros for inflate(): */
 /* check function to use adler32() for zlib or crc32() for gzip */
@@ -4901,21 +4901,21 @@ not enough available input to do that, then return from inflate(). */
 
 pub unsafe extern "C" fn inflate(
     mut strm: crate::zlib_h::z_streamp,
-    mut flush: libc::c_int,
-) -> libc::c_int {
+    mut flush: i32,
+) -> i32 {
     let mut current_block: u64; /* next input */
     let mut state: *mut crate::src::zlib::inflate::inflate_state =
         0 as *mut crate::src::zlib::inflate::inflate_state; /* next output */
-    let mut next: *mut libc::c_uchar = 0 as *mut libc::c_uchar; /* available input and output */
-    let mut put: *mut libc::c_uchar = 0 as *mut libc::c_uchar; /* bit buffer */
-    let mut have: libc::c_uint = 0; /* bits in bit buffer */
-    let mut left: libc::c_uint = 0; /* save starting available input and output */
+    let mut next: *mut u8 = 0 as *mut u8; /* available input and output */
+    let mut put: *mut u8 = 0 as *mut u8; /* bit buffer */
+    let mut have: u32 = 0; /* bits in bit buffer */
+    let mut left: u32 = 0; /* save starting available input and output */
     let mut hold: libc::c_ulong = 0; /* number of stored or match bytes to copy */
-    let mut bits: libc::c_uint = 0; /* where to copy match bytes from */
-    let mut in_0: libc::c_uint = 0; /* current decoding table entry */
-    let mut out: libc::c_uint = 0; /* parent table entry */
-    let mut copy: libc::c_uint = 0; /* length to copy for repeats, bits to drop */
-    let mut from: *mut libc::c_uchar = 0 as *mut libc::c_uchar; /* return code */
+    let mut bits: u32 = 0; /* where to copy match bytes from */
+    let mut in_0: u32 = 0; /* current decoding table entry */
+    let mut out: u32 = 0; /* parent table entry */
+    let mut copy: u32 = 0; /* length to copy for repeats, bits to drop */
+    let mut from: *mut u8 = 0 as *mut u8; /* return code */
     let mut this: crate::src::zlib::inftrees::code = crate::src::zlib::inftrees::code {
         op: 0,
         bits: 0,
@@ -4926,39 +4926,39 @@ pub unsafe extern "C" fn inflate(
         bits: 0,
         val: 0,
     }; /* go to byte boundary */
-    let mut len: libc::c_uint = 0;
-    let mut ret: libc::c_int = 0;
-    static mut order: [libc::c_ushort; 19] = [
-        16 as libc::c_int as libc::c_ushort,
-        17 as libc::c_int as libc::c_ushort,
-        18 as libc::c_int as libc::c_ushort,
-        0 as libc::c_int as libc::c_ushort,
-        8 as libc::c_int as libc::c_ushort,
-        7 as libc::c_int as libc::c_ushort,
-        9 as libc::c_int as libc::c_ushort,
-        6 as libc::c_int as libc::c_ushort,
-        10 as libc::c_int as libc::c_ushort,
-        5 as libc::c_int as libc::c_ushort,
-        11 as libc::c_int as libc::c_ushort,
-        4 as libc::c_int as libc::c_ushort,
-        12 as libc::c_int as libc::c_ushort,
-        3 as libc::c_int as libc::c_ushort,
-        13 as libc::c_int as libc::c_ushort,
-        2 as libc::c_int as libc::c_ushort,
-        14 as libc::c_int as libc::c_ushort,
-        1 as libc::c_int as libc::c_ushort,
-        15 as libc::c_int as libc::c_ushort,
+    let mut len: u32 = 0;
+    let mut ret: i32 = 0;
+    static mut order: [u16; 19] = [
+        16 as i32 as u16,
+        17 as i32 as u16,
+        18 as i32 as u16,
+        0 as i32 as u16,
+        8 as i32 as u16,
+        7 as i32 as u16,
+        9 as i32 as u16,
+        6 as i32 as u16,
+        10 as i32 as u16,
+        5 as i32 as u16,
+        11 as i32 as u16,
+        4 as i32 as u16,
+        12 as i32 as u16,
+        3 as i32 as u16,
+        13 as i32 as u16,
+        2 as i32 as u16,
+        14 as i32 as u16,
+        1 as i32 as u16,
+        15 as i32 as u16,
     ];
     if strm.is_null()
         || (*strm).state.is_null()
         || (*strm).next_out.is_null()
-        || (*strm).next_in.is_null() && (*strm).avail_in != 0 as libc::c_int as libc::c_uint
+        || (*strm).next_in.is_null() && (*strm).avail_in != 0 as i32 as u32
     {
-        return -(2 as libc::c_int);
+        return -(2 as i32);
     }
     state = (*strm).state as *mut crate::src::zlib::inflate::inflate_state;
-    if (*state).mode as libc::c_uint
-        == crate::src::zlib::inflate::TYPE as libc::c_int as libc::c_uint
+    if (*state).mode as u32
+        == crate::src::zlib::inflate::TYPE as i32 as u32
     {
         (*state).mode = crate::src::zlib::inflate::TYPEDO
     }
@@ -4970,30 +4970,30 @@ pub unsafe extern "C" fn inflate(
     bits = (*state).bits;
     in_0 = have;
     out = left;
-    ret = 0 as libc::c_int;
+    ret = 0 as i32;
     's_114: loop {
-        match (*state).mode as libc::c_uint {
+        match (*state).mode as u32 {
             0 => {
-                if (*state).wrap == 0 as libc::c_int {
+                if (*state).wrap == 0 as i32 {
                     (*state).mode = crate::src::zlib::inflate::TYPEDO;
                     continue;
                 } else {
-                    while bits < 16 as libc::c_int as libc::c_uint {
-                        if have == 0 as libc::c_int as libc::c_uint {
+                    while bits < 16 as i32 as u32 {
+                        if have == 0 as i32 as u32 {
                             break 's_114;
                         }
                         have = have.wrapping_sub(1);
                         let fresh0 = next;
                         next = next.offset(1);
                         hold = hold.wrapping_add((*fresh0 as libc::c_ulong) << bits);
-                        bits = bits.wrapping_add(8 as libc::c_int as libc::c_uint)
+                        bits = bits.wrapping_add(8 as i32 as u32)
                     }
-                    if (((hold as libc::c_uint
-                        & ((1 as libc::c_uint) << 8 as libc::c_int)
-                            .wrapping_sub(1 as libc::c_int as libc::c_uint))
-                        << 8 as libc::c_int) as libc::c_ulong)
-                        .wrapping_add(hold >> 8 as libc::c_int)
-                        .wrapping_rem(31 as libc::c_int as libc::c_ulong)
+                    if (((hold as u32
+                        & ((1 as u32) << 8 as i32)
+                            .wrapping_sub(1 as i32 as u32))
+                        << 8 as i32) as libc::c_ulong)
+                        .wrapping_add(hold >> 8 as i32)
+                        .wrapping_rem(31 as i32 as libc::c_ulong)
                         != 0
                     {
                         (*strm).msg = b"incorrect header check\x00" as *const u8
@@ -5001,10 +5001,10 @@ pub unsafe extern "C" fn inflate(
                             as *mut libc::c_char;
                         (*state).mode = crate::src::zlib::inflate::BAD;
                         continue;
-                    } else if hold as libc::c_uint
-                        & ((1 as libc::c_uint) << 4 as libc::c_int)
-                            .wrapping_sub(1 as libc::c_int as libc::c_uint)
-                        != 8 as libc::c_int as libc::c_uint
+                    } else if hold as u32
+                        & ((1 as u32) << 4 as i32)
+                            .wrapping_sub(1 as i32 as u32)
+                        != 8 as i32 as u32
                     {
                         (*strm).msg = b"unknown compression method\x00" as *const u8
                             as *const libc::c_char
@@ -5012,12 +5012,12 @@ pub unsafe extern "C" fn inflate(
                         (*state).mode = crate::src::zlib::inflate::BAD;
                         continue;
                     } else {
-                        hold >>= 4 as libc::c_int;
-                        bits = bits.wrapping_sub(4 as libc::c_int as libc::c_uint);
-                        len = (hold as libc::c_uint
-                            & ((1 as libc::c_uint) << 4 as libc::c_int)
-                                .wrapping_sub(1 as libc::c_int as libc::c_uint))
-                        .wrapping_add(8 as libc::c_int as libc::c_uint);
+                        hold >>= 4 as i32;
+                        bits = bits.wrapping_sub(4 as i32 as u32);
+                        len = (hold as u32
+                            & ((1 as u32) << 4 as i32)
+                                .wrapping_sub(1 as i32 as u32))
+                        .wrapping_add(8 as i32 as u32);
                         if len > (*state).wbits {
                             (*strm).msg = b"invalid window size\x00" as *const u8
                                 as *const libc::c_char
@@ -5025,48 +5025,48 @@ pub unsafe extern "C" fn inflate(
                             (*state).mode = crate::src::zlib::inflate::BAD;
                             continue;
                         } else {
-                            (*state).dmax = (1 as libc::c_uint) << len;
+                            (*state).dmax = (1 as u32) << len;
                             (*state).check = crate::src::zlib::adler32::adler32(
                                 0 as libc::c_long as crate::zconf_h::uLong,
                                 0 as *const crate::zconf_h::Bytef,
-                                0 as libc::c_int as crate::zconf_h::uInt,
+                                0 as i32 as crate::zconf_h::uInt,
                             );
                             (*strm).adler = (*state).check;
-                            (*state).mode = if hold & 0x200 as libc::c_int as libc::c_ulong != 0 {
-                                crate::src::zlib::inflate::DICTID as libc::c_int
+                            (*state).mode = if hold & 0x200 as i32 as libc::c_ulong != 0 {
+                                crate::src::zlib::inflate::DICTID as i32
                             } else {
-                                crate::src::zlib::inflate::TYPE as libc::c_int
+                                crate::src::zlib::inflate::TYPE as i32
                             }
                                 as crate::src::zlib::inflate::inflate_mode;
-                            hold = 0 as libc::c_int as libc::c_ulong;
-                            bits = 0 as libc::c_int as libc::c_uint;
+                            hold = 0 as i32 as libc::c_ulong;
+                            bits = 0 as i32 as u32;
                             continue;
                         }
                     }
                 }
             }
             9 => {
-                while bits < 32 as libc::c_int as libc::c_uint {
-                    if have == 0 as libc::c_int as libc::c_uint {
+                while bits < 32 as i32 as u32 {
+                    if have == 0 as i32 as u32 {
                         break 's_114;
                     }
                     have = have.wrapping_sub(1);
                     let fresh1 = next;
                     next = next.offset(1);
                     hold = hold.wrapping_add((*fresh1 as libc::c_ulong) << bits);
-                    bits = bits.wrapping_add(8 as libc::c_int as libc::c_uint)
+                    bits = bits.wrapping_add(8 as i32 as u32)
                 }
-                (*state).check = (hold >> 24 as libc::c_int & 0xff as libc::c_int as libc::c_ulong)
-                    .wrapping_add(hold >> 8 as libc::c_int & 0xff00 as libc::c_int as libc::c_ulong)
+                (*state).check = (hold >> 24 as i32 & 0xff as i32 as libc::c_ulong)
+                    .wrapping_add(hold >> 8 as i32 & 0xff00 as i32 as libc::c_ulong)
                     .wrapping_add(
-                        (hold & 0xff00 as libc::c_int as libc::c_ulong) << 8 as libc::c_int,
+                        (hold & 0xff00 as i32 as libc::c_ulong) << 8 as i32,
                     )
                     .wrapping_add(
-                        (hold & 0xff as libc::c_int as libc::c_ulong) << 24 as libc::c_int,
+                        (hold & 0xff as i32 as libc::c_ulong) << 24 as i32,
                     );
                 (*strm).adler = (*state).check;
-                hold = 0 as libc::c_int as libc::c_ulong;
-                bits = 0 as libc::c_int as libc::c_uint;
+                hold = 0 as i32 as libc::c_ulong;
+                bits = 0 as i32 as u32;
                 (*state).mode = crate::src::zlib::inflate::DICT;
                 current_block = 210528378685203046;
             }
@@ -5080,20 +5080,20 @@ pub unsafe extern "C" fn inflate(
                 current_block = 14847832218395804385;
             }
             13 => {
-                hold >>= bits & 7 as libc::c_int as libc::c_uint;
-                bits = bits.wrapping_sub(bits & 7 as libc::c_int as libc::c_uint);
-                while bits < 32 as libc::c_int as libc::c_uint {
-                    if have == 0 as libc::c_int as libc::c_uint {
+                hold >>= bits & 7 as i32 as u32;
+                bits = bits.wrapping_sub(bits & 7 as i32 as u32);
+                while bits < 32 as i32 as u32 {
+                    if have == 0 as i32 as u32 {
                         break 's_114;
                     }
                     have = have.wrapping_sub(1);
                     let fresh3 = next;
                     next = next.offset(1);
                     hold = hold.wrapping_add((*fresh3 as libc::c_ulong) << bits);
-                    bits = bits.wrapping_add(8 as libc::c_int as libc::c_uint)
+                    bits = bits.wrapping_add(8 as i32 as u32)
                 }
-                if hold & 0xffff as libc::c_int as libc::c_ulong
-                    != hold >> 16 as libc::c_int ^ 0xffff as libc::c_int as libc::c_ulong
+                if hold & 0xffff as i32 as libc::c_ulong
+                    != hold >> 16 as i32 ^ 0xffff as i32 as libc::c_ulong
                 {
                     (*strm).msg = b"invalid stored block lengths\x00" as *const u8
                         as *const libc::c_char
@@ -5101,9 +5101,9 @@ pub unsafe extern "C" fn inflate(
                     (*state).mode = crate::src::zlib::inflate::BAD;
                     continue;
                 } else {
-                    (*state).length = hold as libc::c_uint & 0xffff as libc::c_int as libc::c_uint;
-                    hold = 0 as libc::c_int as libc::c_ulong;
-                    bits = 0 as libc::c_int as libc::c_uint;
+                    (*state).length = hold as u32 & 0xffff as i32 as u32;
+                    hold = 0 as i32 as libc::c_ulong;
+                    bits = 0 as i32 as u32;
                     (*state).mode = crate::src::zlib::inflate::COPY
                 }
                 current_block = 18432964712698998993;
@@ -5112,36 +5112,36 @@ pub unsafe extern "C" fn inflate(
                 current_block = 18432964712698998993;
             }
             15 => {
-                while bits < 14 as libc::c_int as libc::c_uint {
-                    if have == 0 as libc::c_int as libc::c_uint {
+                while bits < 14 as i32 as u32 {
+                    if have == 0 as i32 as u32 {
                         break 's_114;
                     }
                     have = have.wrapping_sub(1);
                     let fresh4 = next;
                     next = next.offset(1);
                     hold = hold.wrapping_add((*fresh4 as libc::c_ulong) << bits);
-                    bits = bits.wrapping_add(8 as libc::c_int as libc::c_uint)
+                    bits = bits.wrapping_add(8 as i32 as u32)
                 }
-                (*state).nlen = (hold as libc::c_uint
-                    & ((1 as libc::c_uint) << 5 as libc::c_int)
-                        .wrapping_sub(1 as libc::c_int as libc::c_uint))
-                .wrapping_add(257 as libc::c_int as libc::c_uint);
-                hold >>= 5 as libc::c_int;
-                bits = bits.wrapping_sub(5 as libc::c_int as libc::c_uint);
-                (*state).ndist = (hold as libc::c_uint
-                    & ((1 as libc::c_uint) << 5 as libc::c_int)
-                        .wrapping_sub(1 as libc::c_int as libc::c_uint))
-                .wrapping_add(1 as libc::c_int as libc::c_uint);
-                hold >>= 5 as libc::c_int;
-                bits = bits.wrapping_sub(5 as libc::c_int as libc::c_uint);
-                (*state).ncode = (hold as libc::c_uint
-                    & ((1 as libc::c_uint) << 4 as libc::c_int)
-                        .wrapping_sub(1 as libc::c_int as libc::c_uint))
-                .wrapping_add(4 as libc::c_int as libc::c_uint);
-                hold >>= 4 as libc::c_int;
-                bits = bits.wrapping_sub(4 as libc::c_int as libc::c_uint);
-                if (*state).nlen > 286 as libc::c_int as libc::c_uint
-                    || (*state).ndist > 30 as libc::c_int as libc::c_uint
+                (*state).nlen = (hold as u32
+                    & ((1 as u32) << 5 as i32)
+                        .wrapping_sub(1 as i32 as u32))
+                .wrapping_add(257 as i32 as u32);
+                hold >>= 5 as i32;
+                bits = bits.wrapping_sub(5 as i32 as u32);
+                (*state).ndist = (hold as u32
+                    & ((1 as u32) << 5 as i32)
+                        .wrapping_sub(1 as i32 as u32))
+                .wrapping_add(1 as i32 as u32);
+                hold >>= 5 as i32;
+                bits = bits.wrapping_sub(5 as i32 as u32);
+                (*state).ncode = (hold as u32
+                    & ((1 as u32) << 4 as i32)
+                        .wrapping_sub(1 as i32 as u32))
+                .wrapping_add(4 as i32 as u32);
+                hold >>= 4 as i32;
+                bits = bits.wrapping_sub(4 as i32 as u32);
+                if (*state).nlen > 286 as i32 as u32
+                    || (*state).ndist > 30 as i32 as u32
                 {
                     (*strm).msg = b"too many length or distance symbols\x00" as *const u8
                         as *const libc::c_char
@@ -5149,7 +5149,7 @@ pub unsafe extern "C" fn inflate(
                     (*state).mode = crate::src::zlib::inflate::BAD;
                     continue;
                 } else {
-                    (*state).have = 0 as libc::c_int as libc::c_uint;
+                    (*state).have = 0 as i32 as u32;
                     (*state).mode = crate::src::zlib::inflate::LENLENS
                 }
                 current_block = 11322929247169729670;
@@ -5176,27 +5176,27 @@ pub unsafe extern "C" fn inflate(
                 current_block = 12040508763604396018;
             }
             23 => {
-                if left == 0 as libc::c_int as libc::c_uint {
+                if left == 0 as i32 as u32 {
                     break;
                 }
                 let fresh24 = put;
                 put = put.offset(1);
-                *fresh24 = (*state).length as libc::c_uchar;
+                *fresh24 = (*state).length as u8;
                 left = left.wrapping_sub(1);
                 (*state).mode = crate::src::zlib::inflate::LEN;
                 continue;
             }
             24 => {
                 if (*state).wrap != 0 {
-                    while bits < 32 as libc::c_int as libc::c_uint {
-                        if have == 0 as libc::c_int as libc::c_uint {
+                    while bits < 32 as i32 as u32 {
+                        if have == 0 as i32 as u32 {
                             break 's_114;
                         }
                         have = have.wrapping_sub(1);
                         let fresh25 = next;
                         next = next.offset(1);
                         hold = hold.wrapping_add((*fresh25 as libc::c_ulong) << bits);
-                        bits = bits.wrapping_add(8 as libc::c_int as libc::c_uint)
+                        bits = bits.wrapping_add(8 as i32 as u32)
                     }
                     out = out.wrapping_sub(left);
                     (*strm).total_out = ((*strm).total_out as libc::c_ulong)
@@ -5213,15 +5213,15 @@ pub unsafe extern "C" fn inflate(
                         (*strm).adler = (*state).check
                     }
                     out = left;
-                    if (hold >> 24 as libc::c_int & 0xff as libc::c_int as libc::c_ulong)
+                    if (hold >> 24 as i32 & 0xff as i32 as libc::c_ulong)
                         .wrapping_add(
-                            hold >> 8 as libc::c_int & 0xff00 as libc::c_int as libc::c_ulong,
+                            hold >> 8 as i32 & 0xff00 as i32 as libc::c_ulong,
                         )
                         .wrapping_add(
-                            (hold & 0xff00 as libc::c_int as libc::c_ulong) << 8 as libc::c_int,
+                            (hold & 0xff00 as i32 as libc::c_ulong) << 8 as i32,
                         )
                         .wrapping_add(
-                            (hold & 0xff as libc::c_int as libc::c_ulong) << 24 as libc::c_int,
+                            (hold & 0xff as i32 as libc::c_ulong) << 24 as i32,
                         )
                         != (*state).check
                     {
@@ -5231,8 +5231,8 @@ pub unsafe extern "C" fn inflate(
                         (*state).mode = crate::src::zlib::inflate::BAD;
                         continue;
                     } else {
-                        hold = 0 as libc::c_int as libc::c_ulong;
-                        bits = 0 as libc::c_int as libc::c_uint
+                        hold = 0 as i32 as libc::c_ulong;
+                        bits = 0 as i32 as u32
                     }
                 }
                 (*state).mode = crate::src::zlib::inflate::DONE;
@@ -5242,47 +5242,47 @@ pub unsafe extern "C" fn inflate(
                 current_block = 1550432445778694857;
             }
             27 => {
-                ret = -(3 as libc::c_int);
+                ret = -(3 as i32);
                 break;
             }
-            28 => return -(4 as libc::c_int),
-            29 | _ => return -(2 as libc::c_int),
+            28 => return -(4 as i32),
+            29 | _ => return -(2 as i32),
         }
         match current_block {
             11322929247169729670 => {
                 while (*state).have < (*state).ncode {
-                    while bits < 3 as libc::c_int as libc::c_uint {
-                        if have == 0 as libc::c_int as libc::c_uint {
+                    while bits < 3 as i32 as u32 {
+                        if have == 0 as i32 as u32 {
                             break 's_114;
                         }
                         have = have.wrapping_sub(1);
                         let fresh5 = next;
                         next = next.offset(1);
                         hold = hold.wrapping_add((*fresh5 as libc::c_ulong) << bits);
-                        bits = bits.wrapping_add(8 as libc::c_int as libc::c_uint)
+                        bits = bits.wrapping_add(8 as i32 as u32)
                     }
                     let fresh6 = (*state).have;
                     (*state).have = (*state).have.wrapping_add(1);
-                    (*state).lens[order[fresh6 as usize] as usize] = (hold as libc::c_uint
-                        & ((1 as libc::c_uint) << 3 as libc::c_int)
-                            .wrapping_sub(1 as libc::c_int as libc::c_uint))
-                        as libc::c_ushort;
-                    hold >>= 3 as libc::c_int;
-                    bits = bits.wrapping_sub(3 as libc::c_int as libc::c_uint)
+                    (*state).lens[order[fresh6 as usize] as usize] = (hold as u32
+                        & ((1 as u32) << 3 as i32)
+                            .wrapping_sub(1 as i32 as u32))
+                        as u16;
+                    hold >>= 3 as i32;
+                    bits = bits.wrapping_sub(3 as i32 as u32)
                 }
-                while (*state).have < 19 as libc::c_int as libc::c_uint {
+                while (*state).have < 19 as i32 as u32 {
                     let fresh7 = (*state).have;
                     (*state).have = (*state).have.wrapping_add(1);
                     (*state).lens[order[fresh7 as usize] as usize] =
-                        0 as libc::c_int as libc::c_ushort
+                        0 as i32 as u16
                 }
                 (*state).next = (*state).codes.as_mut_ptr();
                 (*state).lencode = (*state).next as *const crate::src::zlib::inftrees::code;
-                (*state).lenbits = 7 as libc::c_int as libc::c_uint;
+                (*state).lenbits = 7 as i32 as u32;
                 ret = crate::src::zlib::inftrees::inflate_table(
                     crate::src::zlib::inftrees::CODES,
                     (*state).lens.as_mut_ptr(),
-                    19 as libc::c_int as libc::c_uint,
+                    19 as i32 as u32,
                     &mut (*state).next as *mut _ as *mut *mut crate::src::zlib::inftrees::code,
                     &mut (*state).lenbits,
                     (*state).work.as_mut_ptr(),
@@ -5294,7 +5294,7 @@ pub unsafe extern "C" fn inflate(
                     (*state).mode = crate::src::zlib::inflate::BAD;
                     continue;
                 } else {
-                    (*state).have = 0 as libc::c_int as libc::c_uint;
+                    (*state).have = 0 as i32 as u32;
                     (*state).mode = crate::src::zlib::inflate::CODELENS
                 }
                 current_block = 6177865312519592116;
@@ -5308,7 +5308,7 @@ pub unsafe extern "C" fn inflate(
                     if copy > left {
                         copy = left
                     }
-                    if copy == 0 as libc::c_int as libc::c_uint {
+                    if copy == 0 as i32 as u32 {
                         break;
                     }
                     crate::stdlib::memcpy(
@@ -5328,26 +5328,26 @@ pub unsafe extern "C" fn inflate(
                 }
             }
             210528378685203046 => {
-                if (*state).havedict == 0 as libc::c_int {
+                if (*state).havedict == 0 as i32 {
                     (*strm).next_out = put;
                     (*strm).avail_out = left;
                     (*strm).next_in = next;
                     (*strm).avail_in = have;
                     (*state).hold = hold;
                     (*state).bits = bits;
-                    return 2 as libc::c_int;
+                    return 2 as i32;
                 }
                 (*state).check = crate::src::zlib::adler32::adler32(
                     0 as libc::c_long as crate::zconf_h::uLong,
                     0 as *const crate::zconf_h::Bytef,
-                    0 as libc::c_int as crate::zconf_h::uInt,
+                    0 as i32 as crate::zconf_h::uInt,
                 );
                 (*strm).adler = (*state).check;
                 (*state).mode = crate::src::zlib::inflate::TYPE;
                 current_block = 10674880093440332853;
             }
             1550432445778694857 => {
-                ret = 1 as libc::c_int;
+                ret = 1 as i32;
                 break;
             }
             _ => {}
@@ -5357,56 +5357,56 @@ pub unsafe extern "C" fn inflate(
                 while (*state).have < (*state).nlen.wrapping_add((*state).ndist) {
                     loop {
                         this = *(*state).lencode.offset(
-                            (hold as libc::c_uint
-                                & ((1 as libc::c_uint) << (*state).lenbits)
-                                    .wrapping_sub(1 as libc::c_int as libc::c_uint))
+                            (hold as u32
+                                & ((1 as u32) << (*state).lenbits)
+                                    .wrapping_sub(1 as i32 as u32))
                                 as isize,
                         );
-                        if this.bits as libc::c_uint <= bits {
+                        if this.bits as u32 <= bits {
                             break;
                         }
-                        if have == 0 as libc::c_int as libc::c_uint {
+                        if have == 0 as i32 as u32 {
                             break 's_114;
                         }
                         have = have.wrapping_sub(1);
                         let fresh8 = next;
                         next = next.offset(1);
                         hold = hold.wrapping_add((*fresh8 as libc::c_ulong) << bits);
-                        bits = bits.wrapping_add(8 as libc::c_int as libc::c_uint)
+                        bits = bits.wrapping_add(8 as i32 as u32)
                     }
-                    if (this.val as libc::c_int) < 16 as libc::c_int {
-                        while bits < this.bits as libc::c_uint {
-                            if have == 0 as libc::c_int as libc::c_uint {
+                    if (this.val as i32) < 16 as i32 {
+                        while bits < this.bits as u32 {
+                            if have == 0 as i32 as u32 {
                                 break 's_114;
                             }
                             have = have.wrapping_sub(1);
                             let fresh9 = next;
                             next = next.offset(1);
                             hold = hold.wrapping_add((*fresh9 as libc::c_ulong) << bits);
-                            bits = bits.wrapping_add(8 as libc::c_int as libc::c_uint)
+                            bits = bits.wrapping_add(8 as i32 as u32)
                         }
-                        hold >>= this.bits as libc::c_int;
-                        bits = bits.wrapping_sub(this.bits as libc::c_uint);
+                        hold >>= this.bits as i32;
+                        bits = bits.wrapping_sub(this.bits as u32);
                         let fresh10 = (*state).have;
                         (*state).have = (*state).have.wrapping_add(1);
                         (*state).lens[fresh10 as usize] = this.val
                     } else {
-                        if this.val as libc::c_int == 16 as libc::c_int {
+                        if this.val as i32 == 16 as i32 {
                             while bits
-                                < (this.bits as libc::c_int + 2 as libc::c_int) as libc::c_uint
+                                < (this.bits as i32 + 2 as i32) as u32
                             {
-                                if have == 0 as libc::c_int as libc::c_uint {
+                                if have == 0 as i32 as u32 {
                                     break 's_114;
                                 }
                                 have = have.wrapping_sub(1);
                                 let fresh11 = next;
                                 next = next.offset(1);
                                 hold = hold.wrapping_add((*fresh11 as libc::c_ulong) << bits);
-                                bits = bits.wrapping_add(8 as libc::c_int as libc::c_uint)
+                                bits = bits.wrapping_add(8 as i32 as u32)
                             }
-                            hold >>= this.bits as libc::c_int;
-                            bits = bits.wrapping_sub(this.bits as libc::c_uint);
-                            if (*state).have == 0 as libc::c_int as libc::c_uint {
+                            hold >>= this.bits as i32;
+                            bits = bits.wrapping_sub(this.bits as u32);
+                            if (*state).have == 0 as i32 as u32 {
                                 (*strm).msg = b"invalid bit length repeat\x00" as *const u8
                                     as *const libc::c_char
                                     as *mut libc::c_char;
@@ -5415,62 +5415,62 @@ pub unsafe extern "C" fn inflate(
                             } else {
                                 len = (*state).lens[(*state)
                                     .have
-                                    .wrapping_sub(1 as libc::c_int as libc::c_uint)
-                                    as usize] as libc::c_uint;
-                                copy = (3 as libc::c_int as libc::c_uint).wrapping_add(
-                                    hold as libc::c_uint
-                                        & ((1 as libc::c_uint) << 2 as libc::c_int)
-                                            .wrapping_sub(1 as libc::c_int as libc::c_uint),
+                                    .wrapping_sub(1 as i32 as u32)
+                                    as usize] as u32;
+                                copy = (3 as i32 as u32).wrapping_add(
+                                    hold as u32
+                                        & ((1 as u32) << 2 as i32)
+                                            .wrapping_sub(1 as i32 as u32),
                                 );
-                                hold >>= 2 as libc::c_int;
-                                bits = bits.wrapping_sub(2 as libc::c_int as libc::c_uint)
+                                hold >>= 2 as i32;
+                                bits = bits.wrapping_sub(2 as i32 as u32)
                             }
-                        } else if this.val as libc::c_int == 17 as libc::c_int {
+                        } else if this.val as i32 == 17 as i32 {
                             while bits
-                                < (this.bits as libc::c_int + 3 as libc::c_int) as libc::c_uint
+                                < (this.bits as i32 + 3 as i32) as u32
                             {
-                                if have == 0 as libc::c_int as libc::c_uint {
+                                if have == 0 as i32 as u32 {
                                     break 's_114;
                                 }
                                 have = have.wrapping_sub(1);
                                 let fresh12 = next;
                                 next = next.offset(1);
                                 hold = hold.wrapping_add((*fresh12 as libc::c_ulong) << bits);
-                                bits = bits.wrapping_add(8 as libc::c_int as libc::c_uint)
+                                bits = bits.wrapping_add(8 as i32 as u32)
                             }
-                            hold >>= this.bits as libc::c_int;
-                            bits = bits.wrapping_sub(this.bits as libc::c_uint);
-                            len = 0 as libc::c_int as libc::c_uint;
-                            copy = (3 as libc::c_int as libc::c_uint).wrapping_add(
-                                hold as libc::c_uint
-                                    & ((1 as libc::c_uint) << 3 as libc::c_int)
-                                        .wrapping_sub(1 as libc::c_int as libc::c_uint),
+                            hold >>= this.bits as i32;
+                            bits = bits.wrapping_sub(this.bits as u32);
+                            len = 0 as i32 as u32;
+                            copy = (3 as i32 as u32).wrapping_add(
+                                hold as u32
+                                    & ((1 as u32) << 3 as i32)
+                                        .wrapping_sub(1 as i32 as u32),
                             );
-                            hold >>= 3 as libc::c_int;
-                            bits = bits.wrapping_sub(3 as libc::c_int as libc::c_uint)
+                            hold >>= 3 as i32;
+                            bits = bits.wrapping_sub(3 as i32 as u32)
                         } else {
                             while bits
-                                < (this.bits as libc::c_int + 7 as libc::c_int) as libc::c_uint
+                                < (this.bits as i32 + 7 as i32) as u32
                             {
-                                if have == 0 as libc::c_int as libc::c_uint {
+                                if have == 0 as i32 as u32 {
                                     break 's_114;
                                 }
                                 have = have.wrapping_sub(1);
                                 let fresh13 = next;
                                 next = next.offset(1);
                                 hold = hold.wrapping_add((*fresh13 as libc::c_ulong) << bits);
-                                bits = bits.wrapping_add(8 as libc::c_int as libc::c_uint)
+                                bits = bits.wrapping_add(8 as i32 as u32)
                             }
-                            hold >>= this.bits as libc::c_int;
-                            bits = bits.wrapping_sub(this.bits as libc::c_uint);
-                            len = 0 as libc::c_int as libc::c_uint;
-                            copy = (11 as libc::c_int as libc::c_uint).wrapping_add(
-                                hold as libc::c_uint
-                                    & ((1 as libc::c_uint) << 7 as libc::c_int)
-                                        .wrapping_sub(1 as libc::c_int as libc::c_uint),
+                            hold >>= this.bits as i32;
+                            bits = bits.wrapping_sub(this.bits as u32);
+                            len = 0 as i32 as u32;
+                            copy = (11 as i32 as u32).wrapping_add(
+                                hold as u32
+                                    & ((1 as u32) << 7 as i32)
+                                        .wrapping_sub(1 as i32 as u32),
                             );
-                            hold >>= 7 as libc::c_int;
-                            bits = bits.wrapping_sub(7 as libc::c_int as libc::c_uint)
+                            hold >>= 7 as i32;
+                            bits = bits.wrapping_sub(7 as i32 as u32)
                         }
                         if (*state).have.wrapping_add(copy)
                             > (*state).nlen.wrapping_add((*state).ndist)
@@ -5489,21 +5489,21 @@ pub unsafe extern "C" fn inflate(
                                 }
                                 let fresh15 = (*state).have;
                                 (*state).have = (*state).have.wrapping_add(1);
-                                (*state).lens[fresh15 as usize] = len as libc::c_ushort
+                                (*state).lens[fresh15 as usize] = len as u16
                             }
                         }
                     }
                 }
                 /* handle error breaks in while */
-                if (*state).mode as libc::c_uint
-                    == crate::src::zlib::inflate::BAD as libc::c_int as libc::c_uint
+                if (*state).mode as u32
+                    == crate::src::zlib::inflate::BAD as i32 as u32
                 {
                     continue;
                 }
                 /* build code tables */
                 (*state).next = (*state).codes.as_mut_ptr();
                 (*state).lencode = (*state).next as *const crate::src::zlib::inftrees::code;
-                (*state).lenbits = 9 as libc::c_int as libc::c_uint;
+                (*state).lenbits = 9 as i32 as u32;
                 ret = crate::src::zlib::inftrees::inflate_table(
                     crate::src::zlib::inftrees::LENS,
                     (*state).lens.as_mut_ptr(),
@@ -5520,7 +5520,7 @@ pub unsafe extern "C" fn inflate(
                     continue;
                 } else {
                     (*state).distcode = (*state).next as *const crate::src::zlib::inftrees::code;
-                    (*state).distbits = 6 as libc::c_int as libc::c_uint;
+                    (*state).distbits = 6 as i32 as u32;
                     ret = crate::src::zlib::inftrees::inflate_table(
                         crate::src::zlib::inftrees::DISTS,
                         (*state).lens.as_mut_ptr().offset((*state).nlen as isize),
@@ -5542,7 +5542,7 @@ pub unsafe extern "C" fn inflate(
                 current_block = 11341304196878840394;
             }
             10674880093440332853 => {
-                if flush == 5 as libc::c_int {
+                if flush == 5 as i32 {
                     break;
                 }
                 current_block = 14847832218395804385;
@@ -5551,8 +5551,8 @@ pub unsafe extern "C" fn inflate(
         }
         match current_block {
             11341304196878840394 => {
-                if have >= 6 as libc::c_int as libc::c_uint
-                    && left >= 258 as libc::c_int as libc::c_uint
+                if have >= 6 as i32 as u32
+                    && left >= 258 as i32 as u32
                 {
                     (*strm).next_out = put;
                     (*strm).avail_out = left;
@@ -5574,64 +5574,64 @@ pub unsafe extern "C" fn inflate(
                 } else {
                     loop {
                         this = *(*state).lencode.offset(
-                            (hold as libc::c_uint
-                                & ((1 as libc::c_uint) << (*state).lenbits)
-                                    .wrapping_sub(1 as libc::c_int as libc::c_uint))
+                            (hold as u32
+                                & ((1 as u32) << (*state).lenbits)
+                                    .wrapping_sub(1 as i32 as u32))
                                 as isize,
                         );
-                        if this.bits as libc::c_uint <= bits {
+                        if this.bits as u32 <= bits {
                             break;
                         }
-                        if have == 0 as libc::c_int as libc::c_uint {
+                        if have == 0 as i32 as u32 {
                             break 's_114;
                         }
                         have = have.wrapping_sub(1);
                         let fresh16 = next;
                         next = next.offset(1);
                         hold = hold.wrapping_add((*fresh16 as libc::c_ulong) << bits);
-                        bits = bits.wrapping_add(8 as libc::c_int as libc::c_uint)
+                        bits = bits.wrapping_add(8 as i32 as u32)
                     }
-                    if this.op as libc::c_int != 0
-                        && this.op as libc::c_int & 0xf0 as libc::c_int == 0 as libc::c_int
+                    if this.op as i32 != 0
+                        && this.op as i32 & 0xf0 as i32 == 0 as i32
                     {
                         last = this;
                         loop {
                             this = *(*state).lencode.offset(
-                                (last.val as libc::c_uint).wrapping_add(
-                                    (hold as libc::c_uint
-                                        & ((1 as libc::c_uint)
-                                            << last.bits as libc::c_int + last.op as libc::c_int)
-                                            .wrapping_sub(1 as libc::c_int as libc::c_uint))
-                                        >> last.bits as libc::c_int,
+                                (last.val as u32).wrapping_add(
+                                    (hold as u32
+                                        & ((1 as u32)
+                                            << last.bits as i32 + last.op as i32)
+                                            .wrapping_sub(1 as i32 as u32))
+                                        >> last.bits as i32,
                                 ) as isize,
                             );
-                            if (last.bits as libc::c_int + this.bits as libc::c_int) as libc::c_uint
+                            if (last.bits as i32 + this.bits as i32) as u32
                                 <= bits
                             {
                                 break;
                             }
-                            if have == 0 as libc::c_int as libc::c_uint {
+                            if have == 0 as i32 as u32 {
                                 break 's_114;
                             }
                             have = have.wrapping_sub(1);
                             let fresh17 = next;
                             next = next.offset(1);
                             hold = hold.wrapping_add((*fresh17 as libc::c_ulong) << bits);
-                            bits = bits.wrapping_add(8 as libc::c_int as libc::c_uint)
+                            bits = bits.wrapping_add(8 as i32 as u32)
                         }
-                        hold >>= last.bits as libc::c_int;
-                        bits = bits.wrapping_sub(last.bits as libc::c_uint)
+                        hold >>= last.bits as i32;
+                        bits = bits.wrapping_sub(last.bits as u32)
                     }
-                    hold >>= this.bits as libc::c_int;
-                    bits = bits.wrapping_sub(this.bits as libc::c_uint);
-                    (*state).length = this.val as libc::c_uint;
-                    if this.op as libc::c_int == 0 as libc::c_int {
+                    hold >>= this.bits as i32;
+                    bits = bits.wrapping_sub(this.bits as u32);
+                    (*state).length = this.val as u32;
+                    if this.op as i32 == 0 as i32 {
                         (*state).mode = crate::src::zlib::inflate::LIT;
                         continue;
-                    } else if this.op as libc::c_int & 32 as libc::c_int != 0 {
+                    } else if this.op as i32 & 32 as i32 != 0 {
                         (*state).mode = crate::src::zlib::inflate::TYPE;
                         continue;
-                    } else if this.op as libc::c_int & 64 as libc::c_int != 0 {
+                    } else if this.op as i32 & 64 as i32 != 0 {
                         (*strm).msg = b"invalid literal/length code\x00" as *const u8
                             as *const libc::c_char
                             as *mut libc::c_char;
@@ -5639,7 +5639,7 @@ pub unsafe extern "C" fn inflate(
                         continue;
                     } else {
                         (*state).extra =
-                            this.op as libc::c_uint & 15 as libc::c_int as libc::c_uint;
+                            this.op as u32 & 15 as i32 as u32;
                         (*state).mode = crate::src::zlib::inflate::LENEXT
                     }
                 }
@@ -5647,30 +5647,30 @@ pub unsafe extern "C" fn inflate(
             }
             14847832218395804385 => {
                 if (*state).last != 0 {
-                    hold >>= bits & 7 as libc::c_int as libc::c_uint;
-                    bits = bits.wrapping_sub(bits & 7 as libc::c_int as libc::c_uint);
+                    hold >>= bits & 7 as i32 as u32;
+                    bits = bits.wrapping_sub(bits & 7 as i32 as u32);
                     (*state).mode = crate::src::zlib::inflate::CHECK;
                     continue;
                 } else {
-                    while bits < 3 as libc::c_int as libc::c_uint {
-                        if have == 0 as libc::c_int as libc::c_uint {
+                    while bits < 3 as i32 as u32 {
+                        if have == 0 as i32 as u32 {
                             break 's_114;
                         }
                         have = have.wrapping_sub(1);
                         let fresh2 = next;
                         next = next.offset(1);
                         hold = hold.wrapping_add((*fresh2 as libc::c_ulong) << bits);
-                        bits = bits.wrapping_add(8 as libc::c_int as libc::c_uint)
+                        bits = bits.wrapping_add(8 as i32 as u32)
                     }
-                    (*state).last = (hold as libc::c_uint
-                        & ((1 as libc::c_uint) << 1 as libc::c_int)
-                            .wrapping_sub(1 as libc::c_int as libc::c_uint))
-                        as libc::c_int;
-                    hold >>= 1 as libc::c_int;
-                    bits = bits.wrapping_sub(1 as libc::c_int as libc::c_uint);
-                    match hold as libc::c_uint
-                        & ((1 as libc::c_uint) << 2 as libc::c_int)
-                            .wrapping_sub(1 as libc::c_int as libc::c_uint)
+                    (*state).last = (hold as u32
+                        & ((1 as u32) << 1 as i32)
+                            .wrapping_sub(1 as i32 as u32))
+                        as i32;
+                    hold >>= 1 as i32;
+                    bits = bits.wrapping_sub(1 as i32 as u32);
+                    match hold as u32
+                        & ((1 as u32) << 2 as i32)
+                            .wrapping_sub(1 as i32 as u32)
                     {
                         0 => {
                             /* stored block */
@@ -5693,8 +5693,8 @@ pub unsafe extern "C" fn inflate(
                         }
                         _ => {}
                     }
-                    hold >>= 2 as libc::c_int;
-                    bits = bits.wrapping_sub(2 as libc::c_int as libc::c_uint);
+                    hold >>= 2 as i32;
+                    bits = bits.wrapping_sub(2 as i32 as u32);
                     continue;
                 }
             }
@@ -5704,19 +5704,19 @@ pub unsafe extern "C" fn inflate(
             10540587995463041380 => {
                 if (*state).extra != 0 {
                     while bits < (*state).extra {
-                        if have == 0 as libc::c_int as libc::c_uint {
+                        if have == 0 as i32 as u32 {
                             break 's_114;
                         }
                         have = have.wrapping_sub(1);
                         let fresh18 = next;
                         next = next.offset(1);
                         hold = hold.wrapping_add((*fresh18 as libc::c_ulong) << bits);
-                        bits = bits.wrapping_add(8 as libc::c_int as libc::c_uint)
+                        bits = bits.wrapping_add(8 as i32 as u32)
                     }
                     (*state).length = (*state).length.wrapping_add(
-                        hold as libc::c_uint
-                            & ((1 as libc::c_uint) << (*state).extra)
-                                .wrapping_sub(1 as libc::c_int as libc::c_uint),
+                        hold as u32
+                            & ((1 as u32) << (*state).extra)
+                                .wrapping_sub(1 as i32 as u32),
                     );
                     hold >>= (*state).extra;
                     bits = bits.wrapping_sub((*state).extra)
@@ -5730,86 +5730,86 @@ pub unsafe extern "C" fn inflate(
             match current_block {
                 583050819838508811 => {
                     this = *(*state).distcode.offset(
-                        (hold as libc::c_uint
-                            & ((1 as libc::c_uint) << (*state).distbits)
-                                .wrapping_sub(1 as libc::c_int as libc::c_uint))
+                        (hold as u32
+                            & ((1 as u32) << (*state).distbits)
+                                .wrapping_sub(1 as i32 as u32))
                             as isize,
                     );
-                    if this.bits as libc::c_uint <= bits {
-                        if this.op as libc::c_int & 0xf0 as libc::c_int == 0 as libc::c_int {
+                    if this.bits as u32 <= bits {
+                        if this.op as i32 & 0xf0 as i32 == 0 as i32 {
                             last = this;
                             loop {
                                 this = *(*state).distcode.offset(
-                                    (last.val as libc::c_uint).wrapping_add(
-                                        (hold as libc::c_uint
-                                            & ((1 as libc::c_uint)
-                                                << last.bits as libc::c_int
-                                                    + last.op as libc::c_int)
-                                                .wrapping_sub(1 as libc::c_int as libc::c_uint))
-                                            >> last.bits as libc::c_int,
+                                    (last.val as u32).wrapping_add(
+                                        (hold as u32
+                                            & ((1 as u32)
+                                                << last.bits as i32
+                                                    + last.op as i32)
+                                                .wrapping_sub(1 as i32 as u32))
+                                            >> last.bits as i32,
                                     ) as isize,
                                 );
-                                if (last.bits as libc::c_int + this.bits as libc::c_int)
-                                    as libc::c_uint
+                                if (last.bits as i32 + this.bits as i32)
+                                    as u32
                                     <= bits
                                 {
                                     break;
                                 }
-                                if have == 0 as libc::c_int as libc::c_uint {
+                                if have == 0 as i32 as u32 {
                                     break 's_114;
                                 }
                                 have = have.wrapping_sub(1);
                                 let fresh20 = next;
                                 next = next.offset(1);
                                 hold = hold.wrapping_add((*fresh20 as libc::c_ulong) << bits);
-                                bits = bits.wrapping_add(8 as libc::c_int as libc::c_uint)
+                                bits = bits.wrapping_add(8 as i32 as u32)
                             }
-                            hold >>= last.bits as libc::c_int;
-                            bits = bits.wrapping_sub(last.bits as libc::c_uint)
+                            hold >>= last.bits as i32;
+                            bits = bits.wrapping_sub(last.bits as u32)
                         }
-                        hold >>= this.bits as libc::c_int;
-                        bits = bits.wrapping_sub(this.bits as libc::c_uint);
-                        if this.op as libc::c_int & 64 as libc::c_int != 0 {
+                        hold >>= this.bits as i32;
+                        bits = bits.wrapping_sub(this.bits as u32);
+                        if this.op as i32 & 64 as i32 != 0 {
                             (*strm).msg = b"invalid distance code\x00" as *const u8
                                 as *const libc::c_char
                                 as *mut libc::c_char;
                             (*state).mode = crate::src::zlib::inflate::BAD;
                             break;
                         } else {
-                            (*state).offset = this.val as libc::c_uint;
+                            (*state).offset = this.val as u32;
                             (*state).extra =
-                                this.op as libc::c_uint & 15 as libc::c_int as libc::c_uint;
+                                this.op as u32 & 15 as i32 as u32;
                             (*state).mode = crate::src::zlib::inflate::DISTEXT;
                             current_block = 6144666487834620188;
                         }
                     } else {
-                        if have == 0 as libc::c_int as libc::c_uint {
+                        if have == 0 as i32 as u32 {
                             break 's_114;
                         }
                         have = have.wrapping_sub(1);
                         let fresh19 = next;
                         next = next.offset(1);
                         hold = hold.wrapping_add((*fresh19 as libc::c_ulong) << bits);
-                        bits = bits.wrapping_add(8 as libc::c_int as libc::c_uint);
+                        bits = bits.wrapping_add(8 as i32 as u32);
                         current_block = 583050819838508811;
                     }
                 }
                 6144666487834620188 => {
                     if (*state).extra != 0 {
                         while bits < (*state).extra {
-                            if have == 0 as libc::c_int as libc::c_uint {
+                            if have == 0 as i32 as u32 {
                                 break 's_114;
                             }
                             have = have.wrapping_sub(1);
                             let fresh21 = next;
                             next = next.offset(1);
                             hold = hold.wrapping_add((*fresh21 as libc::c_ulong) << bits);
-                            bits = bits.wrapping_add(8 as libc::c_int as libc::c_uint)
+                            bits = bits.wrapping_add(8 as i32 as u32)
                         }
                         (*state).offset = (*state).offset.wrapping_add(
-                            hold as libc::c_uint
-                                & ((1 as libc::c_uint) << (*state).extra)
-                                    .wrapping_sub(1 as libc::c_int as libc::c_uint),
+                            hold as u32
+                                & ((1 as u32) << (*state).extra)
+                                    .wrapping_sub(1 as i32 as u32),
                         );
                         hold >>= (*state).extra;
                         bits = bits.wrapping_sub((*state).extra)
@@ -5826,7 +5826,7 @@ pub unsafe extern "C" fn inflate(
                     }
                 }
                 _ => {
-                    if left == 0 as libc::c_int as libc::c_uint {
+                    if left == 0 as i32 as u32 {
                         break 's_114;
                     }
                     copy = out.wrapping_sub(left);
@@ -5867,7 +5867,7 @@ pub unsafe extern "C" fn inflate(
                             break;
                         }
                     }
-                    if (*state).length == 0 as libc::c_int as libc::c_uint {
+                    if (*state).length == 0 as i32 as u32 {
                         (*state).mode = crate::src::zlib::inflate::LEN
                     }
                     break;
@@ -5888,13 +5888,13 @@ pub unsafe extern "C" fn inflate(
     (*state).hold = hold;
     (*state).bits = bits;
     if (*state).wsize != 0
-        || ((*state).mode as libc::c_uint)
-            < crate::src::zlib::inflate::CHECK as libc::c_int as libc::c_uint
+        || ((*state).mode as u32)
+            < crate::src::zlib::inflate::CHECK as i32 as u32
             && out != (*strm).avail_out
     {
         if updatewindow(strm, out) != 0 {
             (*state).mode = crate::src::zlib::inflate::MEM;
-            return -(4 as libc::c_int);
+            return -(4 as i32);
         }
     }
     in_0 = in_0.wrapping_sub((*strm).avail_in);
@@ -5916,35 +5916,35 @@ pub unsafe extern "C" fn inflate(
         .bits
         .wrapping_add(
             (if (*state).last != 0 {
-                64 as libc::c_int
+                64 as i32
             } else {
-                0 as libc::c_int
-            }) as libc::c_uint,
+                0 as i32
+            }) as u32,
         )
         .wrapping_add(
-            (if (*state).mode as libc::c_uint
-                == crate::src::zlib::inflate::TYPE as libc::c_int as libc::c_uint
+            (if (*state).mode as u32
+                == crate::src::zlib::inflate::TYPE as i32 as u32
             {
-                128 as libc::c_int
+                128 as i32
             } else {
-                0 as libc::c_int
-            }) as libc::c_uint,
-        ) as libc::c_int;
-    if (in_0 == 0 as libc::c_int as libc::c_uint && out == 0 as libc::c_int as libc::c_uint
-        || flush == 4 as libc::c_int)
-        && ret == 0 as libc::c_int
+                0 as i32
+            }) as u32,
+        ) as i32;
+    if (in_0 == 0 as i32 as u32 && out == 0 as i32 as u32
+        || flush == 4 as i32)
+        && ret == 0 as i32
     {
-        ret = -(5 as libc::c_int)
+        ret = -(5 as i32)
     }
     return ret;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn inflateEnd(mut strm: crate::zlib_h::z_streamp) -> libc::c_int {
+pub unsafe extern "C" fn inflateEnd(mut strm: crate::zlib_h::z_streamp) -> i32 {
     let mut state: *mut crate::src::zlib::inflate::inflate_state =
         0 as *mut crate::src::zlib::inflate::inflate_state;
     if strm.is_null() || (*strm).state.is_null() || (*strm).zfree.is_none() {
-        return -(2 as libc::c_int);
+        return -(2 as i32);
     }
     state = (*strm).state as *mut crate::src::zlib::inflate::inflate_state;
     if !(*state).window.is_null() {
@@ -5958,7 +5958,7 @@ pub unsafe extern "C" fn inflateEnd(mut strm: crate::zlib_h::z_streamp) -> libc:
         (*strm).state as crate::zconf_h::voidpf,
     );
     (*strm).state = 0 as *mut crate::zlib_h::internal_state;
-    return 0 as libc::c_int;
+    return 0 as i32;
 }
 #[no_mangle]
 
@@ -5966,39 +5966,39 @@ pub unsafe extern "C" fn inflateSetDictionary(
     mut strm: crate::zlib_h::z_streamp,
     mut dictionary: *const crate::zconf_h::Bytef,
     mut dictLength: crate::zconf_h::uInt,
-) -> libc::c_int {
+) -> i32 {
     let mut state: *mut crate::src::zlib::inflate::inflate_state =
         0 as *mut crate::src::zlib::inflate::inflate_state;
     let mut id: libc::c_ulong = 0;
     /* check state */
     if strm.is_null() || (*strm).state.is_null() {
-        return -(2 as libc::c_int);
+        return -(2 as i32);
     }
     state = (*strm).state as *mut crate::src::zlib::inflate::inflate_state;
-    if (*state).wrap != 0 as libc::c_int
-        && (*state).mode as libc::c_uint
-            != crate::src::zlib::inflate::DICT as libc::c_int as libc::c_uint
+    if (*state).wrap != 0 as i32
+        && (*state).mode as u32
+            != crate::src::zlib::inflate::DICT as i32 as u32
     {
-        return -(2 as libc::c_int);
+        return -(2 as i32);
     }
     /* check for correct dictionary id */
-    if (*state).mode as libc::c_uint
-        == crate::src::zlib::inflate::DICT as libc::c_int as libc::c_uint
+    if (*state).mode as u32
+        == crate::src::zlib::inflate::DICT as i32 as u32
     {
         id = crate::src::zlib::adler32::adler32(
             0 as libc::c_long as crate::zconf_h::uLong,
             0 as *const crate::zconf_h::Bytef,
-            0 as libc::c_int as crate::zconf_h::uInt,
+            0 as i32 as crate::zconf_h::uInt,
         );
         id = crate::src::zlib::adler32::adler32(id, dictionary, dictLength);
         if id != (*state).check {
-            return -(3 as libc::c_int);
+            return -(3 as i32);
         }
     }
     /* copy dictionary to window */
     if updatewindow(strm, (*strm).avail_out) != 0 {
         (*state).mode = crate::src::zlib::inflate::MEM;
-        return -(4 as libc::c_int);
+        return -(4 as i32);
     }
     if dictLength > (*state).wsize {
         crate::stdlib::memcpy(
@@ -6020,29 +6020,29 @@ pub unsafe extern "C" fn inflateSetDictionary(
         );
         (*state).whave = dictLength
     }
-    (*state).havedict = 1 as libc::c_int;
-    return 0 as libc::c_int;
+    (*state).havedict = 1 as i32;
+    return 0 as i32;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn inflateGetHeader(
     mut strm: crate::zlib_h::z_streamp,
     mut head: crate::zlib_h::gz_headerp,
-) -> libc::c_int {
+) -> i32 {
     let mut state: *mut crate::src::zlib::inflate::inflate_state =
         0 as *mut crate::src::zlib::inflate::inflate_state;
     /* check state */
     if strm.is_null() || (*strm).state.is_null() {
-        return -(2 as libc::c_int);
+        return -(2 as i32);
     }
     state = (*strm).state as *mut crate::src::zlib::inflate::inflate_state;
-    if (*state).wrap & 2 as libc::c_int == 0 as libc::c_int {
-        return -(2 as libc::c_int);
+    if (*state).wrap & 2 as i32 == 0 as i32 {
+        return -(2 as i32);
     }
     /* save header structure */
     (*state).head = head;
-    (*head).done = 0 as libc::c_int;
-    return 0 as libc::c_int;
+    (*head).done = 0 as i32;
+    return 0 as i32;
 }
 /*
   Search buf[0..len-1] for the pattern: 0, 0, 0xff, 0xff.  Return when found
@@ -6057,27 +6057,27 @@ pub unsafe extern "C" fn inflateGetHeader(
 */
 
 unsafe extern "C" fn syncsearch(
-    mut have: *mut libc::c_uint,
-    mut buf: *mut libc::c_uchar,
-    mut len: libc::c_uint,
-) -> libc::c_uint {
-    let mut got: libc::c_uint = 0; /* number of bytes to look at or looked at */
-    let mut next: libc::c_uint = 0; /* temporary to save total_in and total_out */
+    mut have: *mut u32,
+    mut buf: *mut u8,
+    mut len: u32,
+) -> u32 {
+    let mut got: u32 = 0; /* number of bytes to look at or looked at */
+    let mut next: u32 = 0; /* temporary to save total_in and total_out */
     got = *have; /* to restore bit buffer to byte string */
-    next = 0 as libc::c_int as libc::c_uint;
-    while next < len && got < 4 as libc::c_int as libc::c_uint {
-        if *buf.offset(next as isize) as libc::c_int
-            == (if got < 2 as libc::c_int as libc::c_uint {
-                0 as libc::c_int
+    next = 0 as i32 as u32;
+    while next < len && got < 4 as i32 as u32 {
+        if *buf.offset(next as isize) as i32
+            == (if got < 2 as i32 as u32 {
+                0 as i32
             } else {
-                0xff as libc::c_int
+                0xff as i32
             })
         {
             got = got.wrapping_add(1)
         } else if *buf.offset(next as isize) != 0 {
-            got = 0 as libc::c_int as libc::c_uint
+            got = 0 as i32 as u32
         } else {
-            got = (4 as libc::c_int as libc::c_uint).wrapping_sub(got)
+            got = (4 as i32 as u32).wrapping_sub(got)
         }
         next = next.wrapping_add(1)
     }
@@ -6086,53 +6086,53 @@ unsafe extern "C" fn syncsearch(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn inflateSync(mut strm: crate::zlib_h::z_streamp) -> libc::c_int {
-    let mut len: libc::c_uint = 0;
+pub unsafe extern "C" fn inflateSync(mut strm: crate::zlib_h::z_streamp) -> i32 {
+    let mut len: u32 = 0;
     let mut in_0: libc::c_ulong = 0;
     let mut out: libc::c_ulong = 0;
-    let mut buf: [libc::c_uchar; 4] = [0; 4];
+    let mut buf: [u8; 4] = [0; 4];
     let mut state: *mut crate::src::zlib::inflate::inflate_state =
         0 as *mut crate::src::zlib::inflate::inflate_state;
     /* check parameters */
     if strm.is_null() || (*strm).state.is_null() {
-        return -(2 as libc::c_int);
+        return -(2 as i32);
     }
     state = (*strm).state as *mut crate::src::zlib::inflate::inflate_state;
-    if (*strm).avail_in == 0 as libc::c_int as libc::c_uint
-        && (*state).bits < 8 as libc::c_int as libc::c_uint
+    if (*strm).avail_in == 0 as i32 as u32
+        && (*state).bits < 8 as i32 as u32
     {
-        return -(5 as libc::c_int);
+        return -(5 as i32);
     }
     /* if first time, start search in bit buffer */
-    if (*state).mode as libc::c_uint
-        != crate::src::zlib::inflate::SYNC as libc::c_int as libc::c_uint
+    if (*state).mode as u32
+        != crate::src::zlib::inflate::SYNC as i32 as u32
     {
         (*state).mode = crate::src::zlib::inflate::SYNC;
-        (*state).hold <<= (*state).bits & 7 as libc::c_int as libc::c_uint;
+        (*state).hold <<= (*state).bits & 7 as i32 as u32;
         (*state).bits = (*state)
             .bits
-            .wrapping_sub((*state).bits & 7 as libc::c_int as libc::c_uint);
-        len = 0 as libc::c_int as libc::c_uint;
-        while (*state).bits >= 8 as libc::c_int as libc::c_uint {
+            .wrapping_sub((*state).bits & 7 as i32 as u32);
+        len = 0 as i32 as u32;
+        while (*state).bits >= 8 as i32 as u32 {
             let fresh26 = len;
             len = len.wrapping_add(1);
-            buf[fresh26 as usize] = (*state).hold as libc::c_uchar;
-            (*state).hold >>= 8 as libc::c_int;
-            (*state).bits = (*state).bits.wrapping_sub(8 as libc::c_int as libc::c_uint)
+            buf[fresh26 as usize] = (*state).hold as u8;
+            (*state).hold >>= 8 as i32;
+            (*state).bits = (*state).bits.wrapping_sub(8 as i32 as u32)
         }
-        (*state).have = 0 as libc::c_int as libc::c_uint;
+        (*state).have = 0 as i32 as u32;
         syncsearch(&mut (*state).have, buf.as_mut_ptr(), len);
     }
     /* search available input */
     len = syncsearch(&mut (*state).have, (*strm).next_in, (*strm).avail_in);
-    (*strm).avail_in = ((*strm).avail_in as libc::c_uint).wrapping_sub(len) as crate::zconf_h::uInt
+    (*strm).avail_in = ((*strm).avail_in as u32).wrapping_sub(len) as crate::zconf_h::uInt
         as crate::zconf_h::uInt;
     (*strm).next_in = (*strm).next_in.offset(len as isize);
     (*strm).total_in = ((*strm).total_in as libc::c_ulong).wrapping_add(len as libc::c_ulong)
         as crate::zconf_h::uLong as crate::zconf_h::uLong;
     /* return no joy or set up to restart inflate() on a new block */
-    if (*state).have != 4 as libc::c_int as libc::c_uint {
-        return -(3 as libc::c_int);
+    if (*state).have != 4 as i32 as u32 {
+        return -(3 as i32);
     }
     in_0 = (*strm).total_in;
     out = (*strm).total_out;
@@ -6140,7 +6140,7 @@ pub unsafe extern "C" fn inflateSync(mut strm: crate::zlib_h::z_streamp) -> libc
     (*strm).total_in = in_0;
     (*strm).total_out = out;
     (*state).mode = crate::src::zlib::inflate::TYPE;
-    return 0 as libc::c_int;
+    return 0 as i32;
 }
 /*
      Sets the destination stream as a complete copy of the source stream.
@@ -6598,16 +6598,16 @@ end of file, -1 for error). */
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn inflateSyncPoint(mut strm: crate::zlib_h::z_streamp) -> libc::c_int {
+pub unsafe extern "C" fn inflateSyncPoint(mut strm: crate::zlib_h::z_streamp) -> i32 {
     let mut state: *mut crate::src::zlib::inflate::inflate_state =
         0 as *mut crate::src::zlib::inflate::inflate_state;
     if strm.is_null() || (*strm).state.is_null() {
-        return -(2 as libc::c_int);
+        return -(2 as i32);
     }
     state = (*strm).state as *mut crate::src::zlib::inflate::inflate_state;
-    return ((*state).mode as libc::c_uint
-        == crate::src::zlib::inflate::STORED as libc::c_int as libc::c_uint
-        && (*state).bits == 0 as libc::c_int as libc::c_uint) as libc::c_int;
+    return ((*state).mode as u32
+        == crate::src::zlib::inflate::STORED as i32 as u32
+        && (*state).bits == 0 as i32 as u32) as i32;
 }
 /*
      Initializes the compression dictionary from the given byte sequence
@@ -6813,13 +6813,13 @@ ZEXTERN int ZEXPORT inflateInit2 OF((z_streamp strm,
 pub unsafe extern "C" fn inflateCopy(
     mut dest: crate::zlib_h::z_streamp,
     mut source: crate::zlib_h::z_streamp,
-) -> libc::c_int {
+) -> i32 {
     let mut state: *mut crate::src::zlib::inflate::inflate_state =
         0 as *mut crate::src::zlib::inflate::inflate_state;
     let mut copy: *mut crate::src::zlib::inflate::inflate_state =
         0 as *mut crate::src::zlib::inflate::inflate_state;
-    let mut window: *mut libc::c_uchar = 0 as *mut libc::c_uchar;
-    let mut wsize: libc::c_uint = 0;
+    let mut window: *mut u8 = 0 as *mut u8;
+    let mut wsize: u32 = 0;
     /* check input */
     if dest.is_null()
         || source.is_null()
@@ -6827,35 +6827,35 @@ pub unsafe extern "C" fn inflateCopy(
         || (*source).zalloc.is_none()
         || (*source).zfree.is_none()
     {
-        return -(2 as libc::c_int);
+        return -(2 as i32);
     }
     state = (*source).state as *mut crate::src::zlib::inflate::inflate_state;
     /* allocate space */
     copy = Some((*source).zalloc.expect("non-null function pointer"))
         .expect("non-null function pointer")(
         (*source).opaque,
-        1 as libc::c_int as crate::zconf_h::uInt,
+        1 as i32 as crate::zconf_h::uInt,
         ::std::mem::size_of::<crate::src::zlib::inflate::inflate_state>() as libc::c_ulong
             as crate::zconf_h::uInt,
     ) as *mut crate::src::zlib::inflate::inflate_state;
     if copy.is_null() {
-        return -(4 as libc::c_int);
+        return -(4 as i32);
     }
-    window = 0 as *mut libc::c_uchar;
+    window = 0 as *mut u8;
     if !(*state).window.is_null() {
         window = Some((*source).zalloc.expect("non-null function pointer"))
             .expect("non-null function pointer")(
             (*source).opaque,
-            (1 as libc::c_uint) << (*state).wbits,
-            ::std::mem::size_of::<libc::c_uchar>() as libc::c_ulong as crate::zconf_h::uInt,
-        ) as *mut libc::c_uchar;
+            (1 as u32) << (*state).wbits,
+            ::std::mem::size_of::<u8>() as libc::c_ulong as crate::zconf_h::uInt,
+        ) as *mut u8;
         if window.is_null() {
             Some((*source).zfree.expect("non-null function pointer"))
                 .expect("non-null function pointer")(
                 (*source).opaque,
                 copy as crate::zconf_h::voidpf,
             );
-            return -(4 as libc::c_int);
+            return -(4 as i32);
         }
     }
     /* copy state */
@@ -6874,8 +6874,8 @@ pub unsafe extern "C" fn inflateCopy(
             <= (*state)
                 .codes
                 .as_mut_ptr()
-                .offset(2048 as libc::c_int as isize)
-                .offset(-(1 as libc::c_int as isize))
+                .offset(2048 as i32 as isize)
+                .offset(-(1 as i32 as isize))
                 as *const crate::src::zlib::inftrees::code
     {
         (*copy).lencode = (*copy).codes.as_mut_ptr().offset(
@@ -6890,7 +6890,7 @@ pub unsafe extern "C" fn inflateCopy(
         .as_mut_ptr()
         .offset((*state).next.offset_from((*state).codes.as_mut_ptr()) as libc::c_long as isize);
     if !window.is_null() {
-        wsize = (1 as libc::c_uint) << (*state).wbits;
+        wsize = (1 as u32) << (*state).wbits;
         crate::stdlib::memcpy(
             window as *mut libc::c_void,
             (*state).window as *const libc::c_void,
@@ -6899,5 +6899,5 @@ pub unsafe extern "C" fn inflateCopy(
     }
     (*copy).window = window;
     (*dest).state = copy as *mut crate::zlib_h::internal_state;
-    return 0 as libc::c_int;
+    return 0 as i32;
 }

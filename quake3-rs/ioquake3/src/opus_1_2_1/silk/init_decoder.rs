@@ -29,8 +29,8 @@ pub mod cpu_support_h {
     */
     #[inline]
 
-    pub unsafe extern "C" fn opus_select_arch() -> libc::c_int {
-        return 0 as libc::c_int;
+    pub unsafe extern "C" fn opus_select_arch() -> i32 {
+        return 0 as i32;
     }
 }
 
@@ -334,17 +334,17 @@ POSSIBILITY OF SUCH DAMAGE.
 
 pub unsafe extern "C" fn silk_init_decoder(
     mut psDec: *mut crate::structs_h::silk_decoder_state,
-) -> libc::c_int
+) -> i32
 /* I/O  Decoder state pointer                       */ {
     /* Clear the entire encoder state, except anything copied */
     crate::stdlib::memset(
         psDec as *mut libc::c_void,
-        0 as libc::c_int,
+        0 as i32,
         ::std::mem::size_of::<crate::structs_h::silk_decoder_state>() as libc::c_ulong,
     );
     /* Used to deactivate LSF interpolation */
-    (*psDec).first_frame_after_reset = 1 as libc::c_int;
-    (*psDec).prev_gain_Q16 = 65536 as libc::c_int;
+    (*psDec).first_frame_after_reset = 1 as i32;
+    (*psDec).prev_gain_Q16 = 65536 as i32;
     (*psDec).arch = opus_select_arch();
     /* Reset CNG state */
     crate::src::opus_1_2_1::silk::CNG::silk_CNG_Reset(
@@ -354,5 +354,5 @@ pub unsafe extern "C" fn silk_init_decoder(
     crate::src::opus_1_2_1::silk::PLC::silk_PLC_Reset(
         psDec as *mut crate::structs_h::silk_decoder_state,
     );
-    return 0 as libc::c_int;
+    return 0 as i32;
 }

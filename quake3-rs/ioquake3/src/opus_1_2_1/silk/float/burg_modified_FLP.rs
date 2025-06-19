@@ -100,33 +100,33 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_burg_modified_FLP(
-    mut A: *mut libc::c_float,
-    mut x: *const libc::c_float,
-    minInvGain: libc::c_float,
-    subfr_length: libc::c_int,
-    nb_subfr: libc::c_int,
-    D: libc::c_int,
-) -> libc::c_float
+    mut A: *mut f32,
+    mut x: *const f32,
+    minInvGain: f32,
+    subfr_length: i32,
+    nb_subfr: i32,
+    D: i32,
+) -> f32
 /* I    order                                                       */ {
-    let mut k: libc::c_int = 0;
-    let mut n: libc::c_int = 0;
-    let mut s: libc::c_int = 0;
-    let mut reached_max_gain: libc::c_int = 0;
-    let mut C0: libc::c_double = 0.;
-    let mut invGain: libc::c_double = 0.;
-    let mut num: libc::c_double = 0.;
-    let mut nrg_f: libc::c_double = 0.;
-    let mut nrg_b: libc::c_double = 0.;
-    let mut rc: libc::c_double = 0.;
-    let mut Atmp: libc::c_double = 0.;
-    let mut tmp1: libc::c_double = 0.;
-    let mut tmp2: libc::c_double = 0.;
-    let mut x_ptr: *const libc::c_float = 0 as *const libc::c_float;
-    let mut C_first_row: [libc::c_double; 24] = [0.; 24];
-    let mut C_last_row: [libc::c_double; 24] = [0.; 24];
-    let mut CAf: [libc::c_double; 25] = [0.; 25];
-    let mut CAb: [libc::c_double; 25] = [0.; 25];
-    let mut Af: [libc::c_double; 24] = [0.; 24];
+    let mut k: i32 = 0;
+    let mut n: i32 = 0;
+    let mut s: i32 = 0;
+    let mut reached_max_gain: i32 = 0;
+    let mut C0: f64 = 0.;
+    let mut invGain: f64 = 0.;
+    let mut num: f64 = 0.;
+    let mut nrg_f: f64 = 0.;
+    let mut nrg_b: f64 = 0.;
+    let mut rc: f64 = 0.;
+    let mut Atmp: f64 = 0.;
+    let mut tmp1: f64 = 0.;
+    let mut tmp2: f64 = 0.;
+    let mut x_ptr: *const f32 = 0 as *const f32;
+    let mut C_first_row: [f64; 24] = [0.; 24];
+    let mut C_last_row: [f64; 24] = [0.; 24];
+    let mut CAf: [f64; 25] = [0.; 25];
+    let mut CAb: [f64; 25] = [0.; 25];
+    let mut Af: [f64; 24] = [0.; 24];
     /* Compute autocorrelations, added over subframes */
     C0 = crate::src::opus_1_2_1::silk::float::energy_FLP::silk_energy_FLP(
         x,
@@ -134,16 +134,16 @@ pub unsafe extern "C" fn silk_burg_modified_FLP(
     );
     crate::stdlib::memset(
         C_first_row.as_mut_ptr() as *mut libc::c_void,
-        0 as libc::c_int,
-        (24 as libc::c_int as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<libc::c_double>() as libc::c_ulong),
+        0 as i32,
+        (24 as i32 as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<f64>() as libc::c_ulong),
     );
-    s = 0 as libc::c_int;
+    s = 0 as i32;
     while s < nb_subfr {
         x_ptr = x.offset((s * subfr_length) as isize);
-        n = 1 as libc::c_int;
-        while n < D + 1 as libc::c_int {
-            C_first_row[(n - 1 as libc::c_int) as usize] +=
+        n = 1 as i32;
+        while n < D + 1 as i32 {
+            C_first_row[(n - 1 as i32) as usize] +=
                 crate::src::opus_1_2_1::silk::float::inner_product_FLP::silk_inner_product_FLP(
                     x_ptr,
                     x_ptr.offset(n as isize),
@@ -156,102 +156,102 @@ pub unsafe extern "C" fn silk_burg_modified_FLP(
     crate::stdlib::memcpy(
         C_last_row.as_mut_ptr() as *mut libc::c_void,
         C_first_row.as_mut_ptr() as *const libc::c_void,
-        (24 as libc::c_int as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<libc::c_double>() as libc::c_ulong),
+        (24 as i32 as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<f64>() as libc::c_ulong),
     );
     /* Initialize */
-    CAf[0 as libc::c_int as usize] =
-        C0 + 1e-5f32 as libc::c_double * C0 + 1e-9f32 as libc::c_double;
-    CAb[0 as libc::c_int as usize] = CAf[0 as libc::c_int as usize];
-    invGain = 1.0f32 as libc::c_double;
-    reached_max_gain = 0 as libc::c_int;
-    n = 0 as libc::c_int;
+    CAf[0 as i32 as usize] =
+        C0 + 1e-5f32 as f64 * C0 + 1e-9f32 as f64;
+    CAb[0 as i32 as usize] = CAf[0 as i32 as usize];
+    invGain = 1.0f32 as f64;
+    reached_max_gain = 0 as i32;
+    n = 0 as i32;
     while n < D {
         /* Update first row of correlation matrix (without first element) */
         /* Update last row of correlation matrix (without last element, stored in reversed order) */
         /* Update C * Af */
         /* Update C * flipud(Af) (stored in reversed order) */
-        s = 0 as libc::c_int;
+        s = 0 as i32;
         while s < nb_subfr {
             x_ptr = x.offset((s * subfr_length) as isize);
-            tmp1 = *x_ptr.offset(n as isize) as libc::c_double;
-            tmp2 = *x_ptr.offset((subfr_length - n - 1 as libc::c_int) as isize) as libc::c_double;
-            k = 0 as libc::c_int;
+            tmp1 = *x_ptr.offset(n as isize) as f64;
+            tmp2 = *x_ptr.offset((subfr_length - n - 1 as i32) as isize) as f64;
+            k = 0 as i32;
             while k < n {
                 C_first_row[k as usize] -= (*x_ptr.offset(n as isize)
-                    * *x_ptr.offset((n - k - 1 as libc::c_int) as isize))
-                    as libc::c_double;
+                    * *x_ptr.offset((n - k - 1 as i32) as isize))
+                    as f64;
                 C_last_row[k as usize] -= (*x_ptr
-                    .offset((subfr_length - n - 1 as libc::c_int) as isize)
+                    .offset((subfr_length - n - 1 as i32) as isize)
                     * *x_ptr.offset((subfr_length - n + k) as isize))
-                    as libc::c_double;
+                    as f64;
                 Atmp = Af[k as usize];
-                tmp1 += *x_ptr.offset((n - k - 1 as libc::c_int) as isize) as libc::c_double * Atmp;
-                tmp2 += *x_ptr.offset((subfr_length - n + k) as isize) as libc::c_double * Atmp;
+                tmp1 += *x_ptr.offset((n - k - 1 as i32) as isize) as f64 * Atmp;
+                tmp2 += *x_ptr.offset((subfr_length - n + k) as isize) as f64 * Atmp;
                 k += 1
             }
-            k = 0 as libc::c_int;
+            k = 0 as i32;
             while k <= n {
-                CAf[k as usize] -= tmp1 * *x_ptr.offset((n - k) as isize) as libc::c_double;
+                CAf[k as usize] -= tmp1 * *x_ptr.offset((n - k) as isize) as f64;
                 CAb[k as usize] -= tmp2
-                    * *x_ptr.offset((subfr_length - n + k - 1 as libc::c_int) as isize)
-                        as libc::c_double;
+                    * *x_ptr.offset((subfr_length - n + k - 1 as i32) as isize)
+                        as f64;
                 k += 1
             }
             s += 1
         }
         tmp1 = C_first_row[n as usize];
         tmp2 = C_last_row[n as usize];
-        k = 0 as libc::c_int;
+        k = 0 as i32;
         while k < n {
             Atmp = Af[k as usize];
-            tmp1 += C_last_row[(n - k - 1 as libc::c_int) as usize] * Atmp;
-            tmp2 += C_first_row[(n - k - 1 as libc::c_int) as usize] * Atmp;
+            tmp1 += C_last_row[(n - k - 1 as i32) as usize] * Atmp;
+            tmp2 += C_first_row[(n - k - 1 as i32) as usize] * Atmp;
             k += 1
         }
-        CAf[(n + 1 as libc::c_int) as usize] = tmp1;
-        CAb[(n + 1 as libc::c_int) as usize] = tmp2;
+        CAf[(n + 1 as i32) as usize] = tmp1;
+        CAb[(n + 1 as i32) as usize] = tmp2;
         /* Calculate nominator and denominator for the next order reflection (parcor) coefficient */
-        num = CAb[(n + 1 as libc::c_int) as usize];
-        nrg_b = CAb[0 as libc::c_int as usize];
-        nrg_f = CAf[0 as libc::c_int as usize];
-        k = 0 as libc::c_int;
+        num = CAb[(n + 1 as i32) as usize];
+        nrg_b = CAb[0 as i32 as usize];
+        nrg_f = CAf[0 as i32 as usize];
+        k = 0 as i32;
         while k < n {
             Atmp = Af[k as usize];
             num += CAb[(n - k) as usize] * Atmp;
-            nrg_b += CAb[(k + 1 as libc::c_int) as usize] * Atmp;
-            nrg_f += CAf[(k + 1 as libc::c_int) as usize] * Atmp;
+            nrg_b += CAb[(k + 1 as i32) as usize] * Atmp;
+            nrg_f += CAf[(k + 1 as i32) as usize] * Atmp;
             k += 1
         }
         /* Calculate the next order reflection (parcor) coefficient */
         rc = -2.0f64 * num / (nrg_f + nrg_b);
         /* Update inverse prediction gain */
         tmp1 = invGain * (1.0f64 - rc * rc);
-        if tmp1 <= minInvGain as libc::c_double {
+        if tmp1 <= minInvGain as f64 {
             /* Max prediction gain exceeded; set reflection coefficient such that max prediction gain is exactly hit */
-            rc = crate::stdlib::sqrt(1.0f64 - minInvGain as libc::c_double / invGain);
-            if num > 0 as libc::c_int as libc::c_double {
+            rc = crate::stdlib::sqrt(1.0f64 - minInvGain as f64 / invGain);
+            if num > 0 as i32 as f64 {
                 /* Ensure adjusted reflection coefficients has the original sign */
                 rc = -rc
             }
-            invGain = minInvGain as libc::c_double;
-            reached_max_gain = 1 as libc::c_int
+            invGain = minInvGain as f64;
+            reached_max_gain = 1 as i32
         } else {
             invGain = tmp1
         }
         /* Update the AR coefficients */
-        k = 0 as libc::c_int;
-        while k < n + 1 as libc::c_int >> 1 as libc::c_int {
+        k = 0 as i32;
+        while k < n + 1 as i32 >> 1 as i32 {
             tmp1 = Af[k as usize];
-            tmp2 = Af[(n - k - 1 as libc::c_int) as usize];
+            tmp2 = Af[(n - k - 1 as i32) as usize];
             Af[k as usize] = tmp1 + rc * tmp2;
-            Af[(n - k - 1 as libc::c_int) as usize] = tmp2 + rc * tmp1;
+            Af[(n - k - 1 as i32) as usize] = tmp2 + rc * tmp1;
             k += 1
         }
         Af[n as usize] = rc;
         if reached_max_gain != 0 {
             /* Reached max prediction gain; set remaining coefficients to zero and exit loop */
-            k = n + 1 as libc::c_int;
+            k = n + 1 as i32;
             while k < D {
                 Af[k as usize] = 0.0f64;
                 k += 1
@@ -259,11 +259,11 @@ pub unsafe extern "C" fn silk_burg_modified_FLP(
             break;
         } else {
             /* Update C * Af and C * Ab */
-            k = 0 as libc::c_int;
-            while k <= n + 1 as libc::c_int {
+            k = 0 as i32;
+            while k <= n + 1 as i32 {
                 tmp1 = CAf[k as usize];
-                CAf[k as usize] += rc * CAb[(n - k + 1 as libc::c_int) as usize];
-                CAb[(n - k + 1 as libc::c_int) as usize] += rc * tmp1;
+                CAf[k as usize] += rc * CAb[(n - k + 1 as i32) as usize];
+                CAb[(n - k + 1 as i32) as usize] += rc * tmp1;
                 k += 1
             }
             n += 1
@@ -271,13 +271,13 @@ pub unsafe extern "C" fn silk_burg_modified_FLP(
     }
     if reached_max_gain != 0 {
         /* Convert to silk_float */
-        k = 0 as libc::c_int;
+        k = 0 as i32;
         while k < D {
-            *A.offset(k as isize) = -Af[k as usize] as libc::c_float;
+            *A.offset(k as isize) = -Af[k as usize] as f32;
             k += 1
         }
         /* Subtract energy of preceding samples from C0 */
-        s = 0 as libc::c_int;
+        s = 0 as i32;
         while s < nb_subfr {
             C0 -= crate::src::opus_1_2_1::silk::float::energy_FLP::silk_energy_FLP(
                 x.offset((s * subfr_length) as isize),
@@ -289,18 +289,18 @@ pub unsafe extern "C" fn silk_burg_modified_FLP(
         nrg_f = C0 * invGain
     } else {
         /* Compute residual energy and store coefficients as silk_float */
-        nrg_f = CAf[0 as libc::c_int as usize];
+        nrg_f = CAf[0 as i32 as usize];
         tmp1 = 1.0f64;
-        k = 0 as libc::c_int;
+        k = 0 as i32;
         while k < D {
             Atmp = Af[k as usize];
-            nrg_f += CAf[(k + 1 as libc::c_int) as usize] * Atmp;
+            nrg_f += CAf[(k + 1 as i32) as usize] * Atmp;
             tmp1 += Atmp * Atmp;
-            *A.offset(k as isize) = -Atmp as libc::c_float;
+            *A.offset(k as isize) = -Atmp as f32;
             k += 1
         }
-        nrg_f -= 1e-5f32 as libc::c_double * C0 * tmp1
+        nrg_f -= 1e-5f32 as f64 * C0 * tmp1
     }
     /* Return residual energy */
-    return nrg_f as libc::c_float;
+    return nrg_f as f32;
 }

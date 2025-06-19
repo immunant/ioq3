@@ -59,55 +59,55 @@ POSSIBILITY OF SUCH DAMAGE.
  */
 /* Tables with delay compensation values to equalize total delay for different modes */
 
-static mut delay_matrix_enc: [[libc::c_schar; 3]; 5] = [
+static mut delay_matrix_enc: [[i8; 3]; 5] = [
     [
-        6 as libc::c_int as libc::c_schar,
-        0 as libc::c_int as libc::c_schar,
-        3 as libc::c_int as libc::c_schar,
+        6 as i32 as i8,
+        0 as i32 as i8,
+        3 as i32 as i8,
     ],
     [
-        0 as libc::c_int as libc::c_schar,
-        7 as libc::c_int as libc::c_schar,
-        3 as libc::c_int as libc::c_schar,
+        0 as i32 as i8,
+        7 as i32 as i8,
+        3 as i32 as i8,
     ],
     [
-        0 as libc::c_int as libc::c_schar,
-        1 as libc::c_int as libc::c_schar,
-        10 as libc::c_int as libc::c_schar,
+        0 as i32 as i8,
+        1 as i32 as i8,
+        10 as i32 as i8,
     ],
     [
-        0 as libc::c_int as libc::c_schar,
-        2 as libc::c_int as libc::c_schar,
-        6 as libc::c_int as libc::c_schar,
+        0 as i32 as i8,
+        2 as i32 as i8,
+        6 as i32 as i8,
     ],
     [
-        18 as libc::c_int as libc::c_schar,
-        10 as libc::c_int as libc::c_schar,
-        12 as libc::c_int as libc::c_schar,
+        18 as i32 as i8,
+        10 as i32 as i8,
+        12 as i32 as i8,
     ],
 ];
 
-static mut delay_matrix_dec: [[libc::c_schar; 5]; 3] = [
+static mut delay_matrix_dec: [[i8; 5]; 3] = [
     [
-        4 as libc::c_int as libc::c_schar,
-        0 as libc::c_int as libc::c_schar,
-        2 as libc::c_int as libc::c_schar,
-        0 as libc::c_int as libc::c_schar,
-        0 as libc::c_int as libc::c_schar,
+        4 as i32 as i8,
+        0 as i32 as i8,
+        2 as i32 as i8,
+        0 as i32 as i8,
+        0 as i32 as i8,
     ],
     [
-        0 as libc::c_int as libc::c_schar,
-        9 as libc::c_int as libc::c_schar,
-        4 as libc::c_int as libc::c_schar,
-        7 as libc::c_int as libc::c_schar,
-        4 as libc::c_int as libc::c_schar,
+        0 as i32 as i8,
+        9 as i32 as i8,
+        4 as i32 as i8,
+        7 as i32 as i8,
+        4 as i32 as i8,
     ],
     [
-        0 as libc::c_int as libc::c_schar,
-        3 as libc::c_int as libc::c_schar,
-        12 as libc::c_int as libc::c_schar,
-        7 as libc::c_int as libc::c_schar,
-        7 as libc::c_int as libc::c_schar,
+        0 as i32 as i8,
+        3 as i32 as i8,
+        12 as i32 as i8,
+        7 as i32 as i8,
+        7 as i32 as i8,
     ],
 ];
 /* Initialize/reset the resampler state for a given pair of input/output sampling rates */
@@ -117,135 +117,135 @@ pub unsafe extern "C" fn silk_resampler_init(
     mut S: *mut crate::resampler_structs_h::silk_resampler_state_struct,
     mut Fs_Hz_in: crate::opus_types_h::opus_int32,
     mut Fs_Hz_out: crate::opus_types_h::opus_int32,
-    mut forEnc: libc::c_int,
-) -> libc::c_int
+    mut forEnc: i32,
+) -> i32
 /* I    If 1: encoder; if 0: decoder                                */ {
-    let mut up2x: libc::c_int = 0;
+    let mut up2x: i32 = 0;
     /* Clear state */
     crate::stdlib::memset(
         S as *mut libc::c_void,
-        0 as libc::c_int,
+        0 as i32,
         ::std::mem::size_of::<crate::resampler_structs_h::silk_resampler_state_struct>()
             as libc::c_ulong,
     );
     /* Input checking */
     if forEnc != 0 {
-        if Fs_Hz_in != 8000 as libc::c_int
-            && Fs_Hz_in != 12000 as libc::c_int
-            && Fs_Hz_in != 16000 as libc::c_int
-            && Fs_Hz_in != 24000 as libc::c_int
-            && Fs_Hz_in != 48000 as libc::c_int
-            || Fs_Hz_out != 8000 as libc::c_int
-                && Fs_Hz_out != 12000 as libc::c_int
-                && Fs_Hz_out != 16000 as libc::c_int
+        if Fs_Hz_in != 8000 as i32
+            && Fs_Hz_in != 12000 as i32
+            && Fs_Hz_in != 16000 as i32
+            && Fs_Hz_in != 24000 as i32
+            && Fs_Hz_in != 48000 as i32
+            || Fs_Hz_out != 8000 as i32
+                && Fs_Hz_out != 12000 as i32
+                && Fs_Hz_out != 16000 as i32
         {
-            return -(1 as libc::c_int);
+            return -(1 as i32);
         }
-        (*S).inputDelay = delay_matrix_enc[(((Fs_Hz_in >> 12 as libc::c_int)
-            - (Fs_Hz_in > 16000 as libc::c_int) as libc::c_int
-            >> (Fs_Hz_in > 24000 as libc::c_int) as libc::c_int)
-            - 1 as libc::c_int) as usize][(((Fs_Hz_out >> 12 as libc::c_int)
-            - (Fs_Hz_out > 16000 as libc::c_int) as libc::c_int
-            >> (Fs_Hz_out > 24000 as libc::c_int) as libc::c_int)
-            - 1 as libc::c_int) as usize] as libc::c_int
+        (*S).inputDelay = delay_matrix_enc[(((Fs_Hz_in >> 12 as i32)
+            - (Fs_Hz_in > 16000 as i32) as i32
+            >> (Fs_Hz_in > 24000 as i32) as i32)
+            - 1 as i32) as usize][(((Fs_Hz_out >> 12 as i32)
+            - (Fs_Hz_out > 16000 as i32) as i32
+            >> (Fs_Hz_out > 24000 as i32) as i32)
+            - 1 as i32) as usize] as i32
     } else {
-        if Fs_Hz_in != 8000 as libc::c_int
-            && Fs_Hz_in != 12000 as libc::c_int
-            && Fs_Hz_in != 16000 as libc::c_int
-            || Fs_Hz_out != 8000 as libc::c_int
-                && Fs_Hz_out != 12000 as libc::c_int
-                && Fs_Hz_out != 16000 as libc::c_int
-                && Fs_Hz_out != 24000 as libc::c_int
-                && Fs_Hz_out != 48000 as libc::c_int
+        if Fs_Hz_in != 8000 as i32
+            && Fs_Hz_in != 12000 as i32
+            && Fs_Hz_in != 16000 as i32
+            || Fs_Hz_out != 8000 as i32
+                && Fs_Hz_out != 12000 as i32
+                && Fs_Hz_out != 16000 as i32
+                && Fs_Hz_out != 24000 as i32
+                && Fs_Hz_out != 48000 as i32
         {
-            return -(1 as libc::c_int);
+            return -(1 as i32);
         }
-        (*S).inputDelay = delay_matrix_dec[(((Fs_Hz_in >> 12 as libc::c_int)
-            - (Fs_Hz_in > 16000 as libc::c_int) as libc::c_int
-            >> (Fs_Hz_in > 24000 as libc::c_int) as libc::c_int)
-            - 1 as libc::c_int) as usize][(((Fs_Hz_out >> 12 as libc::c_int)
-            - (Fs_Hz_out > 16000 as libc::c_int) as libc::c_int
-            >> (Fs_Hz_out > 24000 as libc::c_int) as libc::c_int)
-            - 1 as libc::c_int) as usize] as libc::c_int
+        (*S).inputDelay = delay_matrix_dec[(((Fs_Hz_in >> 12 as i32)
+            - (Fs_Hz_in > 16000 as i32) as i32
+            >> (Fs_Hz_in > 24000 as i32) as i32)
+            - 1 as i32) as usize][(((Fs_Hz_out >> 12 as i32)
+            - (Fs_Hz_out > 16000 as i32) as i32
+            >> (Fs_Hz_out > 24000 as i32) as i32)
+            - 1 as i32) as usize] as i32
     }
-    (*S).Fs_in_kHz = Fs_Hz_in / 1000 as libc::c_int;
-    (*S).Fs_out_kHz = Fs_Hz_out / 1000 as libc::c_int;
+    (*S).Fs_in_kHz = Fs_Hz_in / 1000 as i32;
+    (*S).Fs_out_kHz = Fs_Hz_out / 1000 as i32;
     /* Number of samples processed per batch */
-    (*S).batchSize = (*S).Fs_in_kHz * 10 as libc::c_int;
+    (*S).batchSize = (*S).Fs_in_kHz * 10 as i32;
     /* Find resampler with the right sampling ratio */
-    up2x = 0 as libc::c_int;
+    up2x = 0 as i32;
     if Fs_Hz_out > Fs_Hz_in {
         /* Upsample */
-        if Fs_Hz_out == Fs_Hz_in * 2 as libc::c_int {
+        if Fs_Hz_out == Fs_Hz_in * 2 as i32 {
             /* Fs_out : Fs_in = 2 : 1 */
             /* Special case: directly use 2x upsampler */
-            (*S).resampler_function = 1 as libc::c_int
+            (*S).resampler_function = 1 as i32
         } else {
             /* Default resampler */
-            (*S).resampler_function = 2 as libc::c_int;
-            up2x = 1 as libc::c_int
+            (*S).resampler_function = 2 as i32;
+            up2x = 1 as i32
         }
     } else if Fs_Hz_out < Fs_Hz_in {
         /* Downsample */
-        (*S).resampler_function = 3 as libc::c_int;
-        if Fs_Hz_out * 4 as libc::c_int == Fs_Hz_in * 3 as libc::c_int {
+        (*S).resampler_function = 3 as i32;
+        if Fs_Hz_out * 4 as i32 == Fs_Hz_in * 3 as i32 {
             /* Fs_out : Fs_in = 3 : 4 */
-            (*S).FIR_Fracs = 3 as libc::c_int;
-            (*S).FIR_Order = 18 as libc::c_int;
+            (*S).FIR_Fracs = 3 as i32;
+            (*S).FIR_Order = 18 as i32;
             (*S).Coefs =
                 crate::src::opus_1_2_1::silk::resampler_rom::silk_Resampler_3_4_COEFS.as_ptr()
-        } else if Fs_Hz_out * 3 as libc::c_int == Fs_Hz_in * 2 as libc::c_int {
+        } else if Fs_Hz_out * 3 as i32 == Fs_Hz_in * 2 as i32 {
             /* Fs_out : Fs_in = 2 : 3 */
-            (*S).FIR_Fracs = 2 as libc::c_int;
-            (*S).FIR_Order = 18 as libc::c_int;
+            (*S).FIR_Fracs = 2 as i32;
+            (*S).FIR_Order = 18 as i32;
             (*S).Coefs =
                 crate::src::opus_1_2_1::silk::resampler_rom::silk_Resampler_2_3_COEFS.as_ptr()
-        } else if Fs_Hz_out * 2 as libc::c_int == Fs_Hz_in {
+        } else if Fs_Hz_out * 2 as i32 == Fs_Hz_in {
             /* Fs_out : Fs_in = 1 : 2 */
-            (*S).FIR_Fracs = 1 as libc::c_int;
-            (*S).FIR_Order = 24 as libc::c_int;
+            (*S).FIR_Fracs = 1 as i32;
+            (*S).FIR_Order = 24 as i32;
             (*S).Coefs =
                 crate::src::opus_1_2_1::silk::resampler_rom::silk_Resampler_1_2_COEFS.as_ptr()
-        } else if Fs_Hz_out * 3 as libc::c_int == Fs_Hz_in {
+        } else if Fs_Hz_out * 3 as i32 == Fs_Hz_in {
             /* Fs_out : Fs_in = 1 : 3 */
-            (*S).FIR_Fracs = 1 as libc::c_int;
-            (*S).FIR_Order = 36 as libc::c_int;
+            (*S).FIR_Fracs = 1 as i32;
+            (*S).FIR_Order = 36 as i32;
             (*S).Coefs =
                 crate::src::opus_1_2_1::silk::resampler_rom::silk_Resampler_1_3_COEFS.as_ptr()
-        } else if Fs_Hz_out * 4 as libc::c_int == Fs_Hz_in {
+        } else if Fs_Hz_out * 4 as i32 == Fs_Hz_in {
             /* Fs_out : Fs_in = 1 : 4 */
-            (*S).FIR_Fracs = 1 as libc::c_int;
-            (*S).FIR_Order = 36 as libc::c_int;
+            (*S).FIR_Fracs = 1 as i32;
+            (*S).FIR_Order = 36 as i32;
             (*S).Coefs =
                 crate::src::opus_1_2_1::silk::resampler_rom::silk_Resampler_1_4_COEFS.as_ptr()
-        } else if Fs_Hz_out * 6 as libc::c_int == Fs_Hz_in {
+        } else if Fs_Hz_out * 6 as i32 == Fs_Hz_in {
             /* Fs_out : Fs_in = 1 : 6 */
-            (*S).FIR_Fracs = 1 as libc::c_int;
-            (*S).FIR_Order = 36 as libc::c_int;
+            (*S).FIR_Fracs = 1 as i32;
+            (*S).FIR_Order = 36 as i32;
             (*S).Coefs =
                 crate::src::opus_1_2_1::silk::resampler_rom::silk_Resampler_1_6_COEFS.as_ptr()
         } else {
             /* None available */
-            return -(1 as libc::c_int);
+            return -(1 as i32);
         }
     } else {
         /* Input and output sampling rates are equal: copy */
-        (*S).resampler_function = 0 as libc::c_int
+        (*S).resampler_function = 0 as i32
     }
     /* Ratio of input/output samples */
     (*S).invRatio_Q16 = (((((Fs_Hz_in as crate::opus_types_h::opus_uint32)
-        << 14 as libc::c_int + up2x) as crate::opus_types_h::opus_int32
+        << 14 as i32 + up2x) as crate::opus_types_h::opus_int32
         / Fs_Hz_out) as crate::opus_types_h::opus_uint32)
-        << 2 as libc::c_int) as crate::opus_types_h::opus_int32;
+        << 2 as i32) as crate::opus_types_h::opus_int32;
     /* Make sure the ratio is rounded up */
-    while (((*S).invRatio_Q16 as libc::c_longlong * Fs_Hz_out as libc::c_longlong
-        >> 16 as libc::c_int) as crate::opus_types_h::opus_int32)
+    while (((*S).invRatio_Q16 as i64 * Fs_Hz_out as i64
+        >> 16 as i32) as crate::opus_types_h::opus_int32)
         < ((Fs_Hz_in as crate::opus_types_h::opus_uint32) << up2x)
             as crate::opus_types_h::opus_int32
     {
         (*S).invRatio_Q16 += 1
     }
-    return 0 as libc::c_int;
+    return 0 as i32;
 }
 /* **********************************************************************
 Copyright (c) 2006-2011, Skype Limited. All rights reserved.
@@ -299,9 +299,9 @@ pub unsafe extern "C" fn silk_resampler(
     mut out: *mut crate::opus_types_h::opus_int16,
     mut in_0: *const crate::opus_types_h::opus_int16,
     mut inLen: crate::opus_types_h::opus_int32,
-) -> libc::c_int
+) -> i32
 /* I    Number of input samples                                     */ {
-    let mut nSamples: libc::c_int = 0;
+    let mut nSamples: i32 = 0;
     /* Need at least 1 ms of input data */
     nSamples = (*S).Fs_in_kHz - (*S).inputDelay;
     /* Copy to delay buffer */
@@ -377,5 +377,5 @@ pub unsafe extern "C" fn silk_resampler(
            ((*S).inputDelay as
                 libc::c_ulong).wrapping_mul(::std::mem::size_of::<crate::opus_types_h::opus_int16>()
                                                 as libc::c_ulong));
-    return 0 as libc::c_int;
+    return 0 as i32;
 }

@@ -95,37 +95,37 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_insertion_sort_decreasing_FLP(
-    mut a: *mut libc::c_float,
-    mut idx: *mut libc::c_int,
-    L: libc::c_int,
-    K: libc::c_int,
+    mut a: *mut f32,
+    mut idx: *mut i32,
+    L: i32,
+    K: i32,
 )
 /* I    Number of correctly sorted positions                        */
 {
-    let mut value: libc::c_float = 0.;
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
+    let mut value: f32 = 0.;
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
     /* Safety checks */
     /* Write start indices in index vector */
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < K {
         *idx.offset(i as isize) = i;
         i += 1
     }
     /* Sort vector elements by value, decreasing order */
-    i = 1 as libc::c_int;
+    i = 1 as i32;
     while i < K {
         value = *a.offset(i as isize);
-        j = i - 1 as libc::c_int;
-        while j >= 0 as libc::c_int && value > *a.offset(j as isize) {
+        j = i - 1 as i32;
+        while j >= 0 as i32 && value > *a.offset(j as isize) {
             /* Write index */
-            *a.offset((j + 1 as libc::c_int) as isize) = *a.offset(j as isize);
-            *idx.offset((j + 1 as libc::c_int) as isize) = *idx.offset(j as isize);
+            *a.offset((j + 1 as i32) as isize) = *a.offset(j as isize);
+            *idx.offset((j + 1 as i32) as isize) = *idx.offset(j as isize);
             j -= 1 /* Shift value */
             /* Shift index */
         } /* Write value */
-        *a.offset((j + 1 as libc::c_int) as isize) = value;
-        *idx.offset((j + 1 as libc::c_int) as isize) = i;
+        *a.offset((j + 1 as i32) as isize) = value;
+        *idx.offset((j + 1 as i32) as isize) = i;
         i += 1
     }
     /* If less than L values are asked check the remaining values,      */
@@ -133,17 +133,17 @@ pub unsafe extern "C" fn silk_insertion_sort_decreasing_FLP(
     i = K; /* Shift value */
     while i < L {
         value = *a.offset(i as isize);
-        if value > *a.offset((K - 1 as libc::c_int) as isize) {
-            j = K - 2 as libc::c_int;
-            while j >= 0 as libc::c_int && value > *a.offset(j as isize) {
-                *a.offset((j + 1 as libc::c_int) as isize) = *a.offset(j as isize);
-                *idx.offset((j + 1 as libc::c_int) as isize) = *idx.offset(j as isize);
+        if value > *a.offset((K - 1 as i32) as isize) {
+            j = K - 2 as i32;
+            while j >= 0 as i32 && value > *a.offset(j as isize) {
+                *a.offset((j + 1 as i32) as isize) = *a.offset(j as isize);
+                *idx.offset((j + 1 as i32) as isize) = *idx.offset(j as isize);
                 j -= 1
                 /* Shift index */
             }
             /* Write index */
-            *a.offset((j + 1 as libc::c_int) as isize) = value; /* Write value */
-            *idx.offset((j + 1 as libc::c_int) as isize) = i
+            *a.offset((j + 1 as i32) as isize) = value; /* Write value */
+            *idx.offset((j + 1 as i32) as isize) = i
         }
         i += 1
     }

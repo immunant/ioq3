@@ -47,153 +47,153 @@ OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 /* Intel ADPCM step variation table */
 
-static mut indexTable: [libc::c_int; 16] = [
-    -(1 as libc::c_int),
-    -(1 as libc::c_int),
-    -(1 as libc::c_int),
-    -(1 as libc::c_int),
-    2 as libc::c_int,
-    4 as libc::c_int,
-    6 as libc::c_int,
-    8 as libc::c_int,
-    -(1 as libc::c_int),
-    -(1 as libc::c_int),
-    -(1 as libc::c_int),
-    -(1 as libc::c_int),
-    2 as libc::c_int,
-    4 as libc::c_int,
-    6 as libc::c_int,
-    8 as libc::c_int,
+static mut indexTable: [i32; 16] = [
+    -(1 as i32),
+    -(1 as i32),
+    -(1 as i32),
+    -(1 as i32),
+    2 as i32,
+    4 as i32,
+    6 as i32,
+    8 as i32,
+    -(1 as i32),
+    -(1 as i32),
+    -(1 as i32),
+    -(1 as i32),
+    2 as i32,
+    4 as i32,
+    6 as i32,
+    8 as i32,
 ];
 
-static mut stepsizeTable: [libc::c_int; 89] = [
-    7 as libc::c_int,
-    8 as libc::c_int,
-    9 as libc::c_int,
-    10 as libc::c_int,
-    11 as libc::c_int,
-    12 as libc::c_int,
-    13 as libc::c_int,
-    14 as libc::c_int,
-    16 as libc::c_int,
-    17 as libc::c_int,
-    19 as libc::c_int,
-    21 as libc::c_int,
-    23 as libc::c_int,
-    25 as libc::c_int,
-    28 as libc::c_int,
-    31 as libc::c_int,
-    34 as libc::c_int,
-    37 as libc::c_int,
-    41 as libc::c_int,
-    45 as libc::c_int,
-    50 as libc::c_int,
-    55 as libc::c_int,
-    60 as libc::c_int,
-    66 as libc::c_int,
-    73 as libc::c_int,
-    80 as libc::c_int,
-    88 as libc::c_int,
-    97 as libc::c_int,
-    107 as libc::c_int,
-    118 as libc::c_int,
-    130 as libc::c_int,
-    143 as libc::c_int,
-    157 as libc::c_int,
-    173 as libc::c_int,
-    190 as libc::c_int,
-    209 as libc::c_int,
-    230 as libc::c_int,
-    253 as libc::c_int,
-    279 as libc::c_int,
-    307 as libc::c_int,
-    337 as libc::c_int,
-    371 as libc::c_int,
-    408 as libc::c_int,
-    449 as libc::c_int,
-    494 as libc::c_int,
-    544 as libc::c_int,
-    598 as libc::c_int,
-    658 as libc::c_int,
-    724 as libc::c_int,
-    796 as libc::c_int,
-    876 as libc::c_int,
-    963 as libc::c_int,
-    1060 as libc::c_int,
-    1166 as libc::c_int,
-    1282 as libc::c_int,
-    1411 as libc::c_int,
-    1552 as libc::c_int,
-    1707 as libc::c_int,
-    1878 as libc::c_int,
-    2066 as libc::c_int,
-    2272 as libc::c_int,
-    2499 as libc::c_int,
-    2749 as libc::c_int,
-    3024 as libc::c_int,
-    3327 as libc::c_int,
-    3660 as libc::c_int,
-    4026 as libc::c_int,
-    4428 as libc::c_int,
-    4871 as libc::c_int,
-    5358 as libc::c_int,
-    5894 as libc::c_int,
-    6484 as libc::c_int,
-    7132 as libc::c_int,
-    7845 as libc::c_int,
-    8630 as libc::c_int,
-    9493 as libc::c_int,
-    10442 as libc::c_int,
-    11487 as libc::c_int,
-    12635 as libc::c_int,
-    13899 as libc::c_int,
-    15289 as libc::c_int,
-    16818 as libc::c_int,
-    18500 as libc::c_int,
-    20350 as libc::c_int,
-    22385 as libc::c_int,
-    24623 as libc::c_int,
-    27086 as libc::c_int,
-    29794 as libc::c_int,
-    32767 as libc::c_int,
+static mut stepsizeTable: [i32; 89] = [
+    7 as i32,
+    8 as i32,
+    9 as i32,
+    10 as i32,
+    11 as i32,
+    12 as i32,
+    13 as i32,
+    14 as i32,
+    16 as i32,
+    17 as i32,
+    19 as i32,
+    21 as i32,
+    23 as i32,
+    25 as i32,
+    28 as i32,
+    31 as i32,
+    34 as i32,
+    37 as i32,
+    41 as i32,
+    45 as i32,
+    50 as i32,
+    55 as i32,
+    60 as i32,
+    66 as i32,
+    73 as i32,
+    80 as i32,
+    88 as i32,
+    97 as i32,
+    107 as i32,
+    118 as i32,
+    130 as i32,
+    143 as i32,
+    157 as i32,
+    173 as i32,
+    190 as i32,
+    209 as i32,
+    230 as i32,
+    253 as i32,
+    279 as i32,
+    307 as i32,
+    337 as i32,
+    371 as i32,
+    408 as i32,
+    449 as i32,
+    494 as i32,
+    544 as i32,
+    598 as i32,
+    658 as i32,
+    724 as i32,
+    796 as i32,
+    876 as i32,
+    963 as i32,
+    1060 as i32,
+    1166 as i32,
+    1282 as i32,
+    1411 as i32,
+    1552 as i32,
+    1707 as i32,
+    1878 as i32,
+    2066 as i32,
+    2272 as i32,
+    2499 as i32,
+    2749 as i32,
+    3024 as i32,
+    3327 as i32,
+    3660 as i32,
+    4026 as i32,
+    4428 as i32,
+    4871 as i32,
+    5358 as i32,
+    5894 as i32,
+    6484 as i32,
+    7132 as i32,
+    7845 as i32,
+    8630 as i32,
+    9493 as i32,
+    10442 as i32,
+    11487 as i32,
+    12635 as i32,
+    13899 as i32,
+    15289 as i32,
+    16818 as i32,
+    18500 as i32,
+    20350 as i32,
+    22385 as i32,
+    24623 as i32,
+    27086 as i32,
+    29794 as i32,
+    32767 as i32,
 ];
 #[no_mangle]
 
 pub unsafe extern "C" fn S_AdpcmEncode(
-    mut indata: *mut libc::c_short,
+    mut indata: *mut i16,
     mut outdata: *mut libc::c_char,
-    mut len: libc::c_int,
+    mut len: i32,
     mut state: *mut crate::snd_local_h::adpcm_state,
 ) {
-    let mut inp: *mut libc::c_short = 0 as *mut libc::c_short; /* Input buffer pointer */
-    let mut outp: *mut libc::c_schar = 0 as *mut libc::c_schar; /* output buffer pointer */
-    let mut val: libc::c_int = 0; /* Current input sample value */
-    let mut sign: libc::c_int = 0; /* Current adpcm sign bit */
-    let mut delta: libc::c_int = 0; /* Current adpcm output value */
-    let mut diff: libc::c_int = 0; /* Difference between val and sample */
-    let mut step: libc::c_int = 0; /* Stepsize */
-    let mut valpred: libc::c_int = 0; /* Predicted output value */
-    let mut vpdiff: libc::c_int = 0; /* Current change to valpred */
-    let mut index: libc::c_int = 0; /* Current step change index */
-    let mut outputbuffer: libc::c_int = 0; /* place to keep previous 4-bit value */
-    let mut bufferstep: libc::c_int = 0; /* toggle between outputbuffer/output */
-    outp = outdata as *mut libc::c_schar; // quiet a compiler warning
+    let mut inp: *mut i16 = 0 as *mut i16; /* Input buffer pointer */
+    let mut outp: *mut i8 = 0 as *mut i8; /* output buffer pointer */
+    let mut val: i32 = 0; /* Current input sample value */
+    let mut sign: i32 = 0; /* Current adpcm sign bit */
+    let mut delta: i32 = 0; /* Current adpcm output value */
+    let mut diff: i32 = 0; /* Difference between val and sample */
+    let mut step: i32 = 0; /* Stepsize */
+    let mut valpred: i32 = 0; /* Predicted output value */
+    let mut vpdiff: i32 = 0; /* Current change to valpred */
+    let mut index: i32 = 0; /* Current step change index */
+    let mut outputbuffer: i32 = 0; /* place to keep previous 4-bit value */
+    let mut bufferstep: i32 = 0; /* toggle between outputbuffer/output */
+    outp = outdata as *mut i8; // quiet a compiler warning
     inp = indata;
-    valpred = (*state).sample as libc::c_int;
-    index = (*state).index as libc::c_int;
+    valpred = (*state).sample as i32;
+    index = (*state).index as i32;
     step = stepsizeTable[index as usize];
-    outputbuffer = 0 as libc::c_int;
-    bufferstep = 1 as libc::c_int;
-    while len > 0 as libc::c_int {
+    outputbuffer = 0 as i32;
+    bufferstep = 1 as i32;
+    while len > 0 as i32 {
         let fresh0 = inp;
         inp = inp.offset(1);
-        val = *fresh0 as libc::c_int;
+        val = *fresh0 as i32;
         /* Step 1 - compute difference with previous value */
         diff = val - valpred;
-        sign = if diff < 0 as libc::c_int {
-            8 as libc::c_int
+        sign = if diff < 0 as i32 {
+            8 as i32
         } else {
-            0 as libc::c_int
+            0 as i32
         };
         if sign != 0 {
             diff = -diff
@@ -207,22 +207,22 @@ pub unsafe extern "C" fn S_AdpcmEncode(
         	** that even if you have fast mul/div hardware you cannot put it to
         	** good use since the fixup would be too expensive.
         	*/
-        delta = 0 as libc::c_int;
-        vpdiff = step >> 3 as libc::c_int;
+        delta = 0 as i32;
+        vpdiff = step >> 3 as i32;
         if diff >= step {
-            delta = 4 as libc::c_int;
+            delta = 4 as i32;
             diff -= step;
             vpdiff += step
         }
-        step >>= 1 as libc::c_int;
+        step >>= 1 as i32;
         if diff >= step {
-            delta |= 2 as libc::c_int;
+            delta |= 2 as i32;
             diff -= step;
             vpdiff += step
         }
-        step >>= 1 as libc::c_int;
+        step >>= 1 as i32;
         if diff >= step {
-            delta |= 1 as libc::c_int;
+            delta |= 1 as i32;
             vpdiff += step
         }
         /* Step 3 - Update previous value */
@@ -232,39 +232,39 @@ pub unsafe extern "C" fn S_AdpcmEncode(
             valpred += vpdiff
         }
         /* Step 4 - Clamp previous value to 16 bits */
-        if valpred > 32767 as libc::c_int {
-            valpred = 32767 as libc::c_int
-        } else if valpred < -(32768 as libc::c_int) {
-            valpred = -(32768 as libc::c_int)
+        if valpred > 32767 as i32 {
+            valpred = 32767 as i32
+        } else if valpred < -(32768 as i32) {
+            valpred = -(32768 as i32)
         }
         /* Step 5 - Assemble value, update index and step values */
         delta |= sign;
         index += indexTable[delta as usize];
-        if index < 0 as libc::c_int {
-            index = 0 as libc::c_int
+        if index < 0 as i32 {
+            index = 0 as i32
         }
-        if index > 88 as libc::c_int {
-            index = 88 as libc::c_int
+        if index > 88 as i32 {
+            index = 88 as i32
         }
         step = stepsizeTable[index as usize];
         /* Step 6 - Output value */
         if bufferstep != 0 {
-            outputbuffer = delta << 4 as libc::c_int & 0xf0 as libc::c_int
+            outputbuffer = delta << 4 as i32 & 0xf0 as i32
         } else {
             let fresh1 = outp;
             outp = outp.offset(1);
-            *fresh1 = (delta & 0xf as libc::c_int | outputbuffer) as libc::c_schar
+            *fresh1 = (delta & 0xf as i32 | outputbuffer) as i8
         }
-        bufferstep = (bufferstep == 0) as libc::c_int;
+        bufferstep = (bufferstep == 0) as i32;
         len -= 1
     }
     /* Output last step, if needed */
     if bufferstep == 0 {
         let fresh2 = outp;
         outp = outp.offset(1);
-        *fresh2 = outputbuffer as libc::c_schar
+        *fresh2 = outputbuffer as i8
     }
-    (*state).sample = valpred as libc::c_short;
+    (*state).sample = valpred as i16;
     (*state).index = index as libc::c_char;
 }
 /* static */
@@ -272,63 +272,63 @@ pub unsafe extern "C" fn S_AdpcmEncode(
 
 pub unsafe extern "C" fn S_AdpcmDecode(
     mut indata: *const libc::c_char,
-    mut outdata: *mut libc::c_short,
-    mut len: libc::c_int,
+    mut outdata: *mut i16,
+    mut len: i32,
     mut state: *mut crate::snd_local_h::adpcm_state,
 ) {
-    let mut inp: *mut libc::c_schar = 0 as *mut libc::c_schar; /* Input buffer pointer */
-    let mut outp: libc::c_int = 0; /* output buffer pointer */
-    let mut sign: libc::c_int = 0; /* Current adpcm sign bit */
-    let mut delta: libc::c_int = 0; /* Current adpcm output value */
-    let mut step: libc::c_int = 0; /* Stepsize */
-    let mut valpred: libc::c_int = 0; /* Predicted value */
-    let mut vpdiff: libc::c_int = 0; /* Current change to valpred */
-    let mut index: libc::c_int = 0; /* Current step change index */
-    let mut inputbuffer: libc::c_int = 0; /* place to keep next 4-bit value */
-    let mut bufferstep: libc::c_int = 0; /* toggle between inputbuffer/input */
-    outp = 0 as libc::c_int; // quiet a compiler warning
-    inp = indata as *mut libc::c_schar;
-    valpred = (*state).sample as libc::c_int;
-    index = (*state).index as libc::c_int;
+    let mut inp: *mut i8 = 0 as *mut i8; /* Input buffer pointer */
+    let mut outp: i32 = 0; /* output buffer pointer */
+    let mut sign: i32 = 0; /* Current adpcm sign bit */
+    let mut delta: i32 = 0; /* Current adpcm output value */
+    let mut step: i32 = 0; /* Stepsize */
+    let mut valpred: i32 = 0; /* Predicted value */
+    let mut vpdiff: i32 = 0; /* Current change to valpred */
+    let mut index: i32 = 0; /* Current step change index */
+    let mut inputbuffer: i32 = 0; /* place to keep next 4-bit value */
+    let mut bufferstep: i32 = 0; /* toggle between inputbuffer/input */
+    outp = 0 as i32; // quiet a compiler warning
+    inp = indata as *mut i8;
+    valpred = (*state).sample as i32;
+    index = (*state).index as i32;
     step = stepsizeTable[index as usize];
-    bufferstep = 0 as libc::c_int;
-    inputbuffer = 0 as libc::c_int;
-    while len > 0 as libc::c_int {
+    bufferstep = 0 as i32;
+    inputbuffer = 0 as i32;
+    while len > 0 as i32 {
         /* Step 1 - get the delta value */
         if bufferstep != 0 {
-            delta = inputbuffer & 0xf as libc::c_int
+            delta = inputbuffer & 0xf as i32
         } else {
             let fresh3 = inp;
             inp = inp.offset(1);
-            inputbuffer = *fresh3 as libc::c_int;
-            delta = inputbuffer >> 4 as libc::c_int & 0xf as libc::c_int
+            inputbuffer = *fresh3 as i32;
+            delta = inputbuffer >> 4 as i32 & 0xf as i32
         }
-        bufferstep = (bufferstep == 0) as libc::c_int;
+        bufferstep = (bufferstep == 0) as i32;
         /* Step 2 - Find new index value (for later) */
         index += indexTable[delta as usize];
-        if index < 0 as libc::c_int {
-            index = 0 as libc::c_int
+        if index < 0 as i32 {
+            index = 0 as i32
         }
-        if index > 88 as libc::c_int {
-            index = 88 as libc::c_int
+        if index > 88 as i32 {
+            index = 88 as i32
         }
         /* Step 3 - Separate sign and magnitude */
-        sign = delta & 8 as libc::c_int;
-        delta = delta & 7 as libc::c_int;
+        sign = delta & 8 as i32;
+        delta = delta & 7 as i32;
         /* Step 4 - Compute difference and new predicted value */
         /*
         	** Computes 'vpdiff = (delta+0.5)*step/4', but see comment
         	** in adpcm_coder.
         	*/
-        vpdiff = step >> 3 as libc::c_int;
-        if delta & 4 as libc::c_int != 0 {
+        vpdiff = step >> 3 as i32;
+        if delta & 4 as i32 != 0 {
             vpdiff += step
         }
-        if delta & 2 as libc::c_int != 0 {
-            vpdiff += step >> 1 as libc::c_int
+        if delta & 2 as i32 != 0 {
+            vpdiff += step >> 1 as i32
         }
-        if delta & 1 as libc::c_int != 0 {
-            vpdiff += step >> 2 as libc::c_int
+        if delta & 1 as i32 != 0 {
+            vpdiff += step >> 2 as i32
         }
         if sign != 0 {
             valpred -= vpdiff
@@ -336,19 +336,19 @@ pub unsafe extern "C" fn S_AdpcmDecode(
             valpred += vpdiff
         }
         /* Step 5 - clamp output value */
-        if valpred > 32767 as libc::c_int {
-            valpred = 32767 as libc::c_int
-        } else if valpred < -(32768 as libc::c_int) {
-            valpred = -(32768 as libc::c_int)
+        if valpred > 32767 as i32 {
+            valpred = 32767 as i32
+        } else if valpred < -(32768 as i32) {
+            valpred = -(32768 as i32)
         }
         /* Step 6 - Update step value */
         step = stepsizeTable[index as usize];
         /* Step 7 - Output value */
-        *outdata.offset(outp as isize) = valpred as libc::c_short;
+        *outdata.offset(outp as isize) = valpred as i16;
         outp += 1;
         len -= 1
     }
-    (*state).sample = valpred as libc::c_short;
+    (*state).sample = valpred as i16;
     (*state).index = index as libc::c_char;
 }
 /*
@@ -362,27 +362,27 @@ Returns the amount of memory (in bytes) needed to store the samples in out inter
 
 pub unsafe extern "C" fn S_AdpcmMemoryNeeded(
     mut info: *const crate::snd_local_h::wavinfo_t,
-) -> libc::c_int {
-    let mut scale: libc::c_float = 0.;
-    let mut scaledSampleCount: libc::c_int = 0;
-    let mut sampleMemory: libc::c_int = 0;
-    let mut blockCount: libc::c_int = 0;
-    let mut headerMemory: libc::c_int = 0;
+) -> i32 {
+    let mut scale: f32 = 0.;
+    let mut scaledSampleCount: i32 = 0;
+    let mut sampleMemory: i32 = 0;
+    let mut blockCount: i32 = 0;
+    let mut headerMemory: i32 = 0;
     // determine scale to convert from input sampling rate to desired sampling rate
-    scale = (*info).rate as libc::c_float / crate::src::client::snd_dma::dma.speed as libc::c_float;
+    scale = (*info).rate as f32 / crate::src::client::snd_dma::dma.speed as f32;
     // calc number of samples at playback sampling rate
-    scaledSampleCount = ((*info).samples as libc::c_float / scale) as libc::c_int;
+    scaledSampleCount = ((*info).samples as f32 / scale) as i32;
     // calc memory need to store those samples using ADPCM at 4 bits per sample
-    sampleMemory = scaledSampleCount / 2 as libc::c_int;
+    sampleMemory = scaledSampleCount / 2 as i32;
     // calc number of sample blocks needed of PAINTBUFFER_SIZE
-    blockCount = scaledSampleCount / 4096 as libc::c_int;
-    if scaledSampleCount % 4096 as libc::c_int != 0 {
+    blockCount = scaledSampleCount / 4096 as i32;
+    if scaledSampleCount % 4096 as i32 != 0 {
         blockCount += 1
     }
     // calc memory needed to store the block headers
     headerMemory = (blockCount as libc::c_ulong)
         .wrapping_mul(::std::mem::size_of::<crate::snd_local_h::adpcm_state_t>() as libc::c_ulong)
-        as libc::c_int;
+        as i32;
     return sampleMemory + headerMemory;
 }
 /*
@@ -394,7 +394,7 @@ S_AdpcmGetSamples
 
 pub unsafe extern "C" fn S_AdpcmGetSamples(
     mut chunk: *mut crate::snd_local_h::sndBuffer,
-    mut to: *mut libc::c_short,
+    mut to: *mut i16,
 ) {
     let mut state: crate::snd_local_h::adpcm_state_t = crate::snd_local_h::adpcm_state_t {
         sample: 0,
@@ -410,7 +410,7 @@ pub unsafe extern "C" fn S_AdpcmGetSamples(
     S_AdpcmDecode(
         out as *mut libc::c_char as *const libc::c_char,
         to,
-        1024 as libc::c_int * 2 as libc::c_int * 2 as libc::c_int,
+        1024 as i32 * 2 as i32 * 2 as i32,
         &mut state,
     );
 }
@@ -483,28 +483,28 @@ S_AdpcmEncodeSound
 
 pub unsafe extern "C" fn S_AdpcmEncodeSound(
     mut sfx: *mut crate::snd_local_h::sfx_t,
-    mut samples: *mut libc::c_short,
+    mut samples: *mut i16,
 ) {
     let mut state: crate::snd_local_h::adpcm_state_t = crate::snd_local_h::adpcm_state_t {
         sample: 0,
         index: 0,
     };
-    let mut inOffset: libc::c_int = 0;
-    let mut count: libc::c_int = 0;
-    let mut n: libc::c_int = 0;
+    let mut inOffset: i32 = 0;
+    let mut count: i32 = 0;
+    let mut n: i32 = 0;
     let mut newchunk: *mut crate::snd_local_h::sndBuffer = 0 as *mut crate::snd_local_h::sndBuffer;
     let mut chunk: *mut crate::snd_local_h::sndBuffer = 0 as *mut crate::snd_local_h::sndBuffer;
     let mut out: *mut crate::src::qcommon::q_shared::byte =
         0 as *mut crate::src::qcommon::q_shared::byte;
-    inOffset = 0 as libc::c_int;
+    inOffset = 0 as i32;
     count = (*sfx).soundLength;
-    state.index = 0 as libc::c_int as libc::c_char;
-    state.sample = *samples.offset(0 as libc::c_int as isize);
+    state.index = 0 as i32 as libc::c_char;
+    state.sample = *samples.offset(0 as i32 as isize);
     chunk = 0 as *mut crate::snd_local_h::sndBuffer;
     while count != 0 {
         n = count;
-        if n > 1024 as libc::c_int * 2 as libc::c_int * 2 as libc::c_int {
-            n = 1024 as libc::c_int * 2 as libc::c_int * 2 as libc::c_int
+        if n > 1024 as i32 * 2 as i32 * 2 as i32 {
+            n = 1024 as i32 * 2 as i32 * 2 as i32
         }
         newchunk =
             crate::src::client::snd_mem::SND_malloc() as *mut crate::snd_local_h::sndBuffer_s;

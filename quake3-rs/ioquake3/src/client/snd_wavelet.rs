@@ -14,11 +14,11 @@ pub use crate::src::qcommon::q_shared::qtrue;
 #[no_mangle]
 
 pub unsafe extern "C" fn daub4(
-    mut b: *mut libc::c_float,
+    mut b: *mut f32,
     mut n: libc::c_ulong,
-    mut isign: libc::c_int,
+    mut isign: i32,
 ) {
-    let mut wksp: [libc::c_float; 4097] = [
+    let mut wksp: [f32; 4097] = [
         0.0f32, 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
         0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
         0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
@@ -204,520 +204,520 @@ pub unsafe extern "C" fn daub4(
     let mut nh1: libc::c_ulong = 0;
     let mut i: libc::c_ulong = 0;
     let mut j: libc::c_ulong = 0;
-    if n < 4 as libc::c_int as libc::c_ulong {
+    if n < 4 as i32 as libc::c_ulong {
         return;
     }
-    nh = n >> 1 as libc::c_int;
-    nh1 = nh.wrapping_add(1 as libc::c_int as libc::c_ulong);
-    if isign >= 0 as libc::c_int {
-        i = 1 as libc::c_int as libc::c_ulong;
-        j = 1 as libc::c_int as libc::c_ulong;
-        while j <= n.wrapping_sub(3 as libc::c_int as libc::c_ulong) {
+    nh = n >> 1 as i32;
+    nh1 = nh.wrapping_add(1 as i32 as libc::c_ulong);
+    if isign >= 0 as i32 {
+        i = 1 as i32 as libc::c_ulong;
+        j = 1 as i32 as libc::c_ulong;
+        while j <= n.wrapping_sub(3 as i32 as libc::c_ulong) {
             wksp[i as usize] = (0.4829629131445341f64
-                * *b.offset(j.wrapping_sub(1 as libc::c_int as libc::c_ulong) as isize)
-                    as libc::c_double
+                * *b.offset(j.wrapping_sub(1 as i32 as libc::c_ulong) as isize)
+                    as f64
                 + 0.8365163037378079f64
                     * *b.offset(
-                        j.wrapping_add(1 as libc::c_int as libc::c_ulong)
-                            .wrapping_sub(1 as libc::c_int as libc::c_ulong)
+                        j.wrapping_add(1 as i32 as libc::c_ulong)
+                            .wrapping_sub(1 as i32 as libc::c_ulong)
                             as isize,
-                    ) as libc::c_double
+                    ) as f64
                 + 0.2241438680420134f64
                     * *b.offset(
-                        j.wrapping_add(2 as libc::c_int as libc::c_ulong)
-                            .wrapping_sub(1 as libc::c_int as libc::c_ulong)
+                        j.wrapping_add(2 as i32 as libc::c_ulong)
+                            .wrapping_sub(1 as i32 as libc::c_ulong)
                             as isize,
-                    ) as libc::c_double
+                    ) as f64
                 + -0.1294095225512604f64
                     * *b.offset(
-                        j.wrapping_add(3 as libc::c_int as libc::c_ulong)
-                            .wrapping_sub(1 as libc::c_int as libc::c_ulong)
+                        j.wrapping_add(3 as i32 as libc::c_ulong)
+                            .wrapping_sub(1 as i32 as libc::c_ulong)
                             as isize,
-                    ) as libc::c_double) as libc::c_float;
+                    ) as f64) as f32;
             wksp[i.wrapping_add(nh) as usize] = (-0.1294095225512604f64
-                * *b.offset(j.wrapping_sub(1 as libc::c_int as libc::c_ulong) as isize)
-                    as libc::c_double
+                * *b.offset(j.wrapping_sub(1 as i32 as libc::c_ulong) as isize)
+                    as f64
                 - 0.2241438680420134f64
                     * *b.offset(
-                        j.wrapping_add(1 as libc::c_int as libc::c_ulong)
-                            .wrapping_sub(1 as libc::c_int as libc::c_ulong)
+                        j.wrapping_add(1 as i32 as libc::c_ulong)
+                            .wrapping_sub(1 as i32 as libc::c_ulong)
                             as isize,
-                    ) as libc::c_double
+                    ) as f64
                 + 0.8365163037378079f64
                     * *b.offset(
-                        j.wrapping_add(2 as libc::c_int as libc::c_ulong)
-                            .wrapping_sub(1 as libc::c_int as libc::c_ulong)
+                        j.wrapping_add(2 as i32 as libc::c_ulong)
+                            .wrapping_sub(1 as i32 as libc::c_ulong)
                             as isize,
-                    ) as libc::c_double
+                    ) as f64
                 - 0.4829629131445341f64
                     * *b.offset(
-                        j.wrapping_add(3 as libc::c_int as libc::c_ulong)
-                            .wrapping_sub(1 as libc::c_int as libc::c_ulong)
+                        j.wrapping_add(3 as i32 as libc::c_ulong)
+                            .wrapping_sub(1 as i32 as libc::c_ulong)
                             as isize,
-                    ) as libc::c_double)
-                as libc::c_float;
-            j = j.wrapping_add(2 as libc::c_int as libc::c_ulong);
+                    ) as f64)
+                as f32;
+            j = j.wrapping_add(2 as i32 as libc::c_ulong);
             i = i.wrapping_add(1)
         }
         wksp[i as usize] = (0.4829629131445341f64
             * *b.offset(
-                n.wrapping_sub(1 as libc::c_int as libc::c_ulong)
-                    .wrapping_sub(1 as libc::c_int as libc::c_ulong) as isize,
-            ) as libc::c_double
+                n.wrapping_sub(1 as i32 as libc::c_ulong)
+                    .wrapping_sub(1 as i32 as libc::c_ulong) as isize,
+            ) as f64
             + 0.8365163037378079f64
-                * *b.offset(n.wrapping_sub(1 as libc::c_int as libc::c_ulong) as isize)
-                    as libc::c_double
+                * *b.offset(n.wrapping_sub(1 as i32 as libc::c_ulong) as isize)
+                    as f64
             + 0.2241438680420134f64
-                * *b.offset((1 as libc::c_int - 1 as libc::c_int) as isize) as libc::c_double
+                * *b.offset((1 as i32 - 1 as i32) as isize) as f64
             + -0.1294095225512604f64
-                * *b.offset((2 as libc::c_int - 1 as libc::c_int) as isize) as libc::c_double)
-            as libc::c_float;
+                * *b.offset((2 as i32 - 1 as i32) as isize) as f64)
+            as f32;
         wksp[i.wrapping_add(nh) as usize] = (-0.1294095225512604f64
             * *b.offset(
-                n.wrapping_sub(1 as libc::c_int as libc::c_ulong)
-                    .wrapping_sub(1 as libc::c_int as libc::c_ulong) as isize,
-            ) as libc::c_double
+                n.wrapping_sub(1 as i32 as libc::c_ulong)
+                    .wrapping_sub(1 as i32 as libc::c_ulong) as isize,
+            ) as f64
             - 0.2241438680420134f64
-                * *b.offset(n.wrapping_sub(1 as libc::c_int as libc::c_ulong) as isize)
-                    as libc::c_double
+                * *b.offset(n.wrapping_sub(1 as i32 as libc::c_ulong) as isize)
+                    as f64
             + 0.8365163037378079f64
-                * *b.offset((1 as libc::c_int - 1 as libc::c_int) as isize) as libc::c_double
+                * *b.offset((1 as i32 - 1 as i32) as isize) as f64
             - 0.4829629131445341f64
-                * *b.offset((2 as libc::c_int - 1 as libc::c_int) as isize) as libc::c_double)
-            as libc::c_float
+                * *b.offset((2 as i32 - 1 as i32) as isize) as f64)
+            as f32
     } else {
-        wksp[1 as libc::c_int as usize] = (0.2241438680420134f64
-            * *b.offset(nh.wrapping_sub(1 as libc::c_int as libc::c_ulong) as isize)
-                as libc::c_double
+        wksp[1 as i32 as usize] = (0.2241438680420134f64
+            * *b.offset(nh.wrapping_sub(1 as i32 as libc::c_ulong) as isize)
+                as f64
             + 0.8365163037378079f64
-                * *b.offset(n.wrapping_sub(1 as libc::c_int as libc::c_ulong) as isize)
-                    as libc::c_double
+                * *b.offset(n.wrapping_sub(1 as i32 as libc::c_ulong) as isize)
+                    as f64
             + 0.4829629131445341f64
-                * *b.offset((1 as libc::c_int - 1 as libc::c_int) as isize) as libc::c_double
+                * *b.offset((1 as i32 - 1 as i32) as isize) as f64
             + -0.1294095225512604f64
-                * *b.offset(nh1.wrapping_sub(1 as libc::c_int as libc::c_ulong) as isize)
-                    as libc::c_double) as libc::c_float;
-        wksp[2 as libc::c_int as usize] = (-0.1294095225512604f64
-            * *b.offset(nh.wrapping_sub(1 as libc::c_int as libc::c_ulong) as isize)
-                as libc::c_double
+                * *b.offset(nh1.wrapping_sub(1 as i32 as libc::c_ulong) as isize)
+                    as f64) as f32;
+        wksp[2 as i32 as usize] = (-0.1294095225512604f64
+            * *b.offset(nh.wrapping_sub(1 as i32 as libc::c_ulong) as isize)
+                as f64
             - 0.4829629131445341f64
-                * *b.offset(n.wrapping_sub(1 as libc::c_int as libc::c_ulong) as isize)
-                    as libc::c_double
+                * *b.offset(n.wrapping_sub(1 as i32 as libc::c_ulong) as isize)
+                    as f64
             + 0.8365163037378079f64
-                * *b.offset((1 as libc::c_int - 1 as libc::c_int) as isize) as libc::c_double
+                * *b.offset((1 as i32 - 1 as i32) as isize) as f64
             - 0.2241438680420134f64
-                * *b.offset(nh1.wrapping_sub(1 as libc::c_int as libc::c_ulong) as isize)
-                    as libc::c_double) as libc::c_float;
-        i = 1 as libc::c_int as libc::c_ulong;
-        j = 3 as libc::c_int as libc::c_ulong;
+                * *b.offset(nh1.wrapping_sub(1 as i32 as libc::c_ulong) as isize)
+                    as f64) as f32;
+        i = 1 as i32 as libc::c_ulong;
+        j = 3 as i32 as libc::c_ulong;
         while i < nh {
             let fresh0 = j;
             j = j.wrapping_add(1);
             wksp[fresh0 as usize] = (0.2241438680420134f64
-                * *b.offset(i.wrapping_sub(1 as libc::c_int as libc::c_ulong) as isize)
-                    as libc::c_double
+                * *b.offset(i.wrapping_sub(1 as i32 as libc::c_ulong) as isize)
+                    as f64
                 + 0.8365163037378079f64
                     * *b.offset(
                         i.wrapping_add(nh)
-                            .wrapping_sub(1 as libc::c_int as libc::c_ulong)
+                            .wrapping_sub(1 as i32 as libc::c_ulong)
                             as isize,
-                    ) as libc::c_double
+                    ) as f64
                 + 0.4829629131445341f64
                     * *b.offset(
-                        i.wrapping_add(1 as libc::c_int as libc::c_ulong)
-                            .wrapping_sub(1 as libc::c_int as libc::c_ulong)
+                        i.wrapping_add(1 as i32 as libc::c_ulong)
+                            .wrapping_sub(1 as i32 as libc::c_ulong)
                             as isize,
-                    ) as libc::c_double
+                    ) as f64
                 + -0.1294095225512604f64
                     * *b.offset(
                         i.wrapping_add(nh1)
-                            .wrapping_sub(1 as libc::c_int as libc::c_ulong)
+                            .wrapping_sub(1 as i32 as libc::c_ulong)
                             as isize,
-                    ) as libc::c_double) as libc::c_float;
+                    ) as f64) as f32;
             let fresh1 = j;
             j = j.wrapping_add(1);
             wksp[fresh1 as usize] = (-0.1294095225512604f64
-                * *b.offset(i.wrapping_sub(1 as libc::c_int as libc::c_ulong) as isize)
-                    as libc::c_double
+                * *b.offset(i.wrapping_sub(1 as i32 as libc::c_ulong) as isize)
+                    as f64
                 - 0.4829629131445341f64
                     * *b.offset(
                         i.wrapping_add(nh)
-                            .wrapping_sub(1 as libc::c_int as libc::c_ulong)
+                            .wrapping_sub(1 as i32 as libc::c_ulong)
                             as isize,
-                    ) as libc::c_double
+                    ) as f64
                 + 0.8365163037378079f64
                     * *b.offset(
-                        i.wrapping_add(1 as libc::c_int as libc::c_ulong)
-                            .wrapping_sub(1 as libc::c_int as libc::c_ulong)
+                        i.wrapping_add(1 as i32 as libc::c_ulong)
+                            .wrapping_sub(1 as i32 as libc::c_ulong)
                             as isize,
-                    ) as libc::c_double
+                    ) as f64
                 - 0.2241438680420134f64
                     * *b.offset(
                         i.wrapping_add(nh1)
-                            .wrapping_sub(1 as libc::c_int as libc::c_ulong)
+                            .wrapping_sub(1 as i32 as libc::c_ulong)
                             as isize,
-                    ) as libc::c_double) as libc::c_float;
+                    ) as f64) as f32;
             i = i.wrapping_add(1)
         }
     }
-    i = 1 as libc::c_int as libc::c_ulong;
+    i = 1 as i32 as libc::c_ulong;
     while i <= n {
-        *b.offset(i.wrapping_sub(1 as libc::c_int as libc::c_ulong) as isize) = wksp[i as usize];
+        *b.offset(i.wrapping_sub(1 as i32 as libc::c_ulong) as isize) = wksp[i as usize];
         i = i.wrapping_add(1)
     }
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn wt1(
-    mut a: *mut libc::c_float,
+    mut a: *mut f32,
     mut n: libc::c_ulong,
-    mut isign: libc::c_int,
+    mut isign: i32,
 ) {
     let mut nn: libc::c_ulong = 0;
-    let mut inverseStartLength: libc::c_int =
-        n.wrapping_div(4 as libc::c_int as libc::c_ulong) as libc::c_int;
+    let mut inverseStartLength: i32 =
+        n.wrapping_div(4 as i32 as libc::c_ulong) as i32;
     if n < inverseStartLength as libc::c_ulong {
         return;
     }
-    if isign >= 0 as libc::c_int {
+    if isign >= 0 as i32 {
         nn = n;
         while nn >= inverseStartLength as libc::c_ulong {
             daub4(a, nn, isign);
-            nn >>= 1 as libc::c_int
+            nn >>= 1 as i32
         }
     } else {
         nn = inverseStartLength as libc::c_ulong;
         while nn <= n {
             daub4(a, nn, isign);
-            nn <<= 1 as libc::c_int
+            nn <<= 1 as i32
         }
     };
 }
 /* The number of bits required by each value */
 
-static mut numBits: [libc::c_uchar; 256] = [
-    0 as libc::c_int as libc::c_uchar,
-    1 as libc::c_int as libc::c_uchar,
-    2 as libc::c_int as libc::c_uchar,
-    2 as libc::c_int as libc::c_uchar,
-    3 as libc::c_int as libc::c_uchar,
-    3 as libc::c_int as libc::c_uchar,
-    3 as libc::c_int as libc::c_uchar,
-    3 as libc::c_int as libc::c_uchar,
-    4 as libc::c_int as libc::c_uchar,
-    4 as libc::c_int as libc::c_uchar,
-    4 as libc::c_int as libc::c_uchar,
-    4 as libc::c_int as libc::c_uchar,
-    4 as libc::c_int as libc::c_uchar,
-    4 as libc::c_int as libc::c_uchar,
-    4 as libc::c_int as libc::c_uchar,
-    4 as libc::c_int as libc::c_uchar,
-    5 as libc::c_int as libc::c_uchar,
-    5 as libc::c_int as libc::c_uchar,
-    5 as libc::c_int as libc::c_uchar,
-    5 as libc::c_int as libc::c_uchar,
-    5 as libc::c_int as libc::c_uchar,
-    5 as libc::c_int as libc::c_uchar,
-    5 as libc::c_int as libc::c_uchar,
-    5 as libc::c_int as libc::c_uchar,
-    5 as libc::c_int as libc::c_uchar,
-    5 as libc::c_int as libc::c_uchar,
-    5 as libc::c_int as libc::c_uchar,
-    5 as libc::c_int as libc::c_uchar,
-    5 as libc::c_int as libc::c_uchar,
-    5 as libc::c_int as libc::c_uchar,
-    5 as libc::c_int as libc::c_uchar,
-    5 as libc::c_int as libc::c_uchar,
-    6 as libc::c_int as libc::c_uchar,
-    6 as libc::c_int as libc::c_uchar,
-    6 as libc::c_int as libc::c_uchar,
-    6 as libc::c_int as libc::c_uchar,
-    6 as libc::c_int as libc::c_uchar,
-    6 as libc::c_int as libc::c_uchar,
-    6 as libc::c_int as libc::c_uchar,
-    6 as libc::c_int as libc::c_uchar,
-    6 as libc::c_int as libc::c_uchar,
-    6 as libc::c_int as libc::c_uchar,
-    6 as libc::c_int as libc::c_uchar,
-    6 as libc::c_int as libc::c_uchar,
-    6 as libc::c_int as libc::c_uchar,
-    6 as libc::c_int as libc::c_uchar,
-    6 as libc::c_int as libc::c_uchar,
-    6 as libc::c_int as libc::c_uchar,
-    6 as libc::c_int as libc::c_uchar,
-    6 as libc::c_int as libc::c_uchar,
-    6 as libc::c_int as libc::c_uchar,
-    6 as libc::c_int as libc::c_uchar,
-    6 as libc::c_int as libc::c_uchar,
-    6 as libc::c_int as libc::c_uchar,
-    6 as libc::c_int as libc::c_uchar,
-    6 as libc::c_int as libc::c_uchar,
-    6 as libc::c_int as libc::c_uchar,
-    6 as libc::c_int as libc::c_uchar,
-    6 as libc::c_int as libc::c_uchar,
-    6 as libc::c_int as libc::c_uchar,
-    6 as libc::c_int as libc::c_uchar,
-    6 as libc::c_int as libc::c_uchar,
-    6 as libc::c_int as libc::c_uchar,
-    6 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    7 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
-    8 as libc::c_int as libc::c_uchar,
+static mut numBits: [u8; 256] = [
+    0 as i32 as u8,
+    1 as i32 as u8,
+    2 as i32 as u8,
+    2 as i32 as u8,
+    3 as i32 as u8,
+    3 as i32 as u8,
+    3 as i32 as u8,
+    3 as i32 as u8,
+    4 as i32 as u8,
+    4 as i32 as u8,
+    4 as i32 as u8,
+    4 as i32 as u8,
+    4 as i32 as u8,
+    4 as i32 as u8,
+    4 as i32 as u8,
+    4 as i32 as u8,
+    5 as i32 as u8,
+    5 as i32 as u8,
+    5 as i32 as u8,
+    5 as i32 as u8,
+    5 as i32 as u8,
+    5 as i32 as u8,
+    5 as i32 as u8,
+    5 as i32 as u8,
+    5 as i32 as u8,
+    5 as i32 as u8,
+    5 as i32 as u8,
+    5 as i32 as u8,
+    5 as i32 as u8,
+    5 as i32 as u8,
+    5 as i32 as u8,
+    5 as i32 as u8,
+    6 as i32 as u8,
+    6 as i32 as u8,
+    6 as i32 as u8,
+    6 as i32 as u8,
+    6 as i32 as u8,
+    6 as i32 as u8,
+    6 as i32 as u8,
+    6 as i32 as u8,
+    6 as i32 as u8,
+    6 as i32 as u8,
+    6 as i32 as u8,
+    6 as i32 as u8,
+    6 as i32 as u8,
+    6 as i32 as u8,
+    6 as i32 as u8,
+    6 as i32 as u8,
+    6 as i32 as u8,
+    6 as i32 as u8,
+    6 as i32 as u8,
+    6 as i32 as u8,
+    6 as i32 as u8,
+    6 as i32 as u8,
+    6 as i32 as u8,
+    6 as i32 as u8,
+    6 as i32 as u8,
+    6 as i32 as u8,
+    6 as i32 as u8,
+    6 as i32 as u8,
+    6 as i32 as u8,
+    6 as i32 as u8,
+    6 as i32 as u8,
+    6 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    7 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
+    8 as i32 as u8,
 ];
 #[no_mangle]
 
-pub unsafe extern "C" fn MuLawEncode(mut s: libc::c_short) -> crate::src::qcommon::q_shared::byte {
+pub unsafe extern "C" fn MuLawEncode(mut s: i16) -> crate::src::qcommon::q_shared::byte {
     let mut adjusted: libc::c_ulong = 0;
     let mut sign: crate::src::qcommon::q_shared::byte = 0;
     let mut exponent: crate::src::qcommon::q_shared::byte = 0;
     let mut mantissa: crate::src::qcommon::q_shared::byte = 0;
-    sign = if (s as libc::c_int) < 0 as libc::c_int {
-        0 as libc::c_int
+    sign = if (s as i32) < 0 as i32 {
+        0 as i32
     } else {
-        0x80 as libc::c_int
+        0x80 as i32
     } as crate::src::qcommon::q_shared::byte;
-    if (s as libc::c_int) < 0 as libc::c_int {
-        s = -(s as libc::c_int) as libc::c_short
+    if (s as i32) < 0 as i32 {
+        s = -(s as i32) as i16
     }
     adjusted = ((s as libc::c_long)
-        << (16 as libc::c_int as libc::c_ulong).wrapping_sub(
-            (::std::mem::size_of::<libc::c_short>() as libc::c_ulong)
-                .wrapping_mul(8 as libc::c_int as libc::c_ulong),
+        << (16 as i32 as libc::c_ulong).wrapping_sub(
+            (::std::mem::size_of::<i16>() as libc::c_ulong)
+                .wrapping_mul(8 as i32 as libc::c_ulong),
         )) as libc::c_ulong;
     adjusted = adjusted.wrapping_add((128 as libc::c_long + 4 as libc::c_long) as libc::c_ulong);
-    if adjusted > 32767 as libc::c_int as libc::c_ulong {
-        adjusted = 32767 as libc::c_int as libc::c_ulong
+    if adjusted > 32767 as i32 as libc::c_ulong {
+        adjusted = 32767 as i32 as libc::c_ulong
     }
     exponent = (numBits
-        [(adjusted >> 7 as libc::c_int & 0xff as libc::c_int as libc::c_ulong) as usize]
-        as libc::c_int
-        - 1 as libc::c_int) as crate::src::qcommon::q_shared::byte;
-    mantissa = (adjusted >> exponent as libc::c_int + 3 as libc::c_int
-        & 0xf as libc::c_int as libc::c_ulong)
+        [(adjusted >> 7 as i32 & 0xff as i32 as libc::c_ulong) as usize]
+        as i32
+        - 1 as i32) as crate::src::qcommon::q_shared::byte;
+    mantissa = (adjusted >> exponent as i32 + 3 as i32
+        & 0xf as i32 as libc::c_ulong)
         as crate::src::qcommon::q_shared::byte;
-    return !(sign as libc::c_int
-        | (exponent as libc::c_int) << 4 as libc::c_int
-        | mantissa as libc::c_int) as crate::src::qcommon::q_shared::byte;
+    return !(sign as i32
+        | (exponent as i32) << 4 as i32
+        | mantissa as i32) as crate::src::qcommon::q_shared::byte;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn MuLawDecode(
     mut uLaw: crate::src::qcommon::q_shared::byte,
-) -> libc::c_short {
+) -> i16 {
     let mut adjusted: libc::c_long = 0;
     let mut exponent: crate::src::qcommon::q_shared::byte = 0;
     let mut mantissa: crate::src::qcommon::q_shared::byte = 0;
-    uLaw = !(uLaw as libc::c_int) as crate::src::qcommon::q_shared::byte;
-    exponent = (uLaw as libc::c_int >> 4 as libc::c_int & 0x7 as libc::c_int)
+    uLaw = !(uLaw as i32) as crate::src::qcommon::q_shared::byte;
+    exponent = (uLaw as i32 >> 4 as i32 & 0x7 as i32)
         as crate::src::qcommon::q_shared::byte;
-    mantissa = ((uLaw as libc::c_int & 0xf as libc::c_int) + 16 as libc::c_int)
+    mantissa = ((uLaw as i32 & 0xf as i32) + 16 as i32)
         as crate::src::qcommon::q_shared::byte;
-    adjusted = (((mantissa as libc::c_int) << exponent as libc::c_int + 3 as libc::c_int)
-        - 128 as libc::c_int
-        - 4 as libc::c_int) as libc::c_long;
-    return if uLaw as libc::c_int & 0x80 as libc::c_int != 0 {
+    adjusted = (((mantissa as i32) << exponent as i32 + 3 as i32)
+        - 128 as i32
+        - 4 as i32) as libc::c_long;
+    return if uLaw as i32 & 0x80 as i32 != 0 {
         adjusted
     } else {
         -adjusted
-    } as libc::c_short;
+    } as i16;
 }
 #[no_mangle]
 
-pub static mut mulawToShort: [libc::c_short; 256] = [0; 256];
+pub static mut mulawToShort: [i16; 256] = [0; 256];
 
 static mut madeTable: crate::src::qcommon::q_shared::qboolean =
     crate::src::qcommon::q_shared::qfalse;
 
-static mut NXStreamCount: libc::c_int = 0;
+static mut NXStreamCount: i32 = 0;
 #[no_mangle]
 
 pub unsafe extern "C" fn NXPutc(
@@ -732,10 +732,10 @@ pub unsafe extern "C" fn NXPutc(
 
 pub unsafe extern "C" fn encodeWavelet(
     mut sfx: *mut crate::snd_local_h::sfx_t,
-    mut packets: *mut libc::c_short,
+    mut packets: *mut i16,
 ) {
-    let mut wksp: [libc::c_float; 4097] = [
-        0 as libc::c_int as libc::c_float,
+    let mut wksp: [f32; 4097] = [
+        0 as i32 as f32,
         0.,
         0.,
         0.,
@@ -4833,32 +4833,32 @@ pub unsafe extern "C" fn encodeWavelet(
         0.,
         0.,
     ];
-    let mut temp: libc::c_float = 0.;
-    let mut i: libc::c_int = 0;
-    let mut samples: libc::c_int = 0;
-    let mut size: libc::c_int = 0;
+    let mut temp: f32 = 0.;
+    let mut i: i32 = 0;
+    let mut samples: i32 = 0;
+    let mut size: i32 = 0;
     let mut newchunk: *mut crate::snd_local_h::sndBuffer = 0 as *mut crate::snd_local_h::sndBuffer;
     let mut chunk: *mut crate::snd_local_h::sndBuffer = 0 as *mut crate::snd_local_h::sndBuffer;
     let mut out: *mut crate::src::qcommon::q_shared::byte =
         0 as *mut crate::src::qcommon::q_shared::byte;
     if madeTable as u64 == 0 {
-        i = 0 as libc::c_int;
-        while i < 256 as libc::c_int {
+        i = 0 as i32;
+        while i < 256 as i32 {
             mulawToShort[i as usize] = MuLawDecode(i as crate::src::qcommon::q_shared::byte)
-                as libc::c_float as libc::c_short;
+                as f32 as i16;
             i += 1
         }
         madeTable = crate::src::qcommon::q_shared::qtrue
     }
     chunk = 0 as *mut crate::snd_local_h::sndBuffer;
     samples = (*sfx).soundLength;
-    while samples > 0 as libc::c_int {
+    while samples > 0 as i32 {
         size = samples;
-        if size > 1024 as libc::c_int * 2 as libc::c_int {
-            size = 1024 as libc::c_int * 2 as libc::c_int
+        if size > 1024 as i32 * 2 as i32 {
+            size = 1024 as i32 * 2 as i32
         }
-        if size < 4 as libc::c_int {
-            size = 4 as libc::c_int
+        if size < 4 as i32 {
+            size = 4 as i32
         }
         newchunk =
             crate::src::client::snd_mem::SND_malloc() as *mut crate::snd_local_h::sndBuffer_s;
@@ -4868,23 +4868,23 @@ pub unsafe extern "C" fn encodeWavelet(
             (*chunk).next = newchunk
         }
         chunk = newchunk;
-        i = 0 as libc::c_int;
+        i = 0 as i32;
         while i < size {
-            wksp[i as usize] = *packets as libc::c_float;
+            wksp[i as usize] = *packets as f32;
             packets = packets.offset(1);
             i += 1
         }
-        wt1(wksp.as_mut_ptr(), size as libc::c_ulong, 1 as libc::c_int);
+        wt1(wksp.as_mut_ptr(), size as libc::c_ulong, 1 as i32);
         out = (*chunk).sndChunk.as_mut_ptr() as *mut crate::src::qcommon::q_shared::byte;
-        i = 0 as libc::c_int;
+        i = 0 as i32;
         while i < size {
             temp = wksp[i as usize];
-            if temp > 32767 as libc::c_int as libc::c_float {
-                temp = 32767 as libc::c_int as libc::c_float
-            } else if temp < -(32768 as libc::c_int) as libc::c_float {
-                temp = -(32768 as libc::c_int) as libc::c_float
+            if temp > 32767 as i32 as f32 {
+                temp = 32767 as i32 as f32
+            } else if temp < -(32768 as i32) as f32 {
+                temp = -(32768 as i32) as f32
             }
-            *out.offset(i as isize) = MuLawEncode(temp as libc::c_short);
+            *out.offset(i as isize) = MuLawEncode(temp as i16);
             i += 1
         }
         (*chunk).size = size;
@@ -4895,10 +4895,10 @@ pub unsafe extern "C" fn encodeWavelet(
 
 pub unsafe extern "C" fn decodeWavelet(
     mut chunk: *mut crate::snd_local_h::sndBuffer,
-    mut to: *mut libc::c_short,
+    mut to: *mut i16,
 ) {
-    let mut wksp: [libc::c_float; 4097] = [
-        0 as libc::c_int as libc::c_float,
+    let mut wksp: [f32; 4097] = [
+        0 as i32 as f32,
         0.,
         0.,
         0.,
@@ -8996,27 +8996,27 @@ pub unsafe extern "C" fn decodeWavelet(
         0.,
         0.,
     ];
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     let mut out: *mut crate::src::qcommon::q_shared::byte =
         0 as *mut crate::src::qcommon::q_shared::byte;
-    let mut size: libc::c_int = (*chunk).size;
+    let mut size: i32 = (*chunk).size;
     out = (*chunk).sndChunk.as_mut_ptr() as *mut crate::src::qcommon::q_shared::byte;
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < size {
-        wksp[i as usize] = mulawToShort[*out.offset(i as isize) as usize] as libc::c_float;
+        wksp[i as usize] = mulawToShort[*out.offset(i as isize) as usize] as f32;
         i += 1
     }
     wt1(
         wksp.as_mut_ptr(),
         size as libc::c_ulong,
-        -(1 as libc::c_int),
+        -(1 as i32),
     );
     if to.is_null() {
         return;
     }
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < size {
-        *to.offset(i as isize) = wksp[i as usize] as libc::c_short;
+        *to.offset(i as isize) = wksp[i as usize] as i16;
         i += 1
     }
 }
@@ -9085,33 +9085,33 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 pub unsafe extern "C" fn encodeMuLaw(
     mut sfx: *mut crate::snd_local_h::sfx_t,
-    mut packets: *mut libc::c_short,
+    mut packets: *mut i16,
 ) {
-    let mut i: libc::c_int = 0;
-    let mut samples: libc::c_int = 0;
-    let mut size: libc::c_int = 0;
-    let mut grade: libc::c_int = 0;
-    let mut poop: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut samples: i32 = 0;
+    let mut size: i32 = 0;
+    let mut grade: i32 = 0;
+    let mut poop: i32 = 0;
     let mut newchunk: *mut crate::snd_local_h::sndBuffer = 0 as *mut crate::snd_local_h::sndBuffer;
     let mut chunk: *mut crate::snd_local_h::sndBuffer = 0 as *mut crate::snd_local_h::sndBuffer;
     let mut out: *mut crate::src::qcommon::q_shared::byte =
         0 as *mut crate::src::qcommon::q_shared::byte;
     if madeTable as u64 == 0 {
-        i = 0 as libc::c_int;
-        while i < 256 as libc::c_int {
+        i = 0 as i32;
+        while i < 256 as i32 {
             mulawToShort[i as usize] = MuLawDecode(i as crate::src::qcommon::q_shared::byte)
-                as libc::c_float as libc::c_short;
+                as f32 as i16;
             i += 1
         }
         madeTable = crate::src::qcommon::q_shared::qtrue
     }
     chunk = 0 as *mut crate::snd_local_h::sndBuffer;
     samples = (*sfx).soundLength;
-    grade = 0 as libc::c_int;
-    while samples > 0 as libc::c_int {
+    grade = 0 as i32;
+    while samples > 0 as i32 {
         size = samples;
-        if size > 1024 as libc::c_int * 2 as libc::c_int {
-            size = 1024 as libc::c_int * 2 as libc::c_int
+        if size > 1024 as i32 * 2 as i32 {
+            size = 1024 as i32 * 2 as i32
         }
         newchunk =
             crate::src::client::snd_mem::SND_malloc() as *mut crate::snd_local_h::sndBuffer_s;
@@ -9122,16 +9122,16 @@ pub unsafe extern "C" fn encodeMuLaw(
         }
         chunk = newchunk;
         out = (*chunk).sndChunk.as_mut_ptr() as *mut crate::src::qcommon::q_shared::byte;
-        i = 0 as libc::c_int;
+        i = 0 as i32;
         while i < size {
-            poop = *packets.offset(0 as libc::c_int as isize) as libc::c_int + grade;
-            if poop > 32767 as libc::c_int {
-                poop = 32767 as libc::c_int
-            } else if poop < -(32768 as libc::c_int) {
-                poop = -(32768 as libc::c_int)
+            poop = *packets.offset(0 as i32 as isize) as i32 + grade;
+            if poop > 32767 as i32 {
+                poop = 32767 as i32
+            } else if poop < -(32768 as i32) {
+                poop = -(32768 as i32)
             }
-            *out.offset(i as isize) = MuLawEncode(poop as libc::c_short);
-            grade = poop - mulawToShort[*out.offset(i as isize) as usize] as libc::c_int;
+            *out.offset(i as isize) = MuLawEncode(poop as i16);
+            grade = poop - mulawToShort[*out.offset(i as isize) as usize] as i32;
             packets = packets.offset(1);
             i += 1
         }
@@ -9143,14 +9143,14 @@ pub unsafe extern "C" fn encodeMuLaw(
 
 pub unsafe extern "C" fn decodeMuLaw(
     mut chunk: *mut crate::snd_local_h::sndBuffer,
-    mut to: *mut libc::c_short,
+    mut to: *mut i16,
 ) {
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     let mut out: *mut crate::src::qcommon::q_shared::byte =
         0 as *mut crate::src::qcommon::q_shared::byte;
-    let mut size: libc::c_int = (*chunk).size;
+    let mut size: i32 = (*chunk).size;
     out = (*chunk).sndChunk.as_mut_ptr() as *mut crate::src::qcommon::q_shared::byte;
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < size {
         *to.offset(i as isize) = mulawToShort[*out.offset(i as isize) as usize];
         i += 1

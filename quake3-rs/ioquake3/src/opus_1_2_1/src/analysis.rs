@@ -2,43 +2,43 @@
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct TonalityAnalysisState {
-    pub arch: libc::c_int,
-    pub application: libc::c_int,
+    pub arch: i32,
+    pub application: i32,
     pub Fs: crate::opus_types_h::opus_int32,
-    pub angle: [libc::c_float; 240],
-    pub d_angle: [libc::c_float; 240],
-    pub d2_angle: [libc::c_float; 240],
+    pub angle: [f32; 240],
+    pub d_angle: [f32; 240],
+    pub d2_angle: [f32; 240],
     pub inmem: [crate::arch_h::opus_val32; 720],
-    pub mem_fill: libc::c_int,
-    pub prev_band_tonality: [libc::c_float; 18],
-    pub prev_tonality: libc::c_float,
-    pub prev_bandwidth: libc::c_int,
-    pub E: [[libc::c_float; 18]; 8],
-    pub logE: [[libc::c_float; 18]; 8],
-    pub lowE: [libc::c_float; 18],
-    pub highE: [libc::c_float; 18],
-    pub meanE: [libc::c_float; 19],
-    pub mem: [libc::c_float; 32],
-    pub cmean: [libc::c_float; 8],
-    pub std: [libc::c_float; 9],
-    pub music_prob: libc::c_float,
-    pub vad_prob: libc::c_float,
-    pub Etracker: libc::c_float,
-    pub lowECount: libc::c_float,
-    pub E_count: libc::c_int,
-    pub last_music: libc::c_int,
-    pub count: libc::c_int,
-    pub analysis_offset: libc::c_int,
-    pub pspeech: [libc::c_float; 100],
-    pub pmusic: [libc::c_float; 100],
-    pub speech_confidence: libc::c_float,
-    pub music_confidence: libc::c_float,
-    pub speech_confidence_count: libc::c_int,
-    pub music_confidence_count: libc::c_int,
-    pub write_pos: libc::c_int,
-    pub read_pos: libc::c_int,
-    pub read_subframe: libc::c_int,
-    pub hp_ener_accum: libc::c_float,
+    pub mem_fill: i32,
+    pub prev_band_tonality: [f32; 18],
+    pub prev_tonality: f32,
+    pub prev_bandwidth: i32,
+    pub E: [[f32; 18]; 8],
+    pub logE: [[f32; 18]; 8],
+    pub lowE: [f32; 18],
+    pub highE: [f32; 18],
+    pub meanE: [f32; 19],
+    pub mem: [f32; 32],
+    pub cmean: [f32; 8],
+    pub std: [f32; 9],
+    pub music_prob: f32,
+    pub vad_prob: f32,
+    pub Etracker: f32,
+    pub lowECount: f32,
+    pub E_count: i32,
+    pub last_music: i32,
+    pub count: i32,
+    pub analysis_offset: i32,
+    pub pspeech: [f32; 100],
+    pub pmusic: [f32; 100],
+    pub speech_confidence: f32,
+    pub music_confidence: f32,
+    pub speech_confidence_count: i32,
+    pub music_confidence_count: i32,
+    pub write_pos: i32,
+    pub read_pos: i32,
+    pub read_subframe: i32,
+    pub hp_ener_accum: f32,
     pub downmix_state: [crate::arch_h::opus_val32; 3],
     pub info: [crate::celt_h::AnalysisInfo; 100],
 }
@@ -92,14 +92,14 @@ pub mod arch_h {
     Assumes IEEE 754 format. */
     #[inline]
 
-    pub unsafe extern "C" fn celt_isnan(mut x: libc::c_float) -> libc::c_int {
+    pub unsafe extern "C" fn celt_isnan(mut x: f32) -> i32 {
         let mut in_0: crate::mathops_h::C2RustUnnamed_61 =
             crate::mathops_h::C2RustUnnamed_61 { f: 0. };
         in_0.f = x;
-        return (in_0.i >> 23 as libc::c_int & 0xff as libc::c_int as libc::c_uint
-            == 0xff as libc::c_int as libc::c_uint
-            && in_0.i & 0x7fffff as libc::c_int as libc::c_uint != 0 as libc::c_int as libc::c_uint)
-            as libc::c_int;
+        return (in_0.i >> 23 as i32 & 0xff as i32 as u32
+            == 0xff as i32 as u32
+            && in_0.i & 0x7fffff as i32 as u32 != 0 as i32 as u32)
+            as i32;
     }
 
     /* ARCH_H */
@@ -111,36 +111,36 @@ pub mod mathops_h {
     #[inline]
 
     pub unsafe extern "C" fn fast_atan2f(
-        mut y: libc::c_float,
-        mut x: libc::c_float,
-    ) -> libc::c_float {
-        let mut x2: libc::c_float = 0.;
-        let mut y2: libc::c_float = 0.;
+        mut y: f32,
+        mut x: f32,
+    ) -> f32 {
+        let mut x2: f32 = 0.;
+        let mut y2: f32 = 0.;
         x2 = x * x;
         y2 = y * y;
         if x2 + y2 < 1e-18f32 {
-            return 0 as libc::c_int as libc::c_float;
+            return 0 as i32 as f32;
         }
         if x2 < y2 {
-            let mut den: libc::c_float = (y2 + 0.67848403f32 * x2) * (y2 + 0.08595542f32 * x2);
+            let mut den: f32 = (y2 + 0.67848403f32 * x2) * (y2 + 0.08595542f32 * x2);
             return -x * y * (y2 + 0.43157974f32 * x2) / den
-                + (if y < 0 as libc::c_int as libc::c_float {
-                    -(3.141592653f32 / 2 as libc::c_int as libc::c_float)
+                + (if y < 0 as i32 as f32 {
+                    -(3.141592653f32 / 2 as i32 as f32)
                 } else {
-                    (3.141592653f32) / 2 as libc::c_int as libc::c_float
+                    (3.141592653f32) / 2 as i32 as f32
                 });
         } else {
-            let mut den_0: libc::c_float = (x2 + 0.67848403f32 * y2) * (x2 + 0.08595542f32 * y2);
+            let mut den_0: f32 = (x2 + 0.67848403f32 * y2) * (x2 + 0.08595542f32 * y2);
             return x * y * (x2 + 0.43157974f32 * y2) / den_0
-                + (if y < 0 as libc::c_int as libc::c_float {
-                    -(3.141592653f32 / 2 as libc::c_int as libc::c_float)
+                + (if y < 0 as i32 as f32 {
+                    -(3.141592653f32 / 2 as i32 as f32)
                 } else {
-                    (3.141592653f32) / 2 as libc::c_int as libc::c_float
+                    (3.141592653f32) / 2 as i32 as f32
                 })
-                - (if x * y < 0 as libc::c_int as libc::c_float {
-                    -(3.141592653f32 / 2 as libc::c_int as libc::c_float)
+                - (if x * y < 0 as i32 as f32 {
+                    -(3.141592653f32 / 2 as i32 as f32)
                 } else {
-                    (3.141592653f32) / 2 as libc::c_int as libc::c_float
+                    (3.141592653f32) / 2 as i32 as f32
                 });
         };
     }
@@ -177,15 +177,15 @@ pub mod cpu_support_h {
     */
     #[inline]
 
-    pub unsafe extern "C" fn opus_select_arch() -> libc::c_int {
-        return 0 as libc::c_int;
+    pub unsafe extern "C" fn opus_select_arch() -> i32 {
+        return 0 as i32;
     }
 }
 
 pub mod float_cast_h {
     #[inline]
 
-    pub unsafe extern "C" fn float2int(mut x: libc::c_float) -> crate::opus_types_h::opus_int32 {
+    pub unsafe extern "C" fn float2int(mut x: f32) -> crate::opus_types_h::opus_int32 {
         return _mm_cvt_ss2si(_mm_set_ss(x));
     }
 
@@ -255,7 +255,7 @@ Written by Jean-Marc Valin */
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-static mut dct_table: [libc::c_float; 128] = [
+static mut dct_table: [f32; 128] = [
     0.250000f32,
     0.250000f32,
     0.250000f32,
@@ -386,7 +386,7 @@ static mut dct_table: [libc::c_float; 128] = [
     -0.273300f32,
 ];
 
-static mut analysis_window: [libc::c_float; 240] = [
+static mut analysis_window: [f32; 240] = [
     0.000043f32,
     0.000171f32,
     0.000385f32,
@@ -629,67 +629,67 @@ static mut analysis_window: [libc::c_float; 240] = [
     1.000000f32,
 ];
 
-static mut tbands: [libc::c_int; 19] = [
-    4 as libc::c_int,
-    8 as libc::c_int,
-    12 as libc::c_int,
-    16 as libc::c_int,
-    20 as libc::c_int,
-    24 as libc::c_int,
-    28 as libc::c_int,
-    32 as libc::c_int,
-    40 as libc::c_int,
-    48 as libc::c_int,
-    56 as libc::c_int,
-    64 as libc::c_int,
-    80 as libc::c_int,
-    96 as libc::c_int,
-    112 as libc::c_int,
-    136 as libc::c_int,
-    160 as libc::c_int,
-    192 as libc::c_int,
-    240 as libc::c_int,
+static mut tbands: [i32; 19] = [
+    4 as i32,
+    8 as i32,
+    12 as i32,
+    16 as i32,
+    20 as i32,
+    24 as i32,
+    28 as i32,
+    32 as i32,
+    40 as i32,
+    48 as i32,
+    56 as i32,
+    64 as i32,
+    80 as i32,
+    96 as i32,
+    112 as i32,
+    136 as i32,
+    160 as i32,
+    192 as i32,
+    240 as i32,
 ];
 
 unsafe extern "C" fn silk_resampler_down2_hp(
     mut S: *mut crate::arch_h::opus_val32,
     mut out: *mut crate::arch_h::opus_val32,
     mut in_0: *const crate::arch_h::opus_val32,
-    mut inLen: libc::c_int,
+    mut inLen: i32,
 ) -> crate::arch_h::opus_val32
 /* I    Number of input samples                                     */ {
-    let mut k: libc::c_int = 0;
-    let mut len2: libc::c_int = inLen / 2 as libc::c_int;
+    let mut k: i32 = 0;
+    let mut len2: i32 = inLen / 2 as i32;
     let mut in32: crate::arch_h::opus_val32 = 0.;
     let mut out32: crate::arch_h::opus_val32 = 0.;
     let mut out32_hp: crate::arch_h::opus_val32 = 0.;
     let mut Y: crate::arch_h::opus_val32 = 0.;
     let mut X: crate::arch_h::opus_val32 = 0.;
-    let mut hp_ener: crate::arch_h::opus_val64 = 0 as libc::c_int as crate::arch_h::opus_val64;
+    let mut hp_ener: crate::arch_h::opus_val64 = 0 as i32 as crate::arch_h::opus_val64;
     /* Internal variables and state are in Q10 format */
-    k = 0 as libc::c_int;
+    k = 0 as i32;
     while k < len2 {
         /* Convert to Q10 */
-        in32 = *in_0.offset((2 as libc::c_int * k) as isize);
+        in32 = *in_0.offset((2 as i32 * k) as isize);
         /* All-pass section for even input sample */
-        Y = in32 - *S.offset(0 as libc::c_int as isize);
+        Y = in32 - *S.offset(0 as i32 as isize);
         X = 0.6074371f32 * Y;
-        out32 = *S.offset(0 as libc::c_int as isize) + X;
-        *S.offset(0 as libc::c_int as isize) = in32 + X;
+        out32 = *S.offset(0 as i32 as isize) + X;
+        *S.offset(0 as i32 as isize) = in32 + X;
         out32_hp = out32;
         /* Convert to Q10 */
-        in32 = *in_0.offset((2 as libc::c_int * k + 1 as libc::c_int) as isize);
+        in32 = *in_0.offset((2 as i32 * k + 1 as i32) as isize);
         /* All-pass section for odd input sample, and add to output of previous section */
-        Y = in32 - *S.offset(1 as libc::c_int as isize);
+        Y = in32 - *S.offset(1 as i32 as isize);
         X = 0.15063f32 * Y;
-        out32 = out32 + *S.offset(1 as libc::c_int as isize);
+        out32 = out32 + *S.offset(1 as i32 as isize);
         out32 = out32 + X;
-        *S.offset(1 as libc::c_int as isize) = in32 + X;
-        Y = -in32 - *S.offset(2 as libc::c_int as isize);
+        *S.offset(1 as i32 as isize) = in32 + X;
+        Y = -in32 - *S.offset(2 as i32 as isize);
         X = 0.15063f32 * Y;
-        out32_hp = out32_hp + *S.offset(2 as libc::c_int as isize);
+        out32_hp = out32_hp + *S.offset(2 as i32 as isize);
         out32_hp = out32_hp + X;
-        *S.offset(2 as libc::c_int as isize) = -in32 + X;
+        *S.offset(2 as i32 as isize) = -in32 + X;
         hp_ener += out32_hp * out32_hp;
         /* Add, convert back to int16 and store to output */
         *out.offset(k as isize) = 0.5f32 * out32;
@@ -703,26 +703,26 @@ unsafe extern "C" fn downmix_and_resample(
     mut _x: *const libc::c_void,
     mut y: *mut crate::arch_h::opus_val32,
     mut S: *mut crate::arch_h::opus_val32,
-    mut subframe: libc::c_int,
-    mut offset: libc::c_int,
-    mut c1: libc::c_int,
-    mut c2: libc::c_int,
-    mut C: libc::c_int,
-    mut Fs: libc::c_int,
+    mut subframe: i32,
+    mut offset: i32,
+    mut c1: i32,
+    mut c2: i32,
+    mut C: i32,
+    mut Fs: i32,
 ) -> crate::arch_h::opus_val32 {
     let mut tmp: *mut crate::arch_h::opus_val32 = 0 as *mut crate::arch_h::opus_val32;
     let mut scale: crate::arch_h::opus_val32 = 0.;
-    let mut j: libc::c_int = 0;
-    let mut ret: crate::arch_h::opus_val32 = 0 as libc::c_int as crate::arch_h::opus_val32;
-    if subframe == 0 as libc::c_int {
-        return 0 as libc::c_int as crate::arch_h::opus_val32;
+    let mut j: i32 = 0;
+    let mut ret: crate::arch_h::opus_val32 = 0 as i32 as crate::arch_h::opus_val32;
+    if subframe == 0 as i32 {
+        return 0 as i32 as crate::arch_h::opus_val32;
     }
-    if Fs == 48000 as libc::c_int {
-        subframe *= 2 as libc::c_int;
-        offset *= 2 as libc::c_int
-    } else if Fs == 16000 as libc::c_int {
-        subframe = subframe * 2 as libc::c_int / 3 as libc::c_int;
-        offset = offset * 2 as libc::c_int / 3 as libc::c_int
+    if Fs == 48000 as i32 {
+        subframe *= 2 as i32;
+        offset *= 2 as i32
+    } else if Fs == 16000 as i32 {
+        subframe = subframe * 2 as i32 / 3 as i32;
+        offset = offset * 2 as i32 / 3 as i32
     }
     let mut fresh0 = ::std::vec::from_elem(
         0,
@@ -731,52 +731,52 @@ unsafe extern "C" fn downmix_and_resample(
     );
     tmp = fresh0.as_mut_ptr() as *mut crate::arch_h::opus_val32;
     downmix.expect("non-null function pointer")(_x, tmp, subframe, offset, c1, c2, C);
-    scale = 1.0f32 / 32768 as libc::c_int as libc::c_float;
-    if c2 == -(2 as libc::c_int) {
-        scale /= C as libc::c_float
-    } else if c2 > -(1 as libc::c_int) {
-        scale /= 2 as libc::c_int as libc::c_float
+    scale = 1.0f32 / 32768 as i32 as f32;
+    if c2 == -(2 as i32) {
+        scale /= C as f32
+    } else if c2 > -(1 as i32) {
+        scale /= 2 as i32 as f32
     }
-    j = 0 as libc::c_int;
+    j = 0 as i32;
     while j < subframe {
         let ref mut fresh1 = *tmp.offset(j as isize);
         *fresh1 *= scale;
         j += 1
     }
-    if Fs == 48000 as libc::c_int {
+    if Fs == 48000 as i32 {
         ret = silk_resampler_down2_hp(S, y, tmp, subframe)
-    } else if Fs == 24000 as libc::c_int {
+    } else if Fs == 24000 as i32 {
         crate::stdlib::memcpy(
             y as *mut libc::c_void,
             tmp as *const libc::c_void,
             (subframe as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<crate::arch_h::opus_val32>() as libc::c_ulong)
                 .wrapping_add(
-                    (0 as libc::c_int as libc::c_long * y.offset_from(tmp) as libc::c_long)
+                    (0 as i32 as libc::c_long * y.offset_from(tmp) as libc::c_long)
                         as libc::c_ulong,
                 ),
         );
-    } else if Fs == 16000 as libc::c_int {
+    } else if Fs == 16000 as i32 {
         let mut tmp3x: *mut crate::arch_h::opus_val32 = 0 as *mut crate::arch_h::opus_val32;
         let mut fresh2 = ::std::vec::from_elem(
             0,
             (::std::mem::size_of::<crate::arch_h::opus_val32>() as libc::c_ulong)
-                .wrapping_mul((3 as libc::c_int * subframe) as libc::c_ulong) as usize,
+                .wrapping_mul((3 as i32 * subframe) as libc::c_ulong) as usize,
         );
         tmp3x = fresh2.as_mut_ptr() as *mut crate::arch_h::opus_val32;
         /* Don't do this at home! This resampler is horrible and it's only (barely)
         usable for the purpose of the analysis because we don't care about all
         the aliasing between 8 kHz and 12 kHz. */
-        j = 0 as libc::c_int;
+        j = 0 as i32;
         while j < subframe {
-            *tmp3x.offset((3 as libc::c_int * j) as isize) = *tmp.offset(j as isize);
-            *tmp3x.offset((3 as libc::c_int * j + 1 as libc::c_int) as isize) =
+            *tmp3x.offset((3 as i32 * j) as isize) = *tmp.offset(j as isize);
+            *tmp3x.offset((3 as i32 * j + 1 as i32) as isize) =
                 *tmp.offset(j as isize);
-            *tmp3x.offset((3 as libc::c_int * j + 2 as libc::c_int) as isize) =
+            *tmp3x.offset((3 as i32 * j + 2 as i32) as isize) =
                 *tmp.offset(j as isize);
             j += 1
         }
-        silk_resampler_down2_hp(S, y, tmp3x, 3 as libc::c_int * subframe);
+        silk_resampler_down2_hp(S, y, tmp3x, 3 as i32 * subframe);
     }
     return ret;
 }
@@ -809,10 +809,10 @@ pub unsafe extern "C" fn tonality_analysis_reset(
 ) {
     /* Clear non-reusable fields. */
     let mut start: *mut libc::c_char =
-        &mut (*tonal).angle as *mut [libc::c_float; 240] as *mut libc::c_char;
+        &mut (*tonal).angle as *mut [f32; 240] as *mut libc::c_char;
     crate::stdlib::memset(
         start as *mut libc::c_void,
-        0 as libc::c_int,
+        0 as i32,
         (::std::mem::size_of::<crate::src::opus_1_2_1::src::analysis::TonalityAnalysisState>()
             as libc::c_ulong)
             .wrapping_sub(
@@ -828,54 +828,54 @@ pub unsafe extern "C" fn tonality_analysis_reset(
 pub unsafe extern "C" fn tonality_get_info(
     mut tonal: *mut crate::src::opus_1_2_1::src::analysis::TonalityAnalysisState,
     mut info_out: *mut crate::celt_h::AnalysisInfo,
-    mut len: libc::c_int,
+    mut len: i32,
 ) {
-    let mut pos: libc::c_int = 0;
-    let mut curr_lookahead: libc::c_int = 0;
-    let mut psum: libc::c_float = 0.;
-    let mut tonality_max: libc::c_float = 0.;
-    let mut tonality_avg: libc::c_float = 0.;
-    let mut tonality_count: libc::c_int = 0;
-    let mut i: libc::c_int = 0;
+    let mut pos: i32 = 0;
+    let mut curr_lookahead: i32 = 0;
+    let mut psum: f32 = 0.;
+    let mut tonality_max: f32 = 0.;
+    let mut tonality_avg: f32 = 0.;
+    let mut tonality_count: i32 = 0;
+    let mut i: i32 = 0;
     pos = (*tonal).read_pos;
     curr_lookahead = (*tonal).write_pos - (*tonal).read_pos;
-    if curr_lookahead < 0 as libc::c_int {
-        curr_lookahead += 100 as libc::c_int
+    if curr_lookahead < 0 as i32 {
+        curr_lookahead += 100 as i32
     }
     /* On long frames, look at the second analysis window rather than the first. */
-    if len > (*tonal).Fs / 50 as libc::c_int && pos != (*tonal).write_pos {
+    if len > (*tonal).Fs / 50 as i32 && pos != (*tonal).write_pos {
         pos += 1;
-        if pos == 100 as libc::c_int {
-            pos = 0 as libc::c_int
+        if pos == 100 as i32 {
+            pos = 0 as i32
         }
     }
     if pos == (*tonal).write_pos {
         pos -= 1
     }
-    if pos < 0 as libc::c_int {
-        pos = 100 as libc::c_int - 1 as libc::c_int
+    if pos < 0 as i32 {
+        pos = 100 as i32 - 1 as i32
     }
     crate::stdlib::memcpy(
         info_out as *mut libc::c_void,
         &mut *(*tonal).info.as_mut_ptr().offset(pos as isize) as *mut crate::celt_h::AnalysisInfo
             as *const libc::c_void,
-        (1 as libc::c_int as libc::c_ulong)
+        (1 as i32 as libc::c_ulong)
             .wrapping_mul(::std::mem::size_of::<crate::celt_h::AnalysisInfo>() as libc::c_ulong)
             .wrapping_add(
-                (0 as libc::c_int as libc::c_long
+                (0 as i32 as libc::c_long
                     * info_out.offset_from(&mut *(*tonal).info.as_mut_ptr().offset(pos as isize))
                         as libc::c_long) as libc::c_ulong,
             ),
     );
     tonality_avg = (*info_out).tonality;
     tonality_max = tonality_avg;
-    tonality_count = 1 as libc::c_int;
+    tonality_count = 1 as i32;
     /* If possible, look ahead for a tone to compensate for the delay in the tone detector. */
-    i = 0 as libc::c_int;
-    while i < 3 as libc::c_int {
+    i = 0 as i32;
+    while i < 3 as i32 {
         pos += 1;
-        if pos == 100 as libc::c_int {
-            pos = 0 as libc::c_int
+        if pos == 100 as i32 {
+            pos = 0 as i32
         }
         if pos == (*tonal).write_pos {
             break;
@@ -889,45 +889,45 @@ pub unsafe extern "C" fn tonality_get_info(
         tonality_count += 1;
         i += 1
     }
-    (*info_out).tonality = if tonality_avg / tonality_count as libc::c_float > tonality_max - 0.2f32
+    (*info_out).tonality = if tonality_avg / tonality_count as f32 > tonality_max - 0.2f32
     {
-        (tonality_avg) / tonality_count as libc::c_float
+        (tonality_avg) / tonality_count as f32
     } else {
         (tonality_max) - 0.2f32
     };
-    (*tonal).read_subframe += len / ((*tonal).Fs / 400 as libc::c_int);
-    while (*tonal).read_subframe >= 8 as libc::c_int {
-        (*tonal).read_subframe -= 8 as libc::c_int;
+    (*tonal).read_subframe += len / ((*tonal).Fs / 400 as i32);
+    while (*tonal).read_subframe >= 8 as i32 {
+        (*tonal).read_subframe -= 8 as i32;
         (*tonal).read_pos += 1
     }
-    if (*tonal).read_pos >= 100 as libc::c_int {
-        (*tonal).read_pos -= 100 as libc::c_int
+    if (*tonal).read_pos >= 100 as i32 {
+        (*tonal).read_pos -= 100 as i32
     }
     /* The -1 is to compensate for the delay in the features themselves. */
-    curr_lookahead = if curr_lookahead - 1 as libc::c_int > 0 as libc::c_int {
-        (curr_lookahead) - 1 as libc::c_int
+    curr_lookahead = if curr_lookahead - 1 as i32 > 0 as i32 {
+        (curr_lookahead) - 1 as i32
     } else {
-        0 as libc::c_int
+        0 as i32
     };
-    psum = 0 as libc::c_int as libc::c_float;
+    psum = 0 as i32 as f32;
     /* Summing the probability of transition patterns that involve music at
     time (DETECT_SIZE-curr_lookahead-1) */
-    i = 0 as libc::c_int;
-    while i < 100 as libc::c_int - curr_lookahead {
+    i = 0 as i32;
+    while i < 100 as i32 - curr_lookahead {
         psum += (*tonal).pmusic[i as usize];
         i += 1
     }
-    while i < 100 as libc::c_int {
+    while i < 100 as i32 {
         psum += (*tonal).pspeech[i as usize];
         i += 1
     }
     psum = psum * (*tonal).music_confidence
-        + (1 as libc::c_int as libc::c_float - psum) * (*tonal).speech_confidence;
+        + (1 as i32 as f32 - psum) * (*tonal).speech_confidence;
     /*printf("%f %f %f %f %f\n", psum, info_out->music_prob, info_out->vad_prob, info_out->activity_probability, info_out->tonality);*/
     (*info_out).music_prob = psum;
 }
 
-static mut std_feature_bias: [libc::c_float; 9] = [
+static mut std_feature_bias: [f32; 9] = [
     5.684947f32,
     3.475288f32,
     1.770634f32,
@@ -943,98 +943,98 @@ unsafe extern "C" fn tonality_analysis(
     mut tonal: *mut crate::src::opus_1_2_1::src::analysis::TonalityAnalysisState,
     mut celt_mode: *const crate::src::opus_1_2_1::celt::modes::OpusCustomMode,
     mut x: *const libc::c_void,
-    mut len: libc::c_int,
-    mut offset: libc::c_int,
-    mut c1: libc::c_int,
-    mut c2: libc::c_int,
-    mut C: libc::c_int,
-    mut lsb_depth: libc::c_int,
+    mut len: i32,
+    mut offset: i32,
+    mut c1: i32,
+    mut c2: i32,
+    mut C: i32,
+    mut lsb_depth: i32,
     mut downmix: crate::opus_private_h::downmix_func,
 ) {
-    let mut i: libc::c_int = 0;
-    let mut b: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut b: i32 = 0;
     let mut kfft: *const crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_state =
         0 as *const crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_state;
     let mut in_0: *mut crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx =
         0 as *mut crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx;
     let mut out: *mut crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx =
         0 as *mut crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx;
-    let mut N: libc::c_int = 480 as libc::c_int;
-    let mut N2: libc::c_int = 240 as libc::c_int;
-    let mut A: *mut libc::c_float = (*tonal).angle.as_mut_ptr();
-    let mut dA: *mut libc::c_float = (*tonal).d_angle.as_mut_ptr();
-    let mut d2A: *mut libc::c_float = (*tonal).d2_angle.as_mut_ptr();
-    let mut tonality: *mut libc::c_float = 0 as *mut libc::c_float;
-    let mut noisiness: *mut libc::c_float = 0 as *mut libc::c_float;
-    let mut band_tonality: [libc::c_float; 18] = [0.; 18];
-    let mut logE: [libc::c_float; 18] = [0.; 18];
-    let mut BFCC: [libc::c_float; 8] = [0.; 8];
-    let mut features: [libc::c_float; 25] = [0.; 25];
-    let mut frame_tonality: libc::c_float = 0.;
-    let mut max_frame_tonality: libc::c_float = 0.;
+    let mut N: i32 = 480 as i32;
+    let mut N2: i32 = 240 as i32;
+    let mut A: *mut f32 = (*tonal).angle.as_mut_ptr();
+    let mut dA: *mut f32 = (*tonal).d_angle.as_mut_ptr();
+    let mut d2A: *mut f32 = (*tonal).d2_angle.as_mut_ptr();
+    let mut tonality: *mut f32 = 0 as *mut f32;
+    let mut noisiness: *mut f32 = 0 as *mut f32;
+    let mut band_tonality: [f32; 18] = [0.; 18];
+    let mut logE: [f32; 18] = [0.; 18];
+    let mut BFCC: [f32; 8] = [0.; 8];
+    let mut features: [f32; 25] = [0.; 25];
+    let mut frame_tonality: f32 = 0.;
+    let mut max_frame_tonality: f32 = 0.;
     /*float tw_sum=0;*/
-    let mut frame_noisiness: libc::c_float = 0.;
-    let pi4: libc::c_float = (3.14159265358979323846f64
+    let mut frame_noisiness: f32 = 0.;
+    let pi4: f32 = (3.14159265358979323846f64
         * 3.14159265358979323846f64
         * 3.14159265358979323846f64
-        * 3.14159265358979323846f64) as libc::c_float;
-    let mut slope: libc::c_float = 0 as libc::c_int as libc::c_float;
-    let mut frame_stationarity: libc::c_float = 0.;
-    let mut relativeE: libc::c_float = 0.;
-    let mut frame_probs: [libc::c_float; 2] = [0.; 2];
-    let mut alpha: libc::c_float = 0.;
-    let mut alphaE: libc::c_float = 0.;
-    let mut alphaE2: libc::c_float = 0.;
-    let mut frame_loudness: libc::c_float = 0.;
-    let mut bandwidth_mask: libc::c_float = 0.;
-    let mut bandwidth: libc::c_int = 0 as libc::c_int;
-    let mut maxE: libc::c_float = 0 as libc::c_int as libc::c_float;
-    let mut noise_floor: libc::c_float = 0.;
-    let mut remaining: libc::c_int = 0;
+        * 3.14159265358979323846f64) as f32;
+    let mut slope: f32 = 0 as i32 as f32;
+    let mut frame_stationarity: f32 = 0.;
+    let mut relativeE: f32 = 0.;
+    let mut frame_probs: [f32; 2] = [0.; 2];
+    let mut alpha: f32 = 0.;
+    let mut alphaE: f32 = 0.;
+    let mut alphaE2: f32 = 0.;
+    let mut frame_loudness: f32 = 0.;
+    let mut bandwidth_mask: f32 = 0.;
+    let mut bandwidth: i32 = 0 as i32;
+    let mut maxE: f32 = 0 as i32 as f32;
+    let mut noise_floor: f32 = 0.;
+    let mut remaining: i32 = 0;
     let mut info: *mut crate::celt_h::AnalysisInfo = 0 as *mut crate::celt_h::AnalysisInfo;
-    let mut hp_ener: libc::c_float = 0.;
-    let mut tonality2: [libc::c_float; 240] = [0.; 240];
-    let mut midE: [libc::c_float; 8] = [0.; 8];
-    let mut spec_variability: libc::c_float = 0 as libc::c_int as libc::c_float;
-    let mut band_log2: [libc::c_float; 19] = [0.; 19];
-    let mut leakage_from: [libc::c_float; 19] = [0.; 19];
-    let mut leakage_to: [libc::c_float; 19] = [0.; 19];
+    let mut hp_ener: f32 = 0.;
+    let mut tonality2: [f32; 240] = [0.; 240];
+    let mut midE: [f32; 8] = [0.; 8];
+    let mut spec_variability: f32 = 0 as i32 as f32;
+    let mut band_log2: [f32; 19] = [0.; 19];
+    let mut leakage_from: [f32; 19] = [0.; 19];
+    let mut leakage_to: [f32; 19] = [0.; 19];
     alpha = 1.0f32
-        / (if (10 as libc::c_int) < 1 as libc::c_int + (*tonal).count {
-            10 as libc::c_int
+        / (if (10 as i32) < 1 as i32 + (*tonal).count {
+            10 as i32
         } else {
-            (1 as libc::c_int) + (*tonal).count
-        }) as libc::c_float;
+            (1 as i32) + (*tonal).count
+        }) as f32;
     alphaE = 1.0f32
-        / (if (25 as libc::c_int) < 1 as libc::c_int + (*tonal).count {
-            25 as libc::c_int
+        / (if (25 as i32) < 1 as i32 + (*tonal).count {
+            25 as i32
         } else {
-            (1 as libc::c_int) + (*tonal).count
-        }) as libc::c_float;
+            (1 as i32) + (*tonal).count
+        }) as f32;
     alphaE2 = 1.0f32
-        / (if (500 as libc::c_int) < 1 as libc::c_int + (*tonal).count {
-            500 as libc::c_int
+        / (if (500 as i32) < 1 as i32 + (*tonal).count {
+            500 as i32
         } else {
-            (1 as libc::c_int) + (*tonal).count
-        }) as libc::c_float;
-    if (*tonal).Fs == 48000 as libc::c_int {
+            (1 as i32) + (*tonal).count
+        }) as f32;
+    if (*tonal).Fs == 48000 as i32 {
         /* len and offset are now at 24 kHz. */
-        len /= 2 as libc::c_int;
-        offset /= 2 as libc::c_int
-    } else if (*tonal).Fs == 16000 as libc::c_int {
-        len = 3 as libc::c_int * len / 2 as libc::c_int;
-        offset = 3 as libc::c_int * offset / 2 as libc::c_int
+        len /= 2 as i32;
+        offset /= 2 as i32
+    } else if (*tonal).Fs == 16000 as i32 {
+        len = 3 as i32 * len / 2 as i32;
+        offset = 3 as i32 * offset / 2 as i32
     }
-    if (*tonal).count < 4 as libc::c_int {
-        if (*tonal).application == 2048 as libc::c_int {
+    if (*tonal).count < 4 as i32 {
+        if (*tonal).application == 2048 as i32 {
             (*tonal).music_prob = 0.1f32
         } else {
             (*tonal).music_prob = 0.625f32
         }
     }
-    kfft = (*celt_mode).mdct.kfft[0 as libc::c_int as usize];
-    if (*tonal).count == 0 as libc::c_int {
-        (*tonal).mem_fill = 240 as libc::c_int
+    kfft = (*celt_mode).mdct.kfft[0 as i32 as usize];
+    if (*tonal).count == 0 as i32 {
+        (*tonal).mem_fill = 240 as i32
     }
     (*tonal).hp_ener_accum += downmix_and_resample(
         downmix,
@@ -1044,10 +1044,10 @@ unsafe extern "C" fn tonality_analysis(
             .as_mut_ptr()
             .offset((*tonal).mem_fill as isize),
         (*tonal).downmix_state.as_mut_ptr(),
-        if len < 720 as libc::c_int - (*tonal).mem_fill {
+        if len < 720 as i32 - (*tonal).mem_fill {
             len
         } else {
-            (720 as libc::c_int) - (*tonal).mem_fill
+            (720 as i32) - (*tonal).mem_fill
         },
         offset,
         c1,
@@ -1055,7 +1055,7 @@ unsafe extern "C" fn tonality_analysis(
         C,
         (*tonal).Fs,
     );
-    if (*tonal).mem_fill + len < 720 as libc::c_int {
+    if (*tonal).mem_fill + len < 720 as i32 {
         (*tonal).mem_fill += len;
         /* Don't have enough to update the analysis */
         return;
@@ -1065,44 +1065,44 @@ unsafe extern "C" fn tonality_analysis(
     (*tonal).write_pos = (*tonal).write_pos + 1;
     info = &mut *(*tonal).info.as_mut_ptr().offset(fresh3 as isize)
         as *mut crate::celt_h::AnalysisInfo;
-    if (*tonal).write_pos >= 100 as libc::c_int {
-        (*tonal).write_pos -= 100 as libc::c_int
+    if (*tonal).write_pos >= 100 as i32 {
+        (*tonal).write_pos -= 100 as i32
     }
     let mut fresh4 = ::std::vec::from_elem(
         0,
         (::std::mem::size_of::<crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx>()
             as libc::c_ulong)
-            .wrapping_mul(480 as libc::c_int as libc::c_ulong) as usize,
+            .wrapping_mul(480 as i32 as libc::c_ulong) as usize,
     );
     in_0 = fresh4.as_mut_ptr() as *mut crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx;
     let mut fresh5 = ::std::vec::from_elem(
         0,
         (::std::mem::size_of::<crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx>()
             as libc::c_ulong)
-            .wrapping_mul(480 as libc::c_int as libc::c_ulong) as usize,
+            .wrapping_mul(480 as i32 as libc::c_ulong) as usize,
     );
     out = fresh5.as_mut_ptr() as *mut crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx;
     let mut fresh6 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<libc::c_float>() as libc::c_ulong)
-            .wrapping_mul(240 as libc::c_int as libc::c_ulong) as usize,
+        (::std::mem::size_of::<f32>() as libc::c_ulong)
+            .wrapping_mul(240 as i32 as libc::c_ulong) as usize,
     );
-    tonality = fresh6.as_mut_ptr() as *mut libc::c_float;
+    tonality = fresh6.as_mut_ptr() as *mut f32;
     let mut fresh7 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<libc::c_float>() as libc::c_ulong)
-            .wrapping_mul(240 as libc::c_int as libc::c_ulong) as usize,
+        (::std::mem::size_of::<f32>() as libc::c_ulong)
+            .wrapping_mul(240 as i32 as libc::c_ulong) as usize,
     );
-    noisiness = fresh7.as_mut_ptr() as *mut libc::c_float;
-    i = 0 as libc::c_int;
+    noisiness = fresh7.as_mut_ptr() as *mut f32;
+    i = 0 as i32;
     while i < N2 {
-        let mut w: libc::c_float = analysis_window[i as usize];
+        let mut w: f32 = analysis_window[i as usize];
         (*in_0.offset(i as isize)).r = w * (*tonal).inmem[i as usize];
         (*in_0.offset(i as isize)).i = w * (*tonal).inmem[(N2 + i) as usize];
-        (*in_0.offset((N - i - 1 as libc::c_int) as isize)).r =
-            w * (*tonal).inmem[(N - i - 1 as libc::c_int) as usize];
-        (*in_0.offset((N - i - 1 as libc::c_int) as isize)).i =
-            w * (*tonal).inmem[(N + N2 - i - 1 as libc::c_int) as usize];
+        (*in_0.offset((N - i - 1 as i32) as isize)).r =
+            w * (*tonal).inmem[(N - i - 1 as i32) as usize];
+        (*in_0.offset((N - i - 1 as i32) as isize)).i =
+            w * (*tonal).inmem[(N + N2 - i - 1 as i32) as usize];
         i += 1
     }
     crate::stdlib::memmove(
@@ -1110,87 +1110,87 @@ unsafe extern "C" fn tonality_analysis(
         (*tonal)
             .inmem
             .as_mut_ptr()
-            .offset(720 as libc::c_int as isize)
-            .offset(-(240 as libc::c_int as isize)) as *const libc::c_void,
-        (240 as libc::c_int as libc::c_ulong)
+            .offset(720 as i32 as isize)
+            .offset(-(240 as i32 as isize)) as *const libc::c_void,
+        (240 as i32 as libc::c_ulong)
             .wrapping_mul(::std::mem::size_of::<crate::arch_h::opus_val32>() as libc::c_ulong)
             .wrapping_add(
-                (0 as libc::c_int as libc::c_long
+                (0 as i32 as libc::c_long
                     * (*tonal).inmem.as_mut_ptr().offset_from(
                         (*tonal)
                             .inmem
                             .as_mut_ptr()
-                            .offset(720 as libc::c_int as isize)
-                            .offset(-(240 as libc::c_int as isize)),
+                            .offset(720 as i32 as isize)
+                            .offset(-(240 as i32 as isize)),
                     ) as libc::c_long) as libc::c_ulong,
             ),
     );
-    remaining = len - (720 as libc::c_int - (*tonal).mem_fill);
+    remaining = len - (720 as i32 - (*tonal).mem_fill);
     (*tonal).hp_ener_accum = downmix_and_resample(
         downmix,
         x,
         &mut *(*tonal)
             .inmem
             .as_mut_ptr()
-            .offset(240 as libc::c_int as isize),
+            .offset(240 as i32 as isize),
         (*tonal).downmix_state.as_mut_ptr(),
         remaining,
-        offset + 720 as libc::c_int - (*tonal).mem_fill,
+        offset + 720 as i32 - (*tonal).mem_fill,
         c1,
         c2,
         C,
         (*tonal).Fs,
     );
-    (*tonal).mem_fill = 240 as libc::c_int + remaining;
+    (*tonal).mem_fill = 240 as i32 + remaining;
     crate::src::opus_1_2_1::celt::kiss_fft::opus_fft_c(
         kfft as *const crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_state,
         in_0 as *const crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx,
         out as *mut crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx,
     );
     /* If there's any NaN on the input, the entire output will be NaN, so we only need to check one value. */
-    if celt_isnan((*out.offset(0 as libc::c_int as isize)).r) != 0 {
-        (*info).valid = 0 as libc::c_int;
+    if celt_isnan((*out.offset(0 as i32 as isize)).r) != 0 {
+        (*info).valid = 0 as i32;
         return;
     }
-    i = 1 as libc::c_int;
+    i = 1 as i32;
     while i < N2 {
-        let mut X1r: libc::c_float = 0.;
-        let mut X2r: libc::c_float = 0.;
-        let mut X1i: libc::c_float = 0.;
-        let mut X2i: libc::c_float = 0.;
-        let mut angle: libc::c_float = 0.;
-        let mut d_angle: libc::c_float = 0.;
-        let mut d2_angle: libc::c_float = 0.;
-        let mut angle2: libc::c_float = 0.;
-        let mut d_angle2: libc::c_float = 0.;
-        let mut d2_angle2: libc::c_float = 0.;
-        let mut mod1: libc::c_float = 0.;
-        let mut mod2: libc::c_float = 0.;
-        let mut avg_mod: libc::c_float = 0.;
+        let mut X1r: f32 = 0.;
+        let mut X2r: f32 = 0.;
+        let mut X1i: f32 = 0.;
+        let mut X2i: f32 = 0.;
+        let mut angle: f32 = 0.;
+        let mut d_angle: f32 = 0.;
+        let mut d2_angle: f32 = 0.;
+        let mut angle2: f32 = 0.;
+        let mut d_angle2: f32 = 0.;
+        let mut d2_angle2: f32 = 0.;
+        let mut mod1: f32 = 0.;
+        let mut mod2: f32 = 0.;
+        let mut avg_mod: f32 = 0.;
         X1r = (*out.offset(i as isize)).r + (*out.offset((N - i) as isize)).r;
         X1i = (*out.offset(i as isize)).i - (*out.offset((N - i) as isize)).i;
         X2r = (*out.offset(i as isize)).i + (*out.offset((N - i) as isize)).i;
         X2i = (*out.offset((N - i) as isize)).r - (*out.offset(i as isize)).r;
-        angle = (0.5f32 as libc::c_double / 3.14159265358979323846f64) as libc::c_float
+        angle = (0.5f32 as f64 / 3.14159265358979323846f64) as f32
             * fast_atan2f(X1i, X1r);
         d_angle = angle - *A.offset(i as isize);
         d2_angle = d_angle - *dA.offset(i as isize);
-        angle2 = (0.5f32 as libc::c_double / 3.14159265358979323846f64) as libc::c_float
+        angle2 = (0.5f32 as f64 / 3.14159265358979323846f64) as f32
             * fast_atan2f(X2i, X2r);
         d_angle2 = angle2 - angle;
         d2_angle2 = d_angle2 - d_angle;
-        mod1 = d2_angle - float2int(d2_angle) as libc::c_float;
+        mod1 = d2_angle - float2int(d2_angle) as f32;
         *noisiness.offset(i as isize) =
-            crate::stdlib::fabs(mod1 as libc::c_double) as libc::c_float;
+            crate::stdlib::fabs(mod1 as f64) as f32;
         mod1 *= mod1;
         mod1 *= mod1;
-        mod2 = d2_angle2 - float2int(d2_angle2) as libc::c_float;
+        mod2 = d2_angle2 - float2int(d2_angle2) as f32;
         *noisiness.offset(i as isize) +=
-            crate::stdlib::fabs(mod2 as libc::c_double) as libc::c_float;
+            crate::stdlib::fabs(mod2 as f64) as f32;
         mod2 *= mod2;
         mod2 *= mod2;
         avg_mod =
-            0.25f32 * (*d2A.offset(i as isize) + mod1 + 2 as libc::c_int as libc::c_float * mod2);
+            0.25f32 * (*d2A.offset(i as isize) + mod1 + 2 as i32 as f32 * mod2);
         /* This introduces an extra delay of 2 frames in the detection. */
         *tonality.offset(i as isize) =
             1.0f32 / (1.0f32 + 40.0f32 * 16.0f32 * pi4 * avg_mod) - 0.015f32;
@@ -1201,23 +1201,23 @@ unsafe extern "C" fn tonality_analysis(
         *d2A.offset(i as isize) = mod2;
         i += 1
     }
-    i = 2 as libc::c_int;
-    while i < N2 - 1 as libc::c_int {
-        let mut tt: libc::c_float = if tonality2[i as usize]
-            < (if tonality2[(i - 1 as libc::c_int) as usize]
-                > tonality2[(i + 1 as libc::c_int) as usize]
+    i = 2 as i32;
+    while i < N2 - 1 as i32 {
+        let mut tt: f32 = if tonality2[i as usize]
+            < (if tonality2[(i - 1 as i32) as usize]
+                > tonality2[(i + 1 as i32) as usize]
             {
-                tonality2[(i - 1 as libc::c_int) as usize]
+                tonality2[(i - 1 as i32) as usize]
             } else {
-                tonality2[(i + 1 as libc::c_int) as usize]
+                tonality2[(i + 1 as i32) as usize]
             }) {
             tonality2[i as usize]
-        } else if tonality2[(i - 1 as libc::c_int) as usize]
-            > tonality2[(i + 1 as libc::c_int) as usize]
+        } else if tonality2[(i - 1 as i32) as usize]
+            > tonality2[(i + 1 as i32) as usize]
         {
-            tonality2[(i - 1 as libc::c_int) as usize]
+            tonality2[(i - 1 as i32) as usize]
         } else {
-            tonality2[(i + 1 as libc::c_int) as usize]
+            tonality2[(i + 1 as i32) as usize]
         };
         *tonality.offset(i as isize) = 0.9f32
             * (if *tonality.offset(i as isize) > tt - 0.1f32 {
@@ -1227,32 +1227,32 @@ unsafe extern "C" fn tonality_analysis(
             });
         i += 1
     }
-    frame_tonality = 0 as libc::c_int as libc::c_float;
-    max_frame_tonality = 0 as libc::c_int as libc::c_float;
+    frame_tonality = 0 as i32 as f32;
+    max_frame_tonality = 0 as i32 as f32;
     /*tw_sum = 0;*/
-    (*info).activity = 0 as libc::c_int as libc::c_float;
-    frame_noisiness = 0 as libc::c_int as libc::c_float;
-    frame_stationarity = 0 as libc::c_int as libc::c_float;
+    (*info).activity = 0 as i32 as f32;
+    frame_noisiness = 0 as i32 as f32;
+    frame_stationarity = 0 as i32 as f32;
     if (*tonal).count == 0 {
-        b = 0 as libc::c_int;
-        while b < 18 as libc::c_int {
-            (*tonal).lowE[b as usize] = 1e10f64 as libc::c_float;
-            (*tonal).highE[b as usize] = -1e10f64 as libc::c_float;
+        b = 0 as i32;
+        while b < 18 as i32 {
+            (*tonal).lowE[b as usize] = 1e10f64 as f32;
+            (*tonal).highE[b as usize] = -1e10f64 as f32;
             b += 1
         }
     }
-    relativeE = 0 as libc::c_int as libc::c_float;
-    frame_loudness = 0 as libc::c_int as libc::c_float;
+    relativeE = 0 as i32 as f32;
+    frame_loudness = 0 as i32 as f32;
     /* The energy of the very first band is special because of DC. */
-    let mut E: libc::c_float = 0 as libc::c_int as libc::c_float;
-    let mut X1r_0: libc::c_float = 0.;
-    let mut X2r_0: libc::c_float = 0.;
-    X1r_0 = 2 as libc::c_int as libc::c_float * (*out.offset(0 as libc::c_int as isize)).r;
-    X2r_0 = 2 as libc::c_int as libc::c_float * (*out.offset(0 as libc::c_int as isize)).i;
+    let mut E: f32 = 0 as i32 as f32;
+    let mut X1r_0: f32 = 0.;
+    let mut X2r_0: f32 = 0.;
+    X1r_0 = 2 as i32 as f32 * (*out.offset(0 as i32 as isize)).r;
+    X2r_0 = 2 as i32 as f32 * (*out.offset(0 as i32 as isize)).i;
     E = X1r_0 * X1r_0 + X2r_0 * X2r_0;
-    i = 1 as libc::c_int;
-    while i < 4 as libc::c_int {
-        let mut binE: libc::c_float = (*out.offset(i as isize)).r * (*out.offset(i as isize)).r
+    i = 1 as i32;
+    while i < 4 as i32 {
+        let mut binE: f32 = (*out.offset(i as isize)).r * (*out.offset(i as isize)).r
             + (*out.offset((N - i) as isize)).r * (*out.offset((N - i) as isize)).r
             + (*out.offset(i as isize)).i * (*out.offset(i as isize)).i
             + (*out.offset((N - i) as isize)).i * (*out.offset((N - i) as isize)).i;
@@ -1260,20 +1260,20 @@ unsafe extern "C" fn tonality_analysis(
         i += 1
     }
     E = E;
-    band_log2[0 as libc::c_int as usize] = 0.5f32
+    band_log2[0 as i32 as usize] = 0.5f32
         * 1.442695f32
-        * crate::stdlib::log((E + 1e-10f32) as libc::c_double) as libc::c_float;
-    b = 0 as libc::c_int;
-    while b < 18 as libc::c_int {
-        let mut E_0: libc::c_float = 0 as libc::c_int as libc::c_float;
-        let mut tE: libc::c_float = 0 as libc::c_int as libc::c_float;
-        let mut nE: libc::c_float = 0 as libc::c_int as libc::c_float;
-        let mut L1: libc::c_float = 0.;
-        let mut L2: libc::c_float = 0.;
-        let mut stationarity: libc::c_float = 0.;
+        * crate::stdlib::log((E + 1e-10f32) as f64) as f32;
+    b = 0 as i32;
+    while b < 18 as i32 {
+        let mut E_0: f32 = 0 as i32 as f32;
+        let mut tE: f32 = 0 as i32 as f32;
+        let mut nE: f32 = 0 as i32 as f32;
+        let mut L1: f32 = 0.;
+        let mut L2: f32 = 0.;
+        let mut stationarity: f32 = 0.;
         i = tbands[b as usize];
-        while i < tbands[(b + 1 as libc::c_int) as usize] {
-            let mut binE_0: libc::c_float = (*out.offset(i as isize)).r
+        while i < tbands[(b + 1 as i32) as usize] {
+            let mut binE_0: f32 = (*out.offset(i as isize)).r
                 * (*out.offset(i as isize)).r
                 + (*out.offset((N - i) as isize)).r * (*out.offset((N - i) as isize)).r
                 + (*out.offset(i as isize)).i * (*out.offset(i as isize)).i
@@ -1281,8 +1281,8 @@ unsafe extern "C" fn tonality_analysis(
             binE_0 = binE_0;
             E_0 += binE_0;
             tE += binE_0
-                * (if 0 as libc::c_int as libc::c_float > *tonality.offset(i as isize) {
-                    0 as libc::c_int as libc::c_float
+                * (if 0 as i32 as f32 > *tonality.offset(i as isize) {
+                    0 as i32 as f32
                 } else {
                     *tonality.offset(i as isize)
                 });
@@ -1291,23 +1291,23 @@ unsafe extern "C" fn tonality_analysis(
         }
         /* Check for extreme band energies that could cause NaNs later. */
         if !(E_0 < 1e9f32) || celt_isnan(E_0) != 0 {
-            (*info).valid = 0 as libc::c_int;
+            (*info).valid = 0 as i32;
             return;
         }
         (*tonal).E[(*tonal).E_count as usize][b as usize] = E_0;
         frame_noisiness += nE / (1e-15f32 + E_0);
-        frame_loudness += crate::stdlib::sqrt((E_0 + 1e-10f32) as libc::c_double) as libc::c_float;
-        logE[b as usize] = crate::stdlib::log((E_0 + 1e-10f32) as libc::c_double) as libc::c_float;
-        band_log2[(b + 1 as libc::c_int) as usize] = 0.5f32
+        frame_loudness += crate::stdlib::sqrt((E_0 + 1e-10f32) as f64) as f32;
+        logE[b as usize] = crate::stdlib::log((E_0 + 1e-10f32) as f64) as f32;
+        band_log2[(b + 1 as i32) as usize] = 0.5f32
             * 1.442695f32
-            * crate::stdlib::log((E_0 + 1e-10f32) as libc::c_double) as libc::c_float;
+            * crate::stdlib::log((E_0 + 1e-10f32) as f64) as f32;
         (*tonal).logE[(*tonal).E_count as usize][b as usize] = logE[b as usize];
-        if (*tonal).count == 0 as libc::c_int {
+        if (*tonal).count == 0 as i32 {
             (*tonal).lowE[b as usize] = logE[b as usize];
             (*tonal).highE[b as usize] = (*tonal).lowE[b as usize]
         }
-        if (*tonal).highE[b as usize] as libc::c_double
-            > (*tonal).lowE[b as usize] as libc::c_double + 7.5f64
+        if (*tonal).highE[b as usize] as f64
+            > (*tonal).lowE[b as usize] as f64 + 7.5f64
         {
             if (*tonal).highE[b as usize] - logE[b as usize]
                 > logE[b as usize] - (*tonal).lowE[b as usize]
@@ -1320,45 +1320,45 @@ unsafe extern "C" fn tonality_analysis(
         if logE[b as usize] > (*tonal).highE[b as usize] {
             (*tonal).highE[b as usize] = logE[b as usize];
             (*tonal).lowE[b as usize] = if (*tonal).highE[b as usize]
-                - 15 as libc::c_int as libc::c_float
+                - 15 as i32 as f32
                 > (*tonal).lowE[b as usize]
             {
-                ((*tonal).highE[b as usize]) - 15 as libc::c_int as libc::c_float
+                ((*tonal).highE[b as usize]) - 15 as i32 as f32
             } else {
                 (*tonal).lowE[b as usize]
             }
         } else if logE[b as usize] < (*tonal).lowE[b as usize] {
             (*tonal).lowE[b as usize] = logE[b as usize];
             (*tonal).highE[b as usize] = if ((*tonal).lowE[b as usize]
-                + 15 as libc::c_int as libc::c_float)
+                + 15 as i32 as f32)
                 < (*tonal).highE[b as usize]
             {
-                ((*tonal).lowE[b as usize]) + 15 as libc::c_int as libc::c_float
+                ((*tonal).lowE[b as usize]) + 15 as i32 as f32
             } else {
                 (*tonal).highE[b as usize]
             }
         }
         relativeE += (logE[b as usize] - (*tonal).lowE[b as usize])
             / (1e-15f32 + ((*tonal).highE[b as usize] - (*tonal).lowE[b as usize]));
-        L2 = 0 as libc::c_int as libc::c_float;
+        L2 = 0 as i32 as f32;
         L1 = L2;
-        i = 0 as libc::c_int;
-        while i < 8 as libc::c_int {
-            L1 += crate::stdlib::sqrt((*tonal).E[i as usize][b as usize] as libc::c_double)
-                as libc::c_float;
+        i = 0 as i32;
+        while i < 8 as i32 {
+            L1 += crate::stdlib::sqrt((*tonal).E[i as usize][b as usize] as f64)
+                as f32;
             L2 += (*tonal).E[i as usize][b as usize];
             i += 1
         }
         stationarity = if 0.99f32
             < L1 / crate::stdlib::sqrt(
-                1e-15f64 + (8 as libc::c_int as libc::c_float * L2) as libc::c_double,
-            ) as libc::c_float
+                1e-15f64 + (8 as i32 as f32 * L2) as f64,
+            ) as f32
         {
             0.99f32
         } else {
             (L1) / crate::stdlib::sqrt(
-                1e-15f64 + (8 as libc::c_int as libc::c_float * L2) as libc::c_double,
-            ) as libc::c_float
+                1e-15f64 + (8 as i32 as f32 * L2) as f64,
+            ) as f32
         };
         stationarity *= stationarity;
         stationarity *= stationarity;
@@ -1371,109 +1371,109 @@ unsafe extern "C" fn tonality_analysis(
                 (stationarity) * (*tonal).prev_band_tonality[b as usize]
             };
         frame_tonality += band_tonality[b as usize];
-        if b >= 18 as libc::c_int - 9 as libc::c_int {
-            frame_tonality -= band_tonality[(b - 18 as libc::c_int + 9 as libc::c_int) as usize]
+        if b >= 18 as i32 - 9 as i32 {
+            frame_tonality -= band_tonality[(b - 18 as i32 + 9 as i32) as usize]
         }
         max_frame_tonality = if max_frame_tonality
-            > (1.0f32 + 0.03f32 * (b - 18 as libc::c_int) as libc::c_float) * frame_tonality
+            > (1.0f32 + 0.03f32 * (b - 18 as i32) as f32) * frame_tonality
         {
             max_frame_tonality
         } else {
-            (1.0f32 + 0.03f32 * (b - 18 as libc::c_int) as libc::c_float) * frame_tonality
+            (1.0f32 + 0.03f32 * (b - 18 as i32) as f32) * frame_tonality
         };
-        slope += band_tonality[b as usize] * (b - 8 as libc::c_int) as libc::c_float;
+        slope += band_tonality[b as usize] * (b - 8 as i32) as f32;
         /*printf("%f %f ", band_tonality[b], stationarity);*/
         (*tonal).prev_band_tonality[b as usize] = band_tonality[b as usize];
         b += 1
     }
-    leakage_from[0 as libc::c_int as usize] = band_log2[0 as libc::c_int as usize];
-    leakage_to[0 as libc::c_int as usize] = band_log2[0 as libc::c_int as usize] - 2.5f32;
-    b = 1 as libc::c_int;
-    while b < 18 as libc::c_int + 1 as libc::c_int {
-        let mut leak_slope: libc::c_float = 2.0f32
-            * (tbands[b as usize] - tbands[(b - 1 as libc::c_int) as usize]) as libc::c_float
-            / 4 as libc::c_int as libc::c_float;
+    leakage_from[0 as i32 as usize] = band_log2[0 as i32 as usize];
+    leakage_to[0 as i32 as usize] = band_log2[0 as i32 as usize] - 2.5f32;
+    b = 1 as i32;
+    while b < 18 as i32 + 1 as i32 {
+        let mut leak_slope: f32 = 2.0f32
+            * (tbands[b as usize] - tbands[(b - 1 as i32) as usize]) as f32
+            / 4 as i32 as f32;
         leakage_from[b as usize] =
-            if leakage_from[(b - 1 as libc::c_int) as usize] + leak_slope < band_log2[b as usize] {
-                (leakage_from[(b - 1 as libc::c_int) as usize]) + leak_slope
+            if leakage_from[(b - 1 as i32) as usize] + leak_slope < band_log2[b as usize] {
+                (leakage_from[(b - 1 as i32) as usize]) + leak_slope
             } else {
                 band_log2[b as usize]
             };
-        leakage_to[b as usize] = if leakage_to[(b - 1 as libc::c_int) as usize] - leak_slope
+        leakage_to[b as usize] = if leakage_to[(b - 1 as i32) as usize] - leak_slope
             > band_log2[b as usize] - 2.5f32
         {
-            (leakage_to[(b - 1 as libc::c_int) as usize]) - leak_slope
+            (leakage_to[(b - 1 as i32) as usize]) - leak_slope
         } else {
             (band_log2[b as usize]) - 2.5f32
         };
         b += 1
     }
-    b = 18 as libc::c_int - 2 as libc::c_int;
-    while b >= 0 as libc::c_int {
-        let mut leak_slope_0: libc::c_float = 2.0f32
-            * (tbands[(b + 1 as libc::c_int) as usize] - tbands[b as usize]) as libc::c_float
-            / 4 as libc::c_int as libc::c_float;
-        leakage_from[b as usize] = if leakage_from[(b + 1 as libc::c_int) as usize] + leak_slope_0
+    b = 18 as i32 - 2 as i32;
+    while b >= 0 as i32 {
+        let mut leak_slope_0: f32 = 2.0f32
+            * (tbands[(b + 1 as i32) as usize] - tbands[b as usize]) as f32
+            / 4 as i32 as f32;
+        leakage_from[b as usize] = if leakage_from[(b + 1 as i32) as usize] + leak_slope_0
             < leakage_from[b as usize]
         {
-            (leakage_from[(b + 1 as libc::c_int) as usize]) + leak_slope_0
+            (leakage_from[(b + 1 as i32) as usize]) + leak_slope_0
         } else {
             leakage_from[b as usize]
         };
-        leakage_to[b as usize] = if leakage_to[(b + 1 as libc::c_int) as usize] - leak_slope_0
+        leakage_to[b as usize] = if leakage_to[(b + 1 as i32) as usize] - leak_slope_0
             > leakage_to[b as usize]
         {
-            (leakage_to[(b + 1 as libc::c_int) as usize]) - leak_slope_0
+            (leakage_to[(b + 1 as i32) as usize]) - leak_slope_0
         } else {
             leakage_to[b as usize]
         };
         b -= 1
     }
-    b = 0 as libc::c_int;
-    while b < 18 as libc::c_int + 1 as libc::c_int {
+    b = 0 as i32;
+    while b < 18 as i32 + 1 as i32 {
         /* leak_boost[] is made up of two terms. The first, based on leakage_to[],
         represents the boost needed to overcome the amount of analysis leakage
         cause in a weaker band b by louder neighbouring bands.
         The second, based on leakage_from[], applies to a loud band b for
         which the quantization noise causes synthesis leakage to the weaker
         neighbouring bands. */
-        let mut boost: libc::c_float = (if 0 as libc::c_int as libc::c_float
+        let mut boost: f32 = (if 0 as i32 as f32
             > leakage_to[b as usize] - band_log2[b as usize]
         {
-            0 as libc::c_int as libc::c_float
+            0 as i32 as f32
         } else {
             (leakage_to[b as usize]) - band_log2[b as usize]
-        }) + (if 0 as libc::c_int as libc::c_float
+        }) + (if 0 as i32 as f32
             > band_log2[b as usize] - (leakage_from[b as usize] + 2.5f32)
         {
-            0 as libc::c_int as libc::c_float
+            0 as i32 as f32
         } else {
             (band_log2[b as usize]) - (leakage_from[b as usize] + 2.5f32)
         });
-        (*info).leak_boost[b as usize] = if (255 as libc::c_int)
-            < crate::stdlib::floor(0.5f64 + (64.0f32 * boost) as libc::c_double) as libc::c_int
+        (*info).leak_boost[b as usize] = if (255 as i32)
+            < crate::stdlib::floor(0.5f64 + (64.0f32 * boost) as f64) as i32
         {
-            255 as libc::c_int
+            255 as i32
         } else {
-            crate::stdlib::floor(0.5f64 + (64.0f32 * boost) as libc::c_double) as libc::c_int
-        } as libc::c_uchar;
+            crate::stdlib::floor(0.5f64 + (64.0f32 * boost) as f64) as i32
+        } as u8;
         b += 1
     }
-    while b < 19 as libc::c_int {
-        (*info).leak_boost[b as usize] = 0 as libc::c_int as libc::c_uchar;
+    while b < 19 as i32 {
+        (*info).leak_boost[b as usize] = 0 as i32 as u8;
         b += 1
     }
-    i = 0 as libc::c_int;
-    while i < 8 as libc::c_int {
-        let mut j: libc::c_int = 0;
-        let mut mindist: libc::c_float = 1e15f32;
-        j = 0 as libc::c_int;
-        while j < 8 as libc::c_int {
-            let mut k: libc::c_int = 0;
-            let mut dist: libc::c_float = 0 as libc::c_int as libc::c_float;
-            k = 0 as libc::c_int;
-            while k < 18 as libc::c_int {
-                let mut tmp: libc::c_float = 0.;
+    i = 0 as i32;
+    while i < 8 as i32 {
+        let mut j: i32 = 0;
+        let mut mindist: f32 = 1e15f32;
+        j = 0 as i32;
+        while j < 8 as i32 {
+            let mut k: i32 = 0;
+            let mut dist: f32 = 0 as i32 as f32;
+            k = 0 as i32;
+            while k < 18 as i32 {
+                let mut tmp: f32 = 0.;
                 tmp = (*tonal).logE[i as usize][k as usize] - (*tonal).logE[j as usize][k as usize];
                 dist += tmp * tmp;
                 k += 1
@@ -1487,31 +1487,31 @@ unsafe extern "C" fn tonality_analysis(
         i += 1
     }
     spec_variability = crate::stdlib::sqrt(
-        (spec_variability / 8 as libc::c_int as libc::c_float / 18 as libc::c_int as libc::c_float)
-            as libc::c_double,
-    ) as libc::c_float;
-    bandwidth_mask = 0 as libc::c_int as libc::c_float;
-    bandwidth = 0 as libc::c_int;
-    maxE = 0 as libc::c_int as libc::c_float;
+        (spec_variability / 8 as i32 as f32 / 18 as i32 as f32)
+            as f64,
+    ) as f32;
+    bandwidth_mask = 0 as i32 as f32;
+    bandwidth = 0 as i32;
+    maxE = 0 as i32 as f32;
     noise_floor = 5.7e-4f32
-        / ((1 as libc::c_int)
-            << (if 0 as libc::c_int > lsb_depth - 8 as libc::c_int {
-                0 as libc::c_int
+        / ((1 as i32)
+            << (if 0 as i32 > lsb_depth - 8 as i32 {
+                0 as i32
             } else {
-                (lsb_depth) - 8 as libc::c_int
-            })) as libc::c_float;
+                (lsb_depth) - 8 as i32
+            })) as f32;
     noise_floor *= noise_floor;
-    b = 0 as libc::c_int;
-    while b < 18 as libc::c_int {
-        let mut E_1: libc::c_float = 0 as libc::c_int as libc::c_float;
-        let mut band_start: libc::c_int = 0;
-        let mut band_end: libc::c_int = 0;
+    b = 0 as i32;
+    while b < 18 as i32 {
+        let mut E_1: f32 = 0 as i32 as f32;
+        let mut band_start: i32 = 0;
+        let mut band_end: i32 = 0;
         /* Keep a margin of 300 Hz for aliasing */
         band_start = tbands[b as usize];
-        band_end = tbands[(b + 1 as libc::c_int) as usize];
+        band_end = tbands[(b + 1 as i32) as usize];
         i = band_start;
         while i < band_end {
-            let mut binE_1: libc::c_float = (*out.offset(i as isize)).r
+            let mut binE_1: f32 = (*out.offset(i as isize)).r
                 * (*out.offset(i as isize)).r
                 + (*out.offset((N - i) as isize)).r * (*out.offset((N - i) as isize)).r
                 + (*out.offset(i as isize)).i * (*out.offset(i as isize)).i
@@ -1522,8 +1522,8 @@ unsafe extern "C" fn tonality_analysis(
         E_1 = E_1;
         maxE = if maxE > E_1 { maxE } else { E_1 };
         (*tonal).meanE[b as usize] =
-            if (1 as libc::c_int as libc::c_float - alphaE2) * (*tonal).meanE[b as usize] > E_1 {
-                (1 as libc::c_int as libc::c_float - alphaE2) * (*tonal).meanE[b as usize]
+            if (1 as i32 as f32 - alphaE2) * (*tonal).meanE[b as usize] > E_1 {
+                (1 as i32 as f32 - alphaE2) * (*tonal).meanE[b as usize]
             } else {
                 E_1
             };
@@ -1545,29 +1545,29 @@ unsafe extern "C" fn tonality_analysis(
            3) above the PCM quantization noise floor
            We use b+1 because the first CELT band isn't included in tbands[]
         */
-        if E_1 as libc::c_double > 0.1f64 * bandwidth_mask as libc::c_double
+        if E_1 as f64 > 0.1f64 * bandwidth_mask as f64
             && E_1 * 1e9f32 > maxE
-            && E_1 > noise_floor * (band_end - band_start) as libc::c_float
+            && E_1 > noise_floor * (band_end - band_start) as f32
         {
-            bandwidth = b + 1 as libc::c_int
+            bandwidth = b + 1 as i32
         }
         b += 1
     }
     /* Special case for the last two bands, for which we don't have spectrum but only
     the energy above 12 kHz. */
-    if (*tonal).Fs == 48000 as libc::c_int {
-        let mut ratio: libc::c_float = 0.;
-        let mut E_2: libc::c_float =
-            hp_ener * (1.0f32 / (240 as libc::c_int * 240 as libc::c_int) as libc::c_float);
-        ratio = if (*tonal).prev_bandwidth == 20 as libc::c_int {
+    if (*tonal).Fs == 48000 as i32 {
+        let mut ratio: f32 = 0.;
+        let mut E_2: f32 =
+            hp_ener * (1.0f32 / (240 as i32 * 240 as i32) as f32);
+        ratio = if (*tonal).prev_bandwidth == 20 as i32 {
             0.03f32
         } else {
             0.07f32
         };
         maxE = if maxE > E_2 { maxE } else { E_2 };
         (*tonal).meanE[b as usize] =
-            if (1 as libc::c_int as libc::c_float - alphaE2) * (*tonal).meanE[b as usize] > E_2 {
-                (1 as libc::c_int as libc::c_float - alphaE2) * (*tonal).meanE[b as usize]
+            if (1 as i32 as f32 - alphaE2) * (*tonal).meanE[b as usize] > E_2 {
+                (1 as i32 as f32 - alphaE2) * (*tonal).meanE[b as usize]
             } else {
                 E_2
             };
@@ -1584,46 +1584,46 @@ unsafe extern "C" fn tonality_analysis(
         };
         if E_2 > ratio * bandwidth_mask
             && E_2 * 1e9f32 > maxE
-            && E_2 > noise_floor * 160 as libc::c_int as libc::c_float
+            && E_2 > noise_floor * 160 as i32 as f32
         {
-            bandwidth = 20 as libc::c_int
+            bandwidth = 20 as i32
         }
         /* This detector is unreliable, so if the bandwidth is close to SWB, assume it's FB. */
-        if bandwidth >= 17 as libc::c_int {
-            bandwidth = 20 as libc::c_int
+        if bandwidth >= 17 as i32 {
+            bandwidth = 20 as i32
         }
     }
-    if (*tonal).count <= 2 as libc::c_int {
-        bandwidth = 20 as libc::c_int
+    if (*tonal).count <= 2 as i32 {
+        bandwidth = 20 as i32
     }
-    frame_loudness = 20 as libc::c_int as libc::c_float
-        * crate::stdlib::log10(frame_loudness as libc::c_double) as libc::c_float;
+    frame_loudness = 20 as i32 as f32
+        * crate::stdlib::log10(frame_loudness as f64) as f32;
     (*tonal).Etracker = if (*tonal).Etracker - 0.003f32 > frame_loudness {
         ((*tonal).Etracker) - 0.003f32
     } else {
         frame_loudness
     };
-    (*tonal).lowECount *= 1 as libc::c_int as libc::c_float - alphaE;
-    if frame_loudness < (*tonal).Etracker - 30 as libc::c_int as libc::c_float {
+    (*tonal).lowECount *= 1 as i32 as f32 - alphaE;
+    if frame_loudness < (*tonal).Etracker - 30 as i32 as f32 {
         (*tonal).lowECount += alphaE
     }
-    i = 0 as libc::c_int;
-    while i < 8 as libc::c_int {
-        let mut sum: libc::c_float = 0 as libc::c_int as libc::c_float;
-        b = 0 as libc::c_int;
-        while b < 16 as libc::c_int {
-            sum += dct_table[(i * 16 as libc::c_int + b) as usize] * logE[b as usize];
+    i = 0 as i32;
+    while i < 8 as i32 {
+        let mut sum: f32 = 0 as i32 as f32;
+        b = 0 as i32;
+        while b < 16 as i32 {
+            sum += dct_table[(i * 16 as i32 + b) as usize] * logE[b as usize];
             b += 1
         }
         BFCC[i as usize] = sum;
         i += 1
     }
-    i = 0 as libc::c_int;
-    while i < 8 as libc::c_int {
-        let mut sum_0: libc::c_float = 0 as libc::c_int as libc::c_float;
-        b = 0 as libc::c_int;
-        while b < 16 as libc::c_int {
-            sum_0 += dct_table[(i * 16 as libc::c_int + b) as usize]
+    i = 0 as i32;
+    while i < 8 as i32 {
+        let mut sum_0: f32 = 0 as i32 as f32;
+        b = 0 as i32;
+        while b < 16 as i32 {
+            sum_0 += dct_table[(i * 16 as i32 + b) as usize]
                 * 0.5f32
                 * ((*tonal).highE[b as usize] + (*tonal).lowE[b as usize]);
             b += 1
@@ -1631,143 +1631,143 @@ unsafe extern "C" fn tonality_analysis(
         midE[i as usize] = sum_0;
         i += 1
     }
-    frame_stationarity /= 18 as libc::c_int as libc::c_float;
-    relativeE /= 18 as libc::c_int as libc::c_float;
-    if (*tonal).count < 10 as libc::c_int {
+    frame_stationarity /= 18 as i32 as f32;
+    relativeE /= 18 as i32 as f32;
+    if (*tonal).count < 10 as i32 {
         relativeE = 0.5f32
     }
-    frame_noisiness /= 18 as libc::c_int as libc::c_float;
+    frame_noisiness /= 18 as i32 as f32;
     (*info).activity =
-        frame_noisiness + (1 as libc::c_int as libc::c_float - frame_noisiness) * relativeE;
-    frame_tonality = max_frame_tonality / (18 as libc::c_int - 9 as libc::c_int) as libc::c_float;
+        frame_noisiness + (1 as i32 as f32 - frame_noisiness) * relativeE;
+    frame_tonality = max_frame_tonality / (18 as i32 - 9 as i32) as f32;
     frame_tonality = if frame_tonality > (*tonal).prev_tonality * 0.8f32 {
         frame_tonality
     } else {
         ((*tonal).prev_tonality) * 0.8f32
     };
     (*tonal).prev_tonality = frame_tonality;
-    slope /= (8 as libc::c_int * 8 as libc::c_int) as libc::c_float;
+    slope /= (8 as i32 * 8 as i32) as f32;
     (*info).tonality_slope = slope;
-    (*tonal).E_count = ((*tonal).E_count + 1 as libc::c_int) % 8 as libc::c_int;
-    (*tonal).count = if ((*tonal).count + 1 as libc::c_int) < 10000 as libc::c_int {
-        ((*tonal).count) + 1 as libc::c_int
+    (*tonal).E_count = ((*tonal).E_count + 1 as i32) % 8 as i32;
+    (*tonal).count = if ((*tonal).count + 1 as i32) < 10000 as i32 {
+        ((*tonal).count) + 1 as i32
     } else {
-        10000 as libc::c_int
+        10000 as i32
     };
     (*info).tonality = frame_tonality;
-    i = 0 as libc::c_int;
-    while i < 4 as libc::c_int {
+    i = 0 as i32;
+    while i < 4 as i32 {
         features[i as usize] = -0.12299f32
-            * (BFCC[i as usize] + (*tonal).mem[(i + 24 as libc::c_int) as usize])
+            * (BFCC[i as usize] + (*tonal).mem[(i + 24 as i32) as usize])
             + 0.49195f32
-                * ((*tonal).mem[i as usize] + (*tonal).mem[(i + 16 as libc::c_int) as usize])
-            + 0.69693f32 * (*tonal).mem[(i + 8 as libc::c_int) as usize]
+                * ((*tonal).mem[i as usize] + (*tonal).mem[(i + 16 as i32) as usize])
+            + 0.69693f32 * (*tonal).mem[(i + 8 as i32) as usize]
             - 1.4349f32 * (*tonal).cmean[i as usize];
         i += 1
     }
-    i = 0 as libc::c_int;
-    while i < 4 as libc::c_int {
-        (*tonal).cmean[i as usize] = (1 as libc::c_int as libc::c_float - alpha)
+    i = 0 as i32;
+    while i < 4 as i32 {
+        (*tonal).cmean[i as usize] = (1 as i32 as f32 - alpha)
             * (*tonal).cmean[i as usize]
             + alpha * BFCC[i as usize];
         i += 1
     }
-    i = 0 as libc::c_int;
-    while i < 4 as libc::c_int {
-        features[(4 as libc::c_int + i) as usize] = 0.63246f32
-            * (BFCC[i as usize] - (*tonal).mem[(i + 24 as libc::c_int) as usize])
+    i = 0 as i32;
+    while i < 4 as i32 {
+        features[(4 as i32 + i) as usize] = 0.63246f32
+            * (BFCC[i as usize] - (*tonal).mem[(i + 24 as i32) as usize])
             + 0.31623f32
-                * ((*tonal).mem[i as usize] - (*tonal).mem[(i + 16 as libc::c_int) as usize]);
+                * ((*tonal).mem[i as usize] - (*tonal).mem[(i + 16 as i32) as usize]);
         i += 1
     }
-    i = 0 as libc::c_int;
-    while i < 3 as libc::c_int {
-        features[(8 as libc::c_int + i) as usize] = 0.53452f32
-            * (BFCC[i as usize] + (*tonal).mem[(i + 24 as libc::c_int) as usize])
+    i = 0 as i32;
+    while i < 3 as i32 {
+        features[(8 as i32 + i) as usize] = 0.53452f32
+            * (BFCC[i as usize] + (*tonal).mem[(i + 24 as i32) as usize])
             - 0.26726f32
-                * ((*tonal).mem[i as usize] + (*tonal).mem[(i + 16 as libc::c_int) as usize])
-            - 0.53452f32 * (*tonal).mem[(i + 8 as libc::c_int) as usize];
+                * ((*tonal).mem[i as usize] + (*tonal).mem[(i + 16 as i32) as usize])
+            - 0.53452f32 * (*tonal).mem[(i + 8 as i32) as usize];
         i += 1
     }
-    if (*tonal).count > 5 as libc::c_int {
-        i = 0 as libc::c_int;
-        while i < 9 as libc::c_int {
-            (*tonal).std[i as usize] = (1 as libc::c_int as libc::c_float - alpha)
+    if (*tonal).count > 5 as i32 {
+        i = 0 as i32;
+        while i < 9 as i32 {
+            (*tonal).std[i as usize] = (1 as i32 as f32 - alpha)
                 * (*tonal).std[i as usize]
                 + alpha * features[i as usize] * features[i as usize];
             i += 1
         }
     }
-    i = 0 as libc::c_int;
-    while i < 4 as libc::c_int {
+    i = 0 as i32;
+    while i < 4 as i32 {
         features[i as usize] = BFCC[i as usize] - midE[i as usize];
         i += 1
     }
-    i = 0 as libc::c_int;
-    while i < 8 as libc::c_int {
-        (*tonal).mem[(i + 24 as libc::c_int) as usize] =
-            (*tonal).mem[(i + 16 as libc::c_int) as usize];
-        (*tonal).mem[(i + 16 as libc::c_int) as usize] =
-            (*tonal).mem[(i + 8 as libc::c_int) as usize];
-        (*tonal).mem[(i + 8 as libc::c_int) as usize] = (*tonal).mem[i as usize];
+    i = 0 as i32;
+    while i < 8 as i32 {
+        (*tonal).mem[(i + 24 as i32) as usize] =
+            (*tonal).mem[(i + 16 as i32) as usize];
+        (*tonal).mem[(i + 16 as i32) as usize] =
+            (*tonal).mem[(i + 8 as i32) as usize];
+        (*tonal).mem[(i + 8 as i32) as usize] = (*tonal).mem[i as usize];
         (*tonal).mem[i as usize] = BFCC[i as usize];
         i += 1
     }
-    i = 0 as libc::c_int;
-    while i < 9 as libc::c_int {
-        features[(11 as libc::c_int + i) as usize] =
-            crate::stdlib::sqrt((*tonal).std[i as usize] as libc::c_double) as libc::c_float
+    i = 0 as i32;
+    while i < 9 as i32 {
+        features[(11 as i32 + i) as usize] =
+            crate::stdlib::sqrt((*tonal).std[i as usize] as f64) as f32
                 - std_feature_bias[i as usize];
         i += 1
     }
-    features[18 as libc::c_int as usize] = spec_variability - 0.78f32;
-    features[20 as libc::c_int as usize] = (*info).tonality - 0.154723f32;
-    features[21 as libc::c_int as usize] = (*info).activity - 0.724643f32;
-    features[22 as libc::c_int as usize] = frame_stationarity - 0.743717f32;
-    features[23 as libc::c_int as usize] = (*info).tonality_slope + 0.069216f32;
-    features[24 as libc::c_int as usize] = (*tonal).lowECount - 0.067930f32;
+    features[18 as i32 as usize] = spec_variability - 0.78f32;
+    features[20 as i32 as usize] = (*info).tonality - 0.154723f32;
+    features[21 as i32 as usize] = (*info).activity - 0.724643f32;
+    features[22 as i32 as usize] = frame_stationarity - 0.743717f32;
+    features[23 as i32 as usize] = (*info).tonality_slope + 0.069216f32;
+    features[24 as i32 as usize] = (*tonal).lowECount - 0.067930f32;
     crate::src::opus_1_2_1::src::mlp::mlp_process(
         &crate::src::opus_1_2_1::src::mlp_data::net as *const _
             as *const crate::src::opus_1_2_1::src::mlp::MLP,
         features.as_mut_ptr(),
         frame_probs.as_mut_ptr(),
     );
-    frame_probs[0 as libc::c_int as usize] =
-        0.5f32 * (frame_probs[0 as libc::c_int as usize] + 1 as libc::c_int as libc::c_float);
+    frame_probs[0 as i32 as usize] =
+        0.5f32 * (frame_probs[0 as i32 as usize] + 1 as i32 as f32);
     /* Curve fitting between the MLP probability and the actual probability */
     /*frame_probs[0] = .01f + 1.21f*frame_probs[0]*frame_probs[0] - .23f*(float)pow(frame_probs[0], 10);*/
     /* Probability of active audio (as opposed to silence) */
-    frame_probs[1 as libc::c_int as usize] =
-        0.5f32 * frame_probs[1 as libc::c_int as usize] + 0.5f32;
-    frame_probs[1 as libc::c_int as usize] *= frame_probs[1 as libc::c_int as usize];
+    frame_probs[1 as i32 as usize] =
+        0.5f32 * frame_probs[1 as i32 as usize] + 0.5f32;
+    frame_probs[1 as i32 as usize] *= frame_probs[1 as i32 as usize];
     /* Probability of speech or music vs noise */
-    (*info).activity_probability = frame_probs[1 as libc::c_int as usize];
+    (*info).activity_probability = frame_probs[1 as i32 as usize];
     /*printf("%f %f\n", frame_probs[0], frame_probs[1]);*/
     /* Probability of state transition */
-    let mut tau: libc::c_float = 0.;
-    let mut beta: libc::c_float = 0.;
-    let mut p0: libc::c_float = 0.;
-    let mut p1: libc::c_float = 0.;
-    let mut s0: libc::c_float = 0.;
-    let mut m0: libc::c_float = 0.;
-    let mut psum: libc::c_float = 0.;
-    let mut speech0: libc::c_float = 0.;
-    let mut music0: libc::c_float = 0.;
-    let mut p: libc::c_float = 0.;
-    let mut q: libc::c_float = 0.;
+    let mut tau: f32 = 0.;
+    let mut beta: f32 = 0.;
+    let mut p0: f32 = 0.;
+    let mut p1: f32 = 0.;
+    let mut s0: f32 = 0.;
+    let mut m0: f32 = 0.;
+    let mut psum: f32 = 0.;
+    let mut speech0: f32 = 0.;
+    let mut music0: f32 = 0.;
+    let mut p: f32 = 0.;
+    let mut q: f32 = 0.;
     tau = 0.001f32 * (*tonal).music_prob
-        + 0.01f32 * (1 as libc::c_int as libc::c_float - (*tonal).music_prob);
+        + 0.01f32 * (1 as i32 as f32 - (*tonal).music_prob);
     p = if 0.05f32
-        > (if 0.95f32 < frame_probs[1 as libc::c_int as usize] {
+        > (if 0.95f32 < frame_probs[1 as i32 as usize] {
             0.95f32
         } else {
-            frame_probs[1 as libc::c_int as usize]
+            frame_probs[1 as i32 as usize]
         }) {
         0.05f32
-    } else if 0.95f32 < frame_probs[1 as libc::c_int as usize] {
+    } else if 0.95f32 < frame_probs[1 as i32 as usize] {
         0.95f32
     } else {
-        frame_probs[1 as libc::c_int as usize]
+        frame_probs[1 as i32 as usize]
     };
     q = if 0.05f32
         > (if 0.95f32 < (*tonal).vad_prob {
@@ -1782,40 +1782,40 @@ unsafe extern "C" fn tonality_analysis(
         (*tonal).vad_prob
     };
     beta = 0.02f32
-        + 0.05f32 * crate::stdlib::fabs((p - q) as libc::c_double) as libc::c_float
-            / (p * (1 as libc::c_int as libc::c_float - q)
-                + q * (1 as libc::c_int as libc::c_float - p));
-    p0 = (1 as libc::c_int as libc::c_float - (*tonal).vad_prob)
-        * (1 as libc::c_int as libc::c_float - tau)
+        + 0.05f32 * crate::stdlib::fabs((p - q) as f64) as f32
+            / (p * (1 as i32 as f32 - q)
+                + q * (1 as i32 as f32 - p));
+    p0 = (1 as i32 as f32 - (*tonal).vad_prob)
+        * (1 as i32 as f32 - tau)
         + (*tonal).vad_prob * tau;
-    p1 = (*tonal).vad_prob * (1 as libc::c_int as libc::c_float - tau)
-        + (1 as libc::c_int as libc::c_float - (*tonal).vad_prob) * tau;
+    p1 = (*tonal).vad_prob * (1 as i32 as f32 - tau)
+        + (1 as i32 as f32 - (*tonal).vad_prob) * tau;
     p0 *= crate::stdlib::pow(
-        (1 as libc::c_int as libc::c_float - frame_probs[1 as libc::c_int as usize])
-            as libc::c_double,
-        beta as libc::c_double,
-    ) as libc::c_float;
+        (1 as i32 as f32 - frame_probs[1 as i32 as usize])
+            as f64,
+        beta as f64,
+    ) as f32;
     p1 *= crate::stdlib::pow(
-        frame_probs[1 as libc::c_int as usize] as libc::c_double,
-        beta as libc::c_double,
-    ) as libc::c_float;
+        frame_probs[1 as i32 as usize] as f64,
+        beta as f64,
+    ) as f32;
     (*tonal).vad_prob = p1 / (p0 + p1);
     (*info).vad_prob = (*tonal).vad_prob;
-    frame_probs[0 as libc::c_int as usize] = (*tonal).vad_prob
-        * frame_probs[0 as libc::c_int as usize]
-        + (1 as libc::c_int as libc::c_float - (*tonal).vad_prob) * 0.5f32;
+    frame_probs[0 as i32 as usize] = (*tonal).vad_prob
+        * frame_probs[0 as i32 as usize]
+        + (1 as i32 as f32 - (*tonal).vad_prob) * 0.5f32;
     tau = 0.0001f32;
     p = if 0.05f32
-        > (if 0.95f32 < frame_probs[0 as libc::c_int as usize] {
+        > (if 0.95f32 < frame_probs[0 as i32 as usize] {
             0.95f32
         } else {
-            frame_probs[0 as libc::c_int as usize]
+            frame_probs[0 as i32 as usize]
         }) {
         0.05f32
-    } else if 0.95f32 < frame_probs[0 as libc::c_int as usize] {
+    } else if 0.95f32 < frame_probs[0 as i32 as usize] {
         0.95f32
     } else {
-        frame_probs[0 as libc::c_int as usize]
+        frame_probs[0 as i32 as usize]
     };
     q = if 0.05f32
         > (if 0.95f32 < (*tonal).music_prob {
@@ -1830,113 +1830,113 @@ unsafe extern "C" fn tonality_analysis(
         (*tonal).music_prob
     };
     beta = 0.02f32
-        + 0.05f32 * crate::stdlib::fabs((p - q) as libc::c_double) as libc::c_float
-            / (p * (1 as libc::c_int as libc::c_float - q)
-                + q * (1 as libc::c_int as libc::c_float - p));
-    p0 = (1 as libc::c_int as libc::c_float - (*tonal).music_prob)
-        * (1 as libc::c_int as libc::c_float - tau)
+        + 0.05f32 * crate::stdlib::fabs((p - q) as f64) as f32
+            / (p * (1 as i32 as f32 - q)
+                + q * (1 as i32 as f32 - p));
+    p0 = (1 as i32 as f32 - (*tonal).music_prob)
+        * (1 as i32 as f32 - tau)
         + (*tonal).music_prob * tau;
-    p1 = (*tonal).music_prob * (1 as libc::c_int as libc::c_float - tau)
-        + (1 as libc::c_int as libc::c_float - (*tonal).music_prob) * tau;
+    p1 = (*tonal).music_prob * (1 as i32 as f32 - tau)
+        + (1 as i32 as f32 - (*tonal).music_prob) * tau;
     p0 *= crate::stdlib::pow(
-        (1 as libc::c_int as libc::c_float - frame_probs[0 as libc::c_int as usize])
-            as libc::c_double,
-        beta as libc::c_double,
-    ) as libc::c_float;
+        (1 as i32 as f32 - frame_probs[0 as i32 as usize])
+            as f64,
+        beta as f64,
+    ) as f32;
     p1 *= crate::stdlib::pow(
-        frame_probs[0 as libc::c_int as usize] as libc::c_double,
-        beta as libc::c_double,
-    ) as libc::c_float;
+        frame_probs[0 as i32 as usize] as f64,
+        beta as f64,
+    ) as f32;
     (*tonal).music_prob = p1 / (p0 + p1);
     (*info).music_prob = (*tonal).music_prob;
     psum = 1e-20f32;
     speech0 = crate::stdlib::pow(
-        (1 as libc::c_int as libc::c_float - frame_probs[0 as libc::c_int as usize])
-            as libc::c_double,
-        beta as libc::c_double,
-    ) as libc::c_float;
+        (1 as i32 as f32 - frame_probs[0 as i32 as usize])
+            as f64,
+        beta as f64,
+    ) as f32;
     music0 = crate::stdlib::pow(
-        frame_probs[0 as libc::c_int as usize] as libc::c_double,
-        beta as libc::c_double,
-    ) as libc::c_float;
-    if (*tonal).count == 1 as libc::c_int {
-        if (*tonal).application == 2048 as libc::c_int {
-            (*tonal).pmusic[0 as libc::c_int as usize] = 0.1f32
+        frame_probs[0 as i32 as usize] as f64,
+        beta as f64,
+    ) as f32;
+    if (*tonal).count == 1 as i32 {
+        if (*tonal).application == 2048 as i32 {
+            (*tonal).pmusic[0 as i32 as usize] = 0.1f32
         } else {
-            (*tonal).pmusic[0 as libc::c_int as usize] = 0.625f32
+            (*tonal).pmusic[0 as i32 as usize] = 0.625f32
         }
-        (*tonal).pspeech[0 as libc::c_int as usize] =
-            1 as libc::c_int as libc::c_float - (*tonal).pmusic[0 as libc::c_int as usize]
+        (*tonal).pspeech[0 as i32 as usize] =
+            1 as i32 as f32 - (*tonal).pmusic[0 as i32 as usize]
     }
-    s0 = (*tonal).pspeech[0 as libc::c_int as usize] + (*tonal).pspeech[1 as libc::c_int as usize];
-    m0 = (*tonal).pmusic[0 as libc::c_int as usize] + (*tonal).pmusic[1 as libc::c_int as usize];
-    (*tonal).pspeech[0 as libc::c_int as usize] =
-        s0 * (1 as libc::c_int as libc::c_float - tau) * speech0;
-    (*tonal).pmusic[0 as libc::c_int as usize] =
-        m0 * (1 as libc::c_int as libc::c_float - tau) * music0;
-    i = 1 as libc::c_int;
-    while i < 100 as libc::c_int - 1 as libc::c_int {
-        (*tonal).pspeech[i as usize] = (*tonal).pspeech[(i + 1 as libc::c_int) as usize] * speech0;
-        (*tonal).pmusic[i as usize] = (*tonal).pmusic[(i + 1 as libc::c_int) as usize] * music0;
+    s0 = (*tonal).pspeech[0 as i32 as usize] + (*tonal).pspeech[1 as i32 as usize];
+    m0 = (*tonal).pmusic[0 as i32 as usize] + (*tonal).pmusic[1 as i32 as usize];
+    (*tonal).pspeech[0 as i32 as usize] =
+        s0 * (1 as i32 as f32 - tau) * speech0;
+    (*tonal).pmusic[0 as i32 as usize] =
+        m0 * (1 as i32 as f32 - tau) * music0;
+    i = 1 as i32;
+    while i < 100 as i32 - 1 as i32 {
+        (*tonal).pspeech[i as usize] = (*tonal).pspeech[(i + 1 as i32) as usize] * speech0;
+        (*tonal).pmusic[i as usize] = (*tonal).pmusic[(i + 1 as i32) as usize] * music0;
         i += 1
     }
-    (*tonal).pspeech[(100 as libc::c_int - 1 as libc::c_int) as usize] = m0 * tau * speech0;
-    (*tonal).pmusic[(100 as libc::c_int - 1 as libc::c_int) as usize] = s0 * tau * music0;
-    i = 0 as libc::c_int;
-    while i < 100 as libc::c_int {
+    (*tonal).pspeech[(100 as i32 - 1 as i32) as usize] = m0 * tau * speech0;
+    (*tonal).pmusic[(100 as i32 - 1 as i32) as usize] = s0 * tau * music0;
+    i = 0 as i32;
+    while i < 100 as i32 {
         psum += (*tonal).pspeech[i as usize] + (*tonal).pmusic[i as usize];
         i += 1
     }
     psum = 1.0f32 / psum;
-    i = 0 as libc::c_int;
-    while i < 100 as libc::c_int {
+    i = 0 as i32;
+    while i < 100 as i32 {
         (*tonal).pspeech[i as usize] *= psum;
         (*tonal).pmusic[i as usize] *= psum;
         i += 1
     }
-    psum = (*tonal).pmusic[0 as libc::c_int as usize];
-    i = 1 as libc::c_int;
-    while i < 100 as libc::c_int {
+    psum = (*tonal).pmusic[0 as i32 as usize];
+    i = 1 as i32;
+    while i < 100 as i32 {
         psum += (*tonal).pspeech[i as usize];
         i += 1
     }
-    if frame_probs[1 as libc::c_int as usize] as libc::c_double > 0.75f64 {
-        if (*tonal).music_prob as libc::c_double > 0.9f64 {
-            let mut adapt: libc::c_float = 0.;
+    if frame_probs[1 as i32 as usize] as f64 > 0.75f64 {
+        if (*tonal).music_prob as f64 > 0.9f64 {
+            let mut adapt: f32 = 0.;
             (*tonal).music_confidence_count += 1;
-            adapt = 1.0f32 / (*tonal).music_confidence_count as libc::c_float;
+            adapt = 1.0f32 / (*tonal).music_confidence_count as f32;
             (*tonal).music_confidence_count =
-                if (*tonal).music_confidence_count < 500 as libc::c_int {
+                if (*tonal).music_confidence_count < 500 as i32 {
                     (*tonal).music_confidence_count
                 } else {
-                    500 as libc::c_int
+                    500 as i32
                 };
             (*tonal).music_confidence += adapt
-                * (if -0.2f32 > frame_probs[0 as libc::c_int as usize] - (*tonal).music_confidence {
+                * (if -0.2f32 > frame_probs[0 as i32 as usize] - (*tonal).music_confidence {
                     -0.2f32
                 } else {
-                    (frame_probs[0 as libc::c_int as usize]) - (*tonal).music_confidence
+                    (frame_probs[0 as i32 as usize]) - (*tonal).music_confidence
                 })
         }
-        if ((*tonal).music_prob as libc::c_double) < 0.1f64 {
-            let mut adapt_0: libc::c_float = 0.;
+        if ((*tonal).music_prob as f64) < 0.1f64 {
+            let mut adapt_0: f32 = 0.;
             (*tonal).speech_confidence_count += 1;
-            adapt_0 = 1.0f32 / (*tonal).speech_confidence_count as libc::c_float;
+            adapt_0 = 1.0f32 / (*tonal).speech_confidence_count as f32;
             (*tonal).speech_confidence_count =
-                if (*tonal).speech_confidence_count < 500 as libc::c_int {
+                if (*tonal).speech_confidence_count < 500 as i32 {
                     (*tonal).speech_confidence_count
                 } else {
-                    500 as libc::c_int
+                    500 as i32
                 };
             (*tonal).speech_confidence += adapt_0
-                * (if 0.2f32 < frame_probs[0 as libc::c_int as usize] - (*tonal).speech_confidence {
+                * (if 0.2f32 < frame_probs[0 as i32 as usize] - (*tonal).speech_confidence {
                     0.2f32
                 } else {
-                    (frame_probs[0 as libc::c_int as usize]) - (*tonal).speech_confidence
+                    (frame_probs[0 as i32 as usize]) - (*tonal).speech_confidence
                 })
         }
     }
-    (*tonal).last_music = ((*tonal).music_prob > 0.5f32) as libc::c_int;
+    (*tonal).last_music = ((*tonal).music_prob > 0.5f32) as i32;
     (*info).bandwidth = bandwidth;
     (*tonal).prev_bandwidth = bandwidth;
     /* Represents independence of the MLP probabilities, where
@@ -1974,7 +1974,7 @@ unsafe extern "C" fn tonality_analysis(
     /* Estimate our confidence in the speech/music decisions */
     /*printf("%d %d\n", info->bandwidth, info->opus_bandwidth);*/
     (*info).noisiness = frame_noisiness;
-    (*info).valid = 1 as libc::c_int;
+    (*info).valid = 1 as i32;
 }
 #[no_mangle]
 
@@ -1982,37 +1982,37 @@ pub unsafe extern "C" fn run_analysis(
     mut analysis: *mut crate::src::opus_1_2_1::src::analysis::TonalityAnalysisState,
     mut celt_mode: *const crate::src::opus_1_2_1::celt::modes::OpusCustomMode,
     mut analysis_pcm: *const libc::c_void,
-    mut analysis_frame_size: libc::c_int,
-    mut frame_size: libc::c_int,
-    mut c1: libc::c_int,
-    mut c2: libc::c_int,
-    mut C: libc::c_int,
+    mut analysis_frame_size: i32,
+    mut frame_size: i32,
+    mut c1: i32,
+    mut c2: i32,
+    mut C: i32,
     mut Fs: crate::opus_types_h::opus_int32,
-    mut lsb_depth: libc::c_int,
+    mut lsb_depth: i32,
     mut downmix: crate::opus_private_h::downmix_func,
     mut analysis_info: *mut crate::celt_h::AnalysisInfo,
 ) {
-    let mut offset: libc::c_int = 0;
-    let mut pcm_len: libc::c_int = 0;
-    analysis_frame_size -= analysis_frame_size & 1 as libc::c_int;
+    let mut offset: i32 = 0;
+    let mut pcm_len: i32 = 0;
+    analysis_frame_size -= analysis_frame_size & 1 as i32;
     if !analysis_pcm.is_null() {
         /* Avoid overflow/wrap-around of the analysis buffer */
-        analysis_frame_size = if ((100 as libc::c_int - 5 as libc::c_int) * Fs / 50 as libc::c_int)
+        analysis_frame_size = if ((100 as i32 - 5 as i32) * Fs / 50 as i32)
             < analysis_frame_size
         {
-            ((100 as libc::c_int - 5 as libc::c_int) * Fs) / 50 as libc::c_int
+            ((100 as i32 - 5 as i32) * Fs) / 50 as i32
         } else {
             analysis_frame_size
         };
         pcm_len = analysis_frame_size - (*analysis).analysis_offset;
         offset = (*analysis).analysis_offset;
-        while pcm_len > 0 as libc::c_int {
+        while pcm_len > 0 as i32 {
             tonality_analysis(
                 analysis,
                 celt_mode,
                 analysis_pcm,
-                if (Fs / 50 as libc::c_int) < pcm_len {
-                    (Fs) / 50 as libc::c_int
+                if (Fs / 50 as i32) < pcm_len {
+                    (Fs) / 50 as i32
                 } else {
                     pcm_len
                 },
@@ -2023,13 +2023,13 @@ pub unsafe extern "C" fn run_analysis(
                 lsb_depth,
                 downmix,
             );
-            offset += Fs / 50 as libc::c_int;
-            pcm_len -= Fs / 50 as libc::c_int
+            offset += Fs / 50 as i32;
+            pcm_len -= Fs / 50 as i32
         }
         (*analysis).analysis_offset = analysis_frame_size;
         (*analysis).analysis_offset -= frame_size
     }
-    (*analysis_info).valid = 0 as libc::c_int;
+    (*analysis_info).valid = 0 as i32;
     tonality_get_info(analysis, analysis_info, frame_size);
 }
 /* DISABLE_FLOAT_API */

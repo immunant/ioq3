@@ -36,10 +36,10 @@ pub use crate::tr_public_h::refimport_t;
 #[derive(Copy, Clone)]
 pub union poor {
     pub fred: [crate::src::qcommon::q_shared::byte; 4],
-    pub ffred: libc::c_float,
+    pub ffred: f32,
 }
 
-static mut registeredFontCount: libc::c_int = 0 as libc::c_int;
+static mut registeredFontCount: i32 = 0 as i32;
 
 static mut registeredFont: [crate::src::qcommon::q_shared::fontInfo_t; 6] =
     [crate::src::qcommon::q_shared::fontInfo_t {
@@ -62,63 +62,63 @@ static mut registeredFont: [crate::src::qcommon::q_shared::fontInfo_t; 6] =
         name: [0; 64],
     }; 6];
 
-static mut fdOffset: libc::c_int = 0;
+static mut fdOffset: i32 = 0;
 
 static mut fdFile: *mut crate::src::qcommon::q_shared::byte =
     0 as *const crate::src::qcommon::q_shared::byte as *mut crate::src::qcommon::q_shared::byte;
 #[no_mangle]
 
-pub unsafe extern "C" fn readInt() -> libc::c_int {
-    let mut i: libc::c_int = (*fdFile.offset(fdOffset as isize) as libc::c_uint
-        | (*fdFile.offset((fdOffset + 1 as libc::c_int) as isize) as libc::c_uint)
-            << 8 as libc::c_int
-        | (*fdFile.offset((fdOffset + 2 as libc::c_int) as isize) as libc::c_uint)
-            << 16 as libc::c_int
-        | (*fdFile.offset((fdOffset + 3 as libc::c_int) as isize) as libc::c_uint)
-            << 24 as libc::c_int) as libc::c_int;
-    fdOffset += 4 as libc::c_int;
+pub unsafe extern "C" fn readInt() -> i32 {
+    let mut i: i32 = (*fdFile.offset(fdOffset as isize) as u32
+        | (*fdFile.offset((fdOffset + 1 as i32) as isize) as u32)
+            << 8 as i32
+        | (*fdFile.offset((fdOffset + 2 as i32) as isize) as u32)
+            << 16 as i32
+        | (*fdFile.offset((fdOffset + 3 as i32) as isize) as u32)
+            << 24 as i32) as i32;
+    fdOffset += 4 as i32;
     return i;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn readFloat() -> libc::c_float {
+pub unsafe extern "C" fn readFloat() -> f32 {
     let mut me: poor = poor { fred: [0; 4] };
-    me.fred[0 as libc::c_int as usize] = *fdFile.offset((fdOffset + 0 as libc::c_int) as isize);
-    me.fred[1 as libc::c_int as usize] = *fdFile.offset((fdOffset + 1 as libc::c_int) as isize);
-    me.fred[2 as libc::c_int as usize] = *fdFile.offset((fdOffset + 2 as libc::c_int) as isize);
-    me.fred[3 as libc::c_int as usize] = *fdFile.offset((fdOffset + 3 as libc::c_int) as isize);
-    fdOffset += 4 as libc::c_int;
+    me.fred[0 as i32 as usize] = *fdFile.offset((fdOffset + 0 as i32) as isize);
+    me.fred[1 as i32 as usize] = *fdFile.offset((fdOffset + 1 as i32) as isize);
+    me.fred[2 as i32 as usize] = *fdFile.offset((fdOffset + 2 as i32) as isize);
+    me.fred[3 as i32 as usize] = *fdFile.offset((fdOffset + 3 as i32) as isize);
+    fdOffset += 4 as i32;
     return me.ffred;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn RE_RegisterFont(
     mut fontName: *const libc::c_char,
-    mut pointSize: libc::c_int,
+    mut pointSize: i32,
     mut font: *mut crate::src::qcommon::q_shared::fontInfo_t,
 ) {
     let mut faceData: *mut libc::c_void = 0 as *mut libc::c_void;
-    let mut i: libc::c_int = 0;
-    let mut len: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut len: i32 = 0;
     let mut name: [libc::c_char; 1024] = [0; 1024];
     if fontName.is_null() {
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+            crate::src::qcommon::q_shared::PRINT_ALL as i32,
             b"RE_RegisterFont: called with empty name\n\x00" as *const u8 as *const libc::c_char,
         );
         return;
     }
-    if pointSize <= 0 as libc::c_int {
-        pointSize = 12 as libc::c_int
+    if pointSize <= 0 as i32 {
+        pointSize = 12 as i32
     }
     crate::src::renderergl1::tr_cmds::R_IssuePendingRenderCommands();
-    if registeredFontCount >= 6 as libc::c_int {
+    if registeredFontCount >= 6 as i32 {
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_WARNING as libc::c_int,
+            crate::src::qcommon::q_shared::PRINT_WARNING as i32,
             b"RE_RegisterFont: Too many fonts registered already.\n\x00" as *const u8
                 as *const libc::c_char,
         );
@@ -126,16 +126,16 @@ pub unsafe extern "C" fn RE_RegisterFont(
     }
     crate::src::qcommon::q_shared::Com_sprintf(
         name.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
         b"fonts/fontImage_%i.dat\x00" as *const u8 as *const libc::c_char,
         pointSize,
     );
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < registeredFontCount {
         if crate::src::qcommon::q_shared::Q_stricmp(
             name.as_mut_ptr(),
             registeredFont[i as usize].name.as_mut_ptr(),
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
             crate::stdlib::memcpy(
                 font as *mut libc::c_void,
@@ -152,17 +152,17 @@ pub unsafe extern "C" fn RE_RegisterFont(
         .FS_ReadFile
         .expect("non-null function pointer")(
         name.as_mut_ptr(), 0 as *mut *mut libc::c_void
-    ) as libc::c_int;
+    ) as i32;
     if len as libc::c_ulong
         == ::std::mem::size_of::<crate::src::qcommon::q_shared::fontInfo_t>() as libc::c_ulong
     {
         crate::src::renderergl1::tr_main::ri
             .FS_ReadFile
             .expect("non-null function pointer")(name.as_mut_ptr(), &mut faceData);
-        fdOffset = 0 as libc::c_int;
+        fdOffset = 0 as i32;
         fdFile = faceData as *mut crate::src::qcommon::q_shared::byte;
-        i = 0 as libc::c_int;
-        while i < 255 as libc::c_int - 0 as libc::c_int + 1 as libc::c_int {
+        i = 0 as i32;
+        while i < 255 as i32 - 0 as i32 + 1 as i32 {
             (*font).glyphs[i as usize].height = readInt();
             (*font).glyphs[i as usize].top = readInt();
             (*font).glyphs[i as usize].bottom = readInt();
@@ -179,11 +179,11 @@ pub unsafe extern "C" fn RE_RegisterFont(
                 (*font).glyphs[i as usize].shaderName.as_mut_ptr(),
                 &mut *fdFile.offset(fdOffset as isize) as *mut crate::src::qcommon::q_shared::byte
                     as *const libc::c_char,
-                ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as libc::c_int,
+                ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
             );
             fdOffset = (fdOffset as libc::c_ulong)
                 .wrapping_add(::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong)
-                as libc::c_int as libc::c_int;
+                as i32 as i32;
             i += 1
         }
         (*font).glyphScale = readFloat();
@@ -191,16 +191,16 @@ pub unsafe extern "C" fn RE_RegisterFont(
             (*font).name.as_mut_ptr() as *mut libc::c_void,
             &mut *fdFile.offset(fdOffset as isize) as *mut crate::src::qcommon::q_shared::byte
                 as *const libc::c_void,
-            64 as libc::c_int as libc::c_ulong,
+            64 as i32 as libc::c_ulong,
         );
         //		Com_Memcpy(font, faceData, sizeof(fontInfo_t));
         crate::src::qcommon::q_shared::Q_strncpyz(
             (*font).name.as_mut_ptr(),
             name.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as libc::c_int,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
         );
-        i = 0 as libc::c_int;
-        while i <= 255 as libc::c_int {
+        i = 0 as i32;
+        while i <= 255 as i32 {
             (*font).glyphs[i as usize].glyph =
                 crate::src::renderergl1::tr_shader::RE_RegisterShaderNoMip(
                     (*font).glyphs[i as usize].shaderName.as_mut_ptr(),
@@ -223,14 +223,14 @@ pub unsafe extern "C" fn RE_RegisterFont(
     crate::src::renderergl1::tr_main::ri
         .Printf
         .expect("non-null function pointer")(
-        crate::src::qcommon::q_shared::PRINT_WARNING as libc::c_int,
+        crate::src::qcommon::q_shared::PRINT_WARNING as i32,
         b"RE_RegisterFont: FreeType code not available\n\x00" as *const u8 as *const libc::c_char,
     );
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn R_InitFreeType() {
-    registeredFontCount = 0 as libc::c_int;
+    registeredFontCount = 0 as i32;
 }
 /*
 ===========================================================================
@@ -289,5 +289,5 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #[no_mangle]
 
 pub unsafe extern "C" fn R_DoneFreeType() {
-    registeredFontCount = 0 as libc::c_int;
+    registeredFontCount = 0 as i32;
 }

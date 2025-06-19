@@ -1,41 +1,41 @@
-pub type byte = libc::c_uchar;
-pub type qboolean = libc::c_uint;
+pub type byte = u8;
+pub type qboolean = u32;
 pub const qfalse: crate::src::qcommon::q_shared::qboolean = 0;
 pub const qtrue: crate::src::qcommon::q_shared::qboolean = 1;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub union floatint_t {
-    pub f: libc::c_float,
-    pub i: libc::c_int,
-    pub ui: libc::c_uint,
+    pub f: f32,
+    pub i: i32,
+    pub ui: u32,
 }
-pub type qhandle_t = libc::c_int;
-pub type sfxHandle_t = libc::c_int;
-pub type fileHandle_t = libc::c_int;
-pub type clipHandle_t = libc::c_int;
+pub type qhandle_t = i32;
+pub type sfxHandle_t = i32;
+pub type fileHandle_t = i32;
+pub type clipHandle_t = i32;
 pub const EXEC_NOW: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 0;
 pub const EXEC_INSERT: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 1;
 pub const EXEC_APPEND: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 2;
-pub type C2RustUnnamed_0 = libc::c_uint;
+pub type C2RustUnnamed_0 = u32;
 pub const ERR_FATAL: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 0;
 pub const ERR_DROP: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 1;
 pub const ERR_SERVERDISCONNECT: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 2;
 pub const ERR_DISCONNECT: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 3;
 pub const ERR_NEED_CD: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 4;
-pub type vec_t = libc::c_float;
+pub type vec_t = f32;
 pub type vec3_t = [crate::src::qcommon::q_shared::vec_t; 3];
 pub type vec4_t = [crate::src::qcommon::q_shared::vec_t; 4];
 pub type pc_token_t = crate::src::qcommon::q_shared::pc_token_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct pc_token_s {
-    pub type_0: libc::c_int,
-    pub subtype: libc::c_int,
-    pub intvalue: libc::c_int,
-    pub floatvalue: libc::c_float,
+    pub type_0: i32,
+    pub subtype: i32,
+    pub intvalue: i32,
+    pub floatvalue: f32,
     pub string: [libc::c_char; 1024],
 }
-pub type fsMode_t = libc::c_uint;
+pub type fsMode_t = u32;
 pub const FS_READ: crate::src::qcommon::q_shared::fsMode_t = 0;
 pub const FS_WRITE: crate::src::qcommon::q_shared::fsMode_t = 1;
 pub const FS_APPEND: crate::src::qcommon::q_shared::fsMode_t = 2;
@@ -52,14 +52,14 @@ pub struct qint64 {
     pub b6: crate::src::qcommon::q_shared::byte,
     pub b7: crate::src::qcommon::q_shared::byte,
 }
-pub type cvarHandle_t = libc::c_int;
+pub type cvarHandle_t = i32;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct vmCvar_t {
     pub handle: crate::src::qcommon::q_shared::cvarHandle_t,
-    pub modificationCount: libc::c_int,
-    pub value: libc::c_float,
-    pub integer: libc::c_int,
+    pub modificationCount: i32,
+    pub value: f32,
+    pub integer: i32,
     pub string: [libc::c_char; 256],
 }
 pub type cplane_t = crate::src::qcommon::q_shared::cplane_s;
@@ -67,7 +67,7 @@ pub type cplane_t = crate::src::qcommon::q_shared::cplane_s;
 #[derive(Copy, Clone)]
 pub struct cplane_s {
     pub normal: crate::src::qcommon::q_shared::vec3_t,
-    pub dist: libc::c_float,
+    pub dist: f32,
     pub type_0: crate::src::qcommon::q_shared::byte,
     pub signbits: crate::src::qcommon::q_shared::byte,
     pub pad: [crate::src::qcommon::q_shared::byte; 2],
@@ -94,53 +94,53 @@ pub type playerState_t = crate::src::qcommon::q_shared::playerState_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct playerState_s {
-    pub commandTime: libc::c_int,
-    pub pm_type: libc::c_int,
-    pub bobCycle: libc::c_int,
-    pub pm_flags: libc::c_int,
-    pub pm_time: libc::c_int,
+    pub commandTime: i32,
+    pub pm_type: i32,
+    pub bobCycle: i32,
+    pub pm_flags: i32,
+    pub pm_time: i32,
     pub origin: crate::src::qcommon::q_shared::vec3_t,
     pub velocity: crate::src::qcommon::q_shared::vec3_t,
-    pub weaponTime: libc::c_int,
-    pub gravity: libc::c_int,
-    pub speed: libc::c_int,
-    pub delta_angles: [libc::c_int; 3],
-    pub groundEntityNum: libc::c_int,
-    pub legsTimer: libc::c_int,
-    pub legsAnim: libc::c_int,
-    pub torsoTimer: libc::c_int,
-    pub torsoAnim: libc::c_int,
-    pub movementDir: libc::c_int,
+    pub weaponTime: i32,
+    pub gravity: i32,
+    pub speed: i32,
+    pub delta_angles: [i32; 3],
+    pub groundEntityNum: i32,
+    pub legsTimer: i32,
+    pub legsAnim: i32,
+    pub torsoTimer: i32,
+    pub torsoAnim: i32,
+    pub movementDir: i32,
     pub grapplePoint: crate::src::qcommon::q_shared::vec3_t,
-    pub eFlags: libc::c_int,
-    pub eventSequence: libc::c_int,
-    pub events: [libc::c_int; 2],
-    pub eventParms: [libc::c_int; 2],
-    pub externalEvent: libc::c_int,
-    pub externalEventParm: libc::c_int,
-    pub externalEventTime: libc::c_int,
-    pub clientNum: libc::c_int,
-    pub weapon: libc::c_int,
-    pub weaponstate: libc::c_int,
+    pub eFlags: i32,
+    pub eventSequence: i32,
+    pub events: [i32; 2],
+    pub eventParms: [i32; 2],
+    pub externalEvent: i32,
+    pub externalEventParm: i32,
+    pub externalEventTime: i32,
+    pub clientNum: i32,
+    pub weapon: i32,
+    pub weaponstate: i32,
     pub viewangles: crate::src::qcommon::q_shared::vec3_t,
-    pub viewheight: libc::c_int,
-    pub damageEvent: libc::c_int,
-    pub damageYaw: libc::c_int,
-    pub damagePitch: libc::c_int,
-    pub damageCount: libc::c_int,
-    pub stats: [libc::c_int; 16],
-    pub persistant: [libc::c_int; 16],
-    pub powerups: [libc::c_int; 16],
-    pub ammo: [libc::c_int; 16],
-    pub generic1: libc::c_int,
-    pub loopSound: libc::c_int,
-    pub jumppad_ent: libc::c_int,
-    pub ping: libc::c_int,
-    pub pmove_framecount: libc::c_int,
-    pub jumppad_frame: libc::c_int,
-    pub entityEventSequence: libc::c_int,
+    pub viewheight: i32,
+    pub damageEvent: i32,
+    pub damageYaw: i32,
+    pub damagePitch: i32,
+    pub damageCount: i32,
+    pub stats: [i32; 16],
+    pub persistant: [i32; 16],
+    pub powerups: [i32; 16],
+    pub ammo: [i32; 16],
+    pub generic1: i32,
+    pub loopSound: i32,
+    pub jumppad_ent: i32,
+    pub ping: i32,
+    pub pmove_framecount: i32,
+    pub jumppad_frame: i32,
+    pub entityEventSequence: i32,
 }
-pub type trType_t = libc::c_uint;
+pub type trType_t = u32;
 pub const TR_STATIONARY: crate::src::qcommon::q_shared::trType_t = 0;
 pub const TR_INTERPOLATE: crate::src::qcommon::q_shared::trType_t = 1;
 pub const TR_LINEAR: crate::src::qcommon::q_shared::trType_t = 2;
@@ -151,8 +151,8 @@ pub const TR_GRAVITY: crate::src::qcommon::q_shared::trType_t = 5;
 #[derive(Copy, Clone)]
 pub struct trajectory_t {
     pub trType: crate::src::qcommon::q_shared::trType_t,
-    pub trTime: libc::c_int,
-    pub trDuration: libc::c_int,
+    pub trTime: i32,
+    pub trDuration: i32,
     pub trBase: crate::src::qcommon::q_shared::vec3_t,
     pub trDelta: crate::src::qcommon::q_shared::vec3_t,
 }
@@ -160,36 +160,36 @@ pub type entityState_t = crate::src::qcommon::q_shared::entityState_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct entityState_s {
-    pub number: libc::c_int,
-    pub eType: libc::c_int,
-    pub eFlags: libc::c_int,
+    pub number: i32,
+    pub eType: i32,
+    pub eFlags: i32,
     pub pos: crate::src::qcommon::q_shared::trajectory_t,
     pub apos: crate::src::qcommon::q_shared::trajectory_t,
-    pub time: libc::c_int,
-    pub time2: libc::c_int,
+    pub time: i32,
+    pub time2: i32,
     pub origin: crate::src::qcommon::q_shared::vec3_t,
     pub origin2: crate::src::qcommon::q_shared::vec3_t,
     pub angles: crate::src::qcommon::q_shared::vec3_t,
     pub angles2: crate::src::qcommon::q_shared::vec3_t,
-    pub otherEntityNum: libc::c_int,
-    pub otherEntityNum2: libc::c_int,
-    pub groundEntityNum: libc::c_int,
-    pub constantLight: libc::c_int,
-    pub loopSound: libc::c_int,
-    pub modelindex: libc::c_int,
-    pub modelindex2: libc::c_int,
-    pub clientNum: libc::c_int,
-    pub frame: libc::c_int,
-    pub solid: libc::c_int,
-    pub event: libc::c_int,
-    pub eventParm: libc::c_int,
-    pub powerups: libc::c_int,
-    pub weapon: libc::c_int,
-    pub legsAnim: libc::c_int,
-    pub torsoAnim: libc::c_int,
-    pub generic1: libc::c_int,
+    pub otherEntityNum: i32,
+    pub otherEntityNum2: i32,
+    pub groundEntityNum: i32,
+    pub constantLight: i32,
+    pub loopSound: i32,
+    pub modelindex: i32,
+    pub modelindex2: i32,
+    pub clientNum: i32,
+    pub frame: i32,
+    pub solid: i32,
+    pub event: i32,
+    pub eventParm: i32,
+    pub powerups: i32,
+    pub weapon: i32,
+    pub legsAnim: i32,
+    pub torsoAnim: i32,
+    pub generic1: i32,
 }
-pub type connstate_t = libc::c_uint;
+pub type connstate_t = u32;
 pub const CA_UNINITIALIZED: crate::src::qcommon::q_shared::connstate_t = 0;
 pub const CA_DISCONNECTED: crate::src::qcommon::q_shared::connstate_t = 1;
 // not talking to a server
@@ -214,17 +214,17 @@ pub const CA_CINEMATIC: crate::src::qcommon::q_shared::connstate_t = 9;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct glyphInfo_t {
-    pub height: libc::c_int,
-    pub top: libc::c_int,
-    pub bottom: libc::c_int,
-    pub pitch: libc::c_int,
-    pub xSkip: libc::c_int,
-    pub imageWidth: libc::c_int,
-    pub imageHeight: libc::c_int,
-    pub s: libc::c_float,
-    pub t: libc::c_float,
-    pub s2: libc::c_float,
-    pub t2: libc::c_float,
+    pub height: i32,
+    pub top: i32,
+    pub bottom: i32,
+    pub pitch: i32,
+    pub xSkip: i32,
+    pub imageWidth: i32,
+    pub imageHeight: i32,
+    pub s: f32,
+    pub t: f32,
+    pub s2: f32,
+    pub t2: f32,
     pub glyph: crate::src::qcommon::q_shared::qhandle_t,
     pub shaderName: [libc::c_char; 32],
 }
@@ -232,7 +232,7 @@ pub struct glyphInfo_t {
 #[derive(Copy, Clone)]
 pub struct fontInfo_t {
     pub glyphs: [crate::src::qcommon::q_shared::glyphInfo_t; 256],
-    pub glyphScale: libc::c_float,
+    pub glyphScale: f32,
     pub name: [libc::c_char; 64],
 }
 pub type qtime_t = crate::src::qcommon::q_shared::qtime_s;
@@ -242,15 +242,15 @@ pub type qtime_t = crate::src::qcommon::q_shared::qtime_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct qtime_s {
-    pub tm_sec: libc::c_int,
-    pub tm_min: libc::c_int,
-    pub tm_hour: libc::c_int,
-    pub tm_mday: libc::c_int,
-    pub tm_mon: libc::c_int,
-    pub tm_year: libc::c_int,
-    pub tm_wday: libc::c_int,
-    pub tm_yday: libc::c_int,
-    pub tm_isdst: libc::c_int,
+    pub tm_sec: i32,
+    pub tm_min: i32,
+    pub tm_hour: i32,
+    pub tm_mday: i32,
+    pub tm_mon: i32,
+    pub tm_year: i32,
+    pub tm_wday: i32,
+    pub tm_yday: i32,
+    pub tm_isdst: i32,
 }
 /* daylight savings time flag */
 
@@ -259,7 +259,7 @@ pub struct qtime_s {
 // TTimo: AS_MPLAYER is no longer used
 
 // cinematic states
-pub type e_status = libc::c_uint;
+pub type e_status = u32;
 pub const FMV_IDLE: crate::src::qcommon::q_shared::e_status = 0;
 pub const FMV_PLAY: crate::src::qcommon::q_shared::e_status = 1;
 // play
@@ -274,8 +274,8 @@ pub mod ctype_h {
 
     #[inline]
 
-    pub unsafe extern "C" fn tolower(mut __c: libc::c_int) -> libc::c_int {
-        return if __c >= -(128 as libc::c_int) && __c < 256 as libc::c_int {
+    pub unsafe extern "C" fn tolower(mut __c: i32) -> i32 {
+        return if __c >= -(128 as i32) && __c < 256 as i32 {
             *(*crate::stdlib::__ctype_tolower_loc()).offset(__c as isize)
         } else {
             __c
@@ -284,8 +284,8 @@ pub mod ctype_h {
 
     #[inline]
 
-    pub unsafe extern "C" fn toupper(mut __c: libc::c_int) -> libc::c_int {
-        return if __c >= -(128 as libc::c_int) && __c < 256 as libc::c_int {
+    pub unsafe extern "C" fn toupper(mut __c: i32) -> i32 {
+        return if __c >= -(128 as i32) && __c < 256 as i32 {
             *(*crate::stdlib::__ctype_toupper_loc()).offset(__c as isize)
         } else {
             __c
@@ -296,7 +296,7 @@ pub mod stdlib_float_h {
 
     #[inline]
 
-    pub unsafe extern "C" fn atof(mut __nptr: *const libc::c_char) -> libc::c_double {
+    pub unsafe extern "C" fn atof(mut __nptr: *const libc::c_char) -> f64 {
         return ::libc::strtod(__nptr, 0 as *mut libc::c_void as *mut *mut libc::c_char);
     }
 }
@@ -360,21 +360,21 @@ pub unsafe extern "C" fn Q_IsColorString(
     if p.is_null() {
         return crate::src::qcommon::q_shared::qfalse;
     }
-    if *p.offset(0 as libc::c_int as isize) as libc::c_int != '^' as i32 {
+    if *p.offset(0 as i32 as isize) as i32 != '^' as i32 {
         return crate::src::qcommon::q_shared::qfalse;
     }
-    if *p.offset(1 as libc::c_int as isize) as libc::c_int == 0 as libc::c_int {
+    if *p.offset(1 as i32 as isize) as i32 == 0 as i32 {
         return crate::src::qcommon::q_shared::qfalse;
     }
     // isalnum expects a signed integer in the range -1 (EOF) to 255, or it might assert on undefined behaviour
     // a dereferenced char pointer has the range -128 to 127, so we just need to rangecheck the negative part
-    if (*p.offset(1 as libc::c_int as isize) as libc::c_int) < 0 as libc::c_int {
+    if (*p.offset(1 as i32 as isize) as i32) < 0 as i32 {
         return crate::src::qcommon::q_shared::qfalse;
     }
     if *(*crate::stdlib::__ctype_b_loc())
-        .offset(*p.offset(1 as libc::c_int as isize) as libc::c_int as isize) as libc::c_int
-        & crate::stdlib::_ISalnum as libc::c_int as libc::c_ushort as libc::c_int
-        == 0 as libc::c_int
+        .offset(*p.offset(1 as i32 as isize) as i32 as isize) as i32
+        & crate::stdlib::_ISalnum as i32 as u16 as i32
+        == 0 as i32
     {
         return crate::src::qcommon::q_shared::qfalse;
     }
@@ -382,10 +382,10 @@ pub unsafe extern "C" fn Q_IsColorString(
 }
 #[no_mangle]
 pub unsafe extern "C" fn Com_Clamp(
-    mut min: libc::c_float,
-    mut max: libc::c_float,
-    mut value: libc::c_float,
-) -> libc::c_float {
+    mut min: f32,
+    mut max: f32,
+    mut value: f32,
+) -> f32 {
     if value < min {
         return min;
     }
@@ -404,8 +404,8 @@ pub unsafe extern "C" fn COM_SkipPath(mut pathname: *mut libc::c_char) -> *mut l
     let mut last: *mut libc::c_char = 0 as *mut libc::c_char;
     last = pathname;
     while *pathname != 0 {
-        if *pathname as libc::c_int == '/' as i32 {
-            last = pathname.offset(1 as libc::c_int as isize)
+        if *pathname as i32 == '/' as i32 {
+            last = pathname.offset(1 as i32 as isize)
         }
         pathname = pathname.offset(1)
     }
@@ -424,7 +424,7 @@ pub unsafe extern "C" fn COM_GetExtension(mut name: *const libc::c_char) -> *con
         slash = ::libc::strrchr(name, '/' as i32);
         (slash.is_null()) || slash < dot
     } {
-        return dot.offset(1 as libc::c_int as isize);
+        return dot.offset(1 as i32 as isize);
     } else {
         return b"\x00" as *const u8 as *const libc::c_char;
     };
@@ -438,7 +438,7 @@ COM_StripExtension
 pub unsafe extern "C" fn COM_StripExtension(
     mut in_0: *const libc::c_char,
     mut out: *mut libc::c_char,
-    mut destsize: libc::c_int,
+    mut destsize: i32,
 ) {
     let mut dot: *const libc::c_char = ::libc::strrchr(in_0, '.' as i32);
     let mut slash: *const libc::c_char = 0 as *const libc::c_char;
@@ -447,15 +447,15 @@ pub unsafe extern "C" fn COM_StripExtension(
         (slash.is_null()) || slash < dot
     } {
         destsize = if (destsize as libc::c_long)
-            < dot.offset_from(in_0) as libc::c_long + 1 as libc::c_int as libc::c_long
+            < dot.offset_from(in_0) as libc::c_long + 1 as i32 as libc::c_long
         {
             destsize as libc::c_long
         } else {
-            (dot.offset_from(in_0) as libc::c_long) + 1 as libc::c_int as libc::c_long
-        } as libc::c_int
+            (dot.offset_from(in_0) as libc::c_long) + 1 as i32 as libc::c_long
+        } as i32
     }
-    if in_0 == out as *const libc::c_char && destsize > 1 as libc::c_int {
-        *out.offset((destsize - 1 as libc::c_int) as isize) = '\u{0}' as i32 as libc::c_char
+    if in_0 == out as *const libc::c_char && destsize > 1 as i32 {
+        *out.offset((destsize - 1 as i32) as isize) = '\u{0}' as i32 as libc::c_char
     } else {
         Q_strncpyz(out, in_0, destsize);
     };
@@ -472,10 +472,10 @@ pub unsafe extern "C" fn COM_CompareExtension(
     mut in_0: *const libc::c_char,
     mut ext: *const libc::c_char,
 ) -> crate::src::qcommon::q_shared::qboolean {
-    let mut inlen: libc::c_int = 0;
-    let mut extlen: libc::c_int = 0;
-    inlen = crate::stdlib::strlen(in_0) as libc::c_int;
-    extlen = crate::stdlib::strlen(ext) as libc::c_int;
+    let mut inlen: i32 = 0;
+    let mut extlen: i32 = 0;
+    inlen = crate::stdlib::strlen(in_0) as i32;
+    extlen = crate::stdlib::strlen(ext) as i32;
     if extlen <= inlen {
         in_0 = in_0.offset((inlen - extlen) as isize);
         if Q_stricmp(in_0, ext) == 0 {
@@ -495,7 +495,7 @@ if path doesn't have an extension, then append
 #[no_mangle]
 pub unsafe extern "C" fn COM_DefaultExtension(
     mut path: *mut libc::c_char,
-    mut maxSize: libc::c_int,
+    mut maxSize: i32,
     mut extension: *const libc::c_char,
 ) {
     let mut dot: *const libc::c_char = ::libc::strrchr(path, '.' as i32);
@@ -544,8 +544,8 @@ pub unsafe extern "C" fn CopyShortSwap(mut dest: *mut libc::c_void, mut src: *mu
         dest as *mut crate::src::qcommon::q_shared::byte;
     let mut from: *mut crate::src::qcommon::q_shared::byte =
         src as *mut crate::src::qcommon::q_shared::byte;
-    *to.offset(0 as libc::c_int as isize) = *from.offset(1 as libc::c_int as isize);
-    *to.offset(1 as libc::c_int as isize) = *from.offset(0 as libc::c_int as isize);
+    *to.offset(0 as i32 as isize) = *from.offset(1 as i32 as isize);
+    *to.offset(1 as i32 as isize) = *from.offset(0 as i32 as isize);
 }
 #[no_mangle]
 pub unsafe extern "C" fn CopyLongSwap(mut dest: *mut libc::c_void, mut src: *mut libc::c_void) {
@@ -553,41 +553,41 @@ pub unsafe extern "C" fn CopyLongSwap(mut dest: *mut libc::c_void, mut src: *mut
         dest as *mut crate::src::qcommon::q_shared::byte;
     let mut from: *mut crate::src::qcommon::q_shared::byte =
         src as *mut crate::src::qcommon::q_shared::byte;
-    *to.offset(0 as libc::c_int as isize) = *from.offset(3 as libc::c_int as isize);
-    *to.offset(1 as libc::c_int as isize) = *from.offset(2 as libc::c_int as isize);
-    *to.offset(2 as libc::c_int as isize) = *from.offset(1 as libc::c_int as isize);
-    *to.offset(3 as libc::c_int as isize) = *from.offset(0 as libc::c_int as isize);
+    *to.offset(0 as i32 as isize) = *from.offset(3 as i32 as isize);
+    *to.offset(1 as i32 as isize) = *from.offset(2 as i32 as isize);
+    *to.offset(2 as i32 as isize) = *from.offset(1 as i32 as isize);
+    *to.offset(3 as i32 as isize) = *from.offset(0 as i32 as isize);
 }
 #[no_mangle]
-pub unsafe extern "C" fn ShortSwap(mut l: libc::c_short) -> libc::c_short {
+pub unsafe extern "C" fn ShortSwap(mut l: i16) -> i16 {
     let mut b1: crate::src::qcommon::q_shared::byte = 0;
     let mut b2: crate::src::qcommon::q_shared::byte = 0;
-    b1 = (l as libc::c_int & 255 as libc::c_int) as crate::src::qcommon::q_shared::byte;
-    b2 = (l as libc::c_int >> 8 as libc::c_int & 255 as libc::c_int)
+    b1 = (l as i32 & 255 as i32) as crate::src::qcommon::q_shared::byte;
+    b2 = (l as i32 >> 8 as i32 & 255 as i32)
         as crate::src::qcommon::q_shared::byte;
-    return (((b1 as libc::c_int) << 8 as libc::c_int) + b2 as libc::c_int) as libc::c_short;
+    return (((b1 as i32) << 8 as i32) + b2 as i32) as i16;
 }
 #[no_mangle]
-pub unsafe extern "C" fn ShortNoSwap(mut l: libc::c_short) -> libc::c_short {
+pub unsafe extern "C" fn ShortNoSwap(mut l: i16) -> i16 {
     return l;
 }
 #[no_mangle]
-pub unsafe extern "C" fn LongSwap(mut l: libc::c_int) -> libc::c_int {
+pub unsafe extern "C" fn LongSwap(mut l: i32) -> i32 {
     let mut b1: crate::src::qcommon::q_shared::byte = 0;
     let mut b2: crate::src::qcommon::q_shared::byte = 0;
     let mut b3: crate::src::qcommon::q_shared::byte = 0;
     let mut b4: crate::src::qcommon::q_shared::byte = 0;
-    b1 = (l & 255 as libc::c_int) as crate::src::qcommon::q_shared::byte;
-    b2 = (l >> 8 as libc::c_int & 255 as libc::c_int) as crate::src::qcommon::q_shared::byte;
-    b3 = (l >> 16 as libc::c_int & 255 as libc::c_int) as crate::src::qcommon::q_shared::byte;
-    b4 = (l >> 24 as libc::c_int & 255 as libc::c_int) as crate::src::qcommon::q_shared::byte;
-    return ((b1 as libc::c_int) << 24 as libc::c_int)
-        + ((b2 as libc::c_int) << 16 as libc::c_int)
-        + ((b3 as libc::c_int) << 8 as libc::c_int)
-        + b4 as libc::c_int;
+    b1 = (l & 255 as i32) as crate::src::qcommon::q_shared::byte;
+    b2 = (l >> 8 as i32 & 255 as i32) as crate::src::qcommon::q_shared::byte;
+    b3 = (l >> 16 as i32 & 255 as i32) as crate::src::qcommon::q_shared::byte;
+    b4 = (l >> 24 as i32 & 255 as i32) as crate::src::qcommon::q_shared::byte;
+    return ((b1 as i32) << 24 as i32)
+        + ((b2 as i32) << 16 as i32)
+        + ((b3 as i32) << 8 as i32)
+        + b4 as i32;
 }
 #[no_mangle]
-pub unsafe extern "C" fn LongNoSwap(mut l: libc::c_int) -> libc::c_int {
+pub unsafe extern "C" fn LongNoSwap(mut l: i32) -> i32 {
     return l;
 }
 #[no_mangle]
@@ -668,15 +668,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 //endianness
 #[no_mangle]
-pub unsafe extern "C" fn FloatSwap(mut f: *const libc::c_float) -> libc::c_float {
+pub unsafe extern "C" fn FloatSwap(mut f: *const f32) -> f32 {
     let mut out: crate::src::qcommon::q_shared::floatint_t =
         crate::src::qcommon::q_shared::floatint_t { f: 0. };
     out.f = *f;
-    out.ui = LongSwap(out.ui as libc::c_int) as libc::c_uint;
+    out.ui = LongSwap(out.ui as i32) as u32;
     return out.f;
 }
 #[no_mangle]
-pub unsafe extern "C" fn FloatNoSwap(mut f: *const libc::c_float) -> libc::c_float {
+pub unsafe extern "C" fn FloatNoSwap(mut f: *const f32) -> f32 {
     return *f;
 }
 /*
@@ -726,21 +726,21 @@ PARSING
 */
 static mut com_token: [libc::c_char; 1024] = [0; 1024];
 static mut com_parsename: [libc::c_char; 1024] = [0; 1024];
-static mut com_lines: libc::c_int = 0;
-static mut com_tokenline: libc::c_int = 0;
+static mut com_lines: i32 = 0;
+static mut com_tokenline: i32 = 0;
 #[no_mangle]
 pub unsafe extern "C" fn COM_BeginParseSession(mut name: *const libc::c_char) {
-    com_lines = 1 as libc::c_int;
-    com_tokenline = 0 as libc::c_int;
+    com_lines = 1 as i32;
+    com_tokenline = 0 as i32;
     Com_sprintf(
         com_parsename.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
         b"%s\x00" as *const u8 as *const libc::c_char,
         name,
     );
 }
 #[no_mangle]
-pub unsafe extern "C" fn COM_GetCurrentParseLine() -> libc::c_int {
+pub unsafe extern "C" fn COM_GetCurrentParseLine() -> i32 {
     if com_tokenline != 0 {
         return com_tokenline;
     }
@@ -802,9 +802,9 @@ unsafe extern "C" fn SkipWhitespace(
     mut data: *mut libc::c_char,
     mut hasNewLines: *mut crate::src::qcommon::q_shared::qboolean,
 ) -> *mut libc::c_char {
-    let mut c: libc::c_int = 0;
+    let mut c: i32 = 0;
     loop {
-        c = *data as libc::c_int;
+        c = *data as i32;
         if !(c <= ' ' as i32) {
             break;
         }
@@ -820,10 +820,10 @@ unsafe extern "C" fn SkipWhitespace(
     return data;
 }
 #[no_mangle]
-pub unsafe extern "C" fn COM_Compress(mut data_p: *mut libc::c_char) -> libc::c_int {
+pub unsafe extern "C" fn COM_Compress(mut data_p: *mut libc::c_char) -> i32 {
     let mut in_0: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut out: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut c: libc::c_int = 0;
+    let mut c: i32 = 0;
     let mut newline: crate::src::qcommon::q_shared::qboolean =
         crate::src::qcommon::q_shared::qfalse;
     let mut whitespace: crate::src::qcommon::q_shared::qboolean =
@@ -832,29 +832,29 @@ pub unsafe extern "C" fn COM_Compress(mut data_p: *mut libc::c_char) -> libc::c_
     in_0 = out;
     if !in_0.is_null() {
         loop {
-            c = *in_0 as libc::c_int;
-            if !(c != 0 as libc::c_int) {
+            c = *in_0 as i32;
+            if !(c != 0 as i32) {
                 break;
             }
             // skip double slash comments
             if c == '/' as i32
-                && *in_0.offset(1 as libc::c_int as isize) as libc::c_int == '/' as i32
+                && *in_0.offset(1 as i32 as isize) as i32 == '/' as i32
             {
-                while *in_0 as libc::c_int != 0 && *in_0 as libc::c_int != '\n' as i32 {
+                while *in_0 as i32 != 0 && *in_0 as i32 != '\n' as i32 {
                     in_0 = in_0.offset(1)
                 }
             // skip /* */ comments
             } else if c == '/' as i32
-                && *in_0.offset(1 as libc::c_int as isize) as libc::c_int == '*' as i32
+                && *in_0.offset(1 as i32 as isize) as i32 == '*' as i32
             {
-                while *in_0 as libc::c_int != 0
-                    && (*in_0 as libc::c_int != '*' as i32
-                        || *in_0.offset(1 as libc::c_int as isize) as libc::c_int != '/' as i32)
+                while *in_0 as i32 != 0
+                    && (*in_0 as i32 != '*' as i32
+                        || *in_0.offset(1 as i32 as isize) as i32 != '/' as i32)
                 {
                     in_0 = in_0.offset(1)
                 }
                 if *in_0 != 0 {
-                    in_0 = in_0.offset(2 as libc::c_int as isize)
+                    in_0 = in_0.offset(2 as i32 as isize)
                 }
             // record when we hit a newline
             } else if c == '\n' as i32 || c == '\r' as i32 {
@@ -887,7 +887,7 @@ pub unsafe extern "C" fn COM_Compress(mut data_p: *mut libc::c_char) -> libc::c_
                     *fresh2 = c as libc::c_char;
                     in_0 = in_0.offset(1);
                     loop {
-                        c = *in_0 as libc::c_int;
+                        c = *in_0 as i32;
                         if !(c != 0 && c != '\"' as i32) {
                             break;
                         }
@@ -909,24 +909,24 @@ pub unsafe extern "C" fn COM_Compress(mut data_p: *mut libc::c_char) -> libc::c_
                 }
             }
         }
-        *out = 0 as libc::c_int as libc::c_char
+        *out = 0 as i32 as libc::c_char
     }
-    return out.offset_from(data_p) as libc::c_long as libc::c_int;
+    return out.offset_from(data_p) as libc::c_long as i32;
 }
 #[no_mangle]
 pub unsafe extern "C" fn COM_ParseExt(
     mut data_p: *mut *mut libc::c_char,
     mut allowLineBreaks: crate::src::qcommon::q_shared::qboolean,
 ) -> *mut libc::c_char {
-    let mut c: libc::c_int = 0 as libc::c_int;
-    let mut len: libc::c_int = 0;
+    let mut c: i32 = 0 as i32;
+    let mut len: i32 = 0;
     let mut hasNewLines: crate::src::qcommon::q_shared::qboolean =
         crate::src::qcommon::q_shared::qfalse;
     let mut data: *mut libc::c_char = 0 as *mut libc::c_char;
     data = *data_p;
-    len = 0 as libc::c_int;
-    com_token[0 as libc::c_int as usize] = 0 as libc::c_int as libc::c_char;
-    com_tokenline = 0 as libc::c_int;
+    len = 0 as i32;
+    com_token[0 as i32 as usize] = 0 as i32 as libc::c_char;
+    com_tokenline = 0 as i32;
     // make sure incoming data is valid
     if data.is_null() {
         *data_p = 0 as *mut libc::c_char;
@@ -939,36 +939,36 @@ pub unsafe extern "C" fn COM_ParseExt(
             *data_p = 0 as *mut libc::c_char;
             return com_token.as_mut_ptr();
         }
-        if hasNewLines as libc::c_uint != 0 && allowLineBreaks as u64 == 0 {
+        if hasNewLines as u32 != 0 && allowLineBreaks as u64 == 0 {
             *data_p = data;
             return com_token.as_mut_ptr();
         }
-        c = *data as libc::c_int;
+        c = *data as i32;
         // skip double slash comments
-        if c == '/' as i32 && *data.offset(1 as libc::c_int as isize) as libc::c_int == '/' as i32 {
-            data = data.offset(2 as libc::c_int as isize);
-            while *data as libc::c_int != 0 && *data as libc::c_int != '\n' as i32 {
+        if c == '/' as i32 && *data.offset(1 as i32 as isize) as i32 == '/' as i32 {
+            data = data.offset(2 as i32 as isize);
+            while *data as i32 != 0 && *data as i32 != '\n' as i32 {
                 data = data.offset(1)
             }
         } else {
             // skip /* */ comments
             if !(c == '/' as i32
-                && *data.offset(1 as libc::c_int as isize) as libc::c_int == '*' as i32)
+                && *data.offset(1 as i32 as isize) as i32 == '*' as i32)
             {
                 break;
             }
-            data = data.offset(2 as libc::c_int as isize);
-            while *data as libc::c_int != 0
-                && (*data as libc::c_int != '*' as i32
-                    || *data.offset(1 as libc::c_int as isize) as libc::c_int != '/' as i32)
+            data = data.offset(2 as i32 as isize);
+            while *data as i32 != 0
+                && (*data as i32 != '*' as i32
+                    || *data.offset(1 as i32 as isize) as i32 != '/' as i32)
             {
-                if *data as libc::c_int == '\n' as i32 {
+                if *data as i32 == '\n' as i32 {
                     com_lines += 1
                 }
                 data = data.offset(1)
             }
             if *data != 0 {
-                data = data.offset(2 as libc::c_int as isize)
+                data = data.offset(2 as i32 as isize)
             }
         }
     }
@@ -980,16 +980,16 @@ pub unsafe extern "C" fn COM_ParseExt(
         loop {
             let fresh5 = data;
             data = data.offset(1);
-            c = *fresh5 as libc::c_int;
+            c = *fresh5 as i32;
             if c == '\"' as i32 || c == 0 {
-                com_token[len as usize] = 0 as libc::c_int as libc::c_char;
+                com_token[len as usize] = 0 as i32 as libc::c_char;
                 *data_p = data;
                 return com_token.as_mut_ptr();
             }
             if c == '\n' as i32 {
                 com_lines += 1
             }
-            if len < 1024 as libc::c_int - 1 as libc::c_int {
+            if len < 1024 as i32 - 1 as i32 {
                 com_token[len as usize] = c as libc::c_char;
                 len += 1
             }
@@ -998,17 +998,17 @@ pub unsafe extern "C" fn COM_ParseExt(
     loop
     // parse a regular word
     {
-        if len < 1024 as libc::c_int - 1 as libc::c_int {
+        if len < 1024 as i32 - 1 as i32 {
             com_token[len as usize] = c as libc::c_char;
             len += 1
         }
         data = data.offset(1);
-        c = *data as libc::c_int;
-        if !(c > 32 as libc::c_int) {
+        c = *data as i32;
+        if !(c > 32 as i32) {
             break;
         }
     }
-    com_token[len as usize] = 0 as libc::c_int as libc::c_char;
+    com_token[len as usize] = 0 as i32 as libc::c_char;
     *data_p = data;
     return com_token.as_mut_ptr();
 }
@@ -1026,7 +1026,7 @@ pub unsafe extern "C" fn COM_MatchToken(
     token = COM_Parse(buf_p);
     if ::libc::strcmp(token, match_0) != 0 {
         crate::src::q3_ui::ui_atoms::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"MatchToken: %s != %s\x00" as *const u8 as *const libc::c_char,
             token,
             match_0,
@@ -1045,15 +1045,15 @@ Internal brace depths are properly skipped.
 #[no_mangle]
 pub unsafe extern "C" fn SkipBracedSection(
     mut program: *mut *mut libc::c_char,
-    mut depth: libc::c_int,
+    mut depth: i32,
 ) -> crate::src::qcommon::q_shared::qboolean {
     let mut token: *mut libc::c_char = 0 as *mut libc::c_char;
     loop {
         token = COM_ParseExt(program, crate::src::qcommon::q_shared::qtrue);
-        if *token.offset(1 as libc::c_int as isize) as libc::c_int == 0 as libc::c_int {
-            if *token.offset(0 as libc::c_int as isize) as libc::c_int == '{' as i32 {
+        if *token.offset(1 as i32 as isize) as i32 == 0 as i32 {
+            if *token.offset(0 as i32 as isize) as i32 == '{' as i32 {
                 depth += 1
-            } else if *token.offset(0 as libc::c_int as isize) as libc::c_int == '}' as i32 {
+            } else if *token.offset(0 as i32 as isize) as i32 == '}' as i32 {
                 depth -= 1
             }
         }
@@ -1061,7 +1061,7 @@ pub unsafe extern "C" fn SkipBracedSection(
             break;
         }
     }
-    return (depth == 0 as libc::c_int) as libc::c_int as crate::src::qcommon::q_shared::qboolean;
+    return (depth == 0 as i32) as i32 as crate::src::qcommon::q_shared::qboolean;
 }
 /*
 =================
@@ -1071,7 +1071,7 @@ SkipRestOfLine
 #[no_mangle]
 pub unsafe extern "C" fn SkipRestOfLine(mut data: *mut *mut libc::c_char) {
     let mut p: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut c: libc::c_int = 0;
+    let mut c: i32 = 0;
     p = *data;
     if *p == 0 {
         return;
@@ -1079,8 +1079,8 @@ pub unsafe extern "C" fn SkipRestOfLine(mut data: *mut *mut libc::c_char) {
     loop {
         let fresh6 = p;
         p = p.offset(1);
-        c = *fresh6 as libc::c_int;
-        if !(c != 0 as libc::c_int) {
+        c = *fresh6 as i32;
+        if !(c != 0 as i32) {
             break;
         }
         if !(c == '\n' as i32) {
@@ -1094,19 +1094,19 @@ pub unsafe extern "C" fn SkipRestOfLine(mut data: *mut *mut libc::c_char) {
 #[no_mangle]
 pub unsafe extern "C" fn Parse1DMatrix(
     mut buf_p: *mut *mut libc::c_char,
-    mut x: libc::c_int,
-    mut m: *mut libc::c_float,
+    mut x: i32,
+    mut m: *mut f32,
 ) {
     let mut token: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     COM_MatchToken(
         buf_p,
         b"(\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
     );
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < x {
         token = COM_Parse(buf_p);
-        *m.offset(i as isize) = atof(token) as libc::c_float;
+        *m.offset(i as isize) = atof(token) as f32;
         i += 1
     }
     COM_MatchToken(
@@ -1117,16 +1117,16 @@ pub unsafe extern "C" fn Parse1DMatrix(
 #[no_mangle]
 pub unsafe extern "C" fn Parse2DMatrix(
     mut buf_p: *mut *mut libc::c_char,
-    mut y: libc::c_int,
-    mut x: libc::c_int,
-    mut m: *mut libc::c_float,
+    mut y: i32,
+    mut x: i32,
+    mut m: *mut f32,
 ) {
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     COM_MatchToken(
         buf_p,
         b"(\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
     );
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < y {
         Parse1DMatrix(buf_p, x, m.offset((i * x) as isize));
         i += 1
@@ -1139,17 +1139,17 @@ pub unsafe extern "C" fn Parse2DMatrix(
 #[no_mangle]
 pub unsafe extern "C" fn Parse3DMatrix(
     mut buf_p: *mut *mut libc::c_char,
-    mut z: libc::c_int,
-    mut y: libc::c_int,
-    mut x: libc::c_int,
-    mut m: *mut libc::c_float,
+    mut z: i32,
+    mut y: i32,
+    mut x: i32,
+    mut m: *mut f32,
 ) {
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     COM_MatchToken(
         buf_p,
         b"(\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
     );
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < z {
         Parse2DMatrix(buf_p, y, x, m.offset((i * x * y) as isize));
         i += 1
@@ -1165,56 +1165,56 @@ Com_HexStrToInt
 ===================
 */
 #[no_mangle]
-pub unsafe extern "C" fn Com_HexStrToInt(mut str: *const libc::c_char) -> libc::c_int {
+pub unsafe extern "C" fn Com_HexStrToInt(mut str: *const libc::c_char) -> i32 {
     if str.is_null() {
-        return -(1 as libc::c_int);
+        return -(1 as i32);
     }
     // check for hex code
-    if *str.offset(0 as libc::c_int as isize) as libc::c_int == '0' as i32
-        && *str.offset(1 as libc::c_int as isize) as libc::c_int == 'x' as i32
-        && *str.offset(2 as libc::c_int as isize) as libc::c_int != '\u{0}' as i32
+    if *str.offset(0 as i32 as isize) as i32 == '0' as i32
+        && *str.offset(1 as i32 as isize) as i32 == 'x' as i32
+        && *str.offset(2 as i32 as isize) as i32 != '\u{0}' as i32
     {
-        let mut i: libc::c_int = 0;
-        let mut n: libc::c_int = 0 as libc::c_int;
-        let mut len: libc::c_int = crate::stdlib::strlen(str) as libc::c_int;
-        i = 2 as libc::c_int;
+        let mut i: i32 = 0;
+        let mut n: i32 = 0 as i32;
+        let mut len: i32 = crate::stdlib::strlen(str) as i32;
+        i = 2 as i32;
         while i < len {
             let mut digit: libc::c_char = 0;
-            n *= 16 as libc::c_int;
+            n *= 16 as i32;
             digit = ({
-                let mut __res: libc::c_int = 0;
+                let mut __res: i32 = 0;
                 if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong
-                    > 1 as libc::c_int as libc::c_ulong
+                    > 1 as i32 as libc::c_ulong
                 {
                     if 0 != 0 {
-                        let mut __c: libc::c_int = *str.offset(i as isize) as libc::c_int;
-                        __res = if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
+                        let mut __c: i32 = *str.offset(i as isize) as i32;
+                        __res = if __c < -(128 as i32) || __c > 255 as i32 {
                             __c
                         } else {
                             *(*crate::stdlib::__ctype_tolower_loc()).offset(__c as isize)
                         }
                     } else {
-                        __res = tolower(*str.offset(i as isize) as libc::c_int)
+                        __res = tolower(*str.offset(i as isize) as i32)
                     }
                 } else {
                     __res = *(*crate::stdlib::__ctype_tolower_loc())
-                        .offset(*str.offset(i as isize) as libc::c_int as isize)
+                        .offset(*str.offset(i as isize) as i32 as isize)
                 }
                 __res
             }) as libc::c_char;
-            if digit as libc::c_int >= '0' as i32 && digit as libc::c_int <= '9' as i32 {
-                digit = (digit as libc::c_int - '0' as i32) as libc::c_char
-            } else if digit as libc::c_int >= 'a' as i32 && digit as libc::c_int <= 'f' as i32 {
-                digit = (digit as libc::c_int - 'a' as i32 + 10 as libc::c_int) as libc::c_char
+            if digit as i32 >= '0' as i32 && digit as i32 <= '9' as i32 {
+                digit = (digit as i32 - '0' as i32) as libc::c_char
+            } else if digit as i32 >= 'a' as i32 && digit as i32 <= 'f' as i32 {
+                digit = (digit as i32 - 'a' as i32 + 10 as i32) as libc::c_char
             } else {
-                return -(1 as libc::c_int);
+                return -(1 as i32);
             }
-            n += digit as libc::c_int;
+            n += digit as i32;
             i += 1
         }
         return n;
     }
-    return -(1 as libc::c_int);
+    return -(1 as i32);
 }
 /*
 ============================================================================
@@ -1224,50 +1224,50 @@ pub unsafe extern "C" fn Com_HexStrToInt(mut str: *const libc::c_char) -> libc::
 ============================================================================
 */
 #[no_mangle]
-pub unsafe extern "C" fn Q_isprint(mut c: libc::c_int) -> libc::c_int {
-    if c >= 0x20 as libc::c_int && c <= 0x7e as libc::c_int {
-        return 1 as libc::c_int;
+pub unsafe extern "C" fn Q_isprint(mut c: i32) -> i32 {
+    if c >= 0x20 as i32 && c <= 0x7e as i32 {
+        return 1 as i32;
     }
-    return 0 as libc::c_int;
+    return 0 as i32;
 }
 #[no_mangle]
-pub unsafe extern "C" fn Q_islower(mut c: libc::c_int) -> libc::c_int {
+pub unsafe extern "C" fn Q_islower(mut c: i32) -> i32 {
     if c >= 'a' as i32 && c <= 'z' as i32 {
-        return 1 as libc::c_int;
+        return 1 as i32;
     }
-    return 0 as libc::c_int;
+    return 0 as i32;
 }
 #[no_mangle]
-pub unsafe extern "C" fn Q_isupper(mut c: libc::c_int) -> libc::c_int {
+pub unsafe extern "C" fn Q_isupper(mut c: i32) -> i32 {
     if c >= 'A' as i32 && c <= 'Z' as i32 {
-        return 1 as libc::c_int;
+        return 1 as i32;
     }
-    return 0 as libc::c_int;
+    return 0 as i32;
 }
 #[no_mangle]
-pub unsafe extern "C" fn Q_isalpha(mut c: libc::c_int) -> libc::c_int {
+pub unsafe extern "C" fn Q_isalpha(mut c: i32) -> i32 {
     if c >= 'a' as i32 && c <= 'z' as i32 || c >= 'A' as i32 && c <= 'Z' as i32 {
-        return 1 as libc::c_int;
+        return 1 as i32;
     }
-    return 0 as libc::c_int;
+    return 0 as i32;
 }
 #[no_mangle]
 pub unsafe extern "C" fn Q_isanumber(
     mut s: *const libc::c_char,
 ) -> crate::src::qcommon::q_shared::qboolean {
     let mut p: *mut libc::c_char = 0 as *mut libc::c_char;
-    if *s as libc::c_int == '\u{0}' as i32 {
+    if *s as i32 == '\u{0}' as i32 {
         return crate::src::qcommon::q_shared::qfalse;
     }
     ::libc::strtod(s, &mut p);
-    return (*p as libc::c_int == '\u{0}' as i32) as libc::c_int
+    return (*p as i32 == '\u{0}' as i32) as i32
         as crate::src::qcommon::q_shared::qboolean;
 }
 #[no_mangle]
 pub unsafe extern "C" fn Q_isintegral(
-    mut f: libc::c_float,
+    mut f: f32,
 ) -> crate::src::qcommon::q_shared::qboolean {
-    return (f as libc::c_int as libc::c_float == f) as libc::c_int
+    return (f as i32 as f32 == f) as i32
         as crate::src::qcommon::q_shared::qboolean;
 }
 /*
@@ -1281,59 +1281,59 @@ Safe strncpy that ensures a trailing zero
 pub unsafe extern "C" fn Q_strncpyz(
     mut dest: *mut libc::c_char,
     mut src: *const libc::c_char,
-    mut destsize: libc::c_int,
+    mut destsize: i32,
 ) {
     if dest.is_null() {
         crate::src::q3_ui::ui_atoms::Com_Error(
-            crate::src::qcommon::q_shared::ERR_FATAL as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_FATAL as i32,
             b"Q_strncpyz: NULL dest\x00" as *const u8 as *const libc::c_char,
         );
     }
     if src.is_null() {
         crate::src::q3_ui::ui_atoms::Com_Error(
-            crate::src::qcommon::q_shared::ERR_FATAL as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_FATAL as i32,
             b"Q_strncpyz: NULL src\x00" as *const u8 as *const libc::c_char,
         );
     }
-    if destsize < 1 as libc::c_int {
+    if destsize < 1 as i32 {
         crate::src::q3_ui::ui_atoms::Com_Error(
-            crate::src::qcommon::q_shared::ERR_FATAL as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_FATAL as i32,
             b"Q_strncpyz: destsize < 1\x00" as *const u8 as *const libc::c_char,
         );
     }
-    crate::stdlib::strncpy(dest, src, (destsize - 1 as libc::c_int) as libc::c_ulong);
-    *dest.offset((destsize - 1 as libc::c_int) as isize) = 0 as libc::c_int as libc::c_char;
+    crate::stdlib::strncpy(dest, src, (destsize - 1 as i32) as libc::c_ulong);
+    *dest.offset((destsize - 1 as i32) as isize) = 0 as i32 as libc::c_char;
 }
 #[no_mangle]
 pub unsafe extern "C" fn Q_stricmpn(
     mut s1: *const libc::c_char,
     mut s2: *const libc::c_char,
-    mut n: libc::c_int,
-) -> libc::c_int {
-    let mut c1: libc::c_int = 0;
-    let mut c2: libc::c_int = 0;
+    mut n: i32,
+) -> i32 {
+    let mut c1: i32 = 0;
+    let mut c2: i32 = 0;
     if s1.is_null() {
         if s2.is_null() {
-            return 0 as libc::c_int;
+            return 0 as i32;
         } else {
-            return -(1 as libc::c_int);
+            return -(1 as i32);
         }
     } else {
         if s2.is_null() {
-            return 1 as libc::c_int;
+            return 1 as i32;
         }
     }
     loop {
         let fresh7 = s1;
         s1 = s1.offset(1);
-        c1 = *fresh7 as libc::c_int;
+        c1 = *fresh7 as i32;
         let fresh8 = s2;
         s2 = s2.offset(1);
-        c2 = *fresh8 as libc::c_int;
+        c2 = *fresh8 as i32;
         let fresh9 = n;
         n = n - 1;
         if fresh9 == 0 {
-            return 0 as libc::c_int;
+            return 0 as i32;
             // strings are equal until end point
         }
         if c1 != c2 {
@@ -1345,9 +1345,9 @@ pub unsafe extern "C" fn Q_stricmpn(
             }
             if c1 != c2 {
                 return if c1 < c2 {
-                    -(1 as libc::c_int)
+                    -(1 as i32)
                 } else {
-                    1 as libc::c_int
+                    1 as i32
                 };
             }
         }
@@ -1355,7 +1355,7 @@ pub unsafe extern "C" fn Q_stricmpn(
             break;
         }
     }
-    return 0 as libc::c_int;
+    return 0 as i32;
     // strings are equal
 }
 // strings are equal
@@ -1363,35 +1363,35 @@ pub unsafe extern "C" fn Q_stricmpn(
 pub unsafe extern "C" fn Q_strncmp(
     mut s1: *const libc::c_char,
     mut s2: *const libc::c_char,
-    mut n: libc::c_int,
-) -> libc::c_int {
-    let mut c1: libc::c_int = 0;
-    let mut c2: libc::c_int = 0;
+    mut n: i32,
+) -> i32 {
+    let mut c1: i32 = 0;
+    let mut c2: i32 = 0;
     loop {
         let fresh10 = s1;
         s1 = s1.offset(1);
-        c1 = *fresh10 as libc::c_int;
+        c1 = *fresh10 as i32;
         let fresh11 = s2;
         s2 = s2.offset(1);
-        c2 = *fresh11 as libc::c_int;
+        c2 = *fresh11 as i32;
         let fresh12 = n;
         n = n - 1;
         if fresh12 == 0 {
-            return 0 as libc::c_int;
+            return 0 as i32;
             // strings are equal until end point
         }
         if c1 != c2 {
             return if c1 < c2 {
-                -(1 as libc::c_int)
+                -(1 as i32)
             } else {
-                1 as libc::c_int
+                1 as i32
             };
         }
         if !(c1 != 0) {
             break;
         }
     }
-    return 0 as libc::c_int;
+    return 0 as i32;
     // strings are equal
 }
 // strings are equal
@@ -1399,11 +1399,11 @@ pub unsafe extern "C" fn Q_strncmp(
 pub unsafe extern "C" fn Q_stricmp(
     mut s1: *const libc::c_char,
     mut s2: *const libc::c_char,
-) -> libc::c_int {
+) -> i32 {
     return if !s1.is_null() && !s2.is_null() {
-        Q_stricmpn(s1, s2, 99999 as libc::c_int)
+        Q_stricmpn(s1, s2, 99999 as i32)
     } else {
-        -(1 as libc::c_int)
+        -(1 as i32)
     };
 }
 #[no_mangle]
@@ -1412,22 +1412,22 @@ pub unsafe extern "C" fn Q_strlwr(mut s1: *mut libc::c_char) -> *mut libc::c_cha
     s = s1;
     while *s != 0 {
         *s = ({
-            let mut __res: libc::c_int = 0;
+            let mut __res: i32 = 0;
             if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong
-                > 1 as libc::c_int as libc::c_ulong
+                > 1 as i32 as libc::c_ulong
             {
                 if 0 != 0 {
-                    let mut __c: libc::c_int = *s as libc::c_int;
-                    __res = if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
+                    let mut __c: i32 = *s as i32;
+                    __res = if __c < -(128 as i32) || __c > 255 as i32 {
                         __c
                     } else {
                         *(*crate::stdlib::__ctype_tolower_loc()).offset(__c as isize)
                     }
                 } else {
-                    __res = tolower(*s as libc::c_int)
+                    __res = tolower(*s as i32)
                 }
             } else {
-                __res = *(*crate::stdlib::__ctype_tolower_loc()).offset(*s as libc::c_int as isize)
+                __res = *(*crate::stdlib::__ctype_tolower_loc()).offset(*s as i32 as isize)
             }
             __res
         }) as libc::c_char;
@@ -1441,22 +1441,22 @@ pub unsafe extern "C" fn Q_strupr(mut s1: *mut libc::c_char) -> *mut libc::c_cha
     s = s1;
     while *s != 0 {
         *s = ({
-            let mut __res: libc::c_int = 0;
+            let mut __res: i32 = 0;
             if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong
-                > 1 as libc::c_int as libc::c_ulong
+                > 1 as i32 as libc::c_ulong
             {
                 if 0 != 0 {
-                    let mut __c: libc::c_int = *s as libc::c_int;
-                    __res = if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
+                    let mut __c: i32 = *s as i32;
+                    __res = if __c < -(128 as i32) || __c > 255 as i32 {
                         __c
                     } else {
                         *(*crate::stdlib::__ctype_toupper_loc()).offset(__c as isize)
                     }
                 } else {
-                    __res = toupper(*s as libc::c_int)
+                    __res = toupper(*s as i32)
                 }
             } else {
-                __res = *(*crate::stdlib::__ctype_toupper_loc()).offset(*s as libc::c_int as isize)
+                __res = *(*crate::stdlib::__ctype_toupper_loc()).offset(*s as i32 as isize)
             }
             __res
         }) as libc::c_char;
@@ -1468,14 +1468,14 @@ pub unsafe extern "C" fn Q_strupr(mut s1: *mut libc::c_char) -> *mut libc::c_cha
 #[no_mangle]
 pub unsafe extern "C" fn Q_strcat(
     mut dest: *mut libc::c_char,
-    mut size: libc::c_int,
+    mut size: i32,
     mut src: *const libc::c_char,
 ) {
-    let mut l1: libc::c_int = 0;
-    l1 = crate::stdlib::strlen(dest) as libc::c_int;
+    let mut l1: i32 = 0;
+    l1 = crate::stdlib::strlen(dest) as i32;
     if l1 >= size {
         crate::src::q3_ui::ui_atoms::Com_Error(
-            crate::src::qcommon::q_shared::ERR_FATAL as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_FATAL as i32,
             b"Q_strcat: already overflowed\x00" as *const u8 as *const libc::c_char,
         );
     }
@@ -1495,9 +1495,9 @@ pub unsafe extern "C" fn Q_stristr(
     let fresh13 = find;
     find = find.offset(1);
     c = *fresh13;
-    if c as libc::c_int != 0 as libc::c_int {
-        if c as libc::c_int >= 'a' as i32 && c as libc::c_int <= 'z' as i32 {
-            c = (c as libc::c_int - ('a' as i32 - 'A' as i32)) as libc::c_char
+    if c as i32 != 0 as i32 {
+        if c as i32 >= 'a' as i32 && c as i32 <= 'z' as i32 {
+            c = (c as i32 - ('a' as i32 - 'A' as i32)) as libc::c_char
         }
         len = crate::stdlib::strlen(find);
         loop {
@@ -1505,17 +1505,17 @@ pub unsafe extern "C" fn Q_stristr(
                 let fresh14 = s;
                 s = s.offset(1);
                 sc = *fresh14;
-                if sc as libc::c_int == 0 as libc::c_int {
+                if sc as i32 == 0 as i32 {
                     return 0 as *const libc::c_char;
                 }
-                if sc as libc::c_int >= 'a' as i32 && sc as libc::c_int <= 'z' as i32 {
-                    sc = (sc as libc::c_int - ('a' as i32 - 'A' as i32)) as libc::c_char
+                if sc as i32 >= 'a' as i32 && sc as i32 <= 'z' as i32 {
+                    sc = (sc as i32 - ('a' as i32 - 'A' as i32)) as libc::c_char
                 }
-                if !(sc as libc::c_int != c as libc::c_int) {
+                if !(sc as i32 != c as i32) {
                     break;
                 }
             }
-            if !(Q_stricmpn(s, find, len as libc::c_int) != 0 as libc::c_int) {
+            if !(Q_stricmpn(s, find, len as i32) != 0 as i32) {
                 break;
             }
         }
@@ -1524,17 +1524,17 @@ pub unsafe extern "C" fn Q_stristr(
     return s;
 }
 #[no_mangle]
-pub unsafe extern "C" fn Q_PrintStrlen(mut string: *const libc::c_char) -> libc::c_int {
-    let mut len: libc::c_int = 0;
+pub unsafe extern "C" fn Q_PrintStrlen(mut string: *const libc::c_char) -> i32 {
+    let mut len: i32 = 0;
     let mut p: *const libc::c_char = 0 as *const libc::c_char;
     if string.is_null() {
-        return 0 as libc::c_int;
+        return 0 as i32;
     }
-    len = 0 as libc::c_int;
+    len = 0 as i32;
     p = string;
     while *p != 0 {
         if Q_IsColorString(p) as u64 != 0 {
-            p = p.offset(2 as libc::c_int as isize)
+            p = p.offset(2 as i32 as isize)
         } else {
             p = p.offset(1);
             len += 1
@@ -1546,17 +1546,17 @@ pub unsafe extern "C" fn Q_PrintStrlen(mut string: *const libc::c_char) -> libc:
 pub unsafe extern "C" fn Q_CleanStr(mut string: *mut libc::c_char) -> *mut libc::c_char {
     let mut d: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut c: libc::c_int = 0;
+    let mut c: i32 = 0;
     s = string;
     d = string;
     loop {
-        c = *s as libc::c_int;
-        if !(c != 0 as libc::c_int) {
+        c = *s as i32;
+        if !(c != 0 as i32) {
             break;
         }
         if Q_IsColorString(s) as u64 != 0 {
             s = s.offset(1)
-        } else if c >= 0x20 as libc::c_int && c <= 0x7e as libc::c_int {
+        } else if c >= 0x20 as i32 && c <= 0x7e as i32 {
             let fresh15 = d;
             d = d.offset(1);
             *fresh15 = c as libc::c_char
@@ -1570,11 +1570,11 @@ pub unsafe extern "C" fn Q_CleanStr(mut string: *mut libc::c_char) -> *mut libc:
 pub unsafe extern "C" fn Q_CountChar(
     mut string: *const libc::c_char,
     mut tocount: libc::c_char,
-) -> libc::c_int {
-    let mut count: libc::c_int = 0;
-    count = 0 as libc::c_int;
+) -> i32 {
+    let mut count: i32 = 0;
+    count = 0 as i32;
     while *string != 0 {
-        if *string as libc::c_int == tocount as libc::c_int {
+        if *string as i32 == tocount as i32 {
             count += 1
         }
         string = string.offset(1)
@@ -1584,11 +1584,11 @@ pub unsafe extern "C" fn Q_CountChar(
 #[no_mangle]
 pub unsafe extern "C" fn Com_sprintf(
     mut dest: *mut libc::c_char,
-    mut size: libc::c_int,
+    mut size: i32,
     mut fmt: *const libc::c_char,
     mut args: ...
-) -> libc::c_int {
-    let mut len: libc::c_int = 0;
+) -> i32 {
+    let mut len: i32 = 0;
     let mut argptr: ::std::ffi::VaListImpl;
     argptr = args.clone();
     len = crate::stdlib::vsnprintf(dest, size as libc::c_ulong, fmt, argptr.as_va_list());
@@ -1597,7 +1597,7 @@ pub unsafe extern "C" fn Com_sprintf(
             b"Com_sprintf: Output length %d too short, require %d bytes.\n\x00" as *const u8
                 as *const libc::c_char,
             size,
-            len + 1 as libc::c_int,
+            len + 1 as i32,
         );
     }
     return len;
@@ -1614,9 +1614,9 @@ varargs versions of all text functions.
 pub unsafe extern "C" fn va(mut format: *mut libc::c_char, mut args: ...) -> *mut libc::c_char {
     let mut argptr: ::std::ffi::VaListImpl; // in case va is called by nested functions
     static mut string: [[libc::c_char; 32000]; 2] = [[0; 32000]; 2];
-    static mut index: libc::c_int = 0 as libc::c_int;
+    static mut index: i32 = 0 as i32;
     let mut buf: *mut libc::c_char = 0 as *mut libc::c_char;
-    buf = string[(index & 1 as libc::c_int) as usize].as_mut_ptr();
+    buf = string[(index & 1 as i32) as usize].as_mut_ptr();
     index += 1;
     argptr = args.clone();
     crate::stdlib::vsnprintf(
@@ -1639,26 +1639,26 @@ pub unsafe extern "C" fn Com_TruncateLongString(
     mut buffer: *mut libc::c_char,
     mut s: *const libc::c_char,
 ) {
-    let mut length: libc::c_int = crate::stdlib::strlen(s) as libc::c_int;
-    if length <= 64 as libc::c_int {
-        Q_strncpyz(buffer, s, 64 as libc::c_int);
+    let mut length: i32 = crate::stdlib::strlen(s) as i32;
+    if length <= 64 as i32 {
+        Q_strncpyz(buffer, s, 64 as i32);
     } else {
         Q_strncpyz(
             buffer,
             s,
-            64 as libc::c_int / 2 as libc::c_int - 3 as libc::c_int,
+            64 as i32 / 2 as i32 - 3 as i32,
         );
         Q_strcat(
             buffer,
-            64 as libc::c_int,
+            64 as i32,
             b" ... \x00" as *const u8 as *const libc::c_char,
         );
         Q_strcat(
             buffer,
-            64 as libc::c_int,
+            64 as i32,
             s.offset(length as isize)
-                .offset(-((64 as libc::c_int / 2 as libc::c_int) as isize))
-                .offset(3 as libc::c_int as isize),
+                .offset(-((64 as i32 / 2 as i32) as isize))
+                .offset(3 as i32 as isize),
         );
     };
 }
@@ -1687,24 +1687,24 @@ pub unsafe extern "C" fn Info_ValueForKey(
     let mut pkey: [libc::c_char; 8192] = [0; 8192]; // use two buffers so compares
     static mut value: [[libc::c_char; 8192]; 2] = [[0; 8192]; 2];
     // work without stomping on each other
-    static mut valueindex: libc::c_int = 0 as libc::c_int;
+    static mut valueindex: i32 = 0 as i32;
     let mut o: *mut libc::c_char = 0 as *mut libc::c_char;
     if s.is_null() || key.is_null() {
         return b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     }
-    if crate::stdlib::strlen(s) >= 8192 as libc::c_int as libc::c_ulong {
+    if crate::stdlib::strlen(s) >= 8192 as i32 as libc::c_ulong {
         crate::src::q3_ui::ui_atoms::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"Info_ValueForKey: oversize infostring\x00" as *const u8 as *const libc::c_char,
         );
     }
-    valueindex ^= 1 as libc::c_int;
-    if *s as libc::c_int == '\\' as i32 {
+    valueindex ^= 1 as i32;
+    if *s as i32 == '\\' as i32 {
         s = s.offset(1)
     }
     loop {
         o = pkey.as_mut_ptr();
-        while *s as libc::c_int != '\\' as i32 {
+        while *s as i32 != '\\' as i32 {
             if *s == 0 {
                 return b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
             }
@@ -1714,17 +1714,17 @@ pub unsafe extern "C" fn Info_ValueForKey(
             o = o.offset(1);
             *fresh17 = *fresh16
         }
-        *o = 0 as libc::c_int as libc::c_char;
+        *o = 0 as i32 as libc::c_char;
         s = s.offset(1);
         o = value[valueindex as usize].as_mut_ptr();
-        while *s as libc::c_int != '\\' as i32 && *s as libc::c_int != 0 {
+        while *s as i32 != '\\' as i32 && *s as i32 != 0 {
             let fresh18 = s;
             s = s.offset(1);
             let fresh19 = o;
             o = o.offset(1);
             *fresh19 = *fresh18
         }
-        *o = 0 as libc::c_int as libc::c_char;
+        *o = 0 as i32 as libc::c_char;
         if Q_stricmp(key, pkey.as_mut_ptr()) == 0 {
             return value[valueindex as usize].as_mut_ptr();
         }
@@ -1751,15 +1751,15 @@ pub unsafe extern "C" fn Info_NextPair(
     let mut o: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut s: *const libc::c_char = 0 as *const libc::c_char;
     s = *head;
-    if *s as libc::c_int == '\\' as i32 {
+    if *s as i32 == '\\' as i32 {
         s = s.offset(1)
     }
-    *key.offset(0 as libc::c_int as isize) = 0 as libc::c_int as libc::c_char;
-    *value.offset(0 as libc::c_int as isize) = 0 as libc::c_int as libc::c_char;
+    *key.offset(0 as i32 as isize) = 0 as i32 as libc::c_char;
+    *value.offset(0 as i32 as isize) = 0 as i32 as libc::c_char;
     o = key;
-    while *s as libc::c_int != '\\' as i32 {
+    while *s as i32 != '\\' as i32 {
         if *s == 0 {
-            *o = 0 as libc::c_int as libc::c_char;
+            *o = 0 as i32 as libc::c_char;
             *head = s;
             return;
         }
@@ -1769,17 +1769,17 @@ pub unsafe extern "C" fn Info_NextPair(
         o = o.offset(1);
         *fresh21 = *fresh20
     }
-    *o = 0 as libc::c_int as libc::c_char;
+    *o = 0 as i32 as libc::c_char;
     s = s.offset(1);
     o = value;
-    while *s as libc::c_int != '\\' as i32 && *s as libc::c_int != 0 {
+    while *s as i32 != '\\' as i32 && *s as i32 != 0 {
         let fresh22 = s;
         s = s.offset(1);
         let fresh23 = o;
         o = o.offset(1);
         *fresh23 = *fresh22
     }
-    *o = 0 as libc::c_int as libc::c_char;
+    *o = 0 as i32 as libc::c_char;
     *head = s;
 }
 /*
@@ -1793,9 +1793,9 @@ pub unsafe extern "C" fn Info_RemoveKey(mut s: *mut libc::c_char, mut key: *cons
     let mut pkey: [libc::c_char; 1024] = [0; 1024];
     let mut value: [libc::c_char; 1024] = [0; 1024];
     let mut o: *mut libc::c_char = 0 as *mut libc::c_char;
-    if crate::stdlib::strlen(s) >= 1024 as libc::c_int as libc::c_ulong {
+    if crate::stdlib::strlen(s) >= 1024 as i32 as libc::c_ulong {
         crate::src::q3_ui::ui_atoms::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"Info_RemoveKey: oversize infostring\x00" as *const u8 as *const libc::c_char,
         );
     }
@@ -1804,11 +1804,11 @@ pub unsafe extern "C" fn Info_RemoveKey(mut s: *mut libc::c_char, mut key: *cons
     }
     loop {
         start = s;
-        if *s as libc::c_int == '\\' as i32 {
+        if *s as i32 == '\\' as i32 {
             s = s.offset(1)
         }
         o = pkey.as_mut_ptr();
-        while *s as libc::c_int != '\\' as i32 {
+        while *s as i32 != '\\' as i32 {
             if *s == 0 {
                 return;
             }
@@ -1818,10 +1818,10 @@ pub unsafe extern "C" fn Info_RemoveKey(mut s: *mut libc::c_char, mut key: *cons
             o = o.offset(1);
             *fresh25 = *fresh24
         }
-        *o = 0 as libc::c_int as libc::c_char;
+        *o = 0 as i32 as libc::c_char;
         s = s.offset(1);
         o = value.as_mut_ptr();
-        while *s as libc::c_int != '\\' as i32 && *s as libc::c_int != 0 {
+        while *s as i32 != '\\' as i32 && *s as i32 != 0 {
             if *s == 0 {
                 return;
             }
@@ -1831,12 +1831,12 @@ pub unsafe extern "C" fn Info_RemoveKey(mut s: *mut libc::c_char, mut key: *cons
             o = o.offset(1);
             *fresh27 = *fresh26
         }
-        *o = 0 as libc::c_int as libc::c_char;
+        *o = 0 as i32 as libc::c_char;
         if ::libc::strcmp(key, pkey.as_mut_ptr()) == 0 {
             crate::stdlib::memmove(
                 start as *mut libc::c_void,
                 s as *const libc::c_void,
-                crate::stdlib::strlen(s).wrapping_add(1 as libc::c_int as libc::c_ulong),
+                crate::stdlib::strlen(s).wrapping_add(1 as i32 as libc::c_ulong),
             );
             return;
         }
@@ -1859,9 +1859,9 @@ pub unsafe extern "C" fn Info_RemoveKey_Big(
     let mut pkey: [libc::c_char; 8192] = [0; 8192];
     let mut value: [libc::c_char; 8192] = [0; 8192];
     let mut o: *mut libc::c_char = 0 as *mut libc::c_char;
-    if crate::stdlib::strlen(s) >= 8192 as libc::c_int as libc::c_ulong {
+    if crate::stdlib::strlen(s) >= 8192 as i32 as libc::c_ulong {
         crate::src::q3_ui::ui_atoms::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"Info_RemoveKey_Big: oversize infostring\x00" as *const u8 as *const libc::c_char,
         );
     }
@@ -1870,11 +1870,11 @@ pub unsafe extern "C" fn Info_RemoveKey_Big(
     }
     loop {
         start = s;
-        if *s as libc::c_int == '\\' as i32 {
+        if *s as i32 == '\\' as i32 {
             s = s.offset(1)
         }
         o = pkey.as_mut_ptr();
-        while *s as libc::c_int != '\\' as i32 {
+        while *s as i32 != '\\' as i32 {
             if *s == 0 {
                 return;
             }
@@ -1884,10 +1884,10 @@ pub unsafe extern "C" fn Info_RemoveKey_Big(
             o = o.offset(1);
             *fresh29 = *fresh28
         }
-        *o = 0 as libc::c_int as libc::c_char;
+        *o = 0 as i32 as libc::c_char;
         s = s.offset(1);
         o = value.as_mut_ptr();
-        while *s as libc::c_int != '\\' as i32 && *s as libc::c_int != 0 {
+        while *s as i32 != '\\' as i32 && *s as i32 != 0 {
             if *s == 0 {
                 return;
             }
@@ -1897,12 +1897,12 @@ pub unsafe extern "C" fn Info_RemoveKey_Big(
             o = o.offset(1);
             *fresh31 = *fresh30
         }
-        *o = 0 as libc::c_int as libc::c_char;
+        *o = 0 as i32 as libc::c_char;
         if ::libc::strcmp(key, pkey.as_mut_ptr()) == 0 {
             crate::stdlib::memmove(
                 start as *mut libc::c_void,
                 s as *const libc::c_void,
-                crate::stdlib::strlen(s).wrapping_add(1 as libc::c_int as libc::c_ulong),
+                crate::stdlib::strlen(s).wrapping_add(1 as i32 as libc::c_ulong),
             );
             return;
         }
@@ -1946,20 +1946,20 @@ pub unsafe extern "C" fn Info_SetValueForKey(
 ) {
     let mut newi: [libc::c_char; 1024] = [0; 1024];
     let mut blacklist: *const libc::c_char = b"\\;\"\x00" as *const u8 as *const libc::c_char;
-    if crate::stdlib::strlen(s) >= 1024 as libc::c_int as libc::c_ulong {
+    if crate::stdlib::strlen(s) >= 1024 as i32 as libc::c_ulong {
         crate::src::q3_ui::ui_atoms::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"Info_SetValueForKey: oversize infostring\x00" as *const u8 as *const libc::c_char,
         );
     }
     while *blacklist != 0 {
-        if !::libc::strchr(key, *blacklist as libc::c_int).is_null()
-            || !::libc::strchr(value, *blacklist as libc::c_int).is_null()
+        if !::libc::strchr(key, *blacklist as i32).is_null()
+            || !::libc::strchr(value, *blacklist as i32).is_null()
         {
             crate::src::q3_ui::ui_atoms::Com_Printf(
                 b"^3Can\'t use keys or values with a \'%c\': %s = %s\n\x00" as *const u8
                     as *const libc::c_char,
-                *blacklist as libc::c_int,
+                *blacklist as i32,
                 key,
                 value,
             );
@@ -1973,13 +1973,13 @@ pub unsafe extern "C" fn Info_SetValueForKey(
     }
     Com_sprintf(
         newi.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
         b"\\%s\\%s\x00" as *const u8 as *const libc::c_char,
         key,
         value,
     );
     if crate::stdlib::strlen(newi.as_mut_ptr()).wrapping_add(crate::stdlib::strlen(s))
-        >= 1024 as libc::c_int as libc::c_ulong
+        >= 1024 as i32 as libc::c_ulong
     {
         crate::src::q3_ui::ui_atoms::Com_Printf(
             b"Info string length exceeded\n\x00" as *const u8 as *const libc::c_char,
@@ -2048,20 +2048,20 @@ pub unsafe extern "C" fn Info_SetValueForKey_Big(
 ) {
     let mut newi: [libc::c_char; 8192] = [0; 8192];
     let mut blacklist: *const libc::c_char = b"\\;\"\x00" as *const u8 as *const libc::c_char;
-    if crate::stdlib::strlen(s) >= 8192 as libc::c_int as libc::c_ulong {
+    if crate::stdlib::strlen(s) >= 8192 as i32 as libc::c_ulong {
         crate::src::q3_ui::ui_atoms::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"Info_SetValueForKey: oversize infostring\x00" as *const u8 as *const libc::c_char,
         );
     }
     while *blacklist != 0 {
-        if !::libc::strchr(key, *blacklist as libc::c_int).is_null()
-            || !::libc::strchr(value, *blacklist as libc::c_int).is_null()
+        if !::libc::strchr(key, *blacklist as i32).is_null()
+            || !::libc::strchr(value, *blacklist as i32).is_null()
         {
             crate::src::q3_ui::ui_atoms::Com_Printf(
                 b"^3Can\'t use keys or values with a \'%c\': %s = %s\n\x00" as *const u8
                     as *const libc::c_char,
-                *blacklist as libc::c_int,
+                *blacklist as i32,
                 key,
                 value,
             );
@@ -2075,13 +2075,13 @@ pub unsafe extern "C" fn Info_SetValueForKey_Big(
     }
     Com_sprintf(
         newi.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 8192]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 8192]>() as libc::c_ulong as i32,
         b"\\%s\\%s\x00" as *const u8 as *const libc::c_char,
         key,
         value,
     );
     if crate::stdlib::strlen(newi.as_mut_ptr()).wrapping_add(crate::stdlib::strlen(s))
-        >= 8192 as libc::c_int as libc::c_ulong
+        >= 8192 as i32 as libc::c_ulong
     {
         crate::src::q3_ui::ui_atoms::Com_Printf(
             b"BIG Info string length exceeded\n\x00" as *const u8 as *const libc::c_char,
@@ -2101,10 +2101,10 @@ unsafe extern "C" fn Com_CharIsOneOfCharset(
     mut c: libc::c_char,
     mut set: *mut libc::c_char,
 ) -> crate::src::qcommon::q_shared::qboolean {
-    let mut i: libc::c_int = 0;
-    i = 0 as libc::c_int;
+    let mut i: i32 = 0;
+    i = 0 as i32;
     while (i as libc::c_ulong) < crate::stdlib::strlen(set) {
-        if *set.offset(i as isize) as libc::c_int == c as libc::c_int {
+        if *set.offset(i as isize) as i32 == c as i32 {
             return crate::src::qcommon::q_shared::qtrue;
         }
         i += 1
@@ -2328,10 +2328,10 @@ Com_SkipTokens
 #[no_mangle]
 pub unsafe extern "C" fn Com_SkipTokens(
     mut s: *mut libc::c_char,
-    mut numTokens: libc::c_int,
+    mut numTokens: i32,
     mut sep: *mut libc::c_char,
 ) -> *mut libc::c_char {
-    let mut sepCount: libc::c_int = 0 as libc::c_int;
+    let mut sepCount: i32 = 0 as i32;
     let mut p: *mut libc::c_char = s;
     while sepCount < numTokens {
         let fresh32 = p;
@@ -2341,7 +2341,7 @@ pub unsafe extern "C" fn Com_SkipTokens(
             while Com_CharIsOneOfCharset(*p, sep) as u64 != 0 {
                 p = p.offset(1)
             }
-        } else if *p as libc::c_int == '\u{0}' as i32 {
+        } else if *p as i32 == '\u{0}' as i32 {
             break;
         }
     }

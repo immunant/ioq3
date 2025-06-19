@@ -7,12 +7,12 @@ pub mod macros_h {
         mut in32: crate::opus_types_h::opus_int32,
     ) -> crate::opus_types_h::opus_int32 {
         return if in32 != 0 {
-            (32 as libc::c_int)
-                - (::std::mem::size_of::<libc::c_uint>() as libc::c_ulong as libc::c_int
-                    * 8 as libc::c_int
-                    - (in32 as libc::c_uint).leading_zeros() as i32)
+            (32 as i32)
+                - (::std::mem::size_of::<u32>() as libc::c_ulong as i32
+                    * 8 as i32
+                    - (in32 as u32).leading_zeros() as i32)
         } else {
-            32 as libc::c_int
+            32 as i32
         };
     }
 
@@ -88,71 +88,71 @@ pub mod Inlines_h {
 
     pub unsafe extern "C" fn silk_INVERSE32_varQ(
         b32: crate::opus_types_h::opus_int32,
-        Qres: libc::c_int,
+        Qres: i32,
     ) -> crate::opus_types_h::opus_int32
 /* I    Q-domain of result (> 0)        */ {
-        let mut b_headrm: libc::c_int = 0;
-        let mut lshift: libc::c_int = 0;
+        let mut b_headrm: i32 = 0;
+        let mut lshift: i32 = 0;
         let mut b32_inv: crate::opus_types_h::opus_int32 = 0;
         let mut b32_nrm: crate::opus_types_h::opus_int32 = 0;
         let mut err_Q32: crate::opus_types_h::opus_int32 = 0;
         let mut result: crate::opus_types_h::opus_int32 = 0;
         /* Compute number of bits head room and normalize input */
-        b_headrm = silk_CLZ32(if b32 > 0 as libc::c_int { b32 } else { -b32 }) - 1 as libc::c_int; /* Q: b_headrm                */
+        b_headrm = silk_CLZ32(if b32 > 0 as i32 { b32 } else { -b32 }) - 1 as i32; /* Q: b_headrm                */
         b32_nrm = ((b32 as crate::opus_types_h::opus_uint32) << b_headrm)
             as crate::opus_types_h::opus_int32;
         /* Inverse of b32, with 14 bits of precision */
-        b32_inv = (0x7fffffff as libc::c_int >> 2 as libc::c_int) / (b32_nrm >> 16 as libc::c_int); /* Q: 29 + 16 - b_headrm    */
+        b32_inv = (0x7fffffff as i32 >> 2 as i32) / (b32_nrm >> 16 as i32); /* Q: 29 + 16 - b_headrm    */
         /* First approximation */
-        result = ((b32_inv as crate::opus_types_h::opus_uint32) << 16 as libc::c_int)
+        result = ((b32_inv as crate::opus_types_h::opus_uint32) << 16 as i32)
             as crate::opus_types_h::opus_int32; /* Q: 61 - b_headrm            */
         /* Compute residual by subtracting product of denominator and first approximation from one */
-        err_Q32 = (((((1 as libc::c_int) << 29 as libc::c_int)
-            - (b32_nrm as libc::c_longlong
-                * b32_inv as crate::opus_types_h::opus_int16 as libc::c_longlong
-                >> 16 as libc::c_int) as crate::opus_types_h::opus_int32)
+        err_Q32 = (((((1 as i32) << 29 as i32)
+            - (b32_nrm as i64
+                * b32_inv as crate::opus_types_h::opus_int16 as i64
+                >> 16 as i32) as crate::opus_types_h::opus_int32)
             as crate::opus_types_h::opus_uint32)
-            << 3 as libc::c_int) as crate::opus_types_h::opus_int32; /* Q32                        */
+            << 3 as i32) as crate::opus_types_h::opus_int32; /* Q32                        */
         /* Refinement */
-        result = (result as libc::c_longlong
-            + (err_Q32 as libc::c_longlong * b32_inv as libc::c_longlong >> 16 as libc::c_int))
+        result = (result as i64
+            + (err_Q32 as i64 * b32_inv as i64 >> 16 as i32))
             as crate::opus_types_h::opus_int32; /* Q: 61 - b_headrm            */
         /* Convert to Qres domain */
-        lshift = 61 as libc::c_int - b_headrm - Qres;
-        if lshift <= 0 as libc::c_int {
-            return (((if 0x80000000 as libc::c_uint as crate::opus_types_h::opus_int32 >> -lshift
-                > 0x7fffffff as libc::c_int >> -lshift
+        lshift = 61 as i32 - b_headrm - Qres;
+        if lshift <= 0 as i32 {
+            return (((if 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> -lshift
+                > 0x7fffffff as i32 >> -lshift
             {
                 (if result
-                    > 0x80000000 as libc::c_uint as crate::opus_types_h::opus_int32 >> -lshift
+                    > 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> -lshift
                 {
-                    (0x80000000 as libc::c_uint as crate::opus_types_h::opus_int32) >> -lshift
+                    (0x80000000 as u32 as crate::opus_types_h::opus_int32) >> -lshift
                 } else {
-                    (if result < 0x7fffffff as libc::c_int >> -lshift {
-                        (0x7fffffff as libc::c_int) >> -lshift
+                    (if result < 0x7fffffff as i32 >> -lshift {
+                        (0x7fffffff as i32) >> -lshift
                     } else {
                         result
                     })
                 })
             } else {
-                (if result > 0x7fffffff as libc::c_int >> -lshift {
-                    (0x7fffffff as libc::c_int) >> -lshift
+                (if result > 0x7fffffff as i32 >> -lshift {
+                    (0x7fffffff as i32) >> -lshift
                 } else {
                     (if result
-                        < 0x80000000 as libc::c_uint as crate::opus_types_h::opus_int32 >> -lshift
+                        < 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> -lshift
                     {
-                        (0x80000000 as libc::c_uint as crate::opus_types_h::opus_int32) >> -lshift
+                        (0x80000000 as u32 as crate::opus_types_h::opus_int32) >> -lshift
                     } else {
                         result
                     })
                 })
             }) as crate::opus_types_h::opus_uint32)
                 << -lshift) as crate::opus_types_h::opus_int32;
-        } else if lshift < 32 as libc::c_int {
+        } else if lshift < 32 as i32 {
             return result >> lshift;
         } else {
             /* Avoid undefined result */
-            return 0 as libc::c_int;
+            return 0 as i32;
         };
     }
 
@@ -176,599 +176,599 @@ pub use crate::stdlib::uint32_t;
 
 unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
     mut A_QA: *mut crate::opus_types_h::opus_int32,
-    order: libc::c_int,
+    order: i32,
 ) -> crate::opus_types_h::opus_int32
 /* I   Prediction order                                         */ {
-    let mut k: libc::c_int = 0;
-    let mut n: libc::c_int = 0;
-    let mut mult2Q: libc::c_int = 0;
+    let mut k: i32 = 0;
+    let mut n: i32 = 0;
+    let mut mult2Q: i32 = 0;
     let mut invGain_Q30: crate::opus_types_h::opus_int32 = 0;
     let mut rc_Q31: crate::opus_types_h::opus_int32 = 0;
     let mut rc_mult1_Q30: crate::opus_types_h::opus_int32 = 0;
     let mut rc_mult2: crate::opus_types_h::opus_int32 = 0;
     let mut tmp1: crate::opus_types_h::opus_int32 = 0;
     let mut tmp2: crate::opus_types_h::opus_int32 = 0;
-    invGain_Q30 = ((1 as libc::c_int as libc::c_longlong
-        * ((1 as libc::c_int as libc::c_longlong) << 30 as libc::c_int))
-        as libc::c_double
+    invGain_Q30 = ((1 as i32 as i64
+        * ((1 as i32 as i64) << 30 as i32))
+        as f64
         + 0.5f64) as crate::opus_types_h::opus_int32;
-    k = order - 1 as libc::c_int;
-    while k > 0 as libc::c_int {
+    k = order - 1 as i32;
+    while k > 0 as i32 {
         /* Check for stability */
         if *A_QA.offset(k as isize)
             > (0.99975f64
-                * ((1 as libc::c_int as libc::c_longlong) << 24 as libc::c_int) as libc::c_double
+                * ((1 as i32 as i64) << 24 as i32) as f64
                 + 0.5f64) as crate::opus_types_h::opus_int32
             || *A_QA.offset(k as isize)
                 < -((0.99975f64
-                    * ((1 as libc::c_int as libc::c_longlong) << 24 as libc::c_int)
-                        as libc::c_double
+                    * ((1 as i32 as i64) << 24 as i32)
+                        as f64
                     + 0.5f64) as crate::opus_types_h::opus_int32)
         {
-            return 0 as libc::c_int;
+            return 0 as i32;
         }
         /* Set RC equal to negated AR coef */
         rc_Q31 = -(((*A_QA.offset(k as isize) as crate::opus_types_h::opus_uint32)
-            << 31 as libc::c_int - 24 as libc::c_int)
+            << 31 as i32 - 24 as i32)
             as crate::opus_types_h::opus_int32);
         /* rc_mult1_Q30 range: [ 1 : 2^30 ] */
-        rc_mult1_Q30 = ((1 as libc::c_int as libc::c_longlong
-            * ((1 as libc::c_int as libc::c_longlong) << 30 as libc::c_int))
-            as libc::c_double
+        rc_mult1_Q30 = ((1 as i32 as i64
+            * ((1 as i32 as i64) << 30 as i32))
+            as f64
             + 0.5f64) as crate::opus_types_h::opus_int32
-            - (rc_Q31 as libc::c_longlong * rc_Q31 as libc::c_longlong >> 32 as libc::c_int)
+            - (rc_Q31 as i64 * rc_Q31 as i64 >> 32 as i32)
                 as crate::opus_types_h::opus_int32;
         /* reduce A_LIMIT if fails */
         /* Update inverse gain */
         /* invGain_Q30 range: [ 0 : 2^30 ] */
-        invGain_Q30 = (((invGain_Q30 as libc::c_longlong * rc_mult1_Q30 as libc::c_longlong
-            >> 32 as libc::c_int) as crate::opus_types_h::opus_int32
+        invGain_Q30 = (((invGain_Q30 as i64 * rc_mult1_Q30 as i64
+            >> 32 as i32) as crate::opus_types_h::opus_int32
             as crate::opus_types_h::opus_uint32)
-            << 2 as libc::c_int) as crate::opus_types_h::opus_int32;
+            << 2 as i32) as crate::opus_types_h::opus_int32;
         if invGain_Q30
             < ((1.0f32 / 1e4f32
-                * ((1 as libc::c_int as libc::c_longlong) << 30 as libc::c_int) as libc::c_float)
-                as libc::c_double
+                * ((1 as i32 as i64) << 30 as i32) as f32)
+                as f64
                 + 0.5f64) as crate::opus_types_h::opus_int32
         {
-            return 0 as libc::c_int;
+            return 0 as i32;
         }
-        mult2Q = 32 as libc::c_int
-            - silk_CLZ32(if rc_mult1_Q30 > 0 as libc::c_int {
+        mult2Q = 32 as i32
+            - silk_CLZ32(if rc_mult1_Q30 > 0 as i32 {
                 rc_mult1_Q30
             } else {
                 -rc_mult1_Q30
             });
-        rc_mult2 = silk_INVERSE32_varQ(rc_mult1_Q30, mult2Q + 30 as libc::c_int);
-        n = 0 as libc::c_int;
-        while n < k + 1 as libc::c_int >> 1 as libc::c_int {
-            let mut tmp64: libc::c_longlong = 0;
+        rc_mult2 = silk_INVERSE32_varQ(rc_mult1_Q30, mult2Q + 30 as i32);
+        n = 0 as i32;
+        while n < k + 1 as i32 >> 1 as i32 {
+            let mut tmp64: i64 = 0;
             tmp1 = *A_QA.offset(n as isize);
-            tmp2 = *A_QA.offset((k - n - 1 as libc::c_int) as isize);
-            tmp64 = if mult2Q == 1 as libc::c_int {
+            tmp2 = *A_QA.offset((k - n - 1 as i32) as isize);
+            tmp64 = if mult2Q == 1 as i32 {
                 ((if (tmp1 as crate::opus_types_h::opus_uint32).wrapping_sub(
-                    (if 31 as libc::c_int == 1 as libc::c_int {
-                        (tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong >> 1 as libc::c_int)
-                            + (tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                & 1 as libc::c_int as libc::c_longlong)
+                    (if 31 as i32 == 1 as i32 {
+                        (tmp2 as i64 * rc_Q31 as i64 >> 1 as i32)
+                            + (tmp2 as i64 * rc_Q31 as i64
+                                & 1 as i32 as i64)
                     } else {
-                        ((tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                            >> 31 as libc::c_int - 1 as libc::c_int)
-                            + 1 as libc::c_int as libc::c_longlong)
-                            >> 1 as libc::c_int
+                        ((tmp2 as i64 * rc_Q31 as i64
+                            >> 31 as i32 - 1 as i32)
+                            + 1 as i32 as i64)
+                            >> 1 as i32
                     }) as crate::opus_types_h::opus_int32
                         as crate::opus_types_h::opus_uint32,
-                ) & 0x80000000 as libc::c_uint
-                    == 0 as libc::c_int as libc::c_uint
+                ) & 0x80000000 as u32
+                    == 0 as i32 as u32
                 {
-                    (if tmp1 as libc::c_uint
-                        & ((if 31 as libc::c_int == 1 as libc::c_int {
-                            (tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                >> 1 as libc::c_int)
-                                + (tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                    & 1 as libc::c_int as libc::c_longlong)
+                    (if tmp1 as u32
+                        & ((if 31 as i32 == 1 as i32 {
+                            (tmp2 as i64 * rc_Q31 as i64
+                                >> 1 as i32)
+                                + (tmp2 as i64 * rc_Q31 as i64
+                                    & 1 as i32 as i64)
                         } else {
-                            ((tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                >> 31 as libc::c_int - 1 as libc::c_int)
-                                + 1 as libc::c_int as libc::c_longlong)
-                                >> 1 as libc::c_int
+                            ((tmp2 as i64 * rc_Q31 as i64
+                                >> 31 as i32 - 1 as i32)
+                                + 1 as i32 as i64)
+                                >> 1 as i32
                         }) as crate::opus_types_h::opus_int32
-                            as libc::c_uint
-                            ^ 0x80000000 as libc::c_uint)
-                        & 0x80000000 as libc::c_uint
+                            as u32
+                            ^ 0x80000000 as u32)
+                        & 0x80000000 as u32
                         != 0
                     {
-                        0x80000000 as libc::c_uint as crate::opus_types_h::opus_int32
+                        0x80000000 as u32 as crate::opus_types_h::opus_int32
                     } else {
                         (tmp1)
-                            - (if 31 as libc::c_int == 1 as libc::c_int {
-                                (tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                    >> 1 as libc::c_int)
-                                    + (tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                        & 1 as libc::c_int as libc::c_longlong)
+                            - (if 31 as i32 == 1 as i32 {
+                                (tmp2 as i64 * rc_Q31 as i64
+                                    >> 1 as i32)
+                                    + (tmp2 as i64 * rc_Q31 as i64
+                                        & 1 as i32 as i64)
                             } else {
-                                ((tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                    >> 31 as libc::c_int - 1 as libc::c_int)
-                                    + 1 as libc::c_int as libc::c_longlong)
-                                    >> 1 as libc::c_int
+                                ((tmp2 as i64 * rc_Q31 as i64
+                                    >> 31 as i32 - 1 as i32)
+                                    + 1 as i32 as i64)
+                                    >> 1 as i32
                             }) as crate::opus_types_h::opus_int32
                     })
                 } else {
-                    (if (tmp1 as libc::c_uint ^ 0x80000000 as libc::c_uint)
-                        & (if 31 as libc::c_int == 1 as libc::c_int {
-                            (tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                >> 1 as libc::c_int)
-                                + (tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                    & 1 as libc::c_int as libc::c_longlong)
+                    (if (tmp1 as u32 ^ 0x80000000 as u32)
+                        & (if 31 as i32 == 1 as i32 {
+                            (tmp2 as i64 * rc_Q31 as i64
+                                >> 1 as i32)
+                                + (tmp2 as i64 * rc_Q31 as i64
+                                    & 1 as i32 as i64)
                         } else {
-                            ((tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                >> 31 as libc::c_int - 1 as libc::c_int)
-                                + 1 as libc::c_int as libc::c_longlong)
-                                >> 1 as libc::c_int
+                            ((tmp2 as i64 * rc_Q31 as i64
+                                >> 31 as i32 - 1 as i32)
+                                + 1 as i32 as i64)
+                                >> 1 as i32
                         }) as crate::opus_types_h::opus_int32
-                            as libc::c_uint
-                        & 0x80000000 as libc::c_uint
+                            as u32
+                        & 0x80000000 as u32
                         != 0
                     {
-                        0x7fffffff as libc::c_int
+                        0x7fffffff as i32
                     } else {
                         (tmp1)
-                            - (if 31 as libc::c_int == 1 as libc::c_int {
-                                (tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                    >> 1 as libc::c_int)
-                                    + (tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                        & 1 as libc::c_int as libc::c_longlong)
+                            - (if 31 as i32 == 1 as i32 {
+                                (tmp2 as i64 * rc_Q31 as i64
+                                    >> 1 as i32)
+                                    + (tmp2 as i64 * rc_Q31 as i64
+                                        & 1 as i32 as i64)
                             } else {
-                                ((tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                    >> 31 as libc::c_int - 1 as libc::c_int)
-                                    + 1 as libc::c_int as libc::c_longlong)
-                                    >> 1 as libc::c_int
+                                ((tmp2 as i64 * rc_Q31 as i64
+                                    >> 31 as i32 - 1 as i32)
+                                    + 1 as i32 as i64)
+                                    >> 1 as i32
                             }) as crate::opus_types_h::opus_int32
                     })
-                }) as libc::c_longlong
-                    * rc_mult2 as libc::c_longlong
-                    >> 1 as libc::c_int)
+                }) as i64
+                    * rc_mult2 as i64
+                    >> 1 as i32)
                     + ((if (tmp1 as crate::opus_types_h::opus_uint32).wrapping_sub(
-                        (if 31 as libc::c_int == 1 as libc::c_int {
-                            (tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                >> 1 as libc::c_int)
-                                + (tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                    & 1 as libc::c_int as libc::c_longlong)
+                        (if 31 as i32 == 1 as i32 {
+                            (tmp2 as i64 * rc_Q31 as i64
+                                >> 1 as i32)
+                                + (tmp2 as i64 * rc_Q31 as i64
+                                    & 1 as i32 as i64)
                         } else {
-                            ((tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                >> 31 as libc::c_int - 1 as libc::c_int)
-                                + 1 as libc::c_int as libc::c_longlong)
-                                >> 1 as libc::c_int
+                            ((tmp2 as i64 * rc_Q31 as i64
+                                >> 31 as i32 - 1 as i32)
+                                + 1 as i32 as i64)
+                                >> 1 as i32
                         }) as crate::opus_types_h::opus_int32
                             as crate::opus_types_h::opus_uint32,
-                    ) & 0x80000000 as libc::c_uint
-                        == 0 as libc::c_int as libc::c_uint
+                    ) & 0x80000000 as u32
+                        == 0 as i32 as u32
                     {
-                        (if tmp1 as libc::c_uint
-                            & ((if 31 as libc::c_int == 1 as libc::c_int {
-                                (tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                    >> 1 as libc::c_int)
-                                    + (tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                        & 1 as libc::c_int as libc::c_longlong)
+                        (if tmp1 as u32
+                            & ((if 31 as i32 == 1 as i32 {
+                                (tmp2 as i64 * rc_Q31 as i64
+                                    >> 1 as i32)
+                                    + (tmp2 as i64 * rc_Q31 as i64
+                                        & 1 as i32 as i64)
                             } else {
-                                ((tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                    >> 31 as libc::c_int - 1 as libc::c_int)
-                                    + 1 as libc::c_int as libc::c_longlong)
-                                    >> 1 as libc::c_int
+                                ((tmp2 as i64 * rc_Q31 as i64
+                                    >> 31 as i32 - 1 as i32)
+                                    + 1 as i32 as i64)
+                                    >> 1 as i32
                             }) as crate::opus_types_h::opus_int32
-                                as libc::c_uint
-                                ^ 0x80000000 as libc::c_uint)
-                            & 0x80000000 as libc::c_uint
+                                as u32
+                                ^ 0x80000000 as u32)
+                            & 0x80000000 as u32
                             != 0
                         {
-                            0x80000000 as libc::c_uint as crate::opus_types_h::opus_int32
+                            0x80000000 as u32 as crate::opus_types_h::opus_int32
                         } else {
                             (tmp1)
-                                - (if 31 as libc::c_int == 1 as libc::c_int {
-                                    (tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                        >> 1 as libc::c_int)
-                                        + (tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                            & 1 as libc::c_int as libc::c_longlong)
+                                - (if 31 as i32 == 1 as i32 {
+                                    (tmp2 as i64 * rc_Q31 as i64
+                                        >> 1 as i32)
+                                        + (tmp2 as i64 * rc_Q31 as i64
+                                            & 1 as i32 as i64)
                                 } else {
-                                    ((tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                        >> 31 as libc::c_int - 1 as libc::c_int)
-                                        + 1 as libc::c_int as libc::c_longlong)
-                                        >> 1 as libc::c_int
+                                    ((tmp2 as i64 * rc_Q31 as i64
+                                        >> 31 as i32 - 1 as i32)
+                                        + 1 as i32 as i64)
+                                        >> 1 as i32
                                 })
                                     as crate::opus_types_h::opus_int32
                         })
                     } else {
-                        (if (tmp1 as libc::c_uint ^ 0x80000000 as libc::c_uint)
-                            & (if 31 as libc::c_int == 1 as libc::c_int {
-                                (tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                    >> 1 as libc::c_int)
-                                    + (tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                        & 1 as libc::c_int as libc::c_longlong)
+                        (if (tmp1 as u32 ^ 0x80000000 as u32)
+                            & (if 31 as i32 == 1 as i32 {
+                                (tmp2 as i64 * rc_Q31 as i64
+                                    >> 1 as i32)
+                                    + (tmp2 as i64 * rc_Q31 as i64
+                                        & 1 as i32 as i64)
                             } else {
-                                ((tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                    >> 31 as libc::c_int - 1 as libc::c_int)
-                                    + 1 as libc::c_int as libc::c_longlong)
-                                    >> 1 as libc::c_int
+                                ((tmp2 as i64 * rc_Q31 as i64
+                                    >> 31 as i32 - 1 as i32)
+                                    + 1 as i32 as i64)
+                                    >> 1 as i32
                             }) as crate::opus_types_h::opus_int32
-                                as libc::c_uint
-                            & 0x80000000 as libc::c_uint
+                                as u32
+                            & 0x80000000 as u32
                             != 0
                         {
-                            0x7fffffff as libc::c_int
+                            0x7fffffff as i32
                         } else {
                             (tmp1)
-                                - (if 31 as libc::c_int == 1 as libc::c_int {
-                                    (tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                        >> 1 as libc::c_int)
-                                        + (tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                            & 1 as libc::c_int as libc::c_longlong)
+                                - (if 31 as i32 == 1 as i32 {
+                                    (tmp2 as i64 * rc_Q31 as i64
+                                        >> 1 as i32)
+                                        + (tmp2 as i64 * rc_Q31 as i64
+                                            & 1 as i32 as i64)
                                 } else {
-                                    ((tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                        >> 31 as libc::c_int - 1 as libc::c_int)
-                                        + 1 as libc::c_int as libc::c_longlong)
-                                        >> 1 as libc::c_int
+                                    ((tmp2 as i64 * rc_Q31 as i64
+                                        >> 31 as i32 - 1 as i32)
+                                        + 1 as i32 as i64)
+                                        >> 1 as i32
                                 })
                                     as crate::opus_types_h::opus_int32
                         })
-                    }) as libc::c_longlong
-                        * rc_mult2 as libc::c_longlong
-                        & 1 as libc::c_int as libc::c_longlong)
+                    }) as i64
+                        * rc_mult2 as i64
+                        & 1 as i32 as i64)
             } else {
                 (((if (tmp1 as crate::opus_types_h::opus_uint32).wrapping_sub(
-                    (if 31 as libc::c_int == 1 as libc::c_int {
-                        (tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong >> 1 as libc::c_int)
-                            + (tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                & 1 as libc::c_int as libc::c_longlong)
+                    (if 31 as i32 == 1 as i32 {
+                        (tmp2 as i64 * rc_Q31 as i64 >> 1 as i32)
+                            + (tmp2 as i64 * rc_Q31 as i64
+                                & 1 as i32 as i64)
                     } else {
-                        ((tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                            >> 31 as libc::c_int - 1 as libc::c_int)
-                            + 1 as libc::c_int as libc::c_longlong)
-                            >> 1 as libc::c_int
+                        ((tmp2 as i64 * rc_Q31 as i64
+                            >> 31 as i32 - 1 as i32)
+                            + 1 as i32 as i64)
+                            >> 1 as i32
                     }) as crate::opus_types_h::opus_int32
                         as crate::opus_types_h::opus_uint32,
-                ) & 0x80000000 as libc::c_uint
-                    == 0 as libc::c_int as libc::c_uint
+                ) & 0x80000000 as u32
+                    == 0 as i32 as u32
                 {
-                    (if tmp1 as libc::c_uint
-                        & ((if 31 as libc::c_int == 1 as libc::c_int {
-                            (tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                >> 1 as libc::c_int)
-                                + (tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                    & 1 as libc::c_int as libc::c_longlong)
+                    (if tmp1 as u32
+                        & ((if 31 as i32 == 1 as i32 {
+                            (tmp2 as i64 * rc_Q31 as i64
+                                >> 1 as i32)
+                                + (tmp2 as i64 * rc_Q31 as i64
+                                    & 1 as i32 as i64)
                         } else {
-                            ((tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                >> 31 as libc::c_int - 1 as libc::c_int)
-                                + 1 as libc::c_int as libc::c_longlong)
-                                >> 1 as libc::c_int
+                            ((tmp2 as i64 * rc_Q31 as i64
+                                >> 31 as i32 - 1 as i32)
+                                + 1 as i32 as i64)
+                                >> 1 as i32
                         }) as crate::opus_types_h::opus_int32
-                            as libc::c_uint
-                            ^ 0x80000000 as libc::c_uint)
-                        & 0x80000000 as libc::c_uint
+                            as u32
+                            ^ 0x80000000 as u32)
+                        & 0x80000000 as u32
                         != 0
                     {
-                        0x80000000 as libc::c_uint as crate::opus_types_h::opus_int32
+                        0x80000000 as u32 as crate::opus_types_h::opus_int32
                     } else {
                         (tmp1)
-                            - (if 31 as libc::c_int == 1 as libc::c_int {
-                                (tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                    >> 1 as libc::c_int)
-                                    + (tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                        & 1 as libc::c_int as libc::c_longlong)
+                            - (if 31 as i32 == 1 as i32 {
+                                (tmp2 as i64 * rc_Q31 as i64
+                                    >> 1 as i32)
+                                    + (tmp2 as i64 * rc_Q31 as i64
+                                        & 1 as i32 as i64)
                             } else {
-                                ((tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                    >> 31 as libc::c_int - 1 as libc::c_int)
-                                    + 1 as libc::c_int as libc::c_longlong)
-                                    >> 1 as libc::c_int
+                                ((tmp2 as i64 * rc_Q31 as i64
+                                    >> 31 as i32 - 1 as i32)
+                                    + 1 as i32 as i64)
+                                    >> 1 as i32
                             }) as crate::opus_types_h::opus_int32
                     })
                 } else {
-                    (if (tmp1 as libc::c_uint ^ 0x80000000 as libc::c_uint)
-                        & (if 31 as libc::c_int == 1 as libc::c_int {
-                            (tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                >> 1 as libc::c_int)
-                                + (tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                    & 1 as libc::c_int as libc::c_longlong)
+                    (if (tmp1 as u32 ^ 0x80000000 as u32)
+                        & (if 31 as i32 == 1 as i32 {
+                            (tmp2 as i64 * rc_Q31 as i64
+                                >> 1 as i32)
+                                + (tmp2 as i64 * rc_Q31 as i64
+                                    & 1 as i32 as i64)
                         } else {
-                            ((tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                >> 31 as libc::c_int - 1 as libc::c_int)
-                                + 1 as libc::c_int as libc::c_longlong)
-                                >> 1 as libc::c_int
+                            ((tmp2 as i64 * rc_Q31 as i64
+                                >> 31 as i32 - 1 as i32)
+                                + 1 as i32 as i64)
+                                >> 1 as i32
                         }) as crate::opus_types_h::opus_int32
-                            as libc::c_uint
-                        & 0x80000000 as libc::c_uint
+                            as u32
+                        & 0x80000000 as u32
                         != 0
                     {
-                        0x7fffffff as libc::c_int
+                        0x7fffffff as i32
                     } else {
                         (tmp1)
-                            - (if 31 as libc::c_int == 1 as libc::c_int {
-                                (tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                    >> 1 as libc::c_int)
-                                    + (tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                        & 1 as libc::c_int as libc::c_longlong)
+                            - (if 31 as i32 == 1 as i32 {
+                                (tmp2 as i64 * rc_Q31 as i64
+                                    >> 1 as i32)
+                                    + (tmp2 as i64 * rc_Q31 as i64
+                                        & 1 as i32 as i64)
                             } else {
-                                ((tmp2 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                    >> 31 as libc::c_int - 1 as libc::c_int)
-                                    + 1 as libc::c_int as libc::c_longlong)
-                                    >> 1 as libc::c_int
+                                ((tmp2 as i64 * rc_Q31 as i64
+                                    >> 31 as i32 - 1 as i32)
+                                    + 1 as i32 as i64)
+                                    >> 1 as i32
                             }) as crate::opus_types_h::opus_int32
                     })
-                }) as libc::c_longlong
-                    * rc_mult2 as libc::c_longlong
-                    >> mult2Q - 1 as libc::c_int)
-                    + 1 as libc::c_int as libc::c_longlong)
-                    >> 1 as libc::c_int
+                }) as i64
+                    * rc_mult2 as i64
+                    >> mult2Q - 1 as i32)
+                    + 1 as i32 as i64)
+                    >> 1 as i32
             };
-            if tmp64 > 0x7fffffff as libc::c_int as libc::c_longlong
+            if tmp64 > 0x7fffffff as i32 as i64
                 || tmp64
-                    < 0x80000000 as libc::c_uint as crate::opus_types_h::opus_int32
-                        as libc::c_longlong
+                    < 0x80000000 as u32 as crate::opus_types_h::opus_int32
+                        as i64
             {
-                return 0 as libc::c_int;
+                return 0 as i32;
             }
             *A_QA.offset(n as isize) = tmp64 as crate::opus_types_h::opus_int32;
-            tmp64 = if mult2Q == 1 as libc::c_int {
+            tmp64 = if mult2Q == 1 as i32 {
                 ((if (tmp2 as crate::opus_types_h::opus_uint32).wrapping_sub(
-                    (if 31 as libc::c_int == 1 as libc::c_int {
-                        (tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong >> 1 as libc::c_int)
-                            + (tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                & 1 as libc::c_int as libc::c_longlong)
+                    (if 31 as i32 == 1 as i32 {
+                        (tmp1 as i64 * rc_Q31 as i64 >> 1 as i32)
+                            + (tmp1 as i64 * rc_Q31 as i64
+                                & 1 as i32 as i64)
                     } else {
-                        ((tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                            >> 31 as libc::c_int - 1 as libc::c_int)
-                            + 1 as libc::c_int as libc::c_longlong)
-                            >> 1 as libc::c_int
+                        ((tmp1 as i64 * rc_Q31 as i64
+                            >> 31 as i32 - 1 as i32)
+                            + 1 as i32 as i64)
+                            >> 1 as i32
                     }) as crate::opus_types_h::opus_int32
                         as crate::opus_types_h::opus_uint32,
-                ) & 0x80000000 as libc::c_uint
-                    == 0 as libc::c_int as libc::c_uint
+                ) & 0x80000000 as u32
+                    == 0 as i32 as u32
                 {
-                    (if tmp2 as libc::c_uint
-                        & ((if 31 as libc::c_int == 1 as libc::c_int {
-                            (tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                >> 1 as libc::c_int)
-                                + (tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                    & 1 as libc::c_int as libc::c_longlong)
+                    (if tmp2 as u32
+                        & ((if 31 as i32 == 1 as i32 {
+                            (tmp1 as i64 * rc_Q31 as i64
+                                >> 1 as i32)
+                                + (tmp1 as i64 * rc_Q31 as i64
+                                    & 1 as i32 as i64)
                         } else {
-                            ((tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                >> 31 as libc::c_int - 1 as libc::c_int)
-                                + 1 as libc::c_int as libc::c_longlong)
-                                >> 1 as libc::c_int
+                            ((tmp1 as i64 * rc_Q31 as i64
+                                >> 31 as i32 - 1 as i32)
+                                + 1 as i32 as i64)
+                                >> 1 as i32
                         }) as crate::opus_types_h::opus_int32
-                            as libc::c_uint
-                            ^ 0x80000000 as libc::c_uint)
-                        & 0x80000000 as libc::c_uint
+                            as u32
+                            ^ 0x80000000 as u32)
+                        & 0x80000000 as u32
                         != 0
                     {
-                        0x80000000 as libc::c_uint as crate::opus_types_h::opus_int32
+                        0x80000000 as u32 as crate::opus_types_h::opus_int32
                     } else {
                         (tmp2)
-                            - (if 31 as libc::c_int == 1 as libc::c_int {
-                                (tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                    >> 1 as libc::c_int)
-                                    + (tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                        & 1 as libc::c_int as libc::c_longlong)
+                            - (if 31 as i32 == 1 as i32 {
+                                (tmp1 as i64 * rc_Q31 as i64
+                                    >> 1 as i32)
+                                    + (tmp1 as i64 * rc_Q31 as i64
+                                        & 1 as i32 as i64)
                             } else {
-                                ((tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                    >> 31 as libc::c_int - 1 as libc::c_int)
-                                    + 1 as libc::c_int as libc::c_longlong)
-                                    >> 1 as libc::c_int
+                                ((tmp1 as i64 * rc_Q31 as i64
+                                    >> 31 as i32 - 1 as i32)
+                                    + 1 as i32 as i64)
+                                    >> 1 as i32
                             }) as crate::opus_types_h::opus_int32
                     })
                 } else {
-                    (if (tmp2 as libc::c_uint ^ 0x80000000 as libc::c_uint)
-                        & (if 31 as libc::c_int == 1 as libc::c_int {
-                            (tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                >> 1 as libc::c_int)
-                                + (tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                    & 1 as libc::c_int as libc::c_longlong)
+                    (if (tmp2 as u32 ^ 0x80000000 as u32)
+                        & (if 31 as i32 == 1 as i32 {
+                            (tmp1 as i64 * rc_Q31 as i64
+                                >> 1 as i32)
+                                + (tmp1 as i64 * rc_Q31 as i64
+                                    & 1 as i32 as i64)
                         } else {
-                            ((tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                >> 31 as libc::c_int - 1 as libc::c_int)
-                                + 1 as libc::c_int as libc::c_longlong)
-                                >> 1 as libc::c_int
+                            ((tmp1 as i64 * rc_Q31 as i64
+                                >> 31 as i32 - 1 as i32)
+                                + 1 as i32 as i64)
+                                >> 1 as i32
                         }) as crate::opus_types_h::opus_int32
-                            as libc::c_uint
-                        & 0x80000000 as libc::c_uint
+                            as u32
+                        & 0x80000000 as u32
                         != 0
                     {
-                        0x7fffffff as libc::c_int
+                        0x7fffffff as i32
                     } else {
                         (tmp2)
-                            - (if 31 as libc::c_int == 1 as libc::c_int {
-                                (tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                    >> 1 as libc::c_int)
-                                    + (tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                        & 1 as libc::c_int as libc::c_longlong)
+                            - (if 31 as i32 == 1 as i32 {
+                                (tmp1 as i64 * rc_Q31 as i64
+                                    >> 1 as i32)
+                                    + (tmp1 as i64 * rc_Q31 as i64
+                                        & 1 as i32 as i64)
                             } else {
-                                ((tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                    >> 31 as libc::c_int - 1 as libc::c_int)
-                                    + 1 as libc::c_int as libc::c_longlong)
-                                    >> 1 as libc::c_int
+                                ((tmp1 as i64 * rc_Q31 as i64
+                                    >> 31 as i32 - 1 as i32)
+                                    + 1 as i32 as i64)
+                                    >> 1 as i32
                             }) as crate::opus_types_h::opus_int32
                     })
-                }) as libc::c_longlong
-                    * rc_mult2 as libc::c_longlong
-                    >> 1 as libc::c_int)
+                }) as i64
+                    * rc_mult2 as i64
+                    >> 1 as i32)
                     + ((if (tmp2 as crate::opus_types_h::opus_uint32).wrapping_sub(
-                        (if 31 as libc::c_int == 1 as libc::c_int {
-                            (tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                >> 1 as libc::c_int)
-                                + (tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                    & 1 as libc::c_int as libc::c_longlong)
+                        (if 31 as i32 == 1 as i32 {
+                            (tmp1 as i64 * rc_Q31 as i64
+                                >> 1 as i32)
+                                + (tmp1 as i64 * rc_Q31 as i64
+                                    & 1 as i32 as i64)
                         } else {
-                            ((tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                >> 31 as libc::c_int - 1 as libc::c_int)
-                                + 1 as libc::c_int as libc::c_longlong)
-                                >> 1 as libc::c_int
+                            ((tmp1 as i64 * rc_Q31 as i64
+                                >> 31 as i32 - 1 as i32)
+                                + 1 as i32 as i64)
+                                >> 1 as i32
                         }) as crate::opus_types_h::opus_int32
                             as crate::opus_types_h::opus_uint32,
-                    ) & 0x80000000 as libc::c_uint
-                        == 0 as libc::c_int as libc::c_uint
+                    ) & 0x80000000 as u32
+                        == 0 as i32 as u32
                     {
-                        (if tmp2 as libc::c_uint
-                            & ((if 31 as libc::c_int == 1 as libc::c_int {
-                                (tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                    >> 1 as libc::c_int)
-                                    + (tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                        & 1 as libc::c_int as libc::c_longlong)
+                        (if tmp2 as u32
+                            & ((if 31 as i32 == 1 as i32 {
+                                (tmp1 as i64 * rc_Q31 as i64
+                                    >> 1 as i32)
+                                    + (tmp1 as i64 * rc_Q31 as i64
+                                        & 1 as i32 as i64)
                             } else {
-                                ((tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                    >> 31 as libc::c_int - 1 as libc::c_int)
-                                    + 1 as libc::c_int as libc::c_longlong)
-                                    >> 1 as libc::c_int
+                                ((tmp1 as i64 * rc_Q31 as i64
+                                    >> 31 as i32 - 1 as i32)
+                                    + 1 as i32 as i64)
+                                    >> 1 as i32
                             }) as crate::opus_types_h::opus_int32
-                                as libc::c_uint
-                                ^ 0x80000000 as libc::c_uint)
-                            & 0x80000000 as libc::c_uint
+                                as u32
+                                ^ 0x80000000 as u32)
+                            & 0x80000000 as u32
                             != 0
                         {
-                            0x80000000 as libc::c_uint as crate::opus_types_h::opus_int32
+                            0x80000000 as u32 as crate::opus_types_h::opus_int32
                         } else {
                             (tmp2)
-                                - (if 31 as libc::c_int == 1 as libc::c_int {
-                                    (tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                        >> 1 as libc::c_int)
-                                        + (tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                            & 1 as libc::c_int as libc::c_longlong)
+                                - (if 31 as i32 == 1 as i32 {
+                                    (tmp1 as i64 * rc_Q31 as i64
+                                        >> 1 as i32)
+                                        + (tmp1 as i64 * rc_Q31 as i64
+                                            & 1 as i32 as i64)
                                 } else {
-                                    ((tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                        >> 31 as libc::c_int - 1 as libc::c_int)
-                                        + 1 as libc::c_int as libc::c_longlong)
-                                        >> 1 as libc::c_int
+                                    ((tmp1 as i64 * rc_Q31 as i64
+                                        >> 31 as i32 - 1 as i32)
+                                        + 1 as i32 as i64)
+                                        >> 1 as i32
                                 })
                                     as crate::opus_types_h::opus_int32
                         })
                     } else {
-                        (if (tmp2 as libc::c_uint ^ 0x80000000 as libc::c_uint)
-                            & (if 31 as libc::c_int == 1 as libc::c_int {
-                                (tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                    >> 1 as libc::c_int)
-                                    + (tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                        & 1 as libc::c_int as libc::c_longlong)
+                        (if (tmp2 as u32 ^ 0x80000000 as u32)
+                            & (if 31 as i32 == 1 as i32 {
+                                (tmp1 as i64 * rc_Q31 as i64
+                                    >> 1 as i32)
+                                    + (tmp1 as i64 * rc_Q31 as i64
+                                        & 1 as i32 as i64)
                             } else {
-                                ((tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                    >> 31 as libc::c_int - 1 as libc::c_int)
-                                    + 1 as libc::c_int as libc::c_longlong)
-                                    >> 1 as libc::c_int
+                                ((tmp1 as i64 * rc_Q31 as i64
+                                    >> 31 as i32 - 1 as i32)
+                                    + 1 as i32 as i64)
+                                    >> 1 as i32
                             }) as crate::opus_types_h::opus_int32
-                                as libc::c_uint
-                            & 0x80000000 as libc::c_uint
+                                as u32
+                            & 0x80000000 as u32
                             != 0
                         {
-                            0x7fffffff as libc::c_int
+                            0x7fffffff as i32
                         } else {
                             (tmp2)
-                                - (if 31 as libc::c_int == 1 as libc::c_int {
-                                    (tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                        >> 1 as libc::c_int)
-                                        + (tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                            & 1 as libc::c_int as libc::c_longlong)
+                                - (if 31 as i32 == 1 as i32 {
+                                    (tmp1 as i64 * rc_Q31 as i64
+                                        >> 1 as i32)
+                                        + (tmp1 as i64 * rc_Q31 as i64
+                                            & 1 as i32 as i64)
                                 } else {
-                                    ((tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                        >> 31 as libc::c_int - 1 as libc::c_int)
-                                        + 1 as libc::c_int as libc::c_longlong)
-                                        >> 1 as libc::c_int
+                                    ((tmp1 as i64 * rc_Q31 as i64
+                                        >> 31 as i32 - 1 as i32)
+                                        + 1 as i32 as i64)
+                                        >> 1 as i32
                                 })
                                     as crate::opus_types_h::opus_int32
                         })
-                    }) as libc::c_longlong
-                        * rc_mult2 as libc::c_longlong
-                        & 1 as libc::c_int as libc::c_longlong)
+                    }) as i64
+                        * rc_mult2 as i64
+                        & 1 as i32 as i64)
             } else {
                 (((if (tmp2 as crate::opus_types_h::opus_uint32).wrapping_sub(
-                    (if 31 as libc::c_int == 1 as libc::c_int {
-                        (tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong >> 1 as libc::c_int)
-                            + (tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                & 1 as libc::c_int as libc::c_longlong)
+                    (if 31 as i32 == 1 as i32 {
+                        (tmp1 as i64 * rc_Q31 as i64 >> 1 as i32)
+                            + (tmp1 as i64 * rc_Q31 as i64
+                                & 1 as i32 as i64)
                     } else {
-                        ((tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                            >> 31 as libc::c_int - 1 as libc::c_int)
-                            + 1 as libc::c_int as libc::c_longlong)
-                            >> 1 as libc::c_int
+                        ((tmp1 as i64 * rc_Q31 as i64
+                            >> 31 as i32 - 1 as i32)
+                            + 1 as i32 as i64)
+                            >> 1 as i32
                     }) as crate::opus_types_h::opus_int32
                         as crate::opus_types_h::opus_uint32,
-                ) & 0x80000000 as libc::c_uint
-                    == 0 as libc::c_int as libc::c_uint
+                ) & 0x80000000 as u32
+                    == 0 as i32 as u32
                 {
-                    (if tmp2 as libc::c_uint
-                        & ((if 31 as libc::c_int == 1 as libc::c_int {
-                            (tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                >> 1 as libc::c_int)
-                                + (tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                    & 1 as libc::c_int as libc::c_longlong)
+                    (if tmp2 as u32
+                        & ((if 31 as i32 == 1 as i32 {
+                            (tmp1 as i64 * rc_Q31 as i64
+                                >> 1 as i32)
+                                + (tmp1 as i64 * rc_Q31 as i64
+                                    & 1 as i32 as i64)
                         } else {
-                            ((tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                >> 31 as libc::c_int - 1 as libc::c_int)
-                                + 1 as libc::c_int as libc::c_longlong)
-                                >> 1 as libc::c_int
+                            ((tmp1 as i64 * rc_Q31 as i64
+                                >> 31 as i32 - 1 as i32)
+                                + 1 as i32 as i64)
+                                >> 1 as i32
                         }) as crate::opus_types_h::opus_int32
-                            as libc::c_uint
-                            ^ 0x80000000 as libc::c_uint)
-                        & 0x80000000 as libc::c_uint
+                            as u32
+                            ^ 0x80000000 as u32)
+                        & 0x80000000 as u32
                         != 0
                     {
-                        0x80000000 as libc::c_uint as crate::opus_types_h::opus_int32
+                        0x80000000 as u32 as crate::opus_types_h::opus_int32
                     } else {
                         (tmp2)
-                            - (if 31 as libc::c_int == 1 as libc::c_int {
-                                (tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                    >> 1 as libc::c_int)
-                                    + (tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                        & 1 as libc::c_int as libc::c_longlong)
+                            - (if 31 as i32 == 1 as i32 {
+                                (tmp1 as i64 * rc_Q31 as i64
+                                    >> 1 as i32)
+                                    + (tmp1 as i64 * rc_Q31 as i64
+                                        & 1 as i32 as i64)
                             } else {
-                                ((tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                    >> 31 as libc::c_int - 1 as libc::c_int)
-                                    + 1 as libc::c_int as libc::c_longlong)
-                                    >> 1 as libc::c_int
+                                ((tmp1 as i64 * rc_Q31 as i64
+                                    >> 31 as i32 - 1 as i32)
+                                    + 1 as i32 as i64)
+                                    >> 1 as i32
                             }) as crate::opus_types_h::opus_int32
                     })
                 } else {
-                    (if (tmp2 as libc::c_uint ^ 0x80000000 as libc::c_uint)
-                        & (if 31 as libc::c_int == 1 as libc::c_int {
-                            (tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                >> 1 as libc::c_int)
-                                + (tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                    & 1 as libc::c_int as libc::c_longlong)
+                    (if (tmp2 as u32 ^ 0x80000000 as u32)
+                        & (if 31 as i32 == 1 as i32 {
+                            (tmp1 as i64 * rc_Q31 as i64
+                                >> 1 as i32)
+                                + (tmp1 as i64 * rc_Q31 as i64
+                                    & 1 as i32 as i64)
                         } else {
-                            ((tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                >> 31 as libc::c_int - 1 as libc::c_int)
-                                + 1 as libc::c_int as libc::c_longlong)
-                                >> 1 as libc::c_int
+                            ((tmp1 as i64 * rc_Q31 as i64
+                                >> 31 as i32 - 1 as i32)
+                                + 1 as i32 as i64)
+                                >> 1 as i32
                         }) as crate::opus_types_h::opus_int32
-                            as libc::c_uint
-                        & 0x80000000 as libc::c_uint
+                            as u32
+                        & 0x80000000 as u32
                         != 0
                     {
-                        0x7fffffff as libc::c_int
+                        0x7fffffff as i32
                     } else {
                         (tmp2)
-                            - (if 31 as libc::c_int == 1 as libc::c_int {
-                                (tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                    >> 1 as libc::c_int)
-                                    + (tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                        & 1 as libc::c_int as libc::c_longlong)
+                            - (if 31 as i32 == 1 as i32 {
+                                (tmp1 as i64 * rc_Q31 as i64
+                                    >> 1 as i32)
+                                    + (tmp1 as i64 * rc_Q31 as i64
+                                        & 1 as i32 as i64)
                             } else {
-                                ((tmp1 as libc::c_longlong * rc_Q31 as libc::c_longlong
-                                    >> 31 as libc::c_int - 1 as libc::c_int)
-                                    + 1 as libc::c_int as libc::c_longlong)
-                                    >> 1 as libc::c_int
+                                ((tmp1 as i64 * rc_Q31 as i64
+                                    >> 31 as i32 - 1 as i32)
+                                    + 1 as i32 as i64)
+                                    >> 1 as i32
                             }) as crate::opus_types_h::opus_int32
                     })
-                }) as libc::c_longlong
-                    * rc_mult2 as libc::c_longlong
-                    >> mult2Q - 1 as libc::c_int)
-                    + 1 as libc::c_int as libc::c_longlong)
-                    >> 1 as libc::c_int
+                }) as i64
+                    * rc_mult2 as i64
+                    >> mult2Q - 1 as i32)
+                    + 1 as i32 as i64)
+                    >> 1 as i32
             };
-            if tmp64 > 0x7fffffff as libc::c_int as libc::c_longlong
+            if tmp64 > 0x7fffffff as i32 as i64
                 || tmp64
-                    < 0x80000000 as libc::c_uint as crate::opus_types_h::opus_int32
-                        as libc::c_longlong
+                    < 0x80000000 as u32 as crate::opus_types_h::opus_int32
+                        as i64
             {
-                return 0 as libc::c_int;
+                return 0 as i32;
             }
-            *A_QA.offset((k - n - 1 as libc::c_int) as isize) =
+            *A_QA.offset((k - n - 1 as i32) as isize) =
                 tmp64 as crate::opus_types_h::opus_int32;
             n += 1
         }
@@ -779,39 +779,39 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
     /* Check for stability */
     if *A_QA.offset(k as isize)
         > (0.99975f64
-            * ((1 as libc::c_int as libc::c_longlong) << 24 as libc::c_int) as libc::c_double
+            * ((1 as i32 as i64) << 24 as i32) as f64
             + 0.5f64) as crate::opus_types_h::opus_int32
         || *A_QA.offset(k as isize)
             < -((0.99975f64
-                * ((1 as libc::c_int as libc::c_longlong) << 24 as libc::c_int) as libc::c_double
+                * ((1 as i32 as i64) << 24 as i32) as f64
                 + 0.5f64) as crate::opus_types_h::opus_int32)
     {
-        return 0 as libc::c_int;
+        return 0 as i32;
     }
     /* Set RC equal to negated AR coef */
-    rc_Q31 = -(((*A_QA.offset(0 as libc::c_int as isize) as crate::opus_types_h::opus_uint32)
-        << 31 as libc::c_int - 24 as libc::c_int)
+    rc_Q31 = -(((*A_QA.offset(0 as i32 as isize) as crate::opus_types_h::opus_uint32)
+        << 31 as i32 - 24 as i32)
         as crate::opus_types_h::opus_int32);
     /* Range: [ 1 : 2^30 ] */
-    rc_mult1_Q30 = ((1 as libc::c_int as libc::c_longlong
-        * ((1 as libc::c_int as libc::c_longlong) << 30 as libc::c_int))
-        as libc::c_double
+    rc_mult1_Q30 = ((1 as i32 as i64
+        * ((1 as i32 as i64) << 30 as i32))
+        as f64
         + 0.5f64) as crate::opus_types_h::opus_int32
-        - (rc_Q31 as libc::c_longlong * rc_Q31 as libc::c_longlong >> 32 as libc::c_int)
+        - (rc_Q31 as i64 * rc_Q31 as i64 >> 32 as i32)
             as crate::opus_types_h::opus_int32;
     /* Update inverse gain */
     /* Range: [ 0 : 2^30 ] */
-    invGain_Q30 = (((invGain_Q30 as libc::c_longlong * rc_mult1_Q30 as libc::c_longlong
-        >> 32 as libc::c_int) as crate::opus_types_h::opus_int32
+    invGain_Q30 = (((invGain_Q30 as i64 * rc_mult1_Q30 as i64
+        >> 32 as i32) as crate::opus_types_h::opus_int32
         as crate::opus_types_h::opus_uint32)
-        << 2 as libc::c_int) as crate::opus_types_h::opus_int32;
+        << 2 as i32) as crate::opus_types_h::opus_int32;
     if invGain_Q30
         < ((1.0f32 / 1e4f32
-            * ((1 as libc::c_int as libc::c_longlong) << 30 as libc::c_int) as libc::c_float)
-            as libc::c_double
+            * ((1 as i32 as i64) << 30 as i32) as f32)
+            as f64
             + 0.5f64) as crate::opus_types_h::opus_int32
     {
-        return 0 as libc::c_int;
+        return 0 as i32;
     }
     return invGain_Q30;
 }
@@ -915,25 +915,25 @@ POSSIBILITY OF SUCH DAMAGE.
 
 pub unsafe extern "C" fn silk_LPC_inverse_pred_gain_c(
     mut A_Q12: *const crate::opus_types_h::opus_int16,
-    order: libc::c_int,
+    order: i32,
 ) -> crate::opus_types_h::opus_int32
 /* I   Prediction order                                             */ {
-    let mut k: libc::c_int = 0;
+    let mut k: i32 = 0;
     let mut Atmp_QA: [crate::opus_types_h::opus_int32; 24] = [0; 24];
-    let mut DC_resp: crate::opus_types_h::opus_int32 = 0 as libc::c_int;
+    let mut DC_resp: crate::opus_types_h::opus_int32 = 0 as i32;
     /* Increase Q domain of the AR coefficients */
-    k = 0 as libc::c_int;
+    k = 0 as i32;
     while k < order {
         DC_resp += *A_Q12.offset(k as isize) as crate::opus_types_h::opus_int32;
         Atmp_QA[k as usize] = ((*A_Q12.offset(k as isize) as crate::opus_types_h::opus_int32
             as crate::opus_types_h::opus_uint32)
-            << 24 as libc::c_int - 12 as libc::c_int)
+            << 24 as i32 - 12 as i32)
             as crate::opus_types_h::opus_int32;
         k += 1
     }
     /* If the DC is unstable, we don't even need to do the full calculations */
-    if DC_resp >= 4096 as libc::c_int {
-        return 0 as libc::c_int;
+    if DC_resp >= 4096 as i32 {
+        return 0 as i32;
     }
     return LPC_inverse_pred_gain_QA_c(Atmp_QA.as_mut_ptr(), order);
 }

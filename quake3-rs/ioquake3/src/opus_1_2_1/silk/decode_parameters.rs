@@ -324,22 +324,22 @@ POSSIBILITY OF SUCH DAMAGE.
 pub unsafe extern "C" fn silk_decode_parameters(
     mut psDec: *mut crate::structs_h::silk_decoder_state,
     mut psDecCtrl: *mut crate::structs_h::silk_decoder_control,
-    mut condCoding: libc::c_int,
+    mut condCoding: i32,
 )
 /* I    The type of conditional coding to use       */
 {
-    let mut i: libc::c_int = 0;
-    let mut k: libc::c_int = 0;
-    let mut Ix: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut k: i32 = 0;
+    let mut Ix: i32 = 0;
     let mut pNLSF_Q15: [crate::opus_types_h::opus_int16; 16] = [0; 16];
     let mut pNLSF0_Q15: [crate::opus_types_h::opus_int16; 16] = [0; 16];
-    let mut cbk_ptr_Q7: *const libc::c_schar = 0 as *const libc::c_schar;
+    let mut cbk_ptr_Q7: *const i8 = 0 as *const i8;
     /* Dequant Gains */
     crate::src::opus_1_2_1::silk::gain_quant::silk_gains_dequant(
         (*psDecCtrl).Gains_Q16.as_mut_ptr(),
-        (*psDec).indices.GainsIndices.as_mut_ptr() as *const libc::c_schar,
+        (*psDec).indices.GainsIndices.as_mut_ptr() as *const i8,
         &mut (*psDec).LastGainIndex,
-        (condCoding == 2 as libc::c_int) as libc::c_int,
+        (condCoding == 2 as i32) as i32,
         (*psDec).nb_subfr,
     );
     /* ***************/
@@ -352,32 +352,32 @@ pub unsafe extern "C" fn silk_decode_parameters(
     );
     /* Convert NLSF parameters to AR prediction filter coefficients */
     crate::src::opus_1_2_1::silk::NLSF2A::silk_NLSF2A(
-        (*psDecCtrl).PredCoef_Q12[1 as libc::c_int as usize].as_mut_ptr(),
+        (*psDecCtrl).PredCoef_Q12[1 as i32 as usize].as_mut_ptr(),
         pNLSF_Q15.as_mut_ptr(),
         (*psDec).LPC_order,
         (*psDec).arch,
     );
     /* If just reset, e.g., because internal Fs changed, do not allow interpolation */
     /* improves the case of packet loss in the first frame after a switch           */
-    if (*psDec).first_frame_after_reset == 1 as libc::c_int {
-        (*psDec).indices.NLSFInterpCoef_Q2 = 4 as libc::c_int as libc::c_schar
+    if (*psDec).first_frame_after_reset == 1 as i32 {
+        (*psDec).indices.NLSFInterpCoef_Q2 = 4 as i32 as i8
     }
-    if ((*psDec).indices.NLSFInterpCoef_Q2 as libc::c_int) < 4 as libc::c_int {
+    if ((*psDec).indices.NLSFInterpCoef_Q2 as i32) < 4 as i32 {
         /* Calculation of the interpolated NLSF0 vector from the interpolation factor, */
         /* the previous NLSF1, and the current NLSF1                                   */
-        i = 0 as libc::c_int;
+        i = 0 as i32;
         while i < (*psDec).LPC_order {
-            pNLSF0_Q15[i as usize] = ((*psDec).prevNLSF_Q15[i as usize] as libc::c_int
-                + ((*psDec).indices.NLSFInterpCoef_Q2 as libc::c_int
-                    * (pNLSF_Q15[i as usize] as libc::c_int
-                        - (*psDec).prevNLSF_Q15[i as usize] as libc::c_int)
-                    >> 2 as libc::c_int))
+            pNLSF0_Q15[i as usize] = ((*psDec).prevNLSF_Q15[i as usize] as i32
+                + ((*psDec).indices.NLSFInterpCoef_Q2 as i32
+                    * (pNLSF_Q15[i as usize] as i32
+                        - (*psDec).prevNLSF_Q15[i as usize] as i32)
+                    >> 2 as i32))
                 as crate::opus_types_h::opus_int16;
             i += 1
         }
         /* Convert NLSF parameters to AR prediction filter coefficients */
         crate::src::opus_1_2_1::silk::NLSF2A::silk_NLSF2A(
-            (*psDecCtrl).PredCoef_Q12[0 as libc::c_int as usize].as_mut_ptr(),
+            (*psDecCtrl).PredCoef_Q12[0 as i32 as usize].as_mut_ptr(),
             pNLSF0_Q15.as_mut_ptr(),
             (*psDec).LPC_order,
             (*psDec).arch,
@@ -385,8 +385,8 @@ pub unsafe extern "C" fn silk_decode_parameters(
     } else {
         /* Copy LPC coefficients for first half from second half */
         crate::stdlib::memcpy(
-            (*psDecCtrl).PredCoef_Q12[0 as libc::c_int as usize].as_mut_ptr() as *mut libc::c_void,
-            (*psDecCtrl).PredCoef_Q12[1 as libc::c_int as usize].as_mut_ptr()
+            (*psDecCtrl).PredCoef_Q12[0 as i32 as usize].as_mut_ptr() as *mut libc::c_void,
+            (*psDecCtrl).PredCoef_Q12[1 as i32 as usize].as_mut_ptr()
                 as *const libc::c_void,
             ((*psDec).LPC_order as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
                 crate::opus_types_h::opus_int16,
@@ -401,17 +401,17 @@ pub unsafe extern "C" fn silk_decode_parameters(
     /* After a packet loss do BWE of LPC coefs */
     if (*psDec).lossCnt != 0 {
         crate::src::opus_1_2_1::silk::bwexpander::silk_bwexpander(
-            (*psDecCtrl).PredCoef_Q12[0 as libc::c_int as usize].as_mut_ptr(),
+            (*psDecCtrl).PredCoef_Q12[0 as i32 as usize].as_mut_ptr(),
             (*psDec).LPC_order,
-            63570 as libc::c_int,
+            63570 as i32,
         );
         crate::src::opus_1_2_1::silk::bwexpander::silk_bwexpander(
-            (*psDecCtrl).PredCoef_Q12[1 as libc::c_int as usize].as_mut_ptr(),
+            (*psDecCtrl).PredCoef_Q12[1 as i32 as usize].as_mut_ptr(),
             (*psDec).LPC_order,
-            63570 as libc::c_int,
+            63570 as i32,
         );
     }
-    if (*psDec).indices.signalType as libc::c_int == 2 as libc::c_int {
+    if (*psDec).indices.signalType as i32 == 2 as i32 {
         /* ********************/
         /* Decode pitch lags */
         /* ********************/
@@ -426,15 +426,15 @@ pub unsafe extern "C" fn silk_decode_parameters(
         /* Decode Codebook Index */
         cbk_ptr_Q7 = crate::src::opus_1_2_1::silk::tables_LTP::silk_LTP_vq_ptrs_Q7
             [(*psDec).indices.PERIndex as usize]; /* set pointer to start of codebook */
-        k = 0 as libc::c_int;
+        k = 0 as i32;
         while k < (*psDec).nb_subfr {
-            Ix = (*psDec).indices.LTPIndex[k as usize] as libc::c_int;
-            i = 0 as libc::c_int;
-            while i < 5 as libc::c_int {
-                (*psDecCtrl).LTPCoef_Q14[(k * 5 as libc::c_int + i) as usize] =
-                    ((*cbk_ptr_Q7.offset((Ix * 5 as libc::c_int + i) as isize)
+            Ix = (*psDec).indices.LTPIndex[k as usize] as i32;
+            i = 0 as i32;
+            while i < 5 as i32 {
+                (*psDecCtrl).LTPCoef_Q14[(k * 5 as i32 + i) as usize] =
+                    ((*cbk_ptr_Q7.offset((Ix * 5 as i32 + i) as isize)
                         as crate::opus_types_h::opus_uint32)
-                        << 7 as libc::c_int) as crate::opus_types_h::opus_int32
+                        << 7 as i32) as crate::opus_types_h::opus_int32
                         as crate::opus_types_h::opus_int16;
                 i += 1
             }
@@ -443,25 +443,25 @@ pub unsafe extern "C" fn silk_decode_parameters(
         /* *********************/
         /* Decode LTP scaling */
         /* *********************/
-        Ix = (*psDec).indices.LTP_scaleIndex as libc::c_int;
+        Ix = (*psDec).indices.LTP_scaleIndex as i32;
         (*psDecCtrl).LTP_scale_Q14 =
             crate::src::opus_1_2_1::silk::tables_other::silk_LTPScales_table_Q14[Ix as usize]
-                as libc::c_int
+                as i32
     } else {
         crate::stdlib::memset(
             (*psDecCtrl).pitchL.as_mut_ptr() as *mut libc::c_void,
-            0 as libc::c_int,
+            0 as i32,
             ((*psDec).nb_subfr as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<libc::c_int>() as libc::c_ulong),
+                .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
         );
         crate::stdlib::memset(
             (*psDecCtrl).LTPCoef_Q14.as_mut_ptr() as *mut libc::c_void,
-            0 as libc::c_int,
-            ((5 as libc::c_int * (*psDec).nb_subfr) as libc::c_ulong).wrapping_mul(
+            0 as i32,
+            ((5 as i32 * (*psDec).nb_subfr) as libc::c_ulong).wrapping_mul(
                 ::std::mem::size_of::<crate::opus_types_h::opus_int16>() as libc::c_ulong,
             ),
         );
-        (*psDec).indices.PERIndex = 0 as libc::c_int as libc::c_schar;
-        (*psDecCtrl).LTP_scale_Q14 = 0 as libc::c_int
+        (*psDec).indices.PERIndex = 0 as i32 as i8;
+        (*psDecCtrl).LTP_scale_Q14 = 0 as i32
     };
 }

@@ -3,12 +3,12 @@ use ::libc;
 pub mod stdlib_h {
     #[inline]
 
-    pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> libc::c_int {
+    pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return ::libc::strtol(
             __nptr,
             0 as *mut libc::c_void as *mut *mut libc::c_char,
-            10 as libc::c_int,
-        ) as libc::c_int;
+            10 as i32,
+        ) as i32;
     }
 }
 
@@ -119,13 +119,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_TargetCommand_f() {
-    let mut targetNum: libc::c_int = 0;
+    let mut targetNum: i32 = 0;
     let mut test: [libc::c_char; 4] = [0; 4];
     targetNum = CG_CrosshairPlayer();
-    if targetNum == -(1 as libc::c_int) {
+    if targetNum == -(1 as i32) {
         return;
     }
-    trap_Argv(1 as libc::c_int, test.as_mut_ptr(), 4 as libc::c_int);
+    trap_Argv(1 as i32, test.as_mut_ptr(), 4 as i32);
     trap_SendClientCommand(va(
         b"gc %i %i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         targetNum,
@@ -145,7 +145,7 @@ unsafe extern "C" fn CG_SizeUp_f() {
         b"cg_viewsize\x00" as *const u8 as *const libc::c_char,
         va(
             b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            cg_viewsize.integer + 10 as libc::c_int,
+            cg_viewsize.integer + 10 as i32,
         ),
     );
 }
@@ -162,7 +162,7 @@ unsafe extern "C" fn CG_SizeDown_f() {
         b"cg_viewsize\x00" as *const u8 as *const libc::c_char,
         va(
             b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            cg_viewsize.integer - 10 as libc::c_int,
+            cg_viewsize.integer - 10 as i32,
         ),
     );
 }
@@ -177,15 +177,15 @@ Debugging command to print the current position
 unsafe extern "C" fn CG_Viewpos_f() {
     CG_Printf(
         b"(%i %i %i) : %i\n\x00" as *const u8 as *const libc::c_char,
-        cg.refdef.vieworg[0 as libc::c_int as usize] as libc::c_int,
-        cg.refdef.vieworg[1 as libc::c_int as usize] as libc::c_int,
-        cg.refdef.vieworg[2 as libc::c_int as usize] as libc::c_int,
-        cg.refdefViewAngles[1 as libc::c_int as usize] as libc::c_int,
+        cg.refdef.vieworg[0 as i32 as usize] as i32,
+        cg.refdef.vieworg[1 as i32 as usize] as i32,
+        cg.refdef.vieworg[2 as i32 as usize] as i32,
+        cg.refdefViewAngles[1 as i32 as usize] as i32,
     );
 }
 
 unsafe extern "C" fn CG_ScoresDown_f() {
-    if (cg.scoresRequestTime + 2000 as libc::c_int) < cg.time {
+    if (cg.scoresRequestTime + 2000 as i32) < cg.time {
         // the scores are more than two seconds out of data,
         // so request new ones
         cg.scoresRequestTime = cg.time;
@@ -194,7 +194,7 @@ unsafe extern "C" fn CG_ScoresDown_f() {
         // displayed, but if this is the first hit, clear them out
         if cg.showScores as u64 == 0 {
             cg.showScores = qtrue;
-            cg.numScores = 0 as libc::c_int
+            cg.numScores = 0 as i32
         }
     } else {
         // show the cached contents even if they just pressed if it
@@ -211,17 +211,17 @@ unsafe extern "C" fn CG_ScoresUp_f() {
 }
 
 unsafe extern "C" fn CG_TellTarget_f() {
-    let mut clientNum: libc::c_int = 0;
+    let mut clientNum: i32 = 0;
     let mut command: [libc::c_char; 128] = [0; 128];
     let mut message: [libc::c_char; 128] = [0; 128];
     clientNum = CG_CrosshairPlayer();
-    if clientNum == -(1 as libc::c_int) {
+    if clientNum == -(1 as i32) {
         return;
     }
-    trap_Args(message.as_mut_ptr(), 128 as libc::c_int);
+    trap_Args(message.as_mut_ptr(), 128 as i32);
     Com_sprintf(
         command.as_mut_ptr(),
-        128 as libc::c_int,
+        128 as i32,
         b"tell %i %s\x00" as *const u8 as *const libc::c_char,
         clientNum,
         message.as_mut_ptr(),
@@ -230,17 +230,17 @@ unsafe extern "C" fn CG_TellTarget_f() {
 }
 
 unsafe extern "C" fn CG_TellAttacker_f() {
-    let mut clientNum: libc::c_int = 0;
+    let mut clientNum: i32 = 0;
     let mut command: [libc::c_char; 128] = [0; 128];
     let mut message: [libc::c_char; 128] = [0; 128];
     clientNum = CG_LastAttacker();
-    if clientNum == -(1 as libc::c_int) {
+    if clientNum == -(1 as i32) {
         return;
     }
-    trap_Args(message.as_mut_ptr(), 128 as libc::c_int);
+    trap_Args(message.as_mut_ptr(), 128 as i32);
     Com_sprintf(
         command.as_mut_ptr(),
-        128 as libc::c_int,
+        128 as i32,
         b"tell %i %s\x00" as *const u8 as *const libc::c_char,
         clientNum,
         message.as_mut_ptr(),
@@ -258,12 +258,12 @@ unsafe extern "C" fn CG_StartOrbit_f() {
     trap_Cvar_VariableStringBuffer(
         b"developer\x00" as *const u8 as *const libc::c_char,
         var.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
     if atoi(var.as_mut_ptr()) == 0 {
         return;
     }
-    if cg_cameraOrbit.value != 0 as libc::c_int as libc::c_float {
+    if cg_cameraOrbit.value != 0 as i32 as f32 {
         trap_Cvar_Set(
             b"cg_cameraOrbit\x00" as *const u8 as *const libc::c_char,
             b"0\x00" as *const u8 as *const libc::c_char,
@@ -455,9 +455,9 @@ Cmd_Argc() / Cmd_Argv()
 
 pub unsafe extern "C" fn CG_ConsoleCommand() -> qboolean {
     let mut cmd: *const libc::c_char = 0 as *const libc::c_char;
-    let mut i: libc::c_int = 0;
-    cmd = CG_Argv(0 as libc::c_int);
-    i = 0 as libc::c_int;
+    let mut i: i32 = 0;
+    cmd = CG_Argv(0 as i32);
+    i = 0 as i32;
     while (i as libc::c_ulong)
         < (::std::mem::size_of::<[consoleCommand_t; 21]>() as libc::c_ulong)
             .wrapping_div(::std::mem::size_of::<consoleCommand_t>() as libc::c_ulong)
@@ -731,8 +731,8 @@ so it can perform tab completion
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_InitConsoleCommands() {
-    let mut i: libc::c_int = 0;
-    i = 0 as libc::c_int;
+    let mut i: i32 = 0;
+    i = 0 as i32;
     while (i as libc::c_ulong)
         < (::std::mem::size_of::<[consoleCommand_t; 21]>() as libc::c_ulong)
             .wrapping_div(::std::mem::size_of::<consoleCommand_t>() as libc::c_ulong)

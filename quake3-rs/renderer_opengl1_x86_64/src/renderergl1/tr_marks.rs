@@ -197,25 +197,25 @@ pub mod q_shared_h {
     #[inline]
 
     pub unsafe extern "C" fn VectorNormalizeFast(mut v: *mut crate::src::qcommon::q_shared::vec_t) {
-        let mut ilength: libc::c_float = 0.;
+        let mut ilength: f32 = 0.;
         ilength = crate::src::qcommon::q_math::Q_rsqrt(
-            *v.offset(0 as libc::c_int as isize) * *v.offset(0 as libc::c_int as isize)
-                + *v.offset(1 as libc::c_int as isize) * *v.offset(1 as libc::c_int as isize)
-                + *v.offset(2 as libc::c_int as isize) * *v.offset(2 as libc::c_int as isize),
+            *v.offset(0 as i32 as isize) * *v.offset(0 as i32 as isize)
+                + *v.offset(1 as i32 as isize) * *v.offset(1 as i32 as isize)
+                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize),
         );
-        let ref mut fresh0 = *v.offset(0 as libc::c_int as isize);
+        let ref mut fresh0 = *v.offset(0 as i32 as isize);
         *fresh0 *= ilength;
-        let ref mut fresh1 = *v.offset(1 as libc::c_int as isize);
+        let ref mut fresh1 = *v.offset(1 as i32 as isize);
         *fresh1 *= ilength;
-        let ref mut fresh2 = *v.offset(2 as libc::c_int as isize);
+        let ref mut fresh2 = *v.offset(2 as i32 as isize);
         *fresh2 *= ilength;
     }
     #[inline]
 
     pub unsafe extern "C" fn VectorInverse(mut v: *mut crate::src::qcommon::q_shared::vec_t) {
-        *v.offset(0 as libc::c_int as isize) = -*v.offset(0 as libc::c_int as isize);
-        *v.offset(1 as libc::c_int as isize) = -*v.offset(1 as libc::c_int as isize);
-        *v.offset(2 as libc::c_int as isize) = -*v.offset(2 as libc::c_int as isize);
+        *v.offset(0 as i32 as isize) = -*v.offset(0 as i32 as isize);
+        *v.offset(1 as i32 as isize) = -*v.offset(1 as i32 as isize);
+        *v.offset(2 as i32 as isize) = -*v.offset(2 as i32 as isize);
     }
     #[inline]
 
@@ -224,15 +224,15 @@ pub mod q_shared_h {
         mut v2: *const crate::src::qcommon::q_shared::vec_t,
         mut cross: *mut crate::src::qcommon::q_shared::vec_t,
     ) {
-        *cross.offset(0 as libc::c_int as isize) = *v1.offset(1 as libc::c_int as isize)
-            * *v2.offset(2 as libc::c_int as isize)
-            - *v1.offset(2 as libc::c_int as isize) * *v2.offset(1 as libc::c_int as isize);
-        *cross.offset(1 as libc::c_int as isize) = *v1.offset(2 as libc::c_int as isize)
-            * *v2.offset(0 as libc::c_int as isize)
-            - *v1.offset(0 as libc::c_int as isize) * *v2.offset(2 as libc::c_int as isize);
-        *cross.offset(2 as libc::c_int as isize) = *v1.offset(0 as libc::c_int as isize)
-            * *v2.offset(1 as libc::c_int as isize)
-            - *v1.offset(1 as libc::c_int as isize) * *v2.offset(0 as libc::c_int as isize);
+        *cross.offset(0 as i32 as isize) = *v1.offset(1 as i32 as isize)
+            * *v2.offset(2 as i32 as isize)
+            - *v1.offset(2 as i32 as isize) * *v2.offset(1 as i32 as isize);
+        *cross.offset(1 as i32 as isize) = *v1.offset(2 as i32 as isize)
+            * *v2.offset(0 as i32 as isize)
+            - *v1.offset(0 as i32 as isize) * *v2.offset(2 as i32 as isize);
+        *cross.offset(2 as i32 as isize) = *v1.offset(0 as i32 as isize)
+            * *v2.offset(1 as i32 as isize)
+            - *v1.offset(1 as i32 as isize) * *v2.offset(0 as i32 as isize);
     }
 
     // __Q_SHARED_H
@@ -433,16 +433,16 @@ pub use crate::tr_local_h::TMOD_TRANSFORM;
 pub use crate::tr_local_h::TMOD_TURBULENT;
 
 unsafe extern "C" fn R_ChopPolyBehindPlane(
-    mut numInPoints: libc::c_int,
+    mut numInPoints: i32,
     mut inPoints: *mut crate::src::qcommon::q_shared::vec3_t,
-    mut numOutPoints: *mut libc::c_int,
+    mut numOutPoints: *mut i32,
     mut outPoints: *mut crate::src::qcommon::q_shared::vec3_t,
     mut normal: *mut crate::src::qcommon::q_shared::vec_t,
     mut dist: crate::src::qcommon::q_shared::vec_t,
     mut epsilon: crate::src::qcommon::q_shared::vec_t,
 ) {
-    let mut dists: [libc::c_float; 68] = [
-        0 as libc::c_int as libc::c_float,
+    let mut dists: [f32; 68] = [
+        0 as i32 as f32,
         0.,
         0.,
         0.,
@@ -511,8 +511,8 @@ unsafe extern "C" fn R_ChopPolyBehindPlane(
         0.,
         0.,
     ];
-    let mut sides: [libc::c_int; 68] = [
-        0 as libc::c_int,
+    let mut sides: [i32; 68] = [
+        0 as i32,
         0,
         0,
         0,
@@ -581,50 +581,50 @@ unsafe extern "C" fn R_ChopPolyBehindPlane(
         0,
         0,
     ];
-    let mut counts: [libc::c_int; 3] = [0; 3];
-    let mut dot: libc::c_float = 0.;
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
-    let mut p1: *mut libc::c_float = 0 as *mut libc::c_float;
-    let mut p2: *mut libc::c_float = 0 as *mut libc::c_float;
-    let mut clip: *mut libc::c_float = 0 as *mut libc::c_float;
-    let mut d: libc::c_float = 0.;
+    let mut counts: [i32; 3] = [0; 3];
+    let mut dot: f32 = 0.;
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
+    let mut p1: *mut f32 = 0 as *mut f32;
+    let mut p2: *mut f32 = 0 as *mut f32;
+    let mut clip: *mut f32 = 0 as *mut f32;
+    let mut d: f32 = 0.;
     // don't clip if it might overflow
-    if numInPoints >= 64 as libc::c_int - 2 as libc::c_int {
-        *numOutPoints = 0 as libc::c_int;
+    if numInPoints >= 64 as i32 - 2 as i32 {
+        *numOutPoints = 0 as i32;
         return;
     }
-    counts[2 as libc::c_int as usize] = 0 as libc::c_int;
-    counts[1 as libc::c_int as usize] = counts[2 as libc::c_int as usize];
-    counts[0 as libc::c_int as usize] = counts[1 as libc::c_int as usize];
+    counts[2 as i32 as usize] = 0 as i32;
+    counts[1 as i32 as usize] = counts[2 as i32 as usize];
+    counts[0 as i32 as usize] = counts[1 as i32 as usize];
     // determine sides for each point
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < numInPoints {
-        dot = (*inPoints.offset(i as isize))[0 as libc::c_int as usize]
-            * *normal.offset(0 as libc::c_int as isize)
-            + (*inPoints.offset(i as isize))[1 as libc::c_int as usize]
-                * *normal.offset(1 as libc::c_int as isize)
-            + (*inPoints.offset(i as isize))[2 as libc::c_int as usize]
-                * *normal.offset(2 as libc::c_int as isize);
+        dot = (*inPoints.offset(i as isize))[0 as i32 as usize]
+            * *normal.offset(0 as i32 as isize)
+            + (*inPoints.offset(i as isize))[1 as i32 as usize]
+                * *normal.offset(1 as i32 as isize)
+            + (*inPoints.offset(i as isize))[2 as i32 as usize]
+                * *normal.offset(2 as i32 as isize);
         dot -= dist;
         dists[i as usize] = dot;
         if dot > epsilon {
-            sides[i as usize] = 0 as libc::c_int
+            sides[i as usize] = 0 as i32
         } else if dot < -epsilon {
-            sides[i as usize] = 1 as libc::c_int
+            sides[i as usize] = 1 as i32
         } else {
-            sides[i as usize] = 2 as libc::c_int
+            sides[i as usize] = 2 as i32
         }
         counts[sides[i as usize] as usize] += 1;
         i += 1
     }
-    sides[i as usize] = sides[0 as libc::c_int as usize];
-    dists[i as usize] = dists[0 as libc::c_int as usize];
-    *numOutPoints = 0 as libc::c_int;
-    if counts[0 as libc::c_int as usize] == 0 {
+    sides[i as usize] = sides[0 as i32 as usize];
+    dists[i as usize] = dists[0 as i32 as usize];
+    *numOutPoints = 0 as i32;
+    if counts[0 as i32 as usize] == 0 {
         return;
     }
-    if counts[1 as libc::c_int as usize] == 0 {
+    if counts[1 as i32 as usize] == 0 {
         *numOutPoints = numInPoints;
         crate::stdlib::memcpy(
             outPoints as *mut libc::c_void,
@@ -635,38 +635,38 @@ unsafe extern "C" fn R_ChopPolyBehindPlane(
         );
         return;
     }
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < numInPoints {
         p1 = (*inPoints.offset(i as isize)).as_mut_ptr();
         clip = (*outPoints.offset(*numOutPoints as isize)).as_mut_ptr();
-        if sides[i as usize] == 2 as libc::c_int {
-            *clip.offset(0 as libc::c_int as isize) = *p1.offset(0 as libc::c_int as isize);
-            *clip.offset(1 as libc::c_int as isize) = *p1.offset(1 as libc::c_int as isize);
-            *clip.offset(2 as libc::c_int as isize) = *p1.offset(2 as libc::c_int as isize);
+        if sides[i as usize] == 2 as i32 {
+            *clip.offset(0 as i32 as isize) = *p1.offset(0 as i32 as isize);
+            *clip.offset(1 as i32 as isize) = *p1.offset(1 as i32 as isize);
+            *clip.offset(2 as i32 as isize) = *p1.offset(2 as i32 as isize);
             *numOutPoints += 1
         } else {
-            if sides[i as usize] == 0 as libc::c_int {
-                *clip.offset(0 as libc::c_int as isize) = *p1.offset(0 as libc::c_int as isize);
-                *clip.offset(1 as libc::c_int as isize) = *p1.offset(1 as libc::c_int as isize);
-                *clip.offset(2 as libc::c_int as isize) = *p1.offset(2 as libc::c_int as isize);
+            if sides[i as usize] == 0 as i32 {
+                *clip.offset(0 as i32 as isize) = *p1.offset(0 as i32 as isize);
+                *clip.offset(1 as i32 as isize) = *p1.offset(1 as i32 as isize);
+                *clip.offset(2 as i32 as isize) = *p1.offset(2 as i32 as isize);
                 *numOutPoints += 1;
                 clip = (*outPoints.offset(*numOutPoints as isize)).as_mut_ptr()
             }
-            if !(sides[(i + 1 as libc::c_int) as usize] == 2 as libc::c_int
-                || sides[(i + 1 as libc::c_int) as usize] == sides[i as usize])
+            if !(sides[(i + 1 as i32) as usize] == 2 as i32
+                || sides[(i + 1 as i32) as usize] == sides[i as usize])
             {
                 // generate a split point
-                p2 = (*inPoints.offset(((i + 1 as libc::c_int) % numInPoints) as isize))
+                p2 = (*inPoints.offset(((i + 1 as i32) % numInPoints) as isize))
                     .as_mut_ptr();
-                d = dists[i as usize] - dists[(i + 1 as libc::c_int) as usize];
-                if d == 0 as libc::c_int as libc::c_float {
-                    dot = 0 as libc::c_int as libc::c_float
+                d = dists[i as usize] - dists[(i + 1 as i32) as usize];
+                if d == 0 as i32 as f32 {
+                    dot = 0 as i32 as f32
                 } else {
                     dot = dists[i as usize] / d
                 }
                 // clip xyz
-                j = 0 as libc::c_int;
-                while j < 3 as libc::c_int {
+                j = 0 as i32;
+                while j < 3 as i32 {
                     *clip.offset(j as isize) = *p1.offset(j as isize)
                         + dot * (*p2.offset(j as isize) - *p1.offset(j as isize));
                     j += 1
@@ -690,29 +690,29 @@ pub unsafe extern "C" fn R_BoxSurfaces_r(
     mut mins: *mut crate::src::qcommon::q_shared::vec_t,
     mut maxs: *mut crate::src::qcommon::q_shared::vec_t,
     mut list: *mut *mut crate::tr_local_h::surfaceType_t,
-    mut listsize: libc::c_int,
-    mut listlength: *mut libc::c_int,
+    mut listsize: i32,
+    mut listlength: *mut i32,
     mut dir: *mut crate::src::qcommon::q_shared::vec_t,
 ) {
-    let mut s: libc::c_int = 0;
-    let mut c: libc::c_int = 0;
+    let mut s: i32 = 0;
+    let mut c: i32 = 0;
     let mut surf: *mut crate::tr_local_h::msurface_t = 0 as *mut crate::tr_local_h::msurface_t;
     let mut mark: *mut *mut crate::tr_local_h::msurface_t =
         0 as *mut *mut crate::tr_local_h::msurface_t;
     // do the tail recursion in a loop
-    while (*node).contents == -(1 as libc::c_int) {
+    while (*node).contents == -(1 as i32) {
         s = crate::src::qcommon::q_math::BoxOnPlaneSide(
             mins,
             maxs,
             (*node).plane as *mut crate::src::qcommon::q_shared::cplane_s,
         );
-        if s == 1 as libc::c_int {
-            node = (*node).children[0 as libc::c_int as usize]
-        } else if s == 2 as libc::c_int {
-            node = (*node).children[1 as libc::c_int as usize]
+        if s == 1 as i32 {
+            node = (*node).children[0 as i32 as usize]
+        } else if s == 2 as i32 {
+            node = (*node).children[1 as i32 as usize]
         } else {
             R_BoxSurfaces_r(
-                (*node).children[0 as libc::c_int as usize],
+                (*node).children[0 as i32 as usize],
                 mins,
                 maxs,
                 list,
@@ -720,7 +720,7 @@ pub unsafe extern "C" fn R_BoxSurfaces_r(
                 listlength,
                 dir,
             );
-            node = (*node).children[1 as libc::c_int as usize]
+            node = (*node).children[1 as i32 as usize]
         }
     }
     // add the individual surfaces
@@ -739,12 +739,12 @@ pub unsafe extern "C" fn R_BoxSurfaces_r(
         //
         surf = *mark;
         // check if the surface has NOIMPACT or NOMARKS set
-        if (*(*surf).shader).surfaceFlags & (0x10 as libc::c_int | 0x20 as libc::c_int) != 0
-            || (*(*surf).shader).contentFlags & 64 as libc::c_int != 0
+        if (*(*surf).shader).surfaceFlags & (0x10 as i32 | 0x20 as i32) != 0
+            || (*(*surf).shader).contentFlags & 64 as i32 != 0
         {
             (*surf).viewCount = crate::src::renderergl1::tr_main::tr.viewCount
-        } else if *(*surf).data as libc::c_uint
-            == crate::tr_local_h::SF_FACE as libc::c_int as libc::c_uint
+        } else if *(*surf).data as u32
+            == crate::tr_local_h::SF_FACE as i32 as u32
         {
             // extra check for surfaces to avoid list overflows
             // the face plane should go through the box
@@ -754,30 +754,30 @@ pub unsafe extern "C" fn R_BoxSurfaces_r(
                 &mut (*((*surf).data as *mut crate::tr_local_h::srfSurfaceFace_t)).plane as *mut _
                     as *mut crate::src::qcommon::q_shared::cplane_s,
             );
-            if s == 1 as libc::c_int || s == 2 as libc::c_int {
+            if s == 1 as i32 || s == 2 as i32 {
                 (*surf).viewCount = crate::src::renderergl1::tr_main::tr.viewCount
             } else if ((*((*surf).data as *mut crate::tr_local_h::srfSurfaceFace_t))
                 .plane
-                .normal[0 as libc::c_int as usize]
-                * *dir.offset(0 as libc::c_int as isize)
+                .normal[0 as i32 as usize]
+                * *dir.offset(0 as i32 as isize)
                 + (*((*surf).data as *mut crate::tr_local_h::srfSurfaceFace_t))
                     .plane
-                    .normal[1 as libc::c_int as usize]
-                    * *dir.offset(1 as libc::c_int as isize)
+                    .normal[1 as i32 as usize]
+                    * *dir.offset(1 as i32 as isize)
                 + (*((*surf).data as *mut crate::tr_local_h::srfSurfaceFace_t))
                     .plane
-                    .normal[2 as libc::c_int as usize]
-                    * *dir.offset(2 as libc::c_int as isize))
-                as libc::c_double
+                    .normal[2 as i32 as usize]
+                    * *dir.offset(2 as i32 as isize))
+                as f64
                 > -0.5f64
             {
                 // don't add faces that make sharp angles with the projection direction
                 (*surf).viewCount = crate::src::renderergl1::tr_main::tr.viewCount
             }
-        } else if *(*surf).data as libc::c_uint
-            != crate::tr_local_h::SF_GRID as libc::c_int as libc::c_uint
-            && *(*surf).data as libc::c_uint
-                != crate::tr_local_h::SF_TRIANGLES as libc::c_int as libc::c_uint
+        } else if *(*surf).data as u32
+            != crate::tr_local_h::SF_GRID as i32 as u32
+            && *(*surf).data as u32
+                != crate::tr_local_h::SF_TRIANGLES as i32 as u32
         {
             (*surf).viewCount = crate::src::renderergl1::tr_main::tr.viewCount
         }
@@ -801,45 +801,45 @@ R_AddMarkFragments
 #[no_mangle]
 
 pub unsafe extern "C" fn R_AddMarkFragments(
-    mut numClipPoints: libc::c_int,
+    mut numClipPoints: i32,
     mut clipPoints: *mut [crate::src::qcommon::q_shared::vec3_t; 64],
-    mut numPlanes: libc::c_int,
+    mut numPlanes: i32,
     mut normals: *mut crate::src::qcommon::q_shared::vec3_t,
-    mut dists: *mut libc::c_float,
-    mut maxPoints: libc::c_int,
+    mut dists: *mut f32,
+    mut maxPoints: i32,
     mut pointBuffer: *mut crate::src::qcommon::q_shared::vec_t,
-    mut _maxFragments: libc::c_int,
+    mut _maxFragments: i32,
     mut fragmentBuffer: *mut crate::src::qcommon::q_shared::markFragment_t,
-    mut returnedPoints: *mut libc::c_int,
-    mut returnedFragments: *mut libc::c_int,
+    mut returnedPoints: *mut i32,
+    mut returnedFragments: *mut i32,
     mut _mins: *mut crate::src::qcommon::q_shared::vec_t,
     mut _maxs: *mut crate::src::qcommon::q_shared::vec_t,
 ) {
-    let mut pingPong: libc::c_int = 0;
-    let mut i: libc::c_int = 0;
+    let mut pingPong: i32 = 0;
+    let mut i: i32 = 0;
     let mut mf: *mut crate::src::qcommon::q_shared::markFragment_t =
         0 as *mut crate::src::qcommon::q_shared::markFragment_t;
     // chop the surface by all the bounding planes of the to be projected polygon
-    pingPong = 0 as libc::c_int;
-    i = 0 as libc::c_int;
+    pingPong = 0 as i32;
+    i = 0 as i32;
     while i < numPlanes {
         R_ChopPolyBehindPlane(
             numClipPoints,
             (*clipPoints.offset(pingPong as isize)).as_mut_ptr(),
             &mut numClipPoints,
-            (*clipPoints.offset((pingPong == 0) as libc::c_int as isize)).as_mut_ptr(),
+            (*clipPoints.offset((pingPong == 0) as i32 as isize)).as_mut_ptr(),
             (*normals.offset(i as isize)).as_mut_ptr(),
             *dists.offset(i as isize),
             0.5f64 as crate::src::qcommon::q_shared::vec_t,
         );
-        pingPong ^= 1 as libc::c_int;
-        if numClipPoints == 0 as libc::c_int {
+        pingPong ^= 1 as i32;
+        if numClipPoints == 0 as i32 {
             break;
         }
         i += 1
     }
     // completely clipped away?
-    if numClipPoints == 0 as libc::c_int {
+    if numClipPoints == 0 as i32 {
         return;
     }
     // add this fragment to the returned list
@@ -863,7 +863,7 @@ pub unsafe extern "C" fn R_AddMarkFragments(
     (*mf).firstPoint = *returnedPoints;
     (*mf).numPoints = numClipPoints;
     crate::stdlib::memcpy(
-        pointBuffer.offset((*returnedPoints * 3 as libc::c_int) as isize) as *mut libc::c_void,
+        pointBuffer.offset((*returnedPoints * 3 as i32) as isize) as *mut libc::c_void,
         (*clipPoints.offset(pingPong as isize)).as_mut_ptr() as *const libc::c_void,
         (numClipPoints as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
             crate::src::qcommon::q_shared::vec3_t,
@@ -1261,41 +1261,41 @@ R_MarkFragments
 #[no_mangle]
 
 pub unsafe extern "C" fn R_MarkFragments(
-    mut numPoints: libc::c_int,
+    mut numPoints: i32,
     mut points: *const crate::src::qcommon::q_shared::vec3_t,
     mut projection: *const crate::src::qcommon::q_shared::vec_t,
-    mut maxPoints: libc::c_int,
+    mut maxPoints: i32,
     mut pointBuffer: *mut crate::src::qcommon::q_shared::vec_t,
-    mut maxFragments: libc::c_int,
+    mut maxFragments: i32,
     mut fragmentBuffer: *mut crate::src::qcommon::q_shared::markFragment_t,
-) -> libc::c_int {
-    let mut numsurfaces: libc::c_int = 0;
-    let mut numPlanes: libc::c_int = 0;
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
-    let mut k: libc::c_int = 0;
-    let mut m: libc::c_int = 0;
-    let mut n: libc::c_int = 0;
+) -> i32 {
+    let mut numsurfaces: i32 = 0;
+    let mut numPlanes: i32 = 0;
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
+    let mut k: i32 = 0;
+    let mut m: i32 = 0;
+    let mut n: i32 = 0;
     let mut surfaces: [*mut crate::tr_local_h::surfaceType_t; 64] =
         [0 as *mut crate::tr_local_h::surfaceType_t; 64];
     let mut mins: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut maxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut returnedFragments: libc::c_int = 0;
-    let mut returnedPoints: libc::c_int = 0;
+    let mut returnedFragments: i32 = 0;
+    let mut returnedPoints: i32 = 0;
     let mut normals: [crate::src::qcommon::q_shared::vec3_t; 66] = [[0.; 3]; 66];
-    let mut dists: [libc::c_float; 66] = [0.; 66];
+    let mut dists: [f32; 66] = [0.; 66];
     let mut clipPoints: [[crate::src::qcommon::q_shared::vec3_t; 64]; 2] = [[[0.; 3]; 64]; 2];
-    let mut numClipPoints: libc::c_int = 0;
-    let mut v: *mut libc::c_float = 0 as *mut libc::c_float;
+    let mut numClipPoints: i32 = 0;
+    let mut v: *mut f32 = 0 as *mut f32;
     let mut cv: *mut crate::tr_local_h::srfGridMesh_t = 0 as *mut crate::tr_local_h::srfGridMesh_t;
     let mut dv: *mut crate::qfiles_h::drawVert_t = 0 as *mut crate::qfiles_h::drawVert_t;
     let mut normal: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut projectionDir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut v1: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut v2: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut indexes: *mut libc::c_int = 0 as *mut libc::c_int;
-    if numPoints <= 0 as libc::c_int {
-        return 0 as libc::c_int;
+    let mut indexes: *mut i32 = 0 as *mut i32;
+    if numPoints <= 0 as i32 {
+        return 0 as i32;
     }
     //increment view count for double check prevention
     crate::src::renderergl1::tr_main::tr.viewCount += 1;
@@ -1303,7 +1303,7 @@ pub unsafe extern "C" fn R_MarkFragments(
     crate::src::qcommon::q_math::VectorNormalize2(projection, projectionDir.as_mut_ptr());
     // find all the brushes that are to be considered
     crate::src::qcommon::q_math::ClearBounds(mins.as_mut_ptr(), maxs.as_mut_ptr());
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < numPoints {
         let mut temp: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
         crate::src::qcommon::q_math::AddPointToBounds(
@@ -1311,24 +1311,24 @@ pub unsafe extern "C" fn R_MarkFragments(
             mins.as_mut_ptr(),
             maxs.as_mut_ptr(),
         );
-        temp[0 as libc::c_int as usize] = (*points.offset(i as isize))[0 as libc::c_int as usize]
-            + *projection.offset(0 as libc::c_int as isize);
-        temp[1 as libc::c_int as usize] = (*points.offset(i as isize))[1 as libc::c_int as usize]
-            + *projection.offset(1 as libc::c_int as isize);
-        temp[2 as libc::c_int as usize] = (*points.offset(i as isize))[2 as libc::c_int as usize]
-            + *projection.offset(2 as libc::c_int as isize);
+        temp[0 as i32 as usize] = (*points.offset(i as isize))[0 as i32 as usize]
+            + *projection.offset(0 as i32 as isize);
+        temp[1 as i32 as usize] = (*points.offset(i as isize))[1 as i32 as usize]
+            + *projection.offset(1 as i32 as isize);
+        temp[2 as i32 as usize] = (*points.offset(i as isize))[2 as i32 as usize]
+            + *projection.offset(2 as i32 as isize);
         crate::src::qcommon::q_math::AddPointToBounds(
             temp.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
             mins.as_mut_ptr(),
             maxs.as_mut_ptr(),
         );
         // make sure we get all the leafs (also the one(s) in front of the hit surface)
-        temp[0 as libc::c_int as usize] = (*points.offset(i as isize))[0 as libc::c_int as usize]
-            + projectionDir[0 as libc::c_int as usize] * -(20 as libc::c_int) as libc::c_float;
-        temp[1 as libc::c_int as usize] = (*points.offset(i as isize))[1 as libc::c_int as usize]
-            + projectionDir[1 as libc::c_int as usize] * -(20 as libc::c_int) as libc::c_float;
-        temp[2 as libc::c_int as usize] = (*points.offset(i as isize))[2 as libc::c_int as usize]
-            + projectionDir[2 as libc::c_int as usize] * -(20 as libc::c_int) as libc::c_float;
+        temp[0 as i32 as usize] = (*points.offset(i as isize))[0 as i32 as usize]
+            + projectionDir[0 as i32 as usize] * -(20 as i32) as f32;
+        temp[1 as i32 as usize] = (*points.offset(i as isize))[1 as i32 as usize]
+            + projectionDir[1 as i32 as usize] * -(20 as i32) as f32;
+        temp[2 as i32 as usize] = (*points.offset(i as isize))[2 as i32 as usize]
+            + projectionDir[2 as i32 as usize] * -(20 as i32) as f32;
         crate::src::qcommon::q_math::AddPointToBounds(
             temp.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
             mins.as_mut_ptr(),
@@ -1336,101 +1336,101 @@ pub unsafe extern "C" fn R_MarkFragments(
         );
         i += 1
     }
-    if numPoints > 64 as libc::c_int {
-        numPoints = 64 as libc::c_int
+    if numPoints > 64 as i32 {
+        numPoints = 64 as i32
     }
     // create the bounding planes for the to be projected polygon
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < numPoints {
-        v1[0 as libc::c_int as usize] = (*points
-            .offset(((i + 1 as libc::c_int) % numPoints) as isize))[0 as libc::c_int as usize]
-            - (*points.offset(i as isize))[0 as libc::c_int as usize];
-        v1[1 as libc::c_int as usize] = (*points
-            .offset(((i + 1 as libc::c_int) % numPoints) as isize))[1 as libc::c_int as usize]
-            - (*points.offset(i as isize))[1 as libc::c_int as usize];
-        v1[2 as libc::c_int as usize] = (*points
-            .offset(((i + 1 as libc::c_int) % numPoints) as isize))[2 as libc::c_int as usize]
-            - (*points.offset(i as isize))[2 as libc::c_int as usize];
-        v2[0 as libc::c_int as usize] = (*points.offset(i as isize))[0 as libc::c_int as usize]
-            + *projection.offset(0 as libc::c_int as isize);
-        v2[1 as libc::c_int as usize] = (*points.offset(i as isize))[1 as libc::c_int as usize]
-            + *projection.offset(1 as libc::c_int as isize);
-        v2[2 as libc::c_int as usize] = (*points.offset(i as isize))[2 as libc::c_int as usize]
-            + *projection.offset(2 as libc::c_int as isize);
-        v2[0 as libc::c_int as usize] =
-            (*points.offset(i as isize))[0 as libc::c_int as usize] - v2[0 as libc::c_int as usize];
-        v2[1 as libc::c_int as usize] =
-            (*points.offset(i as isize))[1 as libc::c_int as usize] - v2[1 as libc::c_int as usize];
-        v2[2 as libc::c_int as usize] =
-            (*points.offset(i as isize))[2 as libc::c_int as usize] - v2[2 as libc::c_int as usize];
+        v1[0 as i32 as usize] = (*points
+            .offset(((i + 1 as i32) % numPoints) as isize))[0 as i32 as usize]
+            - (*points.offset(i as isize))[0 as i32 as usize];
+        v1[1 as i32 as usize] = (*points
+            .offset(((i + 1 as i32) % numPoints) as isize))[1 as i32 as usize]
+            - (*points.offset(i as isize))[1 as i32 as usize];
+        v1[2 as i32 as usize] = (*points
+            .offset(((i + 1 as i32) % numPoints) as isize))[2 as i32 as usize]
+            - (*points.offset(i as isize))[2 as i32 as usize];
+        v2[0 as i32 as usize] = (*points.offset(i as isize))[0 as i32 as usize]
+            + *projection.offset(0 as i32 as isize);
+        v2[1 as i32 as usize] = (*points.offset(i as isize))[1 as i32 as usize]
+            + *projection.offset(1 as i32 as isize);
+        v2[2 as i32 as usize] = (*points.offset(i as isize))[2 as i32 as usize]
+            + *projection.offset(2 as i32 as isize);
+        v2[0 as i32 as usize] =
+            (*points.offset(i as isize))[0 as i32 as usize] - v2[0 as i32 as usize];
+        v2[1 as i32 as usize] =
+            (*points.offset(i as isize))[1 as i32 as usize] - v2[1 as i32 as usize];
+        v2[2 as i32 as usize] =
+            (*points.offset(i as isize))[2 as i32 as usize] - v2[2 as i32 as usize];
         CrossProduct(
             v1.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
             v2.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
             normals[i as usize].as_mut_ptr(),
         );
         VectorNormalizeFast(normals[i as usize].as_mut_ptr());
-        dists[i as usize] = normals[i as usize][0 as libc::c_int as usize]
-            * (*points.offset(i as isize))[0 as libc::c_int as usize]
-            + normals[i as usize][1 as libc::c_int as usize]
-                * (*points.offset(i as isize))[1 as libc::c_int as usize]
-            + normals[i as usize][2 as libc::c_int as usize]
-                * (*points.offset(i as isize))[2 as libc::c_int as usize];
+        dists[i as usize] = normals[i as usize][0 as i32 as usize]
+            * (*points.offset(i as isize))[0 as i32 as usize]
+            + normals[i as usize][1 as i32 as usize]
+                * (*points.offset(i as isize))[1 as i32 as usize]
+            + normals[i as usize][2 as i32 as usize]
+                * (*points.offset(i as isize))[2 as i32 as usize];
         i += 1
     }
     // add near and far clipping planes for projection
-    normals[numPoints as usize][0 as libc::c_int as usize] =
-        projectionDir[0 as libc::c_int as usize];
-    normals[numPoints as usize][1 as libc::c_int as usize] =
-        projectionDir[1 as libc::c_int as usize];
-    normals[numPoints as usize][2 as libc::c_int as usize] =
-        projectionDir[2 as libc::c_int as usize];
-    dists[numPoints as usize] = normals[numPoints as usize][0 as libc::c_int as usize]
-        * (*points.offset(0 as libc::c_int as isize))[0 as libc::c_int as usize]
-        + normals[numPoints as usize][1 as libc::c_int as usize]
-            * (*points.offset(0 as libc::c_int as isize))[1 as libc::c_int as usize]
-        + normals[numPoints as usize][2 as libc::c_int as usize]
-            * (*points.offset(0 as libc::c_int as isize))[2 as libc::c_int as usize]
-        - 32 as libc::c_int as libc::c_float;
-    normals[(numPoints + 1 as libc::c_int) as usize][0 as libc::c_int as usize] =
-        projectionDir[0 as libc::c_int as usize];
-    normals[(numPoints + 1 as libc::c_int) as usize][1 as libc::c_int as usize] =
-        projectionDir[1 as libc::c_int as usize];
-    normals[(numPoints + 1 as libc::c_int) as usize][2 as libc::c_int as usize] =
-        projectionDir[2 as libc::c_int as usize];
-    VectorInverse(normals[(numPoints + 1 as libc::c_int) as usize].as_mut_ptr());
-    dists[(numPoints + 1 as libc::c_int) as usize] = normals
-        [(numPoints + 1 as libc::c_int) as usize][0 as libc::c_int as usize]
-        * (*points.offset(0 as libc::c_int as isize))[0 as libc::c_int as usize]
-        + normals[(numPoints + 1 as libc::c_int) as usize][1 as libc::c_int as usize]
-            * (*points.offset(0 as libc::c_int as isize))[1 as libc::c_int as usize]
-        + normals[(numPoints + 1 as libc::c_int) as usize][2 as libc::c_int as usize]
-            * (*points.offset(0 as libc::c_int as isize))[2 as libc::c_int as usize]
-        - 20 as libc::c_int as libc::c_float;
-    numPlanes = numPoints + 2 as libc::c_int;
-    numsurfaces = 0 as libc::c_int;
+    normals[numPoints as usize][0 as i32 as usize] =
+        projectionDir[0 as i32 as usize];
+    normals[numPoints as usize][1 as i32 as usize] =
+        projectionDir[1 as i32 as usize];
+    normals[numPoints as usize][2 as i32 as usize] =
+        projectionDir[2 as i32 as usize];
+    dists[numPoints as usize] = normals[numPoints as usize][0 as i32 as usize]
+        * (*points.offset(0 as i32 as isize))[0 as i32 as usize]
+        + normals[numPoints as usize][1 as i32 as usize]
+            * (*points.offset(0 as i32 as isize))[1 as i32 as usize]
+        + normals[numPoints as usize][2 as i32 as usize]
+            * (*points.offset(0 as i32 as isize))[2 as i32 as usize]
+        - 32 as i32 as f32;
+    normals[(numPoints + 1 as i32) as usize][0 as i32 as usize] =
+        projectionDir[0 as i32 as usize];
+    normals[(numPoints + 1 as i32) as usize][1 as i32 as usize] =
+        projectionDir[1 as i32 as usize];
+    normals[(numPoints + 1 as i32) as usize][2 as i32 as usize] =
+        projectionDir[2 as i32 as usize];
+    VectorInverse(normals[(numPoints + 1 as i32) as usize].as_mut_ptr());
+    dists[(numPoints + 1 as i32) as usize] = normals
+        [(numPoints + 1 as i32) as usize][0 as i32 as usize]
+        * (*points.offset(0 as i32 as isize))[0 as i32 as usize]
+        + normals[(numPoints + 1 as i32) as usize][1 as i32 as usize]
+            * (*points.offset(0 as i32 as isize))[1 as i32 as usize]
+        + normals[(numPoints + 1 as i32) as usize][2 as i32 as usize]
+            * (*points.offset(0 as i32 as isize))[2 as i32 as usize]
+        - 20 as i32 as f32;
+    numPlanes = numPoints + 2 as i32;
+    numsurfaces = 0 as i32;
     R_BoxSurfaces_r(
         (*crate::src::renderergl1::tr_main::tr.world).nodes,
         mins.as_mut_ptr(),
         maxs.as_mut_ptr(),
         surfaces.as_mut_ptr(),
-        64 as libc::c_int,
+        64 as i32,
         &mut numsurfaces,
         projectionDir.as_mut_ptr(),
     );
     //assert(numsurfaces <= 64);
     //assert(numsurfaces != 64);
-    returnedPoints = 0 as libc::c_int;
-    returnedFragments = 0 as libc::c_int;
-    i = 0 as libc::c_int;
+    returnedPoints = 0 as i32;
+    returnedFragments = 0 as i32;
+    i = 0 as i32;
     while i < numsurfaces {
-        if *surfaces[i as usize] as libc::c_uint
-            == crate::tr_local_h::SF_GRID as libc::c_int as libc::c_uint
+        if *surfaces[i as usize] as u32
+            == crate::tr_local_h::SF_GRID as i32 as u32
         {
             cv = surfaces[i as usize] as *mut crate::tr_local_h::srfGridMesh_t;
-            m = 0 as libc::c_int;
-            while m < (*cv).height - 1 as libc::c_int {
-                n = 0 as libc::c_int;
-                while n < (*cv).width - 1 as libc::c_int {
+            m = 0 as i32;
+            while m < (*cv).height - 1 as i32 {
+                n = 0 as i32;
+                while n < (*cv).width - 1 as i32 {
                     // We triangulate the grid and chop all triangles within
                     // the bounding planes of the to be projected polygon.
                     // LOD is not taken into account, not such a big deal though.
@@ -1451,122 +1451,122 @@ pub unsafe extern "C" fn R_MarkFragments(
                     // The offset is added in the vertex normal vector direction
                     // so all triangles will still fit together.
                     // The 2 unit offset should avoid pretty much all LOD problems.
-                    numClipPoints = 3 as libc::c_int;
+                    numClipPoints = 3 as i32;
                     dv = (*cv)
                         .verts
                         .as_mut_ptr()
                         .offset((m * (*cv).width) as isize)
                         .offset(n as isize);
-                    clipPoints[0 as libc::c_int as usize][0 as libc::c_int as usize]
-                        [0 as libc::c_int as usize] =
-                        (*dv.offset(0 as libc::c_int as isize)).xyz[0 as libc::c_int as usize];
-                    clipPoints[0 as libc::c_int as usize][0 as libc::c_int as usize]
-                        [1 as libc::c_int as usize] =
-                        (*dv.offset(0 as libc::c_int as isize)).xyz[1 as libc::c_int as usize];
-                    clipPoints[0 as libc::c_int as usize][0 as libc::c_int as usize]
-                        [2 as libc::c_int as usize] =
-                        (*dv.offset(0 as libc::c_int as isize)).xyz[2 as libc::c_int as usize];
-                    clipPoints[0 as libc::c_int as usize][0 as libc::c_int as usize]
-                        [0 as libc::c_int as usize] = clipPoints[0 as libc::c_int as usize]
-                        [0 as libc::c_int as usize][0 as libc::c_int as usize]
-                        + (*dv.offset(0 as libc::c_int as isize)).normal[0 as libc::c_int as usize]
-                            * 0 as libc::c_int as libc::c_float;
-                    clipPoints[0 as libc::c_int as usize][0 as libc::c_int as usize]
-                        [1 as libc::c_int as usize] = clipPoints[0 as libc::c_int as usize]
-                        [0 as libc::c_int as usize][1 as libc::c_int as usize]
-                        + (*dv.offset(0 as libc::c_int as isize)).normal[1 as libc::c_int as usize]
-                            * 0 as libc::c_int as libc::c_float;
-                    clipPoints[0 as libc::c_int as usize][0 as libc::c_int as usize]
-                        [2 as libc::c_int as usize] = clipPoints[0 as libc::c_int as usize]
-                        [0 as libc::c_int as usize][2 as libc::c_int as usize]
-                        + (*dv.offset(0 as libc::c_int as isize)).normal[2 as libc::c_int as usize]
-                            * 0 as libc::c_int as libc::c_float;
-                    clipPoints[0 as libc::c_int as usize][1 as libc::c_int as usize]
-                        [0 as libc::c_int as usize] =
-                        (*dv.offset((*cv).width as isize)).xyz[0 as libc::c_int as usize];
-                    clipPoints[0 as libc::c_int as usize][1 as libc::c_int as usize]
-                        [1 as libc::c_int as usize] =
-                        (*dv.offset((*cv).width as isize)).xyz[1 as libc::c_int as usize];
-                    clipPoints[0 as libc::c_int as usize][1 as libc::c_int as usize]
-                        [2 as libc::c_int as usize] =
-                        (*dv.offset((*cv).width as isize)).xyz[2 as libc::c_int as usize];
-                    clipPoints[0 as libc::c_int as usize][1 as libc::c_int as usize]
-                        [0 as libc::c_int as usize] = clipPoints[0 as libc::c_int as usize]
-                        [1 as libc::c_int as usize][0 as libc::c_int as usize]
-                        + (*dv.offset((*cv).width as isize)).normal[0 as libc::c_int as usize]
-                            * 0 as libc::c_int as libc::c_float;
-                    clipPoints[0 as libc::c_int as usize][1 as libc::c_int as usize]
-                        [1 as libc::c_int as usize] = clipPoints[0 as libc::c_int as usize]
-                        [1 as libc::c_int as usize][1 as libc::c_int as usize]
-                        + (*dv.offset((*cv).width as isize)).normal[1 as libc::c_int as usize]
-                            * 0 as libc::c_int as libc::c_float;
-                    clipPoints[0 as libc::c_int as usize][1 as libc::c_int as usize]
-                        [2 as libc::c_int as usize] = clipPoints[0 as libc::c_int as usize]
-                        [1 as libc::c_int as usize][2 as libc::c_int as usize]
-                        + (*dv.offset((*cv).width as isize)).normal[2 as libc::c_int as usize]
-                            * 0 as libc::c_int as libc::c_float;
-                    clipPoints[0 as libc::c_int as usize][2 as libc::c_int as usize]
-                        [0 as libc::c_int as usize] =
-                        (*dv.offset(1 as libc::c_int as isize)).xyz[0 as libc::c_int as usize];
-                    clipPoints[0 as libc::c_int as usize][2 as libc::c_int as usize]
-                        [1 as libc::c_int as usize] =
-                        (*dv.offset(1 as libc::c_int as isize)).xyz[1 as libc::c_int as usize];
-                    clipPoints[0 as libc::c_int as usize][2 as libc::c_int as usize]
-                        [2 as libc::c_int as usize] =
-                        (*dv.offset(1 as libc::c_int as isize)).xyz[2 as libc::c_int as usize];
-                    clipPoints[0 as libc::c_int as usize][2 as libc::c_int as usize]
-                        [0 as libc::c_int as usize] = clipPoints[0 as libc::c_int as usize]
-                        [2 as libc::c_int as usize][0 as libc::c_int as usize]
-                        + (*dv.offset(1 as libc::c_int as isize)).normal[0 as libc::c_int as usize]
-                            * 0 as libc::c_int as libc::c_float;
-                    clipPoints[0 as libc::c_int as usize][2 as libc::c_int as usize]
-                        [1 as libc::c_int as usize] = clipPoints[0 as libc::c_int as usize]
-                        [2 as libc::c_int as usize][1 as libc::c_int as usize]
-                        + (*dv.offset(1 as libc::c_int as isize)).normal[1 as libc::c_int as usize]
-                            * 0 as libc::c_int as libc::c_float;
-                    clipPoints[0 as libc::c_int as usize][2 as libc::c_int as usize]
-                        [2 as libc::c_int as usize] = clipPoints[0 as libc::c_int as usize]
-                        [2 as libc::c_int as usize][2 as libc::c_int as usize]
-                        + (*dv.offset(1 as libc::c_int as isize)).normal[2 as libc::c_int as usize]
-                            * 0 as libc::c_int as libc::c_float;
+                    clipPoints[0 as i32 as usize][0 as i32 as usize]
+                        [0 as i32 as usize] =
+                        (*dv.offset(0 as i32 as isize)).xyz[0 as i32 as usize];
+                    clipPoints[0 as i32 as usize][0 as i32 as usize]
+                        [1 as i32 as usize] =
+                        (*dv.offset(0 as i32 as isize)).xyz[1 as i32 as usize];
+                    clipPoints[0 as i32 as usize][0 as i32 as usize]
+                        [2 as i32 as usize] =
+                        (*dv.offset(0 as i32 as isize)).xyz[2 as i32 as usize];
+                    clipPoints[0 as i32 as usize][0 as i32 as usize]
+                        [0 as i32 as usize] = clipPoints[0 as i32 as usize]
+                        [0 as i32 as usize][0 as i32 as usize]
+                        + (*dv.offset(0 as i32 as isize)).normal[0 as i32 as usize]
+                            * 0 as i32 as f32;
+                    clipPoints[0 as i32 as usize][0 as i32 as usize]
+                        [1 as i32 as usize] = clipPoints[0 as i32 as usize]
+                        [0 as i32 as usize][1 as i32 as usize]
+                        + (*dv.offset(0 as i32 as isize)).normal[1 as i32 as usize]
+                            * 0 as i32 as f32;
+                    clipPoints[0 as i32 as usize][0 as i32 as usize]
+                        [2 as i32 as usize] = clipPoints[0 as i32 as usize]
+                        [0 as i32 as usize][2 as i32 as usize]
+                        + (*dv.offset(0 as i32 as isize)).normal[2 as i32 as usize]
+                            * 0 as i32 as f32;
+                    clipPoints[0 as i32 as usize][1 as i32 as usize]
+                        [0 as i32 as usize] =
+                        (*dv.offset((*cv).width as isize)).xyz[0 as i32 as usize];
+                    clipPoints[0 as i32 as usize][1 as i32 as usize]
+                        [1 as i32 as usize] =
+                        (*dv.offset((*cv).width as isize)).xyz[1 as i32 as usize];
+                    clipPoints[0 as i32 as usize][1 as i32 as usize]
+                        [2 as i32 as usize] =
+                        (*dv.offset((*cv).width as isize)).xyz[2 as i32 as usize];
+                    clipPoints[0 as i32 as usize][1 as i32 as usize]
+                        [0 as i32 as usize] = clipPoints[0 as i32 as usize]
+                        [1 as i32 as usize][0 as i32 as usize]
+                        + (*dv.offset((*cv).width as isize)).normal[0 as i32 as usize]
+                            * 0 as i32 as f32;
+                    clipPoints[0 as i32 as usize][1 as i32 as usize]
+                        [1 as i32 as usize] = clipPoints[0 as i32 as usize]
+                        [1 as i32 as usize][1 as i32 as usize]
+                        + (*dv.offset((*cv).width as isize)).normal[1 as i32 as usize]
+                            * 0 as i32 as f32;
+                    clipPoints[0 as i32 as usize][1 as i32 as usize]
+                        [2 as i32 as usize] = clipPoints[0 as i32 as usize]
+                        [1 as i32 as usize][2 as i32 as usize]
+                        + (*dv.offset((*cv).width as isize)).normal[2 as i32 as usize]
+                            * 0 as i32 as f32;
+                    clipPoints[0 as i32 as usize][2 as i32 as usize]
+                        [0 as i32 as usize] =
+                        (*dv.offset(1 as i32 as isize)).xyz[0 as i32 as usize];
+                    clipPoints[0 as i32 as usize][2 as i32 as usize]
+                        [1 as i32 as usize] =
+                        (*dv.offset(1 as i32 as isize)).xyz[1 as i32 as usize];
+                    clipPoints[0 as i32 as usize][2 as i32 as usize]
+                        [2 as i32 as usize] =
+                        (*dv.offset(1 as i32 as isize)).xyz[2 as i32 as usize];
+                    clipPoints[0 as i32 as usize][2 as i32 as usize]
+                        [0 as i32 as usize] = clipPoints[0 as i32 as usize]
+                        [2 as i32 as usize][0 as i32 as usize]
+                        + (*dv.offset(1 as i32 as isize)).normal[0 as i32 as usize]
+                            * 0 as i32 as f32;
+                    clipPoints[0 as i32 as usize][2 as i32 as usize]
+                        [1 as i32 as usize] = clipPoints[0 as i32 as usize]
+                        [2 as i32 as usize][1 as i32 as usize]
+                        + (*dv.offset(1 as i32 as isize)).normal[1 as i32 as usize]
+                            * 0 as i32 as f32;
+                    clipPoints[0 as i32 as usize][2 as i32 as usize]
+                        [2 as i32 as usize] = clipPoints[0 as i32 as usize]
+                        [2 as i32 as usize][2 as i32 as usize]
+                        + (*dv.offset(1 as i32 as isize)).normal[2 as i32 as usize]
+                            * 0 as i32 as f32;
                     // check the normal of this triangle
-                    v1[0 as libc::c_int as usize] = clipPoints[0 as libc::c_int as usize]
-                        [0 as libc::c_int as usize][0 as libc::c_int as usize]
-                        - clipPoints[0 as libc::c_int as usize][1 as libc::c_int as usize]
-                            [0 as libc::c_int as usize];
-                    v1[1 as libc::c_int as usize] = clipPoints[0 as libc::c_int as usize]
-                        [0 as libc::c_int as usize][1 as libc::c_int as usize]
-                        - clipPoints[0 as libc::c_int as usize][1 as libc::c_int as usize]
-                            [1 as libc::c_int as usize];
-                    v1[2 as libc::c_int as usize] = clipPoints[0 as libc::c_int as usize]
-                        [0 as libc::c_int as usize][2 as libc::c_int as usize]
-                        - clipPoints[0 as libc::c_int as usize][1 as libc::c_int as usize]
-                            [2 as libc::c_int as usize];
-                    v2[0 as libc::c_int as usize] = clipPoints[0 as libc::c_int as usize]
-                        [2 as libc::c_int as usize][0 as libc::c_int as usize]
-                        - clipPoints[0 as libc::c_int as usize][1 as libc::c_int as usize]
-                            [0 as libc::c_int as usize];
-                    v2[1 as libc::c_int as usize] = clipPoints[0 as libc::c_int as usize]
-                        [2 as libc::c_int as usize][1 as libc::c_int as usize]
-                        - clipPoints[0 as libc::c_int as usize][1 as libc::c_int as usize]
-                            [1 as libc::c_int as usize];
-                    v2[2 as libc::c_int as usize] = clipPoints[0 as libc::c_int as usize]
-                        [2 as libc::c_int as usize][2 as libc::c_int as usize]
-                        - clipPoints[0 as libc::c_int as usize][1 as libc::c_int as usize]
-                            [2 as libc::c_int as usize];
+                    v1[0 as i32 as usize] = clipPoints[0 as i32 as usize]
+                        [0 as i32 as usize][0 as i32 as usize]
+                        - clipPoints[0 as i32 as usize][1 as i32 as usize]
+                            [0 as i32 as usize];
+                    v1[1 as i32 as usize] = clipPoints[0 as i32 as usize]
+                        [0 as i32 as usize][1 as i32 as usize]
+                        - clipPoints[0 as i32 as usize][1 as i32 as usize]
+                            [1 as i32 as usize];
+                    v1[2 as i32 as usize] = clipPoints[0 as i32 as usize]
+                        [0 as i32 as usize][2 as i32 as usize]
+                        - clipPoints[0 as i32 as usize][1 as i32 as usize]
+                            [2 as i32 as usize];
+                    v2[0 as i32 as usize] = clipPoints[0 as i32 as usize]
+                        [2 as i32 as usize][0 as i32 as usize]
+                        - clipPoints[0 as i32 as usize][1 as i32 as usize]
+                            [0 as i32 as usize];
+                    v2[1 as i32 as usize] = clipPoints[0 as i32 as usize]
+                        [2 as i32 as usize][1 as i32 as usize]
+                        - clipPoints[0 as i32 as usize][1 as i32 as usize]
+                            [1 as i32 as usize];
+                    v2[2 as i32 as usize] = clipPoints[0 as i32 as usize]
+                        [2 as i32 as usize][2 as i32 as usize]
+                        - clipPoints[0 as i32 as usize][1 as i32 as usize]
+                            [2 as i32 as usize];
                     CrossProduct(
                         v1.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
                         v2.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
                         normal.as_mut_ptr(),
                     );
                     VectorNormalizeFast(normal.as_mut_ptr());
-                    if ((normal[0 as libc::c_int as usize]
-                        * projectionDir[0 as libc::c_int as usize]
-                        + normal[1 as libc::c_int as usize]
-                            * projectionDir[1 as libc::c_int as usize]
-                        + normal[2 as libc::c_int as usize]
-                            * projectionDir[2 as libc::c_int as usize])
-                        as libc::c_double)
+                    if ((normal[0 as i32 as usize]
+                        * projectionDir[0 as i32 as usize]
+                        + normal[1 as i32 as usize]
+                            * projectionDir[1 as i32 as usize]
+                        + normal[2 as i32 as usize]
+                            * projectionDir[2 as i32 as usize])
+                        as f64)
                         < -0.1f64
                     {
                         // add the fragments of this triangle
@@ -1590,122 +1590,122 @@ pub unsafe extern "C" fn R_MarkFragments(
                             // not enough space for more fragments
                         }
                     }
-                    clipPoints[0 as libc::c_int as usize][0 as libc::c_int as usize]
-                        [0 as libc::c_int as usize] =
-                        (*dv.offset(1 as libc::c_int as isize)).xyz[0 as libc::c_int as usize];
-                    clipPoints[0 as libc::c_int as usize][0 as libc::c_int as usize]
-                        [1 as libc::c_int as usize] =
-                        (*dv.offset(1 as libc::c_int as isize)).xyz[1 as libc::c_int as usize];
-                    clipPoints[0 as libc::c_int as usize][0 as libc::c_int as usize]
-                        [2 as libc::c_int as usize] =
-                        (*dv.offset(1 as libc::c_int as isize)).xyz[2 as libc::c_int as usize];
-                    clipPoints[0 as libc::c_int as usize][0 as libc::c_int as usize]
-                        [0 as libc::c_int as usize] = clipPoints[0 as libc::c_int as usize]
-                        [0 as libc::c_int as usize][0 as libc::c_int as usize]
-                        + (*dv.offset(1 as libc::c_int as isize)).normal[0 as libc::c_int as usize]
-                            * 0 as libc::c_int as libc::c_float;
-                    clipPoints[0 as libc::c_int as usize][0 as libc::c_int as usize]
-                        [1 as libc::c_int as usize] = clipPoints[0 as libc::c_int as usize]
-                        [0 as libc::c_int as usize][1 as libc::c_int as usize]
-                        + (*dv.offset(1 as libc::c_int as isize)).normal[1 as libc::c_int as usize]
-                            * 0 as libc::c_int as libc::c_float;
-                    clipPoints[0 as libc::c_int as usize][0 as libc::c_int as usize]
-                        [2 as libc::c_int as usize] = clipPoints[0 as libc::c_int as usize]
-                        [0 as libc::c_int as usize][2 as libc::c_int as usize]
-                        + (*dv.offset(1 as libc::c_int as isize)).normal[2 as libc::c_int as usize]
-                            * 0 as libc::c_int as libc::c_float;
-                    clipPoints[0 as libc::c_int as usize][1 as libc::c_int as usize]
-                        [0 as libc::c_int as usize] =
-                        (*dv.offset((*cv).width as isize)).xyz[0 as libc::c_int as usize];
-                    clipPoints[0 as libc::c_int as usize][1 as libc::c_int as usize]
-                        [1 as libc::c_int as usize] =
-                        (*dv.offset((*cv).width as isize)).xyz[1 as libc::c_int as usize];
-                    clipPoints[0 as libc::c_int as usize][1 as libc::c_int as usize]
-                        [2 as libc::c_int as usize] =
-                        (*dv.offset((*cv).width as isize)).xyz[2 as libc::c_int as usize];
-                    clipPoints[0 as libc::c_int as usize][1 as libc::c_int as usize]
-                        [0 as libc::c_int as usize] = clipPoints[0 as libc::c_int as usize]
-                        [1 as libc::c_int as usize][0 as libc::c_int as usize]
-                        + (*dv.offset((*cv).width as isize)).normal[0 as libc::c_int as usize]
-                            * 0 as libc::c_int as libc::c_float;
-                    clipPoints[0 as libc::c_int as usize][1 as libc::c_int as usize]
-                        [1 as libc::c_int as usize] = clipPoints[0 as libc::c_int as usize]
-                        [1 as libc::c_int as usize][1 as libc::c_int as usize]
-                        + (*dv.offset((*cv).width as isize)).normal[1 as libc::c_int as usize]
-                            * 0 as libc::c_int as libc::c_float;
-                    clipPoints[0 as libc::c_int as usize][1 as libc::c_int as usize]
-                        [2 as libc::c_int as usize] = clipPoints[0 as libc::c_int as usize]
-                        [1 as libc::c_int as usize][2 as libc::c_int as usize]
-                        + (*dv.offset((*cv).width as isize)).normal[2 as libc::c_int as usize]
-                            * 0 as libc::c_int as libc::c_float;
-                    clipPoints[0 as libc::c_int as usize][2 as libc::c_int as usize]
-                        [0 as libc::c_int as usize] = (*dv
-                        .offset(((*cv).width + 1 as libc::c_int) as isize))
-                    .xyz[0 as libc::c_int as usize];
-                    clipPoints[0 as libc::c_int as usize][2 as libc::c_int as usize]
-                        [1 as libc::c_int as usize] = (*dv
-                        .offset(((*cv).width + 1 as libc::c_int) as isize))
-                    .xyz[1 as libc::c_int as usize];
-                    clipPoints[0 as libc::c_int as usize][2 as libc::c_int as usize]
-                        [2 as libc::c_int as usize] = (*dv
-                        .offset(((*cv).width + 1 as libc::c_int) as isize))
-                    .xyz[2 as libc::c_int as usize];
-                    clipPoints[0 as libc::c_int as usize][2 as libc::c_int as usize]
-                        [0 as libc::c_int as usize] = clipPoints[0 as libc::c_int as usize]
-                        [2 as libc::c_int as usize][0 as libc::c_int as usize]
-                        + (*dv.offset(((*cv).width + 1 as libc::c_int) as isize)).normal
-                            [0 as libc::c_int as usize]
-                            * 0 as libc::c_int as libc::c_float;
-                    clipPoints[0 as libc::c_int as usize][2 as libc::c_int as usize]
-                        [1 as libc::c_int as usize] = clipPoints[0 as libc::c_int as usize]
-                        [2 as libc::c_int as usize][1 as libc::c_int as usize]
-                        + (*dv.offset(((*cv).width + 1 as libc::c_int) as isize)).normal
-                            [1 as libc::c_int as usize]
-                            * 0 as libc::c_int as libc::c_float;
-                    clipPoints[0 as libc::c_int as usize][2 as libc::c_int as usize]
-                        [2 as libc::c_int as usize] = clipPoints[0 as libc::c_int as usize]
-                        [2 as libc::c_int as usize][2 as libc::c_int as usize]
-                        + (*dv.offset(((*cv).width + 1 as libc::c_int) as isize)).normal
-                            [2 as libc::c_int as usize]
-                            * 0 as libc::c_int as libc::c_float;
+                    clipPoints[0 as i32 as usize][0 as i32 as usize]
+                        [0 as i32 as usize] =
+                        (*dv.offset(1 as i32 as isize)).xyz[0 as i32 as usize];
+                    clipPoints[0 as i32 as usize][0 as i32 as usize]
+                        [1 as i32 as usize] =
+                        (*dv.offset(1 as i32 as isize)).xyz[1 as i32 as usize];
+                    clipPoints[0 as i32 as usize][0 as i32 as usize]
+                        [2 as i32 as usize] =
+                        (*dv.offset(1 as i32 as isize)).xyz[2 as i32 as usize];
+                    clipPoints[0 as i32 as usize][0 as i32 as usize]
+                        [0 as i32 as usize] = clipPoints[0 as i32 as usize]
+                        [0 as i32 as usize][0 as i32 as usize]
+                        + (*dv.offset(1 as i32 as isize)).normal[0 as i32 as usize]
+                            * 0 as i32 as f32;
+                    clipPoints[0 as i32 as usize][0 as i32 as usize]
+                        [1 as i32 as usize] = clipPoints[0 as i32 as usize]
+                        [0 as i32 as usize][1 as i32 as usize]
+                        + (*dv.offset(1 as i32 as isize)).normal[1 as i32 as usize]
+                            * 0 as i32 as f32;
+                    clipPoints[0 as i32 as usize][0 as i32 as usize]
+                        [2 as i32 as usize] = clipPoints[0 as i32 as usize]
+                        [0 as i32 as usize][2 as i32 as usize]
+                        + (*dv.offset(1 as i32 as isize)).normal[2 as i32 as usize]
+                            * 0 as i32 as f32;
+                    clipPoints[0 as i32 as usize][1 as i32 as usize]
+                        [0 as i32 as usize] =
+                        (*dv.offset((*cv).width as isize)).xyz[0 as i32 as usize];
+                    clipPoints[0 as i32 as usize][1 as i32 as usize]
+                        [1 as i32 as usize] =
+                        (*dv.offset((*cv).width as isize)).xyz[1 as i32 as usize];
+                    clipPoints[0 as i32 as usize][1 as i32 as usize]
+                        [2 as i32 as usize] =
+                        (*dv.offset((*cv).width as isize)).xyz[2 as i32 as usize];
+                    clipPoints[0 as i32 as usize][1 as i32 as usize]
+                        [0 as i32 as usize] = clipPoints[0 as i32 as usize]
+                        [1 as i32 as usize][0 as i32 as usize]
+                        + (*dv.offset((*cv).width as isize)).normal[0 as i32 as usize]
+                            * 0 as i32 as f32;
+                    clipPoints[0 as i32 as usize][1 as i32 as usize]
+                        [1 as i32 as usize] = clipPoints[0 as i32 as usize]
+                        [1 as i32 as usize][1 as i32 as usize]
+                        + (*dv.offset((*cv).width as isize)).normal[1 as i32 as usize]
+                            * 0 as i32 as f32;
+                    clipPoints[0 as i32 as usize][1 as i32 as usize]
+                        [2 as i32 as usize] = clipPoints[0 as i32 as usize]
+                        [1 as i32 as usize][2 as i32 as usize]
+                        + (*dv.offset((*cv).width as isize)).normal[2 as i32 as usize]
+                            * 0 as i32 as f32;
+                    clipPoints[0 as i32 as usize][2 as i32 as usize]
+                        [0 as i32 as usize] = (*dv
+                        .offset(((*cv).width + 1 as i32) as isize))
+                    .xyz[0 as i32 as usize];
+                    clipPoints[0 as i32 as usize][2 as i32 as usize]
+                        [1 as i32 as usize] = (*dv
+                        .offset(((*cv).width + 1 as i32) as isize))
+                    .xyz[1 as i32 as usize];
+                    clipPoints[0 as i32 as usize][2 as i32 as usize]
+                        [2 as i32 as usize] = (*dv
+                        .offset(((*cv).width + 1 as i32) as isize))
+                    .xyz[2 as i32 as usize];
+                    clipPoints[0 as i32 as usize][2 as i32 as usize]
+                        [0 as i32 as usize] = clipPoints[0 as i32 as usize]
+                        [2 as i32 as usize][0 as i32 as usize]
+                        + (*dv.offset(((*cv).width + 1 as i32) as isize)).normal
+                            [0 as i32 as usize]
+                            * 0 as i32 as f32;
+                    clipPoints[0 as i32 as usize][2 as i32 as usize]
+                        [1 as i32 as usize] = clipPoints[0 as i32 as usize]
+                        [2 as i32 as usize][1 as i32 as usize]
+                        + (*dv.offset(((*cv).width + 1 as i32) as isize)).normal
+                            [1 as i32 as usize]
+                            * 0 as i32 as f32;
+                    clipPoints[0 as i32 as usize][2 as i32 as usize]
+                        [2 as i32 as usize] = clipPoints[0 as i32 as usize]
+                        [2 as i32 as usize][2 as i32 as usize]
+                        + (*dv.offset(((*cv).width + 1 as i32) as isize)).normal
+                            [2 as i32 as usize]
+                            * 0 as i32 as f32;
                     // check the normal of this triangle
-                    v1[0 as libc::c_int as usize] = clipPoints[0 as libc::c_int as usize]
-                        [0 as libc::c_int as usize][0 as libc::c_int as usize]
-                        - clipPoints[0 as libc::c_int as usize][1 as libc::c_int as usize]
-                            [0 as libc::c_int as usize];
-                    v1[1 as libc::c_int as usize] = clipPoints[0 as libc::c_int as usize]
-                        [0 as libc::c_int as usize][1 as libc::c_int as usize]
-                        - clipPoints[0 as libc::c_int as usize][1 as libc::c_int as usize]
-                            [1 as libc::c_int as usize];
-                    v1[2 as libc::c_int as usize] = clipPoints[0 as libc::c_int as usize]
-                        [0 as libc::c_int as usize][2 as libc::c_int as usize]
-                        - clipPoints[0 as libc::c_int as usize][1 as libc::c_int as usize]
-                            [2 as libc::c_int as usize];
-                    v2[0 as libc::c_int as usize] = clipPoints[0 as libc::c_int as usize]
-                        [2 as libc::c_int as usize][0 as libc::c_int as usize]
-                        - clipPoints[0 as libc::c_int as usize][1 as libc::c_int as usize]
-                            [0 as libc::c_int as usize];
-                    v2[1 as libc::c_int as usize] = clipPoints[0 as libc::c_int as usize]
-                        [2 as libc::c_int as usize][1 as libc::c_int as usize]
-                        - clipPoints[0 as libc::c_int as usize][1 as libc::c_int as usize]
-                            [1 as libc::c_int as usize];
-                    v2[2 as libc::c_int as usize] = clipPoints[0 as libc::c_int as usize]
-                        [2 as libc::c_int as usize][2 as libc::c_int as usize]
-                        - clipPoints[0 as libc::c_int as usize][1 as libc::c_int as usize]
-                            [2 as libc::c_int as usize];
+                    v1[0 as i32 as usize] = clipPoints[0 as i32 as usize]
+                        [0 as i32 as usize][0 as i32 as usize]
+                        - clipPoints[0 as i32 as usize][1 as i32 as usize]
+                            [0 as i32 as usize];
+                    v1[1 as i32 as usize] = clipPoints[0 as i32 as usize]
+                        [0 as i32 as usize][1 as i32 as usize]
+                        - clipPoints[0 as i32 as usize][1 as i32 as usize]
+                            [1 as i32 as usize];
+                    v1[2 as i32 as usize] = clipPoints[0 as i32 as usize]
+                        [0 as i32 as usize][2 as i32 as usize]
+                        - clipPoints[0 as i32 as usize][1 as i32 as usize]
+                            [2 as i32 as usize];
+                    v2[0 as i32 as usize] = clipPoints[0 as i32 as usize]
+                        [2 as i32 as usize][0 as i32 as usize]
+                        - clipPoints[0 as i32 as usize][1 as i32 as usize]
+                            [0 as i32 as usize];
+                    v2[1 as i32 as usize] = clipPoints[0 as i32 as usize]
+                        [2 as i32 as usize][1 as i32 as usize]
+                        - clipPoints[0 as i32 as usize][1 as i32 as usize]
+                            [1 as i32 as usize];
+                    v2[2 as i32 as usize] = clipPoints[0 as i32 as usize]
+                        [2 as i32 as usize][2 as i32 as usize]
+                        - clipPoints[0 as i32 as usize][1 as i32 as usize]
+                            [2 as i32 as usize];
                     CrossProduct(
                         v1.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
                         v2.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
                         normal.as_mut_ptr(),
                     );
                     VectorNormalizeFast(normal.as_mut_ptr());
-                    if ((normal[0 as libc::c_int as usize]
-                        * projectionDir[0 as libc::c_int as usize]
-                        + normal[1 as libc::c_int as usize]
-                            * projectionDir[1 as libc::c_int as usize]
-                        + normal[2 as libc::c_int as usize]
-                            * projectionDir[2 as libc::c_int as usize])
-                        as libc::c_double)
+                    if ((normal[0 as i32 as usize]
+                        * projectionDir[0 as i32 as usize]
+                        + normal[1 as i32 as usize]
+                            * projectionDir[1 as i32 as usize]
+                        + normal[2 as i32 as usize]
+                            * projectionDir[2 as i32 as usize])
+                        as f64)
                         < -0.05f64
                     {
                         // add the fragments of this triangle
@@ -1733,54 +1733,54 @@ pub unsafe extern "C" fn R_MarkFragments(
                 }
                 m += 1
             }
-        } else if *surfaces[i as usize] as libc::c_uint
-            == crate::tr_local_h::SF_FACE as libc::c_int as libc::c_uint
+        } else if *surfaces[i as usize] as u32
+            == crate::tr_local_h::SF_FACE as i32 as u32
         {
             let mut surf: *mut crate::tr_local_h::srfSurfaceFace_t =
                 surfaces[i as usize] as *mut crate::tr_local_h::srfSurfaceFace_t;
             // check the normal of this face
-            if !(((*surf).plane.normal[0 as libc::c_int as usize]
-                * projectionDir[0 as libc::c_int as usize]
-                + (*surf).plane.normal[1 as libc::c_int as usize]
-                    * projectionDir[1 as libc::c_int as usize]
-                + (*surf).plane.normal[2 as libc::c_int as usize]
-                    * projectionDir[2 as libc::c_int as usize]) as libc::c_double
+            if !(((*surf).plane.normal[0 as i32 as usize]
+                * projectionDir[0 as i32 as usize]
+                + (*surf).plane.normal[1 as i32 as usize]
+                    * projectionDir[1 as i32 as usize]
+                + (*surf).plane.normal[2 as i32 as usize]
+                    * projectionDir[2 as i32 as usize]) as f64
                 > -0.5f64)
             {
                 indexes = (surf as *mut crate::src::qcommon::q_shared::byte)
                     .offset((*surf).ofsIndices as isize)
-                    as *mut libc::c_int;
-                k = 0 as libc::c_int;
+                    as *mut i32;
+                k = 0 as i32;
                 while k < (*surf).numIndices {
-                    j = 0 as libc::c_int;
-                    while j < 3 as libc::c_int {
+                    j = 0 as i32;
+                    while j < 3 as i32 {
                         v = (&mut *(*(*surf)
                             .points
                             .as_mut_ptr()
-                            .offset(0 as libc::c_int as isize))
+                            .offset(0 as i32 as isize))
                         .as_mut_ptr()
-                        .offset(0 as libc::c_int as isize)
-                            as *mut libc::c_float)
+                        .offset(0 as i32 as isize)
+                            as *mut f32)
                             .offset(
-                                (8 as libc::c_int * *indexes.offset((k + j) as isize)) as isize,
+                                (8 as i32 * *indexes.offset((k + j) as isize)) as isize,
                             );
-                        clipPoints[0 as libc::c_int as usize][j as usize]
-                            [0 as libc::c_int as usize] = *v.offset(0 as libc::c_int as isize)
-                            + (*surf).plane.normal[0 as libc::c_int as usize]
-                                * 0 as libc::c_int as libc::c_float;
-                        clipPoints[0 as libc::c_int as usize][j as usize]
-                            [1 as libc::c_int as usize] = *v.offset(1 as libc::c_int as isize)
-                            + (*surf).plane.normal[1 as libc::c_int as usize]
-                                * 0 as libc::c_int as libc::c_float;
-                        clipPoints[0 as libc::c_int as usize][j as usize]
-                            [2 as libc::c_int as usize] = *v.offset(2 as libc::c_int as isize)
-                            + (*surf).plane.normal[2 as libc::c_int as usize]
-                                * 0 as libc::c_int as libc::c_float;
+                        clipPoints[0 as i32 as usize][j as usize]
+                            [0 as i32 as usize] = *v.offset(0 as i32 as isize)
+                            + (*surf).plane.normal[0 as i32 as usize]
+                                * 0 as i32 as f32;
+                        clipPoints[0 as i32 as usize][j as usize]
+                            [1 as i32 as usize] = *v.offset(1 as i32 as isize)
+                            + (*surf).plane.normal[1 as i32 as usize]
+                                * 0 as i32 as f32;
+                        clipPoints[0 as i32 as usize][j as usize]
+                            [2 as i32 as usize] = *v.offset(2 as i32 as isize)
+                            + (*surf).plane.normal[2 as i32 as usize]
+                                * 0 as i32 as f32;
                         j += 1
                     }
                     // add the fragments of this face
                     R_AddMarkFragments(
-                        3 as libc::c_int,
+                        3 as i32,
                         clipPoints.as_mut_ptr(),
                         numPlanes,
                         normals.as_mut_ptr(),
@@ -1798,50 +1798,50 @@ pub unsafe extern "C" fn R_MarkFragments(
                         return returnedFragments;
                         // not enough space for more fragments
                     }
-                    k += 3 as libc::c_int
+                    k += 3 as i32
                 }
             }
-        } else if *surfaces[i as usize] as libc::c_uint
-            == crate::tr_local_h::SF_TRIANGLES as libc::c_int as libc::c_uint
+        } else if *surfaces[i as usize] as u32
+            == crate::tr_local_h::SF_TRIANGLES as i32 as u32
             && (*crate::src::renderergl1::tr_init::r_marksOnTriangleMeshes).integer != 0
         {
             let mut surf_0: *mut crate::tr_local_h::srfTriangles_t =
                 surfaces[i as usize] as *mut crate::tr_local_h::srfTriangles_t;
-            k = 0 as libc::c_int;
+            k = 0 as i32;
             while k < (*surf_0).numIndexes {
-                j = 0 as libc::c_int;
-                while j < 3 as libc::c_int {
+                j = 0 as i32;
+                while j < 3 as i32 {
                     v = (*(*surf_0)
                         .verts
                         .offset(*(*surf_0).indexes.offset((k + j) as isize) as isize))
                     .xyz
                     .as_mut_ptr();
-                    clipPoints[0 as libc::c_int as usize][j as usize][0 as libc::c_int as usize] =
-                        *v.offset(0 as libc::c_int as isize)
+                    clipPoints[0 as i32 as usize][j as usize][0 as i32 as usize] =
+                        *v.offset(0 as i32 as isize)
                             + (*(*surf_0)
                                 .verts
                                 .offset(*(*surf_0).indexes.offset((k + j) as isize) as isize))
-                            .normal[0 as libc::c_int as usize]
-                                * 0 as libc::c_int as libc::c_float;
-                    clipPoints[0 as libc::c_int as usize][j as usize][1 as libc::c_int as usize] =
-                        *v.offset(1 as libc::c_int as isize)
+                            .normal[0 as i32 as usize]
+                                * 0 as i32 as f32;
+                    clipPoints[0 as i32 as usize][j as usize][1 as i32 as usize] =
+                        *v.offset(1 as i32 as isize)
                             + (*(*surf_0)
                                 .verts
                                 .offset(*(*surf_0).indexes.offset((k + j) as isize) as isize))
-                            .normal[1 as libc::c_int as usize]
-                                * 0 as libc::c_int as libc::c_float;
-                    clipPoints[0 as libc::c_int as usize][j as usize][2 as libc::c_int as usize] =
-                        *v.offset(2 as libc::c_int as isize)
+                            .normal[1 as i32 as usize]
+                                * 0 as i32 as f32;
+                    clipPoints[0 as i32 as usize][j as usize][2 as i32 as usize] =
+                        *v.offset(2 as i32 as isize)
                             + (*(*surf_0)
                                 .verts
                                 .offset(*(*surf_0).indexes.offset((k + j) as isize) as isize))
-                            .normal[2 as libc::c_int as usize]
-                                * 0 as libc::c_int as libc::c_float;
+                            .normal[2 as i32 as usize]
+                                * 0 as i32 as f32;
                     j += 1
                 }
                 // add the fragments of this face
                 R_AddMarkFragments(
-                    3 as libc::c_int,
+                    3 as i32,
                     clipPoints.as_mut_ptr(),
                     numPlanes,
                     normals.as_mut_ptr(),
@@ -1859,7 +1859,7 @@ pub unsafe extern "C" fn R_MarkFragments(
                     return returnedFragments;
                     // not enough space for more fragments
                 }
-                k += 3 as libc::c_int
+                k += 3 as i32
             }
         }
         i += 1

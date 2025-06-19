@@ -242,7 +242,7 @@ pub type my_idct_ptr = *mut my_idct_controller;
 #[derive(Copy, Clone)]
 pub struct my_idct_controller {
     pub pub_0: crate::jpegint_h::jpeg_inverse_dct,
-    pub cur_method: [libc::c_int; 10],
+    pub cur_method: [i32; 10],
 }
 
 #[repr(C)]
@@ -263,18 +263,18 @@ pub union multiplier_table {
 
 unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
     let mut idct: my_idct_ptr = (*cinfo).idct as my_idct_ptr;
-    let mut ci: libc::c_int = 0;
-    let mut i: libc::c_int = 0;
+    let mut ci: i32 = 0;
+    let mut i: i32 = 0;
     let mut compptr: *mut crate::jpeglib_h::jpeg_component_info =
         0 as *mut crate::jpeglib_h::jpeg_component_info;
-    let mut method: libc::c_int = 0 as libc::c_int;
+    let mut method: i32 = 0 as i32;
     let mut method_ptr: crate::jpegint_h::inverse_DCT_method_ptr = None;
     let mut qtbl: *mut crate::jpeglib_h::JQUANT_TBL = 0 as *mut crate::jpeglib_h::JQUANT_TBL;
-    ci = 0 as libc::c_int;
+    ci = 0 as i32;
     compptr = (*cinfo).comp_info;
     while ci < (*cinfo).num_components {
         /* Select the proper IDCT routine for this component's scaling */
-        match ((*compptr).DCT_h_scaled_size << 8 as libc::c_int) + (*compptr).DCT_v_scaled_size {
+        match ((*compptr).DCT_h_scaled_size << 8 as i32) + (*compptr).DCT_v_scaled_size {
             257 => {
                 method_ptr = Some(
                     crate::src::jpeg_8c::jidctint::jpeg_idct_1x1
@@ -286,7 +286,7 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
                             _: crate::jmorecfg_h::JDIMENSION,
                         ) -> (),
                 ); /* jidctint uses islow-style table */
-                method = crate::jpeglib_h::JDCT_ISLOW as libc::c_int
+                method = crate::jpeglib_h::JDCT_ISLOW as i32
             }
             514 => {
                 method_ptr = Some(
@@ -299,7 +299,7 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
                             _: crate::jmorecfg_h::JDIMENSION,
                         ) -> (),
                 ); /* jidctint uses islow-style table */
-                method = crate::jpeglib_h::JDCT_ISLOW as libc::c_int
+                method = crate::jpeglib_h::JDCT_ISLOW as i32
             }
             771 => {
                 method_ptr = Some(
@@ -312,7 +312,7 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
                             _: crate::jmorecfg_h::JDIMENSION,
                         ) -> (),
                 ); /* jidctint uses islow-style table */
-                method = crate::jpeglib_h::JDCT_ISLOW as libc::c_int
+                method = crate::jpeglib_h::JDCT_ISLOW as i32
             }
             1028 => {
                 method_ptr = Some(
@@ -325,7 +325,7 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
                             _: crate::jmorecfg_h::JDIMENSION,
                         ) -> (),
                 ); /* jidctint uses islow-style table */
-                method = crate::jpeglib_h::JDCT_ISLOW as libc::c_int
+                method = crate::jpeglib_h::JDCT_ISLOW as i32
             }
             1285 => {
                 method_ptr = Some(
@@ -338,7 +338,7 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
                             _: crate::jmorecfg_h::JDIMENSION,
                         ) -> (),
                 ); /* jidctint uses islow-style table */
-                method = crate::jpeglib_h::JDCT_ISLOW as libc::c_int
+                method = crate::jpeglib_h::JDCT_ISLOW as i32
             }
             1542 => {
                 method_ptr = Some(
@@ -351,7 +351,7 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
                             _: crate::jmorecfg_h::JDIMENSION,
                         ) -> (),
                 ); /* jidctint uses islow-style table */
-                method = crate::jpeglib_h::JDCT_ISLOW as libc::c_int
+                method = crate::jpeglib_h::JDCT_ISLOW as i32
             }
             1799 => {
                 method_ptr = Some(
@@ -364,7 +364,7 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
                             _: crate::jmorecfg_h::JDIMENSION,
                         ) -> (),
                 ); /* jidctint uses islow-style table */
-                method = crate::jpeglib_h::JDCT_ISLOW as libc::c_int
+                method = crate::jpeglib_h::JDCT_ISLOW as i32
             }
             2313 => {
                 method_ptr = Some(
@@ -377,7 +377,7 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
                             _: crate::jmorecfg_h::JDIMENSION,
                         ) -> (),
                 ); /* jidctint uses islow-style table */
-                method = crate::jpeglib_h::JDCT_ISLOW as libc::c_int
+                method = crate::jpeglib_h::JDCT_ISLOW as i32
             }
             2570 => {
                 method_ptr = Some(
@@ -390,7 +390,7 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
                             _: crate::jmorecfg_h::JDIMENSION,
                         ) -> (),
                 ); /* jidctint uses islow-style table */
-                method = crate::jpeglib_h::JDCT_ISLOW as libc::c_int
+                method = crate::jpeglib_h::JDCT_ISLOW as i32
             }
             2827 => {
                 method_ptr = Some(
@@ -403,7 +403,7 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
                             _: crate::jmorecfg_h::JDIMENSION,
                         ) -> (),
                 ); /* jidctint uses islow-style table */
-                method = crate::jpeglib_h::JDCT_ISLOW as libc::c_int
+                method = crate::jpeglib_h::JDCT_ISLOW as i32
             }
             3084 => {
                 method_ptr = Some(
@@ -416,7 +416,7 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
                             _: crate::jmorecfg_h::JDIMENSION,
                         ) -> (),
                 ); /* jidctint uses islow-style table */
-                method = crate::jpeglib_h::JDCT_ISLOW as libc::c_int
+                method = crate::jpeglib_h::JDCT_ISLOW as i32
             }
             3341 => {
                 method_ptr = Some(
@@ -429,7 +429,7 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
                             _: crate::jmorecfg_h::JDIMENSION,
                         ) -> (),
                 ); /* jidctint uses islow-style table */
-                method = crate::jpeglib_h::JDCT_ISLOW as libc::c_int
+                method = crate::jpeglib_h::JDCT_ISLOW as i32
             }
             3598 => {
                 method_ptr = Some(
@@ -442,7 +442,7 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
                             _: crate::jmorecfg_h::JDIMENSION,
                         ) -> (),
                 ); /* jidctint uses islow-style table */
-                method = crate::jpeglib_h::JDCT_ISLOW as libc::c_int
+                method = crate::jpeglib_h::JDCT_ISLOW as i32
             }
             3855 => {
                 method_ptr = Some(
@@ -455,7 +455,7 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
                             _: crate::jmorecfg_h::JDIMENSION,
                         ) -> (),
                 ); /* jidctint uses islow-style table */
-                method = crate::jpeglib_h::JDCT_ISLOW as libc::c_int
+                method = crate::jpeglib_h::JDCT_ISLOW as i32
             }
             4112 => {
                 method_ptr = Some(
@@ -468,7 +468,7 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
                             _: crate::jmorecfg_h::JDIMENSION,
                         ) -> (),
                 ); /* jidctint uses islow-style table */
-                method = crate::jpeglib_h::JDCT_ISLOW as libc::c_int
+                method = crate::jpeglib_h::JDCT_ISLOW as i32
             }
             4104 => {
                 method_ptr = Some(
@@ -481,7 +481,7 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
                             _: crate::jmorecfg_h::JDIMENSION,
                         ) -> (),
                 ); /* jidctint uses islow-style table */
-                method = crate::jpeglib_h::JDCT_ISLOW as libc::c_int
+                method = crate::jpeglib_h::JDCT_ISLOW as i32
             }
             3591 => {
                 method_ptr = Some(
@@ -494,7 +494,7 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
                             _: crate::jmorecfg_h::JDIMENSION,
                         ) -> (),
                 ); /* jidctint uses islow-style table */
-                method = crate::jpeglib_h::JDCT_ISLOW as libc::c_int
+                method = crate::jpeglib_h::JDCT_ISLOW as i32
             }
             3078 => {
                 method_ptr = Some(
@@ -507,7 +507,7 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
                             _: crate::jmorecfg_h::JDIMENSION,
                         ) -> (),
                 ); /* jidctint uses islow-style table */
-                method = crate::jpeglib_h::JDCT_ISLOW as libc::c_int
+                method = crate::jpeglib_h::JDCT_ISLOW as i32
             }
             2565 => {
                 method_ptr = Some(
@@ -520,7 +520,7 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
                             _: crate::jmorecfg_h::JDIMENSION,
                         ) -> (),
                 ); /* jidctint uses islow-style table */
-                method = crate::jpeglib_h::JDCT_ISLOW as libc::c_int
+                method = crate::jpeglib_h::JDCT_ISLOW as i32
             }
             2052 => {
                 method_ptr = Some(
@@ -533,7 +533,7 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
                             _: crate::jmorecfg_h::JDIMENSION,
                         ) -> (),
                 ); /* jidctint uses islow-style table */
-                method = crate::jpeglib_h::JDCT_ISLOW as libc::c_int
+                method = crate::jpeglib_h::JDCT_ISLOW as i32
             }
             1539 => {
                 method_ptr = Some(
@@ -546,7 +546,7 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
                             _: crate::jmorecfg_h::JDIMENSION,
                         ) -> (),
                 ); /* jidctint uses islow-style table */
-                method = crate::jpeglib_h::JDCT_ISLOW as libc::c_int
+                method = crate::jpeglib_h::JDCT_ISLOW as i32
             }
             1026 => {
                 method_ptr = Some(
@@ -559,7 +559,7 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
                             _: crate::jmorecfg_h::JDIMENSION,
                         ) -> (),
                 ); /* jidctint uses islow-style table */
-                method = crate::jpeglib_h::JDCT_ISLOW as libc::c_int
+                method = crate::jpeglib_h::JDCT_ISLOW as i32
             }
             513 => {
                 method_ptr = Some(
@@ -572,7 +572,7 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
                             _: crate::jmorecfg_h::JDIMENSION,
                         ) -> (),
                 ); /* jidctint uses islow-style table */
-                method = crate::jpeglib_h::JDCT_ISLOW as libc::c_int
+                method = crate::jpeglib_h::JDCT_ISLOW as i32
             }
             2064 => {
                 method_ptr = Some(
@@ -585,7 +585,7 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
                             _: crate::jmorecfg_h::JDIMENSION,
                         ) -> (),
                 ); /* jidctint uses islow-style table */
-                method = crate::jpeglib_h::JDCT_ISLOW as libc::c_int
+                method = crate::jpeglib_h::JDCT_ISLOW as i32
             }
             1806 => {
                 method_ptr = Some(
@@ -598,7 +598,7 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
                             _: crate::jmorecfg_h::JDIMENSION,
                         ) -> (),
                 ); /* jidctint uses islow-style table */
-                method = crate::jpeglib_h::JDCT_ISLOW as libc::c_int
+                method = crate::jpeglib_h::JDCT_ISLOW as i32
             }
             1548 => {
                 method_ptr = Some(
@@ -611,7 +611,7 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
                             _: crate::jmorecfg_h::JDIMENSION,
                         ) -> (),
                 ); /* jidctint uses islow-style table */
-                method = crate::jpeglib_h::JDCT_ISLOW as libc::c_int
+                method = crate::jpeglib_h::JDCT_ISLOW as i32
             }
             1290 => {
                 method_ptr = Some(
@@ -624,7 +624,7 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
                             _: crate::jmorecfg_h::JDIMENSION,
                         ) -> (),
                 ); /* jidctint uses islow-style table */
-                method = crate::jpeglib_h::JDCT_ISLOW as libc::c_int
+                method = crate::jpeglib_h::JDCT_ISLOW as i32
             }
             1032 => {
                 method_ptr = Some(
@@ -637,7 +637,7 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
                             _: crate::jmorecfg_h::JDIMENSION,
                         ) -> (),
                 ); /* jidctint uses islow-style table */
-                method = crate::jpeglib_h::JDCT_ISLOW as libc::c_int
+                method = crate::jpeglib_h::JDCT_ISLOW as i32
             }
             774 => {
                 method_ptr = Some(
@@ -650,7 +650,7 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
                             _: crate::jmorecfg_h::JDIMENSION,
                         ) -> (),
                 ); /* jidctint uses islow-style table */
-                method = crate::jpeglib_h::JDCT_ISLOW as libc::c_int
+                method = crate::jpeglib_h::JDCT_ISLOW as i32
             }
             516 => {
                 method_ptr = Some(
@@ -663,7 +663,7 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
                             _: crate::jmorecfg_h::JDIMENSION,
                         ) -> (),
                 ); /* jidctint uses islow-style table */
-                method = crate::jpeglib_h::JDCT_ISLOW as libc::c_int
+                method = crate::jpeglib_h::JDCT_ISLOW as i32
             }
             258 => {
                 method_ptr = Some(
@@ -676,9 +676,9 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
                             _: crate::jmorecfg_h::JDIMENSION,
                         ) -> (),
                 ); /* jidctint uses islow-style table */
-                method = crate::jpeglib_h::JDCT_ISLOW as libc::c_int
+                method = crate::jpeglib_h::JDCT_ISLOW as i32
             }
-            2056 => match (*cinfo).dct_method as libc::c_uint {
+            2056 => match (*cinfo).dct_method as u32 {
                 0 => {
                     method_ptr = Some(
                         crate::src::jpeg_8c::jidctint::jpeg_idct_islow
@@ -690,7 +690,7 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
                                 _: crate::jmorecfg_h::JDIMENSION,
                             ) -> (),
                     );
-                    method = crate::jpeglib_h::JDCT_ISLOW as libc::c_int
+                    method = crate::jpeglib_h::JDCT_ISLOW as i32
                 }
                 1 => {
                     method_ptr = Some(
@@ -703,7 +703,7 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
                                 _: crate::jmorecfg_h::JDIMENSION,
                             ) -> (),
                     );
-                    method = crate::jpeglib_h::JDCT_IFAST as libc::c_int
+                    method = crate::jpeglib_h::JDCT_IFAST as i32
                 }
                 2 => {
                     method_ptr = Some(
@@ -716,11 +716,11 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
                                 _: crate::jmorecfg_h::JDIMENSION,
                             ) -> (),
                     );
-                    method = crate::jpeglib_h::JDCT_FLOAT as libc::c_int
+                    method = crate::jpeglib_h::JDCT_FLOAT as i32
                 }
                 _ => {
                     (*(*cinfo).err).msg_code =
-                        crate::src::jpeg_8c::jerror::JERR_NOT_COMPILED as libc::c_int;
+                        crate::src::jpeg_8c::jerror::JERR_NOT_COMPILED as i32;
                     Some(
                         (*(*cinfo).err)
                             .error_exit
@@ -733,10 +733,10 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
             },
             _ => {
                 (*(*cinfo).err).msg_code =
-                    crate::src::jpeg_8c::jerror::JERR_BAD_DCTSIZE as libc::c_int;
-                (*(*cinfo).err).msg_parm.i[0 as libc::c_int as usize] =
+                    crate::src::jpeg_8c::jerror::JERR_BAD_DCTSIZE as i32;
+                (*(*cinfo).err).msg_parm.i[0 as i32 as usize] =
                     (*compptr).DCT_h_scaled_size;
-                (*(*cinfo).err).msg_parm.i[1 as libc::c_int as usize] =
+                (*(*cinfo).err).msg_parm.i[1 as i32 as usize] =
                     (*compptr).DCT_v_scaled_size;
                 Some(
                     (*(*cinfo).err)
@@ -767,8 +767,8 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
                          */
                         let mut ismtbl: *mut crate::jdct_h::ISLOW_MULT_TYPE =
                             (*compptr).dct_table as *mut crate::jdct_h::ISLOW_MULT_TYPE;
-                        i = 0 as libc::c_int;
-                        while i < 64 as libc::c_int {
+                        i = 0 as i32;
+                        while i < 64 as i32 {
                             *ismtbl.offset(i as isize) =
                                 (*qtbl).quantval[i as usize] as crate::jdct_h::ISLOW_MULT_TYPE;
                             i += 1
@@ -785,79 +785,79 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
                         let mut ifmtbl: *mut crate::jdct_h::IFAST_MULT_TYPE =
                             (*compptr).dct_table as *mut crate::jdct_h::IFAST_MULT_TYPE;
                         static mut aanscales: [crate::jmorecfg_h::INT16; 64] = [
-                            16384 as libc::c_int as crate::jmorecfg_h::INT16,
-                            22725 as libc::c_int as crate::jmorecfg_h::INT16,
-                            21407 as libc::c_int as crate::jmorecfg_h::INT16,
-                            19266 as libc::c_int as crate::jmorecfg_h::INT16,
-                            16384 as libc::c_int as crate::jmorecfg_h::INT16,
-                            12873 as libc::c_int as crate::jmorecfg_h::INT16,
-                            8867 as libc::c_int as crate::jmorecfg_h::INT16,
-                            4520 as libc::c_int as crate::jmorecfg_h::INT16,
-                            22725 as libc::c_int as crate::jmorecfg_h::INT16,
-                            31521 as libc::c_int as crate::jmorecfg_h::INT16,
-                            29692 as libc::c_int as crate::jmorecfg_h::INT16,
-                            26722 as libc::c_int as crate::jmorecfg_h::INT16,
-                            22725 as libc::c_int as crate::jmorecfg_h::INT16,
-                            17855 as libc::c_int as crate::jmorecfg_h::INT16,
-                            12299 as libc::c_int as crate::jmorecfg_h::INT16,
-                            6270 as libc::c_int as crate::jmorecfg_h::INT16,
-                            21407 as libc::c_int as crate::jmorecfg_h::INT16,
-                            29692 as libc::c_int as crate::jmorecfg_h::INT16,
-                            27969 as libc::c_int as crate::jmorecfg_h::INT16,
-                            25172 as libc::c_int as crate::jmorecfg_h::INT16,
-                            21407 as libc::c_int as crate::jmorecfg_h::INT16,
-                            16819 as libc::c_int as crate::jmorecfg_h::INT16,
-                            11585 as libc::c_int as crate::jmorecfg_h::INT16,
-                            5906 as libc::c_int as crate::jmorecfg_h::INT16,
-                            19266 as libc::c_int as crate::jmorecfg_h::INT16,
-                            26722 as libc::c_int as crate::jmorecfg_h::INT16,
-                            25172 as libc::c_int as crate::jmorecfg_h::INT16,
-                            22654 as libc::c_int as crate::jmorecfg_h::INT16,
-                            19266 as libc::c_int as crate::jmorecfg_h::INT16,
-                            15137 as libc::c_int as crate::jmorecfg_h::INT16,
-                            10426 as libc::c_int as crate::jmorecfg_h::INT16,
-                            5315 as libc::c_int as crate::jmorecfg_h::INT16,
-                            16384 as libc::c_int as crate::jmorecfg_h::INT16,
-                            22725 as libc::c_int as crate::jmorecfg_h::INT16,
-                            21407 as libc::c_int as crate::jmorecfg_h::INT16,
-                            19266 as libc::c_int as crate::jmorecfg_h::INT16,
-                            16384 as libc::c_int as crate::jmorecfg_h::INT16,
-                            12873 as libc::c_int as crate::jmorecfg_h::INT16,
-                            8867 as libc::c_int as crate::jmorecfg_h::INT16,
-                            4520 as libc::c_int as crate::jmorecfg_h::INT16,
-                            12873 as libc::c_int as crate::jmorecfg_h::INT16,
-                            17855 as libc::c_int as crate::jmorecfg_h::INT16,
-                            16819 as libc::c_int as crate::jmorecfg_h::INT16,
-                            15137 as libc::c_int as crate::jmorecfg_h::INT16,
-                            12873 as libc::c_int as crate::jmorecfg_h::INT16,
-                            10114 as libc::c_int as crate::jmorecfg_h::INT16,
-                            6967 as libc::c_int as crate::jmorecfg_h::INT16,
-                            3552 as libc::c_int as crate::jmorecfg_h::INT16,
-                            8867 as libc::c_int as crate::jmorecfg_h::INT16,
-                            12299 as libc::c_int as crate::jmorecfg_h::INT16,
-                            11585 as libc::c_int as crate::jmorecfg_h::INT16,
-                            10426 as libc::c_int as crate::jmorecfg_h::INT16,
-                            8867 as libc::c_int as crate::jmorecfg_h::INT16,
-                            6967 as libc::c_int as crate::jmorecfg_h::INT16,
-                            4799 as libc::c_int as crate::jmorecfg_h::INT16,
-                            2446 as libc::c_int as crate::jmorecfg_h::INT16,
-                            4520 as libc::c_int as crate::jmorecfg_h::INT16,
-                            6270 as libc::c_int as crate::jmorecfg_h::INT16,
-                            5906 as libc::c_int as crate::jmorecfg_h::INT16,
-                            5315 as libc::c_int as crate::jmorecfg_h::INT16,
-                            4520 as libc::c_int as crate::jmorecfg_h::INT16,
-                            3552 as libc::c_int as crate::jmorecfg_h::INT16,
-                            2446 as libc::c_int as crate::jmorecfg_h::INT16,
-                            1247 as libc::c_int as crate::jmorecfg_h::INT16,
+                            16384 as i32 as crate::jmorecfg_h::INT16,
+                            22725 as i32 as crate::jmorecfg_h::INT16,
+                            21407 as i32 as crate::jmorecfg_h::INT16,
+                            19266 as i32 as crate::jmorecfg_h::INT16,
+                            16384 as i32 as crate::jmorecfg_h::INT16,
+                            12873 as i32 as crate::jmorecfg_h::INT16,
+                            8867 as i32 as crate::jmorecfg_h::INT16,
+                            4520 as i32 as crate::jmorecfg_h::INT16,
+                            22725 as i32 as crate::jmorecfg_h::INT16,
+                            31521 as i32 as crate::jmorecfg_h::INT16,
+                            29692 as i32 as crate::jmorecfg_h::INT16,
+                            26722 as i32 as crate::jmorecfg_h::INT16,
+                            22725 as i32 as crate::jmorecfg_h::INT16,
+                            17855 as i32 as crate::jmorecfg_h::INT16,
+                            12299 as i32 as crate::jmorecfg_h::INT16,
+                            6270 as i32 as crate::jmorecfg_h::INT16,
+                            21407 as i32 as crate::jmorecfg_h::INT16,
+                            29692 as i32 as crate::jmorecfg_h::INT16,
+                            27969 as i32 as crate::jmorecfg_h::INT16,
+                            25172 as i32 as crate::jmorecfg_h::INT16,
+                            21407 as i32 as crate::jmorecfg_h::INT16,
+                            16819 as i32 as crate::jmorecfg_h::INT16,
+                            11585 as i32 as crate::jmorecfg_h::INT16,
+                            5906 as i32 as crate::jmorecfg_h::INT16,
+                            19266 as i32 as crate::jmorecfg_h::INT16,
+                            26722 as i32 as crate::jmorecfg_h::INT16,
+                            25172 as i32 as crate::jmorecfg_h::INT16,
+                            22654 as i32 as crate::jmorecfg_h::INT16,
+                            19266 as i32 as crate::jmorecfg_h::INT16,
+                            15137 as i32 as crate::jmorecfg_h::INT16,
+                            10426 as i32 as crate::jmorecfg_h::INT16,
+                            5315 as i32 as crate::jmorecfg_h::INT16,
+                            16384 as i32 as crate::jmorecfg_h::INT16,
+                            22725 as i32 as crate::jmorecfg_h::INT16,
+                            21407 as i32 as crate::jmorecfg_h::INT16,
+                            19266 as i32 as crate::jmorecfg_h::INT16,
+                            16384 as i32 as crate::jmorecfg_h::INT16,
+                            12873 as i32 as crate::jmorecfg_h::INT16,
+                            8867 as i32 as crate::jmorecfg_h::INT16,
+                            4520 as i32 as crate::jmorecfg_h::INT16,
+                            12873 as i32 as crate::jmorecfg_h::INT16,
+                            17855 as i32 as crate::jmorecfg_h::INT16,
+                            16819 as i32 as crate::jmorecfg_h::INT16,
+                            15137 as i32 as crate::jmorecfg_h::INT16,
+                            12873 as i32 as crate::jmorecfg_h::INT16,
+                            10114 as i32 as crate::jmorecfg_h::INT16,
+                            6967 as i32 as crate::jmorecfg_h::INT16,
+                            3552 as i32 as crate::jmorecfg_h::INT16,
+                            8867 as i32 as crate::jmorecfg_h::INT16,
+                            12299 as i32 as crate::jmorecfg_h::INT16,
+                            11585 as i32 as crate::jmorecfg_h::INT16,
+                            10426 as i32 as crate::jmorecfg_h::INT16,
+                            8867 as i32 as crate::jmorecfg_h::INT16,
+                            6967 as i32 as crate::jmorecfg_h::INT16,
+                            4799 as i32 as crate::jmorecfg_h::INT16,
+                            2446 as i32 as crate::jmorecfg_h::INT16,
+                            4520 as i32 as crate::jmorecfg_h::INT16,
+                            6270 as i32 as crate::jmorecfg_h::INT16,
+                            5906 as i32 as crate::jmorecfg_h::INT16,
+                            5315 as i32 as crate::jmorecfg_h::INT16,
+                            4520 as i32 as crate::jmorecfg_h::INT16,
+                            3552 as i32 as crate::jmorecfg_h::INT16,
+                            2446 as i32 as crate::jmorecfg_h::INT16,
+                            1247 as i32 as crate::jmorecfg_h::INT16,
                         ];
-                        i = 0 as libc::c_int;
-                        while i < 64 as libc::c_int {
+                        i = 0 as i32;
+                        while i < 64 as i32 {
                             *ifmtbl.offset(i as isize) = ((*qtbl).quantval[i as usize]
                                 as crate::jmorecfg_h::INT32
                                 * aanscales[i as usize] as crate::jmorecfg_h::INT32
-                                + ((1 as libc::c_int as crate::jmorecfg_h::INT32)
-                                    << 14 as libc::c_int - 2 as libc::c_int - 1 as libc::c_int)
-                                >> 14 as libc::c_int - 2 as libc::c_int)
+                                + ((1 as i32 as crate::jmorecfg_h::INT32)
+                                    << 14 as i32 - 2 as i32 - 1 as i32)
+                                >> 14 as i32 - 2 as i32)
                                 as crate::jdct_h::IFAST_MULT_TYPE;
                             i += 1
                         }
@@ -871,9 +871,9 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
                          */
                         let mut fmtbl: *mut crate::jdct_h::FLOAT_MULT_TYPE =
                             (*compptr).dct_table as *mut crate::jdct_h::FLOAT_MULT_TYPE;
-                        let mut row: libc::c_int = 0;
-                        let mut col: libc::c_int = 0;
-                        static mut aanscalefactor: [libc::c_double; 8] = [
+                        let mut row: i32 = 0;
+                        let mut col: i32 = 0;
+                        static mut aanscalefactor: [f64; 8] = [
                             1.0f64,
                             1.387039845f64,
                             1.306562965f64,
@@ -883,13 +883,13 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
                             0.541196100f64,
                             0.275899379f64,
                         ];
-                        i = 0 as libc::c_int;
-                        row = 0 as libc::c_int;
-                        while row < 8 as libc::c_int {
-                            col = 0 as libc::c_int;
-                            while col < 8 as libc::c_int {
+                        i = 0 as i32;
+                        row = 0 as i32;
+                        while row < 8 as i32 {
+                            col = 0 as i32;
+                            while col < 8 as i32 {
                                 *fmtbl.offset(i as isize) = ((*qtbl).quantval[i as usize]
-                                    as libc::c_double
+                                    as f64
                                     * aanscalefactor[row as usize]
                                     * aanscalefactor[col as usize]
                                     * 0.125f64)
@@ -902,7 +902,7 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
                     }
                     _ => {
                         (*(*cinfo).err).msg_code =
-                            crate::src::jpeg_8c::jerror::JERR_NOT_COMPILED as libc::c_int;
+                            crate::src::jpeg_8c::jerror::JERR_NOT_COMPILED as i32;
                         Some(
                             (*(*cinfo).err)
                                 .error_exit
@@ -927,7 +927,7 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
 
 pub unsafe extern "C" fn jinit_inverse_dct(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
     let mut idct: my_idct_ptr = 0 as *mut my_idct_controller;
-    let mut ci: libc::c_int = 0;
+    let mut ci: i32 = 0;
     let mut compptr: *mut crate::jpeglib_h::jpeg_component_info =
         0 as *mut crate::jpeglib_h::jpeg_component_info;
     idct = Some(
@@ -937,13 +937,13 @@ pub unsafe extern "C" fn jinit_inverse_dct(mut cinfo: crate::jpeglib_h::j_decomp
     )
     .expect("non-null function pointer")(
         cinfo as crate::jpeglib_h::j_common_ptr,
-        1 as libc::c_int,
+        1 as i32,
         ::std::mem::size_of::<my_idct_controller>() as libc::c_ulong,
     ) as my_idct_ptr;
     (*cinfo).idct = idct as *mut crate::jpegint_h::jpeg_inverse_dct;
     (*idct).pub_0.start_pass =
         Some(start_pass as unsafe extern "C" fn(_: crate::jpeglib_h::j_decompress_ptr) -> ());
-    ci = 0 as libc::c_int;
+    ci = 0 as i32;
     compptr = (*cinfo).comp_info;
     while ci < (*cinfo).num_components {
         /* Allocate and pre-zero a multiplier table for each component */
@@ -954,16 +954,16 @@ pub unsafe extern "C" fn jinit_inverse_dct(mut cinfo: crate::jpeglib_h::j_decomp
         )
         .expect("non-null function pointer")(
             cinfo as crate::jpeglib_h::j_common_ptr,
-            1 as libc::c_int,
+            1 as i32,
             ::std::mem::size_of::<multiplier_table>() as libc::c_ulong,
         );
         crate::stdlib::memset(
             (*compptr).dct_table,
-            0 as libc::c_int,
+            0 as i32,
             ::std::mem::size_of::<multiplier_table>() as libc::c_ulong,
         );
         /* Mark multiplier table not yet set up for any method */
-        (*idct).cur_method[ci as usize] = -(1 as libc::c_int);
+        (*idct).cur_method[ci as usize] = -(1 as i32);
         ci += 1;
         compptr = compptr.offset(1)
     }

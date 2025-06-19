@@ -51,7 +51,7 @@ pub type bot_character_t = bot_character_s;
 #[derive(Copy, Clone)]
 pub struct bot_character_s {
     pub filename: [libc::c_char; 64],
-    pub skill: libc::c_float,
+    pub skill: f32,
     pub c: [bot_characteristic_t; 1],
 }
 //variable sized
@@ -72,8 +72,8 @@ pub struct bot_characteristic_s {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub union cvalue {
-    pub integer: libc::c_int,
-    pub _float: libc::c_float,
+    pub integer: i32,
+    pub _float: f32,
     pub string: *mut libc::c_char,
 }
 #[no_mangle]
@@ -88,12 +88,12 @@ pub static mut botcharacters: [*mut bot_character_t; 65] =
 //========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn BotCharacterFromHandle(mut handle: libc::c_int) -> *mut bot_character_t {
-    if handle <= 0 as libc::c_int || handle > 64 as libc::c_int {
+pub unsafe extern "C" fn BotCharacterFromHandle(mut handle: i32) -> *mut bot_character_t {
+    if handle <= 0 as i32 || handle > 64 as i32 {
         crate::src::botlib::be_interface::botimport
             .Print
             .expect("non-null function pointer")(
-            4 as libc::c_int,
+            4 as i32,
             b"character handle %d out of range\n\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             handle,
@@ -104,7 +104,7 @@ pub unsafe extern "C" fn BotCharacterFromHandle(mut handle: libc::c_int) -> *mut
         crate::src::botlib::be_interface::botimport
             .Print
             .expect("non-null function pointer")(
-            4 as libc::c_int,
+            4 as i32,
             b"invalid character %d\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             handle,
         );
@@ -122,21 +122,21 @@ pub unsafe extern "C" fn BotCharacterFromHandle(mut handle: libc::c_int) -> *mut
 #[no_mangle]
 
 pub unsafe extern "C" fn BotDumpCharacter(mut ch: *mut bot_character_t) {
-    let mut i: libc::c_int = 0; //end for
+    let mut i: i32 = 0; //end for
     crate::src::botlib::l_log::Log_Write(
         b"%s\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         (*ch).filename.as_mut_ptr(),
     );
     crate::src::botlib::l_log::Log_Write(
         b"skill %.1f\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-        (*ch).skill as libc::c_double,
+        (*ch).skill as f64,
     );
     crate::src::botlib::l_log::Log_Write(
         b"{\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
     );
-    i = 0 as libc::c_int;
-    while i < 80 as libc::c_int {
-        match (*(*ch).c.as_mut_ptr().offset(i as isize)).type_0 as libc::c_int {
+    i = 0 as i32;
+    while i < 80 as i32 {
+        match (*(*ch).c.as_mut_ptr().offset(i as isize)).type_0 as i32 {
             1 => {
                 crate::src::botlib::l_log::Log_Write(
                     b" %4d %d\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -148,7 +148,7 @@ pub unsafe extern "C" fn BotDumpCharacter(mut ch: *mut bot_character_t) {
                 crate::src::botlib::l_log::Log_Write(
                     b" %4d %f\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     i,
-                    (*(*ch).c.as_mut_ptr().offset(i as isize)).value._float as libc::c_double,
+                    (*(*ch).c.as_mut_ptr().offset(i as isize)).value._float as f64,
                 );
             }
             3 => {
@@ -177,10 +177,10 @@ pub unsafe extern "C" fn BotDumpCharacter(mut ch: *mut bot_character_t) {
 #[no_mangle]
 
 pub unsafe extern "C" fn BotFreeCharacterStrings(mut ch: *mut bot_character_t) {
-    let mut i: libc::c_int = 0;
-    i = 0 as libc::c_int;
-    while i < 80 as libc::c_int {
-        if (*(*ch).c.as_mut_ptr().offset(i as isize)).type_0 as libc::c_int == 3 as libc::c_int {
+    let mut i: i32 = 0;
+    i = 0 as i32;
+    while i < 80 as i32 {
+        if (*(*ch).c.as_mut_ptr().offset(i as isize)).type_0 as i32 == 3 as i32 {
             crate::src::botlib::l_memory::FreeMemory(
                 (*(*ch).c.as_mut_ptr().offset(i as isize)).value.string as *mut libc::c_void,
             );
@@ -199,12 +199,12 @@ pub unsafe extern "C" fn BotFreeCharacterStrings(mut ch: *mut bot_character_t) {
 //========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn BotFreeCharacter2(mut handle: libc::c_int) {
-    if handle <= 0 as libc::c_int || handle > 64 as libc::c_int {
+pub unsafe extern "C" fn BotFreeCharacter2(mut handle: i32) {
+    if handle <= 0 as i32 || handle > 64 as i32 {
         crate::src::botlib::be_interface::botimport
             .Print
             .expect("non-null function pointer")(
-            4 as libc::c_int,
+            4 as i32,
             b"character handle %d out of range\n\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             handle,
@@ -215,7 +215,7 @@ pub unsafe extern "C" fn BotFreeCharacter2(mut handle: libc::c_int) {
         crate::src::botlib::be_interface::botimport
             .Print
             .expect("non-null function pointer")(
-            4 as libc::c_int,
+            4 as i32,
             b"invalid character %d\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             handle,
         );
@@ -235,7 +235,7 @@ pub unsafe extern "C" fn BotFreeCharacter2(mut handle: libc::c_int) {
 //========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn BotFreeCharacter(mut handle: libc::c_int) {
+pub unsafe extern "C" fn BotFreeCharacter(mut handle: i32) {
     if crate::src::botlib::l_libvar::LibVarGetValue(
         b"bot_reloadcharacters\x00" as *const u8 as *const libc::c_char,
     ) == 0.
@@ -257,34 +257,34 @@ pub unsafe extern "C" fn BotDefaultCharacteristics(
     mut ch: *mut bot_character_t,
     mut defaultch: *mut bot_character_t,
 ) {
-    let mut i: libc::c_int = 0;
-    i = 0 as libc::c_int;
-    while i < 80 as libc::c_int {
+    let mut i: i32 = 0;
+    i = 0 as i32;
+    while i < 80 as i32 {
         if !((*(*ch).c.as_mut_ptr().offset(i as isize)).type_0 != 0) {
             //
-            if (*(*defaultch).c.as_mut_ptr().offset(i as isize)).type_0 as libc::c_int
-                == 2 as libc::c_int
+            if (*(*defaultch).c.as_mut_ptr().offset(i as isize)).type_0 as i32
+                == 2 as i32
             {
                 (*(*ch).c.as_mut_ptr().offset(i as isize)).type_0 =
-                    2 as libc::c_int as libc::c_char; //end if
+                    2 as i32 as libc::c_char; //end if
                 (*(*ch).c.as_mut_ptr().offset(i as isize)).value._float =
                     (*(*defaultch).c.as_mut_ptr().offset(i as isize))
                         .value
                         ._float
-            } else if (*(*defaultch).c.as_mut_ptr().offset(i as isize)).type_0 as libc::c_int
-                == 1 as libc::c_int
+            } else if (*(*defaultch).c.as_mut_ptr().offset(i as isize)).type_0 as i32
+                == 1 as i32
             {
                 (*(*ch).c.as_mut_ptr().offset(i as isize)).type_0 =
-                    1 as libc::c_int as libc::c_char; //end else if
+                    1 as i32 as libc::c_char; //end else if
                 (*(*ch).c.as_mut_ptr().offset(i as isize)).value.integer =
                     (*(*defaultch).c.as_mut_ptr().offset(i as isize))
                         .value
                         .integer
-            } else if (*(*defaultch).c.as_mut_ptr().offset(i as isize)).type_0 as libc::c_int
-                == 3 as libc::c_int
+            } else if (*(*defaultch).c.as_mut_ptr().offset(i as isize)).type_0 as i32
+                == 3 as i32
             {
                 (*(*ch).c.as_mut_ptr().offset(i as isize)).type_0 =
-                    3 as libc::c_int as libc::c_char;
+                    3 as i32 as libc::c_char;
                 let ref mut fresh0 = (*(*ch).c.as_mut_ptr().offset(i as isize)).value.string;
                 *fresh0 = crate::src::botlib::l_memory::GetMemory(
                     crate::stdlib::strlen(
@@ -292,7 +292,7 @@ pub unsafe extern "C" fn BotDefaultCharacteristics(
                             .value
                             .string,
                     )
-                    .wrapping_add(1 as libc::c_int as libc::c_ulong),
+                    .wrapping_add(1 as i32 as libc::c_ulong),
                 ) as *mut libc::c_char;
                 ::libc::strcpy(
                     (*(*ch).c.as_mut_ptr().offset(i as isize)).value.string,
@@ -318,11 +318,11 @@ pub unsafe extern "C" fn BotDefaultCharacteristics(
 
 pub unsafe extern "C" fn BotLoadCharacterFromFile(
     mut charfile: *mut libc::c_char,
-    mut skill: libc::c_int,
+    mut skill: i32,
 ) -> *mut bot_character_t {
-    let mut indent: libc::c_int = 0;
-    let mut index: libc::c_int = 0;
-    let mut foundcharacter: libc::c_int = 0;
+    let mut indent: i32 = 0;
+    let mut index: i32 = 0;
+    let mut foundcharacter: i32 = 0;
     let mut ch: *mut bot_character_t = 0 as *mut bot_character_t;
     let mut source: *mut crate::src::botlib::l_precomp::source_t =
         0 as *mut crate::src::botlib::l_precomp::source_t;
@@ -338,7 +338,7 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
         linescrossed: 0,
         next: 0 as *mut crate::src::botlib::l_script::token_s,
     };
-    foundcharacter = crate::src::qcommon::q_shared::qfalse as libc::c_int;
+    foundcharacter = crate::src::qcommon::q_shared::qfalse as i32;
     //a bot character is parsed in two phases
     crate::src::botlib::l_precomp::PC_SetBaseFolder(
         b"botfiles\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -349,7 +349,7 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
         crate::src::botlib::be_interface::botimport
             .Print
             .expect("non-null function pointer")(
-            3 as libc::c_int,
+            3 as i32,
             b"counldn\'t load %s\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             charfile,
         );
@@ -357,7 +357,7 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
     }
     ch = crate::src::botlib::l_memory::GetClearedMemory(
         (::std::mem::size_of::<bot_character_t>() as libc::c_ulong).wrapping_add(
-            (80 as libc::c_int as libc::c_ulong)
+            (80 as i32 as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<bot_characteristic_t>() as libc::c_ulong),
         ),
     ) as *mut bot_character_t;
@@ -376,8 +376,8 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
             //end while
             if crate::src::botlib::l_precomp::PC_ExpectTokenType(
                 source as *mut crate::src::botlib::l_precomp::source_s,
-                3 as libc::c_int,
-                0 as libc::c_int,
+                3 as i32,
+                0 as i32,
                 &mut token as *mut _ as *mut crate::src::botlib::l_script::token_s,
             ) == 0
             {
@@ -401,10 +401,10 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
                 crate::src::botlib::l_memory::FreeMemory(ch as *mut libc::c_void);
                 return 0 as *mut bot_character_t;
             }
-            if skill < 0 as libc::c_int || token.intvalue == skill as libc::c_ulong {
+            if skill < 0 as i32 || token.intvalue == skill as libc::c_ulong {
                 //if it's the correct skill
-                foundcharacter = crate::src::qcommon::q_shared::qtrue as libc::c_int; //end if
-                (*ch).skill = token.intvalue as libc::c_float;
+                foundcharacter = crate::src::qcommon::q_shared::qtrue as i32; //end if
+                (*ch).skill = token.intvalue as f32;
                 while crate::src::botlib::l_precomp::PC_ExpectAnyToken(
                     source as *mut crate::src::botlib::l_precomp::source_s,
                     &mut token as *mut _ as *mut crate::src::botlib::l_script::token_s,
@@ -418,8 +418,8 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
                         break;
                         //end else
                     } //end if
-                    if token.type_0 != 3 as libc::c_int
-                        || token.subtype & 0x1000 as libc::c_int == 0
+                    if token.type_0 != 3 as i32
+                        || token.subtype & 0x1000 as i32 == 0
                     {
                         crate::src::botlib::l_precomp::SourceError(
                             source as *mut crate::src::botlib::l_precomp::source_s,
@@ -435,14 +435,14 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
                         crate::src::botlib::l_memory::FreeMemory(ch as *mut libc::c_void); //end if
                         return 0 as *mut bot_character_t;
                     } //end if
-                    index = token.intvalue as libc::c_int;
-                    if index < 0 as libc::c_int || index > 80 as libc::c_int {
+                    index = token.intvalue as i32;
+                    if index < 0 as i32 || index > 80 as i32 {
                         crate::src::botlib::l_precomp::SourceError(
                             source as *mut crate::src::botlib::l_precomp::source_s,
                             b"characteristic index out of range [0, %d]\x00" as *const u8
                                 as *const libc::c_char
                                 as *mut libc::c_char,
-                            80 as libc::c_int,
+                            80 as i32,
                         );
                         crate::src::botlib::l_precomp::FreeSource(
                             source as *mut crate::src::botlib::l_precomp::source_s,
@@ -478,33 +478,33 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
                         crate::src::botlib::l_memory::FreeMemory(ch as *mut libc::c_void);
                         return 0 as *mut bot_character_t;
                     }
-                    if token.type_0 == 3 as libc::c_int {
-                        if token.subtype & 0x800 as libc::c_int != 0 {
+                    if token.type_0 == 3 as i32 {
+                        if token.subtype & 0x800 as i32 != 0 {
                             (*(*ch).c.as_mut_ptr().offset(index as isize)).value._float =
                                 token.floatvalue;
                             (*(*ch).c.as_mut_ptr().offset(index as isize)).type_0 =
-                                2 as libc::c_int as libc::c_char
+                                2 as i32 as libc::c_char
                         } else {
                             (*(*ch).c.as_mut_ptr().offset(index as isize)).value.integer =
-                                token.intvalue as libc::c_int;
+                                token.intvalue as i32;
                             (*(*ch).c.as_mut_ptr().offset(index as isize)).type_0 =
-                                1 as libc::c_int as libc::c_char
+                                1 as i32 as libc::c_char
                         }
                     //end else
-                    } else if token.type_0 == 1 as libc::c_int {
+                    } else if token.type_0 == 1 as i32 {
                         crate::src::botlib::l_script::StripDoubleQuotes(token.string.as_mut_ptr()); //end else if
                         let ref mut fresh1 =
                             (*(*ch).c.as_mut_ptr().offset(index as isize)).value.string;
                         *fresh1 = crate::src::botlib::l_memory::GetMemory(
                             crate::stdlib::strlen(token.string.as_mut_ptr())
-                                .wrapping_add(1 as libc::c_int as libc::c_ulong),
+                                .wrapping_add(1 as i32 as libc::c_ulong),
                         ) as *mut libc::c_char;
                         ::libc::strcpy(
                             (*(*ch).c.as_mut_ptr().offset(index as isize)).value.string,
                             token.string.as_mut_ptr(),
                         );
                         (*(*ch).c.as_mut_ptr().offset(index as isize)).type_0 =
-                            3 as libc::c_int as libc::c_char
+                            3 as i32 as libc::c_char
                     } else {
                         crate::src::botlib::l_precomp::SourceError(
                             source as *mut crate::src::botlib::l_precomp::source_s,
@@ -523,7 +523,7 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
                 }
                 break;
             } else {
-                indent = 1 as libc::c_int;
+                indent = 1 as i32;
                 while indent != 0 {
                     //end while
                     if crate::src::botlib::l_precomp::PC_ExpectAnyToken(
@@ -590,19 +590,19 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
 
 pub unsafe extern "C" fn BotFindCachedCharacter(
     mut charfile: *mut libc::c_char,
-    mut skill: libc::c_float,
-) -> libc::c_int {
-    let mut handle: libc::c_int = 0; //end for
-    handle = 1 as libc::c_int;
-    while handle <= 64 as libc::c_int {
+    mut skill: f32,
+) -> i32 {
+    let mut handle: i32 = 0; //end for
+    handle = 1 as i32;
+    while handle <= 64 as i32 {
         if !botcharacters[handle as usize].is_null() {
             if ::libc::strcmp(
                 (*botcharacters[handle as usize]).filename.as_mut_ptr(),
                 charfile,
-            ) == 0 as libc::c_int
-                && (skill < 0 as libc::c_int as libc::c_float
+            ) == 0 as i32
+                && (skill < 0 as i32 as f32
                     || crate::stdlib::fabs(
-                        ((*botcharacters[handle as usize]).skill - skill) as libc::c_double,
+                        ((*botcharacters[handle as usize]).skill - skill) as f64,
                     ) < 0.01f64)
             {
                 return handle;
@@ -611,7 +611,7 @@ pub unsafe extern "C" fn BotFindCachedCharacter(
         handle += 1
         //end if
     }
-    return 0 as libc::c_int;
+    return 0 as i32;
 }
 //end of the function BotFindCachedCharacter
 //===========================================================================
@@ -624,24 +624,24 @@ pub unsafe extern "C" fn BotFindCachedCharacter(
 
 pub unsafe extern "C" fn BotLoadCachedCharacter(
     mut charfile: *mut libc::c_char,
-    mut skill: libc::c_float,
-    mut reload: libc::c_int,
-) -> libc::c_int {
-    let mut handle: libc::c_int = 0;
-    let mut cachedhandle: libc::c_int = 0;
-    let mut intskill: libc::c_int = 0;
+    mut skill: f32,
+    mut reload: i32,
+) -> i32 {
+    let mut handle: i32 = 0;
+    let mut cachedhandle: i32 = 0;
+    let mut intskill: i32 = 0;
     let mut ch: *mut bot_character_t = 0 as *mut bot_character_t;
     //DEBUG
     //find a free spot for a character
-    handle = 1 as libc::c_int; //end for
-    while handle <= 64 as libc::c_int {
+    handle = 1 as i32; //end for
+    while handle <= 64 as i32 {
         if botcharacters[handle as usize].is_null() {
             break;
         }
         handle += 1
     }
-    if handle > 64 as libc::c_int {
-        return 0 as libc::c_int;
+    if handle > 64 as i32 {
+        return 0 as i32;
     }
     //try to load a cached character with the given skill
     if reload == 0 {
@@ -650,10 +650,10 @@ pub unsafe extern "C" fn BotLoadCachedCharacter(
             crate::src::botlib::be_interface::botimport
                 .Print
                 .expect("non-null function pointer")(
-                1 as libc::c_int,
+                1 as i32,
                 b"loaded cached skill %f from %s\n\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                skill as libc::c_double,
+                skill as f64,
                 charfile,
             ); //end else
             return cachedhandle;
@@ -661,7 +661,7 @@ pub unsafe extern "C" fn BotLoadCachedCharacter(
         //end if
     }
     //
-    intskill = (skill as libc::c_double + 0.5f64) as libc::c_int;
+    intskill = (skill as f64 + 0.5f64) as i32;
     //try to load the character with the given skill
     ch = BotLoadCharacterFromFile(charfile, intskill); //end if
     if !ch.is_null() {
@@ -670,7 +670,7 @@ pub unsafe extern "C" fn BotLoadCachedCharacter(
         crate::src::botlib::be_interface::botimport
             .Print
             .expect("non-null function pointer")(
-            1 as libc::c_int,
+            1 as i32,
             b"loaded skill %d from %s\n\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             intskill,
@@ -683,7 +683,7 @@ pub unsafe extern "C" fn BotLoadCachedCharacter(
     crate::src::botlib::be_interface::botimport
         .Print
         .expect("non-null function pointer")(
-        2 as libc::c_int,
+        2 as i32,
         b"couldn\'t find skill %d in %s\n\x00" as *const u8 as *const libc::c_char
             as *mut libc::c_char,
         intskill,
@@ -701,7 +701,7 @@ pub unsafe extern "C" fn BotLoadCachedCharacter(
             crate::src::botlib::be_interface::botimport
                 .Print
                 .expect("non-null function pointer")(
-                1 as libc::c_int,
+                1 as i32,
                 b"loaded cached default skill %d from %s\n\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 intskill,
@@ -721,7 +721,7 @@ pub unsafe extern "C" fn BotLoadCachedCharacter(
         crate::src::botlib::be_interface::botimport
             .Print
             .expect("non-null function pointer")(
-            1 as libc::c_int,
+            1 as i32,
             b"loaded default skill %d from %s\n\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             intskill,
@@ -733,15 +733,15 @@ pub unsafe extern "C" fn BotLoadCachedCharacter(
     if reload == 0 {
         //end if
         //try to load a cached character with any skill
-        cachedhandle = BotFindCachedCharacter(charfile, -(1 as libc::c_int) as libc::c_float);
+        cachedhandle = BotFindCachedCharacter(charfile, -(1 as i32) as f32);
         if cachedhandle != 0 {
             crate::src::botlib::be_interface::botimport
                 .Print
                 .expect("non-null function pointer")(
-                1 as libc::c_int,
+                1 as i32,
                 b"loaded cached skill %f from %s\n\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                (*botcharacters[cachedhandle as usize]).skill as libc::c_double,
+                (*botcharacters[cachedhandle as usize]).skill as f64,
                 charfile,
             );
             return cachedhandle;
@@ -749,16 +749,16 @@ pub unsafe extern "C" fn BotLoadCachedCharacter(
         //end if
     }
     //try to load a character with any skill
-    ch = BotLoadCharacterFromFile(charfile, -(1 as libc::c_int)); //end if
+    ch = BotLoadCharacterFromFile(charfile, -(1 as i32)); //end if
     if !ch.is_null() {
         botcharacters[handle as usize] = ch;
         crate::src::botlib::be_interface::botimport
             .Print
             .expect("non-null function pointer")(
-            1 as libc::c_int,
+            1 as i32,
             b"loaded skill %f from %s\n\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
-            (*ch).skill as libc::c_double,
+            (*ch).skill as f64,
             charfile,
         );
         return handle;
@@ -769,16 +769,16 @@ pub unsafe extern "C" fn BotLoadCachedCharacter(
         //try to load a cached character with any skill
         cachedhandle = BotFindCachedCharacter(
             b"bots/default_c.c\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            -(1 as libc::c_int) as libc::c_float,
+            -(1 as i32) as f32,
         );
         if cachedhandle != 0 {
             crate::src::botlib::be_interface::botimport
                 .Print
                 .expect("non-null function pointer")(
-                1 as libc::c_int,
+                1 as i32,
                 b"loaded cached default skill %f from %s\n\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                (*botcharacters[cachedhandle as usize]).skill as libc::c_double,
+                (*botcharacters[cachedhandle as usize]).skill as f64,
                 charfile,
             );
             return cachedhandle;
@@ -788,17 +788,17 @@ pub unsafe extern "C" fn BotLoadCachedCharacter(
     //try to load a character with any skill
     ch = BotLoadCharacterFromFile(
         b"bots/default_c.c\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-        -(1 as libc::c_int),
+        -(1 as i32),
     ); //end if
     if !ch.is_null() {
         botcharacters[handle as usize] = ch;
         crate::src::botlib::be_interface::botimport
             .Print
             .expect("non-null function pointer")(
-            1 as libc::c_int,
+            1 as i32,
             b"loaded default skill %f from %s\n\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
-            (*ch).skill as libc::c_double,
+            (*ch).skill as f64,
             charfile,
         );
         return handle;
@@ -807,13 +807,13 @@ pub unsafe extern "C" fn BotLoadCachedCharacter(
     crate::src::botlib::be_interface::botimport
         .Print
         .expect("non-null function pointer")(
-        2 as libc::c_int,
+        2 as i32,
         b"couldn\'t load any skill from %s\n\x00" as *const u8 as *const libc::c_char
             as *mut libc::c_char,
         charfile,
     );
     //couldn't load any character
-    return 0 as libc::c_int;
+    return 0 as i32;
 }
 //end of the function BotLoadCachedCharacter
 //===========================================================================
@@ -826,21 +826,21 @@ pub unsafe extern "C" fn BotLoadCachedCharacter(
 
 pub unsafe extern "C" fn BotLoadCharacterSkill(
     mut charfile: *mut libc::c_char,
-    mut skill: libc::c_float,
-) -> libc::c_int {
-    let mut ch: libc::c_int = 0; //end if
-    let mut defaultch: libc::c_int = 0;
+    mut skill: f32,
+) -> i32 {
+    let mut ch: i32 = 0; //end if
+    let mut defaultch: i32 = 0;
     defaultch = BotLoadCachedCharacter(
         b"bots/default_c.c\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         skill,
-        crate::src::qcommon::q_shared::qfalse as libc::c_int,
+        crate::src::qcommon::q_shared::qfalse as i32,
     );
     ch = BotLoadCachedCharacter(
         charfile,
         skill,
         crate::src::botlib::l_libvar::LibVarGetValue(
             b"bot_reloadcharacters\x00" as *const u8 as *const libc::c_char,
-        ) as libc::c_int,
+        ) as i32,
     );
     if defaultch != 0 && ch != 0 {
         BotDefaultCharacteristics(
@@ -860,35 +860,35 @@ pub unsafe extern "C" fn BotLoadCharacterSkill(
 #[no_mangle]
 
 pub unsafe extern "C" fn BotInterpolateCharacters(
-    mut handle1: libc::c_int,
-    mut handle2: libc::c_int,
-    mut desiredskill: libc::c_float,
-) -> libc::c_int {
+    mut handle1: i32,
+    mut handle2: i32,
+    mut desiredskill: f32,
+) -> i32 {
     let mut ch1: *mut bot_character_t = 0 as *mut bot_character_t;
     let mut ch2: *mut bot_character_t = 0 as *mut bot_character_t;
     let mut out: *mut bot_character_t = 0 as *mut bot_character_t;
-    let mut i: libc::c_int = 0;
-    let mut handle: libc::c_int = 0;
-    let mut scale: libc::c_float = 0.;
+    let mut i: i32 = 0;
+    let mut handle: i32 = 0;
+    let mut scale: f32 = 0.;
     ch1 = BotCharacterFromHandle(handle1);
     ch2 = BotCharacterFromHandle(handle2);
     if ch1.is_null() || ch2.is_null() {
-        return 0 as libc::c_int;
+        return 0 as i32;
     }
     //find a free spot for a character
-    handle = 1 as libc::c_int; //end for
-    while handle <= 64 as libc::c_int {
+    handle = 1 as i32; //end for
+    while handle <= 64 as i32 {
         if botcharacters[handle as usize].is_null() {
             break; //end for
         }
         handle += 1
     }
-    if handle > 64 as libc::c_int {
-        return 0 as libc::c_int;
+    if handle > 64 as i32 {
+        return 0 as i32;
     }
     out = crate::src::botlib::l_memory::GetClearedMemory(
         (::std::mem::size_of::<bot_character_t>() as libc::c_ulong).wrapping_add(
-            (80 as libc::c_int as libc::c_ulong)
+            (80 as i32 as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<bot_characteristic_t>() as libc::c_ulong),
         ),
     ) as *mut bot_character_t;
@@ -896,32 +896,32 @@ pub unsafe extern "C" fn BotInterpolateCharacters(
     ::libc::strcpy((*out).filename.as_mut_ptr(), (*ch1).filename.as_mut_ptr());
     botcharacters[handle as usize] = out;
     scale = (desiredskill - (*ch1).skill) / ((*ch2).skill - (*ch1).skill);
-    i = 0 as libc::c_int;
-    while i < 80 as libc::c_int {
+    i = 0 as i32;
+    while i < 80 as i32 {
         //
-        if (*(*ch1).c.as_mut_ptr().offset(i as isize)).type_0 as libc::c_int == 2 as libc::c_int
-            && (*(*ch2).c.as_mut_ptr().offset(i as isize)).type_0 as libc::c_int == 2 as libc::c_int
+        if (*(*ch1).c.as_mut_ptr().offset(i as isize)).type_0 as i32 == 2 as i32
+            && (*(*ch2).c.as_mut_ptr().offset(i as isize)).type_0 as i32 == 2 as i32
         {
-            (*(*out).c.as_mut_ptr().offset(i as isize)).type_0 = 2 as libc::c_int as libc::c_char; //end if
+            (*(*out).c.as_mut_ptr().offset(i as isize)).type_0 = 2 as i32 as libc::c_char; //end if
             (*(*out).c.as_mut_ptr().offset(i as isize)).value._float =
                 (*(*ch1).c.as_mut_ptr().offset(i as isize)).value._float
                     + ((*(*ch2).c.as_mut_ptr().offset(i as isize)).value._float
                         - (*(*ch1).c.as_mut_ptr().offset(i as isize)).value._float)
                         * scale
-        } else if (*(*ch1).c.as_mut_ptr().offset(i as isize)).type_0 as libc::c_int
-            == 1 as libc::c_int
+        } else if (*(*ch1).c.as_mut_ptr().offset(i as isize)).type_0 as i32
+            == 1 as i32
         {
-            (*(*out).c.as_mut_ptr().offset(i as isize)).type_0 = 1 as libc::c_int as libc::c_char; //end else if
+            (*(*out).c.as_mut_ptr().offset(i as isize)).type_0 = 1 as i32 as libc::c_char; //end else if
             (*(*out).c.as_mut_ptr().offset(i as isize)).value.integer =
                 (*(*ch1).c.as_mut_ptr().offset(i as isize)).value.integer
-        } else if (*(*ch1).c.as_mut_ptr().offset(i as isize)).type_0 as libc::c_int
-            == 3 as libc::c_int
+        } else if (*(*ch1).c.as_mut_ptr().offset(i as isize)).type_0 as i32
+            == 3 as i32
         {
-            (*(*out).c.as_mut_ptr().offset(i as isize)).type_0 = 3 as libc::c_int as libc::c_char;
+            (*(*out).c.as_mut_ptr().offset(i as isize)).type_0 = 3 as i32 as libc::c_char;
             let ref mut fresh2 = (*(*out).c.as_mut_ptr().offset(i as isize)).value.string;
             *fresh2 = crate::src::botlib::l_memory::GetMemory(
                 crate::stdlib::strlen((*(*ch1).c.as_mut_ptr().offset(i as isize)).value.string)
-                    .wrapping_add(1 as libc::c_int as libc::c_ulong),
+                    .wrapping_add(1 as i32 as libc::c_ulong),
             ) as *mut libc::c_char;
             ::libc::strcpy(
                 (*(*out).c.as_mut_ptr().offset(i as isize)).value.string,
@@ -975,21 +975,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 pub unsafe extern "C" fn BotLoadCharacter(
     mut charfile: *mut libc::c_char,
-    mut skill: libc::c_float,
-) -> libc::c_int {
-    let mut firstskill: libc::c_int = 0;
-    let mut secondskill: libc::c_int = 0;
-    let mut handle: libc::c_int = 0;
+    mut skill: f32,
+) -> i32 {
+    let mut firstskill: i32 = 0;
+    let mut secondskill: i32 = 0;
+    let mut handle: i32 = 0;
     //make sure the skill is in the valid range
-    if (skill as libc::c_double) < 1.0f64 {
-        skill = 1.0f64 as libc::c_float
-    } else if skill as libc::c_double > 5.0f64 {
-        skill = 5.0f64 as libc::c_float
+    if (skill as f64) < 1.0f64 {
+        skill = 1.0f64 as f32
+    } else if skill as f64 > 5.0f64 {
+        skill = 5.0f64 as f32
     }
     //skill 1, 4 and 5 should be available in the character files
-    if skill as libc::c_double == 1.0f64
-        || skill as libc::c_double == 4.0f64
-        || skill as libc::c_double == 5.0f64
+    if skill as f64 == 1.0f64
+        || skill as f64 == 4.0f64
+        || skill as f64 == 5.0f64
     {
         return BotLoadCharacterSkill(charfile, skill);
     } //end if
@@ -999,31 +999,31 @@ pub unsafe extern "C" fn BotLoadCharacter(
         crate::src::botlib::be_interface::botimport
             .Print
             .expect("non-null function pointer")(
-            1 as libc::c_int,
+            1 as i32,
             b"loaded cached skill %f from %s\n\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
-            skill as libc::c_double,
+            skill as f64,
             charfile,
         ); //end else
         return handle;
     } //end if
-    if (skill as libc::c_double) < 4.0f64 {
+    if (skill as f64) < 4.0f64 {
         //load skill 1 and 4
-        firstskill = BotLoadCharacterSkill(charfile, 1 as libc::c_int as libc::c_float);
+        firstskill = BotLoadCharacterSkill(charfile, 1 as i32 as f32);
         if firstskill == 0 {
-            return 0 as libc::c_int;
+            return 0 as i32;
         }
-        secondskill = BotLoadCharacterSkill(charfile, 4 as libc::c_int as libc::c_float);
+        secondskill = BotLoadCharacterSkill(charfile, 4 as i32 as f32);
         if secondskill == 0 {
             return firstskill;
         }
     } else {
         //load skill 4 and 5
-        firstskill = BotLoadCharacterSkill(charfile, 4 as libc::c_int as libc::c_float);
+        firstskill = BotLoadCharacterSkill(charfile, 4 as i32 as f32);
         if firstskill == 0 {
-            return 0 as libc::c_int;
+            return 0 as i32;
         }
-        secondskill = BotLoadCharacterSkill(charfile, 5 as libc::c_int as libc::c_float);
+        secondskill = BotLoadCharacterSkill(charfile, 5 as i32 as f32);
         if secondskill == 0 {
             return firstskill;
         }
@@ -1031,7 +1031,7 @@ pub unsafe extern "C" fn BotLoadCharacter(
     //interpolate between the two skills
     handle = BotInterpolateCharacters(firstskill, secondskill, skill);
     if handle == 0 {
-        return 0 as libc::c_int;
+        return 0 as i32;
     }
     //write the character to the log file
     BotDumpCharacter(botcharacters[handle as usize]);
@@ -1048,37 +1048,37 @@ pub unsafe extern "C" fn BotLoadCharacter(
 #[no_mangle]
 
 pub unsafe extern "C" fn CheckCharacteristicIndex(
-    mut character: libc::c_int,
-    mut index: libc::c_int,
-) -> libc::c_int {
+    mut character: i32,
+    mut index: i32,
+) -> i32 {
     let mut ch: *mut bot_character_t = 0 as *mut bot_character_t; //end if
     ch = BotCharacterFromHandle(character); //end if
     if ch.is_null() {
-        return crate::src::qcommon::q_shared::qfalse as libc::c_int;
+        return crate::src::qcommon::q_shared::qfalse as i32;
     }
-    if index < 0 as libc::c_int || index >= 80 as libc::c_int {
+    if index < 0 as i32 || index >= 80 as i32 {
         crate::src::botlib::be_interface::botimport
             .Print
             .expect("non-null function pointer")(
-            3 as libc::c_int,
+            3 as i32,
             b"characteristic %d does not exist\n\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             index,
         );
-        return crate::src::qcommon::q_shared::qfalse as libc::c_int;
+        return crate::src::qcommon::q_shared::qfalse as i32;
     }
     if (*(*ch).c.as_mut_ptr().offset(index as isize)).type_0 == 0 {
         crate::src::botlib::be_interface::botimport
             .Print
             .expect("non-null function pointer")(
-            3 as libc::c_int,
+            3 as i32,
             b"characteristic %d is not initialized\n\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             index,
         );
-        return crate::src::qcommon::q_shared::qfalse as libc::c_int;
+        return crate::src::qcommon::q_shared::qfalse as i32;
     }
-    return crate::src::qcommon::q_shared::qtrue as libc::c_int;
+    return crate::src::qcommon::q_shared::qtrue as i32;
 }
 //returns a float characteristic
 //end of the function CheckCharacteristicIndex
@@ -1091,23 +1091,23 @@ pub unsafe extern "C" fn CheckCharacteristicIndex(
 #[no_mangle]
 
 pub unsafe extern "C" fn Characteristic_Float(
-    mut character: libc::c_int,
-    mut index: libc::c_int,
-) -> libc::c_float {
+    mut character: i32,
+    mut index: i32,
+) -> f32 {
     let mut ch: *mut bot_character_t = 0 as *mut bot_character_t;
     ch = BotCharacterFromHandle(character);
     if ch.is_null() {
-        return 0 as libc::c_int as libc::c_float;
+        return 0 as i32 as f32;
     }
     //check if the index is in range
     if CheckCharacteristicIndex(character, index) == 0 {
-        return 0 as libc::c_int as libc::c_float;
+        return 0 as i32 as f32;
     }
     //an integer will be converted to a float
-    if (*(*ch).c.as_mut_ptr().offset(index as isize)).type_0 as libc::c_int == 1 as libc::c_int {
-        return (*(*ch).c.as_mut_ptr().offset(index as isize)).value.integer as libc::c_float;
-    } else if (*(*ch).c.as_mut_ptr().offset(index as isize)).type_0 as libc::c_int
-        == 2 as libc::c_int
+    if (*(*ch).c.as_mut_ptr().offset(index as isize)).type_0 as i32 == 1 as i32 {
+        return (*(*ch).c.as_mut_ptr().offset(index as isize)).value.integer as f32;
+    } else if (*(*ch).c.as_mut_ptr().offset(index as isize)).type_0 as i32
+        == 2 as i32
     {
         //end if
         //floats are just returned
@@ -1118,12 +1118,12 @@ pub unsafe extern "C" fn Characteristic_Float(
         crate::src::botlib::be_interface::botimport
             .Print
             .expect("non-null function pointer")(
-            3 as libc::c_int,
+            3 as i32,
             b"characteristic %d is not a float\n\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             index,
         );
-        return 0 as libc::c_int as libc::c_float;
+        return 0 as i32 as f32;
     };
     //end else if
     //	return 0;
@@ -1139,29 +1139,29 @@ pub unsafe extern "C" fn Characteristic_Float(
 #[no_mangle]
 
 pub unsafe extern "C" fn Characteristic_BFloat(
-    mut character: libc::c_int,
-    mut index: libc::c_int,
-    mut min: libc::c_float,
-    mut max: libc::c_float,
-) -> libc::c_float {
-    let mut value: libc::c_float = 0.; //end if
+    mut character: i32,
+    mut index: i32,
+    mut min: f32,
+    mut max: f32,
+) -> f32 {
+    let mut value: f32 = 0.; //end if
     let mut ch: *mut bot_character_t = 0 as *mut bot_character_t;
     ch = BotCharacterFromHandle(character);
     if ch.is_null() {
-        return 0 as libc::c_int as libc::c_float;
+        return 0 as i32 as f32;
     }
     if min > max {
         crate::src::botlib::be_interface::botimport
             .Print
             .expect("non-null function pointer")(
-            3 as libc::c_int,
+            3 as i32,
             b"cannot bound characteristic %d between %f and %f\n\x00" as *const u8
                 as *const libc::c_char as *mut libc::c_char,
             index,
-            min as libc::c_double,
-            max as libc::c_double,
+            min as f64,
+            max as f64,
         );
-        return 0 as libc::c_int as libc::c_float;
+        return 0 as i32 as f32;
     }
     value = Characteristic_Float(character, index);
     if value < min {
@@ -1183,37 +1183,37 @@ pub unsafe extern "C" fn Characteristic_BFloat(
 #[no_mangle]
 
 pub unsafe extern "C" fn Characteristic_Integer(
-    mut character: libc::c_int,
-    mut index: libc::c_int,
-) -> libc::c_int {
+    mut character: i32,
+    mut index: i32,
+) -> i32 {
     let mut ch: *mut bot_character_t = 0 as *mut bot_character_t;
     ch = BotCharacterFromHandle(character);
     if ch.is_null() {
-        return 0 as libc::c_int;
+        return 0 as i32;
     }
     //check if the index is in range
     if CheckCharacteristicIndex(character, index) == 0 {
-        return 0 as libc::c_int;
+        return 0 as i32;
     }
     //an integer will just be returned
-    if (*(*ch).c.as_mut_ptr().offset(index as isize)).type_0 as libc::c_int == 1 as libc::c_int {
+    if (*(*ch).c.as_mut_ptr().offset(index as isize)).type_0 as i32 == 1 as i32 {
         return (*(*ch).c.as_mut_ptr().offset(index as isize)).value.integer;
-    } else if (*(*ch).c.as_mut_ptr().offset(index as isize)).type_0 as libc::c_int
-        == 2 as libc::c_int
+    } else if (*(*ch).c.as_mut_ptr().offset(index as isize)).type_0 as i32
+        == 2 as i32
     {
         //end if
         //floats are casted to integers
-        return (*(*ch).c.as_mut_ptr().offset(index as isize)).value._float as libc::c_int;
+        return (*(*ch).c.as_mut_ptr().offset(index as isize)).value._float as i32;
     } else {
         crate::src::botlib::be_interface::botimport
             .Print
             .expect("non-null function pointer")(
-            3 as libc::c_int,
+            3 as i32,
             b"characteristic %d is not an integer\n\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             index,
         ); //end else if
-        return 0 as libc::c_int;
+        return 0 as i32;
     };
     //end else if
     //	return 0;
@@ -1229,29 +1229,29 @@ pub unsafe extern "C" fn Characteristic_Integer(
 #[no_mangle]
 
 pub unsafe extern "C" fn Characteristic_BInteger(
-    mut character: libc::c_int,
-    mut index: libc::c_int,
-    mut min: libc::c_int,
-    mut max: libc::c_int,
-) -> libc::c_int {
-    let mut value: libc::c_int = 0; //end if
+    mut character: i32,
+    mut index: i32,
+    mut min: i32,
+    mut max: i32,
+) -> i32 {
+    let mut value: i32 = 0; //end if
     let mut ch: *mut bot_character_t = 0 as *mut bot_character_t;
     ch = BotCharacterFromHandle(character);
     if ch.is_null() {
-        return 0 as libc::c_int;
+        return 0 as i32;
     }
     if min > max {
         crate::src::botlib::be_interface::botimport
             .Print
             .expect("non-null function pointer")(
-            3 as libc::c_int,
+            3 as i32,
             b"cannot bound characteristic %d between %d and %d\n\x00" as *const u8
                 as *const libc::c_char as *mut libc::c_char,
             index,
             min,
             max,
         );
-        return 0 as libc::c_int;
+        return 0 as i32;
     }
     value = Characteristic_Integer(character, index);
     if value < min {
@@ -1273,10 +1273,10 @@ pub unsafe extern "C" fn Characteristic_BInteger(
 #[no_mangle]
 
 pub unsafe extern "C" fn Characteristic_String(
-    mut character: libc::c_int,
-    mut index: libc::c_int,
+    mut character: i32,
+    mut index: i32,
     mut buf: *mut libc::c_char,
-    mut size: libc::c_int,
+    mut size: i32,
 ) {
     let mut ch: *mut bot_character_t = 0 as *mut bot_character_t;
     ch = BotCharacterFromHandle(character);
@@ -1288,18 +1288,18 @@ pub unsafe extern "C" fn Characteristic_String(
         return;
     }
     //an integer will be converted to a float
-    if (*(*ch).c.as_mut_ptr().offset(index as isize)).type_0 as libc::c_int == 3 as libc::c_int {
+    if (*(*ch).c.as_mut_ptr().offset(index as isize)).type_0 as i32 == 3 as i32 {
         crate::stdlib::strncpy(
             buf,
             (*(*ch).c.as_mut_ptr().offset(index as isize)).value.string,
-            (size - 1 as libc::c_int) as libc::c_ulong,
+            (size - 1 as i32) as libc::c_ulong,
         ); //end if
-        *buf.offset((size - 1 as libc::c_int) as isize) = '\u{0}' as i32 as libc::c_char
+        *buf.offset((size - 1 as i32) as isize) = '\u{0}' as i32 as libc::c_char
     } else {
         crate::src::botlib::be_interface::botimport
             .Print
             .expect("non-null function pointer")(
-            3 as libc::c_int,
+            3 as i32,
             b"characteristic %d is not a string\n\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             index,
@@ -1318,9 +1318,9 @@ pub unsafe extern "C" fn Characteristic_String(
 #[no_mangle]
 
 pub unsafe extern "C" fn BotShutdownCharacters() {
-    let mut handle: libc::c_int = 0;
-    handle = 1 as libc::c_int;
-    while handle <= 64 as libc::c_int {
+    let mut handle: i32 = 0;
+    handle = 1 as i32;
+    while handle <= 64 as i32 {
         if !botcharacters[handle as usize].is_null() {
             BotFreeCharacter2(handle);
         }

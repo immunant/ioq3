@@ -116,73 +116,73 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_find_LTP_FLP(
-    mut XX: *mut libc::c_float,
-    mut xX: *mut libc::c_float,
-    mut r_ptr: *const libc::c_float,
-    mut lag: *const libc::c_int,
-    subfr_length: libc::c_int,
-    nb_subfr: libc::c_int,
+    mut XX: *mut f32,
+    mut xX: *mut f32,
+    mut r_ptr: *const f32,
+    mut lag: *const i32,
+    subfr_length: i32,
+    nb_subfr: i32,
 )
 /* I    number of subframes                         */
 {
-    let mut k: libc::c_int = 0;
-    let mut xX_ptr: *mut libc::c_float = 0 as *mut libc::c_float;
-    let mut XX_ptr: *mut libc::c_float = 0 as *mut libc::c_float;
-    let mut lag_ptr: *const libc::c_float = 0 as *const libc::c_float;
-    let mut xx: libc::c_float = 0.;
-    let mut temp: libc::c_float = 0.;
+    let mut k: i32 = 0;
+    let mut xX_ptr: *mut f32 = 0 as *mut f32;
+    let mut XX_ptr: *mut f32 = 0 as *mut f32;
+    let mut lag_ptr: *const f32 = 0 as *const f32;
+    let mut xx: f32 = 0.;
+    let mut temp: f32 = 0.;
     xX_ptr = xX;
     XX_ptr = XX;
-    k = 0 as libc::c_int;
+    k = 0 as i32;
     while k < nb_subfr {
         lag_ptr = r_ptr
-            .offset(-((*lag.offset(k as isize) + 5 as libc::c_int / 2 as libc::c_int) as isize));
+            .offset(-((*lag.offset(k as isize) + 5 as i32 / 2 as i32) as isize));
         crate::src::opus_1_2_1::silk::float::corrMatrix_FLP::silk_corrMatrix_FLP(
             lag_ptr,
             subfr_length,
-            5 as libc::c_int,
+            5 as i32,
             XX_ptr,
         );
         crate::src::opus_1_2_1::silk::float::corrMatrix_FLP::silk_corrVector_FLP(
             lag_ptr,
             r_ptr,
             subfr_length,
-            5 as libc::c_int,
+            5 as i32,
             xX_ptr,
         );
         xx = crate::src::opus_1_2_1::silk::float::energy_FLP::silk_energy_FLP(
             r_ptr,
-            subfr_length + 5 as libc::c_int,
-        ) as libc::c_float;
+            subfr_length + 5 as i32,
+        ) as f32;
         temp = 1.0f32
             / (if xx
                 > 0.03f32
                     * 0.5f32
-                    * (*XX_ptr.offset(0 as libc::c_int as isize)
-                        + *XX_ptr.offset(24 as libc::c_int as isize))
+                    * (*XX_ptr.offset(0 as i32 as isize)
+                        + *XX_ptr.offset(24 as i32 as isize))
                     + 1.0f32
             {
                 xx
             } else {
                 (0.03f32
                     * 0.5f32
-                    * (*XX_ptr.offset(0 as libc::c_int as isize)
-                        + *XX_ptr.offset(24 as libc::c_int as isize)))
+                    * (*XX_ptr.offset(0 as i32 as isize)
+                        + *XX_ptr.offset(24 as i32 as isize)))
                     + 1.0f32
             });
         crate::src::opus_1_2_1::silk::float::scale_vector_FLP::silk_scale_vector_FLP(
             XX_ptr,
             temp,
-            5 as libc::c_int * 5 as libc::c_int,
+            5 as i32 * 5 as i32,
         );
         crate::src::opus_1_2_1::silk::float::scale_vector_FLP::silk_scale_vector_FLP(
             xX_ptr,
             temp,
-            5 as libc::c_int,
+            5 as i32,
         );
         r_ptr = r_ptr.offset(subfr_length as isize);
-        XX_ptr = XX_ptr.offset((5 as libc::c_int * 5 as libc::c_int) as isize);
-        xX_ptr = xX_ptr.offset(5 as libc::c_int as isize);
+        XX_ptr = XX_ptr.offset((5 as i32 * 5 as i32) as isize);
+        xX_ptr = xX_ptr.offset(5 as i32 as isize);
         k += 1
     }
 }

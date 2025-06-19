@@ -239,10 +239,10 @@ pub mod q_shared_h {
         mut v: *const crate::src::qcommon::q_shared::vec_t,
     ) -> crate::src::qcommon::q_shared::vec_t {
         return crate::stdlib::sqrt(
-            (*v.offset(0 as libc::c_int as isize) * *v.offset(0 as libc::c_int as isize)
-                + *v.offset(1 as libc::c_int as isize) * *v.offset(1 as libc::c_int as isize)
-                + *v.offset(2 as libc::c_int as isize) * *v.offset(2 as libc::c_int as isize))
-                as libc::c_double,
+            (*v.offset(0 as i32 as isize) * *v.offset(0 as i32 as isize)
+                + *v.offset(1 as i32 as isize) * *v.offset(1 as i32 as isize)
+                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize))
+                as f64,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
 
@@ -484,69 +484,69 @@ pub unsafe extern "C" fn G_BounceMissile(
     mut trace: *mut crate::src::qcommon::q_shared::trace_t,
 ) {
     let mut velocity: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut dot: libc::c_float = 0.;
-    let mut hitTime: libc::c_int = 0;
+    let mut dot: f32 = 0.;
+    let mut hitTime: i32 = 0;
     // reflect the velocity on the trace plane
-    hitTime = (crate::src::game::g_main::level.previousTime as libc::c_float
+    hitTime = (crate::src::game::g_main::level.previousTime as f32
         + (crate::src::game::g_main::level.time - crate::src::game::g_main::level.previousTime)
-            as libc::c_float
-            * (*trace).fraction) as libc::c_int;
+            as f32
+            * (*trace).fraction) as i32;
     crate::src::game::bg_misc::BG_EvaluateTrajectoryDelta(
         &mut (*ent).s.pos as *mut _ as *const crate::src::qcommon::q_shared::trajectory_t,
         hitTime,
         velocity.as_mut_ptr(),
     );
-    dot = velocity[0 as libc::c_int as usize] * (*trace).plane.normal[0 as libc::c_int as usize]
-        + velocity[1 as libc::c_int as usize] * (*trace).plane.normal[1 as libc::c_int as usize]
-        + velocity[2 as libc::c_int as usize] * (*trace).plane.normal[2 as libc::c_int as usize];
-    (*ent).s.pos.trDelta[0 as libc::c_int as usize] = velocity[0 as libc::c_int as usize]
-        + (*trace).plane.normal[0 as libc::c_int as usize]
-            * (-(2 as libc::c_int) as libc::c_float * dot);
-    (*ent).s.pos.trDelta[1 as libc::c_int as usize] = velocity[1 as libc::c_int as usize]
-        + (*trace).plane.normal[1 as libc::c_int as usize]
-            * (-(2 as libc::c_int) as libc::c_float * dot);
-    (*ent).s.pos.trDelta[2 as libc::c_int as usize] = velocity[2 as libc::c_int as usize]
-        + (*trace).plane.normal[2 as libc::c_int as usize]
-            * (-(2 as libc::c_int) as libc::c_float * dot);
-    if (*ent).s.eFlags & 0x20 as libc::c_int != 0 {
-        (*ent).s.pos.trDelta[0 as libc::c_int as usize] =
-            ((*ent).s.pos.trDelta[0 as libc::c_int as usize] as libc::c_double * 0.65f64)
+    dot = velocity[0 as i32 as usize] * (*trace).plane.normal[0 as i32 as usize]
+        + velocity[1 as i32 as usize] * (*trace).plane.normal[1 as i32 as usize]
+        + velocity[2 as i32 as usize] * (*trace).plane.normal[2 as i32 as usize];
+    (*ent).s.pos.trDelta[0 as i32 as usize] = velocity[0 as i32 as usize]
+        + (*trace).plane.normal[0 as i32 as usize]
+            * (-(2 as i32) as f32 * dot);
+    (*ent).s.pos.trDelta[1 as i32 as usize] = velocity[1 as i32 as usize]
+        + (*trace).plane.normal[1 as i32 as usize]
+            * (-(2 as i32) as f32 * dot);
+    (*ent).s.pos.trDelta[2 as i32 as usize] = velocity[2 as i32 as usize]
+        + (*trace).plane.normal[2 as i32 as usize]
+            * (-(2 as i32) as f32 * dot);
+    if (*ent).s.eFlags & 0x20 as i32 != 0 {
+        (*ent).s.pos.trDelta[0 as i32 as usize] =
+            ((*ent).s.pos.trDelta[0 as i32 as usize] as f64 * 0.65f64)
                 as crate::src::qcommon::q_shared::vec_t;
-        (*ent).s.pos.trDelta[1 as libc::c_int as usize] =
-            ((*ent).s.pos.trDelta[1 as libc::c_int as usize] as libc::c_double * 0.65f64)
+        (*ent).s.pos.trDelta[1 as i32 as usize] =
+            ((*ent).s.pos.trDelta[1 as i32 as usize] as f64 * 0.65f64)
                 as crate::src::qcommon::q_shared::vec_t;
-        (*ent).s.pos.trDelta[2 as libc::c_int as usize] =
-            ((*ent).s.pos.trDelta[2 as libc::c_int as usize] as libc::c_double * 0.65f64)
+        (*ent).s.pos.trDelta[2 as i32 as usize] =
+            ((*ent).s.pos.trDelta[2 as i32 as usize] as f64 * 0.65f64)
                 as crate::src::qcommon::q_shared::vec_t;
         // check for stop
-        if (*trace).plane.normal[2 as libc::c_int as usize] as libc::c_double > 0.2f64
+        if (*trace).plane.normal[2 as i32 as usize] as f64 > 0.2f64
             && VectorLength(
                 (*ent).s.pos.trDelta.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t
-            ) < 40 as libc::c_int as libc::c_float
+            ) < 40 as i32 as f32
         {
             crate::src::game::g_utils::G_SetOrigin(
                 ent as *mut crate::g_local_h::gentity_s,
                 (*trace).endpos.as_mut_ptr(),
             );
-            (*ent).s.time = crate::src::game::g_main::level.time / 4 as libc::c_int;
+            (*ent).s.time = crate::src::game::g_main::level.time / 4 as i32;
             return;
         }
     }
-    (*ent).r.currentOrigin[0 as libc::c_int as usize] = (*ent).r.currentOrigin
-        [0 as libc::c_int as usize]
-        + (*trace).plane.normal[0 as libc::c_int as usize];
-    (*ent).r.currentOrigin[1 as libc::c_int as usize] = (*ent).r.currentOrigin
-        [1 as libc::c_int as usize]
-        + (*trace).plane.normal[1 as libc::c_int as usize];
-    (*ent).r.currentOrigin[2 as libc::c_int as usize] = (*ent).r.currentOrigin
-        [2 as libc::c_int as usize]
-        + (*trace).plane.normal[2 as libc::c_int as usize];
-    (*ent).s.pos.trBase[0 as libc::c_int as usize] =
-        (*ent).r.currentOrigin[0 as libc::c_int as usize];
-    (*ent).s.pos.trBase[1 as libc::c_int as usize] =
-        (*ent).r.currentOrigin[1 as libc::c_int as usize];
-    (*ent).s.pos.trBase[2 as libc::c_int as usize] =
-        (*ent).r.currentOrigin[2 as libc::c_int as usize];
+    (*ent).r.currentOrigin[0 as i32 as usize] = (*ent).r.currentOrigin
+        [0 as i32 as usize]
+        + (*trace).plane.normal[0 as i32 as usize];
+    (*ent).r.currentOrigin[1 as i32 as usize] = (*ent).r.currentOrigin
+        [1 as i32 as usize]
+        + (*trace).plane.normal[1 as i32 as usize];
+    (*ent).r.currentOrigin[2 as i32 as usize] = (*ent).r.currentOrigin
+        [2 as i32 as usize]
+        + (*trace).plane.normal[2 as i32 as usize];
+    (*ent).s.pos.trBase[0 as i32 as usize] =
+        (*ent).r.currentOrigin[0 as i32 as usize];
+    (*ent).s.pos.trBase[1 as i32 as usize] =
+        (*ent).r.currentOrigin[1 as i32 as usize];
+    (*ent).s.pos.trBase[2 as i32 as usize] =
+        (*ent).r.currentOrigin[2 as i32 as usize];
     (*ent).s.pos.trTime = crate::src::game::g_main::level.time;
 }
 /*
@@ -566,24 +566,24 @@ pub unsafe extern "C" fn G_ExplodeMissile(mut ent: *mut crate::g_local_h::gentit
         crate::src::game::g_main::level.time,
         origin.as_mut_ptr(),
     );
-    origin[0 as libc::c_int as usize] =
-        origin[0 as libc::c_int as usize] as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-    origin[1 as libc::c_int as usize] =
-        origin[1 as libc::c_int as usize] as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-    origin[2 as libc::c_int as usize] =
-        origin[2 as libc::c_int as usize] as libc::c_int as crate::src::qcommon::q_shared::vec_t;
+    origin[0 as i32 as usize] =
+        origin[0 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t;
+    origin[1 as i32 as usize] =
+        origin[1 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t;
+    origin[2 as i32 as usize] =
+        origin[2 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t;
     crate::src::game::g_utils::G_SetOrigin(
         ent as *mut crate::g_local_h::gentity_s,
         origin.as_mut_ptr(),
     );
     // we don't have a valid direction, so just point straight up
-    dir[1 as libc::c_int as usize] = 0 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-    dir[0 as libc::c_int as usize] = dir[1 as libc::c_int as usize];
-    dir[2 as libc::c_int as usize] = 1 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-    (*ent).s.eType = crate::bg_public_h::ET_GENERAL as libc::c_int;
+    dir[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    dir[0 as i32 as usize] = dir[1 as i32 as usize];
+    dir[2 as i32 as usize] = 1 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*ent).s.eType = crate::bg_public_h::ET_GENERAL as i32;
     crate::src::game::g_utils::G_AddEvent(
         ent as *mut crate::g_local_h::gentity_s,
-        crate::bg_public_h::EV_MISSILE_MISS as libc::c_int,
+        crate::bg_public_h::EV_MISSILE_MISS as i32,
         crate::src::qcommon::q_math::DirToByte(dir.as_mut_ptr()),
     );
     (*ent).freeAfterEvent = crate::src::qcommon::q_shared::qtrue;
@@ -592,8 +592,8 @@ pub unsafe extern "C" fn G_ExplodeMissile(mut ent: *mut crate::g_local_h::gentit
         if crate::src::game::g_combat::G_RadiusDamage(
             (*ent).r.currentOrigin.as_mut_ptr(),
             (*ent).parent as *mut crate::g_local_h::gentity_s,
-            (*ent).splashDamage as libc::c_float,
-            (*ent).splashRadius as libc::c_float,
+            (*ent).splashDamage as f32,
+            (*ent).splashRadius as f32,
             ent as *mut crate::g_local_h::gentity_s,
             (*ent).splashMethodOfDeath,
         ) as u64
@@ -624,13 +624,13 @@ pub unsafe extern "C" fn G_MissileImpact(
         .offset((*trace).entityNum as isize) as *mut crate::g_local_h::gentity_t;
     // check for bounce
     if (*other).takedamage as u64 == 0
-        && (*ent).s.eFlags & (0x10 as libc::c_int | 0x20 as libc::c_int) != 0
+        && (*ent).s.eFlags & (0x10 as i32 | 0x20 as i32) != 0
     {
         G_BounceMissile(ent, trace);
         crate::src::game::g_utils::G_AddEvent(
             ent as *mut crate::g_local_h::gentity_s,
-            crate::bg_public_h::EV_GRENADE_BOUNCE as libc::c_int,
-            0 as libc::c_int,
+            crate::bg_public_h::EV_GRENADE_BOUNCE as i32,
+            0 as i32,
         );
         return;
     }
@@ -658,10 +658,10 @@ pub unsafe extern "C" fn G_MissileImpact(
                 velocity.as_mut_ptr(),
             );
             if VectorLength(velocity.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t)
-                == 0 as libc::c_int as libc::c_float
+                == 0 as i32 as f32
             {
-                velocity[2 as libc::c_int as usize] =
-                    1 as libc::c_int as crate::src::qcommon::q_shared::vec_t
+                velocity[2 as i32 as usize] =
+                    1 as i32 as crate::src::qcommon::q_shared::vec_t
                 // stepped on a grenade
             }
             crate::src::game::g_combat::G_Damage(
@@ -674,7 +674,7 @@ pub unsafe extern "C" fn G_MissileImpact(
                 velocity.as_mut_ptr(),
                 (*ent).s.origin.as_mut_ptr(),
                 (*ent).damage,
-                0 as libc::c_int,
+                0 as i32,
                 (*ent).methodOfDeath,
             );
         }
@@ -687,31 +687,31 @@ pub unsafe extern "C" fn G_MissileImpact(
         let mut nent: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
         let mut v: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
         nent = crate::src::game::g_utils::G_Spawn() as *mut crate::g_local_h::gentity_s;
-        if (*other).takedamage as libc::c_uint != 0 && !(*other).client.is_null() {
+        if (*other).takedamage as u32 != 0 && !(*other).client.is_null() {
             crate::src::game::g_utils::G_AddEvent(
                 nent as *mut crate::g_local_h::gentity_s,
-                crate::bg_public_h::EV_MISSILE_HIT as libc::c_int,
+                crate::bg_public_h::EV_MISSILE_HIT as i32,
                 crate::src::qcommon::q_math::DirToByte((*trace).plane.normal.as_mut_ptr()),
             );
             (*nent).s.otherEntityNum = (*other).s.number;
             (*ent).enemy = other;
-            v[0 as libc::c_int as usize] =
-                ((*other).r.currentOrigin[0 as libc::c_int as usize] as libc::c_double
-                    + ((*other).r.mins[0 as libc::c_int as usize]
-                        + (*other).r.maxs[0 as libc::c_int as usize])
-                        as libc::c_double
+            v[0 as i32 as usize] =
+                ((*other).r.currentOrigin[0 as i32 as usize] as f64
+                    + ((*other).r.mins[0 as i32 as usize]
+                        + (*other).r.maxs[0 as i32 as usize])
+                        as f64
                         * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
-            v[1 as libc::c_int as usize] =
-                ((*other).r.currentOrigin[1 as libc::c_int as usize] as libc::c_double
-                    + ((*other).r.mins[1 as libc::c_int as usize]
-                        + (*other).r.maxs[1 as libc::c_int as usize])
-                        as libc::c_double
+            v[1 as i32 as usize] =
+                ((*other).r.currentOrigin[1 as i32 as usize] as f64
+                    + ((*other).r.mins[1 as i32 as usize]
+                        + (*other).r.maxs[1 as i32 as usize])
+                        as f64
                         * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
-            v[2 as libc::c_int as usize] =
-                ((*other).r.currentOrigin[2 as libc::c_int as usize] as libc::c_double
-                    + ((*other).r.mins[2 as libc::c_int as usize]
-                        + (*other).r.maxs[2 as libc::c_int as usize])
-                        as libc::c_double
+            v[2 as i32 as usize] =
+                ((*other).r.currentOrigin[2 as i32 as usize] as f64
+                    + ((*other).r.mins[2 as i32 as usize]
+                        + (*other).r.maxs[2 as i32 as usize])
+                        as f64
                         * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
             crate::src::game::g_weapon::SnapVectorTowards(
                 v.as_mut_ptr(),
@@ -719,12 +719,12 @@ pub unsafe extern "C" fn G_MissileImpact(
             );
         // save net bandwidth
         } else {
-            v[0 as libc::c_int as usize] = (*trace).endpos[0 as libc::c_int as usize]; // save net bandwidth
-            v[1 as libc::c_int as usize] = (*trace).endpos[1 as libc::c_int as usize];
-            v[2 as libc::c_int as usize] = (*trace).endpos[2 as libc::c_int as usize];
+            v[0 as i32 as usize] = (*trace).endpos[0 as i32 as usize]; // save net bandwidth
+            v[1 as i32 as usize] = (*trace).endpos[1 as i32 as usize];
+            v[2 as i32 as usize] = (*trace).endpos[2 as i32 as usize];
             crate::src::game::g_utils::G_AddEvent(
                 nent as *mut crate::g_local_h::gentity_s,
-                crate::bg_public_h::EV_MISSILE_MISS as libc::c_int,
+                crate::bg_public_h::EV_MISSILE_MISS as i32,
                 crate::src::qcommon::q_math::DirToByte((*trace).plane.normal.as_mut_ptr()),
             );
             (*ent).enemy = 0 as *mut crate::g_local_h::gentity_t
@@ -735,8 +735,8 @@ pub unsafe extern "C" fn G_MissileImpact(
         );
         (*nent).freeAfterEvent = crate::src::qcommon::q_shared::qtrue;
         // change over to a normal entity right at the point of impact
-        (*nent).s.eType = crate::bg_public_h::ET_GENERAL as libc::c_int;
-        (*ent).s.eType = crate::bg_public_h::ET_GRAPPLE as libc::c_int;
+        (*nent).s.eType = crate::bg_public_h::ET_GENERAL as i32;
+        (*ent).s.eType = crate::bg_public_h::ET_GRAPPLE as i32;
         crate::src::game::g_utils::G_SetOrigin(
             ent as *mut crate::g_local_h::gentity_s,
             v.as_mut_ptr(),
@@ -749,43 +749,43 @@ pub unsafe extern "C" fn G_MissileImpact(
             crate::src::game::g_weapon::Weapon_HookThink
                 as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
         );
-        (*ent).nextthink = crate::src::game::g_main::level.time + 100 as libc::c_int;
-        (*(*(*ent).parent).client).ps.pm_flags |= 2048 as libc::c_int;
-        (*(*(*ent).parent).client).ps.grapplePoint[0 as libc::c_int as usize] =
-            (*ent).r.currentOrigin[0 as libc::c_int as usize];
-        (*(*(*ent).parent).client).ps.grapplePoint[1 as libc::c_int as usize] =
-            (*ent).r.currentOrigin[1 as libc::c_int as usize];
-        (*(*(*ent).parent).client).ps.grapplePoint[2 as libc::c_int as usize] =
-            (*ent).r.currentOrigin[2 as libc::c_int as usize];
+        (*ent).nextthink = crate::src::game::g_main::level.time + 100 as i32;
+        (*(*(*ent).parent).client).ps.pm_flags |= 2048 as i32;
+        (*(*(*ent).parent).client).ps.grapplePoint[0 as i32 as usize] =
+            (*ent).r.currentOrigin[0 as i32 as usize];
+        (*(*(*ent).parent).client).ps.grapplePoint[1 as i32 as usize] =
+            (*ent).r.currentOrigin[1 as i32 as usize];
+        (*(*(*ent).parent).client).ps.grapplePoint[2 as i32 as usize] =
+            (*ent).r.currentOrigin[2 as i32 as usize];
         crate::src::game::g_syscalls::trap_LinkEntity(ent as *mut crate::g_local_h::gentity_s);
         crate::src::game::g_syscalls::trap_LinkEntity(nent as *mut crate::g_local_h::gentity_s);
         return;
     }
     // is it cheaper in bandwidth to just remove this ent and create a new
     // one, rather than changing the missile into the explosion?
-    if (*other).takedamage as libc::c_uint != 0 && !(*other).client.is_null() {
+    if (*other).takedamage as u32 != 0 && !(*other).client.is_null() {
         crate::src::game::g_utils::G_AddEvent(
             ent as *mut crate::g_local_h::gentity_s,
-            crate::bg_public_h::EV_MISSILE_HIT as libc::c_int,
+            crate::bg_public_h::EV_MISSILE_HIT as i32,
             crate::src::qcommon::q_math::DirToByte((*trace).plane.normal.as_mut_ptr()),
         );
         (*ent).s.otherEntityNum = (*other).s.number
-    } else if (*trace).surfaceFlags & 0x1000 as libc::c_int != 0 {
+    } else if (*trace).surfaceFlags & 0x1000 as i32 != 0 {
         crate::src::game::g_utils::G_AddEvent(
             ent as *mut crate::g_local_h::gentity_s,
-            crate::bg_public_h::EV_MISSILE_MISS_METAL as libc::c_int,
+            crate::bg_public_h::EV_MISSILE_MISS_METAL as i32,
             crate::src::qcommon::q_math::DirToByte((*trace).plane.normal.as_mut_ptr()),
         );
     } else {
         crate::src::game::g_utils::G_AddEvent(
             ent as *mut crate::g_local_h::gentity_s,
-            crate::bg_public_h::EV_MISSILE_MISS as libc::c_int,
+            crate::bg_public_h::EV_MISSILE_MISS as i32,
             crate::src::qcommon::q_math::DirToByte((*trace).plane.normal.as_mut_ptr()),
         );
     }
     (*ent).freeAfterEvent = crate::src::qcommon::q_shared::qtrue;
     // change over to a normal entity right at the point of impact
-    (*ent).s.eType = crate::bg_public_h::ET_GENERAL as libc::c_int; // save net bandwidth
+    (*ent).s.eType = crate::bg_public_h::ET_GENERAL as i32; // save net bandwidth
     crate::src::game::g_weapon::SnapVectorTowards(
         (*trace).endpos.as_mut_ptr(),
         (*ent).s.pos.trBase.as_mut_ptr(),
@@ -799,8 +799,8 @@ pub unsafe extern "C" fn G_MissileImpact(
         if crate::src::game::g_combat::G_RadiusDamage(
             (*trace).endpos.as_mut_ptr(),
             (*ent).parent as *mut crate::g_local_h::gentity_s,
-            (*ent).splashDamage as libc::c_float,
-            (*ent).splashRadius as libc::c_float,
+            (*ent).splashDamage as f32,
+            (*ent).splashRadius as f32,
             other as *mut crate::g_local_h::gentity_s,
             (*ent).splashMethodOfDeath,
         ) as u64
@@ -839,7 +839,7 @@ pub unsafe extern "C" fn G_RunMissile(mut ent: *mut crate::g_local_h::gentity_t)
         contents: 0,
         entityNum: 0,
     };
-    let mut passent: libc::c_int = 0;
+    let mut passent: i32 = 0;
     // get current position
     crate::src::game::bg_misc::BG_EvaluateTrajectory(
         &mut (*ent).s.pos as *mut _ as *const crate::src::qcommon::q_shared::trajectory_t,
@@ -863,7 +863,7 @@ pub unsafe extern "C" fn G_RunMissile(mut ent: *mut crate::g_local_h::gentity_t)
         passent,
         (*ent).clipmask,
     );
-    if tr.startsolid as libc::c_uint != 0 || tr.allsolid as libc::c_uint != 0 {
+    if tr.startsolid as u32 != 0 || tr.allsolid as u32 != 0 {
         // make sure the tr.entityNum is set to the entity we're stuck in
         crate::src::game::g_syscalls::trap_Trace(
             &mut tr as *mut _ as *mut crate::src::qcommon::q_shared::trace_t,
@@ -874,16 +874,16 @@ pub unsafe extern "C" fn G_RunMissile(mut ent: *mut crate::g_local_h::gentity_t)
             passent,
             (*ent).clipmask,
         );
-        tr.fraction = 0 as libc::c_int as libc::c_float
+        tr.fraction = 0 as i32 as f32
     } else {
-        (*ent).r.currentOrigin[0 as libc::c_int as usize] = tr.endpos[0 as libc::c_int as usize];
-        (*ent).r.currentOrigin[1 as libc::c_int as usize] = tr.endpos[1 as libc::c_int as usize];
-        (*ent).r.currentOrigin[2 as libc::c_int as usize] = tr.endpos[2 as libc::c_int as usize]
+        (*ent).r.currentOrigin[0 as i32 as usize] = tr.endpos[0 as i32 as usize];
+        (*ent).r.currentOrigin[1 as i32 as usize] = tr.endpos[1 as i32 as usize];
+        (*ent).r.currentOrigin[2 as i32 as usize] = tr.endpos[2 as i32 as usize]
     }
     crate::src::game::g_syscalls::trap_LinkEntity(ent as *mut crate::g_local_h::gentity_s);
-    if tr.fraction != 1 as libc::c_int as libc::c_float {
+    if tr.fraction != 1 as i32 as f32 {
         // never explode or bounce on sky
-        if tr.surfaceFlags & 0x10 as libc::c_int != 0 {
+        if tr.surfaceFlags & 0x10 as i32 != 0 {
             // If grapple, reset owner
             if !(*ent).parent.is_null()
                 && !(*(*ent).parent).client.is_null()
@@ -895,7 +895,7 @@ pub unsafe extern "C" fn G_RunMissile(mut ent: *mut crate::g_local_h::gentity_t)
             return;
         }
         G_MissileImpact(ent, &mut tr);
-        if (*ent).s.eType != crate::bg_public_h::ET_MISSILE as libc::c_int {
+        if (*ent).s.eType != crate::bg_public_h::ET_MISSILE as i32 {
             return;
             // exploded
         }
@@ -921,45 +921,45 @@ pub unsafe extern "C" fn fire_plasma(
     crate::src::qcommon::q_math::VectorNormalize(dir);
     bolt = crate::src::game::g_utils::G_Spawn() as *mut crate::g_local_h::gentity_s;
     (*bolt).classname = b"plasma\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    (*bolt).nextthink = crate::src::game::g_main::level.time + 10000 as libc::c_int;
+    (*bolt).nextthink = crate::src::game::g_main::level.time + 10000 as i32;
     (*bolt).think =
         Some(G_ExplodeMissile as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> ());
-    (*bolt).s.eType = crate::bg_public_h::ET_MISSILE as libc::c_int;
-    (*bolt).r.svFlags = 0x80 as libc::c_int;
-    (*bolt).s.weapon = crate::bg_public_h::WP_PLASMAGUN as libc::c_int;
+    (*bolt).s.eType = crate::bg_public_h::ET_MISSILE as i32;
+    (*bolt).r.svFlags = 0x80 as i32;
+    (*bolt).s.weapon = crate::bg_public_h::WP_PLASMAGUN as i32;
     (*bolt).r.ownerNum = (*self_0).s.number;
     (*bolt).parent = self_0;
-    (*bolt).damage = 20 as libc::c_int;
-    (*bolt).splashDamage = 15 as libc::c_int;
-    (*bolt).splashRadius = 20 as libc::c_int;
-    (*bolt).methodOfDeath = crate::bg_public_h::MOD_PLASMA as libc::c_int;
-    (*bolt).splashMethodOfDeath = crate::bg_public_h::MOD_PLASMA_SPLASH as libc::c_int;
-    (*bolt).clipmask = 1 as libc::c_int | 0x2000000 as libc::c_int | 0x4000000 as libc::c_int;
+    (*bolt).damage = 20 as i32;
+    (*bolt).splashDamage = 15 as i32;
+    (*bolt).splashRadius = 20 as i32;
+    (*bolt).methodOfDeath = crate::bg_public_h::MOD_PLASMA as i32;
+    (*bolt).splashMethodOfDeath = crate::bg_public_h::MOD_PLASMA_SPLASH as i32;
+    (*bolt).clipmask = 1 as i32 | 0x2000000 as i32 | 0x4000000 as i32;
     (*bolt).target_ent = 0 as *mut crate::g_local_h::gentity_t;
     (*bolt).s.pos.trType = crate::src::qcommon::q_shared::TR_LINEAR;
-    (*bolt).s.pos.trTime = crate::src::game::g_main::level.time - 50 as libc::c_int;
-    (*bolt).s.pos.trBase[0 as libc::c_int as usize] = *start.offset(0 as libc::c_int as isize);
-    (*bolt).s.pos.trBase[1 as libc::c_int as usize] = *start.offset(1 as libc::c_int as isize);
-    (*bolt).s.pos.trBase[2 as libc::c_int as usize] = *start.offset(2 as libc::c_int as isize);
-    (*bolt).s.pos.trDelta[0 as libc::c_int as usize] =
-        *dir.offset(0 as libc::c_int as isize) * 2000 as libc::c_int as libc::c_float;
-    (*bolt).s.pos.trDelta[1 as libc::c_int as usize] =
-        *dir.offset(1 as libc::c_int as isize) * 2000 as libc::c_int as libc::c_float;
-    (*bolt).s.pos.trDelta[2 as libc::c_int as usize] =
-        *dir.offset(2 as libc::c_int as isize) * 2000 as libc::c_int as libc::c_float;
-    (*bolt).s.pos.trDelta[0 as libc::c_int as usize] =
-        (*bolt).s.pos.trDelta[0 as libc::c_int as usize] as libc::c_int
+    (*bolt).s.pos.trTime = crate::src::game::g_main::level.time - 50 as i32;
+    (*bolt).s.pos.trBase[0 as i32 as usize] = *start.offset(0 as i32 as isize);
+    (*bolt).s.pos.trBase[1 as i32 as usize] = *start.offset(1 as i32 as isize);
+    (*bolt).s.pos.trBase[2 as i32 as usize] = *start.offset(2 as i32 as isize);
+    (*bolt).s.pos.trDelta[0 as i32 as usize] =
+        *dir.offset(0 as i32 as isize) * 2000 as i32 as f32;
+    (*bolt).s.pos.trDelta[1 as i32 as usize] =
+        *dir.offset(1 as i32 as isize) * 2000 as i32 as f32;
+    (*bolt).s.pos.trDelta[2 as i32 as usize] =
+        *dir.offset(2 as i32 as isize) * 2000 as i32 as f32;
+    (*bolt).s.pos.trDelta[0 as i32 as usize] =
+        (*bolt).s.pos.trDelta[0 as i32 as usize] as i32
             as crate::src::qcommon::q_shared::vec_t;
-    (*bolt).s.pos.trDelta[1 as libc::c_int as usize] =
-        (*bolt).s.pos.trDelta[1 as libc::c_int as usize] as libc::c_int
+    (*bolt).s.pos.trDelta[1 as i32 as usize] =
+        (*bolt).s.pos.trDelta[1 as i32 as usize] as i32
             as crate::src::qcommon::q_shared::vec_t;
-    (*bolt).s.pos.trDelta[2 as libc::c_int as usize] =
-        (*bolt).s.pos.trDelta[2 as libc::c_int as usize] as libc::c_int
+    (*bolt).s.pos.trDelta[2 as i32 as usize] =
+        (*bolt).s.pos.trDelta[2 as i32 as usize] as i32
             as crate::src::qcommon::q_shared::vec_t;
     // save net bandwidth
-    (*bolt).r.currentOrigin[0 as libc::c_int as usize] = *start.offset(0 as libc::c_int as isize);
-    (*bolt).r.currentOrigin[1 as libc::c_int as usize] = *start.offset(1 as libc::c_int as isize);
-    (*bolt).r.currentOrigin[2 as libc::c_int as usize] = *start.offset(2 as libc::c_int as isize);
+    (*bolt).r.currentOrigin[0 as i32 as usize] = *start.offset(0 as i32 as isize);
+    (*bolt).r.currentOrigin[1 as i32 as usize] = *start.offset(1 as i32 as isize);
+    (*bolt).r.currentOrigin[2 as i32 as usize] = *start.offset(2 as i32 as isize);
     return bolt;
 }
 //=============================================================================
@@ -979,46 +979,46 @@ pub unsafe extern "C" fn fire_grenade(
     crate::src::qcommon::q_math::VectorNormalize(dir);
     bolt = crate::src::game::g_utils::G_Spawn() as *mut crate::g_local_h::gentity_s;
     (*bolt).classname = b"grenade\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    (*bolt).nextthink = crate::src::game::g_main::level.time + 2500 as libc::c_int;
+    (*bolt).nextthink = crate::src::game::g_main::level.time + 2500 as i32;
     (*bolt).think =
         Some(G_ExplodeMissile as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> ());
-    (*bolt).s.eType = crate::bg_public_h::ET_MISSILE as libc::c_int;
-    (*bolt).r.svFlags = 0x80 as libc::c_int;
-    (*bolt).s.weapon = crate::bg_public_h::WP_GRENADE_LAUNCHER as libc::c_int;
-    (*bolt).s.eFlags = 0x20 as libc::c_int;
+    (*bolt).s.eType = crate::bg_public_h::ET_MISSILE as i32;
+    (*bolt).r.svFlags = 0x80 as i32;
+    (*bolt).s.weapon = crate::bg_public_h::WP_GRENADE_LAUNCHER as i32;
+    (*bolt).s.eFlags = 0x20 as i32;
     (*bolt).r.ownerNum = (*self_0).s.number;
     (*bolt).parent = self_0;
-    (*bolt).damage = 100 as libc::c_int;
-    (*bolt).splashDamage = 100 as libc::c_int;
-    (*bolt).splashRadius = 150 as libc::c_int;
-    (*bolt).methodOfDeath = crate::bg_public_h::MOD_GRENADE as libc::c_int;
-    (*bolt).splashMethodOfDeath = crate::bg_public_h::MOD_GRENADE_SPLASH as libc::c_int;
-    (*bolt).clipmask = 1 as libc::c_int | 0x2000000 as libc::c_int | 0x4000000 as libc::c_int;
+    (*bolt).damage = 100 as i32;
+    (*bolt).splashDamage = 100 as i32;
+    (*bolt).splashRadius = 150 as i32;
+    (*bolt).methodOfDeath = crate::bg_public_h::MOD_GRENADE as i32;
+    (*bolt).splashMethodOfDeath = crate::bg_public_h::MOD_GRENADE_SPLASH as i32;
+    (*bolt).clipmask = 1 as i32 | 0x2000000 as i32 | 0x4000000 as i32;
     (*bolt).target_ent = 0 as *mut crate::g_local_h::gentity_t;
     (*bolt).s.pos.trType = crate::src::qcommon::q_shared::TR_GRAVITY;
-    (*bolt).s.pos.trTime = crate::src::game::g_main::level.time - 50 as libc::c_int;
-    (*bolt).s.pos.trBase[0 as libc::c_int as usize] = *start.offset(0 as libc::c_int as isize);
-    (*bolt).s.pos.trBase[1 as libc::c_int as usize] = *start.offset(1 as libc::c_int as isize);
-    (*bolt).s.pos.trBase[2 as libc::c_int as usize] = *start.offset(2 as libc::c_int as isize);
-    (*bolt).s.pos.trDelta[0 as libc::c_int as usize] =
-        *dir.offset(0 as libc::c_int as isize) * 700 as libc::c_int as libc::c_float;
-    (*bolt).s.pos.trDelta[1 as libc::c_int as usize] =
-        *dir.offset(1 as libc::c_int as isize) * 700 as libc::c_int as libc::c_float;
-    (*bolt).s.pos.trDelta[2 as libc::c_int as usize] =
-        *dir.offset(2 as libc::c_int as isize) * 700 as libc::c_int as libc::c_float;
-    (*bolt).s.pos.trDelta[0 as libc::c_int as usize] =
-        (*bolt).s.pos.trDelta[0 as libc::c_int as usize] as libc::c_int
+    (*bolt).s.pos.trTime = crate::src::game::g_main::level.time - 50 as i32;
+    (*bolt).s.pos.trBase[0 as i32 as usize] = *start.offset(0 as i32 as isize);
+    (*bolt).s.pos.trBase[1 as i32 as usize] = *start.offset(1 as i32 as isize);
+    (*bolt).s.pos.trBase[2 as i32 as usize] = *start.offset(2 as i32 as isize);
+    (*bolt).s.pos.trDelta[0 as i32 as usize] =
+        *dir.offset(0 as i32 as isize) * 700 as i32 as f32;
+    (*bolt).s.pos.trDelta[1 as i32 as usize] =
+        *dir.offset(1 as i32 as isize) * 700 as i32 as f32;
+    (*bolt).s.pos.trDelta[2 as i32 as usize] =
+        *dir.offset(2 as i32 as isize) * 700 as i32 as f32;
+    (*bolt).s.pos.trDelta[0 as i32 as usize] =
+        (*bolt).s.pos.trDelta[0 as i32 as usize] as i32
             as crate::src::qcommon::q_shared::vec_t;
-    (*bolt).s.pos.trDelta[1 as libc::c_int as usize] =
-        (*bolt).s.pos.trDelta[1 as libc::c_int as usize] as libc::c_int
+    (*bolt).s.pos.trDelta[1 as i32 as usize] =
+        (*bolt).s.pos.trDelta[1 as i32 as usize] as i32
             as crate::src::qcommon::q_shared::vec_t;
-    (*bolt).s.pos.trDelta[2 as libc::c_int as usize] =
-        (*bolt).s.pos.trDelta[2 as libc::c_int as usize] as libc::c_int
+    (*bolt).s.pos.trDelta[2 as i32 as usize] =
+        (*bolt).s.pos.trDelta[2 as i32 as usize] as i32
             as crate::src::qcommon::q_shared::vec_t;
     // save net bandwidth
-    (*bolt).r.currentOrigin[0 as libc::c_int as usize] = *start.offset(0 as libc::c_int as isize);
-    (*bolt).r.currentOrigin[1 as libc::c_int as usize] = *start.offset(1 as libc::c_int as isize);
-    (*bolt).r.currentOrigin[2 as libc::c_int as usize] = *start.offset(2 as libc::c_int as isize);
+    (*bolt).r.currentOrigin[0 as i32 as usize] = *start.offset(0 as i32 as isize);
+    (*bolt).r.currentOrigin[1 as i32 as usize] = *start.offset(1 as i32 as isize);
+    (*bolt).r.currentOrigin[2 as i32 as usize] = *start.offset(2 as i32 as isize);
     return bolt;
 }
 //=============================================================================
@@ -1038,45 +1038,45 @@ pub unsafe extern "C" fn fire_bfg(
     crate::src::qcommon::q_math::VectorNormalize(dir);
     bolt = crate::src::game::g_utils::G_Spawn() as *mut crate::g_local_h::gentity_s;
     (*bolt).classname = b"bfg\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    (*bolt).nextthink = crate::src::game::g_main::level.time + 10000 as libc::c_int;
+    (*bolt).nextthink = crate::src::game::g_main::level.time + 10000 as i32;
     (*bolt).think =
         Some(G_ExplodeMissile as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> ());
-    (*bolt).s.eType = crate::bg_public_h::ET_MISSILE as libc::c_int;
-    (*bolt).r.svFlags = 0x80 as libc::c_int;
-    (*bolt).s.weapon = crate::bg_public_h::WP_BFG as libc::c_int;
+    (*bolt).s.eType = crate::bg_public_h::ET_MISSILE as i32;
+    (*bolt).r.svFlags = 0x80 as i32;
+    (*bolt).s.weapon = crate::bg_public_h::WP_BFG as i32;
     (*bolt).r.ownerNum = (*self_0).s.number;
     (*bolt).parent = self_0;
-    (*bolt).damage = 100 as libc::c_int;
-    (*bolt).splashDamage = 100 as libc::c_int;
-    (*bolt).splashRadius = 120 as libc::c_int;
-    (*bolt).methodOfDeath = crate::bg_public_h::MOD_BFG as libc::c_int;
-    (*bolt).splashMethodOfDeath = crate::bg_public_h::MOD_BFG_SPLASH as libc::c_int;
-    (*bolt).clipmask = 1 as libc::c_int | 0x2000000 as libc::c_int | 0x4000000 as libc::c_int;
+    (*bolt).damage = 100 as i32;
+    (*bolt).splashDamage = 100 as i32;
+    (*bolt).splashRadius = 120 as i32;
+    (*bolt).methodOfDeath = crate::bg_public_h::MOD_BFG as i32;
+    (*bolt).splashMethodOfDeath = crate::bg_public_h::MOD_BFG_SPLASH as i32;
+    (*bolt).clipmask = 1 as i32 | 0x2000000 as i32 | 0x4000000 as i32;
     (*bolt).target_ent = 0 as *mut crate::g_local_h::gentity_t;
     (*bolt).s.pos.trType = crate::src::qcommon::q_shared::TR_LINEAR;
-    (*bolt).s.pos.trTime = crate::src::game::g_main::level.time - 50 as libc::c_int;
-    (*bolt).s.pos.trBase[0 as libc::c_int as usize] = *start.offset(0 as libc::c_int as isize);
-    (*bolt).s.pos.trBase[1 as libc::c_int as usize] = *start.offset(1 as libc::c_int as isize);
-    (*bolt).s.pos.trBase[2 as libc::c_int as usize] = *start.offset(2 as libc::c_int as isize);
-    (*bolt).s.pos.trDelta[0 as libc::c_int as usize] =
-        *dir.offset(0 as libc::c_int as isize) * 2000 as libc::c_int as libc::c_float;
-    (*bolt).s.pos.trDelta[1 as libc::c_int as usize] =
-        *dir.offset(1 as libc::c_int as isize) * 2000 as libc::c_int as libc::c_float;
-    (*bolt).s.pos.trDelta[2 as libc::c_int as usize] =
-        *dir.offset(2 as libc::c_int as isize) * 2000 as libc::c_int as libc::c_float;
-    (*bolt).s.pos.trDelta[0 as libc::c_int as usize] =
-        (*bolt).s.pos.trDelta[0 as libc::c_int as usize] as libc::c_int
+    (*bolt).s.pos.trTime = crate::src::game::g_main::level.time - 50 as i32;
+    (*bolt).s.pos.trBase[0 as i32 as usize] = *start.offset(0 as i32 as isize);
+    (*bolt).s.pos.trBase[1 as i32 as usize] = *start.offset(1 as i32 as isize);
+    (*bolt).s.pos.trBase[2 as i32 as usize] = *start.offset(2 as i32 as isize);
+    (*bolt).s.pos.trDelta[0 as i32 as usize] =
+        *dir.offset(0 as i32 as isize) * 2000 as i32 as f32;
+    (*bolt).s.pos.trDelta[1 as i32 as usize] =
+        *dir.offset(1 as i32 as isize) * 2000 as i32 as f32;
+    (*bolt).s.pos.trDelta[2 as i32 as usize] =
+        *dir.offset(2 as i32 as isize) * 2000 as i32 as f32;
+    (*bolt).s.pos.trDelta[0 as i32 as usize] =
+        (*bolt).s.pos.trDelta[0 as i32 as usize] as i32
             as crate::src::qcommon::q_shared::vec_t;
-    (*bolt).s.pos.trDelta[1 as libc::c_int as usize] =
-        (*bolt).s.pos.trDelta[1 as libc::c_int as usize] as libc::c_int
+    (*bolt).s.pos.trDelta[1 as i32 as usize] =
+        (*bolt).s.pos.trDelta[1 as i32 as usize] as i32
             as crate::src::qcommon::q_shared::vec_t;
-    (*bolt).s.pos.trDelta[2 as libc::c_int as usize] =
-        (*bolt).s.pos.trDelta[2 as libc::c_int as usize] as libc::c_int
+    (*bolt).s.pos.trDelta[2 as i32 as usize] =
+        (*bolt).s.pos.trDelta[2 as i32 as usize] as i32
             as crate::src::qcommon::q_shared::vec_t;
     // save net bandwidth
-    (*bolt).r.currentOrigin[0 as libc::c_int as usize] = *start.offset(0 as libc::c_int as isize);
-    (*bolt).r.currentOrigin[1 as libc::c_int as usize] = *start.offset(1 as libc::c_int as isize);
-    (*bolt).r.currentOrigin[2 as libc::c_int as usize] = *start.offset(2 as libc::c_int as isize);
+    (*bolt).r.currentOrigin[0 as i32 as usize] = *start.offset(0 as i32 as isize);
+    (*bolt).r.currentOrigin[1 as i32 as usize] = *start.offset(1 as i32 as isize);
+    (*bolt).r.currentOrigin[2 as i32 as usize] = *start.offset(2 as i32 as isize);
     return bolt;
 }
 //=============================================================================
@@ -1096,45 +1096,45 @@ pub unsafe extern "C" fn fire_rocket(
     crate::src::qcommon::q_math::VectorNormalize(dir);
     bolt = crate::src::game::g_utils::G_Spawn() as *mut crate::g_local_h::gentity_s;
     (*bolt).classname = b"rocket\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    (*bolt).nextthink = crate::src::game::g_main::level.time + 15000 as libc::c_int;
+    (*bolt).nextthink = crate::src::game::g_main::level.time + 15000 as i32;
     (*bolt).think =
         Some(G_ExplodeMissile as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> ());
-    (*bolt).s.eType = crate::bg_public_h::ET_MISSILE as libc::c_int;
-    (*bolt).r.svFlags = 0x80 as libc::c_int;
-    (*bolt).s.weapon = crate::bg_public_h::WP_ROCKET_LAUNCHER as libc::c_int;
+    (*bolt).s.eType = crate::bg_public_h::ET_MISSILE as i32;
+    (*bolt).r.svFlags = 0x80 as i32;
+    (*bolt).s.weapon = crate::bg_public_h::WP_ROCKET_LAUNCHER as i32;
     (*bolt).r.ownerNum = (*self_0).s.number;
     (*bolt).parent = self_0;
-    (*bolt).damage = 100 as libc::c_int;
-    (*bolt).splashDamage = 100 as libc::c_int;
-    (*bolt).splashRadius = 120 as libc::c_int;
-    (*bolt).methodOfDeath = crate::bg_public_h::MOD_ROCKET as libc::c_int;
-    (*bolt).splashMethodOfDeath = crate::bg_public_h::MOD_ROCKET_SPLASH as libc::c_int;
-    (*bolt).clipmask = 1 as libc::c_int | 0x2000000 as libc::c_int | 0x4000000 as libc::c_int;
+    (*bolt).damage = 100 as i32;
+    (*bolt).splashDamage = 100 as i32;
+    (*bolt).splashRadius = 120 as i32;
+    (*bolt).methodOfDeath = crate::bg_public_h::MOD_ROCKET as i32;
+    (*bolt).splashMethodOfDeath = crate::bg_public_h::MOD_ROCKET_SPLASH as i32;
+    (*bolt).clipmask = 1 as i32 | 0x2000000 as i32 | 0x4000000 as i32;
     (*bolt).target_ent = 0 as *mut crate::g_local_h::gentity_t;
     (*bolt).s.pos.trType = crate::src::qcommon::q_shared::TR_LINEAR;
-    (*bolt).s.pos.trTime = crate::src::game::g_main::level.time - 50 as libc::c_int;
-    (*bolt).s.pos.trBase[0 as libc::c_int as usize] = *start.offset(0 as libc::c_int as isize);
-    (*bolt).s.pos.trBase[1 as libc::c_int as usize] = *start.offset(1 as libc::c_int as isize);
-    (*bolt).s.pos.trBase[2 as libc::c_int as usize] = *start.offset(2 as libc::c_int as isize);
-    (*bolt).s.pos.trDelta[0 as libc::c_int as usize] =
-        *dir.offset(0 as libc::c_int as isize) * 900 as libc::c_int as libc::c_float;
-    (*bolt).s.pos.trDelta[1 as libc::c_int as usize] =
-        *dir.offset(1 as libc::c_int as isize) * 900 as libc::c_int as libc::c_float;
-    (*bolt).s.pos.trDelta[2 as libc::c_int as usize] =
-        *dir.offset(2 as libc::c_int as isize) * 900 as libc::c_int as libc::c_float;
-    (*bolt).s.pos.trDelta[0 as libc::c_int as usize] =
-        (*bolt).s.pos.trDelta[0 as libc::c_int as usize] as libc::c_int
+    (*bolt).s.pos.trTime = crate::src::game::g_main::level.time - 50 as i32;
+    (*bolt).s.pos.trBase[0 as i32 as usize] = *start.offset(0 as i32 as isize);
+    (*bolt).s.pos.trBase[1 as i32 as usize] = *start.offset(1 as i32 as isize);
+    (*bolt).s.pos.trBase[2 as i32 as usize] = *start.offset(2 as i32 as isize);
+    (*bolt).s.pos.trDelta[0 as i32 as usize] =
+        *dir.offset(0 as i32 as isize) * 900 as i32 as f32;
+    (*bolt).s.pos.trDelta[1 as i32 as usize] =
+        *dir.offset(1 as i32 as isize) * 900 as i32 as f32;
+    (*bolt).s.pos.trDelta[2 as i32 as usize] =
+        *dir.offset(2 as i32 as isize) * 900 as i32 as f32;
+    (*bolt).s.pos.trDelta[0 as i32 as usize] =
+        (*bolt).s.pos.trDelta[0 as i32 as usize] as i32
             as crate::src::qcommon::q_shared::vec_t;
-    (*bolt).s.pos.trDelta[1 as libc::c_int as usize] =
-        (*bolt).s.pos.trDelta[1 as libc::c_int as usize] as libc::c_int
+    (*bolt).s.pos.trDelta[1 as i32 as usize] =
+        (*bolt).s.pos.trDelta[1 as i32 as usize] as i32
             as crate::src::qcommon::q_shared::vec_t;
-    (*bolt).s.pos.trDelta[2 as libc::c_int as usize] =
-        (*bolt).s.pos.trDelta[2 as libc::c_int as usize] as libc::c_int
+    (*bolt).s.pos.trDelta[2 as i32 as usize] =
+        (*bolt).s.pos.trDelta[2 as i32 as usize] as i32
             as crate::src::qcommon::q_shared::vec_t;
     // save net bandwidth
-    (*bolt).r.currentOrigin[0 as libc::c_int as usize] = *start.offset(0 as libc::c_int as isize);
-    (*bolt).r.currentOrigin[1 as libc::c_int as usize] = *start.offset(1 as libc::c_int as isize);
-    (*bolt).r.currentOrigin[2 as libc::c_int as usize] = *start.offset(2 as libc::c_int as isize);
+    (*bolt).r.currentOrigin[0 as i32 as usize] = *start.offset(0 as i32 as isize);
+    (*bolt).r.currentOrigin[1 as i32 as usize] = *start.offset(1 as i32 as isize);
+    (*bolt).r.currentOrigin[2 as i32 as usize] = *start.offset(2 as i32 as isize);
     return bolt;
 }
 /*
@@ -1338,44 +1338,44 @@ pub unsafe extern "C" fn fire_grapple(
     crate::src::qcommon::q_math::VectorNormalize(dir); // use to match beam in client
     hook = crate::src::game::g_utils::G_Spawn() as *mut crate::g_local_h::gentity_s;
     (*hook).classname = b"hook\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    (*hook).nextthink = crate::src::game::g_main::level.time + 10000 as libc::c_int;
+    (*hook).nextthink = crate::src::game::g_main::level.time + 10000 as i32;
     (*hook).think = Some(
         crate::src::game::g_weapon::Weapon_HookFree
             as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
     );
-    (*hook).s.eType = crate::bg_public_h::ET_MISSILE as libc::c_int;
-    (*hook).r.svFlags = 0x80 as libc::c_int;
-    (*hook).s.weapon = crate::bg_public_h::WP_GRAPPLING_HOOK as libc::c_int;
+    (*hook).s.eType = crate::bg_public_h::ET_MISSILE as i32;
+    (*hook).r.svFlags = 0x80 as i32;
+    (*hook).s.weapon = crate::bg_public_h::WP_GRAPPLING_HOOK as i32;
     (*hook).r.ownerNum = (*self_0).s.number;
-    (*hook).methodOfDeath = crate::bg_public_h::MOD_GRAPPLE as libc::c_int;
-    (*hook).clipmask = 1 as libc::c_int | 0x2000000 as libc::c_int | 0x4000000 as libc::c_int;
+    (*hook).methodOfDeath = crate::bg_public_h::MOD_GRAPPLE as i32;
+    (*hook).clipmask = 1 as i32 | 0x2000000 as i32 | 0x4000000 as i32;
     (*hook).parent = self_0;
     (*hook).target_ent = 0 as *mut crate::g_local_h::gentity_t;
     (*hook).s.pos.trType = crate::src::qcommon::q_shared::TR_LINEAR;
-    (*hook).s.pos.trTime = crate::src::game::g_main::level.time - 50 as libc::c_int;
+    (*hook).s.pos.trTime = crate::src::game::g_main::level.time - 50 as i32;
     (*hook).s.otherEntityNum = (*self_0).s.number;
-    (*hook).s.pos.trBase[0 as libc::c_int as usize] = *start.offset(0 as libc::c_int as isize);
-    (*hook).s.pos.trBase[1 as libc::c_int as usize] = *start.offset(1 as libc::c_int as isize);
-    (*hook).s.pos.trBase[2 as libc::c_int as usize] = *start.offset(2 as libc::c_int as isize);
-    (*hook).s.pos.trDelta[0 as libc::c_int as usize] =
-        *dir.offset(0 as libc::c_int as isize) * 800 as libc::c_int as libc::c_float;
-    (*hook).s.pos.trDelta[1 as libc::c_int as usize] =
-        *dir.offset(1 as libc::c_int as isize) * 800 as libc::c_int as libc::c_float;
-    (*hook).s.pos.trDelta[2 as libc::c_int as usize] =
-        *dir.offset(2 as libc::c_int as isize) * 800 as libc::c_int as libc::c_float;
-    (*hook).s.pos.trDelta[0 as libc::c_int as usize] =
-        (*hook).s.pos.trDelta[0 as libc::c_int as usize] as libc::c_int
+    (*hook).s.pos.trBase[0 as i32 as usize] = *start.offset(0 as i32 as isize);
+    (*hook).s.pos.trBase[1 as i32 as usize] = *start.offset(1 as i32 as isize);
+    (*hook).s.pos.trBase[2 as i32 as usize] = *start.offset(2 as i32 as isize);
+    (*hook).s.pos.trDelta[0 as i32 as usize] =
+        *dir.offset(0 as i32 as isize) * 800 as i32 as f32;
+    (*hook).s.pos.trDelta[1 as i32 as usize] =
+        *dir.offset(1 as i32 as isize) * 800 as i32 as f32;
+    (*hook).s.pos.trDelta[2 as i32 as usize] =
+        *dir.offset(2 as i32 as isize) * 800 as i32 as f32;
+    (*hook).s.pos.trDelta[0 as i32 as usize] =
+        (*hook).s.pos.trDelta[0 as i32 as usize] as i32
             as crate::src::qcommon::q_shared::vec_t;
-    (*hook).s.pos.trDelta[1 as libc::c_int as usize] =
-        (*hook).s.pos.trDelta[1 as libc::c_int as usize] as libc::c_int
+    (*hook).s.pos.trDelta[1 as i32 as usize] =
+        (*hook).s.pos.trDelta[1 as i32 as usize] as i32
             as crate::src::qcommon::q_shared::vec_t;
-    (*hook).s.pos.trDelta[2 as libc::c_int as usize] =
-        (*hook).s.pos.trDelta[2 as libc::c_int as usize] as libc::c_int
+    (*hook).s.pos.trDelta[2 as i32 as usize] =
+        (*hook).s.pos.trDelta[2 as i32 as usize] as i32
             as crate::src::qcommon::q_shared::vec_t;
     // save net bandwidth
-    (*hook).r.currentOrigin[0 as libc::c_int as usize] = *start.offset(0 as libc::c_int as isize);
-    (*hook).r.currentOrigin[1 as libc::c_int as usize] = *start.offset(1 as libc::c_int as isize);
-    (*hook).r.currentOrigin[2 as libc::c_int as usize] = *start.offset(2 as libc::c_int as isize);
+    (*hook).r.currentOrigin[0 as i32 as usize] = *start.offset(0 as i32 as isize);
+    (*hook).r.currentOrigin[1 as i32 as usize] = *start.offset(1 as i32 as isize);
+    (*hook).r.currentOrigin[2 as i32 as usize] = *start.offset(2 as i32 as isize);
     (*(*self_0).client).hook = hook;
     return hook;
 }

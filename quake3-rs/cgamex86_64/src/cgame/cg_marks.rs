@@ -9,15 +9,15 @@ pub mod q_shared_h {
         mut v2: *const crate::src::qcommon::q_shared::vec_t,
         mut cross: *mut crate::src::qcommon::q_shared::vec_t,
     ) {
-        *cross.offset(0 as libc::c_int as isize) = *v1.offset(1 as libc::c_int as isize)
-            * *v2.offset(2 as libc::c_int as isize)
-            - *v1.offset(2 as libc::c_int as isize) * *v2.offset(1 as libc::c_int as isize);
-        *cross.offset(1 as libc::c_int as isize) = *v1.offset(2 as libc::c_int as isize)
-            * *v2.offset(0 as libc::c_int as isize)
-            - *v1.offset(0 as libc::c_int as isize) * *v2.offset(2 as libc::c_int as isize);
-        *cross.offset(2 as libc::c_int as isize) = *v1.offset(0 as libc::c_int as isize)
-            * *v2.offset(1 as libc::c_int as isize)
-            - *v1.offset(1 as libc::c_int as isize) * *v2.offset(0 as libc::c_int as isize);
+        *cross.offset(0 as i32 as isize) = *v1.offset(1 as i32 as isize)
+            * *v2.offset(2 as i32 as isize)
+            - *v1.offset(2 as i32 as isize) * *v2.offset(1 as i32 as isize);
+        *cross.offset(1 as i32 as isize) = *v1.offset(2 as i32 as isize)
+            * *v2.offset(0 as i32 as isize)
+            - *v1.offset(0 as i32 as isize) * *v2.offset(2 as i32 as isize);
+        *cross.offset(2 as i32 as isize) = *v1.offset(0 as i32 as isize)
+            * *v2.offset(1 as i32 as isize)
+            - *v1.offset(1 as i32 as isize) * *v2.offset(0 as i32 as isize);
     }
 
     // __Q_SHARED_H
@@ -210,7 +210,7 @@ pub static mut cg_markPolys: [crate::cg_local_h::markPoly_t; 256] =
         }; 10],
     }; 256];
 
-static mut markTotal: libc::c_int = 0;
+static mut markTotal: i32 = 0;
 /*
 ===================
 CG_InitMarkPolys
@@ -221,20 +221,20 @@ This is called at startup and for tournement restarts
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_InitMarkPolys() {
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     crate::stdlib::memset(
         cg_markPolys.as_mut_ptr() as *mut libc::c_void,
-        0 as libc::c_int,
+        0 as i32,
         ::std::mem::size_of::<[crate::cg_local_h::markPoly_t; 256]>() as libc::c_ulong,
     );
     cg_activeMarkPolys.nextMark = &mut cg_activeMarkPolys;
     cg_activeMarkPolys.prevMark = &mut cg_activeMarkPolys;
     cg_freeMarkPolys = cg_markPolys.as_mut_ptr();
-    i = 0 as libc::c_int;
-    while i < 256 as libc::c_int - 1 as libc::c_int {
+    i = 0 as i32;
+    while i < 256 as i32 - 1 as i32 {
         cg_markPolys[i as usize].nextMark = &mut *cg_markPolys
             .as_mut_ptr()
-            .offset((i + 1 as libc::c_int) as isize)
+            .offset((i + 1 as i32) as isize)
             as *mut crate::cg_local_h::markPoly_t;
         i += 1
     }
@@ -270,7 +270,7 @@ Will allways succeed, even if it requires freeing an old active mark
 
 pub unsafe extern "C" fn CG_AllocMark() -> *mut crate::cg_local_h::markPoly_t {
     let mut le: *mut crate::cg_local_h::markPoly_t = 0 as *mut crate::cg_local_h::markPoly_t;
-    let mut time: libc::c_int = 0;
+    let mut time: i32 = 0;
     if cg_freeMarkPolys.is_null() {
         // no free entities, so free the one at the end of the chain
         // remove the oldest active entity
@@ -284,7 +284,7 @@ pub unsafe extern "C" fn CG_AllocMark() -> *mut crate::cg_local_h::markPoly_t {
     cg_freeMarkPolys = (*cg_freeMarkPolys).nextMark;
     crate::stdlib::memset(
         le as *mut libc::c_void,
-        0 as libc::c_int,
+        0 as i32,
         ::std::mem::size_of::<crate::cg_local_h::markPoly_t>() as libc::c_ulong,
     );
     // link into the active list
@@ -300,22 +300,22 @@ pub unsafe extern "C" fn CG_ImpactMark(
     mut markShader: crate::src::qcommon::q_shared::qhandle_t,
     mut origin: *const crate::src::qcommon::q_shared::vec_t,
     mut dir: *const crate::src::qcommon::q_shared::vec_t,
-    mut orientation: libc::c_float,
-    mut red: libc::c_float,
-    mut green: libc::c_float,
-    mut blue: libc::c_float,
-    mut alpha: libc::c_float,
+    mut orientation: f32,
+    mut red: f32,
+    mut green: f32,
+    mut blue: f32,
+    mut alpha: f32,
     mut alphaFade: crate::src::qcommon::q_shared::qboolean,
-    mut radius: libc::c_float,
+    mut radius: f32,
     mut temporary: crate::src::qcommon::q_shared::qboolean,
 ) {
     let mut axis: [crate::src::qcommon::q_shared::vec3_t; 3] = [[0.; 3]; 3];
-    let mut texCoordScale: libc::c_float = 0.;
+    let mut texCoordScale: f32 = 0.;
     let mut originalPoints: [crate::src::qcommon::q_shared::vec3_t; 4] = [[0.; 3]; 4];
     let mut colors: [crate::src::qcommon::q_shared::byte; 4] = [0; 4];
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
-    let mut numFragments: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
+    let mut numFragments: i32 = 0;
     let mut markFragments: [crate::src::qcommon::q_shared::markFragment_t; 128] =
         [crate::src::qcommon::q_shared::markFragment_t {
             firstPoint: 0,
@@ -328,7 +328,7 @@ pub unsafe extern "C" fn CG_ImpactMark(
     if crate::src::cgame::cg_main::cg_addMarks.integer == 0 {
         return;
     }
-    if radius <= 0 as libc::c_int as libc::c_float {
+    if radius <= 0 as i32 as f32 {
         crate::src::cgame::cg_main::CG_Error(
             b"CG_ImpactMark called with <= 0 radius\x00" as *const u8 as *const libc::c_char,
         );
@@ -339,67 +339,67 @@ pub unsafe extern "C" fn CG_ImpactMark(
     // create the texture axis
     crate::src::qcommon::q_math::VectorNormalize2(
         dir,
-        axis[0 as libc::c_int as usize].as_mut_ptr(),
+        axis[0 as i32 as usize].as_mut_ptr(),
     );
     crate::src::qcommon::q_math::PerpendicularVector(
-        axis[1 as libc::c_int as usize].as_mut_ptr(),
-        axis[0 as libc::c_int as usize].as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        axis[1 as i32 as usize].as_mut_ptr(),
+        axis[0 as i32 as usize].as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
     );
     crate::src::qcommon::q_math::RotatePointAroundVector(
-        axis[2 as libc::c_int as usize].as_mut_ptr(),
-        axis[0 as libc::c_int as usize].as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-        axis[1 as libc::c_int as usize].as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        axis[2 as i32 as usize].as_mut_ptr(),
+        axis[0 as i32 as usize].as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        axis[1 as i32 as usize].as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
         orientation,
     );
     CrossProduct(
-        axis[0 as libc::c_int as usize].as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-        axis[2 as libc::c_int as usize].as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-        axis[1 as libc::c_int as usize].as_mut_ptr(),
+        axis[0 as i32 as usize].as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        axis[2 as i32 as usize].as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        axis[1 as i32 as usize].as_mut_ptr(),
     );
-    texCoordScale = (0.5f64 * 1.0f64 / radius as libc::c_double) as libc::c_float;
+    texCoordScale = (0.5f64 * 1.0f64 / radius as f64) as f32;
     // create the full polygon
-    i = 0 as libc::c_int;
-    while i < 3 as libc::c_int {
-        originalPoints[0 as libc::c_int as usize][i as usize] = *origin.offset(i as isize)
-            - radius * axis[1 as libc::c_int as usize][i as usize]
-            - radius * axis[2 as libc::c_int as usize][i as usize];
-        originalPoints[1 as libc::c_int as usize][i as usize] = *origin.offset(i as isize)
-            + radius * axis[1 as libc::c_int as usize][i as usize]
-            - radius * axis[2 as libc::c_int as usize][i as usize];
-        originalPoints[2 as libc::c_int as usize][i as usize] = *origin.offset(i as isize)
-            + radius * axis[1 as libc::c_int as usize][i as usize]
-            + radius * axis[2 as libc::c_int as usize][i as usize];
-        originalPoints[3 as libc::c_int as usize][i as usize] = *origin.offset(i as isize)
-            - radius * axis[1 as libc::c_int as usize][i as usize]
-            + radius * axis[2 as libc::c_int as usize][i as usize];
+    i = 0 as i32;
+    while i < 3 as i32 {
+        originalPoints[0 as i32 as usize][i as usize] = *origin.offset(i as isize)
+            - radius * axis[1 as i32 as usize][i as usize]
+            - radius * axis[2 as i32 as usize][i as usize];
+        originalPoints[1 as i32 as usize][i as usize] = *origin.offset(i as isize)
+            + radius * axis[1 as i32 as usize][i as usize]
+            - radius * axis[2 as i32 as usize][i as usize];
+        originalPoints[2 as i32 as usize][i as usize] = *origin.offset(i as isize)
+            + radius * axis[1 as i32 as usize][i as usize]
+            + radius * axis[2 as i32 as usize][i as usize];
+        originalPoints[3 as i32 as usize][i as usize] = *origin.offset(i as isize)
+            - radius * axis[1 as i32 as usize][i as usize]
+            + radius * axis[2 as i32 as usize][i as usize];
         i += 1
     }
     // get the fragments
-    projection[0 as libc::c_int as usize] =
-        *dir.offset(0 as libc::c_int as isize) * -(20 as libc::c_int) as libc::c_float;
-    projection[1 as libc::c_int as usize] =
-        *dir.offset(1 as libc::c_int as isize) * -(20 as libc::c_int) as libc::c_float;
-    projection[2 as libc::c_int as usize] =
-        *dir.offset(2 as libc::c_int as isize) * -(20 as libc::c_int) as libc::c_float;
+    projection[0 as i32 as usize] =
+        *dir.offset(0 as i32 as isize) * -(20 as i32) as f32;
+    projection[1 as i32 as usize] =
+        *dir.offset(1 as i32 as isize) * -(20 as i32) as f32;
+    projection[2 as i32 as usize] =
+        *dir.offset(2 as i32 as isize) * -(20 as i32) as f32;
     numFragments = crate::src::cgame::cg_syscalls::trap_CM_MarkFragments(
-        4 as libc::c_int,
+        4 as i32,
         originalPoints.as_mut_ptr() as *mut libc::c_void
             as *const crate::src::qcommon::q_shared::vec3_t,
         projection.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-        384 as libc::c_int,
-        markPoints[0 as libc::c_int as usize].as_mut_ptr(),
-        128 as libc::c_int,
+        384 as i32,
+        markPoints[0 as i32 as usize].as_mut_ptr(),
+        128 as i32,
         markFragments.as_mut_ptr() as *mut crate::src::qcommon::q_shared::markFragment_t,
     );
-    colors[0 as libc::c_int as usize] =
-        (red * 255 as libc::c_int as libc::c_float) as crate::src::qcommon::q_shared::byte;
-    colors[1 as libc::c_int as usize] =
-        (green * 255 as libc::c_int as libc::c_float) as crate::src::qcommon::q_shared::byte;
-    colors[2 as libc::c_int as usize] =
-        (blue * 255 as libc::c_int as libc::c_float) as crate::src::qcommon::q_shared::byte;
-    colors[3 as libc::c_int as usize] =
-        (alpha * 255 as libc::c_int as libc::c_float) as crate::src::qcommon::q_shared::byte;
-    i = 0 as libc::c_int;
+    colors[0 as i32 as usize] =
+        (red * 255 as i32 as f32) as crate::src::qcommon::q_shared::byte;
+    colors[1 as i32 as usize] =
+        (green * 255 as i32 as f32) as crate::src::qcommon::q_shared::byte;
+    colors[2 as i32 as usize] =
+        (blue * 255 as i32 as f32) as crate::src::qcommon::q_shared::byte;
+    colors[3 as i32 as usize] =
+        (alpha * 255 as i32 as f32) as crate::src::qcommon::q_shared::byte;
+    i = 0 as i32;
     mf = markFragments.as_mut_ptr();
     while i < numFragments {
         let mut v: *mut crate::tr_types_h::polyVert_t = 0 as *mut crate::tr_types_h::polyVert_t;
@@ -411,45 +411,45 @@ pub unsafe extern "C" fn CG_ImpactMark(
         let mut mark: *mut crate::cg_local_h::markPoly_t = 0 as *mut crate::cg_local_h::markPoly_t;
         // we have an upper limit on the complexity of polygons
         // that we store persistantly
-        if (*mf).numPoints > 10 as libc::c_int {
-            (*mf).numPoints = 10 as libc::c_int
+        if (*mf).numPoints > 10 as i32 {
+            (*mf).numPoints = 10 as i32
         }
-        j = 0 as libc::c_int;
+        j = 0 as i32;
         v = verts.as_mut_ptr();
         while j < (*mf).numPoints {
             let mut delta: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-            (*v).xyz[0 as libc::c_int as usize] =
-                markPoints[((*mf).firstPoint + j) as usize][0 as libc::c_int as usize];
-            (*v).xyz[1 as libc::c_int as usize] =
-                markPoints[((*mf).firstPoint + j) as usize][1 as libc::c_int as usize];
-            (*v).xyz[2 as libc::c_int as usize] =
-                markPoints[((*mf).firstPoint + j) as usize][2 as libc::c_int as usize];
-            delta[0 as libc::c_int as usize] =
-                (*v).xyz[0 as libc::c_int as usize] - *origin.offset(0 as libc::c_int as isize);
-            delta[1 as libc::c_int as usize] =
-                (*v).xyz[1 as libc::c_int as usize] - *origin.offset(1 as libc::c_int as isize);
-            delta[2 as libc::c_int as usize] =
-                (*v).xyz[2 as libc::c_int as usize] - *origin.offset(2 as libc::c_int as isize);
-            (*v).st[0 as libc::c_int as usize] = (0.5f64
-                + ((delta[0 as libc::c_int as usize]
-                    * axis[1 as libc::c_int as usize][0 as libc::c_int as usize]
-                    + delta[1 as libc::c_int as usize]
-                        * axis[1 as libc::c_int as usize][1 as libc::c_int as usize]
-                    + delta[2 as libc::c_int as usize]
-                        * axis[1 as libc::c_int as usize][2 as libc::c_int as usize])
-                    * texCoordScale) as libc::c_double)
-                as libc::c_float;
-            (*v).st[1 as libc::c_int as usize] = (0.5f64
-                + ((delta[0 as libc::c_int as usize]
-                    * axis[2 as libc::c_int as usize][0 as libc::c_int as usize]
-                    + delta[1 as libc::c_int as usize]
-                        * axis[2 as libc::c_int as usize][1 as libc::c_int as usize]
-                    + delta[2 as libc::c_int as usize]
-                        * axis[2 as libc::c_int as usize][2 as libc::c_int as usize])
-                    * texCoordScale) as libc::c_double)
-                as libc::c_float;
-            *((*v).modulate.as_mut_ptr() as *mut libc::c_int) =
-                *(colors.as_mut_ptr() as *mut libc::c_int);
+            (*v).xyz[0 as i32 as usize] =
+                markPoints[((*mf).firstPoint + j) as usize][0 as i32 as usize];
+            (*v).xyz[1 as i32 as usize] =
+                markPoints[((*mf).firstPoint + j) as usize][1 as i32 as usize];
+            (*v).xyz[2 as i32 as usize] =
+                markPoints[((*mf).firstPoint + j) as usize][2 as i32 as usize];
+            delta[0 as i32 as usize] =
+                (*v).xyz[0 as i32 as usize] - *origin.offset(0 as i32 as isize);
+            delta[1 as i32 as usize] =
+                (*v).xyz[1 as i32 as usize] - *origin.offset(1 as i32 as isize);
+            delta[2 as i32 as usize] =
+                (*v).xyz[2 as i32 as usize] - *origin.offset(2 as i32 as isize);
+            (*v).st[0 as i32 as usize] = (0.5f64
+                + ((delta[0 as i32 as usize]
+                    * axis[1 as i32 as usize][0 as i32 as usize]
+                    + delta[1 as i32 as usize]
+                        * axis[1 as i32 as usize][1 as i32 as usize]
+                    + delta[2 as i32 as usize]
+                        * axis[1 as i32 as usize][2 as i32 as usize])
+                    * texCoordScale) as f64)
+                as f32;
+            (*v).st[1 as i32 as usize] = (0.5f64
+                + ((delta[0 as i32 as usize]
+                    * axis[2 as i32 as usize][0 as i32 as usize]
+                    + delta[1 as i32 as usize]
+                        * axis[2 as i32 as usize][1 as i32 as usize]
+                    + delta[2 as i32 as usize]
+                        * axis[2 as i32 as usize][2 as i32 as usize])
+                    * texCoordScale) as f64)
+                as f32;
+            *((*v).modulate.as_mut_ptr() as *mut i32) =
+                *(colors.as_mut_ptr() as *mut i32);
             j += 1;
             v = v.offset(1)
         }
@@ -467,10 +467,10 @@ pub unsafe extern "C" fn CG_ImpactMark(
             (*mark).alphaFade = alphaFade;
             (*mark).markShader = markShader;
             (*mark).poly.numVerts = (*mf).numPoints;
-            (*mark).color[0 as libc::c_int as usize] = red;
-            (*mark).color[1 as libc::c_int as usize] = green;
-            (*mark).color[2 as libc::c_int as usize] = blue;
-            (*mark).color[3 as libc::c_int as usize] = alpha;
+            (*mark).color[0 as i32 as usize] = red;
+            (*mark).color[1 as i32 as usize] = green;
+            (*mark).color[2 as i32 as usize] = blue;
+            (*mark).color[3 as i32 as usize] = alpha;
             crate::stdlib::memcpy(
                 (*mark).verts.as_mut_ptr() as *mut libc::c_void,
                 verts.as_mut_ptr() as *const libc::c_void,
@@ -718,11 +718,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_AddMarks() {
-    let mut j: libc::c_int = 0;
+    let mut j: i32 = 0;
     let mut mp: *mut crate::cg_local_h::markPoly_t = 0 as *mut crate::cg_local_h::markPoly_t;
     let mut next: *mut crate::cg_local_h::markPoly_t = 0 as *mut crate::cg_local_h::markPoly_t;
-    let mut t: libc::c_int = 0;
-    let mut fade: libc::c_int = 0;
+    let mut t: i32 = 0;
+    let mut fade: i32 = 0;
     if crate::src::cgame::cg_main::cg_addMarks.integer == 0 {
         return;
     }
@@ -732,33 +732,33 @@ pub unsafe extern "C" fn CG_AddMarks() {
         // still have it
         next = (*mp).nextMark;
         // see if it is time to completely remove it
-        if crate::src::cgame::cg_main::cg.time > (*mp).time + 10000 as libc::c_int {
+        if crate::src::cgame::cg_main::cg.time > (*mp).time + 10000 as i32 {
             CG_FreeMarkPoly(mp);
         } else {
             // fade out the energy bursts
             if (*mp).markShader == crate::src::cgame::cg_main::cgs.media.energyMarkShader {
-                fade = (450 as libc::c_int as libc::c_double
-                    - 450 as libc::c_int as libc::c_double
-                        * ((crate::src::cgame::cg_main::cg.time - (*mp).time) as libc::c_double
-                            / 3000.0f64)) as libc::c_int;
-                if fade < 255 as libc::c_int {
-                    if fade < 0 as libc::c_int {
-                        fade = 0 as libc::c_int
+                fade = (450 as i32 as f64
+                    - 450 as i32 as f64
+                        * ((crate::src::cgame::cg_main::cg.time - (*mp).time) as f64
+                            / 3000.0f64)) as i32;
+                if fade < 255 as i32 {
+                    if fade < 0 as i32 {
+                        fade = 0 as i32
                     }
-                    if (*mp).verts[0 as libc::c_int as usize].modulate[0 as libc::c_int as usize]
-                        as libc::c_int
-                        != 0 as libc::c_int
+                    if (*mp).verts[0 as i32 as usize].modulate[0 as i32 as usize]
+                        as i32
+                        != 0 as i32
                     {
-                        j = 0 as libc::c_int;
+                        j = 0 as i32;
                         while j < (*mp).poly.numVerts {
-                            (*mp).verts[j as usize].modulate[0 as libc::c_int as usize] =
-                                ((*mp).color[0 as libc::c_int as usize] * fade as libc::c_float)
+                            (*mp).verts[j as usize].modulate[0 as i32 as usize] =
+                                ((*mp).color[0 as i32 as usize] * fade as f32)
                                     as crate::src::qcommon::q_shared::byte;
-                            (*mp).verts[j as usize].modulate[1 as libc::c_int as usize] =
-                                ((*mp).color[1 as libc::c_int as usize] * fade as libc::c_float)
+                            (*mp).verts[j as usize].modulate[1 as i32 as usize] =
+                                ((*mp).color[1 as i32 as usize] * fade as f32)
                                     as crate::src::qcommon::q_shared::byte;
-                            (*mp).verts[j as usize].modulate[2 as libc::c_int as usize] =
-                                ((*mp).color[2 as libc::c_int as usize] * fade as libc::c_float)
+                            (*mp).verts[j as usize].modulate[2 as i32 as usize] =
+                                ((*mp).color[2 as i32 as usize] * fade as f32)
                                     as crate::src::qcommon::q_shared::byte;
                             j += 1
                         }
@@ -766,27 +766,27 @@ pub unsafe extern "C" fn CG_AddMarks() {
                 }
             }
             // fade all marks out with time
-            t = (*mp).time + 10000 as libc::c_int - crate::src::cgame::cg_main::cg.time;
-            if t < 1000 as libc::c_int {
-                fade = 255 as libc::c_int * t / 1000 as libc::c_int;
+            t = (*mp).time + 10000 as i32 - crate::src::cgame::cg_main::cg.time;
+            if t < 1000 as i32 {
+                fade = 255 as i32 * t / 1000 as i32;
                 if (*mp).alphaFade as u64 != 0 {
-                    j = 0 as libc::c_int;
+                    j = 0 as i32;
                     while j < (*mp).poly.numVerts {
-                        (*mp).verts[j as usize].modulate[3 as libc::c_int as usize] =
+                        (*mp).verts[j as usize].modulate[3 as i32 as usize] =
                             fade as crate::src::qcommon::q_shared::byte;
                         j += 1
                     }
                 } else {
-                    j = 0 as libc::c_int;
+                    j = 0 as i32;
                     while j < (*mp).poly.numVerts {
-                        (*mp).verts[j as usize].modulate[0 as libc::c_int as usize] =
-                            ((*mp).color[0 as libc::c_int as usize] * fade as libc::c_float)
+                        (*mp).verts[j as usize].modulate[0 as i32 as usize] =
+                            ((*mp).color[0 as i32 as usize] * fade as f32)
                                 as crate::src::qcommon::q_shared::byte;
-                        (*mp).verts[j as usize].modulate[1 as libc::c_int as usize] =
-                            ((*mp).color[1 as libc::c_int as usize] * fade as libc::c_float)
+                        (*mp).verts[j as usize].modulate[1 as i32 as usize] =
+                            ((*mp).color[1 as i32 as usize] * fade as f32)
                                 as crate::src::qcommon::q_shared::byte;
-                        (*mp).verts[j as usize].modulate[2 as libc::c_int as usize] =
-                            ((*mp).color[2 as libc::c_int as usize] * fade as libc::c_float)
+                        (*mp).verts[j as usize].modulate[2 as i32 as usize] =
+                            ((*mp).color[2 as i32 as usize] * fade as f32)
                                 as crate::src::qcommon::q_shared::byte;
                         j += 1
                     }

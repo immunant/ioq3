@@ -133,21 +133,21 @@ POSSIBILITY OF SUCH DAMAGE.
 pub unsafe extern "C" fn silk_control_audio_bandwidth(
     mut psEncC: *mut crate::structs_h::silk_encoder_state,
     mut encControl: *mut crate::control_h::silk_EncControlStruct,
-) -> libc::c_int
+) -> i32
 /* I    Control structure                           */ {
-    let mut fs_kHz: libc::c_int = 0;
+    let mut fs_kHz: i32 = 0;
     let mut fs_Hz: crate::opus_types_h::opus_int32 = 0;
     fs_kHz = (*psEncC).fs_kHz;
     fs_Hz = fs_kHz as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
-        * 1000 as libc::c_int as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32;
-    if fs_Hz == 0 as libc::c_int {
+        * 1000 as i32 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32;
+    if fs_Hz == 0 as i32 {
         /* Encoder has just been initialized */
         fs_Hz = if (*psEncC).desiredInternal_fs_Hz < (*psEncC).API_fs_Hz {
             (*psEncC).desiredInternal_fs_Hz
         } else {
             (*psEncC).API_fs_Hz
         };
-        fs_kHz = fs_Hz / 1000 as libc::c_int
+        fs_kHz = fs_Hz / 1000 as i32
     } else if fs_Hz > (*psEncC).API_fs_Hz
         || fs_Hz > (*psEncC).maxInternal_fs_Hz
         || fs_Hz < (*psEncC).minInternal_fs_Hz
@@ -164,57 +164,57 @@ pub unsafe extern "C" fn silk_control_audio_bandwidth(
         } else {
             (*psEncC).minInternal_fs_Hz
         };
-        fs_kHz = fs_Hz / 1000 as libc::c_int
+        fs_kHz = fs_Hz / 1000 as i32
     } else {
         /* State machine for the internal sampling rate switching */
         if (*psEncC).sLP.transition_frame_no
-            >= 5120 as libc::c_int / (5 as libc::c_int * 4 as libc::c_int)
+            >= 5120 as i32 / (5 as i32 * 4 as i32)
         {
             /* Stop transition phase */
-            (*psEncC).sLP.mode = 0 as libc::c_int
+            (*psEncC).sLP.mode = 0 as i32
         }
         if (*psEncC).allow_bandwidth_switch != 0 || (*encControl).opusCanSwitch != 0 {
             /* Check if we should switch down */
             if (*psEncC).fs_kHz as crate::opus_types_h::opus_int16
                 as crate::opus_types_h::opus_int32
-                * 1000 as libc::c_int as crate::opus_types_h::opus_int16
+                * 1000 as i32 as crate::opus_types_h::opus_int16
                     as crate::opus_types_h::opus_int32
                 > (*psEncC).desiredInternal_fs_Hz
             {
                 /* Switch down */
-                if (*psEncC).sLP.mode == 0 as libc::c_int {
+                if (*psEncC).sLP.mode == 0 as i32 {
                     /* New transition */
                     (*psEncC).sLP.transition_frame_no =
-                        5120 as libc::c_int / (5 as libc::c_int * 4 as libc::c_int);
+                        5120 as i32 / (5 as i32 * 4 as i32);
                     /* Reset transition filter state */
                     crate::stdlib::memset(
                         (*psEncC).sLP.In_LP_State.as_mut_ptr() as *mut libc::c_void,
-                        0 as libc::c_int,
+                        0 as i32,
                         ::std::mem::size_of::<[crate::opus_types_h::opus_int32; 2]>()
                             as libc::c_ulong,
                     );
                 }
                 if (*encControl).opusCanSwitch != 0 {
                     /* Stop transition phase */
-                    (*psEncC).sLP.mode = 0 as libc::c_int;
+                    (*psEncC).sLP.mode = 0 as i32;
                     /* Switch to a lower sample frequency */
-                    fs_kHz = if (*psEncC).fs_kHz == 16 as libc::c_int {
-                        12 as libc::c_int
+                    fs_kHz = if (*psEncC).fs_kHz == 16 as i32 {
+                        12 as i32
                     } else {
-                        8 as libc::c_int
+                        8 as i32
                     }
-                } else if (*psEncC).sLP.transition_frame_no <= 0 as libc::c_int {
-                    (*encControl).switchReady = 1 as libc::c_int;
+                } else if (*psEncC).sLP.transition_frame_no <= 0 as i32 {
+                    (*encControl).switchReady = 1 as i32;
                     /* Make room for redundancy */
-                    (*encControl).maxBits -= (*encControl).maxBits * 5 as libc::c_int
-                        / ((*encControl).payloadSize_ms + 5 as libc::c_int)
+                    (*encControl).maxBits -= (*encControl).maxBits * 5 as i32
+                        / ((*encControl).payloadSize_ms + 5 as i32)
                 } else {
                     /* Direction: down (at double speed) */
-                    (*psEncC).sLP.mode = -(2 as libc::c_int)
+                    (*psEncC).sLP.mode = -(2 as i32)
                 }
             } else if ((*psEncC).fs_kHz as crate::opus_types_h::opus_int16
                 as crate::opus_types_h::opus_int32
-                * 1000 as libc::c_int as crate::opus_types_h::opus_int16
+                * 1000 as i32 as crate::opus_types_h::opus_int16
                     as crate::opus_types_h::opus_int32)
                 < (*psEncC).desiredInternal_fs_Hz
             {
@@ -222,33 +222,33 @@ pub unsafe extern "C" fn silk_control_audio_bandwidth(
                 /* Switch up */
                 if (*encControl).opusCanSwitch != 0 {
                     /* Switch to a higher sample frequency */
-                    fs_kHz = if (*psEncC).fs_kHz == 8 as libc::c_int {
-                        12 as libc::c_int
+                    fs_kHz = if (*psEncC).fs_kHz == 8 as i32 {
+                        12 as i32
                     } else {
-                        16 as libc::c_int
+                        16 as i32
                     };
                     /* New transition */
-                    (*psEncC).sLP.transition_frame_no = 0 as libc::c_int;
+                    (*psEncC).sLP.transition_frame_no = 0 as i32;
                     /* Reset transition filter state */
                     crate::stdlib::memset(
                         (*psEncC).sLP.In_LP_State.as_mut_ptr() as *mut libc::c_void,
-                        0 as libc::c_int,
+                        0 as i32,
                         ::std::mem::size_of::<[crate::opus_types_h::opus_int32; 2]>()
                             as libc::c_ulong,
                     );
                     /* Direction: up */
-                    (*psEncC).sLP.mode = 1 as libc::c_int
-                } else if (*psEncC).sLP.mode == 0 as libc::c_int {
-                    (*encControl).switchReady = 1 as libc::c_int;
+                    (*psEncC).sLP.mode = 1 as i32
+                } else if (*psEncC).sLP.mode == 0 as i32 {
+                    (*encControl).switchReady = 1 as i32;
                     /* Make room for redundancy */
-                    (*encControl).maxBits -= (*encControl).maxBits * 5 as libc::c_int
-                        / ((*encControl).payloadSize_ms + 5 as libc::c_int)
+                    (*encControl).maxBits -= (*encControl).maxBits * 5 as i32
+                        / ((*encControl).payloadSize_ms + 5 as i32)
                 } else {
                     /* Direction: up */
-                    (*psEncC).sLP.mode = 1 as libc::c_int
+                    (*psEncC).sLP.mode = 1 as i32
                 }
-            } else if (*psEncC).sLP.mode < 0 as libc::c_int {
-                (*psEncC).sLP.mode = 1 as libc::c_int
+            } else if (*psEncC).sLP.mode < 0 as i32 {
+                (*psEncC).sLP.mode = 1 as i32
             }
         }
     }

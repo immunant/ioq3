@@ -328,7 +328,7 @@ pub unsafe extern "C" fn jpeg_open_backing_store(
     mut _info: crate::jmemsys_h::backing_store_ptr,
     mut _total_bytes_needed: libc::c_long,
 ) {
-    (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_NO_BACKING_STORE as libc::c_int;
+    (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_NO_BACKING_STORE as i32;
     Some(
         (*(*cinfo).err)
             .error_exit
@@ -354,7 +354,7 @@ pub unsafe extern "C" fn jpeg_open_backing_store(
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_mem_init(mut _cinfo: crate::jpeglib_h::j_common_ptr) -> libc::c_long {
-    return 0 as libc::c_int as libc::c_long;
+    return 0 as i32 as libc::c_long;
     /* just set max_memory_to_use to 0 */
 }
 #[no_mangle]

@@ -307,24 +307,24 @@ UpdateTournamentInfo
 #[no_mangle]
 
 pub unsafe extern "C" fn UpdateTournamentInfo() {
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     let mut player: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
-    let mut playerClientNum: libc::c_int = 0;
-    let mut n: libc::c_int = 0;
-    let mut accuracy: libc::c_int = 0;
-    let mut perfect: libc::c_int = 0;
-    let mut msglen: libc::c_int = 0;
+    let mut playerClientNum: i32 = 0;
+    let mut n: i32 = 0;
+    let mut accuracy: i32 = 0;
+    let mut perfect: i32 = 0;
+    let mut msglen: i32 = 0;
     let mut buf: [libc::c_char; 32] = [0; 32];
     let mut msg: [libc::c_char; 1024] = [0; 1024];
     // find the real player
     player = 0 as *mut crate::g_local_h::gentity_t;
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < crate::src::game::g_main::level.maxclients {
         player = &mut *crate::src::game::g_main::g_entities
             .as_mut_ptr()
             .offset(i as isize) as *mut crate::g_local_h::gentity_t;
         if !((*player).inuse as u64 == 0) {
-            if (*player).r.svFlags & 0x8 as libc::c_int == 0 {
+            if (*player).r.svFlags & 0x8 as i32 == 0 {
                 break;
             }
         }
@@ -340,73 +340,73 @@ pub unsafe extern "C" fn UpdateTournamentInfo() {
         .clients
         .offset(playerClientNum as isize))
     .sess
-    .sessionTeam as libc::c_uint
-        == crate::bg_public_h::TEAM_SPECTATOR as libc::c_int as libc::c_uint
+    .sessionTeam as u32
+        == crate::bg_public_h::TEAM_SPECTATOR as i32 as u32
     {
         crate::src::qcommon::q_shared::Com_sprintf(
             msg.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
             b"postgame %i %i 0 0 0 0 0 0\x00" as *const u8 as *const libc::c_char,
             crate::src::game::g_main::level.numNonSpectatorClients,
             playerClientNum,
         ); // clear lava burning
     } else {
         if (*(*player).client).accuracy_shots != 0 {
-            accuracy = (*(*player).client).accuracy_hits * 100 as libc::c_int
+            accuracy = (*(*player).client).accuracy_hits * 100 as i32
                 / (*(*player).client).accuracy_shots
         } else {
-            accuracy = 0 as libc::c_int
+            accuracy = 0 as i32
         } // don't bounce
         perfect = if (*crate::src::game::g_main::level
             .clients
             .offset(playerClientNum as isize))
         .ps
-        .persistant[crate::bg_public_h::PERS_RANK as libc::c_int as usize]
-            == 0 as libc::c_int
+        .persistant[crate::bg_public_h::PERS_RANK as i32 as usize]
+            == 0 as i32
             && (*(*player).client).ps.persistant
-                [crate::bg_public_h::PERS_KILLED as libc::c_int as usize]
-                == 0 as libc::c_int
+                [crate::bg_public_h::PERS_KILLED as i32 as usize]
+                == 0 as i32
         {
-            1 as libc::c_int
+            1 as i32
         } else {
-            0 as libc::c_int
+            0 as i32
         };
         crate::src::qcommon::q_shared::Com_sprintf(
             msg.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
             b"postgame %i %i %i %i %i %i %i %i\x00" as *const u8 as *const libc::c_char,
             crate::src::game::g_main::level.numNonSpectatorClients,
             playerClientNum,
             accuracy,
             (*(*player).client).ps.persistant
-                [crate::bg_public_h::PERS_IMPRESSIVE_COUNT as libc::c_int as usize],
+                [crate::bg_public_h::PERS_IMPRESSIVE_COUNT as i32 as usize],
             (*(*player).client).ps.persistant
-                [crate::bg_public_h::PERS_EXCELLENT_COUNT as libc::c_int as usize],
+                [crate::bg_public_h::PERS_EXCELLENT_COUNT as i32 as usize],
             (*(*player).client).ps.persistant
-                [crate::bg_public_h::PERS_GAUNTLET_FRAG_COUNT as libc::c_int as usize],
+                [crate::bg_public_h::PERS_GAUNTLET_FRAG_COUNT as i32 as usize],
             (*(*player).client).ps.persistant
-                [crate::bg_public_h::PERS_SCORE as libc::c_int as usize],
+                [crate::bg_public_h::PERS_SCORE as i32 as usize],
             perfect,
         );
     }
-    msglen = crate::stdlib::strlen(msg.as_mut_ptr()) as libc::c_int;
-    i = 0 as libc::c_int;
+    msglen = crate::stdlib::strlen(msg.as_mut_ptr()) as i32;
+    i = 0 as i32;
     while i < crate::src::game::g_main::level.numNonSpectatorClients {
         n = crate::src::game::g_main::level.sortedClients[i as usize];
         crate::src::qcommon::q_shared::Com_sprintf(
             buf.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as libc::c_int,
+            ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
             b" %i %i %i\x00" as *const u8 as *const libc::c_char,
             n,
             (*crate::src::game::g_main::level.clients.offset(n as isize))
                 .ps
-                .persistant[crate::bg_public_h::PERS_RANK as libc::c_int as usize],
+                .persistant[crate::bg_public_h::PERS_RANK as i32 as usize],
             (*crate::src::game::g_main::level.clients.offset(n as isize))
                 .ps
-                .persistant[crate::bg_public_h::PERS_SCORE as libc::c_int as usize],
+                .persistant[crate::bg_public_h::PERS_SCORE as i32 as usize],
         );
         msglen = (msglen as libc::c_ulong).wrapping_add(crate::stdlib::strlen(buf.as_mut_ptr()))
-            as libc::c_int as libc::c_int;
+            as i32 as i32;
         if msglen as libc::c_ulong >= ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong
         {
             break;
@@ -415,7 +415,7 @@ pub unsafe extern "C" fn UpdateTournamentInfo() {
         i += 1
     }
     crate::src::game::g_syscalls::trap_SendConsoleCommand(
-        crate::src::qcommon::q_shared::EXEC_APPEND as libc::c_int,
+        crate::src::qcommon::q_shared::EXEC_APPEND as i32,
         msg.as_mut_ptr(),
     );
 }
@@ -424,7 +424,7 @@ unsafe extern "C" fn SpawnModelOnVictoryPad(
     mut pad: *mut crate::g_local_h::gentity_t,
     mut offset: *mut crate::src::qcommon::q_shared::vec_t,
     mut ent: *mut crate::g_local_h::gentity_t,
-    mut place: libc::c_int,
+    mut place: i32,
 ) -> *mut crate::g_local_h::gentity_t {
     let mut body: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
     let mut vec: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
@@ -441,85 +441,85 @@ unsafe extern "C" fn SpawnModelOnVictoryPad(
     (*body).classname = (*(*ent).client).pers.netname.as_mut_ptr();
     (*body).client = (*ent).client;
     (*body).s = (*ent).s;
-    (*body).s.eType = crate::bg_public_h::ET_PLAYER as libc::c_int;
-    (*body).s.eFlags = 0 as libc::c_int;
-    (*body).s.powerups = 0 as libc::c_int;
-    (*body).s.loopSound = 0 as libc::c_int;
+    (*body).s.eType = crate::bg_public_h::ET_PLAYER as i32;
+    (*body).s.eFlags = 0 as i32;
+    (*body).s.powerups = 0 as i32;
+    (*body).s.loopSound = 0 as i32;
     (*body).s.number = body.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
-        as libc::c_long as libc::c_int;
+        as libc::c_long as i32;
     (*body).timestamp = crate::src::game::g_main::level.time;
     (*body).physicsObject = crate::src::qcommon::q_shared::qtrue;
-    (*body).physicsBounce = 0 as libc::c_int as libc::c_float;
-    (*body).s.event = 0 as libc::c_int;
+    (*body).physicsBounce = 0 as i32 as f32;
+    (*body).s.event = 0 as i32;
     (*body).s.pos.trType = crate::src::qcommon::q_shared::TR_STATIONARY;
-    (*body).s.groundEntityNum = ((1 as libc::c_int) << 10 as libc::c_int) - 2 as libc::c_int;
-    (*body).s.legsAnim = crate::bg_public_h::LEGS_IDLE as libc::c_int;
-    (*body).s.torsoAnim = crate::bg_public_h::TORSO_STAND as libc::c_int;
-    if (*body).s.weapon == crate::bg_public_h::WP_NONE as libc::c_int {
-        (*body).s.weapon = crate::bg_public_h::WP_MACHINEGUN as libc::c_int
+    (*body).s.groundEntityNum = ((1 as i32) << 10 as i32) - 2 as i32;
+    (*body).s.legsAnim = crate::bg_public_h::LEGS_IDLE as i32;
+    (*body).s.torsoAnim = crate::bg_public_h::TORSO_STAND as i32;
+    if (*body).s.weapon == crate::bg_public_h::WP_NONE as i32 {
+        (*body).s.weapon = crate::bg_public_h::WP_MACHINEGUN as i32
     }
-    if (*body).s.weapon == crate::bg_public_h::WP_GAUNTLET as libc::c_int {
-        (*body).s.torsoAnim = crate::bg_public_h::TORSO_STAND2 as libc::c_int
+    if (*body).s.weapon == crate::bg_public_h::WP_GAUNTLET as i32 {
+        (*body).s.torsoAnim = crate::bg_public_h::TORSO_STAND2 as i32
     }
-    (*body).s.event = 0 as libc::c_int;
+    (*body).s.event = 0 as i32;
     (*body).r.svFlags = (*ent).r.svFlags;
-    (*body).r.mins[0 as libc::c_int as usize] = (*ent).r.mins[0 as libc::c_int as usize];
-    (*body).r.mins[1 as libc::c_int as usize] = (*ent).r.mins[1 as libc::c_int as usize];
-    (*body).r.mins[2 as libc::c_int as usize] = (*ent).r.mins[2 as libc::c_int as usize];
-    (*body).r.maxs[0 as libc::c_int as usize] = (*ent).r.maxs[0 as libc::c_int as usize];
-    (*body).r.maxs[1 as libc::c_int as usize] = (*ent).r.maxs[1 as libc::c_int as usize];
-    (*body).r.maxs[2 as libc::c_int as usize] = (*ent).r.maxs[2 as libc::c_int as usize];
-    (*body).r.absmin[0 as libc::c_int as usize] = (*ent).r.absmin[0 as libc::c_int as usize];
-    (*body).r.absmin[1 as libc::c_int as usize] = (*ent).r.absmin[1 as libc::c_int as usize];
-    (*body).r.absmin[2 as libc::c_int as usize] = (*ent).r.absmin[2 as libc::c_int as usize];
-    (*body).r.absmax[0 as libc::c_int as usize] = (*ent).r.absmax[0 as libc::c_int as usize];
-    (*body).r.absmax[1 as libc::c_int as usize] = (*ent).r.absmax[1 as libc::c_int as usize];
-    (*body).r.absmax[2 as libc::c_int as usize] = (*ent).r.absmax[2 as libc::c_int as usize];
-    (*body).clipmask = 1 as libc::c_int | 0x10000 as libc::c_int;
-    (*body).r.contents = 0x2000000 as libc::c_int;
+    (*body).r.mins[0 as i32 as usize] = (*ent).r.mins[0 as i32 as usize];
+    (*body).r.mins[1 as i32 as usize] = (*ent).r.mins[1 as i32 as usize];
+    (*body).r.mins[2 as i32 as usize] = (*ent).r.mins[2 as i32 as usize];
+    (*body).r.maxs[0 as i32 as usize] = (*ent).r.maxs[0 as i32 as usize];
+    (*body).r.maxs[1 as i32 as usize] = (*ent).r.maxs[1 as i32 as usize];
+    (*body).r.maxs[2 as i32 as usize] = (*ent).r.maxs[2 as i32 as usize];
+    (*body).r.absmin[0 as i32 as usize] = (*ent).r.absmin[0 as i32 as usize];
+    (*body).r.absmin[1 as i32 as usize] = (*ent).r.absmin[1 as i32 as usize];
+    (*body).r.absmin[2 as i32 as usize] = (*ent).r.absmin[2 as i32 as usize];
+    (*body).r.absmax[0 as i32 as usize] = (*ent).r.absmax[0 as i32 as usize];
+    (*body).r.absmax[1 as i32 as usize] = (*ent).r.absmax[1 as i32 as usize];
+    (*body).r.absmax[2 as i32 as usize] = (*ent).r.absmax[2 as i32 as usize];
+    (*body).clipmask = 1 as i32 | 0x10000 as i32;
+    (*body).r.contents = 0x2000000 as i32;
     (*body).r.ownerNum = (*ent).r.ownerNum;
     (*body).takedamage = crate::src::qcommon::q_shared::qfalse;
-    vec[0 as libc::c_int as usize] = crate::src::game::g_main::level.intermission_origin
-        [0 as libc::c_int as usize]
-        - (*pad).r.currentOrigin[0 as libc::c_int as usize];
-    vec[1 as libc::c_int as usize] = crate::src::game::g_main::level.intermission_origin
-        [1 as libc::c_int as usize]
-        - (*pad).r.currentOrigin[1 as libc::c_int as usize];
-    vec[2 as libc::c_int as usize] = crate::src::game::g_main::level.intermission_origin
-        [2 as libc::c_int as usize]
-        - (*pad).r.currentOrigin[2 as libc::c_int as usize];
+    vec[0 as i32 as usize] = crate::src::game::g_main::level.intermission_origin
+        [0 as i32 as usize]
+        - (*pad).r.currentOrigin[0 as i32 as usize];
+    vec[1 as i32 as usize] = crate::src::game::g_main::level.intermission_origin
+        [1 as i32 as usize]
+        - (*pad).r.currentOrigin[1 as i32 as usize];
+    vec[2 as i32 as usize] = crate::src::game::g_main::level.intermission_origin
+        [2 as i32 as usize]
+        - (*pad).r.currentOrigin[2 as i32 as usize];
     crate::src::qcommon::q_math::vectoangles(
         vec.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
         (*body).s.apos.trBase.as_mut_ptr(),
     );
-    (*body).s.apos.trBase[0 as libc::c_int as usize] =
-        0 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-    (*body).s.apos.trBase[2 as libc::c_int as usize] =
-        0 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
+    (*body).s.apos.trBase[0 as i32 as usize] =
+        0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*body).s.apos.trBase[2 as i32 as usize] =
+        0 as i32 as crate::src::qcommon::q_shared::vec_t;
     crate::src::qcommon::q_math::AngleVectors(
         (*body).s.apos.trBase.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
         f.as_mut_ptr(),
         r.as_mut_ptr(),
         u.as_mut_ptr(),
     );
-    vec[0 as libc::c_int as usize] = (*pad).r.currentOrigin[0 as libc::c_int as usize]
-        + f[0 as libc::c_int as usize] * *offset.offset(0 as libc::c_int as isize);
-    vec[1 as libc::c_int as usize] = (*pad).r.currentOrigin[1 as libc::c_int as usize]
-        + f[1 as libc::c_int as usize] * *offset.offset(0 as libc::c_int as isize);
-    vec[2 as libc::c_int as usize] = (*pad).r.currentOrigin[2 as libc::c_int as usize]
-        + f[2 as libc::c_int as usize] * *offset.offset(0 as libc::c_int as isize);
-    vec[0 as libc::c_int as usize] = vec[0 as libc::c_int as usize]
-        + r[0 as libc::c_int as usize] * *offset.offset(1 as libc::c_int as isize);
-    vec[1 as libc::c_int as usize] = vec[1 as libc::c_int as usize]
-        + r[1 as libc::c_int as usize] * *offset.offset(1 as libc::c_int as isize);
-    vec[2 as libc::c_int as usize] = vec[2 as libc::c_int as usize]
-        + r[2 as libc::c_int as usize] * *offset.offset(1 as libc::c_int as isize);
-    vec[0 as libc::c_int as usize] = vec[0 as libc::c_int as usize]
-        + u[0 as libc::c_int as usize] * *offset.offset(2 as libc::c_int as isize);
-    vec[1 as libc::c_int as usize] = vec[1 as libc::c_int as usize]
-        + u[1 as libc::c_int as usize] * *offset.offset(2 as libc::c_int as isize);
-    vec[2 as libc::c_int as usize] = vec[2 as libc::c_int as usize]
-        + u[2 as libc::c_int as usize] * *offset.offset(2 as libc::c_int as isize);
+    vec[0 as i32 as usize] = (*pad).r.currentOrigin[0 as i32 as usize]
+        + f[0 as i32 as usize] * *offset.offset(0 as i32 as isize);
+    vec[1 as i32 as usize] = (*pad).r.currentOrigin[1 as i32 as usize]
+        + f[1 as i32 as usize] * *offset.offset(0 as i32 as isize);
+    vec[2 as i32 as usize] = (*pad).r.currentOrigin[2 as i32 as usize]
+        + f[2 as i32 as usize] * *offset.offset(0 as i32 as isize);
+    vec[0 as i32 as usize] = vec[0 as i32 as usize]
+        + r[0 as i32 as usize] * *offset.offset(1 as i32 as isize);
+    vec[1 as i32 as usize] = vec[1 as i32 as usize]
+        + r[1 as i32 as usize] * *offset.offset(1 as i32 as isize);
+    vec[2 as i32 as usize] = vec[2 as i32 as usize]
+        + r[2 as i32 as usize] * *offset.offset(1 as i32 as isize);
+    vec[0 as i32 as usize] = vec[0 as i32 as usize]
+        + u[0 as i32 as usize] * *offset.offset(2 as i32 as isize);
+    vec[1 as i32 as usize] = vec[1 as i32 as usize]
+        + u[1 as i32 as usize] * *offset.offset(2 as i32 as isize);
+    vec[2 as i32 as usize] = vec[2 as i32 as usize]
+        + u[2 as i32 as usize] * *offset.offset(2 as i32 as isize);
     crate::src::game::g_utils::G_SetOrigin(
         body as *mut crate::g_local_h::gentity_s,
         vec.as_mut_ptr(),
@@ -530,20 +530,20 @@ unsafe extern "C" fn SpawnModelOnVictoryPad(
 }
 
 unsafe extern "C" fn CelebrateStop(mut player: *mut crate::g_local_h::gentity_t) {
-    let mut anim: libc::c_int = 0;
-    if (*player).s.weapon == crate::bg_public_h::WP_GAUNTLET as libc::c_int {
-        anim = crate::bg_public_h::TORSO_STAND2 as libc::c_int
+    let mut anim: i32 = 0;
+    if (*player).s.weapon == crate::bg_public_h::WP_GAUNTLET as i32 {
+        anim = crate::bg_public_h::TORSO_STAND2 as i32
     } else {
-        anim = crate::bg_public_h::TORSO_STAND as libc::c_int
+        anim = crate::bg_public_h::TORSO_STAND as i32
     }
-    (*player).s.torsoAnim = (*player).s.torsoAnim & 128 as libc::c_int ^ 128 as libc::c_int | anim;
+    (*player).s.torsoAnim = (*player).s.torsoAnim & 128 as i32 ^ 128 as i32 | anim;
 }
 
 unsafe extern "C" fn CelebrateStart(mut player: *mut crate::g_local_h::gentity_t) {
-    (*player).s.torsoAnim = (*player).s.torsoAnim & 128 as libc::c_int ^ 128 as libc::c_int
-        | crate::bg_public_h::TORSO_GESTURE as libc::c_int;
+    (*player).s.torsoAnim = (*player).s.torsoAnim & 128 as i32 ^ 128 as i32
+        | crate::bg_public_h::TORSO_GESTURE as i32;
     (*player).nextthink = crate::src::game::g_main::level.time
-        + (34 as libc::c_int * 66 as libc::c_int + 50 as libc::c_int);
+        + (34 as i32 * 66 as i32 + 50 as i32);
     (*player).think =
         Some(CelebrateStop as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> ());
     /*
@@ -553,27 +553,27 @@ unsafe extern "C" fn CelebrateStart(mut player: *mut crate::g_local_h::gentity_t
     */
     crate::src::game::g_utils::G_AddEvent(
         player as *mut crate::g_local_h::gentity_s,
-        crate::bg_public_h::EV_TAUNT as libc::c_int,
-        0 as libc::c_int,
+        crate::bg_public_h::EV_TAUNT as i32,
+        0 as i32,
     );
 }
 
 static mut offsetFirst: crate::src::qcommon::q_shared::vec3_t = [
-    0 as libc::c_int as crate::src::qcommon::q_shared::vec_t,
-    0 as libc::c_int as crate::src::qcommon::q_shared::vec_t,
-    74 as libc::c_int as crate::src::qcommon::q_shared::vec_t,
+    0 as i32 as crate::src::qcommon::q_shared::vec_t,
+    0 as i32 as crate::src::qcommon::q_shared::vec_t,
+    74 as i32 as crate::src::qcommon::q_shared::vec_t,
 ];
 
 static mut offsetSecond: crate::src::qcommon::q_shared::vec3_t = [
-    -(10 as libc::c_int) as crate::src::qcommon::q_shared::vec_t,
-    60 as libc::c_int as crate::src::qcommon::q_shared::vec_t,
-    54 as libc::c_int as crate::src::qcommon::q_shared::vec_t,
+    -(10 as i32) as crate::src::qcommon::q_shared::vec_t,
+    60 as i32 as crate::src::qcommon::q_shared::vec_t,
+    54 as i32 as crate::src::qcommon::q_shared::vec_t,
 ];
 
 static mut offsetThird: crate::src::qcommon::q_shared::vec3_t = [
-    -(19 as libc::c_int) as crate::src::qcommon::q_shared::vec_t,
-    -(60 as libc::c_int) as crate::src::qcommon::q_shared::vec_t,
-    45 as libc::c_int as crate::src::qcommon::q_shared::vec_t,
+    -(19 as i32) as crate::src::qcommon::q_shared::vec_t,
+    -(60 as i32) as crate::src::qcommon::q_shared::vec_t,
+    45 as i32 as crate::src::qcommon::q_shared::vec_t,
 ];
 
 unsafe extern "C" fn PodiumPlacementThink(mut podium: *mut crate::g_local_h::gentity_t) {
@@ -582,7 +582,7 @@ unsafe extern "C" fn PodiumPlacementThink(mut podium: *mut crate::g_local_h::gen
     let mut f: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut r: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut u: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    (*podium).nextthink = crate::src::game::g_main::level.time + 100 as libc::c_int;
+    (*podium).nextthink = crate::src::game::g_main::level.time + 100 as i32;
     crate::src::qcommon::q_math::AngleVectors(
         crate::src::game::g_main::level
             .intermission_angle
@@ -591,168 +591,168 @@ unsafe extern "C" fn PodiumPlacementThink(mut podium: *mut crate::g_local_h::gen
         0 as *mut crate::src::qcommon::q_shared::vec_t,
         0 as *mut crate::src::qcommon::q_shared::vec_t,
     );
-    origin[0 as libc::c_int as usize] = crate::src::game::g_main::level.intermission_origin
-        [0 as libc::c_int as usize]
-        + vec[0 as libc::c_int as usize]
+    origin[0 as i32 as usize] = crate::src::game::g_main::level.intermission_origin
+        [0 as i32 as usize]
+        + vec[0 as i32 as usize]
             * crate::src::game::g_syscalls::trap_Cvar_VariableIntegerValue(
                 b"g_podiumDist\x00" as *const u8 as *const libc::c_char,
-            ) as libc::c_float;
-    origin[1 as libc::c_int as usize] = crate::src::game::g_main::level.intermission_origin
-        [1 as libc::c_int as usize]
-        + vec[1 as libc::c_int as usize]
+            ) as f32;
+    origin[1 as i32 as usize] = crate::src::game::g_main::level.intermission_origin
+        [1 as i32 as usize]
+        + vec[1 as i32 as usize]
             * crate::src::game::g_syscalls::trap_Cvar_VariableIntegerValue(
                 b"g_podiumDist\x00" as *const u8 as *const libc::c_char,
-            ) as libc::c_float;
-    origin[2 as libc::c_int as usize] = crate::src::game::g_main::level.intermission_origin
-        [2 as libc::c_int as usize]
-        + vec[2 as libc::c_int as usize]
+            ) as f32;
+    origin[2 as i32 as usize] = crate::src::game::g_main::level.intermission_origin
+        [2 as i32 as usize]
+        + vec[2 as i32 as usize]
             * crate::src::game::g_syscalls::trap_Cvar_VariableIntegerValue(
                 b"g_podiumDist\x00" as *const u8 as *const libc::c_char,
-            ) as libc::c_float;
-    origin[2 as libc::c_int as usize] -=
+            ) as f32;
+    origin[2 as i32 as usize] -=
         crate::src::game::g_syscalls::trap_Cvar_VariableIntegerValue(
             b"g_podiumDrop\x00" as *const u8 as *const libc::c_char,
-        ) as libc::c_float;
+        ) as f32;
     crate::src::game::g_utils::G_SetOrigin(
         podium as *mut crate::g_local_h::gentity_s,
         origin.as_mut_ptr(),
     );
     if !podium1.is_null() {
-        vec[0 as libc::c_int as usize] = crate::src::game::g_main::level.intermission_origin
-            [0 as libc::c_int as usize]
-            - (*podium).r.currentOrigin[0 as libc::c_int as usize];
-        vec[1 as libc::c_int as usize] = crate::src::game::g_main::level.intermission_origin
-            [1 as libc::c_int as usize]
-            - (*podium).r.currentOrigin[1 as libc::c_int as usize];
-        vec[2 as libc::c_int as usize] = crate::src::game::g_main::level.intermission_origin
-            [2 as libc::c_int as usize]
-            - (*podium).r.currentOrigin[2 as libc::c_int as usize];
+        vec[0 as i32 as usize] = crate::src::game::g_main::level.intermission_origin
+            [0 as i32 as usize]
+            - (*podium).r.currentOrigin[0 as i32 as usize];
+        vec[1 as i32 as usize] = crate::src::game::g_main::level.intermission_origin
+            [1 as i32 as usize]
+            - (*podium).r.currentOrigin[1 as i32 as usize];
+        vec[2 as i32 as usize] = crate::src::game::g_main::level.intermission_origin
+            [2 as i32 as usize]
+            - (*podium).r.currentOrigin[2 as i32 as usize];
         crate::src::qcommon::q_math::vectoangles(
             vec.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
             (*podium1).s.apos.trBase.as_mut_ptr(),
         );
-        (*podium1).s.apos.trBase[0 as libc::c_int as usize] =
-            0 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-        (*podium1).s.apos.trBase[2 as libc::c_int as usize] =
-            0 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
+        (*podium1).s.apos.trBase[0 as i32 as usize] =
+            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        (*podium1).s.apos.trBase[2 as i32 as usize] =
+            0 as i32 as crate::src::qcommon::q_shared::vec_t;
         crate::src::qcommon::q_math::AngleVectors(
             (*podium1).s.apos.trBase.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
             f.as_mut_ptr(),
             r.as_mut_ptr(),
             u.as_mut_ptr(),
         );
-        vec[0 as libc::c_int as usize] = (*podium).r.currentOrigin[0 as libc::c_int as usize]
-            + f[0 as libc::c_int as usize] * offsetFirst[0 as libc::c_int as usize];
-        vec[1 as libc::c_int as usize] = (*podium).r.currentOrigin[1 as libc::c_int as usize]
-            + f[1 as libc::c_int as usize] * offsetFirst[0 as libc::c_int as usize];
-        vec[2 as libc::c_int as usize] = (*podium).r.currentOrigin[2 as libc::c_int as usize]
-            + f[2 as libc::c_int as usize] * offsetFirst[0 as libc::c_int as usize];
-        vec[0 as libc::c_int as usize] = vec[0 as libc::c_int as usize]
-            + r[0 as libc::c_int as usize] * offsetFirst[1 as libc::c_int as usize];
-        vec[1 as libc::c_int as usize] = vec[1 as libc::c_int as usize]
-            + r[1 as libc::c_int as usize] * offsetFirst[1 as libc::c_int as usize];
-        vec[2 as libc::c_int as usize] = vec[2 as libc::c_int as usize]
-            + r[2 as libc::c_int as usize] * offsetFirst[1 as libc::c_int as usize];
-        vec[0 as libc::c_int as usize] = vec[0 as libc::c_int as usize]
-            + u[0 as libc::c_int as usize] * offsetFirst[2 as libc::c_int as usize];
-        vec[1 as libc::c_int as usize] = vec[1 as libc::c_int as usize]
-            + u[1 as libc::c_int as usize] * offsetFirst[2 as libc::c_int as usize];
-        vec[2 as libc::c_int as usize] = vec[2 as libc::c_int as usize]
-            + u[2 as libc::c_int as usize] * offsetFirst[2 as libc::c_int as usize];
+        vec[0 as i32 as usize] = (*podium).r.currentOrigin[0 as i32 as usize]
+            + f[0 as i32 as usize] * offsetFirst[0 as i32 as usize];
+        vec[1 as i32 as usize] = (*podium).r.currentOrigin[1 as i32 as usize]
+            + f[1 as i32 as usize] * offsetFirst[0 as i32 as usize];
+        vec[2 as i32 as usize] = (*podium).r.currentOrigin[2 as i32 as usize]
+            + f[2 as i32 as usize] * offsetFirst[0 as i32 as usize];
+        vec[0 as i32 as usize] = vec[0 as i32 as usize]
+            + r[0 as i32 as usize] * offsetFirst[1 as i32 as usize];
+        vec[1 as i32 as usize] = vec[1 as i32 as usize]
+            + r[1 as i32 as usize] * offsetFirst[1 as i32 as usize];
+        vec[2 as i32 as usize] = vec[2 as i32 as usize]
+            + r[2 as i32 as usize] * offsetFirst[1 as i32 as usize];
+        vec[0 as i32 as usize] = vec[0 as i32 as usize]
+            + u[0 as i32 as usize] * offsetFirst[2 as i32 as usize];
+        vec[1 as i32 as usize] = vec[1 as i32 as usize]
+            + u[1 as i32 as usize] * offsetFirst[2 as i32 as usize];
+        vec[2 as i32 as usize] = vec[2 as i32 as usize]
+            + u[2 as i32 as usize] * offsetFirst[2 as i32 as usize];
         crate::src::game::g_utils::G_SetOrigin(
             podium1 as *mut crate::g_local_h::gentity_s,
             vec.as_mut_ptr(),
         );
     }
     if !podium2.is_null() {
-        vec[0 as libc::c_int as usize] = crate::src::game::g_main::level.intermission_origin
-            [0 as libc::c_int as usize]
-            - (*podium).r.currentOrigin[0 as libc::c_int as usize];
-        vec[1 as libc::c_int as usize] = crate::src::game::g_main::level.intermission_origin
-            [1 as libc::c_int as usize]
-            - (*podium).r.currentOrigin[1 as libc::c_int as usize];
-        vec[2 as libc::c_int as usize] = crate::src::game::g_main::level.intermission_origin
-            [2 as libc::c_int as usize]
-            - (*podium).r.currentOrigin[2 as libc::c_int as usize];
+        vec[0 as i32 as usize] = crate::src::game::g_main::level.intermission_origin
+            [0 as i32 as usize]
+            - (*podium).r.currentOrigin[0 as i32 as usize];
+        vec[1 as i32 as usize] = crate::src::game::g_main::level.intermission_origin
+            [1 as i32 as usize]
+            - (*podium).r.currentOrigin[1 as i32 as usize];
+        vec[2 as i32 as usize] = crate::src::game::g_main::level.intermission_origin
+            [2 as i32 as usize]
+            - (*podium).r.currentOrigin[2 as i32 as usize];
         crate::src::qcommon::q_math::vectoangles(
             vec.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
             (*podium2).s.apos.trBase.as_mut_ptr(),
         );
-        (*podium2).s.apos.trBase[0 as libc::c_int as usize] =
-            0 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-        (*podium2).s.apos.trBase[2 as libc::c_int as usize] =
-            0 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
+        (*podium2).s.apos.trBase[0 as i32 as usize] =
+            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        (*podium2).s.apos.trBase[2 as i32 as usize] =
+            0 as i32 as crate::src::qcommon::q_shared::vec_t;
         crate::src::qcommon::q_math::AngleVectors(
             (*podium2).s.apos.trBase.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
             f.as_mut_ptr(),
             r.as_mut_ptr(),
             u.as_mut_ptr(),
         );
-        vec[0 as libc::c_int as usize] = (*podium).r.currentOrigin[0 as libc::c_int as usize]
-            + f[0 as libc::c_int as usize] * offsetSecond[0 as libc::c_int as usize];
-        vec[1 as libc::c_int as usize] = (*podium).r.currentOrigin[1 as libc::c_int as usize]
-            + f[1 as libc::c_int as usize] * offsetSecond[0 as libc::c_int as usize];
-        vec[2 as libc::c_int as usize] = (*podium).r.currentOrigin[2 as libc::c_int as usize]
-            + f[2 as libc::c_int as usize] * offsetSecond[0 as libc::c_int as usize];
-        vec[0 as libc::c_int as usize] = vec[0 as libc::c_int as usize]
-            + r[0 as libc::c_int as usize] * offsetSecond[1 as libc::c_int as usize];
-        vec[1 as libc::c_int as usize] = vec[1 as libc::c_int as usize]
-            + r[1 as libc::c_int as usize] * offsetSecond[1 as libc::c_int as usize];
-        vec[2 as libc::c_int as usize] = vec[2 as libc::c_int as usize]
-            + r[2 as libc::c_int as usize] * offsetSecond[1 as libc::c_int as usize];
-        vec[0 as libc::c_int as usize] = vec[0 as libc::c_int as usize]
-            + u[0 as libc::c_int as usize] * offsetSecond[2 as libc::c_int as usize];
-        vec[1 as libc::c_int as usize] = vec[1 as libc::c_int as usize]
-            + u[1 as libc::c_int as usize] * offsetSecond[2 as libc::c_int as usize];
-        vec[2 as libc::c_int as usize] = vec[2 as libc::c_int as usize]
-            + u[2 as libc::c_int as usize] * offsetSecond[2 as libc::c_int as usize];
+        vec[0 as i32 as usize] = (*podium).r.currentOrigin[0 as i32 as usize]
+            + f[0 as i32 as usize] * offsetSecond[0 as i32 as usize];
+        vec[1 as i32 as usize] = (*podium).r.currentOrigin[1 as i32 as usize]
+            + f[1 as i32 as usize] * offsetSecond[0 as i32 as usize];
+        vec[2 as i32 as usize] = (*podium).r.currentOrigin[2 as i32 as usize]
+            + f[2 as i32 as usize] * offsetSecond[0 as i32 as usize];
+        vec[0 as i32 as usize] = vec[0 as i32 as usize]
+            + r[0 as i32 as usize] * offsetSecond[1 as i32 as usize];
+        vec[1 as i32 as usize] = vec[1 as i32 as usize]
+            + r[1 as i32 as usize] * offsetSecond[1 as i32 as usize];
+        vec[2 as i32 as usize] = vec[2 as i32 as usize]
+            + r[2 as i32 as usize] * offsetSecond[1 as i32 as usize];
+        vec[0 as i32 as usize] = vec[0 as i32 as usize]
+            + u[0 as i32 as usize] * offsetSecond[2 as i32 as usize];
+        vec[1 as i32 as usize] = vec[1 as i32 as usize]
+            + u[1 as i32 as usize] * offsetSecond[2 as i32 as usize];
+        vec[2 as i32 as usize] = vec[2 as i32 as usize]
+            + u[2 as i32 as usize] * offsetSecond[2 as i32 as usize];
         crate::src::game::g_utils::G_SetOrigin(
             podium2 as *mut crate::g_local_h::gentity_s,
             vec.as_mut_ptr(),
         );
     }
     if !podium3.is_null() {
-        vec[0 as libc::c_int as usize] = crate::src::game::g_main::level.intermission_origin
-            [0 as libc::c_int as usize]
-            - (*podium).r.currentOrigin[0 as libc::c_int as usize];
-        vec[1 as libc::c_int as usize] = crate::src::game::g_main::level.intermission_origin
-            [1 as libc::c_int as usize]
-            - (*podium).r.currentOrigin[1 as libc::c_int as usize];
-        vec[2 as libc::c_int as usize] = crate::src::game::g_main::level.intermission_origin
-            [2 as libc::c_int as usize]
-            - (*podium).r.currentOrigin[2 as libc::c_int as usize];
+        vec[0 as i32 as usize] = crate::src::game::g_main::level.intermission_origin
+            [0 as i32 as usize]
+            - (*podium).r.currentOrigin[0 as i32 as usize];
+        vec[1 as i32 as usize] = crate::src::game::g_main::level.intermission_origin
+            [1 as i32 as usize]
+            - (*podium).r.currentOrigin[1 as i32 as usize];
+        vec[2 as i32 as usize] = crate::src::game::g_main::level.intermission_origin
+            [2 as i32 as usize]
+            - (*podium).r.currentOrigin[2 as i32 as usize];
         crate::src::qcommon::q_math::vectoangles(
             vec.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
             (*podium3).s.apos.trBase.as_mut_ptr(),
         );
-        (*podium3).s.apos.trBase[0 as libc::c_int as usize] =
-            0 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-        (*podium3).s.apos.trBase[2 as libc::c_int as usize] =
-            0 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
+        (*podium3).s.apos.trBase[0 as i32 as usize] =
+            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        (*podium3).s.apos.trBase[2 as i32 as usize] =
+            0 as i32 as crate::src::qcommon::q_shared::vec_t;
         crate::src::qcommon::q_math::AngleVectors(
             (*podium3).s.apos.trBase.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
             f.as_mut_ptr(),
             r.as_mut_ptr(),
             u.as_mut_ptr(),
         );
-        vec[0 as libc::c_int as usize] = (*podium).r.currentOrigin[0 as libc::c_int as usize]
-            + f[0 as libc::c_int as usize] * offsetThird[0 as libc::c_int as usize];
-        vec[1 as libc::c_int as usize] = (*podium).r.currentOrigin[1 as libc::c_int as usize]
-            + f[1 as libc::c_int as usize] * offsetThird[0 as libc::c_int as usize];
-        vec[2 as libc::c_int as usize] = (*podium).r.currentOrigin[2 as libc::c_int as usize]
-            + f[2 as libc::c_int as usize] * offsetThird[0 as libc::c_int as usize];
-        vec[0 as libc::c_int as usize] = vec[0 as libc::c_int as usize]
-            + r[0 as libc::c_int as usize] * offsetThird[1 as libc::c_int as usize];
-        vec[1 as libc::c_int as usize] = vec[1 as libc::c_int as usize]
-            + r[1 as libc::c_int as usize] * offsetThird[1 as libc::c_int as usize];
-        vec[2 as libc::c_int as usize] = vec[2 as libc::c_int as usize]
-            + r[2 as libc::c_int as usize] * offsetThird[1 as libc::c_int as usize];
-        vec[0 as libc::c_int as usize] = vec[0 as libc::c_int as usize]
-            + u[0 as libc::c_int as usize] * offsetThird[2 as libc::c_int as usize];
-        vec[1 as libc::c_int as usize] = vec[1 as libc::c_int as usize]
-            + u[1 as libc::c_int as usize] * offsetThird[2 as libc::c_int as usize];
-        vec[2 as libc::c_int as usize] = vec[2 as libc::c_int as usize]
-            + u[2 as libc::c_int as usize] * offsetThird[2 as libc::c_int as usize];
+        vec[0 as i32 as usize] = (*podium).r.currentOrigin[0 as i32 as usize]
+            + f[0 as i32 as usize] * offsetThird[0 as i32 as usize];
+        vec[1 as i32 as usize] = (*podium).r.currentOrigin[1 as i32 as usize]
+            + f[1 as i32 as usize] * offsetThird[0 as i32 as usize];
+        vec[2 as i32 as usize] = (*podium).r.currentOrigin[2 as i32 as usize]
+            + f[2 as i32 as usize] * offsetThird[0 as i32 as usize];
+        vec[0 as i32 as usize] = vec[0 as i32 as usize]
+            + r[0 as i32 as usize] * offsetThird[1 as i32 as usize];
+        vec[1 as i32 as usize] = vec[1 as i32 as usize]
+            + r[1 as i32 as usize] * offsetThird[1 as i32 as usize];
+        vec[2 as i32 as usize] = vec[2 as i32 as usize]
+            + r[2 as i32 as usize] * offsetThird[1 as i32 as usize];
+        vec[0 as i32 as usize] = vec[0 as i32 as usize]
+            + u[0 as i32 as usize] * offsetThird[2 as i32 as usize];
+        vec[1 as i32 as usize] = vec[1 as i32 as usize]
+            + u[1 as i32 as usize] * offsetThird[2 as i32 as usize];
+        vec[2 as i32 as usize] = vec[2 as i32 as usize]
+            + u[2 as i32 as usize] * offsetThird[2 as i32 as usize];
         crate::src::game::g_utils::G_SetOrigin(
             podium3 as *mut crate::g_local_h::gentity_s,
             vec.as_mut_ptr(),
@@ -769,11 +769,11 @@ unsafe extern "C" fn SpawnPodium() -> *mut crate::g_local_h::gentity_t {
         return 0 as *mut crate::g_local_h::gentity_t;
     }
     (*podium).classname = b"podium\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    (*podium).s.eType = crate::bg_public_h::ET_GENERAL as libc::c_int;
+    (*podium).s.eType = crate::bg_public_h::ET_GENERAL as i32;
     (*podium).s.number = podium.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
-        as libc::c_long as libc::c_int;
-    (*podium).clipmask = 1 as libc::c_int;
-    (*podium).r.contents = 1 as libc::c_int;
+        as libc::c_long as i32;
+    (*podium).clipmask = 1 as i32;
+    (*podium).r.contents = 1 as i32;
     (*podium).s.modelindex = crate::src::game::g_utils::G_ModelIndex(
         b"models/mapobjects/podium/podium4.md3\x00" as *const u8 as *const libc::c_char
             as *mut libc::c_char,
@@ -786,49 +786,49 @@ unsafe extern "C" fn SpawnPodium() -> *mut crate::g_local_h::gentity_t {
         0 as *mut crate::src::qcommon::q_shared::vec_t,
         0 as *mut crate::src::qcommon::q_shared::vec_t,
     );
-    origin[0 as libc::c_int as usize] = crate::src::game::g_main::level.intermission_origin
-        [0 as libc::c_int as usize]
-        + vec[0 as libc::c_int as usize]
+    origin[0 as i32 as usize] = crate::src::game::g_main::level.intermission_origin
+        [0 as i32 as usize]
+        + vec[0 as i32 as usize]
             * crate::src::game::g_syscalls::trap_Cvar_VariableIntegerValue(
                 b"g_podiumDist\x00" as *const u8 as *const libc::c_char,
-            ) as libc::c_float;
-    origin[1 as libc::c_int as usize] = crate::src::game::g_main::level.intermission_origin
-        [1 as libc::c_int as usize]
-        + vec[1 as libc::c_int as usize]
+            ) as f32;
+    origin[1 as i32 as usize] = crate::src::game::g_main::level.intermission_origin
+        [1 as i32 as usize]
+        + vec[1 as i32 as usize]
             * crate::src::game::g_syscalls::trap_Cvar_VariableIntegerValue(
                 b"g_podiumDist\x00" as *const u8 as *const libc::c_char,
-            ) as libc::c_float;
-    origin[2 as libc::c_int as usize] = crate::src::game::g_main::level.intermission_origin
-        [2 as libc::c_int as usize]
-        + vec[2 as libc::c_int as usize]
+            ) as f32;
+    origin[2 as i32 as usize] = crate::src::game::g_main::level.intermission_origin
+        [2 as i32 as usize]
+        + vec[2 as i32 as usize]
             * crate::src::game::g_syscalls::trap_Cvar_VariableIntegerValue(
                 b"g_podiumDist\x00" as *const u8 as *const libc::c_char,
-            ) as libc::c_float;
-    origin[2 as libc::c_int as usize] -=
+            ) as f32;
+    origin[2 as i32 as usize] -=
         crate::src::game::g_syscalls::trap_Cvar_VariableIntegerValue(
             b"g_podiumDrop\x00" as *const u8 as *const libc::c_char,
-        ) as libc::c_float;
+        ) as f32;
     crate::src::game::g_utils::G_SetOrigin(
         podium as *mut crate::g_local_h::gentity_s,
         origin.as_mut_ptr(),
     );
-    vec[0 as libc::c_int as usize] = crate::src::game::g_main::level.intermission_origin
-        [0 as libc::c_int as usize]
-        - (*podium).r.currentOrigin[0 as libc::c_int as usize];
-    vec[1 as libc::c_int as usize] = crate::src::game::g_main::level.intermission_origin
-        [1 as libc::c_int as usize]
-        - (*podium).r.currentOrigin[1 as libc::c_int as usize];
-    vec[2 as libc::c_int as usize] = crate::src::game::g_main::level.intermission_origin
-        [2 as libc::c_int as usize]
-        - (*podium).r.currentOrigin[2 as libc::c_int as usize];
-    (*podium).s.apos.trBase[1 as libc::c_int as usize] = crate::src::game::g_utils::vectoyaw(
+    vec[0 as i32 as usize] = crate::src::game::g_main::level.intermission_origin
+        [0 as i32 as usize]
+        - (*podium).r.currentOrigin[0 as i32 as usize];
+    vec[1 as i32 as usize] = crate::src::game::g_main::level.intermission_origin
+        [1 as i32 as usize]
+        - (*podium).r.currentOrigin[1 as i32 as usize];
+    vec[2 as i32 as usize] = crate::src::game::g_main::level.intermission_origin
+        [2 as i32 as usize]
+        - (*podium).r.currentOrigin[2 as i32 as usize];
+    (*podium).s.apos.trBase[1 as i32 as usize] = crate::src::game::g_utils::vectoyaw(
         vec.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
     );
     crate::src::game::g_syscalls::trap_LinkEntity(podium as *mut crate::g_local_h::gentity_s);
     (*podium).think = Some(
         PodiumPlacementThink as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
     );
-    (*podium).nextthink = crate::src::game::g_main::level.time + 100 as libc::c_int;
+    (*podium).nextthink = crate::src::game::g_main::level.time + 100 as i32;
     return podium;
 }
 /*
@@ -852,17 +852,17 @@ pub unsafe extern "C" fn SpawnModelsOnVictoryPads() {
             *crate::src::game::g_main::level
                 .sortedClients
                 .as_mut_ptr()
-                .offset(0 as libc::c_int as isize) as isize,
+                .offset(0 as i32 as isize) as isize,
         ),
         (*crate::src::game::g_main::level.clients.offset(
-            crate::src::game::g_main::level.sortedClients[0 as libc::c_int as usize] as isize,
+            crate::src::game::g_main::level.sortedClients[0 as i32 as usize] as isize,
         ))
         .ps
-        .persistant[crate::bg_public_h::PERS_RANK as libc::c_int as usize]
-            & !(0x4000 as libc::c_int),
+        .persistant[crate::bg_public_h::PERS_RANK as i32 as usize]
+            & !(0x4000 as i32),
     );
     if !player.is_null() {
-        (*player).nextthink = crate::src::game::g_main::level.time + 2000 as libc::c_int;
+        (*player).nextthink = crate::src::game::g_main::level.time + 2000 as i32;
         (*player).think =
             Some(CelebrateStart as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> ());
         podium1 = player
@@ -874,19 +874,19 @@ pub unsafe extern "C" fn SpawnModelsOnVictoryPads() {
             *crate::src::game::g_main::level
                 .sortedClients
                 .as_mut_ptr()
-                .offset(1 as libc::c_int as isize) as isize,
+                .offset(1 as i32 as isize) as isize,
         ),
         (*crate::src::game::g_main::level.clients.offset(
-            crate::src::game::g_main::level.sortedClients[1 as libc::c_int as usize] as isize,
+            crate::src::game::g_main::level.sortedClients[1 as i32 as usize] as isize,
         ))
         .ps
-        .persistant[crate::bg_public_h::PERS_RANK as libc::c_int as usize]
-            & !(0x4000 as libc::c_int),
+        .persistant[crate::bg_public_h::PERS_RANK as i32 as usize]
+            & !(0x4000 as i32),
     );
     if !player.is_null() {
         podium2 = player
     }
-    if crate::src::game::g_main::level.numNonSpectatorClients > 2 as libc::c_int {
+    if crate::src::game::g_main::level.numNonSpectatorClients > 2 as i32 {
         player = SpawnModelOnVictoryPad(
             podium,
             offsetThird.as_mut_ptr(),
@@ -894,14 +894,14 @@ pub unsafe extern "C" fn SpawnModelsOnVictoryPads() {
                 *crate::src::game::g_main::level
                     .sortedClients
                     .as_mut_ptr()
-                    .offset(2 as libc::c_int as isize) as isize,
+                    .offset(2 as i32 as isize) as isize,
             ),
             (*crate::src::game::g_main::level.clients.offset(
-                crate::src::game::g_main::level.sortedClients[2 as libc::c_int as usize] as isize,
+                crate::src::game::g_main::level.sortedClients[2 as i32 as usize] as isize,
             ))
             .ps
-            .persistant[crate::bg_public_h::PERS_RANK as libc::c_int as usize]
-                & !(0x4000 as libc::c_int),
+            .persistant[crate::bg_public_h::PERS_RANK as i32 as usize]
+                & !(0x4000 as i32),
         );
         if !player.is_null() {
             podium3 = player
@@ -1147,7 +1147,7 @@ Svcmd_AbortPodium_f
 
 pub unsafe extern "C" fn Svcmd_AbortPodium_f() {
     if crate::src::game::g_main::g_gametype.integer
-        != crate::bg_public_h::GT_SINGLE_PLAYER as libc::c_int
+        != crate::bg_public_h::GT_SINGLE_PLAYER as i32
     {
         return;
     }

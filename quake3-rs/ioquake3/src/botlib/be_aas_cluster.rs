@@ -102,7 +102,7 @@ extern "C" {
 // do not flood through area faces, only use reachabilities
 #[no_mangle]
 
-pub static mut nofaceflood: libc::c_int = crate::src::qcommon::q_shared::qtrue as libc::c_int;
+pub static mut nofaceflood: i32 = crate::src::qcommon::q_shared::qtrue as i32;
 //===========================================================================
 //
 // Parameter:				-
@@ -112,13 +112,13 @@ pub static mut nofaceflood: libc::c_int = crate::src::qcommon::q_shared::qtrue a
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_RemoveClusterAreas() {
-    let mut i: libc::c_int = 0;
-    i = 1 as libc::c_int;
+    let mut i: i32 = 0;
+    i = 1 as i32;
     while i < crate::src::botlib::be_aas_main::aasworld.numareas {
         (*crate::src::botlib::be_aas_main::aasworld
             .areasettings
             .offset(i as isize))
-        .cluster = 0 as libc::c_int;
+        .cluster = 0 as i32;
         i += 1
     }
     //end for
@@ -132,9 +132,9 @@ pub unsafe extern "C" fn AAS_RemoveClusterAreas() {
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_ClearCluster(mut clusternum: libc::c_int) {
-    let mut i: libc::c_int = 0;
-    i = 1 as libc::c_int;
+pub unsafe extern "C" fn AAS_ClearCluster(mut clusternum: i32) {
+    let mut i: i32 = 0;
+    i = 1 as i32;
     while i < crate::src::botlib::be_aas_main::aasworld.numareas {
         if (*crate::src::botlib::be_aas_main::aasworld
             .areasettings
@@ -145,7 +145,7 @@ pub unsafe extern "C" fn AAS_ClearCluster(mut clusternum: libc::c_int) {
             (*crate::src::botlib::be_aas_main::aasworld
                 .areasettings
                 .offset(i as isize))
-            .cluster = 0 as libc::c_int
+            .cluster = 0 as i32
         }
         i += 1
         //end if
@@ -161,9 +161,9 @@ pub unsafe extern "C" fn AAS_ClearCluster(mut clusternum: libc::c_int) {
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_RemovePortalsClusterReference(mut clusternum: libc::c_int) {
-    let mut portalnum: libc::c_int = 0; //end if
-    portalnum = 1 as libc::c_int;
+pub unsafe extern "C" fn AAS_RemovePortalsClusterReference(mut clusternum: i32) {
+    let mut portalnum: i32 = 0; //end if
+    portalnum = 1 as i32;
     while portalnum < crate::src::botlib::be_aas_main::aasworld.numportals {
         if (*crate::src::botlib::be_aas_main::aasworld
             .portals
@@ -174,7 +174,7 @@ pub unsafe extern "C" fn AAS_RemovePortalsClusterReference(mut clusternum: libc:
             (*crate::src::botlib::be_aas_main::aasworld
                 .portals
                 .offset(portalnum as isize))
-            .frontcluster = 0 as libc::c_int
+            .frontcluster = 0 as i32
         }
         if (*crate::src::botlib::be_aas_main::aasworld
             .portals
@@ -185,7 +185,7 @@ pub unsafe extern "C" fn AAS_RemovePortalsClusterReference(mut clusternum: libc:
             (*crate::src::botlib::be_aas_main::aasworld
                 .portals
                 .offset(portalnum as isize))
-            .backcluster = 0 as libc::c_int
+            .backcluster = 0 as i32
         }
         portalnum += 1
         //end if
@@ -202,15 +202,15 @@ pub unsafe extern "C" fn AAS_RemovePortalsClusterReference(mut clusternum: libc:
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_UpdatePortal(
-    mut areanum: libc::c_int,
-    mut clusternum: libc::c_int,
-) -> libc::c_int {
-    let mut portalnum: libc::c_int = 0;
+    mut areanum: i32,
+    mut clusternum: i32,
+) -> i32 {
+    let mut portalnum: i32 = 0;
     let mut portal: *mut crate::aasfile_h::aas_portal_t = 0 as *mut crate::aasfile_h::aas_portal_t;
     let mut cluster: *mut crate::aasfile_h::aas_cluster_t =
         0 as *mut crate::aasfile_h::aas_cluster_t;
     //find the portal of the area
-    portalnum = 1 as libc::c_int; //end for
+    portalnum = 1 as i32; //end for
     while portalnum < crate::src::botlib::be_aas_main::aasworld.numportals {
         if (*crate::src::botlib::be_aas_main::aasworld
             .portals
@@ -228,7 +228,7 @@ pub unsafe extern "C" fn AAS_UpdatePortal(
             b"no portal of area %d\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             areanum,
         ); //end if
-        return crate::src::qcommon::q_shared::qtrue as libc::c_int;
+        return crate::src::qcommon::q_shared::qtrue as i32;
     }
     //
     portal = &mut *crate::src::botlib::be_aas_main::aasworld
@@ -236,10 +236,10 @@ pub unsafe extern "C" fn AAS_UpdatePortal(
         .offset(portalnum as isize) as *mut crate::aasfile_h::aas_portal_t;
     //if the portal is already fully updated
     if (*portal).frontcluster == clusternum {
-        return crate::src::qcommon::q_shared::qtrue as libc::c_int;
+        return crate::src::qcommon::q_shared::qtrue as i32;
     }
     if (*portal).backcluster == clusternum {
-        return crate::src::qcommon::q_shared::qtrue as libc::c_int;
+        return crate::src::qcommon::q_shared::qtrue as i32;
     }
     //if the portal has no front cluster yet
     if (*portal).frontcluster == 0 {
@@ -255,20 +255,20 @@ pub unsafe extern "C" fn AAS_UpdatePortal(
         (*crate::src::botlib::be_aas_main::aasworld
             .areasettings
             .offset(areanum as isize))
-        .contents &= !(8 as libc::c_int); //end if
+        .contents &= !(8 as i32); //end if
         crate::src::botlib::l_log::Log_Write(
             b"portal area %d is separating more than two clusters\r\n\x00" as *const u8
                 as *const libc::c_char as *mut libc::c_char,
             areanum,
         );
-        return crate::src::qcommon::q_shared::qfalse as libc::c_int;
+        return crate::src::qcommon::q_shared::qfalse as i32;
     }
-    if crate::src::botlib::be_aas_main::aasworld.portalindexsize >= 65536 as libc::c_int {
+    if crate::src::botlib::be_aas_main::aasworld.portalindexsize >= 65536 as i32 {
         crate::src::botlib::be_aas_main::AAS_Error(
             b"AAS_MAX_PORTALINDEXSIZE\n\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
         );
-        return crate::src::qcommon::q_shared::qtrue as libc::c_int;
+        return crate::src::qcommon::q_shared::qtrue as i32;
     }
     //set the area cluster number to the negative portal number
     (*crate::src::botlib::be_aas_main::aasworld
@@ -284,7 +284,7 @@ pub unsafe extern "C" fn AAS_UpdatePortal(
         .offset(((*cluster).firstportal + (*cluster).numportals) as isize) = portalnum;
     crate::src::botlib::be_aas_main::aasworld.portalindexsize += 1;
     (*cluster).numportals += 1;
-    return crate::src::qcommon::q_shared::qtrue as libc::c_int;
+    return crate::src::qcommon::q_shared::qtrue as i32;
 }
 //end of the function AAS_UpdatePortal
 //===========================================================================
@@ -296,28 +296,28 @@ pub unsafe extern "C" fn AAS_UpdatePortal(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_FloodClusterAreas_r(
-    mut areanum: libc::c_int,
-    mut clusternum: libc::c_int,
-) -> libc::c_int {
+    mut areanum: i32,
+    mut clusternum: i32,
+) -> i32 {
     let mut area: *mut crate::aasfile_h::aas_area_t = 0 as *mut crate::aasfile_h::aas_area_t;
     let mut face: *mut crate::aasfile_h::aas_face_t = 0 as *mut crate::aasfile_h::aas_face_t;
-    let mut facenum: libc::c_int = 0;
-    let mut i: libc::c_int = 0;
+    let mut facenum: i32 = 0;
+    let mut i: i32 = 0;
     //
-    if areanum <= 0 as libc::c_int || areanum >= crate::src::botlib::be_aas_main::aasworld.numareas
+    if areanum <= 0 as i32 || areanum >= crate::src::botlib::be_aas_main::aasworld.numareas
     {
         crate::src::botlib::be_aas_main::AAS_Error(
             b"AAS_FloodClusterAreas_r: areanum out of range\n\x00" as *const u8
                 as *const libc::c_char as *mut libc::c_char,
         ); //end if
-        return crate::src::qcommon::q_shared::qfalse as libc::c_int;
+        return crate::src::qcommon::q_shared::qfalse as i32;
     }
     //if the area is already part of a cluster
     if (*crate::src::botlib::be_aas_main::aasworld
         .areasettings
         .offset(areanum as isize))
     .cluster
-        > 0 as libc::c_int
+        > 0 as i32
     {
         if (*crate::src::botlib::be_aas_main::aasworld
             .areasettings
@@ -325,7 +325,7 @@ pub unsafe extern "C" fn AAS_FloodClusterAreas_r(
         .cluster
             == clusternum
         {
-            return crate::src::qcommon::q_shared::qtrue as libc::c_int;
+            return crate::src::qcommon::q_shared::qtrue as i32;
         } //end if
           //
           //there's a reachability going from one cluster to another only in one direction
@@ -340,14 +340,14 @@ pub unsafe extern "C" fn AAS_FloodClusterAreas_r(
             .cluster,
             areanum,
         );
-        return crate::src::qcommon::q_shared::qfalse as libc::c_int;
+        return crate::src::qcommon::q_shared::qfalse as i32;
     }
     //don't add the cluster portal areas to the clusters
     if (*crate::src::botlib::be_aas_main::aasworld
         .areasettings
         .offset(areanum as isize))
     .contents
-        & 8 as libc::c_int
+        & 8 as i32
         != 0
     {
         return AAS_UpdatePortal(areanum, clusternum);
@@ -375,7 +375,7 @@ pub unsafe extern "C" fn AAS_FloodClusterAreas_r(
         .offset(areanum as isize) as *mut crate::aasfile_h::aas_area_t;
     //use area faces to flood into adjacent areas
     if nofaceflood == 0 {
-        i = 0 as libc::c_int; //end if
+        i = 0 as i32; //end if
         while i < (*area).numfaces {
             facenum = ::libc::abs(
                 *crate::src::botlib::be_aas_main::aasworld
@@ -389,12 +389,12 @@ pub unsafe extern "C" fn AAS_FloodClusterAreas_r(
                 //end else
                 if (*face).backarea != 0 {
                     if AAS_FloodClusterAreas_r((*face).backarea, clusternum) == 0 {
-                        return crate::src::qcommon::q_shared::qfalse as libc::c_int;
+                        return crate::src::qcommon::q_shared::qfalse as i32;
                     }
                 }
             } else if (*face).frontarea != 0 {
                 if AAS_FloodClusterAreas_r((*face).frontarea, clusternum) == 0 {
-                    return crate::src::qcommon::q_shared::qfalse as libc::c_int;
+                    return crate::src::qcommon::q_shared::qfalse as i32;
                 }
             } //end if
             i += 1
@@ -402,7 +402,7 @@ pub unsafe extern "C" fn AAS_FloodClusterAreas_r(
         //end for
     }
     //use the reachabilities to flood into other areas
-    i = 0 as libc::c_int; //end for
+    i = 0 as i32; //end for
     while i
         < (*crate::src::botlib::be_aas_main::aasworld
             .areasettings
@@ -435,12 +435,12 @@ pub unsafe extern "C" fn AAS_FloodClusterAreas_r(
                 clusternum,
             ) == 0
             {
-                return crate::src::qcommon::q_shared::qfalse as libc::c_int;
+                return crate::src::qcommon::q_shared::qfalse as i32;
             }
         } //end if
         i += 1
     }
-    return crate::src::qcommon::q_shared::qtrue as libc::c_int;
+    return crate::src::qcommon::q_shared::qtrue as i32;
 }
 //end of the function AAS_FloodClusterAreas_r
 //===========================================================================
@@ -453,12 +453,12 @@ pub unsafe extern "C" fn AAS_FloodClusterAreas_r(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_FloodClusterAreasUsingReachabilities(
-    mut clusternum: libc::c_int,
-) -> libc::c_int {
-    let mut i: libc::c_int = 0; //end for
-    let mut j: libc::c_int = 0;
-    let mut areanum: libc::c_int = 0;
-    i = 1 as libc::c_int;
+    mut clusternum: i32,
+) -> i32 {
+    let mut i: i32 = 0; //end for
+    let mut j: i32 = 0;
+    let mut areanum: i32 = 0;
+    i = 1 as i32;
     while i < crate::src::botlib::be_aas_main::aasworld.numareas {
         //if this area already has a cluster set
         if !((*crate::src::botlib::be_aas_main::aasworld
@@ -472,11 +472,11 @@ pub unsafe extern "C" fn AAS_FloodClusterAreasUsingReachabilities(
                 .areasettings
                 .offset(i as isize))
             .contents
-                & 8 as libc::c_int
+                & 8 as i32
                 != 0)
             {
                 //loop over the reachable areas from this area
-                j = 0 as libc::c_int;
+                j = 0 as i32;
                 while j
                     < (*crate::src::botlib::be_aas_main::aasworld
                         .areasettings
@@ -500,7 +500,7 @@ pub unsafe extern "C" fn AAS_FloodClusterAreasUsingReachabilities(
                         .areasettings
                         .offset(areanum as isize))
                     .contents
-                        & 8 as libc::c_int
+                        & 8 as i32
                         != 0)
                     {
                         //if this area has a cluster set
@@ -511,9 +511,9 @@ pub unsafe extern "C" fn AAS_FloodClusterAreasUsingReachabilities(
                             != 0
                         {
                             if AAS_FloodClusterAreas_r(i, clusternum) == 0 {
-                                return crate::src::qcommon::q_shared::qfalse as libc::c_int;
+                                return crate::src::qcommon::q_shared::qfalse as i32;
                             }
-                            i = 0 as libc::c_int;
+                            i = 0 as i32;
                             break;
                         }
                     }
@@ -524,7 +524,7 @@ pub unsafe extern "C" fn AAS_FloodClusterAreasUsingReachabilities(
         i += 1
         //end for
     }
-    return crate::src::qcommon::q_shared::qtrue as libc::c_int;
+    return crate::src::qcommon::q_shared::qtrue as i32;
 }
 //end of the function AAS_FloodClusterAreasUsingReachabilities
 //===========================================================================
@@ -535,16 +535,16 @@ pub unsafe extern "C" fn AAS_FloodClusterAreasUsingReachabilities(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_NumberClusterPortals(mut clusternum: libc::c_int) {
-    let mut i: libc::c_int = 0;
-    let mut portalnum: libc::c_int = 0;
+pub unsafe extern "C" fn AAS_NumberClusterPortals(mut clusternum: i32) {
+    let mut i: i32 = 0;
+    let mut portalnum: i32 = 0;
     let mut cluster: *mut crate::aasfile_h::aas_cluster_t =
         0 as *mut crate::aasfile_h::aas_cluster_t;
     let mut portal: *mut crate::aasfile_h::aas_portal_t = 0 as *mut crate::aasfile_h::aas_portal_t;
     cluster = &mut *crate::src::botlib::be_aas_main::aasworld
         .clusters
         .offset(clusternum as isize) as *mut crate::aasfile_h::aas_cluster_t;
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < (*cluster).numportals {
         portalnum = *crate::src::botlib::be_aas_main::aasworld
             .portalindex
@@ -556,11 +556,11 @@ pub unsafe extern "C" fn AAS_NumberClusterPortals(mut clusternum: libc::c_int) {
             //end else
             let fresh1 = (*cluster).numareas; //end if
             (*cluster).numareas = (*cluster).numareas + 1;
-            (*portal).clusterareanum[0 as libc::c_int as usize] = fresh1
+            (*portal).clusterareanum[0 as i32 as usize] = fresh1
         } else {
             let fresh2 = (*cluster).numareas;
             (*cluster).numareas = (*cluster).numareas + 1;
-            (*portal).clusterareanum[1 as libc::c_int as usize] = fresh2
+            (*portal).clusterareanum[1 as i32 as usize] = fresh2
         }
         i += 1
     }
@@ -575,22 +575,22 @@ pub unsafe extern "C" fn AAS_NumberClusterPortals(mut clusternum: libc::c_int) {
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_NumberClusterAreas(mut clusternum: libc::c_int) {
-    let mut i: libc::c_int = 0;
-    let mut portalnum: libc::c_int = 0;
+pub unsafe extern "C" fn AAS_NumberClusterAreas(mut clusternum: i32) {
+    let mut i: i32 = 0;
+    let mut portalnum: i32 = 0;
     let mut cluster: *mut crate::aasfile_h::aas_cluster_t =
         0 as *mut crate::aasfile_h::aas_cluster_t;
     let mut portal: *mut crate::aasfile_h::aas_portal_t = 0 as *mut crate::aasfile_h::aas_portal_t;
     (*crate::src::botlib::be_aas_main::aasworld
         .clusters
         .offset(clusternum as isize))
-    .numareas = 0 as libc::c_int;
+    .numareas = 0 as i32;
     (*crate::src::botlib::be_aas_main::aasworld
         .clusters
         .offset(clusternum as isize))
-    .numreachabilityareas = 0 as libc::c_int;
+    .numreachabilityareas = 0 as i32;
     //number all areas in this cluster WITH reachabilities
-    i = 1 as libc::c_int; //end for
+    i = 1 as i32; //end for
     while i < crate::src::botlib::be_aas_main::aasworld.numareas {
         //
         if !((*crate::src::botlib::be_aas_main::aasworld
@@ -628,7 +628,7 @@ pub unsafe extern "C" fn AAS_NumberClusterAreas(mut clusternum: libc::c_int) {
     cluster = &mut *crate::src::botlib::be_aas_main::aasworld
         .clusters
         .offset(clusternum as isize) as *mut crate::aasfile_h::aas_cluster_t; //end for
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < (*cluster).numportals {
         portalnum = *crate::src::botlib::be_aas_main::aasworld
             .portalindex
@@ -641,7 +641,7 @@ pub unsafe extern "C" fn AAS_NumberClusterAreas(mut clusternum: libc::c_int) {
                 //end else
                 let fresh5 = (*cluster).numareas; //end if
                 (*cluster).numareas = (*cluster).numareas + 1;
-                (*portal).clusterareanum[0 as libc::c_int as usize] = fresh5;
+                (*portal).clusterareanum[0 as i32 as usize] = fresh5;
                 let ref mut fresh6 = (*crate::src::botlib::be_aas_main::aasworld
                     .clusters
                     .offset(clusternum as isize))
@@ -650,7 +650,7 @@ pub unsafe extern "C" fn AAS_NumberClusterAreas(mut clusternum: libc::c_int) {
             } else {
                 let fresh7 = (*cluster).numareas;
                 (*cluster).numareas = (*cluster).numareas + 1;
-                (*portal).clusterareanum[1 as libc::c_int as usize] = fresh7;
+                (*portal).clusterareanum[1 as i32 as usize] = fresh7;
                 let ref mut fresh8 = (*crate::src::botlib::be_aas_main::aasworld
                     .clusters
                     .offset(clusternum as isize))
@@ -661,7 +661,7 @@ pub unsafe extern "C" fn AAS_NumberClusterAreas(mut clusternum: libc::c_int) {
         i += 1
     }
     //number all areas in this cluster WITHOUT reachabilities
-    i = 1 as libc::c_int; //end for
+    i = 1 as i32; //end for
     while i < crate::src::botlib::be_aas_main::aasworld.numareas {
         //
         if !((*crate::src::botlib::be_aas_main::aasworld
@@ -694,7 +694,7 @@ pub unsafe extern "C" fn AAS_NumberClusterAreas(mut clusternum: libc::c_int) {
     cluster = &mut *crate::src::botlib::be_aas_main::aasworld
         .clusters
         .offset(clusternum as isize) as *mut crate::aasfile_h::aas_cluster_t;
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < (*cluster).numportals {
         portalnum = *crate::src::botlib::be_aas_main::aasworld
             .portalindex
@@ -707,11 +707,11 @@ pub unsafe extern "C" fn AAS_NumberClusterAreas(mut clusternum: libc::c_int) {
                 //end else
                 let fresh10 = (*cluster).numareas; //end if
                 (*cluster).numareas = (*cluster).numareas + 1;
-                (*portal).clusterareanum[0 as libc::c_int as usize] = fresh10
+                (*portal).clusterareanum[0 as i32 as usize] = fresh10
             } else {
                 let fresh11 = (*cluster).numareas;
                 (*cluster).numareas = (*cluster).numareas + 1;
-                (*portal).clusterareanum[1 as libc::c_int as usize] = fresh11
+                (*portal).clusterareanum[1 as i32 as usize] = fresh11
             }
         }
         i += 1
@@ -727,14 +727,14 @@ pub unsafe extern "C" fn AAS_NumberClusterAreas(mut clusternum: libc::c_int) {
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_FindClusters() -> libc::c_int {
-    let mut i: libc::c_int = 0;
+pub unsafe extern "C" fn AAS_FindClusters() -> i32 {
+    let mut i: i32 = 0;
     let mut cluster: *mut crate::aasfile_h::aas_cluster_t =
         0 as *mut crate::aasfile_h::aas_cluster_t;
     AAS_RemoveClusterAreas();
     let mut current_block_16: u64;
     //
-    i = 1 as libc::c_int; //end for
+    i = 1 as i32; //end for
     while i < crate::src::botlib::be_aas_main::aasworld.numareas {
         //if the area is already part of a cluster
         if !((*crate::src::botlib::be_aas_main::aasworld
@@ -767,40 +767,40 @@ pub unsafe extern "C" fn AAS_FindClusters() -> libc::c_int {
                         .areasettings
                         .offset(i as isize))
                     .contents
-                        & 8 as libc::c_int
+                        & 8 as i32
                         != 0)
                     {
                         if crate::src::botlib::be_aas_main::aasworld.numclusters
-                            >= 65536 as libc::c_int
+                            >= 65536 as i32
                         {
                             crate::src::botlib::be_aas_main::AAS_Error(
                                 b"AAS_MAX_CLUSTERS\n\x00" as *const u8 as *const libc::c_char
                                     as *mut libc::c_char,
                             ); //end if
-                            return crate::src::qcommon::q_shared::qfalse as libc::c_int;
+                            return crate::src::qcommon::q_shared::qfalse as i32;
                         }
                         cluster = &mut *crate::src::botlib::be_aas_main::aasworld
                             .clusters
                             .offset(crate::src::botlib::be_aas_main::aasworld.numclusters as isize)
                             as *mut crate::aasfile_h::aas_cluster_t;
-                        (*cluster).numareas = 0 as libc::c_int;
-                        (*cluster).numreachabilityareas = 0 as libc::c_int;
+                        (*cluster).numareas = 0 as i32;
+                        (*cluster).numreachabilityareas = 0 as i32;
                         (*cluster).firstportal =
                             crate::src::botlib::be_aas_main::aasworld.portalindexsize;
-                        (*cluster).numportals = 0 as libc::c_int;
+                        (*cluster).numportals = 0 as i32;
                         //flood the areas in this cluster
                         if AAS_FloodClusterAreas_r(
                             i,
                             crate::src::botlib::be_aas_main::aasworld.numclusters,
                         ) == 0
                         {
-                            return crate::src::qcommon::q_shared::qfalse as libc::c_int;
+                            return crate::src::qcommon::q_shared::qfalse as i32;
                         }
                         if AAS_FloodClusterAreasUsingReachabilities(
                             crate::src::botlib::be_aas_main::aasworld.numclusters,
                         ) == 0
                         {
-                            return crate::src::qcommon::q_shared::qfalse as libc::c_int;
+                            return crate::src::qcommon::q_shared::qfalse as i32;
                         }
                         //number the cluster areas
                         //AAS_NumberClusterPortals(aasworld.numclusters);
@@ -815,7 +815,7 @@ pub unsafe extern "C" fn AAS_FindClusters() -> libc::c_int {
         }
         i += 1
     }
-    return crate::src::qcommon::q_shared::qtrue as libc::c_int;
+    return crate::src::qcommon::q_shared::qtrue as i32;
 }
 //end of the function AAS_FindClusters
 //===========================================================================
@@ -827,19 +827,19 @@ pub unsafe extern "C" fn AAS_FindClusters() -> libc::c_int {
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_CreatePortals() {
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     let mut portal: *mut crate::aasfile_h::aas_portal_t = 0 as *mut crate::aasfile_h::aas_portal_t;
-    i = 1 as libc::c_int;
+    i = 1 as i32;
     while i < crate::src::botlib::be_aas_main::aasworld.numareas {
         //if the area is a cluster portal
         if (*crate::src::botlib::be_aas_main::aasworld
             .areasettings
             .offset(i as isize))
         .contents
-            & 8 as libc::c_int
+            & 8 as i32
             != 0
         {
-            if crate::src::botlib::be_aas_main::aasworld.numportals >= 65536 as libc::c_int {
+            if crate::src::botlib::be_aas_main::aasworld.numportals >= 65536 as i32 {
                 crate::src::botlib::be_aas_main::AAS_Error(
                     b"AAS_MAX_PORTALS\n\x00" as *const u8 as *const libc::c_char
                         as *mut libc::c_char,
@@ -851,8 +851,8 @@ pub unsafe extern "C" fn AAS_CreatePortals() {
                 .offset(crate::src::botlib::be_aas_main::aasworld.numportals as isize)
                 as *mut crate::aasfile_h::aas_portal_t;
             (*portal).areanum = i;
-            (*portal).frontcluster = 0 as libc::c_int;
-            (*portal).backcluster = 0 as libc::c_int;
+            (*portal).frontcluster = 0 as i32;
+            (*portal).backcluster = 0 as i32;
             crate::src::botlib::be_aas_main::aasworld.numportals += 1
         }
         i += 1
@@ -1089,23 +1089,23 @@ qboolean AAS_CanMergeFaces(int *facenums, int numfaces, int planenum)
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_ConnectedAreas_r(
-    mut areanums: *mut libc::c_int,
-    mut numareas: libc::c_int,
-    mut connectedareas: *mut libc::c_int,
-    mut curarea: libc::c_int,
+    mut areanums: *mut i32,
+    mut numareas: i32,
+    mut connectedareas: *mut i32,
+    mut curarea: i32,
 ) {
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
-    let mut otherareanum: libc::c_int = 0;
-    let mut facenum: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
+    let mut otherareanum: i32 = 0;
+    let mut facenum: i32 = 0;
     let mut area: *mut crate::aasfile_h::aas_area_t = 0 as *mut crate::aasfile_h::aas_area_t;
     let mut face: *mut crate::aasfile_h::aas_face_t = 0 as *mut crate::aasfile_h::aas_face_t;
-    *connectedareas.offset(curarea as isize) = crate::src::qcommon::q_shared::qtrue as libc::c_int;
+    *connectedareas.offset(curarea as isize) = crate::src::qcommon::q_shared::qtrue as i32;
     area = &mut *crate::src::botlib::be_aas_main::aasworld
         .areas
         .offset(*areanums.offset(curarea as isize) as isize)
         as *mut crate::aasfile_h::aas_area_t;
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < (*area).numfaces {
         facenum = ::libc::abs(
             *crate::src::botlib::be_aas_main::aasworld
@@ -1116,7 +1116,7 @@ pub unsafe extern "C" fn AAS_ConnectedAreas_r(
             .faces
             .offset(facenum as isize) as *mut crate::aasfile_h::aas_face_t;
         //if the face is solid
-        if !((*face).faceflags & 1 as libc::c_int != 0) {
+        if !((*face).faceflags & 1 as i32 != 0) {
             //get the area at the other side of the face
             if (*face).frontarea != *areanums.offset(curarea as isize) {
                 otherareanum = (*face).frontarea
@@ -1124,7 +1124,7 @@ pub unsafe extern "C" fn AAS_ConnectedAreas_r(
                 otherareanum = (*face).backarea
             }
             //check if the face is leading to one of the other areas
-            j = 0 as libc::c_int; //end for
+            j = 0 as i32; //end for
             while j < numareas {
                 if *areanums.offset(j as isize) == otherareanum {
                     break;
@@ -1154,29 +1154,29 @@ pub unsafe extern "C" fn AAS_ConnectedAreas_r(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_ConnectedAreas(
-    mut areanums: *mut libc::c_int,
-    mut numareas: libc::c_int,
+    mut areanums: *mut i32,
+    mut numareas: i32,
 ) -> crate::src::qcommon::q_shared::qboolean {
-    let mut connectedareas: [libc::c_int; 1024] = [0; 1024]; //end for
-    let mut i: libc::c_int = 0;
+    let mut connectedareas: [i32; 1024] = [0; 1024]; //end for
+    let mut i: i32 = 0;
     crate::stdlib::memset(
         connectedareas.as_mut_ptr() as *mut libc::c_void,
-        0 as libc::c_int,
-        ::std::mem::size_of::<[libc::c_int; 1024]>() as libc::c_ulong,
+        0 as i32,
+        ::std::mem::size_of::<[i32; 1024]>() as libc::c_ulong,
     );
-    if numareas < 1 as libc::c_int {
+    if numareas < 1 as i32 {
         return crate::src::qcommon::q_shared::qfalse;
     }
-    if numareas == 1 as libc::c_int {
+    if numareas == 1 as i32 {
         return crate::src::qcommon::q_shared::qtrue;
     }
     AAS_ConnectedAreas_r(
         areanums,
         numareas,
         connectedareas.as_mut_ptr(),
-        0 as libc::c_int,
+        0 as i32,
     );
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < numareas {
         if connectedareas[i as usize] == 0 {
             return crate::src::qcommon::q_shared::qfalse;
@@ -1196,16 +1196,16 @@ pub unsafe extern "C" fn AAS_ConnectedAreas(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_GetAdjacentAreasWithLessPresenceTypes_r(
-    mut areanums: *mut libc::c_int,
-    mut numareas: libc::c_int,
-    mut curareanum: libc::c_int,
-) -> libc::c_int {
-    let mut i: libc::c_int = 0; //end for
-    let mut j: libc::c_int = 0;
-    let mut presencetype: libc::c_int = 0;
-    let mut otherpresencetype: libc::c_int = 0;
-    let mut otherareanum: libc::c_int = 0;
-    let mut facenum: libc::c_int = 0;
+    mut areanums: *mut i32,
+    mut numareas: i32,
+    mut curareanum: i32,
+) -> i32 {
+    let mut i: i32 = 0; //end for
+    let mut j: i32 = 0;
+    let mut presencetype: i32 = 0;
+    let mut otherpresencetype: i32 = 0;
+    let mut otherareanum: i32 = 0;
+    let mut facenum: i32 = 0;
     let mut area: *mut crate::aasfile_h::aas_area_t = 0 as *mut crate::aasfile_h::aas_area_t;
     let mut face: *mut crate::aasfile_h::aas_face_t = 0 as *mut crate::aasfile_h::aas_face_t;
     let fresh12 = numareas;
@@ -1218,7 +1218,7 @@ pub unsafe extern "C" fn AAS_GetAdjacentAreasWithLessPresenceTypes_r(
         .areasettings
         .offset(curareanum as isize))
     .presencetype;
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < (*area).numfaces {
         facenum = ::libc::abs(
             *crate::src::botlib::be_aas_main::aasworld
@@ -1230,7 +1230,7 @@ pub unsafe extern "C" fn AAS_GetAdjacentAreasWithLessPresenceTypes_r(
             .offset(facenum as isize) as *mut crate::aasfile_h::aas_face_t;
         //end if
         //if the face is solid
-        if !((*face).faceflags & 1 as libc::c_int != 0) {
+        if !((*face).faceflags & 1 as i32 != 0) {
             //the area at the other side of the face
             if (*face).frontarea != curareanum {
                 otherareanum = (*face).frontarea
@@ -1245,7 +1245,7 @@ pub unsafe extern "C" fn AAS_GetAdjacentAreasWithLessPresenceTypes_r(
             //if the other area has less presence types
             if presencetype & !otherpresencetype != 0 && otherpresencetype & !presencetype == 0 {
                 //check if the other area isn't already in the list
-                j = 0 as libc::c_int; //end for
+                j = 0 as i32; //end for
                 while j < numareas {
                     if otherareanum == *areanums.offset(j as isize) {
                         break;
@@ -1255,7 +1255,7 @@ pub unsafe extern "C" fn AAS_GetAdjacentAreasWithLessPresenceTypes_r(
                 //end if
                 if j == numareas {
                     //if the other area isn't already in the list
-                    if numareas >= 1024 as libc::c_int {
+                    if numareas >= 1024 as i32 {
                         crate::src::botlib::be_aas_main::AAS_Error(
                             b"MAX_PORTALAREAS\n\x00" as *const u8 as *const libc::c_char
                                 as *mut libc::c_char,
@@ -1283,31 +1283,31 @@ pub unsafe extern "C" fn AAS_GetAdjacentAreasWithLessPresenceTypes_r(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_CheckAreaForPossiblePortals(mut areanum: libc::c_int) -> libc::c_int {
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
-    let mut k: libc::c_int = 0;
-    let mut fen: libc::c_int = 0;
-    let mut ben: libc::c_int = 0;
-    let mut frontedgenum: libc::c_int = 0;
-    let mut backedgenum: libc::c_int = 0;
-    let mut facenum: libc::c_int = 0;
-    let mut areanums: [libc::c_int; 1024] = [0; 1024];
-    let mut numareas: libc::c_int = 0;
-    let mut otherareanum: libc::c_int = 0;
-    let mut numareafrontfaces: [libc::c_int; 1024] = [0; 1024];
-    let mut numareabackfaces: [libc::c_int; 1024] = [0; 1024];
-    let mut frontfacenums: [libc::c_int; 1024] = [0; 1024];
-    let mut backfacenums: [libc::c_int; 1024] = [0; 1024];
-    let mut numfrontfaces: libc::c_int = 0;
-    let mut numbackfaces: libc::c_int = 0;
-    let mut frontareanums: [libc::c_int; 1024] = [0; 1024];
-    let mut backareanums: [libc::c_int; 1024] = [0; 1024];
-    let mut numfrontareas: libc::c_int = 0;
-    let mut numbackareas: libc::c_int = 0;
-    let mut frontplanenum: libc::c_int = 0;
-    let mut backplanenum: libc::c_int = 0;
-    let mut faceplanenum: libc::c_int = 0;
+pub unsafe extern "C" fn AAS_CheckAreaForPossiblePortals(mut areanum: i32) -> i32 {
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
+    let mut k: i32 = 0;
+    let mut fen: i32 = 0;
+    let mut ben: i32 = 0;
+    let mut frontedgenum: i32 = 0;
+    let mut backedgenum: i32 = 0;
+    let mut facenum: i32 = 0;
+    let mut areanums: [i32; 1024] = [0; 1024];
+    let mut numareas: i32 = 0;
+    let mut otherareanum: i32 = 0;
+    let mut numareafrontfaces: [i32; 1024] = [0; 1024];
+    let mut numareabackfaces: [i32; 1024] = [0; 1024];
+    let mut frontfacenums: [i32; 1024] = [0; 1024];
+    let mut backfacenums: [i32; 1024] = [0; 1024];
+    let mut numfrontfaces: i32 = 0;
+    let mut numbackfaces: i32 = 0;
+    let mut frontareanums: [i32; 1024] = [0; 1024];
+    let mut backareanums: [i32; 1024] = [0; 1024];
+    let mut numfrontareas: i32 = 0;
+    let mut numbackareas: i32 = 0;
+    let mut frontplanenum: i32 = 0;
+    let mut backplanenum: i32 = 0;
+    let mut faceplanenum: i32 = 0;
     let mut area: *mut crate::aasfile_h::aas_area_t = 0 as *mut crate::aasfile_h::aas_area_t;
     let mut frontface: *mut crate::aasfile_h::aas_face_t = 0 as *mut crate::aasfile_h::aas_face_t;
     let mut backface: *mut crate::aasfile_h::aas_face_t = 0 as *mut crate::aasfile_h::aas_face_t;
@@ -1317,52 +1317,52 @@ pub unsafe extern "C" fn AAS_CheckAreaForPossiblePortals(mut areanum: libc::c_in
         .areasettings
         .offset(areanum as isize))
     .contents
-        & 8 as libc::c_int
+        & 8 as i32
         != 0
     {
-        return 0 as libc::c_int;
+        return 0 as i32;
     }
     //it must be a grounded area
     if (*crate::src::botlib::be_aas_main::aasworld
         .areasettings
         .offset(areanum as isize))
     .areaflags
-        & 1 as libc::c_int
+        & 1 as i32
         == 0
     {
-        return 0 as libc::c_int;
+        return 0 as i32;
     }
     //
     crate::stdlib::memset(
         numareafrontfaces.as_mut_ptr() as *mut libc::c_void,
-        0 as libc::c_int,
-        ::std::mem::size_of::<[libc::c_int; 1024]>() as libc::c_ulong,
+        0 as i32,
+        ::std::mem::size_of::<[i32; 1024]>() as libc::c_ulong,
     );
     crate::stdlib::memset(
         numareabackfaces.as_mut_ptr() as *mut libc::c_void,
-        0 as libc::c_int,
-        ::std::mem::size_of::<[libc::c_int; 1024]>() as libc::c_ulong,
+        0 as i32,
+        ::std::mem::size_of::<[i32; 1024]>() as libc::c_ulong,
     );
-    numbackfaces = 0 as libc::c_int;
+    numbackfaces = 0 as i32;
     numfrontfaces = numbackfaces;
-    numbackareas = 0 as libc::c_int;
+    numbackareas = 0 as i32;
     numfrontareas = numbackareas;
-    backplanenum = -(1 as libc::c_int);
+    backplanenum = -(1 as i32);
     frontplanenum = backplanenum;
     //add any adjacent areas with less presence types
     numareas = AAS_GetAdjacentAreasWithLessPresenceTypes_r(
         areanums.as_mut_ptr(),
-        0 as libc::c_int,
+        0 as i32,
         areanum,
     );
     //
-    i = 0 as libc::c_int; //end for
+    i = 0 as i32; //end for
     while i < numareas {
         area = &mut *crate::src::botlib::be_aas_main::aasworld
             .areas
             .offset(*areanums.as_mut_ptr().offset(i as isize) as isize)
             as *mut crate::aasfile_h::aas_area_t;
-        j = 0 as libc::c_int;
+        j = 0 as i32;
         while j < (*area).numfaces {
             facenum = ::libc::abs(
                 *crate::src::botlib::be_aas_main::aasworld
@@ -1375,9 +1375,9 @@ pub unsafe extern "C" fn AAS_CheckAreaForPossiblePortals(mut areanum: libc::c_in
             //end for
             //end else
             //if the face is solid
-            if !((*face).faceflags & 1 as libc::c_int != 0) {
+            if !((*face).faceflags & 1 as i32 != 0) {
                 //check if the face is shared with one of the other areas
-                k = 0 as libc::c_int; //end for
+                k = 0 as i32; //end for
                 while k < numareas {
                     if !(k == i) {
                         if (*face).frontarea == areanums[k as usize]
@@ -1401,20 +1401,20 @@ pub unsafe extern "C" fn AAS_CheckAreaForPossiblePortals(mut areanum: libc::c_in
                         .areasettings
                         .offset(otherareanum as isize))
                     .contents
-                        & 8 as libc::c_int
+                        & 8 as i32
                         != 0
                     {
-                        return 0 as libc::c_int;
+                        return 0 as i32;
                     }
                     //number of the plane of the area
-                    faceplanenum = (*face).planenum & !(1 as libc::c_int);
+                    faceplanenum = (*face).planenum & !(1 as i32);
                     //
-                    if frontplanenum < 0 as libc::c_int || faceplanenum == frontplanenum {
+                    if frontplanenum < 0 as i32 || faceplanenum == frontplanenum {
                         frontplanenum = faceplanenum; //end if
                         let fresh13 = numfrontfaces; //end for
                         numfrontfaces = numfrontfaces + 1; //end else
                         frontfacenums[fresh13 as usize] = facenum; //end for
-                        k = 0 as libc::c_int;
+                        k = 0 as i32;
                         while k < numfrontareas {
                             if frontareanums[k as usize] == otherareanum {
                                 break;
@@ -1427,12 +1427,12 @@ pub unsafe extern "C" fn AAS_CheckAreaForPossiblePortals(mut areanum: libc::c_in
                             frontareanums[fresh14 as usize] = otherareanum
                         }
                         numareafrontfaces[i as usize] += 1
-                    } else if backplanenum < 0 as libc::c_int || faceplanenum == backplanenum {
+                    } else if backplanenum < 0 as i32 || faceplanenum == backplanenum {
                         backplanenum = faceplanenum;
                         let fresh15 = numbackfaces;
                         numbackfaces = numbackfaces + 1;
                         backfacenums[fresh15 as usize] = facenum;
-                        k = 0 as libc::c_int;
+                        k = 0 as i32;
                         while k < numbackareas {
                             if backareanums[k as usize] == otherareanum {
                                 break;
@@ -1446,7 +1446,7 @@ pub unsafe extern "C" fn AAS_CheckAreaForPossiblePortals(mut areanum: libc::c_in
                         }
                         numareabackfaces[i as usize] += 1
                     } else {
-                        return 0 as libc::c_int;
+                        return 0 as i32;
                     }
                 }
             }
@@ -1455,42 +1455,42 @@ pub unsafe extern "C" fn AAS_CheckAreaForPossiblePortals(mut areanum: libc::c_in
         i += 1
     }
     //every area should have at least one front face and one back face
-    i = 0 as libc::c_int; //end for
+    i = 0 as i32; //end for
     while i < numareas {
         if numareafrontfaces[i as usize] == 0 || numareabackfaces[i as usize] == 0 {
-            return 0 as libc::c_int;
+            return 0 as i32;
         }
         i += 1
     }
     //the front areas should all be connected
     if AAS_ConnectedAreas(frontareanums.as_mut_ptr(), numfrontareas) as u64 == 0 {
-        return 0 as libc::c_int;
+        return 0 as i32;
     }
     //the back areas should all be connected
     if AAS_ConnectedAreas(backareanums.as_mut_ptr(), numbackareas) as u64 == 0 {
-        return 0 as libc::c_int;
+        return 0 as i32;
     }
     //none of the front faces should have a shared edge with a back face
-    i = 0 as libc::c_int; //end for
+    i = 0 as i32; //end for
     while i < numfrontfaces {
         frontface = &mut *crate::src::botlib::be_aas_main::aasworld
             .faces
             .offset(*frontfacenums.as_mut_ptr().offset(i as isize) as isize)
             as *mut crate::aasfile_h::aas_face_t; //end for
-        fen = 0 as libc::c_int; //end for
+        fen = 0 as i32; //end for
         while fen < (*frontface).numedges {
             frontedgenum = ::libc::abs(
                 *crate::src::botlib::be_aas_main::aasworld
                     .edgeindex
                     .offset(((*frontface).firstedge + fen) as isize),
             ); //end for
-            j = 0 as libc::c_int;
+            j = 0 as i32;
             while j < numbackfaces {
                 backface = &mut *crate::src::botlib::be_aas_main::aasworld
                     .faces
                     .offset(*backfacenums.as_mut_ptr().offset(j as isize) as isize)
                     as *mut crate::aasfile_h::aas_face_t;
-                ben = 0 as libc::c_int;
+                ben = 0 as i32;
                 while ben < (*backface).numedges {
                     backedgenum = ::libc::abs(
                         *crate::src::botlib::be_aas_main::aasworld
@@ -1518,20 +1518,20 @@ pub unsafe extern "C" fn AAS_CheckAreaForPossiblePortals(mut areanum: libc::c_in
         i += 1
     }
     if i != numfrontfaces {
-        return 0 as libc::c_int;
+        return 0 as i32;
     }
     //set the cluster portal contents
-    i = 0 as libc::c_int; //end for
+    i = 0 as i32; //end for
     while i < numareas {
         (*crate::src::botlib::be_aas_main::aasworld
             .areasettings
             .offset(areanums[i as usize] as isize))
-        .contents |= 8 as libc::c_int;
+        .contents |= 8 as i32;
         //this area can be used as a route portal
         (*crate::src::botlib::be_aas_main::aasworld
             .areasettings
             .offset(areanums[i as usize] as isize))
-        .contents |= 32 as libc::c_int;
+        .contents |= 32 as i32;
         crate::src::botlib::l_log::Log_Write(
             b"possible portal: %d\r\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             areanums[i as usize],
@@ -1551,16 +1551,16 @@ pub unsafe extern "C" fn AAS_CheckAreaForPossiblePortals(mut areanum: libc::c_in
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_FindPossiblePortals() {
-    let mut i: libc::c_int = 0; //end for
-    let mut numpossibleportals: libc::c_int = 0;
-    numpossibleportals = 0 as libc::c_int;
-    i = 1 as libc::c_int;
+    let mut i: i32 = 0; //end for
+    let mut numpossibleportals: i32 = 0;
+    numpossibleportals = 0 as i32;
+    i = 1 as i32;
     while i < crate::src::botlib::be_aas_main::aasworld.numareas {
         numpossibleportals += AAS_CheckAreaForPossiblePortals(i);
         i += 1
     }
     botimport.Print.expect("non-null function pointer")(
-        1 as libc::c_int,
+        1 as i32,
         b"\r%6d possible portal areas\n\x00" as *const u8 as *const libc::c_char
             as *mut libc::c_char,
         numpossibleportals,
@@ -1576,13 +1576,13 @@ pub unsafe extern "C" fn AAS_FindPossiblePortals() {
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_RemoveAllPortals() {
-    let mut i: libc::c_int = 0;
-    i = 1 as libc::c_int;
+    let mut i: i32 = 0;
+    i = 1 as i32;
     while i < crate::src::botlib::be_aas_main::aasworld.numareas {
         (*crate::src::botlib::be_aas_main::aasworld
             .areasettings
             .offset(i as isize))
-        .contents &= !(8 as libc::c_int);
+        .contents &= !(8 as i32);
         i += 1
     }
     //end for
@@ -1596,10 +1596,10 @@ pub unsafe extern "C" fn AAS_RemoveAllPortals() {
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_TestPortals() -> libc::c_int {
-    let mut i: libc::c_int = 0; //end for
+pub unsafe extern "C" fn AAS_TestPortals() -> i32 {
+    let mut i: i32 = 0; //end for
     let mut portal: *mut crate::aasfile_h::aas_portal_t = 0 as *mut crate::aasfile_h::aas_portal_t;
-    i = 1 as libc::c_int;
+    i = 1 as i32;
     while i < crate::src::botlib::be_aas_main::aasworld.numportals {
         portal = &mut *crate::src::botlib::be_aas_main::aasworld
             .portals
@@ -1609,29 +1609,29 @@ pub unsafe extern "C" fn AAS_TestPortals() -> libc::c_int {
             (*crate::src::botlib::be_aas_main::aasworld
                 .areasettings
                 .offset((*portal).areanum as isize))
-            .contents &= !(8 as libc::c_int); //end if
+            .contents &= !(8 as i32); //end if
             crate::src::botlib::l_log::Log_Write(
                 b"portal area %d has no front cluster\r\n\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 (*portal).areanum,
             );
-            return crate::src::qcommon::q_shared::qfalse as libc::c_int;
+            return crate::src::qcommon::q_shared::qfalse as i32;
         }
         if (*portal).backcluster == 0 {
             (*crate::src::botlib::be_aas_main::aasworld
                 .areasettings
                 .offset((*portal).areanum as isize))
-            .contents &= !(8 as libc::c_int);
+            .contents &= !(8 as i32);
             crate::src::botlib::l_log::Log_Write(
                 b"portal area %d has no back cluster\r\n\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 (*portal).areanum,
             );
-            return crate::src::qcommon::q_shared::qfalse as libc::c_int;
+            return crate::src::qcommon::q_shared::qfalse as i32;
         }
         i += 1
     }
-    return crate::src::qcommon::q_shared::qtrue as libc::c_int;
+    return crate::src::qcommon::q_shared::qtrue as i32;
 }
 //end of the function
 //===========================================================================
@@ -1643,16 +1643,16 @@ pub unsafe extern "C" fn AAS_TestPortals() -> libc::c_int {
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_CountForcedClusterPortals() {
-    let mut num: libc::c_int = 0; //end for
-    let mut i: libc::c_int = 0;
-    num = 0 as libc::c_int;
-    i = 1 as libc::c_int;
+    let mut num: i32 = 0; //end for
+    let mut i: i32 = 0;
+    num = 0 as i32;
+    i = 1 as i32;
     while i < crate::src::botlib::be_aas_main::aasworld.numareas {
         if (*crate::src::botlib::be_aas_main::aasworld
             .areasettings
             .offset(i as isize))
         .contents
-            & 8 as libc::c_int
+            & 8 as i32
             != 0
         {
             crate::src::botlib::l_log::Log_Write(
@@ -1666,7 +1666,7 @@ pub unsafe extern "C" fn AAS_CountForcedClusterPortals() {
         //end if
     }
     botimport.Print.expect("non-null function pointer")(
-        1 as libc::c_int,
+        1 as i32,
         b"%6d forced portal areas\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         num,
     );
@@ -1681,20 +1681,20 @@ pub unsafe extern "C" fn AAS_CountForcedClusterPortals() {
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_CreateViewPortals() {
-    let mut i: libc::c_int = 0;
-    i = 1 as libc::c_int;
+    let mut i: i32 = 0;
+    i = 1 as i32;
     while i < crate::src::botlib::be_aas_main::aasworld.numareas {
         if (*crate::src::botlib::be_aas_main::aasworld
             .areasettings
             .offset(i as isize))
         .contents
-            & 8 as libc::c_int
+            & 8 as i32
             != 0
         {
             (*crate::src::botlib::be_aas_main::aasworld
                 .areasettings
                 .offset(i as isize))
-            .contents |= 512 as libc::c_int
+            .contents |= 512 as i32
         }
         i += 1
         //end if
@@ -1713,20 +1713,20 @@ pub unsafe extern "C" fn AAS_CreateViewPortals() {
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_SetViewPortalsAsClusterPortals() {
-    let mut i: libc::c_int = 0;
-    i = 1 as libc::c_int;
+    let mut i: i32 = 0;
+    i = 1 as i32;
     while i < crate::src::botlib::be_aas_main::aasworld.numareas {
         if (*crate::src::botlib::be_aas_main::aasworld
             .areasettings
             .offset(i as isize))
         .contents
-            & 512 as libc::c_int
+            & 512 as i32
             != 0
         {
             (*crate::src::botlib::be_aas_main::aasworld
                 .areasettings
                 .offset(i as isize))
-            .contents |= 8 as libc::c_int
+            .contents |= 8 as i32
         }
         i += 1
         //end if
@@ -1803,25 +1803,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_InitClustering() {
-    let mut i: libc::c_int = 0;
-    let mut removedPortalAreas: libc::c_int = 0;
-    let mut n: libc::c_int = 0;
-    let mut total: libc::c_int = 0;
-    let mut numreachabilityareas: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut removedPortalAreas: i32 = 0;
+    let mut n: i32 = 0;
+    let mut total: i32 = 0;
+    let mut numreachabilityareas: i32 = 0;
     if crate::src::botlib::be_aas_main::aasworld.loaded == 0 {
         return;
     }
     //if there are clusters
-    if crate::src::botlib::be_aas_main::aasworld.numclusters >= 1 as libc::c_int {
+    if crate::src::botlib::be_aas_main::aasworld.numclusters >= 1 as i32 {
         //end if
         //if clustering isn't forced
         if crate::src::botlib::l_libvar::LibVarGetValue(
             b"forceclustering\x00" as *const u8 as *const libc::c_char,
-        ) as libc::c_int
+        ) as i32
             == 0
             && crate::src::botlib::l_libvar::LibVarGetValue(
                 b"forcereachability\x00" as *const u8 as *const libc::c_char,
-            ) as libc::c_int
+            ) as i32
                 == 0
         {
             return;
@@ -1847,7 +1847,7 @@ pub unsafe extern "C" fn AAS_InitClustering() {
     }
     crate::src::botlib::be_aas_main::aasworld.portals =
         crate::src::botlib::l_memory::GetClearedMemory(
-            (65536 as libc::c_int as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
+            (65536 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
                 crate::aasfile_h::aas_portal_t,
             >() as libc::c_ulong),
         ) as *mut crate::aasfile_h::aas_portal_t;
@@ -1862,7 +1862,7 @@ pub unsafe extern "C" fn AAS_InitClustering() {
     }
     crate::src::botlib::be_aas_main::aasworld.portalindex =
         crate::src::botlib::l_memory::GetClearedMemory(
-            (65536 as libc::c_int as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
+            (65536 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
                 crate::aasfile_h::aas_portalindex_t,
             >() as libc::c_ulong),
         ) as *mut crate::aasfile_h::aas_portalindex_t;
@@ -1874,27 +1874,27 @@ pub unsafe extern "C" fn AAS_InitClustering() {
     }
     crate::src::botlib::be_aas_main::aasworld.clusters =
         crate::src::botlib::l_memory::GetClearedMemory(
-            (65536 as libc::c_int as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
+            (65536 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
                 crate::aasfile_h::aas_cluster_t,
             >() as libc::c_ulong),
         ) as *mut crate::aasfile_h::aas_cluster_t;
     //
-    removedPortalAreas = 0 as libc::c_int; //end while
+    removedPortalAreas = 0 as i32; //end while
     botimport.Print.expect("non-null function pointer")(
-        1 as libc::c_int,
+        1 as i32,
         b"\r%6d removed portal areas\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         removedPortalAreas,
     );
     loop {
         botimport.Print.expect("non-null function pointer")(
-            1 as libc::c_int,
+            1 as i32,
             b"\r%6d\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             removedPortalAreas,
         );
         //initialize the number of portals and clusters
-        crate::src::botlib::be_aas_main::aasworld.numportals = 1 as libc::c_int; //portal 0 is a dummy
-        crate::src::botlib::be_aas_main::aasworld.portalindexsize = 0 as libc::c_int; //cluster 0 is a dummy
-        crate::src::botlib::be_aas_main::aasworld.numclusters = 1 as libc::c_int;
+        crate::src::botlib::be_aas_main::aasworld.numportals = 1 as i32; //portal 0 is a dummy
+        crate::src::botlib::be_aas_main::aasworld.portalindexsize = 0 as i32; //cluster 0 is a dummy
+        crate::src::botlib::be_aas_main::aasworld.numclusters = 1 as i32;
         //create the portals from the portal areas
         AAS_CreatePortals();
         //
@@ -1909,14 +1909,14 @@ pub unsafe extern "C" fn AAS_InitClustering() {
         }
     }
     botimport.Print.expect("non-null function pointer")(
-        1 as libc::c_int,
+        1 as i32,
         b"\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
     );
     //the AAS file should be saved
     crate::src::botlib::be_aas_main::aasworld.savefile =
-        crate::src::qcommon::q_shared::qtrue as libc::c_int;
+        crate::src::qcommon::q_shared::qtrue as i32;
     //write the portal areas to the log file
-    i = 1 as libc::c_int; //end for
+    i = 1 as i32; //end for
     while i < crate::src::botlib::be_aas_main::aasworld.numportals {
         crate::src::botlib::l_log::Log_Write(
             b"portal %d: area %d\r\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -1930,19 +1930,19 @@ pub unsafe extern "C" fn AAS_InitClustering() {
     }
     // report cluster info
     botimport.Print.expect("non-null function pointer")(
-        1 as libc::c_int,
+        1 as i32,
         b"%6d portals created\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         crate::src::botlib::be_aas_main::aasworld.numportals,
     ); //end for
     botimport.Print.expect("non-null function pointer")(
-        1 as libc::c_int,
+        1 as i32,
         b"%6d clusters created\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         crate::src::botlib::be_aas_main::aasworld.numclusters,
     );
-    i = 1 as libc::c_int;
+    i = 1 as i32;
     while i < crate::src::botlib::be_aas_main::aasworld.numclusters {
         botimport.Print.expect("non-null function pointer")(
-            1 as libc::c_int,
+            1 as i32,
             b"cluster %d has %d reachability areas\n\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             i,
@@ -1954,9 +1954,9 @@ pub unsafe extern "C" fn AAS_InitClustering() {
         i += 1
     }
     // report AAS file efficiency
-    numreachabilityareas = 0 as libc::c_int;
-    total = 0 as libc::c_int;
-    i = 0 as libc::c_int;
+    numreachabilityareas = 0 as i32;
+    total = 0 as i32;
+    i = 0 as i32;
     while i < crate::src::botlib::be_aas_main::aasworld.numclusters {
         n = (*crate::src::botlib::be_aas_main::aasworld
             .clusters
@@ -1969,16 +1969,16 @@ pub unsafe extern "C" fn AAS_InitClustering() {
     total += numreachabilityareas * crate::src::botlib::be_aas_main::aasworld.numportals;
     //
     botimport.Print.expect("non-null function pointer")(
-        1 as libc::c_int,
+        1 as i32,
         b"%6i total reachability areas\n\x00" as *const u8 as *const libc::c_char
             as *mut libc::c_char,
         numreachabilityareas,
     );
     botimport.Print.expect("non-null function pointer")(
-        1 as libc::c_int,
+        1 as i32,
         b"%6i AAS memory/CPU usage (the lower the better)\n\x00" as *const u8 as *const libc::c_char
             as *mut libc::c_char,
-        total * 3 as libc::c_int,
+        total * 3 as i32,
     );
 }
 //end of the function AAS_InitClustering

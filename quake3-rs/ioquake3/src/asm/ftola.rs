@@ -21,39 +21,39 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ===========================================================================
 */
 
-static mut fpucw: libc::c_ushort = 0xc7f as libc::c_int as libc::c_ushort;
+static mut fpucw: u16 = 0xc7f as i32 as u16;
 /*
  * GNU inline asm ftol conversion functions using SSE or FPU
  */
 #[no_mangle]
 
-pub unsafe extern "C" fn qftolsse(mut f: libc::c_float) -> libc::c_long {
+pub unsafe extern "C" fn qftolsse(mut f: f32) -> libc::c_long {
     let mut retval: libc::c_long = 0;
     asm!("cvttss2si $1, $0\n" : "=r" (retval) : "x" (f) : : "volatile");
     return retval;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn qvmftolsse() -> libc::c_int {
-    let mut retval: libc::c_int = 0;
+pub unsafe extern "C" fn qvmftolsse() -> i32 {
+    let mut retval: i32 = 0;
     asm!("movss (%rdi, %rbx, 4), %xmm0\ncvttss2si %xmm0, $0\n" : "=r" (retval) : :
      "xmm0" : "volatile");
     return retval;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn qftolx87(mut f: libc::c_float) -> libc::c_long {
+pub unsafe extern "C" fn qftolx87(mut f: f32) -> libc::c_long {
     let mut retval: libc::c_long = 0;
-    let mut oldcw: libc::c_ushort = 0 as libc::c_int as libc::c_ushort;
+    let mut oldcw: u16 = 0 as i32 as u16;
     asm!("fnstcw $2\nfldcw $3\nflds $1\nfistpl $1\nfldcw $2\nmov $1, $0\n" : "=r"
      (retval) : "*m" (&f), "*m" (&oldcw), "*m" (&fpucw) : : "volatile");
     return retval;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn qvmftolx87() -> libc::c_int {
-    let mut retval: libc::c_int = 0;
-    let mut oldcw: libc::c_ushort = 0 as libc::c_int as libc::c_ushort;
+pub unsafe extern "C" fn qvmftolx87() -> i32 {
+    let mut retval: i32 = 0;
+    let mut oldcw: u16 = 0 as i32 as u16;
     asm!("fnstcw $1\nfldcw $2\nflds (%rdi, %rbx, 4)\nfistpl (%rdi, %rbx, 4)\nfldcw $1\nmov (%rdi, %rbx, 4), $0\n"
      : "=r" (retval) : "*m" (&oldcw), "*m" (&fpucw) : : "volatile");
     return retval;

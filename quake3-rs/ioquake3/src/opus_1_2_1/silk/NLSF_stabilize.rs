@@ -91,13 +91,13 @@ pub mod SigProc_FIX_h {
     /* silk_min() versions with typecast in the function call */
     #[inline]
 
-    pub unsafe extern "C" fn silk_min_int(mut a: libc::c_int, mut b: libc::c_int) -> libc::c_int {
+    pub unsafe extern "C" fn silk_min_int(mut a: i32, mut b: i32) -> i32 {
         return if a < b { a } else { b };
     }
     /* silk_min() versions with typecast in the function call */
     #[inline]
 
-    pub unsafe extern "C" fn silk_max_int(mut a: libc::c_int, mut b: libc::c_int) -> libc::c_int {
+    pub unsafe extern "C" fn silk_max_int(mut a: i32, mut b: i32) -> i32 {
         return if a > b { a } else { b };
     }
 
@@ -334,35 +334,35 @@ POSSIBILITY OF SUCH DAMAGE.
 pub unsafe extern "C" fn silk_NLSF_stabilize(
     mut NLSF_Q15: *mut crate::opus_types_h::opus_int16,
     mut NDeltaMin_Q15: *const crate::opus_types_h::opus_int16,
-    L: libc::c_int,
+    L: i32,
 )
 /* I     Number of NLSF parameters in the input vector              */
 {
-    let mut i: libc::c_int = 0;
-    let mut I: libc::c_int = 0 as libc::c_int;
-    let mut k: libc::c_int = 0;
-    let mut loops: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut I: i32 = 0 as i32;
+    let mut k: i32 = 0;
+    let mut loops: i32 = 0;
     let mut center_freq_Q15: crate::opus_types_h::opus_int16 = 0;
     let mut diff_Q15: crate::opus_types_h::opus_int32 = 0;
     let mut min_diff_Q15: crate::opus_types_h::opus_int32 = 0;
     let mut min_center_Q15: crate::opus_types_h::opus_int32 = 0;
     let mut max_center_Q15: crate::opus_types_h::opus_int32 = 0;
     /* This is necessary to ensure an output within range of a opus_int16 */
-    loops = 0 as libc::c_int;
-    while loops < 20 as libc::c_int {
+    loops = 0 as i32;
+    while loops < 20 as i32 {
         /* *************************/
         /* Find smallest distance */
         /* *************************/
         /* First element */
-        min_diff_Q15 = *NLSF_Q15.offset(0 as libc::c_int as isize) as libc::c_int
-            - *NDeltaMin_Q15.offset(0 as libc::c_int as isize) as libc::c_int;
-        I = 0 as libc::c_int;
+        min_diff_Q15 = *NLSF_Q15.offset(0 as i32 as isize) as i32
+            - *NDeltaMin_Q15.offset(0 as i32 as isize) as i32;
+        I = 0 as i32;
         /* Middle elements */
-        i = 1 as libc::c_int;
-        while i <= L - 1 as libc::c_int {
-            diff_Q15 = *NLSF_Q15.offset(i as isize) as libc::c_int
-                - (*NLSF_Q15.offset((i - 1 as libc::c_int) as isize) as libc::c_int
-                    + *NDeltaMin_Q15.offset(i as isize) as libc::c_int);
+        i = 1 as i32;
+        while i <= L - 1 as i32 {
+            diff_Q15 = *NLSF_Q15.offset(i as isize) as i32
+                - (*NLSF_Q15.offset((i - 1 as i32) as isize) as i32
+                    + *NDeltaMin_Q15.offset(i as isize) as i32);
             if diff_Q15 < min_diff_Q15 {
                 min_diff_Q15 = diff_Q15;
                 I = i
@@ -370,9 +370,9 @@ pub unsafe extern "C" fn silk_NLSF_stabilize(
             i += 1
         }
         /* Last element */
-        diff_Q15 = ((1 as libc::c_int) << 15 as libc::c_int)
-            - (*NLSF_Q15.offset((L - 1 as libc::c_int) as isize) as libc::c_int
-                + *NDeltaMin_Q15.offset(L as isize) as libc::c_int);
+        diff_Q15 = ((1 as i32) << 15 as i32)
+            - (*NLSF_Q15.offset((L - 1 as i32) as isize) as i32
+                + *NDeltaMin_Q15.offset(L as isize) as i32);
         if diff_Q15 < min_diff_Q15 {
             min_diff_Q15 = diff_Q15;
             I = L
@@ -380,211 +380,211 @@ pub unsafe extern "C" fn silk_NLSF_stabilize(
         /* **************************************************/
         /* Now check if the smallest distance non-negative */
         /* **************************************************/
-        if min_diff_Q15 >= 0 as libc::c_int {
+        if min_diff_Q15 >= 0 as i32 {
             return;
         }
-        if I == 0 as libc::c_int {
+        if I == 0 as i32 {
             /* Move away from lower limit */
-            *NLSF_Q15.offset(0 as libc::c_int as isize) =
-                *NDeltaMin_Q15.offset(0 as libc::c_int as isize)
+            *NLSF_Q15.offset(0 as i32 as isize) =
+                *NDeltaMin_Q15.offset(0 as i32 as isize)
         } else if I == L {
             /* Move away from higher limit */
-            *NLSF_Q15.offset((L - 1 as libc::c_int) as isize) = (((1 as libc::c_int)
-                << 15 as libc::c_int)
-                - *NDeltaMin_Q15.offset(L as isize) as libc::c_int)
+            *NLSF_Q15.offset((L - 1 as i32) as isize) = (((1 as i32)
+                << 15 as i32)
+                - *NDeltaMin_Q15.offset(L as isize) as i32)
                 as crate::opus_types_h::opus_int16
         } else {
             /* Find the lower extreme for the location of the current center frequency */
-            min_center_Q15 = 0 as libc::c_int;
-            k = 0 as libc::c_int;
+            min_center_Q15 = 0 as i32;
+            k = 0 as i32;
             while k < I {
-                min_center_Q15 += *NDeltaMin_Q15.offset(k as isize) as libc::c_int;
+                min_center_Q15 += *NDeltaMin_Q15.offset(k as isize) as i32;
                 k += 1
             }
-            min_center_Q15 += *NDeltaMin_Q15.offset(I as isize) as libc::c_int >> 1 as libc::c_int;
+            min_center_Q15 += *NDeltaMin_Q15.offset(I as isize) as i32 >> 1 as i32;
             /* Find the upper extreme for the location of the current center frequency */
-            max_center_Q15 = (1 as libc::c_int) << 15 as libc::c_int;
+            max_center_Q15 = (1 as i32) << 15 as i32;
             k = L;
             while k > I {
-                max_center_Q15 -= *NDeltaMin_Q15.offset(k as isize) as libc::c_int;
+                max_center_Q15 -= *NDeltaMin_Q15.offset(k as isize) as i32;
                 k -= 1
             }
-            max_center_Q15 -= *NDeltaMin_Q15.offset(I as isize) as libc::c_int >> 1 as libc::c_int;
+            max_center_Q15 -= *NDeltaMin_Q15.offset(I as isize) as i32 >> 1 as i32;
             /* Move apart, sorted by value, keeping the same center frequency */
             center_freq_Q15 = if min_center_Q15 > max_center_Q15 {
-                if (if 1 as libc::c_int == 1 as libc::c_int {
-                    (*NLSF_Q15.offset((I - 1 as libc::c_int) as isize)
+                if (if 1 as i32 == 1 as i32 {
+                    (*NLSF_Q15.offset((I - 1 as i32) as isize)
                         as crate::opus_types_h::opus_int32
                         + *NLSF_Q15.offset(I as isize) as crate::opus_types_h::opus_int32
-                        >> 1 as libc::c_int)
-                        + (*NLSF_Q15.offset((I - 1 as libc::c_int) as isize)
+                        >> 1 as i32)
+                        + (*NLSF_Q15.offset((I - 1 as i32) as isize)
                             as crate::opus_types_h::opus_int32
                             + *NLSF_Q15.offset(I as isize) as crate::opus_types_h::opus_int32
-                            & 1 as libc::c_int)
+                            & 1 as i32)
                 } else {
-                    ((*NLSF_Q15.offset((I - 1 as libc::c_int) as isize)
+                    ((*NLSF_Q15.offset((I - 1 as i32) as isize)
                         as crate::opus_types_h::opus_int32
                         + *NLSF_Q15.offset(I as isize) as crate::opus_types_h::opus_int32
-                        >> 1 as libc::c_int - 1 as libc::c_int)
-                        + 1 as libc::c_int)
-                        >> 1 as libc::c_int
+                        >> 1 as i32 - 1 as i32)
+                        + 1 as i32)
+                        >> 1 as i32
                 }) > min_center_Q15
                 {
                     min_center_Q15
-                } else if (if 1 as libc::c_int == 1 as libc::c_int {
-                    (*NLSF_Q15.offset((I - 1 as libc::c_int) as isize)
+                } else if (if 1 as i32 == 1 as i32 {
+                    (*NLSF_Q15.offset((I - 1 as i32) as isize)
                         as crate::opus_types_h::opus_int32
                         + *NLSF_Q15.offset(I as isize) as crate::opus_types_h::opus_int32
-                        >> 1 as libc::c_int)
-                        + (*NLSF_Q15.offset((I - 1 as libc::c_int) as isize)
+                        >> 1 as i32)
+                        + (*NLSF_Q15.offset((I - 1 as i32) as isize)
                             as crate::opus_types_h::opus_int32
                             + *NLSF_Q15.offset(I as isize) as crate::opus_types_h::opus_int32
-                            & 1 as libc::c_int)
+                            & 1 as i32)
                 } else {
-                    ((*NLSF_Q15.offset((I - 1 as libc::c_int) as isize)
+                    ((*NLSF_Q15.offset((I - 1 as i32) as isize)
                         as crate::opus_types_h::opus_int32
                         + *NLSF_Q15.offset(I as isize) as crate::opus_types_h::opus_int32
-                        >> 1 as libc::c_int - 1 as libc::c_int)
-                        + 1 as libc::c_int)
-                        >> 1 as libc::c_int
+                        >> 1 as i32 - 1 as i32)
+                        + 1 as i32)
+                        >> 1 as i32
                 }) < max_center_Q15
                 {
                     max_center_Q15
-                } else if 1 as libc::c_int == 1 as libc::c_int {
-                    (*NLSF_Q15.offset((I - 1 as libc::c_int) as isize)
+                } else if 1 as i32 == 1 as i32 {
+                    (*NLSF_Q15.offset((I - 1 as i32) as isize)
                         as crate::opus_types_h::opus_int32
                         + *NLSF_Q15.offset(I as isize) as crate::opus_types_h::opus_int32
-                        >> 1 as libc::c_int)
-                        + (*NLSF_Q15.offset((I - 1 as libc::c_int) as isize)
+                        >> 1 as i32)
+                        + (*NLSF_Q15.offset((I - 1 as i32) as isize)
                             as crate::opus_types_h::opus_int32
                             + *NLSF_Q15.offset(I as isize) as crate::opus_types_h::opus_int32
-                            & 1 as libc::c_int)
+                            & 1 as i32)
                 } else {
-                    ((*NLSF_Q15.offset((I - 1 as libc::c_int) as isize)
+                    ((*NLSF_Q15.offset((I - 1 as i32) as isize)
                         as crate::opus_types_h::opus_int32
                         + *NLSF_Q15.offset(I as isize) as crate::opus_types_h::opus_int32
-                        >> 1 as libc::c_int - 1 as libc::c_int)
-                        + 1 as libc::c_int)
-                        >> 1 as libc::c_int
+                        >> 1 as i32 - 1 as i32)
+                        + 1 as i32)
+                        >> 1 as i32
                 }
-            } else if (if 1 as libc::c_int == 1 as libc::c_int {
-                (*NLSF_Q15.offset((I - 1 as libc::c_int) as isize)
+            } else if (if 1 as i32 == 1 as i32 {
+                (*NLSF_Q15.offset((I - 1 as i32) as isize)
                     as crate::opus_types_h::opus_int32
                     + *NLSF_Q15.offset(I as isize) as crate::opus_types_h::opus_int32
-                    >> 1 as libc::c_int)
-                    + (*NLSF_Q15.offset((I - 1 as libc::c_int) as isize)
+                    >> 1 as i32)
+                    + (*NLSF_Q15.offset((I - 1 as i32) as isize)
                         as crate::opus_types_h::opus_int32
                         + *NLSF_Q15.offset(I as isize) as crate::opus_types_h::opus_int32
-                        & 1 as libc::c_int)
+                        & 1 as i32)
             } else {
-                ((*NLSF_Q15.offset((I - 1 as libc::c_int) as isize)
+                ((*NLSF_Q15.offset((I - 1 as i32) as isize)
                     as crate::opus_types_h::opus_int32
                     + *NLSF_Q15.offset(I as isize) as crate::opus_types_h::opus_int32
-                    >> 1 as libc::c_int - 1 as libc::c_int)
-                    + 1 as libc::c_int)
-                    >> 1 as libc::c_int
+                    >> 1 as i32 - 1 as i32)
+                    + 1 as i32)
+                    >> 1 as i32
             }) > max_center_Q15
             {
                 max_center_Q15
-            } else if (if 1 as libc::c_int == 1 as libc::c_int {
-                (*NLSF_Q15.offset((I - 1 as libc::c_int) as isize)
+            } else if (if 1 as i32 == 1 as i32 {
+                (*NLSF_Q15.offset((I - 1 as i32) as isize)
                     as crate::opus_types_h::opus_int32
                     + *NLSF_Q15.offset(I as isize) as crate::opus_types_h::opus_int32
-                    >> 1 as libc::c_int)
-                    + (*NLSF_Q15.offset((I - 1 as libc::c_int) as isize)
+                    >> 1 as i32)
+                    + (*NLSF_Q15.offset((I - 1 as i32) as isize)
                         as crate::opus_types_h::opus_int32
                         + *NLSF_Q15.offset(I as isize) as crate::opus_types_h::opus_int32
-                        & 1 as libc::c_int)
+                        & 1 as i32)
             } else {
-                ((*NLSF_Q15.offset((I - 1 as libc::c_int) as isize)
+                ((*NLSF_Q15.offset((I - 1 as i32) as isize)
                     as crate::opus_types_h::opus_int32
                     + *NLSF_Q15.offset(I as isize) as crate::opus_types_h::opus_int32
-                    >> 1 as libc::c_int - 1 as libc::c_int)
-                    + 1 as libc::c_int)
-                    >> 1 as libc::c_int
+                    >> 1 as i32 - 1 as i32)
+                    + 1 as i32)
+                    >> 1 as i32
             }) < min_center_Q15
             {
                 min_center_Q15
-            } else if 1 as libc::c_int == 1 as libc::c_int {
-                (*NLSF_Q15.offset((I - 1 as libc::c_int) as isize)
+            } else if 1 as i32 == 1 as i32 {
+                (*NLSF_Q15.offset((I - 1 as i32) as isize)
                     as crate::opus_types_h::opus_int32
                     + *NLSF_Q15.offset(I as isize) as crate::opus_types_h::opus_int32
-                    >> 1 as libc::c_int)
-                    + (*NLSF_Q15.offset((I - 1 as libc::c_int) as isize)
+                    >> 1 as i32)
+                    + (*NLSF_Q15.offset((I - 1 as i32) as isize)
                         as crate::opus_types_h::opus_int32
                         + *NLSF_Q15.offset(I as isize) as crate::opus_types_h::opus_int32
-                        & 1 as libc::c_int)
+                        & 1 as i32)
             } else {
-                ((*NLSF_Q15.offset((I - 1 as libc::c_int) as isize)
+                ((*NLSF_Q15.offset((I - 1 as i32) as isize)
                     as crate::opus_types_h::opus_int32
                     + *NLSF_Q15.offset(I as isize) as crate::opus_types_h::opus_int32
-                    >> 1 as libc::c_int - 1 as libc::c_int)
-                    + 1 as libc::c_int)
-                    >> 1 as libc::c_int
+                    >> 1 as i32 - 1 as i32)
+                    + 1 as i32)
+                    >> 1 as i32
             } as crate::opus_types_h::opus_int16;
-            *NLSF_Q15.offset((I - 1 as libc::c_int) as isize) = (center_freq_Q15 as libc::c_int
-                - (*NDeltaMin_Q15.offset(I as isize) as libc::c_int >> 1 as libc::c_int))
+            *NLSF_Q15.offset((I - 1 as i32) as isize) = (center_freq_Q15 as i32
+                - (*NDeltaMin_Q15.offset(I as isize) as i32 >> 1 as i32))
                 as crate::opus_types_h::opus_int16;
-            *NLSF_Q15.offset(I as isize) = (*NLSF_Q15.offset((I - 1 as libc::c_int) as isize)
-                as libc::c_int
-                + *NDeltaMin_Q15.offset(I as isize) as libc::c_int)
+            *NLSF_Q15.offset(I as isize) = (*NLSF_Q15.offset((I - 1 as i32) as isize)
+                as i32
+                + *NDeltaMin_Q15.offset(I as isize) as i32)
                 as crate::opus_types_h::opus_int16
         }
         loops += 1
     }
     /* Safe and simple fall back method, which is less ideal than the above */
-    if loops == 20 as libc::c_int {
+    if loops == 20 as i32 {
         /* Insertion sort (fast for already almost sorted arrays):   */
         /* Best case:  O(n)   for an already sorted array            */
         /* Worst case: O(n^2) for an inversely sorted array          */
         crate::src::opus_1_2_1::silk::sort::silk_insertion_sort_increasing_all_values_int16(
-            &mut *NLSF_Q15.offset(0 as libc::c_int as isize),
+            &mut *NLSF_Q15.offset(0 as i32 as isize),
             L,
         );
         /* First NLSF should be no less than NDeltaMin[0] */
-        *NLSF_Q15.offset(0 as libc::c_int as isize) = silk_max_int(
-            *NLSF_Q15.offset(0 as libc::c_int as isize) as libc::c_int,
-            *NDeltaMin_Q15.offset(0 as libc::c_int as isize) as libc::c_int,
+        *NLSF_Q15.offset(0 as i32 as isize) = silk_max_int(
+            *NLSF_Q15.offset(0 as i32 as isize) as i32,
+            *NDeltaMin_Q15.offset(0 as i32 as isize) as i32,
         ) as crate::opus_types_h::opus_int16;
         /* Keep delta_min distance between the NLSFs */
-        i = 1 as libc::c_int;
+        i = 1 as i32;
         while i < L {
             *NLSF_Q15.offset(i as isize) = silk_max_int(
-                *NLSF_Q15.offset(i as isize) as libc::c_int,
-                if *NLSF_Q15.offset((i - 1 as libc::c_int) as isize)
+                *NLSF_Q15.offset(i as isize) as i32,
+                if *NLSF_Q15.offset((i - 1 as i32) as isize)
                     as crate::opus_types_h::opus_int32
-                    + *NDeltaMin_Q15.offset(i as isize) as libc::c_int
-                    > 0x7fff as libc::c_int
+                    + *NDeltaMin_Q15.offset(i as isize) as i32
+                    > 0x7fff as i32
                 {
-                    0x7fff as libc::c_int
-                } else if (*NLSF_Q15.offset((i - 1 as libc::c_int) as isize)
+                    0x7fff as i32
+                } else if (*NLSF_Q15.offset((i - 1 as i32) as isize)
                     as crate::opus_types_h::opus_int32
-                    + *NDeltaMin_Q15.offset(i as isize) as libc::c_int)
-                    < 0x8000 as libc::c_int as crate::opus_types_h::opus_int16 as libc::c_int
+                    + *NDeltaMin_Q15.offset(i as isize) as i32)
+                    < 0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
                 {
-                    0x8000 as libc::c_int as crate::opus_types_h::opus_int16 as libc::c_int
+                    0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
                 } else {
-                    (*NLSF_Q15.offset((i - 1 as libc::c_int) as isize)
+                    (*NLSF_Q15.offset((i - 1 as i32) as isize)
                         as crate::opus_types_h::opus_int32)
-                        + *NDeltaMin_Q15.offset(i as isize) as libc::c_int
-                } as crate::opus_types_h::opus_int16 as libc::c_int,
+                        + *NDeltaMin_Q15.offset(i as isize) as i32
+                } as crate::opus_types_h::opus_int16 as i32,
             ) as crate::opus_types_h::opus_int16;
             i += 1
         }
         /* Last NLSF should be no higher than 1 - NDeltaMin[L] */
-        *NLSF_Q15.offset((L - 1 as libc::c_int) as isize) = silk_min_int(
-            *NLSF_Q15.offset((L - 1 as libc::c_int) as isize) as libc::c_int,
-            ((1 as libc::c_int) << 15 as libc::c_int)
-                - *NDeltaMin_Q15.offset(L as isize) as libc::c_int,
+        *NLSF_Q15.offset((L - 1 as i32) as isize) = silk_min_int(
+            *NLSF_Q15.offset((L - 1 as i32) as isize) as i32,
+            ((1 as i32) << 15 as i32)
+                - *NDeltaMin_Q15.offset(L as isize) as i32,
         )
             as crate::opus_types_h::opus_int16;
         /* Keep NDeltaMin distance between the NLSFs */
-        i = L - 2 as libc::c_int;
-        while i >= 0 as libc::c_int {
+        i = L - 2 as i32;
+        while i >= 0 as i32 {
             *NLSF_Q15.offset(i as isize) = silk_min_int(
-                *NLSF_Q15.offset(i as isize) as libc::c_int,
-                *NLSF_Q15.offset((i + 1 as libc::c_int) as isize) as libc::c_int
-                    - *NDeltaMin_Q15.offset((i + 1 as libc::c_int) as isize) as libc::c_int,
+                *NLSF_Q15.offset(i as isize) as i32,
+                *NLSF_Q15.offset((i + 1 as i32) as isize) as i32
+                    - *NDeltaMin_Q15.offset((i + 1 as i32) as isize) as i32,
             ) as crate::opus_types_h::opus_int16;
             i -= 1
         }

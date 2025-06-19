@@ -258,101 +258,101 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // tr_mesh.c: triangle model functions
 
 unsafe extern "C" fn ProjectRadius(
-    mut r: libc::c_float,
+    mut r: f32,
     mut location: *mut crate::src::qcommon::q_shared::vec_t,
-) -> libc::c_float {
-    let mut pr: libc::c_float = 0.;
-    let mut dist: libc::c_float = 0.;
-    let mut c: libc::c_float = 0.;
+) -> f32 {
+    let mut pr: f32 = 0.;
+    let mut dist: f32 = 0.;
+    let mut c: f32 = 0.;
     let mut p: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut projected: [libc::c_float; 4] = [0.; 4];
-    c = crate::src::renderergl1::tr_main::tr.viewParms.or.axis[0 as libc::c_int as usize]
-        [0 as libc::c_int as usize]
-        * crate::src::renderergl1::tr_main::tr.viewParms.or.origin[0 as libc::c_int as usize]
-        + crate::src::renderergl1::tr_main::tr.viewParms.or.axis[0 as libc::c_int as usize]
-            [1 as libc::c_int as usize]
-            * crate::src::renderergl1::tr_main::tr.viewParms.or.origin[1 as libc::c_int as usize]
-        + crate::src::renderergl1::tr_main::tr.viewParms.or.axis[0 as libc::c_int as usize]
-            [2 as libc::c_int as usize]
-            * crate::src::renderergl1::tr_main::tr.viewParms.or.origin[2 as libc::c_int as usize];
-    dist = crate::src::renderergl1::tr_main::tr.viewParms.or.axis[0 as libc::c_int as usize]
-        [0 as libc::c_int as usize]
-        * *location.offset(0 as libc::c_int as isize)
-        + crate::src::renderergl1::tr_main::tr.viewParms.or.axis[0 as libc::c_int as usize]
-            [1 as libc::c_int as usize]
-            * *location.offset(1 as libc::c_int as isize)
-        + crate::src::renderergl1::tr_main::tr.viewParms.or.axis[0 as libc::c_int as usize]
-            [2 as libc::c_int as usize]
-            * *location.offset(2 as libc::c_int as isize)
+    let mut projected: [f32; 4] = [0.; 4];
+    c = crate::src::renderergl1::tr_main::tr.viewParms.or.axis[0 as i32 as usize]
+        [0 as i32 as usize]
+        * crate::src::renderergl1::tr_main::tr.viewParms.or.origin[0 as i32 as usize]
+        + crate::src::renderergl1::tr_main::tr.viewParms.or.axis[0 as i32 as usize]
+            [1 as i32 as usize]
+            * crate::src::renderergl1::tr_main::tr.viewParms.or.origin[1 as i32 as usize]
+        + crate::src::renderergl1::tr_main::tr.viewParms.or.axis[0 as i32 as usize]
+            [2 as i32 as usize]
+            * crate::src::renderergl1::tr_main::tr.viewParms.or.origin[2 as i32 as usize];
+    dist = crate::src::renderergl1::tr_main::tr.viewParms.or.axis[0 as i32 as usize]
+        [0 as i32 as usize]
+        * *location.offset(0 as i32 as isize)
+        + crate::src::renderergl1::tr_main::tr.viewParms.or.axis[0 as i32 as usize]
+            [1 as i32 as usize]
+            * *location.offset(1 as i32 as isize)
+        + crate::src::renderergl1::tr_main::tr.viewParms.or.axis[0 as i32 as usize]
+            [2 as i32 as usize]
+            * *location.offset(2 as i32 as isize)
         - c;
-    if dist <= 0 as libc::c_int as libc::c_float {
-        return 0 as libc::c_int as libc::c_float;
+    if dist <= 0 as i32 as f32 {
+        return 0 as i32 as f32;
     }
-    p[0 as libc::c_int as usize] = 0 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-    p[1 as libc::c_int as usize] =
-        crate::stdlib::fabs(r as libc::c_double) as crate::src::qcommon::q_shared::vec_t;
-    p[2 as libc::c_int as usize] = -dist;
-    projected[0 as libc::c_int as usize] = p[0 as libc::c_int as usize]
+    p[0 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    p[1 as i32 as usize] =
+        crate::stdlib::fabs(r as f64) as crate::src::qcommon::q_shared::vec_t;
+    p[2 as i32 as usize] = -dist;
+    projected[0 as i32 as usize] = p[0 as i32 as usize]
         * crate::src::renderergl1::tr_main::tr
             .viewParms
-            .projectionMatrix[0 as libc::c_int as usize]
-        + p[1 as libc::c_int as usize]
+            .projectionMatrix[0 as i32 as usize]
+        + p[1 as i32 as usize]
             * crate::src::renderergl1::tr_main::tr
                 .viewParms
-                .projectionMatrix[4 as libc::c_int as usize]
-        + p[2 as libc::c_int as usize]
+                .projectionMatrix[4 as i32 as usize]
+        + p[2 as i32 as usize]
             * crate::src::renderergl1::tr_main::tr
                 .viewParms
-                .projectionMatrix[8 as libc::c_int as usize]
+                .projectionMatrix[8 as i32 as usize]
         + crate::src::renderergl1::tr_main::tr
             .viewParms
-            .projectionMatrix[12 as libc::c_int as usize];
-    projected[1 as libc::c_int as usize] = p[0 as libc::c_int as usize]
+            .projectionMatrix[12 as i32 as usize];
+    projected[1 as i32 as usize] = p[0 as i32 as usize]
         * crate::src::renderergl1::tr_main::tr
             .viewParms
-            .projectionMatrix[1 as libc::c_int as usize]
-        + p[1 as libc::c_int as usize]
+            .projectionMatrix[1 as i32 as usize]
+        + p[1 as i32 as usize]
             * crate::src::renderergl1::tr_main::tr
                 .viewParms
-                .projectionMatrix[5 as libc::c_int as usize]
-        + p[2 as libc::c_int as usize]
+                .projectionMatrix[5 as i32 as usize]
+        + p[2 as i32 as usize]
             * crate::src::renderergl1::tr_main::tr
                 .viewParms
-                .projectionMatrix[9 as libc::c_int as usize]
+                .projectionMatrix[9 as i32 as usize]
         + crate::src::renderergl1::tr_main::tr
             .viewParms
-            .projectionMatrix[13 as libc::c_int as usize];
-    projected[2 as libc::c_int as usize] = p[0 as libc::c_int as usize]
+            .projectionMatrix[13 as i32 as usize];
+    projected[2 as i32 as usize] = p[0 as i32 as usize]
         * crate::src::renderergl1::tr_main::tr
             .viewParms
-            .projectionMatrix[2 as libc::c_int as usize]
-        + p[1 as libc::c_int as usize]
+            .projectionMatrix[2 as i32 as usize]
+        + p[1 as i32 as usize]
             * crate::src::renderergl1::tr_main::tr
                 .viewParms
-                .projectionMatrix[6 as libc::c_int as usize]
-        + p[2 as libc::c_int as usize]
+                .projectionMatrix[6 as i32 as usize]
+        + p[2 as i32 as usize]
             * crate::src::renderergl1::tr_main::tr
                 .viewParms
-                .projectionMatrix[10 as libc::c_int as usize]
+                .projectionMatrix[10 as i32 as usize]
         + crate::src::renderergl1::tr_main::tr
             .viewParms
-            .projectionMatrix[14 as libc::c_int as usize];
-    projected[3 as libc::c_int as usize] = p[0 as libc::c_int as usize]
+            .projectionMatrix[14 as i32 as usize];
+    projected[3 as i32 as usize] = p[0 as i32 as usize]
         * crate::src::renderergl1::tr_main::tr
             .viewParms
-            .projectionMatrix[3 as libc::c_int as usize]
-        + p[1 as libc::c_int as usize]
+            .projectionMatrix[3 as i32 as usize]
+        + p[1 as i32 as usize]
             * crate::src::renderergl1::tr_main::tr
                 .viewParms
-                .projectionMatrix[7 as libc::c_int as usize]
-        + p[2 as libc::c_int as usize]
+                .projectionMatrix[7 as i32 as usize]
+        + p[2 as i32 as usize]
             * crate::src::renderergl1::tr_main::tr
                 .viewParms
-                .projectionMatrix[11 as libc::c_int as usize]
+                .projectionMatrix[11 as i32 as usize]
         + crate::src::renderergl1::tr_main::tr
             .viewParms
-            .projectionMatrix[15 as libc::c_int as usize];
-    pr = projected[1 as libc::c_int as usize] / projected[3 as libc::c_int as usize];
+            .projectionMatrix[15 as i32 as usize];
+    pr = projected[1 as i32 as usize] / projected[3 as i32 as usize];
     if pr > 1.0f32 {
         pr = 1.0f32
     }
@@ -367,11 +367,11 @@ R_CullModel
 unsafe extern "C" fn R_CullModel(
     mut header: *mut crate::qfiles_h::md3Header_t,
     mut ent: *mut crate::tr_local_h::trRefEntity_t,
-) -> libc::c_int {
+) -> i32 {
     let mut bounds: [crate::src::qcommon::q_shared::vec3_t; 2] = [[0.; 3]; 2];
     let mut oldFrame: *mut crate::qfiles_h::md3Frame_t = 0 as *mut crate::qfiles_h::md3Frame_t;
     let mut newFrame: *mut crate::qfiles_h::md3Frame_t = 0 as *mut crate::qfiles_h::md3Frame_t;
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     // compute frame pointers
     newFrame = ((header as *mut crate::src::qcommon::q_shared::byte)
         .offset((*header).ofsFrames as isize) as *mut crate::qfiles_h::md3Frame_t)
@@ -390,11 +390,11 @@ unsafe extern "C" fn R_CullModel(
                     crate::src::renderergl1::tr_main::tr
                         .pc
                         .c_sphere_cull_md3_out += 1;
-                    return 2 as libc::c_int;
+                    return 2 as i32;
                 }
                 0 => {
                     crate::src::renderergl1::tr_main::tr.pc.c_sphere_cull_md3_in += 1;
-                    return 0 as libc::c_int;
+                    return 0 as i32;
                 }
                 1 => {
                     crate::src::renderergl1::tr_main::tr
@@ -404,8 +404,8 @@ unsafe extern "C" fn R_CullModel(
                 _ => {}
             }
         } else {
-            let mut sphereCull: libc::c_int = 0;
-            let mut sphereCullB: libc::c_int = 0;
+            let mut sphereCull: i32 = 0;
+            let mut sphereCullB: i32 = 0;
             sphereCull = crate::src::renderergl1::tr_main::R_CullLocalPointAndRadius(
                 (*newFrame).localOrigin.as_mut_ptr(),
                 (*newFrame).radius,
@@ -419,15 +419,15 @@ unsafe extern "C" fn R_CullModel(
                 )
             }
             if sphereCull == sphereCullB {
-                if sphereCull == 2 as libc::c_int {
+                if sphereCull == 2 as i32 {
                     crate::src::renderergl1::tr_main::tr
                         .pc
                         .c_sphere_cull_md3_out += 1;
-                    return 2 as libc::c_int;
+                    return 2 as i32;
                 } else {
-                    if sphereCull == 0 as libc::c_int {
+                    if sphereCull == 0 as i32 {
                         crate::src::renderergl1::tr_main::tr.pc.c_sphere_cull_md3_in += 1;
-                        return 0 as libc::c_int;
+                        return 0 as i32;
                     } else {
                         crate::src::renderergl1::tr_main::tr
                             .pc
@@ -438,38 +438,38 @@ unsafe extern "C" fn R_CullModel(
         }
     }
     // calculate a bounding box in the current coordinate system
-    i = 0 as libc::c_int;
-    while i < 3 as libc::c_int {
-        bounds[0 as libc::c_int as usize][i as usize] = if (*oldFrame).bounds
-            [0 as libc::c_int as usize][i as usize]
-            < (*newFrame).bounds[0 as libc::c_int as usize][i as usize]
+    i = 0 as i32;
+    while i < 3 as i32 {
+        bounds[0 as i32 as usize][i as usize] = if (*oldFrame).bounds
+            [0 as i32 as usize][i as usize]
+            < (*newFrame).bounds[0 as i32 as usize][i as usize]
         {
-            (*oldFrame).bounds[0 as libc::c_int as usize][i as usize]
+            (*oldFrame).bounds[0 as i32 as usize][i as usize]
         } else {
-            (*newFrame).bounds[0 as libc::c_int as usize][i as usize]
+            (*newFrame).bounds[0 as i32 as usize][i as usize]
         };
-        bounds[1 as libc::c_int as usize][i as usize] = if (*oldFrame).bounds
-            [1 as libc::c_int as usize][i as usize]
-            > (*newFrame).bounds[1 as libc::c_int as usize][i as usize]
+        bounds[1 as i32 as usize][i as usize] = if (*oldFrame).bounds
+            [1 as i32 as usize][i as usize]
+            > (*newFrame).bounds[1 as i32 as usize][i as usize]
         {
-            (*oldFrame).bounds[1 as libc::c_int as usize][i as usize]
+            (*oldFrame).bounds[1 as i32 as usize][i as usize]
         } else {
-            (*newFrame).bounds[1 as libc::c_int as usize][i as usize]
+            (*newFrame).bounds[1 as i32 as usize][i as usize]
         };
         i += 1
     }
     match crate::src::renderergl1::tr_main::R_CullLocalBox(bounds.as_mut_ptr()) {
         0 => {
             crate::src::renderergl1::tr_main::tr.pc.c_box_cull_md3_in += 1;
-            return 0 as libc::c_int;
+            return 0 as i32;
         }
         1 => {
             crate::src::renderergl1::tr_main::tr.pc.c_box_cull_md3_clip += 1;
-            return 1 as libc::c_int;
+            return 1 as i32;
         }
         2 | _ => {
             crate::src::renderergl1::tr_main::tr.pc.c_box_cull_md3_out += 1;
-            return 2 as libc::c_int;
+            return 2 as i32;
         }
     };
 }
@@ -490,25 +490,25 @@ R_ComputeLOD
 
 pub unsafe extern "C" fn R_ComputeLOD(
     mut ent: *mut crate::tr_local_h::trRefEntity_t,
-) -> libc::c_int {
-    let mut radius: libc::c_float = 0.;
-    let mut flod: libc::c_float = 0.;
-    let mut lodscale: libc::c_float = 0.;
-    let mut projectedRadius: libc::c_float = 0.;
+) -> i32 {
+    let mut radius: f32 = 0.;
+    let mut flod: f32 = 0.;
+    let mut lodscale: f32 = 0.;
+    let mut projectedRadius: f32 = 0.;
     let mut frame: *mut crate::qfiles_h::md3Frame_t = 0 as *mut crate::qfiles_h::md3Frame_t;
     let mut mdr: *mut crate::qfiles_h::mdrHeader_t = 0 as *mut crate::qfiles_h::mdrHeader_t;
     let mut mdrframe: *mut crate::qfiles_h::mdrFrame_t = 0 as *mut crate::qfiles_h::mdrFrame_t;
-    let mut lod: libc::c_int = 0;
-    if (*crate::src::renderergl1::tr_main::tr.currentModel).numLods < 2 as libc::c_int {
+    let mut lod: i32 = 0;
+    if (*crate::src::renderergl1::tr_main::tr.currentModel).numLods < 2 as i32 {
         // model has only 1 LOD level, skip computations and bias
-        lod = 0 as libc::c_int
+        lod = 0 as i32
     } else {
         // multiple LODs exist, so compute projected bounding sphere
         // and use that as a criteria for selecting LOD
-        if (*crate::src::renderergl1::tr_main::tr.currentModel).type_0 as libc::c_uint
-            == crate::tr_local_h::MOD_MDR as libc::c_int as libc::c_uint
+        if (*crate::src::renderergl1::tr_main::tr.currentModel).type_0 as u32
+            == crate::tr_local_h::MOD_MDR as i32 as u32
         {
-            let mut frameSize: libc::c_int = 0;
+            let mut frameSize: i32 = 0;
             mdr = (*crate::src::renderergl1::tr_main::tr.currentModel).modelData
                 as *mut crate::qfiles_h::mdrHeader_t;
             frameSize = &mut *(*(0 as *mut crate::qfiles_h::mdrFrame_t))
@@ -516,60 +516,60 @@ pub unsafe extern "C" fn R_ComputeLOD(
                 .as_mut_ptr()
                 .offset((*mdr).numBones as isize)
                 as *mut crate::qfiles_h::mdrBone_t
-                as crate::stddef_h::size_t as libc::c_int;
+                as crate::stddef_h::size_t as i32;
             mdrframe = (mdr as *mut crate::src::qcommon::q_shared::byte)
                 .offset((*mdr).ofsFrames as isize)
                 .offset((frameSize * (*ent).e.frame) as isize)
                 as *mut crate::qfiles_h::mdrFrame_t;
             radius = crate::src::qcommon::q_math::RadiusFromBounds(
-                (*mdrframe).bounds[0 as libc::c_int as usize].as_mut_ptr()
+                (*mdrframe).bounds[0 as i32 as usize].as_mut_ptr()
                     as *const crate::src::qcommon::q_shared::vec_t,
-                (*mdrframe).bounds[1 as libc::c_int as usize].as_mut_ptr()
+                (*mdrframe).bounds[1 as i32 as usize].as_mut_ptr()
                     as *const crate::src::qcommon::q_shared::vec_t,
             )
         } else {
             frame = ((*crate::src::renderergl1::tr_main::tr.currentModel).md3
-                [0 as libc::c_int as usize] as *mut libc::c_uchar)
+                [0 as i32 as usize] as *mut u8)
                 .offset(
                     (*(*crate::src::renderergl1::tr_main::tr.currentModel).md3
-                        [0 as libc::c_int as usize])
+                        [0 as i32 as usize])
                         .ofsFrames as isize,
                 ) as *mut crate::qfiles_h::md3Frame_t;
             frame = frame.offset((*ent).e.frame as isize);
             radius = crate::src::qcommon::q_math::RadiusFromBounds(
-                (*frame).bounds[0 as libc::c_int as usize].as_mut_ptr()
+                (*frame).bounds[0 as i32 as usize].as_mut_ptr()
                     as *const crate::src::qcommon::q_shared::vec_t,
-                (*frame).bounds[1 as libc::c_int as usize].as_mut_ptr()
+                (*frame).bounds[1 as i32 as usize].as_mut_ptr()
                     as *const crate::src::qcommon::q_shared::vec_t,
             )
         }
         projectedRadius = ProjectRadius(radius, (*ent).e.origin.as_mut_ptr());
-        if projectedRadius != 0 as libc::c_int as libc::c_float {
+        if projectedRadius != 0 as i32 as f32 {
             lodscale = (*crate::src::renderergl1::tr_init::r_lodscale).value;
-            if lodscale > 20 as libc::c_int as libc::c_float {
-                lodscale = 20 as libc::c_int as libc::c_float
+            if lodscale > 20 as i32 as f32 {
+                lodscale = 20 as i32 as f32
             }
             flod = 1.0f32 - projectedRadius * lodscale
         } else {
             // object intersects near view plane, e.g. view weapon
-            flod = 0 as libc::c_int as libc::c_float
+            flod = 0 as i32 as f32
         }
-        flod *= (*crate::src::renderergl1::tr_main::tr.currentModel).numLods as libc::c_float;
+        flod *= (*crate::src::renderergl1::tr_main::tr.currentModel).numLods as f32;
         lod = crate::src::renderergl1::tr_main::ri
             .ftol
-            .expect("non-null function pointer")(flod) as libc::c_int;
-        if lod < 0 as libc::c_int {
-            lod = 0 as libc::c_int
+            .expect("non-null function pointer")(flod) as i32;
+        if lod < 0 as i32 {
+            lod = 0 as i32
         } else if lod >= (*crate::src::renderergl1::tr_main::tr.currentModel).numLods {
-            lod = (*crate::src::renderergl1::tr_main::tr.currentModel).numLods - 1 as libc::c_int
+            lod = (*crate::src::renderergl1::tr_main::tr.currentModel).numLods - 1 as i32
         }
     }
     lod += (*crate::src::renderergl1::tr_init::r_lodbias).integer;
     if lod >= (*crate::src::renderergl1::tr_main::tr.currentModel).numLods {
-        lod = (*crate::src::renderergl1::tr_main::tr.currentModel).numLods - 1 as libc::c_int
+        lod = (*crate::src::renderergl1::tr_main::tr.currentModel).numLods - 1 as i32
     }
-    if lod < 0 as libc::c_int {
-        lod = 0 as libc::c_int
+    if lod < 0 as i32 {
+        lod = 0 as i32
     }
     return lod;
 }
@@ -584,50 +584,50 @@ R_ComputeFogNum
 pub unsafe extern "C" fn R_ComputeFogNum(
     mut header: *mut crate::qfiles_h::md3Header_t,
     mut ent: *mut crate::tr_local_h::trRefEntity_t,
-) -> libc::c_int {
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
+) -> i32 {
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
     let mut fog: *mut crate::tr_local_h::fog_t = 0 as *mut crate::tr_local_h::fog_t;
     let mut md3Frame: *mut crate::qfiles_h::md3Frame_t = 0 as *mut crate::qfiles_h::md3Frame_t;
     let mut localOrigin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    if crate::src::renderergl1::tr_main::tr.refdef.rdflags & 0x1 as libc::c_int != 0 {
-        return 0 as libc::c_int;
+    if crate::src::renderergl1::tr_main::tr.refdef.rdflags & 0x1 as i32 != 0 {
+        return 0 as i32;
     }
     // FIXME: non-normalized axis issues
     md3Frame = ((header as *mut crate::src::qcommon::q_shared::byte)
         .offset((*header).ofsFrames as isize) as *mut crate::qfiles_h::md3Frame_t)
         .offset((*ent).e.frame as isize);
-    localOrigin[0 as libc::c_int as usize] = (*ent).e.origin[0 as libc::c_int as usize]
-        + (*md3Frame).localOrigin[0 as libc::c_int as usize];
-    localOrigin[1 as libc::c_int as usize] = (*ent).e.origin[1 as libc::c_int as usize]
-        + (*md3Frame).localOrigin[1 as libc::c_int as usize];
-    localOrigin[2 as libc::c_int as usize] = (*ent).e.origin[2 as libc::c_int as usize]
-        + (*md3Frame).localOrigin[2 as libc::c_int as usize];
-    i = 1 as libc::c_int;
+    localOrigin[0 as i32 as usize] = (*ent).e.origin[0 as i32 as usize]
+        + (*md3Frame).localOrigin[0 as i32 as usize];
+    localOrigin[1 as i32 as usize] = (*ent).e.origin[1 as i32 as usize]
+        + (*md3Frame).localOrigin[1 as i32 as usize];
+    localOrigin[2 as i32 as usize] = (*ent).e.origin[2 as i32 as usize]
+        + (*md3Frame).localOrigin[2 as i32 as usize];
+    i = 1 as i32;
     while i < (*crate::src::renderergl1::tr_main::tr.world).numfogs {
         fog = &mut *(*crate::src::renderergl1::tr_main::tr.world)
             .fogs
             .offset(i as isize) as *mut crate::tr_local_h::fog_t;
-        j = 0 as libc::c_int;
-        while j < 3 as libc::c_int {
+        j = 0 as i32;
+        while j < 3 as i32 {
             if localOrigin[j as usize] - (*md3Frame).radius
-                >= (*fog).bounds[1 as libc::c_int as usize][j as usize]
+                >= (*fog).bounds[1 as i32 as usize][j as usize]
             {
                 break;
             }
             if localOrigin[j as usize] + (*md3Frame).radius
-                <= (*fog).bounds[0 as libc::c_int as usize][j as usize]
+                <= (*fog).bounds[0 as i32 as usize][j as usize]
             {
                 break;
             }
             j += 1
         }
-        if j == 3 as libc::c_int {
+        if j == 3 as i32 {
             return i;
         }
         i += 1
     }
-    return 0 as libc::c_int;
+    return 0 as i32;
 }
 /*
 ===========================================================================
@@ -950,26 +950,26 @@ R_AddMD3Surfaces
 #[no_mangle]
 
 pub unsafe extern "C" fn R_AddMD3Surfaces(mut ent: *mut crate::tr_local_h::trRefEntity_t) {
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     let mut header: *mut crate::qfiles_h::md3Header_t = 0 as *mut crate::qfiles_h::md3Header_t;
     let mut surface: *mut crate::qfiles_h::md3Surface_t = 0 as *mut crate::qfiles_h::md3Surface_t;
     let mut md3Shader: *mut crate::qfiles_h::md3Shader_t = 0 as *mut crate::qfiles_h::md3Shader_t;
     let mut shader: *mut crate::tr_local_h::shader_t = 0 as *mut crate::tr_local_h::shader_t;
-    let mut cull: libc::c_int = 0;
-    let mut lod: libc::c_int = 0;
-    let mut fogNum: libc::c_int = 0;
+    let mut cull: i32 = 0;
+    let mut lod: i32 = 0;
+    let mut fogNum: i32 = 0;
     let mut personalModel: crate::src::qcommon::q_shared::qboolean =
         crate::src::qcommon::q_shared::qfalse;
     // don't add third_person objects if not in a portal
-    personalModel = ((*ent).e.renderfx & 0x2 as libc::c_int != 0
+    personalModel = ((*ent).e.renderfx & 0x2 as i32 != 0
         && crate::src::renderergl1::tr_main::tr.viewParms.isPortal as u64 == 0)
-        as libc::c_int as crate::src::qcommon::q_shared::qboolean;
-    if (*ent).e.renderfx & 0x200 as libc::c_int != 0 {
+        as i32 as crate::src::qcommon::q_shared::qboolean;
+    if (*ent).e.renderfx & 0x200 as i32 != 0 {
         (*ent).e.frame %= (*(*crate::src::renderergl1::tr_main::tr.currentModel).md3
-            [0 as libc::c_int as usize])
+            [0 as i32 as usize])
             .numFrames;
         (*ent).e.oldframe %= (*(*crate::src::renderergl1::tr_main::tr.currentModel).md3
-            [0 as libc::c_int as usize])
+            [0 as i32 as usize])
             .numFrames
     }
     //
@@ -979,19 +979,19 @@ pub unsafe extern "C" fn R_AddMD3Surfaces(mut ent: *mut crate::tr_local_h::trRef
     // range checked again.
     //
     if (*ent).e.frame
-        >= (*(*crate::src::renderergl1::tr_main::tr.currentModel).md3[0 as libc::c_int as usize])
+        >= (*(*crate::src::renderergl1::tr_main::tr.currentModel).md3[0 as i32 as usize])
             .numFrames
-        || (*ent).e.frame < 0 as libc::c_int
+        || (*ent).e.frame < 0 as i32
         || (*ent).e.oldframe
             >= (*(*crate::src::renderergl1::tr_main::tr.currentModel).md3
-                [0 as libc::c_int as usize])
+                [0 as i32 as usize])
                 .numFrames
-        || (*ent).e.oldframe < 0 as libc::c_int
+        || (*ent).e.oldframe < 0 as i32
     {
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_DEVELOPER as libc::c_int,
+            crate::src::qcommon::q_shared::PRINT_DEVELOPER as i32,
             b"R_AddMD3Surfaces: no such frame %d to %d for \'%s\'\n\x00" as *const u8
                 as *const libc::c_char,
             (*ent).e.oldframe,
@@ -1000,8 +1000,8 @@ pub unsafe extern "C" fn R_AddMD3Surfaces(mut ent: *mut crate::tr_local_h::trRef
                 .name
                 .as_mut_ptr(),
         );
-        (*ent).e.frame = 0 as libc::c_int;
-        (*ent).e.oldframe = 0 as libc::c_int
+        (*ent).e.frame = 0 as i32;
+        (*ent).e.oldframe = 0 as i32
     }
     //
     // compute LOD
@@ -1013,14 +1013,14 @@ pub unsafe extern "C" fn R_AddMD3Surfaces(mut ent: *mut crate::tr_local_h::trRef
     // is outside the view frustum.
     //
     cull = R_CullModel(header, ent);
-    if cull == 2 as libc::c_int {
+    if cull == 2 as i32 {
         return;
     }
     //
     // set up lighting now that we know we aren't culled
     //
     if personalModel as u64 == 0
-        || (*crate::src::renderergl1::tr_init::r_shadows).integer > 1 as libc::c_int
+        || (*crate::src::renderergl1::tr_init::r_shadows).integer > 1 as i32
     {
         crate::src::renderergl1::tr_light::R_SetupEntityLighting(
             &mut crate::src::renderergl1::tr_main::tr.refdef as *mut _
@@ -1037,21 +1037,21 @@ pub unsafe extern "C" fn R_AddMD3Surfaces(mut ent: *mut crate::tr_local_h::trRef
     //
     surface = (header as *mut crate::src::qcommon::q_shared::byte)
         .offset((*header).ofsSurfaces as isize) as *mut crate::qfiles_h::md3Surface_t;
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < (*header).numSurfaces {
         if (*ent).e.customShader != 0 {
             shader = crate::src::renderergl1::tr_shader::R_GetShaderByHandle((*ent).e.customShader)
                 as *mut crate::tr_local_h::shader_s
-        } else if (*ent).e.customSkin > 0 as libc::c_int
+        } else if (*ent).e.customSkin > 0 as i32
             && (*ent).e.customSkin < crate::src::renderergl1::tr_main::tr.numSkins
         {
             let mut skin: *mut crate::tr_local_h::skin_t = 0 as *mut crate::tr_local_h::skin_t;
-            let mut j: libc::c_int = 0;
+            let mut j: i32 = 0;
             skin = crate::src::renderergl1::tr_image::R_GetSkinByHandle((*ent).e.customSkin)
                 as *mut crate::tr_local_h::skin_s;
             // match the surface name to something in the skin file
             shader = crate::src::renderergl1::tr_main::tr.defaultShader;
-            j = 0 as libc::c_int;
+            j = 0 as i32;
             while j < (*skin).numSurfaces {
                 // the names have both been lowercased
                 if ::libc::strcmp(
@@ -1069,7 +1069,7 @@ pub unsafe extern "C" fn R_AddMD3Surfaces(mut ent: *mut crate::tr_local_h::trRef
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_DEVELOPER as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_DEVELOPER as i32,
                     b"WARNING: no shader for surface %s in skin %s\n\x00" as *const u8
                         as *const libc::c_char,
                     (*surface).name.as_mut_ptr(),
@@ -1079,14 +1079,14 @@ pub unsafe extern "C" fn R_AddMD3Surfaces(mut ent: *mut crate::tr_local_h::trRef
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_DEVELOPER as libc::c_int,
+                    crate::src::qcommon::q_shared::PRINT_DEVELOPER as i32,
                     b"WARNING: shader %s in skin %s not found\n\x00" as *const u8
                         as *const libc::c_char,
                     (*shader).name.as_mut_ptr(),
                     (*skin).name.as_mut_ptr(),
                 );
             }
-        } else if (*surface).numShaders <= 0 as libc::c_int {
+        } else if (*surface).numShaders <= 0 as i32 {
             shader = crate::src::renderergl1::tr_main::tr.defaultShader
         } else {
             md3Shader = (surface as *mut crate::src::qcommon::q_shared::byte)
@@ -1098,31 +1098,31 @@ pub unsafe extern "C" fn R_AddMD3Surfaces(mut ent: *mut crate::tr_local_h::trRef
         // we will add shadows even if the main object isn't visible in the view
         // stencil shadows can't do personal models unless I polyhedron clip
         if personalModel as u64 == 0
-            && (*crate::src::renderergl1::tr_init::r_shadows).integer == 2 as libc::c_int
-            && fogNum == 0 as libc::c_int
-            && (*ent).e.renderfx & (0x40 as libc::c_int | 0x8 as libc::c_int) == 0
-            && (*shader).sort == crate::tr_local_h::SS_OPAQUE as libc::c_int as libc::c_float
+            && (*crate::src::renderergl1::tr_init::r_shadows).integer == 2 as i32
+            && fogNum == 0 as i32
+            && (*ent).e.renderfx & (0x40 as i32 | 0x8 as i32) == 0
+            && (*shader).sort == crate::tr_local_h::SS_OPAQUE as i32 as f32
         {
             crate::src::renderergl1::tr_main::R_AddDrawSurf(
                 surface as *mut libc::c_void as *mut crate::tr_local_h::surfaceType_t,
                 crate::src::renderergl1::tr_main::tr.shadowShader
                     as *mut crate::tr_local_h::shader_s,
-                0 as libc::c_int,
-                crate::src::qcommon::q_shared::qfalse as libc::c_int,
+                0 as i32,
+                crate::src::qcommon::q_shared::qfalse as i32,
             );
         }
         // projection shadows work fine with personal models
-        if (*crate::src::renderergl1::tr_init::r_shadows).integer == 3 as libc::c_int
-            && fogNum == 0 as libc::c_int
-            && (*ent).e.renderfx & 0x100 as libc::c_int != 0
-            && (*shader).sort == crate::tr_local_h::SS_OPAQUE as libc::c_int as libc::c_float
+        if (*crate::src::renderergl1::tr_init::r_shadows).integer == 3 as i32
+            && fogNum == 0 as i32
+            && (*ent).e.renderfx & 0x100 as i32 != 0
+            && (*shader).sort == crate::tr_local_h::SS_OPAQUE as i32 as f32
         {
             crate::src::renderergl1::tr_main::R_AddDrawSurf(
                 surface as *mut libc::c_void as *mut crate::tr_local_h::surfaceType_t,
                 crate::src::renderergl1::tr_main::tr.projectionShadowShader
                     as *mut crate::tr_local_h::shader_s,
-                0 as libc::c_int,
-                crate::src::qcommon::q_shared::qfalse as libc::c_int,
+                0 as i32,
+                crate::src::qcommon::q_shared::qfalse as i32,
             );
         }
         // don't add third_person objects if not viewing through a portal
@@ -1131,7 +1131,7 @@ pub unsafe extern "C" fn R_AddMD3Surfaces(mut ent: *mut crate::tr_local_h::trRef
                 surface as *mut libc::c_void as *mut crate::tr_local_h::surfaceType_t,
                 shader as *mut crate::tr_local_h::shader_s,
                 fogNum,
-                crate::src::qcommon::q_shared::qfalse as libc::c_int,
+                crate::src::qcommon::q_shared::qfalse as i32,
             );
         }
         surface = (surface as *mut crate::src::qcommon::q_shared::byte)

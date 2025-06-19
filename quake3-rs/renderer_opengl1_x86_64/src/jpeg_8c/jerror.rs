@@ -1,5 +1,5 @@
 // =============== BEGIN jerror_h ================
-pub type C2RustUnnamed_1 = libc::c_uint;
+pub type C2RustUnnamed_1 = u32;
 
 pub const JMSG_NOMESSAGE: crate::src::jpeg_8c::jerror::C2RustUnnamed_1 = 0;
 
@@ -491,7 +491,7 @@ unsafe extern "C" fn error_exit(mut cinfo: crate::jpeglib_h::j_common_ptr) {
     .expect("non-null function pointer")(cinfo);
     /* Let the memory manager delete any temp files before we die */
     crate::src::jpeg_8c::jcomapi::jpeg_destroy(cinfo as *mut crate::jpeglib_h::jpeg_common_struct);
-    ::libc::exit(1 as libc::c_int);
+    ::libc::exit(1 as i32);
 }
 /*
  * Actual output of an error or trace message.
@@ -537,16 +537,16 @@ unsafe extern "C" fn output_message(mut cinfo: crate::jpeglib_h::j_common_ptr) {
 
 unsafe extern "C" fn emit_message(
     mut cinfo: crate::jpeglib_h::j_common_ptr,
-    mut msg_level: libc::c_int,
+    mut msg_level: i32,
 ) {
     let mut err: *mut crate::jpeglib_h::jpeg_error_mgr = (*cinfo).err;
-    if msg_level < 0 as libc::c_int {
+    if msg_level < 0 as i32 {
         /* It's a warning message.  Since corrupt files may generate many warnings,
          * the policy implemented here is to show only the first warning,
          * unless trace_level >= 3.
          */
-        if (*err).num_warnings == 0 as libc::c_int as libc::c_long
-            || (*err).trace_level >= 3 as libc::c_int
+        if (*err).num_warnings == 0 as i32 as libc::c_long
+            || (*err).trace_level >= 3 as i32
         {
             Some((*err).output_message.expect("non-null function pointer"))
                 .expect("non-null function pointer")(cinfo);
@@ -571,13 +571,13 @@ unsafe extern "C" fn format_message(
     mut buffer: *mut libc::c_char,
 ) {
     let mut err: *mut crate::jpeglib_h::jpeg_error_mgr = (*cinfo).err;
-    let mut msg_code: libc::c_int = (*err).msg_code;
+    let mut msg_code: i32 = (*err).msg_code;
     let mut msgtext: *const libc::c_char = 0 as *const libc::c_char;
     let mut msgptr: *const libc::c_char = 0 as *const libc::c_char;
     let mut ch: libc::c_char = 0;
     let mut isstring: crate::jmorecfg_h::boolean = 0;
     /* Look up message string in proper table */
-    if msg_code > 0 as libc::c_int && msg_code <= (*err).last_jpeg_message {
+    if msg_code > 0 as i32 && msg_code <= (*err).last_jpeg_message {
         msgtext = *(*err).jpeg_message_table.offset(msg_code as isize)
     } else if !(*err).addon_message_table.is_null()
         && msg_code >= (*err).first_addon_message
@@ -589,24 +589,24 @@ unsafe extern "C" fn format_message(
     }
     /* Defend against bogus message number */
     if msgtext.is_null() {
-        (*err).msg_parm.i[0 as libc::c_int as usize] = msg_code;
-        msgtext = *(*err).jpeg_message_table.offset(0 as libc::c_int as isize)
+        (*err).msg_parm.i[0 as i32 as usize] = msg_code;
+        msgtext = *(*err).jpeg_message_table.offset(0 as i32 as isize)
     }
     /* Check for string parameter, as indicated by %s in the message text */
-    isstring = 0 as libc::c_int;
+    isstring = 0 as i32;
     msgptr = msgtext;
     loop {
         let fresh0 = msgptr;
         msgptr = msgptr.offset(1);
         ch = *fresh0;
-        if !(ch as libc::c_int != '\u{0}' as i32) {
+        if !(ch as i32 != '\u{0}' as i32) {
             break;
         }
-        if !(ch as libc::c_int == '%' as i32) {
+        if !(ch as i32 == '%' as i32) {
             continue;
         }
-        if *msgptr as libc::c_int == 's' as i32 {
-            isstring = 1 as libc::c_int
+        if *msgptr as i32 == 's' as i32 {
+            isstring = 1 as i32
         }
         break;
     }
@@ -617,14 +617,14 @@ unsafe extern "C" fn format_message(
         ::libc::sprintf(
             buffer,
             msgtext,
-            (*err).msg_parm.i[0 as libc::c_int as usize],
-            (*err).msg_parm.i[1 as libc::c_int as usize],
-            (*err).msg_parm.i[2 as libc::c_int as usize],
-            (*err).msg_parm.i[3 as libc::c_int as usize],
-            (*err).msg_parm.i[4 as libc::c_int as usize],
-            (*err).msg_parm.i[5 as libc::c_int as usize],
-            (*err).msg_parm.i[6 as libc::c_int as usize],
-            (*err).msg_parm.i[7 as libc::c_int as usize],
+            (*err).msg_parm.i[0 as i32 as usize],
+            (*err).msg_parm.i[1 as i32 as usize],
+            (*err).msg_parm.i[2 as i32 as usize],
+            (*err).msg_parm.i[3 as i32 as usize],
+            (*err).msg_parm.i[4 as i32 as usize],
+            (*err).msg_parm.i[5 as i32 as usize],
+            (*err).msg_parm.i[6 as i32 as usize],
+            (*err).msg_parm.i[7 as i32 as usize],
         );
     };
 }
@@ -637,9 +637,9 @@ unsafe extern "C" fn format_message(
  */
 
 unsafe extern "C" fn reset_error_mgr(mut cinfo: crate::jpeglib_h::j_common_ptr) {
-    (*(*cinfo).err).num_warnings = 0 as libc::c_int as libc::c_long;
+    (*(*cinfo).err).num_warnings = 0 as i32 as libc::c_long;
     /* trace_level is not reset since it is an application-supplied parameter */
-    (*(*cinfo).err).msg_code = 0 as libc::c_int;
+    (*(*cinfo).err).msg_code = 0 as i32;
     /* may be useful as a flag for "no error" */
 }
 /* Declarations for routines called by application.
@@ -672,7 +672,7 @@ pub unsafe extern "C" fn jpeg_std_error(
         Some(error_exit as unsafe extern "C" fn(_: crate::jpeglib_h::j_common_ptr) -> ()); /* default = no tracing */
     (*err).emit_message = Some(
         emit_message
-            as unsafe extern "C" fn(_: crate::jpeglib_h::j_common_ptr, _: libc::c_int) -> (),
+            as unsafe extern "C" fn(_: crate::jpeglib_h::j_common_ptr, _: i32) -> (),
     ); /* no warnings emitted yet */
     (*err).output_message =
         Some(output_message as unsafe extern "C" fn(_: crate::jpeglib_h::j_common_ptr) -> ()); /* may be useful as a flag for "no error" */
@@ -682,15 +682,15 @@ pub unsafe extern "C" fn jpeg_std_error(
     );
     (*err).reset_error_mgr =
         Some(reset_error_mgr as unsafe extern "C" fn(_: crate::jpeglib_h::j_common_ptr) -> ());
-    (*err).trace_level = 0 as libc::c_int;
-    (*err).num_warnings = 0 as libc::c_int as libc::c_long;
-    (*err).msg_code = 0 as libc::c_int;
+    (*err).trace_level = 0 as i32;
+    (*err).num_warnings = 0 as i32 as libc::c_long;
+    (*err).msg_code = 0 as i32;
     /* Initialize message table pointers */
     (*err).jpeg_message_table = jpeg_std_message_table.as_ptr(); /* for safety */
     (*err).last_jpeg_message =
-        crate::src::jpeg_8c::jerror::JMSG_LASTMSGCODE as libc::c_int - 1 as libc::c_int;
+        crate::src::jpeg_8c::jerror::JMSG_LASTMSGCODE as i32 - 1 as i32;
     (*err).addon_message_table = 0 as *const *const libc::c_char;
-    (*err).first_addon_message = 0 as libc::c_int;
-    (*err).last_addon_message = 0 as libc::c_int;
+    (*err).first_addon_message = 0 as i32;
+    (*err).last_addon_message = 0 as i32;
     return err;
 }

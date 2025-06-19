@@ -17,16 +17,16 @@ ASCII characters.*/
 pub unsafe extern "C" fn op_strncasecmp(
     mut _a: *const libc::c_char,
     mut _b: *const libc::c_char,
-    mut _n: libc::c_int,
-) -> libc::c_int {
-    let mut i: libc::c_int = 0;
-    i = 0 as libc::c_int;
+    mut _n: i32,
+) -> i32 {
+    let mut i: i32 = 0;
+    i = 0 as i32;
     while i < _n {
-        let mut a: libc::c_int = 0;
-        let mut b: libc::c_int = 0;
-        let mut d: libc::c_int = 0;
-        a = *_a.offset(i as isize) as libc::c_int;
-        b = *_b.offset(i as isize) as libc::c_int;
+        let mut a: i32 = 0;
+        let mut b: i32 = 0;
+        let mut d: i32 = 0;
+        a = *_a.offset(i as isize) as i32;
+        b = *_b.offset(i as isize) as i32;
         if a >= 'a' as i32 && a <= 'z' as i32 {
             a -= 'a' as i32 - 'A' as i32
         }
@@ -39,5 +39,5 @@ pub unsafe extern "C" fn op_strncasecmp(
         }
         i += 1
     }
-    return 0 as libc::c_int;
+    return 0 as i32;
 }

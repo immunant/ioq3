@@ -259,28 +259,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 #[no_mangle]
 
-pub static mut r_firstSceneDrawSurf: libc::c_int = 0;
+pub static mut r_firstSceneDrawSurf: i32 = 0;
 #[no_mangle]
 
-pub static mut r_numdlights: libc::c_int = 0;
+pub static mut r_numdlights: i32 = 0;
 #[no_mangle]
 
-pub static mut r_firstSceneDlight: libc::c_int = 0;
+pub static mut r_firstSceneDlight: i32 = 0;
 #[no_mangle]
 
-pub static mut r_numentities: libc::c_int = 0;
+pub static mut r_numentities: i32 = 0;
 #[no_mangle]
 
-pub static mut r_firstSceneEntity: libc::c_int = 0;
+pub static mut r_firstSceneEntity: i32 = 0;
 #[no_mangle]
 
-pub static mut r_numpolys: libc::c_int = 0;
+pub static mut r_numpolys: i32 = 0;
 #[no_mangle]
 
-pub static mut r_firstScenePoly: libc::c_int = 0;
+pub static mut r_firstScenePoly: i32 = 0;
 #[no_mangle]
 
-pub static mut r_numpolyverts: libc::c_int = 0;
+pub static mut r_numpolyverts: i32 = 0;
 /*
 ====================
 R_InitNextFrame
@@ -292,15 +292,15 @@ R_InitNextFrame
 pub unsafe extern "C" fn R_InitNextFrame() {
     (*crate::src::renderergl1::tr_backend::backEndData)
         .commands
-        .used = 0 as libc::c_int;
-    r_firstSceneDrawSurf = 0 as libc::c_int;
-    r_numdlights = 0 as libc::c_int;
-    r_firstSceneDlight = 0 as libc::c_int;
-    r_numentities = 0 as libc::c_int;
-    r_firstSceneEntity = 0 as libc::c_int;
-    r_numpolys = 0 as libc::c_int;
-    r_firstScenePoly = 0 as libc::c_int;
-    r_numpolyverts = 0 as libc::c_int;
+        .used = 0 as i32;
+    r_firstSceneDrawSurf = 0 as i32;
+    r_numdlights = 0 as i32;
+    r_firstSceneDlight = 0 as i32;
+    r_numentities = 0 as i32;
+    r_firstSceneEntity = 0 as i32;
+    r_numpolys = 0 as i32;
+    r_firstScenePoly = 0 as i32;
+    r_numpolyverts = 0 as i32;
 }
 /*
 ====================
@@ -332,14 +332,14 @@ Adds all the scene's polys into this view's drawsurf list
 #[no_mangle]
 
 pub unsafe extern "C" fn R_AddPolygonSurfaces() {
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     let mut sh: *mut crate::tr_local_h::shader_t = 0 as *mut crate::tr_local_h::shader_t;
     let mut poly: *mut crate::tr_local_h::srfPoly_t = 0 as *mut crate::tr_local_h::srfPoly_t;
     crate::src::renderergl1::tr_main::tr.currentEntityNum =
-        ((1 as libc::c_int) << 10 as libc::c_int) - 1 as libc::c_int;
+        ((1 as i32) << 10 as i32) - 1 as i32;
     crate::src::renderergl1::tr_main::tr.shiftedEntityNum =
-        crate::src::renderergl1::tr_main::tr.currentEntityNum << 7 as libc::c_int;
-    i = 0 as libc::c_int;
+        crate::src::renderergl1::tr_main::tr.currentEntityNum << 7 as i32;
+    i = 0 as i32;
     poly = crate::src::renderergl1::tr_main::tr.refdef.polys;
     while i < crate::src::renderergl1::tr_main::tr.refdef.numPolys {
         sh = crate::src::renderergl1::tr_shader::R_GetShaderByHandle((*poly).hShader)
@@ -348,7 +348,7 @@ pub unsafe extern "C" fn R_AddPolygonSurfaces() {
             poly as *mut libc::c_void as *mut crate::tr_local_h::surfaceType_t,
             sh as *mut crate::tr_local_h::shader_s,
             (*poly).fogIndex,
-            crate::src::qcommon::q_shared::qfalse as libc::c_int,
+            crate::src::qcommon::q_shared::qfalse as i32,
         );
         i += 1;
         poly = poly.offset(1)
@@ -364,14 +364,14 @@ RE_AddPolyToScene
 
 pub unsafe extern "C" fn RE_AddPolyToScene(
     mut hShader: crate::src::qcommon::q_shared::qhandle_t,
-    mut numVerts: libc::c_int,
+    mut numVerts: i32,
     mut verts: *const crate::tr_types_h::polyVert_t,
-    mut numPolys: libc::c_int,
+    mut numPolys: i32,
 ) {
     let mut poly: *mut crate::tr_local_h::srfPoly_t = 0 as *mut crate::tr_local_h::srfPoly_t;
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
-    let mut fogIndex: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
+    let mut fogIndex: i32 = 0;
     let mut fog: *mut crate::tr_local_h::fog_t = 0 as *mut crate::tr_local_h::fog_t;
     let mut bounds: [crate::src::qcommon::q_shared::vec3_t; 2] = [[0.; 3]; 2];
     if crate::src::renderergl1::tr_main::tr.registered as u64 == 0 {
@@ -381,13 +381,13 @@ pub unsafe extern "C" fn RE_AddPolyToScene(
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_WARNING as libc::c_int,
+            crate::src::qcommon::q_shared::PRINT_WARNING as i32,
             b"WARNING: RE_AddPolyToScene: NULL poly shader\n\x00" as *const u8
                 as *const libc::c_char,
         );
         return;
     }
-    j = 0 as libc::c_int;
+    j = 0 as i32;
     while j < numPolys {
         if r_numpolyverts + numVerts > crate::src::renderergl1::tr_init::max_polyverts
             || r_numpolys >= crate::src::renderergl1::tr_init::max_polys
@@ -401,7 +401,7 @@ pub unsafe extern "C" fn RE_AddPolyToScene(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_DEVELOPER as libc::c_int,
+                crate::src::qcommon::q_shared::PRINT_DEVELOPER as i32,
                 b"WARNING: RE_AddPolyToScene: r_max_polys or r_max_polyverts reached\n\x00"
                     as *const u8 as *const libc::c_char,
             );
@@ -425,76 +425,76 @@ pub unsafe extern "C" fn RE_AddPolyToScene(
                 crate::tr_types_h::polyVert_t,
             >() as libc::c_ulong),
         );
-        if crate::src::renderergl1::tr_init::glConfig.hardwareType as libc::c_uint
-            == crate::tr_types_h::GLHW_RAGEPRO as libc::c_int as libc::c_uint
+        if crate::src::renderergl1::tr_init::glConfig.hardwareType as u32
+            == crate::tr_types_h::GLHW_RAGEPRO as i32 as u32
         {
-            (*(*poly).verts).modulate[0 as libc::c_int as usize] =
-                255 as libc::c_int as crate::src::qcommon::q_shared::byte;
-            (*(*poly).verts).modulate[1 as libc::c_int as usize] =
-                255 as libc::c_int as crate::src::qcommon::q_shared::byte;
-            (*(*poly).verts).modulate[2 as libc::c_int as usize] =
-                255 as libc::c_int as crate::src::qcommon::q_shared::byte;
-            (*(*poly).verts).modulate[3 as libc::c_int as usize] =
-                255 as libc::c_int as crate::src::qcommon::q_shared::byte
+            (*(*poly).verts).modulate[0 as i32 as usize] =
+                255 as i32 as crate::src::qcommon::q_shared::byte;
+            (*(*poly).verts).modulate[1 as i32 as usize] =
+                255 as i32 as crate::src::qcommon::q_shared::byte;
+            (*(*poly).verts).modulate[2 as i32 as usize] =
+                255 as i32 as crate::src::qcommon::q_shared::byte;
+            (*(*poly).verts).modulate[3 as i32 as usize] =
+                255 as i32 as crate::src::qcommon::q_shared::byte
         }
         // done.
         r_numpolys += 1;
         r_numpolyverts += numVerts;
         // if no world is loaded
         if crate::src::renderergl1::tr_main::tr.world.is_null() {
-            fogIndex = 0 as libc::c_int
-        } else if (*crate::src::renderergl1::tr_main::tr.world).numfogs == 1 as libc::c_int {
-            fogIndex = 0 as libc::c_int
+            fogIndex = 0 as i32
+        } else if (*crate::src::renderergl1::tr_main::tr.world).numfogs == 1 as i32 {
+            fogIndex = 0 as i32
         } else {
             // see if it is in a fog volume
             // find which fog volume the poly is in
-            bounds[0 as libc::c_int as usize][0 as libc::c_int as usize] =
-                (*(*poly).verts.offset(0 as libc::c_int as isize)).xyz[0 as libc::c_int as usize];
-            bounds[0 as libc::c_int as usize][1 as libc::c_int as usize] =
-                (*(*poly).verts.offset(0 as libc::c_int as isize)).xyz[1 as libc::c_int as usize];
-            bounds[0 as libc::c_int as usize][2 as libc::c_int as usize] =
-                (*(*poly).verts.offset(0 as libc::c_int as isize)).xyz[2 as libc::c_int as usize];
-            bounds[1 as libc::c_int as usize][0 as libc::c_int as usize] =
-                (*(*poly).verts.offset(0 as libc::c_int as isize)).xyz[0 as libc::c_int as usize];
-            bounds[1 as libc::c_int as usize][1 as libc::c_int as usize] =
-                (*(*poly).verts.offset(0 as libc::c_int as isize)).xyz[1 as libc::c_int as usize];
-            bounds[1 as libc::c_int as usize][2 as libc::c_int as usize] =
-                (*(*poly).verts.offset(0 as libc::c_int as isize)).xyz[2 as libc::c_int as usize];
-            i = 1 as libc::c_int;
+            bounds[0 as i32 as usize][0 as i32 as usize] =
+                (*(*poly).verts.offset(0 as i32 as isize)).xyz[0 as i32 as usize];
+            bounds[0 as i32 as usize][1 as i32 as usize] =
+                (*(*poly).verts.offset(0 as i32 as isize)).xyz[1 as i32 as usize];
+            bounds[0 as i32 as usize][2 as i32 as usize] =
+                (*(*poly).verts.offset(0 as i32 as isize)).xyz[2 as i32 as usize];
+            bounds[1 as i32 as usize][0 as i32 as usize] =
+                (*(*poly).verts.offset(0 as i32 as isize)).xyz[0 as i32 as usize];
+            bounds[1 as i32 as usize][1 as i32 as usize] =
+                (*(*poly).verts.offset(0 as i32 as isize)).xyz[1 as i32 as usize];
+            bounds[1 as i32 as usize][2 as i32 as usize] =
+                (*(*poly).verts.offset(0 as i32 as isize)).xyz[2 as i32 as usize];
+            i = 1 as i32;
             while i < (*poly).numVerts {
                 crate::src::qcommon::q_math::AddPointToBounds(
                     (*(*poly).verts.offset(i as isize)).xyz.as_mut_ptr()
                         as *const crate::src::qcommon::q_shared::vec_t,
-                    bounds[0 as libc::c_int as usize].as_mut_ptr(),
-                    bounds[1 as libc::c_int as usize].as_mut_ptr(),
+                    bounds[0 as i32 as usize].as_mut_ptr(),
+                    bounds[1 as i32 as usize].as_mut_ptr(),
                 );
                 i += 1
             }
-            fogIndex = 1 as libc::c_int;
+            fogIndex = 1 as i32;
             while fogIndex < (*crate::src::renderergl1::tr_main::tr.world).numfogs {
                 fog = &mut *(*crate::src::renderergl1::tr_main::tr.world)
                     .fogs
                     .offset(fogIndex as isize)
                     as *mut crate::tr_local_h::fog_t;
-                if bounds[1 as libc::c_int as usize][0 as libc::c_int as usize]
-                    >= (*fog).bounds[0 as libc::c_int as usize][0 as libc::c_int as usize]
-                    && bounds[1 as libc::c_int as usize][1 as libc::c_int as usize]
-                        >= (*fog).bounds[0 as libc::c_int as usize][1 as libc::c_int as usize]
-                    && bounds[1 as libc::c_int as usize][2 as libc::c_int as usize]
-                        >= (*fog).bounds[0 as libc::c_int as usize][2 as libc::c_int as usize]
-                    && bounds[0 as libc::c_int as usize][0 as libc::c_int as usize]
-                        <= (*fog).bounds[1 as libc::c_int as usize][0 as libc::c_int as usize]
-                    && bounds[0 as libc::c_int as usize][1 as libc::c_int as usize]
-                        <= (*fog).bounds[1 as libc::c_int as usize][1 as libc::c_int as usize]
-                    && bounds[0 as libc::c_int as usize][2 as libc::c_int as usize]
-                        <= (*fog).bounds[1 as libc::c_int as usize][2 as libc::c_int as usize]
+                if bounds[1 as i32 as usize][0 as i32 as usize]
+                    >= (*fog).bounds[0 as i32 as usize][0 as i32 as usize]
+                    && bounds[1 as i32 as usize][1 as i32 as usize]
+                        >= (*fog).bounds[0 as i32 as usize][1 as i32 as usize]
+                    && bounds[1 as i32 as usize][2 as i32 as usize]
+                        >= (*fog).bounds[0 as i32 as usize][2 as i32 as usize]
+                    && bounds[0 as i32 as usize][0 as i32 as usize]
+                        <= (*fog).bounds[1 as i32 as usize][0 as i32 as usize]
+                    && bounds[0 as i32 as usize][1 as i32 as usize]
+                        <= (*fog).bounds[1 as i32 as usize][1 as i32 as usize]
+                    && bounds[0 as i32 as usize][2 as i32 as usize]
+                        <= (*fog).bounds[1 as i32 as usize][2 as i32 as usize]
                 {
                     break;
                 }
                 fogIndex += 1
             }
             if fogIndex == (*crate::src::renderergl1::tr_main::tr.world).numfogs {
-                fogIndex = 0 as libc::c_int
+                fogIndex = 0 as i32
             }
         }
         (*poly).fogIndex = fogIndex;
@@ -514,42 +514,42 @@ pub unsafe extern "C" fn RE_AddRefEntityToScene(mut ent: *const crate::tr_types_
     if crate::src::renderergl1::tr_main::tr.registered as u64 == 0 {
         return;
     }
-    if r_numentities >= ((1 as libc::c_int) << 10 as libc::c_int) - 1 as libc::c_int {
+    if r_numentities >= ((1 as i32) << 10 as i32) - 1 as i32 {
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_DEVELOPER as libc::c_int,
+            crate::src::qcommon::q_shared::PRINT_DEVELOPER as i32,
             b"RE_AddRefEntityToScene: Dropping refEntity, reached MAX_REFENTITIES\n\x00"
                 as *const u8 as *const libc::c_char,
         );
         return;
     }
-    if crate::src::qcommon::q_math::Q_isnan((*ent).origin[0 as libc::c_int as usize]) != 0
-        || crate::src::qcommon::q_math::Q_isnan((*ent).origin[1 as libc::c_int as usize]) != 0
-        || crate::src::qcommon::q_math::Q_isnan((*ent).origin[2 as libc::c_int as usize]) != 0
+    if crate::src::qcommon::q_math::Q_isnan((*ent).origin[0 as i32 as usize]) != 0
+        || crate::src::qcommon::q_math::Q_isnan((*ent).origin[1 as i32 as usize]) != 0
+        || crate::src::qcommon::q_math::Q_isnan((*ent).origin[2 as i32 as usize]) != 0
     {
         static mut firstTime: crate::src::qcommon::q_shared::qboolean =
             crate::src::qcommon::q_shared::qtrue;
         if firstTime as u64 != 0 {
             firstTime = crate::src::qcommon::q_shared::qfalse;
             crate::src::renderergl1::tr_main::ri.Printf.expect("non-null function pointer")(crate::src::qcommon::q_shared::PRINT_WARNING as
-                                                              libc::c_int,
+                                                              i32,
                                                           b"RE_AddRefEntityToScene passed a refEntity which has an origin with a NaN component\n\x00"
                                                               as *const u8 as
                                                               *const libc::c_char);
         }
         return;
     }
-    if ((*ent).reType as libc::c_int) < 0 as libc::c_int
-        || (*ent).reType as libc::c_uint
-            >= crate::tr_types_h::RT_MAX_REF_ENTITY_TYPE as libc::c_int as libc::c_uint
+    if ((*ent).reType as i32) < 0 as i32
+        || (*ent).reType as u32
+            >= crate::tr_types_h::RT_MAX_REF_ENTITY_TYPE as i32 as u32
     {
         crate::src::renderergl1::tr_main::ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"RE_AddRefEntityToScene: bad reType %i\x00" as *const u8 as *const libc::c_char,
-            (*ent).reType as libc::c_uint,
+            (*ent).reType as u32,
         );
     }
     (*crate::src::renderergl1::tr_backend::backEndData).entities[r_numentities as usize].e = *ent;
@@ -567,27 +567,27 @@ RE_AddDynamicLightToScene
 
 pub unsafe extern "C" fn RE_AddDynamicLightToScene(
     mut org: *const crate::src::qcommon::q_shared::vec_t,
-    mut intensity: libc::c_float,
-    mut r: libc::c_float,
-    mut g: libc::c_float,
-    mut b: libc::c_float,
-    mut additive: libc::c_int,
+    mut intensity: f32,
+    mut r: f32,
+    mut g: f32,
+    mut b: f32,
+    mut additive: i32,
 ) {
     let mut dl: *mut crate::tr_local_h::dlight_t = 0 as *mut crate::tr_local_h::dlight_t;
     if crate::src::renderergl1::tr_main::tr.registered as u64 == 0 {
         return;
     }
-    if r_numdlights >= 32 as libc::c_int {
+    if r_numdlights >= 32 as i32 {
         return;
     }
-    if intensity <= 0 as libc::c_int as libc::c_float {
+    if intensity <= 0 as i32 as f32 {
         return;
     }
     // these cards don't have the correct blend mode
-    if crate::src::renderergl1::tr_init::glConfig.hardwareType as libc::c_uint
-        == crate::tr_types_h::GLHW_RIVA128 as libc::c_int as libc::c_uint
-        || crate::src::renderergl1::tr_init::glConfig.hardwareType as libc::c_uint
-            == crate::tr_types_h::GLHW_PERMEDIA2 as libc::c_int as libc::c_uint
+    if crate::src::renderergl1::tr_init::glConfig.hardwareType as u32
+        == crate::tr_types_h::GLHW_RIVA128 as i32 as u32
+        || crate::src::renderergl1::tr_init::glConfig.hardwareType as u32
+            == crate::tr_types_h::GLHW_PERMEDIA2 as i32 as u32
     {
         return;
     }
@@ -597,13 +597,13 @@ pub unsafe extern "C" fn RE_AddDynamicLightToScene(
         .dlights
         .as_mut_ptr()
         .offset(fresh0 as isize) as *mut crate::tr_local_h::dlight_t;
-    (*dl).origin[0 as libc::c_int as usize] = *org.offset(0 as libc::c_int as isize);
-    (*dl).origin[1 as libc::c_int as usize] = *org.offset(1 as libc::c_int as isize);
-    (*dl).origin[2 as libc::c_int as usize] = *org.offset(2 as libc::c_int as isize);
+    (*dl).origin[0 as i32 as usize] = *org.offset(0 as i32 as isize);
+    (*dl).origin[1 as i32 as usize] = *org.offset(1 as i32 as isize);
+    (*dl).origin[2 as i32 as usize] = *org.offset(2 as i32 as isize);
     (*dl).radius = intensity;
-    (*dl).color[0 as libc::c_int as usize] = r;
-    (*dl).color[1 as libc::c_int as usize] = g;
-    (*dl).color[2 as libc::c_int as usize] = b;
+    (*dl).color[0 as i32 as usize] = r;
+    (*dl).color[1 as i32 as usize] = g;
+    (*dl).color[2 as i32 as usize] = b;
     (*dl).additive = additive;
 }
 /*
@@ -616,10 +616,10 @@ RE_AddLightToScene
 
 pub unsafe extern "C" fn RE_AddLightToScene(
     mut org: *const crate::src::qcommon::q_shared::vec_t,
-    mut intensity: libc::c_float,
-    mut r: libc::c_float,
-    mut g: libc::c_float,
-    mut b: libc::c_float,
+    mut intensity: f32,
+    mut r: f32,
+    mut g: f32,
+    mut b: f32,
 ) {
     RE_AddDynamicLightToScene(
         org,
@@ -627,7 +627,7 @@ pub unsafe extern "C" fn RE_AddLightToScene(
         r,
         g,
         b,
-        crate::src::qcommon::q_shared::qfalse as libc::c_int,
+        crate::src::qcommon::q_shared::qfalse as i32,
     );
 }
 /*
@@ -640,10 +640,10 @@ RE_AddAdditiveLightToScene
 
 pub unsafe extern "C" fn RE_AddAdditiveLightToScene(
     mut org: *const crate::src::qcommon::q_shared::vec_t,
-    mut intensity: libc::c_float,
-    mut r: libc::c_float,
-    mut g: libc::c_float,
-    mut b: libc::c_float,
+    mut intensity: f32,
+    mut r: f32,
+    mut g: f32,
+    mut b: f32,
 ) {
     RE_AddDynamicLightToScene(
         org,
@@ -651,7 +651,7 @@ pub unsafe extern "C" fn RE_AddAdditiveLightToScene(
         r,
         g,
         b,
-        crate::src::qcommon::q_shared::qtrue as libc::c_int,
+        crate::src::qcommon::q_shared::qtrue as i32,
     );
 }
 /*
@@ -1098,7 +1098,7 @@ pub unsafe extern "C" fn RE_RenderScene(mut fd: *const crate::tr_types_h::refdef
         zFar: 0.,
         stereoFrame: crate::tr_types_h::STEREO_CENTER,
     };
-    let mut startTime: libc::c_int = 0;
+    let mut startTime: i32 = 0;
     if crate::src::renderergl1::tr_main::tr.registered as u64 == 0 {
         return;
     }
@@ -1113,12 +1113,12 @@ pub unsafe extern "C" fn RE_RenderScene(mut fd: *const crate::tr_types_h::refdef
         .Milliseconds
         .expect("non-null function pointer")();
     if crate::src::renderergl1::tr_main::tr.world.is_null()
-        && (*fd).rdflags & 0x1 as libc::c_int == 0
+        && (*fd).rdflags & 0x1 as i32 == 0
     {
         crate::src::renderergl1::tr_main::ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"R_RenderScene: NULL worldmodel\x00" as *const u8 as *const libc::c_char,
         );
     }
@@ -1136,64 +1136,64 @@ pub unsafe extern "C" fn RE_RenderScene(mut fd: *const crate::tr_types_h::refdef
     crate::src::renderergl1::tr_main::tr.refdef.height = (*fd).height;
     crate::src::renderergl1::tr_main::tr.refdef.fov_x = (*fd).fov_x;
     crate::src::renderergl1::tr_main::tr.refdef.fov_y = (*fd).fov_y;
-    crate::src::renderergl1::tr_main::tr.refdef.vieworg[0 as libc::c_int as usize] =
-        (*fd).vieworg[0 as libc::c_int as usize];
-    crate::src::renderergl1::tr_main::tr.refdef.vieworg[1 as libc::c_int as usize] =
-        (*fd).vieworg[1 as libc::c_int as usize];
-    crate::src::renderergl1::tr_main::tr.refdef.vieworg[2 as libc::c_int as usize] =
-        (*fd).vieworg[2 as libc::c_int as usize];
-    crate::src::renderergl1::tr_main::tr.refdef.viewaxis[0 as libc::c_int as usize]
-        [0 as libc::c_int as usize] =
-        (*fd).viewaxis[0 as libc::c_int as usize][0 as libc::c_int as usize];
-    crate::src::renderergl1::tr_main::tr.refdef.viewaxis[0 as libc::c_int as usize]
-        [1 as libc::c_int as usize] =
-        (*fd).viewaxis[0 as libc::c_int as usize][1 as libc::c_int as usize];
-    crate::src::renderergl1::tr_main::tr.refdef.viewaxis[0 as libc::c_int as usize]
-        [2 as libc::c_int as usize] =
-        (*fd).viewaxis[0 as libc::c_int as usize][2 as libc::c_int as usize];
-    crate::src::renderergl1::tr_main::tr.refdef.viewaxis[1 as libc::c_int as usize]
-        [0 as libc::c_int as usize] =
-        (*fd).viewaxis[1 as libc::c_int as usize][0 as libc::c_int as usize];
-    crate::src::renderergl1::tr_main::tr.refdef.viewaxis[1 as libc::c_int as usize]
-        [1 as libc::c_int as usize] =
-        (*fd).viewaxis[1 as libc::c_int as usize][1 as libc::c_int as usize];
-    crate::src::renderergl1::tr_main::tr.refdef.viewaxis[1 as libc::c_int as usize]
-        [2 as libc::c_int as usize] =
-        (*fd).viewaxis[1 as libc::c_int as usize][2 as libc::c_int as usize];
-    crate::src::renderergl1::tr_main::tr.refdef.viewaxis[2 as libc::c_int as usize]
-        [0 as libc::c_int as usize] =
-        (*fd).viewaxis[2 as libc::c_int as usize][0 as libc::c_int as usize];
-    crate::src::renderergl1::tr_main::tr.refdef.viewaxis[2 as libc::c_int as usize]
-        [1 as libc::c_int as usize] =
-        (*fd).viewaxis[2 as libc::c_int as usize][1 as libc::c_int as usize];
-    crate::src::renderergl1::tr_main::tr.refdef.viewaxis[2 as libc::c_int as usize]
-        [2 as libc::c_int as usize] =
-        (*fd).viewaxis[2 as libc::c_int as usize][2 as libc::c_int as usize];
+    crate::src::renderergl1::tr_main::tr.refdef.vieworg[0 as i32 as usize] =
+        (*fd).vieworg[0 as i32 as usize];
+    crate::src::renderergl1::tr_main::tr.refdef.vieworg[1 as i32 as usize] =
+        (*fd).vieworg[1 as i32 as usize];
+    crate::src::renderergl1::tr_main::tr.refdef.vieworg[2 as i32 as usize] =
+        (*fd).vieworg[2 as i32 as usize];
+    crate::src::renderergl1::tr_main::tr.refdef.viewaxis[0 as i32 as usize]
+        [0 as i32 as usize] =
+        (*fd).viewaxis[0 as i32 as usize][0 as i32 as usize];
+    crate::src::renderergl1::tr_main::tr.refdef.viewaxis[0 as i32 as usize]
+        [1 as i32 as usize] =
+        (*fd).viewaxis[0 as i32 as usize][1 as i32 as usize];
+    crate::src::renderergl1::tr_main::tr.refdef.viewaxis[0 as i32 as usize]
+        [2 as i32 as usize] =
+        (*fd).viewaxis[0 as i32 as usize][2 as i32 as usize];
+    crate::src::renderergl1::tr_main::tr.refdef.viewaxis[1 as i32 as usize]
+        [0 as i32 as usize] =
+        (*fd).viewaxis[1 as i32 as usize][0 as i32 as usize];
+    crate::src::renderergl1::tr_main::tr.refdef.viewaxis[1 as i32 as usize]
+        [1 as i32 as usize] =
+        (*fd).viewaxis[1 as i32 as usize][1 as i32 as usize];
+    crate::src::renderergl1::tr_main::tr.refdef.viewaxis[1 as i32 as usize]
+        [2 as i32 as usize] =
+        (*fd).viewaxis[1 as i32 as usize][2 as i32 as usize];
+    crate::src::renderergl1::tr_main::tr.refdef.viewaxis[2 as i32 as usize]
+        [0 as i32 as usize] =
+        (*fd).viewaxis[2 as i32 as usize][0 as i32 as usize];
+    crate::src::renderergl1::tr_main::tr.refdef.viewaxis[2 as i32 as usize]
+        [1 as i32 as usize] =
+        (*fd).viewaxis[2 as i32 as usize][1 as i32 as usize];
+    crate::src::renderergl1::tr_main::tr.refdef.viewaxis[2 as i32 as usize]
+        [2 as i32 as usize] =
+        (*fd).viewaxis[2 as i32 as usize][2 as i32 as usize];
     crate::src::renderergl1::tr_main::tr.refdef.time = (*fd).time;
     crate::src::renderergl1::tr_main::tr.refdef.rdflags = (*fd).rdflags;
     // copy the areamask data over and note if it has changed, which
     // will force a reset of the visible leafs even if the view hasn't moved
     crate::src::renderergl1::tr_main::tr.refdef.areamaskModified =
         crate::src::qcommon::q_shared::qfalse;
-    if crate::src::renderergl1::tr_main::tr.refdef.rdflags & 0x1 as libc::c_int == 0 {
-        let mut areaDiff: libc::c_int = 0;
-        let mut i: libc::c_int = 0;
+    if crate::src::renderergl1::tr_main::tr.refdef.rdflags & 0x1 as i32 == 0 {
+        let mut areaDiff: i32 = 0;
+        let mut i: i32 = 0;
         // compare the area bits
-        areaDiff = 0 as libc::c_int;
-        i = 0 as libc::c_int;
-        while i < 32 as libc::c_int / 4 as libc::c_int {
+        areaDiff = 0 as i32;
+        i = 0 as i32;
+        while i < 32 as i32 / 4 as i32 {
             areaDiff |= *(crate::src::renderergl1::tr_main::tr
                 .refdef
                 .areamask
-                .as_mut_ptr() as *mut libc::c_int)
+                .as_mut_ptr() as *mut i32)
                 .offset(i as isize)
-                ^ *((*fd).areamask.as_ptr() as *mut libc::c_int).offset(i as isize);
+                ^ *((*fd).areamask.as_ptr() as *mut i32).offset(i as isize);
             *(crate::src::renderergl1::tr_main::tr
                 .refdef
                 .areamask
-                .as_mut_ptr() as *mut libc::c_int)
+                .as_mut_ptr() as *mut i32)
                 .offset(i as isize) =
-                *((*fd).areamask.as_ptr() as *mut libc::c_int).offset(i as isize);
+                *((*fd).areamask.as_ptr() as *mut i32).offset(i as isize);
             i += 1
         }
         if areaDiff != 0 {
@@ -1204,7 +1204,7 @@ pub unsafe extern "C" fn RE_RenderScene(mut fd: *const crate::tr_types_h::refdef
     }
     // derived info
     crate::src::renderergl1::tr_main::tr.refdef.floatTime =
-        crate::src::renderergl1::tr_main::tr.refdef.time as libc::c_double * 0.001f64;
+        crate::src::renderergl1::tr_main::tr.refdef.time as f64 * 0.001f64;
     crate::src::renderergl1::tr_main::tr.refdef.numDrawSurfs = r_firstSceneDrawSurf;
     crate::src::renderergl1::tr_main::tr.refdef.drawSurfs =
         (*crate::src::renderergl1::tr_backend::backEndData)
@@ -1229,12 +1229,12 @@ pub unsafe extern "C" fn RE_RenderScene(mut fd: *const crate::tr_types_h::refdef
             .offset(r_firstScenePoly as isize) as *mut crate::tr_local_h::srfPoly_t;
     // turn off dynamic lighting globally by clearing all the
     // dlights if it needs to be disabled or if vertex lighting is enabled
-    if (*crate::src::renderergl1::tr_init::r_dynamiclight).integer == 0 as libc::c_int
-        || (*crate::src::renderergl1::tr_init::r_vertexLight).integer == 1 as libc::c_int
-        || crate::src::renderergl1::tr_init::glConfig.hardwareType as libc::c_uint
-            == crate::tr_types_h::GLHW_PERMEDIA2 as libc::c_int as libc::c_uint
+    if (*crate::src::renderergl1::tr_init::r_dynamiclight).integer == 0 as i32
+        || (*crate::src::renderergl1::tr_init::r_vertexLight).integer == 1 as i32
+        || crate::src::renderergl1::tr_init::glConfig.hardwareType as u32
+            == crate::tr_types_h::GLHW_PERMEDIA2 as i32 as u32
     {
-        crate::src::renderergl1::tr_main::tr.refdef.num_dlights = 0 as libc::c_int
+        crate::src::renderergl1::tr_main::tr.refdef.num_dlights = 0 as i32
     }
     // a single frame may have multiple scenes draw inside it --
     // a 3D game view, 3D status bar renderings, 3D menus, etc.
@@ -1251,7 +1251,7 @@ pub unsafe extern "C" fn RE_RenderScene(mut fd: *const crate::tr_types_h::refdef
     //
     crate::stdlib::memset(
         &mut parms as *mut crate::tr_local_h::viewParms_t as *mut libc::c_void,
-        0 as libc::c_int,
+        0 as i32,
         ::std::mem::size_of::<crate::tr_local_h::viewParms_t>() as libc::c_ulong,
     );
     parms.viewportX = crate::src::renderergl1::tr_main::tr.refdef.x;
@@ -1264,30 +1264,30 @@ pub unsafe extern "C" fn RE_RenderScene(mut fd: *const crate::tr_types_h::refdef
     parms.fovX = crate::src::renderergl1::tr_main::tr.refdef.fov_x;
     parms.fovY = crate::src::renderergl1::tr_main::tr.refdef.fov_y;
     parms.stereoFrame = crate::src::renderergl1::tr_main::tr.refdef.stereoFrame;
-    parms.or.origin[0 as libc::c_int as usize] = (*fd).vieworg[0 as libc::c_int as usize];
-    parms.or.origin[1 as libc::c_int as usize] = (*fd).vieworg[1 as libc::c_int as usize];
-    parms.or.origin[2 as libc::c_int as usize] = (*fd).vieworg[2 as libc::c_int as usize];
-    parms.or.axis[0 as libc::c_int as usize][0 as libc::c_int as usize] =
-        (*fd).viewaxis[0 as libc::c_int as usize][0 as libc::c_int as usize];
-    parms.or.axis[0 as libc::c_int as usize][1 as libc::c_int as usize] =
-        (*fd).viewaxis[0 as libc::c_int as usize][1 as libc::c_int as usize];
-    parms.or.axis[0 as libc::c_int as usize][2 as libc::c_int as usize] =
-        (*fd).viewaxis[0 as libc::c_int as usize][2 as libc::c_int as usize];
-    parms.or.axis[1 as libc::c_int as usize][0 as libc::c_int as usize] =
-        (*fd).viewaxis[1 as libc::c_int as usize][0 as libc::c_int as usize];
-    parms.or.axis[1 as libc::c_int as usize][1 as libc::c_int as usize] =
-        (*fd).viewaxis[1 as libc::c_int as usize][1 as libc::c_int as usize];
-    parms.or.axis[1 as libc::c_int as usize][2 as libc::c_int as usize] =
-        (*fd).viewaxis[1 as libc::c_int as usize][2 as libc::c_int as usize];
-    parms.or.axis[2 as libc::c_int as usize][0 as libc::c_int as usize] =
-        (*fd).viewaxis[2 as libc::c_int as usize][0 as libc::c_int as usize];
-    parms.or.axis[2 as libc::c_int as usize][1 as libc::c_int as usize] =
-        (*fd).viewaxis[2 as libc::c_int as usize][1 as libc::c_int as usize];
-    parms.or.axis[2 as libc::c_int as usize][2 as libc::c_int as usize] =
-        (*fd).viewaxis[2 as libc::c_int as usize][2 as libc::c_int as usize];
-    parms.pvsOrigin[0 as libc::c_int as usize] = (*fd).vieworg[0 as libc::c_int as usize];
-    parms.pvsOrigin[1 as libc::c_int as usize] = (*fd).vieworg[1 as libc::c_int as usize];
-    parms.pvsOrigin[2 as libc::c_int as usize] = (*fd).vieworg[2 as libc::c_int as usize];
+    parms.or.origin[0 as i32 as usize] = (*fd).vieworg[0 as i32 as usize];
+    parms.or.origin[1 as i32 as usize] = (*fd).vieworg[1 as i32 as usize];
+    parms.or.origin[2 as i32 as usize] = (*fd).vieworg[2 as i32 as usize];
+    parms.or.axis[0 as i32 as usize][0 as i32 as usize] =
+        (*fd).viewaxis[0 as i32 as usize][0 as i32 as usize];
+    parms.or.axis[0 as i32 as usize][1 as i32 as usize] =
+        (*fd).viewaxis[0 as i32 as usize][1 as i32 as usize];
+    parms.or.axis[0 as i32 as usize][2 as i32 as usize] =
+        (*fd).viewaxis[0 as i32 as usize][2 as i32 as usize];
+    parms.or.axis[1 as i32 as usize][0 as i32 as usize] =
+        (*fd).viewaxis[1 as i32 as usize][0 as i32 as usize];
+    parms.or.axis[1 as i32 as usize][1 as i32 as usize] =
+        (*fd).viewaxis[1 as i32 as usize][1 as i32 as usize];
+    parms.or.axis[1 as i32 as usize][2 as i32 as usize] =
+        (*fd).viewaxis[1 as i32 as usize][2 as i32 as usize];
+    parms.or.axis[2 as i32 as usize][0 as i32 as usize] =
+        (*fd).viewaxis[2 as i32 as usize][0 as i32 as usize];
+    parms.or.axis[2 as i32 as usize][1 as i32 as usize] =
+        (*fd).viewaxis[2 as i32 as usize][1 as i32 as usize];
+    parms.or.axis[2 as i32 as usize][2 as i32 as usize] =
+        (*fd).viewaxis[2 as i32 as usize][2 as i32 as usize];
+    parms.pvsOrigin[0 as i32 as usize] = (*fd).vieworg[0 as i32 as usize];
+    parms.pvsOrigin[1 as i32 as usize] = (*fd).vieworg[1 as i32 as usize];
+    parms.pvsOrigin[2 as i32 as usize] = (*fd).vieworg[2 as i32 as usize];
     crate::src::renderergl1::tr_main::R_RenderView(
         &mut parms as *mut _ as *mut crate::tr_local_h::viewParms_t,
     );

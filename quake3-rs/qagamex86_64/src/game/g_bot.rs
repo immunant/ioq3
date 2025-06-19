@@ -3,7 +3,7 @@ use ::libc;
 pub mod stdlib_float_h {
     #[inline]
 
-    pub unsafe extern "C" fn atof(mut __nptr: *const libc::c_char) -> libc::c_double {
+    pub unsafe extern "C" fn atof(mut __nptr: *const libc::c_char) -> f64 {
         return ::libc::strtod(__nptr, 0 as *mut libc::c_void as *mut *mut libc::c_char);
     }
 }
@@ -11,12 +11,12 @@ pub mod stdlib_float_h {
 pub mod stdlib_h {
     #[inline]
 
-    pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> libc::c_int {
+    pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return ::libc::strtol(
             __nptr,
             0 as *mut libc::c_void as *mut *mut libc::c_char,
-            10 as libc::c_int,
-        ) as libc::c_int;
+            10 as i32,
+        ) as i32;
     }
 }
 
@@ -168,8 +168,8 @@ extern "C" {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct botSpawnQueue_t {
-    pub clientNum: libc::c_int,
-    pub spawnTime: libc::c_int,
+    pub clientNum: i32,
+    pub spawnTime: i32,
 }
 /*
 ===========================================================================
@@ -195,13 +195,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 //
 // g_bot.c
 
-static mut g_numBots: libc::c_int = 0;
+static mut g_numBots: i32 = 0;
 
 static mut g_botInfos: [*mut libc::c_char; 1024] =
     [0 as *const libc::c_char as *mut libc::c_char; 1024];
 #[no_mangle]
 
-pub static mut g_numArenas: libc::c_int = 0;
+pub static mut g_numArenas: i32 = 0;
 
 static mut g_arenaInfos: [*mut libc::c_char; 1024] =
     [0 as *const libc::c_char as *mut libc::c_char; 1024];
@@ -224,14 +224,14 @@ pub static mut bot_minplayers: crate::src::qcommon::q_shared::vmCvar_t =
 
 pub unsafe extern "C" fn trap_Cvar_VariableValue(
     mut var_name: *const libc::c_char,
-) -> libc::c_float {
+) -> f32 {
     let mut buf: [libc::c_char; 128] = [0; 128];
     crate::src::game::g_syscalls::trap_Cvar_VariableStringBuffer(
         var_name,
         buf.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong as i32,
     );
-    return atof(buf.as_mut_ptr()) as libc::c_float;
+    return atof(buf.as_mut_ptr()) as f32;
 }
 /*
 ===============
@@ -242,17 +242,17 @@ G_ParseInfos
 
 pub unsafe extern "C" fn G_ParseInfos(
     mut buf: *mut libc::c_char,
-    mut max: libc::c_int,
+    mut max: i32,
     mut infos: *mut *mut libc::c_char,
-) -> libc::c_int {
+) -> i32 {
     let mut token: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut count: libc::c_int = 0;
+    let mut count: i32 = 0;
     let mut key: [libc::c_char; 1024] = [0; 1024];
     let mut info: [libc::c_char; 1024] = [0; 1024];
-    count = 0 as libc::c_int;
+    count = 0 as i32;
     loop {
         token = crate::src::qcommon::q_shared::COM_Parse(&mut buf);
-        if *token.offset(0 as libc::c_int as isize) == 0 {
+        if *token.offset(0 as i32 as isize) == 0 {
             break;
         }
         if ::libc::strcmp(token, b"{\x00" as *const u8 as *const libc::c_char) != 0 {
@@ -266,13 +266,13 @@ pub unsafe extern "C" fn G_ParseInfos(
             );
             break;
         } else {
-            info[0 as libc::c_int as usize] = '\u{0}' as i32 as libc::c_char;
+            info[0 as i32 as usize] = '\u{0}' as i32 as libc::c_char;
             loop {
                 token = crate::src::qcommon::q_shared::COM_ParseExt(
                     &mut buf,
                     crate::src::qcommon::q_shared::qtrue,
                 );
-                if *token.offset(0 as libc::c_int as isize) == 0 {
+                if *token.offset(0 as i32 as isize) == 0 {
                     crate::src::game::g_main::Com_Printf(
                         b"Unexpected end of info file\n\x00" as *const u8 as *const libc::c_char,
                     );
@@ -285,13 +285,13 @@ pub unsafe extern "C" fn G_ParseInfos(
                         key.as_mut_ptr(),
                         token,
                         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong
-                            as libc::c_int,
+                            as i32,
                     );
                     token = crate::src::qcommon::q_shared::COM_ParseExt(
                         &mut buf,
                         crate::src::qcommon::q_shared::qfalse,
                     );
-                    if *token.offset(0 as libc::c_int as isize) == 0 {
+                    if *token.offset(0 as i32 as isize) == 0 {
                         ::libc::strcpy(token, b"<NULL>\x00" as *const u8 as *const libc::c_char);
                     }
                     crate::src::qcommon::q_shared::Info_SetValueForKey(
@@ -310,9 +310,9 @@ pub unsafe extern "C" fn G_ParseInfos(
                     ))
                     .wrapping_add(crate::stdlib::strlen(crate::src::qcommon::q_shared::va(
                         b"%d\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                        1024 as libc::c_int,
+                        1024 as i32,
                     )))
-                    .wrapping_add(1 as libc::c_int as libc::c_ulong) as libc::c_int,
+                    .wrapping_add(1 as i32 as libc::c_ulong) as i32,
             ) as *mut libc::c_char;
             if !(*infos.offset(count as isize)).is_null() {
                 ::libc::strcpy(*infos.offset(count as isize), info.as_mut_ptr());
@@ -329,7 +329,7 @@ G_LoadArenasFromFile
 */
 
 unsafe extern "C" fn G_LoadArenasFromFile(mut filename: *mut libc::c_char) {
-    let mut len: libc::c_int = 0;
+    let mut len: i32 = 0;
     let mut f: crate::src::qcommon::q_shared::fileHandle_t = 0;
     let mut buf: [libc::c_char; 8192] = [0; 8192];
     len = crate::src::game::g_syscalls::trap_FS_FOpenFile(
@@ -344,23 +344,23 @@ unsafe extern "C" fn G_LoadArenasFromFile(mut filename: *mut libc::c_char) {
         ));
         return;
     }
-    if len >= 8192 as libc::c_int {
+    if len >= 8192 as i32 {
         crate::src::game::g_syscalls::trap_FS_FCloseFile(f);
         crate::src::game::g_syscalls::trap_Print(crate::src::qcommon::q_shared::va(
             b"^1file too large: %s is %i, max allowed is %i\n\x00" as *const u8
                 as *const libc::c_char as *mut libc::c_char,
             filename,
             len,
-            8192 as libc::c_int,
+            8192 as i32,
         ));
         return;
     }
     crate::src::game::g_syscalls::trap_FS_Read(buf.as_mut_ptr() as *mut libc::c_void, len, f);
-    buf[len as usize] = 0 as libc::c_int as libc::c_char;
+    buf[len as usize] = 0 as i32 as libc::c_char;
     crate::src::game::g_syscalls::trap_FS_FCloseFile(f);
     g_numArenas += G_ParseInfos(
         buf.as_mut_ptr(),
-        1024 as libc::c_int - g_numArenas,
+        1024 as i32 - g_numArenas,
         &mut *g_arenaInfos.as_mut_ptr().offset(g_numArenas as isize),
     );
 }
@@ -371,7 +371,7 @@ G_LoadArenas
 */
 
 unsafe extern "C" fn G_LoadArenas() {
-    let mut numdirs: libc::c_int = 0;
+    let mut numdirs: i32 = 0;
     let mut arenasFile: crate::src::qcommon::q_shared::vmCvar_t =
         crate::src::qcommon::q_shared::vmCvar_t {
             handle: 0,
@@ -383,15 +383,15 @@ unsafe extern "C" fn G_LoadArenas() {
     let mut filename: [libc::c_char; 128] = [0; 128];
     let mut dirlist: [libc::c_char; 1024] = [0; 1024];
     let mut dirptr: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut i: libc::c_int = 0;
-    let mut n: libc::c_int = 0;
-    let mut dirlen: libc::c_int = 0;
-    g_numArenas = 0 as libc::c_int;
+    let mut i: i32 = 0;
+    let mut n: i32 = 0;
+    let mut dirlen: i32 = 0;
+    g_numArenas = 0 as i32;
     crate::src::game::g_syscalls::trap_Cvar_Register(
         &mut arenasFile as *mut _ as *mut crate::src::qcommon::q_shared::vmCvar_t,
         b"g_arenasFile\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
-        0x10 as libc::c_int | 0x40 as libc::c_int,
+        0x10 as i32 | 0x40 as i32,
     );
     if *arenasFile.string.as_mut_ptr() != 0 {
         G_LoadArenasFromFile(arenasFile.string.as_mut_ptr());
@@ -405,12 +405,12 @@ unsafe extern "C" fn G_LoadArenas() {
         b"scripts\x00" as *const u8 as *const libc::c_char,
         b".arena\x00" as *const u8 as *const libc::c_char,
         dirlist.as_mut_ptr(),
-        1024 as libc::c_int,
+        1024 as i32,
     );
     dirptr = dirlist.as_mut_ptr();
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < numdirs {
-        dirlen = crate::stdlib::strlen(dirptr) as libc::c_int;
+        dirlen = crate::stdlib::strlen(dirptr) as i32;
         ::libc::strcpy(
             filename.as_mut_ptr(),
             b"scripts/\x00" as *const u8 as *const libc::c_char,
@@ -418,13 +418,13 @@ unsafe extern "C" fn G_LoadArenas() {
         ::libc::strcat(filename.as_mut_ptr(), dirptr);
         G_LoadArenasFromFile(filename.as_mut_ptr());
         i += 1;
-        dirptr = dirptr.offset((dirlen + 1 as libc::c_int) as isize)
+        dirptr = dirptr.offset((dirlen + 1 as i32) as isize)
     }
     crate::src::game::g_syscalls::trap_Print(crate::src::qcommon::q_shared::va(
         b"%i arenas parsed\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         g_numArenas,
     ));
-    n = 0 as libc::c_int;
+    n = 0 as i32;
     while n < g_numArenas {
         crate::src::qcommon::q_shared::Info_SetValueForKey(
             g_arenaInfos[n as usize],
@@ -445,8 +445,8 @@ G_GetArenaInfoByNumber
 #[no_mangle]
 
 pub unsafe extern "C" fn G_GetArenaInfoByMap(mut map: *const libc::c_char) -> *const libc::c_char {
-    let mut n: libc::c_int = 0;
-    n = 0 as libc::c_int;
+    let mut n: i32 = 0;
+    n = 0 as i32;
     while n < g_numArenas {
         if crate::src::qcommon::q_shared::Q_stricmp(
             crate::src::qcommon::q_shared::Info_ValueForKey(
@@ -454,7 +454,7 @@ pub unsafe extern "C" fn G_GetArenaInfoByMap(mut map: *const libc::c_char) -> *c
                 b"map\x00" as *const u8 as *const libc::c_char,
             ),
             map,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
             return g_arenaInfos[n as usize];
         }
@@ -474,7 +474,7 @@ unsafe extern "C" fn PlayerIntroSound(mut modelAndSkin: *const libc::c_char) {
     crate::src::qcommon::q_shared::Q_strncpyz(
         model.as_mut_ptr(),
         modelAndSkin,
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
     );
     skin = ::libc::strrchr(model.as_mut_ptr(), '/' as i32);
     if !skin.is_null() {
@@ -487,12 +487,12 @@ unsafe extern "C" fn PlayerIntroSound(mut modelAndSkin: *const libc::c_char) {
     if crate::src::qcommon::q_shared::Q_stricmp(
         skin,
         b"default\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as libc::c_int
+    ) == 0 as i32
     {
         skin = model.as_mut_ptr()
     }
     crate::src::game::g_syscalls::trap_SendConsoleCommand(
-        crate::src::qcommon::q_shared::EXEC_APPEND as libc::c_int,
+        crate::src::qcommon::q_shared::EXEC_APPEND as i32,
         crate::src::qcommon::q_shared::va(
             b"play sound/player/announce/%s.wav\n\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
@@ -513,23 +513,23 @@ Returns number of bots with name on specified team or whole server if team is -1
 
 pub unsafe extern "C" fn G_CountBotPlayersByName(
     mut name: *const libc::c_char,
-    mut team: libc::c_int,
-) -> libc::c_int {
-    let mut i: libc::c_int = 0;
-    let mut num: libc::c_int = 0;
+    mut team: i32,
+) -> i32 {
+    let mut i: i32 = 0;
+    let mut num: i32 = 0;
     let mut cl: *mut crate::g_local_h::gclient_t = 0 as *mut crate::g_local_h::gclient_t;
-    num = 0 as libc::c_int;
-    i = 0 as libc::c_int;
+    num = 0 as i32;
+    i = 0 as i32;
     while i < crate::src::game::g_main::g_maxclients.integer {
         cl = crate::src::game::g_main::level.clients.offset(i as isize);
-        if !((*cl).pers.connected as libc::c_uint
-            == crate::g_local_h::CON_DISCONNECTED as libc::c_int as libc::c_uint)
+        if !((*cl).pers.connected as u32
+            == crate::g_local_h::CON_DISCONNECTED as i32 as u32)
         {
-            if !(crate::src::game::g_main::g_entities[i as usize].r.svFlags & 0x8 as libc::c_int
+            if !(crate::src::game::g_main::g_entities[i as usize].r.svFlags & 0x8 as i32
                 == 0)
             {
-                if !(team >= 0 as libc::c_int
-                    && (*cl).sess.sessionTeam as libc::c_uint != team as libc::c_uint)
+                if !(team >= 0 as i32
+                    && (*cl).sess.sessionTeam as u32 != team as u32)
                 {
                     if !(!name.is_null()
                         && crate::src::qcommon::q_shared::Q_stricmp(
@@ -555,28 +555,28 @@ Get random least used bot info on team or whole server if team is -1.
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn G_SelectRandomBotInfo(mut team: libc::c_int) -> libc::c_int {
-    let mut selection: [libc::c_int; 1024] = [0; 1024];
-    let mut n: libc::c_int = 0;
-    let mut num: libc::c_int = 0;
-    let mut count: libc::c_int = 0;
-    let mut bestCount: libc::c_int = 0;
+pub unsafe extern "C" fn G_SelectRandomBotInfo(mut team: i32) -> i32 {
+    let mut selection: [i32; 1024] = [0; 1024];
+    let mut n: i32 = 0;
+    let mut num: i32 = 0;
+    let mut count: i32 = 0;
+    let mut bestCount: i32 = 0;
     let mut value: *mut libc::c_char = 0 as *mut libc::c_char;
     // don't add duplicate bots to the server if there are less bots than bot types
-    if team != -(1 as libc::c_int)
-        && G_CountBotPlayersByName(0 as *const libc::c_char, -(1 as libc::c_int)) < g_numBots
+    if team != -(1 as i32)
+        && G_CountBotPlayersByName(0 as *const libc::c_char, -(1 as i32)) < g_numBots
     {
-        team = -(1 as libc::c_int)
+        team = -(1 as i32)
     }
-    num = 0 as libc::c_int;
-    bestCount = 64 as libc::c_int;
-    n = 0 as libc::c_int;
+    num = 0 as i32;
+    bestCount = 64 as i32;
+    n = 0 as i32;
     while n < g_numBots {
         value = crate::src::qcommon::q_shared::Info_ValueForKey(
             g_botInfos[n as usize],
             b"funname\x00" as *const u8 as *const libc::c_char,
         );
-        if *value.offset(0 as libc::c_int as isize) == 0 {
+        if *value.offset(0 as i32 as isize) == 0 {
             value = crate::src::qcommon::q_shared::Info_ValueForKey(
                 g_botInfos[n as usize],
                 b"name\x00" as *const u8 as *const libc::c_char,
@@ -586,25 +586,25 @@ pub unsafe extern "C" fn G_SelectRandomBotInfo(mut team: libc::c_int) -> libc::c
         count = G_CountBotPlayersByName(value, team);
         if count < bestCount {
             bestCount = count;
-            num = 0 as libc::c_int
+            num = 0 as i32
         }
         if count == bestCount {
             let fresh2 = num;
             num = num + 1;
             selection[fresh2 as usize] = n;
-            if num == 1024 as libc::c_int {
+            if num == 1024 as i32 {
                 break;
             }
         }
         n += 1
     }
-    if num > 0 as libc::c_int {
-        num = ((::libc::rand() & 0x7fff as libc::c_int) as libc::c_float
-            / 0x7fff as libc::c_int as libc::c_float
-            * (num - 1 as libc::c_int) as libc::c_float) as libc::c_int;
+    if num > 0 as i32 {
+        num = ((::libc::rand() & 0x7fff as i32) as f32
+            / 0x7fff as i32 as f32
+            * (num - 1 as i32) as f32) as i32;
         return selection[num as usize];
     }
-    return -(1 as libc::c_int);
+    return -(1 as i32);
 }
 /*
 ===============
@@ -613,25 +613,25 @@ G_AddRandomBot
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn G_AddRandomBot(mut team: libc::c_int) {
+pub unsafe extern "C" fn G_AddRandomBot(mut team: i32) {
     let mut teamstr: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut skill: libc::c_float = 0.;
+    let mut skill: f32 = 0.;
     skill = trap_Cvar_VariableValue(b"g_spSkill\x00" as *const u8 as *const libc::c_char);
-    if team == crate::bg_public_h::TEAM_RED as libc::c_int {
+    if team == crate::bg_public_h::TEAM_RED as i32 {
         teamstr = b"red\x00" as *const u8 as *const libc::c_char as *mut libc::c_char
-    } else if team == crate::bg_public_h::TEAM_BLUE as libc::c_int {
+    } else if team == crate::bg_public_h::TEAM_BLUE as i32 {
         teamstr = b"blue\x00" as *const u8 as *const libc::c_char as *mut libc::c_char
     } else {
         teamstr = b"free\x00" as *const u8 as *const libc::c_char as *mut libc::c_char
     }
     crate::src::game::g_syscalls::trap_SendConsoleCommand(
-        crate::src::qcommon::q_shared::EXEC_INSERT as libc::c_int,
+        crate::src::qcommon::q_shared::EXEC_INSERT as i32,
         crate::src::qcommon::q_shared::va(
             b"addbot random %f %s %i\n\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
-            skill as libc::c_double,
+            skill as f64,
             teamstr,
-            0 as libc::c_int,
+            0 as i32,
         ),
     );
 }
@@ -642,36 +642,36 @@ G_RemoveRandomBot
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn G_RemoveRandomBot(mut team: libc::c_int) -> libc::c_int {
-    let mut i: libc::c_int = 0;
+pub unsafe extern "C" fn G_RemoveRandomBot(mut team: i32) -> i32 {
+    let mut i: i32 = 0;
     let mut cl: *mut crate::g_local_h::gclient_t = 0 as *mut crate::g_local_h::gclient_t;
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < crate::src::game::g_main::g_maxclients.integer {
         cl = crate::src::game::g_main::level.clients.offset(i as isize);
-        if !((*cl).pers.connected as libc::c_uint
-            != crate::g_local_h::CON_CONNECTED as libc::c_int as libc::c_uint)
+        if !((*cl).pers.connected as u32
+            != crate::g_local_h::CON_CONNECTED as i32 as u32)
         {
-            if !(crate::src::game::g_main::g_entities[i as usize].r.svFlags & 0x8 as libc::c_int
+            if !(crate::src::game::g_main::g_entities[i as usize].r.svFlags & 0x8 as i32
                 == 0)
             {
-                if !(team >= 0 as libc::c_int
-                    && (*cl).sess.sessionTeam as libc::c_uint != team as libc::c_uint)
+                if !(team >= 0 as i32
+                    && (*cl).sess.sessionTeam as u32 != team as u32)
                 {
                     crate::src::game::g_syscalls::trap_SendConsoleCommand(
-                        crate::src::qcommon::q_shared::EXEC_INSERT as libc::c_int,
+                        crate::src::qcommon::q_shared::EXEC_INSERT as i32,
                         crate::src::qcommon::q_shared::va(
                             b"clientkick %d\n\x00" as *const u8 as *const libc::c_char
                                 as *mut libc::c_char,
                             i,
                         ),
                     );
-                    return crate::src::qcommon::q_shared::qtrue as libc::c_int;
+                    return crate::src::qcommon::q_shared::qtrue as i32;
                 }
             }
         }
         i += 1
     }
-    return crate::src::qcommon::q_shared::qfalse as libc::c_int;
+    return crate::src::qcommon::q_shared::qfalse as i32;
 }
 /*
 ===============
@@ -680,22 +680,22 @@ G_CountHumanPlayers
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn G_CountHumanPlayers(mut team: libc::c_int) -> libc::c_int {
-    let mut i: libc::c_int = 0;
-    let mut num: libc::c_int = 0;
+pub unsafe extern "C" fn G_CountHumanPlayers(mut team: i32) -> i32 {
+    let mut i: i32 = 0;
+    let mut num: i32 = 0;
     let mut cl: *mut crate::g_local_h::gclient_t = 0 as *mut crate::g_local_h::gclient_t;
-    num = 0 as libc::c_int;
-    i = 0 as libc::c_int;
+    num = 0 as i32;
+    i = 0 as i32;
     while i < crate::src::game::g_main::g_maxclients.integer {
         cl = crate::src::game::g_main::level.clients.offset(i as isize);
-        if !((*cl).pers.connected as libc::c_uint
-            != crate::g_local_h::CON_CONNECTED as libc::c_int as libc::c_uint)
+        if !((*cl).pers.connected as u32
+            != crate::g_local_h::CON_CONNECTED as i32 as u32)
         {
-            if !(crate::src::game::g_main::g_entities[i as usize].r.svFlags & 0x8 as libc::c_int
+            if !(crate::src::game::g_main::g_entities[i as usize].r.svFlags & 0x8 as i32
                 != 0)
             {
-                if !(team >= 0 as libc::c_int
-                    && (*cl).sess.sessionTeam as libc::c_uint != team as libc::c_uint)
+                if !(team >= 0 as i32
+                    && (*cl).sess.sessionTeam as u32 != team as u32)
                 {
                     num += 1
                 }
@@ -714,22 +714,22 @@ Check connected and connecting (delay join) bots.
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn G_CountBotPlayers(mut team: libc::c_int) -> libc::c_int {
-    let mut i: libc::c_int = 0;
-    let mut num: libc::c_int = 0;
+pub unsafe extern "C" fn G_CountBotPlayers(mut team: i32) -> i32 {
+    let mut i: i32 = 0;
+    let mut num: i32 = 0;
     let mut cl: *mut crate::g_local_h::gclient_t = 0 as *mut crate::g_local_h::gclient_t;
-    num = 0 as libc::c_int;
-    i = 0 as libc::c_int;
+    num = 0 as i32;
+    i = 0 as i32;
     while i < crate::src::game::g_main::g_maxclients.integer {
         cl = crate::src::game::g_main::level.clients.offset(i as isize);
-        if !((*cl).pers.connected as libc::c_uint
-            == crate::g_local_h::CON_DISCONNECTED as libc::c_int as libc::c_uint)
+        if !((*cl).pers.connected as u32
+            == crate::g_local_h::CON_DISCONNECTED as i32 as u32)
         {
-            if !(crate::src::game::g_main::g_entities[i as usize].r.svFlags & 0x8 as libc::c_int
+            if !(crate::src::game::g_main::g_entities[i as usize].r.svFlags & 0x8 as i32
                 == 0)
             {
-                if !(team >= 0 as libc::c_int
-                    && (*cl).sess.sessionTeam as libc::c_uint != team as libc::c_uint)
+                if !(team >= 0 as i32
+                    && (*cl).sess.sessionTeam as u32 != team as u32)
                 {
                     num += 1
                 }
@@ -747,15 +747,15 @@ G_CheckMinimumPlayers
 #[no_mangle]
 
 pub unsafe extern "C" fn G_CheckMinimumPlayers() {
-    let mut minplayers: libc::c_int = 0;
-    let mut humanplayers: libc::c_int = 0;
-    let mut botplayers: libc::c_int = 0;
-    static mut checkminimumplayers_time: libc::c_int = 0;
+    let mut minplayers: i32 = 0;
+    let mut humanplayers: i32 = 0;
+    let mut botplayers: i32 = 0;
+    static mut checkminimumplayers_time: i32 = 0;
     if crate::src::game::g_main::level.intermissiontime != 0 {
         return;
     }
     //only check once each 10 seconds
-    if checkminimumplayers_time > crate::src::game::g_main::level.time - 10000 as libc::c_int {
+    if checkminimumplayers_time > crate::src::game::g_main::level.time - 10000 as i32 {
         return;
     }
     checkminimumplayers_time = crate::src::game::g_main::level.time;
@@ -763,62 +763,62 @@ pub unsafe extern "C" fn G_CheckMinimumPlayers() {
         &mut bot_minplayers as *mut _ as *mut crate::src::qcommon::q_shared::vmCvar_t,
     );
     minplayers = bot_minplayers.integer;
-    if minplayers <= 0 as libc::c_int {
+    if minplayers <= 0 as i32 {
         return;
     }
-    if crate::src::game::g_main::g_gametype.integer >= crate::bg_public_h::GT_TEAM as libc::c_int {
-        if minplayers >= crate::src::game::g_main::g_maxclients.integer / 2 as libc::c_int {
+    if crate::src::game::g_main::g_gametype.integer >= crate::bg_public_h::GT_TEAM as i32 {
+        if minplayers >= crate::src::game::g_main::g_maxclients.integer / 2 as i32 {
             minplayers =
-                crate::src::game::g_main::g_maxclients.integer / 2 as libc::c_int - 1 as libc::c_int
+                crate::src::game::g_main::g_maxclients.integer / 2 as i32 - 1 as i32
         }
-        humanplayers = G_CountHumanPlayers(crate::bg_public_h::TEAM_RED as libc::c_int);
-        botplayers = G_CountBotPlayers(crate::bg_public_h::TEAM_RED as libc::c_int);
+        humanplayers = G_CountHumanPlayers(crate::bg_public_h::TEAM_RED as i32);
+        botplayers = G_CountBotPlayers(crate::bg_public_h::TEAM_RED as i32);
         //
         if humanplayers + botplayers < minplayers {
-            G_AddRandomBot(crate::bg_public_h::TEAM_RED as libc::c_int);
+            G_AddRandomBot(crate::bg_public_h::TEAM_RED as i32);
         } else if humanplayers + botplayers > minplayers && botplayers != 0 {
-            G_RemoveRandomBot(crate::bg_public_h::TEAM_RED as libc::c_int);
+            G_RemoveRandomBot(crate::bg_public_h::TEAM_RED as i32);
         }
         //
-        humanplayers = G_CountHumanPlayers(crate::bg_public_h::TEAM_BLUE as libc::c_int);
-        botplayers = G_CountBotPlayers(crate::bg_public_h::TEAM_BLUE as libc::c_int);
+        humanplayers = G_CountHumanPlayers(crate::bg_public_h::TEAM_BLUE as i32);
+        botplayers = G_CountBotPlayers(crate::bg_public_h::TEAM_BLUE as i32);
         //
         if humanplayers + botplayers < minplayers {
-            G_AddRandomBot(crate::bg_public_h::TEAM_BLUE as libc::c_int);
+            G_AddRandomBot(crate::bg_public_h::TEAM_BLUE as i32);
         } else if humanplayers + botplayers > minplayers && botplayers != 0 {
-            G_RemoveRandomBot(crate::bg_public_h::TEAM_BLUE as libc::c_int);
+            G_RemoveRandomBot(crate::bg_public_h::TEAM_BLUE as i32);
         }
     } else if crate::src::game::g_main::g_gametype.integer
-        == crate::bg_public_h::GT_TOURNAMENT as libc::c_int
+        == crate::bg_public_h::GT_TOURNAMENT as i32
     {
         if minplayers >= crate::src::game::g_main::g_maxclients.integer {
-            minplayers = crate::src::game::g_main::g_maxclients.integer - 1 as libc::c_int
+            minplayers = crate::src::game::g_main::g_maxclients.integer - 1 as i32
         }
-        humanplayers = G_CountHumanPlayers(-(1 as libc::c_int));
-        botplayers = G_CountBotPlayers(-(1 as libc::c_int));
+        humanplayers = G_CountHumanPlayers(-(1 as i32));
+        botplayers = G_CountBotPlayers(-(1 as i32));
         //
         if humanplayers + botplayers < minplayers {
-            G_AddRandomBot(crate::bg_public_h::TEAM_FREE as libc::c_int);
+            G_AddRandomBot(crate::bg_public_h::TEAM_FREE as i32);
         } else if humanplayers + botplayers > minplayers && botplayers != 0 {
             // try to remove spectators first
-            if G_RemoveRandomBot(crate::bg_public_h::TEAM_SPECTATOR as libc::c_int) == 0 {
+            if G_RemoveRandomBot(crate::bg_public_h::TEAM_SPECTATOR as i32) == 0 {
                 // just remove the bot that is playing
-                G_RemoveRandomBot(-(1 as libc::c_int));
+                G_RemoveRandomBot(-(1 as i32));
             }
         }
     } else if crate::src::game::g_main::g_gametype.integer
-        == crate::bg_public_h::GT_FFA as libc::c_int
+        == crate::bg_public_h::GT_FFA as i32
     {
         if minplayers >= crate::src::game::g_main::g_maxclients.integer {
-            minplayers = crate::src::game::g_main::g_maxclients.integer - 1 as libc::c_int
+            minplayers = crate::src::game::g_main::g_maxclients.integer - 1 as i32
         }
-        humanplayers = G_CountHumanPlayers(crate::bg_public_h::TEAM_FREE as libc::c_int);
-        botplayers = G_CountBotPlayers(crate::bg_public_h::TEAM_FREE as libc::c_int);
+        humanplayers = G_CountHumanPlayers(crate::bg_public_h::TEAM_FREE as i32);
+        botplayers = G_CountBotPlayers(crate::bg_public_h::TEAM_FREE as i32);
         //
         if humanplayers + botplayers < minplayers {
-            G_AddRandomBot(crate::bg_public_h::TEAM_FREE as libc::c_int);
+            G_AddRandomBot(crate::bg_public_h::TEAM_FREE as i32);
         } else if humanplayers + botplayers > minplayers && botplayers != 0 {
-            G_RemoveRandomBot(crate::bg_public_h::TEAM_FREE as libc::c_int);
+            G_RemoveRandomBot(crate::bg_public_h::TEAM_FREE as i32);
         }
     };
 }
@@ -830,23 +830,23 @@ G_CheckBotSpawn
 #[no_mangle]
 
 pub unsafe extern "C" fn G_CheckBotSpawn() {
-    let mut n: libc::c_int = 0;
+    let mut n: i32 = 0;
     let mut userinfo: [libc::c_char; 1024] = [0; 1024];
     G_CheckMinimumPlayers();
-    n = 0 as libc::c_int;
-    while n < 16 as libc::c_int {
+    n = 0 as i32;
+    while n < 16 as i32 {
         if !(botSpawnQueue[n as usize].spawnTime == 0) {
             if !(botSpawnQueue[n as usize].spawnTime > crate::src::game::g_main::level.time) {
                 crate::src::game::g_client::ClientBegin(botSpawnQueue[n as usize].clientNum);
-                botSpawnQueue[n as usize].spawnTime = 0 as libc::c_int;
+                botSpawnQueue[n as usize].spawnTime = 0 as i32;
                 if crate::src::game::g_main::g_gametype.integer
-                    == crate::bg_public_h::GT_SINGLE_PLAYER as libc::c_int
+                    == crate::bg_public_h::GT_SINGLE_PLAYER as i32
                 {
                     crate::src::game::g_syscalls::trap_GetUserinfo(
                         botSpawnQueue[n as usize].clientNum,
                         userinfo.as_mut_ptr(),
                         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong
-                            as libc::c_int,
+                            as i32,
                     );
                     PlayerIntroSound(crate::src::qcommon::q_shared::Info_ValueForKey(
                         userinfo.as_mut_ptr(),
@@ -864,10 +864,10 @@ AddBotToSpawnQueue
 ===============
 */
 
-unsafe extern "C" fn AddBotToSpawnQueue(mut clientNum: libc::c_int, mut delay: libc::c_int) {
-    let mut n: libc::c_int = 0;
-    n = 0 as libc::c_int;
-    while n < 16 as libc::c_int {
+unsafe extern "C" fn AddBotToSpawnQueue(mut clientNum: i32, mut delay: i32) {
+    let mut n: i32 = 0;
+    n = 0 as i32;
+    while n < 16 as i32 {
         if botSpawnQueue[n as usize].spawnTime == 0 {
             botSpawnQueue[n as usize].spawnTime = crate::src::game::g_main::level.time + delay;
             botSpawnQueue[n as usize].clientNum = clientNum;
@@ -890,12 +890,12 @@ doesn't happen on a freed index
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn G_RemoveQueuedBotBegin(mut clientNum: libc::c_int) {
-    let mut n: libc::c_int = 0;
-    n = 0 as libc::c_int;
-    while n < 16 as libc::c_int {
+pub unsafe extern "C" fn G_RemoveQueuedBotBegin(mut clientNum: i32) {
+    let mut n: i32 = 0;
+    n = 0 as i32;
+    while n < 16 as i32 {
         if botSpawnQueue[n as usize].clientNum == clientNum {
-            botSpawnQueue[n as usize].spawnTime = 0 as libc::c_int;
+            botSpawnQueue[n as usize].spawnTime = 0 as i32;
             return;
         }
         n += 1
@@ -909,7 +909,7 @@ G_BotConnect
 #[no_mangle]
 
 pub unsafe extern "C" fn G_BotConnect(
-    mut clientNum: libc::c_int,
+    mut clientNum: i32,
     mut restart: crate::src::qcommon::q_shared::qboolean,
 ) -> crate::src::qcommon::q_shared::qboolean {
     let mut settings: crate::g_local_h::bot_settings_t = crate::g_local_h::bot_settings_t {
@@ -920,7 +920,7 @@ pub unsafe extern "C" fn G_BotConnect(
     crate::src::game::g_syscalls::trap_GetUserinfo(
         clientNum,
         userinfo.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
     crate::src::qcommon::q_shared::Q_strncpyz(
         settings.characterfile.as_mut_ptr(),
@@ -928,12 +928,12 @@ pub unsafe extern "C" fn G_BotConnect(
             userinfo.as_mut_ptr(),
             b"characterfile\x00" as *const u8 as *const libc::c_char,
         ),
-        ::std::mem::size_of::<[libc::c_char; 144]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 144]>() as libc::c_ulong as i32,
     );
     settings.skill = atof(crate::src::qcommon::q_shared::Info_ValueForKey(
         userinfo.as_mut_ptr(),
         b"skill\x00" as *const u8 as *const libc::c_char,
-    )) as libc::c_float;
+    )) as f32;
     if crate::src::game::ai_main::BotAISetupClient(
         clientNum,
         &mut settings as *mut _ as *mut crate::g_local_h::bot_settings_s,
@@ -956,14 +956,14 @@ G_AddBot
 
 unsafe extern "C" fn G_AddBot(
     mut name: *const libc::c_char,
-    mut skill: libc::c_float,
+    mut skill: f32,
     mut team: *const libc::c_char,
-    mut delay: libc::c_int,
+    mut delay: i32,
     mut altname: *mut libc::c_char,
 ) {
-    let mut clientNum: libc::c_int = 0;
-    let mut teamNum: libc::c_int = 0;
-    let mut botinfoNum: libc::c_int = 0;
+    let mut clientNum: i32 = 0;
+    let mut teamNum: i32 = 0;
+    let mut botinfoNum: i32 = 0;
     let mut botinfo: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut key: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
@@ -973,7 +973,7 @@ unsafe extern "C" fn G_AddBot(
     let mut userinfo: [libc::c_char; 1024] = [0; 1024];
     // have the server allocate a client slot
     clientNum = crate::src::game::g_syscalls::trap_BotAllocateClient();
-    if clientNum == -(1 as libc::c_int) {
+    if clientNum == -(1 as i32) {
         crate::src::game::g_main::G_Printf(
             b"^1Unable to add bot. All player slots are in use.\n\x00" as *const u8
                 as *const libc::c_char,
@@ -985,10 +985,10 @@ unsafe extern "C" fn G_AddBot(
     // set default team
     if team.is_null() || *team == 0 {
         if crate::src::game::g_main::g_gametype.integer
-            >= crate::bg_public_h::GT_TEAM as libc::c_int
+            >= crate::bg_public_h::GT_TEAM as i32
         {
-            if crate::src::game::g_client::PickTeam(clientNum) as libc::c_uint
-                == crate::bg_public_h::TEAM_RED as libc::c_int as libc::c_uint
+            if crate::src::game::g_client::PickTeam(clientNum) as u32
+                == crate::bg_public_h::TEAM_RED as i32 as u32
             {
                 team = b"red\x00" as *const u8 as *const libc::c_char
             } else {
@@ -1002,28 +1002,28 @@ unsafe extern "C" fn G_AddBot(
     if crate::src::qcommon::q_shared::Q_stricmp(
         name,
         b"random\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as libc::c_int
+    ) == 0 as i32
     {
         if crate::src::qcommon::q_shared::Q_stricmp(
             team,
             b"red\x00" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
             || crate::src::qcommon::q_shared::Q_stricmp(
                 team,
                 b"r\x00" as *const u8 as *const libc::c_char,
-            ) == 0 as libc::c_int
+            ) == 0 as i32
         {
-            teamNum = crate::bg_public_h::TEAM_RED as libc::c_int
+            teamNum = crate::bg_public_h::TEAM_RED as i32
         } else if crate::src::qcommon::q_shared::Q_stricmp(
             team,
             b"blue\x00" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
             || crate::src::qcommon::q_shared::Q_stricmp(
                 team,
                 b"b\x00" as *const u8 as *const libc::c_char,
-            ) == 0 as libc::c_int
+            ) == 0 as i32
         {
-            teamNum = crate::bg_public_h::TEAM_BLUE as libc::c_int
+            teamNum = crate::bg_public_h::TEAM_BLUE as i32
         } else if crate::src::qcommon::q_shared::Q_stricmp(
             team,
             b"spectator\x00" as *const u8 as *const libc::c_char,
@@ -1033,12 +1033,12 @@ unsafe extern "C" fn G_AddBot(
                 b"s\x00" as *const u8 as *const libc::c_char,
             ) == 0
         {
-            teamNum = crate::bg_public_h::TEAM_SPECTATOR as libc::c_int
+            teamNum = crate::bg_public_h::TEAM_SPECTATOR as i32
         } else {
-            teamNum = crate::bg_public_h::TEAM_FREE as libc::c_int
+            teamNum = crate::bg_public_h::TEAM_FREE as i32
         }
         botinfoNum = G_SelectRandomBotInfo(teamNum);
-        if botinfoNum < 0 as libc::c_int {
+        if botinfoNum < 0 as i32 {
             crate::src::game::g_main::G_Printf(
                 b"^1Error: Cannot add random bot, no bot info available.\n\x00" as *const u8
                     as *const libc::c_char,
@@ -1059,19 +1059,19 @@ unsafe extern "C" fn G_AddBot(
         return;
     }
     // create the bot's userinfo
-    userinfo[0 as libc::c_int as usize] = '\u{0}' as i32 as libc::c_char;
+    userinfo[0 as i32 as usize] = '\u{0}' as i32 as libc::c_char;
     botname = crate::src::qcommon::q_shared::Info_ValueForKey(
         botinfo,
         b"funname\x00" as *const u8 as *const libc::c_char,
     );
-    if *botname.offset(0 as libc::c_int as isize) == 0 {
+    if *botname.offset(0 as i32 as isize) == 0 {
         botname = crate::src::qcommon::q_shared::Info_ValueForKey(
             botinfo,
             b"name\x00" as *const u8 as *const libc::c_char,
         )
     }
     // check for an alternative name
-    if !altname.is_null() && *altname.offset(0 as libc::c_int as isize) as libc::c_int != 0 {
+    if !altname.is_null() && *altname.offset(0 as i32 as isize) as i32 != 0 {
         botname = altname
     }
     crate::src::qcommon::q_shared::Info_SetValueForKey(
@@ -1094,7 +1094,7 @@ unsafe extern "C" fn G_AddBot(
         b"skill\x00" as *const u8 as *const libc::c_char,
         crate::src::qcommon::q_shared::va(
             b"%.2f\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            skill as libc::c_double,
+            skill as f64,
         ),
     );
     crate::src::qcommon::q_shared::Info_SetValueForKey(
@@ -1102,22 +1102,22 @@ unsafe extern "C" fn G_AddBot(
         b"teampref\x00" as *const u8 as *const libc::c_char,
         team,
     );
-    if skill >= 1 as libc::c_int as libc::c_float && skill < 2 as libc::c_int as libc::c_float {
+    if skill >= 1 as i32 as f32 && skill < 2 as i32 as f32 {
         crate::src::qcommon::q_shared::Info_SetValueForKey(
             userinfo.as_mut_ptr(),
             b"handicap\x00" as *const u8 as *const libc::c_char,
             b"50\x00" as *const u8 as *const libc::c_char,
         );
-    } else if skill >= 2 as libc::c_int as libc::c_float
-        && skill < 3 as libc::c_int as libc::c_float
+    } else if skill >= 2 as i32 as f32
+        && skill < 3 as i32 as f32
     {
         crate::src::qcommon::q_shared::Info_SetValueForKey(
             userinfo.as_mut_ptr(),
             b"handicap\x00" as *const u8 as *const libc::c_char,
             b"70\x00" as *const u8 as *const libc::c_char,
         );
-    } else if skill >= 3 as libc::c_int as libc::c_float
-        && skill < 4 as libc::c_int as libc::c_float
+    } else if skill >= 3 as i32 as f32
+        && skill < 4 as i32 as f32
     {
         crate::src::qcommon::q_shared::Info_SetValueForKey(
             userinfo.as_mut_ptr(),
@@ -1197,7 +1197,7 @@ unsafe extern "C" fn G_AddBot(
     {
         return;
     }
-    if delay == 0 as libc::c_int {
+    if delay == 0 as i32 {
         crate::src::game::g_client::ClientBegin(clientNum);
         return;
     }
@@ -1211,8 +1211,8 @@ Svcmd_AddBot_f
 #[no_mangle]
 
 pub unsafe extern "C" fn Svcmd_AddBot_f() {
-    let mut skill: libc::c_float = 0.;
-    let mut delay: libc::c_int = 0;
+    let mut skill: f32 = 0.;
+    let mut delay: i32 = 0;
     let mut name: [libc::c_char; 1024] = [0; 1024];
     let mut altname: [libc::c_char; 1024] = [0; 1024];
     let mut string: [libc::c_char; 1024] = [0; 1024];
@@ -1226,11 +1226,11 @@ pub unsafe extern "C" fn Svcmd_AddBot_f() {
     }
     // name
     crate::src::game::g_syscalls::trap_Argv(
-        1 as libc::c_int,
+        1 as i32,
         name.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
-    if name[0 as libc::c_int as usize] == 0 {
+    if name[0 as i32 as usize] == 0 {
         crate::src::game::g_syscalls::trap_Print(
             b"Usage: Addbot <botname> [skill 1-5] [team] [msec delay] [altname]\n\x00" as *const u8
                 as *const libc::c_char,
@@ -1239,41 +1239,41 @@ pub unsafe extern "C" fn Svcmd_AddBot_f() {
     }
     // skill
     crate::src::game::g_syscalls::trap_Argv(
-        2 as libc::c_int,
+        2 as i32,
         string.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
-    if string[0 as libc::c_int as usize] == 0 {
-        skill = 4 as libc::c_int as libc::c_float
+    if string[0 as i32 as usize] == 0 {
+        skill = 4 as i32 as f32
     } else {
         skill = crate::src::qcommon::q_shared::Com_Clamp(
-            1 as libc::c_int as libc::c_float,
-            5 as libc::c_int as libc::c_float,
-            atof(string.as_mut_ptr()) as libc::c_float,
+            1 as i32 as f32,
+            5 as i32 as f32,
+            atof(string.as_mut_ptr()) as f32,
         )
     }
     // team
     crate::src::game::g_syscalls::trap_Argv(
-        3 as libc::c_int,
+        3 as i32,
         team.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
     // delay
     crate::src::game::g_syscalls::trap_Argv(
-        4 as libc::c_int,
+        4 as i32,
         string.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
-    if string[0 as libc::c_int as usize] == 0 {
-        delay = 0 as libc::c_int
+    if string[0 as i32 as usize] == 0 {
+        delay = 0 as i32
     } else {
         delay = atoi(string.as_mut_ptr())
     }
     // alternative name
     crate::src::game::g_syscalls::trap_Argv(
-        5 as libc::c_int,
+        5 as i32,
         altname.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
     G_AddBot(
         name.as_mut_ptr(),
@@ -1285,13 +1285,13 @@ pub unsafe extern "C" fn Svcmd_AddBot_f() {
     // if this was issued during gameplay and we are playing locally,
     // go ahead and load the bot's media immediately
     if crate::src::game::g_main::level.time - crate::src::game::g_main::level.startTime
-        > 1000 as libc::c_int
+        > 1000 as i32
         && crate::src::game::g_syscalls::trap_Cvar_VariableIntegerValue(
             b"cl_running\x00" as *const u8 as *const libc::c_char,
         ) != 0
     {
         crate::src::game::g_syscalls::trap_SendServerCommand(
-            -(1 as libc::c_int),
+            -(1 as i32),
             b"loaddefered\n\x00" as *const u8 as *const libc::c_char,
         );
         // FIXME: spelled wrong, but not changing for demo
@@ -1305,7 +1305,7 @@ Svcmd_BotList_f
 #[no_mangle]
 
 pub unsafe extern "C" fn Svcmd_BotList_f() {
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     let mut name: [libc::c_char; 1024] = [0; 1024];
     let mut funname: [libc::c_char; 1024] = [0; 1024];
     let mut model: [libc::c_char; 1024] = [0; 1024];
@@ -1314,7 +1314,7 @@ pub unsafe extern "C" fn Svcmd_BotList_f() {
         b"^1name             model            aifile              funname\n\x00" as *const u8
             as *const libc::c_char,
     );
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < g_numBots {
         crate::src::qcommon::q_shared::Q_strncpyz(
             name.as_mut_ptr(),
@@ -1322,7 +1322,7 @@ pub unsafe extern "C" fn Svcmd_BotList_f() {
                 g_botInfos[i as usize],
                 b"name\x00" as *const u8 as *const libc::c_char,
             ),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
         );
         if *name.as_mut_ptr() == 0 {
             ::libc::strcpy(
@@ -1336,7 +1336,7 @@ pub unsafe extern "C" fn Svcmd_BotList_f() {
                 g_botInfos[i as usize],
                 b"funname\x00" as *const u8 as *const libc::c_char,
             ),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
         );
         if *funname.as_mut_ptr() == 0 {
             ::libc::strcpy(
@@ -1350,7 +1350,7 @@ pub unsafe extern "C" fn Svcmd_BotList_f() {
                 g_botInfos[i as usize],
                 b"model\x00" as *const u8 as *const libc::c_char,
             ),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
         );
         if *model.as_mut_ptr() == 0 {
             ::libc::strcpy(
@@ -1364,7 +1364,7 @@ pub unsafe extern "C" fn Svcmd_BotList_f() {
                 g_botInfos[i as usize],
                 b"aifile\x00" as *const u8 as *const libc::c_char,
             ),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
         );
         if *aifile.as_mut_ptr() == 0 {
             ::libc::strcpy(
@@ -1389,39 +1389,39 @@ G_SpawnBots
 ===============
 */
 
-unsafe extern "C" fn G_SpawnBots(mut botList: *mut libc::c_char, mut baseDelay: libc::c_int) {
+unsafe extern "C" fn G_SpawnBots(mut botList: *mut libc::c_char, mut baseDelay: i32) {
     let mut bot: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut p: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut skill: libc::c_float = 0.;
-    let mut delay: libc::c_int = 0;
+    let mut skill: f32 = 0.;
+    let mut delay: i32 = 0;
     let mut bots: [libc::c_char; 1024] = [0; 1024];
     podium1 = 0 as *mut crate::g_local_h::gentity_t;
     podium2 = 0 as *mut crate::g_local_h::gentity_t;
     podium3 = 0 as *mut crate::g_local_h::gentity_t;
     skill = trap_Cvar_VariableValue(b"g_spSkill\x00" as *const u8 as *const libc::c_char);
-    if skill < 1 as libc::c_int as libc::c_float {
+    if skill < 1 as i32 as f32 {
         crate::src::game::g_syscalls::trap_Cvar_Set(
             b"g_spSkill\x00" as *const u8 as *const libc::c_char,
             b"1\x00" as *const u8 as *const libc::c_char,
         );
-        skill = 1 as libc::c_int as libc::c_float
-    } else if skill > 5 as libc::c_int as libc::c_float {
+        skill = 1 as i32 as f32
+    } else if skill > 5 as i32 as f32 {
         crate::src::game::g_syscalls::trap_Cvar_Set(
             b"g_spSkill\x00" as *const u8 as *const libc::c_char,
             b"5\x00" as *const u8 as *const libc::c_char,
         );
-        skill = 5 as libc::c_int as libc::c_float
+        skill = 5 as i32 as f32
     }
     crate::src::qcommon::q_shared::Q_strncpyz(
         bots.as_mut_ptr(),
         botList,
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
-    p = &mut *bots.as_mut_ptr().offset(0 as libc::c_int as isize) as *mut libc::c_char;
+    p = &mut *bots.as_mut_ptr().offset(0 as i32 as isize) as *mut libc::c_char;
     delay = baseDelay;
     while *p != 0 {
         //skip spaces
-        while *p as libc::c_int != 0 && *p as libc::c_int == ' ' as i32 {
+        while *p as i32 != 0 && *p as i32 == ' ' as i32 {
             p = p.offset(1)
         }
         if *p == 0 {
@@ -1430,27 +1430,27 @@ unsafe extern "C" fn G_SpawnBots(mut botList: *mut libc::c_char, mut baseDelay: 
         // mark start of bot name
         bot = p;
         // skip until space of null
-        while *p as libc::c_int != 0 && *p as libc::c_int != ' ' as i32 {
+        while *p as i32 != 0 && *p as i32 != ' ' as i32 {
             p = p.offset(1)
         }
         if *p != 0 {
             let fresh3 = p;
             p = p.offset(1);
-            *fresh3 = 0 as libc::c_int as libc::c_char
+            *fresh3 = 0 as i32 as libc::c_char
         }
         // we must add the bot this way, calling G_AddBot directly at this stage
         // does "Bad Things"
         crate::src::game::g_syscalls::trap_SendConsoleCommand(
-            crate::src::qcommon::q_shared::EXEC_INSERT as libc::c_int,
+            crate::src::qcommon::q_shared::EXEC_INSERT as i32,
             crate::src::qcommon::q_shared::va(
                 b"addbot %s %f free %i\n\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 bot,
-                skill as libc::c_double,
+                skill as f64,
                 delay,
             ),
         );
-        delay += 1500 as libc::c_int
+        delay += 1500 as i32
     }
 }
 /*
@@ -1460,7 +1460,7 @@ G_LoadBotsFromFile
 */
 
 unsafe extern "C" fn G_LoadBotsFromFile(mut filename: *mut libc::c_char) {
-    let mut len: libc::c_int = 0;
+    let mut len: i32 = 0;
     let mut f: crate::src::qcommon::q_shared::fileHandle_t = 0;
     let mut buf: [libc::c_char; 8192] = [0; 8192];
     len = crate::src::game::g_syscalls::trap_FS_FOpenFile(
@@ -1475,23 +1475,23 @@ unsafe extern "C" fn G_LoadBotsFromFile(mut filename: *mut libc::c_char) {
         ));
         return;
     }
-    if len >= 8192 as libc::c_int {
+    if len >= 8192 as i32 {
         crate::src::game::g_syscalls::trap_Print(crate::src::qcommon::q_shared::va(
             b"^1file too large: %s is %i, max allowed is %i\n\x00" as *const u8
                 as *const libc::c_char as *mut libc::c_char,
             filename,
             len,
-            8192 as libc::c_int,
+            8192 as i32,
         ));
         crate::src::game::g_syscalls::trap_FS_FCloseFile(f);
         return;
     }
     crate::src::game::g_syscalls::trap_FS_Read(buf.as_mut_ptr() as *mut libc::c_void, len, f);
-    buf[len as usize] = 0 as libc::c_int as libc::c_char;
+    buf[len as usize] = 0 as i32 as libc::c_char;
     crate::src::game::g_syscalls::trap_FS_FCloseFile(f);
     g_numBots += G_ParseInfos(
         buf.as_mut_ptr(),
-        1024 as libc::c_int - g_numBots,
+        1024 as i32 - g_numBots,
         &mut *g_botInfos.as_mut_ptr().offset(g_numBots as isize),
     );
 }
@@ -1510,24 +1510,24 @@ unsafe extern "C" fn G_LoadBots() {
             integer: 0,
             string: [0; 256],
         };
-    let mut numdirs: libc::c_int = 0;
+    let mut numdirs: i32 = 0;
     let mut filename: [libc::c_char; 128] = [0; 128];
     let mut dirlist: [libc::c_char; 1024] = [0; 1024];
     let mut dirptr: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut i: libc::c_int = 0;
-    let mut dirlen: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut dirlen: i32 = 0;
     if crate::src::game::g_syscalls::trap_Cvar_VariableIntegerValue(
         b"bot_enable\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
         return;
     }
-    g_numBots = 0 as libc::c_int;
+    g_numBots = 0 as i32;
     crate::src::game::g_syscalls::trap_Cvar_Register(
         &mut botsFile as *mut _ as *mut crate::src::qcommon::q_shared::vmCvar_t,
         b"g_botsFile\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
-        0x10 as libc::c_int | 0x40 as libc::c_int,
+        0x10 as i32 | 0x40 as i32,
     );
     if *botsFile.string.as_mut_ptr() != 0 {
         G_LoadBotsFromFile(botsFile.string.as_mut_ptr());
@@ -1541,12 +1541,12 @@ unsafe extern "C" fn G_LoadBots() {
         b"scripts\x00" as *const u8 as *const libc::c_char,
         b".bot\x00" as *const u8 as *const libc::c_char,
         dirlist.as_mut_ptr(),
-        1024 as libc::c_int,
+        1024 as i32,
     );
     dirptr = dirlist.as_mut_ptr();
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < numdirs {
-        dirlen = crate::stdlib::strlen(dirptr) as libc::c_int;
+        dirlen = crate::stdlib::strlen(dirptr) as i32;
         ::libc::strcpy(
             filename.as_mut_ptr(),
             b"scripts/\x00" as *const u8 as *const libc::c_char,
@@ -1554,7 +1554,7 @@ unsafe extern "C" fn G_LoadBots() {
         ::libc::strcat(filename.as_mut_ptr(), dirptr);
         G_LoadBotsFromFile(filename.as_mut_ptr());
         i += 1;
-        dirptr = dirptr.offset((dirlen + 1 as libc::c_int) as isize)
+        dirptr = dirptr.offset((dirlen + 1 as i32) as isize)
     }
     crate::src::game::g_syscalls::trap_Print(crate::src::qcommon::q_shared::va(
         b"%i bots parsed\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -1568,8 +1568,8 @@ G_GetBotInfoByNumber
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn G_GetBotInfoByNumber(mut num: libc::c_int) -> *mut libc::c_char {
-    if num < 0 as libc::c_int || num >= g_numBots {
+pub unsafe extern "C" fn G_GetBotInfoByNumber(mut num: i32) -> *mut libc::c_char {
+    if num < 0 as i32 || num >= g_numBots {
         crate::src::game::g_syscalls::trap_Print(crate::src::qcommon::q_shared::va(
             b"^1Invalid bot number: %i\n\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
@@ -1587,9 +1587,9 @@ G_GetBotInfoByName
 #[no_mangle]
 
 pub unsafe extern "C" fn G_GetBotInfoByName(mut name: *const libc::c_char) -> *mut libc::c_char {
-    let mut n: libc::c_int = 0;
+    let mut n: i32 = 0;
     let mut value: *mut libc::c_char = 0 as *mut libc::c_char;
-    n = 0 as libc::c_int;
+    n = 0 as i32;
     while n < g_numBots {
         value = crate::src::qcommon::q_shared::Info_ValueForKey(
             g_botInfos[n as usize],
@@ -1610,11 +1610,11 @@ G_InitBots
 #[no_mangle]
 
 pub unsafe extern "C" fn G_InitBots(mut restart: crate::src::qcommon::q_shared::qboolean) {
-    let mut fragLimit: libc::c_int = 0;
-    let mut timeLimit: libc::c_int = 0;
+    let mut fragLimit: i32 = 0;
+    let mut timeLimit: i32 = 0;
     let mut arenainfo: *const libc::c_char = 0 as *const libc::c_char;
     let mut strValue: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut basedelay: libc::c_int = 0;
+    let mut basedelay: i32 = 0;
     let mut map: [libc::c_char; 64] = [0; 64];
     let mut serverinfo: [libc::c_char; 1024] = [0; 1024];
     G_LoadBots();
@@ -1623,14 +1623,14 @@ pub unsafe extern "C" fn G_InitBots(mut restart: crate::src::qcommon::q_shared::
         &mut bot_minplayers as *mut _ as *mut crate::src::qcommon::q_shared::vmCvar_t,
         b"bot_minplayers\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
-        0x4 as libc::c_int,
+        0x4 as i32,
     );
     if crate::src::game::g_main::g_gametype.integer
-        == crate::bg_public_h::GT_SINGLE_PLAYER as libc::c_int
+        == crate::bg_public_h::GT_SINGLE_PLAYER as i32
     {
         crate::src::game::g_syscalls::trap_GetServerinfo(
             serverinfo.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
         );
         crate::src::qcommon::q_shared::Q_strncpyz(
             map.as_mut_ptr(),
@@ -1638,7 +1638,7 @@ pub unsafe extern "C" fn G_InitBots(mut restart: crate::src::qcommon::q_shared::
                 serverinfo.as_mut_ptr(),
                 b"mapname\x00" as *const u8 as *const libc::c_char,
             ),
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as libc::c_int,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
         );
         arenainfo = G_GetArenaInfoByMap(map.as_mut_ptr());
         if arenainfo.is_null() {
@@ -1686,7 +1686,7 @@ pub unsafe extern "C" fn G_InitBots(mut restart: crate::src::qcommon::q_shared::
                 b"0\x00" as *const u8 as *const libc::c_char,
             );
         }
-        basedelay = 2000 as libc::c_int;
+        basedelay = 2000 as i32;
         strValue = crate::src::qcommon::q_shared::Info_ValueForKey(
             arenainfo,
             b"special\x00" as *const u8 as *const libc::c_char,
@@ -1694,9 +1694,9 @@ pub unsafe extern "C" fn G_InitBots(mut restart: crate::src::qcommon::q_shared::
         if crate::src::qcommon::q_shared::Q_stricmp(
             strValue,
             b"training\x00" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
-            basedelay += 10000 as libc::c_int
+            basedelay += 10000 as i32
         }
         if restart as u64 == 0 {
             G_SpawnBots(

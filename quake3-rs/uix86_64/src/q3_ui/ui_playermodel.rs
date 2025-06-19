@@ -385,12 +385,12 @@ pub struct playermodel_t {
     pub skinname: crate::ui_local_h::menutext_s,
     pub playername: crate::ui_local_h::menutext_s,
     pub playerinfo: crate::ui_local_h::playerInfo_t,
-    pub nummodels: libc::c_int,
+    pub nummodels: i32,
     pub modelnames: [[libc::c_char; 128]; 256],
-    pub modelpage: libc::c_int,
-    pub numpages: libc::c_int,
+    pub modelpage: i32,
+    pub numpages: i32,
     pub modelskin: [libc::c_char; 64],
-    pub selectedmodel: libc::c_int,
+    pub selectedmodel: i32,
 }
 
 static mut playermodel_artlist: [*mut libc::c_char; 11] = [
@@ -444,7 +444,7 @@ static mut s_playermodel: playermodel_t = playermodel_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     }; 16],
     picbuttons: [crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -471,7 +471,7 @@ static mut s_playermodel: playermodel_t = playermodel_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     }; 16],
     framel: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -498,7 +498,7 @@ static mut s_playermodel: playermodel_t = playermodel_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     framer: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -525,7 +525,7 @@ static mut s_playermodel: playermodel_t = playermodel_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     ports: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -552,7 +552,7 @@ static mut s_playermodel: playermodel_t = playermodel_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     banner: crate::ui_local_h::menutext_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -575,7 +575,7 @@ static mut s_playermodel: playermodel_t = playermodel_t {
         },
         string: 0 as *const libc::c_char as *mut libc::c_char,
         style: 0,
-        color: 0 as *const libc::c_float as *mut libc::c_float,
+        color: 0 as *const f32 as *mut f32,
     },
     back: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -602,7 +602,7 @@ static mut s_playermodel: playermodel_t = playermodel_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     player: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -629,7 +629,7 @@ static mut s_playermodel: playermodel_t = playermodel_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     arrows: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -656,7 +656,7 @@ static mut s_playermodel: playermodel_t = playermodel_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     left: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -683,7 +683,7 @@ static mut s_playermodel: playermodel_t = playermodel_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     right: crate::ui_local_h::menubitmap_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -710,7 +710,7 @@ static mut s_playermodel: playermodel_t = playermodel_t {
         focusshader: 0,
         width: 0,
         height: 0,
-        focuscolor: 0 as *const libc::c_float as *mut libc::c_float,
+        focuscolor: 0 as *const f32 as *mut f32,
     },
     modelname: crate::ui_local_h::menutext_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -733,7 +733,7 @@ static mut s_playermodel: playermodel_t = playermodel_t {
         },
         string: 0 as *const libc::c_char as *mut libc::c_char,
         style: 0,
-        color: 0 as *const libc::c_float as *mut libc::c_float,
+        color: 0 as *const f32 as *mut f32,
     },
     skinname: crate::ui_local_h::menutext_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -756,7 +756,7 @@ static mut s_playermodel: playermodel_t = playermodel_t {
         },
         string: 0 as *const libc::c_char as *mut libc::c_char,
         style: 0,
-        color: 0 as *const libc::c_float as *mut libc::c_float,
+        color: 0 as *const f32 as *mut f32,
     },
     playername: crate::ui_local_h::menutext_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -779,7 +779,7 @@ static mut s_playermodel: playermodel_t = playermodel_t {
         },
         string: 0 as *const libc::c_char as *mut libc::c_char,
         style: 0,
-        color: 0 as *const libc::c_float as *mut libc::c_float,
+        color: 0 as *const f32 as *mut f32,
     },
     playerinfo: crate::ui_local_h::playerInfo_t {
         legsModel: 0,
@@ -870,53 +870,53 @@ PlayerModel_UpdateGrid
 */
 
 unsafe extern "C" fn PlayerModel_UpdateGrid() {
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
-    j = s_playermodel.modelpage * (4 as libc::c_int * 4 as libc::c_int);
-    i = 0 as libc::c_int;
-    while i < 4 as libc::c_int * 4 as libc::c_int {
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
+    j = s_playermodel.modelpage * (4 as i32 * 4 as i32);
+    i = 0 as i32;
+    while i < 4 as i32 * 4 as i32 {
         if j < s_playermodel.nummodels {
             // model/skin portrait
             s_playermodel.pics[i as usize].generic.name =
                 s_playermodel.modelnames[j as usize].as_mut_ptr();
             s_playermodel.picbuttons[i as usize].generic.flags &=
-                !(0x4000 as libc::c_int as libc::c_uint)
+                !(0x4000 as i32 as u32)
         } else {
             // dead slot
             s_playermodel.pics[i as usize].generic.name = 0 as *const libc::c_char;
             s_playermodel.picbuttons[i as usize].generic.flags |=
-                0x4000 as libc::c_int as libc::c_uint
+                0x4000 as i32 as u32
         }
-        s_playermodel.pics[i as usize].generic.flags &= !(0x40 as libc::c_int as libc::c_uint);
-        s_playermodel.pics[i as usize].shader = 0 as libc::c_int;
-        s_playermodel.picbuttons[i as usize].generic.flags |= 0x100 as libc::c_int as libc::c_uint;
+        s_playermodel.pics[i as usize].generic.flags &= !(0x40 as i32 as u32);
+        s_playermodel.pics[i as usize].shader = 0 as i32;
+        s_playermodel.picbuttons[i as usize].generic.flags |= 0x100 as i32 as u32;
         i += 1;
         j += 1
     }
-    if s_playermodel.selectedmodel / (4 as libc::c_int * 4 as libc::c_int)
+    if s_playermodel.selectedmodel / (4 as i32 * 4 as i32)
         == s_playermodel.modelpage
     {
         // set selected model
-        i = s_playermodel.selectedmodel % (4 as libc::c_int * 4 as libc::c_int);
-        s_playermodel.pics[i as usize].generic.flags |= 0x40 as libc::c_int as libc::c_uint;
+        i = s_playermodel.selectedmodel % (4 as i32 * 4 as i32);
+        s_playermodel.pics[i as usize].generic.flags |= 0x40 as i32 as u32;
         s_playermodel.picbuttons[i as usize].generic.flags &=
-            !(0x100 as libc::c_int as libc::c_uint)
+            !(0x100 as i32 as u32)
     }
-    if s_playermodel.numpages > 1 as libc::c_int {
-        if s_playermodel.modelpage > 0 as libc::c_int {
-            s_playermodel.left.generic.flags &= !(0x4000 as libc::c_int as libc::c_uint)
+    if s_playermodel.numpages > 1 as i32 {
+        if s_playermodel.modelpage > 0 as i32 {
+            s_playermodel.left.generic.flags &= !(0x4000 as i32 as u32)
         } else {
-            s_playermodel.left.generic.flags |= 0x4000 as libc::c_int as libc::c_uint
+            s_playermodel.left.generic.flags |= 0x4000 as i32 as u32
         }
-        if s_playermodel.modelpage < s_playermodel.numpages - 1 as libc::c_int {
-            s_playermodel.right.generic.flags &= !(0x4000 as libc::c_int as libc::c_uint)
+        if s_playermodel.modelpage < s_playermodel.numpages - 1 as i32 {
+            s_playermodel.right.generic.flags &= !(0x4000 as i32 as u32)
         } else {
-            s_playermodel.right.generic.flags |= 0x4000 as libc::c_int as libc::c_uint
+            s_playermodel.right.generic.flags |= 0x4000 as i32 as u32
         }
     } else {
         // hide left/right markers
-        s_playermodel.left.generic.flags |= 0x4000 as libc::c_int as libc::c_uint;
-        s_playermodel.right.generic.flags |= 0x4000 as libc::c_int as libc::c_uint
+        s_playermodel.left.generic.flags |= 0x4000 as i32 as u32;
+        s_playermodel.right.generic.flags |= 0x4000 as i32 as u32
     };
 }
 /*
@@ -930,27 +930,27 @@ unsafe extern "C" fn PlayerModel_UpdateModel() {
     let mut moveangles: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     crate::stdlib::memset(
         &mut s_playermodel.playerinfo as *mut crate::ui_local_h::playerInfo_t as *mut libc::c_void,
-        0 as libc::c_int,
+        0 as i32,
         ::std::mem::size_of::<crate::ui_local_h::playerInfo_t>() as libc::c_ulong,
     );
-    viewangles[1 as libc::c_int as usize] =
-        (180 as libc::c_int - 30 as libc::c_int) as crate::src::qcommon::q_shared::vec_t;
-    viewangles[0 as libc::c_int as usize] =
-        0 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-    viewangles[2 as libc::c_int as usize] =
-        0 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-    moveangles[2 as libc::c_int as usize] =
-        0 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-    moveangles[1 as libc::c_int as usize] = moveangles[2 as libc::c_int as usize];
-    moveangles[0 as libc::c_int as usize] = moveangles[1 as libc::c_int as usize];
+    viewangles[1 as i32 as usize] =
+        (180 as i32 - 30 as i32) as crate::src::qcommon::q_shared::vec_t;
+    viewangles[0 as i32 as usize] =
+        0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    viewangles[2 as i32 as usize] =
+        0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    moveangles[2 as i32 as usize] =
+        0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    moveangles[1 as i32 as usize] = moveangles[2 as i32 as usize];
+    moveangles[0 as i32 as usize] = moveangles[1 as i32 as usize];
     crate::src::q3_ui::ui_players::UI_PlayerInfo_SetModel(
         &mut s_playermodel.playerinfo as *mut _ as *mut crate::ui_local_h::playerInfo_t,
         s_playermodel.modelskin.as_mut_ptr(),
     );
     crate::src::q3_ui::ui_players::UI_PlayerInfo_SetInfo(
         &mut s_playermodel.playerinfo as *mut _ as *mut crate::ui_local_h::playerInfo_t,
-        crate::bg_public_h::LEGS_IDLE as libc::c_int,
-        crate::bg_public_h::TORSO_STAND as libc::c_int,
+        crate::bg_public_h::LEGS_IDLE as i32,
+        crate::bg_public_h::TORSO_STAND as i32,
         viewangles.as_mut_ptr(),
         moveangles.as_mut_ptr(),
         crate::bg_public_h::WP_MACHINEGUN,
@@ -987,19 +987,19 @@ PlayerModel_MenuEvent
 =================
 */
 
-unsafe extern "C" fn PlayerModel_MenuEvent(mut ptr: *mut libc::c_void, mut event: libc::c_int) {
-    if event != 3 as libc::c_int {
+unsafe extern "C" fn PlayerModel_MenuEvent(mut ptr: *mut libc::c_void, mut event: i32) {
+    if event != 3 as i32 {
         return;
     }
     match (*(ptr as *mut crate::ui_local_h::menucommon_s)).id {
         100 => {
-            if s_playermodel.modelpage > 0 as libc::c_int {
+            if s_playermodel.modelpage > 0 as i32 {
                 s_playermodel.modelpage -= 1;
                 PlayerModel_UpdateGrid();
             }
         }
         101 => {
-            if s_playermodel.modelpage < s_playermodel.numpages - 1 as libc::c_int {
+            if s_playermodel.modelpage < s_playermodel.numpages - 1 as i32 {
                 s_playermodel.modelpage += 1;
                 PlayerModel_UpdateGrid();
             }
@@ -1018,30 +1018,30 @@ PlayerModel_MenuKey
 */
 
 unsafe extern "C" fn PlayerModel_MenuKey(
-    mut key: libc::c_int,
+    mut key: i32,
 ) -> crate::src::qcommon::q_shared::sfxHandle_t {
     let mut m: *mut crate::ui_local_h::menucommon_s = 0 as *mut crate::ui_local_h::menucommon_s;
-    let mut picnum: libc::c_int = 0;
+    let mut picnum: i32 = 0;
     match key {
         163 | 134 => {
             m = crate::src::q3_ui::ui_qmenu::Menu_ItemAtCursor(
                 &mut s_playermodel.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
             ) as *mut crate::ui_local_h::menucommon_s;
-            picnum = (*m).id - 0 as libc::c_int;
-            if picnum >= 0 as libc::c_int && picnum <= 15 as libc::c_int {
-                if picnum > 0 as libc::c_int {
+            picnum = (*m).id - 0 as i32;
+            if picnum >= 0 as i32 && picnum <= 15 as i32 {
+                if picnum > 0 as i32 {
                     crate::src::q3_ui::ui_qmenu::Menu_SetCursor(
                         &mut s_playermodel.menu as *mut _
                             as *mut crate::ui_local_h::_tag_menuframework,
-                        s_playermodel.menu.cursor - 1 as libc::c_int,
+                        s_playermodel.menu.cursor - 1 as i32,
                     );
                     return crate::src::q3_ui::ui_qmenu::menu_move_sound;
-                } else if s_playermodel.modelpage > 0 as libc::c_int {
+                } else if s_playermodel.modelpage > 0 as i32 {
                     s_playermodel.modelpage -= 1;
                     crate::src::q3_ui::ui_qmenu::Menu_SetCursor(
                         &mut s_playermodel.menu as *mut _
                             as *mut crate::ui_local_h::_tag_menuframework,
-                        s_playermodel.menu.cursor + 15 as libc::c_int,
+                        s_playermodel.menu.cursor + 15 as i32,
                     );
                     PlayerModel_UpdateGrid();
                     return crate::src::q3_ui::ui_qmenu::menu_move_sound;
@@ -1054,28 +1054,28 @@ unsafe extern "C" fn PlayerModel_MenuKey(
             m = crate::src::q3_ui::ui_qmenu::Menu_ItemAtCursor(
                 &mut s_playermodel.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
             ) as *mut crate::ui_local_h::menucommon_s;
-            picnum = (*m).id - 0 as libc::c_int;
-            if picnum >= 0 as libc::c_int && picnum <= 15 as libc::c_int {
-                if picnum < 15 as libc::c_int
-                    && (s_playermodel.modelpage * (4 as libc::c_int * 4 as libc::c_int)
+            picnum = (*m).id - 0 as i32;
+            if picnum >= 0 as i32 && picnum <= 15 as i32 {
+                if picnum < 15 as i32
+                    && (s_playermodel.modelpage * (4 as i32 * 4 as i32)
                         + picnum
-                        + 1 as libc::c_int)
+                        + 1 as i32)
                         < s_playermodel.nummodels
                 {
                     crate::src::q3_ui::ui_qmenu::Menu_SetCursor(
                         &mut s_playermodel.menu as *mut _
                             as *mut crate::ui_local_h::_tag_menuframework,
-                        s_playermodel.menu.cursor + 1 as libc::c_int,
+                        s_playermodel.menu.cursor + 1 as i32,
                     );
                     return crate::src::q3_ui::ui_qmenu::menu_move_sound;
-                } else if picnum == 15 as libc::c_int
-                    && s_playermodel.modelpage < s_playermodel.numpages - 1 as libc::c_int
+                } else if picnum == 15 as i32
+                    && s_playermodel.modelpage < s_playermodel.numpages - 1 as i32
                 {
                     s_playermodel.modelpage += 1;
                     crate::src::q3_ui::ui_qmenu::Menu_SetCursor(
                         &mut s_playermodel.menu as *mut _
                             as *mut crate::ui_local_h::_tag_menuframework,
-                        s_playermodel.menu.cursor - 15 as libc::c_int,
+                        s_playermodel.menu.cursor - 15 as i32,
                     );
                     PlayerModel_UpdateGrid();
                     return crate::src::q3_ui::ui_qmenu::menu_move_sound;
@@ -1100,28 +1100,28 @@ PlayerModel_PicEvent
 =================
 */
 
-unsafe extern "C" fn PlayerModel_PicEvent(mut ptr: *mut libc::c_void, mut event: libc::c_int) {
-    let mut modelnum: libc::c_int = 0;
-    let mut maxlen: libc::c_int = 0;
+unsafe extern "C" fn PlayerModel_PicEvent(mut ptr: *mut libc::c_void, mut event: i32) {
+    let mut modelnum: i32 = 0;
+    let mut maxlen: i32 = 0;
     let mut buffptr: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut pdest: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut i: libc::c_int = 0;
-    if event != 3 as libc::c_int {
+    let mut i: i32 = 0;
+    if event != 3 as i32 {
         return;
     }
-    i = 0 as libc::c_int;
-    while i < 4 as libc::c_int * 4 as libc::c_int {
+    i = 0 as i32;
+    while i < 4 as i32 * 4 as i32 {
         // reset
-        s_playermodel.pics[i as usize].generic.flags &= !(0x40 as libc::c_int as libc::c_uint);
-        s_playermodel.picbuttons[i as usize].generic.flags |= 0x100 as libc::c_int as libc::c_uint;
+        s_playermodel.pics[i as usize].generic.flags &= !(0x40 as i32 as u32);
+        s_playermodel.picbuttons[i as usize].generic.flags |= 0x100 as i32 as u32;
         i += 1
     }
     // set selected
-    i = (*(ptr as *mut crate::ui_local_h::menucommon_s)).id - 0 as libc::c_int;
-    s_playermodel.pics[i as usize].generic.flags |= 0x40 as libc::c_int as libc::c_uint;
-    s_playermodel.picbuttons[i as usize].generic.flags &= !(0x100 as libc::c_int as libc::c_uint);
+    i = (*(ptr as *mut crate::ui_local_h::menucommon_s)).id - 0 as i32;
+    s_playermodel.pics[i as usize].generic.flags |= 0x40 as i32 as u32;
+    s_playermodel.picbuttons[i as usize].generic.flags &= !(0x100 as i32 as u32);
     // get model and strip icon_
-    modelnum = s_playermodel.modelpage * (4 as libc::c_int * 4 as libc::c_int) + i;
+    modelnum = s_playermodel.modelpage * (4 as i32 * 4 as i32) + i;
     buffptr = s_playermodel.modelnames[modelnum as usize]
         .as_mut_ptr()
         .offset(
@@ -1134,35 +1134,35 @@ unsafe extern "C" fn PlayerModel_PicEvent(mut ptr: *mut libc::c_void, mut event:
         crate::src::qcommon::q_shared::Q_strncpyz(
             s_playermodel.modelskin.as_mut_ptr(),
             buffptr,
-            (pdest.offset_from(buffptr) as libc::c_long + 1 as libc::c_int as libc::c_long)
-                as libc::c_int,
+            (pdest.offset_from(buffptr) as libc::c_long + 1 as i32 as libc::c_long)
+                as i32,
         );
         ::libc::strcat(
             s_playermodel.modelskin.as_mut_ptr(),
-            pdest.offset(5 as libc::c_int as isize),
+            pdest.offset(5 as i32 as isize),
         );
         // separate the model name
-        maxlen = pdest.offset_from(buffptr) as libc::c_long as libc::c_int;
-        if maxlen > 16 as libc::c_int {
-            maxlen = 16 as libc::c_int
+        maxlen = pdest.offset_from(buffptr) as libc::c_long as i32;
+        if maxlen > 16 as i32 {
+            maxlen = 16 as i32
         }
         crate::src::qcommon::q_shared::Q_strncpyz(s_playermodel.modelname.string, buffptr, maxlen);
         crate::src::qcommon::q_shared::Q_strupr(s_playermodel.modelname.string);
         // separate the skin name
-        maxlen = crate::stdlib::strlen(pdest.offset(5 as libc::c_int as isize))
-            .wrapping_add(1 as libc::c_int as libc::c_ulong) as libc::c_int;
-        if maxlen > 16 as libc::c_int {
-            maxlen = 16 as libc::c_int
+        maxlen = crate::stdlib::strlen(pdest.offset(5 as i32 as isize))
+            .wrapping_add(1 as i32 as libc::c_ulong) as i32;
+        if maxlen > 16 as i32 {
+            maxlen = 16 as i32
         }
         crate::src::qcommon::q_shared::Q_strncpyz(
             s_playermodel.skinname.string,
-            pdest.offset(5 as libc::c_int as isize),
+            pdest.offset(5 as i32 as isize),
             maxlen,
         );
         crate::src::qcommon::q_shared::Q_strupr(s_playermodel.skinname.string);
         s_playermodel.selectedmodel = modelnum;
         if crate::src::ui::ui_syscalls::trap_MemoryRemaining()
-            > 5 as libc::c_int * 1024 as libc::c_int * 1024 as libc::c_int
+            > 5 as i32 * 1024 as i32 * 1024 as i32
         {
             PlayerModel_UpdateModel();
         }
@@ -1178,24 +1178,24 @@ unsafe extern "C" fn PlayerModel_DrawPlayer(mut self_0: *mut libc::c_void) {
     let mut b: *mut crate::ui_local_h::menubitmap_s = 0 as *mut crate::ui_local_h::menubitmap_s;
     b = self_0 as *mut crate::ui_local_h::menubitmap_s;
     if crate::src::ui::ui_syscalls::trap_MemoryRemaining()
-        <= 5 as libc::c_int * 1024 as libc::c_int * 1024 as libc::c_int
+        <= 5 as i32 * 1024 as i32 * 1024 as i32
     {
         crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
             (*b).generic.x,
-            (*b).generic.y + (*b).height / 2 as libc::c_int,
+            (*b).generic.y + (*b).height / 2 as i32,
             b"LOW MEMORY\x00" as *const u8 as *const libc::c_char,
-            0 as libc::c_int,
+            0 as i32,
             crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr(),
         );
         return;
     }
     crate::src::q3_ui::ui_players::UI_DrawPlayer(
-        (*b).generic.x as libc::c_float,
-        (*b).generic.y as libc::c_float,
-        (*b).width as libc::c_float,
-        (*b).height as libc::c_float,
+        (*b).generic.x as f32,
+        (*b).generic.y as f32,
+        (*b).width as f32,
+        (*b).height as f32,
         &mut s_playermodel.playerinfo as *mut _ as *mut crate::ui_local_h::playerInfo_t,
-        crate::src::q3_ui::ui_atoms::uis.realtime / 2 as libc::c_int,
+        crate::src::q3_ui::ui_atoms::uis.realtime / 2 as i32,
     );
 }
 /*
@@ -1205,39 +1205,39 @@ PlayerModel_BuildList
 */
 
 unsafe extern "C" fn PlayerModel_BuildList() {
-    let mut numdirs: libc::c_int = 0;
-    let mut numfiles: libc::c_int = 0;
+    let mut numdirs: i32 = 0;
+    let mut numfiles: i32 = 0;
     let mut dirlist: [libc::c_char; 2048] = [0; 2048];
     let mut filelist: [libc::c_char; 2048] = [0; 2048];
     let mut skinname: [libc::c_char; 64] = [0; 64];
     let mut dirptr: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut fileptr: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
-    let mut dirlen: libc::c_int = 0;
-    let mut filelen: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
+    let mut dirlen: i32 = 0;
+    let mut filelen: i32 = 0;
     let mut precache: crate::src::qcommon::q_shared::qboolean =
         crate::src::qcommon::q_shared::qfalse;
     precache = crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
         b"com_buildscript\x00" as *const u8 as *const libc::c_char,
     ) as crate::src::qcommon::q_shared::qboolean;
-    s_playermodel.modelpage = 0 as libc::c_int;
-    s_playermodel.nummodels = 0 as libc::c_int;
+    s_playermodel.modelpage = 0 as i32;
+    s_playermodel.nummodels = 0 as i32;
     // iterate directory of all player models
     numdirs = crate::src::ui::ui_syscalls::trap_FS_GetFileList(
         b"models/players\x00" as *const u8 as *const libc::c_char,
         b"/\x00" as *const u8 as *const libc::c_char,
         dirlist.as_mut_ptr(),
-        2048 as libc::c_int,
+        2048 as i32,
     );
     dirptr = dirlist.as_mut_ptr();
-    i = 0 as libc::c_int;
-    while i < numdirs && s_playermodel.nummodels < 256 as libc::c_int {
-        dirlen = crate::stdlib::strlen(dirptr) as libc::c_int;
+    i = 0 as i32;
+    while i < numdirs && s_playermodel.nummodels < 256 as i32 {
+        dirlen = crate::stdlib::strlen(dirptr) as i32;
         if dirlen != 0
-            && *dirptr.offset((dirlen - 1 as libc::c_int) as isize) as libc::c_int == '/' as i32
+            && *dirptr.offset((dirlen - 1 as i32) as isize) as i32 == '/' as i32
         {
-            *dirptr.offset((dirlen - 1 as libc::c_int) as isize) = '\u{0}' as i32 as libc::c_char
+            *dirptr.offset((dirlen - 1 as i32) as isize) = '\u{0}' as i32 as libc::c_char
         }
         if !(::libc::strcmp(dirptr, b".\x00" as *const u8 as *const libc::c_char) == 0
             || ::libc::strcmp(dirptr, b"..\x00" as *const u8 as *const libc::c_char) == 0)
@@ -1251,22 +1251,22 @@ unsafe extern "C" fn PlayerModel_BuildList() {
                 ),
                 b"tga\x00" as *const u8 as *const libc::c_char,
                 filelist.as_mut_ptr(),
-                2048 as libc::c_int,
+                2048 as i32,
             );
             fileptr = filelist.as_mut_ptr();
-            j = 0 as libc::c_int;
-            while j < numfiles && s_playermodel.nummodels < 256 as libc::c_int {
-                filelen = crate::stdlib::strlen(fileptr) as libc::c_int;
+            j = 0 as i32;
+            while j < numfiles && s_playermodel.nummodels < 256 as i32 {
+                filelen = crate::stdlib::strlen(fileptr) as i32;
                 crate::src::qcommon::q_shared::COM_StripExtension(
                     fileptr,
                     skinname.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as libc::c_int,
+                    ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
                 );
                 // look for icon_????
                 if crate::src::qcommon::q_shared::Q_stricmpn(
                     skinname.as_mut_ptr(),
                     b"icon_\x00" as *const u8 as *const libc::c_char,
-                    5 as libc::c_int,
+                    5 as i32,
                 ) == 0
                 {
                     let fresh0 = s_playermodel.nummodels;
@@ -1274,7 +1274,7 @@ unsafe extern "C" fn PlayerModel_BuildList() {
                     crate::src::qcommon::q_shared::Com_sprintf(
                         s_playermodel.modelnames[fresh0 as usize].as_mut_ptr(),
                         ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong
-                            as libc::c_int,
+                            as i32,
                         b"models/players/%s/%s\x00" as *const u8 as *const libc::c_char,
                         dirptr,
                         skinname.as_mut_ptr(),
@@ -1294,15 +1294,15 @@ unsafe extern "C" fn PlayerModel_BuildList() {
                     );
                 }
                 j += 1;
-                fileptr = fileptr.offset((filelen + 1 as libc::c_int) as isize)
+                fileptr = fileptr.offset((filelen + 1 as i32) as isize)
             }
         }
         i += 1;
-        dirptr = dirptr.offset((dirlen + 1 as libc::c_int) as isize)
+        dirptr = dirptr.offset((dirlen + 1 as i32) as isize)
     }
     //APSFIXME - Degenerate no models case
-    s_playermodel.numpages = s_playermodel.nummodels / (4 as libc::c_int * 4 as libc::c_int);
-    if s_playermodel.nummodels % (4 as libc::c_int * 4 as libc::c_int) != 0 {
+    s_playermodel.numpages = s_playermodel.nummodels / (4 as i32 * 4 as i32);
+    if s_playermodel.nummodels % (4 as i32 * 4 as i32) != 0 {
         s_playermodel.numpages += 1
     };
 }
@@ -1313,8 +1313,8 @@ PlayerModel_SetMenuItems
 */
 
 unsafe extern "C" fn PlayerModel_SetMenuItems() {
-    let mut i: libc::c_int = 0;
-    let mut maxlen: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut maxlen: i32 = 0;
     let mut modelskin: [libc::c_char; 64] = [0; 64];
     let mut buffptr: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut pdest: *mut libc::c_char = 0 as *mut libc::c_char;
@@ -1322,25 +1322,25 @@ unsafe extern "C" fn PlayerModel_SetMenuItems() {
     crate::src::ui::ui_syscalls::trap_Cvar_VariableStringBuffer(
         b"name\x00" as *const u8 as *const libc::c_char,
         s_playermodel.playername.string,
-        16 as libc::c_int,
+        16 as i32,
     );
     crate::src::qcommon::q_shared::Q_CleanStr(s_playermodel.playername.string);
     // model
     crate::src::ui::ui_syscalls::trap_Cvar_VariableStringBuffer(
         b"model\x00" as *const u8 as *const libc::c_char,
         s_playermodel.modelskin.as_mut_ptr(),
-        64 as libc::c_int,
+        64 as i32,
     );
     // use default skin if none is set
     if ::libc::strchr(s_playermodel.modelskin.as_mut_ptr(), '/' as i32).is_null() {
         crate::src::qcommon::q_shared::Q_strcat(
             s_playermodel.modelskin.as_mut_ptr(),
-            64 as libc::c_int,
+            64 as i32,
             b"/default\x00" as *const u8 as *const libc::c_char,
         );
     }
     // find model in our list
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < s_playermodel.nummodels {
         // strip icon_
         buffptr = s_playermodel.modelnames[i as usize]
@@ -1353,12 +1353,12 @@ unsafe extern "C" fn PlayerModel_SetMenuItems() {
             crate::src::qcommon::q_shared::Q_strncpyz(
                 modelskin.as_mut_ptr(),
                 buffptr,
-                (pdest.offset_from(buffptr) as libc::c_long + 1 as libc::c_int as libc::c_long)
-                    as libc::c_int,
+                (pdest.offset_from(buffptr) as libc::c_long + 1 as i32 as libc::c_long)
+                    as i32,
             );
             ::libc::strcat(
                 modelskin.as_mut_ptr(),
-                pdest.offset(5 as libc::c_int as isize),
+                pdest.offset(5 as i32 as isize),
             );
             if crate::src::qcommon::q_shared::Q_stricmp(
                 s_playermodel.modelskin.as_mut_ptr(),
@@ -1367,11 +1367,11 @@ unsafe extern "C" fn PlayerModel_SetMenuItems() {
             {
                 // found pic, set selection here
                 s_playermodel.selectedmodel = i;
-                s_playermodel.modelpage = i / (4 as libc::c_int * 4 as libc::c_int);
+                s_playermodel.modelpage = i / (4 as i32 * 4 as i32);
                 // separate the model name
-                maxlen = pdest.offset_from(buffptr) as libc::c_long as libc::c_int;
-                if maxlen > 16 as libc::c_int {
-                    maxlen = 16 as libc::c_int
+                maxlen = pdest.offset_from(buffptr) as libc::c_long as i32;
+                if maxlen > 16 as i32 {
+                    maxlen = 16 as i32
                 }
                 crate::src::qcommon::q_shared::Q_strncpyz(
                     s_playermodel.modelname.string,
@@ -1380,15 +1380,15 @@ unsafe extern "C" fn PlayerModel_SetMenuItems() {
                 );
                 crate::src::qcommon::q_shared::Q_strupr(s_playermodel.modelname.string);
                 // separate the skin name
-                maxlen = crate::stdlib::strlen(pdest.offset(5 as libc::c_int as isize))
-                    .wrapping_add(1 as libc::c_int as libc::c_ulong)
-                    as libc::c_int;
-                if maxlen > 16 as libc::c_int {
-                    maxlen = 16 as libc::c_int
+                maxlen = crate::stdlib::strlen(pdest.offset(5 as i32 as isize))
+                    .wrapping_add(1 as i32 as libc::c_ulong)
+                    as i32;
+                if maxlen > 16 as i32 {
+                    maxlen = 16 as i32
                 }
                 crate::src::qcommon::q_shared::Q_strncpyz(
                     s_playermodel.skinname.string,
-                    pdest.offset(5 as libc::c_int as isize),
+                    pdest.offset(5 as i32 as isize),
                     maxlen,
                 );
                 crate::src::qcommon::q_shared::Q_strupr(s_playermodel.skinname.string);
@@ -1405,187 +1405,187 @@ PlayerModel_MenuInit
 */
 
 unsafe extern "C" fn PlayerModel_MenuInit() {
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
-    let mut k: libc::c_int = 0;
-    let mut x: libc::c_int = 0;
-    let mut y: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
+    let mut k: i32 = 0;
+    let mut x: i32 = 0;
+    let mut y: i32 = 0;
     static mut playername: [libc::c_char; 32] = [0; 32];
     static mut modelname: [libc::c_char; 32] = [0; 32];
     static mut skinname: [libc::c_char; 32] = [0; 32];
     // zero set all our globals
     crate::stdlib::memset(
         &mut s_playermodel as *mut playermodel_t as *mut libc::c_void,
-        0 as libc::c_int,
+        0 as i32,
         ::std::mem::size_of::<playermodel_t>() as libc::c_ulong,
     );
     PlayerModel_Cache();
     s_playermodel.menu.key = Some(
         PlayerModel_MenuKey
-            as unsafe extern "C" fn(_: libc::c_int) -> crate::src::qcommon::q_shared::sfxHandle_t,
+            as unsafe extern "C" fn(_: i32) -> crate::src::qcommon::q_shared::sfxHandle_t,
     );
     s_playermodel.menu.wrapAround = crate::src::qcommon::q_shared::qtrue;
     s_playermodel.menu.fullscreen = crate::src::qcommon::q_shared::qtrue;
-    s_playermodel.banner.generic.type_0 = 10 as libc::c_int;
-    s_playermodel.banner.generic.x = 320 as libc::c_int;
-    s_playermodel.banner.generic.y = 16 as libc::c_int;
+    s_playermodel.banner.generic.type_0 = 10 as i32;
+    s_playermodel.banner.generic.x = 320 as i32;
+    s_playermodel.banner.generic.y = 16 as i32;
     s_playermodel.banner.string =
         b"PLAYER MODEL\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     s_playermodel.banner.color = crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr();
-    s_playermodel.banner.style = 0x1 as libc::c_int;
-    s_playermodel.framel.generic.type_0 = 6 as libc::c_int;
+    s_playermodel.banner.style = 0x1 as i32;
+    s_playermodel.framel.generic.type_0 = 6 as i32;
     s_playermodel.framel.generic.name =
         b"menu/art/frame1_l\x00" as *const u8 as *const libc::c_char;
     s_playermodel.framel.generic.flags =
-        0x4 as libc::c_int as libc::c_uint | 0x4000 as libc::c_int as libc::c_uint;
-    s_playermodel.framel.generic.x = 0 as libc::c_int;
-    s_playermodel.framel.generic.y = 78 as libc::c_int;
-    s_playermodel.framel.width = 256 as libc::c_int;
-    s_playermodel.framel.height = 329 as libc::c_int;
-    s_playermodel.framer.generic.type_0 = 6 as libc::c_int;
+        0x4 as i32 as u32 | 0x4000 as i32 as u32;
+    s_playermodel.framel.generic.x = 0 as i32;
+    s_playermodel.framel.generic.y = 78 as i32;
+    s_playermodel.framel.width = 256 as i32;
+    s_playermodel.framel.height = 329 as i32;
+    s_playermodel.framer.generic.type_0 = 6 as i32;
     s_playermodel.framer.generic.name =
         b"menu/art/frame1_r\x00" as *const u8 as *const libc::c_char;
     s_playermodel.framer.generic.flags =
-        0x4 as libc::c_int as libc::c_uint | 0x4000 as libc::c_int as libc::c_uint;
-    s_playermodel.framer.generic.x = 376 as libc::c_int;
-    s_playermodel.framer.generic.y = 76 as libc::c_int;
-    s_playermodel.framer.width = 256 as libc::c_int;
-    s_playermodel.framer.height = 334 as libc::c_int;
-    s_playermodel.ports.generic.type_0 = 6 as libc::c_int;
+        0x4 as i32 as u32 | 0x4000 as i32 as u32;
+    s_playermodel.framer.generic.x = 376 as i32;
+    s_playermodel.framer.generic.y = 76 as i32;
+    s_playermodel.framer.width = 256 as i32;
+    s_playermodel.framer.height = 334 as i32;
+    s_playermodel.ports.generic.type_0 = 6 as i32;
     s_playermodel.ports.generic.name =
         b"menu/art/player_models_ports\x00" as *const u8 as *const libc::c_char;
     s_playermodel.ports.generic.flags =
-        0x4 as libc::c_int as libc::c_uint | 0x4000 as libc::c_int as libc::c_uint;
-    s_playermodel.ports.generic.x = 50 as libc::c_int;
-    s_playermodel.ports.generic.y = 59 as libc::c_int;
-    s_playermodel.ports.width = 274 as libc::c_int;
-    s_playermodel.ports.height = 274 as libc::c_int;
-    y = 59 as libc::c_int;
-    i = 0 as libc::c_int;
-    k = 0 as libc::c_int;
-    while i < 4 as libc::c_int {
-        x = 50 as libc::c_int;
-        j = 0 as libc::c_int;
-        while j < 4 as libc::c_int {
-            s_playermodel.pics[k as usize].generic.type_0 = 6 as libc::c_int;
+        0x4 as i32 as u32 | 0x4000 as i32 as u32;
+    s_playermodel.ports.generic.x = 50 as i32;
+    s_playermodel.ports.generic.y = 59 as i32;
+    s_playermodel.ports.width = 274 as i32;
+    s_playermodel.ports.height = 274 as i32;
+    y = 59 as i32;
+    i = 0 as i32;
+    k = 0 as i32;
+    while i < 4 as i32 {
+        x = 50 as i32;
+        j = 0 as i32;
+        while j < 4 as i32 {
+            s_playermodel.pics[k as usize].generic.type_0 = 6 as i32;
             s_playermodel.pics[k as usize].generic.flags =
-                0x4 as libc::c_int as libc::c_uint | 0x4000 as libc::c_int as libc::c_uint;
+                0x4 as i32 as u32 | 0x4000 as i32 as u32;
             s_playermodel.pics[k as usize].generic.x = x;
             s_playermodel.pics[k as usize].generic.y = y;
-            s_playermodel.pics[k as usize].width = 64 as libc::c_int;
-            s_playermodel.pics[k as usize].height = 64 as libc::c_int;
+            s_playermodel.pics[k as usize].width = 64 as i32;
+            s_playermodel.pics[k as usize].height = 64 as i32;
             s_playermodel.pics[k as usize].focuspic =
                 b"menu/art/opponents_selected\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char;
             s_playermodel.pics[k as usize].focuscolor =
                 crate::src::qcommon::q_math::colorRed.as_mut_ptr();
-            s_playermodel.picbuttons[k as usize].generic.type_0 = 6 as libc::c_int;
-            s_playermodel.picbuttons[k as usize].generic.flags = 0x4 as libc::c_int as libc::c_uint
-                | 0x8000 as libc::c_int as libc::c_uint
-                | 0x100 as libc::c_int as libc::c_uint;
-            s_playermodel.picbuttons[k as usize].generic.id = 0 as libc::c_int + k;
+            s_playermodel.picbuttons[k as usize].generic.type_0 = 6 as i32;
+            s_playermodel.picbuttons[k as usize].generic.flags = 0x4 as i32 as u32
+                | 0x8000 as i32 as u32
+                | 0x100 as i32 as u32;
+            s_playermodel.picbuttons[k as usize].generic.id = 0 as i32 + k;
             s_playermodel.picbuttons[k as usize].generic.callback = Some(
                 PlayerModel_PicEvent
-                    as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+                    as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
             );
-            s_playermodel.picbuttons[k as usize].generic.x = x - 16 as libc::c_int;
-            s_playermodel.picbuttons[k as usize].generic.y = y - 16 as libc::c_int;
+            s_playermodel.picbuttons[k as usize].generic.x = x - 16 as i32;
+            s_playermodel.picbuttons[k as usize].generic.y = y - 16 as i32;
             s_playermodel.picbuttons[k as usize].generic.left = x;
             s_playermodel.picbuttons[k as usize].generic.top = y;
-            s_playermodel.picbuttons[k as usize].generic.right = x + 64 as libc::c_int;
-            s_playermodel.picbuttons[k as usize].generic.bottom = y + 64 as libc::c_int;
-            s_playermodel.picbuttons[k as usize].width = 128 as libc::c_int;
-            s_playermodel.picbuttons[k as usize].height = 128 as libc::c_int;
+            s_playermodel.picbuttons[k as usize].generic.right = x + 64 as i32;
+            s_playermodel.picbuttons[k as usize].generic.bottom = y + 64 as i32;
+            s_playermodel.picbuttons[k as usize].width = 128 as i32;
+            s_playermodel.picbuttons[k as usize].height = 128 as i32;
             s_playermodel.picbuttons[k as usize].focuspic =
                 b"menu/art/opponents_select\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char;
             s_playermodel.picbuttons[k as usize].focuscolor =
                 crate::src::qcommon::q_math::colorRed.as_mut_ptr();
-            x += 64 as libc::c_int + 6 as libc::c_int;
+            x += 64 as i32 + 6 as i32;
             j += 1;
             k += 1
         }
-        y += 64 as libc::c_int + 6 as libc::c_int;
+        y += 64 as i32 + 6 as i32;
         i += 1
     }
-    s_playermodel.playername.generic.type_0 = 9 as libc::c_int;
+    s_playermodel.playername.generic.type_0 = 9 as i32;
     s_playermodel.playername.generic.flags =
-        0x8 as libc::c_int as libc::c_uint | 0x4000 as libc::c_int as libc::c_uint;
-    s_playermodel.playername.generic.x = 320 as libc::c_int;
-    s_playermodel.playername.generic.y = 440 as libc::c_int;
+        0x8 as i32 as u32 | 0x4000 as i32 as u32;
+    s_playermodel.playername.generic.x = 320 as i32;
+    s_playermodel.playername.generic.y = 440 as i32;
     s_playermodel.playername.string = playername.as_mut_ptr();
-    s_playermodel.playername.style = 0x1 as libc::c_int;
+    s_playermodel.playername.style = 0x1 as i32;
     s_playermodel.playername.color = crate::src::q3_ui::ui_qmenu::text_color_normal.as_mut_ptr();
-    s_playermodel.modelname.generic.type_0 = 9 as libc::c_int;
+    s_playermodel.modelname.generic.type_0 = 9 as i32;
     s_playermodel.modelname.generic.flags =
-        0x8 as libc::c_int as libc::c_uint | 0x4000 as libc::c_int as libc::c_uint;
-    s_playermodel.modelname.generic.x = 497 as libc::c_int;
-    s_playermodel.modelname.generic.y = 54 as libc::c_int;
+        0x8 as i32 as u32 | 0x4000 as i32 as u32;
+    s_playermodel.modelname.generic.x = 497 as i32;
+    s_playermodel.modelname.generic.y = 54 as i32;
     s_playermodel.modelname.string = modelname.as_mut_ptr();
-    s_playermodel.modelname.style = 0x1 as libc::c_int;
+    s_playermodel.modelname.style = 0x1 as i32;
     s_playermodel.modelname.color = crate::src::q3_ui::ui_qmenu::text_color_normal.as_mut_ptr();
-    s_playermodel.skinname.generic.type_0 = 9 as libc::c_int;
+    s_playermodel.skinname.generic.type_0 = 9 as i32;
     s_playermodel.skinname.generic.flags =
-        0x8 as libc::c_int as libc::c_uint | 0x4000 as libc::c_int as libc::c_uint;
-    s_playermodel.skinname.generic.x = 497 as libc::c_int;
-    s_playermodel.skinname.generic.y = 394 as libc::c_int;
+        0x8 as i32 as u32 | 0x4000 as i32 as u32;
+    s_playermodel.skinname.generic.x = 497 as i32;
+    s_playermodel.skinname.generic.y = 394 as i32;
     s_playermodel.skinname.string = skinname.as_mut_ptr();
-    s_playermodel.skinname.style = 0x1 as libc::c_int;
+    s_playermodel.skinname.style = 0x1 as i32;
     s_playermodel.skinname.color = crate::src::q3_ui::ui_qmenu::text_color_normal.as_mut_ptr();
-    s_playermodel.player.generic.type_0 = 6 as libc::c_int;
-    s_playermodel.player.generic.flags = 0x4000 as libc::c_int as libc::c_uint;
+    s_playermodel.player.generic.type_0 = 6 as i32;
+    s_playermodel.player.generic.flags = 0x4000 as i32 as u32;
     s_playermodel.player.generic.ownerdraw =
         Some(PlayerModel_DrawPlayer as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    s_playermodel.player.generic.x = 400 as libc::c_int;
-    s_playermodel.player.generic.y = -(40 as libc::c_int);
-    s_playermodel.player.width = 32 as libc::c_int * 10 as libc::c_int;
-    s_playermodel.player.height = 56 as libc::c_int * 10 as libc::c_int;
-    s_playermodel.arrows.generic.type_0 = 6 as libc::c_int;
+    s_playermodel.player.generic.x = 400 as i32;
+    s_playermodel.player.generic.y = -(40 as i32);
+    s_playermodel.player.width = 32 as i32 * 10 as i32;
+    s_playermodel.player.height = 56 as i32 * 10 as i32;
+    s_playermodel.arrows.generic.type_0 = 6 as i32;
     s_playermodel.arrows.generic.name =
         b"menu/art/gs_arrows_0\x00" as *const u8 as *const libc::c_char;
-    s_playermodel.arrows.generic.flags = 0x4000 as libc::c_int as libc::c_uint;
-    s_playermodel.arrows.generic.x = 125 as libc::c_int;
-    s_playermodel.arrows.generic.y = 340 as libc::c_int;
-    s_playermodel.arrows.width = 128 as libc::c_int;
-    s_playermodel.arrows.height = 32 as libc::c_int;
-    s_playermodel.left.generic.type_0 = 6 as libc::c_int;
+    s_playermodel.arrows.generic.flags = 0x4000 as i32 as u32;
+    s_playermodel.arrows.generic.x = 125 as i32;
+    s_playermodel.arrows.generic.y = 340 as i32;
+    s_playermodel.arrows.width = 128 as i32;
+    s_playermodel.arrows.height = 32 as i32;
+    s_playermodel.left.generic.type_0 = 6 as i32;
     s_playermodel.left.generic.flags =
-        0x4 as libc::c_int as libc::c_uint | 0x100 as libc::c_int as libc::c_uint;
+        0x4 as i32 as u32 | 0x100 as i32 as u32;
     s_playermodel.left.generic.callback = Some(
-        PlayerModel_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        PlayerModel_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    s_playermodel.left.generic.id = 100 as libc::c_int;
-    s_playermodel.left.generic.x = 125 as libc::c_int;
-    s_playermodel.left.generic.y = 340 as libc::c_int;
-    s_playermodel.left.width = 64 as libc::c_int;
-    s_playermodel.left.height = 32 as libc::c_int;
+    s_playermodel.left.generic.id = 100 as i32;
+    s_playermodel.left.generic.x = 125 as i32;
+    s_playermodel.left.generic.y = 340 as i32;
+    s_playermodel.left.width = 64 as i32;
+    s_playermodel.left.height = 32 as i32;
     s_playermodel.left.focuspic =
         b"menu/art/gs_arrows_l\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    s_playermodel.right.generic.type_0 = 6 as libc::c_int;
+    s_playermodel.right.generic.type_0 = 6 as i32;
     s_playermodel.right.generic.flags =
-        0x4 as libc::c_int as libc::c_uint | 0x100 as libc::c_int as libc::c_uint;
+        0x4 as i32 as u32 | 0x100 as i32 as u32;
     s_playermodel.right.generic.callback = Some(
-        PlayerModel_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        PlayerModel_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    s_playermodel.right.generic.id = 101 as libc::c_int;
-    s_playermodel.right.generic.x = 125 as libc::c_int + 61 as libc::c_int;
-    s_playermodel.right.generic.y = 340 as libc::c_int;
-    s_playermodel.right.width = 64 as libc::c_int;
-    s_playermodel.right.height = 32 as libc::c_int;
+    s_playermodel.right.generic.id = 101 as i32;
+    s_playermodel.right.generic.x = 125 as i32 + 61 as i32;
+    s_playermodel.right.generic.y = 340 as i32;
+    s_playermodel.right.width = 64 as i32;
+    s_playermodel.right.height = 32 as i32;
     s_playermodel.right.focuspic =
         b"menu/art/gs_arrows_r\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    s_playermodel.back.generic.type_0 = 6 as libc::c_int;
+    s_playermodel.back.generic.type_0 = 6 as i32;
     s_playermodel.back.generic.name = b"menu/art/back_0\x00" as *const u8 as *const libc::c_char;
     s_playermodel.back.generic.flags =
-        0x4 as libc::c_int as libc::c_uint | 0x100 as libc::c_int as libc::c_uint;
+        0x4 as i32 as u32 | 0x100 as i32 as u32;
     s_playermodel.back.generic.callback = Some(
-        PlayerModel_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> (),
+        PlayerModel_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    s_playermodel.back.generic.id = 102 as libc::c_int;
-    s_playermodel.back.generic.x = 0 as libc::c_int;
-    s_playermodel.back.generic.y = 480 as libc::c_int - 64 as libc::c_int;
-    s_playermodel.back.width = 128 as libc::c_int;
-    s_playermodel.back.height = 64 as libc::c_int;
+    s_playermodel.back.generic.id = 102 as i32;
+    s_playermodel.back.generic.x = 0 as i32;
+    s_playermodel.back.generic.y = 480 as i32 - 64 as i32;
+    s_playermodel.back.width = 128 as i32;
+    s_playermodel.back.height = 64 as i32;
     s_playermodel.back.focuspic =
         b"menu/art/back_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     crate::src::q3_ui::ui_qmenu::Menu_AddItem(
@@ -1616,8 +1616,8 @@ unsafe extern "C" fn PlayerModel_MenuInit() {
         &mut s_playermodel.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
         &mut s_playermodel.skinname as *mut crate::ui_local_h::menutext_s as *mut libc::c_void,
     );
-    i = 0 as libc::c_int;
-    while i < 4 as libc::c_int * 4 as libc::c_int {
+    i = 0 as i32;
+    while i < 4 as i32 * 4 as i32 {
         crate::src::q3_ui::ui_qmenu::Menu_AddItem(
             &mut s_playermodel.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
             &mut *s_playermodel.pics.as_mut_ptr().offset(i as isize)
@@ -1666,14 +1666,14 @@ PlayerModel_Cache
 #[no_mangle]
 
 pub unsafe extern "C" fn PlayerModel_Cache() {
-    let mut i: libc::c_int = 0;
-    i = 0 as libc::c_int;
+    let mut i: i32 = 0;
+    i = 0 as i32;
     while !playermodel_artlist[i as usize].is_null() {
         crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(playermodel_artlist[i as usize]);
         i += 1
     }
     PlayerModel_BuildList();
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < s_playermodel.nummodels {
         crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
             s_playermodel.modelnames[i as usize].as_mut_ptr(),
@@ -1773,7 +1773,7 @@ pub unsafe extern "C" fn UI_PlayerModelMenu() {
         &mut *s_playermodel
             .pics
             .as_mut_ptr()
-            .offset((s_playermodel.selectedmodel % (4 as libc::c_int * 4 as libc::c_int)) as isize)
+            .offset((s_playermodel.selectedmodel % (4 as i32 * 4 as i32)) as isize)
             as *mut crate::ui_local_h::menubitmap_s as *mut libc::c_void,
     );
 }

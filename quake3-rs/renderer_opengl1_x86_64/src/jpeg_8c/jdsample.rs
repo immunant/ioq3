@@ -207,9 +207,9 @@ pub struct my_upsampler {
     pub pub_0: crate::jpegint_h::jpeg_upsampler,
     pub color_buf: [crate::jpeglib_h::JSAMPARRAY; 10],
     pub methods: [upsample1_ptr; 10],
-    pub next_row_out: libc::c_int,
+    pub next_row_out: i32,
     pub rows_to_go: crate::jmorecfg_h::JDIMENSION,
-    pub rowgroup_height: [libc::c_int; 10],
+    pub rowgroup_height: [i32; 10],
     pub h_expand: [crate::jmorecfg_h::UINT8; 10],
     pub v_expand: [crate::jmorecfg_h::UINT8; 10],
 }
@@ -272,13 +272,13 @@ unsafe extern "C" fn sep_upsample(
     mut out_rows_avail: crate::jmorecfg_h::JDIMENSION,
 ) {
     let mut upsample: my_upsample_ptr = (*cinfo).upsample as my_upsample_ptr;
-    let mut ci: libc::c_int = 0;
+    let mut ci: i32 = 0;
     let mut compptr: *mut crate::jpeglib_h::jpeg_component_info =
         0 as *mut crate::jpeglib_h::jpeg_component_info;
     let mut num_rows: crate::jmorecfg_h::JDIMENSION = 0;
     /* Fill the conversion buffer, if it's empty */
     if (*upsample).next_row_out >= (*cinfo).max_v_samp_factor {
-        ci = 0 as libc::c_int;
+        ci = 0 as i32;
         compptr = (*cinfo).comp_info;
         while ci < (*cinfo).num_components {
             /* Invoke per-component upsample method.  Notice we pass a POINTER
@@ -293,7 +293,7 @@ unsafe extern "C" fn sep_upsample(
                 compptr,
                 (*input_buf.offset(ci as isize)).offset(
                     (*in_row_group_ctr)
-                        .wrapping_mul((*upsample).rowgroup_height[ci as usize] as libc::c_uint)
+                        .wrapping_mul((*upsample).rowgroup_height[ci as usize] as u32)
                         as isize,
                 ),
                 (*upsample).color_buf.as_mut_ptr().offset(ci as isize),
@@ -301,7 +301,7 @@ unsafe extern "C" fn sep_upsample(
             ci += 1;
             compptr = compptr.offset(1)
         }
-        (*upsample).next_row_out = 0 as libc::c_int
+        (*upsample).next_row_out = 0 as i32
     }
     /* Color-convert and emit rows */
     /* How many we have in the buffer: */
@@ -314,7 +314,7 @@ unsafe extern "C" fn sep_upsample(
         num_rows = (*upsample).rows_to_go
     }
     /* And not more than what the client can accept: */
-    out_rows_avail = (out_rows_avail as libc::c_uint).wrapping_sub(*out_row_ctr)
+    out_rows_avail = (out_rows_avail as u32).wrapping_sub(*out_row_ctr)
         as crate::jmorecfg_h::JDIMENSION as crate::jmorecfg_h::JDIMENSION;
     if num_rows > out_rows_avail {
         num_rows = out_rows_avail
@@ -329,16 +329,16 @@ unsafe extern "C" fn sep_upsample(
         (*upsample).color_buf.as_mut_ptr(),
         (*upsample).next_row_out as crate::jmorecfg_h::JDIMENSION,
         output_buf.offset(*out_row_ctr as isize),
-        num_rows as libc::c_int,
+        num_rows as i32,
     );
     /* Adjust counts */
-    *out_row_ctr = (*out_row_ctr as libc::c_uint).wrapping_add(num_rows)
+    *out_row_ctr = (*out_row_ctr as u32).wrapping_add(num_rows)
         as crate::jmorecfg_h::JDIMENSION as crate::jmorecfg_h::JDIMENSION;
-    (*upsample).rows_to_go = ((*upsample).rows_to_go as libc::c_uint).wrapping_sub(num_rows)
+    (*upsample).rows_to_go = ((*upsample).rows_to_go as u32).wrapping_sub(num_rows)
         as crate::jmorecfg_h::JDIMENSION
         as crate::jmorecfg_h::JDIMENSION;
-    (*upsample).next_row_out = ((*upsample).next_row_out as libc::c_uint).wrapping_add(num_rows)
-        as libc::c_int as libc::c_int;
+    (*upsample).next_row_out = ((*upsample).next_row_out as u32).wrapping_add(num_rows)
+        as i32 as i32;
     /* When the buffer is emptied, declare this input row group consumed */
     if (*upsample).next_row_out >= (*cinfo).max_v_samp_factor {
         *in_row_group_ctr = (*in_row_group_ctr).wrapping_add(1)
@@ -399,15 +399,15 @@ unsafe extern "C" fn int_upsample(
     let mut inptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
     let mut outptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
     let mut invalue: crate::jmorecfg_h::JSAMPLE = 0;
-    let mut h: libc::c_int = 0;
+    let mut h: i32 = 0;
     let mut outend: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
-    let mut h_expand: libc::c_int = 0;
-    let mut v_expand: libc::c_int = 0;
-    let mut inrow: libc::c_int = 0;
-    let mut outrow: libc::c_int = 0;
-    h_expand = (*upsample).h_expand[(*compptr).component_index as usize] as libc::c_int;
-    v_expand = (*upsample).v_expand[(*compptr).component_index as usize] as libc::c_int;
-    outrow = 0 as libc::c_int;
+    let mut h_expand: i32 = 0;
+    let mut v_expand: i32 = 0;
+    let mut inrow: i32 = 0;
+    let mut outrow: i32 = 0;
+    h_expand = (*upsample).h_expand[(*compptr).component_index as usize] as i32;
+    v_expand = (*upsample).v_expand[(*compptr).component_index as usize] as i32;
+    outrow = 0 as i32;
     inrow = outrow;
     while outrow < (*cinfo).max_v_samp_factor {
         /* Generate one output row with proper horizontal expansion */
@@ -419,7 +419,7 @@ unsafe extern "C" fn int_upsample(
             inptr = inptr.offset(1);
             invalue = *fresh0;
             h = h_expand;
-            while h > 0 as libc::c_int {
+            while h > 0 as i32 {
                 let fresh1 = outptr;
                 outptr = outptr.offset(1);
                 *fresh1 = invalue;
@@ -427,13 +427,13 @@ unsafe extern "C" fn int_upsample(
             }
         }
         /* Generate any additional output rows by duplicating the first one */
-        if v_expand > 1 as libc::c_int {
+        if v_expand > 1 as i32 {
             crate::src::jpeg_8c::jutils::jcopy_sample_rows(
                 output_data,
                 outrow,
                 output_data,
-                outrow + 1 as libc::c_int,
-                v_expand - 1 as libc::c_int,
+                outrow + 1 as i32,
+                v_expand - 1 as i32,
                 (*cinfo).output_width,
             );
         }
@@ -457,8 +457,8 @@ unsafe extern "C" fn h2v1_upsample(
     let mut outptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
     let mut invalue: crate::jmorecfg_h::JSAMPLE = 0;
     let mut outend: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
-    let mut outrow: libc::c_int = 0;
-    outrow = 0 as libc::c_int;
+    let mut outrow: i32 = 0;
+    outrow = 0 as i32;
     while outrow < (*cinfo).max_v_samp_factor {
         inptr = *input_data.offset(outrow as isize);
         outptr = *output_data.offset(outrow as isize);
@@ -493,9 +493,9 @@ unsafe extern "C" fn h2v2_upsample(
     let mut outptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
     let mut invalue: crate::jmorecfg_h::JSAMPLE = 0;
     let mut outend: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
-    let mut inrow: libc::c_int = 0;
-    let mut outrow: libc::c_int = 0;
-    outrow = 0 as libc::c_int;
+    let mut inrow: i32 = 0;
+    let mut outrow: i32 = 0;
+    outrow = 0 as i32;
     inrow = outrow;
     while outrow < (*cinfo).max_v_samp_factor {
         inptr = *input_data.offset(inrow as isize);
@@ -516,12 +516,12 @@ unsafe extern "C" fn h2v2_upsample(
             output_data,
             outrow,
             output_data,
-            outrow + 1 as libc::c_int,
-            1 as libc::c_int,
+            outrow + 1 as i32,
+            1 as i32,
             (*cinfo).output_width,
         );
         inrow += 1;
-        outrow += 2 as libc::c_int
+        outrow += 2 as i32
     }
 }
 /*
@@ -531,14 +531,14 @@ unsafe extern "C" fn h2v2_upsample(
 
 pub unsafe extern "C" fn jinit_upsampler(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
     let mut upsample: my_upsample_ptr = 0 as *mut my_upsampler; /* until we find out differently */
-    let mut ci: libc::c_int = 0;
+    let mut ci: i32 = 0;
     let mut compptr: *mut crate::jpeglib_h::jpeg_component_info =
         0 as *mut crate::jpeglib_h::jpeg_component_info;
     let mut need_buffer: crate::jmorecfg_h::boolean = 0;
-    let mut h_in_group: libc::c_int = 0;
-    let mut v_in_group: libc::c_int = 0;
-    let mut h_out_group: libc::c_int = 0;
-    let mut v_out_group: libc::c_int = 0;
+    let mut h_in_group: i32 = 0;
+    let mut v_in_group: i32 = 0;
+    let mut h_out_group: i32 = 0;
+    let mut v_out_group: i32 = 0;
     upsample = Some(
         (*(*cinfo).mem)
             .alloc_small
@@ -546,7 +546,7 @@ pub unsafe extern "C" fn jinit_upsampler(mut cinfo: crate::jpeglib_h::j_decompre
     )
     .expect("non-null function pointer")(
         cinfo as crate::jpeglib_h::j_common_ptr,
-        1 as libc::c_int,
+        1 as i32,
         ::std::mem::size_of::<my_upsampler>() as libc::c_ulong,
     ) as my_upsample_ptr;
     (*cinfo).upsample = upsample as *mut crate::jpegint_h::jpeg_upsampler;
@@ -565,10 +565,10 @@ pub unsafe extern "C" fn jinit_upsampler(mut cinfo: crate::jpeglib_h::j_decompre
                 _: crate::jmorecfg_h::JDIMENSION,
             ) -> (),
     );
-    (*upsample).pub_0.need_context_rows = 0 as libc::c_int;
+    (*upsample).pub_0.need_context_rows = 0 as i32;
     if (*cinfo).CCIR601_sampling != 0 {
         /* this isn't supported */
-        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_CCIR601_NOTIMPL as libc::c_int;
+        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_CCIR601_NOTIMPL as i32;
         Some(
             (*(*cinfo).err)
                 .error_exit
@@ -579,7 +579,7 @@ pub unsafe extern "C" fn jinit_upsampler(mut cinfo: crate::jpeglib_h::j_decompre
     /* Verify we can handle the sampling factors, select per-component methods,
      * and create storage as needed.
      */
-    ci = 0 as libc::c_int;
+    ci = 0 as i32;
     compptr = (*cinfo).comp_info;
     while ci < (*cinfo).num_components {
         /* Compute size of an "input group" after IDCT scaling.  This many samples
@@ -592,7 +592,7 @@ pub unsafe extern "C" fn jinit_upsampler(mut cinfo: crate::jpeglib_h::j_decompre
         h_out_group = (*cinfo).max_h_samp_factor;
         v_out_group = (*cinfo).max_v_samp_factor;
         (*upsample).rowgroup_height[ci as usize] = v_in_group;
-        need_buffer = 1 as libc::c_int;
+        need_buffer = 1 as i32;
         if (*compptr).component_needed == 0 {
             /* Don't bother to upsample an uninteresting component. */
             (*upsample).methods[ci as usize] = Some(
@@ -604,7 +604,7 @@ pub unsafe extern "C" fn jinit_upsampler(mut cinfo: crate::jpeglib_h::j_decompre
                         _: *mut crate::jpeglib_h::JSAMPARRAY,
                     ) -> (),
             );
-            need_buffer = 0 as libc::c_int
+            need_buffer = 0 as i32
         } else if h_in_group == h_out_group && v_in_group == v_out_group {
             /* Fullsize components can be processed without any work. */
             (*upsample).methods[ci as usize] = Some(
@@ -616,8 +616,8 @@ pub unsafe extern "C" fn jinit_upsampler(mut cinfo: crate::jpeglib_h::j_decompre
                         _: *mut crate::jpeglib_h::JSAMPARRAY,
                     ) -> (),
             );
-            need_buffer = 0 as libc::c_int
-        } else if h_in_group * 2 as libc::c_int == h_out_group && v_in_group == v_out_group {
+            need_buffer = 0 as i32
+        } else if h_in_group * 2 as i32 == h_out_group && v_in_group == v_out_group {
             /* Special case for 2h1v upsampling */
             (*upsample).methods[ci as usize] = Some(
                 h2v1_upsample
@@ -628,8 +628,8 @@ pub unsafe extern "C" fn jinit_upsampler(mut cinfo: crate::jpeglib_h::j_decompre
                         _: *mut crate::jpeglib_h::JSAMPARRAY,
                     ) -> (),
             )
-        } else if h_in_group * 2 as libc::c_int == h_out_group
-            && v_in_group * 2 as libc::c_int == v_out_group
+        } else if h_in_group * 2 as i32 == h_out_group
+            && v_in_group * 2 as i32 == v_out_group
         {
             /* Special case for 2h2v upsampling */
             (*upsample).methods[ci as usize] = Some(
@@ -641,8 +641,8 @@ pub unsafe extern "C" fn jinit_upsampler(mut cinfo: crate::jpeglib_h::j_decompre
                         _: *mut crate::jpeglib_h::JSAMPARRAY,
                     ) -> (),
             )
-        } else if h_out_group % h_in_group == 0 as libc::c_int
-            && v_out_group % v_in_group == 0 as libc::c_int
+        } else if h_out_group % h_in_group == 0 as i32
+            && v_out_group % v_in_group == 0 as i32
         {
             /* Generic integral-factors upsampling method */
             (*upsample).methods[ci as usize] = Some(
@@ -660,7 +660,7 @@ pub unsafe extern "C" fn jinit_upsampler(mut cinfo: crate::jpeglib_h::j_decompre
                 (v_out_group / v_in_group) as crate::jmorecfg_h::UINT8
         } else {
             (*(*cinfo).err).msg_code =
-                crate::src::jpeg_8c::jerror::JERR_FRACT_SAMPLE_NOTIMPL as libc::c_int;
+                crate::src::jpeg_8c::jerror::JERR_FRACT_SAMPLE_NOTIMPL as i32;
             Some(
                 (*(*cinfo).err)
                     .error_exit
@@ -678,7 +678,7 @@ pub unsafe extern "C" fn jinit_upsampler(mut cinfo: crate::jpeglib_h::j_decompre
             )
             .expect("non-null function pointer")(
                 cinfo as crate::jpeglib_h::j_common_ptr,
-                1 as libc::c_int,
+                1 as i32,
                 crate::src::jpeg_8c::jutils::jround_up(
                     (*cinfo).output_width as libc::c_long,
                     (*cinfo).max_h_samp_factor as libc::c_long,

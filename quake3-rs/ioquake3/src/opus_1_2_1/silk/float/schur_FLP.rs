@@ -67,52 +67,52 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_schur_FLP(
-    mut refl_coef: *mut libc::c_float,
-    mut auto_corr: *const libc::c_float,
-    mut order: libc::c_int,
-) -> libc::c_float
+    mut refl_coef: *mut f32,
+    mut auto_corr: *const f32,
+    mut order: i32,
+) -> f32
 /* I    order                                                       */ {
-    let mut k: libc::c_int = 0;
-    let mut n: libc::c_int = 0;
-    let mut C: [[libc::c_double; 2]; 25] = [[0.; 2]; 25];
-    let mut Ctmp1: libc::c_double = 0.;
-    let mut Ctmp2: libc::c_double = 0.;
-    let mut rc_tmp: libc::c_double = 0.;
+    let mut k: i32 = 0;
+    let mut n: i32 = 0;
+    let mut C: [[f64; 2]; 25] = [[0.; 2]; 25];
+    let mut Ctmp1: f64 = 0.;
+    let mut Ctmp2: f64 = 0.;
+    let mut rc_tmp: f64 = 0.;
     /* Copy correlations */
-    k = 0 as libc::c_int;
+    k = 0 as i32;
     loop {
-        C[k as usize][1 as libc::c_int as usize] = *auto_corr.offset(k as isize) as libc::c_double;
-        C[k as usize][0 as libc::c_int as usize] = C[k as usize][1 as libc::c_int as usize];
+        C[k as usize][1 as i32 as usize] = *auto_corr.offset(k as isize) as f64;
+        C[k as usize][0 as i32 as usize] = C[k as usize][1 as i32 as usize];
         k += 1;
         if !(k <= order) {
             break;
         }
     }
-    k = 0 as libc::c_int;
+    k = 0 as i32;
     while k < order {
         /* Get reflection coefficient */
-        rc_tmp = -C[(k + 1 as libc::c_int) as usize][0 as libc::c_int as usize]
-            / (if C[0 as libc::c_int as usize][1 as libc::c_int as usize]
-                > 1e-9f32 as libc::c_double
+        rc_tmp = -C[(k + 1 as i32) as usize][0 as i32 as usize]
+            / (if C[0 as i32 as usize][1 as i32 as usize]
+                > 1e-9f32 as f64
             {
-                C[0 as libc::c_int as usize][1 as libc::c_int as usize]
+                C[0 as i32 as usize][1 as i32 as usize]
             } else {
-                1e-9f32 as libc::c_double
+                1e-9f32 as f64
             });
         /* Save the output */
-        *refl_coef.offset(k as isize) = rc_tmp as libc::c_float;
+        *refl_coef.offset(k as isize) = rc_tmp as f32;
         /* Update correlations */
-        n = 0 as libc::c_int;
+        n = 0 as i32;
         while n < order - k {
-            Ctmp1 = C[(n + k + 1 as libc::c_int) as usize][0 as libc::c_int as usize];
-            Ctmp2 = C[n as usize][1 as libc::c_int as usize];
-            C[(n + k + 1 as libc::c_int) as usize][0 as libc::c_int as usize] =
+            Ctmp1 = C[(n + k + 1 as i32) as usize][0 as i32 as usize];
+            Ctmp2 = C[n as usize][1 as i32 as usize];
+            C[(n + k + 1 as i32) as usize][0 as i32 as usize] =
                 Ctmp1 + Ctmp2 * rc_tmp;
-            C[n as usize][1 as libc::c_int as usize] = Ctmp2 + Ctmp1 * rc_tmp;
+            C[n as usize][1 as i32 as usize] = Ctmp2 + Ctmp1 * rc_tmp;
             n += 1
         }
         k += 1
     }
     /* Return residual energy */
-    return C[0 as libc::c_int as usize][1 as libc::c_int as usize] as libc::c_float;
+    return C[0 as i32 as usize][1 as i32 as usize] as f32;
 }

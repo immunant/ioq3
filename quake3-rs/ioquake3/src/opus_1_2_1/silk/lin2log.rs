@@ -7,12 +7,12 @@ pub mod macros_h {
         mut in32: crate::opus_types_h::opus_int32,
     ) -> crate::opus_types_h::opus_int32 {
         return if in32 != 0 {
-            (32 as libc::c_int)
-                - (::std::mem::size_of::<libc::c_uint>() as libc::c_ulong as libc::c_int
-                    * 8 as libc::c_int
-                    - (in32 as libc::c_uint).leading_zeros() as i32)
+            (32 as i32)
+                - (::std::mem::size_of::<u32>() as libc::c_ulong as i32
+                    * 8 as i32
+                    - (in32 as u32).leading_zeros() as i32)
         } else {
-            32 as libc::c_int
+            32 as i32
         };
     }
 
@@ -66,7 +66,7 @@ pub mod Inlines_h {
     {
         let mut lzeros: crate::opus_types_h::opus_int32 = silk_CLZ32(in_0);
         *lz = lzeros;
-        *frac_Q7 = silk_ROR32(in_0, 24 as libc::c_int - lzeros) & 0x7f as libc::c_int;
+        *frac_Q7 = silk_ROR32(in_0, 24 as i32 - lzeros) & 0x7f as i32;
     }
 
     use crate::src::opus_1_2_1::silk::lin2log::macros_h::silk_CLZ32;
@@ -219,18 +219,18 @@ pub mod SigProc_FIX_h {
 
     pub unsafe extern "C" fn silk_ROR32(
         mut a32: crate::opus_types_h::opus_int32,
-        mut rot: libc::c_int,
+        mut rot: i32,
     ) -> crate::opus_types_h::opus_int32 {
         let mut x: crate::opus_types_h::opus_uint32 = a32 as crate::opus_types_h::opus_uint32;
         let mut r: crate::opus_types_h::opus_uint32 = rot as crate::opus_types_h::opus_uint32;
         let mut m: crate::opus_types_h::opus_uint32 = -rot as crate::opus_types_h::opus_uint32;
-        if rot == 0 as libc::c_int {
+        if rot == 0 as i32 {
             return a32;
-        } else if rot < 0 as libc::c_int {
-            return (x << m | x >> (32 as libc::c_int as libc::c_uint).wrapping_sub(m))
+        } else if rot < 0 as i32 {
+            return (x << m | x >> (32 as i32 as u32).wrapping_sub(m))
                 as crate::opus_types_h::opus_int32;
         } else {
-            return (x << (32 as libc::c_int as libc::c_uint).wrapping_sub(r) | x >> r)
+            return (x << (32 as i32 as u32).wrapping_sub(r) | x >> r)
                 as crate::opus_types_h::opus_int32;
         };
     }
@@ -408,10 +408,10 @@ pub unsafe extern "C" fn silk_lin2log(
     let mut frac_Q7: crate::opus_types_h::opus_int32 = 0;
     silk_CLZ_FRAC(inLin, &mut lz, &mut frac_Q7);
     /* Piece-wise parabolic approximation */
-    return (frac_Q7 as libc::c_longlong
-        + ((frac_Q7 * (128 as libc::c_int - frac_Q7)) as libc::c_longlong
-            * 179 as libc::c_int as crate::opus_types_h::opus_int16 as libc::c_longlong
-            >> 16 as libc::c_int)) as crate::opus_types_h::opus_int32
-        + (((31 as libc::c_int - lz) as crate::opus_types_h::opus_uint32) << 7 as libc::c_int)
+    return (frac_Q7 as i64
+        + ((frac_Q7 * (128 as i32 - frac_Q7)) as i64
+            * 179 as i32 as crate::opus_types_h::opus_int16 as i64
+            >> 16 as i32)) as crate::opus_types_h::opus_int32
+        + (((31 as i32 - lz) as crate::opus_types_h::opus_uint32) << 7 as i32)
             as crate::opus_types_h::opus_int32;
 }

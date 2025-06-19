@@ -219,7 +219,7 @@ unsafe extern "C" fn start_pass_dpost(
     mut pass_mode: crate::jpegint_h::J_BUF_MODE,
 ) {
     let mut post: my_post_ptr = (*cinfo).post as my_post_ptr;
-    match pass_mode as libc::c_uint {
+    match pass_mode as u32 {
         0 => {
             if (*cinfo).quantize_colors != 0 {
                 /* Single-pass processing with color quantization. */
@@ -248,9 +248,9 @@ unsafe extern "C" fn start_pass_dpost(
                     .expect("non-null function pointer")(
                         cinfo as crate::jpeglib_h::j_common_ptr,
                         (*post).whole_image,
-                        0 as libc::c_int as crate::jmorecfg_h::JDIMENSION,
+                        0 as i32 as crate::jmorecfg_h::JDIMENSION,
                         (*post).strip_height,
-                        1 as libc::c_int,
+                        1 as i32,
                     )
                 }
             } else {
@@ -264,7 +264,7 @@ unsafe extern "C" fn start_pass_dpost(
             /* First pass of 2-pass quantization */
             if (*post).whole_image.is_null() {
                 (*(*cinfo).err).msg_code =
-                    crate::src::jpeg_8c::jerror::JERR_BAD_BUFFER_MODE as libc::c_int;
+                    crate::src::jpeg_8c::jerror::JERR_BAD_BUFFER_MODE as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
@@ -291,7 +291,7 @@ unsafe extern "C" fn start_pass_dpost(
             /* Second pass of 2-pass quantization */
             if (*post).whole_image.is_null() {
                 (*(*cinfo).err).msg_code =
-                    crate::src::jpeg_8c::jerror::JERR_BAD_BUFFER_MODE as libc::c_int;
+                    crate::src::jpeg_8c::jerror::JERR_BAD_BUFFER_MODE as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
@@ -317,7 +317,7 @@ unsafe extern "C" fn start_pass_dpost(
         _ => {
             /* QUANT_2PASS_SUPPORTED */
             (*(*cinfo).err).msg_code =
-                crate::src::jpeg_8c::jerror::JERR_BAD_BUFFER_MODE as libc::c_int;
+                crate::src::jpeg_8c::jerror::JERR_BAD_BUFFER_MODE as i32;
             Some(
                 (*(*cinfo).err)
                     .error_exit
@@ -328,7 +328,7 @@ unsafe extern "C" fn start_pass_dpost(
             );
         }
     }
-    (*post).next_row = 0 as libc::c_int as crate::jmorecfg_h::JDIMENSION;
+    (*post).next_row = 0 as i32 as crate::jmorecfg_h::JDIMENSION;
     (*post).starting_row = (*post).next_row;
 }
 /* Forward declarations */
@@ -355,7 +355,7 @@ unsafe extern "C" fn post_process_1pass(
     if max_rows > (*post).strip_height {
         max_rows = (*post).strip_height
     }
-    num_rows = 0 as libc::c_int as crate::jmorecfg_h::JDIMENSION;
+    num_rows = 0 as i32 as crate::jmorecfg_h::JDIMENSION;
     Some(
         (*(*cinfo).upsample)
             .upsample
@@ -380,9 +380,9 @@ unsafe extern "C" fn post_process_1pass(
         cinfo,
         (*post).buffer,
         output_buf.offset(*out_row_ctr as isize),
-        num_rows as libc::c_int,
+        num_rows as i32,
     );
-    *out_row_ctr = (*out_row_ctr as libc::c_uint).wrapping_add(num_rows)
+    *out_row_ctr = (*out_row_ctr as u32).wrapping_add(num_rows)
         as crate::jmorecfg_h::JDIMENSION as crate::jmorecfg_h::JDIMENSION;
 }
 /*
@@ -402,7 +402,7 @@ unsafe extern "C" fn post_process_prepass(
     let mut old_next_row: crate::jmorecfg_h::JDIMENSION = 0;
     let mut num_rows: crate::jmorecfg_h::JDIMENSION = 0;
     /* Reposition virtual buffer if at start of strip. */
-    if (*post).next_row == 0 as libc::c_int as libc::c_uint {
+    if (*post).next_row == 0 as i32 as u32 {
         (*post).buffer = Some(
             (*(*cinfo).mem)
                 .access_virt_sarray
@@ -413,7 +413,7 @@ unsafe extern "C" fn post_process_prepass(
             (*post).whole_image,
             (*post).starting_row,
             (*post).strip_height,
-            1 as libc::c_int,
+            1 as i32,
         )
     }
     /* Upsample some data (up to a strip height's worth). */
@@ -445,17 +445,17 @@ unsafe extern "C" fn post_process_prepass(
             cinfo,
             (*post).buffer.offset(old_next_row as isize),
             0 as *mut libc::c_void as crate::jpeglib_h::JSAMPARRAY,
-            num_rows as libc::c_int,
+            num_rows as i32,
         );
-        *out_row_ctr = (*out_row_ctr as libc::c_uint).wrapping_add(num_rows)
+        *out_row_ctr = (*out_row_ctr as u32).wrapping_add(num_rows)
             as crate::jmorecfg_h::JDIMENSION as crate::jmorecfg_h::JDIMENSION
     }
     /* Advance if we filled the strip. */
     if (*post).next_row >= (*post).strip_height {
         (*post).starting_row =
-            ((*post).starting_row as libc::c_uint).wrapping_add((*post).strip_height)
+            ((*post).starting_row as u32).wrapping_add((*post).strip_height)
                 as crate::jmorecfg_h::JDIMENSION as crate::jmorecfg_h::JDIMENSION;
-        (*post).next_row = 0 as libc::c_int as crate::jmorecfg_h::JDIMENSION
+        (*post).next_row = 0 as i32 as crate::jmorecfg_h::JDIMENSION
     };
 }
 /*
@@ -475,7 +475,7 @@ unsafe extern "C" fn post_process_2pass(
     let mut num_rows: crate::jmorecfg_h::JDIMENSION = 0;
     let mut max_rows: crate::jmorecfg_h::JDIMENSION = 0;
     /* Reposition virtual buffer if at start of strip. */
-    if (*post).next_row == 0 as libc::c_int as libc::c_uint {
+    if (*post).next_row == 0 as i32 as u32 {
         (*post).buffer = Some(
             (*(*cinfo).mem)
                 .access_virt_sarray
@@ -486,7 +486,7 @@ unsafe extern "C" fn post_process_2pass(
             (*post).whole_image,
             (*post).starting_row,
             (*post).strip_height,
-            0 as libc::c_int,
+            0 as i32,
         )
     }
     /* Determine number of rows to emit. */
@@ -510,18 +510,18 @@ unsafe extern "C" fn post_process_2pass(
         cinfo,
         (*post).buffer.offset((*post).next_row as isize),
         output_buf.offset(*out_row_ctr as isize),
-        num_rows as libc::c_int,
+        num_rows as i32,
     );
-    *out_row_ctr = (*out_row_ctr as libc::c_uint).wrapping_add(num_rows)
+    *out_row_ctr = (*out_row_ctr as u32).wrapping_add(num_rows)
         as crate::jmorecfg_h::JDIMENSION as crate::jmorecfg_h::JDIMENSION;
     /* Advance if we filled the strip. */
-    (*post).next_row = ((*post).next_row as libc::c_uint).wrapping_add(num_rows)
+    (*post).next_row = ((*post).next_row as u32).wrapping_add(num_rows)
         as crate::jmorecfg_h::JDIMENSION as crate::jmorecfg_h::JDIMENSION;
     if (*post).next_row >= (*post).strip_height {
         (*post).starting_row =
-            ((*post).starting_row as libc::c_uint).wrapping_add((*post).strip_height)
+            ((*post).starting_row as u32).wrapping_add((*post).strip_height)
                 as crate::jmorecfg_h::JDIMENSION as crate::jmorecfg_h::JDIMENSION;
-        (*post).next_row = 0 as libc::c_int as crate::jmorecfg_h::JDIMENSION
+        (*post).next_row = 0 as i32 as crate::jmorecfg_h::JDIMENSION
     };
 }
 /* It is useful to allow each component to have a separate IDCT method. */
@@ -561,7 +561,7 @@ pub unsafe extern "C" fn jinit_d_post_controller(
     )
     .expect("non-null function pointer")(
         cinfo as crate::jpeglib_h::j_common_ptr,
-        1 as libc::c_int,
+        1 as i32,
         ::std::mem::size_of::<my_post_controller>() as libc::c_ulong,
     ) as my_post_ptr; /* flag for no strip buffer */
     (*cinfo).post = post as *mut crate::jpegint_h::jpeg_d_post_controller;
@@ -591,11 +591,11 @@ pub unsafe extern "C" fn jinit_d_post_controller(
             )
             .expect("non-null function pointer")(
                 cinfo as crate::jpeglib_h::j_common_ptr,
-                1 as libc::c_int,
-                0 as libc::c_int,
+                1 as i32,
+                0 as i32,
                 (*cinfo)
                     .output_width
-                    .wrapping_mul((*cinfo).out_color_components as libc::c_uint),
+                    .wrapping_mul((*cinfo).out_color_components as u32),
                 crate::src::jpeg_8c::jutils::jround_up(
                     (*cinfo).output_height as libc::c_long,
                     (*post).strip_height as libc::c_long,
@@ -612,10 +612,10 @@ pub unsafe extern "C" fn jinit_d_post_controller(
             )
             .expect("non-null function pointer")(
                 cinfo as crate::jpeglib_h::j_common_ptr,
-                1 as libc::c_int,
+                1 as i32,
                 (*cinfo)
                     .output_width
-                    .wrapping_mul((*cinfo).out_color_components as libc::c_uint),
+                    .wrapping_mul((*cinfo).out_color_components as u32),
                 (*post).strip_height,
             )
         }

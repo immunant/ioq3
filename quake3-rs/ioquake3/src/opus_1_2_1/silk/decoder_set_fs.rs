@@ -299,14 +299,14 @@ POSSIBILITY OF SUCH DAMAGE.
 
 pub unsafe extern "C" fn silk_decoder_set_fs(
     mut psDec: *mut crate::structs_h::silk_decoder_state,
-    mut fs_kHz: libc::c_int,
+    mut fs_kHz: i32,
     mut fs_API_Hz: crate::opus_types_h::opus_int32,
-) -> libc::c_int
+) -> i32
 /* I    API Sampling frequency (Hz)                 */ {
-    let mut frame_length: libc::c_int = 0;
-    let mut ret: libc::c_int = 0 as libc::c_int;
+    let mut frame_length: i32 = 0;
+    let mut ret: i32 = 0 as i32;
     /* New (sub)frame length */
-    (*psDec).subfr_length = 5 as libc::c_int as crate::opus_types_h::opus_int16
+    (*psDec).subfr_length = 5 as i32 as crate::opus_types_h::opus_int16
         as crate::opus_types_h::opus_int32
         * fs_kHz as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32;
     frame_length = (*psDec).nb_subfr as crate::opus_types_h::opus_int16
@@ -320,16 +320,16 @@ pub unsafe extern "C" fn silk_decoder_set_fs(
             &mut (*psDec).resampler_state as *mut _
                 as *mut crate::resampler_structs_h::_silk_resampler_state_struct,
             fs_kHz as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
-                * 1000 as libc::c_int as crate::opus_types_h::opus_int16
+                * 1000 as i32 as crate::opus_types_h::opus_int16
                     as crate::opus_types_h::opus_int32,
             fs_API_Hz,
-            0 as libc::c_int,
+            0 as i32,
         );
         (*psDec).fs_API_hz = fs_API_Hz
     }
     if (*psDec).fs_kHz != fs_kHz || frame_length != (*psDec).frame_length {
-        if fs_kHz == 8 as libc::c_int {
-            if (*psDec).nb_subfr == 4 as libc::c_int {
+        if fs_kHz == 8 as i32 {
+            if (*psDec).nb_subfr == 4 as i32 {
                 (*psDec).pitch_contour_iCDF =
                     crate::src::opus_1_2_1::silk::tables_pitch_lag::silk_pitch_contour_NB_iCDF
                         .as_ptr()
@@ -338,7 +338,7 @@ pub unsafe extern "C" fn silk_decoder_set_fs(
                     crate::src::opus_1_2_1::silk::tables_pitch_lag::silk_pitch_contour_10_ms_NB_iCDF
                         .as_ptr()
             }
-        } else if (*psDec).nb_subfr == 4 as libc::c_int {
+        } else if (*psDec).nb_subfr == 4 as i32 {
             (*psDec).pitch_contour_iCDF =
                 crate::src::opus_1_2_1::silk::tables_pitch_lag::silk_pitch_contour_iCDF.as_ptr()
         } else {
@@ -347,40 +347,40 @@ pub unsafe extern "C" fn silk_decoder_set_fs(
                     .as_ptr()
         }
         if (*psDec).fs_kHz != fs_kHz {
-            (*psDec).ltp_mem_length = 20 as libc::c_int as crate::opus_types_h::opus_int16
+            (*psDec).ltp_mem_length = 20 as i32 as crate::opus_types_h::opus_int16
                 as crate::opus_types_h::opus_int32
                 * fs_kHz as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32;
-            if fs_kHz == 8 as libc::c_int || fs_kHz == 12 as libc::c_int {
-                (*psDec).LPC_order = 10 as libc::c_int;
+            if fs_kHz == 8 as i32 || fs_kHz == 12 as i32 {
+                (*psDec).LPC_order = 10 as i32;
                 (*psDec).psNLSF_CB =
                     &crate::src::opus_1_2_1::silk::tables_NLSF_CB_NB_MB::silk_NLSF_CB_NB_MB
             } else {
-                (*psDec).LPC_order = 16 as libc::c_int;
+                (*psDec).LPC_order = 16 as i32;
                 (*psDec).psNLSF_CB =
                     &crate::src::opus_1_2_1::silk::tables_NLSF_CB_WB::silk_NLSF_CB_WB
             }
-            if fs_kHz == 16 as libc::c_int {
+            if fs_kHz == 16 as i32 {
                 (*psDec).pitch_lag_low_bits_iCDF =
                     crate::src::opus_1_2_1::silk::tables_other::silk_uniform8_iCDF.as_ptr()
-            } else if fs_kHz == 12 as libc::c_int {
+            } else if fs_kHz == 12 as i32 {
                 (*psDec).pitch_lag_low_bits_iCDF =
                     crate::src::opus_1_2_1::silk::tables_other::silk_uniform6_iCDF.as_ptr()
-            } else if fs_kHz == 8 as libc::c_int {
+            } else if fs_kHz == 8 as i32 {
                 (*psDec).pitch_lag_low_bits_iCDF =
                     crate::src::opus_1_2_1::silk::tables_other::silk_uniform4_iCDF.as_ptr()
             }
-            (*psDec).first_frame_after_reset = 1 as libc::c_int;
-            (*psDec).lagPrev = 100 as libc::c_int;
-            (*psDec).LastGainIndex = 10 as libc::c_int as libc::c_schar;
-            (*psDec).prevSignalType = 0 as libc::c_int;
+            (*psDec).first_frame_after_reset = 1 as i32;
+            (*psDec).lagPrev = 100 as i32;
+            (*psDec).LastGainIndex = 10 as i32 as i8;
+            (*psDec).prevSignalType = 0 as i32;
             crate::stdlib::memset(
                 (*psDec).outBuf.as_mut_ptr() as *mut libc::c_void,
-                0 as libc::c_int,
+                0 as i32,
                 ::std::mem::size_of::<[crate::opus_types_h::opus_int16; 480]>() as libc::c_ulong,
             );
             crate::stdlib::memset(
                 (*psDec).sLPC_Q14_buf.as_mut_ptr() as *mut libc::c_void,
-                0 as libc::c_int,
+                0 as i32,
                 ::std::mem::size_of::<[crate::opus_types_h::opus_int32; 16]>() as libc::c_ulong,
             );
         }

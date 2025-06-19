@@ -3,12 +3,12 @@ use ::libc;
 pub mod stdlib_h {
     #[inline]
 
-    pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> libc::c_int {
+    pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return ::libc::strtol(
             __nptr,
             0 as *mut libc::c_void as *mut *mut libc::c_char,
-            10 as libc::c_int,
-        ) as libc::c_int;
+            10 as i32,
+        ) as i32;
     }
 }
 
@@ -127,7 +127,7 @@ pub use crate::src::game::g_syscalls::trap_SendServerCommand;
 pub use ::libc::strtol;
 extern "C" {
     #[no_mangle]
-    pub fn ConcatArgs(start: libc::c_int) -> *mut libc::c_char;
+    pub fn ConcatArgs(start: i32) -> *mut libc::c_char;
 }
 /*
 ===========================================================================
@@ -190,8 +190,8 @@ pub type ipFilter_t = ipFilter_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct ipFilter_s {
-    pub mask: libc::c_uint,
-    pub compare: libc::c_uint,
+    pub mask: u32,
+    pub compare: u32,
 }
 
 static mut ipFilters: [ipFilter_t; 1024] = [ipFilter_t {
@@ -199,7 +199,7 @@ static mut ipFilters: [ipFilter_t; 1024] = [ipFilter_t {
     compare: 0,
 }; 1024];
 
-static mut numIPFilters: libc::c_int = 0;
+static mut numIPFilters: i32 = 0;
 /*
 =================
 StringToFilter
@@ -211,20 +211,20 @@ unsafe extern "C" fn StringToFilter(
     mut f: *mut ipFilter_t,
 ) -> crate::src::qcommon::q_shared::qboolean {
     let mut num: [libc::c_char; 128] = [0; 128];
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
     let mut b: [crate::src::qcommon::q_shared::byte; 4] = [0; 4];
     let mut m: [crate::src::qcommon::q_shared::byte; 4] = [0; 4];
-    i = 0 as libc::c_int;
-    while i < 4 as libc::c_int {
-        b[i as usize] = 0 as libc::c_int as crate::src::qcommon::q_shared::byte;
-        m[i as usize] = 0 as libc::c_int as crate::src::qcommon::q_shared::byte;
+    i = 0 as i32;
+    while i < 4 as i32 {
+        b[i as usize] = 0 as i32 as crate::src::qcommon::q_shared::byte;
+        m[i as usize] = 0 as i32 as crate::src::qcommon::q_shared::byte;
         i += 1
     }
-    i = 0 as libc::c_int;
-    while i < 4 as libc::c_int {
-        if (*s as libc::c_int) < '0' as i32 || *s as libc::c_int > '9' as i32 {
-            if *s as libc::c_int == '*' as i32 {
+    i = 0 as i32;
+    while i < 4 as i32 {
+        if (*s as i32) < '0' as i32 || *s as i32 > '9' as i32 {
+            if *s as i32 == '*' as i32 {
                 // 'match any'
                 // b[i] and m[i] to 0
                 s = s.offset(1);
@@ -240,17 +240,17 @@ unsafe extern "C" fn StringToFilter(
                 return crate::src::qcommon::q_shared::qfalse;
             }
         } else {
-            j = 0 as libc::c_int;
-            while *s as libc::c_int >= '0' as i32 && *s as libc::c_int <= '9' as i32 {
+            j = 0 as i32;
+            while *s as i32 >= '0' as i32 && *s as i32 <= '9' as i32 {
                 let fresh0 = s;
                 s = s.offset(1);
                 let fresh1 = j;
                 j = j + 1;
                 num[fresh1 as usize] = *fresh0
             }
-            num[j as usize] = 0 as libc::c_int as libc::c_char;
+            num[j as usize] = 0 as i32 as libc::c_char;
             b[i as usize] = atoi(num.as_mut_ptr()) as crate::src::qcommon::q_shared::byte;
-            m[i as usize] = 255 as libc::c_int as crate::src::qcommon::q_shared::byte;
+            m[i as usize] = 255 as i32 as crate::src::qcommon::q_shared::byte;
             if *s == 0 {
                 break;
             }
@@ -258,8 +258,8 @@ unsafe extern "C" fn StringToFilter(
         }
         i += 1
     }
-    (*f).mask = *(m.as_mut_ptr() as *mut libc::c_uint);
-    (*f).compare = *(b.as_mut_ptr() as *mut libc::c_uint);
+    (*f).mask = *(m.as_mut_ptr() as *mut u32);
+    (*f).compare = *(b.as_mut_ptr() as *mut u32);
     return crate::src::qcommon::q_shared::qtrue;
 }
 /*
@@ -270,21 +270,21 @@ UpdateIPBans
 
 unsafe extern "C" fn UpdateIPBans() {
     let mut b: [crate::src::qcommon::q_shared::byte; 4] = [
-        0 as libc::c_int as crate::src::qcommon::q_shared::byte,
+        0 as i32 as crate::src::qcommon::q_shared::byte,
         0,
         0,
         0,
     ];
     let mut m: [crate::src::qcommon::q_shared::byte; 4] = [
-        0 as libc::c_int as crate::src::qcommon::q_shared::byte,
+        0 as i32 as crate::src::qcommon::q_shared::byte,
         0,
         0,
         0,
     ];
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
     let mut iplist_final: [libc::c_char; 256] = [
-        0 as libc::c_int as libc::c_char,
+        0 as i32 as libc::c_char,
         0,
         0,
         0,
@@ -542,7 +542,7 @@ unsafe extern "C" fn UpdateIPBans() {
         0,
     ];
     let mut ip: [libc::c_char; 64] = [
-        0 as libc::c_int as libc::c_char,
+        0 as i32 as libc::c_char,
         0,
         0,
         0,
@@ -607,35 +607,35 @@ unsafe extern "C" fn UpdateIPBans() {
         0,
         0,
     ];
-    *iplist_final.as_mut_ptr() = 0 as libc::c_int as libc::c_char;
-    i = 0 as libc::c_int;
+    *iplist_final.as_mut_ptr() = 0 as i32 as libc::c_char;
+    i = 0 as i32;
     while i < numIPFilters {
-        if !(ipFilters[i as usize].compare == 0xffffffff as libc::c_uint) {
-            *(b.as_mut_ptr() as *mut libc::c_uint) = ipFilters[i as usize].compare;
-            *(m.as_mut_ptr() as *mut libc::c_uint) = ipFilters[i as usize].mask;
-            *ip.as_mut_ptr() = 0 as libc::c_int as libc::c_char;
-            j = 0 as libc::c_int;
-            while j < 4 as libc::c_int {
-                if m[j as usize] as libc::c_int != 255 as libc::c_int {
+        if !(ipFilters[i as usize].compare == 0xffffffff as u32) {
+            *(b.as_mut_ptr() as *mut u32) = ipFilters[i as usize].compare;
+            *(m.as_mut_ptr() as *mut u32) = ipFilters[i as usize].mask;
+            *ip.as_mut_ptr() = 0 as i32 as libc::c_char;
+            j = 0 as i32;
+            while j < 4 as i32 {
+                if m[j as usize] as i32 != 255 as i32 {
                     crate::src::qcommon::q_shared::Q_strcat(
                         ip.as_mut_ptr(),
-                        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as libc::c_int,
+                        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
                         b"*\x00" as *const u8 as *const libc::c_char,
                     );
                 } else {
                     crate::src::qcommon::q_shared::Q_strcat(
                         ip.as_mut_ptr(),
-                        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as libc::c_int,
+                        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
                         crate::src::qcommon::q_shared::va(
                             b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                            b[j as usize] as libc::c_int,
+                            b[j as usize] as i32,
                         ),
                     );
                 }
                 crate::src::qcommon::q_shared::Q_strcat(
                     ip.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as libc::c_int,
-                    if j < 3 as libc::c_int {
+                    ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                    if j < 3 as i32 {
                         b".\x00" as *const u8 as *const libc::c_char
                     } else {
                         b" \x00" as *const u8 as *const libc::c_char
@@ -645,11 +645,11 @@ unsafe extern "C" fn UpdateIPBans() {
             }
             if crate::stdlib::strlen(iplist_final.as_mut_ptr())
                 .wrapping_add(crate::stdlib::strlen(ip.as_mut_ptr()))
-                < 256 as libc::c_int as libc::c_ulong
+                < 256 as i32 as libc::c_ulong
             {
                 crate::src::qcommon::q_shared::Q_strcat(
                     iplist_final.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as libc::c_int,
+                    ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
                     ip.as_mut_ptr(),
                 );
             } else {
@@ -677,41 +677,41 @@ G_FilterPacket
 pub unsafe extern "C" fn G_FilterPacket(
     mut from: *mut libc::c_char,
 ) -> crate::src::qcommon::q_shared::qboolean {
-    let mut i: libc::c_int = 0;
-    let mut in_0: libc::c_uint = 0;
+    let mut i: i32 = 0;
+    let mut in_0: u32 = 0;
     let mut m: [crate::src::qcommon::q_shared::byte; 4] = [
-        0 as libc::c_int as crate::src::qcommon::q_shared::byte,
+        0 as i32 as crate::src::qcommon::q_shared::byte,
         0,
         0,
         0,
     ];
     let mut p: *mut libc::c_char = 0 as *mut libc::c_char;
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     p = from;
-    while *p as libc::c_int != 0 && i < 4 as libc::c_int {
-        m[i as usize] = 0 as libc::c_int as crate::src::qcommon::q_shared::byte;
-        while *p as libc::c_int >= '0' as i32 && *p as libc::c_int <= '9' as i32 {
-            m[i as usize] = (m[i as usize] as libc::c_int * 10 as libc::c_int
-                + (*p as libc::c_int - '0' as i32))
+    while *p as i32 != 0 && i < 4 as i32 {
+        m[i as usize] = 0 as i32 as crate::src::qcommon::q_shared::byte;
+        while *p as i32 >= '0' as i32 && *p as i32 <= '9' as i32 {
+            m[i as usize] = (m[i as usize] as i32 * 10 as i32
+                + (*p as i32 - '0' as i32))
                 as crate::src::qcommon::q_shared::byte;
             p = p.offset(1)
         }
-        if *p == 0 || *p as libc::c_int == ':' as i32 {
+        if *p == 0 || *p as i32 == ':' as i32 {
             break;
         }
         i += 1;
         p = p.offset(1)
     }
-    in_0 = *(m.as_mut_ptr() as *mut libc::c_uint);
-    i = 0 as libc::c_int;
+    in_0 = *(m.as_mut_ptr() as *mut u32);
+    i = 0 as i32;
     while i < numIPFilters {
         if in_0 & ipFilters[i as usize].mask == ipFilters[i as usize].compare {
-            return (crate::src::game::g_main::g_filterBan.integer != 0 as libc::c_int)
-                as libc::c_int as crate::src::qcommon::q_shared::qboolean;
+            return (crate::src::game::g_main::g_filterBan.integer != 0 as i32)
+                as i32 as crate::src::qcommon::q_shared::qboolean;
         }
         i += 1
     }
-    return (crate::src::game::g_main::g_filterBan.integer == 0 as libc::c_int) as libc::c_int
+    return (crate::src::game::g_main::g_filterBan.integer == 0 as i32) as i32
         as crate::src::qcommon::q_shared::qboolean;
 }
 /*
@@ -721,16 +721,16 @@ AddIP
 */
 
 unsafe extern "C" fn AddIP(mut str: *mut libc::c_char) {
-    let mut i: libc::c_int = 0; // free spot
-    i = 0 as libc::c_int;
+    let mut i: i32 = 0; // free spot
+    i = 0 as i32;
     while i < numIPFilters {
-        if ipFilters[i as usize].compare == 0xffffffff as libc::c_uint {
+        if ipFilters[i as usize].compare == 0xffffffff as u32 {
             break;
         }
         i += 1
     }
     if i == numIPFilters {
-        if numIPFilters == 1024 as libc::c_int {
+        if numIPFilters == 1024 as i32 {
             crate::src::game::g_main::G_Printf(
                 b"IP filter list is full\n\x00" as *const u8 as *const libc::c_char,
             );
@@ -739,7 +739,7 @@ unsafe extern "C" fn AddIP(mut str: *mut libc::c_char) {
         numIPFilters += 1
     }
     if StringToFilter(str, &mut *ipFilters.as_mut_ptr().offset(i as isize)) as u64 == 0 {
-        ipFilters[i as usize].compare = 0xffffffff as libc::c_uint
+        ipFilters[i as usize].compare = 0xffffffff as u32
     }
     UpdateIPBans();
 }
@@ -757,7 +757,7 @@ pub unsafe extern "C" fn G_ProcessIPBans() {
     crate::src::qcommon::q_shared::Q_strncpyz(
         str.as_mut_ptr(),
         crate::src::game::g_main::g_banIPs.string.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
     );
     s = crate::src::game::g_main::g_banIPs.string.as_mut_ptr();
     t = s;
@@ -767,10 +767,10 @@ pub unsafe extern "C" fn G_ProcessIPBans() {
         if s.is_null() {
             break;
         }
-        while *s as libc::c_int == ' ' as i32 {
+        while *s as i32 == ' ' as i32 {
             let fresh2 = s;
             s = s.offset(1);
-            *fresh2 = 0 as libc::c_int as libc::c_char
+            *fresh2 = 0 as i32 as libc::c_char
         }
         if *t != 0 {
             AddIP(t);
@@ -787,16 +787,16 @@ Svcmd_AddIP_f
 
 pub unsafe extern "C" fn Svcmd_AddIP_f() {
     let mut str: [libc::c_char; 1024] = [0; 1024];
-    if crate::src::game::g_syscalls::trap_Argc() < 2 as libc::c_int {
+    if crate::src::game::g_syscalls::trap_Argc() < 2 as i32 {
         crate::src::game::g_main::G_Printf(
             b"Usage: addip <ip-mask>\n\x00" as *const u8 as *const libc::c_char,
         );
         return;
     }
     crate::src::game::g_syscalls::trap_Argv(
-        1 as libc::c_int,
+        1 as i32,
         str.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
     AddIP(str.as_mut_ptr());
 }
@@ -812,26 +812,26 @@ pub unsafe extern "C" fn Svcmd_RemoveIP_f() {
         mask: 0,
         compare: 0,
     };
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     let mut str: [libc::c_char; 1024] = [0; 1024];
-    if crate::src::game::g_syscalls::trap_Argc() < 2 as libc::c_int {
+    if crate::src::game::g_syscalls::trap_Argc() < 2 as i32 {
         crate::src::game::g_main::G_Printf(
             b"Usage: removeip <ip-mask>\n\x00" as *const u8 as *const libc::c_char,
         );
         return;
     }
     crate::src::game::g_syscalls::trap_Argv(
-        1 as libc::c_int,
+        1 as i32,
         str.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
     if StringToFilter(str.as_mut_ptr(), &mut f) as u64 == 0 {
         return;
     }
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < numIPFilters {
         if ipFilters[i as usize].mask == f.mask && ipFilters[i as usize].compare == f.compare {
-            ipFilters[i as usize].compare = 0xffffffff as libc::c_uint;
+            ipFilters[i as usize].compare = 0xffffffff as u32;
             crate::src::game::g_main::G_Printf(
                 b"Removed.\n\x00" as *const u8 as *const libc::c_char,
             );
@@ -853,10 +853,10 @@ Svcmd_EntityList_f
 #[no_mangle]
 
 pub unsafe extern "C" fn Svcmd_EntityList_f() {
-    let mut e: libc::c_int = 0;
+    let mut e: i32 = 0;
     let mut check: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
     check = crate::src::game::g_main::g_entities.as_mut_ptr();
-    e = 0 as libc::c_int;
+    e = 0 as i32;
     while e < crate::src::game::g_main::level.num_entities {
         if !((*check).inuse as u64 == 0) {
             crate::src::game::g_main::G_Printf(b"%3i:\x00" as *const u8 as *const libc::c_char, e);
@@ -946,14 +946,14 @@ pub unsafe extern "C" fn ClientForString(
     mut s: *const libc::c_char,
 ) -> *mut crate::g_local_h::gclient_t {
     let mut cl: *mut crate::g_local_h::gclient_t = 0 as *mut crate::g_local_h::gclient_t;
-    let mut i: libc::c_int = 0;
-    let mut idnum: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut idnum: i32 = 0;
     // numeric values are just slot numbers
-    if *s.offset(0 as libc::c_int as isize) as libc::c_int >= '0' as i32
-        && *s.offset(0 as libc::c_int as isize) as libc::c_int <= '9' as i32
+    if *s.offset(0 as i32 as isize) as i32 >= '0' as i32
+        && *s.offset(0 as i32 as isize) as i32 <= '9' as i32
     {
         idnum = atoi(s);
-        if idnum < 0 as libc::c_int || idnum >= crate::src::game::g_main::level.maxclients {
+        if idnum < 0 as i32 || idnum >= crate::src::game::g_main::level.maxclients {
             crate::src::game::g_main::Com_Printf(
                 b"Bad client slot: %i\n\x00" as *const u8 as *const libc::c_char,
                 idnum,
@@ -963,8 +963,8 @@ pub unsafe extern "C" fn ClientForString(
         cl = &mut *crate::src::game::g_main::level
             .clients
             .offset(idnum as isize) as *mut crate::g_local_h::gclient_s;
-        if (*cl).pers.connected as libc::c_uint
-            == crate::g_local_h::CON_DISCONNECTED as libc::c_int as libc::c_uint
+        if (*cl).pers.connected as u32
+            == crate::g_local_h::CON_DISCONNECTED as i32 as u32
         {
             crate::src::game::g_main::G_Printf(
                 b"Client %i is not connected\n\x00" as *const u8 as *const libc::c_char,
@@ -975,12 +975,12 @@ pub unsafe extern "C" fn ClientForString(
         return cl;
     }
     // check for a name match
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < crate::src::game::g_main::level.maxclients {
         cl = &mut *crate::src::game::g_main::level.clients.offset(i as isize)
             as *mut crate::g_local_h::gclient_s;
-        if !((*cl).pers.connected as libc::c_uint
-            == crate::g_local_h::CON_DISCONNECTED as libc::c_int as libc::c_uint)
+        if !((*cl).pers.connected as u32
+            == crate::g_local_h::CON_DISCONNECTED as i32 as u32)
         {
             if crate::src::qcommon::q_shared::Q_stricmp((*cl).pers.netname.as_mut_ptr(), s) == 0 {
                 return cl;
@@ -1006,7 +1006,7 @@ forceteam <player> <team>
 pub unsafe extern "C" fn Svcmd_ForceTeam_f() {
     let mut cl: *mut crate::g_local_h::gclient_t = 0 as *mut crate::g_local_h::gclient_t;
     let mut str: [libc::c_char; 1024] = [0; 1024];
-    if crate::src::game::g_syscalls::trap_Argc() < 3 as libc::c_int {
+    if crate::src::game::g_syscalls::trap_Argc() < 3 as i32 {
         crate::src::game::g_main::G_Printf(
             b"Usage: forceteam <player> <team>\n\x00" as *const u8 as *const libc::c_char,
         );
@@ -1014,9 +1014,9 @@ pub unsafe extern "C" fn Svcmd_ForceTeam_f() {
     }
     // find the player
     crate::src::game::g_syscalls::trap_Argv(
-        1 as libc::c_int,
+        1 as i32,
         str.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
     cl = ClientForString(str.as_mut_ptr());
     if cl.is_null() {
@@ -1024,9 +1024,9 @@ pub unsafe extern "C" fn Svcmd_ForceTeam_f() {
     }
     // set the team
     crate::src::game::g_syscalls::trap_Argv(
-        2 as libc::c_int,
+        2 as i32,
         str.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
     crate::src::game::g_cmds::SetTeam(
         &mut *crate::src::game::g_main::g_entities.as_mut_ptr().offset(
@@ -1249,14 +1249,14 @@ ConsoleCommand
 pub unsafe extern "C" fn ConsoleCommand() -> crate::src::qcommon::q_shared::qboolean {
     let mut cmd: [libc::c_char; 1024] = [0; 1024];
     crate::src::game::g_syscalls::trap_Argv(
-        0 as libc::c_int,
+        0 as i32,
         cmd.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
     if crate::src::qcommon::q_shared::Q_stricmp(
         cmd.as_mut_ptr(),
         b"entitylist\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as libc::c_int
+    ) == 0 as i32
     {
         Svcmd_EntityList_f();
         return crate::src::qcommon::q_shared::qtrue;
@@ -1264,7 +1264,7 @@ pub unsafe extern "C" fn ConsoleCommand() -> crate::src::qcommon::q_shared::qboo
     if crate::src::qcommon::q_shared::Q_stricmp(
         cmd.as_mut_ptr(),
         b"forceteam\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as libc::c_int
+    ) == 0 as i32
     {
         Svcmd_ForceTeam_f();
         return crate::src::qcommon::q_shared::qtrue;
@@ -1272,7 +1272,7 @@ pub unsafe extern "C" fn ConsoleCommand() -> crate::src::qcommon::q_shared::qboo
     if crate::src::qcommon::q_shared::Q_stricmp(
         cmd.as_mut_ptr(),
         b"game_memory\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as libc::c_int
+    ) == 0 as i32
     {
         crate::src::game::g_mem::Svcmd_GameMem_f();
         return crate::src::qcommon::q_shared::qtrue;
@@ -1280,7 +1280,7 @@ pub unsafe extern "C" fn ConsoleCommand() -> crate::src::qcommon::q_shared::qboo
     if crate::src::qcommon::q_shared::Q_stricmp(
         cmd.as_mut_ptr(),
         b"addbot\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as libc::c_int
+    ) == 0 as i32
     {
         crate::src::game::g_bot::Svcmd_AddBot_f();
         return crate::src::qcommon::q_shared::qtrue;
@@ -1288,7 +1288,7 @@ pub unsafe extern "C" fn ConsoleCommand() -> crate::src::qcommon::q_shared::qboo
     if crate::src::qcommon::q_shared::Q_stricmp(
         cmd.as_mut_ptr(),
         b"botlist\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as libc::c_int
+    ) == 0 as i32
     {
         crate::src::game::g_bot::Svcmd_BotList_f();
         return crate::src::qcommon::q_shared::qtrue;
@@ -1296,7 +1296,7 @@ pub unsafe extern "C" fn ConsoleCommand() -> crate::src::qcommon::q_shared::qboo
     if crate::src::qcommon::q_shared::Q_stricmp(
         cmd.as_mut_ptr(),
         b"abort_podium\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as libc::c_int
+    ) == 0 as i32
     {
         crate::src::game::g_arenas::Svcmd_AbortPodium_f();
         return crate::src::qcommon::q_shared::qtrue;
@@ -1304,7 +1304,7 @@ pub unsafe extern "C" fn ConsoleCommand() -> crate::src::qcommon::q_shared::qboo
     if crate::src::qcommon::q_shared::Q_stricmp(
         cmd.as_mut_ptr(),
         b"addip\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as libc::c_int
+    ) == 0 as i32
     {
         Svcmd_AddIP_f();
         return crate::src::qcommon::q_shared::qtrue;
@@ -1312,7 +1312,7 @@ pub unsafe extern "C" fn ConsoleCommand() -> crate::src::qcommon::q_shared::qboo
     if crate::src::qcommon::q_shared::Q_stricmp(
         cmd.as_mut_ptr(),
         b"removeip\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as libc::c_int
+    ) == 0 as i32
     {
         Svcmd_RemoveIP_f();
         return crate::src::qcommon::q_shared::qtrue;
@@ -1320,10 +1320,10 @@ pub unsafe extern "C" fn ConsoleCommand() -> crate::src::qcommon::q_shared::qboo
     if crate::src::qcommon::q_shared::Q_stricmp(
         cmd.as_mut_ptr(),
         b"listip\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as libc::c_int
+    ) == 0 as i32
     {
         crate::src::game::g_syscalls::trap_SendConsoleCommand(
-            crate::src::qcommon::q_shared::EXEC_NOW as libc::c_int,
+            crate::src::qcommon::q_shared::EXEC_NOW as i32,
             b"g_banIPs\n\x00" as *const u8 as *const libc::c_char,
         );
         return crate::src::qcommon::q_shared::qtrue;
@@ -1332,25 +1332,25 @@ pub unsafe extern "C" fn ConsoleCommand() -> crate::src::qcommon::q_shared::qboo
         if crate::src::qcommon::q_shared::Q_stricmp(
             cmd.as_mut_ptr(),
             b"say\x00" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
             crate::src::game::g_syscalls::trap_SendServerCommand(
-                -(1 as libc::c_int),
+                -(1 as i32),
                 crate::src::qcommon::q_shared::va(
                     b"print \"server: %s\n\"\x00" as *const u8 as *const libc::c_char
                         as *mut libc::c_char,
-                    ConcatArgs(1 as libc::c_int),
+                    ConcatArgs(1 as i32),
                 ),
             );
             return crate::src::qcommon::q_shared::qtrue;
         }
         // everything else will also be printed as a say command
         crate::src::game::g_syscalls::trap_SendServerCommand(
-            -(1 as libc::c_int),
+            -(1 as i32),
             crate::src::qcommon::q_shared::va(
                 b"print \"server: %s\n\"\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                ConcatArgs(0 as libc::c_int),
+                ConcatArgs(0 as i32),
             ),
         );
         return crate::src::qcommon::q_shared::qtrue;

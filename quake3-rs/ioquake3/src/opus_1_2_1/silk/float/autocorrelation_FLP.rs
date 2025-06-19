@@ -77,25 +77,25 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_autocorrelation_FLP(
-    mut results: *mut libc::c_float,
-    mut inputData: *const libc::c_float,
-    mut inputDataSize: libc::c_int,
-    mut correlationCount: libc::c_int,
+    mut results: *mut f32,
+    mut inputData: *const f32,
+    mut inputDataSize: i32,
+    mut correlationCount: i32,
 )
 /* I    number of correlation taps to compute                       */
 {
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     if correlationCount > inputDataSize {
         correlationCount = inputDataSize
     }
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < correlationCount {
         *results.offset(i as isize) =
             crate::src::opus_1_2_1::silk::float::inner_product_FLP::silk_inner_product_FLP(
                 inputData,
                 inputData.offset(i as isize),
                 inputDataSize - i,
-            ) as libc::c_float;
+            ) as f32;
         i += 1
     }
 }

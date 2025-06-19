@@ -7,14 +7,14 @@ pub mod q_shared_h {
     pub unsafe extern "C" fn VectorCompare(
         mut v1: *const crate::src::qcommon::q_shared::vec_t,
         mut v2: *const crate::src::qcommon::q_shared::vec_t,
-    ) -> libc::c_int {
-        if *v1.offset(0 as libc::c_int as isize) != *v2.offset(0 as libc::c_int as isize)
-            || *v1.offset(1 as libc::c_int as isize) != *v2.offset(1 as libc::c_int as isize)
-            || *v1.offset(2 as libc::c_int as isize) != *v2.offset(2 as libc::c_int as isize)
+    ) -> i32 {
+        if *v1.offset(0 as i32 as isize) != *v2.offset(0 as i32 as isize)
+            || *v1.offset(1 as i32 as isize) != *v2.offset(1 as i32 as isize)
+            || *v1.offset(2 as i32 as isize) != *v2.offset(2 as i32 as isize)
         {
-            return 0 as libc::c_int;
+            return 0 as i32;
         }
-        return 1 as libc::c_int;
+        return 1 as i32;
     }
     #[inline]
 
@@ -22,10 +22,10 @@ pub mod q_shared_h {
         mut v: *const crate::src::qcommon::q_shared::vec_t,
     ) -> crate::src::qcommon::q_shared::vec_t {
         return crate::stdlib::sqrt(
-            (*v.offset(0 as libc::c_int as isize) * *v.offset(0 as libc::c_int as isize)
-                + *v.offset(1 as libc::c_int as isize) * *v.offset(1 as libc::c_int as isize)
-                + *v.offset(2 as libc::c_int as isize) * *v.offset(2 as libc::c_int as isize))
-                as libc::c_double,
+            (*v.offset(0 as i32 as isize) * *v.offset(0 as i32 as isize)
+                + *v.offset(1 as i32 as isize) * *v.offset(1 as i32 as isize)
+                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize))
+                as f64,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
 
@@ -378,12 +378,12 @@ static mut cg_pmove: crate::bg_public_h::pmove_t = crate::bg_public_h::pmove_t {
     pointcontents: None,
 };
 
-static mut cg_numSolidEntities: libc::c_int = 0;
+static mut cg_numSolidEntities: i32 = 0;
 
 static mut cg_solidEntities: [*mut crate::cg_local_h::centity_t; 256] =
     [0 as *const crate::cg_local_h::centity_t as *mut crate::cg_local_h::centity_t; 256];
 
-static mut cg_numTriggerEntities: libc::c_int = 0;
+static mut cg_numTriggerEntities: i32 = 0;
 
 static mut cg_triggerEntities: [*mut crate::cg_local_h::centity_t; 256] =
     [0 as *const crate::cg_local_h::centity_t as *mut crate::cg_local_h::centity_t; 256];
@@ -399,13 +399,13 @@ efficient collision detection
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_BuildSolidList() {
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     let mut cent: *mut crate::cg_local_h::centity_t = 0 as *mut crate::cg_local_h::centity_t;
     let mut snap: *mut crate::cg_public_h::snapshot_t = 0 as *mut crate::cg_public_h::snapshot_t;
     let mut ent: *mut crate::src::qcommon::q_shared::entityState_t =
         0 as *mut crate::src::qcommon::q_shared::entityState_t;
-    cg_numSolidEntities = 0 as libc::c_int;
-    cg_numTriggerEntities = 0 as libc::c_int;
+    cg_numSolidEntities = 0 as i32;
+    cg_numTriggerEntities = 0 as i32;
     if !crate::src::cgame::cg_main::cg.nextSnap.is_null()
         && crate::src::cgame::cg_main::cg.nextFrameTeleport as u64 == 0
         && crate::src::cgame::cg_main::cg.thisFrameTeleport as u64 == 0
@@ -414,16 +414,16 @@ pub unsafe extern "C" fn CG_BuildSolidList() {
     } else {
         snap = crate::src::cgame::cg_main::cg.snap
     }
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < (*snap).numEntities {
         cent = &mut *crate::src::cgame::cg_main::cg_entities
             .as_mut_ptr()
             .offset((*(*snap).entities.as_mut_ptr().offset(i as isize)).number as isize)
             as *mut crate::cg_local_h::centity_t;
         ent = &mut (*cent).currentState;
-        if (*ent).eType == crate::bg_public_h::ET_ITEM as libc::c_int
-            || (*ent).eType == crate::bg_public_h::ET_PUSH_TRIGGER as libc::c_int
-            || (*ent).eType == crate::bg_public_h::ET_TELEPORT_TRIGGER as libc::c_int
+        if (*ent).eType == crate::bg_public_h::ET_ITEM as i32
+            || (*ent).eType == crate::bg_public_h::ET_PUSH_TRIGGER as i32
+            || (*ent).eType == crate::bg_public_h::ET_TELEPORT_TRIGGER as i32
         {
             cg_triggerEntities[cg_numTriggerEntities as usize] = cent;
             cg_numTriggerEntities += 1
@@ -446,14 +446,14 @@ unsafe extern "C" fn CG_ClipMoveToEntities(
     mut mins: *const crate::src::qcommon::q_shared::vec_t,
     mut maxs: *const crate::src::qcommon::q_shared::vec_t,
     mut end: *const crate::src::qcommon::q_shared::vec_t,
-    mut skipNumber: libc::c_int,
-    mut mask: libc::c_int,
+    mut skipNumber: i32,
+    mut mask: i32,
     mut tr: *mut crate::src::qcommon::q_shared::trace_t,
 ) {
-    let mut i: libc::c_int = 0;
-    let mut x: libc::c_int = 0;
-    let mut zd: libc::c_int = 0;
-    let mut zu: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut x: i32 = 0;
+    let mut zd: i32 = 0;
+    let mut zu: i32 = 0;
     let mut trace: crate::src::qcommon::q_shared::trace_t =
         crate::src::qcommon::q_shared::trace_t {
             allsolid: crate::src::qcommon::q_shared::qfalse,
@@ -479,17 +479,17 @@ unsafe extern "C" fn CG_ClipMoveToEntities(
     let mut origin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut angles: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut cent: *mut crate::cg_local_h::centity_t = 0 as *mut crate::cg_local_h::centity_t;
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < cg_numSolidEntities {
         cent = cg_solidEntities[i as usize];
         ent = &mut (*cent).currentState;
         if !((*ent).number == skipNumber) {
-            if (*ent).solid == 0xffffff as libc::c_int {
+            if (*ent).solid == 0xffffff as i32 {
                 // special value for bmodel
                 cmodel = crate::src::cgame::cg_syscalls::trap_CM_InlineModel((*ent).modelindex);
-                angles[0 as libc::c_int as usize] = (*cent).lerpAngles[0 as libc::c_int as usize];
-                angles[1 as libc::c_int as usize] = (*cent).lerpAngles[1 as libc::c_int as usize];
-                angles[2 as libc::c_int as usize] = (*cent).lerpAngles[2 as libc::c_int as usize];
+                angles[0 as i32 as usize] = (*cent).lerpAngles[0 as i32 as usize];
+                angles[1 as i32 as usize] = (*cent).lerpAngles[1 as i32 as usize];
+                angles[2 as i32 as usize] = (*cent).lerpAngles[2 as i32 as usize];
                 crate::src::game::bg_misc::BG_EvaluateTrajectory(
                     &mut (*cent).currentState.pos as *mut _
                         as *const crate::src::qcommon::q_shared::trajectory_t,
@@ -498,28 +498,28 @@ unsafe extern "C" fn CG_ClipMoveToEntities(
                 );
             } else {
                 // encoded bbox
-                x = (*ent).solid & 255 as libc::c_int;
-                zd = (*ent).solid >> 8 as libc::c_int & 255 as libc::c_int;
-                zu = ((*ent).solid >> 16 as libc::c_int & 255 as libc::c_int) - 32 as libc::c_int;
-                bmins[1 as libc::c_int as usize] = -x as crate::src::qcommon::q_shared::vec_t;
-                bmins[0 as libc::c_int as usize] = bmins[1 as libc::c_int as usize];
-                bmaxs[1 as libc::c_int as usize] = x as crate::src::qcommon::q_shared::vec_t;
-                bmaxs[0 as libc::c_int as usize] = bmaxs[1 as libc::c_int as usize];
-                bmins[2 as libc::c_int as usize] = -zd as crate::src::qcommon::q_shared::vec_t;
-                bmaxs[2 as libc::c_int as usize] = zu as crate::src::qcommon::q_shared::vec_t;
+                x = (*ent).solid & 255 as i32;
+                zd = (*ent).solid >> 8 as i32 & 255 as i32;
+                zu = ((*ent).solid >> 16 as i32 & 255 as i32) - 32 as i32;
+                bmins[1 as i32 as usize] = -x as crate::src::qcommon::q_shared::vec_t;
+                bmins[0 as i32 as usize] = bmins[1 as i32 as usize];
+                bmaxs[1 as i32 as usize] = x as crate::src::qcommon::q_shared::vec_t;
+                bmaxs[0 as i32 as usize] = bmaxs[1 as i32 as usize];
+                bmins[2 as i32 as usize] = -zd as crate::src::qcommon::q_shared::vec_t;
+                bmaxs[2 as i32 as usize] = zu as crate::src::qcommon::q_shared::vec_t;
                 cmodel = crate::src::cgame::cg_syscalls::trap_CM_TempBoxModel(
                     bmins.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
                     bmaxs.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
                 );
-                angles[0 as libc::c_int as usize] =
-                    crate::src::qcommon::q_math::vec3_origin[0 as libc::c_int as usize];
-                angles[1 as libc::c_int as usize] =
-                    crate::src::qcommon::q_math::vec3_origin[1 as libc::c_int as usize];
-                angles[2 as libc::c_int as usize] =
-                    crate::src::qcommon::q_math::vec3_origin[2 as libc::c_int as usize];
-                origin[0 as libc::c_int as usize] = (*cent).lerpOrigin[0 as libc::c_int as usize];
-                origin[1 as libc::c_int as usize] = (*cent).lerpOrigin[1 as libc::c_int as usize];
-                origin[2 as libc::c_int as usize] = (*cent).lerpOrigin[2 as libc::c_int as usize]
+                angles[0 as i32 as usize] =
+                    crate::src::qcommon::q_math::vec3_origin[0 as i32 as usize];
+                angles[1 as i32 as usize] =
+                    crate::src::qcommon::q_math::vec3_origin[1 as i32 as usize];
+                angles[2 as i32 as usize] =
+                    crate::src::qcommon::q_math::vec3_origin[2 as i32 as usize];
+                origin[0 as i32 as usize] = (*cent).lerpOrigin[0 as i32 as usize];
+                origin[1 as i32 as usize] = (*cent).lerpOrigin[1 as i32 as usize];
+                origin[2 as i32 as usize] = (*cent).lerpOrigin[2 as i32 as usize]
             }
             crate::src::cgame::cg_syscalls::trap_CM_TransformedBoxTrace(
                 &mut trace as *mut _ as *mut crate::src::qcommon::q_shared::trace_t,
@@ -532,7 +532,7 @@ unsafe extern "C" fn CG_ClipMoveToEntities(
                 origin.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
                 angles.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
             );
-            if trace.allsolid as libc::c_uint != 0 || trace.fraction < (*tr).fraction {
+            if trace.allsolid as u32 != 0 || trace.fraction < (*tr).fraction {
                 trace.entityNum = (*ent).number;
                 *tr = trace
             } else if trace.startsolid as u64 != 0 {
@@ -558,8 +558,8 @@ pub unsafe extern "C" fn CG_Trace(
     mut mins: *const crate::src::qcommon::q_shared::vec_t,
     mut maxs: *const crate::src::qcommon::q_shared::vec_t,
     mut end: *const crate::src::qcommon::q_shared::vec_t,
-    mut skipNumber: libc::c_int,
-    mut mask: libc::c_int,
+    mut skipNumber: i32,
+    mut mask: i32,
 ) {
     let mut t: crate::src::qcommon::q_shared::trace_t = crate::src::qcommon::q_shared::trace_t {
         allsolid: crate::src::qcommon::q_shared::qfalse,
@@ -583,13 +583,13 @@ pub unsafe extern "C" fn CG_Trace(
         end,
         mins,
         maxs,
-        0 as libc::c_int,
+        0 as i32,
         mask,
     );
-    t.entityNum = if t.fraction as libc::c_double != 1.0f64 {
-        ((1 as libc::c_int) << 10 as libc::c_int) - 2 as libc::c_int
+    t.entityNum = if t.fraction as f64 != 1.0f64 {
+        ((1 as i32) << 10 as i32) - 2 as i32
     } else {
-        ((1 as libc::c_int) << 10 as libc::c_int) - 1 as libc::c_int
+        ((1 as i32) << 10 as i32) - 1 as i32
     };
     // check all other solid models
     CG_ClipMoveToEntities(start, mins, maxs, end, skipNumber, mask, &mut t);
@@ -604,21 +604,21 @@ CG_PointContents
 
 pub unsafe extern "C" fn CG_PointContents(
     mut point: *const crate::src::qcommon::q_shared::vec_t,
-    mut passEntityNum: libc::c_int,
-) -> libc::c_int {
-    let mut i: libc::c_int = 0;
+    mut passEntityNum: i32,
+) -> i32 {
+    let mut i: i32 = 0;
     let mut ent: *mut crate::src::qcommon::q_shared::entityState_t =
         0 as *mut crate::src::qcommon::q_shared::entityState_t;
     let mut cent: *mut crate::cg_local_h::centity_t = 0 as *mut crate::cg_local_h::centity_t;
     let mut cmodel: crate::src::qcommon::q_shared::clipHandle_t = 0;
-    let mut contents: libc::c_int = 0;
-    contents = crate::src::cgame::cg_syscalls::trap_CM_PointContents(point, 0 as libc::c_int);
-    i = 0 as libc::c_int;
+    let mut contents: i32 = 0;
+    contents = crate::src::cgame::cg_syscalls::trap_CM_PointContents(point, 0 as i32);
+    i = 0 as i32;
     while i < cg_numSolidEntities {
         cent = cg_solidEntities[i as usize];
         ent = &mut (*cent).currentState;
         if !((*ent).number == passEntityNum) {
-            if !((*ent).solid != 0xffffff as libc::c_int) {
+            if !((*ent).solid != 0xffffff as i32) {
                 cmodel = crate::src::cgame::cg_syscalls::trap_CM_InlineModel((*ent).modelindex);
                 if !(cmodel == 0) {
                     contents |= crate::src::cgame::cg_syscalls::trap_CM_TransformedPointContents(
@@ -649,8 +649,8 @@ cg.snap->player_state and cg.nextFrame->player_state
 unsafe extern "C" fn CG_InterpolatePlayerState(
     mut grabAngles: crate::src::qcommon::q_shared::qboolean,
 ) {
-    let mut f: libc::c_float = 0.;
-    let mut i: libc::c_int = 0;
+    let mut f: f32 = 0.;
+    let mut i: i32 = 0;
     let mut out: *mut crate::src::qcommon::q_shared::playerState_t =
         0 as *mut crate::src::qcommon::q_shared::playerState_t;
     let mut prev: *mut crate::cg_public_h::snapshot_t = 0 as *mut crate::cg_public_h::snapshot_t;
@@ -671,7 +671,7 @@ unsafe extern "C" fn CG_InterpolatePlayerState(
                 rightmove: 0,
                 upmove: 0,
             };
-        let mut cmdNum: libc::c_int = 0;
+        let mut cmdNum: i32 = 0;
         cmdNum = crate::src::cgame::cg_syscalls::trap_GetCurrentCmdNumber();
         crate::src::cgame::cg_syscalls::trap_GetUserCmd(
             cmdNum,
@@ -689,17 +689,17 @@ unsafe extern "C" fn CG_InterpolatePlayerState(
     if next.is_null() || (*next).serverTime <= (*prev).serverTime {
         return;
     }
-    f = (crate::src::cgame::cg_main::cg.time - (*prev).serverTime) as libc::c_float
-        / ((*next).serverTime - (*prev).serverTime) as libc::c_float;
+    f = (crate::src::cgame::cg_main::cg.time - (*prev).serverTime) as f32
+        / ((*next).serverTime - (*prev).serverTime) as f32;
     i = (*next).ps.bobCycle;
     if i < (*prev).ps.bobCycle {
-        i += 256 as libc::c_int
+        i += 256 as i32
         // handle wraparound
     }
-    (*out).bobCycle = ((*prev).ps.bobCycle as libc::c_float
-        + f * (i - (*prev).ps.bobCycle) as libc::c_float) as libc::c_int;
-    i = 0 as libc::c_int;
-    while i < 3 as libc::c_int {
+    (*out).bobCycle = ((*prev).ps.bobCycle as f32
+        + f * (i - (*prev).ps.bobCycle) as f32) as i32;
+    i = 0 as i32;
+    while i < 3 as i32 {
         (*out).origin[i as usize] = (*prev).ps.origin[i as usize]
             + f * ((*next).ps.origin[i as usize] - (*prev).ps.origin[i as usize]);
         if grabAngles as u64 == 0 {
@@ -740,7 +740,7 @@ unsafe extern "C" fn CG_TouchItem(mut cent: *mut crate::cg_local_h::centity_t) {
         return;
     }
     if crate::src::game::bg_misc::BG_CanItemBeGrabbed(
-        crate::src::cgame::cg_main::cgs.gametype as libc::c_int,
+        crate::src::cgame::cg_main::cgs.gametype as i32,
         &mut (*cent).currentState as *mut _ as *const crate::src::qcommon::q_shared::entityState_s,
         &mut crate::src::cgame::cg_main::cg.predictedPlayerState as *mut _
             as *const crate::src::qcommon::q_shared::playerState_s,
@@ -756,51 +756,51 @@ unsafe extern "C" fn CG_TouchItem(mut cent: *mut crate::cg_local_h::centity_t) {
         as *mut crate::bg_public_h::gitem_t;
     // Special case for flags.
     // We don't predict touching our own flag
-    if crate::src::cgame::cg_main::cgs.gametype as libc::c_uint
-        == crate::bg_public_h::GT_CTF as libc::c_int as libc::c_uint
+    if crate::src::cgame::cg_main::cgs.gametype as u32
+        == crate::bg_public_h::GT_CTF as i32 as u32
     {
         if crate::src::cgame::cg_main::cg
             .predictedPlayerState
-            .persistant[crate::bg_public_h::PERS_TEAM as libc::c_int as usize]
-            == crate::bg_public_h::TEAM_RED as libc::c_int
-            && (*item).giType as libc::c_uint
-                == crate::bg_public_h::IT_TEAM as libc::c_int as libc::c_uint
-            && (*item).giTag == crate::bg_public_h::PW_REDFLAG as libc::c_int
+            .persistant[crate::bg_public_h::PERS_TEAM as i32 as usize]
+            == crate::bg_public_h::TEAM_RED as i32
+            && (*item).giType as u32
+                == crate::bg_public_h::IT_TEAM as i32 as u32
+            && (*item).giTag == crate::bg_public_h::PW_REDFLAG as i32
         {
             return;
         }
         if crate::src::cgame::cg_main::cg
             .predictedPlayerState
-            .persistant[crate::bg_public_h::PERS_TEAM as libc::c_int as usize]
-            == crate::bg_public_h::TEAM_BLUE as libc::c_int
-            && (*item).giType as libc::c_uint
-                == crate::bg_public_h::IT_TEAM as libc::c_int as libc::c_uint
-            && (*item).giTag == crate::bg_public_h::PW_BLUEFLAG as libc::c_int
+            .persistant[crate::bg_public_h::PERS_TEAM as i32 as usize]
+            == crate::bg_public_h::TEAM_BLUE as i32
+            && (*item).giType as u32
+                == crate::bg_public_h::IT_TEAM as i32 as u32
+            && (*item).giTag == crate::bg_public_h::PW_BLUEFLAG as i32
         {
             return;
         }
     }
     // grab it
     crate::src::game::bg_misc::BG_AddPredictableEventToPlayerstate(
-        crate::bg_public_h::EV_ITEM_PICKUP as libc::c_int,
+        crate::bg_public_h::EV_ITEM_PICKUP as i32,
         (*cent).currentState.modelindex,
         &mut crate::src::cgame::cg_main::cg.predictedPlayerState as *mut _
             as *mut crate::src::qcommon::q_shared::playerState_s,
     );
     // remove it from the frame so it won't be drawn
-    (*cent).currentState.eFlags |= 0x80 as libc::c_int;
+    (*cent).currentState.eFlags |= 0x80 as i32;
     // don't touch it again this prediction
     (*cent).miscTime = crate::src::cgame::cg_main::cg.time;
     // if it's a weapon, give them some predicted ammo so the autoswitch will work
-    if (*item).giType as libc::c_uint
-        == crate::bg_public_h::IT_WEAPON as libc::c_int as libc::c_uint
+    if (*item).giType as u32
+        == crate::bg_public_h::IT_WEAPON as i32 as u32
     {
         crate::src::cgame::cg_main::cg.predictedPlayerState.stats
-            [crate::bg_public_h::STAT_WEAPONS as libc::c_int as usize] |=
-            (1 as libc::c_int) << (*item).giTag;
+            [crate::bg_public_h::STAT_WEAPONS as i32 as usize] |=
+            (1 as i32) << (*item).giTag;
         if crate::src::cgame::cg_main::cg.predictedPlayerState.ammo[(*item).giTag as usize] == 0 {
             crate::src::cgame::cg_main::cg.predictedPlayerState.ammo[(*item).giTag as usize] =
-                1 as libc::c_int
+                1 as i32
         }
     };
 }
@@ -813,7 +813,7 @@ Predict push triggers and items
 */
 
 unsafe extern "C" fn CG_TouchTriggerPrediction() {
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     let mut trace: crate::src::qcommon::q_shared::trace_t =
         crate::src::qcommon::q_shared::trace_t {
             allsolid: crate::src::qcommon::q_shared::qfalse,
@@ -839,27 +839,27 @@ unsafe extern "C" fn CG_TouchTriggerPrediction() {
         crate::src::qcommon::q_shared::qfalse;
     // dead clients don't activate triggers
     if crate::src::cgame::cg_main::cg.predictedPlayerState.stats
-        [crate::bg_public_h::STAT_HEALTH as libc::c_int as usize]
-        <= 0 as libc::c_int
+        [crate::bg_public_h::STAT_HEALTH as i32 as usize]
+        <= 0 as i32
     {
         return;
     }
     spectator = (crate::src::cgame::cg_main::cg.predictedPlayerState.pm_type
-        == crate::bg_public_h::PM_SPECTATOR as libc::c_int) as libc::c_int
+        == crate::bg_public_h::PM_SPECTATOR as i32) as i32
         as crate::src::qcommon::q_shared::qboolean;
     if crate::src::cgame::cg_main::cg.predictedPlayerState.pm_type
-        != crate::bg_public_h::PM_NORMAL as libc::c_int
+        != crate::bg_public_h::PM_NORMAL as i32
         && spectator as u64 == 0
     {
         return;
     }
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < cg_numTriggerEntities {
         cent = cg_triggerEntities[i as usize];
         ent = &mut (*cent).currentState;
-        if (*ent).eType == crate::bg_public_h::ET_ITEM as libc::c_int && spectator as u64 == 0 {
+        if (*ent).eType == crate::bg_public_h::ET_ITEM as i32 && spectator as u64 == 0 {
             CG_TouchItem(cent);
-        } else if !((*ent).solid != 0xffffff as libc::c_int) {
+        } else if !((*ent).solid != 0xffffff as i32) {
             cmodel = crate::src::cgame::cg_syscalls::trap_CM_InlineModel((*ent).modelindex);
             if !(cmodel == 0) {
                 crate::src::cgame::cg_syscalls::trap_CM_BoxTrace(
@@ -877,13 +877,13 @@ unsafe extern "C" fn CG_TouchTriggerPrediction() {
                     cg_pmove.mins.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
                     cg_pmove.maxs.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
                     cmodel,
-                    -(1 as libc::c_int),
+                    -(1 as i32),
                 );
                 if !(trace.startsolid as u64 == 0) {
-                    if (*ent).eType == crate::bg_public_h::ET_TELEPORT_TRIGGER as libc::c_int {
+                    if (*ent).eType == crate::bg_public_h::ET_TELEPORT_TRIGGER as i32 {
                         crate::src::cgame::cg_main::cg.hyperspace =
                             crate::src::qcommon::q_shared::qtrue
-                    } else if (*ent).eType == crate::bg_public_h::ET_PUSH_TRIGGER as libc::c_int {
+                    } else if (*ent).eType == crate::bg_public_h::ET_PUSH_TRIGGER as i32 {
                         crate::src::game::bg_misc::BG_TouchJumpPad(
                             &mut crate::src::cgame::cg_main::cg.predictedPlayerState as *mut _
                                 as *mut crate::src::qcommon::q_shared::playerState_s,
@@ -905,10 +905,10 @@ unsafe extern "C" fn CG_TouchTriggerPrediction() {
     {
         crate::src::cgame::cg_main::cg
             .predictedPlayerState
-            .jumppad_frame = 0 as libc::c_int;
+            .jumppad_frame = 0 as i32;
         crate::src::cgame::cg_main::cg
             .predictedPlayerState
-            .jumppad_ent = 0 as libc::c_int
+            .jumppad_ent = 0 as i32
     };
 }
 /*
@@ -1157,8 +1157,8 @@ to ease the jerk.
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_PredictPlayerState() {
-    let mut cmdNum: libc::c_int = 0; // will be set if touching a trigger_teleport
-    let mut current: libc::c_int = 0;
+    let mut cmdNum: i32 = 0; // will be set if touching a trigger_teleport
+    let mut current: i32 = 0;
     let mut oldPlayerState: crate::src::qcommon::q_shared::playerState_t =
         crate::src::qcommon::q_shared::playerState_t {
             commandTime: 0,
@@ -1238,8 +1238,8 @@ pub unsafe extern "C" fn CG_PredictPlayerState() {
             (*crate::src::cgame::cg_main::cg.snap).ps
     }
     // demo playback just copies the moves
-    if crate::src::cgame::cg_main::cg.demoPlayback as libc::c_uint != 0
-        || (*crate::src::cgame::cg_main::cg.snap).ps.pm_flags & 4096 as libc::c_int != 0
+    if crate::src::cgame::cg_main::cg.demoPlayback as u32 != 0
+        || (*crate::src::cgame::cg_main::cg.snap).ps.pm_flags & 4096 as i32 != 0
     {
         CG_InterpolatePlayerState(crate::src::qcommon::q_shared::qfalse);
         return;
@@ -1261,32 +1261,32 @@ pub unsafe extern "C" fn CG_PredictPlayerState() {
                 _: *const crate::src::qcommon::q_shared::vec_t,
                 _: *const crate::src::qcommon::q_shared::vec_t,
                 _: *const crate::src::qcommon::q_shared::vec_t,
-                _: libc::c_int,
-                _: libc::c_int,
+                _: i32,
+                _: i32,
             ) -> (),
     );
     cg_pmove.pointcontents = Some(
         CG_PointContents
             as unsafe extern "C" fn(
                 _: *const crate::src::qcommon::q_shared::vec_t,
-                _: libc::c_int,
-            ) -> libc::c_int,
+                _: i32,
+            ) -> i32,
     );
-    if (*cg_pmove.ps).pm_type == crate::bg_public_h::PM_DEAD as libc::c_int {
-        cg_pmove.tracemask = (1 as libc::c_int | 0x10000 as libc::c_int | 0x2000000 as libc::c_int)
-            & !(0x2000000 as libc::c_int)
+    if (*cg_pmove.ps).pm_type == crate::bg_public_h::PM_DEAD as i32 {
+        cg_pmove.tracemask = (1 as i32 | 0x10000 as i32 | 0x2000000 as i32)
+            & !(0x2000000 as i32)
     } else {
-        cg_pmove.tracemask = 1 as libc::c_int | 0x10000 as libc::c_int | 0x2000000 as libc::c_int
+        cg_pmove.tracemask = 1 as i32 | 0x10000 as i32 | 0x2000000 as i32
     }
     if (*crate::src::cgame::cg_main::cg.snap).ps.persistant
-        [crate::bg_public_h::PERS_TEAM as libc::c_int as usize]
-        == crate::bg_public_h::TEAM_SPECTATOR as libc::c_int
+        [crate::bg_public_h::PERS_TEAM as i32 as usize]
+        == crate::bg_public_h::TEAM_SPECTATOR as i32
     {
-        cg_pmove.tracemask &= !(0x2000000 as libc::c_int)
+        cg_pmove.tracemask &= !(0x2000000 as i32)
         // spectators can fly through bodies
     }
-    cg_pmove.noFootsteps = (crate::src::cgame::cg_main::cgs.dmflags & 32 as libc::c_int
-        > 0 as libc::c_int) as libc::c_int
+    cg_pmove.noFootsteps = (crate::src::cgame::cg_main::cgs.dmflags & 32 as i32
+        > 0 as i32) as i32
         as crate::src::qcommon::q_shared::qboolean;
     // save the state before the pmove so we can detect transitions
     oldPlayerState = crate::src::cgame::cg_main::cg.predictedPlayerState;
@@ -1294,7 +1294,7 @@ pub unsafe extern "C" fn CG_PredictPlayerState() {
     // if we don't have the commands right after the snapshot, we
     // can't accurately predict a current position, so just freeze at
     // the last good position we had
-    cmdNum = current - 64 as libc::c_int + 1 as libc::c_int;
+    cmdNum = current - 64 as i32 + 1 as i32;
     crate::src::cgame::cg_syscalls::trap_GetUserCmd(
         cmdNum,
         &mut oldestCmd as *mut _ as *mut crate::src::qcommon::q_shared::usercmd_s,
@@ -1333,7 +1333,7 @@ pub unsafe extern "C" fn CG_PredictPlayerState() {
         crate::src::cgame::cg_main::cg.physicsTime =
             (*crate::src::cgame::cg_main::cg.snap).serverTime
     }
-    if crate::src::cgame::cg_main::pmove_msec.integer < 8 as libc::c_int {
+    if crate::src::cgame::cg_main::pmove_msec.integer < 8 as i32 {
         crate::src::cgame::cg_syscalls::trap_Cvar_Set(
             b"pmove_msec\x00" as *const u8 as *const libc::c_char,
             b"8\x00" as *const u8 as *const libc::c_char,
@@ -1342,7 +1342,7 @@ pub unsafe extern "C" fn CG_PredictPlayerState() {
             &mut crate::src::cgame::cg_main::pmove_msec as *mut _
                 as *mut crate::src::qcommon::q_shared::vmCvar_t,
         );
-    } else if crate::src::cgame::cg_main::pmove_msec.integer > 33 as libc::c_int {
+    } else if crate::src::cgame::cg_main::pmove_msec.integer > 33 as i32 {
         crate::src::cgame::cg_syscalls::trap_Cvar_Set(
             b"pmove_msec\x00" as *const u8 as *const libc::c_char,
             b"33\x00" as *const u8 as *const libc::c_char,
@@ -1356,7 +1356,7 @@ pub unsafe extern "C" fn CG_PredictPlayerState() {
     cg_pmove.pmove_msec = crate::src::cgame::cg_main::pmove_msec.integer;
     // run cmds
     moved = crate::src::qcommon::q_shared::qfalse;
-    cmdNum = current - 64 as libc::c_int + 1 as libc::c_int;
+    cmdNum = current - 64 as i32 + 1 as i32;
     while cmdNum <= current {
         // get the command
         crate::src::cgame::cg_syscalls::trap_GetUserCmd(
@@ -1390,17 +1390,17 @@ pub unsafe extern "C" fn CG_PredictPlayerState() {
                     == oldPlayerState.commandTime
                 {
                     let mut delta: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-                    let mut len: libc::c_float = 0.;
+                    let mut len: f32 = 0.;
                     if crate::src::cgame::cg_main::cg.thisFrameTeleport as u64 != 0 {
                         // a teleport will not cause an error decay
-                        crate::src::cgame::cg_main::cg.predictedError[2 as libc::c_int as usize] =
-                            0 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-                        crate::src::cgame::cg_main::cg.predictedError[1 as libc::c_int as usize] =
+                        crate::src::cgame::cg_main::cg.predictedError[2 as i32 as usize] =
+                            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+                        crate::src::cgame::cg_main::cg.predictedError[1 as i32 as usize] =
                             crate::src::cgame::cg_main::cg.predictedError
-                                [2 as libc::c_int as usize];
-                        crate::src::cgame::cg_main::cg.predictedError[0 as libc::c_int as usize] =
+                                [2 as i32 as usize];
+                        crate::src::cgame::cg_main::cg.predictedError[0 as i32 as usize] =
                             crate::src::cgame::cg_main::cg.predictedError
-                                [1 as libc::c_int as usize];
+                                [1 as i32 as usize];
                         if crate::src::cgame::cg_main::cg_showmiss.integer != 0 {
                             crate::src::cgame::cg_main::CG_Printf(
                                 b"PredictionTeleport\n\x00" as *const u8 as *const libc::c_char,
@@ -1442,81 +1442,81 @@ pub unsafe extern "C" fn CG_PredictPlayerState() {
                                 );
                             }
                         }
-                        delta[0 as libc::c_int as usize] = oldPlayerState.origin
-                            [0 as libc::c_int as usize]
-                            - adjusted[0 as libc::c_int as usize];
-                        delta[1 as libc::c_int as usize] = oldPlayerState.origin
-                            [1 as libc::c_int as usize]
-                            - adjusted[1 as libc::c_int as usize];
-                        delta[2 as libc::c_int as usize] = oldPlayerState.origin
-                            [2 as libc::c_int as usize]
-                            - adjusted[2 as libc::c_int as usize];
+                        delta[0 as i32 as usize] = oldPlayerState.origin
+                            [0 as i32 as usize]
+                            - adjusted[0 as i32 as usize];
+                        delta[1 as i32 as usize] = oldPlayerState.origin
+                            [1 as i32 as usize]
+                            - adjusted[1 as i32 as usize];
+                        delta[2 as i32 as usize] = oldPlayerState.origin
+                            [2 as i32 as usize]
+                            - adjusted[2 as i32 as usize];
                         len = VectorLength(
                             delta.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t
                         );
-                        if len as libc::c_double > 0.1f64 {
+                        if len as f64 > 0.1f64 {
                             if crate::src::cgame::cg_main::cg_showmiss.integer != 0 {
                                 crate::src::cgame::cg_main::CG_Printf(
                                     b"Prediction miss: %f\n\x00" as *const u8
                                         as *const libc::c_char,
-                                    len as libc::c_double,
+                                    len as f64,
                                 );
                             }
                             if crate::src::cgame::cg_main::cg_errorDecay.integer != 0 {
-                                let mut t: libc::c_int = 0;
-                                let mut f: libc::c_float = 0.;
+                                let mut t: i32 = 0;
+                                let mut f: f32 = 0.;
                                 t = crate::src::cgame::cg_main::cg.time
                                     - crate::src::cgame::cg_main::cg.predictedErrorTime;
                                 f = (crate::src::cgame::cg_main::cg_errorDecay.value
-                                    - t as libc::c_float)
+                                    - t as f32)
                                     / crate::src::cgame::cg_main::cg_errorDecay.value;
-                                if f < 0 as libc::c_int as libc::c_float {
-                                    f = 0 as libc::c_int as libc::c_float
+                                if f < 0 as i32 as f32 {
+                                    f = 0 as i32 as f32
                                 }
-                                if f > 0 as libc::c_int as libc::c_float
+                                if f > 0 as i32 as f32
                                     && crate::src::cgame::cg_main::cg_showmiss.integer != 0
                                 {
                                     crate::src::cgame::cg_main::CG_Printf(
                                         b"Double prediction decay: %f\n\x00" as *const u8
                                             as *const libc::c_char,
-                                        f as libc::c_double,
+                                        f as f64,
                                     );
                                 }
                                 crate::src::cgame::cg_main::cg.predictedError
-                                    [0 as libc::c_int as usize] = crate::src::cgame::cg_main::cg
-                                    .predictedError[0 as libc::c_int as usize]
+                                    [0 as i32 as usize] = crate::src::cgame::cg_main::cg
+                                    .predictedError[0 as i32 as usize]
                                     * f;
                                 crate::src::cgame::cg_main::cg.predictedError
-                                    [1 as libc::c_int as usize] = crate::src::cgame::cg_main::cg
-                                    .predictedError[1 as libc::c_int as usize]
+                                    [1 as i32 as usize] = crate::src::cgame::cg_main::cg
+                                    .predictedError[1 as i32 as usize]
                                     * f;
                                 crate::src::cgame::cg_main::cg.predictedError
-                                    [2 as libc::c_int as usize] = crate::src::cgame::cg_main::cg
-                                    .predictedError[2 as libc::c_int as usize]
+                                    [2 as i32 as usize] = crate::src::cgame::cg_main::cg
+                                    .predictedError[2 as i32 as usize]
                                     * f
                             } else {
                                 crate::src::cgame::cg_main::cg.predictedError
-                                    [2 as libc::c_int as usize] =
-                                    0 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
+                                    [2 as i32 as usize] =
+                                    0 as i32 as crate::src::qcommon::q_shared::vec_t;
                                 crate::src::cgame::cg_main::cg.predictedError
-                                    [1 as libc::c_int as usize] = crate::src::cgame::cg_main::cg
-                                    .predictedError[2 as libc::c_int as usize];
+                                    [1 as i32 as usize] = crate::src::cgame::cg_main::cg
+                                    .predictedError[2 as i32 as usize];
                                 crate::src::cgame::cg_main::cg.predictedError
-                                    [0 as libc::c_int as usize] = crate::src::cgame::cg_main::cg
-                                    .predictedError[1 as libc::c_int as usize]
+                                    [0 as i32 as usize] = crate::src::cgame::cg_main::cg
+                                    .predictedError[1 as i32 as usize]
                             }
                             crate::src::cgame::cg_main::cg.predictedError
-                                [0 as libc::c_int as usize] = delta[0 as libc::c_int as usize]
+                                [0 as i32 as usize] = delta[0 as i32 as usize]
                                 + crate::src::cgame::cg_main::cg.predictedError
-                                    [0 as libc::c_int as usize];
+                                    [0 as i32 as usize];
                             crate::src::cgame::cg_main::cg.predictedError
-                                [1 as libc::c_int as usize] = delta[1 as libc::c_int as usize]
+                                [1 as i32 as usize] = delta[1 as i32 as usize]
                                 + crate::src::cgame::cg_main::cg.predictedError
-                                    [1 as libc::c_int as usize];
+                                    [1 as i32 as usize];
                             crate::src::cgame::cg_main::cg.predictedError
-                                [2 as libc::c_int as usize] = delta[2 as libc::c_int as usize]
+                                [2 as i32 as usize] = delta[2 as i32 as usize]
                                 + crate::src::cgame::cg_main::cg.predictedError
-                                    [2 as libc::c_int as usize];
+                                    [2 as i32 as usize];
                             crate::src::cgame::cg_main::cg.predictedErrorTime =
                                 crate::src::cgame::cg_main::cg.oldTime
                         }
@@ -1528,7 +1528,7 @@ pub unsafe extern "C" fn CG_PredictPlayerState() {
                 if cg_pmove.pmove_fixed != 0 {
                     cg_pmove.cmd.serverTime = (cg_pmove.cmd.serverTime
                         + crate::src::cgame::cg_main::pmove_msec.integer
-                        - 1 as libc::c_int)
+                        - 1 as i32)
                         / crate::src::cgame::cg_main::pmove_msec.integer
                         * crate::src::cgame::cg_main::pmove_msec.integer
                 }
@@ -1542,7 +1542,7 @@ pub unsafe extern "C" fn CG_PredictPlayerState() {
         }
         cmdNum += 1
     }
-    if crate::src::cgame::cg_main::cg_showmiss.integer > 1 as libc::c_int {
+    if crate::src::cgame::cg_main::cg_showmiss.integer > 1 as i32 {
         crate::src::cgame::cg_main::CG_Printf(
             b"[%i : %i] \x00" as *const u8 as *const libc::c_char,
             cg_pmove.cmd.serverTime,
@@ -1585,7 +1585,7 @@ pub unsafe extern "C" fn CG_PredictPlayerState() {
         if crate::src::cgame::cg_main::cg
             .predictedPlayerState
             .eventSequence
-            > oldPlayerState.eventSequence + 2 as libc::c_int
+            > oldPlayerState.eventSequence + 2 as i32
         {
             crate::src::cgame::cg_main::CG_Printf(
                 b"WARNING: dropped event\n\x00" as *const u8 as *const libc::c_char,

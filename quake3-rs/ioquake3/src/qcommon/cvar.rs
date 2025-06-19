@@ -3,7 +3,7 @@ use ::libc;
 pub mod stdlib_float_h {
     #[inline]
 
-    pub unsafe extern "C" fn atof(mut __nptr: *const libc::c_char) -> libc::c_double {
+    pub unsafe extern "C" fn atof(mut __nptr: *const libc::c_char) -> f64 {
         return ::libc::strtod(__nptr, 0 as *mut libc::c_void as *mut *mut libc::c_char);
     }
 }
@@ -11,20 +11,20 @@ pub mod stdlib_float_h {
 pub mod stdlib_h {
     #[inline]
 
-    pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> libc::c_int {
+    pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return ::libc::strtol(
             __nptr,
             0 as *mut libc::c_void as *mut *mut libc::c_char,
-            10 as libc::c_int,
-        ) as libc::c_int;
+            10 as i32,
+        ) as i32;
     }
 }
 
 pub mod ctype_h {
     #[inline]
 
-    pub unsafe extern "C" fn tolower(mut __c: libc::c_int) -> libc::c_int {
-        return if __c >= -(128 as libc::c_int) && __c < 256 as libc::c_int {
+    pub unsafe extern "C" fn tolower(mut __c: i32) -> i32 {
+        return if __c >= -(128 as i32) && __c < 256 as i32 {
             *(*crate::stdlib::__ctype_tolower_loc()).offset(__c as isize)
         } else {
             __c
@@ -112,7 +112,7 @@ pub static mut cvar_cheats: *mut crate::src::qcommon::q_shared::cvar_t =
     0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
 #[no_mangle]
 
-pub static mut cvar_modifiedFlags: libc::c_int = 0;
+pub static mut cvar_modifiedFlags: i32 = 0;
 #[no_mangle]
 
 pub static mut cvar_indexes: [crate::src::qcommon::q_shared::cvar_t; 2048] =
@@ -143,7 +143,7 @@ pub static mut cvar_indexes: [crate::src::qcommon::q_shared::cvar_t; 2048] =
     }; 2048];
 #[no_mangle]
 
-pub static mut cvar_numIndexes: libc::c_int = 0;
+pub static mut cvar_numIndexes: i32 = 0;
 
 static mut hashTable: [*mut crate::src::qcommon::q_shared::cvar_t; 256] =
     [0 as *const crate::src::qcommon::q_shared::cvar_t
@@ -155,37 +155,37 @@ return a hash value for the filename
 */
 
 unsafe extern "C" fn generateHashValue(mut fname: *const libc::c_char) -> libc::c_long {
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     let mut hash: libc::c_long = 0;
     let mut letter: libc::c_char = 0;
-    hash = 0 as libc::c_int as libc::c_long;
-    i = 0 as libc::c_int;
-    while *fname.offset(i as isize) as libc::c_int != '\u{0}' as i32 {
+    hash = 0 as i32 as libc::c_long;
+    i = 0 as i32;
+    while *fname.offset(i as isize) as i32 != '\u{0}' as i32 {
         letter = ({
-            let mut __res: libc::c_int = 0;
+            let mut __res: i32 = 0;
             if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong
-                > 1 as libc::c_int as libc::c_ulong
+                > 1 as i32 as libc::c_ulong
             {
                 if 0 != 0 {
-                    let mut __c: libc::c_int = *fname.offset(i as isize) as libc::c_int;
-                    __res = if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
+                    let mut __c: i32 = *fname.offset(i as isize) as i32;
+                    __res = if __c < -(128 as i32) || __c > 255 as i32 {
                         __c
                     } else {
                         *(*crate::stdlib::__ctype_tolower_loc()).offset(__c as isize)
                     }
                 } else {
-                    __res = tolower(*fname.offset(i as isize) as libc::c_int)
+                    __res = tolower(*fname.offset(i as isize) as i32)
                 }
             } else {
                 __res = *(*crate::stdlib::__ctype_tolower_loc())
-                    .offset(*fname.offset(i as isize) as libc::c_int as isize)
+                    .offset(*fname.offset(i as isize) as i32 as isize)
             }
             __res
         }) as libc::c_char;
-        hash += letter as libc::c_long * (i + 119 as libc::c_int) as libc::c_long;
+        hash += letter as libc::c_long * (i + 119 as i32) as libc::c_long;
         i += 1
     }
-    hash &= (256 as libc::c_int - 1 as libc::c_int) as libc::c_long;
+    hash &= (256 as i32 - 1 as i32) as libc::c_long;
     return hash;
 }
 /*
@@ -241,12 +241,12 @@ Cvar_VariableValue
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Cvar_VariableValue(mut var_name: *const libc::c_char) -> libc::c_float {
+pub unsafe extern "C" fn Cvar_VariableValue(mut var_name: *const libc::c_char) -> f32 {
     let mut var: *mut crate::src::qcommon::q_shared::cvar_t =
         0 as *mut crate::src::qcommon::q_shared::cvar_t;
     var = Cvar_FindVar(var_name);
     if var.is_null() {
-        return 0 as libc::c_int as libc::c_float;
+        return 0 as i32 as f32;
     }
     return (*var).value;
 }
@@ -259,12 +259,12 @@ Cvar_VariableIntegerValue
 
 pub unsafe extern "C" fn Cvar_VariableIntegerValue(
     mut var_name: *const libc::c_char,
-) -> libc::c_int {
+) -> i32 {
     let mut var: *mut crate::src::qcommon::q_shared::cvar_t =
         0 as *mut crate::src::qcommon::q_shared::cvar_t;
     var = Cvar_FindVar(var_name);
     if var.is_null() {
-        return 0 as libc::c_int;
+        return 0 as i32;
     }
     return (*var).integer;
 }
@@ -297,13 +297,13 @@ Cvar_VariableStringBuffer
 pub unsafe extern "C" fn Cvar_VariableStringBuffer(
     mut var_name: *const libc::c_char,
     mut buffer: *mut libc::c_char,
-    mut bufsize: libc::c_int,
+    mut bufsize: i32,
 ) {
     let mut var: *mut crate::src::qcommon::q_shared::cvar_t =
         0 as *mut crate::src::qcommon::q_shared::cvar_t;
     var = Cvar_FindVar(var_name);
     if var.is_null() {
-        *buffer = 0 as libc::c_int as libc::c_char
+        *buffer = 0 as i32 as libc::c_char
     } else {
         crate::src::qcommon::q_shared::Q_strncpyz(buffer, (*var).string, bufsize);
     };
@@ -316,14 +316,14 @@ Cvar_Flags
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Cvar_Flags(mut var_name: *const libc::c_char) -> libc::c_int {
+pub unsafe extern "C" fn Cvar_Flags(mut var_name: *const libc::c_char) -> i32 {
     let mut var: *mut crate::src::qcommon::q_shared::cvar_t =
         0 as *mut crate::src::qcommon::q_shared::cvar_t;
     var = Cvar_FindVar(var_name);
     if var.is_null() {
-        return 0x80000000 as libc::c_uint as libc::c_int;
+        return 0x80000000 as u32 as i32;
     } else if (*var).modified as u64 != 0 {
-        return (*var).flags | 0x40000000 as libc::c_int;
+        return (*var).flags | 0x40000000 as i32;
     } else {
         return (*var).flags;
     };
@@ -361,7 +361,7 @@ unsafe extern "C" fn Cvar_Validate(
     mut warn: crate::src::qcommon::q_shared::qboolean,
 ) -> *const libc::c_char {
     static mut s: [libc::c_char; 256] = [0; 256];
-    let mut valuef: libc::c_float = 0.;
+    let mut valuef: f32 = 0.;
     let mut changed: crate::src::qcommon::q_shared::qboolean =
         crate::src::qcommon::q_shared::qfalse;
     if (*var).validate as u64 == 0 {
@@ -371,7 +371,7 @@ unsafe extern "C" fn Cvar_Validate(
         return value;
     }
     if crate::src::qcommon::q_shared::Q_isanumber(value) as u64 != 0 {
-        valuef = atof(value) as libc::c_float;
+        valuef = atof(value) as f32;
         if (*var).integral as u64 != 0 {
             if crate::src::qcommon::q_shared::Q_isintegral(valuef) as u64 == 0 {
                 if warn as u64 != 0 {
@@ -381,7 +381,7 @@ unsafe extern "C" fn Cvar_Validate(
                         (*var).name,
                     );
                 }
-                valuef = valuef as libc::c_int as libc::c_float;
+                valuef = valuef as i32 as f32;
                 changed = crate::src::qcommon::q_shared::qtrue
             }
         }
@@ -392,7 +392,7 @@ unsafe extern "C" fn Cvar_Validate(
                 (*var).name,
             );
         }
-        valuef = atof((*var).resetString) as libc::c_float;
+        valuef = atof((*var).resetString) as f32;
         changed = crate::src::qcommon::q_shared::qtrue
     }
     if valuef < (*var).min {
@@ -410,12 +410,12 @@ unsafe extern "C" fn Cvar_Validate(
             if crate::src::qcommon::q_shared::Q_isintegral((*var).min) as u64 != 0 {
                 crate::src::qcommon::common::Com_Printf(
                     b" out of range (min %d)\x00" as *const u8 as *const libc::c_char,
-                    (*var).min as libc::c_int,
+                    (*var).min as i32,
                 );
             } else {
                 crate::src::qcommon::common::Com_Printf(
                     b" out of range (min %f)\x00" as *const u8 as *const libc::c_char,
-                    (*var).min as libc::c_double,
+                    (*var).min as f64,
                 );
             }
         }
@@ -436,12 +436,12 @@ unsafe extern "C" fn Cvar_Validate(
             if crate::src::qcommon::q_shared::Q_isintegral((*var).max) as u64 != 0 {
                 crate::src::qcommon::common::Com_Printf(
                     b" out of range (max %d)\x00" as *const u8 as *const libc::c_char,
-                    (*var).max as libc::c_int,
+                    (*var).max as i32,
                 );
             } else {
                 crate::src::qcommon::common::Com_Printf(
                     b" out of range (max %f)\x00" as *const u8 as *const libc::c_char,
-                    (*var).max as libc::c_double,
+                    (*var).max as f64,
                 );
             }
         }
@@ -452,27 +452,27 @@ unsafe extern "C" fn Cvar_Validate(
         if crate::src::qcommon::q_shared::Q_isintegral(valuef) as u64 != 0 {
             crate::src::qcommon::q_shared::Com_sprintf(
                 s.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as libc::c_int,
+                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
                 b"%d\x00" as *const u8 as *const libc::c_char,
-                valuef as libc::c_int,
+                valuef as i32,
             );
             if warn as u64 != 0 {
                 crate::src::qcommon::common::Com_Printf(
                     b", setting to %d\n\x00" as *const u8 as *const libc::c_char,
-                    valuef as libc::c_int,
+                    valuef as i32,
                 );
             }
         } else {
             crate::src::qcommon::q_shared::Com_sprintf(
                 s.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as libc::c_int,
+                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
                 b"%f\x00" as *const u8 as *const libc::c_char,
-                valuef as libc::c_double,
+                valuef as f64,
             );
             if warn as u64 != 0 {
                 crate::src::qcommon::common::Com_Printf(
                     b", setting to %f\n\x00" as *const u8 as *const libc::c_char,
-                    valuef as libc::c_double,
+                    valuef as f64,
                 );
             }
         }
@@ -521,15 +521,15 @@ The flags will be or'ed in if the variable exists.
 pub unsafe extern "C" fn Cvar_Get(
     mut var_name: *const libc::c_char,
     mut var_value: *const libc::c_char,
-    mut flags: libc::c_int,
+    mut flags: i32,
 ) -> *mut crate::src::qcommon::q_shared::cvar_t {
     let mut var: *mut crate::src::qcommon::q_shared::cvar_t =
         0 as *mut crate::src::qcommon::q_shared::cvar_t;
     let mut hash: libc::c_long = 0;
-    let mut index: libc::c_int = 0;
+    let mut index: i32 = 0;
     if var_name.is_null() || var_value.is_null() {
         crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_FATAL as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_FATAL as i32,
             b"Cvar_Get: NULL parameter\x00" as *const u8 as *const libc::c_char,
         );
     }
@@ -545,22 +545,22 @@ pub unsafe extern "C" fn Cvar_Get(
     if !var.is_null() {
         var_value = Cvar_Validate(var, var_value, crate::src::qcommon::q_shared::qfalse);
         // Make sure the game code cannot mark engine-added variables as gamecode vars
-        if (*var).flags & 0x1000 as libc::c_int != 0 {
-            if flags & 0x1000 as libc::c_int == 0 {
-                (*var).flags &= !(0x1000 as libc::c_int)
+        if (*var).flags & 0x1000 as i32 != 0 {
+            if flags & 0x1000 as i32 == 0 {
+                (*var).flags &= !(0x1000 as i32)
             }
-        } else if (*var).flags & 0x80 as libc::c_int == 0 {
-            if flags & 0x1000 as libc::c_int != 0 {
-                flags &= !(0x1000 as libc::c_int)
+        } else if (*var).flags & 0x80 as i32 == 0 {
+            if flags & 0x1000 as i32 != 0 {
+                flags &= !(0x1000 as i32)
             }
         }
         // if the C code is now specifying a variable that the user already
         // set a value for, take the new value as the reset value
-        if (*var).flags & 0x80 as libc::c_int != 0 {
-            (*var).flags &= !(0x80 as libc::c_int);
+        if (*var).flags & 0x80 as i32 != 0 {
+            (*var).flags &= !(0x80 as i32);
             crate::src::qcommon::common::Z_Free((*var).resetString as *mut libc::c_void);
             (*var).resetString = crate::src::qcommon::common::CopyString(var_value);
-            if flags & 0x40 as libc::c_int != 0 {
+            if flags & 0x40 as i32 != 0 {
                 // this variable was set by the user,
                 // so force it to value given by the engine.
                 if !(*var).latchedString.is_null() {
@@ -570,20 +570,20 @@ pub unsafe extern "C" fn Cvar_Get(
             }
         }
         // Make sure servers cannot mark engine-added variables as SERVER_CREATED
-        if (*var).flags & 0x800 as libc::c_int != 0 {
-            if flags & 0x800 as libc::c_int == 0 {
-                (*var).flags &= !(0x800 as libc::c_int)
+        if (*var).flags & 0x800 as i32 != 0 {
+            if flags & 0x800 as i32 == 0 {
+                (*var).flags &= !(0x800 as i32)
             }
-        } else if flags & 0x800 as libc::c_int != 0 {
-            flags &= !(0x800 as libc::c_int)
+        } else if flags & 0x800 as i32 != 0 {
+            flags &= !(0x800 as i32)
         }
         (*var).flags |= flags;
         // only allow one non-empty reset string without a warning
-        if *(*var).resetString.offset(0 as libc::c_int as isize) == 0 {
+        if *(*var).resetString.offset(0 as i32 as isize) == 0 {
             // we don't have a reset string yet
             crate::src::qcommon::common::Z_Free((*var).resetString as *mut libc::c_void);
             (*var).resetString = crate::src::qcommon::common::CopyString(var_value)
-        } else if *var_value.offset(0 as libc::c_int as isize) as libc::c_int != 0
+        } else if *var_value.offset(0 as i32 as isize) as i32 != 0
             && ::libc::strcmp((*var).resetString, var_value) != 0
         {
             crate::src::qcommon::common::Com_DPrintf(
@@ -611,17 +611,17 @@ pub unsafe extern "C" fn Cvar_Get(
     // allocate a new cvar
     //
     // find a free cvar
-    index = 0 as libc::c_int;
-    while index < 2048 as libc::c_int {
+    index = 0 as i32;
+    while index < 2048 as i32 {
         if cvar_indexes[index as usize].name.is_null() {
             break;
         }
         index += 1
     }
-    if index >= 2048 as libc::c_int {
+    if index >= 2048 as i32 {
         if crate::src::qcommon::common::com_errorEntered as u64 == 0 {
             crate::src::qcommon::common::Com_Error(
-                crate::src::qcommon::q_shared::ERR_FATAL as libc::c_int,
+                crate::src::qcommon::q_shared::ERR_FATAL as i32,
                 b"Error: Too many cvars, cannot create a new one!\x00" as *const u8
                     as *const libc::c_char,
             );
@@ -631,13 +631,13 @@ pub unsafe extern "C" fn Cvar_Get(
     var = &mut *cvar_indexes.as_mut_ptr().offset(index as isize)
         as *mut crate::src::qcommon::q_shared::cvar_t;
     if index >= cvar_numIndexes {
-        cvar_numIndexes = index + 1 as libc::c_int
+        cvar_numIndexes = index + 1 as i32
     }
     (*var).name = crate::src::qcommon::common::CopyString(var_name);
     (*var).string = crate::src::qcommon::common::CopyString(var_value);
     (*var).modified = crate::src::qcommon::q_shared::qtrue;
-    (*var).modificationCount = 1 as libc::c_int;
-    (*var).value = atof((*var).string) as libc::c_float;
+    (*var).modificationCount = 1 as i32;
+    (*var).value = atof((*var).string) as f32;
     (*var).integer = atoi((*var).string);
     (*var).resetString = crate::src::qcommon::common::CopyString(var_value);
     (*var).validate = crate::src::qcommon::q_shared::qfalse;
@@ -653,7 +653,7 @@ pub unsafe extern "C" fn Cvar_Get(
     // note what types of cvars have been modified (userinfo, archive, serverinfo, systeminfo)
     cvar_modifiedFlags |= (*var).flags;
     hash = generateHashValue(var_name);
-    (*var).hashIndex = hash as libc::c_int;
+    (*var).hashIndex = hash as i32;
     (*var).hashNext = hashTable[hash as usize];
     if !hashTable[hash as usize].is_null() {
         (*hashTable[hash as usize]).hashPrev = var
@@ -677,7 +677,7 @@ pub unsafe extern "C" fn Cvar_Print(mut v: *mut crate::src::qcommon::q_shared::c
         (*v).name,
         (*v).string,
     );
-    if (*v).flags & 0x40 as libc::c_int == 0 {
+    if (*v).flags & 0x40 as i32 == 0 {
         if crate::src::qcommon::q_shared::Q_stricmp((*v).string, (*v).resetString) == 0 {
             crate::src::qcommon::common::Com_Printf(
                 b", the default\x00" as *const u8 as *const libc::c_char,
@@ -734,16 +734,16 @@ pub unsafe extern "C" fn Cvar_Set2(
         }
         // create it
         if force as u64 == 0 {
-            return Cvar_Get(var_name, value, 0x80 as libc::c_int);
+            return Cvar_Get(var_name, value, 0x80 as i32);
         } else {
-            return Cvar_Get(var_name, value, 0 as libc::c_int);
+            return Cvar_Get(var_name, value, 0 as i32);
         }
     }
     if value.is_null() {
         value = (*var).resetString
     }
     value = Cvar_Validate(var, value, crate::src::qcommon::q_shared::qtrue);
-    if (*var).flags & 0x20 as libc::c_int != 0 && !(*var).latchedString.is_null() {
+    if (*var).flags & 0x20 as i32 != 0 && !(*var).latchedString.is_null() {
         if ::libc::strcmp(value, (*var).string) == 0 {
             crate::src::qcommon::common::Z_Free((*var).latchedString as *mut libc::c_void);
             (*var).latchedString = 0 as *mut libc::c_char;
@@ -758,34 +758,34 @@ pub unsafe extern "C" fn Cvar_Set2(
     // note what types of cvars have been modified (userinfo, archive, serverinfo, systeminfo)
     cvar_modifiedFlags |= (*var).flags; // not changed
     if force as u64 == 0 {
-        if (*var).flags & 0x40 as libc::c_int != 0 {
+        if (*var).flags & 0x40 as i32 != 0 {
             crate::src::qcommon::common::Com_Printf(
                 b"%s is read only.\n\x00" as *const u8 as *const libc::c_char,
                 var_name,
             ); // free the old value string
             return var;
         }
-        if (*var).flags & 0x10 as libc::c_int != 0 {
+        if (*var).flags & 0x10 as i32 != 0 {
             crate::src::qcommon::common::Com_Printf(
                 b"%s is write protected.\n\x00" as *const u8 as *const libc::c_char,
                 var_name,
             );
             return var;
         }
-        if (*var).flags & 0x200 as libc::c_int != 0 && (*cvar_cheats).integer == 0 {
+        if (*var).flags & 0x200 as i32 != 0 && (*cvar_cheats).integer == 0 {
             crate::src::qcommon::common::Com_Printf(
                 b"%s is cheat protected.\n\x00" as *const u8 as *const libc::c_char,
                 var_name,
             );
             return var;
         }
-        if (*var).flags & 0x20 as libc::c_int != 0 {
+        if (*var).flags & 0x20 as i32 != 0 {
             if !(*var).latchedString.is_null() {
-                if ::libc::strcmp(value, (*var).latchedString) == 0 as libc::c_int {
+                if ::libc::strcmp(value, (*var).latchedString) == 0 as i32 {
                     return var;
                 }
                 crate::src::qcommon::common::Z_Free((*var).latchedString as *mut libc::c_void);
-            } else if ::libc::strcmp(value, (*var).string) == 0 as libc::c_int {
+            } else if ::libc::strcmp(value, (*var).string) == 0 as i32 {
                 return var;
             }
             crate::src::qcommon::common::Com_Printf(
@@ -808,7 +808,7 @@ pub unsafe extern "C" fn Cvar_Set2(
     (*var).modificationCount += 1;
     crate::src::qcommon::common::Z_Free((*var).string as *mut libc::c_void);
     (*var).string = crate::src::qcommon::common::CopyString(value);
-    (*var).value = atof((*var).string) as libc::c_float;
+    (*var).value = atof((*var).string) as f32;
     (*var).integer = atoi((*var).string);
     return var;
 }
@@ -838,11 +838,11 @@ pub unsafe extern "C" fn Cvar_SetSafe(
     mut var_name: *const libc::c_char,
     mut value: *const libc::c_char,
 ) {
-    let mut flags: libc::c_int = Cvar_Flags(var_name);
-    if flags as libc::c_uint != 0x80000000 as libc::c_uint && flags & 0x2000 as libc::c_int != 0 {
+    let mut flags: i32 = Cvar_Flags(var_name);
+    if flags as u32 != 0x80000000 as u32 && flags & 0x2000 as i32 != 0 {
         if !value.is_null() {
             crate::src::qcommon::common::Com_Error(
-                crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+                crate::src::qcommon::q_shared::ERR_DROP as i32,
                 b"Restricted source tried to set \"%s\" to \"%s\"\x00" as *const u8
                     as *const libc::c_char,
                 var_name,
@@ -850,7 +850,7 @@ pub unsafe extern "C" fn Cvar_SetSafe(
             );
         } else {
             crate::src::qcommon::common::Com_Error(
-                crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+                crate::src::qcommon::q_shared::ERR_DROP as i32,
                 b"Restricted source tried to modify \"%s\"\x00" as *const u8 as *const libc::c_char,
                 var_name,
             );
@@ -882,22 +882,22 @@ Cvar_SetValue
 
 pub unsafe extern "C" fn Cvar_SetValue(
     mut var_name: *const libc::c_char,
-    mut value: libc::c_float,
+    mut value: f32,
 ) {
     let mut val: [libc::c_char; 32] = [0; 32];
-    if value == value as libc::c_int as libc::c_float {
+    if value == value as i32 as f32 {
         crate::src::qcommon::q_shared::Com_sprintf(
             val.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as libc::c_int,
+            ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
             b"%i\x00" as *const u8 as *const libc::c_char,
-            value as libc::c_int,
+            value as i32,
         );
     } else {
         crate::src::qcommon::q_shared::Com_sprintf(
             val.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as libc::c_int,
+            ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
             b"%f\x00" as *const u8 as *const libc::c_char,
-            value as libc::c_double,
+            value as f64,
         );
     }
     Cvar_Set(var_name, val.as_mut_ptr());
@@ -911,22 +911,22 @@ Cvar_SetValueSafe
 
 pub unsafe extern "C" fn Cvar_SetValueSafe(
     mut var_name: *const libc::c_char,
-    mut value: libc::c_float,
+    mut value: f32,
 ) {
     let mut val: [libc::c_char; 32] = [0; 32];
     if crate::src::qcommon::q_shared::Q_isintegral(value) as u64 != 0 {
         crate::src::qcommon::q_shared::Com_sprintf(
             val.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as libc::c_int,
+            ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
             b"%i\x00" as *const u8 as *const libc::c_char,
-            value as libc::c_int,
+            value as i32,
         );
     } else {
         crate::src::qcommon::q_shared::Com_sprintf(
             val.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as libc::c_int,
+            ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
             b"%f\x00" as *const u8 as *const libc::c_char,
-            value as libc::c_double,
+            value as f64,
         );
     }
     Cvar_SetSafe(var_name, val.as_mut_ptr());
@@ -975,7 +975,7 @@ pub unsafe extern "C" fn Cvar_SetCheatState() {
     // set all default vars to the safe value
     var = cvar_vars;
     while !var.is_null() {
-        if (*var).flags & 0x200 as libc::c_int != 0 {
+        if (*var).flags & 0x200 as i32 != 0 {
             // the CVAR_LATCHED|CVAR_CHEAT vars might escape the reset here
             // because of a different var->latchedString
             if !(*var).latchedString.is_null() {
@@ -1003,12 +1003,12 @@ pub unsafe extern "C" fn Cvar_Command() -> crate::src::qcommon::q_shared::qboole
     let mut v: *mut crate::src::qcommon::q_shared::cvar_t =
         0 as *mut crate::src::qcommon::q_shared::cvar_t;
     // check variables
-    v = Cvar_FindVar(crate::src::qcommon::cmd::Cmd_Argv(0 as libc::c_int));
+    v = Cvar_FindVar(crate::src::qcommon::cmd::Cmd_Argv(0 as i32));
     if v.is_null() {
         return crate::src::qcommon::q_shared::qfalse;
     }
     // perform a variable print or set
-    if crate::src::qcommon::cmd::Cmd_Argc() == 1 as libc::c_int {
+    if crate::src::qcommon::cmd::Cmd_Argc() == 1 as i32 {
         Cvar_Print(v);
         return crate::src::qcommon::q_shared::qtrue;
     }
@@ -1034,13 +1034,13 @@ pub unsafe extern "C" fn Cvar_Print_f() {
     let mut name: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut cv: *mut crate::src::qcommon::q_shared::cvar_t =
         0 as *mut crate::src::qcommon::q_shared::cvar_t;
-    if crate::src::qcommon::cmd::Cmd_Argc() != 2 as libc::c_int {
+    if crate::src::qcommon::cmd::Cmd_Argc() != 2 as i32 {
         crate::src::qcommon::common::Com_Printf(
             b"usage: print <variable>\n\x00" as *const u8 as *const libc::c_char,
         );
         return;
     }
-    name = crate::src::qcommon::cmd::Cmd_Argv(1 as libc::c_int);
+    name = crate::src::qcommon::cmd::Cmd_Argv(1 as i32);
     cv = Cvar_FindVar(name);
     if !cv.is_null() {
         Cvar_Print(cv);
@@ -1062,43 +1062,43 @@ given values
 #[no_mangle]
 
 pub unsafe extern "C" fn Cvar_Toggle_f() {
-    let mut i: libc::c_int = 0;
-    let mut c: libc::c_int = crate::src::qcommon::cmd::Cmd_Argc();
+    let mut i: i32 = 0;
+    let mut c: i32 = crate::src::qcommon::cmd::Cmd_Argc();
     let mut curval: *mut libc::c_char = 0 as *mut libc::c_char;
-    if c < 2 as libc::c_int {
+    if c < 2 as i32 {
         crate::src::qcommon::common::Com_Printf(
             b"usage: toggle <variable> [value1, value2, ...]\n\x00" as *const u8
                 as *const libc::c_char,
         );
         return;
     }
-    if c == 2 as libc::c_int {
+    if c == 2 as i32 {
         Cvar_Set2(
-            crate::src::qcommon::cmd::Cmd_Argv(1 as libc::c_int),
+            crate::src::qcommon::cmd::Cmd_Argv(1 as i32),
             crate::src::qcommon::q_shared::va(
                 b"%d\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                (Cvar_VariableValue(crate::src::qcommon::cmd::Cmd_Argv(1 as libc::c_int)) == 0.)
-                    as libc::c_int,
+                (Cvar_VariableValue(crate::src::qcommon::cmd::Cmd_Argv(1 as i32)) == 0.)
+                    as i32,
             ),
             crate::src::qcommon::q_shared::qfalse,
         );
         return;
     }
-    if c == 3 as libc::c_int {
+    if c == 3 as i32 {
         crate::src::qcommon::common::Com_Printf(
             b"toggle: nothing to toggle to\n\x00" as *const u8 as *const libc::c_char,
         );
         return;
     }
-    curval = Cvar_VariableString(crate::src::qcommon::cmd::Cmd_Argv(1 as libc::c_int));
+    curval = Cvar_VariableString(crate::src::qcommon::cmd::Cmd_Argv(1 as i32));
     // don't bother checking the last arg for a match since the desired
     // behaviour is the same as no match (set to the first argument)
-    i = 2 as libc::c_int;
-    while (i + 1 as libc::c_int) < c {
-        if ::libc::strcmp(curval, crate::src::qcommon::cmd::Cmd_Argv(i)) == 0 as libc::c_int {
+    i = 2 as i32;
+    while (i + 1 as i32) < c {
+        if ::libc::strcmp(curval, crate::src::qcommon::cmd::Cmd_Argv(i)) == 0 as i32 {
             Cvar_Set2(
-                crate::src::qcommon::cmd::Cmd_Argv(1 as libc::c_int),
-                crate::src::qcommon::cmd::Cmd_Argv(i + 1 as libc::c_int),
+                crate::src::qcommon::cmd::Cmd_Argv(1 as i32),
+                crate::src::qcommon::cmd::Cmd_Argv(i + 1 as i32),
                 crate::src::qcommon::q_shared::qfalse,
             );
             return;
@@ -1107,8 +1107,8 @@ pub unsafe extern "C" fn Cvar_Toggle_f() {
     }
     // fallback
     Cvar_Set2(
-        crate::src::qcommon::cmd::Cmd_Argv(1 as libc::c_int),
-        crate::src::qcommon::cmd::Cmd_Argv(2 as libc::c_int),
+        crate::src::qcommon::cmd::Cmd_Argv(1 as i32),
+        crate::src::qcommon::cmd::Cmd_Argv(2 as i32),
         crate::src::qcommon::q_shared::qfalse,
     );
 }
@@ -1123,48 +1123,48 @@ weren't declared in C code.
 #[no_mangle]
 
 pub unsafe extern "C" fn Cvar_Set_f() {
-    let mut c: libc::c_int = 0;
+    let mut c: i32 = 0;
     let mut cmd: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut v: *mut crate::src::qcommon::q_shared::cvar_t =
         0 as *mut crate::src::qcommon::q_shared::cvar_t;
     c = crate::src::qcommon::cmd::Cmd_Argc();
-    cmd = crate::src::qcommon::cmd::Cmd_Argv(0 as libc::c_int);
-    if c < 2 as libc::c_int {
+    cmd = crate::src::qcommon::cmd::Cmd_Argv(0 as i32);
+    if c < 2 as i32 {
         crate::src::qcommon::common::Com_Printf(
             b"usage: %s <variable> <value>\n\x00" as *const u8 as *const libc::c_char,
             cmd,
         );
         return;
     }
-    if c == 2 as libc::c_int {
+    if c == 2 as i32 {
         Cvar_Print_f();
         return;
     }
     v = Cvar_Set2(
-        crate::src::qcommon::cmd::Cmd_Argv(1 as libc::c_int),
-        crate::src::qcommon::cmd::Cmd_ArgsFrom(2 as libc::c_int),
+        crate::src::qcommon::cmd::Cmd_Argv(1 as i32),
+        crate::src::qcommon::cmd::Cmd_ArgsFrom(2 as i32),
         crate::src::qcommon::q_shared::qfalse,
     );
     if v.is_null() {
         return;
     }
-    match *cmd.offset(3 as libc::c_int as isize) as libc::c_int {
+    match *cmd.offset(3 as i32 as isize) as i32 {
         97 => {
-            if (*v).flags & 0x1 as libc::c_int == 0 {
-                (*v).flags |= 0x1 as libc::c_int;
-                cvar_modifiedFlags |= 0x1 as libc::c_int
+            if (*v).flags & 0x1 as i32 == 0 {
+                (*v).flags |= 0x1 as i32;
+                cvar_modifiedFlags |= 0x1 as i32
             }
         }
         117 => {
-            if (*v).flags & 0x2 as libc::c_int == 0 {
-                (*v).flags |= 0x2 as libc::c_int;
-                cvar_modifiedFlags |= 0x2 as libc::c_int
+            if (*v).flags & 0x2 as i32 == 0 {
+                (*v).flags |= 0x2 as i32;
+                cvar_modifiedFlags |= 0x2 as i32
             }
         }
         115 => {
-            if (*v).flags & 0x4 as libc::c_int == 0 {
-                (*v).flags |= 0x4 as libc::c_int;
-                cvar_modifiedFlags |= 0x4 as libc::c_int
+            if (*v).flags & 0x4 as i32 == 0 {
+                (*v).flags |= 0x4 as i32;
+                cvar_modifiedFlags |= 0x4 as i32
             }
         }
         _ => {}
@@ -1178,13 +1178,13 @@ Cvar_Reset_f
 #[no_mangle]
 
 pub unsafe extern "C" fn Cvar_Reset_f() {
-    if crate::src::qcommon::cmd::Cmd_Argc() != 2 as libc::c_int {
+    if crate::src::qcommon::cmd::Cmd_Argc() != 2 as i32 {
         crate::src::qcommon::common::Com_Printf(
             b"usage: reset <variable>\n\x00" as *const u8 as *const libc::c_char,
         );
         return;
     }
-    Cvar_Reset(crate::src::qcommon::cmd::Cmd_Argv(1 as libc::c_int));
+    Cvar_Reset(crate::src::qcommon::cmd::Cmd_Argv(1 as i32));
 }
 // called by Cmd_ExecuteString when Cmd_Argv(0) doesn't match a known
 // command.  Returns true if the command was a variable reference that
@@ -1210,14 +1210,14 @@ pub unsafe extern "C" fn Cvar_WriteVariables(mut f: crate::src::qcommon::q_share
             || crate::src::qcommon::q_shared::Q_stricmp(
                 (*var).name,
                 b"cl_cdkey\x00" as *const u8 as *const libc::c_char,
-            ) == 0 as libc::c_int)
+            ) == 0 as i32)
         {
-            if (*var).flags & 0x1 as libc::c_int != 0 {
+            if (*var).flags & 0x1 as i32 != 0 {
                 // write the latched value, even if it hasn't taken effect yet
                 if !(*var).latchedString.is_null() {
                     if crate::stdlib::strlen((*var).name)
                         .wrapping_add(crate::stdlib::strlen((*var).latchedString))
-                        .wrapping_add(10 as libc::c_int as libc::c_ulong)
+                        .wrapping_add(10 as i32 as libc::c_ulong)
                         > ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong
                     {
                         crate::src::qcommon::common::Com_Printf(
@@ -1230,7 +1230,7 @@ pub unsafe extern "C" fn Cvar_WriteVariables(mut f: crate::src::qcommon::q_share
                         crate::src::qcommon::q_shared::Com_sprintf(
                             buffer.as_mut_ptr(),
                             ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong
-                                as libc::c_int,
+                                as i32,
                             b"seta %s \"%s\"\n\x00" as *const u8 as *const libc::c_char,
                             (*var).name,
                             (*var).latchedString,
@@ -1239,7 +1239,7 @@ pub unsafe extern "C" fn Cvar_WriteVariables(mut f: crate::src::qcommon::q_share
                     }
                 } else if crate::stdlib::strlen((*var).name)
                     .wrapping_add(crate::stdlib::strlen((*var).string))
-                    .wrapping_add(10 as libc::c_int as libc::c_ulong)
+                    .wrapping_add(10 as i32 as libc::c_ulong)
                     > ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong
                 {
                     crate::src::qcommon::common::Com_Printf(
@@ -1252,7 +1252,7 @@ pub unsafe extern "C" fn Cvar_WriteVariables(mut f: crate::src::qcommon::q_share
                     crate::src::qcommon::q_shared::Com_sprintf(
                         buffer.as_mut_ptr(),
                         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong
-                            as libc::c_int,
+                            as i32,
                         b"seta %s \"%s\"\n\x00" as *const u8 as *const libc::c_char,
                         (*var).name,
                         (*var).string,
@@ -1264,7 +1264,7 @@ pub unsafe extern "C" fn Cvar_WriteVariables(mut f: crate::src::qcommon::q_share
                     _ => {
                         crate::src::qcommon::files::FS_Write(
                             buffer.as_mut_ptr() as *const libc::c_void,
-                            crate::stdlib::strlen(buffer.as_mut_ptr()) as libc::c_int,
+                            crate::stdlib::strlen(buffer.as_mut_ptr()) as i32,
                             f,
                         );
                     }
@@ -1284,14 +1284,14 @@ Cvar_List_f
 pub unsafe extern "C" fn Cvar_List_f() {
     let mut var: *mut crate::src::qcommon::q_shared::cvar_t =
         0 as *mut crate::src::qcommon::q_shared::cvar_t;
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     let mut match_0: *mut libc::c_char = 0 as *mut libc::c_char;
-    if crate::src::qcommon::cmd::Cmd_Argc() > 1 as libc::c_int {
-        match_0 = crate::src::qcommon::cmd::Cmd_Argv(1 as libc::c_int)
+    if crate::src::qcommon::cmd::Cmd_Argc() > 1 as i32 {
+        match_0 = crate::src::qcommon::cmd::Cmd_Argv(1 as i32)
     } else {
         match_0 = 0 as *mut libc::c_char
     }
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     var = cvar_vars;
     while !var.is_null() {
         if !((*var).name.is_null()
@@ -1299,10 +1299,10 @@ pub unsafe extern "C" fn Cvar_List_f() {
                 && crate::src::qcommon::common::Com_Filter(
                     match_0,
                     (*var).name,
-                    crate::src::qcommon::q_shared::qfalse as libc::c_int,
+                    crate::src::qcommon::q_shared::qfalse as i32,
                 ) == 0)
         {
-            if (*var).flags & 0x4 as libc::c_int != 0 {
+            if (*var).flags & 0x4 as i32 != 0 {
                 crate::src::qcommon::common::Com_Printf(
                     b"S\x00" as *const u8 as *const libc::c_char,
                 );
@@ -1311,7 +1311,7 @@ pub unsafe extern "C" fn Cvar_List_f() {
                     b" \x00" as *const u8 as *const libc::c_char,
                 );
             }
-            if (*var).flags & 0x8 as libc::c_int != 0 {
+            if (*var).flags & 0x8 as i32 != 0 {
                 crate::src::qcommon::common::Com_Printf(
                     b"s\x00" as *const u8 as *const libc::c_char,
                 );
@@ -1320,7 +1320,7 @@ pub unsafe extern "C" fn Cvar_List_f() {
                     b" \x00" as *const u8 as *const libc::c_char,
                 );
             }
-            if (*var).flags & 0x2 as libc::c_int != 0 {
+            if (*var).flags & 0x2 as i32 != 0 {
                 crate::src::qcommon::common::Com_Printf(
                     b"U\x00" as *const u8 as *const libc::c_char,
                 );
@@ -1329,7 +1329,7 @@ pub unsafe extern "C" fn Cvar_List_f() {
                     b" \x00" as *const u8 as *const libc::c_char,
                 );
             }
-            if (*var).flags & 0x40 as libc::c_int != 0 {
+            if (*var).flags & 0x40 as i32 != 0 {
                 crate::src::qcommon::common::Com_Printf(
                     b"R\x00" as *const u8 as *const libc::c_char,
                 );
@@ -1338,7 +1338,7 @@ pub unsafe extern "C" fn Cvar_List_f() {
                     b" \x00" as *const u8 as *const libc::c_char,
                 );
             }
-            if (*var).flags & 0x10 as libc::c_int != 0 {
+            if (*var).flags & 0x10 as i32 != 0 {
                 crate::src::qcommon::common::Com_Printf(
                     b"I\x00" as *const u8 as *const libc::c_char,
                 );
@@ -1347,7 +1347,7 @@ pub unsafe extern "C" fn Cvar_List_f() {
                     b" \x00" as *const u8 as *const libc::c_char,
                 );
             }
-            if (*var).flags & 0x1 as libc::c_int != 0 {
+            if (*var).flags & 0x1 as i32 != 0 {
                 crate::src::qcommon::common::Com_Printf(
                     b"A\x00" as *const u8 as *const libc::c_char,
                 );
@@ -1356,7 +1356,7 @@ pub unsafe extern "C" fn Cvar_List_f() {
                     b" \x00" as *const u8 as *const libc::c_char,
                 );
             }
-            if (*var).flags & 0x20 as libc::c_int != 0 {
+            if (*var).flags & 0x20 as i32 != 0 {
                 crate::src::qcommon::common::Com_Printf(
                     b"L\x00" as *const u8 as *const libc::c_char,
                 );
@@ -1365,7 +1365,7 @@ pub unsafe extern "C" fn Cvar_List_f() {
                     b" \x00" as *const u8 as *const libc::c_char,
                 );
             }
-            if (*var).flags & 0x200 as libc::c_int != 0 {
+            if (*var).flags & 0x200 as i32 != 0 {
                 crate::src::qcommon::common::Com_Printf(
                     b"C\x00" as *const u8 as *const libc::c_char,
                 );
@@ -1374,7 +1374,7 @@ pub unsafe extern "C" fn Cvar_List_f() {
                     b" \x00" as *const u8 as *const libc::c_char,
                 );
             }
-            if (*var).flags & 0x80 as libc::c_int != 0 {
+            if (*var).flags & 0x80 as i32 != 0 {
                 crate::src::qcommon::common::Com_Printf(
                     b"?\x00" as *const u8 as *const libc::c_char,
                 );
@@ -1411,15 +1411,15 @@ Cvar_ListModified_f
 pub unsafe extern "C" fn Cvar_ListModified_f() {
     let mut var: *mut crate::src::qcommon::q_shared::cvar_t =
         0 as *mut crate::src::qcommon::q_shared::cvar_t;
-    let mut totalModified: libc::c_int = 0;
+    let mut totalModified: i32 = 0;
     let mut value: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut match_0: *mut libc::c_char = 0 as *mut libc::c_char;
-    if crate::src::qcommon::cmd::Cmd_Argc() > 1 as libc::c_int {
-        match_0 = crate::src::qcommon::cmd::Cmd_Argv(1 as libc::c_int)
+    if crate::src::qcommon::cmd::Cmd_Argc() > 1 as i32 {
+        match_0 = crate::src::qcommon::cmd::Cmd_Argv(1 as i32)
     } else {
         match_0 = 0 as *mut libc::c_char
     }
-    totalModified = 0 as libc::c_int;
+    totalModified = 0 as i32;
     var = cvar_vars;
     while !var.is_null() {
         if !((*var).name.is_null() || (*var).modificationCount == 0) {
@@ -1434,10 +1434,10 @@ pub unsafe extern "C" fn Cvar_ListModified_f() {
                     && crate::src::qcommon::common::Com_Filter(
                         match_0,
                         (*var).name,
-                        crate::src::qcommon::q_shared::qfalse as libc::c_int,
+                        crate::src::qcommon::q_shared::qfalse as i32,
                     ) == 0)
                 {
-                    if (*var).flags & 0x4 as libc::c_int != 0 {
+                    if (*var).flags & 0x4 as i32 != 0 {
                         crate::src::qcommon::common::Com_Printf(
                             b"S\x00" as *const u8 as *const libc::c_char,
                         );
@@ -1446,7 +1446,7 @@ pub unsafe extern "C" fn Cvar_ListModified_f() {
                             b" \x00" as *const u8 as *const libc::c_char,
                         );
                     }
-                    if (*var).flags & 0x8 as libc::c_int != 0 {
+                    if (*var).flags & 0x8 as i32 != 0 {
                         crate::src::qcommon::common::Com_Printf(
                             b"s\x00" as *const u8 as *const libc::c_char,
                         );
@@ -1455,7 +1455,7 @@ pub unsafe extern "C" fn Cvar_ListModified_f() {
                             b" \x00" as *const u8 as *const libc::c_char,
                         );
                     }
-                    if (*var).flags & 0x2 as libc::c_int != 0 {
+                    if (*var).flags & 0x2 as i32 != 0 {
                         crate::src::qcommon::common::Com_Printf(
                             b"U\x00" as *const u8 as *const libc::c_char,
                         );
@@ -1464,7 +1464,7 @@ pub unsafe extern "C" fn Cvar_ListModified_f() {
                             b" \x00" as *const u8 as *const libc::c_char,
                         );
                     }
-                    if (*var).flags & 0x40 as libc::c_int != 0 {
+                    if (*var).flags & 0x40 as i32 != 0 {
                         crate::src::qcommon::common::Com_Printf(
                             b"R\x00" as *const u8 as *const libc::c_char,
                         );
@@ -1473,7 +1473,7 @@ pub unsafe extern "C" fn Cvar_ListModified_f() {
                             b" \x00" as *const u8 as *const libc::c_char,
                         );
                     }
-                    if (*var).flags & 0x10 as libc::c_int != 0 {
+                    if (*var).flags & 0x10 as i32 != 0 {
                         crate::src::qcommon::common::Com_Printf(
                             b"I\x00" as *const u8 as *const libc::c_char,
                         );
@@ -1482,7 +1482,7 @@ pub unsafe extern "C" fn Cvar_ListModified_f() {
                             b" \x00" as *const u8 as *const libc::c_char,
                         );
                     }
-                    if (*var).flags & 0x1 as libc::c_int != 0 {
+                    if (*var).flags & 0x1 as i32 != 0 {
                         crate::src::qcommon::common::Com_Printf(
                             b"A\x00" as *const u8 as *const libc::c_char,
                         );
@@ -1491,7 +1491,7 @@ pub unsafe extern "C" fn Cvar_ListModified_f() {
                             b" \x00" as *const u8 as *const libc::c_char,
                         );
                     }
-                    if (*var).flags & 0x20 as libc::c_int != 0 {
+                    if (*var).flags & 0x20 as i32 != 0 {
                         crate::src::qcommon::common::Com_Printf(
                             b"L\x00" as *const u8 as *const libc::c_char,
                         );
@@ -1500,7 +1500,7 @@ pub unsafe extern "C" fn Cvar_ListModified_f() {
                             b" \x00" as *const u8 as *const libc::c_char,
                         );
                     }
-                    if (*var).flags & 0x200 as libc::c_int != 0 {
+                    if (*var).flags & 0x200 as i32 != 0 {
                         crate::src::qcommon::common::Com_Printf(
                             b"C\x00" as *const u8 as *const libc::c_char,
                         );
@@ -1509,7 +1509,7 @@ pub unsafe extern "C" fn Cvar_ListModified_f() {
                             b" \x00" as *const u8 as *const libc::c_char,
                         );
                     }
-                    if (*var).flags & 0x80 as libc::c_int != 0 {
+                    if (*var).flags & 0x80 as i32 != 0 {
                         crate::src::qcommon::common::Com_Printf(
                             b"?\x00" as *const u8 as *const libc::c_char,
                         );
@@ -1599,24 +1599,24 @@ Unsets a userdefined cvar
 pub unsafe extern "C" fn Cvar_Unset_f() {
     let mut cv: *mut crate::src::qcommon::q_shared::cvar_t =
         0 as *mut crate::src::qcommon::q_shared::cvar_t;
-    if crate::src::qcommon::cmd::Cmd_Argc() != 2 as libc::c_int {
+    if crate::src::qcommon::cmd::Cmd_Argc() != 2 as i32 {
         crate::src::qcommon::common::Com_Printf(
             b"Usage: %s <varname>\n\x00" as *const u8 as *const libc::c_char,
-            crate::src::qcommon::cmd::Cmd_Argv(0 as libc::c_int),
+            crate::src::qcommon::cmd::Cmd_Argv(0 as i32),
         );
         return;
     }
-    cv = Cvar_FindVar(crate::src::qcommon::cmd::Cmd_Argv(1 as libc::c_int));
+    cv = Cvar_FindVar(crate::src::qcommon::cmd::Cmd_Argv(1 as i32));
     if cv.is_null() {
         return;
     }
-    if (*cv).flags & 0x80 as libc::c_int != 0 {
+    if (*cv).flags & 0x80 as i32 != 0 {
         Cvar_Unset(cv);
     } else {
         crate::src::qcommon::common::Com_Printf(
             b"Error: %s: Variable %s is not user created.\n\x00" as *const u8
                 as *const libc::c_char,
-            crate::src::qcommon::cmd::Cmd_Argv(0 as libc::c_int),
+            crate::src::qcommon::cmd::Cmd_Argv(0 as i32),
             (*cv).name,
         );
     };
@@ -1636,13 +1636,13 @@ pub unsafe extern "C" fn Cvar_Restart(mut unsetVM: crate::src::qcommon::q_shared
         0 as *mut crate::src::qcommon::q_shared::cvar_t;
     curvar = cvar_vars;
     while !curvar.is_null() {
-        if (*curvar).flags & 0x80 as libc::c_int != 0
-            || unsetVM as libc::c_uint != 0 && (*curvar).flags & 0x1000 as libc::c_int != 0
+        if (*curvar).flags & 0x80 as i32 != 0
+            || unsetVM as u32 != 0 && (*curvar).flags & 0x1000 as i32 != 0
         {
             // throw out any variables the user/vm created
             curvar = Cvar_Unset(curvar)
         } else {
-            if (*curvar).flags & (0x40 as libc::c_int | 0x10 as libc::c_int | 0x400 as libc::c_int)
+            if (*curvar).flags & (0x40 as i32 | 0x10 as i32 | 0x400 as i32)
                 == 0
             {
                 // Just reset the rest to their default values.
@@ -1675,11 +1675,11 @@ Cvar_InfoString
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Cvar_InfoString(mut bit: libc::c_int) -> *mut libc::c_char {
+pub unsafe extern "C" fn Cvar_InfoString(mut bit: i32) -> *mut libc::c_char {
     static mut info: [libc::c_char; 1024] = [0; 1024];
     let mut var: *mut crate::src::qcommon::q_shared::cvar_t =
         0 as *mut crate::src::qcommon::q_shared::cvar_t;
-    info[0 as libc::c_int as usize] = 0 as libc::c_int as libc::c_char;
+    info[0 as i32 as usize] = 0 as i32 as libc::c_char;
     var = cvar_vars;
     while !var.is_null() {
         if !(*var).name.is_null() && (*var).flags & bit != 0 {
@@ -1702,11 +1702,11 @@ Cvar_InfoString_Big
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Cvar_InfoString_Big(mut bit: libc::c_int) -> *mut libc::c_char {
+pub unsafe extern "C" fn Cvar_InfoString_Big(mut bit: i32) -> *mut libc::c_char {
     static mut info: [libc::c_char; 8192] = [0; 8192];
     let mut var: *mut crate::src::qcommon::q_shared::cvar_t =
         0 as *mut crate::src::qcommon::q_shared::cvar_t;
-    info[0 as libc::c_int as usize] = 0 as libc::c_int as libc::c_char;
+    info[0 as i32 as usize] = 0 as i32 as libc::c_char;
     var = cvar_vars;
     while !var.is_null() {
         if !(*var).name.is_null() && (*var).flags & bit != 0 {
@@ -1730,9 +1730,9 @@ Cvar_InfoStringBuffer
 #[no_mangle]
 
 pub unsafe extern "C" fn Cvar_InfoStringBuffer(
-    mut bit: libc::c_int,
+    mut bit: i32,
     mut buff: *mut libc::c_char,
-    mut buffsize: libc::c_int,
+    mut buffsize: i32,
 ) {
     crate::src::qcommon::q_shared::Q_strncpyz(buff, Cvar_InfoString(bit), buffsize);
 }
@@ -1745,8 +1745,8 @@ Cvar_CheckRange
 
 pub unsafe extern "C" fn Cvar_CheckRange(
     mut var: *mut crate::src::qcommon::q_shared::cvar_t,
-    mut min: libc::c_float,
-    mut max: libc::c_float,
+    mut min: f32,
+    mut max: f32,
     mut integral: crate::src::qcommon::q_shared::qboolean,
 ) {
     (*var).validate = crate::src::qcommon::q_shared::qtrue;
@@ -1768,7 +1768,7 @@ pub unsafe extern "C" fn Cvar_SetDescription(
     mut var_description: *const libc::c_char,
 ) {
     if !var_description.is_null()
-        && *var_description.offset(0 as libc::c_int as isize) as libc::c_int != '\u{0}' as i32
+        && *var_description.offset(0 as i32 as isize) as i32 != '\u{0}' as i32
     {
         if !(*var).description.is_null() {
             crate::src::qcommon::common::Z_Free((*var).description as *mut libc::c_void);
@@ -1793,7 +1793,7 @@ pub unsafe extern "C" fn Cvar_Register(
     mut vmCvar: *mut crate::src::qcommon::q_shared::vmCvar_t,
     mut varName: *const libc::c_char,
     mut defaultValue: *const libc::c_char,
-    mut flags: libc::c_int,
+    mut flags: i32,
 ) {
     let mut cv: *mut crate::src::qcommon::q_shared::cvar_t =
         0 as *mut crate::src::qcommon::q_shared::cvar_t;
@@ -1801,80 +1801,80 @@ pub unsafe extern "C" fn Cvar_Register(
     // user. In other words CVAR_ARCHIVE and CVAR_ROM are mutually exclusive
     // flags. Unfortunately some historical game code (including single player
     // baseq3) sets both flags. We unset CVAR_ROM for such cvars.
-    if flags & (0x1 as libc::c_int | 0x40 as libc::c_int)
-        == 0x1 as libc::c_int | 0x40 as libc::c_int
+    if flags & (0x1 as i32 | 0x40 as i32)
+        == 0x1 as i32 | 0x40 as i32
     {
         crate::src::qcommon::common::Com_DPrintf(
             b"^3WARNING: Unsetting CVAR_ROM from cvar \'%s\', since it is also CVAR_ARCHIVE\n\x00"
                 as *const u8 as *const libc::c_char,
             varName,
         );
-        flags &= !(0x40 as libc::c_int)
+        flags &= !(0x40 as i32)
     }
     // Don't allow VM to specific a different creator or other internal flags.
-    if flags & 0x80 as libc::c_int != 0 {
+    if flags & 0x80 as i32 != 0 {
         crate::src::qcommon::common::Com_DPrintf(
             b"^3WARNING: VM tried to set CVAR_USER_CREATED on cvar \'%s\'\n\x00" as *const u8
                 as *const libc::c_char,
             varName,
         );
-        flags &= !(0x80 as libc::c_int)
+        flags &= !(0x80 as i32)
     }
-    if flags & 0x800 as libc::c_int != 0 {
+    if flags & 0x800 as i32 != 0 {
         crate::src::qcommon::common::Com_DPrintf(
             b"^3WARNING: VM tried to set CVAR_SERVER_CREATED on cvar \'%s\'\n\x00" as *const u8
                 as *const libc::c_char,
             varName,
         );
-        flags &= !(0x800 as libc::c_int)
+        flags &= !(0x800 as i32)
     }
-    if flags & 0x2000 as libc::c_int != 0 {
+    if flags & 0x2000 as i32 != 0 {
         crate::src::qcommon::common::Com_DPrintf(
             b"^3WARNING: VM tried to set CVAR_PROTECTED on cvar \'%s\'\n\x00" as *const u8
                 as *const libc::c_char,
             varName,
         );
-        flags &= !(0x2000 as libc::c_int)
+        flags &= !(0x2000 as i32)
     }
-    if flags & 0x40000000 as libc::c_int != 0 {
+    if flags & 0x40000000 as i32 != 0 {
         crate::src::qcommon::common::Com_DPrintf(
             b"^3WARNING: VM tried to set CVAR_MODIFIED on cvar \'%s\'\n\x00" as *const u8
                 as *const libc::c_char,
             varName,
         );
-        flags &= !(0x40000000 as libc::c_int)
+        flags &= !(0x40000000 as i32)
     }
-    if flags as libc::c_uint & 0x80000000 as libc::c_uint != 0 {
+    if flags as u32 & 0x80000000 as u32 != 0 {
         crate::src::qcommon::common::Com_DPrintf(
             b"^3WARNING: VM tried to set CVAR_NONEXISTENT on cvar \'%s\'\n\x00" as *const u8
                 as *const libc::c_char,
             varName,
         );
-        flags = (flags as libc::c_uint & !(0x80000000 as libc::c_uint)) as libc::c_int
+        flags = (flags as u32 & !(0x80000000 as u32)) as i32
     }
     cv = Cvar_FindVar(varName);
     // Don't modify cvar if it's protected.
-    if !cv.is_null() && (*cv).flags & 0x2000 as libc::c_int != 0 {
+    if !cv.is_null() && (*cv).flags & 0x2000 as i32 != 0 {
         crate::src::qcommon::common::Com_DPrintf(
             b"^3WARNING: VM tried to register protected cvar \'%s\' with value \'%s\'%s\n\x00"
                 as *const u8 as *const libc::c_char,
             varName,
             defaultValue,
-            if flags & !(*cv).flags != 0 as libc::c_int {
+            if flags & !(*cv).flags != 0 as i32 {
                 b" and new flags\x00" as *const u8 as *const libc::c_char
             } else {
                 b"\x00" as *const u8 as *const libc::c_char
             },
         );
     } else {
-        cv = Cvar_Get(varName, defaultValue, flags | 0x1000 as libc::c_int)
+        cv = Cvar_Get(varName, defaultValue, flags | 0x1000 as i32)
     }
     if vmCvar.is_null() {
         return;
     }
     (*vmCvar).handle = cv.offset_from(cvar_indexes.as_mut_ptr()) as libc::c_long
         as crate::src::qcommon::q_shared::cvarHandle_t;
-    (*vmCvar).modificationCount = -(1 as libc::c_int);
+    (*vmCvar).modificationCount = -(1 as i32);
     Cvar_Update(vmCvar);
 }
 // basically a slightly modified Cvar_Get for the interpreted modules
@@ -1890,9 +1890,9 @@ updates an interpreted modules' version of a cvar
 pub unsafe extern "C" fn Cvar_Update(mut vmCvar: *mut crate::src::qcommon::q_shared::vmCvar_t) {
     let mut cv: *mut crate::src::qcommon::q_shared::cvar_t =
         0 as *mut crate::src::qcommon::q_shared::cvar_t;
-    if (*vmCvar).handle as libc::c_uint >= cvar_numIndexes as libc::c_uint {
+    if (*vmCvar).handle as u32 >= cvar_numIndexes as u32 {
         crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"Cvar_Update: handle out of range\x00" as *const u8 as *const libc::c_char,
         );
     }
@@ -1905,21 +1905,21 @@ pub unsafe extern "C" fn Cvar_Update(mut vmCvar: *mut crate::src::qcommon::q_sha
         // variable might have been cleared by a cvar_restart
     }
     (*vmCvar).modificationCount = (*cv).modificationCount;
-    if crate::stdlib::strlen((*cv).string).wrapping_add(1 as libc::c_int as libc::c_ulong)
-        > 256 as libc::c_int as libc::c_ulong
+    if crate::stdlib::strlen((*cv).string).wrapping_add(1 as i32 as libc::c_ulong)
+        > 256 as i32 as libc::c_ulong
     {
         crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"Cvar_Update: src %s length %u exceeds MAX_CVAR_VALUE_STRING\x00" as *const u8
                 as *const libc::c_char,
             (*cv).string,
-            crate::stdlib::strlen((*cv).string) as libc::c_uint,
+            crate::stdlib::strlen((*cv).string) as u32,
         );
     }
     crate::src::qcommon::q_shared::Q_strncpyz(
         (*vmCvar).string.as_mut_ptr(),
         (*cv).string,
-        256 as libc::c_int,
+        256 as i32,
     );
     (*vmCvar).value = (*cv).value;
     (*vmCvar).integer = (*cv).integer;
@@ -1933,13 +1933,13 @@ Cvar_CompleteCvarName
 
 pub unsafe extern "C" fn Cvar_CompleteCvarName(
     mut args: *mut libc::c_char,
-    mut argNum: libc::c_int,
+    mut argNum: i32,
 ) {
-    if argNum == 2 as libc::c_int {
+    if argNum == 2 as i32 {
         // Skip "<cmd> "
         let mut p: *mut libc::c_char = crate::src::qcommon::q_shared::Com_SkipTokens(
             args,
-            1 as libc::c_int,
+            1 as i32,
             b" \x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         );
         if p > args {
@@ -1976,7 +1976,7 @@ pub unsafe extern "C" fn Cvar_Init() {
     cvar_cheats = Cvar_Get(
         b"sv_cheats\x00" as *const u8 as *const libc::c_char,
         b"1\x00" as *const u8 as *const libc::c_char,
-        0x40 as libc::c_int | 0x8 as libc::c_int,
+        0x40 as i32 | 0x8 as i32,
     );
     crate::src::qcommon::cmd::Cmd_AddCommand(
         b"print\x00" as *const u8 as *const libc::c_char,
@@ -1990,7 +1990,7 @@ pub unsafe extern "C" fn Cvar_Init() {
         b"toggle\x00" as *const u8 as *const libc::c_char,
         Some(
             Cvar_CompleteCvarName
-                as unsafe extern "C" fn(_: *mut libc::c_char, _: libc::c_int) -> (),
+                as unsafe extern "C" fn(_: *mut libc::c_char, _: i32) -> (),
         ),
     );
     crate::src::qcommon::cmd::Cmd_AddCommand(
@@ -2001,7 +2001,7 @@ pub unsafe extern "C" fn Cvar_Init() {
         b"set\x00" as *const u8 as *const libc::c_char,
         Some(
             Cvar_CompleteCvarName
-                as unsafe extern "C" fn(_: *mut libc::c_char, _: libc::c_int) -> (),
+                as unsafe extern "C" fn(_: *mut libc::c_char, _: i32) -> (),
         ),
     );
     crate::src::qcommon::cmd::Cmd_AddCommand(
@@ -2012,7 +2012,7 @@ pub unsafe extern "C" fn Cvar_Init() {
         b"sets\x00" as *const u8 as *const libc::c_char,
         Some(
             Cvar_CompleteCvarName
-                as unsafe extern "C" fn(_: *mut libc::c_char, _: libc::c_int) -> (),
+                as unsafe extern "C" fn(_: *mut libc::c_char, _: i32) -> (),
         ),
     );
     crate::src::qcommon::cmd::Cmd_AddCommand(
@@ -2023,7 +2023,7 @@ pub unsafe extern "C" fn Cvar_Init() {
         b"setu\x00" as *const u8 as *const libc::c_char,
         Some(
             Cvar_CompleteCvarName
-                as unsafe extern "C" fn(_: *mut libc::c_char, _: libc::c_int) -> (),
+                as unsafe extern "C" fn(_: *mut libc::c_char, _: i32) -> (),
         ),
     );
     crate::src::qcommon::cmd::Cmd_AddCommand(
@@ -2034,7 +2034,7 @@ pub unsafe extern "C" fn Cvar_Init() {
         b"seta\x00" as *const u8 as *const libc::c_char,
         Some(
             Cvar_CompleteCvarName
-                as unsafe extern "C" fn(_: *mut libc::c_char, _: libc::c_int) -> (),
+                as unsafe extern "C" fn(_: *mut libc::c_char, _: i32) -> (),
         ),
     );
     crate::src::qcommon::cmd::Cmd_AddCommand(
@@ -2045,7 +2045,7 @@ pub unsafe extern "C" fn Cvar_Init() {
         b"reset\x00" as *const u8 as *const libc::c_char,
         Some(
             Cvar_CompleteCvarName
-                as unsafe extern "C" fn(_: *mut libc::c_char, _: libc::c_int) -> (),
+                as unsafe extern "C" fn(_: *mut libc::c_char, _: i32) -> (),
         ),
     );
     crate::src::qcommon::cmd::Cmd_AddCommand(
@@ -2056,7 +2056,7 @@ pub unsafe extern "C" fn Cvar_Init() {
         b"unset\x00" as *const u8 as *const libc::c_char,
         Some(
             Cvar_CompleteCvarName
-                as unsafe extern "C" fn(_: *mut libc::c_char, _: libc::c_int) -> (),
+                as unsafe extern "C" fn(_: *mut libc::c_char, _: i32) -> (),
         ),
     );
     crate::src::qcommon::cmd::Cmd_AddCommand(

@@ -320,19 +320,19 @@ POSSIBILITY OF SUCH DAMAGE.
 pub unsafe extern "C" fn silk_decode_indices(
     mut psDec: *mut crate::structs_h::silk_decoder_state,
     mut psRangeDec: *mut crate::src::opus_1_2_1::celt::entcode::ec_dec,
-    mut FrameIndex: libc::c_int,
-    mut decode_LBRR: libc::c_int,
-    mut condCoding: libc::c_int,
+    mut FrameIndex: i32,
+    mut decode_LBRR: i32,
+    mut condCoding: i32,
 )
 /* I    The type of conditional coding to use       */
 {
-    let mut i: libc::c_int = 0;
-    let mut k: libc::c_int = 0;
-    let mut Ix: libc::c_int = 0;
-    let mut decode_absolute_lagIndex: libc::c_int = 0;
-    let mut delta_lagIndex: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut k: i32 = 0;
+    let mut Ix: i32 = 0;
+    let mut decode_absolute_lagIndex: i32 = 0;
+    let mut delta_lagIndex: i32 = 0;
     let mut ec_ix: [crate::opus_types_h::opus_int16; 16] = [0; 16];
-    let mut pred_Q8: [libc::c_uchar; 16] = [0; 16];
+    let mut pred_Q8: [u8; 16] = [0; 16];
     /* ******************************************/
     /* Decode signal type and quantizer offset */
     /* ******************************************/
@@ -340,134 +340,134 @@ pub unsafe extern "C" fn silk_decode_indices(
         Ix = crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
             psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
             crate::src::opus_1_2_1::silk::tables_other::silk_type_offset_VAD_iCDF.as_ptr(),
-            8 as libc::c_int as libc::c_uint,
-        ) + 2 as libc::c_int
+            8 as i32 as u32,
+        ) + 2 as i32
     } else {
         Ix = crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
             psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
             crate::src::opus_1_2_1::silk::tables_other::silk_type_offset_no_VAD_iCDF.as_ptr(),
-            8 as libc::c_int as libc::c_uint,
+            8 as i32 as u32,
         )
     }
-    (*psDec).indices.signalType = (Ix >> 1 as libc::c_int) as libc::c_schar;
-    (*psDec).indices.quantOffsetType = (Ix & 1 as libc::c_int) as libc::c_schar;
+    (*psDec).indices.signalType = (Ix >> 1 as i32) as i8;
+    (*psDec).indices.quantOffsetType = (Ix & 1 as i32) as i8;
     /* ***************/
     /* Decode gains */
     /* ***************/
     /* First subframe */
-    if condCoding == 2 as libc::c_int {
+    if condCoding == 2 as i32 {
         /* Conditional coding */
-        (*psDec).indices.GainsIndices[0 as libc::c_int as usize] =
+        (*psDec).indices.GainsIndices[0 as i32 as usize] =
             crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
                 psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
                 crate::src::opus_1_2_1::silk::tables_gain::silk_delta_gain_iCDF.as_ptr(),
-                8 as libc::c_int as libc::c_uint,
-            ) as libc::c_schar
+                8 as i32 as u32,
+            ) as i8
     } else {
         /* Independent coding, in two stages: MSB bits followed by 3 LSBs */
-        (*psDec).indices.GainsIndices[0 as libc::c_int as usize] =
+        (*psDec).indices.GainsIndices[0 as i32 as usize] =
             ((crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
                 psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
                 crate::src::opus_1_2_1::silk::tables_gain::silk_gain_iCDF
                     [(*psDec).indices.signalType as usize]
                     .as_ptr(),
-                8 as libc::c_int as libc::c_uint,
+                8 as i32 as u32,
             ) as crate::opus_types_h::opus_uint32)
-                << 3 as libc::c_int) as crate::opus_types_h::opus_int32
-                as libc::c_schar;
-        (*psDec).indices.GainsIndices[0 as libc::c_int as usize] =
-            ((*psDec).indices.GainsIndices[0 as libc::c_int as usize] as libc::c_int
+                << 3 as i32) as crate::opus_types_h::opus_int32
+                as i8;
+        (*psDec).indices.GainsIndices[0 as i32 as usize] =
+            ((*psDec).indices.GainsIndices[0 as i32 as usize] as i32
                 + crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
                     psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
                     crate::src::opus_1_2_1::silk::tables_other::silk_uniform8_iCDF.as_ptr(),
-                    8 as libc::c_int as libc::c_uint,
-                ) as libc::c_schar as libc::c_int) as libc::c_schar
+                    8 as i32 as u32,
+                ) as i8 as i32) as i8
     }
     /* Remaining subframes */
-    i = 1 as libc::c_int;
+    i = 1 as i32;
     while i < (*psDec).nb_subfr {
         (*psDec).indices.GainsIndices[i as usize] =
             crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
                 psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
                 crate::src::opus_1_2_1::silk::tables_gain::silk_delta_gain_iCDF.as_ptr(),
-                8 as libc::c_int as libc::c_uint,
-            ) as libc::c_schar;
+                8 as i32 as u32,
+            ) as i8;
         i += 1
     }
     /* *********************/
     /* Decode LSF Indices */
     /* *********************/
-    (*psDec).indices.NLSFIndices[0 as libc::c_int as usize] =
+    (*psDec).indices.NLSFIndices[0 as i32 as usize] =
         crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
             psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
             &*(*(*psDec).psNLSF_CB).CB1_iCDF.offset(
-                (((*psDec).indices.signalType as libc::c_int >> 1 as libc::c_int)
-                    * (*(*psDec).psNLSF_CB).nVectors as libc::c_int) as isize,
+                (((*psDec).indices.signalType as i32 >> 1 as i32)
+                    * (*(*psDec).psNLSF_CB).nVectors as i32) as isize,
             ),
-            8 as libc::c_int as libc::c_uint,
-        ) as libc::c_schar;
+            8 as i32 as u32,
+        ) as i8;
     crate::src::opus_1_2_1::silk::NLSF_unpack::silk_NLSF_unpack(
         ec_ix.as_mut_ptr(),
         pred_Q8.as_mut_ptr(),
         (*psDec).psNLSF_CB as *const crate::structs_h::silk_NLSF_CB_struct,
-        (*psDec).indices.NLSFIndices[0 as libc::c_int as usize] as libc::c_int,
+        (*psDec).indices.NLSFIndices[0 as i32 as usize] as i32,
     );
-    i = 0 as libc::c_int;
-    while i < (*(*psDec).psNLSF_CB).order as libc::c_int {
+    i = 0 as i32;
+    while i < (*(*psDec).psNLSF_CB).order as i32 {
         Ix = crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
             psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
             &*(*(*psDec).psNLSF_CB)
                 .ec_iCDF
                 .offset(*ec_ix.as_mut_ptr().offset(i as isize) as isize),
-            8 as libc::c_int as libc::c_uint,
+            8 as i32 as u32,
         );
-        if Ix == 0 as libc::c_int {
+        if Ix == 0 as i32 {
             Ix -= crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
                 psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
                 crate::src::opus_1_2_1::silk::tables_other::silk_NLSF_EXT_iCDF.as_ptr(),
-                8 as libc::c_int as libc::c_uint,
+                8 as i32 as u32,
             )
-        } else if Ix == 2 as libc::c_int * 4 as libc::c_int {
+        } else if Ix == 2 as i32 * 4 as i32 {
             Ix += crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
                 psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
                 crate::src::opus_1_2_1::silk::tables_other::silk_NLSF_EXT_iCDF.as_ptr(),
-                8 as libc::c_int as libc::c_uint,
+                8 as i32 as u32,
             )
         }
-        (*psDec).indices.NLSFIndices[(i + 1 as libc::c_int) as usize] =
-            (Ix - 4 as libc::c_int) as libc::c_schar;
+        (*psDec).indices.NLSFIndices[(i + 1 as i32) as usize] =
+            (Ix - 4 as i32) as i8;
         i += 1
     }
     /* Decode LSF interpolation factor */
-    if (*psDec).nb_subfr == 4 as libc::c_int {
+    if (*psDec).nb_subfr == 4 as i32 {
         (*psDec).indices.NLSFInterpCoef_Q2 = crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
             psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
             crate::src::opus_1_2_1::silk::tables_other::silk_NLSF_interpolation_factor_iCDF
                 .as_ptr(),
-            8 as libc::c_int as libc::c_uint,
-        ) as libc::c_schar
+            8 as i32 as u32,
+        ) as i8
     } else {
-        (*psDec).indices.NLSFInterpCoef_Q2 = 4 as libc::c_int as libc::c_schar
+        (*psDec).indices.NLSFInterpCoef_Q2 = 4 as i32 as i8
     }
-    if (*psDec).indices.signalType as libc::c_int == 2 as libc::c_int {
+    if (*psDec).indices.signalType as i32 == 2 as i32 {
         /* ********************/
         /* Decode pitch lags */
         /* ********************/
         /* Get lag index */
-        decode_absolute_lagIndex = 1 as libc::c_int;
-        if condCoding == 2 as libc::c_int && (*psDec).ec_prevSignalType == 2 as libc::c_int {
+        decode_absolute_lagIndex = 1 as i32;
+        if condCoding == 2 as i32 && (*psDec).ec_prevSignalType == 2 as i32 {
             /* Decode Delta index */
             delta_lagIndex = crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
                 psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
                 crate::src::opus_1_2_1::silk::tables_pitch_lag::silk_pitch_delta_iCDF.as_ptr(),
-                8 as libc::c_int as libc::c_uint,
-            ) as crate::opus_types_h::opus_int16 as libc::c_int;
-            if delta_lagIndex > 0 as libc::c_int {
-                delta_lagIndex = delta_lagIndex - 9 as libc::c_int;
-                (*psDec).indices.lagIndex = ((*psDec).ec_prevLagIndex as libc::c_int
+                8 as i32 as u32,
+            ) as crate::opus_types_h::opus_int16 as i32;
+            if delta_lagIndex > 0 as i32 {
+                delta_lagIndex = delta_lagIndex - 9 as i32;
+                (*psDec).indices.lagIndex = ((*psDec).ec_prevLagIndex as i32
                     + delta_lagIndex)
                     as crate::opus_types_h::opus_int16;
-                decode_absolute_lagIndex = 0 as libc::c_int
+                decode_absolute_lagIndex = 0 as i32
             }
         }
         if decode_absolute_lagIndex != 0 {
@@ -475,17 +475,17 @@ pub unsafe extern "C" fn silk_decode_indices(
             (*psDec).indices.lagIndex = (crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
                 psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
                 crate::src::opus_1_2_1::silk::tables_pitch_lag::silk_pitch_lag_iCDF.as_ptr(),
-                8 as libc::c_int as libc::c_uint,
+                8 as i32 as u32,
             ) as crate::opus_types_h::opus_int16
-                as libc::c_int
-                * ((*psDec).fs_kHz >> 1 as libc::c_int))
+                as i32
+                * ((*psDec).fs_kHz >> 1 as i32))
                 as crate::opus_types_h::opus_int16;
-            (*psDec).indices.lagIndex = ((*psDec).indices.lagIndex as libc::c_int
+            (*psDec).indices.lagIndex = ((*psDec).indices.lagIndex as i32
                 + crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
                     psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
                     (*psDec).pitch_lag_low_bits_iCDF,
-                    8 as libc::c_int as libc::c_uint,
-                ) as crate::opus_types_h::opus_int16 as libc::c_int)
+                    8 as i32 as u32,
+                ) as crate::opus_types_h::opus_int16 as i32)
                 as crate::opus_types_h::opus_int16
         }
         (*psDec).ec_prevLagIndex = (*psDec).indices.lagIndex;
@@ -493,8 +493,8 @@ pub unsafe extern "C" fn silk_decode_indices(
         (*psDec).indices.contourIndex = crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
             psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
             (*psDec).pitch_contour_iCDF,
-            8 as libc::c_int as libc::c_uint,
-        ) as libc::c_schar;
+            8 as i32 as u32,
+        ) as i8;
         /* *******************/
         /* Decode LTP gains */
         /* *******************/
@@ -502,39 +502,39 @@ pub unsafe extern "C" fn silk_decode_indices(
         (*psDec).indices.PERIndex = crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
             psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
             crate::src::opus_1_2_1::silk::tables_LTP::silk_LTP_per_index_iCDF.as_ptr(),
-            8 as libc::c_int as libc::c_uint,
-        ) as libc::c_schar;
-        k = 0 as libc::c_int;
+            8 as i32 as u32,
+        ) as i8;
+        k = 0 as i32;
         while k < (*psDec).nb_subfr {
             (*psDec).indices.LTPIndex[k as usize] =
                 crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
                     psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
                     crate::src::opus_1_2_1::silk::tables_LTP::silk_LTP_gain_iCDF_ptrs
                         [(*psDec).indices.PERIndex as usize],
-                    8 as libc::c_int as libc::c_uint,
-                ) as libc::c_schar;
+                    8 as i32 as u32,
+                ) as i8;
             k += 1
         }
         /* *********************/
         /* Decode LTP scaling */
         /* *********************/
-        if condCoding == 0 as libc::c_int {
+        if condCoding == 0 as i32 {
             (*psDec).indices.LTP_scaleIndex = crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
                 psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
                 crate::src::opus_1_2_1::silk::tables_other::silk_LTPscale_iCDF.as_ptr(),
-                8 as libc::c_int as libc::c_uint,
-            ) as libc::c_schar
+                8 as i32 as u32,
+            ) as i8
         } else {
-            (*psDec).indices.LTP_scaleIndex = 0 as libc::c_int as libc::c_schar
+            (*psDec).indices.LTP_scaleIndex = 0 as i32 as i8
         }
     }
-    (*psDec).ec_prevSignalType = (*psDec).indices.signalType as libc::c_int;
+    (*psDec).ec_prevSignalType = (*psDec).indices.signalType as i32;
     /* **************/
     /* Decode seed */
     /* **************/
     (*psDec).indices.Seed = crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
         psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
         crate::src::opus_1_2_1::silk::tables_other::silk_uniform4_iCDF.as_ptr(),
-        8 as libc::c_int as libc::c_uint,
-    ) as libc::c_schar;
+        8 as i32 as u32,
+    ) as i8;
 }

@@ -49,86 +49,86 @@ pub use crate::jpeglib_h::JSAMPROW;
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_fdct_float(
-    mut data: *mut libc::c_float,
+    mut data: *mut f32,
     mut sample_data: crate::jpeglib_h::JSAMPARRAY,
     mut start_col: crate::jmorecfg_h::JDIMENSION,
 ) {
-    let mut tmp0: libc::c_float = 0.;
-    let mut tmp1: libc::c_float = 0.;
-    let mut tmp2: libc::c_float = 0.;
-    let mut tmp3: libc::c_float = 0.;
-    let mut tmp4: libc::c_float = 0.;
-    let mut tmp5: libc::c_float = 0.;
-    let mut tmp6: libc::c_float = 0.;
-    let mut tmp7: libc::c_float = 0.;
-    let mut tmp10: libc::c_float = 0.;
-    let mut tmp11: libc::c_float = 0.;
-    let mut tmp12: libc::c_float = 0.;
-    let mut tmp13: libc::c_float = 0.;
-    let mut z1: libc::c_float = 0.;
-    let mut z2: libc::c_float = 0.;
-    let mut z3: libc::c_float = 0.;
-    let mut z4: libc::c_float = 0.;
-    let mut z5: libc::c_float = 0.;
-    let mut z11: libc::c_float = 0.;
-    let mut z13: libc::c_float = 0.;
-    let mut dataptr: *mut libc::c_float = 0 as *mut libc::c_float;
+    let mut tmp0: f32 = 0.;
+    let mut tmp1: f32 = 0.;
+    let mut tmp2: f32 = 0.;
+    let mut tmp3: f32 = 0.;
+    let mut tmp4: f32 = 0.;
+    let mut tmp5: f32 = 0.;
+    let mut tmp6: f32 = 0.;
+    let mut tmp7: f32 = 0.;
+    let mut tmp10: f32 = 0.;
+    let mut tmp11: f32 = 0.;
+    let mut tmp12: f32 = 0.;
+    let mut tmp13: f32 = 0.;
+    let mut z1: f32 = 0.;
+    let mut z2: f32 = 0.;
+    let mut z3: f32 = 0.;
+    let mut z4: f32 = 0.;
+    let mut z5: f32 = 0.;
+    let mut z11: f32 = 0.;
+    let mut z13: f32 = 0.;
+    let mut dataptr: *mut f32 = 0 as *mut f32;
     let mut elemptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
-    let mut ctr: libc::c_int = 0;
+    let mut ctr: i32 = 0;
     /* Pass 1: process rows. */
     dataptr = data;
-    ctr = 0 as libc::c_int;
-    while ctr < 8 as libc::c_int {
+    ctr = 0 as i32;
+    while ctr < 8 as i32 {
         elemptr = (*sample_data.offset(ctr as isize)).offset(start_col as isize);
         /* advance pointer to next row */
-        tmp0 = (*elemptr.offset(0 as libc::c_int as isize) as libc::c_int
-            + *elemptr.offset(7 as libc::c_int as isize) as libc::c_int)
-            as libc::c_float;
-        tmp7 = (*elemptr.offset(0 as libc::c_int as isize) as libc::c_int
-            - *elemptr.offset(7 as libc::c_int as isize) as libc::c_int)
-            as libc::c_float;
-        tmp1 = (*elemptr.offset(1 as libc::c_int as isize) as libc::c_int
-            + *elemptr.offset(6 as libc::c_int as isize) as libc::c_int)
-            as libc::c_float;
-        tmp6 = (*elemptr.offset(1 as libc::c_int as isize) as libc::c_int
-            - *elemptr.offset(6 as libc::c_int as isize) as libc::c_int)
-            as libc::c_float;
-        tmp2 = (*elemptr.offset(2 as libc::c_int as isize) as libc::c_int
-            + *elemptr.offset(5 as libc::c_int as isize) as libc::c_int)
-            as libc::c_float;
-        tmp5 = (*elemptr.offset(2 as libc::c_int as isize) as libc::c_int
-            - *elemptr.offset(5 as libc::c_int as isize) as libc::c_int)
-            as libc::c_float;
-        tmp3 = (*elemptr.offset(3 as libc::c_int as isize) as libc::c_int
-            + *elemptr.offset(4 as libc::c_int as isize) as libc::c_int)
-            as libc::c_float;
-        tmp4 = (*elemptr.offset(3 as libc::c_int as isize) as libc::c_int
-            - *elemptr.offset(4 as libc::c_int as isize) as libc::c_int)
-            as libc::c_float;
+        tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
+            + *elemptr.offset(7 as i32 as isize) as i32)
+            as f32;
+        tmp7 = (*elemptr.offset(0 as i32 as isize) as i32
+            - *elemptr.offset(7 as i32 as isize) as i32)
+            as f32;
+        tmp1 = (*elemptr.offset(1 as i32 as isize) as i32
+            + *elemptr.offset(6 as i32 as isize) as i32)
+            as f32;
+        tmp6 = (*elemptr.offset(1 as i32 as isize) as i32
+            - *elemptr.offset(6 as i32 as isize) as i32)
+            as f32;
+        tmp2 = (*elemptr.offset(2 as i32 as isize) as i32
+            + *elemptr.offset(5 as i32 as isize) as i32)
+            as f32;
+        tmp5 = (*elemptr.offset(2 as i32 as isize) as i32
+            - *elemptr.offset(5 as i32 as isize) as i32)
+            as f32;
+        tmp3 = (*elemptr.offset(3 as i32 as isize) as i32
+            + *elemptr.offset(4 as i32 as isize) as i32)
+            as f32;
+        tmp4 = (*elemptr.offset(3 as i32 as isize) as i32
+            - *elemptr.offset(4 as i32 as isize) as i32)
+            as f32;
         tmp10 = tmp0 + tmp3;
         tmp13 = tmp0 - tmp3;
         tmp11 = tmp1 + tmp2;
         tmp12 = tmp1 - tmp2;
-        *dataptr.offset(0 as libc::c_int as isize) =
-            tmp10 + tmp11 - (8 as libc::c_int * 128 as libc::c_int) as libc::c_float;
-        *dataptr.offset(4 as libc::c_int as isize) = tmp10 - tmp11;
-        z1 = (tmp12 + tmp13) * 0.707106781f64 as libc::c_float;
-        *dataptr.offset(2 as libc::c_int as isize) = tmp13 + z1;
-        *dataptr.offset(6 as libc::c_int as isize) = tmp13 - z1;
+        *dataptr.offset(0 as i32 as isize) =
+            tmp10 + tmp11 - (8 as i32 * 128 as i32) as f32;
+        *dataptr.offset(4 as i32 as isize) = tmp10 - tmp11;
+        z1 = (tmp12 + tmp13) * 0.707106781f64 as f32;
+        *dataptr.offset(2 as i32 as isize) = tmp13 + z1;
+        *dataptr.offset(6 as i32 as isize) = tmp13 - z1;
         tmp10 = tmp4 + tmp5;
         tmp11 = tmp5 + tmp6;
         tmp12 = tmp6 + tmp7;
-        z5 = (tmp10 - tmp12) * 0.382683433f64 as libc::c_float;
-        z2 = 0.541196100f64 as libc::c_float * tmp10 + z5;
-        z4 = 1.306562965f64 as libc::c_float * tmp12 + z5;
-        z3 = tmp11 * 0.707106781f64 as libc::c_float;
+        z5 = (tmp10 - tmp12) * 0.382683433f64 as f32;
+        z2 = 0.541196100f64 as f32 * tmp10 + z5;
+        z4 = 1.306562965f64 as f32 * tmp12 + z5;
+        z3 = tmp11 * 0.707106781f64 as f32;
         z11 = tmp7 + z3;
         z13 = tmp7 - z3;
-        *dataptr.offset(5 as libc::c_int as isize) = z13 + z2;
-        *dataptr.offset(3 as libc::c_int as isize) = z13 - z2;
-        *dataptr.offset(1 as libc::c_int as isize) = z11 + z4;
-        *dataptr.offset(7 as libc::c_int as isize) = z11 - z4;
-        dataptr = dataptr.offset(8 as libc::c_int as isize);
+        *dataptr.offset(5 as i32 as isize) = z13 + z2;
+        *dataptr.offset(3 as i32 as isize) = z13 - z2;
+        *dataptr.offset(1 as i32 as isize) = z11 + z4;
+        *dataptr.offset(7 as i32 as isize) = z11 - z4;
+        dataptr = dataptr.offset(8 as i32 as isize);
         ctr += 1
     }
     /* Load data into workspace */
@@ -149,47 +149,47 @@ pub unsafe extern "C" fn jpeg_fdct_float(
     /* phase 6 */
     /* Pass 2: process columns. */
     dataptr = data;
-    ctr = 8 as libc::c_int - 1 as libc::c_int;
-    while ctr >= 0 as libc::c_int {
-        tmp0 = *dataptr.offset((8 as libc::c_int * 0 as libc::c_int) as isize)
-            + *dataptr.offset((8 as libc::c_int * 7 as libc::c_int) as isize);
-        tmp7 = *dataptr.offset((8 as libc::c_int * 0 as libc::c_int) as isize)
-            - *dataptr.offset((8 as libc::c_int * 7 as libc::c_int) as isize);
-        tmp1 = *dataptr.offset((8 as libc::c_int * 1 as libc::c_int) as isize)
-            + *dataptr.offset((8 as libc::c_int * 6 as libc::c_int) as isize);
-        tmp6 = *dataptr.offset((8 as libc::c_int * 1 as libc::c_int) as isize)
-            - *dataptr.offset((8 as libc::c_int * 6 as libc::c_int) as isize);
-        tmp2 = *dataptr.offset((8 as libc::c_int * 2 as libc::c_int) as isize)
-            + *dataptr.offset((8 as libc::c_int * 5 as libc::c_int) as isize);
-        tmp5 = *dataptr.offset((8 as libc::c_int * 2 as libc::c_int) as isize)
-            - *dataptr.offset((8 as libc::c_int * 5 as libc::c_int) as isize);
-        tmp3 = *dataptr.offset((8 as libc::c_int * 3 as libc::c_int) as isize)
-            + *dataptr.offset((8 as libc::c_int * 4 as libc::c_int) as isize);
-        tmp4 = *dataptr.offset((8 as libc::c_int * 3 as libc::c_int) as isize)
-            - *dataptr.offset((8 as libc::c_int * 4 as libc::c_int) as isize);
+    ctr = 8 as i32 - 1 as i32;
+    while ctr >= 0 as i32 {
+        tmp0 = *dataptr.offset((8 as i32 * 0 as i32) as isize)
+            + *dataptr.offset((8 as i32 * 7 as i32) as isize);
+        tmp7 = *dataptr.offset((8 as i32 * 0 as i32) as isize)
+            - *dataptr.offset((8 as i32 * 7 as i32) as isize);
+        tmp1 = *dataptr.offset((8 as i32 * 1 as i32) as isize)
+            + *dataptr.offset((8 as i32 * 6 as i32) as isize);
+        tmp6 = *dataptr.offset((8 as i32 * 1 as i32) as isize)
+            - *dataptr.offset((8 as i32 * 6 as i32) as isize);
+        tmp2 = *dataptr.offset((8 as i32 * 2 as i32) as isize)
+            + *dataptr.offset((8 as i32 * 5 as i32) as isize);
+        tmp5 = *dataptr.offset((8 as i32 * 2 as i32) as isize)
+            - *dataptr.offset((8 as i32 * 5 as i32) as isize);
+        tmp3 = *dataptr.offset((8 as i32 * 3 as i32) as isize)
+            + *dataptr.offset((8 as i32 * 4 as i32) as isize);
+        tmp4 = *dataptr.offset((8 as i32 * 3 as i32) as isize)
+            - *dataptr.offset((8 as i32 * 4 as i32) as isize);
         /* advance pointer to next column */
         tmp10 = tmp0 + tmp3;
         tmp13 = tmp0 - tmp3;
         tmp11 = tmp1 + tmp2;
         tmp12 = tmp1 - tmp2;
-        *dataptr.offset((8 as libc::c_int * 0 as libc::c_int) as isize) = tmp10 + tmp11;
-        *dataptr.offset((8 as libc::c_int * 4 as libc::c_int) as isize) = tmp10 - tmp11;
-        z1 = (tmp12 + tmp13) * 0.707106781f64 as libc::c_float;
-        *dataptr.offset((8 as libc::c_int * 2 as libc::c_int) as isize) = tmp13 + z1;
-        *dataptr.offset((8 as libc::c_int * 6 as libc::c_int) as isize) = tmp13 - z1;
+        *dataptr.offset((8 as i32 * 0 as i32) as isize) = tmp10 + tmp11;
+        *dataptr.offset((8 as i32 * 4 as i32) as isize) = tmp10 - tmp11;
+        z1 = (tmp12 + tmp13) * 0.707106781f64 as f32;
+        *dataptr.offset((8 as i32 * 2 as i32) as isize) = tmp13 + z1;
+        *dataptr.offset((8 as i32 * 6 as i32) as isize) = tmp13 - z1;
         tmp10 = tmp4 + tmp5;
         tmp11 = tmp5 + tmp6;
         tmp12 = tmp6 + tmp7;
-        z5 = (tmp10 - tmp12) * 0.382683433f64 as libc::c_float;
-        z2 = 0.541196100f64 as libc::c_float * tmp10 + z5;
-        z4 = 1.306562965f64 as libc::c_float * tmp12 + z5;
-        z3 = tmp11 * 0.707106781f64 as libc::c_float;
+        z5 = (tmp10 - tmp12) * 0.382683433f64 as f32;
+        z2 = 0.541196100f64 as f32 * tmp10 + z5;
+        z4 = 1.306562965f64 as f32 * tmp12 + z5;
+        z3 = tmp11 * 0.707106781f64 as f32;
         z11 = tmp7 + z3;
         z13 = tmp7 - z3;
-        *dataptr.offset((8 as libc::c_int * 5 as libc::c_int) as isize) = z13 + z2;
-        *dataptr.offset((8 as libc::c_int * 3 as libc::c_int) as isize) = z13 - z2;
-        *dataptr.offset((8 as libc::c_int * 1 as libc::c_int) as isize) = z11 + z4;
-        *dataptr.offset((8 as libc::c_int * 7 as libc::c_int) as isize) = z11 - z4;
+        *dataptr.offset((8 as i32 * 5 as i32) as isize) = z13 + z2;
+        *dataptr.offset((8 as i32 * 3 as i32) as isize) = z13 - z2;
+        *dataptr.offset((8 as i32 * 1 as i32) as isize) = z11 + z4;
+        *dataptr.offset((8 as i32 * 7 as i32) as isize) = z11 - z4;
         dataptr = dataptr.offset(1);
         ctr -= 1
     }

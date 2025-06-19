@@ -34,24 +34,24 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_corrVector_FLP(
-    mut x: *const libc::c_float,
-    mut t: *const libc::c_float,
-    L: libc::c_int,
-    Order: libc::c_int,
-    mut Xt: *mut libc::c_float,
+    mut x: *const f32,
+    mut t: *const f32,
+    L: i32,
+    Order: i32,
+    mut Xt: *mut f32,
 )
 /* O    X'*t correlation vector [order]             */
 {
-    let mut lag: libc::c_int = 0; /* Points to first sample of column 0 of X: X[:,0] */
-    let mut ptr1: *const libc::c_float = 0 as *const libc::c_float;
-    ptr1 = &*x.offset((Order - 1 as libc::c_int) as isize) as *const libc::c_float;
-    lag = 0 as libc::c_int;
+    let mut lag: i32 = 0; /* Points to first sample of column 0 of X: X[:,0] */
+    let mut ptr1: *const f32 = 0 as *const f32;
+    ptr1 = &*x.offset((Order - 1 as i32) as isize) as *const f32;
+    lag = 0 as i32;
     while lag < Order {
         /* Calculate X[:,lag]'*t */
         *Xt.offset(lag as isize) =
             crate::src::opus_1_2_1::silk::float::inner_product_FLP::silk_inner_product_FLP(
                 ptr1, t, L,
-            ) as libc::c_float;
+            ) as f32;
         ptr1 = ptr1.offset(-1);
         lag += 1
         /* Next column of X */
@@ -203,47 +203,47 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_corrMatrix_FLP(
-    mut x: *const libc::c_float,
-    L: libc::c_int,
-    Order: libc::c_int,
-    mut XX: *mut libc::c_float,
+    mut x: *const f32,
+    L: i32,
+    Order: i32,
+    mut XX: *mut f32,
 )
 /* O    X'*X correlation matrix [order x order]     */
 {
-    let mut j: libc::c_int = 0; /* First sample of column 0 of X */
-    let mut lag: libc::c_int = 0; /* X[:,0]'*X[:,0] */
-    let mut energy: libc::c_double = 0.;
-    let mut ptr1: *const libc::c_float = 0 as *const libc::c_float;
-    let mut ptr2: *const libc::c_float = 0 as *const libc::c_float;
-    ptr1 = &*x.offset((Order - 1 as libc::c_int) as isize) as *const libc::c_float;
+    let mut j: i32 = 0; /* First sample of column 0 of X */
+    let mut lag: i32 = 0; /* X[:,0]'*X[:,0] */
+    let mut energy: f64 = 0.;
+    let mut ptr1: *const f32 = 0 as *const f32;
+    let mut ptr2: *const f32 = 0 as *const f32;
+    ptr1 = &*x.offset((Order - 1 as i32) as isize) as *const f32;
     energy = crate::src::opus_1_2_1::silk::float::energy_FLP::silk_energy_FLP(ptr1, L);
-    *XX.offset((0 as libc::c_int * Order + 0 as libc::c_int) as isize) = energy as libc::c_float;
-    j = 1 as libc::c_int;
+    *XX.offset((0 as i32 * Order + 0 as i32) as isize) = energy as f32;
+    j = 1 as i32;
     while j < Order {
         /* Calculate X[:,j]'*X[:,j] */
         energy += (*ptr1.offset(-j as isize) * *ptr1.offset(-j as isize)
             - *ptr1.offset((L - j) as isize) * *ptr1.offset((L - j) as isize))
-            as libc::c_double; /* First sample of column 1 of X */
-        *XX.offset((j * Order + j) as isize) = energy as libc::c_float;
+            as f64; /* First sample of column 1 of X */
+        *XX.offset((j * Order + j) as isize) = energy as f32;
         j += 1
     }
-    ptr2 = &*x.offset((Order - 2 as libc::c_int) as isize) as *const libc::c_float;
-    lag = 1 as libc::c_int;
+    ptr2 = &*x.offset((Order - 2 as i32) as isize) as *const f32;
+    lag = 1 as i32;
     while lag < Order {
         /* Calculate X[:,0]'*X[:,lag] */
         energy = crate::src::opus_1_2_1::silk::float::inner_product_FLP::silk_inner_product_FLP(
             ptr1, ptr2, L,
         );
-        *XX.offset((lag * Order + 0 as libc::c_int) as isize) = energy as libc::c_float;
-        *XX.offset((0 as libc::c_int * Order + lag) as isize) = energy as libc::c_float;
+        *XX.offset((lag * Order + 0 as i32) as isize) = energy as f32;
+        *XX.offset((0 as i32 * Order + lag) as isize) = energy as f32;
         /* Next column of X */
-        j = 1 as libc::c_int;
+        j = 1 as i32;
         while j < Order - lag {
             energy += (*ptr1.offset(-j as isize) * *ptr2.offset(-j as isize)
                 - *ptr1.offset((L - j) as isize) * *ptr2.offset((L - j) as isize))
-                as libc::c_double;
-            *XX.offset(((lag + j) * Order + j) as isize) = energy as libc::c_float;
-            *XX.offset((j * Order + (lag + j)) as isize) = energy as libc::c_float;
+                as f64;
+            *XX.offset(((lag + j) * Order + j) as isize) = energy as f32;
+            *XX.offset((j * Order + (lag + j)) as isize) = energy as f32;
             j += 1
         }
         ptr2 = ptr2.offset(-1);

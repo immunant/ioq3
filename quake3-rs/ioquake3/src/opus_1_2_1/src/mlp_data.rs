@@ -4,7 +4,7 @@ pub use crate::src::opus_1_2_1::src::mlp::MLP;
 /* RMS error was 0.280492, seed was 1480478173 */
 /* 0.005976 0.031821 (0.280494 0.280492) done */
 
-static mut weights: [libc::c_float; 450] = [
+static mut weights: [f32; 450] = [
     -0.514624f32,
     0.0234227f32,
     -0.14329f32,
@@ -457,13 +457,13 @@ static mut weights: [libc::c_float; 450] = [
     0.946102f32,
 ];
 
-static mut topo: [libc::c_int; 3] = [25 as libc::c_int, 16 as libc::c_int, 2 as libc::c_int];
+static mut topo: [i32; 3] = [25 as i32, 16 as i32, 2 as i32];
 #[no_mangle]
 
 pub static mut net: crate::src::opus_1_2_1::src::mlp::MLP = unsafe {
     {
         let mut init = crate::src::opus_1_2_1::src::mlp::MLP {
-            layers: 3 as libc::c_int,
+            layers: 3 as i32,
             topo: topo.as_ptr(),
             weights: weights.as_ptr(),
         };

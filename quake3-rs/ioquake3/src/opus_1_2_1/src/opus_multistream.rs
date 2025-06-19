@@ -31,87 +31,87 @@ Written by Jean-Marc Valin */
 
 pub unsafe extern "C" fn validate_layout(
     mut layout: *const crate::opus_private_h::ChannelLayout,
-) -> libc::c_int {
-    let mut i: libc::c_int = 0;
-    let mut max_channel: libc::c_int = 0;
+) -> i32 {
+    let mut i: i32 = 0;
+    let mut max_channel: i32 = 0;
     max_channel = (*layout).nb_streams + (*layout).nb_coupled_streams;
-    if max_channel > 255 as libc::c_int {
-        return 0 as libc::c_int;
+    if max_channel > 255 as i32 {
+        return 0 as i32;
     }
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < (*layout).nb_channels {
-        if (*layout).mapping[i as usize] as libc::c_int >= max_channel
-            && (*layout).mapping[i as usize] as libc::c_int != 255 as libc::c_int
+        if (*layout).mapping[i as usize] as i32 >= max_channel
+            && (*layout).mapping[i as usize] as i32 != 255 as i32
         {
-            return 0 as libc::c_int;
+            return 0 as i32;
         }
         i += 1
     }
-    return 1 as libc::c_int;
+    return 1 as i32;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn get_left_channel(
     mut layout: *const crate::opus_private_h::ChannelLayout,
-    mut stream_id: libc::c_int,
-    mut prev: libc::c_int,
-) -> libc::c_int {
-    let mut i: libc::c_int = 0;
-    i = if prev < 0 as libc::c_int {
-        0 as libc::c_int
+    mut stream_id: i32,
+    mut prev: i32,
+) -> i32 {
+    let mut i: i32 = 0;
+    i = if prev < 0 as i32 {
+        0 as i32
     } else {
-        (prev) + 1 as libc::c_int
+        (prev) + 1 as i32
     };
     while i < (*layout).nb_channels {
-        if (*layout).mapping[i as usize] as libc::c_int == stream_id * 2 as libc::c_int {
+        if (*layout).mapping[i as usize] as i32 == stream_id * 2 as i32 {
             return i;
         }
         i += 1
     }
-    return -(1 as libc::c_int);
+    return -(1 as i32);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn get_right_channel(
     mut layout: *const crate::opus_private_h::ChannelLayout,
-    mut stream_id: libc::c_int,
-    mut prev: libc::c_int,
-) -> libc::c_int {
-    let mut i: libc::c_int = 0;
-    i = if prev < 0 as libc::c_int {
-        0 as libc::c_int
+    mut stream_id: i32,
+    mut prev: i32,
+) -> i32 {
+    let mut i: i32 = 0;
+    i = if prev < 0 as i32 {
+        0 as i32
     } else {
-        (prev) + 1 as libc::c_int
+        (prev) + 1 as i32
     };
     while i < (*layout).nb_channels {
-        if (*layout).mapping[i as usize] as libc::c_int
-            == stream_id * 2 as libc::c_int + 1 as libc::c_int
+        if (*layout).mapping[i as usize] as i32
+            == stream_id * 2 as i32 + 1 as i32
         {
             return i;
         }
         i += 1
     }
-    return -(1 as libc::c_int);
+    return -(1 as i32);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn get_mono_channel(
     mut layout: *const crate::opus_private_h::ChannelLayout,
-    mut stream_id: libc::c_int,
-    mut prev: libc::c_int,
-) -> libc::c_int {
-    let mut i: libc::c_int = 0;
-    i = if prev < 0 as libc::c_int {
-        0 as libc::c_int
+    mut stream_id: i32,
+    mut prev: i32,
+) -> i32 {
+    let mut i: i32 = 0;
+    i = if prev < 0 as i32 {
+        0 as i32
     } else {
-        (prev) + 1 as libc::c_int
+        (prev) + 1 as i32
     };
     while i < (*layout).nb_channels {
-        if (*layout).mapping[i as usize] as libc::c_int == stream_id + (*layout).nb_coupled_streams
+        if (*layout).mapping[i as usize] as i32 == stream_id + (*layout).nb_coupled_streams
         {
             return i;
         }
         i += 1
     }
-    return -(1 as libc::c_int);
+    return -(1 as i32);
 }

@@ -2,12 +2,12 @@ pub type bot_input_t = bot_input_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct bot_input_s {
-    pub thinktime: libc::c_float,
+    pub thinktime: f32,
     pub dir: crate::src::qcommon::q_shared::vec3_t,
-    pub speed: libc::c_float,
+    pub speed: f32,
     pub viewangles: crate::src::qcommon::q_shared::vec3_t,
-    pub actionflags: libc::c_int,
-    pub weapon: libc::c_int,
+    pub actionflags: i32,
+    pub weapon: i32,
 }
 //origin of the goal
 
@@ -29,8 +29,8 @@ pub type bsp_surface_t = bsp_surface_s;
 #[derive(Copy, Clone)]
 pub struct bsp_surface_s {
     pub name: [libc::c_char; 16],
-    pub flags: libc::c_int,
-    pub value: libc::c_int,
+    pub flags: i32,
+    pub value: i32,
 }
 //remove the bsp_trace_s structure definition l8r on
 
@@ -41,14 +41,14 @@ pub type bsp_trace_t = bsp_trace_s;
 pub struct bsp_trace_s {
     pub allsolid: crate::src::qcommon::q_shared::qboolean,
     pub startsolid: crate::src::qcommon::q_shared::qboolean,
-    pub fraction: libc::c_float,
+    pub fraction: f32,
     pub endpos: crate::src::qcommon::q_shared::vec3_t,
     pub plane: crate::src::qcommon::q_shared::cplane_t,
-    pub exp_dist: libc::c_float,
-    pub sidenum: libc::c_int,
+    pub exp_dist: f32,
+    pub sidenum: i32,
     pub surface: bsp_surface_t,
-    pub contents: libc::c_int,
-    pub ent: libc::c_int,
+    pub contents: i32,
+    pub ent: i32,
 }
 //time since last output (in seconds)
 
@@ -69,22 +69,22 @@ pub type bot_entitystate_t = bot_entitystate_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct bot_entitystate_s {
-    pub type_0: libc::c_int,
-    pub flags: libc::c_int,
+    pub type_0: i32,
+    pub flags: i32,
     pub origin: crate::src::qcommon::q_shared::vec3_t,
     pub angles: crate::src::qcommon::q_shared::vec3_t,
     pub old_origin: crate::src::qcommon::q_shared::vec3_t,
     pub mins: crate::src::qcommon::q_shared::vec3_t,
     pub maxs: crate::src::qcommon::q_shared::vec3_t,
-    pub groundent: libc::c_int,
-    pub solid: libc::c_int,
-    pub modelindex: libc::c_int,
-    pub modelindex2: libc::c_int,
-    pub frame: libc::c_int,
-    pub event: libc::c_int,
-    pub eventParm: libc::c_int,
-    pub powerups: libc::c_int,
-    pub weapon: libc::c_int,
-    pub legsAnim: libc::c_int,
-    pub torsoAnim: libc::c_int,
+    pub groundent: i32,
+    pub solid: i32,
+    pub modelindex: i32,
+    pub modelindex2: i32,
+    pub frame: i32,
+    pub event: i32,
+    pub eventParm: i32,
+    pub powerups: i32,
+    pub weapon: i32,
+    pub legsAnim: i32,
+    pub torsoAnim: i32,
 }

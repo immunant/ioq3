@@ -2,8 +2,8 @@
 #[derive(Copy, Clone)]
 pub struct uiClientState_t {
     pub connState: crate::src::qcommon::q_shared::connstate_t,
-    pub connectPacketCount: libc::c_int,
-    pub clientNum: libc::c_int,
+    pub connectPacketCount: i32,
+    pub clientNum: i32,
     pub servername: [libc::c_char; 1024],
     pub updateInfoString: [libc::c_char; 1024],
     pub messageString: [libc::c_char; 1024],
@@ -106,7 +106,7 @@ pub const UI_ATAN2: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 105;
 pub const UI_SQRT: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 106;
 pub const UI_FLOOR: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 107;
 pub const UI_CEIL: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 108;
-pub type uiMenuCommand_t = libc::c_uint;
+pub type uiMenuCommand_t = u32;
 pub const UIMENU_NONE: uiMenuCommand_t = 0;
 pub const UIMENU_MAIN: uiMenuCommand_t = 1;
 pub const UIMENU_INGAME: uiMenuCommand_t = 2;

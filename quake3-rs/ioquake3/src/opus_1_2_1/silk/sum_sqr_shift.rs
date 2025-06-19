@@ -7,12 +7,12 @@ pub mod macros_h {
         mut in32: crate::opus_types_h::opus_int32,
     ) -> crate::opus_types_h::opus_int32 {
         return if in32 != 0 {
-            (32 as libc::c_int)
-                - (::std::mem::size_of::<libc::c_uint>() as libc::c_ulong as libc::c_int
-                    * 8 as libc::c_int
-                    - (in32 as libc::c_uint).leading_zeros() as i32)
+            (32 as i32)
+                - (::std::mem::size_of::<u32>() as libc::c_ulong as i32
+                    * 8 as i32
+                    - (in32 as u32).leading_zeros() as i32)
         } else {
-            32 as libc::c_int
+            32 as i32
         };
     }
 
@@ -380,65 +380,65 @@ POSSIBILITY OF SUCH DAMAGE.
 
 pub unsafe extern "C" fn silk_sum_sqr_shift(
     mut energy: *mut crate::opus_types_h::opus_int32,
-    mut shift: *mut libc::c_int,
+    mut shift: *mut i32,
     mut x: *const crate::opus_types_h::opus_int16,
-    mut len: libc::c_int,
+    mut len: i32,
 )
 /* I   Length of input vector                                       */
 {
-    let mut i: libc::c_int = 0;
-    let mut shft: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut shft: i32 = 0;
     let mut nrg_tmp: crate::opus_types_h::opus_uint32 = 0;
     let mut nrg: crate::opus_types_h::opus_int32 = 0;
     /* Do a first run with the maximum shift we could have. */
-    shft = 31 as libc::c_int - silk_CLZ32(len);
+    shft = 31 as i32 - silk_CLZ32(len);
     /* Let's be conservative with rounding and start with nrg=len. */
     nrg = len;
-    i = 0 as libc::c_int;
-    while i < len - 1 as libc::c_int {
+    i = 0 as i32;
+    while i < len - 1 as i32 {
         nrg_tmp = (*x.offset(i as isize) as crate::opus_types_h::opus_int32
             * *x.offset(i as isize) as crate::opus_types_h::opus_int32)
             as crate::opus_types_h::opus_uint32;
         nrg_tmp = nrg_tmp.wrapping_add(
-            (*x.offset((i + 1 as libc::c_int) as isize) as crate::opus_types_h::opus_int32
-                * *x.offset((i + 1 as libc::c_int) as isize) as crate::opus_types_h::opus_int32)
+            (*x.offset((i + 1 as i32) as isize) as crate::opus_types_h::opus_int32
+                * *x.offset((i + 1 as i32) as isize) as crate::opus_types_h::opus_int32)
                 as crate::opus_types_h::opus_uint32,
         ) as crate::opus_types_h::opus_int32 as crate::opus_types_h::opus_uint32;
         nrg =
-            (nrg as libc::c_uint).wrapping_add(nrg_tmp >> shft) as crate::opus_types_h::opus_int32;
-        i += 2 as libc::c_int
+            (nrg as u32).wrapping_add(nrg_tmp >> shft) as crate::opus_types_h::opus_int32;
+        i += 2 as i32
     }
     if i < len {
         /* One sample left to process */
         nrg_tmp = (*x.offset(i as isize) as crate::opus_types_h::opus_int32
             * *x.offset(i as isize) as crate::opus_types_h::opus_int32)
             as crate::opus_types_h::opus_uint32;
-        nrg = (nrg as libc::c_uint).wrapping_add(nrg_tmp >> shft) as crate::opus_types_h::opus_int32
+        nrg = (nrg as u32).wrapping_add(nrg_tmp >> shft) as crate::opus_types_h::opus_int32
     }
     /* Make sure the result will fit in a 32-bit signed integer with two bits
     of headroom. */
-    shft = silk_max_32(0 as libc::c_int, shft + 3 as libc::c_int - silk_CLZ32(nrg));
-    nrg = 0 as libc::c_int;
-    i = 0 as libc::c_int;
-    while i < len - 1 as libc::c_int {
+    shft = silk_max_32(0 as i32, shft + 3 as i32 - silk_CLZ32(nrg));
+    nrg = 0 as i32;
+    i = 0 as i32;
+    while i < len - 1 as i32 {
         nrg_tmp = (*x.offset(i as isize) as crate::opus_types_h::opus_int32
             * *x.offset(i as isize) as crate::opus_types_h::opus_int32)
             as crate::opus_types_h::opus_uint32;
         nrg_tmp = nrg_tmp.wrapping_add(
-            (*x.offset((i + 1 as libc::c_int) as isize) as crate::opus_types_h::opus_int32
-                * *x.offset((i + 1 as libc::c_int) as isize) as crate::opus_types_h::opus_int32)
+            (*x.offset((i + 1 as i32) as isize) as crate::opus_types_h::opus_int32
+                * *x.offset((i + 1 as i32) as isize) as crate::opus_types_h::opus_int32)
                 as crate::opus_types_h::opus_uint32,
         ) as crate::opus_types_h::opus_int32 as crate::opus_types_h::opus_uint32;
         nrg =
-            (nrg as libc::c_uint).wrapping_add(nrg_tmp >> shft) as crate::opus_types_h::opus_int32;
-        i += 2 as libc::c_int
+            (nrg as u32).wrapping_add(nrg_tmp >> shft) as crate::opus_types_h::opus_int32;
+        i += 2 as i32
     }
     if i < len {
         /* One sample left to process */
         nrg_tmp = (*x.offset(i as isize) as crate::opus_types_h::opus_int32
             * *x.offset(i as isize) as crate::opus_types_h::opus_int32)
             as crate::opus_types_h::opus_uint32;
-        nrg = (nrg as libc::c_uint).wrapping_add(nrg_tmp >> shft) as crate::opus_types_h::opus_int32
+        nrg = (nrg as u32).wrapping_add(nrg_tmp >> shft) as crate::opus_types_h::opus_int32
     }
     /* Output arguments */
     *shift = shft;

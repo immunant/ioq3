@@ -247,16 +247,16 @@ pub use crate::src::jpeg_8c::jerror::JWRN_TOO_MUCH_DATA;
 pub unsafe extern "C" fn jpeg_read_coefficients(
     mut cinfo: crate::jpeglib_h::j_decompress_ptr,
 ) -> *mut crate::jpeglib_h::jvirt_barray_ptr {
-    if (*cinfo).global_state == 202 as libc::c_int {
+    if (*cinfo).global_state == 202 as i32 {
         /* First call: initialize active modules */
         transdecode_master_selection(cinfo);
-        (*cinfo).global_state = 209 as libc::c_int
+        (*cinfo).global_state = 209 as i32
     }
-    if (*cinfo).global_state == 209 as libc::c_int {
+    if (*cinfo).global_state == 209 as i32 {
         loop
         /* Absorb whole file into the coef buffer */
         {
-            let mut retcode: libc::c_int = 0;
+            let mut retcode: i32 = 0;
             /* Call progress monitor hook if present */
             if !(*cinfo).progress.is_null() {
                 Some(
@@ -275,15 +275,15 @@ pub unsafe extern "C" fn jpeg_read_coefficients(
                     .expect("non-null function pointer"),
             )
             .expect("non-null function pointer")(cinfo);
-            if retcode == 0 as libc::c_int {
+            if retcode == 0 as i32 {
                 return 0 as *mut crate::jpeglib_h::jvirt_barray_ptr;
             }
-            if retcode == 2 as libc::c_int {
+            if retcode == 2 as i32 {
                 break;
             }
             /* Advance progress counter if appropriate */
             if !(*cinfo).progress.is_null()
-                && (retcode == 3 as libc::c_int || retcode == 1 as libc::c_int)
+                && (retcode == 3 as i32 || retcode == 1 as i32)
             {
                 (*(*cinfo).progress).pass_counter += 1;
                 if (*(*cinfo).progress).pass_counter >= (*(*cinfo).progress).pass_limit {
@@ -293,20 +293,20 @@ pub unsafe extern "C" fn jpeg_read_coefficients(
             }
         }
         /* Set state so that jpeg_finish_decompress does the right thing */
-        (*cinfo).global_state = 210 as libc::c_int
+        (*cinfo).global_state = 210 as i32
     }
     /* At this point we should be in state DSTATE_STOPPING if being used
      * standalone, or in state DSTATE_BUFIMAGE if being invoked to get access
      * to the coefficients during a full buffered-image-mode decompression.
      */
-    if ((*cinfo).global_state == 210 as libc::c_int || (*cinfo).global_state == 207 as libc::c_int)
+    if ((*cinfo).global_state == 210 as i32 || (*cinfo).global_state == 207 as i32)
         && (*cinfo).buffered_image != 0
     {
         return (*(*cinfo).coef).coef_arrays;
     }
     /* Oops, improper usage */
-    (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_STATE as libc::c_int;
-    (*(*cinfo).err).msg_parm.i[0 as libc::c_int as usize] = (*cinfo).global_state;
+    (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_STATE as i32;
+    (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = (*cinfo).global_state;
     Some(
         (*(*cinfo).err)
             .error_exit
@@ -336,7 +336,7 @@ pub unsafe extern "C" fn jpeg_read_coefficients(
 
 unsafe extern "C" fn transdecode_master_selection(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
     /* This is effectively a buffered-image operation. */
-    (*cinfo).buffered_image = 1 as libc::c_int;
+    (*cinfo).buffered_image = 1 as i32;
     /* Compute output image dimensions and related values. */
     crate::src::jpeg_8c::jdinput::jpeg_core_output_dimensions(
         cinfo as *mut crate::jpeglib_h::jpeg_decompress_struct,
@@ -354,7 +354,7 @@ unsafe extern "C" fn transdecode_master_selection(mut cinfo: crate::jpeglib_h::j
     /* Always get a full-image coefficient buffer. */
     crate::src::jpeg_8c::jdcoefct::jinit_d_coef_controller(
         cinfo as *mut crate::jpeglib_h::jpeg_decompress_struct,
-        1 as libc::c_int,
+        1 as i32,
     );
     /* We can now tell the memory manager to allocate virtual arrays. */
     Some(
@@ -372,21 +372,21 @@ unsafe extern "C" fn transdecode_master_selection(mut cinfo: crate::jpeglib_h::j
     .expect("non-null function pointer")(cinfo);
     /* Initialize progress monitoring. */
     if !(*cinfo).progress.is_null() {
-        let mut nscans: libc::c_int = 0;
+        let mut nscans: i32 = 0;
         /* Estimate number of scans to set pass_limit. */
         if (*cinfo).progressive_mode != 0 {
             /* Arbitrarily estimate 2 interleaved DC scans + 3 AC scans/component. */
-            nscans = 2 as libc::c_int + 3 as libc::c_int * (*cinfo).num_components
+            nscans = 2 as i32 + 3 as i32 * (*cinfo).num_components
         } else if (*(*cinfo).inputctl).has_multiple_scans != 0 {
             /* For a nonprogressive multiscan file, estimate 1 scan per component. */
             nscans = (*cinfo).num_components
         } else {
-            nscans = 1 as libc::c_int
+            nscans = 1 as i32
         }
         (*(*cinfo).progress).pass_counter = 0 as libc::c_long;
         (*(*cinfo).progress).pass_limit =
             (*cinfo).total_iMCU_rows as libc::c_long * nscans as libc::c_long;
-        (*(*cinfo).progress).completed_passes = 0 as libc::c_int;
-        (*(*cinfo).progress).total_passes = 1 as libc::c_int
+        (*(*cinfo).progress).completed_passes = 0 as i32;
+        (*(*cinfo).progress).total_passes = 1 as i32
     };
 }

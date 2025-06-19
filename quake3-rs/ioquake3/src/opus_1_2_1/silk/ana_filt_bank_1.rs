@@ -38,10 +38,10 @@ POSSIBILITY OF SUCH DAMAGE.
 /* Coefficients for 2-band filter bank based on first-order allpass filters */
 
 static mut A_fb1_20: crate::opus_types_h::opus_int16 =
-    ((5394 as libc::c_int) << 1 as libc::c_int) as crate::opus_types_h::opus_int16;
+    ((5394 as i32) << 1 as i32) as crate::opus_types_h::opus_int16;
 
 static mut A_fb1_21: crate::opus_types_h::opus_int16 =
-    -(24290 as libc::c_int) as crate::opus_types_h::opus_int16;
+    -(24290 as i32) as crate::opus_types_h::opus_int16;
 /* **********************************************************************
 Copyright (c) 2006-2011, Skype Limited. All rights reserved.
 Redistribution and use in source and binary forms, with or without
@@ -154,82 +154,82 @@ pub unsafe extern "C" fn silk_ana_filt_bank_1(
 )
 /* I    Number of input samples                                     */
 {
-    let mut k: libc::c_int = 0;
-    let mut N2: libc::c_int = N >> 1 as libc::c_int;
+    let mut k: i32 = 0;
+    let mut N2: i32 = N >> 1 as i32;
     let mut in32: crate::opus_types_h::opus_int32 = 0;
     let mut X: crate::opus_types_h::opus_int32 = 0;
     let mut Y: crate::opus_types_h::opus_int32 = 0;
     let mut out_1: crate::opus_types_h::opus_int32 = 0;
     let mut out_2: crate::opus_types_h::opus_int32 = 0;
     /* Internal variables and state are in Q10 format */
-    k = 0 as libc::c_int;
+    k = 0 as i32;
     while k < N2 {
         /* Convert to Q10 */
-        in32 = ((*in_0.offset((2 as libc::c_int * k) as isize) as crate::opus_types_h::opus_int32
+        in32 = ((*in_0.offset((2 as i32 * k) as isize) as crate::opus_types_h::opus_int32
             as crate::opus_types_h::opus_uint32)
-            << 10 as libc::c_int) as crate::opus_types_h::opus_int32;
+            << 10 as i32) as crate::opus_types_h::opus_int32;
         /* All-pass section for even input sample */
-        Y = in32 - *S.offset(0 as libc::c_int as isize);
-        X = (Y as libc::c_longlong
-            + (Y as libc::c_longlong * A_fb1_21 as libc::c_longlong >> 16 as libc::c_int))
+        Y = in32 - *S.offset(0 as i32 as isize);
+        X = (Y as i64
+            + (Y as i64 * A_fb1_21 as i64 >> 16 as i32))
             as crate::opus_types_h::opus_int32;
-        out_1 = *S.offset(0 as libc::c_int as isize) + X;
-        *S.offset(0 as libc::c_int as isize) = in32 + X;
+        out_1 = *S.offset(0 as i32 as isize) + X;
+        *S.offset(0 as i32 as isize) = in32 + X;
         /* Convert to Q10 */
-        in32 = ((*in_0.offset((2 as libc::c_int * k + 1 as libc::c_int) as isize)
+        in32 = ((*in_0.offset((2 as i32 * k + 1 as i32) as isize)
             as crate::opus_types_h::opus_int32
             as crate::opus_types_h::opus_uint32)
-            << 10 as libc::c_int) as crate::opus_types_h::opus_int32;
+            << 10 as i32) as crate::opus_types_h::opus_int32;
         /* All-pass section for odd input sample, and add to output of previous section */
-        Y = in32 - *S.offset(1 as libc::c_int as isize);
-        X = (Y as libc::c_longlong * A_fb1_20 as libc::c_longlong >> 16 as libc::c_int)
+        Y = in32 - *S.offset(1 as i32 as isize);
+        X = (Y as i64 * A_fb1_20 as i64 >> 16 as i32)
             as crate::opus_types_h::opus_int32;
-        out_2 = *S.offset(1 as libc::c_int as isize) + X;
-        *S.offset(1 as libc::c_int as isize) = in32 + X;
+        out_2 = *S.offset(1 as i32 as isize) + X;
+        *S.offset(1 as i32 as isize) = in32 + X;
         /* Add/subtract, convert back to int16 and store to output */
-        *outL.offset(k as isize) = if (if 11 as libc::c_int == 1 as libc::c_int {
-            (out_2 + out_1 >> 1 as libc::c_int) + (out_2 + out_1 & 1 as libc::c_int)
+        *outL.offset(k as isize) = if (if 11 as i32 == 1 as i32 {
+            (out_2 + out_1 >> 1 as i32) + (out_2 + out_1 & 1 as i32)
         } else {
-            ((out_2 + out_1 >> 11 as libc::c_int - 1 as libc::c_int) + 1 as libc::c_int)
-                >> 1 as libc::c_int
-        }) > 0x7fff as libc::c_int
+            ((out_2 + out_1 >> 11 as i32 - 1 as i32) + 1 as i32)
+                >> 1 as i32
+        }) > 0x7fff as i32
         {
-            0x7fff as libc::c_int
-        } else if (if 11 as libc::c_int == 1 as libc::c_int {
-            (out_2 + out_1 >> 1 as libc::c_int) + (out_2 + out_1 & 1 as libc::c_int)
+            0x7fff as i32
+        } else if (if 11 as i32 == 1 as i32 {
+            (out_2 + out_1 >> 1 as i32) + (out_2 + out_1 & 1 as i32)
         } else {
-            ((out_2 + out_1 >> 11 as libc::c_int - 1 as libc::c_int) + 1 as libc::c_int)
-                >> 1 as libc::c_int
-        }) < 0x8000 as libc::c_int as crate::opus_types_h::opus_int16 as libc::c_int
+            ((out_2 + out_1 >> 11 as i32 - 1 as i32) + 1 as i32)
+                >> 1 as i32
+        }) < 0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
         {
-            0x8000 as libc::c_int as crate::opus_types_h::opus_int16 as libc::c_int
-        } else if 11 as libc::c_int == 1 as libc::c_int {
-            (out_2 + out_1 >> 1 as libc::c_int) + (out_2 + out_1 & 1 as libc::c_int)
+            0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+        } else if 11 as i32 == 1 as i32 {
+            (out_2 + out_1 >> 1 as i32) + (out_2 + out_1 & 1 as i32)
         } else {
-            ((out_2 + out_1 >> 11 as libc::c_int - 1 as libc::c_int) + 1 as libc::c_int)
-                >> 1 as libc::c_int
+            ((out_2 + out_1 >> 11 as i32 - 1 as i32) + 1 as i32)
+                >> 1 as i32
         } as crate::opus_types_h::opus_int16;
-        *outH.offset(k as isize) = if (if 11 as libc::c_int == 1 as libc::c_int {
-            (out_2 - out_1 >> 1 as libc::c_int) + (out_2 - out_1 & 1 as libc::c_int)
+        *outH.offset(k as isize) = if (if 11 as i32 == 1 as i32 {
+            (out_2 - out_1 >> 1 as i32) + (out_2 - out_1 & 1 as i32)
         } else {
-            ((out_2 - out_1 >> 11 as libc::c_int - 1 as libc::c_int) + 1 as libc::c_int)
-                >> 1 as libc::c_int
-        }) > 0x7fff as libc::c_int
+            ((out_2 - out_1 >> 11 as i32 - 1 as i32) + 1 as i32)
+                >> 1 as i32
+        }) > 0x7fff as i32
         {
-            0x7fff as libc::c_int
-        } else if (if 11 as libc::c_int == 1 as libc::c_int {
-            (out_2 - out_1 >> 1 as libc::c_int) + (out_2 - out_1 & 1 as libc::c_int)
+            0x7fff as i32
+        } else if (if 11 as i32 == 1 as i32 {
+            (out_2 - out_1 >> 1 as i32) + (out_2 - out_1 & 1 as i32)
         } else {
-            ((out_2 - out_1 >> 11 as libc::c_int - 1 as libc::c_int) + 1 as libc::c_int)
-                >> 1 as libc::c_int
-        }) < 0x8000 as libc::c_int as crate::opus_types_h::opus_int16 as libc::c_int
+            ((out_2 - out_1 >> 11 as i32 - 1 as i32) + 1 as i32)
+                >> 1 as i32
+        }) < 0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
         {
-            0x8000 as libc::c_int as crate::opus_types_h::opus_int16 as libc::c_int
-        } else if 11 as libc::c_int == 1 as libc::c_int {
-            (out_2 - out_1 >> 1 as libc::c_int) + (out_2 - out_1 & 1 as libc::c_int)
+            0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+        } else if 11 as i32 == 1 as i32 {
+            (out_2 - out_1 >> 1 as i32) + (out_2 - out_1 & 1 as i32)
         } else {
-            ((out_2 - out_1 >> 11 as libc::c_int - 1 as libc::c_int) + 1 as libc::c_int)
-                >> 1 as libc::c_int
+            ((out_2 - out_1 >> 11 as i32 - 1 as i32) + 1 as i32)
+                >> 1 as i32
         } as crate::opus_types_h::opus_int16;
         k += 1
     }

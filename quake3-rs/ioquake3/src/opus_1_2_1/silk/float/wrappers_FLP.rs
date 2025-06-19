@@ -56,7 +56,7 @@ pub mod float_cast_h {
     /* With GCC, when SSE is available, the fastest conversion is cvtss2si. */
     #[inline]
 
-    pub unsafe extern "C" fn float2int(mut x: libc::c_float) -> crate::opus_types_h::opus_int32 {
+    pub unsafe extern "C" fn float2int(mut x: f32) -> crate::opus_types_h::opus_int32 {
         return _mm_cvt_ss2si(_mm_set_ss(x));
     }
 
@@ -71,7 +71,7 @@ pub mod SigProc_FLP_h {
     #[inline]
 
     pub unsafe extern "C" fn silk_float2int(
-        mut x: libc::c_float,
+        mut x: f32,
     ) -> crate::opus_types_h::opus_int32 {
         return float2int(x);
     }
@@ -139,14 +139,14 @@ POSSIBILITY OF SUCH DAMAGE.
 
 pub unsafe extern "C" fn silk_A2NLSF_FLP(
     mut NLSF_Q15: *mut crate::opus_types_h::opus_int16,
-    mut pAR: *const libc::c_float,
-    LPC_order: libc::c_int,
+    mut pAR: *const f32,
+    LPC_order: i32,
 )
 /* I    LPC order                                   */
 {
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     let mut a_fix_Q16: [crate::opus_types_h::opus_int32; 16] = [0; 16];
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < LPC_order {
         a_fix_Q16[i as usize] = silk_float2int(*pAR.offset(i as isize) * 65536.0f32);
         i += 1
@@ -157,14 +157,14 @@ pub unsafe extern "C" fn silk_A2NLSF_FLP(
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_NLSF2A_FLP(
-    mut pAR: *mut libc::c_float,
+    mut pAR: *mut f32,
     mut NLSF_Q15: *const crate::opus_types_h::opus_int16,
-    LPC_order: libc::c_int,
-    mut arch: libc::c_int,
+    LPC_order: i32,
+    mut arch: i32,
 )
 /* I    Run-time architecture                       */
 {
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     let mut a_fix_Q12: [crate::opus_types_h::opus_int16; 16] = [0; 16];
     crate::src::opus_1_2_1::silk::NLSF2A::silk_NLSF2A(
         a_fix_Q12.as_mut_ptr(),
@@ -172,9 +172,9 @@ pub unsafe extern "C" fn silk_NLSF2A_FLP(
         LPC_order,
         arch,
     );
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < LPC_order {
-        *pAR.offset(i as isize) = a_fix_Q12[i as usize] as libc::c_float * (1.0f32 / 4096.0f32);
+        *pAR.offset(i as isize) = a_fix_Q12[i as usize] as f32 * (1.0f32 / 4096.0f32);
         i += 1
     }
 }
@@ -185,14 +185,14 @@ pub unsafe extern "C" fn silk_NLSF2A_FLP(
 
 pub unsafe extern "C" fn silk_process_NLSFs_FLP(
     mut psEncC: *mut crate::structs_h::silk_encoder_state,
-    mut PredCoef: *mut [libc::c_float; 16],
+    mut PredCoef: *mut [f32; 16],
     mut NLSF_Q15: *mut crate::opus_types_h::opus_int16,
     mut prev_NLSF_Q15: *const crate::opus_types_h::opus_int16,
 )
 /* I    Previous Normalized LSFs (0 - (2^15-1))     */
 {
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
     let mut PredCoef_Q12: [[crate::opus_types_h::opus_int16; 16]; 2] = [[0; 16]; 2];
     crate::src::opus_1_2_1::silk::process_NLSFs::silk_process_NLSFs(
         psEncC as *mut crate::structs_h::silk_encoder_state,
@@ -200,12 +200,12 @@ pub unsafe extern "C" fn silk_process_NLSFs_FLP(
         NLSF_Q15,
         prev_NLSF_Q15,
     );
-    j = 0 as libc::c_int;
-    while j < 2 as libc::c_int {
-        i = 0 as libc::c_int;
+    j = 0 as i32;
+    while j < 2 as i32 {
+        i = 0 as i32;
         while i < (*psEncC).predictLPCOrder {
             (*PredCoef.offset(j as isize))[i as usize] =
-                PredCoef_Q12[j as usize][i as usize] as libc::c_float * (1.0f32 / 4096.0f32);
+                PredCoef_Q12[j as usize][i as usize] as f32 * (1.0f32 / 4096.0f32);
             i += 1
         }
         j += 1
@@ -270,45 +270,45 @@ pub unsafe extern "C" fn silk_NSQ_wrapper_FLP(
     mut psEncCtrl: *mut crate::structs_FLP_h::silk_encoder_control_FLP,
     mut psIndices: *mut crate::structs_h::SideInfoIndices,
     mut psNSQ: *mut crate::structs_h::silk_nsq_state,
-    mut pulses: *mut libc::c_schar,
-    mut x: *const libc::c_float,
+    mut pulses: *mut i8,
+    mut x: *const f32,
 )
 /* I    Prefiltered input signal                    */
 {
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
     let mut x16: [crate::opus_types_h::opus_int16; 320] = [0; 320];
     let mut Gains_Q16: [crate::opus_types_h::opus_int32; 4] = [0; 4];
     let mut PredCoef_Q12: [[crate::opus_types_h::opus_int16; 16]; 2] = [[0; 16]; 2];
     let mut LTPCoef_Q14: [crate::opus_types_h::opus_int16; 20] = [0; 20];
-    let mut LTP_scale_Q14: libc::c_int = 0;
+    let mut LTP_scale_Q14: i32 = 0;
     /* Noise shaping parameters */
     let mut AR_Q13: [crate::opus_types_h::opus_int16; 96] = [0; 96]; /* Packs two int16 coefficients per int32 value             */
     let mut LF_shp_Q14: [crate::opus_types_h::opus_int32; 4] = [0; 4];
-    let mut Lambda_Q10: libc::c_int = 0;
-    let mut Tilt_Q14: [libc::c_int; 4] = [0; 4];
-    let mut HarmShapeGain_Q14: [libc::c_int; 4] = [0; 4];
+    let mut Lambda_Q10: i32 = 0;
+    let mut Tilt_Q14: [i32; 4] = [0; 4];
+    let mut HarmShapeGain_Q14: [i32; 4] = [0; 4];
     /* Convert control struct to fix control struct */
     /* Noise shape parameters */
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < (*psEnc).sCmn.nb_subfr {
-        j = 0 as libc::c_int;
+        j = 0 as i32;
         while j < (*psEnc).sCmn.shapingLPCOrder {
-            AR_Q13[(i * 24 as libc::c_int + j) as usize] =
-                silk_float2int((*psEncCtrl).AR[(i * 24 as libc::c_int + j) as usize] * 8192.0f32)
+            AR_Q13[(i * 24 as i32 + j) as usize] =
+                silk_float2int((*psEncCtrl).AR[(i * 24 as i32 + j) as usize] * 8192.0f32)
                     as crate::opus_types_h::opus_int16;
             j += 1
         }
         i += 1
     }
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < (*psEnc).sCmn.nb_subfr {
         LF_shp_Q14[i as usize] = ((silk_float2int((*psEncCtrl).LF_AR_shp[i as usize] * 16384.0f32)
             as crate::opus_types_h::opus_uint32)
-            << 16 as libc::c_int)
+            << 16 as i32)
             as crate::opus_types_h::opus_int32
             | silk_float2int((*psEncCtrl).LF_MA_shp[i as usize] * 16384.0f32)
-                as crate::opus_types_h::opus_uint16 as libc::c_int;
+                as crate::opus_types_h::opus_uint16 as i32;
         Tilt_Q14[i as usize] = silk_float2int((*psEncCtrl).Tilt[i as usize] * 16384.0f32);
         HarmShapeGain_Q14[i as usize] =
             silk_float2int((*psEncCtrl).HarmShapeGain[i as usize] * 16384.0f32);
@@ -316,15 +316,15 @@ pub unsafe extern "C" fn silk_NSQ_wrapper_FLP(
     }
     Lambda_Q10 = silk_float2int((*psEncCtrl).Lambda * 1024.0f32);
     /* prediction and coding parameters */
-    i = 0 as libc::c_int;
-    while i < (*psEnc).sCmn.nb_subfr * 5 as libc::c_int {
+    i = 0 as i32;
+    while i < (*psEnc).sCmn.nb_subfr * 5 as i32 {
         LTPCoef_Q14[i as usize] = silk_float2int((*psEncCtrl).LTPCoef[i as usize] * 16384.0f32)
             as crate::opus_types_h::opus_int16;
         i += 1
     }
-    j = 0 as libc::c_int;
-    while j < 2 as libc::c_int {
-        i = 0 as libc::c_int;
+    j = 0 as i32;
+    while j < 2 as i32 {
+        i = 0 as i32;
         while i < (*psEnc).sCmn.predictLPCOrder {
             PredCoef_Q12[j as usize][i as usize] =
                 silk_float2int((*psEncCtrl).PredCoef[j as usize][i as usize] * 4096.0f32)
@@ -333,26 +333,26 @@ pub unsafe extern "C" fn silk_NSQ_wrapper_FLP(
         }
         j += 1
     }
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < (*psEnc).sCmn.nb_subfr {
         Gains_Q16[i as usize] = silk_float2int((*psEncCtrl).Gains[i as usize] * 65536.0f32);
         i += 1
     }
-    if (*psIndices).signalType as libc::c_int == 2 as libc::c_int {
+    if (*psIndices).signalType as i32 == 2 as i32 {
         LTP_scale_Q14 = crate::src::opus_1_2_1::silk::tables_other::silk_LTPScales_table_Q14
-            [(*psIndices).LTP_scaleIndex as usize] as libc::c_int
+            [(*psIndices).LTP_scaleIndex as usize] as i32
     } else {
-        LTP_scale_Q14 = 0 as libc::c_int
+        LTP_scale_Q14 = 0 as i32
     }
     /* Convert input to fix */
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < (*psEnc).sCmn.frame_length {
         x16[i as usize] = silk_float2int(*x.offset(i as isize)) as crate::opus_types_h::opus_int16;
         i += 1
     }
     /* Call NSQ */
-    if (*psEnc).sCmn.nStatesDelayedDecision > 1 as libc::c_int
-        || (*psEnc).sCmn.warping_Q16 > 0 as libc::c_int
+    if (*psEnc).sCmn.nStatesDelayedDecision > 1 as i32
+        || (*psEnc).sCmn.warping_Q16 > 0 as i32
     {
         crate::src::opus_1_2_1::silk::NSQ_del_dec::silk_NSQ_del_dec_c(
             &mut (*psEnc).sCmn as *mut _ as *const crate::structs_h::silk_encoder_state,
@@ -360,15 +360,15 @@ pub unsafe extern "C" fn silk_NSQ_wrapper_FLP(
             psIndices as *mut crate::structs_h::SideInfoIndices,
             x16.as_mut_ptr() as *const crate::opus_types_h::opus_int16,
             pulses,
-            PredCoef_Q12[0 as libc::c_int as usize].as_mut_ptr()
+            PredCoef_Q12[0 as i32 as usize].as_mut_ptr()
                 as *const crate::opus_types_h::opus_int16,
             LTPCoef_Q14.as_mut_ptr() as *const crate::opus_types_h::opus_int16,
             AR_Q13.as_mut_ptr() as *const crate::opus_types_h::opus_int16,
-            HarmShapeGain_Q14.as_mut_ptr() as *const libc::c_int,
-            Tilt_Q14.as_mut_ptr() as *const libc::c_int,
+            HarmShapeGain_Q14.as_mut_ptr() as *const i32,
+            Tilt_Q14.as_mut_ptr() as *const i32,
             LF_shp_Q14.as_mut_ptr() as *const crate::opus_types_h::opus_int32,
             Gains_Q16.as_mut_ptr() as *const crate::opus_types_h::opus_int32,
-            (*psEncCtrl).pitchL.as_mut_ptr() as *const libc::c_int,
+            (*psEncCtrl).pitchL.as_mut_ptr() as *const i32,
             Lambda_Q10,
             LTP_scale_Q14,
         );
@@ -379,15 +379,15 @@ pub unsafe extern "C" fn silk_NSQ_wrapper_FLP(
             psIndices as *mut crate::structs_h::SideInfoIndices,
             x16.as_mut_ptr() as *const crate::opus_types_h::opus_int16,
             pulses,
-            PredCoef_Q12[0 as libc::c_int as usize].as_mut_ptr()
+            PredCoef_Q12[0 as i32 as usize].as_mut_ptr()
                 as *const crate::opus_types_h::opus_int16,
             LTPCoef_Q14.as_mut_ptr() as *const crate::opus_types_h::opus_int16,
             AR_Q13.as_mut_ptr() as *const crate::opus_types_h::opus_int16,
-            HarmShapeGain_Q14.as_mut_ptr() as *const libc::c_int,
-            Tilt_Q14.as_mut_ptr() as *const libc::c_int,
+            HarmShapeGain_Q14.as_mut_ptr() as *const i32,
+            Tilt_Q14.as_mut_ptr() as *const i32,
             LF_shp_Q14.as_mut_ptr() as *const crate::opus_types_h::opus_int32,
             Gains_Q16.as_mut_ptr() as *const crate::opus_types_h::opus_int32,
-            (*psEncCtrl).pitchL.as_mut_ptr() as *const libc::c_int,
+            (*psEncCtrl).pitchL.as_mut_ptr() as *const i32,
             Lambda_Q10,
             LTP_scale_Q14,
         );
@@ -516,31 +516,31 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_quant_LTP_gains_FLP(
-    mut B: *mut libc::c_float,
-    mut cbk_index: *mut libc::c_schar,
-    mut periodicity_index: *mut libc::c_schar,
+    mut B: *mut f32,
+    mut cbk_index: *mut i8,
+    mut periodicity_index: *mut i8,
     mut sum_log_gain_Q7: *mut crate::opus_types_h::opus_int32,
-    mut pred_gain_dB: *mut libc::c_float,
-    mut XX: *const libc::c_float,
-    mut xX: *const libc::c_float,
-    subfr_len: libc::c_int,
-    nb_subfr: libc::c_int,
-    mut arch: libc::c_int,
+    mut pred_gain_dB: *mut f32,
+    mut XX: *const f32,
+    mut xX: *const f32,
+    subfr_len: i32,
+    nb_subfr: i32,
+    mut arch: i32,
 )
 /* I    Run-time architecture                       */
 {
-    let mut i: libc::c_int = 0;
-    let mut pred_gain_dB_Q7: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut pred_gain_dB_Q7: i32 = 0;
     let mut B_Q14: [crate::opus_types_h::opus_int16; 20] = [0; 20];
     let mut XX_Q17: [crate::opus_types_h::opus_int32; 100] = [0; 100];
     let mut xX_Q17: [crate::opus_types_h::opus_int32; 20] = [0; 20];
-    i = 0 as libc::c_int;
-    while i < nb_subfr * 5 as libc::c_int * 5 as libc::c_int {
+    i = 0 as i32;
+    while i < nb_subfr * 5 as i32 * 5 as i32 {
         XX_Q17[i as usize] = silk_float2int(*XX.offset(i as isize) * 131072.0f32);
         i += 1
     }
-    i = 0 as libc::c_int;
-    while i < nb_subfr * 5 as libc::c_int {
+    i = 0 as i32;
+    while i < nb_subfr * 5 as i32 {
         xX_Q17[i as usize] = silk_float2int(*xX.offset(i as isize) * 131072.0f32);
         i += 1
     }
@@ -556,10 +556,10 @@ pub unsafe extern "C" fn silk_quant_LTP_gains_FLP(
         nb_subfr,
         arch,
     );
-    i = 0 as libc::c_int;
-    while i < nb_subfr * 5 as libc::c_int {
-        *B.offset(i as isize) = B_Q14[i as usize] as libc::c_float * (1.0f32 / 16384.0f32);
+    i = 0 as i32;
+    while i < nb_subfr * 5 as i32 {
+        *B.offset(i as isize) = B_Q14[i as usize] as f32 * (1.0f32 / 16384.0f32);
         i += 1
     }
-    *pred_gain_dB = pred_gain_dB_Q7 as libc::c_float * (1.0f32 / 128.0f32);
+    *pred_gain_dB = pred_gain_dB_Q7 as f32 * (1.0f32 / 128.0f32);
 }

@@ -50,23 +50,23 @@ pub unsafe extern "C" fn silk_resampler_private_AR2(
 {
     let mut k: crate::opus_types_h::opus_int32 = 0;
     let mut out32: crate::opus_types_h::opus_int32 = 0;
-    k = 0 as libc::c_int;
+    k = 0 as i32;
     while k < len {
-        out32 = *S.offset(0 as libc::c_int as isize)
+        out32 = *S.offset(0 as i32 as isize)
             + ((*in_0.offset(k as isize) as crate::opus_types_h::opus_int32
                 as crate::opus_types_h::opus_uint32)
-                << 8 as libc::c_int) as crate::opus_types_h::opus_int32;
+                << 8 as i32) as crate::opus_types_h::opus_int32;
         *out_Q8.offset(k as isize) = out32;
-        out32 = ((out32 as crate::opus_types_h::opus_uint32) << 2 as libc::c_int)
+        out32 = ((out32 as crate::opus_types_h::opus_uint32) << 2 as i32)
             as crate::opus_types_h::opus_int32;
-        *S.offset(0 as libc::c_int as isize) =
-            (*S.offset(1 as libc::c_int as isize) as libc::c_longlong
-                + (out32 as libc::c_longlong
-                    * *A_Q14.offset(0 as libc::c_int as isize) as libc::c_longlong
-                    >> 16 as libc::c_int)) as crate::opus_types_h::opus_int32;
-        *S.offset(1 as libc::c_int as isize) = (out32 as libc::c_longlong
-            * *A_Q14.offset(1 as libc::c_int as isize) as libc::c_longlong
-            >> 16 as libc::c_int)
+        *S.offset(0 as i32 as isize) =
+            (*S.offset(1 as i32 as isize) as i64
+                + (out32 as i64
+                    * *A_Q14.offset(0 as i32 as isize) as i64
+                    >> 16 as i32)) as crate::opus_types_h::opus_int32;
+        *S.offset(1 as i32 as isize) = (out32 as i64
+            * *A_Q14.offset(1 as i32 as isize) as i64
+            >> 16 as i32)
             as crate::opus_types_h::opus_int32;
         k += 1
     }

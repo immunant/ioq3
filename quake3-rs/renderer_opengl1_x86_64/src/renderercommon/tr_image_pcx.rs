@@ -33,21 +33,21 @@ pub struct pcx_t {
     pub version: libc::c_char,
     pub encoding: libc::c_char,
     pub bits_per_pixel: libc::c_char,
-    pub xmin: libc::c_ushort,
-    pub ymin: libc::c_ushort,
-    pub xmax: libc::c_ushort,
-    pub ymax: libc::c_ushort,
-    pub hres: libc::c_ushort,
-    pub vres: libc::c_ushort,
-    pub palette: [libc::c_uchar; 48],
+    pub xmin: u16,
+    pub ymin: u16,
+    pub xmax: u16,
+    pub ymax: u16,
+    pub hres: u16,
+    pub vres: u16,
+    pub palette: [u8; 48],
     pub reserved: libc::c_char,
     pub color_planes: libc::c_char,
-    pub bytes_per_line: libc::c_ushort,
-    pub palette_type: libc::c_ushort,
-    pub hscreensize: libc::c_ushort,
-    pub vscreensize: libc::c_ushort,
+    pub bytes_per_line: u16,
+    pub palette_type: u16,
+    pub hscreensize: u16,
+    pub vscreensize: u16,
     pub filler: [libc::c_char; 54],
-    pub data: [libc::c_uchar; 0],
+    pub data: [u8; 0],
 }
 
 #[repr(C)]
@@ -122,8 +122,8 @@ IMAGE LOADERS
 pub unsafe extern "C" fn R_LoadPCX(
     mut filename: *const libc::c_char,
     mut pic: *mut *mut crate::src::qcommon::q_shared::byte,
-    mut width: *mut libc::c_int,
-    mut height: *mut libc::c_int,
+    mut width: *mut i32,
+    mut height: *mut i32,
 ) {
     let mut raw: C2RustUnnamed_88 = C2RustUnnamed_88 {
         b: 0 as *mut crate::src::qcommon::q_shared::byte,
@@ -131,26 +131,26 @@ pub unsafe extern "C" fn R_LoadPCX(
     let mut end: *mut crate::src::qcommon::q_shared::byte =
         0 as *mut crate::src::qcommon::q_shared::byte;
     let mut pcx: *mut pcx_t = 0 as *mut pcx_t;
-    let mut len: libc::c_int = 0;
-    let mut dataByte: libc::c_uchar = 0 as libc::c_int as libc::c_uchar;
-    let mut runLength: libc::c_uchar = 0 as libc::c_int as libc::c_uchar;
+    let mut len: i32 = 0;
+    let mut dataByte: u8 = 0 as i32 as u8;
+    let mut runLength: u8 = 0 as i32 as u8;
     let mut out: *mut crate::src::qcommon::q_shared::byte =
         0 as *mut crate::src::qcommon::q_shared::byte;
     let mut pix: *mut crate::src::qcommon::q_shared::byte =
         0 as *mut crate::src::qcommon::q_shared::byte;
-    let mut w: libc::c_ushort = 0;
-    let mut h: libc::c_ushort = 0;
+    let mut w: u16 = 0;
+    let mut h: u16 = 0;
     let mut pic8: *mut crate::src::qcommon::q_shared::byte =
         0 as *mut crate::src::qcommon::q_shared::byte;
     let mut palette: *mut crate::src::qcommon::q_shared::byte =
         0 as *mut crate::src::qcommon::q_shared::byte;
-    let mut i: libc::c_int = 0;
-    let mut size: libc::c_uint = 0 as libc::c_int as libc::c_uint;
+    let mut i: i32 = 0;
+    let mut size: u32 = 0 as i32 as u32;
     if !width.is_null() {
-        *width = 0 as libc::c_int
+        *width = 0 as i32
     }
     if !height.is_null() {
-        *height = 0 as libc::c_int
+        *height = 0 as i32
     }
     *pic = 0 as *mut crate::src::qcommon::q_shared::byte;
     //
@@ -159,15 +159,15 @@ pub unsafe extern "C" fn R_LoadPCX(
     len = crate::src::renderergl1::tr_main::ri
         .FS_ReadFile
         .expect("non-null function pointer")(filename as *mut libc::c_char, &mut raw.v)
-        as libc::c_int;
-    if raw.b.is_null() || len < 0 as libc::c_int {
+        as i32;
+    if raw.b.is_null() || len < 0 as i32 {
         return;
     }
-    if (len as libc::c_uint as libc::c_ulong) < ::std::mem::size_of::<pcx_t>() as libc::c_ulong {
+    if (len as u32 as libc::c_ulong) < ::std::mem::size_of::<pcx_t>() as libc::c_ulong {
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+            crate::src::qcommon::q_shared::PRINT_ALL as i32,
             b"PCX truncated: %s\n\x00" as *const u8 as *const libc::c_char,
             filename,
         );
@@ -181,59 +181,59 @@ pub unsafe extern "C" fn R_LoadPCX(
     //
     pcx = raw.b as *mut pcx_t;
     end = raw.b.offset(len as isize);
-    w = ((*pcx).xmax as libc::c_int + 1 as libc::c_int) as libc::c_ushort;
-    h = ((*pcx).ymax as libc::c_int + 1 as libc::c_int) as libc::c_ushort;
-    size = (w as libc::c_int * h as libc::c_int) as libc::c_uint;
-    if (*pcx).manufacturer as libc::c_int != 0xa as libc::c_int
-        || (*pcx).version as libc::c_int != 5 as libc::c_int
-        || (*pcx).encoding as libc::c_int != 1 as libc::c_int
-        || (*pcx).color_planes as libc::c_int != 1 as libc::c_int
-        || (*pcx).bits_per_pixel as libc::c_int != 8 as libc::c_int
-        || w as libc::c_int >= 1024 as libc::c_int
-        || h as libc::c_int >= 1024 as libc::c_int
+    w = ((*pcx).xmax as i32 + 1 as i32) as u16;
+    h = ((*pcx).ymax as i32 + 1 as i32) as u16;
+    size = (w as i32 * h as i32) as u32;
+    if (*pcx).manufacturer as i32 != 0xa as i32
+        || (*pcx).version as i32 != 5 as i32
+        || (*pcx).encoding as i32 != 1 as i32
+        || (*pcx).color_planes as i32 != 1 as i32
+        || (*pcx).bits_per_pixel as i32 != 8 as i32
+        || w as i32 >= 1024 as i32
+        || h as i32 >= 1024 as i32
     {
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+            crate::src::qcommon::q_shared::PRINT_ALL as i32,
             b"Bad or unsupported pcx file %s (%dx%d@%d)\n\x00" as *const u8 as *const libc::c_char,
             filename,
-            w as libc::c_int,
-            h as libc::c_int,
-            (*pcx).bits_per_pixel as libc::c_int,
+            w as i32,
+            h as i32,
+            (*pcx).bits_per_pixel as i32,
         );
         return;
     }
     pic8 = crate::src::renderergl1::tr_main::ri
         .Malloc
-        .expect("non-null function pointer")(size as libc::c_int)
+        .expect("non-null function pointer")(size as i32)
         as *mut crate::src::qcommon::q_shared::byte;
     pix = pic8;
     raw.b = (*pcx).data.as_mut_ptr();
     // FIXME: should use bytes_per_line but original q3 didn't do that either
     while pix < pic8.offset(size as isize) {
-        if runLength as libc::c_int > 0 as libc::c_int {
+        if runLength as i32 > 0 as i32 {
             let fresh0 = pix;
             pix = pix.offset(1);
             *fresh0 = dataByte;
             runLength = runLength.wrapping_sub(1)
         } else {
-            if raw.b.offset(1 as libc::c_int as isize) > end {
+            if raw.b.offset(1 as i32 as isize) > end {
                 break;
             }
             let fresh1 = raw.b;
             raw.b = raw.b.offset(1);
             dataByte = *fresh1;
-            if dataByte as libc::c_int & 0xc0 as libc::c_int == 0xc0 as libc::c_int {
-                if raw.b.offset(1 as libc::c_int as isize) > end {
+            if dataByte as i32 & 0xc0 as i32 == 0xc0 as i32 {
+                if raw.b.offset(1 as i32 as isize) > end {
                     break;
                 }
-                runLength = (dataByte as libc::c_int & 0x3f as libc::c_int) as libc::c_uchar;
+                runLength = (dataByte as i32 & 0x3f as i32) as u8;
                 let fresh2 = raw.b;
                 raw.b = raw.b.offset(1);
                 dataByte = *fresh2
             } else {
-                runLength = 1 as libc::c_int as libc::c_uchar
+                runLength = 1 as i32 as u8
             }
         }
     }
@@ -241,7 +241,7 @@ pub unsafe extern "C" fn R_LoadPCX(
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+            crate::src::qcommon::q_shared::PRINT_ALL as i32,
             b"PCX file truncated: %s\n\x00" as *const u8 as *const libc::c_char,
             filename,
         );
@@ -255,14 +255,14 @@ pub unsafe extern "C" fn R_LoadPCX(
     if raw
         .b
         .offset_from(pcx as *mut crate::src::qcommon::q_shared::byte) as libc::c_long
-        >= end.offset_from(769 as libc::c_int as *mut crate::src::qcommon::q_shared::byte)
+        >= end.offset_from(769 as i32 as *mut crate::src::qcommon::q_shared::byte)
             as libc::c_long
-        || *end.offset(-(769 as libc::c_int) as isize) as libc::c_int != 0xc as libc::c_int
+        || *end.offset(-(769 as i32) as isize) as i32 != 0xc as i32
     {
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_ALL as libc::c_int,
+            crate::src::qcommon::q_shared::PRINT_ALL as i32,
             b"PCX missing palette: %s\n\x00" as *const u8 as *const libc::c_char,
             filename,
         );
@@ -274,32 +274,32 @@ pub unsafe extern "C" fn R_LoadPCX(
             .expect("non-null function pointer")(pic8 as *mut libc::c_void);
         return;
     }
-    palette = end.offset(-(768 as libc::c_int as isize));
+    palette = end.offset(-(768 as i32 as isize));
     out = crate::src::renderergl1::tr_main::ri
         .Malloc
         .expect("non-null function pointer")(
-        (4 as libc::c_int as libc::c_uint).wrapping_mul(size) as libc::c_int,
+        (4 as i32 as u32).wrapping_mul(size) as i32,
     ) as *mut crate::src::qcommon::q_shared::byte;
     pix = out;
-    i = 0 as libc::c_int;
-    while (i as libc::c_uint) < size {
-        let mut p: libc::c_uchar = *pic8.offset(i as isize);
-        *pix.offset(0 as libc::c_int as isize) =
-            *palette.offset((p as libc::c_int * 3 as libc::c_int) as isize);
-        *pix.offset(1 as libc::c_int as isize) =
-            *palette.offset((p as libc::c_int * 3 as libc::c_int + 1 as libc::c_int) as isize);
-        *pix.offset(2 as libc::c_int as isize) =
-            *palette.offset((p as libc::c_int * 3 as libc::c_int + 2 as libc::c_int) as isize);
-        *pix.offset(3 as libc::c_int as isize) =
-            255 as libc::c_int as crate::src::qcommon::q_shared::byte;
-        pix = pix.offset(4 as libc::c_int as isize);
+    i = 0 as i32;
+    while (i as u32) < size {
+        let mut p: u8 = *pic8.offset(i as isize);
+        *pix.offset(0 as i32 as isize) =
+            *palette.offset((p as i32 * 3 as i32) as isize);
+        *pix.offset(1 as i32 as isize) =
+            *palette.offset((p as i32 * 3 as i32 + 1 as i32) as isize);
+        *pix.offset(2 as i32 as isize) =
+            *palette.offset((p as i32 * 3 as i32 + 2 as i32) as isize);
+        *pix.offset(3 as i32 as isize) =
+            255 as i32 as crate::src::qcommon::q_shared::byte;
+        pix = pix.offset(4 as i32 as isize);
         i += 1
     }
     if !width.is_null() {
-        *width = w as libc::c_int
+        *width = w as i32
     }
     if !height.is_null() {
-        *height = h as libc::c_int
+        *height = h as i32
     }
     *pic = out;
     crate::src::renderergl1::tr_main::ri

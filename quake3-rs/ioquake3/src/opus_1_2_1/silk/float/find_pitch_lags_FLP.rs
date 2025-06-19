@@ -121,22 +121,22 @@ POSSIBILITY OF SUCH DAMAGE.
 pub unsafe extern "C" fn silk_find_pitch_lags_FLP(
     mut psEnc: *mut crate::structs_FLP_h::silk_encoder_state_FLP,
     mut psEncCtrl: *mut crate::structs_FLP_h::silk_encoder_control_FLP,
-    mut res: *mut libc::c_float,
-    mut x: *const libc::c_float,
-    mut arch: libc::c_int,
+    mut res: *mut f32,
+    mut x: *const f32,
+    mut arch: i32,
 )
 /* I    Run-time architecture                       */
 {
-    let mut buf_len: libc::c_int = 0;
-    let mut thrhld: libc::c_float = 0.;
-    let mut res_nrg: libc::c_float = 0.;
-    let mut x_buf_ptr: *const libc::c_float = 0 as *const libc::c_float;
-    let mut x_buf: *const libc::c_float = 0 as *const libc::c_float;
-    let mut auto_corr: [libc::c_float; 17] = [0.; 17];
-    let mut A: [libc::c_float; 16] = [0.; 16];
-    let mut refl_coef: [libc::c_float; 16] = [0.; 16];
-    let mut Wsig: [libc::c_float; 384] = [0.; 384];
-    let mut Wsig_ptr: *mut libc::c_float = 0 as *mut libc::c_float;
+    let mut buf_len: i32 = 0;
+    let mut thrhld: f32 = 0.;
+    let mut res_nrg: f32 = 0.;
+    let mut x_buf_ptr: *const f32 = 0 as *const f32;
+    let mut x_buf: *const f32 = 0 as *const f32;
+    let mut auto_corr: [f32; 17] = [0.; 17];
+    let mut A: [f32; 16] = [0.; 16];
+    let mut refl_coef: [f32; 16] = [0.; 16];
+    let mut Wsig: [f32; 384] = [0.; 384];
+    let mut Wsig_ptr: *mut f32 = 0 as *mut f32;
     /* *****************************************/
     /* Set up buffer lengths etc based on Fs  */
     /* *****************************************/
@@ -155,7 +155,7 @@ pub unsafe extern "C" fn silk_find_pitch_lags_FLP(
     crate::src::opus_1_2_1::silk::float::apply_sine_window_FLP::silk_apply_sine_window_FLP(
         Wsig_ptr,
         x_buf_ptr,
-        1 as libc::c_int,
+        1 as i32,
         (*psEnc).sCmn.la_pitch,
     );
     /* Middle non-windowed samples */
@@ -164,23 +164,23 @@ pub unsafe extern "C" fn silk_find_pitch_lags_FLP(
     crate::stdlib::memcpy(
         Wsig_ptr as *mut libc::c_void,
         x_buf_ptr as *const libc::c_void,
-        (((*psEnc).sCmn.pitch_LPC_win_length - ((*psEnc).sCmn.la_pitch << 1 as libc::c_int))
+        (((*psEnc).sCmn.pitch_LPC_win_length - ((*psEnc).sCmn.la_pitch << 1 as i32))
             as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<libc::c_float>() as libc::c_ulong),
+            .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
     );
     /* Last LA_LTP samples */
     Wsig_ptr = Wsig_ptr.offset(
-        ((*psEnc).sCmn.pitch_LPC_win_length - ((*psEnc).sCmn.la_pitch << 1 as libc::c_int))
+        ((*psEnc).sCmn.pitch_LPC_win_length - ((*psEnc).sCmn.la_pitch << 1 as i32))
             as isize,
     );
     x_buf_ptr = x_buf_ptr.offset(
-        ((*psEnc).sCmn.pitch_LPC_win_length - ((*psEnc).sCmn.la_pitch << 1 as libc::c_int))
+        ((*psEnc).sCmn.pitch_LPC_win_length - ((*psEnc).sCmn.la_pitch << 1 as i32))
             as isize,
     );
     crate::src::opus_1_2_1::silk::float::apply_sine_window_FLP::silk_apply_sine_window_FLP(
         Wsig_ptr,
         x_buf_ptr,
-        2 as libc::c_int,
+        2 as i32,
         (*psEnc).sCmn.la_pitch,
     );
     /* Calculate autocorrelation sequence */
@@ -188,20 +188,20 @@ pub unsafe extern "C" fn silk_find_pitch_lags_FLP(
         auto_corr.as_mut_ptr(),
         Wsig.as_mut_ptr(),
         (*psEnc).sCmn.pitch_LPC_win_length,
-        (*psEnc).sCmn.pitchEstimationLPCOrder + 1 as libc::c_int,
+        (*psEnc).sCmn.pitchEstimationLPCOrder + 1 as i32,
     );
     /* Add white noise, as a fraction of the energy */
-    auto_corr[0 as libc::c_int as usize] +=
-        auto_corr[0 as libc::c_int as usize] * 1e-3f32 + 1 as libc::c_int as libc::c_float;
+    auto_corr[0 as i32 as usize] +=
+        auto_corr[0 as i32 as usize] * 1e-3f32 + 1 as i32 as f32;
     /* Calculate the reflection coefficients using Schur */
     res_nrg = crate::src::opus_1_2_1::silk::float::schur_FLP::silk_schur_FLP(
         refl_coef.as_mut_ptr(),
-        auto_corr.as_mut_ptr() as *const libc::c_float,
+        auto_corr.as_mut_ptr() as *const f32,
         (*psEnc).sCmn.pitchEstimationLPCOrder,
     );
     /* Prediction gain */
     (*psEncCtrl).predGain =
-        auto_corr[0 as libc::c_int as usize] / (if res_nrg > 1.0f32 { res_nrg } else { 1.0f32 });
+        auto_corr[0 as i32 as usize] / (if res_nrg > 1.0f32 { res_nrg } else { 1.0f32 });
     /* Convert reflection coefficients to prediction coefficients */
     crate::src::opus_1_2_1::silk::float::k2a_FLP::silk_k2a_FLP(
         A.as_mut_ptr(),
@@ -219,50 +219,50 @@ pub unsafe extern "C" fn silk_find_pitch_lags_FLP(
     /* ****************************************/
     crate::src::opus_1_2_1::silk::float::LPC_analysis_filter_FLP::silk_LPC_analysis_filter_FLP(
         res,
-        A.as_mut_ptr() as *const libc::c_float,
+        A.as_mut_ptr() as *const f32,
         x_buf,
         buf_len,
         (*psEnc).sCmn.pitchEstimationLPCOrder,
     );
-    if (*psEnc).sCmn.indices.signalType as libc::c_int != 0 as libc::c_int
-        && (*psEnc).sCmn.first_frame_after_reset == 0 as libc::c_int
+    if (*psEnc).sCmn.indices.signalType as i32 != 0 as i32
+        && (*psEnc).sCmn.first_frame_after_reset == 0 as i32
     {
         /* Threshold for pitch estimator */
         thrhld = 0.6f32;
-        thrhld -= 0.004f32 * (*psEnc).sCmn.pitchEstimationLPCOrder as libc::c_float;
-        thrhld -= 0.1f32 * (*psEnc).sCmn.speech_activity_Q8 as libc::c_float * (1.0f32 / 256.0f32);
+        thrhld -= 0.004f32 * (*psEnc).sCmn.pitchEstimationLPCOrder as f32;
+        thrhld -= 0.1f32 * (*psEnc).sCmn.speech_activity_Q8 as f32 * (1.0f32 / 256.0f32);
         thrhld -= 0.15f32
-            * ((*psEnc).sCmn.prevSignalType as libc::c_int >> 1 as libc::c_int) as libc::c_float;
-        thrhld -= 0.1f32 * (*psEnc).sCmn.input_tilt_Q15 as libc::c_float * (1.0f32 / 32768.0f32);
+            * ((*psEnc).sCmn.prevSignalType as i32 >> 1 as i32) as f32;
+        thrhld -= 0.1f32 * (*psEnc).sCmn.input_tilt_Q15 as f32 * (1.0f32 / 32768.0f32);
         /* ****************************************/
         /* Call Pitch estimator                  */
         /* ****************************************/
-        if crate::src::opus_1_2_1::silk::float::pitch_analysis_core_FLP::silk_pitch_analysis_core_FLP(res as *const libc::c_float,
+        if crate::src::opus_1_2_1::silk::float::pitch_analysis_core_FLP::silk_pitch_analysis_core_FLP(res as *const f32,
                                         (*psEncCtrl).pitchL.as_mut_ptr(),
                                         &mut (*psEnc).sCmn.indices.lagIndex,
                                         &mut (*psEnc).sCmn.indices.contourIndex,
                                         &mut (*psEnc).LTPCorr,
                                         (*psEnc).sCmn.prevLag,
                                         (*psEnc).sCmn.pitchEstimationThreshold_Q16
-                                            as libc::c_float / 65536.0f32,
+                                            as f32 / 65536.0f32,
                                         thrhld, (*psEnc).sCmn.fs_kHz,
                                         (*psEnc).sCmn.pitchEstimationComplexity,
                                         (*psEnc).sCmn.nb_subfr, arch) ==
-               0 as libc::c_int {
+               0 as i32 {
             (*psEnc).sCmn.indices.signalType =
-                2 as libc::c_int as libc::c_schar
+                2 as i32 as i8
         } else {
             (*psEnc).sCmn.indices.signalType =
-                1 as libc::c_int as libc::c_schar
+                1 as i32 as i8
         }
     } else {
         crate::stdlib::memset(
             (*psEncCtrl).pitchL.as_mut_ptr() as *mut libc::c_void,
-            0 as libc::c_int,
-            ::std::mem::size_of::<[libc::c_int; 4]>() as libc::c_ulong,
+            0 as i32,
+            ::std::mem::size_of::<[i32; 4]>() as libc::c_ulong,
         );
-        (*psEnc).sCmn.indices.lagIndex = 0 as libc::c_int as crate::opus_types_h::opus_int16;
-        (*psEnc).sCmn.indices.contourIndex = 0 as libc::c_int as libc::c_schar;
-        (*psEnc).LTPCorr = 0 as libc::c_int as libc::c_float
+        (*psEnc).sCmn.indices.lagIndex = 0 as i32 as crate::opus_types_h::opus_int16;
+        (*psEnc).sCmn.indices.contourIndex = 0 as i32 as i8;
+        (*psEnc).LTPCorr = 0 as i32 as f32
     };
 }

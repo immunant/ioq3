@@ -8,18 +8,18 @@ pub type ec_dec = crate::src::opus_1_2_1::celt::entcode::ec_ctx;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct ec_ctx {
-    pub buf: *mut libc::c_uchar,
+    pub buf: *mut u8,
     pub storage: crate::opus_types_h::opus_uint32,
     pub end_offs: crate::opus_types_h::opus_uint32,
     pub end_window: crate::src::opus_1_2_1::celt::entcode::ec_window,
-    pub nend_bits: libc::c_int,
-    pub nbits_total: libc::c_int,
+    pub nend_bits: i32,
+    pub nbits_total: i32,
     pub offs: crate::opus_types_h::opus_uint32,
     pub rng: crate::opus_types_h::opus_uint32,
     pub val: crate::opus_types_h::opus_uint32,
     pub ext: crate::opus_types_h::opus_uint32,
-    pub rem: libc::c_int,
-    pub error: libc::c_int,
+    pub rem: i32,
+    pub error: i32,
 }
 use ::libc;
 
@@ -123,26 +123,26 @@ followed by a lookup to determine the exact transition thresholds. */
 pub unsafe extern "C" fn ec_tell_frac(
     mut _this: *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
 ) -> crate::opus_types_h::opus_uint32 {
-    static mut correction: [libc::c_uint; 8] = [
-        35733 as libc::c_int as libc::c_uint,
-        38967 as libc::c_int as libc::c_uint,
-        42495 as libc::c_int as libc::c_uint,
-        46340 as libc::c_int as libc::c_uint,
-        50535 as libc::c_int as libc::c_uint,
-        55109 as libc::c_int as libc::c_uint,
-        60097 as libc::c_int as libc::c_uint,
-        65535 as libc::c_int as libc::c_uint,
+    static mut correction: [u32; 8] = [
+        35733 as i32 as u32,
+        38967 as i32 as u32,
+        42495 as i32 as u32,
+        46340 as i32 as u32,
+        50535 as i32 as u32,
+        55109 as i32 as u32,
+        60097 as i32 as u32,
+        65535 as i32 as u32,
     ];
     let mut nbits: crate::opus_types_h::opus_uint32 = 0;
     let mut r: crate::opus_types_h::opus_uint32 = 0;
-    let mut l: libc::c_int = 0;
-    let mut b: libc::c_uint = 0;
-    nbits = ((*_this).nbits_total << 3 as libc::c_int) as crate::opus_types_h::opus_uint32;
-    l = ::std::mem::size_of::<libc::c_uint>() as libc::c_ulong as libc::c_int * 8 as libc::c_int
+    let mut l: i32 = 0;
+    let mut b: u32 = 0;
+    nbits = ((*_this).nbits_total << 3 as i32) as crate::opus_types_h::opus_uint32;
+    l = ::std::mem::size_of::<u32>() as libc::c_ulong as i32 * 8 as i32
         - (*_this).rng.leading_zeros() as i32;
-    r = (*_this).rng >> l - 16 as libc::c_int;
-    b = (r >> 12 as libc::c_int).wrapping_sub(8 as libc::c_int as libc::c_uint);
-    b = b.wrapping_add((r > correction[b as usize]) as libc::c_int as libc::c_uint);
-    l = ((l << 3 as libc::c_int) as libc::c_uint).wrapping_add(b) as libc::c_int;
-    return nbits.wrapping_sub(l as libc::c_uint);
+    r = (*_this).rng >> l - 16 as i32;
+    b = (r >> 12 as i32).wrapping_sub(8 as i32 as u32);
+    b = b.wrapping_add((r > correction[b as usize]) as i32 as u32);
+    l = ((l << 3 as i32) as u32).wrapping_add(b) as i32;
+    return nbits.wrapping_sub(l as u32);
 }

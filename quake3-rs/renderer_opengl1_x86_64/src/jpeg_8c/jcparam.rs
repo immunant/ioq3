@@ -209,9 +209,9 @@ pub use crate::src::jpeg_8c::jerror::JWRN_TOO_MUCH_DATA;
 
 pub unsafe extern "C" fn jpeg_add_quant_table(
     mut cinfo: crate::jpeglib_h::j_compress_ptr,
-    mut which_tbl: libc::c_int,
-    mut basic_table: *const libc::c_uint,
-    mut scale_factor: libc::c_int,
+    mut which_tbl: i32,
+    mut basic_table: *const u32,
+    mut scale_factor: i32,
     mut force_baseline: crate::jmorecfg_h::boolean,
 )
 /* Define a quantization table equal to the basic_table times
@@ -222,12 +222,12 @@ pub unsafe extern "C" fn jpeg_add_quant_table(
 {
     let mut qtblptr: *mut *mut crate::jpeglib_h::JQUANT_TBL =
         0 as *mut *mut crate::jpeglib_h::JQUANT_TBL;
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     let mut temp: libc::c_long = 0;
     /* Safety check to ensure start_compress not called yet. */
-    if (*cinfo).global_state != 100 as libc::c_int {
-        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_STATE as libc::c_int;
-        (*(*cinfo).err).msg_parm.i[0 as libc::c_int as usize] = (*cinfo).global_state;
+    if (*cinfo).global_state != 100 as i32 {
+        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_STATE as i32;
+        (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = (*cinfo).global_state;
         Some(
             (*(*cinfo).err)
                 .error_exit
@@ -235,9 +235,9 @@ pub unsafe extern "C" fn jpeg_add_quant_table(
         )
         .expect("non-null function pointer")(cinfo as crate::jpeglib_h::j_common_ptr);
     }
-    if which_tbl < 0 as libc::c_int || which_tbl >= 4 as libc::c_int {
-        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_DQT_INDEX as libc::c_int;
-        (*(*cinfo).err).msg_parm.i[0 as libc::c_int as usize] = which_tbl;
+    if which_tbl < 0 as i32 || which_tbl >= 4 as i32 {
+        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_DQT_INDEX as i32;
+        (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = which_tbl;
         Some(
             (*(*cinfo).err)
                 .error_exit
@@ -254,8 +254,8 @@ pub unsafe extern "C" fn jpeg_add_quant_table(
             cinfo as crate::jpeglib_h::j_common_ptr as *mut crate::jpeglib_h::jpeg_common_struct,
         ) as *mut crate::jpeglib_h::JQUANT_TBL
     }
-    i = 0 as libc::c_int;
-    while i < 64 as libc::c_int {
+    i = 0 as i32;
+    while i < 64 as i32 {
         temp = (*basic_table.offset(i as isize) as libc::c_long * scale_factor as libc::c_long
             + 50 as libc::c_long)
             / 100 as libc::c_long;
@@ -273,145 +273,145 @@ pub unsafe extern "C" fn jpeg_add_quant_table(
         i += 1
     }
     /* Initialize sent_table FALSE so table will be written to JPEG file. */
-    (**qtblptr).sent_table = 0 as libc::c_int;
+    (**qtblptr).sent_table = 0 as i32;
 }
 /* These are the sample quantization tables given in JPEG spec section K.1.
  * The spec says that the values given produce "good" quality, and
  * when divided by 2, "very good" quality.
  */
 
-static mut std_luminance_quant_tbl: [libc::c_uint; 64] = [
-    16 as libc::c_int as libc::c_uint,
-    11 as libc::c_int as libc::c_uint,
-    10 as libc::c_int as libc::c_uint,
-    16 as libc::c_int as libc::c_uint,
-    24 as libc::c_int as libc::c_uint,
-    40 as libc::c_int as libc::c_uint,
-    51 as libc::c_int as libc::c_uint,
-    61 as libc::c_int as libc::c_uint,
-    12 as libc::c_int as libc::c_uint,
-    12 as libc::c_int as libc::c_uint,
-    14 as libc::c_int as libc::c_uint,
-    19 as libc::c_int as libc::c_uint,
-    26 as libc::c_int as libc::c_uint,
-    58 as libc::c_int as libc::c_uint,
-    60 as libc::c_int as libc::c_uint,
-    55 as libc::c_int as libc::c_uint,
-    14 as libc::c_int as libc::c_uint,
-    13 as libc::c_int as libc::c_uint,
-    16 as libc::c_int as libc::c_uint,
-    24 as libc::c_int as libc::c_uint,
-    40 as libc::c_int as libc::c_uint,
-    57 as libc::c_int as libc::c_uint,
-    69 as libc::c_int as libc::c_uint,
-    56 as libc::c_int as libc::c_uint,
-    14 as libc::c_int as libc::c_uint,
-    17 as libc::c_int as libc::c_uint,
-    22 as libc::c_int as libc::c_uint,
-    29 as libc::c_int as libc::c_uint,
-    51 as libc::c_int as libc::c_uint,
-    87 as libc::c_int as libc::c_uint,
-    80 as libc::c_int as libc::c_uint,
-    62 as libc::c_int as libc::c_uint,
-    18 as libc::c_int as libc::c_uint,
-    22 as libc::c_int as libc::c_uint,
-    37 as libc::c_int as libc::c_uint,
-    56 as libc::c_int as libc::c_uint,
-    68 as libc::c_int as libc::c_uint,
-    109 as libc::c_int as libc::c_uint,
-    103 as libc::c_int as libc::c_uint,
-    77 as libc::c_int as libc::c_uint,
-    24 as libc::c_int as libc::c_uint,
-    35 as libc::c_int as libc::c_uint,
-    55 as libc::c_int as libc::c_uint,
-    64 as libc::c_int as libc::c_uint,
-    81 as libc::c_int as libc::c_uint,
-    104 as libc::c_int as libc::c_uint,
-    113 as libc::c_int as libc::c_uint,
-    92 as libc::c_int as libc::c_uint,
-    49 as libc::c_int as libc::c_uint,
-    64 as libc::c_int as libc::c_uint,
-    78 as libc::c_int as libc::c_uint,
-    87 as libc::c_int as libc::c_uint,
-    103 as libc::c_int as libc::c_uint,
-    121 as libc::c_int as libc::c_uint,
-    120 as libc::c_int as libc::c_uint,
-    101 as libc::c_int as libc::c_uint,
-    72 as libc::c_int as libc::c_uint,
-    92 as libc::c_int as libc::c_uint,
-    95 as libc::c_int as libc::c_uint,
-    98 as libc::c_int as libc::c_uint,
-    112 as libc::c_int as libc::c_uint,
-    100 as libc::c_int as libc::c_uint,
-    103 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
+static mut std_luminance_quant_tbl: [u32; 64] = [
+    16 as i32 as u32,
+    11 as i32 as u32,
+    10 as i32 as u32,
+    16 as i32 as u32,
+    24 as i32 as u32,
+    40 as i32 as u32,
+    51 as i32 as u32,
+    61 as i32 as u32,
+    12 as i32 as u32,
+    12 as i32 as u32,
+    14 as i32 as u32,
+    19 as i32 as u32,
+    26 as i32 as u32,
+    58 as i32 as u32,
+    60 as i32 as u32,
+    55 as i32 as u32,
+    14 as i32 as u32,
+    13 as i32 as u32,
+    16 as i32 as u32,
+    24 as i32 as u32,
+    40 as i32 as u32,
+    57 as i32 as u32,
+    69 as i32 as u32,
+    56 as i32 as u32,
+    14 as i32 as u32,
+    17 as i32 as u32,
+    22 as i32 as u32,
+    29 as i32 as u32,
+    51 as i32 as u32,
+    87 as i32 as u32,
+    80 as i32 as u32,
+    62 as i32 as u32,
+    18 as i32 as u32,
+    22 as i32 as u32,
+    37 as i32 as u32,
+    56 as i32 as u32,
+    68 as i32 as u32,
+    109 as i32 as u32,
+    103 as i32 as u32,
+    77 as i32 as u32,
+    24 as i32 as u32,
+    35 as i32 as u32,
+    55 as i32 as u32,
+    64 as i32 as u32,
+    81 as i32 as u32,
+    104 as i32 as u32,
+    113 as i32 as u32,
+    92 as i32 as u32,
+    49 as i32 as u32,
+    64 as i32 as u32,
+    78 as i32 as u32,
+    87 as i32 as u32,
+    103 as i32 as u32,
+    121 as i32 as u32,
+    120 as i32 as u32,
+    101 as i32 as u32,
+    72 as i32 as u32,
+    92 as i32 as u32,
+    95 as i32 as u32,
+    98 as i32 as u32,
+    112 as i32 as u32,
+    100 as i32 as u32,
+    103 as i32 as u32,
+    99 as i32 as u32,
 ];
 
-static mut std_chrominance_quant_tbl: [libc::c_uint; 64] = [
-    17 as libc::c_int as libc::c_uint,
-    18 as libc::c_int as libc::c_uint,
-    24 as libc::c_int as libc::c_uint,
-    47 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    18 as libc::c_int as libc::c_uint,
-    21 as libc::c_int as libc::c_uint,
-    26 as libc::c_int as libc::c_uint,
-    66 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    24 as libc::c_int as libc::c_uint,
-    26 as libc::c_int as libc::c_uint,
-    56 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    47 as libc::c_int as libc::c_uint,
-    66 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
-    99 as libc::c_int as libc::c_uint,
+static mut std_chrominance_quant_tbl: [u32; 64] = [
+    17 as i32 as u32,
+    18 as i32 as u32,
+    24 as i32 as u32,
+    47 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    18 as i32 as u32,
+    21 as i32 as u32,
+    26 as i32 as u32,
+    66 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    24 as i32 as u32,
+    26 as i32 as u32,
+    56 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    47 as i32 as u32,
+    66 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
+    99 as i32 as u32,
 ];
 #[no_mangle]
 
@@ -427,16 +427,16 @@ pub unsafe extern "C" fn jpeg_default_qtables(
     /* Set up two quantization tables using the specified scaling */
     jpeg_add_quant_table(
         cinfo,
-        0 as libc::c_int,
+        0 as i32,
         std_luminance_quant_tbl.as_ptr(),
-        (*cinfo).q_scale_factor[0 as libc::c_int as usize],
+        (*cinfo).q_scale_factor[0 as i32 as usize],
         force_baseline,
     );
     jpeg_add_quant_table(
         cinfo,
-        1 as libc::c_int,
+        1 as i32,
         std_chrominance_quant_tbl.as_ptr(),
-        (*cinfo).q_scale_factor[1 as libc::c_int as usize],
+        (*cinfo).q_scale_factor[1 as i32 as usize],
         force_baseline,
     );
 }
@@ -444,7 +444,7 @@ pub unsafe extern "C" fn jpeg_default_qtables(
 
 pub unsafe extern "C" fn jpeg_set_linear_quality(
     mut cinfo: crate::jpeglib_h::j_compress_ptr,
-    mut scale_factor: libc::c_int,
+    mut scale_factor: i32,
     mut force_baseline: crate::jmorecfg_h::boolean,
 )
 /* Set or change the 'quality' (quantization) setting, using default tables
@@ -456,14 +456,14 @@ pub unsafe extern "C" fn jpeg_set_linear_quality(
     /* Set up two quantization tables using the specified scaling */
     jpeg_add_quant_table(
         cinfo,
-        0 as libc::c_int,
+        0 as i32,
         std_luminance_quant_tbl.as_ptr(),
         scale_factor,
         force_baseline,
     );
     jpeg_add_quant_table(
         cinfo,
-        1 as libc::c_int,
+        1 as i32,
         std_chrominance_quant_tbl.as_ptr(),
         scale_factor,
         force_baseline,
@@ -471,17 +471,17 @@ pub unsafe extern "C" fn jpeg_set_linear_quality(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn jpeg_quality_scaling(mut quality: libc::c_int) -> libc::c_int
+pub unsafe extern "C" fn jpeg_quality_scaling(mut quality: i32) -> i32
 /* Convert a user-specified quality rating to a percentage scaling factor
  * for an underlying quantization table, using our recommended scaling curve.
  * The input 'quality' factor should be 0 (terrible) to 100 (very good).
  */ {
     /* Safety limit on quality factor.  Convert 0 to 1 to avoid zero divide. */
-    if quality <= 0 as libc::c_int {
-        quality = 1 as libc::c_int
+    if quality <= 0 as i32 {
+        quality = 1 as i32
     }
-    if quality > 100 as libc::c_int {
-        quality = 100 as libc::c_int
+    if quality > 100 as i32 {
+        quality = 100 as i32
     }
     /* The basic table is used as-is (scaling 100) for a quality of 50.
      * Qualities 50..100 are converted to scaling percentage 200 - 2*Q;
@@ -489,10 +489,10 @@ pub unsafe extern "C" fn jpeg_quality_scaling(mut quality: libc::c_int) -> libc:
      * to make all the table entries 1 (hence, minimum quantization loss).
      * Qualities 1..50 are converted to scaling percentage 5000/Q.
      */
-    if quality < 50 as libc::c_int {
-        quality = 5000 as libc::c_int / quality
+    if quality < 50 as i32 {
+        quality = 5000 as i32 / quality
     } else {
-        quality = 200 as libc::c_int - quality * 2 as libc::c_int
+        quality = 200 as i32 - quality * 2 as i32
     }
     return quality;
 }
@@ -500,7 +500,7 @@ pub unsafe extern "C" fn jpeg_quality_scaling(mut quality: libc::c_int) -> libc:
 
 pub unsafe extern "C" fn jpeg_set_quality(
     mut cinfo: crate::jpeglib_h::j_compress_ptr,
-    mut quality: libc::c_int,
+    mut quality: i32,
     mut force_baseline: crate::jmorecfg_h::boolean,
 )
 /* Set or change the 'quality' (quantization) setting, using default tables.
@@ -526,8 +526,8 @@ unsafe extern "C" fn add_huff_table(
 )
 /* Define a Huffman table */
 {
-    let mut nsymbols: libc::c_int = 0;
-    let mut len: libc::c_int = 0;
+    let mut nsymbols: i32 = 0;
+    let mut len: i32 = 0;
     if (*htblptr).is_null() {
         *htblptr = crate::src::jpeg_8c::jcomapi::jpeg_alloc_huff_table(
             cinfo as crate::jpeglib_h::j_common_ptr as *mut crate::jpeglib_h::jpeg_common_struct,
@@ -543,14 +543,14 @@ unsafe extern "C" fn add_huff_table(
      * number of symbols from the val[] array, without risking marching off
      * the end of memory.  jchuff.c will do a more thorough test later.
      */
-    nsymbols = 0 as libc::c_int;
-    len = 1 as libc::c_int;
-    while len <= 16 as libc::c_int {
-        nsymbols += *bits.offset(len as isize) as libc::c_int;
+    nsymbols = 0 as i32;
+    len = 1 as i32;
+    while len <= 16 as i32 {
+        nsymbols += *bits.offset(len as isize) as i32;
         len += 1
     }
-    if nsymbols < 1 as libc::c_int || nsymbols > 256 as libc::c_int {
-        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_HUFF_TABLE as libc::c_int;
+    if nsymbols < 1 as i32 || nsymbols > 256 as i32 {
+        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_HUFF_TABLE as i32;
         Some(
             (*(*cinfo).err)
                 .error_exit
@@ -565,7 +565,7 @@ unsafe extern "C" fn add_huff_table(
             .wrapping_mul(::std::mem::size_of::<crate::jmorecfg_h::UINT8>() as libc::c_ulong),
     );
     /* Initialize sent_table FALSE so table will be written to JPEG file. */
-    (**htblptr).sent_table = 0 as libc::c_int;
+    (**htblptr).sent_table = 0 as i32;
 }
 
 unsafe extern "C" fn std_huff_tables(mut cinfo: crate::jpeglib_h::j_compress_ptr)
@@ -573,443 +573,443 @@ unsafe extern "C" fn std_huff_tables(mut cinfo: crate::jpeglib_h::j_compress_ptr
 /* IMPORTANT: these are only valid for 8-bit data precision! */
 {
     static mut bits_dc_luminance: [crate::jmorecfg_h::UINT8; 17] = [
-        0 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0 as libc::c_int as crate::jmorecfg_h::UINT8,
-        1 as libc::c_int as crate::jmorecfg_h::UINT8,
-        5 as libc::c_int as crate::jmorecfg_h::UINT8,
-        1 as libc::c_int as crate::jmorecfg_h::UINT8,
-        1 as libc::c_int as crate::jmorecfg_h::UINT8,
-        1 as libc::c_int as crate::jmorecfg_h::UINT8,
-        1 as libc::c_int as crate::jmorecfg_h::UINT8,
-        1 as libc::c_int as crate::jmorecfg_h::UINT8,
-        1 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0 as libc::c_int as crate::jmorecfg_h::UINT8,
+        0 as i32 as crate::jmorecfg_h::UINT8,
+        0 as i32 as crate::jmorecfg_h::UINT8,
+        1 as i32 as crate::jmorecfg_h::UINT8,
+        5 as i32 as crate::jmorecfg_h::UINT8,
+        1 as i32 as crate::jmorecfg_h::UINT8,
+        1 as i32 as crate::jmorecfg_h::UINT8,
+        1 as i32 as crate::jmorecfg_h::UINT8,
+        1 as i32 as crate::jmorecfg_h::UINT8,
+        1 as i32 as crate::jmorecfg_h::UINT8,
+        1 as i32 as crate::jmorecfg_h::UINT8,
+        0 as i32 as crate::jmorecfg_h::UINT8,
+        0 as i32 as crate::jmorecfg_h::UINT8,
+        0 as i32 as crate::jmorecfg_h::UINT8,
+        0 as i32 as crate::jmorecfg_h::UINT8,
+        0 as i32 as crate::jmorecfg_h::UINT8,
+        0 as i32 as crate::jmorecfg_h::UINT8,
+        0 as i32 as crate::jmorecfg_h::UINT8,
     ];
     static mut val_dc_luminance: [crate::jmorecfg_h::UINT8; 12] = [
-        0 as libc::c_int as crate::jmorecfg_h::UINT8,
-        1 as libc::c_int as crate::jmorecfg_h::UINT8,
-        2 as libc::c_int as crate::jmorecfg_h::UINT8,
-        3 as libc::c_int as crate::jmorecfg_h::UINT8,
-        4 as libc::c_int as crate::jmorecfg_h::UINT8,
-        5 as libc::c_int as crate::jmorecfg_h::UINT8,
-        6 as libc::c_int as crate::jmorecfg_h::UINT8,
-        7 as libc::c_int as crate::jmorecfg_h::UINT8,
-        8 as libc::c_int as crate::jmorecfg_h::UINT8,
-        9 as libc::c_int as crate::jmorecfg_h::UINT8,
-        10 as libc::c_int as crate::jmorecfg_h::UINT8,
-        11 as libc::c_int as crate::jmorecfg_h::UINT8,
+        0 as i32 as crate::jmorecfg_h::UINT8,
+        1 as i32 as crate::jmorecfg_h::UINT8,
+        2 as i32 as crate::jmorecfg_h::UINT8,
+        3 as i32 as crate::jmorecfg_h::UINT8,
+        4 as i32 as crate::jmorecfg_h::UINT8,
+        5 as i32 as crate::jmorecfg_h::UINT8,
+        6 as i32 as crate::jmorecfg_h::UINT8,
+        7 as i32 as crate::jmorecfg_h::UINT8,
+        8 as i32 as crate::jmorecfg_h::UINT8,
+        9 as i32 as crate::jmorecfg_h::UINT8,
+        10 as i32 as crate::jmorecfg_h::UINT8,
+        11 as i32 as crate::jmorecfg_h::UINT8,
     ];
     static mut bits_dc_chrominance: [crate::jmorecfg_h::UINT8; 17] = [
-        0 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0 as libc::c_int as crate::jmorecfg_h::UINT8,
-        3 as libc::c_int as crate::jmorecfg_h::UINT8,
-        1 as libc::c_int as crate::jmorecfg_h::UINT8,
-        1 as libc::c_int as crate::jmorecfg_h::UINT8,
-        1 as libc::c_int as crate::jmorecfg_h::UINT8,
-        1 as libc::c_int as crate::jmorecfg_h::UINT8,
-        1 as libc::c_int as crate::jmorecfg_h::UINT8,
-        1 as libc::c_int as crate::jmorecfg_h::UINT8,
-        1 as libc::c_int as crate::jmorecfg_h::UINT8,
-        1 as libc::c_int as crate::jmorecfg_h::UINT8,
-        1 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0 as libc::c_int as crate::jmorecfg_h::UINT8,
+        0 as i32 as crate::jmorecfg_h::UINT8,
+        0 as i32 as crate::jmorecfg_h::UINT8,
+        3 as i32 as crate::jmorecfg_h::UINT8,
+        1 as i32 as crate::jmorecfg_h::UINT8,
+        1 as i32 as crate::jmorecfg_h::UINT8,
+        1 as i32 as crate::jmorecfg_h::UINT8,
+        1 as i32 as crate::jmorecfg_h::UINT8,
+        1 as i32 as crate::jmorecfg_h::UINT8,
+        1 as i32 as crate::jmorecfg_h::UINT8,
+        1 as i32 as crate::jmorecfg_h::UINT8,
+        1 as i32 as crate::jmorecfg_h::UINT8,
+        1 as i32 as crate::jmorecfg_h::UINT8,
+        0 as i32 as crate::jmorecfg_h::UINT8,
+        0 as i32 as crate::jmorecfg_h::UINT8,
+        0 as i32 as crate::jmorecfg_h::UINT8,
+        0 as i32 as crate::jmorecfg_h::UINT8,
+        0 as i32 as crate::jmorecfg_h::UINT8,
     ];
     static mut val_dc_chrominance: [crate::jmorecfg_h::UINT8; 12] = [
-        0 as libc::c_int as crate::jmorecfg_h::UINT8,
-        1 as libc::c_int as crate::jmorecfg_h::UINT8,
-        2 as libc::c_int as crate::jmorecfg_h::UINT8,
-        3 as libc::c_int as crate::jmorecfg_h::UINT8,
-        4 as libc::c_int as crate::jmorecfg_h::UINT8,
-        5 as libc::c_int as crate::jmorecfg_h::UINT8,
-        6 as libc::c_int as crate::jmorecfg_h::UINT8,
-        7 as libc::c_int as crate::jmorecfg_h::UINT8,
-        8 as libc::c_int as crate::jmorecfg_h::UINT8,
-        9 as libc::c_int as crate::jmorecfg_h::UINT8,
-        10 as libc::c_int as crate::jmorecfg_h::UINT8,
-        11 as libc::c_int as crate::jmorecfg_h::UINT8,
+        0 as i32 as crate::jmorecfg_h::UINT8,
+        1 as i32 as crate::jmorecfg_h::UINT8,
+        2 as i32 as crate::jmorecfg_h::UINT8,
+        3 as i32 as crate::jmorecfg_h::UINT8,
+        4 as i32 as crate::jmorecfg_h::UINT8,
+        5 as i32 as crate::jmorecfg_h::UINT8,
+        6 as i32 as crate::jmorecfg_h::UINT8,
+        7 as i32 as crate::jmorecfg_h::UINT8,
+        8 as i32 as crate::jmorecfg_h::UINT8,
+        9 as i32 as crate::jmorecfg_h::UINT8,
+        10 as i32 as crate::jmorecfg_h::UINT8,
+        11 as i32 as crate::jmorecfg_h::UINT8,
     ];
     static mut bits_ac_luminance: [crate::jmorecfg_h::UINT8; 17] = [
-        0 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0 as libc::c_int as crate::jmorecfg_h::UINT8,
-        2 as libc::c_int as crate::jmorecfg_h::UINT8,
-        1 as libc::c_int as crate::jmorecfg_h::UINT8,
-        3 as libc::c_int as crate::jmorecfg_h::UINT8,
-        3 as libc::c_int as crate::jmorecfg_h::UINT8,
-        2 as libc::c_int as crate::jmorecfg_h::UINT8,
-        4 as libc::c_int as crate::jmorecfg_h::UINT8,
-        3 as libc::c_int as crate::jmorecfg_h::UINT8,
-        5 as libc::c_int as crate::jmorecfg_h::UINT8,
-        5 as libc::c_int as crate::jmorecfg_h::UINT8,
-        4 as libc::c_int as crate::jmorecfg_h::UINT8,
-        4 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0 as libc::c_int as crate::jmorecfg_h::UINT8,
-        1 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x7d as libc::c_int as crate::jmorecfg_h::UINT8,
+        0 as i32 as crate::jmorecfg_h::UINT8,
+        0 as i32 as crate::jmorecfg_h::UINT8,
+        2 as i32 as crate::jmorecfg_h::UINT8,
+        1 as i32 as crate::jmorecfg_h::UINT8,
+        3 as i32 as crate::jmorecfg_h::UINT8,
+        3 as i32 as crate::jmorecfg_h::UINT8,
+        2 as i32 as crate::jmorecfg_h::UINT8,
+        4 as i32 as crate::jmorecfg_h::UINT8,
+        3 as i32 as crate::jmorecfg_h::UINT8,
+        5 as i32 as crate::jmorecfg_h::UINT8,
+        5 as i32 as crate::jmorecfg_h::UINT8,
+        4 as i32 as crate::jmorecfg_h::UINT8,
+        4 as i32 as crate::jmorecfg_h::UINT8,
+        0 as i32 as crate::jmorecfg_h::UINT8,
+        0 as i32 as crate::jmorecfg_h::UINT8,
+        1 as i32 as crate::jmorecfg_h::UINT8,
+        0x7d as i32 as crate::jmorecfg_h::UINT8,
     ];
     static mut val_ac_luminance: [crate::jmorecfg_h::UINT8; 162] = [
-        0x1 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x2 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x3 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x4 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x11 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x5 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x12 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x21 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x31 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x41 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x6 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x13 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x51 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x61 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x7 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x22 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x71 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x14 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x32 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x81 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x91 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xa1 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x8 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x23 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x42 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xb1 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xc1 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x15 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x52 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xd1 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xf0 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x24 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x33 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x62 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x72 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x82 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x9 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xa as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x16 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x17 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x18 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x19 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x1a as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x25 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x26 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x27 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x28 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x29 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x2a as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x34 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x35 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x36 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x37 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x38 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x39 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x3a as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x43 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x44 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x45 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x46 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x47 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x48 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x49 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x4a as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x53 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x54 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x55 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x56 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x57 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x58 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x59 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x5a as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x63 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x64 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x65 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x66 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x67 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x68 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x69 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x6a as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x73 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x74 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x75 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x76 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x77 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x78 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x79 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x7a as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x83 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x84 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x85 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x86 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x87 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x88 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x89 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x8a as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x92 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x93 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x94 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x95 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x96 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x97 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x98 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x99 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x9a as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xa2 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xa3 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xa4 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xa5 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xa6 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xa7 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xa8 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xa9 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xaa as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xb2 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xb3 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xb4 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xb5 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xb6 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xb7 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xb8 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xb9 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xba as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xc2 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xc3 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xc4 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xc5 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xc6 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xc7 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xc8 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xc9 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xca as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xd2 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xd3 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xd4 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xd5 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xd6 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xd7 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xd8 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xd9 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xda as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xe1 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xe2 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xe3 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xe4 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xe5 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xe6 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xe7 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xe8 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xe9 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xea as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xf1 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xf2 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xf3 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xf4 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xf5 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xf6 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xf7 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xf8 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xf9 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xfa as libc::c_int as crate::jmorecfg_h::UINT8,
+        0x1 as i32 as crate::jmorecfg_h::UINT8,
+        0x2 as i32 as crate::jmorecfg_h::UINT8,
+        0x3 as i32 as crate::jmorecfg_h::UINT8,
+        0 as i32 as crate::jmorecfg_h::UINT8,
+        0x4 as i32 as crate::jmorecfg_h::UINT8,
+        0x11 as i32 as crate::jmorecfg_h::UINT8,
+        0x5 as i32 as crate::jmorecfg_h::UINT8,
+        0x12 as i32 as crate::jmorecfg_h::UINT8,
+        0x21 as i32 as crate::jmorecfg_h::UINT8,
+        0x31 as i32 as crate::jmorecfg_h::UINT8,
+        0x41 as i32 as crate::jmorecfg_h::UINT8,
+        0x6 as i32 as crate::jmorecfg_h::UINT8,
+        0x13 as i32 as crate::jmorecfg_h::UINT8,
+        0x51 as i32 as crate::jmorecfg_h::UINT8,
+        0x61 as i32 as crate::jmorecfg_h::UINT8,
+        0x7 as i32 as crate::jmorecfg_h::UINT8,
+        0x22 as i32 as crate::jmorecfg_h::UINT8,
+        0x71 as i32 as crate::jmorecfg_h::UINT8,
+        0x14 as i32 as crate::jmorecfg_h::UINT8,
+        0x32 as i32 as crate::jmorecfg_h::UINT8,
+        0x81 as i32 as crate::jmorecfg_h::UINT8,
+        0x91 as i32 as crate::jmorecfg_h::UINT8,
+        0xa1 as i32 as crate::jmorecfg_h::UINT8,
+        0x8 as i32 as crate::jmorecfg_h::UINT8,
+        0x23 as i32 as crate::jmorecfg_h::UINT8,
+        0x42 as i32 as crate::jmorecfg_h::UINT8,
+        0xb1 as i32 as crate::jmorecfg_h::UINT8,
+        0xc1 as i32 as crate::jmorecfg_h::UINT8,
+        0x15 as i32 as crate::jmorecfg_h::UINT8,
+        0x52 as i32 as crate::jmorecfg_h::UINT8,
+        0xd1 as i32 as crate::jmorecfg_h::UINT8,
+        0xf0 as i32 as crate::jmorecfg_h::UINT8,
+        0x24 as i32 as crate::jmorecfg_h::UINT8,
+        0x33 as i32 as crate::jmorecfg_h::UINT8,
+        0x62 as i32 as crate::jmorecfg_h::UINT8,
+        0x72 as i32 as crate::jmorecfg_h::UINT8,
+        0x82 as i32 as crate::jmorecfg_h::UINT8,
+        0x9 as i32 as crate::jmorecfg_h::UINT8,
+        0xa as i32 as crate::jmorecfg_h::UINT8,
+        0x16 as i32 as crate::jmorecfg_h::UINT8,
+        0x17 as i32 as crate::jmorecfg_h::UINT8,
+        0x18 as i32 as crate::jmorecfg_h::UINT8,
+        0x19 as i32 as crate::jmorecfg_h::UINT8,
+        0x1a as i32 as crate::jmorecfg_h::UINT8,
+        0x25 as i32 as crate::jmorecfg_h::UINT8,
+        0x26 as i32 as crate::jmorecfg_h::UINT8,
+        0x27 as i32 as crate::jmorecfg_h::UINT8,
+        0x28 as i32 as crate::jmorecfg_h::UINT8,
+        0x29 as i32 as crate::jmorecfg_h::UINT8,
+        0x2a as i32 as crate::jmorecfg_h::UINT8,
+        0x34 as i32 as crate::jmorecfg_h::UINT8,
+        0x35 as i32 as crate::jmorecfg_h::UINT8,
+        0x36 as i32 as crate::jmorecfg_h::UINT8,
+        0x37 as i32 as crate::jmorecfg_h::UINT8,
+        0x38 as i32 as crate::jmorecfg_h::UINT8,
+        0x39 as i32 as crate::jmorecfg_h::UINT8,
+        0x3a as i32 as crate::jmorecfg_h::UINT8,
+        0x43 as i32 as crate::jmorecfg_h::UINT8,
+        0x44 as i32 as crate::jmorecfg_h::UINT8,
+        0x45 as i32 as crate::jmorecfg_h::UINT8,
+        0x46 as i32 as crate::jmorecfg_h::UINT8,
+        0x47 as i32 as crate::jmorecfg_h::UINT8,
+        0x48 as i32 as crate::jmorecfg_h::UINT8,
+        0x49 as i32 as crate::jmorecfg_h::UINT8,
+        0x4a as i32 as crate::jmorecfg_h::UINT8,
+        0x53 as i32 as crate::jmorecfg_h::UINT8,
+        0x54 as i32 as crate::jmorecfg_h::UINT8,
+        0x55 as i32 as crate::jmorecfg_h::UINT8,
+        0x56 as i32 as crate::jmorecfg_h::UINT8,
+        0x57 as i32 as crate::jmorecfg_h::UINT8,
+        0x58 as i32 as crate::jmorecfg_h::UINT8,
+        0x59 as i32 as crate::jmorecfg_h::UINT8,
+        0x5a as i32 as crate::jmorecfg_h::UINT8,
+        0x63 as i32 as crate::jmorecfg_h::UINT8,
+        0x64 as i32 as crate::jmorecfg_h::UINT8,
+        0x65 as i32 as crate::jmorecfg_h::UINT8,
+        0x66 as i32 as crate::jmorecfg_h::UINT8,
+        0x67 as i32 as crate::jmorecfg_h::UINT8,
+        0x68 as i32 as crate::jmorecfg_h::UINT8,
+        0x69 as i32 as crate::jmorecfg_h::UINT8,
+        0x6a as i32 as crate::jmorecfg_h::UINT8,
+        0x73 as i32 as crate::jmorecfg_h::UINT8,
+        0x74 as i32 as crate::jmorecfg_h::UINT8,
+        0x75 as i32 as crate::jmorecfg_h::UINT8,
+        0x76 as i32 as crate::jmorecfg_h::UINT8,
+        0x77 as i32 as crate::jmorecfg_h::UINT8,
+        0x78 as i32 as crate::jmorecfg_h::UINT8,
+        0x79 as i32 as crate::jmorecfg_h::UINT8,
+        0x7a as i32 as crate::jmorecfg_h::UINT8,
+        0x83 as i32 as crate::jmorecfg_h::UINT8,
+        0x84 as i32 as crate::jmorecfg_h::UINT8,
+        0x85 as i32 as crate::jmorecfg_h::UINT8,
+        0x86 as i32 as crate::jmorecfg_h::UINT8,
+        0x87 as i32 as crate::jmorecfg_h::UINT8,
+        0x88 as i32 as crate::jmorecfg_h::UINT8,
+        0x89 as i32 as crate::jmorecfg_h::UINT8,
+        0x8a as i32 as crate::jmorecfg_h::UINT8,
+        0x92 as i32 as crate::jmorecfg_h::UINT8,
+        0x93 as i32 as crate::jmorecfg_h::UINT8,
+        0x94 as i32 as crate::jmorecfg_h::UINT8,
+        0x95 as i32 as crate::jmorecfg_h::UINT8,
+        0x96 as i32 as crate::jmorecfg_h::UINT8,
+        0x97 as i32 as crate::jmorecfg_h::UINT8,
+        0x98 as i32 as crate::jmorecfg_h::UINT8,
+        0x99 as i32 as crate::jmorecfg_h::UINT8,
+        0x9a as i32 as crate::jmorecfg_h::UINT8,
+        0xa2 as i32 as crate::jmorecfg_h::UINT8,
+        0xa3 as i32 as crate::jmorecfg_h::UINT8,
+        0xa4 as i32 as crate::jmorecfg_h::UINT8,
+        0xa5 as i32 as crate::jmorecfg_h::UINT8,
+        0xa6 as i32 as crate::jmorecfg_h::UINT8,
+        0xa7 as i32 as crate::jmorecfg_h::UINT8,
+        0xa8 as i32 as crate::jmorecfg_h::UINT8,
+        0xa9 as i32 as crate::jmorecfg_h::UINT8,
+        0xaa as i32 as crate::jmorecfg_h::UINT8,
+        0xb2 as i32 as crate::jmorecfg_h::UINT8,
+        0xb3 as i32 as crate::jmorecfg_h::UINT8,
+        0xb4 as i32 as crate::jmorecfg_h::UINT8,
+        0xb5 as i32 as crate::jmorecfg_h::UINT8,
+        0xb6 as i32 as crate::jmorecfg_h::UINT8,
+        0xb7 as i32 as crate::jmorecfg_h::UINT8,
+        0xb8 as i32 as crate::jmorecfg_h::UINT8,
+        0xb9 as i32 as crate::jmorecfg_h::UINT8,
+        0xba as i32 as crate::jmorecfg_h::UINT8,
+        0xc2 as i32 as crate::jmorecfg_h::UINT8,
+        0xc3 as i32 as crate::jmorecfg_h::UINT8,
+        0xc4 as i32 as crate::jmorecfg_h::UINT8,
+        0xc5 as i32 as crate::jmorecfg_h::UINT8,
+        0xc6 as i32 as crate::jmorecfg_h::UINT8,
+        0xc7 as i32 as crate::jmorecfg_h::UINT8,
+        0xc8 as i32 as crate::jmorecfg_h::UINT8,
+        0xc9 as i32 as crate::jmorecfg_h::UINT8,
+        0xca as i32 as crate::jmorecfg_h::UINT8,
+        0xd2 as i32 as crate::jmorecfg_h::UINT8,
+        0xd3 as i32 as crate::jmorecfg_h::UINT8,
+        0xd4 as i32 as crate::jmorecfg_h::UINT8,
+        0xd5 as i32 as crate::jmorecfg_h::UINT8,
+        0xd6 as i32 as crate::jmorecfg_h::UINT8,
+        0xd7 as i32 as crate::jmorecfg_h::UINT8,
+        0xd8 as i32 as crate::jmorecfg_h::UINT8,
+        0xd9 as i32 as crate::jmorecfg_h::UINT8,
+        0xda as i32 as crate::jmorecfg_h::UINT8,
+        0xe1 as i32 as crate::jmorecfg_h::UINT8,
+        0xe2 as i32 as crate::jmorecfg_h::UINT8,
+        0xe3 as i32 as crate::jmorecfg_h::UINT8,
+        0xe4 as i32 as crate::jmorecfg_h::UINT8,
+        0xe5 as i32 as crate::jmorecfg_h::UINT8,
+        0xe6 as i32 as crate::jmorecfg_h::UINT8,
+        0xe7 as i32 as crate::jmorecfg_h::UINT8,
+        0xe8 as i32 as crate::jmorecfg_h::UINT8,
+        0xe9 as i32 as crate::jmorecfg_h::UINT8,
+        0xea as i32 as crate::jmorecfg_h::UINT8,
+        0xf1 as i32 as crate::jmorecfg_h::UINT8,
+        0xf2 as i32 as crate::jmorecfg_h::UINT8,
+        0xf3 as i32 as crate::jmorecfg_h::UINT8,
+        0xf4 as i32 as crate::jmorecfg_h::UINT8,
+        0xf5 as i32 as crate::jmorecfg_h::UINT8,
+        0xf6 as i32 as crate::jmorecfg_h::UINT8,
+        0xf7 as i32 as crate::jmorecfg_h::UINT8,
+        0xf8 as i32 as crate::jmorecfg_h::UINT8,
+        0xf9 as i32 as crate::jmorecfg_h::UINT8,
+        0xfa as i32 as crate::jmorecfg_h::UINT8,
     ];
     static mut bits_ac_chrominance: [crate::jmorecfg_h::UINT8; 17] = [
-        0 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0 as libc::c_int as crate::jmorecfg_h::UINT8,
-        2 as libc::c_int as crate::jmorecfg_h::UINT8,
-        1 as libc::c_int as crate::jmorecfg_h::UINT8,
-        2 as libc::c_int as crate::jmorecfg_h::UINT8,
-        4 as libc::c_int as crate::jmorecfg_h::UINT8,
-        4 as libc::c_int as crate::jmorecfg_h::UINT8,
-        3 as libc::c_int as crate::jmorecfg_h::UINT8,
-        4 as libc::c_int as crate::jmorecfg_h::UINT8,
-        7 as libc::c_int as crate::jmorecfg_h::UINT8,
-        5 as libc::c_int as crate::jmorecfg_h::UINT8,
-        4 as libc::c_int as crate::jmorecfg_h::UINT8,
-        4 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0 as libc::c_int as crate::jmorecfg_h::UINT8,
-        1 as libc::c_int as crate::jmorecfg_h::UINT8,
-        2 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x77 as libc::c_int as crate::jmorecfg_h::UINT8,
+        0 as i32 as crate::jmorecfg_h::UINT8,
+        0 as i32 as crate::jmorecfg_h::UINT8,
+        2 as i32 as crate::jmorecfg_h::UINT8,
+        1 as i32 as crate::jmorecfg_h::UINT8,
+        2 as i32 as crate::jmorecfg_h::UINT8,
+        4 as i32 as crate::jmorecfg_h::UINT8,
+        4 as i32 as crate::jmorecfg_h::UINT8,
+        3 as i32 as crate::jmorecfg_h::UINT8,
+        4 as i32 as crate::jmorecfg_h::UINT8,
+        7 as i32 as crate::jmorecfg_h::UINT8,
+        5 as i32 as crate::jmorecfg_h::UINT8,
+        4 as i32 as crate::jmorecfg_h::UINT8,
+        4 as i32 as crate::jmorecfg_h::UINT8,
+        0 as i32 as crate::jmorecfg_h::UINT8,
+        1 as i32 as crate::jmorecfg_h::UINT8,
+        2 as i32 as crate::jmorecfg_h::UINT8,
+        0x77 as i32 as crate::jmorecfg_h::UINT8,
     ];
     static mut val_ac_chrominance: [crate::jmorecfg_h::UINT8; 162] = [
-        0 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x1 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x2 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x3 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x11 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x4 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x5 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x21 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x31 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x6 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x12 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x41 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x51 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x7 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x61 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x71 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x13 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x22 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x32 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x81 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x8 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x14 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x42 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x91 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xa1 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xb1 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xc1 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x9 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x23 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x33 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x52 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xf0 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x15 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x62 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x72 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xd1 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xa as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x16 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x24 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x34 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xe1 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x25 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xf1 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x17 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x18 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x19 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x1a as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x26 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x27 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x28 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x29 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x2a as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x35 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x36 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x37 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x38 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x39 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x3a as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x43 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x44 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x45 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x46 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x47 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x48 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x49 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x4a as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x53 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x54 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x55 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x56 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x57 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x58 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x59 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x5a as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x63 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x64 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x65 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x66 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x67 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x68 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x69 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x6a as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x73 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x74 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x75 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x76 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x77 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x78 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x79 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x7a as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x82 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x83 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x84 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x85 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x86 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x87 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x88 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x89 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x8a as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x92 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x93 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x94 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x95 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x96 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x97 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x98 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x99 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0x9a as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xa2 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xa3 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xa4 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xa5 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xa6 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xa7 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xa8 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xa9 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xaa as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xb2 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xb3 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xb4 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xb5 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xb6 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xb7 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xb8 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xb9 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xba as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xc2 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xc3 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xc4 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xc5 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xc6 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xc7 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xc8 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xc9 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xca as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xd2 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xd3 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xd4 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xd5 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xd6 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xd7 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xd8 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xd9 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xda as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xe2 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xe3 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xe4 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xe5 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xe6 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xe7 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xe8 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xe9 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xea as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xf2 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xf3 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xf4 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xf5 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xf6 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xf7 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xf8 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xf9 as libc::c_int as crate::jmorecfg_h::UINT8,
-        0xfa as libc::c_int as crate::jmorecfg_h::UINT8,
+        0 as i32 as crate::jmorecfg_h::UINT8,
+        0x1 as i32 as crate::jmorecfg_h::UINT8,
+        0x2 as i32 as crate::jmorecfg_h::UINT8,
+        0x3 as i32 as crate::jmorecfg_h::UINT8,
+        0x11 as i32 as crate::jmorecfg_h::UINT8,
+        0x4 as i32 as crate::jmorecfg_h::UINT8,
+        0x5 as i32 as crate::jmorecfg_h::UINT8,
+        0x21 as i32 as crate::jmorecfg_h::UINT8,
+        0x31 as i32 as crate::jmorecfg_h::UINT8,
+        0x6 as i32 as crate::jmorecfg_h::UINT8,
+        0x12 as i32 as crate::jmorecfg_h::UINT8,
+        0x41 as i32 as crate::jmorecfg_h::UINT8,
+        0x51 as i32 as crate::jmorecfg_h::UINT8,
+        0x7 as i32 as crate::jmorecfg_h::UINT8,
+        0x61 as i32 as crate::jmorecfg_h::UINT8,
+        0x71 as i32 as crate::jmorecfg_h::UINT8,
+        0x13 as i32 as crate::jmorecfg_h::UINT8,
+        0x22 as i32 as crate::jmorecfg_h::UINT8,
+        0x32 as i32 as crate::jmorecfg_h::UINT8,
+        0x81 as i32 as crate::jmorecfg_h::UINT8,
+        0x8 as i32 as crate::jmorecfg_h::UINT8,
+        0x14 as i32 as crate::jmorecfg_h::UINT8,
+        0x42 as i32 as crate::jmorecfg_h::UINT8,
+        0x91 as i32 as crate::jmorecfg_h::UINT8,
+        0xa1 as i32 as crate::jmorecfg_h::UINT8,
+        0xb1 as i32 as crate::jmorecfg_h::UINT8,
+        0xc1 as i32 as crate::jmorecfg_h::UINT8,
+        0x9 as i32 as crate::jmorecfg_h::UINT8,
+        0x23 as i32 as crate::jmorecfg_h::UINT8,
+        0x33 as i32 as crate::jmorecfg_h::UINT8,
+        0x52 as i32 as crate::jmorecfg_h::UINT8,
+        0xf0 as i32 as crate::jmorecfg_h::UINT8,
+        0x15 as i32 as crate::jmorecfg_h::UINT8,
+        0x62 as i32 as crate::jmorecfg_h::UINT8,
+        0x72 as i32 as crate::jmorecfg_h::UINT8,
+        0xd1 as i32 as crate::jmorecfg_h::UINT8,
+        0xa as i32 as crate::jmorecfg_h::UINT8,
+        0x16 as i32 as crate::jmorecfg_h::UINT8,
+        0x24 as i32 as crate::jmorecfg_h::UINT8,
+        0x34 as i32 as crate::jmorecfg_h::UINT8,
+        0xe1 as i32 as crate::jmorecfg_h::UINT8,
+        0x25 as i32 as crate::jmorecfg_h::UINT8,
+        0xf1 as i32 as crate::jmorecfg_h::UINT8,
+        0x17 as i32 as crate::jmorecfg_h::UINT8,
+        0x18 as i32 as crate::jmorecfg_h::UINT8,
+        0x19 as i32 as crate::jmorecfg_h::UINT8,
+        0x1a as i32 as crate::jmorecfg_h::UINT8,
+        0x26 as i32 as crate::jmorecfg_h::UINT8,
+        0x27 as i32 as crate::jmorecfg_h::UINT8,
+        0x28 as i32 as crate::jmorecfg_h::UINT8,
+        0x29 as i32 as crate::jmorecfg_h::UINT8,
+        0x2a as i32 as crate::jmorecfg_h::UINT8,
+        0x35 as i32 as crate::jmorecfg_h::UINT8,
+        0x36 as i32 as crate::jmorecfg_h::UINT8,
+        0x37 as i32 as crate::jmorecfg_h::UINT8,
+        0x38 as i32 as crate::jmorecfg_h::UINT8,
+        0x39 as i32 as crate::jmorecfg_h::UINT8,
+        0x3a as i32 as crate::jmorecfg_h::UINT8,
+        0x43 as i32 as crate::jmorecfg_h::UINT8,
+        0x44 as i32 as crate::jmorecfg_h::UINT8,
+        0x45 as i32 as crate::jmorecfg_h::UINT8,
+        0x46 as i32 as crate::jmorecfg_h::UINT8,
+        0x47 as i32 as crate::jmorecfg_h::UINT8,
+        0x48 as i32 as crate::jmorecfg_h::UINT8,
+        0x49 as i32 as crate::jmorecfg_h::UINT8,
+        0x4a as i32 as crate::jmorecfg_h::UINT8,
+        0x53 as i32 as crate::jmorecfg_h::UINT8,
+        0x54 as i32 as crate::jmorecfg_h::UINT8,
+        0x55 as i32 as crate::jmorecfg_h::UINT8,
+        0x56 as i32 as crate::jmorecfg_h::UINT8,
+        0x57 as i32 as crate::jmorecfg_h::UINT8,
+        0x58 as i32 as crate::jmorecfg_h::UINT8,
+        0x59 as i32 as crate::jmorecfg_h::UINT8,
+        0x5a as i32 as crate::jmorecfg_h::UINT8,
+        0x63 as i32 as crate::jmorecfg_h::UINT8,
+        0x64 as i32 as crate::jmorecfg_h::UINT8,
+        0x65 as i32 as crate::jmorecfg_h::UINT8,
+        0x66 as i32 as crate::jmorecfg_h::UINT8,
+        0x67 as i32 as crate::jmorecfg_h::UINT8,
+        0x68 as i32 as crate::jmorecfg_h::UINT8,
+        0x69 as i32 as crate::jmorecfg_h::UINT8,
+        0x6a as i32 as crate::jmorecfg_h::UINT8,
+        0x73 as i32 as crate::jmorecfg_h::UINT8,
+        0x74 as i32 as crate::jmorecfg_h::UINT8,
+        0x75 as i32 as crate::jmorecfg_h::UINT8,
+        0x76 as i32 as crate::jmorecfg_h::UINT8,
+        0x77 as i32 as crate::jmorecfg_h::UINT8,
+        0x78 as i32 as crate::jmorecfg_h::UINT8,
+        0x79 as i32 as crate::jmorecfg_h::UINT8,
+        0x7a as i32 as crate::jmorecfg_h::UINT8,
+        0x82 as i32 as crate::jmorecfg_h::UINT8,
+        0x83 as i32 as crate::jmorecfg_h::UINT8,
+        0x84 as i32 as crate::jmorecfg_h::UINT8,
+        0x85 as i32 as crate::jmorecfg_h::UINT8,
+        0x86 as i32 as crate::jmorecfg_h::UINT8,
+        0x87 as i32 as crate::jmorecfg_h::UINT8,
+        0x88 as i32 as crate::jmorecfg_h::UINT8,
+        0x89 as i32 as crate::jmorecfg_h::UINT8,
+        0x8a as i32 as crate::jmorecfg_h::UINT8,
+        0x92 as i32 as crate::jmorecfg_h::UINT8,
+        0x93 as i32 as crate::jmorecfg_h::UINT8,
+        0x94 as i32 as crate::jmorecfg_h::UINT8,
+        0x95 as i32 as crate::jmorecfg_h::UINT8,
+        0x96 as i32 as crate::jmorecfg_h::UINT8,
+        0x97 as i32 as crate::jmorecfg_h::UINT8,
+        0x98 as i32 as crate::jmorecfg_h::UINT8,
+        0x99 as i32 as crate::jmorecfg_h::UINT8,
+        0x9a as i32 as crate::jmorecfg_h::UINT8,
+        0xa2 as i32 as crate::jmorecfg_h::UINT8,
+        0xa3 as i32 as crate::jmorecfg_h::UINT8,
+        0xa4 as i32 as crate::jmorecfg_h::UINT8,
+        0xa5 as i32 as crate::jmorecfg_h::UINT8,
+        0xa6 as i32 as crate::jmorecfg_h::UINT8,
+        0xa7 as i32 as crate::jmorecfg_h::UINT8,
+        0xa8 as i32 as crate::jmorecfg_h::UINT8,
+        0xa9 as i32 as crate::jmorecfg_h::UINT8,
+        0xaa as i32 as crate::jmorecfg_h::UINT8,
+        0xb2 as i32 as crate::jmorecfg_h::UINT8,
+        0xb3 as i32 as crate::jmorecfg_h::UINT8,
+        0xb4 as i32 as crate::jmorecfg_h::UINT8,
+        0xb5 as i32 as crate::jmorecfg_h::UINT8,
+        0xb6 as i32 as crate::jmorecfg_h::UINT8,
+        0xb7 as i32 as crate::jmorecfg_h::UINT8,
+        0xb8 as i32 as crate::jmorecfg_h::UINT8,
+        0xb9 as i32 as crate::jmorecfg_h::UINT8,
+        0xba as i32 as crate::jmorecfg_h::UINT8,
+        0xc2 as i32 as crate::jmorecfg_h::UINT8,
+        0xc3 as i32 as crate::jmorecfg_h::UINT8,
+        0xc4 as i32 as crate::jmorecfg_h::UINT8,
+        0xc5 as i32 as crate::jmorecfg_h::UINT8,
+        0xc6 as i32 as crate::jmorecfg_h::UINT8,
+        0xc7 as i32 as crate::jmorecfg_h::UINT8,
+        0xc8 as i32 as crate::jmorecfg_h::UINT8,
+        0xc9 as i32 as crate::jmorecfg_h::UINT8,
+        0xca as i32 as crate::jmorecfg_h::UINT8,
+        0xd2 as i32 as crate::jmorecfg_h::UINT8,
+        0xd3 as i32 as crate::jmorecfg_h::UINT8,
+        0xd4 as i32 as crate::jmorecfg_h::UINT8,
+        0xd5 as i32 as crate::jmorecfg_h::UINT8,
+        0xd6 as i32 as crate::jmorecfg_h::UINT8,
+        0xd7 as i32 as crate::jmorecfg_h::UINT8,
+        0xd8 as i32 as crate::jmorecfg_h::UINT8,
+        0xd9 as i32 as crate::jmorecfg_h::UINT8,
+        0xda as i32 as crate::jmorecfg_h::UINT8,
+        0xe2 as i32 as crate::jmorecfg_h::UINT8,
+        0xe3 as i32 as crate::jmorecfg_h::UINT8,
+        0xe4 as i32 as crate::jmorecfg_h::UINT8,
+        0xe5 as i32 as crate::jmorecfg_h::UINT8,
+        0xe6 as i32 as crate::jmorecfg_h::UINT8,
+        0xe7 as i32 as crate::jmorecfg_h::UINT8,
+        0xe8 as i32 as crate::jmorecfg_h::UINT8,
+        0xe9 as i32 as crate::jmorecfg_h::UINT8,
+        0xea as i32 as crate::jmorecfg_h::UINT8,
+        0xf2 as i32 as crate::jmorecfg_h::UINT8,
+        0xf3 as i32 as crate::jmorecfg_h::UINT8,
+        0xf4 as i32 as crate::jmorecfg_h::UINT8,
+        0xf5 as i32 as crate::jmorecfg_h::UINT8,
+        0xf6 as i32 as crate::jmorecfg_h::UINT8,
+        0xf7 as i32 as crate::jmorecfg_h::UINT8,
+        0xf8 as i32 as crate::jmorecfg_h::UINT8,
+        0xf9 as i32 as crate::jmorecfg_h::UINT8,
+        0xfa as i32 as crate::jmorecfg_h::UINT8,
     ];
     add_huff_table(
         cinfo,
         &mut *(*cinfo)
             .dc_huff_tbl_ptrs
             .as_mut_ptr()
-            .offset(0 as libc::c_int as isize),
+            .offset(0 as i32 as isize),
         bits_dc_luminance.as_ptr(),
         val_dc_luminance.as_ptr(),
     );
@@ -1018,7 +1018,7 @@ unsafe extern "C" fn std_huff_tables(mut cinfo: crate::jpeglib_h::j_compress_ptr
         &mut *(*cinfo)
             .ac_huff_tbl_ptrs
             .as_mut_ptr()
-            .offset(0 as libc::c_int as isize),
+            .offset(0 as i32 as isize),
         bits_ac_luminance.as_ptr(),
         val_ac_luminance.as_ptr(),
     );
@@ -1027,7 +1027,7 @@ unsafe extern "C" fn std_huff_tables(mut cinfo: crate::jpeglib_h::j_compress_ptr
         &mut *(*cinfo)
             .dc_huff_tbl_ptrs
             .as_mut_ptr()
-            .offset(1 as libc::c_int as isize),
+            .offset(1 as i32 as isize),
         bits_dc_chrominance.as_ptr(),
         val_dc_chrominance.as_ptr(),
     );
@@ -1036,7 +1036,7 @@ unsafe extern "C" fn std_huff_tables(mut cinfo: crate::jpeglib_h::j_compress_ptr
         &mut *(*cinfo)
             .ac_huff_tbl_ptrs
             .as_mut_ptr()
-            .offset(1 as libc::c_int as isize),
+            .offset(1 as i32 as isize),
         bits_ac_chrominance.as_ptr(),
         val_ac_chrominance.as_ptr(),
     );
@@ -1053,11 +1053,11 @@ unsafe extern "C" fn std_huff_tables(mut cinfo: crate::jpeglib_h::j_compress_ptr
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_set_defaults(mut cinfo: crate::jpeglib_h::j_compress_ptr) {
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     /* Safety check to ensure start_compress not called yet. */
-    if (*cinfo).global_state != 100 as libc::c_int {
-        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_STATE as libc::c_int;
-        (*(*cinfo).err).msg_parm.i[0 as libc::c_int as usize] = (*cinfo).global_state;
+    if (*cinfo).global_state != 100 as i32 {
+        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_STATE as i32;
+        (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = (*cinfo).global_state;
         Some(
             (*(*cinfo).err)
                 .error_exit
@@ -1077,56 +1077,56 @@ pub unsafe extern "C" fn jpeg_set_defaults(mut cinfo: crate::jpeglib_h::j_compre
         )
         .expect("non-null function pointer")(
             cinfo as crate::jpeglib_h::j_common_ptr,
-            0 as libc::c_int,
-            (10 as libc::c_int as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
+            0 as i32,
+            (10 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
                 crate::jpeglib_h::jpeg_component_info,
             >() as libc::c_ulong),
         ) as *mut crate::jpeglib_h::jpeg_component_info
     }
     /* Initialize everything not dependent on the color space */
-    (*cinfo).scale_num = 1 as libc::c_int as libc::c_uint; /* 1:1 scaling */
-    (*cinfo).scale_denom = 1 as libc::c_int as libc::c_uint;
-    (*cinfo).data_precision = 8 as libc::c_int;
+    (*cinfo).scale_num = 1 as i32 as u32; /* 1:1 scaling */
+    (*cinfo).scale_denom = 1 as i32 as u32;
+    (*cinfo).data_precision = 8 as i32;
     /* Set up two quantization tables using default quality of 75 */
-    jpeg_set_quality(cinfo, 75 as libc::c_int, 1 as libc::c_int);
+    jpeg_set_quality(cinfo, 75 as i32, 1 as i32);
     /* Set up two Huffman tables */
     std_huff_tables(cinfo);
     /* Initialize default arithmetic coding conditioning */
-    i = 0 as libc::c_int;
-    while i < 16 as libc::c_int {
-        (*cinfo).arith_dc_L[i as usize] = 0 as libc::c_int as crate::jmorecfg_h::UINT8;
-        (*cinfo).arith_dc_U[i as usize] = 1 as libc::c_int as crate::jmorecfg_h::UINT8;
-        (*cinfo).arith_ac_K[i as usize] = 5 as libc::c_int as crate::jmorecfg_h::UINT8;
+    i = 0 as i32;
+    while i < 16 as i32 {
+        (*cinfo).arith_dc_L[i as usize] = 0 as i32 as crate::jmorecfg_h::UINT8;
+        (*cinfo).arith_dc_U[i as usize] = 1 as i32 as crate::jmorecfg_h::UINT8;
+        (*cinfo).arith_ac_K[i as usize] = 5 as i32 as crate::jmorecfg_h::UINT8;
         i += 1
     }
     /* Default is no multiple-scan output */
     (*cinfo).scan_info = 0 as *const crate::jpeglib_h::jpeg_scan_info;
-    (*cinfo).num_scans = 0 as libc::c_int;
+    (*cinfo).num_scans = 0 as i32;
     /* Expect normal source image, not raw downsampled data */
-    (*cinfo).raw_data_in = 0 as libc::c_int;
+    (*cinfo).raw_data_in = 0 as i32;
     /* Use Huffman coding, not arithmetic coding, by default */
-    (*cinfo).arith_code = 0 as libc::c_int;
+    (*cinfo).arith_code = 0 as i32;
     /* By default, don't do extra passes to optimize entropy coding */
-    (*cinfo).optimize_coding = 0 as libc::c_int;
+    (*cinfo).optimize_coding = 0 as i32;
     /* The standard Huffman tables are only valid for 8-bit data precision.
      * If the precision is higher, force optimization on so that usable
      * tables will be computed.  This test can be removed if default tables
      * are supplied that are valid for the desired precision.
      */
-    if (*cinfo).data_precision > 8 as libc::c_int {
-        (*cinfo).optimize_coding = 1 as libc::c_int
+    if (*cinfo).data_precision > 8 as i32 {
+        (*cinfo).optimize_coding = 1 as i32
     }
     /* By default, use the simpler non-cosited sampling alignment */
-    (*cinfo).CCIR601_sampling = 0 as libc::c_int;
+    (*cinfo).CCIR601_sampling = 0 as i32;
     /* By default, apply fancy downsampling */
-    (*cinfo).do_fancy_downsampling = 1 as libc::c_int;
+    (*cinfo).do_fancy_downsampling = 1 as i32;
     /* No input smoothing */
-    (*cinfo).smoothing_factor = 0 as libc::c_int;
+    (*cinfo).smoothing_factor = 0 as i32;
     /* DCT algorithm preference */
     (*cinfo).dct_method = crate::jpeglib_h::JDCT_ISLOW;
     /* No restart markers */
-    (*cinfo).restart_interval = 0 as libc::c_int as libc::c_uint;
-    (*cinfo).restart_in_rows = 0 as libc::c_int;
+    (*cinfo).restart_interval = 0 as i32 as u32;
+    (*cinfo).restart_in_rows = 0 as i32;
     /* Fill in default JFIF marker parameters.  Note that whether the marker
      * will actually be written is determined by jpeg_set_colorspace.
      *
@@ -1136,11 +1136,11 @@ pub unsafe extern "C" fn jpeg_set_defaults(mut cinfo: crate::jpeglib_h::j_compre
      * to 1.02, but there may still be some decoders in use that will complain
      * about that; saying 1.01 should minimize compatibility problems.
      */
-    (*cinfo).JFIF_major_version = 1 as libc::c_int as crate::jmorecfg_h::UINT8; /* Default JFIF version = 1.01 */
-    (*cinfo).JFIF_minor_version = 1 as libc::c_int as crate::jmorecfg_h::UINT8; /* Pixel size is unknown by default */
-    (*cinfo).density_unit = 0 as libc::c_int as crate::jmorecfg_h::UINT8; /* Pixel aspect ratio is square by default */
-    (*cinfo).X_density = 1 as libc::c_int as crate::jmorecfg_h::UINT16;
-    (*cinfo).Y_density = 1 as libc::c_int as crate::jmorecfg_h::UINT16;
+    (*cinfo).JFIF_major_version = 1 as i32 as crate::jmorecfg_h::UINT8; /* Default JFIF version = 1.01 */
+    (*cinfo).JFIF_minor_version = 1 as i32 as crate::jmorecfg_h::UINT8; /* Pixel size is unknown by default */
+    (*cinfo).density_unit = 0 as i32 as crate::jmorecfg_h::UINT8; /* Pixel aspect ratio is square by default */
+    (*cinfo).X_density = 1 as i32 as crate::jmorecfg_h::UINT16;
+    (*cinfo).Y_density = 1 as i32 as crate::jmorecfg_h::UINT16;
     /* Choose JPEG colorspace based on input space, set defaults accordingly */
     jpeg_default_colorspace(cinfo);
 }
@@ -1150,7 +1150,7 @@ pub unsafe extern "C" fn jpeg_set_defaults(mut cinfo: crate::jpeglib_h::j_compre
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_default_colorspace(mut cinfo: crate::jpeglib_h::j_compress_ptr) {
-    match (*cinfo).in_color_space as libc::c_uint {
+    match (*cinfo).in_color_space as u32 {
         1 => {
             jpeg_set_colorspace(cinfo, crate::jpeglib_h::JCS_GRAYSCALE); /* By default, no translation */
         }
@@ -1171,7 +1171,7 @@ pub unsafe extern "C" fn jpeg_default_colorspace(mut cinfo: crate::jpeglib_h::j_
         }
         _ => {
             (*(*cinfo).err).msg_code =
-                crate::src::jpeg_8c::jerror::JERR_BAD_IN_COLORSPACE as libc::c_int;
+                crate::src::jpeg_8c::jerror::JERR_BAD_IN_COLORSPACE as i32;
             Some(
                 (*(*cinfo).err)
                     .error_exit
@@ -1194,11 +1194,11 @@ pub unsafe extern "C" fn jpeg_set_colorspace(
 ) {
     let mut compptr: *mut crate::jpeglib_h::jpeg_component_info =
         0 as *mut crate::jpeglib_h::jpeg_component_info;
-    let mut ci: libc::c_int = 0;
+    let mut ci: i32 = 0;
     /* Safety check to ensure start_compress not called yet. */
-    if (*cinfo).global_state != 100 as libc::c_int {
-        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_STATE as libc::c_int;
-        (*(*cinfo).err).msg_parm.i[0 as libc::c_int as usize] = (*cinfo).global_state;
+    if (*cinfo).global_state != 100 as i32 {
+        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_STATE as i32;
+        (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = (*cinfo).global_state;
         Some(
             (*(*cinfo).err)
                 .error_exit
@@ -1210,161 +1210,161 @@ pub unsafe extern "C" fn jpeg_set_colorspace(
      * tables 1 for chrominance components.
      */
     (*cinfo).jpeg_color_space = colorspace; /* No marker for non-JFIF colorspaces */
-    (*cinfo).write_JFIF_header = 0 as libc::c_int; /* write no Adobe marker by default */
-    (*cinfo).write_Adobe_marker = 0 as libc::c_int; /* Write a JFIF marker */
-    match colorspace as libc::c_uint {
+    (*cinfo).write_JFIF_header = 0 as i32; /* write no Adobe marker by default */
+    (*cinfo).write_Adobe_marker = 0 as i32; /* Write a JFIF marker */
+    match colorspace as u32 {
         1 => {
-            (*cinfo).write_JFIF_header = 1 as libc::c_int;
-            (*cinfo).num_components = 1 as libc::c_int;
+            (*cinfo).write_JFIF_header = 1 as i32;
+            (*cinfo).num_components = 1 as i32;
             /* JFIF specifies component ID 1 */
-            compptr = &mut *(*cinfo).comp_info.offset(0 as libc::c_int as isize)
+            compptr = &mut *(*cinfo).comp_info.offset(0 as i32 as isize)
                 as *mut crate::jpeglib_h::jpeg_component_info; /* write Adobe marker to flag RGB */
-            (*compptr).component_id = 1 as libc::c_int; /* Write a JFIF marker */
-            (*compptr).h_samp_factor = 1 as libc::c_int;
-            (*compptr).v_samp_factor = 1 as libc::c_int;
-            (*compptr).quant_tbl_no = 0 as libc::c_int;
-            (*compptr).dc_tbl_no = 0 as libc::c_int;
-            (*compptr).ac_tbl_no = 0 as libc::c_int
+            (*compptr).component_id = 1 as i32; /* Write a JFIF marker */
+            (*compptr).h_samp_factor = 1 as i32;
+            (*compptr).v_samp_factor = 1 as i32;
+            (*compptr).quant_tbl_no = 0 as i32;
+            (*compptr).dc_tbl_no = 0 as i32;
+            (*compptr).ac_tbl_no = 0 as i32
         }
         2 => {
-            (*cinfo).write_Adobe_marker = 1 as libc::c_int;
-            (*cinfo).num_components = 3 as libc::c_int;
-            compptr = &mut *(*cinfo).comp_info.offset(0 as libc::c_int as isize)
+            (*cinfo).write_Adobe_marker = 1 as i32;
+            (*cinfo).num_components = 3 as i32;
+            compptr = &mut *(*cinfo).comp_info.offset(0 as i32 as isize)
                 as *mut crate::jpeglib_h::jpeg_component_info;
-            (*compptr).component_id = 0x52 as libc::c_int;
-            (*compptr).h_samp_factor = 1 as libc::c_int;
-            (*compptr).v_samp_factor = 1 as libc::c_int;
-            (*compptr).quant_tbl_no = 0 as libc::c_int;
-            (*compptr).dc_tbl_no = 0 as libc::c_int;
-            (*compptr).ac_tbl_no = 0 as libc::c_int;
-            compptr = &mut *(*cinfo).comp_info.offset(1 as libc::c_int as isize)
+            (*compptr).component_id = 0x52 as i32;
+            (*compptr).h_samp_factor = 1 as i32;
+            (*compptr).v_samp_factor = 1 as i32;
+            (*compptr).quant_tbl_no = 0 as i32;
+            (*compptr).dc_tbl_no = 0 as i32;
+            (*compptr).ac_tbl_no = 0 as i32;
+            compptr = &mut *(*cinfo).comp_info.offset(1 as i32 as isize)
                 as *mut crate::jpeglib_h::jpeg_component_info;
-            (*compptr).component_id = 0x47 as libc::c_int;
-            (*compptr).h_samp_factor = 1 as libc::c_int;
-            (*compptr).v_samp_factor = 1 as libc::c_int;
-            (*compptr).quant_tbl_no = 0 as libc::c_int;
-            (*compptr).dc_tbl_no = 0 as libc::c_int;
-            (*compptr).ac_tbl_no = 0 as libc::c_int;
-            compptr = &mut *(*cinfo).comp_info.offset(2 as libc::c_int as isize)
+            (*compptr).component_id = 0x47 as i32;
+            (*compptr).h_samp_factor = 1 as i32;
+            (*compptr).v_samp_factor = 1 as i32;
+            (*compptr).quant_tbl_no = 0 as i32;
+            (*compptr).dc_tbl_no = 0 as i32;
+            (*compptr).ac_tbl_no = 0 as i32;
+            compptr = &mut *(*cinfo).comp_info.offset(2 as i32 as isize)
                 as *mut crate::jpeglib_h::jpeg_component_info;
-            (*compptr).component_id = 0x42 as libc::c_int;
-            (*compptr).h_samp_factor = 1 as libc::c_int;
-            (*compptr).v_samp_factor = 1 as libc::c_int;
-            (*compptr).quant_tbl_no = 0 as libc::c_int;
-            (*compptr).dc_tbl_no = 0 as libc::c_int;
-            (*compptr).ac_tbl_no = 0 as libc::c_int
+            (*compptr).component_id = 0x42 as i32;
+            (*compptr).h_samp_factor = 1 as i32;
+            (*compptr).v_samp_factor = 1 as i32;
+            (*compptr).quant_tbl_no = 0 as i32;
+            (*compptr).dc_tbl_no = 0 as i32;
+            (*compptr).ac_tbl_no = 0 as i32
         }
         3 => {
-            (*cinfo).write_JFIF_header = 1 as libc::c_int;
-            (*cinfo).num_components = 3 as libc::c_int;
+            (*cinfo).write_JFIF_header = 1 as i32;
+            (*cinfo).num_components = 3 as i32;
             /* JFIF specifies component IDs 1,2,3 */
             /* We default to 2x2 subsamples of chrominance */
-            compptr = &mut *(*cinfo).comp_info.offset(0 as libc::c_int as isize)
+            compptr = &mut *(*cinfo).comp_info.offset(0 as i32 as isize)
                 as *mut crate::jpeglib_h::jpeg_component_info; /* write Adobe marker to flag CMYK */
-            (*compptr).component_id = 1 as libc::c_int; /* write Adobe marker to flag YCCK */
-            (*compptr).h_samp_factor = 2 as libc::c_int;
-            (*compptr).v_samp_factor = 2 as libc::c_int;
-            (*compptr).quant_tbl_no = 0 as libc::c_int;
-            (*compptr).dc_tbl_no = 0 as libc::c_int;
-            (*compptr).ac_tbl_no = 0 as libc::c_int;
-            compptr = &mut *(*cinfo).comp_info.offset(1 as libc::c_int as isize)
+            (*compptr).component_id = 1 as i32; /* write Adobe marker to flag YCCK */
+            (*compptr).h_samp_factor = 2 as i32;
+            (*compptr).v_samp_factor = 2 as i32;
+            (*compptr).quant_tbl_no = 0 as i32;
+            (*compptr).dc_tbl_no = 0 as i32;
+            (*compptr).ac_tbl_no = 0 as i32;
+            compptr = &mut *(*cinfo).comp_info.offset(1 as i32 as isize)
                 as *mut crate::jpeglib_h::jpeg_component_info;
-            (*compptr).component_id = 2 as libc::c_int;
-            (*compptr).h_samp_factor = 1 as libc::c_int;
-            (*compptr).v_samp_factor = 1 as libc::c_int;
-            (*compptr).quant_tbl_no = 1 as libc::c_int;
-            (*compptr).dc_tbl_no = 1 as libc::c_int;
-            (*compptr).ac_tbl_no = 1 as libc::c_int;
-            compptr = &mut *(*cinfo).comp_info.offset(2 as libc::c_int as isize)
+            (*compptr).component_id = 2 as i32;
+            (*compptr).h_samp_factor = 1 as i32;
+            (*compptr).v_samp_factor = 1 as i32;
+            (*compptr).quant_tbl_no = 1 as i32;
+            (*compptr).dc_tbl_no = 1 as i32;
+            (*compptr).ac_tbl_no = 1 as i32;
+            compptr = &mut *(*cinfo).comp_info.offset(2 as i32 as isize)
                 as *mut crate::jpeglib_h::jpeg_component_info;
-            (*compptr).component_id = 3 as libc::c_int;
-            (*compptr).h_samp_factor = 1 as libc::c_int;
-            (*compptr).v_samp_factor = 1 as libc::c_int;
-            (*compptr).quant_tbl_no = 1 as libc::c_int;
-            (*compptr).dc_tbl_no = 1 as libc::c_int;
-            (*compptr).ac_tbl_no = 1 as libc::c_int
+            (*compptr).component_id = 3 as i32;
+            (*compptr).h_samp_factor = 1 as i32;
+            (*compptr).v_samp_factor = 1 as i32;
+            (*compptr).quant_tbl_no = 1 as i32;
+            (*compptr).dc_tbl_no = 1 as i32;
+            (*compptr).ac_tbl_no = 1 as i32
         }
         4 => {
-            (*cinfo).write_Adobe_marker = 1 as libc::c_int;
-            (*cinfo).num_components = 4 as libc::c_int;
-            compptr = &mut *(*cinfo).comp_info.offset(0 as libc::c_int as isize)
+            (*cinfo).write_Adobe_marker = 1 as i32;
+            (*cinfo).num_components = 4 as i32;
+            compptr = &mut *(*cinfo).comp_info.offset(0 as i32 as isize)
                 as *mut crate::jpeglib_h::jpeg_component_info;
-            (*compptr).component_id = 0x43 as libc::c_int;
-            (*compptr).h_samp_factor = 1 as libc::c_int;
-            (*compptr).v_samp_factor = 1 as libc::c_int;
-            (*compptr).quant_tbl_no = 0 as libc::c_int;
-            (*compptr).dc_tbl_no = 0 as libc::c_int;
-            (*compptr).ac_tbl_no = 0 as libc::c_int;
-            compptr = &mut *(*cinfo).comp_info.offset(1 as libc::c_int as isize)
+            (*compptr).component_id = 0x43 as i32;
+            (*compptr).h_samp_factor = 1 as i32;
+            (*compptr).v_samp_factor = 1 as i32;
+            (*compptr).quant_tbl_no = 0 as i32;
+            (*compptr).dc_tbl_no = 0 as i32;
+            (*compptr).ac_tbl_no = 0 as i32;
+            compptr = &mut *(*cinfo).comp_info.offset(1 as i32 as isize)
                 as *mut crate::jpeglib_h::jpeg_component_info;
-            (*compptr).component_id = 0x4d as libc::c_int;
-            (*compptr).h_samp_factor = 1 as libc::c_int;
-            (*compptr).v_samp_factor = 1 as libc::c_int;
-            (*compptr).quant_tbl_no = 0 as libc::c_int;
-            (*compptr).dc_tbl_no = 0 as libc::c_int;
-            (*compptr).ac_tbl_no = 0 as libc::c_int;
-            compptr = &mut *(*cinfo).comp_info.offset(2 as libc::c_int as isize)
+            (*compptr).component_id = 0x4d as i32;
+            (*compptr).h_samp_factor = 1 as i32;
+            (*compptr).v_samp_factor = 1 as i32;
+            (*compptr).quant_tbl_no = 0 as i32;
+            (*compptr).dc_tbl_no = 0 as i32;
+            (*compptr).ac_tbl_no = 0 as i32;
+            compptr = &mut *(*cinfo).comp_info.offset(2 as i32 as isize)
                 as *mut crate::jpeglib_h::jpeg_component_info;
-            (*compptr).component_id = 0x59 as libc::c_int;
-            (*compptr).h_samp_factor = 1 as libc::c_int;
-            (*compptr).v_samp_factor = 1 as libc::c_int;
-            (*compptr).quant_tbl_no = 0 as libc::c_int;
-            (*compptr).dc_tbl_no = 0 as libc::c_int;
-            (*compptr).ac_tbl_no = 0 as libc::c_int;
-            compptr = &mut *(*cinfo).comp_info.offset(3 as libc::c_int as isize)
+            (*compptr).component_id = 0x59 as i32;
+            (*compptr).h_samp_factor = 1 as i32;
+            (*compptr).v_samp_factor = 1 as i32;
+            (*compptr).quant_tbl_no = 0 as i32;
+            (*compptr).dc_tbl_no = 0 as i32;
+            (*compptr).ac_tbl_no = 0 as i32;
+            compptr = &mut *(*cinfo).comp_info.offset(3 as i32 as isize)
                 as *mut crate::jpeglib_h::jpeg_component_info;
-            (*compptr).component_id = 0x4b as libc::c_int;
-            (*compptr).h_samp_factor = 1 as libc::c_int;
-            (*compptr).v_samp_factor = 1 as libc::c_int;
-            (*compptr).quant_tbl_no = 0 as libc::c_int;
-            (*compptr).dc_tbl_no = 0 as libc::c_int;
-            (*compptr).ac_tbl_no = 0 as libc::c_int
+            (*compptr).component_id = 0x4b as i32;
+            (*compptr).h_samp_factor = 1 as i32;
+            (*compptr).v_samp_factor = 1 as i32;
+            (*compptr).quant_tbl_no = 0 as i32;
+            (*compptr).dc_tbl_no = 0 as i32;
+            (*compptr).ac_tbl_no = 0 as i32
         }
         5 => {
-            (*cinfo).write_Adobe_marker = 1 as libc::c_int;
-            (*cinfo).num_components = 4 as libc::c_int;
-            compptr = &mut *(*cinfo).comp_info.offset(0 as libc::c_int as isize)
+            (*cinfo).write_Adobe_marker = 1 as i32;
+            (*cinfo).num_components = 4 as i32;
+            compptr = &mut *(*cinfo).comp_info.offset(0 as i32 as isize)
                 as *mut crate::jpeglib_h::jpeg_component_info;
-            (*compptr).component_id = 1 as libc::c_int;
-            (*compptr).h_samp_factor = 2 as libc::c_int;
-            (*compptr).v_samp_factor = 2 as libc::c_int;
-            (*compptr).quant_tbl_no = 0 as libc::c_int;
-            (*compptr).dc_tbl_no = 0 as libc::c_int;
-            (*compptr).ac_tbl_no = 0 as libc::c_int;
-            compptr = &mut *(*cinfo).comp_info.offset(1 as libc::c_int as isize)
+            (*compptr).component_id = 1 as i32;
+            (*compptr).h_samp_factor = 2 as i32;
+            (*compptr).v_samp_factor = 2 as i32;
+            (*compptr).quant_tbl_no = 0 as i32;
+            (*compptr).dc_tbl_no = 0 as i32;
+            (*compptr).ac_tbl_no = 0 as i32;
+            compptr = &mut *(*cinfo).comp_info.offset(1 as i32 as isize)
                 as *mut crate::jpeglib_h::jpeg_component_info;
-            (*compptr).component_id = 2 as libc::c_int;
-            (*compptr).h_samp_factor = 1 as libc::c_int;
-            (*compptr).v_samp_factor = 1 as libc::c_int;
-            (*compptr).quant_tbl_no = 1 as libc::c_int;
-            (*compptr).dc_tbl_no = 1 as libc::c_int;
-            (*compptr).ac_tbl_no = 1 as libc::c_int;
-            compptr = &mut *(*cinfo).comp_info.offset(2 as libc::c_int as isize)
+            (*compptr).component_id = 2 as i32;
+            (*compptr).h_samp_factor = 1 as i32;
+            (*compptr).v_samp_factor = 1 as i32;
+            (*compptr).quant_tbl_no = 1 as i32;
+            (*compptr).dc_tbl_no = 1 as i32;
+            (*compptr).ac_tbl_no = 1 as i32;
+            compptr = &mut *(*cinfo).comp_info.offset(2 as i32 as isize)
                 as *mut crate::jpeglib_h::jpeg_component_info;
-            (*compptr).component_id = 3 as libc::c_int;
-            (*compptr).h_samp_factor = 1 as libc::c_int;
-            (*compptr).v_samp_factor = 1 as libc::c_int;
-            (*compptr).quant_tbl_no = 1 as libc::c_int;
-            (*compptr).dc_tbl_no = 1 as libc::c_int;
-            (*compptr).ac_tbl_no = 1 as libc::c_int;
-            compptr = &mut *(*cinfo).comp_info.offset(3 as libc::c_int as isize)
+            (*compptr).component_id = 3 as i32;
+            (*compptr).h_samp_factor = 1 as i32;
+            (*compptr).v_samp_factor = 1 as i32;
+            (*compptr).quant_tbl_no = 1 as i32;
+            (*compptr).dc_tbl_no = 1 as i32;
+            (*compptr).ac_tbl_no = 1 as i32;
+            compptr = &mut *(*cinfo).comp_info.offset(3 as i32 as isize)
                 as *mut crate::jpeglib_h::jpeg_component_info;
-            (*compptr).component_id = 4 as libc::c_int;
-            (*compptr).h_samp_factor = 2 as libc::c_int;
-            (*compptr).v_samp_factor = 2 as libc::c_int;
-            (*compptr).quant_tbl_no = 0 as libc::c_int;
-            (*compptr).dc_tbl_no = 0 as libc::c_int;
-            (*compptr).ac_tbl_no = 0 as libc::c_int
+            (*compptr).component_id = 4 as i32;
+            (*compptr).h_samp_factor = 2 as i32;
+            (*compptr).v_samp_factor = 2 as i32;
+            (*compptr).quant_tbl_no = 0 as i32;
+            (*compptr).dc_tbl_no = 0 as i32;
+            (*compptr).ac_tbl_no = 0 as i32
         }
         0 => {
             (*cinfo).num_components = (*cinfo).input_components;
-            if (*cinfo).num_components < 1 as libc::c_int
-                || (*cinfo).num_components > 10 as libc::c_int
+            if (*cinfo).num_components < 1 as i32
+                || (*cinfo).num_components > 10 as i32
             {
                 (*(*cinfo).err).msg_code =
-                    crate::src::jpeg_8c::jerror::JERR_COMPONENT_COUNT as libc::c_int;
-                (*(*cinfo).err).msg_parm.i[0 as libc::c_int as usize] = (*cinfo).num_components;
-                (*(*cinfo).err).msg_parm.i[1 as libc::c_int as usize] = 10 as libc::c_int;
+                    crate::src::jpeg_8c::jerror::JERR_COMPONENT_COUNT as i32;
+                (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = (*cinfo).num_components;
+                (*(*cinfo).err).msg_parm.i[1 as i32 as usize] = 10 as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
@@ -1374,22 +1374,22 @@ pub unsafe extern "C" fn jpeg_set_colorspace(
                     cinfo as crate::jpeglib_h::j_common_ptr
                 );
             }
-            ci = 0 as libc::c_int;
+            ci = 0 as i32;
             while ci < (*cinfo).num_components {
                 compptr = &mut *(*cinfo).comp_info.offset(ci as isize)
                     as *mut crate::jpeglib_h::jpeg_component_info;
                 (*compptr).component_id = ci;
-                (*compptr).h_samp_factor = 1 as libc::c_int;
-                (*compptr).v_samp_factor = 1 as libc::c_int;
-                (*compptr).quant_tbl_no = 0 as libc::c_int;
-                (*compptr).dc_tbl_no = 0 as libc::c_int;
-                (*compptr).ac_tbl_no = 0 as libc::c_int;
+                (*compptr).h_samp_factor = 1 as i32;
+                (*compptr).v_samp_factor = 1 as i32;
+                (*compptr).quant_tbl_no = 0 as i32;
+                (*compptr).dc_tbl_no = 0 as i32;
+                (*compptr).ac_tbl_no = 0 as i32;
                 ci += 1
             }
         }
         _ => {
             (*(*cinfo).err).msg_code =
-                crate::src::jpeg_8c::jerror::JERR_BAD_J_COLORSPACE as libc::c_int;
+                crate::src::jpeg_8c::jerror::JERR_BAD_J_COLORSPACE as i32;
             Some(
                 (*(*cinfo).err)
                     .error_exit
@@ -1404,15 +1404,15 @@ pub unsafe extern "C" fn jpeg_set_colorspace(
 
 unsafe extern "C" fn fill_a_scan(
     mut scanptr: *mut crate::jpeglib_h::jpeg_scan_info,
-    mut ci: libc::c_int,
-    mut Ss: libc::c_int,
-    mut Se: libc::c_int,
-    mut Ah: libc::c_int,
-    mut Al: libc::c_int,
+    mut ci: i32,
+    mut Ss: i32,
+    mut Se: i32,
+    mut Ah: i32,
+    mut Al: i32,
 ) -> *mut crate::jpeglib_h::jpeg_scan_info
 /* Support routine: generate one scan for specified component */ {
-    (*scanptr).comps_in_scan = 1 as libc::c_int;
-    (*scanptr).component_index[0 as libc::c_int as usize] = ci;
+    (*scanptr).comps_in_scan = 1 as i32;
+    (*scanptr).component_index[0 as i32 as usize] = ci;
     (*scanptr).Ss = Ss;
     (*scanptr).Se = Se;
     (*scanptr).Ah = Ah;
@@ -1423,18 +1423,18 @@ unsafe extern "C" fn fill_a_scan(
 
 unsafe extern "C" fn fill_scans(
     mut scanptr: *mut crate::jpeglib_h::jpeg_scan_info,
-    mut ncomps: libc::c_int,
-    mut Ss: libc::c_int,
-    mut Se: libc::c_int,
-    mut Ah: libc::c_int,
-    mut Al: libc::c_int,
+    mut ncomps: i32,
+    mut Ss: i32,
+    mut Se: i32,
+    mut Ah: i32,
+    mut Al: i32,
 ) -> *mut crate::jpeglib_h::jpeg_scan_info
 /* Support routine: generate one scan for each component */ {
-    let mut ci: libc::c_int = 0;
-    ci = 0 as libc::c_int;
+    let mut ci: i32 = 0;
+    ci = 0 as i32;
     while ci < ncomps {
-        (*scanptr).comps_in_scan = 1 as libc::c_int;
-        (*scanptr).component_index[0 as libc::c_int as usize] = ci;
+        (*scanptr).comps_in_scan = 1 as i32;
+        (*scanptr).component_index[0 as i32 as usize] = ci;
         (*scanptr).Ss = Ss;
         (*scanptr).Se = Se;
         (*scanptr).Ah = Ah;
@@ -1447,28 +1447,28 @@ unsafe extern "C" fn fill_scans(
 
 unsafe extern "C" fn fill_dc_scans(
     mut scanptr: *mut crate::jpeglib_h::jpeg_scan_info,
-    mut ncomps: libc::c_int,
-    mut Ah: libc::c_int,
-    mut Al: libc::c_int,
+    mut ncomps: i32,
+    mut Ah: i32,
+    mut Al: i32,
 ) -> *mut crate::jpeglib_h::jpeg_scan_info
 /* Support routine: generate interleaved DC scan if possible, else N scans */ {
-    let mut ci: libc::c_int = 0;
-    if ncomps <= 4 as libc::c_int {
+    let mut ci: i32 = 0;
+    if ncomps <= 4 as i32 {
         /* Single interleaved DC scan */
         (*scanptr).comps_in_scan = ncomps;
-        ci = 0 as libc::c_int;
+        ci = 0 as i32;
         while ci < ncomps {
             (*scanptr).component_index[ci as usize] = ci;
             ci += 1
         }
-        (*scanptr).Se = 0 as libc::c_int;
+        (*scanptr).Se = 0 as i32;
         (*scanptr).Ss = (*scanptr).Se;
         (*scanptr).Ah = Ah;
         (*scanptr).Al = Al;
         scanptr = scanptr.offset(1)
     } else {
         /* Noninterleaved DC scan for each component */
-        scanptr = fill_scans(scanptr, ncomps, 0 as libc::c_int, 0 as libc::c_int, Ah, Al)
+        scanptr = fill_scans(scanptr, ncomps, 0 as i32, 0 as i32, Ah, Al)
     }
     return scanptr;
 }
@@ -1479,14 +1479,14 @@ unsafe extern "C" fn fill_dc_scans(
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_simple_progression(mut cinfo: crate::jpeglib_h::j_compress_ptr) {
-    let mut ncomps: libc::c_int = (*cinfo).num_components;
-    let mut nscans: libc::c_int = 0;
+    let mut ncomps: i32 = (*cinfo).num_components;
+    let mut nscans: i32 = 0;
     let mut scanptr: *mut crate::jpeglib_h::jpeg_scan_info =
         0 as *mut crate::jpeglib_h::jpeg_scan_info;
     /* Safety check to ensure start_compress not called yet. */
-    if (*cinfo).global_state != 100 as libc::c_int {
-        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_STATE as libc::c_int;
-        (*(*cinfo).err).msg_parm.i[0 as libc::c_int as usize] = (*cinfo).global_state;
+    if (*cinfo).global_state != 100 as i32 {
+        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_STATE as i32;
+        (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = (*cinfo).global_state;
         Some(
             (*(*cinfo).err)
                 .error_exit
@@ -1495,17 +1495,17 @@ pub unsafe extern "C" fn jpeg_simple_progression(mut cinfo: crate::jpeglib_h::j_
         .expect("non-null function pointer")(cinfo as crate::jpeglib_h::j_common_ptr);
     }
     /* Figure space needed for script.  Calculation must match code below! */
-    if ncomps == 3 as libc::c_int
-        && (*cinfo).jpeg_color_space as libc::c_uint
-            == crate::jpeglib_h::JCS_YCbCr as libc::c_int as libc::c_uint
+    if ncomps == 3 as i32
+        && (*cinfo).jpeg_color_space as u32
+            == crate::jpeglib_h::JCS_YCbCr as i32 as u32
     {
         /* Custom script for YCbCr color images. */
-        nscans = 10 as libc::c_int
-    } else if ncomps > 4 as libc::c_int {
+        nscans = 10 as i32
+    } else if ncomps > 4 as i32 {
         /* All-purpose script for other color spaces. */
-        nscans = 6 as libc::c_int * ncomps
+        nscans = 6 as i32 * ncomps
     } else {
-        nscans = 2 as libc::c_int + 4 as libc::c_int * ncomps
+        nscans = 2 as i32 + 4 as i32 * ncomps
     } /* 2 DC + 4 AC scans per component */
     /* 2 DC scans; 4 AC scans per component */
     /* Allocate space for script.
@@ -1516,10 +1516,10 @@ pub unsafe extern "C" fn jpeg_simple_progression(mut cinfo: crate::jpeglib_h::j_
      * enough space to handle YCbCr even if initially asked for grayscale.
      */
     if (*cinfo).script_space.is_null() || (*cinfo).script_space_size < nscans {
-        (*cinfo).script_space_size = if nscans > 10 as libc::c_int {
+        (*cinfo).script_space_size = if nscans > 10 as i32 {
             nscans
         } else {
-            10 as libc::c_int
+            10 as i32
         };
         (*cinfo).script_space = Some(
             (*(*cinfo).mem)
@@ -1528,7 +1528,7 @@ pub unsafe extern "C" fn jpeg_simple_progression(mut cinfo: crate::jpeglib_h::j_
         )
         .expect("non-null function pointer")(
             cinfo as crate::jpeglib_h::j_common_ptr,
-            0 as libc::c_int,
+            0 as i32,
             ((*cinfo).script_space_size as libc::c_ulong)
                 .wrapping_mul(
                     ::std::mem::size_of::<crate::jpeglib_h::jpeg_scan_info>() as libc::c_ulong
@@ -1538,123 +1538,123 @@ pub unsafe extern "C" fn jpeg_simple_progression(mut cinfo: crate::jpeglib_h::j_
     scanptr = (*cinfo).script_space;
     (*cinfo).scan_info = scanptr;
     (*cinfo).num_scans = nscans;
-    if ncomps == 3 as libc::c_int
-        && (*cinfo).jpeg_color_space as libc::c_uint
-            == crate::jpeglib_h::JCS_YCbCr as libc::c_int as libc::c_uint
+    if ncomps == 3 as i32
+        && (*cinfo).jpeg_color_space as u32
+            == crate::jpeglib_h::JCS_YCbCr as i32 as u32
     {
         /* Custom script for YCbCr color images. */
         /* Initial DC scan */
-        scanptr = fill_dc_scans(scanptr, ncomps, 0 as libc::c_int, 1 as libc::c_int);
+        scanptr = fill_dc_scans(scanptr, ncomps, 0 as i32, 1 as i32);
         /* Initial AC scan: get some luma data out in a hurry */
         scanptr = fill_a_scan(
             scanptr,
-            0 as libc::c_int,
-            1 as libc::c_int,
-            5 as libc::c_int,
-            0 as libc::c_int,
-            2 as libc::c_int,
+            0 as i32,
+            1 as i32,
+            5 as i32,
+            0 as i32,
+            2 as i32,
         );
         /* Chroma data is too small to be worth expending many scans on */
         scanptr = fill_a_scan(
             scanptr,
-            2 as libc::c_int,
-            1 as libc::c_int,
-            63 as libc::c_int,
-            0 as libc::c_int,
-            1 as libc::c_int,
+            2 as i32,
+            1 as i32,
+            63 as i32,
+            0 as i32,
+            1 as i32,
         );
         scanptr = fill_a_scan(
             scanptr,
-            1 as libc::c_int,
-            1 as libc::c_int,
-            63 as libc::c_int,
-            0 as libc::c_int,
-            1 as libc::c_int,
+            1 as i32,
+            1 as i32,
+            63 as i32,
+            0 as i32,
+            1 as i32,
         );
         /* Complete spectral selection for luma AC */
         scanptr = fill_a_scan(
             scanptr,
-            0 as libc::c_int,
-            6 as libc::c_int,
-            63 as libc::c_int,
-            0 as libc::c_int,
-            2 as libc::c_int,
+            0 as i32,
+            6 as i32,
+            63 as i32,
+            0 as i32,
+            2 as i32,
         );
         /* Refine next bit of luma AC */
         scanptr = fill_a_scan(
             scanptr,
-            0 as libc::c_int,
-            1 as libc::c_int,
-            63 as libc::c_int,
-            2 as libc::c_int,
-            1 as libc::c_int,
+            0 as i32,
+            1 as i32,
+            63 as i32,
+            2 as i32,
+            1 as i32,
         );
         /* Finish DC successive approximation */
-        scanptr = fill_dc_scans(scanptr, ncomps, 1 as libc::c_int, 0 as libc::c_int);
+        scanptr = fill_dc_scans(scanptr, ncomps, 1 as i32, 0 as i32);
         /* Finish AC successive approximation */
         scanptr = fill_a_scan(
             scanptr,
-            2 as libc::c_int,
-            1 as libc::c_int,
-            63 as libc::c_int,
-            1 as libc::c_int,
-            0 as libc::c_int,
+            2 as i32,
+            1 as i32,
+            63 as i32,
+            1 as i32,
+            0 as i32,
         );
         scanptr = fill_a_scan(
             scanptr,
-            1 as libc::c_int,
-            1 as libc::c_int,
-            63 as libc::c_int,
-            1 as libc::c_int,
-            0 as libc::c_int,
+            1 as i32,
+            1 as i32,
+            63 as i32,
+            1 as i32,
+            0 as i32,
         );
         /* Luma bottom bit comes last since it's usually largest scan */
         scanptr = fill_a_scan(
             scanptr,
-            0 as libc::c_int,
-            1 as libc::c_int,
-            63 as libc::c_int,
-            1 as libc::c_int,
-            0 as libc::c_int,
+            0 as i32,
+            1 as i32,
+            63 as i32,
+            1 as i32,
+            0 as i32,
         )
     } else {
         /* All-purpose script for other color spaces. */
         /* Successive approximation first pass */
-        scanptr = fill_dc_scans(scanptr, ncomps, 0 as libc::c_int, 1 as libc::c_int);
+        scanptr = fill_dc_scans(scanptr, ncomps, 0 as i32, 1 as i32);
         scanptr = fill_scans(
             scanptr,
             ncomps,
-            1 as libc::c_int,
-            5 as libc::c_int,
-            0 as libc::c_int,
-            2 as libc::c_int,
+            1 as i32,
+            5 as i32,
+            0 as i32,
+            2 as i32,
         );
         scanptr = fill_scans(
             scanptr,
             ncomps,
-            6 as libc::c_int,
-            63 as libc::c_int,
-            0 as libc::c_int,
-            2 as libc::c_int,
+            6 as i32,
+            63 as i32,
+            0 as i32,
+            2 as i32,
         );
         /* Successive approximation second pass */
         scanptr = fill_scans(
             scanptr,
             ncomps,
-            1 as libc::c_int,
-            63 as libc::c_int,
-            2 as libc::c_int,
-            1 as libc::c_int,
+            1 as i32,
+            63 as i32,
+            2 as i32,
+            1 as i32,
         );
         /* Successive approximation final pass */
-        scanptr = fill_dc_scans(scanptr, ncomps, 1 as libc::c_int, 0 as libc::c_int);
+        scanptr = fill_dc_scans(scanptr, ncomps, 1 as i32, 0 as i32);
         scanptr = fill_scans(
             scanptr,
             ncomps,
-            1 as libc::c_int,
-            63 as libc::c_int,
-            1 as libc::c_int,
-            0 as libc::c_int,
+            1 as i32,
+            63 as i32,
+            1 as i32,
+            0 as i32,
         )
     };
 }

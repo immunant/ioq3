@@ -4,12 +4,12 @@ pub mod stdlib_h {
 
     #[inline]
 
-    pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> libc::c_int {
+    pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return ::libc::strtol(
             __nptr,
             0 as *mut libc::c_void as *mut *mut libc::c_char,
-            10 as libc::c_int,
-        ) as libc::c_int;
+            10 as i32,
+        ) as i32;
     }
 }
 
@@ -216,31 +216,31 @@ Returns the player with player id or name from Cmd_Argv(1)
 
 unsafe extern "C" fn SV_GetPlayerByHandle() -> *mut crate::server_h::client_t {
     let mut cl: *mut crate::server_h::client_t = 0 as *mut crate::server_h::client_t;
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut cleanName: [libc::c_char; 64] = [0; 64];
     // make sure server is running
     if (*crate::src::qcommon::common::com_sv_running).integer == 0 {
         return 0 as *mut crate::server_h::client_t;
     }
-    if crate::src::qcommon::cmd::Cmd_Argc() < 2 as libc::c_int {
+    if crate::src::qcommon::cmd::Cmd_Argc() < 2 as i32 {
         crate::src::qcommon::common::Com_Printf(
             b"No player specified.\n\x00" as *const u8 as *const libc::c_char,
         );
         return 0 as *mut crate::server_h::client_t;
     }
-    s = crate::src::qcommon::cmd::Cmd_Argv(1 as libc::c_int);
+    s = crate::src::qcommon::cmd::Cmd_Argv(1 as i32);
     // Check whether this is a numeric player handle
-    i = 0 as libc::c_int;
-    while *s.offset(i as isize) as libc::c_int >= '0' as i32
-        && *s.offset(i as isize) as libc::c_int <= '9' as i32
+    i = 0 as i32;
+    while *s.offset(i as isize) as i32 >= '0' as i32
+        && *s.offset(i as isize) as i32 <= '9' as i32
     {
         i += 1
     }
     if *s.offset(i as isize) == 0 {
-        let mut plid: libc::c_int = atoi(s);
+        let mut plid: i32 = atoi(s);
         // Check for numeric playerid match
-        if plid >= 0 as libc::c_int && plid < (*crate::src::server::sv_main::sv_maxclients).integer
+        if plid >= 0 as i32 && plid < (*crate::src::server::sv_main::sv_maxclients).integer
         {
             cl = &mut *crate::src::server::sv_main::svs
                 .clients
@@ -251,7 +251,7 @@ unsafe extern "C" fn SV_GetPlayerByHandle() -> *mut crate::server_h::client_t {
         }
     }
     // check for a name match
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     cl = crate::src::server::sv_main::svs.clients;
     while i < (*crate::src::server::sv_main::sv_maxclients).integer {
         if !((*cl).state as u64 == 0) {
@@ -261,7 +261,7 @@ unsafe extern "C" fn SV_GetPlayerByHandle() -> *mut crate::server_h::client_t {
             crate::src::qcommon::q_shared::Q_strncpyz(
                 cleanName.as_mut_ptr(),
                 (*cl).name.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as libc::c_int,
+                ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
             );
             crate::src::qcommon::q_shared::Q_CleanStr(cleanName.as_mut_ptr());
             if crate::src::qcommon::q_shared::Q_stricmp(cleanName.as_mut_ptr(), s) == 0 {
@@ -287,24 +287,24 @@ Returns the player with idnum from Cmd_Argv(1)
 
 unsafe extern "C" fn SV_GetPlayerByNum() -> *mut crate::server_h::client_t {
     let mut cl: *mut crate::server_h::client_t = 0 as *mut crate::server_h::client_t;
-    let mut i: libc::c_int = 0;
-    let mut idnum: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut idnum: i32 = 0;
     let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
     // make sure server is running
     if (*crate::src::qcommon::common::com_sv_running).integer == 0 {
         return 0 as *mut crate::server_h::client_t;
     }
-    if crate::src::qcommon::cmd::Cmd_Argc() < 2 as libc::c_int {
+    if crate::src::qcommon::cmd::Cmd_Argc() < 2 as i32 {
         crate::src::qcommon::common::Com_Printf(
             b"No player specified.\n\x00" as *const u8 as *const libc::c_char,
         );
         return 0 as *mut crate::server_h::client_t;
     }
-    s = crate::src::qcommon::cmd::Cmd_Argv(1 as libc::c_int);
-    i = 0 as libc::c_int;
+    s = crate::src::qcommon::cmd::Cmd_Argv(1 as i32);
+    i = 0 as i32;
     while *s.offset(i as isize) != 0 {
-        if (*s.offset(i as isize) as libc::c_int) < '0' as i32
-            || *s.offset(i as isize) as libc::c_int > '9' as i32
+        if (*s.offset(i as isize) as i32) < '0' as i32
+            || *s.offset(i as isize) as i32 > '9' as i32
         {
             crate::src::qcommon::common::Com_Printf(
                 b"Bad slot number: %s\n\x00" as *const u8 as *const libc::c_char,
@@ -315,7 +315,7 @@ unsafe extern "C" fn SV_GetPlayerByNum() -> *mut crate::server_h::client_t {
         i += 1
     }
     idnum = atoi(s);
-    if idnum < 0 as libc::c_int || idnum >= (*crate::src::server::sv_main::sv_maxclients).integer {
+    if idnum < 0 as i32 || idnum >= (*crate::src::server::sv_main::sv_maxclients).integer {
         crate::src::qcommon::common::Com_Printf(
             b"Bad client slot: %i\n\x00" as *const u8 as *const libc::c_char,
             idnum,
@@ -351,7 +351,7 @@ unsafe extern "C" fn SV_Map_f() {
     let mut cheat: crate::src::qcommon::q_shared::qboolean = crate::src::qcommon::q_shared::qfalse;
     let mut expanded: [libc::c_char; 64] = [0; 64];
     let mut mapname: [libc::c_char; 64] = [0; 64];
-    map = crate::src::qcommon::cmd::Cmd_Argv(1 as libc::c_int);
+    map = crate::src::qcommon::cmd::Cmd_Argv(1 as i32);
     if map.is_null() {
         return;
     }
@@ -359,12 +359,12 @@ unsafe extern "C" fn SV_Map_f() {
     // a typo at the server console won't end the game
     crate::src::qcommon::q_shared::Com_sprintf(
         expanded.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
         b"maps/%s.bsp\x00" as *const u8 as *const libc::c_char,
         map,
     );
     if crate::src::qcommon::files::FS_ReadFile(expanded.as_mut_ptr(), 0 as *mut *mut libc::c_void)
-        == -(1 as libc::c_int) as libc::c_long
+        == -(1 as i32) as libc::c_long
     {
         crate::src::qcommon::common::Com_Printf(
             b"Can\'t find map %s\n\x00" as *const u8 as *const libc::c_char,
@@ -377,29 +377,29 @@ unsafe extern "C" fn SV_Map_f() {
     crate::src::qcommon::cvar::Cvar_Get(
         b"g_gametype\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
-        0x4 as libc::c_int | 0x2 as libc::c_int | 0x20 as libc::c_int,
+        0x4 as i32 | 0x2 as i32 | 0x20 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s;
-    cmd = crate::src::qcommon::cmd::Cmd_Argv(0 as libc::c_int);
+    cmd = crate::src::qcommon::cmd::Cmd_Argv(0 as i32);
     if crate::src::qcommon::q_shared::Q_stricmpn(
         cmd,
         b"sp\x00" as *const u8 as *const libc::c_char,
-        2 as libc::c_int,
-    ) == 0 as libc::c_int
+        2 as i32,
+    ) == 0 as i32
     {
         crate::src::qcommon::cvar::Cvar_SetValue(
             b"g_gametype\x00" as *const u8 as *const libc::c_char,
-            crate::bg_public_h::GT_SINGLE_PLAYER as libc::c_int as libc::c_float,
+            crate::bg_public_h::GT_SINGLE_PLAYER as i32 as f32,
         );
         crate::src::qcommon::cvar::Cvar_SetValue(
             b"g_doWarmup\x00" as *const u8 as *const libc::c_char,
-            0 as libc::c_int as libc::c_float,
+            0 as i32 as f32,
         );
         // may not set sv_maxclients directly, always set latched
         crate::src::qcommon::cvar::Cvar_SetLatched(
             b"sv_maxclients\x00" as *const u8 as *const libc::c_char,
             b"8\x00" as *const u8 as *const libc::c_char,
         );
-        cmd = cmd.offset(2 as libc::c_int as isize);
+        cmd = cmd.offset(2 as i32 as isize);
         if crate::src::qcommon::q_shared::Q_stricmp(
             cmd,
             b"devmap\x00" as *const u8 as *const libc::c_char,
@@ -423,11 +423,11 @@ unsafe extern "C" fn SV_Map_f() {
             killBots = crate::src::qcommon::q_shared::qfalse
         }
         if (*crate::src::server::sv_main::sv_gametype).integer
-            == crate::bg_public_h::GT_SINGLE_PLAYER as libc::c_int
+            == crate::bg_public_h::GT_SINGLE_PLAYER as i32
         {
             crate::src::qcommon::cvar::Cvar_SetValue(
                 b"g_gametype\x00" as *const u8 as *const libc::c_char,
-                crate::bg_public_h::GT_FFA as libc::c_int as libc::c_float,
+                crate::bg_public_h::GT_FFA as i32 as f32,
             );
         }
     }
@@ -436,7 +436,7 @@ unsafe extern "C" fn SV_Map_f() {
     crate::src::qcommon::q_shared::Q_strncpyz(
         mapname.as_mut_ptr(),
         map,
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
     );
     // start up the map
     crate::src::server::sv_init::SV_SpawnServer(mapname.as_mut_ptr(), killBots);
@@ -466,11 +466,11 @@ This allows fair starts with variable load times.
 */
 
 unsafe extern "C" fn SV_MapRestart_f() {
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     let mut client: *mut crate::server_h::client_t = 0 as *mut crate::server_h::client_t;
     let mut denied: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut isBot: crate::src::qcommon::q_shared::qboolean = crate::src::qcommon::q_shared::qfalse;
-    let mut delay: libc::c_int = 0;
+    let mut delay: i32 = 0;
     // make sure we aren't restarting twice in the same frame
     if crate::src::qcommon::common::com_frameTime == crate::src::server::sv_main::sv.serverId {
         return;
@@ -485,10 +485,10 @@ unsafe extern "C" fn SV_MapRestart_f() {
     if crate::src::server::sv_main::sv.restartTime != 0 {
         return;
     }
-    if crate::src::qcommon::cmd::Cmd_Argc() > 1 as libc::c_int {
-        delay = atoi(crate::src::qcommon::cmd::Cmd_Argv(1 as libc::c_int))
+    if crate::src::qcommon::cmd::Cmd_Argc() > 1 as i32 {
+        delay = atoi(crate::src::qcommon::cmd::Cmd_Argv(1 as i32))
     } else {
-        delay = 5 as libc::c_int
+        delay = 5 as i32
     }
     if delay != 0
         && crate::src::qcommon::cvar::Cvar_VariableValue(
@@ -496,9 +496,9 @@ unsafe extern "C" fn SV_MapRestart_f() {
         ) == 0.
     {
         crate::src::server::sv_main::sv.restartTime =
-            crate::src::server::sv_main::sv.time + delay * 1000 as libc::c_int;
+            crate::src::server::sv_main::sv.time + delay * 1000 as i32;
         crate::src::server::sv_init::SV_SetConfigstring(
-            5 as libc::c_int,
+            5 as i32,
             crate::src::qcommon::q_shared::va(
                 b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 crate::src::server::sv_main::sv.restartTime,
@@ -508,8 +508,8 @@ unsafe extern "C" fn SV_MapRestart_f() {
     }
     // check for changes in variables that can't just be restarted
     // check for maxclients change
-    if (*crate::src::server::sv_main::sv_maxclients).modified as libc::c_uint != 0
-        || (*crate::src::server::sv_main::sv_gametype).modified as libc::c_uint != 0
+    if (*crate::src::server::sv_main::sv_maxclients).modified as u32 != 0
+        || (*crate::src::server::sv_main::sv_gametype).modified as u32 != 0
     {
         let mut mapname: [libc::c_char; 64] = [0; 64];
         crate::src::qcommon::common::Com_Printf(
@@ -521,7 +521,7 @@ unsafe extern "C" fn SV_MapRestart_f() {
             crate::src::qcommon::cvar::Cvar_VariableString(
                 b"mapname\x00" as *const u8 as *const libc::c_char,
             ),
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as libc::c_int,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
         );
         crate::src::server::sv_init::SV_SpawnServer(
             mapname.as_mut_ptr(),
@@ -531,7 +531,7 @@ unsafe extern "C" fn SV_MapRestart_f() {
     }
     // toggle the server bit so clients can detect that a
     // map_restart has happened
-    crate::src::server::sv_main::svs.snapFlagServerBit ^= 4 as libc::c_int;
+    crate::src::server::sv_main::svs.snapFlagServerBit ^= 4 as i32;
     // generate a new serverid
     // TTimo - don't update restartedserverId there, otherwise we won't deal correctly with multiple map_restart
     crate::src::server::sv_main::sv.serverId = crate::src::qcommon::common::com_frameTime;
@@ -545,10 +545,10 @@ unsafe extern "C" fn SV_MapRestart_f() {
     // if a map_restart occurs while a client is changing maps, we need
     // to give them the correct time so that when they finish loading
     // they don't violate the backwards time check in cl_cgame.c
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < (*crate::src::server::sv_main::sv_maxclients).integer {
-        if (*crate::src::server::sv_main::svs.clients.offset(i as isize)).state as libc::c_uint
-            == crate::server_h::CS_PRIMED as libc::c_int as libc::c_uint
+        if (*crate::src::server::sv_main::svs.clients.offset(i as isize)).state as u32
+            == crate::server_h::CS_PRIMED as i32 as u32
         {
             (*crate::src::server::sv_main::svs.clients.offset(i as isize)).oldServerTime =
                 crate::src::server::sv_main::sv.restartTime
@@ -562,30 +562,30 @@ unsafe extern "C" fn SV_MapRestart_f() {
     crate::src::server::sv_main::sv.restarting = crate::src::qcommon::q_shared::qtrue;
     crate::src::server::sv_game::SV_RestartGameProgs();
     // run a few frames to allow everything to settle
-    i = 0 as libc::c_int;
-    while i < 3 as libc::c_int {
+    i = 0 as i32;
+    while i < 3 as i32 {
         crate::src::qcommon::vm::VM_Call(
             crate::src::server::sv_main::gvm,
-            crate::g_public_h::GAME_RUN_FRAME as libc::c_int,
+            crate::g_public_h::GAME_RUN_FRAME as i32,
             crate::src::server::sv_main::sv.time,
         );
-        crate::src::server::sv_main::sv.time += 100 as libc::c_int;
-        crate::src::server::sv_main::svs.time += 100 as libc::c_int;
+        crate::src::server::sv_main::sv.time += 100 as i32;
+        crate::src::server::sv_main::svs.time += 100 as i32;
         i += 1
     }
     crate::src::server::sv_main::sv.state = crate::server_h::SS_GAME;
     crate::src::server::sv_main::sv.restarting = crate::src::qcommon::q_shared::qfalse;
     // connect and begin all the clients
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < (*crate::src::server::sv_main::sv_maxclients).integer {
         client = &mut *crate::src::server::sv_main::svs.clients.offset(i as isize)
             as *mut crate::server_h::client_t;
         // send the new gamestate to all connected clients
-        if !(((*client).state as libc::c_uint)
-            < crate::server_h::CS_CONNECTED as libc::c_int as libc::c_uint)
+        if !(((*client).state as u32)
+            < crate::server_h::CS_CONNECTED as i32 as u32)
         {
-            if (*client).netchan.remoteAddress.type_0 as libc::c_uint
-                == crate::qcommon_h::NA_BOT as libc::c_int as libc::c_uint
+            if (*client).netchan.remoteAddress.type_0 as u32
+                == crate::qcommon_h::NA_BOT as i32 as u32
             {
                 isBot = crate::src::qcommon::q_shared::qtrue
             } else {
@@ -601,10 +601,10 @@ unsafe extern "C" fn SV_MapRestart_f() {
                 crate::src::server::sv_main::gvm,
                 crate::src::qcommon::vm::VM_Call(
                     crate::src::server::sv_main::gvm,
-                    crate::g_public_h::GAME_CLIENT_CONNECT as libc::c_int,
+                    crate::g_public_h::GAME_CLIENT_CONNECT as i32,
                     i,
-                    crate::src::qcommon::q_shared::qfalse as libc::c_int,
-                    isBot as libc::c_uint,
+                    crate::src::qcommon::q_shared::qfalse as i32,
+                    isBot as u32,
                 ),
             ) as *mut libc::c_char;
             if !denied.is_null() {
@@ -620,8 +620,8 @@ unsafe extern "C" fn SV_MapRestart_f() {
                     delay,
                     i,
                 );
-            } else if (*client).state as libc::c_uint
-                == crate::server_h::CS_ACTIVE as libc::c_int as libc::c_uint
+            } else if (*client).state as u32
+                == crate::server_h::CS_ACTIVE as i32 as u32
             {
                 crate::src::server::sv_client::SV_ClientEnterWorld(
                     client as *mut crate::server_h::client_s,
@@ -644,11 +644,11 @@ unsafe extern "C" fn SV_MapRestart_f() {
     // run another frame to allow things to look at all the players
     crate::src::qcommon::vm::VM_Call(
         crate::src::server::sv_main::gvm,
-        crate::g_public_h::GAME_RUN_FRAME as libc::c_int,
+        crate::g_public_h::GAME_RUN_FRAME as i32,
         crate::src::server::sv_main::sv.time,
     );
-    crate::src::server::sv_main::sv.time += 100 as libc::c_int;
-    crate::src::server::sv_main::svs.time += 100 as libc::c_int;
+    crate::src::server::sv_main::sv.time += 100 as i32;
+    crate::src::server::sv_main::svs.time += 100 as i32;
 }
 //===============================================================
 /*
@@ -661,7 +661,7 @@ Kick a user off of the server
 
 unsafe extern "C" fn SV_Kick_f() {
     let mut cl: *mut crate::server_h::client_t = 0 as *mut crate::server_h::client_t;
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     // make sure server is running
     if (*crate::src::qcommon::common::com_sv_running).integer == 0 {
         crate::src::qcommon::common::Com_Printf(
@@ -669,7 +669,7 @@ unsafe extern "C" fn SV_Kick_f() {
         );
         return;
     }
-    if crate::src::qcommon::cmd::Cmd_Argc() != 2 as libc::c_int {
+    if crate::src::qcommon::cmd::Cmd_Argc() != 2 as i32 {
         crate::src::qcommon::common::Com_Printf(b"Usage: kick <player name>\nkick all = kick everyone\nkick allbots = kick all bots\n\x00"
                        as *const u8 as *const libc::c_char);
         return;
@@ -677,16 +677,16 @@ unsafe extern "C" fn SV_Kick_f() {
     cl = SV_GetPlayerByHandle();
     if cl.is_null() {
         if crate::src::qcommon::q_shared::Q_stricmp(
-            crate::src::qcommon::cmd::Cmd_Argv(1 as libc::c_int),
+            crate::src::qcommon::cmd::Cmd_Argv(1 as i32),
             b"all\x00" as *const u8 as *const libc::c_char,
         ) == 0
         {
-            i = 0 as libc::c_int;
+            i = 0 as i32;
             cl = crate::src::server::sv_main::svs.clients;
             while i < (*crate::src::server::sv_main::sv_maxclients).integer {
                 if !((*cl).state as u64 == 0) {
-                    if !((*cl).netchan.remoteAddress.type_0 as libc::c_uint
-                        == crate::qcommon_h::NA_LOOPBACK as libc::c_int as libc::c_uint)
+                    if !((*cl).netchan.remoteAddress.type_0 as u32
+                        == crate::qcommon_h::NA_LOOPBACK as i32 as u32)
                     {
                         crate::src::server::sv_client::SV_DropClient(
                             cl as *mut crate::server_h::client_s,
@@ -700,16 +700,16 @@ unsafe extern "C" fn SV_Kick_f() {
                 // in case there is a funny zombie
             }
         } else if crate::src::qcommon::q_shared::Q_stricmp(
-            crate::src::qcommon::cmd::Cmd_Argv(1 as libc::c_int),
+            crate::src::qcommon::cmd::Cmd_Argv(1 as i32),
             b"allbots\x00" as *const u8 as *const libc::c_char,
         ) == 0
         {
-            i = 0 as libc::c_int;
+            i = 0 as i32;
             cl = crate::src::server::sv_main::svs.clients;
             while i < (*crate::src::server::sv_main::sv_maxclients).integer {
                 if !((*cl).state as u64 == 0) {
-                    if !((*cl).netchan.remoteAddress.type_0 as libc::c_uint
-                        != crate::qcommon_h::NA_BOT as libc::c_int as libc::c_uint)
+                    if !((*cl).netchan.remoteAddress.type_0 as u32
+                        != crate::qcommon_h::NA_BOT as i32 as u32)
                     {
                         crate::src::server::sv_client::SV_DropClient(
                             cl as *mut crate::server_h::client_s,
@@ -725,8 +725,8 @@ unsafe extern "C" fn SV_Kick_f() {
         }
         return;
     }
-    if (*cl).netchan.remoteAddress.type_0 as libc::c_uint
-        == crate::qcommon_h::NA_LOOPBACK as libc::c_int as libc::c_uint
+    if (*cl).netchan.remoteAddress.type_0 as u32
+        == crate::qcommon_h::NA_LOOPBACK as i32 as u32
     {
         crate::src::qcommon::common::Com_Printf(
             b"Cannot kick host player\n\x00" as *const u8 as *const libc::c_char,
@@ -750,7 +750,7 @@ Kick all bots off of the server
 
 unsafe extern "C" fn SV_KickBots_f() {
     let mut cl: *mut crate::server_h::client_t = 0 as *mut crate::server_h::client_t;
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     // make sure server is running
     if (*crate::src::qcommon::common::com_sv_running).integer == 0 {
         crate::src::qcommon::common::Com_Printf(
@@ -758,12 +758,12 @@ unsafe extern "C" fn SV_KickBots_f() {
         );
         return;
     }
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     cl = crate::src::server::sv_main::svs.clients;
     while i < (*crate::src::server::sv_main::sv_maxclients).integer {
         if !((*cl).state as u64 == 0) {
-            if !((*cl).netchan.remoteAddress.type_0 as libc::c_uint
-                != crate::qcommon_h::NA_BOT as libc::c_int as libc::c_uint)
+            if !((*cl).netchan.remoteAddress.type_0 as u32
+                != crate::qcommon_h::NA_BOT as i32 as u32)
             {
                 crate::src::server::sv_client::SV_DropClient(
                     cl as *mut crate::server_h::client_s,
@@ -787,7 +787,7 @@ Kick all users off of the server
 
 unsafe extern "C" fn SV_KickAll_f() {
     let mut cl: *mut crate::server_h::client_t = 0 as *mut crate::server_h::client_t;
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     // make sure server is running
     if (*crate::src::qcommon::common::com_sv_running).integer == 0 {
         crate::src::qcommon::common::Com_Printf(
@@ -795,12 +795,12 @@ unsafe extern "C" fn SV_KickAll_f() {
         );
         return;
     }
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     cl = crate::src::server::sv_main::svs.clients;
     while i < (*crate::src::server::sv_main::sv_maxclients).integer {
         if !((*cl).state as u64 == 0) {
-            if !((*cl).netchan.remoteAddress.type_0 as libc::c_uint
-                == crate::qcommon_h::NA_LOOPBACK as libc::c_int as libc::c_uint)
+            if !((*cl).netchan.remoteAddress.type_0 as u32
+                == crate::qcommon_h::NA_LOOPBACK as i32 as u32)
             {
                 crate::src::server::sv_client::SV_DropClient(
                     cl as *mut crate::server_h::client_s,
@@ -831,10 +831,10 @@ unsafe extern "C" fn SV_KickNum_f() {
         );
         return;
     }
-    if crate::src::qcommon::cmd::Cmd_Argc() != 2 as libc::c_int {
+    if crate::src::qcommon::cmd::Cmd_Argc() != 2 as i32 {
         crate::src::qcommon::common::Com_Printf(
             b"Usage: %s <client number>\n\x00" as *const u8 as *const libc::c_char,
-            crate::src::qcommon::cmd::Cmd_Argv(0 as libc::c_int),
+            crate::src::qcommon::cmd::Cmd_Argv(0 as i32),
         );
         return;
     }
@@ -842,8 +842,8 @@ unsafe extern "C" fn SV_KickNum_f() {
     if cl.is_null() {
         return;
     }
-    if (*cl).netchan.remoteAddress.type_0 as libc::c_uint
-        == crate::qcommon_h::NA_LOOPBACK as libc::c_int as libc::c_uint
+    if (*cl).netchan.remoteAddress.type_0 as u32
+        == crate::qcommon_h::NA_LOOPBACK as i32 as u32
     {
         crate::src::qcommon::common::Com_Printf(
             b"Cannot kick host player\n\x00" as *const u8 as *const libc::c_char,
@@ -876,7 +876,7 @@ unsafe extern "C" fn SV_Ban_f() {
         );
         return;
     }
-    if crate::src::qcommon::cmd::Cmd_Argc() != 2 as libc::c_int {
+    if crate::src::qcommon::cmd::Cmd_Argc() != 2 as i32 {
         crate::src::qcommon::common::Com_Printf(
             b"Usage: banUser <player name>\n\x00" as *const u8 as *const libc::c_char,
         );
@@ -886,8 +886,8 @@ unsafe extern "C" fn SV_Ban_f() {
     if cl.is_null() {
         return;
     }
-    if (*cl).netchan.remoteAddress.type_0 as libc::c_uint
-        == crate::qcommon_h::NA_LOOPBACK as libc::c_int as libc::c_uint
+    if (*cl).netchan.remoteAddress.type_0 as u32
+        == crate::qcommon_h::NA_LOOPBACK as i32 as u32
     {
         crate::src::qcommon::common::Com_Printf(
             b"Cannot kick host player\n\x00" as *const u8 as *const libc::c_char,
@@ -895,9 +895,9 @@ unsafe extern "C" fn SV_Ban_f() {
         return;
     }
     // look up the authorize server's IP
-    if crate::src::server::sv_main::svs.authorizeAddress.ip[0 as libc::c_int as usize] == 0
-        && crate::src::server::sv_main::svs.authorizeAddress.type_0 as libc::c_uint
-            != crate::qcommon_h::NA_BAD as libc::c_int as libc::c_uint
+    if crate::src::server::sv_main::svs.authorizeAddress.ip[0 as i32 as usize] == 0
+        && crate::src::server::sv_main::svs.authorizeAddress.type_0 as u32
+            != crate::qcommon_h::NA_BAD as i32 as u32
     {
         crate::src::qcommon::common::Com_Printf(
             b"Resolving %s\n\x00" as *const u8 as *const libc::c_char,
@@ -916,36 +916,36 @@ unsafe extern "C" fn SV_Ban_f() {
             return;
         }
         crate::src::server::sv_main::svs.authorizeAddress.port =
-            crate::src::qcommon::q_shared::ShortSwap(27952 as libc::c_int as libc::c_short)
-                as libc::c_ushort;
+            crate::src::qcommon::q_shared::ShortSwap(27952 as i32 as i16)
+                as u16;
         crate::src::qcommon::common::Com_Printf(
             b"%s resolved to %i.%i.%i.%i:%i\n\x00" as *const u8 as *const libc::c_char,
             b"authorize.quake3arena.com\x00" as *const u8 as *const libc::c_char,
-            crate::src::server::sv_main::svs.authorizeAddress.ip[0 as libc::c_int as usize]
-                as libc::c_int,
-            crate::src::server::sv_main::svs.authorizeAddress.ip[1 as libc::c_int as usize]
-                as libc::c_int,
-            crate::src::server::sv_main::svs.authorizeAddress.ip[2 as libc::c_int as usize]
-                as libc::c_int,
-            crate::src::server::sv_main::svs.authorizeAddress.ip[3 as libc::c_int as usize]
-                as libc::c_int,
+            crate::src::server::sv_main::svs.authorizeAddress.ip[0 as i32 as usize]
+                as i32,
+            crate::src::server::sv_main::svs.authorizeAddress.ip[1 as i32 as usize]
+                as i32,
+            crate::src::server::sv_main::svs.authorizeAddress.ip[2 as i32 as usize]
+                as i32,
+            crate::src::server::sv_main::svs.authorizeAddress.ip[3 as i32 as usize]
+                as i32,
             crate::src::qcommon::q_shared::ShortSwap(
-                crate::src::server::sv_main::svs.authorizeAddress.port as libc::c_short,
-            ) as libc::c_int,
+                crate::src::server::sv_main::svs.authorizeAddress.port as i16,
+            ) as i32,
         );
     }
     // otherwise send their ip to the authorize server
-    if crate::src::server::sv_main::svs.authorizeAddress.type_0 as libc::c_uint
-        != crate::qcommon_h::NA_BAD as libc::c_int as libc::c_uint
+    if crate::src::server::sv_main::svs.authorizeAddress.type_0 as u32
+        != crate::qcommon_h::NA_BAD as i32 as u32
     {
         crate::src::qcommon::net_chan::NET_OutOfBandPrint(
             crate::qcommon_h::NS_SERVER,
             crate::src::server::sv_main::svs.authorizeAddress as crate::qcommon_h::netadr_t,
             b"banUser %i.%i.%i.%i\x00" as *const u8 as *const libc::c_char,
-            (*cl).netchan.remoteAddress.ip[0 as libc::c_int as usize] as libc::c_int,
-            (*cl).netchan.remoteAddress.ip[1 as libc::c_int as usize] as libc::c_int,
-            (*cl).netchan.remoteAddress.ip[2 as libc::c_int as usize] as libc::c_int,
-            (*cl).netchan.remoteAddress.ip[3 as libc::c_int as usize] as libc::c_int,
+            (*cl).netchan.remoteAddress.ip[0 as i32 as usize] as i32,
+            (*cl).netchan.remoteAddress.ip[1 as i32 as usize] as i32,
+            (*cl).netchan.remoteAddress.ip[2 as i32 as usize] as i32,
+            (*cl).netchan.remoteAddress.ip[3 as i32 as usize] as i32,
         );
         crate::src::qcommon::common::Com_Printf(
             b"%s was banned from coming back\n\x00" as *const u8 as *const libc::c_char,
@@ -971,7 +971,7 @@ unsafe extern "C" fn SV_BanNum_f() {
         );
         return;
     }
-    if crate::src::qcommon::cmd::Cmd_Argc() != 2 as libc::c_int {
+    if crate::src::qcommon::cmd::Cmd_Argc() != 2 as i32 {
         crate::src::qcommon::common::Com_Printf(
             b"Usage: banClient <client number>\n\x00" as *const u8 as *const libc::c_char,
         );
@@ -981,8 +981,8 @@ unsafe extern "C" fn SV_BanNum_f() {
     if cl.is_null() {
         return;
     }
-    if (*cl).netchan.remoteAddress.type_0 as libc::c_uint
-        == crate::qcommon_h::NA_LOOPBACK as libc::c_int as libc::c_uint
+    if (*cl).netchan.remoteAddress.type_0 as u32
+        == crate::qcommon_h::NA_LOOPBACK as i32 as u32
     {
         crate::src::qcommon::common::Com_Printf(
             b"Cannot kick host player\n\x00" as *const u8 as *const libc::c_char,
@@ -990,9 +990,9 @@ unsafe extern "C" fn SV_BanNum_f() {
         return;
     }
     // look up the authorize server's IP
-    if crate::src::server::sv_main::svs.authorizeAddress.ip[0 as libc::c_int as usize] == 0
-        && crate::src::server::sv_main::svs.authorizeAddress.type_0 as libc::c_uint
-            != crate::qcommon_h::NA_BAD as libc::c_int as libc::c_uint
+    if crate::src::server::sv_main::svs.authorizeAddress.ip[0 as i32 as usize] == 0
+        && crate::src::server::sv_main::svs.authorizeAddress.type_0 as u32
+            != crate::qcommon_h::NA_BAD as i32 as u32
     {
         crate::src::qcommon::common::Com_Printf(
             b"Resolving %s\n\x00" as *const u8 as *const libc::c_char,
@@ -1011,36 +1011,36 @@ unsafe extern "C" fn SV_BanNum_f() {
             return;
         }
         crate::src::server::sv_main::svs.authorizeAddress.port =
-            crate::src::qcommon::q_shared::ShortSwap(27952 as libc::c_int as libc::c_short)
-                as libc::c_ushort;
+            crate::src::qcommon::q_shared::ShortSwap(27952 as i32 as i16)
+                as u16;
         crate::src::qcommon::common::Com_Printf(
             b"%s resolved to %i.%i.%i.%i:%i\n\x00" as *const u8 as *const libc::c_char,
             b"authorize.quake3arena.com\x00" as *const u8 as *const libc::c_char,
-            crate::src::server::sv_main::svs.authorizeAddress.ip[0 as libc::c_int as usize]
-                as libc::c_int,
-            crate::src::server::sv_main::svs.authorizeAddress.ip[1 as libc::c_int as usize]
-                as libc::c_int,
-            crate::src::server::sv_main::svs.authorizeAddress.ip[2 as libc::c_int as usize]
-                as libc::c_int,
-            crate::src::server::sv_main::svs.authorizeAddress.ip[3 as libc::c_int as usize]
-                as libc::c_int,
+            crate::src::server::sv_main::svs.authorizeAddress.ip[0 as i32 as usize]
+                as i32,
+            crate::src::server::sv_main::svs.authorizeAddress.ip[1 as i32 as usize]
+                as i32,
+            crate::src::server::sv_main::svs.authorizeAddress.ip[2 as i32 as usize]
+                as i32,
+            crate::src::server::sv_main::svs.authorizeAddress.ip[3 as i32 as usize]
+                as i32,
             crate::src::qcommon::q_shared::ShortSwap(
-                crate::src::server::sv_main::svs.authorizeAddress.port as libc::c_short,
-            ) as libc::c_int,
+                crate::src::server::sv_main::svs.authorizeAddress.port as i16,
+            ) as i32,
         );
     }
     // otherwise send their ip to the authorize server
-    if crate::src::server::sv_main::svs.authorizeAddress.type_0 as libc::c_uint
-        != crate::qcommon_h::NA_BAD as libc::c_int as libc::c_uint
+    if crate::src::server::sv_main::svs.authorizeAddress.type_0 as u32
+        != crate::qcommon_h::NA_BAD as i32 as u32
     {
         crate::src::qcommon::net_chan::NET_OutOfBandPrint(
             crate::qcommon_h::NS_SERVER,
             crate::src::server::sv_main::svs.authorizeAddress as crate::qcommon_h::netadr_t,
             b"banUser %i.%i.%i.%i\x00" as *const u8 as *const libc::c_char,
-            (*cl).netchan.remoteAddress.ip[0 as libc::c_int as usize] as libc::c_int,
-            (*cl).netchan.remoteAddress.ip[1 as libc::c_int as usize] as libc::c_int,
-            (*cl).netchan.remoteAddress.ip[2 as libc::c_int as usize] as libc::c_int,
-            (*cl).netchan.remoteAddress.ip[3 as libc::c_int as usize] as libc::c_int,
+            (*cl).netchan.remoteAddress.ip[0 as i32 as usize] as i32,
+            (*cl).netchan.remoteAddress.ip[1 as i32 as usize] as i32,
+            (*cl).netchan.remoteAddress.ip[2 as i32 as usize] as i32,
+            (*cl).netchan.remoteAddress.ip[3 as i32 as usize] as i32,
         );
         crate::src::qcommon::common::Com_Printf(
             b"%s was banned from coming back\n\x00" as *const u8 as *const libc::c_char,
@@ -1057,8 +1057,8 @@ Load saved bans from file.
 */
 
 unsafe extern "C" fn SV_RehashBans_f() {
-    let mut index: libc::c_int = 0;
-    let mut filelen: libc::c_int = 0;
+    let mut index: i32 = 0;
+    let mut filelen: i32 = 0;
     let mut readfrom: crate::src::qcommon::q_shared::fileHandle_t = 0;
     let mut textbuf: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut curpos: *mut libc::c_char = 0 as *mut libc::c_char;
@@ -1070,7 +1070,7 @@ unsafe extern "C" fn SV_RehashBans_f() {
     if (*crate::src::qcommon::common::com_sv_running).integer == 0 {
         return;
     }
-    crate::src::server::sv_main::serverBansCount = 0 as libc::c_int;
+    crate::src::server::sv_main::serverBansCount = 0 as i32;
     if (*crate::src::server::sv_main::sv_banFile).string.is_null()
         || *(*crate::src::server::sv_main::sv_banFile).string == 0
     {
@@ -1078,15 +1078,15 @@ unsafe extern "C" fn SV_RehashBans_f() {
     }
     crate::src::qcommon::q_shared::Com_sprintf(
         filepath.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
         b"%s/%s\x00" as *const u8 as *const libc::c_char,
         crate::src::qcommon::files::FS_GetCurrentGameDir(),
         (*crate::src::server::sv_main::sv_banFile).string,
     );
     filelen = crate::src::qcommon::files::FS_SV_FOpenFileRead(filepath.as_mut_ptr(), &mut readfrom)
-        as libc::c_int;
-    if filelen >= 0 as libc::c_int {
-        if filelen < 2 as libc::c_int {
+        as i32;
+    if filelen >= 0 as i32 {
+        if filelen < 2 as i32 {
             // Don't bother if file is too short.
             crate::src::qcommon::files::FS_FCloseFile(readfrom);
             return;
@@ -1097,21 +1097,21 @@ unsafe extern "C" fn SV_RehashBans_f() {
             crate::src::qcommon::files::FS_Read(textbuf as *mut libc::c_void, filelen, readfrom);
         crate::src::qcommon::files::FS_FCloseFile(readfrom);
         endpos = textbuf.offset(filelen as isize);
-        index = 0 as libc::c_int;
-        while index < 1024 as libc::c_int && curpos.offset(2 as libc::c_int as isize) < endpos {
+        index = 0 as i32;
+        while index < 1024 as i32 && curpos.offset(2 as i32 as isize) < endpos {
             // find the end of the address string
-            maskpos = curpos.offset(2 as libc::c_int as isize);
-            while maskpos < endpos && *maskpos as libc::c_int != ' ' as i32 {
+            maskpos = curpos.offset(2 as i32 as isize);
+            while maskpos < endpos && *maskpos as i32 != ' ' as i32 {
                 maskpos = maskpos.offset(1)
             }
-            if maskpos.offset(1 as libc::c_int as isize) >= endpos {
+            if maskpos.offset(1 as i32 as isize) >= endpos {
                 break;
             }
             *maskpos = '\u{0}' as i32 as libc::c_char;
             maskpos = maskpos.offset(1);
             // find the end of the subnet specifier
             newlinepos = maskpos;
-            while newlinepos < endpos && *newlinepos as libc::c_int != '\n' as i32 {
+            while newlinepos < endpos && *newlinepos as i32 != '\n' as i32 {
                 newlinepos = newlinepos.offset(1)
             }
             if newlinepos >= endpos {
@@ -1119,7 +1119,7 @@ unsafe extern "C" fn SV_RehashBans_f() {
             }
             *newlinepos = '\u{0}' as i32 as libc::c_char;
             if crate::src::qcommon::net_chan::NET_StringToAdr(
-                curpos.offset(2 as libc::c_int as isize),
+                curpos.offset(2 as i32 as isize),
                 &mut (*crate::src::server::sv_main::serverBans
                     .as_mut_ptr()
                     .offset(index as isize))
@@ -1128,35 +1128,35 @@ unsafe extern "C" fn SV_RehashBans_f() {
             ) != 0
             {
                 crate::src::server::sv_main::serverBans[index as usize].isexception =
-                    (*curpos.offset(0 as libc::c_int as isize) as libc::c_int != '0' as i32)
-                        as libc::c_int
+                    (*curpos.offset(0 as i32 as isize) as i32 != '0' as i32)
+                        as i32
                         as crate::src::qcommon::q_shared::qboolean;
                 crate::src::server::sv_main::serverBans[index as usize].subnet = atoi(maskpos);
                 if crate::src::server::sv_main::serverBans[index as usize]
                     .ip
-                    .type_0 as libc::c_uint
-                    == crate::qcommon_h::NA_IP as libc::c_int as libc::c_uint
+                    .type_0 as u32
+                    == crate::qcommon_h::NA_IP as i32 as u32
                     && (crate::src::server::sv_main::serverBans[index as usize].subnet
-                        < 1 as libc::c_int
+                        < 1 as i32
                         || crate::src::server::sv_main::serverBans[index as usize].subnet
-                            > 32 as libc::c_int)
+                            > 32 as i32)
                 {
                     crate::src::server::sv_main::serverBans[index as usize].subnet =
-                        32 as libc::c_int
+                        32 as i32
                 } else if crate::src::server::sv_main::serverBans[index as usize]
                     .ip
-                    .type_0 as libc::c_uint
-                    == crate::qcommon_h::NA_IP6 as libc::c_int as libc::c_uint
+                    .type_0 as u32
+                    == crate::qcommon_h::NA_IP6 as i32 as u32
                     && (crate::src::server::sv_main::serverBans[index as usize].subnet
-                        < 1 as libc::c_int
+                        < 1 as i32
                         || crate::src::server::sv_main::serverBans[index as usize].subnet
-                            > 128 as libc::c_int)
+                            > 128 as i32)
                 {
                     crate::src::server::sv_main::serverBans[index as usize].subnet =
-                        128 as libc::c_int
+                        128 as i32
                 }
             }
-            curpos = newlinepos.offset(1 as libc::c_int as isize);
+            curpos = newlinepos.offset(1 as i32 as isize);
             index += 1
         }
         crate::src::server::sv_main::serverBansCount = index;
@@ -1172,7 +1172,7 @@ Save bans to file.
 */
 
 unsafe extern "C" fn SV_WriteBans() {
-    let mut index: libc::c_int = 0;
+    let mut index: i32 = 0;
     let mut writeto: crate::src::qcommon::q_shared::fileHandle_t = 0;
     let mut filepath: [libc::c_char; 64] = [0; 64];
     if (*crate::src::server::sv_main::sv_banFile).string.is_null()
@@ -1182,7 +1182,7 @@ unsafe extern "C" fn SV_WriteBans() {
     }
     crate::src::qcommon::q_shared::Com_sprintf(
         filepath.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as libc::c_int,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
         b"%s/%s\x00" as *const u8 as *const libc::c_char,
         crate::src::qcommon::files::FS_GetCurrentGameDir(),
         (*crate::src::server::sv_main::sv_banFile).string,
@@ -1191,16 +1191,16 @@ unsafe extern "C" fn SV_WriteBans() {
     if writeto != 0 {
         let mut writebuf: [libc::c_char; 128] = [0; 128];
         let mut curban: *mut crate::server_h::serverBan_t = 0 as *mut crate::server_h::serverBan_t;
-        index = 0 as libc::c_int;
+        index = 0 as i32;
         while index < crate::src::server::sv_main::serverBansCount {
             curban = &mut *crate::src::server::sv_main::serverBans
                 .as_mut_ptr()
                 .offset(index as isize) as *mut crate::server_h::serverBan_t;
             crate::src::qcommon::q_shared::Com_sprintf(
                 writebuf.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong as libc::c_int,
+                ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong as i32,
                 b"%d %s %d\n\x00" as *const u8 as *const libc::c_char,
-                (*curban).isexception as libc::c_uint,
+                (*curban).isexception as u32,
                 crate::src::qcommon::net_ip::NET_AdrToString(
                     (*curban).ip as crate::qcommon_h::netadr_t,
                 ),
@@ -1208,7 +1208,7 @@ unsafe extern "C" fn SV_WriteBans() {
             );
             crate::src::qcommon::files::FS_Write(
                 writebuf.as_mut_ptr() as *const libc::c_void,
-                crate::stdlib::strlen(writebuf.as_mut_ptr()) as libc::c_int,
+                crate::stdlib::strlen(writebuf.as_mut_ptr()) as i32,
                 writeto,
             );
             index += 1
@@ -1225,14 +1225,14 @@ Remove a ban or an exception from the list.
 */
 
 unsafe extern "C" fn SV_DelBanEntryFromList(
-    mut index: libc::c_int,
+    mut index: i32,
 ) -> crate::src::qcommon::q_shared::qboolean {
-    if index == crate::src::server::sv_main::serverBansCount - 1 as libc::c_int {
+    if index == crate::src::server::sv_main::serverBansCount - 1 as i32 {
         crate::src::server::sv_main::serverBansCount -= 1
     } else if (index as libc::c_ulong)
         < (::std::mem::size_of::<[crate::server_h::serverBan_t; 1024]>() as libc::c_ulong)
             .wrapping_div(::std::mem::size_of::<crate::server_h::serverBan_t>() as libc::c_ulong)
-            .wrapping_sub(1 as libc::c_int as libc::c_ulong)
+            .wrapping_sub(1 as i32 as libc::c_ulong)
     {
         crate::stdlib::memmove(
             crate::src::server::sv_main::serverBans
@@ -1241,8 +1241,8 @@ unsafe extern "C" fn SV_DelBanEntryFromList(
             crate::src::server::sv_main::serverBans
                 .as_mut_ptr()
                 .offset(index as isize)
-                .offset(1 as libc::c_int as isize) as *const libc::c_void,
-            ((crate::src::server::sv_main::serverBansCount - index - 1 as libc::c_int)
+                .offset(1 as i32 as isize) as *const libc::c_void,
+            ((crate::src::server::sv_main::serverBansCount - index - 1 as i32)
                 as libc::c_ulong)
                 .wrapping_mul(
                     ::std::mem::size_of::<crate::server_h::serverBan_t>() as libc::c_ulong
@@ -1264,7 +1264,7 @@ Parse a CIDR notation type string and return a netadr_t and suffix by reference
 
 unsafe extern "C" fn SV_ParseCIDRNotation(
     mut dest: *mut crate::qcommon_h::netadr_t,
-    mut mask: *mut libc::c_int,
+    mut mask: *mut i32,
     mut adrstr: *mut libc::c_char,
 ) -> crate::src::qcommon::q_shared::qboolean {
     let mut suffix: *mut libc::c_char = 0 as *mut libc::c_char;
@@ -1283,20 +1283,20 @@ unsafe extern "C" fn SV_ParseCIDRNotation(
     }
     if !suffix.is_null() {
         *mask = atoi(suffix);
-        if (*dest).type_0 as libc::c_uint == crate::qcommon_h::NA_IP as libc::c_int as libc::c_uint
+        if (*dest).type_0 as u32 == crate::qcommon_h::NA_IP as i32 as u32
         {
-            if *mask < 1 as libc::c_int || *mask > 32 as libc::c_int {
-                *mask = 32 as libc::c_int
+            if *mask < 1 as i32 || *mask > 32 as i32 {
+                *mask = 32 as i32
             }
-        } else if *mask < 1 as libc::c_int || *mask > 128 as libc::c_int {
-            *mask = 128 as libc::c_int
+        } else if *mask < 1 as i32 || *mask > 128 as i32 {
+            *mask = 128 as i32
         }
-    } else if (*dest).type_0 as libc::c_uint
-        == crate::qcommon_h::NA_IP as libc::c_int as libc::c_uint
+    } else if (*dest).type_0 as u32
+        == crate::qcommon_h::NA_IP as i32 as u32
     {
-        *mask = 32 as libc::c_int
+        *mask = 32 as i32
     } else {
-        *mask = 128 as libc::c_int
+        *mask = 128 as i32
     }
     return crate::src::qcommon::q_shared::qfalse;
 }
@@ -1318,9 +1318,9 @@ unsafe extern "C" fn SV_AddBanToList(mut isexception: crate::src::qcommon::q_sha
         port: 0,
         scope_id: 0,
     };
-    let mut index: libc::c_int = 0;
-    let mut argc: libc::c_int = 0;
-    let mut mask: libc::c_int = 0;
+    let mut index: i32 = 0;
+    let mut argc: i32 = 0;
+    let mut mask: i32 = 0;
     let mut curban: *mut crate::server_h::serverBan_t = 0 as *mut crate::server_h::serverBan_t;
     // make sure server is running
     if (*crate::src::qcommon::common::com_sv_running).integer == 0 {
@@ -1330,11 +1330,11 @@ unsafe extern "C" fn SV_AddBanToList(mut isexception: crate::src::qcommon::q_sha
         return;
     }
     argc = crate::src::qcommon::cmd::Cmd_Argc();
-    if argc < 2 as libc::c_int || argc > 3 as libc::c_int {
+    if argc < 2 as i32 || argc > 3 as i32 {
         crate::src::qcommon::common::Com_Printf(
             b"Usage: %s (ip[/subnet] | clientnum [subnet])\n\x00" as *const u8
                 as *const libc::c_char,
-            crate::src::qcommon::cmd::Cmd_Argv(0 as libc::c_int),
+            crate::src::qcommon::cmd::Cmd_Argv(0 as i32),
         );
         return;
     }
@@ -1348,7 +1348,7 @@ unsafe extern "C" fn SV_AddBanToList(mut isexception: crate::src::qcommon::q_sha
         );
         return;
     }
-    banstring = crate::src::qcommon::cmd::Cmd_Argv(1 as libc::c_int);
+    banstring = crate::src::qcommon::cmd::Cmd_Argv(1 as i32);
     if !::libc::strchr(banstring, '.' as i32).is_null()
         || !::libc::strchr(banstring, ':' as i32).is_null()
     {
@@ -1367,32 +1367,32 @@ unsafe extern "C" fn SV_AddBanToList(mut isexception: crate::src::qcommon::q_sha
         if cl.is_null() {
             crate::src::qcommon::common::Com_Printf(
                 b"Error: Playernum %s does not exist.\n\x00" as *const u8 as *const libc::c_char,
-                crate::src::qcommon::cmd::Cmd_Argv(1 as libc::c_int),
+                crate::src::qcommon::cmd::Cmd_Argv(1 as i32),
             );
             return;
         }
         ip = (*cl).netchan.remoteAddress;
-        if argc == 3 as libc::c_int {
-            mask = atoi(crate::src::qcommon::cmd::Cmd_Argv(2 as libc::c_int));
-            if ip.type_0 as libc::c_uint == crate::qcommon_h::NA_IP as libc::c_int as libc::c_uint {
-                if mask < 1 as libc::c_int || mask > 32 as libc::c_int {
-                    mask = 32 as libc::c_int
+        if argc == 3 as i32 {
+            mask = atoi(crate::src::qcommon::cmd::Cmd_Argv(2 as i32));
+            if ip.type_0 as u32 == crate::qcommon_h::NA_IP as i32 as u32 {
+                if mask < 1 as i32 || mask > 32 as i32 {
+                    mask = 32 as i32
                 }
-            } else if mask < 1 as libc::c_int || mask > 128 as libc::c_int {
-                mask = 128 as libc::c_int
+            } else if mask < 1 as i32 || mask > 128 as i32 {
+                mask = 128 as i32
             }
         } else {
-            mask = if ip.type_0 as libc::c_uint
-                == crate::qcommon_h::NA_IP6 as libc::c_int as libc::c_uint
+            mask = if ip.type_0 as u32
+                == crate::qcommon_h::NA_IP6 as i32 as u32
             {
-                128 as libc::c_int
+                128 as i32
             } else {
-                32 as libc::c_int
+                32 as i32
             }
         }
     }
-    if ip.type_0 as libc::c_uint != crate::qcommon_h::NA_IP as libc::c_int as libc::c_uint
-        && ip.type_0 as libc::c_uint != crate::qcommon_h::NA_IP6 as libc::c_int as libc::c_uint
+    if ip.type_0 as u32 != crate::qcommon_h::NA_IP as i32 as u32
+        && ip.type_0 as u32 != crate::qcommon_h::NA_IP6 as i32 as u32
     {
         crate::src::qcommon::common::Com_Printf(
             b"Error: Can ban players connected via the internet only.\n\x00" as *const u8
@@ -1401,29 +1401,29 @@ unsafe extern "C" fn SV_AddBanToList(mut isexception: crate::src::qcommon::q_sha
         return;
     }
     // first check whether a conflicting ban exists that would supersede the new one.
-    index = 0 as libc::c_int;
+    index = 0 as i32;
     while index < crate::src::server::sv_main::serverBansCount {
         curban = &mut *crate::src::server::sv_main::serverBans
             .as_mut_ptr()
             .offset(index as isize) as *mut crate::server_h::serverBan_t;
         if (*curban).subnet <= mask {
-            if ((*curban).isexception as libc::c_uint != 0 || isexception as u64 == 0)
+            if ((*curban).isexception as u32 != 0 || isexception as u64 == 0)
                 && crate::src::qcommon::net_ip::NET_CompareBaseAdrMask(
                     (*curban).ip as crate::qcommon_h::netadr_t,
                     ip as crate::qcommon_h::netadr_t,
                     (*curban).subnet,
-                ) as libc::c_uint
+                ) as u32
                     != 0
             {
                 crate::src::qcommon::q_shared::Q_strncpyz(
                     addy2.as_mut_ptr(),
                     crate::src::qcommon::net_ip::NET_AdrToString(ip as crate::qcommon_h::netadr_t),
-                    ::std::mem::size_of::<[libc::c_char; 48]>() as libc::c_ulong as libc::c_int,
+                    ::std::mem::size_of::<[libc::c_char; 48]>() as libc::c_ulong as i32,
                 );
                 crate::src::qcommon::common::Com_Printf(
                     b"Error: %s %s/%d supersedes %s %s/%d\n\x00" as *const u8
                         as *const libc::c_char,
-                    if (*curban).isexception as libc::c_uint != 0 {
+                    if (*curban).isexception as u32 != 0 {
                         b"Exception\x00" as *const u8 as *const libc::c_char
                     } else {
                         b"Ban\x00" as *const u8 as *const libc::c_char
@@ -1432,7 +1432,7 @@ unsafe extern "C" fn SV_AddBanToList(mut isexception: crate::src::qcommon::q_sha
                         (*curban).ip as crate::qcommon_h::netadr_t,
                     ),
                     (*curban).subnet,
-                    if isexception as libc::c_uint != 0 {
+                    if isexception as u32 != 0 {
                         b"exception\x00" as *const u8 as *const libc::c_char
                     } else {
                         b"ban\x00" as *const u8 as *const libc::c_char
@@ -1445,12 +1445,12 @@ unsafe extern "C" fn SV_AddBanToList(mut isexception: crate::src::qcommon::q_sha
         }
         if (*curban).subnet >= mask {
             if (*curban).isexception as u64 == 0
-                && isexception as libc::c_uint != 0
+                && isexception as u32 != 0
                 && crate::src::qcommon::net_ip::NET_CompareBaseAdrMask(
                     (*curban).ip as crate::qcommon_h::netadr_t,
                     ip as crate::qcommon_h::netadr_t,
                     mask,
-                ) as libc::c_uint
+                ) as u32
                     != 0
             {
                 crate::src::qcommon::q_shared::Q_strncpyz(
@@ -1458,19 +1458,19 @@ unsafe extern "C" fn SV_AddBanToList(mut isexception: crate::src::qcommon::q_sha
                     crate::src::qcommon::net_ip::NET_AdrToString(
                         (*curban).ip as crate::qcommon_h::netadr_t,
                     ),
-                    ::std::mem::size_of::<[libc::c_char; 48]>() as libc::c_ulong as libc::c_int,
+                    ::std::mem::size_of::<[libc::c_char; 48]>() as libc::c_ulong as i32,
                 );
                 crate::src::qcommon::common::Com_Printf(
                     b"Error: %s %s/%d supersedes already existing %s %s/%d\n\x00" as *const u8
                         as *const libc::c_char,
-                    if isexception as libc::c_uint != 0 {
+                    if isexception as u32 != 0 {
                         b"Exception\x00" as *const u8 as *const libc::c_char
                     } else {
                         b"Ban\x00" as *const u8 as *const libc::c_char
                     },
                     crate::src::qcommon::net_ip::NET_AdrToString(ip as crate::qcommon_h::netadr_t),
                     mask,
-                    if (*curban).isexception as libc::c_uint != 0 {
+                    if (*curban).isexception as u32 != 0 {
                         b"exception\x00" as *const u8 as *const libc::c_char
                     } else {
                         b"ban\x00" as *const u8 as *const libc::c_char
@@ -1484,18 +1484,18 @@ unsafe extern "C" fn SV_AddBanToList(mut isexception: crate::src::qcommon::q_sha
         index += 1
     }
     // now delete bans that are superseded by the new one
-    index = 0 as libc::c_int;
+    index = 0 as i32;
     while index < crate::src::server::sv_main::serverBansCount {
         curban = &mut *crate::src::server::sv_main::serverBans
             .as_mut_ptr()
             .offset(index as isize) as *mut crate::server_h::serverBan_t;
         if (*curban).subnet > mask
-            && ((*curban).isexception as u64 == 0 || isexception as libc::c_uint != 0)
+            && ((*curban).isexception as u64 == 0 || isexception as u32 != 0)
             && crate::src::qcommon::net_ip::NET_CompareBaseAdrMask(
                 (*curban).ip as crate::qcommon_h::netadr_t,
                 ip as crate::qcommon_h::netadr_t,
                 mask,
-            ) as libc::c_uint
+            ) as u32
                 != 0
         {
             SV_DelBanEntryFromList(index);
@@ -1516,7 +1516,7 @@ unsafe extern "C" fn SV_AddBanToList(mut isexception: crate::src::qcommon::q_sha
     SV_WriteBans();
     crate::src::qcommon::common::Com_Printf(
         b"Added %s: %s/%d\n\x00" as *const u8 as *const libc::c_char,
-        if isexception as libc::c_uint != 0 {
+        if isexception as u32 != 0 {
             b"ban exception\x00" as *const u8 as *const libc::c_char
         } else {
             b"ban\x00" as *const u8 as *const libc::c_char
@@ -1534,10 +1534,10 @@ Remove a ban or an exception from the list.
 */
 
 unsafe extern "C" fn SV_DelBanFromList(mut isexception: crate::src::qcommon::q_shared::qboolean) {
-    let mut index: libc::c_int = 0;
-    let mut count: libc::c_int = 0 as libc::c_int;
-    let mut todel: libc::c_int = 0;
-    let mut mask: libc::c_int = 0;
+    let mut index: i32 = 0;
+    let mut count: i32 = 0 as i32;
+    let mut todel: i32 = 0;
+    let mut mask: i32 = 0;
     let mut ip: crate::qcommon_h::netadr_t = crate::qcommon_h::netadr_t {
         type_0: crate::qcommon_h::NA_BAD,
         ip: [0; 4],
@@ -1553,14 +1553,14 @@ unsafe extern "C" fn SV_DelBanFromList(mut isexception: crate::src::qcommon::q_s
         );
         return;
     }
-    if crate::src::qcommon::cmd::Cmd_Argc() != 2 as libc::c_int {
+    if crate::src::qcommon::cmd::Cmd_Argc() != 2 as i32 {
         crate::src::qcommon::common::Com_Printf(
             b"Usage: %s (ip[/subnet] | num)\n\x00" as *const u8 as *const libc::c_char,
-            crate::src::qcommon::cmd::Cmd_Argv(0 as libc::c_int),
+            crate::src::qcommon::cmd::Cmd_Argv(0 as i32),
         );
         return;
     }
-    banstring = crate::src::qcommon::cmd::Cmd_Argv(1 as libc::c_int);
+    banstring = crate::src::qcommon::cmd::Cmd_Argv(1 as i32);
     if !::libc::strchr(banstring, '.' as i32).is_null()
         || !::libc::strchr(banstring, ':' as i32).is_null()
     {
@@ -1572,23 +1572,23 @@ unsafe extern "C" fn SV_DelBanFromList(mut isexception: crate::src::qcommon::q_s
             );
             return;
         }
-        index = 0 as libc::c_int;
+        index = 0 as i32;
         while index < crate::src::server::sv_main::serverBansCount {
             curban = &mut *crate::src::server::sv_main::serverBans
                 .as_mut_ptr()
                 .offset(index as isize) as *mut crate::server_h::serverBan_t;
-            if (*curban).isexception as libc::c_uint == isexception as libc::c_uint
+            if (*curban).isexception as u32 == isexception as u32
                 && (*curban).subnet >= mask
                 && crate::src::qcommon::net_ip::NET_CompareBaseAdrMask(
                     (*curban).ip as crate::qcommon_h::netadr_t,
                     ip as crate::qcommon_h::netadr_t,
                     mask,
-                ) as libc::c_uint
+                ) as u32
                     != 0
             {
                 crate::src::qcommon::common::Com_Printf(
                     b"Deleting %s %s/%d\n\x00" as *const u8 as *const libc::c_char,
-                    if isexception as libc::c_uint != 0 {
+                    if isexception as u32 != 0 {
                         b"exception\x00" as *const u8 as *const libc::c_char
                     } else {
                         b"ban\x00" as *const u8 as *const libc::c_char
@@ -1604,23 +1604,23 @@ unsafe extern "C" fn SV_DelBanFromList(mut isexception: crate::src::qcommon::q_s
             }
         }
     } else {
-        todel = atoi(crate::src::qcommon::cmd::Cmd_Argv(1 as libc::c_int));
-        if todel < 1 as libc::c_int || todel > crate::src::server::sv_main::serverBansCount {
+        todel = atoi(crate::src::qcommon::cmd::Cmd_Argv(1 as i32));
+        if todel < 1 as i32 || todel > crate::src::server::sv_main::serverBansCount {
             crate::src::qcommon::common::Com_Printf(
                 b"Error: Invalid ban number given\n\x00" as *const u8 as *const libc::c_char,
             );
             return;
         }
-        index = 0 as libc::c_int;
+        index = 0 as i32;
         while index < crate::src::server::sv_main::serverBansCount {
-            if crate::src::server::sv_main::serverBans[index as usize].isexception as libc::c_uint
-                == isexception as libc::c_uint
+            if crate::src::server::sv_main::serverBans[index as usize].isexception as u32
+                == isexception as u32
             {
                 count += 1;
                 if count == todel {
                     crate::src::qcommon::common::Com_Printf(
                         b"Deleting %s %s/%d\n\x00" as *const u8 as *const libc::c_char,
-                        if isexception as libc::c_uint != 0 {
+                        if isexception as u32 != 0 {
                             b"exception\x00" as *const u8 as *const libc::c_char
                         } else {
                             b"ban\x00" as *const u8 as *const libc::c_char
@@ -1649,8 +1649,8 @@ List all bans and exceptions on console
 */
 
 unsafe extern "C" fn SV_ListBans_f() {
-    let mut index: libc::c_int = 0;
-    let mut count: libc::c_int = 0;
+    let mut index: i32 = 0;
+    let mut count: i32 = 0;
     let mut ban: *mut crate::server_h::serverBan_t = 0 as *mut crate::server_h::serverBan_t;
     // make sure server is running
     if (*crate::src::qcommon::common::com_sv_running).integer == 0 {
@@ -1660,7 +1660,7 @@ unsafe extern "C" fn SV_ListBans_f() {
         return;
     }
     // List all bans
-    count = 0 as libc::c_int;
+    count = 0 as i32;
     index = count;
     while index < crate::src::server::sv_main::serverBansCount {
         ban = &mut *crate::src::server::sv_main::serverBans
@@ -1680,7 +1680,7 @@ unsafe extern "C" fn SV_ListBans_f() {
         index += 1
     }
     // List all exceptions
-    count = 0 as libc::c_int;
+    count = 0 as i32;
     index = count;
     while index < crate::src::server::sv_main::serverBansCount {
         ban = &mut *crate::src::server::sv_main::serverBans
@@ -1716,7 +1716,7 @@ unsafe extern "C" fn SV_FlushBans_f() {
         );
         return;
     }
-    crate::src::server::sv_main::serverBansCount = 0 as libc::c_int;
+    crate::src::server::sv_main::serverBansCount = 0 as i32;
     // empty the ban file.
     SV_WriteBans();
     crate::src::qcommon::common::Com_Printf(
@@ -1743,12 +1743,12 @@ unsafe extern "C" fn SV_ExceptDel_f() {
 ** SV_Strlen -- skips color escape codes
 */
 
-unsafe extern "C" fn SV_Strlen(mut str: *const libc::c_char) -> libc::c_int {
+unsafe extern "C" fn SV_Strlen(mut str: *const libc::c_char) -> i32 {
     let mut s: *const libc::c_char = str;
-    let mut count: libc::c_int = 0 as libc::c_int;
+    let mut count: i32 = 0 as i32;
     while *s != 0 {
         if crate::src::qcommon::q_shared::Q_IsColorString(s) as u64 != 0 {
-            s = s.offset(2 as libc::c_int as isize)
+            s = s.offset(2 as i32 as isize)
         } else {
             count += 1;
             s = s.offset(1)
@@ -1763,14 +1763,14 @@ SV_Status_f
 */
 
 unsafe extern "C" fn SV_Status_f() {
-    let mut i: libc::c_int = 0;
-    let mut j: libc::c_int = 0;
-    let mut l: libc::c_int = 0;
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
+    let mut l: i32 = 0;
     let mut cl: *mut crate::server_h::client_t = 0 as *mut crate::server_h::client_t;
     let mut ps: *mut crate::src::qcommon::q_shared::playerState_t =
         0 as *mut crate::src::qcommon::q_shared::playerState_t;
     let mut s: *const libc::c_char = 0 as *const libc::c_char;
-    let mut ping: libc::c_int = 0;
+    let mut ping: i32 = 0;
     // make sure server is running
     if (*crate::src::qcommon::common::com_sv_running).integer == 0 {
         crate::src::qcommon::common::Com_Printf(
@@ -1790,7 +1790,7 @@ unsafe extern "C" fn SV_Status_f() {
         b"-- ----- ---- --------------- --------------------------------------- -----\n\x00"
             as *const u8 as *const libc::c_char,
     );
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     cl = crate::src::server::sv_main::svs.clients;
     while i < (*crate::src::server::sv_main::sv_maxclients).integer {
         if !((*cl).state as u64 == 0) {
@@ -1802,25 +1802,25 @@ unsafe extern "C" fn SV_Status_f() {
                 as *mut crate::src::qcommon::q_shared::playerState_s;
             crate::src::qcommon::common::Com_Printf(
                 b"%5i \x00" as *const u8 as *const libc::c_char,
-                (*ps).persistant[0 as libc::c_int as usize],
+                (*ps).persistant[0 as i32 as usize],
             );
-            if (*cl).state as libc::c_uint
-                == crate::server_h::CS_CONNECTED as libc::c_int as libc::c_uint
+            if (*cl).state as u32
+                == crate::server_h::CS_CONNECTED as i32 as u32
             {
                 crate::src::qcommon::common::Com_Printf(
                     b"CON \x00" as *const u8 as *const libc::c_char,
                 );
-            } else if (*cl).state as libc::c_uint
-                == crate::server_h::CS_ZOMBIE as libc::c_int as libc::c_uint
+            } else if (*cl).state as u32
+                == crate::server_h::CS_ZOMBIE as i32 as u32
             {
                 crate::src::qcommon::common::Com_Printf(
                     b"ZMB \x00" as *const u8 as *const libc::c_char,
                 );
             } else {
-                ping = if (*cl).ping < 9999 as libc::c_int {
+                ping = if (*cl).ping < 9999 as i32 {
                     (*cl).ping
                 } else {
-                    9999 as libc::c_int
+                    9999 as i32
                 };
                 crate::src::qcommon::common::Com_Printf(
                     b"%4i \x00" as *const u8 as *const libc::c_char,
@@ -1831,8 +1831,8 @@ unsafe extern "C" fn SV_Status_f() {
                 b"%s\x00" as *const u8 as *const libc::c_char,
                 (*cl).name.as_mut_ptr(),
             );
-            l = 16 as libc::c_int - SV_Strlen((*cl).name.as_mut_ptr());
-            j = 0 as libc::c_int;
+            l = 16 as i32 - SV_Strlen((*cl).name.as_mut_ptr());
+            j = 0 as i32;
             loop {
                 crate::src::qcommon::common::Com_Printf(
                     b" \x00" as *const u8 as *const libc::c_char,
@@ -1850,9 +1850,9 @@ unsafe extern "C" fn SV_Status_f() {
                 b"^7%s\x00" as *const u8 as *const libc::c_char,
                 s,
             );
-            l = (39 as libc::c_int as libc::c_ulong).wrapping_sub(crate::stdlib::strlen(s))
-                as libc::c_int;
-            j = 0 as libc::c_int;
+            l = (39 as i32 as libc::c_ulong).wrapping_sub(crate::stdlib::strlen(s))
+                as i32;
+            j = 0 as i32;
             loop {
                 crate::src::qcommon::common::Com_Printf(
                     b" \x00" as *const u8 as *const libc::c_char,
@@ -1889,7 +1889,7 @@ unsafe extern "C" fn SV_ConSay_f() {
         );
         return;
     }
-    if crate::src::qcommon::cmd::Cmd_Argc() < 2 as libc::c_int {
+    if crate::src::qcommon::cmd::Cmd_Argc() < 2 as i32 {
         return;
     }
     ::libc::strcpy(
@@ -1897,11 +1897,11 @@ unsafe extern "C" fn SV_ConSay_f() {
         b"console: \x00" as *const u8 as *const libc::c_char,
     );
     p = crate::src::qcommon::cmd::Cmd_Args();
-    if *p as libc::c_int == '\"' as i32 {
+    if *p as i32 == '\"' as i32 {
         p = p.offset(1);
         *p.offset(
-            crate::stdlib::strlen(p).wrapping_sub(1 as libc::c_int as libc::c_ulong) as isize,
-        ) = 0 as libc::c_int as libc::c_char
+            crate::stdlib::strlen(p).wrapping_sub(1 as i32 as libc::c_ulong) as isize,
+        ) = 0 as i32 as libc::c_char
     }
     ::libc::strcat(text.as_mut_ptr(), p);
     crate::src::qcommon::common::Com_Printf(
@@ -1931,7 +1931,7 @@ unsafe extern "C" fn SV_ConTell_f() {
         );
         return;
     }
-    if crate::src::qcommon::cmd::Cmd_Argc() < 3 as libc::c_int {
+    if crate::src::qcommon::cmd::Cmd_Argc() < 3 as i32 {
         crate::src::qcommon::common::Com_Printf(
             b"Usage: tell <client number> <text>\n\x00" as *const u8 as *const libc::c_char,
         );
@@ -1945,12 +1945,12 @@ unsafe extern "C" fn SV_ConTell_f() {
         text.as_mut_ptr(),
         b"console_tell: \x00" as *const u8 as *const libc::c_char,
     );
-    p = crate::src::qcommon::cmd::Cmd_ArgsFrom(2 as libc::c_int);
-    if *p as libc::c_int == '\"' as i32 {
+    p = crate::src::qcommon::cmd::Cmd_ArgsFrom(2 as i32);
+    if *p as i32 == '\"' as i32 {
         p = p.offset(1);
         *p.offset(
-            crate::stdlib::strlen(p).wrapping_sub(1 as libc::c_int as libc::c_ulong) as isize,
-        ) = 0 as libc::c_int as libc::c_char
+            crate::stdlib::strlen(p).wrapping_sub(1 as i32 as libc::c_ulong) as isize,
+        ) = 0 as i32 as libc::c_char
     }
     ::libc::strcat(text.as_mut_ptr(), p);
     crate::src::qcommon::common::Com_Printf(
@@ -1977,7 +1977,7 @@ unsafe extern "C" fn SV_ConSayto_f() {
     let mut name: [libc::c_char; 32] = [0; 32];
     let mut cleanName: [libc::c_char; 32] = [0; 32];
     let mut saytocl: *mut crate::server_h::client_t = 0 as *mut crate::server_h::client_t;
-    let mut i: libc::c_int = 0;
+    let mut i: i32 = 0;
     // make sure server is running
     if (*crate::src::qcommon::common::com_sv_running).integer == 0 {
         crate::src::qcommon::common::Com_Printf(
@@ -1985,29 +1985,29 @@ unsafe extern "C" fn SV_ConSayto_f() {
         );
         return;
     }
-    if crate::src::qcommon::cmd::Cmd_Argc() < 3 as libc::c_int {
+    if crate::src::qcommon::cmd::Cmd_Argc() < 3 as i32 {
         crate::src::qcommon::common::Com_Printf(
             b"Usage: sayto <player name> <text>\n\x00" as *const u8 as *const libc::c_char,
         );
         return;
     }
-    rawname = crate::src::qcommon::cmd::Cmd_Argv(1 as libc::c_int);
+    rawname = crate::src::qcommon::cmd::Cmd_Argv(1 as i32);
     //allowing special characters in the console
     //with hex strings for player names
     crate::src::qcommon::common::Com_FieldStringToPlayerName(
         name.as_mut_ptr(),
-        32 as libc::c_int,
+        32 as i32,
         rawname,
     );
     saytocl = 0 as *mut crate::server_h::client_t;
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     cl = crate::src::server::sv_main::svs.clients;
     while i < (*crate::src::server::sv_main::sv_maxclients).integer {
         if !((*cl).state as u64 == 0) {
             crate::src::qcommon::q_shared::Q_strncpyz(
                 cleanName.as_mut_ptr(),
                 (*cl).name.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as libc::c_int,
+                ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
             );
             crate::src::qcommon::q_shared::Q_CleanStr(cleanName.as_mut_ptr());
             if crate::src::qcommon::q_shared::Q_stricmp(cleanName.as_mut_ptr(), name.as_mut_ptr())
@@ -2031,12 +2031,12 @@ unsafe extern "C" fn SV_ConSayto_f() {
         text.as_mut_ptr(),
         b"console_sayto: \x00" as *const u8 as *const libc::c_char,
     );
-    p = crate::src::qcommon::cmd::Cmd_ArgsFrom(2 as libc::c_int);
-    if *p as libc::c_int == '\"' as i32 {
+    p = crate::src::qcommon::cmd::Cmd_ArgsFrom(2 as i32);
+    if *p as i32 == '\"' as i32 {
         p = p.offset(1);
         *p.offset(
-            crate::stdlib::strlen(p).wrapping_sub(1 as libc::c_int as libc::c_ulong) as isize,
-        ) = 0 as libc::c_int as libc::c_char
+            crate::stdlib::strlen(p).wrapping_sub(1 as i32 as libc::c_ulong) as isize,
+        ) = 0 as i32 as libc::c_char
     }
     ::libc::strcat(text.as_mut_ptr(), p);
     crate::src::qcommon::common::Com_Printf(
@@ -2068,7 +2068,7 @@ Also called by SV_DropClient, SV_DirectConnect, and SV_SpawnServer
 #[no_mangle]
 
 pub unsafe extern "C" fn SV_Heartbeat_f() {
-    crate::src::server::sv_main::svs.nextHeartbeatTime = -(9999999 as libc::c_int);
+    crate::src::server::sv_main::svs.nextHeartbeatTime = -(9999999 as i32);
 }
 /*
 ===========
@@ -2090,7 +2090,7 @@ unsafe extern "C" fn SV_Serverinfo_f() {
         b"Server info settings:\n\x00" as *const u8 as *const libc::c_char,
     );
     crate::src::qcommon::common::Info_Print(crate::src::qcommon::cvar::Cvar_InfoString(
-        0x4 as libc::c_int,
+        0x4 as i32,
     ));
 }
 /*
@@ -2113,7 +2113,7 @@ unsafe extern "C" fn SV_Systeminfo_f() {
         b"System info settings:\n\x00" as *const u8 as *const libc::c_char,
     );
     crate::src::qcommon::common::Info_Print(crate::src::qcommon::cvar::Cvar_InfoString_Big(
-        0x8 as libc::c_int,
+        0x8 as i32,
     ));
 }
 /*
@@ -2133,7 +2133,7 @@ unsafe extern "C" fn SV_DumpUser_f() {
         );
         return;
     }
-    if crate::src::qcommon::cmd::Cmd_Argc() != 2 as libc::c_int {
+    if crate::src::qcommon::cmd::Cmd_Argc() != 2 as i32 {
         crate::src::qcommon::common::Com_Printf(
             b"Usage: dumpuser <userid>\n\x00" as *const u8 as *const libc::c_char,
         );
@@ -2165,8 +2165,8 @@ SV_CompleteMapName
 ==================
 */
 
-unsafe extern "C" fn SV_CompleteMapName(mut _args: *mut libc::c_char, mut argNum: libc::c_int) {
-    if argNum == 2 as libc::c_int {
+unsafe extern "C" fn SV_CompleteMapName(mut _args: *mut libc::c_char, mut argNum: i32) {
+    if argNum == 2 as i32 {
         crate::src::qcommon::common::Field_CompleteFilename(
             b"maps\x00" as *const u8 as *const libc::c_char,
             b"bsp\x00" as *const u8 as *const libc::c_char,
@@ -2181,27 +2181,27 @@ SV_CompletePlayerName
 ==================
 */
 
-unsafe extern "C" fn SV_CompletePlayerName(mut _args: *mut libc::c_char, mut argNum: libc::c_int) {
-    if argNum == 2 as libc::c_int {
+unsafe extern "C" fn SV_CompletePlayerName(mut _args: *mut libc::c_char, mut argNum: i32) {
+    if argNum == 2 as i32 {
         let mut names: [[libc::c_char; 32]; 64] = [[0; 32]; 64];
         let mut namesPtr: [*const libc::c_char; 64] = [0 as *const libc::c_char; 64];
         let mut cl: *mut crate::server_h::client_t = 0 as *mut crate::server_h::client_t;
-        let mut i: libc::c_int = 0;
-        let mut nameCount: libc::c_int = 0;
-        let mut clientCount: libc::c_int = 0;
-        nameCount = 0 as libc::c_int;
+        let mut i: i32 = 0;
+        let mut nameCount: i32 = 0;
+        let mut clientCount: i32 = 0;
+        nameCount = 0 as i32;
         clientCount = (*crate::src::server::sv_main::sv_maxclients).integer;
-        i = 0 as libc::c_int;
+        i = 0 as i32;
         cl = crate::src::server::sv_main::svs.clients;
         while i < clientCount {
             if !((*cl).state as u64 == 0) {
-                if i >= 64 as libc::c_int {
+                if i >= 64 as i32 {
                     break;
                 }
                 crate::src::qcommon::q_shared::Q_strncpyz(
                     names[nameCount as usize].as_mut_ptr(),
                     (*cl).name.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as libc::c_int,
+                    ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
                 );
                 crate::src::qcommon::q_shared::Q_CleanStr(names[nameCount as usize].as_mut_ptr());
                 namesPtr[nameCount as usize] = names[nameCount as usize].as_mut_ptr();
@@ -2219,7 +2219,7 @@ unsafe extern "C" fn SV_CompletePlayerName(mut _args: *mut libc::c_char, mut arg
                     as unsafe extern "C" fn(
                         _: *const libc::c_void,
                         _: *const libc::c_void,
-                    ) -> libc::c_int,
+                    ) -> i32,
             ),
         );
         crate::src::qcommon::common::Field_CompletePlayerName(namesPtr.as_mut_ptr(), nameCount);
@@ -2304,7 +2304,7 @@ pub unsafe extern "C" fn SV_AddOperatorCommands() {
     crate::src::qcommon::cmd::Cmd_SetCommandCompletionFunc(
         b"map\x00" as *const u8 as *const libc::c_char,
         Some(
-            SV_CompleteMapName as unsafe extern "C" fn(_: *mut libc::c_char, _: libc::c_int) -> (),
+            SV_CompleteMapName as unsafe extern "C" fn(_: *mut libc::c_char, _: i32) -> (),
         ),
     );
     crate::src::qcommon::cmd::Cmd_AddCommand(
@@ -2314,7 +2314,7 @@ pub unsafe extern "C" fn SV_AddOperatorCommands() {
     crate::src::qcommon::cmd::Cmd_SetCommandCompletionFunc(
         b"devmap\x00" as *const u8 as *const libc::c_char,
         Some(
-            SV_CompleteMapName as unsafe extern "C" fn(_: *mut libc::c_char, _: libc::c_int) -> (),
+            SV_CompleteMapName as unsafe extern "C" fn(_: *mut libc::c_char, _: i32) -> (),
         ),
     );
     crate::src::qcommon::cmd::Cmd_AddCommand(
@@ -2324,7 +2324,7 @@ pub unsafe extern "C" fn SV_AddOperatorCommands() {
     crate::src::qcommon::cmd::Cmd_SetCommandCompletionFunc(
         b"spmap\x00" as *const u8 as *const libc::c_char,
         Some(
-            SV_CompleteMapName as unsafe extern "C" fn(_: *mut libc::c_char, _: libc::c_int) -> (),
+            SV_CompleteMapName as unsafe extern "C" fn(_: *mut libc::c_char, _: i32) -> (),
         ),
     );
     crate::src::qcommon::cmd::Cmd_AddCommand(
@@ -2334,7 +2334,7 @@ pub unsafe extern "C" fn SV_AddOperatorCommands() {
     crate::src::qcommon::cmd::Cmd_SetCommandCompletionFunc(
         b"spdevmap\x00" as *const u8 as *const libc::c_char,
         Some(
-            SV_CompleteMapName as unsafe extern "C" fn(_: *mut libc::c_char, _: libc::c_int) -> (),
+            SV_CompleteMapName as unsafe extern "C" fn(_: *mut libc::c_char, _: i32) -> (),
         ),
     );
     crate::src::qcommon::cmd::Cmd_AddCommand(
@@ -2358,7 +2358,7 @@ pub unsafe extern "C" fn SV_AddOperatorCommands() {
             b"sayto\x00" as *const u8 as *const libc::c_char,
             Some(
                 SV_CompletePlayerName
-                    as unsafe extern "C" fn(_: *mut libc::c_char, _: libc::c_int) -> (),
+                    as unsafe extern "C" fn(_: *mut libc::c_char, _: i32) -> (),
             ),
         );
     }

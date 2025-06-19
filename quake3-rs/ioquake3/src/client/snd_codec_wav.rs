@@ -54,11 +54,11 @@ FGetLittleLong
 
 unsafe extern "C" fn FGetLittleLong(
     mut f: crate::src::qcommon::q_shared::fileHandle_t,
-) -> libc::c_int {
-    let mut v: libc::c_int = 0;
+) -> i32 {
+    let mut v: i32 = 0;
     crate::src::qcommon::files::FS_Read(
-        &mut v as *mut libc::c_int as *mut libc::c_void,
-        ::std::mem::size_of::<libc::c_int>() as libc::c_ulong as libc::c_int,
+        &mut v as *mut i32 as *mut libc::c_void,
+        ::std::mem::size_of::<i32>() as libc::c_ulong as i32,
         f,
     );
     return v;
@@ -71,11 +71,11 @@ FGetLittleShort
 
 unsafe extern "C" fn FGetLittleShort(
     mut f: crate::src::qcommon::q_shared::fileHandle_t,
-) -> libc::c_short {
-    let mut v: libc::c_short = 0;
+) -> i16 {
+    let mut v: i16 = 0;
     crate::src::qcommon::files::FS_Read(
-        &mut v as *mut libc::c_short as *mut libc::c_void,
-        ::std::mem::size_of::<libc::c_short>() as libc::c_ulong as libc::c_int,
+        &mut v as *mut i16 as *mut libc::c_void,
+        ::std::mem::size_of::<i16>() as libc::c_ulong as i32,
         f,
     );
     return v;
@@ -89,20 +89,20 @@ S_ReadChunkInfo
 unsafe extern "C" fn S_ReadChunkInfo(
     mut f: crate::src::qcommon::q_shared::fileHandle_t,
     mut name: *mut libc::c_char,
-) -> libc::c_int {
-    let mut len: libc::c_int = 0;
-    let mut r: libc::c_int = 0;
-    *name.offset(4 as libc::c_int as isize) = 0 as libc::c_int as libc::c_char;
-    r = crate::src::qcommon::files::FS_Read(name as *mut libc::c_void, 4 as libc::c_int, f);
-    if r != 4 as libc::c_int {
-        return -(1 as libc::c_int);
+) -> i32 {
+    let mut len: i32 = 0;
+    let mut r: i32 = 0;
+    *name.offset(4 as i32 as isize) = 0 as i32 as libc::c_char;
+    r = crate::src::qcommon::files::FS_Read(name as *mut libc::c_void, 4 as i32, f);
+    if r != 4 as i32 {
+        return -(1 as i32);
     }
     len = FGetLittleLong(f);
-    if len < 0 as libc::c_int {
+    if len < 0 as i32 {
         crate::src::qcommon::common::Com_Printf(
             b"^3WARNING: Negative chunk length\n\x00" as *const u8 as *const libc::c_char,
         );
-        return -(1 as libc::c_int);
+        return -(1 as i32);
     }
     return len;
 }
@@ -117,28 +117,28 @@ Returns the length of the data in the chunk, or -1 if not found
 unsafe extern "C" fn S_FindRIFFChunk(
     mut f: crate::src::qcommon::q_shared::fileHandle_t,
     mut chunk: *mut libc::c_char,
-) -> libc::c_int {
+) -> i32 {
     let mut name: [libc::c_char; 5] = [0; 5];
-    let mut len: libc::c_int = 0;
+    let mut len: i32 = 0;
     loop {
         len = S_ReadChunkInfo(f, name.as_mut_ptr());
-        if !(len >= 0 as libc::c_int) {
+        if !(len >= 0 as i32) {
             break;
         }
         // If this is the right chunk, return
-        if crate::src::qcommon::q_shared::Q_strncmp(name.as_mut_ptr(), chunk, 4 as libc::c_int) == 0
+        if crate::src::qcommon::q_shared::Q_strncmp(name.as_mut_ptr(), chunk, 4 as i32) == 0
         {
             return len;
         }
-        len = len + 2 as libc::c_int - 1 as libc::c_int & !(2 as libc::c_int - 1 as libc::c_int);
+        len = len + 2 as i32 - 1 as i32 & !(2 as i32 - 1 as i32);
         // Not the right chunk - skip it
         crate::src::qcommon::files::FS_Seek(
             f,
             len as libc::c_long,
-            crate::src::qcommon::q_shared::FS_SEEK_CUR as libc::c_int,
+            crate::src::qcommon::q_shared::FS_SEEK_CUR as i32,
         );
     }
-    return -(1 as libc::c_int);
+    return -(1 as i32);
 }
 /*
 =================
@@ -147,25 +147,25 @@ S_ByteSwapRawSamples
 */
 
 unsafe extern "C" fn S_ByteSwapRawSamples(
-    mut samples: libc::c_int,
-    mut width: libc::c_int,
-    mut s_channels: libc::c_int,
+    mut samples: i32,
+    mut width: i32,
+    mut s_channels: i32,
     mut data: *const crate::src::qcommon::q_shared::byte,
 ) {
-    let mut i: libc::c_int = 0;
-    if width != 2 as libc::c_int {
+    let mut i: i32 = 0;
+    if width != 2 as i32 {
         return;
     }
-    if 256 as libc::c_int == 256 as libc::c_int {
+    if 256 as i32 == 256 as i32 {
         return;
     }
-    if s_channels == 2 as libc::c_int {
-        samples <<= 1 as libc::c_int
+    if s_channels == 2 as i32 {
+        samples <<= 1 as i32
     }
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while i < samples {
-        *(data as *mut libc::c_short).offset(i as isize) =
-            *(data as *mut libc::c_short).offset(i as isize);
+        *(data as *mut i16).offset(i as isize) =
+            *(data as *mut i16).offset(i as isize);
         i += 1
     }
 }
@@ -180,12 +180,12 @@ unsafe extern "C" fn S_ReadRIFFHeader(
     mut info: *mut crate::src::client::snd_codec::snd_info_t,
 ) -> crate::src::qcommon::q_shared::qboolean {
     let mut dump: [libc::c_char; 16] = [0; 16];
-    let mut bits: libc::c_int = 0;
-    let mut fmtlen: libc::c_int = 0 as libc::c_int;
+    let mut bits: i32 = 0;
+    let mut fmtlen: i32 = 0 as i32;
     // skip the riff wav header
     crate::src::qcommon::files::FS_Read(
         dump.as_mut_ptr() as *mut libc::c_void,
-        12 as libc::c_int,
+        12 as i32,
         file,
     );
     // Scan for the format chunk
@@ -193,7 +193,7 @@ unsafe extern "C" fn S_ReadRIFFHeader(
         file,
         b"fmt \x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
     );
-    if fmtlen < 0 as libc::c_int {
+    if fmtlen < 0 as i32 {
         crate::src::qcommon::common::Com_Printf(
             b"^1ERROR: Couldn\'t find \"fmt\" chunk\n\x00" as *const u8 as *const libc::c_char,
         );
@@ -201,27 +201,27 @@ unsafe extern "C" fn S_ReadRIFFHeader(
     }
     // Save the parameters
     FGetLittleShort(file); // wav_format
-    (*info).channels = FGetLittleShort(file) as libc::c_int;
+    (*info).channels = FGetLittleShort(file) as i32;
     (*info).rate = FGetLittleLong(file);
     FGetLittleLong(file);
     FGetLittleShort(file);
-    bits = FGetLittleShort(file) as libc::c_int;
-    if bits < 8 as libc::c_int {
+    bits = FGetLittleShort(file) as i32;
+    if bits < 8 as i32 {
         crate::src::qcommon::common::Com_Printf(
             b"^1ERROR: Less than 8 bit sound is not supported\n\x00" as *const u8
                 as *const libc::c_char,
         );
         return crate::src::qcommon::q_shared::qfalse;
     }
-    (*info).width = bits / 8 as libc::c_int;
-    (*info).dataofs = 0 as libc::c_int;
+    (*info).width = bits / 8 as i32;
+    (*info).dataofs = 0 as i32;
     // Skip the rest of the format chunk if required
-    if fmtlen > 16 as libc::c_int {
-        fmtlen -= 16 as libc::c_int;
+    if fmtlen > 16 as i32 {
+        fmtlen -= 16 as i32;
         crate::src::qcommon::files::FS_Seek(
             file,
             fmtlen as libc::c_long,
-            crate::src::qcommon::q_shared::FS_SEEK_CUR as libc::c_int,
+            crate::src::qcommon::q_shared::FS_SEEK_CUR as i32,
         );
     }
     // Scan for the data chunk
@@ -229,7 +229,7 @@ unsafe extern "C" fn S_ReadRIFFHeader(
         file,
         b"data\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
     );
-    if (*info).size < 0 as libc::c_int {
+    if (*info).size < 0 as i32 {
         crate::src::qcommon::common::Com_Printf(
             b"^1ERROR: Couldn\'t find \"data\" chunk\n\x00" as *const u8 as *const libc::c_char,
         );
@@ -263,9 +263,9 @@ pub static mut wav_codec: crate::src::client::snd_codec::snd_codec_t = {
                 S_WAV_CodecReadStream
                     as unsafe extern "C" fn(
                         _: *mut crate::src::client::snd_codec::snd_stream_t,
-                        _: libc::c_int,
+                        _: i32,
                         _: *mut libc::c_void,
-                    ) -> libc::c_int,
+                    ) -> i32,
             ),
             close: Some(
                 S_WAV_CodecCloseStream
@@ -386,13 +386,13 @@ S_WAV_CodecReadStream
 
 pub unsafe extern "C" fn S_WAV_CodecReadStream(
     mut stream: *mut crate::src::client::snd_codec::snd_stream_t,
-    mut bytes: libc::c_int,
+    mut bytes: i32,
     mut buffer: *mut libc::c_void,
-) -> libc::c_int {
-    let mut remaining: libc::c_int = (*stream).info.size - (*stream).pos;
-    let mut samples: libc::c_int = 0;
-    if remaining <= 0 as libc::c_int {
-        return 0 as libc::c_int;
+) -> i32 {
+    let mut remaining: i32 = (*stream).info.size - (*stream).pos;
+    let mut samples: i32 = 0;
+    if remaining <= 0 as i32 {
+        return 0 as i32;
     }
     if bytes > remaining {
         bytes = remaining

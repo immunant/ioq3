@@ -49,62 +49,62 @@ pub unsafe extern "C" fn silk_stereo_decode_pred(
 )
 /* O    Predictors                                  */
 {
-    let mut n: libc::c_int = 0;
-    let mut ix: [[libc::c_int; 3]; 2] = [[0; 3]; 2];
+    let mut n: i32 = 0;
+    let mut ix: [[i32; 3]; 2] = [[0; 3]; 2];
     let mut low_Q13: crate::opus_types_h::opus_int32 = 0;
     let mut step_Q13: crate::opus_types_h::opus_int32 = 0;
     /* Entropy decoding */
     n = crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
         psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
         crate::src::opus_1_2_1::silk::tables_other::silk_stereo_pred_joint_iCDF.as_ptr(),
-        8 as libc::c_int as libc::c_uint,
+        8 as i32 as u32,
     );
-    ix[0 as libc::c_int as usize][2 as libc::c_int as usize] = n / 5 as libc::c_int;
-    ix[1 as libc::c_int as usize][2 as libc::c_int as usize] =
-        n - 5 as libc::c_int * ix[0 as libc::c_int as usize][2 as libc::c_int as usize];
-    n = 0 as libc::c_int;
-    while n < 2 as libc::c_int {
-        ix[n as usize][0 as libc::c_int as usize] =
+    ix[0 as i32 as usize][2 as i32 as usize] = n / 5 as i32;
+    ix[1 as i32 as usize][2 as i32 as usize] =
+        n - 5 as i32 * ix[0 as i32 as usize][2 as i32 as usize];
+    n = 0 as i32;
+    while n < 2 as i32 {
+        ix[n as usize][0 as i32 as usize] =
             crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
                 psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
                 crate::src::opus_1_2_1::silk::tables_other::silk_uniform3_iCDF.as_ptr(),
-                8 as libc::c_int as libc::c_uint,
+                8 as i32 as u32,
             );
-        ix[n as usize][1 as libc::c_int as usize] =
+        ix[n as usize][1 as i32 as usize] =
             crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
                 psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
                 crate::src::opus_1_2_1::silk::tables_other::silk_uniform5_iCDF.as_ptr(),
-                8 as libc::c_int as libc::c_uint,
+                8 as i32 as u32,
             );
         n += 1
     }
     /* Dequantize */
-    n = 0 as libc::c_int;
-    while n < 2 as libc::c_int {
-        ix[n as usize][0 as libc::c_int as usize] +=
-            3 as libc::c_int * ix[n as usize][2 as libc::c_int as usize];
+    n = 0 as i32;
+    while n < 2 as i32 {
+        ix[n as usize][0 as i32 as usize] +=
+            3 as i32 * ix[n as usize][2 as i32 as usize];
         low_Q13 = crate::src::opus_1_2_1::silk::tables_other::silk_stereo_pred_quant_Q13
-            [ix[n as usize][0 as libc::c_int as usize] as usize]
+            [ix[n as usize][0 as i32 as usize] as usize]
             as crate::opus_types_h::opus_int32;
         step_Q13 = ((crate::src::opus_1_2_1::silk::tables_other::silk_stereo_pred_quant_Q13
-            [(ix[n as usize][0 as libc::c_int as usize] + 1 as libc::c_int) as usize]
-            as libc::c_int
-            - low_Q13) as libc::c_longlong
-            * (0.5f64 / 5 as libc::c_int as libc::c_double
-                * ((1 as libc::c_int as libc::c_longlong) << 16 as libc::c_int) as libc::c_double
+            [(ix[n as usize][0 as i32 as usize] + 1 as i32) as usize]
+            as i32
+            - low_Q13) as i64
+            * (0.5f64 / 5 as i32 as f64
+                * ((1 as i32 as i64) << 16 as i32) as f64
                 + 0.5f64) as crate::opus_types_h::opus_int32
-                as crate::opus_types_h::opus_int16 as libc::c_longlong
-            >> 16 as libc::c_int) as crate::opus_types_h::opus_int32;
+                as crate::opus_types_h::opus_int16 as i64
+            >> 16 as i32) as crate::opus_types_h::opus_int32;
         *pred_Q13.offset(n as isize) = low_Q13
             + step_Q13 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
-                * (2 as libc::c_int * ix[n as usize][1 as libc::c_int as usize] + 1 as libc::c_int)
+                * (2 as i32 * ix[n as usize][1 as i32 as usize] + 1 as i32)
                     as crate::opus_types_h::opus_int16
                     as crate::opus_types_h::opus_int32;
         n += 1
     }
     /* Subtract second from first predictor (helps when actually applying these) */
-    let ref mut fresh0 = *pred_Q13.offset(0 as libc::c_int as isize);
-    *fresh0 -= *pred_Q13.offset(1 as libc::c_int as isize);
+    let ref mut fresh0 = *pred_Q13.offset(0 as i32 as isize);
+    *fresh0 -= *pred_Q13.offset(1 as i32 as isize);
 }
 /* **********************************************************************
 Copyright (c) 2006-2011, Skype Limited. All rights reserved.
@@ -176,7 +176,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 pub unsafe extern "C" fn silk_stereo_decode_mid_only(
     mut psRangeDec: *mut crate::src::opus_1_2_1::celt::entcode::ec_dec,
-    mut decode_only_mid: *mut libc::c_int,
+    mut decode_only_mid: *mut i32,
 )
 /* O    Flag that only mid channel has been coded   */
 {
@@ -184,6 +184,6 @@ pub unsafe extern "C" fn silk_stereo_decode_mid_only(
     *decode_only_mid = crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
         psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
         crate::src::opus_1_2_1::silk::tables_other::silk_stereo_only_code_mid_iCDF.as_ptr(),
-        8 as libc::c_int as libc::c_uint,
+        8 as i32 as u32,
     );
 }

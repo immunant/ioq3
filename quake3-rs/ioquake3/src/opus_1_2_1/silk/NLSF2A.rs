@@ -17,55 +17,55 @@ pub use crate::opus_types_h::opus_uint32;
 unsafe extern "C" fn silk_NLSF2A_find_poly(
     mut out: *mut crate::opus_types_h::opus_int32,
     mut cLSF: *const crate::opus_types_h::opus_int32,
-    mut dd: libc::c_int,
+    mut dd: i32,
 )
 /* I    polynomial order (= 1/2 * filter order)   */
 {
-    let mut k: libc::c_int = 0; /* QA*/
-    let mut n: libc::c_int = 0;
+    let mut k: i32 = 0; /* QA*/
+    let mut n: i32 = 0;
     let mut ftmp: crate::opus_types_h::opus_int32 = 0;
-    *out.offset(0 as libc::c_int as isize) =
-        ((1 as libc::c_int as crate::opus_types_h::opus_uint32) << 16 as libc::c_int)
+    *out.offset(0 as i32 as isize) =
+        ((1 as i32 as crate::opus_types_h::opus_uint32) << 16 as i32)
             as crate::opus_types_h::opus_int32;
-    *out.offset(1 as libc::c_int as isize) = -*cLSF.offset(0 as libc::c_int as isize);
-    k = 1 as libc::c_int;
+    *out.offset(1 as i32 as isize) = -*cLSF.offset(0 as i32 as isize);
+    k = 1 as i32;
     while k < dd {
-        ftmp = *cLSF.offset((2 as libc::c_int * k) as isize);
-        *out.offset((k + 1 as libc::c_int) as isize) =
-            ((*out.offset((k - 1 as libc::c_int) as isize) as crate::opus_types_h::opus_uint32)
-                << 1 as libc::c_int) as crate::opus_types_h::opus_int32
-                - (if 16 as libc::c_int == 1 as libc::c_int {
-                    (ftmp as libc::c_longlong * *out.offset(k as isize) as libc::c_longlong
-                        >> 1 as libc::c_int)
-                        + (ftmp as libc::c_longlong * *out.offset(k as isize) as libc::c_longlong
-                            & 1 as libc::c_int as libc::c_longlong)
+        ftmp = *cLSF.offset((2 as i32 * k) as isize);
+        *out.offset((k + 1 as i32) as isize) =
+            ((*out.offset((k - 1 as i32) as isize) as crate::opus_types_h::opus_uint32)
+                << 1 as i32) as crate::opus_types_h::opus_int32
+                - (if 16 as i32 == 1 as i32 {
+                    (ftmp as i64 * *out.offset(k as isize) as i64
+                        >> 1 as i32)
+                        + (ftmp as i64 * *out.offset(k as isize) as i64
+                            & 1 as i32 as i64)
                 } else {
-                    ((ftmp as libc::c_longlong * *out.offset(k as isize) as libc::c_longlong
-                        >> 16 as libc::c_int - 1 as libc::c_int)
-                        + 1 as libc::c_int as libc::c_longlong)
-                        >> 1 as libc::c_int
+                    ((ftmp as i64 * *out.offset(k as isize) as i64
+                        >> 16 as i32 - 1 as i32)
+                        + 1 as i32 as i64)
+                        >> 1 as i32
                 }) as crate::opus_types_h::opus_int32;
         n = k;
-        while n > 1 as libc::c_int {
+        while n > 1 as i32 {
             let ref mut fresh0 = *out.offset(n as isize);
-            *fresh0 += *out.offset((n - 2 as libc::c_int) as isize)
-                - (if 16 as libc::c_int == 1 as libc::c_int {
-                    (ftmp as libc::c_longlong
-                        * *out.offset((n - 1 as libc::c_int) as isize) as libc::c_longlong
-                        >> 1 as libc::c_int)
-                        + (ftmp as libc::c_longlong
-                            * *out.offset((n - 1 as libc::c_int) as isize) as libc::c_longlong
-                            & 1 as libc::c_int as libc::c_longlong)
+            *fresh0 += *out.offset((n - 2 as i32) as isize)
+                - (if 16 as i32 == 1 as i32 {
+                    (ftmp as i64
+                        * *out.offset((n - 1 as i32) as isize) as i64
+                        >> 1 as i32)
+                        + (ftmp as i64
+                            * *out.offset((n - 1 as i32) as isize) as i64
+                            & 1 as i32 as i64)
                 } else {
-                    ((ftmp as libc::c_longlong
-                        * *out.offset((n - 1 as libc::c_int) as isize) as libc::c_longlong
-                        >> 16 as libc::c_int - 1 as libc::c_int)
-                        + 1 as libc::c_int as libc::c_longlong)
-                        >> 1 as libc::c_int
+                    ((ftmp as i64
+                        * *out.offset((n - 1 as i32) as isize) as i64
+                        >> 16 as i32 - 1 as i32)
+                        + 1 as i32 as i64)
+                        >> 1 as i32
                 }) as crate::opus_types_h::opus_int32;
             n -= 1
         }
-        let ref mut fresh1 = *out.offset(1 as libc::c_int as isize);
+        let ref mut fresh1 = *out.offset(1 as i32 as isize);
         *fresh1 -= ftmp;
         k += 1
     }
@@ -259,47 +259,47 @@ POSSIBILITY OF SUCH DAMAGE.
 pub unsafe extern "C" fn silk_NLSF2A(
     mut a_Q12: *mut crate::opus_types_h::opus_int16,
     mut NLSF: *const crate::opus_types_h::opus_int16,
-    d: libc::c_int,
-    mut _arch: libc::c_int,
+    d: i32,
+    mut _arch: i32,
 )
 /* I    Run-time architecture                                       */
 {
     /* This ordering was found to maximize quality. It improves numerical accuracy of
     silk_NLSF2A_find_poly() compared to "standard" ordering. */
-    static mut ordering16: [libc::c_uchar; 16] = [
-        0 as libc::c_int as libc::c_uchar,
-        15 as libc::c_int as libc::c_uchar,
-        8 as libc::c_int as libc::c_uchar,
-        7 as libc::c_int as libc::c_uchar,
-        4 as libc::c_int as libc::c_uchar,
-        11 as libc::c_int as libc::c_uchar,
-        12 as libc::c_int as libc::c_uchar,
-        3 as libc::c_int as libc::c_uchar,
-        2 as libc::c_int as libc::c_uchar,
-        13 as libc::c_int as libc::c_uchar,
-        10 as libc::c_int as libc::c_uchar,
-        5 as libc::c_int as libc::c_uchar,
-        6 as libc::c_int as libc::c_uchar,
-        9 as libc::c_int as libc::c_uchar,
-        14 as libc::c_int as libc::c_uchar,
-        1 as libc::c_int as libc::c_uchar,
+    static mut ordering16: [u8; 16] = [
+        0 as i32 as u8,
+        15 as i32 as u8,
+        8 as i32 as u8,
+        7 as i32 as u8,
+        4 as i32 as u8,
+        11 as i32 as u8,
+        12 as i32 as u8,
+        3 as i32 as u8,
+        2 as i32 as u8,
+        13 as i32 as u8,
+        10 as i32 as u8,
+        5 as i32 as u8,
+        6 as i32 as u8,
+        9 as i32 as u8,
+        14 as i32 as u8,
+        1 as i32 as u8,
     ];
-    static mut ordering10: [libc::c_uchar; 10] = [
-        0 as libc::c_int as libc::c_uchar,
-        9 as libc::c_int as libc::c_uchar,
-        6 as libc::c_int as libc::c_uchar,
-        3 as libc::c_int as libc::c_uchar,
-        4 as libc::c_int as libc::c_uchar,
-        5 as libc::c_int as libc::c_uchar,
-        8 as libc::c_int as libc::c_uchar,
-        1 as libc::c_int as libc::c_uchar,
-        2 as libc::c_int as libc::c_uchar,
-        7 as libc::c_int as libc::c_uchar,
+    static mut ordering10: [u8; 10] = [
+        0 as i32 as u8,
+        9 as i32 as u8,
+        6 as i32 as u8,
+        3 as i32 as u8,
+        4 as i32 as u8,
+        5 as i32 as u8,
+        8 as i32 as u8,
+        1 as i32 as u8,
+        2 as i32 as u8,
+        7 as i32 as u8,
     ];
-    let mut ordering: *const libc::c_uchar = 0 as *const libc::c_uchar;
-    let mut k: libc::c_int = 0;
-    let mut i: libc::c_int = 0;
-    let mut dd: libc::c_int = 0;
+    let mut ordering: *const u8 = 0 as *const u8;
+    let mut k: i32 = 0;
+    let mut i: i32 = 0;
+    let mut dd: i32 = 0;
     let mut cos_LSF_QA: [crate::opus_types_h::opus_int32; 24] = [0; 24];
     let mut P: [crate::opus_types_h::opus_int32; 13] = [0; 13];
     let mut Q: [crate::opus_types_h::opus_int32; 13] = [0; 13];
@@ -311,45 +311,45 @@ pub unsafe extern "C" fn silk_NLSF2A(
     let mut delta: crate::opus_types_h::opus_int32 = 0;
     let mut a32_QA1: [crate::opus_types_h::opus_int32; 24] = [0; 24];
     /* convert LSFs to 2*cos(LSF), using piecewise linear curve from table */
-    ordering = if d == 16 as libc::c_int {
+    ordering = if d == 16 as i32 {
         ordering16.as_ptr()
     } else {
         ordering10.as_ptr()
     };
-    k = 0 as libc::c_int;
+    k = 0 as i32;
     while k < d {
         /* f_int on a scale 0-127 (rounded down) */
-        f_int = *NLSF.offset(k as isize) as libc::c_int >> 15 as libc::c_int - 7 as libc::c_int;
+        f_int = *NLSF.offset(k as isize) as i32 >> 15 as i32 - 7 as i32;
         /* QA */
-        f_frac = *NLSF.offset(k as isize) as libc::c_int
-            - ((f_int as crate::opus_types_h::opus_uint32) << 15 as libc::c_int - 7 as libc::c_int)
+        f_frac = *NLSF.offset(k as isize) as i32
+            - ((f_int as crate::opus_types_h::opus_uint32) << 15 as i32 - 7 as i32)
                 as crate::opus_types_h::opus_int32;
         cos_val = crate::src::opus_1_2_1::silk::table_LSF_cos::silk_LSFCosTab_FIX_Q12
             [f_int as usize] as crate::opus_types_h::opus_int32;
         delta = crate::src::opus_1_2_1::silk::table_LSF_cos::silk_LSFCosTab_FIX_Q12
-            [(f_int + 1 as libc::c_int) as usize] as libc::c_int
+            [(f_int + 1 as i32) as usize] as i32
             - cos_val;
         cos_LSF_QA[*ordering.offset(k as isize) as usize] =
-            if 20 as libc::c_int - 16 as libc::c_int == 1 as libc::c_int {
-                (((cos_val as crate::opus_types_h::opus_uint32) << 8 as libc::c_int)
+            if 20 as i32 - 16 as i32 == 1 as i32 {
+                (((cos_val as crate::opus_types_h::opus_uint32) << 8 as i32)
                     as crate::opus_types_h::opus_int32
                     + delta * f_frac
-                    >> 1 as libc::c_int)
-                    + (((cos_val as crate::opus_types_h::opus_uint32) << 8 as libc::c_int)
+                    >> 1 as i32)
+                    + (((cos_val as crate::opus_types_h::opus_uint32) << 8 as i32)
                         as crate::opus_types_h::opus_int32
                         + delta * f_frac
-                        & 1 as libc::c_int)
+                        & 1 as i32)
             } else {
-                ((((cos_val as crate::opus_types_h::opus_uint32) << 8 as libc::c_int)
+                ((((cos_val as crate::opus_types_h::opus_uint32) << 8 as i32)
                     as crate::opus_types_h::opus_int32
                     + delta * f_frac
-                    >> 20 as libc::c_int - 16 as libc::c_int - 1 as libc::c_int)
-                    + 1 as libc::c_int)
-                    >> 1 as libc::c_int
+                    >> 20 as i32 - 16 as i32 - 1 as i32)
+                    + 1 as i32)
+                    >> 1 as i32
             };
         k += 1
     }
-    dd = d >> 1 as libc::c_int;
+    dd = d >> 1 as i32;
     /* f_frac, range: 0..255 */
     /* Read start and end value from table */
     /* Q12 */
@@ -358,22 +358,22 @@ pub unsafe extern "C" fn silk_NLSF2A(
     /* generate even and odd polynomials using convolution */
     silk_NLSF2A_find_poly(
         P.as_mut_ptr(),
-        &mut *cos_LSF_QA.as_mut_ptr().offset(0 as libc::c_int as isize),
+        &mut *cos_LSF_QA.as_mut_ptr().offset(0 as i32 as isize),
         dd,
     );
     silk_NLSF2A_find_poly(
         Q.as_mut_ptr(),
-        &mut *cos_LSF_QA.as_mut_ptr().offset(1 as libc::c_int as isize),
+        &mut *cos_LSF_QA.as_mut_ptr().offset(1 as i32 as isize),
         dd,
     );
     /* convert even and odd polynomials to opus_int32 Q12 filter coefs */
-    k = 0 as libc::c_int;
+    k = 0 as i32;
     while k < dd {
-        Ptmp = P[(k + 1 as libc::c_int) as usize] + P[k as usize];
-        Qtmp = Q[(k + 1 as libc::c_int) as usize] - Q[k as usize];
+        Ptmp = P[(k + 1 as i32) as usize] + P[k as usize];
+        Qtmp = Q[(k + 1 as i32) as usize] - Q[k as usize];
         /* QA+1 */
         a32_QA1[k as usize] = -Qtmp - Ptmp;
-        a32_QA1[(d - k - 1 as libc::c_int) as usize] = Qtmp - Ptmp;
+        a32_QA1[(d - k - 1 as i32) as usize] = Qtmp - Ptmp;
         k += 1
     }
     /* the Ptmp and Qtmp values at this stage need to fit in int32 */
@@ -382,35 +382,35 @@ pub unsafe extern "C" fn silk_NLSF2A(
     crate::src::opus_1_2_1::silk::LPC_fit::silk_LPC_fit(
         a_Q12,
         a32_QA1.as_mut_ptr(),
-        12 as libc::c_int,
-        16 as libc::c_int + 1 as libc::c_int,
+        12 as i32,
+        16 as i32 + 1 as i32,
         d,
     );
-    i = 0 as libc::c_int;
+    i = 0 as i32;
     while crate::src::opus_1_2_1::silk::LPC_inv_pred_gain::silk_LPC_inverse_pred_gain_c(a_Q12, d)
-        == 0 as libc::c_int
-        && i < 16 as libc::c_int
+        == 0 as i32
+        && i < 16 as i32
     {
         /* Prediction coefficients are (too close to) unstable; apply bandwidth expansion   */
         /* on the unscaled coefficients, convert to Q12 and measure again                   */
         crate::src::opus_1_2_1::silk::bwexpander_32::silk_bwexpander_32(
             a32_QA1.as_mut_ptr(),
             d,
-            65536 as libc::c_int
-                - ((2 as libc::c_int as crate::opus_types_h::opus_uint32) << i)
+            65536 as i32
+                - ((2 as i32 as crate::opus_types_h::opus_uint32) << i)
                     as crate::opus_types_h::opus_int32,
         );
-        k = 0 as libc::c_int;
+        k = 0 as i32;
         while k < d {
-            *a_Q12.offset(k as isize) = if 16 as libc::c_int + 1 as libc::c_int - 12 as libc::c_int
-                == 1 as libc::c_int
+            *a_Q12.offset(k as isize) = if 16 as i32 + 1 as i32 - 12 as i32
+                == 1 as i32
             {
-                (a32_QA1[k as usize] >> 1 as libc::c_int) + (a32_QA1[k as usize] & 1 as libc::c_int)
+                (a32_QA1[k as usize] >> 1 as i32) + (a32_QA1[k as usize] & 1 as i32)
             } else {
                 ((a32_QA1[k as usize]
-                    >> 16 as libc::c_int + 1 as libc::c_int - 12 as libc::c_int - 1 as libc::c_int)
-                    + 1 as libc::c_int)
-                    >> 1 as libc::c_int
+                    >> 16 as i32 + 1 as i32 - 12 as i32 - 1 as i32)
+                    + 1 as i32)
+                    >> 1 as i32
             } as crate::opus_types_h::opus_int16;
             k += 1
             /* QA+1 -> Q12 */
