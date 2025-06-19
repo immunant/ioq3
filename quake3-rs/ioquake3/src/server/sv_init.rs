@@ -232,7 +232,7 @@ unsafe extern "C" fn SV_SendConfigstring(
             } else {
                 cmd = b"bcs1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char
             }
-            crate::src::qcommon::q_shared::Q_strncpyz(
+            Q_strncpyz(
                 buf.as_mut_ptr(),
                 &mut *(*crate::src::server::sv_main::sv
                     .configstrings
@@ -283,7 +283,7 @@ pub unsafe extern "C" fn SV_UpdateConfigstrings(mut client: *mut crate::server_h
                 && (*(*client).gentity).r.svFlags & 0x200 as i32 != 0)
             {
                 SV_SendConfigstring(client, index);
-                (*client).csUpdated[index as usize] = crate::src::qcommon::q_shared::qfalse
+                (*client).csUpdated[index as usize] = qfalse
             }
         }
         index += 1
@@ -302,7 +302,7 @@ pub unsafe extern "C" fn SV_SetConfigstring(mut index: i32, mut val: *const libc
     let mut client: *mut crate::server_h::client_t = 0 as *mut crate::server_h::client_t;
     if index < 0 as i32 || index >= 1024 as i32 {
         crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+            ERR_DROP as i32,
             b"SV_SetConfigstring: bad index %i\x00" as *const u8 as *const libc::c_char,
             index,
         );
@@ -335,7 +335,7 @@ pub unsafe extern "C" fn SV_SetConfigstring(mut index: i32, mut val: *const libc
         while i < (*crate::src::server::sv_main::sv_maxclients).integer {
             if ((*client).state as u32) < crate::server_h::CS_ACTIVE as i32 as u32 {
                 if (*client).state as u32 == crate::server_h::CS_PRIMED as i32 as u32 {
-                    (*client).csUpdated[index as usize] = crate::src::qcommon::q_shared::qtrue
+                    (*client).csUpdated[index as usize] = qtrue
                 }
             } else if !(index == 0 as i32
                 && !(*client).gentity.is_null()
@@ -364,14 +364,14 @@ pub unsafe extern "C" fn SV_GetConfigstring(
 ) {
     if bufferSize < 1 as i32 {
         crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+            ERR_DROP as i32,
             b"SV_GetConfigstring: bufferSize == %i\x00" as *const u8 as *const libc::c_char,
             bufferSize,
         );
     }
     if index < 0 as i32 || index >= 1024 as i32 {
         crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+            ERR_DROP as i32,
             b"SV_GetConfigstring: bad index %i\x00" as *const u8 as *const libc::c_char,
             index,
         );
@@ -380,7 +380,7 @@ pub unsafe extern "C" fn SV_GetConfigstring(
         *buffer.offset(0 as i32 as isize) = 0 as i32 as libc::c_char;
         return;
     }
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    Q_strncpyz(
         buffer,
         crate::src::server::sv_main::sv.configstrings[index as usize],
         bufferSize,
@@ -397,7 +397,7 @@ SV_SetUserinfo
 pub unsafe extern "C" fn SV_SetUserinfo(mut index: i32, mut val: *const libc::c_char) {
     if index < 0 as i32 || index >= (*crate::src::server::sv_main::sv_maxclients).integer {
         crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+            ERR_DROP as i32,
             b"SV_SetUserinfo: bad index %i\x00" as *const u8 as *const libc::c_char,
             index,
         );
@@ -405,7 +405,7 @@ pub unsafe extern "C" fn SV_SetUserinfo(mut index: i32, mut val: *const libc::c_
     if val.is_null() {
         val = b"\x00" as *const u8 as *const libc::c_char
     }
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    Q_strncpyz(
         (*crate::src::server::sv_main::svs
             .clients
             .offset(index as isize))
@@ -414,13 +414,13 @@ pub unsafe extern "C" fn SV_SetUserinfo(mut index: i32, mut val: *const libc::c_
         val,
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    Q_strncpyz(
         (*crate::src::server::sv_main::svs
             .clients
             .offset(index as isize))
         .name
         .as_mut_ptr(),
-        crate::src::qcommon::q_shared::Info_ValueForKey(
+        Info_ValueForKey(
             val,
             b"name\x00" as *const u8 as *const libc::c_char,
         ),
@@ -442,19 +442,19 @@ pub unsafe extern "C" fn SV_GetUserinfo(
 ) {
     if bufferSize < 1 as i32 {
         crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+            ERR_DROP as i32,
             b"SV_GetUserinfo: bufferSize == %i\x00" as *const u8 as *const libc::c_char,
             bufferSize,
         );
     }
     if index < 0 as i32 || index >= (*crate::src::server::sv_main::sv_maxclients).integer {
         crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+            ERR_DROP as i32,
             b"SV_GetUserinfo: bad index %i\x00" as *const u8 as *const libc::c_char,
             index,
         );
     }
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    Q_strncpyz(
         buffer,
         (*crate::src::server::sv_main::svs
             .clients
@@ -506,12 +506,12 @@ unsafe extern "C" fn SV_BoundMaxClients(mut minimum: i32) {
         b"sv_maxclients\x00" as *const u8 as *const libc::c_char,
         b"8\x00" as *const u8 as *const libc::c_char,
         0 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
-    (*crate::src::server::sv_main::sv_maxclients).modified = crate::src::qcommon::q_shared::qfalse;
+    ) as *mut cvar_s;
+    (*crate::src::server::sv_main::sv_maxclients).modified = qfalse;
     if (*crate::src::server::sv_main::sv_maxclients).integer < minimum {
         crate::src::qcommon::cvar::Cvar_Set(
             b"sv_maxclients\x00" as *const u8 as *const libc::c_char,
-            crate::src::qcommon::q_shared::va(
+            va(
                 b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 minimum,
             ),
@@ -519,7 +519,7 @@ unsafe extern "C" fn SV_BoundMaxClients(mut minimum: i32) {
     } else if (*crate::src::server::sv_main::sv_maxclients).integer > 64 as i32 {
         crate::src::qcommon::cvar::Cvar_Set(
             b"sv_maxclients\x00" as *const u8 as *const libc::c_char,
-            crate::src::qcommon::q_shared::va(
+            va(
                 b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 64 as i32,
             ),
@@ -540,7 +540,7 @@ the menu system first.
 unsafe extern "C" fn SV_Startup() {
     if crate::src::server::sv_main::svs.initialized as u64 != 0 {
         crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_FATAL as i32,
+            ERR_FATAL as i32,
             b"SV_Startup: svs.initialized\x00" as *const u8 as *const libc::c_char,
         );
     }
@@ -558,7 +558,7 @@ unsafe extern "C" fn SV_Startup() {
         crate::src::server::sv_main::svs.numSnapshotEntities =
             (*crate::src::server::sv_main::sv_maxclients).integer * 4 as i32 * 256 as i32
     }
-    crate::src::server::sv_main::svs.initialized = crate::src::qcommon::q_shared::qtrue;
+    crate::src::server::sv_main::svs.initialized = qtrue;
     // Don't respect sv_killserver unless a server is actually running
     if (*crate::src::server::sv_main::sv_killserver).integer != 0 {
         crate::src::qcommon::cvar::Cvar_Set(
@@ -698,11 +698,11 @@ SV_TouchFile
 */
 
 unsafe extern "C" fn SV_TouchFile(mut filename: *const libc::c_char) {
-    let mut f: crate::src::qcommon::q_shared::fileHandle_t = 0;
+    let mut f: fileHandle_t = 0;
     crate::src::qcommon::files::FS_FOpenFileRead(
         filename,
         &mut f,
-        crate::src::qcommon::q_shared::qfalse,
+        qfalse,
     );
     if f != 0 {
         crate::src::qcommon::files::FS_FCloseFile(f);
@@ -724,11 +724,11 @@ This is NOT called for map_restart
 
 pub unsafe extern "C" fn SV_SpawnServer(
     mut server: *mut libc::c_char,
-    mut killBots: crate::src::qcommon::q_shared::qboolean,
+    mut killBots: qboolean,
 ) {
     let mut i: i32 = 0;
     let mut checksum: i32 = 0;
-    let mut isBot: crate::src::qcommon::q_shared::qboolean = crate::src::qcommon::q_shared::qfalse;
+    let mut isBot: qboolean = qfalse;
     let mut systemInfo: [libc::c_char; 16384] = [0; 16384];
     let mut p: *const libc::c_char = 0 as *const libc::c_char;
     // shut down the existing game if it is running
@@ -744,7 +744,7 @@ pub unsafe extern "C" fn SV_SpawnServer(
     // also print some status stuff
     crate::src::client::cl_main::CL_MapLoading();
     // make sure all the client stuff is unloaded
-    crate::src::client::cl_main::CL_ShutdownAll(crate::src::qcommon::q_shared::qfalse);
+    crate::src::client::cl_main::CL_ShutdownAll(qfalse);
     // clear the whole hunk because we're (re)loading the server
     crate::src::qcommon::common::Hunk_Clear();
     // clear collision map data
@@ -763,12 +763,12 @@ pub unsafe extern "C" fn SV_SpawnServer(
     crate::src::qcommon::files::FS_ClearPakReferences(0 as i32);
     // allocate the snapshot entities on the hunk
     crate::src::server::sv_main::svs.snapshotEntities = crate::src::qcommon::common::Hunk_Alloc(
-        (::std::mem::size_of::<crate::src::qcommon::q_shared::entityState_t>() as libc::c_ulong)
+        (::std::mem::size_of::<entityState_t>() as libc::c_ulong)
             .wrapping_mul(crate::src::server::sv_main::svs.numSnapshotEntities as libc::c_ulong)
             as i32,
-        crate::src::qcommon::q_shared::h_high,
+        h_high,
     )
-        as *mut crate::src::qcommon::q_shared::entityState_t;
+        as *mut entityState_t;
     crate::src::server::sv_main::svs.nextSnapshotEntities = 0 as i32;
     // toggle the server bit so clients can detect that a
     // server has changed
@@ -811,18 +811,18 @@ pub unsafe extern "C" fn SV_SpawnServer(
         as i32;
     crate::src::qcommon::files::FS_Restart(crate::src::server::sv_main::sv.checksumFeed);
     crate::src::qcommon::cm_load::CM_LoadMap(
-        crate::src::qcommon::q_shared::va(
+        va(
             b"maps/%s.bsp\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             server,
         ),
-        crate::src::qcommon::q_shared::qfalse,
+        qfalse,
         &mut checksum,
     );
     // set serverinfo visible name
     crate::src::qcommon::cvar::Cvar_Set(b"mapname\x00" as *const u8 as *const libc::c_char, server);
     crate::src::qcommon::cvar::Cvar_Set(
         b"sv_mapChecksum\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::va(
+        va(
             b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             checksum,
         ),
@@ -833,7 +833,7 @@ pub unsafe extern "C" fn SV_SpawnServer(
     crate::src::server::sv_main::sv.checksumFeedServerId = crate::src::server::sv_main::sv.serverId;
     crate::src::qcommon::cvar::Cvar_Set(
         b"sv_serverid\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::va(
+        va(
             b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             crate::src::server::sv_main::sv.serverId,
         ),
@@ -847,7 +847,7 @@ pub unsafe extern "C" fn SV_SpawnServer(
     // load and spawn all other entities
     crate::src::server::sv_game::SV_InitGameProgs();
     // don't allow a map_restart if game is modified
-    (*crate::src::server::sv_main::sv_gametype).modified = crate::src::qcommon::q_shared::qfalse;
+    (*crate::src::server::sv_main::sv_gametype).modified = qfalse;
     // run a few frames to allow everything to settle
     i = 0 as i32;
     while i < 3 as i32 {
@@ -885,11 +885,11 @@ pub unsafe extern "C" fn SV_SpawnServer(
                     );
                     current_block_73 = 13460095289871124136;
                 } else {
-                    isBot = crate::src::qcommon::q_shared::qtrue;
+                    isBot = qtrue;
                     current_block_73 = 6560072651652764009;
                 }
             } else {
-                isBot = crate::src::qcommon::q_shared::qfalse;
+                isBot = qfalse;
                 current_block_73 = 6560072651652764009;
             }
             match current_block_73 {
@@ -902,7 +902,7 @@ pub unsafe extern "C" fn SV_SpawnServer(
                             crate::src::server::sv_main::gvm,
                             crate::g_public_h::GAME_CLIENT_CONNECT as i32,
                             i,
-                            crate::src::qcommon::q_shared::qfalse as i32,
+                            qfalse as i32,
                             isBot as u32,
                         ),
                     ) as *mut libc::c_char; // firstTime = qfalse
@@ -998,7 +998,7 @@ pub unsafe extern "C" fn SV_SpawnServer(
         p,
     );
     // save systeminfo and serverinfo strings
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    Q_strncpyz(
         systemInfo.as_mut_ptr(),
         crate::src::qcommon::cvar::Cvar_InfoString_Big(0x8 as i32),
         ::std::mem::size_of::<[libc::c_char; 16384]>() as libc::c_ulong as i32,
@@ -1020,7 +1020,7 @@ pub unsafe extern "C" fn SV_SpawnServer(
     if (*crate::src::qcommon::common::com_dedicated).integer != 0 {
         // restart renderer in order to show console for dedicated servers
         // launched through the regular binary
-        crate::src::client::cl_main::CL_StartHunkUsers(crate::src::qcommon::q_shared::qtrue);
+        crate::src::client::cl_main::CL_StartHunkUsers(qtrue);
     }
     crate::src::qcommon::common::Com_Printf(
         b"-----------------------------------\n\x00" as *const u8 as *const libc::c_char,
@@ -1044,110 +1044,110 @@ pub unsafe extern "C" fn SV_Init() {
         b"dmflags\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x4 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
 
     crate::src::qcommon::cvar::Cvar_Get(
         b"fraglimit\x00" as *const u8 as *const libc::c_char,
         b"20\x00" as *const u8 as *const libc::c_char,
         0x4 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
 
     crate::src::qcommon::cvar::Cvar_Get(
         b"timelimit\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x4 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     crate::src::server::sv_main::sv_gametype = crate::src::qcommon::cvar::Cvar_Get(
         b"g_gametype\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x4 as i32 | 0x20 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
 
     crate::src::qcommon::cvar::Cvar_Get(
         b"sv_keywords\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
         0x4 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     crate::src::server::sv_main::sv_mapname = crate::src::qcommon::cvar::Cvar_Get(
         b"mapname\x00" as *const u8 as *const libc::c_char,
         b"nomap\x00" as *const u8 as *const libc::c_char,
         0x4 as i32 | 0x40 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     crate::src::server::sv_main::sv_privateClients = crate::src::qcommon::cvar::Cvar_Get(
         b"sv_privateClients\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x4 as i32,
     )
-        as *mut crate::src::qcommon::q_shared::cvar_s;
+        as *mut cvar_s;
     crate::src::server::sv_main::sv_hostname = crate::src::qcommon::cvar::Cvar_Get(
         b"sv_hostname\x00" as *const u8 as *const libc::c_char,
         b"noname\x00" as *const u8 as *const libc::c_char,
         0x4 as i32 | 0x1 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     crate::src::server::sv_main::sv_maxclients = crate::src::qcommon::cvar::Cvar_Get(
         b"sv_maxclients\x00" as *const u8 as *const libc::c_char,
         b"8\x00" as *const u8 as *const libc::c_char,
         0x4 as i32 | 0x20 as i32,
     )
-        as *mut crate::src::qcommon::q_shared::cvar_s;
+        as *mut cvar_s;
     crate::src::server::sv_main::sv_minRate = crate::src::qcommon::cvar::Cvar_Get(
         b"sv_minRate\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x4 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     crate::src::server::sv_main::sv_maxRate = crate::src::qcommon::cvar::Cvar_Get(
         b"sv_maxRate\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x4 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     crate::src::server::sv_main::sv_dlRate = crate::src::qcommon::cvar::Cvar_Get(
         b"sv_dlRate\x00" as *const u8 as *const libc::c_char,
         b"100\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x4 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     crate::src::server::sv_main::sv_minPing = crate::src::qcommon::cvar::Cvar_Get(
         b"sv_minPing\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x4 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     crate::src::server::sv_main::sv_maxPing = crate::src::qcommon::cvar::Cvar_Get(
         b"sv_maxPing\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x4 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     crate::src::server::sv_main::sv_floodProtect = crate::src::qcommon::cvar::Cvar_Get(
         b"sv_floodProtect\x00" as *const u8 as *const libc::c_char,
         b"1\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x4 as i32,
     )
-        as *mut crate::src::qcommon::q_shared::cvar_s;
+        as *mut cvar_s;
     // systeminfo
 
     crate::src::qcommon::cvar::Cvar_Get(
         b"sv_cheats\x00" as *const u8 as *const libc::c_char,
         b"1\x00" as *const u8 as *const libc::c_char,
         0x8 as i32 | 0x40 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     crate::src::server::sv_main::sv_serverid = crate::src::qcommon::cvar::Cvar_Get(
         b"sv_serverid\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x8 as i32 | 0x40 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     crate::src::server::sv_main::sv_pure = crate::src::qcommon::cvar::Cvar_Get(
         b"sv_pure\x00" as *const u8 as *const libc::c_char,
         b"1\x00" as *const u8 as *const libc::c_char,
         0x8 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     crate::src::server::sv_main::sv_voip = crate::src::qcommon::cvar::Cvar_Get(
         b"sv_voip\x00" as *const u8 as *const libc::c_char,
         b"1\x00" as *const u8 as *const libc::c_char,
         0x20 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     crate::src::qcommon::cvar::Cvar_CheckRange(
-        crate::src::server::sv_main::sv_voip as *mut crate::src::qcommon::q_shared::cvar_s,
+        crate::src::server::sv_main::sv_voip as *mut cvar_s,
         0 as i32 as f32,
         1 as i32 as f32,
-        crate::src::qcommon::q_shared::qtrue,
+        qtrue,
     );
     crate::src::server::sv_main::sv_voipProtocol = crate::src::qcommon::cvar::Cvar_Get(
         b"sv_voipProtocol\x00" as *const u8 as *const libc::c_char,
@@ -1158,101 +1158,101 @@ pub unsafe extern "C" fn SV_Init() {
         },
         0x8 as i32 | 0x40 as i32,
     )
-        as *mut crate::src::qcommon::q_shared::cvar_s;
+        as *mut cvar_s;
 
     crate::src::qcommon::cvar::Cvar_Get(
         b"sv_paks\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
         0x8 as i32 | 0x40 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
 
     crate::src::qcommon::cvar::Cvar_Get(
         b"sv_pakNames\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
         0x8 as i32 | 0x40 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
 
     crate::src::qcommon::cvar::Cvar_Get(
         b"sv_referencedPaks\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
         0x8 as i32 | 0x40 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
 
     crate::src::qcommon::cvar::Cvar_Get(
         b"sv_referencedPakNames\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
         0x8 as i32 | 0x40 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     // server vars
     crate::src::server::sv_main::sv_rconPassword = crate::src::qcommon::cvar::Cvar_Get(
         b"rconPassword\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
         0x100 as i32,
     )
-        as *mut crate::src::qcommon::q_shared::cvar_s;
+        as *mut cvar_s;
     crate::src::server::sv_main::sv_privatePassword = crate::src::qcommon::cvar::Cvar_Get(
         b"sv_privatePassword\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
         0x100 as i32,
     )
-        as *mut crate::src::qcommon::q_shared::cvar_s;
+        as *mut cvar_s;
     crate::src::server::sv_main::sv_fps = crate::src::qcommon::cvar::Cvar_Get(
         b"sv_fps\x00" as *const u8 as *const libc::c_char,
         b"20\x00" as *const u8 as *const libc::c_char,
         0x100 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     crate::src::server::sv_main::sv_timeout = crate::src::qcommon::cvar::Cvar_Get(
         b"sv_timeout\x00" as *const u8 as *const libc::c_char,
         b"200\x00" as *const u8 as *const libc::c_char,
         0x100 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     crate::src::server::sv_main::sv_zombietime = crate::src::qcommon::cvar::Cvar_Get(
         b"sv_zombietime\x00" as *const u8 as *const libc::c_char,
         b"2\x00" as *const u8 as *const libc::c_char,
         0x100 as i32,
     )
-        as *mut crate::src::qcommon::q_shared::cvar_s;
+        as *mut cvar_s;
 
     crate::src::qcommon::cvar::Cvar_Get(
         b"nextmap\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
         0x100 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     crate::src::server::sv_main::sv_allowDownload = crate::src::qcommon::cvar::Cvar_Get(
         b"sv_allowDownload\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x4 as i32,
     )
-        as *mut crate::src::qcommon::q_shared::cvar_s;
+        as *mut cvar_s;
 
     crate::src::qcommon::cvar::Cvar_Get(
         b"sv_dlURL\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
         0x4 as i32 | 0x1 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     crate::src::server::sv_main::sv_master[0 as i32 as usize] = crate::src::qcommon::cvar::Cvar_Get(
         b"sv_master1\x00" as *const u8 as *const libc::c_char,
         b"master.quake3arena.com\x00" as *const u8 as *const libc::c_char,
         0 as i32,
     )
-        as *mut crate::src::qcommon::q_shared::cvar_s;
+        as *mut cvar_s;
     crate::src::server::sv_main::sv_master[1 as i32 as usize] = crate::src::qcommon::cvar::Cvar_Get(
         b"sv_master2\x00" as *const u8 as *const libc::c_char,
         b"master.ioquake3.org\x00" as *const u8 as *const libc::c_char,
         0 as i32,
     )
-        as *mut crate::src::qcommon::q_shared::cvar_s;
+        as *mut cvar_s;
     index = 2 as i32;
     while index < 5 as i32 {
         crate::src::server::sv_main::sv_master[index as usize] = crate::src::qcommon::cvar::Cvar_Get(
-            crate::src::qcommon::q_shared::va(
+            va(
                 b"sv_master%d\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 index + 1 as i32,
             ),
             b"\x00" as *const u8 as *const libc::c_char,
             0x1 as i32,
         )
-            as *mut crate::src::qcommon::q_shared::cvar_s;
+            as *mut cvar_s;
         index += 1
     }
     crate::src::server::sv_main::sv_reconnectlimit = crate::src::qcommon::cvar::Cvar_Get(
@@ -1260,47 +1260,47 @@ pub unsafe extern "C" fn SV_Init() {
         b"3\x00" as *const u8 as *const libc::c_char,
         0 as i32,
     )
-        as *mut crate::src::qcommon::q_shared::cvar_s;
+        as *mut cvar_s;
     crate::src::server::sv_main::sv_showloss = crate::src::qcommon::cvar::Cvar_Get(
         b"sv_showloss\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     crate::src::server::sv_main::sv_padPackets = crate::src::qcommon::cvar::Cvar_Get(
         b"sv_padPackets\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0 as i32,
     )
-        as *mut crate::src::qcommon::q_shared::cvar_s;
+        as *mut cvar_s;
     crate::src::server::sv_main::sv_killserver = crate::src::qcommon::cvar::Cvar_Get(
         b"sv_killserver\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0 as i32,
     )
-        as *mut crate::src::qcommon::q_shared::cvar_s;
+        as *mut cvar_s;
     crate::src::server::sv_main::sv_mapChecksum = crate::src::qcommon::cvar::Cvar_Get(
         b"sv_mapChecksum\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
         0x40 as i32,
     )
-        as *mut crate::src::qcommon::q_shared::cvar_s;
+        as *mut cvar_s;
     crate::src::server::sv_main::sv_lanForceRate = crate::src::qcommon::cvar::Cvar_Get(
         b"sv_lanForceRate\x00" as *const u8 as *const libc::c_char,
         b"1\x00" as *const u8 as *const libc::c_char,
         0x1 as i32,
     )
-        as *mut crate::src::qcommon::q_shared::cvar_s;
+        as *mut cvar_s;
     crate::src::server::sv_main::sv_strictAuth = crate::src::qcommon::cvar::Cvar_Get(
         b"sv_strictAuth\x00" as *const u8 as *const libc::c_char,
         b"1\x00" as *const u8 as *const libc::c_char,
         0x1 as i32,
     )
-        as *mut crate::src::qcommon::q_shared::cvar_s;
+        as *mut cvar_s;
     crate::src::server::sv_main::sv_banFile = crate::src::qcommon::cvar::Cvar_Get(
         b"sv_banFile\x00" as *const u8 as *const libc::c_char,
         b"serverbans.dat\x00" as *const u8 as *const libc::c_char,
         0x1 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     // initialize bot cvars so they are listed and can be set before loading the botlib
     crate::src::server::sv_bot::SV_BotInitCvars();
     // init the botlib here because we need the pre-compiler in the UI
@@ -1898,6 +1898,6 @@ pub unsafe extern "C" fn SV_Shutdown(mut finalmsg: *mut libc::c_char) {
     );
     // disconnect any local clients
     if (*crate::src::server::sv_main::sv_killserver).integer != 2 as i32 {
-        crate::src::client::cl_main::CL_Disconnect(crate::src::qcommon::q_shared::qfalse);
+        crate::src::client::cl_main::CL_Disconnect(qfalse);
     };
 }

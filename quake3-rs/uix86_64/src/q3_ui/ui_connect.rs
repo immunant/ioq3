@@ -339,8 +339,8 @@ CONNECTION SCREEN
 */
 #[no_mangle]
 
-pub static mut passwordNeeded: crate::src::qcommon::q_shared::qboolean =
-    crate::src::qcommon::q_shared::qtrue;
+pub static mut passwordNeeded: qboolean =
+    qtrue;
 #[no_mangle]
 
 pub static mut passwordField: crate::ui_local_h::menufield_s = crate::ui_local_h::menufield_s {
@@ -371,21 +371,21 @@ pub static mut passwordField: crate::ui_local_h::menufield_s = crate::ui_local_h
     },
 };
 
-static mut lastConnState: crate::src::qcommon::q_shared::connstate_t =
-    crate::src::qcommon::q_shared::CA_UNINITIALIZED;
+static mut lastConnState: connstate_t =
+    CA_UNINITIALIZED;
 
 static mut lastLoadingText: [libc::c_char; 1024] = [0; 1024];
 
 unsafe extern "C" fn UI_ReadableSize(mut buf: *mut libc::c_char, mut bufsize: i32, mut value: i32) {
     if value > 1024 as i32 * 1024 as i32 * 1024 as i32 {
         // gigs
-        crate::src::qcommon::q_shared::Com_sprintf(
+        Com_sprintf(
             buf,
             bufsize,
             b"%d\x00" as *const u8 as *const libc::c_char,
             value / (1024 as i32 * 1024 as i32 * 1024 as i32),
         );
-        crate::src::qcommon::q_shared::Com_sprintf(
+        Com_sprintf(
             buf.offset(crate::stdlib::strlen(buf) as isize),
             (bufsize as libc::c_ulong).wrapping_sub(crate::stdlib::strlen(buf)) as i32,
             b".%02d GB\x00" as *const u8 as *const libc::c_char,
@@ -394,13 +394,13 @@ unsafe extern "C" fn UI_ReadableSize(mut buf: *mut libc::c_char, mut bufsize: i3
         );
     } else if value > 1024 as i32 * 1024 as i32 {
         // megs
-        crate::src::qcommon::q_shared::Com_sprintf(
+        Com_sprintf(
             buf,
             bufsize,
             b"%d\x00" as *const u8 as *const libc::c_char,
             value / (1024 as i32 * 1024 as i32),
         ); // bytes
-        crate::src::qcommon::q_shared::Com_sprintf(
+        Com_sprintf(
             buf.offset(crate::stdlib::strlen(buf) as isize),
             (bufsize as libc::c_ulong).wrapping_sub(crate::stdlib::strlen(buf)) as i32,
             b".%02d MB\x00" as *const u8 as *const libc::c_char,
@@ -408,14 +408,14 @@ unsafe extern "C" fn UI_ReadableSize(mut buf: *mut libc::c_char, mut bufsize: i3
         );
     } else if value > 1024 as i32 {
         // kilos
-        crate::src::qcommon::q_shared::Com_sprintf(
+        Com_sprintf(
             buf,
             bufsize,
             b"%d KB\x00" as *const u8 as *const libc::c_char,
             value / 1024 as i32,
         );
     } else {
-        crate::src::qcommon::q_shared::Com_sprintf(
+        Com_sprintf(
             buf,
             bufsize,
             b"%d bytes\x00" as *const u8 as *const libc::c_char,
@@ -429,7 +429,7 @@ unsafe extern "C" fn UI_PrintTime(mut buf: *mut libc::c_char, mut bufsize: i32, 
     time /= 1000 as i32; // change to seconds
     if time > 3600 as i32 {
         // in the hours range
-        crate::src::qcommon::q_shared::Com_sprintf(
+        Com_sprintf(
             buf,
             bufsize,
             b"%d hr %d min\x00" as *const u8 as *const libc::c_char,
@@ -438,7 +438,7 @@ unsafe extern "C" fn UI_PrintTime(mut buf: *mut libc::c_char, mut bufsize: i32, 
         ); // secs
     } else if time > 60 as i32 {
         // mins
-        crate::src::qcommon::q_shared::Com_sprintf(
+        Com_sprintf(
             buf,
             bufsize,
             b"%d min %d sec\x00" as *const u8 as *const libc::c_char,
@@ -446,7 +446,7 @@ unsafe extern "C" fn UI_PrintTime(mut buf: *mut libc::c_char, mut bufsize: i32, 
             time % 60 as i32,
         );
     } else {
-        crate::src::qcommon::q_shared::Com_sprintf(
+        Com_sprintf(
             buf,
             bufsize,
             b"%d sec\x00" as *const u8 as *const libc::c_char,
@@ -522,7 +522,7 @@ unsafe extern "C" fn UI_DisplayDownloadInfo(mut downloadName: *const libc::c_cha
         crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
     );
     if downloadSize > 0 as i32 {
-        s = crate::src::qcommon::q_shared::va(
+        s = va(
             b"%s (%d%%)\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             downloadName,
             (downloadCount as f32 * 100.0f32 / downloadSize as f32) as i32,
@@ -558,7 +558,7 @@ unsafe extern "C" fn UI_DisplayDownloadInfo(mut downloadName: *const libc::c_cha
         crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
             leftWidth,
             192 as i32,
-            crate::src::qcommon::q_shared::va(
+            va(
                 b"(%s of %s copied)\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 dlSizeBuf.as_mut_ptr(),
                 totalSizeBuf.as_mut_ptr(),
@@ -600,7 +600,7 @@ unsafe extern "C" fn UI_DisplayDownloadInfo(mut downloadName: *const libc::c_cha
             crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
                 leftWidth,
                 192 as i32,
-                crate::src::qcommon::q_shared::va(
+                va(
                     b"(%s of %s copied)\x00" as *const u8 as *const libc::c_char
                         as *mut libc::c_char,
                     dlSizeBuf.as_mut_ptr(),
@@ -621,7 +621,7 @@ unsafe extern "C" fn UI_DisplayDownloadInfo(mut downloadName: *const libc::c_cha
                 crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
                     leftWidth,
                     192 as i32,
-                    crate::src::qcommon::q_shared::va(
+                    va(
                         b"(%s of %s copied)\x00" as *const u8 as *const libc::c_char
                             as *mut libc::c_char,
                         dlSizeBuf.as_mut_ptr(),
@@ -634,7 +634,7 @@ unsafe extern "C" fn UI_DisplayDownloadInfo(mut downloadName: *const libc::c_cha
                 crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
                     leftWidth,
                     192 as i32,
-                    crate::src::qcommon::q_shared::va(
+                    va(
                         b"(%s copied)\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                         dlSizeBuf.as_mut_ptr(),
                     ),
@@ -647,7 +647,7 @@ unsafe extern "C" fn UI_DisplayDownloadInfo(mut downloadName: *const libc::c_cha
             crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
                 leftWidth,
                 224 as i32,
-                crate::src::qcommon::q_shared::va(
+                va(
                     b"%s/Sec\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     xferRateBuf.as_mut_ptr(),
                 ),
@@ -730,11 +730,11 @@ to prevent it from blinking away too rapidly on local or lan games.
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_DrawConnectScreen(
-    mut overlay: crate::src::qcommon::q_shared::qboolean,
+    mut overlay: qboolean,
 ) {
     let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut cstate: crate::ui_public_h::uiClientState_t = crate::ui_public_h::uiClientState_t {
-        connState: crate::src::qcommon::q_shared::CA_UNINITIALIZED,
+        connState: CA_UNINITIALIZED,
         connectPacketCount: 0,
         clientNum: 0,
         servername: [0; 1024],
@@ -770,9 +770,9 @@ pub unsafe extern "C" fn UI_DrawConnectScreen(
         crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
             320 as i32,
             16 as i32,
-            crate::src::qcommon::q_shared::va(
+            va(
                 b"Loading %s\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                crate::src::qcommon::q_shared::Info_ValueForKey(
+                Info_ValueForKey(
                     info.as_mut_ptr(),
                     b"mapname\x00" as *const u8 as *const libc::c_char,
                 ),
@@ -784,7 +784,7 @@ pub unsafe extern "C" fn UI_DrawConnectScreen(
     crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
         320 as i32,
         64 as i32,
-        crate::src::qcommon::q_shared::va(
+        va(
             b"Connecting to %s\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             cstate.servername.as_mut_ptr(),
         ),
@@ -796,7 +796,7 @@ pub unsafe extern "C" fn UI_DrawConnectScreen(
     crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
         640 as i32 / 2 as i32,
         480 as i32 - 32 as i32,
-        crate::src::qcommon::q_shared::Info_ValueForKey(
+        Info_ValueForKey(
             cstate.updateInfoString.as_mut_ptr(),
             b"motd\x00" as *const u8 as *const libc::c_char,
         ),
@@ -804,7 +804,7 @@ pub unsafe extern "C" fn UI_DrawConnectScreen(
         crate::src::q3_ui::ui_qmenu::menu_text_color.as_mut_ptr(),
     );
     // print any server info (server full, bad version, etc)
-    if (cstate.connState as u32) < crate::src::qcommon::q_shared::CA_CONNECTED as i32 as u32 {
+    if (cstate.connState as u32) < CA_CONNECTED as i32 as u32 {
         crate::src::q3_ui::ui_atoms::UI_DrawProportionalString_AutoWrapped(
             320 as i32,
             192 as i32,
@@ -821,14 +821,14 @@ pub unsafe extern "C" fn UI_DrawConnectScreen(
     lastConnState = cstate.connState;
     match cstate.connState as u32 {
         3 => {
-            s = crate::src::qcommon::q_shared::va(
+            s = va(
                 b"Awaiting challenge...%i\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 cstate.connectPacketCount,
             )
         }
         4 => {
-            s = crate::src::qcommon::q_shared::va(
+            s = va(
                 b"Awaiting connection...%i\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 cstate.connectPacketCount,
@@ -871,7 +871,7 @@ UI_KeyConnect
 pub unsafe extern "C" fn UI_KeyConnect(mut key: i32) {
     if key == crate::keycodes_h::K_ESCAPE as i32 {
         crate::src::ui::ui_syscalls::trap_Cmd_ExecuteText(
-            crate::src::qcommon::q_shared::EXEC_APPEND as i32,
+            EXEC_APPEND as i32,
             b"disconnect\n\x00" as *const u8 as *const libc::c_char,
         );
         return;

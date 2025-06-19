@@ -93,9 +93,9 @@ static mut addBotsMenuInfo: addBotsMenuInfo_t = addBotsMenuInfo_t {
         items: [0 as *const libc::c_void as *mut libc::c_void; 64],
         draw: None,
         key: None,
-        wrapAround: crate::src::qcommon::q_shared::qfalse,
-        fullscreen: crate::src::qcommon::q_shared::qfalse,
-        showlogo: crate::src::qcommon::q_shared::qfalse,
+        wrapAround: qfalse,
+        fullscreen: qfalse,
+        showlogo: qfalse,
     },
     banner: crate::ui_local_h::menutext_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -388,8 +388,8 @@ unsafe extern "C" fn UI_AddBotsMenu_FightEvent(mut _ptr: *mut libc::c_void, mut 
         .offset(addBotsMenuInfo.team.curvalue as isize);
     skill = addBotsMenuInfo.skill.curvalue + 1 as i32;
     crate::src::ui::ui_syscalls::trap_Cmd_ExecuteText(
-        crate::src::qcommon::q_shared::EXEC_APPEND as i32,
-        crate::src::qcommon::q_shared::va(
+        EXEC_APPEND as i32,
+        va(
             b"addbot %s %i %s %i\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             addBotsMenuInfo.botnames[addBotsMenuInfo.selectedBotNum as usize].as_mut_ptr(),
             skill,
@@ -442,9 +442,9 @@ unsafe extern "C" fn UI_AddBotsMenu_SetBotNames() {
         info = crate::src::q3_ui::ui_gameinfo::UI_GetBotInfoByNumber(
             addBotsMenuInfo.sortedBotNums[(addBotsMenuInfo.baseBotNum + n) as usize],
         );
-        crate::src::qcommon::q_shared::Q_strncpyz(
+        Q_strncpyz(
             addBotsMenuInfo.botnames[n as usize].as_mut_ptr(),
-            crate::src::qcommon::q_shared::Info_ValueForKey(
+            Info_ValueForKey(
                 info,
                 b"name\x00" as *const u8 as *const libc::c_char,
             ),
@@ -503,15 +503,15 @@ unsafe extern "C" fn UI_AddBotsMenu_SortCompare(
     num2 = *(arg2 as *mut i32);
     info1 = crate::src::q3_ui::ui_gameinfo::UI_GetBotInfoByNumber(num1);
     info2 = crate::src::q3_ui::ui_gameinfo::UI_GetBotInfoByNumber(num2);
-    name1 = crate::src::qcommon::q_shared::Info_ValueForKey(
+    name1 = Info_ValueForKey(
         info1,
         b"name\x00" as *const u8 as *const libc::c_char,
     );
-    name2 = crate::src::qcommon::q_shared::Info_ValueForKey(
+    name2 = Info_ValueForKey(
         info2,
         b"name\x00" as *const u8 as *const libc::c_char,
     );
-    return crate::src::qcommon::q_shared::Q_stricmp(name1, name2);
+    return Q_stricmp(name1, name2);
 }
 
 unsafe extern "C" fn UI_AddBotsMenu_GetSortedBotNums() {
@@ -565,7 +565,7 @@ unsafe extern "C" fn UI_AddBotsMenu_Init() {
     let mut count: i32 = 0;
     let mut info: [libc::c_char; 1024] = [0; 1024];
     crate::src::ui::ui_syscalls::trap_GetConfigString(0 as i32, info.as_mut_ptr(), 1024 as i32);
-    gametype = atoi(crate::src::qcommon::q_shared::Info_ValueForKey(
+    gametype = atoi(Info_ValueForKey(
         info.as_mut_ptr(),
         b"g_gametype\x00" as *const u8 as *const libc::c_char,
     ));
@@ -574,8 +574,8 @@ unsafe extern "C" fn UI_AddBotsMenu_Init() {
         0 as i32,
         ::std::mem::size_of::<addBotsMenuInfo_t>() as libc::c_ulong,
     );
-    addBotsMenuInfo.menu.fullscreen = crate::src::qcommon::q_shared::qfalse;
-    addBotsMenuInfo.menu.wrapAround = crate::src::qcommon::q_shared::qtrue;
+    addBotsMenuInfo.menu.fullscreen = qfalse;
+    addBotsMenuInfo.menu.wrapAround = qtrue;
     addBotsMenuInfo.delay = 1000 as i32;
     UI_AddBots_Cache();
     addBotsMenuInfo.numBots = crate::src::q3_ui::ui_gameinfo::UI_GetNumBots();
@@ -655,7 +655,7 @@ unsafe extern "C" fn UI_AddBotsMenu_Init() {
     addBotsMenuInfo.skill.generic.name = b"Skill:\x00" as *const u8 as *const libc::c_char;
     addBotsMenuInfo.skill.generic.id = 15 as i32;
     addBotsMenuInfo.skill.itemnames = skillNames.as_mut_ptr();
-    addBotsMenuInfo.skill.curvalue = crate::src::qcommon::q_shared::Com_Clamp(
+    addBotsMenuInfo.skill.curvalue = Com_Clamp(
         0 as i32 as f32,
         4 as i32 as f32,
         (crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
