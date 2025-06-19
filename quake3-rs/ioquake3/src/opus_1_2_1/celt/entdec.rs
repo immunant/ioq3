@@ -220,8 +220,7 @@ pub unsafe extern "C" fn ec_dec_update(
 ) {
     let mut s: crate::opus_types_h::opus_uint32 = 0;
     s = (*_this).ext.wrapping_mul(_ft.wrapping_sub(_fh));
-    (*_this).val = ((*_this).val as u32).wrapping_sub(s) as crate::opus_types_h::opus_uint32
-        as crate::opus_types_h::opus_uint32;
+    (*_this).val = ((*_this).val as u32).wrapping_sub(s) as crate::opus_types_h::opus_uint32;
     (*_this).rng = if _fl > 0 as i32 as u32 {
         (*_this).ext.wrapping_mul(_fh.wrapping_sub(_fl))
     } else {
@@ -418,9 +417,9 @@ pub unsafe extern "C" fn ec_dec_bits(
     }
     ret = window & ((1 as i32 as crate::opus_types_h::opus_uint32) << _bits).wrapping_sub(1 as u32);
     window >>= _bits;
-    available = (available as u32).wrapping_sub(_bits) as i32 as i32;
+    available = (available as u32).wrapping_sub(_bits) as i32;
     (*_this).end_window = window;
     (*_this).nend_bits = available;
-    (*_this).nbits_total = ((*_this).nbits_total as u32).wrapping_add(_bits) as i32 as i32;
+    (*_this).nbits_total = ((*_this).nbits_total as u32).wrapping_add(_bits) as i32;
     return ret;
 }

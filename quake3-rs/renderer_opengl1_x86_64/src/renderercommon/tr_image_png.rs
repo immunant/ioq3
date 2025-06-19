@@ -191,7 +191,7 @@ unsafe extern "C" fn BufferedFileRead(
      *  Raise the pointer and counter.
      */
     (*BF).Ptr = (*BF).Ptr.offset(Length as isize);
-    (*BF).BytesLeft = ((*BF).BytesLeft as u32).wrapping_sub(Length) as i32 as i32;
+    (*BF).BytesLeft = ((*BF).BytesLeft as u32).wrapping_sub(Length) as i32;
     return RetVal;
 }
 /*
@@ -231,7 +231,7 @@ unsafe extern "C" fn BufferedFileRewind(
      *  lower the pointer and counter.
      */
     (*BF).Ptr = (*BF).Ptr.offset(-(Offset as isize));
-    (*BF).BytesLeft = ((*BF).BytesLeft as u32).wrapping_add(Offset) as i32 as i32;
+    (*BF).BytesLeft = ((*BF).BytesLeft as u32).wrapping_add(Offset) as i32;
     return crate::src::qcommon::q_shared::qtrue;
 }
 /*
@@ -258,7 +258,7 @@ unsafe extern "C" fn BufferedFileSkip(
      *  lower the pointer and counter.
      */
     (*BF).Ptr = (*BF).Ptr.offset(Offset as isize);
-    (*BF).BytesLeft = ((*BF).BytesLeft as u32).wrapping_sub(Offset) as i32 as i32;
+    (*BF).BytesLeft = ((*BF).BytesLeft as u32).wrapping_sub(Offset) as i32;
     return crate::src::qcommon::q_shared::qtrue;
 }
 /*
@@ -416,9 +416,8 @@ unsafe extern "C" fn DecompressIDATs(
                 }
                 BytesToRewind = (BytesToRewind as u32)
                     .wrapping_add(Length.wrapping_add(4 as i32 as u32))
-                    as i32 as i32;
+                    as i32;
                 CompressedDataLength = (CompressedDataLength as u32).wrapping_add(Length)
-                    as crate::stdlib::uint32_t
                     as crate::stdlib::uint32_t
             }
         }
@@ -1354,7 +1353,7 @@ unsafe extern "C" fn DecodeImageInterlaced(
                     }) as u32,
                 )
                 .wrapping_mul(PassHeight[a as usize]),
-        ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+        ) as crate::stdlib::uint32_t;
         a = a.wrapping_add(1)
     }
     /*

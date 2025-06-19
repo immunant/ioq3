@@ -1053,7 +1053,7 @@ unsafe extern "C" fn R_LoadMDR(
         size = (size as libc::c_ulong).wrapping_add(
             ((*pinmodel).numFrames as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong),
-        ) as i32 as i32;
+        ) as i32;
         // now add enough space for the uncompressed bones.
         size = (size as libc::c_ulong).wrapping_add(
             (((*pinmodel).numFrames * (*pinmodel).numBones) as libc::c_ulong).wrapping_mul(
@@ -1062,7 +1062,7 @@ unsafe extern "C" fn R_LoadMDR(
                         ::std::mem::size_of::<crate::qfiles_h::mdrCompBone_t>() as libc::c_ulong
                     ),
             ),
-        ) as i32 as i32
+        ) as i32
     }
     // simple bounds check
     if (*pinmodel).numBones < 0 as i32

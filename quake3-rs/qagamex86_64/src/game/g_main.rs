@@ -2381,7 +2381,7 @@ pub unsafe extern "C" fn AddTournamentPlayer() {
     crate::src::game::g_cmds::SetTeam(
         &mut *g_entities
             .as_mut_ptr()
-            .offset(nextInLine.offset_from(level.clients) as isize as isize)
+            .offset(nextInLine.offset_from(level.clients) as isize)
             as *mut _ as *mut crate::g_local_h::gentity_s,
         b"f\x00" as *const u8 as *const libc::c_char,
     );

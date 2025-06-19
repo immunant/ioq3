@@ -120,7 +120,7 @@ pub unsafe extern "C" fn res0_free_look(mut i: *mut libc::c_void) {
 unsafe extern "C" fn icount(mut v: u32) -> i32 {
     let mut ret: i32 = 0 as i32;
     while v != 0 {
-        ret = (ret as u32).wrapping_add(v & 1 as i32 as u32) as i32 as i32;
+        ret = (ret as u32).wrapping_add(v & 1 as i32 as u32) as i32;
         v >>= 1 as i32
     }
     return ret;

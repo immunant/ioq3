@@ -839,7 +839,7 @@ pub unsafe extern "C" fn AAS_CalculateAreaTravelTimes() {
         size = (size as libc::c_ulong).wrapping_add(
             ((*settings).numreachableareas as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<*mut u16>() as libc::c_ulong),
-        ) as i32 as i32;
+        ) as i32;
         //
         size = (size as libc::c_ulong).wrapping_add(
             ((*settings).numreachableareas as libc::c_ulong)
@@ -851,7 +851,7 @@ pub unsafe extern "C" fn AAS_CalculateAreaTravelTimes() {
                             .wrapping_sub(1 as i32 as libc::c_ulong),
                 )
                 .wrapping_mul(::std::mem::size_of::<u16>() as libc::c_ulong),
-        ) as i32 as i32;
+        ) as i32;
         i += 1
     }
     //allocate memory for the area travel times

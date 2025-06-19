@@ -75,462 +75,462 @@ unsafe extern "C" fn MD5Transform(
         (d ^ b & (c ^ d))
             .wrapping_add(*in_0.offset(0 as i32 as isize))
             .wrapping_add(0xd76aa478 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     a = a << 7 as i32 | a >> 32 as i32 - 7 as i32;
-    a = (a as u32).wrapping_add(b) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    a = (a as u32).wrapping_add(b) as crate::stdlib::uint32_t;
     d = (d as u32).wrapping_add(
         (c ^ a & (b ^ c))
             .wrapping_add(*in_0.offset(1 as i32 as isize))
             .wrapping_add(0xe8c7b756 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     d = d << 12 as i32 | d >> 32 as i32 - 12 as i32;
-    d = (d as u32).wrapping_add(a) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    d = (d as u32).wrapping_add(a) as crate::stdlib::uint32_t;
     c = (c as u32).wrapping_add(
         (b ^ d & (a ^ b))
             .wrapping_add(*in_0.offset(2 as i32 as isize))
             .wrapping_add(0x242070db as i32 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     c = c << 17 as i32 | c >> 32 as i32 - 17 as i32;
-    c = (c as u32).wrapping_add(d) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    c = (c as u32).wrapping_add(d) as crate::stdlib::uint32_t;
     b = (b as u32).wrapping_add(
         (a ^ c & (d ^ a))
             .wrapping_add(*in_0.offset(3 as i32 as isize))
             .wrapping_add(0xc1bdceee as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     b = b << 22 as i32 | b >> 32 as i32 - 22 as i32;
-    b = (b as u32).wrapping_add(c) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    b = (b as u32).wrapping_add(c) as crate::stdlib::uint32_t;
     a = (a as u32).wrapping_add(
         (d ^ b & (c ^ d))
             .wrapping_add(*in_0.offset(4 as i32 as isize))
             .wrapping_add(0xf57c0faf as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     a = a << 7 as i32 | a >> 32 as i32 - 7 as i32;
-    a = (a as u32).wrapping_add(b) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    a = (a as u32).wrapping_add(b) as crate::stdlib::uint32_t;
     d = (d as u32).wrapping_add(
         (c ^ a & (b ^ c))
             .wrapping_add(*in_0.offset(5 as i32 as isize))
             .wrapping_add(0x4787c62a as i32 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     d = d << 12 as i32 | d >> 32 as i32 - 12 as i32;
-    d = (d as u32).wrapping_add(a) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    d = (d as u32).wrapping_add(a) as crate::stdlib::uint32_t;
     c = (c as u32).wrapping_add(
         (b ^ d & (a ^ b))
             .wrapping_add(*in_0.offset(6 as i32 as isize))
             .wrapping_add(0xa8304613 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     c = c << 17 as i32 | c >> 32 as i32 - 17 as i32;
-    c = (c as u32).wrapping_add(d) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    c = (c as u32).wrapping_add(d) as crate::stdlib::uint32_t;
     b = (b as u32).wrapping_add(
         (a ^ c & (d ^ a))
             .wrapping_add(*in_0.offset(7 as i32 as isize))
             .wrapping_add(0xfd469501 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     b = b << 22 as i32 | b >> 32 as i32 - 22 as i32;
-    b = (b as u32).wrapping_add(c) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    b = (b as u32).wrapping_add(c) as crate::stdlib::uint32_t;
     a = (a as u32).wrapping_add(
         (d ^ b & (c ^ d))
             .wrapping_add(*in_0.offset(8 as i32 as isize))
             .wrapping_add(0x698098d8 as i32 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     a = a << 7 as i32 | a >> 32 as i32 - 7 as i32;
-    a = (a as u32).wrapping_add(b) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    a = (a as u32).wrapping_add(b) as crate::stdlib::uint32_t;
     d = (d as u32).wrapping_add(
         (c ^ a & (b ^ c))
             .wrapping_add(*in_0.offset(9 as i32 as isize))
             .wrapping_add(0x8b44f7af as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     d = d << 12 as i32 | d >> 32 as i32 - 12 as i32;
-    d = (d as u32).wrapping_add(a) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    d = (d as u32).wrapping_add(a) as crate::stdlib::uint32_t;
     c = (c as u32).wrapping_add(
         (b ^ d & (a ^ b))
             .wrapping_add(*in_0.offset(10 as i32 as isize))
             .wrapping_add(0xffff5bb1 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     c = c << 17 as i32 | c >> 32 as i32 - 17 as i32;
-    c = (c as u32).wrapping_add(d) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    c = (c as u32).wrapping_add(d) as crate::stdlib::uint32_t;
     b = (b as u32).wrapping_add(
         (a ^ c & (d ^ a))
             .wrapping_add(*in_0.offset(11 as i32 as isize))
             .wrapping_add(0x895cd7be as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     b = b << 22 as i32 | b >> 32 as i32 - 22 as i32;
-    b = (b as u32).wrapping_add(c) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    b = (b as u32).wrapping_add(c) as crate::stdlib::uint32_t;
     a = (a as u32).wrapping_add(
         (d ^ b & (c ^ d))
             .wrapping_add(*in_0.offset(12 as i32 as isize))
             .wrapping_add(0x6b901122 as i32 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     a = a << 7 as i32 | a >> 32 as i32 - 7 as i32;
-    a = (a as u32).wrapping_add(b) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    a = (a as u32).wrapping_add(b) as crate::stdlib::uint32_t;
     d = (d as u32).wrapping_add(
         (c ^ a & (b ^ c))
             .wrapping_add(*in_0.offset(13 as i32 as isize))
             .wrapping_add(0xfd987193 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     d = d << 12 as i32 | d >> 32 as i32 - 12 as i32;
-    d = (d as u32).wrapping_add(a) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    d = (d as u32).wrapping_add(a) as crate::stdlib::uint32_t;
     c = (c as u32).wrapping_add(
         (b ^ d & (a ^ b))
             .wrapping_add(*in_0.offset(14 as i32 as isize))
             .wrapping_add(0xa679438e as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     c = c << 17 as i32 | c >> 32 as i32 - 17 as i32;
-    c = (c as u32).wrapping_add(d) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    c = (c as u32).wrapping_add(d) as crate::stdlib::uint32_t;
     b = (b as u32).wrapping_add(
         (a ^ c & (d ^ a))
             .wrapping_add(*in_0.offset(15 as i32 as isize))
             .wrapping_add(0x49b40821 as i32 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     b = b << 22 as i32 | b >> 32 as i32 - 22 as i32;
-    b = (b as u32).wrapping_add(c) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    b = (b as u32).wrapping_add(c) as crate::stdlib::uint32_t;
     a = (a as u32).wrapping_add(
         (c ^ d & (b ^ c))
             .wrapping_add(*in_0.offset(1 as i32 as isize))
             .wrapping_add(0xf61e2562 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     a = a << 5 as i32 | a >> 32 as i32 - 5 as i32;
-    a = (a as u32).wrapping_add(b) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    a = (a as u32).wrapping_add(b) as crate::stdlib::uint32_t;
     d = (d as u32).wrapping_add(
         (b ^ c & (a ^ b))
             .wrapping_add(*in_0.offset(6 as i32 as isize))
             .wrapping_add(0xc040b340 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     d = d << 9 as i32 | d >> 32 as i32 - 9 as i32;
-    d = (d as u32).wrapping_add(a) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    d = (d as u32).wrapping_add(a) as crate::stdlib::uint32_t;
     c = (c as u32).wrapping_add(
         (a ^ b & (d ^ a))
             .wrapping_add(*in_0.offset(11 as i32 as isize))
             .wrapping_add(0x265e5a51 as i32 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     c = c << 14 as i32 | c >> 32 as i32 - 14 as i32;
-    c = (c as u32).wrapping_add(d) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    c = (c as u32).wrapping_add(d) as crate::stdlib::uint32_t;
     b = (b as u32).wrapping_add(
         (d ^ a & (c ^ d))
             .wrapping_add(*in_0.offset(0 as i32 as isize))
             .wrapping_add(0xe9b6c7aa as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     b = b << 20 as i32 | b >> 32 as i32 - 20 as i32;
-    b = (b as u32).wrapping_add(c) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    b = (b as u32).wrapping_add(c) as crate::stdlib::uint32_t;
     a = (a as u32).wrapping_add(
         (c ^ d & (b ^ c))
             .wrapping_add(*in_0.offset(5 as i32 as isize))
             .wrapping_add(0xd62f105d as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     a = a << 5 as i32 | a >> 32 as i32 - 5 as i32;
-    a = (a as u32).wrapping_add(b) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    a = (a as u32).wrapping_add(b) as crate::stdlib::uint32_t;
     d = (d as u32).wrapping_add(
         (b ^ c & (a ^ b))
             .wrapping_add(*in_0.offset(10 as i32 as isize))
             .wrapping_add(0x2441453 as i32 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     d = d << 9 as i32 | d >> 32 as i32 - 9 as i32;
-    d = (d as u32).wrapping_add(a) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    d = (d as u32).wrapping_add(a) as crate::stdlib::uint32_t;
     c = (c as u32).wrapping_add(
         (a ^ b & (d ^ a))
             .wrapping_add(*in_0.offset(15 as i32 as isize))
             .wrapping_add(0xd8a1e681 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     c = c << 14 as i32 | c >> 32 as i32 - 14 as i32;
-    c = (c as u32).wrapping_add(d) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    c = (c as u32).wrapping_add(d) as crate::stdlib::uint32_t;
     b = (b as u32).wrapping_add(
         (d ^ a & (c ^ d))
             .wrapping_add(*in_0.offset(4 as i32 as isize))
             .wrapping_add(0xe7d3fbc8 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     b = b << 20 as i32 | b >> 32 as i32 - 20 as i32;
-    b = (b as u32).wrapping_add(c) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    b = (b as u32).wrapping_add(c) as crate::stdlib::uint32_t;
     a = (a as u32).wrapping_add(
         (c ^ d & (b ^ c))
             .wrapping_add(*in_0.offset(9 as i32 as isize))
             .wrapping_add(0x21e1cde6 as i32 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     a = a << 5 as i32 | a >> 32 as i32 - 5 as i32;
-    a = (a as u32).wrapping_add(b) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    a = (a as u32).wrapping_add(b) as crate::stdlib::uint32_t;
     d = (d as u32).wrapping_add(
         (b ^ c & (a ^ b))
             .wrapping_add(*in_0.offset(14 as i32 as isize))
             .wrapping_add(0xc33707d6 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     d = d << 9 as i32 | d >> 32 as i32 - 9 as i32;
-    d = (d as u32).wrapping_add(a) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    d = (d as u32).wrapping_add(a) as crate::stdlib::uint32_t;
     c = (c as u32).wrapping_add(
         (a ^ b & (d ^ a))
             .wrapping_add(*in_0.offset(3 as i32 as isize))
             .wrapping_add(0xf4d50d87 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     c = c << 14 as i32 | c >> 32 as i32 - 14 as i32;
-    c = (c as u32).wrapping_add(d) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    c = (c as u32).wrapping_add(d) as crate::stdlib::uint32_t;
     b = (b as u32).wrapping_add(
         (d ^ a & (c ^ d))
             .wrapping_add(*in_0.offset(8 as i32 as isize))
             .wrapping_add(0x455a14ed as i32 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     b = b << 20 as i32 | b >> 32 as i32 - 20 as i32;
-    b = (b as u32).wrapping_add(c) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    b = (b as u32).wrapping_add(c) as crate::stdlib::uint32_t;
     a = (a as u32).wrapping_add(
         (c ^ d & (b ^ c))
             .wrapping_add(*in_0.offset(13 as i32 as isize))
             .wrapping_add(0xa9e3e905 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     a = a << 5 as i32 | a >> 32 as i32 - 5 as i32;
-    a = (a as u32).wrapping_add(b) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    a = (a as u32).wrapping_add(b) as crate::stdlib::uint32_t;
     d = (d as u32).wrapping_add(
         (b ^ c & (a ^ b))
             .wrapping_add(*in_0.offset(2 as i32 as isize))
             .wrapping_add(0xfcefa3f8 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     d = d << 9 as i32 | d >> 32 as i32 - 9 as i32;
-    d = (d as u32).wrapping_add(a) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    d = (d as u32).wrapping_add(a) as crate::stdlib::uint32_t;
     c = (c as u32).wrapping_add(
         (a ^ b & (d ^ a))
             .wrapping_add(*in_0.offset(7 as i32 as isize))
             .wrapping_add(0x676f02d9 as i32 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     c = c << 14 as i32 | c >> 32 as i32 - 14 as i32;
-    c = (c as u32).wrapping_add(d) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    c = (c as u32).wrapping_add(d) as crate::stdlib::uint32_t;
     b = (b as u32).wrapping_add(
         (d ^ a & (c ^ d))
             .wrapping_add(*in_0.offset(12 as i32 as isize))
             .wrapping_add(0x8d2a4c8a as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     b = b << 20 as i32 | b >> 32 as i32 - 20 as i32;
-    b = (b as u32).wrapping_add(c) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    b = (b as u32).wrapping_add(c) as crate::stdlib::uint32_t;
     a = (a as u32).wrapping_add(
         (b ^ c ^ d)
             .wrapping_add(*in_0.offset(5 as i32 as isize))
             .wrapping_add(0xfffa3942 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     a = a << 4 as i32 | a >> 32 as i32 - 4 as i32;
-    a = (a as u32).wrapping_add(b) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    a = (a as u32).wrapping_add(b) as crate::stdlib::uint32_t;
     d = (d as u32).wrapping_add(
         (a ^ b ^ c)
             .wrapping_add(*in_0.offset(8 as i32 as isize))
             .wrapping_add(0x8771f681 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     d = d << 11 as i32 | d >> 32 as i32 - 11 as i32;
-    d = (d as u32).wrapping_add(a) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    d = (d as u32).wrapping_add(a) as crate::stdlib::uint32_t;
     c = (c as u32).wrapping_add(
         (d ^ a ^ b)
             .wrapping_add(*in_0.offset(11 as i32 as isize))
             .wrapping_add(0x6d9d6122 as i32 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     c = c << 16 as i32 | c >> 32 as i32 - 16 as i32;
-    c = (c as u32).wrapping_add(d) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    c = (c as u32).wrapping_add(d) as crate::stdlib::uint32_t;
     b = (b as u32).wrapping_add(
         (c ^ d ^ a)
             .wrapping_add(*in_0.offset(14 as i32 as isize))
             .wrapping_add(0xfde5380c as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     b = b << 23 as i32 | b >> 32 as i32 - 23 as i32;
-    b = (b as u32).wrapping_add(c) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    b = (b as u32).wrapping_add(c) as crate::stdlib::uint32_t;
     a = (a as u32).wrapping_add(
         (b ^ c ^ d)
             .wrapping_add(*in_0.offset(1 as i32 as isize))
             .wrapping_add(0xa4beea44 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     a = a << 4 as i32 | a >> 32 as i32 - 4 as i32;
-    a = (a as u32).wrapping_add(b) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    a = (a as u32).wrapping_add(b) as crate::stdlib::uint32_t;
     d = (d as u32).wrapping_add(
         (a ^ b ^ c)
             .wrapping_add(*in_0.offset(4 as i32 as isize))
             .wrapping_add(0x4bdecfa9 as i32 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     d = d << 11 as i32 | d >> 32 as i32 - 11 as i32;
-    d = (d as u32).wrapping_add(a) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    d = (d as u32).wrapping_add(a) as crate::stdlib::uint32_t;
     c = (c as u32).wrapping_add(
         (d ^ a ^ b)
             .wrapping_add(*in_0.offset(7 as i32 as isize))
             .wrapping_add(0xf6bb4b60 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     c = c << 16 as i32 | c >> 32 as i32 - 16 as i32;
-    c = (c as u32).wrapping_add(d) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    c = (c as u32).wrapping_add(d) as crate::stdlib::uint32_t;
     b = (b as u32).wrapping_add(
         (c ^ d ^ a)
             .wrapping_add(*in_0.offset(10 as i32 as isize))
             .wrapping_add(0xbebfbc70 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     b = b << 23 as i32 | b >> 32 as i32 - 23 as i32;
-    b = (b as u32).wrapping_add(c) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    b = (b as u32).wrapping_add(c) as crate::stdlib::uint32_t;
     a = (a as u32).wrapping_add(
         (b ^ c ^ d)
             .wrapping_add(*in_0.offset(13 as i32 as isize))
             .wrapping_add(0x289b7ec6 as i32 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     a = a << 4 as i32 | a >> 32 as i32 - 4 as i32;
-    a = (a as u32).wrapping_add(b) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    a = (a as u32).wrapping_add(b) as crate::stdlib::uint32_t;
     d = (d as u32).wrapping_add(
         (a ^ b ^ c)
             .wrapping_add(*in_0.offset(0 as i32 as isize))
             .wrapping_add(0xeaa127fa as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     d = d << 11 as i32 | d >> 32 as i32 - 11 as i32;
-    d = (d as u32).wrapping_add(a) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    d = (d as u32).wrapping_add(a) as crate::stdlib::uint32_t;
     c = (c as u32).wrapping_add(
         (d ^ a ^ b)
             .wrapping_add(*in_0.offset(3 as i32 as isize))
             .wrapping_add(0xd4ef3085 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     c = c << 16 as i32 | c >> 32 as i32 - 16 as i32;
-    c = (c as u32).wrapping_add(d) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    c = (c as u32).wrapping_add(d) as crate::stdlib::uint32_t;
     b = (b as u32).wrapping_add(
         (c ^ d ^ a)
             .wrapping_add(*in_0.offset(6 as i32 as isize))
             .wrapping_add(0x4881d05 as i32 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     b = b << 23 as i32 | b >> 32 as i32 - 23 as i32;
-    b = (b as u32).wrapping_add(c) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    b = (b as u32).wrapping_add(c) as crate::stdlib::uint32_t;
     a = (a as u32).wrapping_add(
         (b ^ c ^ d)
             .wrapping_add(*in_0.offset(9 as i32 as isize))
             .wrapping_add(0xd9d4d039 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     a = a << 4 as i32 | a >> 32 as i32 - 4 as i32;
-    a = (a as u32).wrapping_add(b) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    a = (a as u32).wrapping_add(b) as crate::stdlib::uint32_t;
     d = (d as u32).wrapping_add(
         (a ^ b ^ c)
             .wrapping_add(*in_0.offset(12 as i32 as isize))
             .wrapping_add(0xe6db99e5 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     d = d << 11 as i32 | d >> 32 as i32 - 11 as i32;
-    d = (d as u32).wrapping_add(a) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    d = (d as u32).wrapping_add(a) as crate::stdlib::uint32_t;
     c = (c as u32).wrapping_add(
         (d ^ a ^ b)
             .wrapping_add(*in_0.offset(15 as i32 as isize))
             .wrapping_add(0x1fa27cf8 as i32 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     c = c << 16 as i32 | c >> 32 as i32 - 16 as i32;
-    c = (c as u32).wrapping_add(d) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    c = (c as u32).wrapping_add(d) as crate::stdlib::uint32_t;
     b = (b as u32).wrapping_add(
         (c ^ d ^ a)
             .wrapping_add(*in_0.offset(2 as i32 as isize))
             .wrapping_add(0xc4ac5665 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     b = b << 23 as i32 | b >> 32 as i32 - 23 as i32;
-    b = (b as u32).wrapping_add(c) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    b = (b as u32).wrapping_add(c) as crate::stdlib::uint32_t;
     a = (a as u32).wrapping_add(
         (c ^ (b | !d))
             .wrapping_add(*in_0.offset(0 as i32 as isize))
             .wrapping_add(0xf4292244 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     a = a << 6 as i32 | a >> 32 as i32 - 6 as i32;
-    a = (a as u32).wrapping_add(b) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    a = (a as u32).wrapping_add(b) as crate::stdlib::uint32_t;
     d = (d as u32).wrapping_add(
         (b ^ (a | !c))
             .wrapping_add(*in_0.offset(7 as i32 as isize))
             .wrapping_add(0x432aff97 as i32 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     d = d << 10 as i32 | d >> 32 as i32 - 10 as i32;
-    d = (d as u32).wrapping_add(a) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    d = (d as u32).wrapping_add(a) as crate::stdlib::uint32_t;
     c = (c as u32).wrapping_add(
         (a ^ (d | !b))
             .wrapping_add(*in_0.offset(14 as i32 as isize))
             .wrapping_add(0xab9423a7 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     c = c << 15 as i32 | c >> 32 as i32 - 15 as i32;
-    c = (c as u32).wrapping_add(d) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    c = (c as u32).wrapping_add(d) as crate::stdlib::uint32_t;
     b = (b as u32).wrapping_add(
         (d ^ (c | !a))
             .wrapping_add(*in_0.offset(5 as i32 as isize))
             .wrapping_add(0xfc93a039 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     b = b << 21 as i32 | b >> 32 as i32 - 21 as i32;
-    b = (b as u32).wrapping_add(c) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    b = (b as u32).wrapping_add(c) as crate::stdlib::uint32_t;
     a = (a as u32).wrapping_add(
         (c ^ (b | !d))
             .wrapping_add(*in_0.offset(12 as i32 as isize))
             .wrapping_add(0x655b59c3 as i32 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     a = a << 6 as i32 | a >> 32 as i32 - 6 as i32;
-    a = (a as u32).wrapping_add(b) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    a = (a as u32).wrapping_add(b) as crate::stdlib::uint32_t;
     d = (d as u32).wrapping_add(
         (b ^ (a | !c))
             .wrapping_add(*in_0.offset(3 as i32 as isize))
             .wrapping_add(0x8f0ccc92 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     d = d << 10 as i32 | d >> 32 as i32 - 10 as i32;
-    d = (d as u32).wrapping_add(a) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    d = (d as u32).wrapping_add(a) as crate::stdlib::uint32_t;
     c = (c as u32).wrapping_add(
         (a ^ (d | !b))
             .wrapping_add(*in_0.offset(10 as i32 as isize))
             .wrapping_add(0xffeff47d as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     c = c << 15 as i32 | c >> 32 as i32 - 15 as i32;
-    c = (c as u32).wrapping_add(d) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    c = (c as u32).wrapping_add(d) as crate::stdlib::uint32_t;
     b = (b as u32).wrapping_add(
         (d ^ (c | !a))
             .wrapping_add(*in_0.offset(1 as i32 as isize))
             .wrapping_add(0x85845dd1 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     b = b << 21 as i32 | b >> 32 as i32 - 21 as i32;
-    b = (b as u32).wrapping_add(c) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    b = (b as u32).wrapping_add(c) as crate::stdlib::uint32_t;
     a = (a as u32).wrapping_add(
         (c ^ (b | !d))
             .wrapping_add(*in_0.offset(8 as i32 as isize))
             .wrapping_add(0x6fa87e4f as i32 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     a = a << 6 as i32 | a >> 32 as i32 - 6 as i32;
-    a = (a as u32).wrapping_add(b) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    a = (a as u32).wrapping_add(b) as crate::stdlib::uint32_t;
     d = (d as u32).wrapping_add(
         (b ^ (a | !c))
             .wrapping_add(*in_0.offset(15 as i32 as isize))
             .wrapping_add(0xfe2ce6e0 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     d = d << 10 as i32 | d >> 32 as i32 - 10 as i32;
-    d = (d as u32).wrapping_add(a) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    d = (d as u32).wrapping_add(a) as crate::stdlib::uint32_t;
     c = (c as u32).wrapping_add(
         (a ^ (d | !b))
             .wrapping_add(*in_0.offset(6 as i32 as isize))
             .wrapping_add(0xa3014314 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     c = c << 15 as i32 | c >> 32 as i32 - 15 as i32;
-    c = (c as u32).wrapping_add(d) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    c = (c as u32).wrapping_add(d) as crate::stdlib::uint32_t;
     b = (b as u32).wrapping_add(
         (d ^ (c | !a))
             .wrapping_add(*in_0.offset(13 as i32 as isize))
             .wrapping_add(0x4e0811a1 as i32 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     b = b << 21 as i32 | b >> 32 as i32 - 21 as i32;
-    b = (b as u32).wrapping_add(c) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    b = (b as u32).wrapping_add(c) as crate::stdlib::uint32_t;
     a = (a as u32).wrapping_add(
         (c ^ (b | !d))
             .wrapping_add(*in_0.offset(4 as i32 as isize))
             .wrapping_add(0xf7537e82 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     a = a << 6 as i32 | a >> 32 as i32 - 6 as i32;
-    a = (a as u32).wrapping_add(b) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    a = (a as u32).wrapping_add(b) as crate::stdlib::uint32_t;
     d = (d as u32).wrapping_add(
         (b ^ (a | !c))
             .wrapping_add(*in_0.offset(11 as i32 as isize))
             .wrapping_add(0xbd3af235 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     d = d << 10 as i32 | d >> 32 as i32 - 10 as i32;
-    d = (d as u32).wrapping_add(a) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    d = (d as u32).wrapping_add(a) as crate::stdlib::uint32_t;
     c = (c as u32).wrapping_add(
         (a ^ (d | !b))
             .wrapping_add(*in_0.offset(2 as i32 as isize))
             .wrapping_add(0x2ad7d2bb as i32 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     c = c << 15 as i32 | c >> 32 as i32 - 15 as i32;
-    c = (c as u32).wrapping_add(d) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    c = (c as u32).wrapping_add(d) as crate::stdlib::uint32_t;
     b = (b as u32).wrapping_add(
         (d ^ (c | !a))
             .wrapping_add(*in_0.offset(9 as i32 as isize))
             .wrapping_add(0xeb86d391 as u32),
-    ) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    ) as crate::stdlib::uint32_t;
     b = b << 21 as i32 | b >> 32 as i32 - 21 as i32;
-    b = (b as u32).wrapping_add(c) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    b = (b as u32).wrapping_add(c) as crate::stdlib::uint32_t;
     let ref mut fresh0 = *buf.offset(0 as i32 as isize);
     *fresh0 =
-        (*fresh0 as u32).wrapping_add(a) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+        (*fresh0 as u32).wrapping_add(a) as crate::stdlib::uint32_t;
     let ref mut fresh1 = *buf.offset(1 as i32 as isize);
     *fresh1 =
-        (*fresh1 as u32).wrapping_add(b) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+        (*fresh1 as u32).wrapping_add(b) as crate::stdlib::uint32_t;
     let ref mut fresh2 = *buf.offset(2 as i32 as isize);
     *fresh2 =
-        (*fresh2 as u32).wrapping_add(c) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+        (*fresh2 as u32).wrapping_add(c) as crate::stdlib::uint32_t;
     let ref mut fresh3 = *buf.offset(3 as i32 as isize);
     *fresh3 =
-        (*fresh3 as u32).wrapping_add(d) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+        (*fresh3 as u32).wrapping_add(d) as crate::stdlib::uint32_t;
 }
 /*
  * Update context to reflect the concatenation of another buffer full
@@ -547,7 +547,7 @@ unsafe extern "C" fn MD5Update(mut ctx: *mut MD5Context, mut buf: *const u8, mut
     }
     (*ctx).bits[1 as i32 as usize] = ((*ctx).bits[1 as i32 as usize] as u32)
         .wrapping_add(len >> 29 as i32)
-        as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+        as crate::stdlib::uint32_t;
     t = t >> 3 as i32 & 0x3f as i32 as u32;
     /* Handle any leading odd-sized chunks */
     if t != 0 {

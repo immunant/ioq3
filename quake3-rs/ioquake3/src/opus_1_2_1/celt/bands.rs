@@ -833,7 +833,7 @@ pub unsafe extern "C" fn spreading_decision(
                         (32 as i32 * (tcount[1 as i32 as usize] + tcount[0 as i32 as usize]))
                             as crate::opus_types_h::opus_uint32,
                         N as crate::opus_types_h::opus_uint32,
-                    )) as i32 as i32
+                    )) as i32
                 }
                 tmp = (2 as i32 * tcount[2 as i32 as usize] >= N) as i32
                     + (2 as i32 * tcount[1 as i32 as usize] >= N) as i32

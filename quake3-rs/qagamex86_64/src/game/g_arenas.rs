@@ -404,7 +404,7 @@ pub unsafe extern "C" fn UpdateTournamentInfo() {
                 .persistant[crate::bg_public_h::PERS_SCORE as i32 as usize],
         );
         msglen = (msglen as libc::c_ulong).wrapping_add(crate::stdlib::strlen(buf.as_mut_ptr()))
-            as i32 as i32;
+            as i32;
         if msglen as libc::c_ulong >= ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong
         {
             break;
