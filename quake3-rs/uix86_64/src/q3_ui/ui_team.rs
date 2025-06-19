@@ -243,7 +243,7 @@ pub unsafe extern "C" fn TeamMain_MenuInit() {
     crate::stdlib::memset(
         &mut s_teammain as *mut teammain_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<teammain_t>() as libc::c_ulong,
+        ::std::mem::size_of::<teammain_t>() as usize,
     );
     TeamMain_Cache();
     s_teammain.menu.wrapAround = qtrue;

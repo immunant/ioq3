@@ -33,7 +33,7 @@ extern "C" {
     #[no_mangle]
     pub fn vsnprintf(
         _: *mut libc::c_char,
-        _: libc::c_ulong,
+        _: usize,
         _: *const libc::c_char,
         _: ::std::ffi::VaList,
     ) -> i32;
@@ -48,28 +48,28 @@ extern "C" {
     pub fn memcpy(
         _: *mut libc::c_void,
         _: *const libc::c_void,
-        _: libc::c_ulong,
+        _: usize,
     ) -> *mut libc::c_void;
 
     #[no_mangle]
     pub fn memmove(
         _: *mut libc::c_void,
         _: *const libc::c_void,
-        _: libc::c_ulong,
+        _: usize,
     ) -> *mut libc::c_void;
 
     #[no_mangle]
-    pub fn memset(_: *mut libc::c_void, _: i32, _: libc::c_ulong) -> *mut libc::c_void;
+    pub fn memset(_: *mut libc::c_void, _: i32, _: usize) -> *mut libc::c_void;
 
     #[no_mangle]
     pub fn strncpy(
         _: *mut libc::c_char,
         _: *const libc::c_char,
-        _: libc::c_ulong,
+        _: usize,
     ) -> *mut libc::c_char;
 
     #[no_mangle]
-    pub fn strlen(_: *const libc::c_char) -> libc::c_ulong;
+    pub fn strlen(_: *const libc::c_char) -> usize;
 }
 // =============== BEGIN ctype_h ================
 pub const _ISupper: crate::bg_public_h::C2RustUnnamed_0 = 256;

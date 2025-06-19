@@ -8356,7 +8356,7 @@ pub unsafe extern "C" fn Sys_SetBinaryPath(mut path: *const libc::c_char) {
     Q_strncpyz(
         binaryPath.as_mut_ptr(),
         path,
-        ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
     );
 }
 /*
@@ -8380,7 +8380,7 @@ pub unsafe extern "C" fn Sys_SetDefaultInstallPath(mut path: *const libc::c_char
     Q_strncpyz(
         installPath.as_mut_ptr(),
         path,
-        ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
     );
 }
 /*
@@ -8452,7 +8452,7 @@ pub unsafe extern "C" fn Sys_GetClipboardData() -> *mut libc::c_char {
     if !cliptext.is_null() {
         if *cliptext.offset(0 as i32 as isize) as i32 != '\u{0}' as i32 {
             let mut bufsize: size_t =
-                crate::stdlib::strlen(cliptext).wrapping_add(1 as i32 as libc::c_ulong);
+                crate::stdlib::strlen(cliptext).wrapping_add(1 as i32 as usize);
             data = Z_Malloc(bufsize as i32) as *mut libc::c_char;
             Q_strncpyz(data, cliptext, bufsize as i32);
             // find first listed char and set to '\0'
@@ -8581,9 +8581,9 @@ unsafe extern "C" fn Sys_WritePIDFile(mut gamedir: *const libc::c_char) -> qbool
         let mut pid: i32 = 0;
         pid = crate::stdlib::fread(
             pidBuffer.as_mut_ptr() as *mut libc::c_void,
-            ::std::mem::size_of::<libc::c_char>() as libc::c_ulong,
-            (::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong)
-                .wrapping_sub(1 as i32 as libc::c_ulong),
+            ::std::mem::size_of::<libc::c_char>() as usize,
+            (::std::mem::size_of::<[libc::c_char; 64]>() as usize)
+                .wrapping_sub(1 as i32 as usize),
             f,
         ) as i32;
         crate::stdlib::fclose(f);
@@ -8629,12 +8629,12 @@ pub unsafe extern "C" fn Sys_InitPIDFile(mut gamedir: *const libc::c_char) {
         FS_GetModDescription(
             gamedir,
             modName.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
         );
         Q_CleanStr(modName.as_mut_ptr());
         Com_sprintf(message.as_mut_ptr(),
                     ::std::mem::size_of::<[libc::c_char; 1024]>() as
-                        libc::c_ulong as i32,
+                        usize as i32,
                     b"The last time %s ran, it didn\'t exit properly. This may be due to inappropriate video settings. Would you like to start with \"safe\" video settings?\x00"
                         as *const u8 as *const libc::c_char,
                     modName.as_mut_ptr());
@@ -8771,7 +8771,7 @@ pub unsafe extern "C" fn Sys_AnsiColorPrint(mut msg: *const libc::c_char) {
                 // Print the color code
                 Com_sprintf(
                     buffer.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
                     b"\x1b[%dm\x00" as *const u8 as *const libc::c_char,
                     q3ToAnsi[(*msg.offset(1 as i32 as isize) as i32 - '0' as i32 & 0x7 as i32)
                         as usize],
@@ -8818,7 +8818,7 @@ pub unsafe extern "C" fn Sys_Error(mut error: *const libc::c_char, mut args: ...
     argptr = args.clone();
     crate::stdlib::vsnprintf(
         string.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize,
         error,
         argptr.as_va_list(),
     );
@@ -8941,13 +8941,13 @@ pub unsafe extern "C" fn Sys_LoadDll(
         }
         len = Com_sprintf(
             libPath.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
             b"%s%c%s\x00" as *const u8 as *const libc::c_char,
             topDir,
             '/' as i32,
             name,
         );
-        if (len as libc::c_ulong) < ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong {
+        if (len as usize) < ::std::mem::size_of::<[libc::c_char; 4096]>() as usize {
             Com_Printf(
                 b"Trying to load \"%s\" from \"%s\"...\n\x00" as *const u8 as *const libc::c_char,
                 name,
@@ -8971,14 +8971,14 @@ pub unsafe extern "C" fn Sys_LoadDll(
             if FS_FilenameCompare(topDir, basePath) as u64 != 0 {
                 len = Com_sprintf(
                     libPath.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
                     b"%s%c%s\x00" as *const u8 as *const libc::c_char,
                     basePath,
                     '/' as i32,
                     name,
                 );
-                if (len as libc::c_ulong)
-                    < ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong
+                if (len as usize)
+                    < ::std::mem::size_of::<[libc::c_char; 4096]>() as usize
                 {
                     Com_Printf(
                         b"Trying to load \"%s\" from \"%s\"...\n\x00" as *const u8
@@ -10251,25 +10251,25 @@ pub(crate) unsafe fn main_0(mut argc: i32, mut argv: *mut *mut libc::c_char) -> 
         if containsSpaces as u64 != 0 {
             Q_strcat(
                 commandLine.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
                 b"\"\x00" as *const u8 as *const libc::c_char,
             );
         }
         Q_strcat(
             commandLine.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
             *argv.offset(i as isize),
         );
         if containsSpaces as u64 != 0 {
             Q_strcat(
                 commandLine.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
                 b"\"\x00" as *const u8 as *const libc::c_char,
             );
         }
         Q_strcat(
             commandLine.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
             b" \x00" as *const u8 as *const libc::c_char,
         );
         i += 1

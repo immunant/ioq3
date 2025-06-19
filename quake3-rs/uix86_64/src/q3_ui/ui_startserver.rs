@@ -605,7 +605,7 @@ unsafe extern "C" fn StartServer_Update() {
         Q_strupr(mapname.as_mut_ptr());
         Com_sprintf(
             picname[i as usize].as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             b"levelshots/%s\x00" as *const u8 as *const libc::c_char,
             mapname.as_mut_ptr(),
         );
@@ -825,7 +825,7 @@ unsafe extern "C" fn StartServer_MenuInit() {
     crate::stdlib::memset(
         &mut s_startserver as *mut startserver_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<startserver_t>() as libc::c_ulong,
+        ::std::mem::size_of::<startserver_t>() as usize,
     );
     StartServer_Cache();
     s_startserver.menu.wrapAround = qtrue;
@@ -1064,7 +1064,7 @@ pub unsafe extern "C" fn StartServer_Cache() {
             Q_strupr(mapname.as_mut_ptr());
             Com_sprintf(
                 picname.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
                 b"levelshots/%s\x00" as *const u8 as *const libc::c_char,
                 mapname.as_mut_ptr(),
             );
@@ -1794,7 +1794,7 @@ unsafe extern "C" fn ServerOptions_Start() {
                     if s_serveroptions.gametype >= GT_TEAM as i32 {
                         Com_sprintf(
                             buf.as_mut_ptr(),
-                            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
                             b"addbot %s %i %s\n\x00" as *const u8 as *const libc::c_char,
                             s_serveroptions.playerNameBuffers[n as usize].as_mut_ptr(),
                             skill,
@@ -1804,7 +1804,7 @@ unsafe extern "C" fn ServerOptions_Start() {
                     } else {
                         Com_sprintf(
                             buf.as_mut_ptr(),
-                            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
                             b"addbot %s %i\n\x00" as *const u8 as *const libc::c_char,
                             s_serveroptions.playerNameBuffers[n as usize].as_mut_ptr(),
                             skill,
@@ -1870,7 +1870,7 @@ unsafe extern "C" fn ServerOptions_InitPlayerItems() {
         trap_Cvar_VariableStringBuffer(
             b"name\x00" as *const u8 as *const libc::c_char,
             s_serveroptions.playerNameBuffers[0 as i32 as usize].as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 16]>() as usize as i32,
         );
         Q_CleanStr(s_serveroptions.playerNameBuffers[0 as i32 as usize].as_mut_ptr());
     }
@@ -2124,7 +2124,7 @@ unsafe extern "C" fn ServerOptions_InitBotNames() {
     Q_strncpyz(
         bots.as_mut_ptr(),
         Info_ValueForKey(arenaInfo, b"bots\x00" as *const u8 as *const libc::c_char),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     p = &mut *bots.as_mut_ptr().offset(0 as i32 as isize) as *mut libc::c_char;
     while *p as i32 != 0 && count < 12 as i32 {
@@ -2154,7 +2154,7 @@ unsafe extern "C" fn ServerOptions_InitBotNames() {
         Q_strncpyz(
             s_serveroptions.playerNameBuffers[count as usize].as_mut_ptr(),
             bot,
-            ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 16]>() as usize as i32,
         );
         count += 1
     }
@@ -2311,7 +2311,7 @@ unsafe extern "C" fn ServerOptions_SetMenuItems() {
     Q_strncpyz(
         s_serveroptions.hostname.field.buffer.as_mut_ptr(),
         UI_Cvar_VariableString(b"sv_hostname\x00" as *const u8 as *const libc::c_char),
-        ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
     );
     s_serveroptions.pure_0.curvalue = Com_Clamp(
         0 as i32 as f32,
@@ -2408,14 +2408,14 @@ unsafe extern "C" fn ServerOptions_MenuInit(mut multiplayer: qboolean) {
     crate::stdlib::memset(
         &mut s_serveroptions as *mut serveroptions_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<serveroptions_t>() as libc::c_ulong,
+        ::std::mem::size_of::<serveroptions_t>() as usize,
     );
     s_serveroptions.multiplayer = multiplayer;
     s_serveroptions.gametype = Com_Clamp(
         0 as i32 as f32,
-        (::std::mem::size_of::<[i32; 5]>() as libc::c_ulong)
-            .wrapping_div(::std::mem::size_of::<i32>() as libc::c_ulong)
-            .wrapping_sub(1 as i32 as libc::c_ulong) as f32,
+        (::std::mem::size_of::<[i32; 5]>() as usize)
+            .wrapping_div(::std::mem::size_of::<i32>() as usize)
+            .wrapping_sub(1 as i32 as usize) as f32,
         trap_Cvar_VariableValue(b"g_gametype\x00" as *const u8 as *const libc::c_char),
     ) as i32;
     s_serveroptions.punkbuster.curvalue = Com_Clamp(
@@ -2541,10 +2541,10 @@ unsafe extern "C" fn ServerOptions_MenuInit(mut multiplayer: qboolean) {
     s_serveroptions.botSkill.generic.type_0 = 3 as i32;
     s_serveroptions.botSkill.generic.flags = 0x100 as i32 as u32 | 0x2 as i32 as u32;
     s_serveroptions.botSkill.generic.name = b"Bot Skill:\x00" as *const u8 as *const libc::c_char;
-    s_serveroptions.botSkill.generic.x = (32 as i32 as libc::c_ulong).wrapping_add(
+    s_serveroptions.botSkill.generic.x = (32 as i32 as usize).wrapping_add(
         crate::stdlib::strlen(s_serveroptions.botSkill.generic.name)
-            .wrapping_add(2 as i32 as libc::c_ulong)
-            .wrapping_mul(8 as i32 as libc::c_ulong),
+            .wrapping_add(2 as i32 as usize)
+            .wrapping_mul(8 as i32 as usize),
     ) as i32;
     s_serveroptions.botSkill.generic.y = y;
     s_serveroptions.botSkill.itemnames = botSkill_list.as_mut_ptr();
@@ -3057,7 +3057,7 @@ unsafe extern "C" fn UI_BotSelectMenu_BuildList() {
     qsort(
         botSelectInfo.sortedBotNums.as_mut_ptr() as *mut libc::c_void,
         botSelectInfo.numBots as size_t,
-        ::std::mem::size_of::<i32>() as libc::c_ulong,
+        ::std::mem::size_of::<i32>() as usize,
         Some(
             UI_BotSelectMenu_SortCompare
                 as unsafe extern "C" fn(_: *const libc::c_void, _: *const libc::c_void) -> i32,
@@ -3080,7 +3080,7 @@ unsafe extern "C" fn ServerPlayerIcon(
     Q_strncpyz(
         model.as_mut_ptr(),
         modelAndSkin,
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     skin = libc::strrchr(model.as_mut_ptr(), '/' as i32);
     if !skin.is_null() {
@@ -3330,7 +3330,7 @@ unsafe extern "C" fn UI_BotSelectMenu_Init(mut bot: *mut libc::c_char) {
     crate::stdlib::memset(
         &mut botSelectInfo as *mut botSelectInfo_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<botSelectInfo_t>() as libc::c_ulong,
+        ::std::mem::size_of::<botSelectInfo_t>() as usize,
     );
     botSelectInfo.menu.wrapAround = qtrue;
     botSelectInfo.menu.fullscreen = qtrue;

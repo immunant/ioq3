@@ -338,7 +338,7 @@ pub unsafe extern "C" fn UpdateTournamentInfo() {
     {
         Com_sprintf(
             msg.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
             b"postgame %i %i 0 0 0 0 0 0\x00" as *const u8 as *const libc::c_char,
             level.numNonSpectatorClients,
             playerClientNum,
@@ -362,7 +362,7 @@ pub unsafe extern "C" fn UpdateTournamentInfo() {
         };
         Com_sprintf(
             msg.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
             b"postgame %i %i %i %i %i %i %i %i\x00" as *const u8 as *const libc::c_char,
             level.numNonSpectatorClients,
             playerClientNum,
@@ -380,15 +380,15 @@ pub unsafe extern "C" fn UpdateTournamentInfo() {
         n = level.sortedClients[i as usize];
         Com_sprintf(
             buf.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 32]>() as usize as i32,
             b" %i %i %i\x00" as *const u8 as *const libc::c_char,
             n,
             (*level.clients.offset(n as isize)).ps.persistant[PERS_RANK as i32 as usize],
             (*level.clients.offset(n as isize)).ps.persistant[PERS_SCORE as i32 as usize],
         );
         msglen =
-            (msglen as libc::c_ulong).wrapping_add(crate::stdlib::strlen(buf.as_mut_ptr())) as i32;
-        if msglen as libc::c_ulong >= ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong
+            (msglen as usize).wrapping_add(crate::stdlib::strlen(buf.as_mut_ptr())) as i32;
+        if msglen as usize >= ::std::mem::size_of::<[libc::c_char; 1024]>() as usize
         {
             break;
         }

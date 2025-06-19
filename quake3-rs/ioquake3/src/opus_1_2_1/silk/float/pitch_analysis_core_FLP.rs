@@ -312,8 +312,8 @@ pub unsafe extern "C" fn silk_pitch_analysis_core_FLP(
         crate::stdlib::memset(
             filt_state.as_mut_ptr() as *mut libc::c_void,
             0 as i32,
-            (2 as i32 as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<opus_int32>() as libc::c_ulong),
+            (2 as i32 as usize)
+                .wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
         );
         silk_resampler_down2(
             filt_state.as_mut_ptr(),
@@ -333,8 +333,8 @@ pub unsafe extern "C" fn silk_pitch_analysis_core_FLP(
         crate::stdlib::memset(
             filt_state.as_mut_ptr() as *mut libc::c_void,
             0 as i32,
-            (6 as i32 as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<opus_int32>() as libc::c_ulong),
+            (6 as i32 as usize)
+                .wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
         );
         silk_resampler_down2_3(
             filt_state.as_mut_ptr(),
@@ -354,8 +354,8 @@ pub unsafe extern "C" fn silk_pitch_analysis_core_FLP(
     crate::stdlib::memset(
         filt_state.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        (2 as i32 as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<opus_int32>() as libc::c_ulong),
+        (2 as i32 as usize)
+            .wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
     );
     silk_resampler_down2(
         filt_state.as_mut_ptr(),
@@ -391,9 +391,9 @@ pub unsafe extern "C" fn silk_pitch_analysis_core_FLP(
     crate::stdlib::memset(
         C.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<f32>() as libc::c_ulong)
-            .wrapping_mul(nb_subfr as libc::c_ulong)
-            .wrapping_mul(((18 as i32 * 16 as i32 >> 1 as i32) + 5 as i32) as libc::c_ulong),
+        (::std::mem::size_of::<f32>() as usize)
+            .wrapping_mul(nb_subfr as usize)
+            .wrapping_mul(((18 as i32 * 16 as i32 >> 1 as i32) + 5 as i32) as usize),
     );
     target_ptr = &mut *frame_4kHz
         .as_mut_ptr()
@@ -459,7 +459,7 @@ pub unsafe extern "C" fn silk_pitch_analysis_core_FLP(
         crate::stdlib::memset(
             pitch_out as *mut libc::c_void,
             0 as i32,
-            (nb_subfr as libc::c_ulong).wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+            (nb_subfr as usize).wrapping_mul(::std::mem::size_of::<i32>() as usize),
         );
         *LTPCorr = 0.0f32;
         *lagIndex = 0 as i32 as opus_int16;
@@ -534,8 +534,8 @@ pub unsafe extern "C" fn silk_pitch_analysis_core_FLP(
     crate::stdlib::memset(
         C.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ((4 as i32 * ((18 as i32 * 16 as i32 >> 1 as i32) + 5 as i32)) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
+        ((4 as i32 * ((18 as i32 * 16 as i32 >> 1 as i32) + 5 as i32)) as usize)
+            .wrapping_mul(::std::mem::size_of::<f32>() as usize),
     );
     if Fs_kHz == 8 as i32 {
         target_ptr = &*frame.offset((4 as i32 * 5 as i32 * 8 as i32) as isize) as *const f32
@@ -653,7 +653,7 @@ pub unsafe extern "C" fn silk_pitch_analysis_core_FLP(
         crate::stdlib::memset(
             pitch_out as *mut libc::c_void,
             0 as i32,
-            (4 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+            (4 as i32 as usize).wrapping_mul(::std::mem::size_of::<i32>() as usize),
         );
         *LTPCorr = 0.0f32;
         *lagIndex = 0 as i32 as opus_int16;

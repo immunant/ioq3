@@ -824,7 +824,7 @@ pub unsafe extern "C" fn jinit_downsampler(mut cinfo: j_compress_ptr) {
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         1 as i32,
-        ::std::mem::size_of::<my_downsampler>() as libc::c_ulong,
+        ::std::mem::size_of::<my_downsampler>() as usize,
     ) as my_downsample_ptr;
     (*cinfo).downsample = downsample as *mut jpeg_downsampler;
     (*downsample).pub_0.start_pass =

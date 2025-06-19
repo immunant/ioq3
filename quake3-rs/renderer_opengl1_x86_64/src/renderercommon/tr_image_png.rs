@@ -107,7 +107,7 @@ unsafe extern "C" fn ReadBufferedFile(mut name: *const libc::c_char) -> *mut Buf
     BF = crate::src::renderergl1::tr_main::ri
         .Malloc
         .expect("non-null function pointer")(
-        ::std::mem::size_of::<BufferedFile>() as libc::c_ulong as i32
+        ::std::mem::size_of::<BufferedFile>() as usize as i32
     ) as *mut BufferedFile;
     if BF.is_null() {
         return 0 as *mut BufferedFile;
@@ -470,7 +470,7 @@ unsafe extern "C" fn DecompressIDATs(
             crate::stdlib::memcpy(
                 CompressedDataPtr as *mut libc::c_void,
                 OrigCompressedData as *const libc::c_void,
-                Length as libc::c_ulong,
+                Length as usize,
             );
             CompressedDataPtr = CompressedDataPtr.offset(Length as isize)
         }
@@ -1586,7 +1586,7 @@ pub unsafe extern "C" fn R_LoadPNG(
     if crate::stdlib::memcmp(
         Signature as *const libc::c_void,
         b"\x89PNG\r\n\x1a\n\x00" as *const u8 as *const libc::c_char as *const libc::c_void,
-        8 as i32 as libc::c_ulong,
+        8 as i32 as usize,
     ) != 0
     {
         CloseBufferedFile(ThePNG);

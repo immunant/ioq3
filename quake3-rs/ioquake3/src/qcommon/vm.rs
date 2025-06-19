@@ -205,7 +205,7 @@ pub unsafe extern "C" fn VM_Init() {
     crate::stdlib::memset(
         vmTable.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[vm_t; 3]>() as libc::c_ulong,
+        ::std::mem::size_of::<[vm_t; 3]>() as usize,
     );
 }
 /*
@@ -236,7 +236,7 @@ pub unsafe extern "C" fn VM_ValueToSymbol(
     }
     Com_sprintf(
         text.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
         b"%s+%i\x00" as *const u8 as *const libc::c_char,
         (*sym).symName.as_mut_ptr(),
         value - (*sym).symValue,
@@ -359,11 +359,11 @@ pub unsafe extern "C" fn VM_LoadSymbols(mut vm: *mut vm_t) {
     COM_StripExtension(
         (*vm).name.as_mut_ptr(),
         name.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     Com_sprintf(
         symbols.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         b"vm/%s.map\x00" as *const u8 as *const libc::c_char,
         name.as_mut_ptr(),
     );
@@ -410,8 +410,8 @@ pub unsafe extern "C" fn VM_LoadSymbols(mut vm: *mut vm_t) {
                 } else {
                     chars = crate::stdlib::strlen(token) as i32;
                     sym = Hunk_Alloc(
-                        (::std::mem::size_of::<vmSymbol_t>() as libc::c_ulong)
-                            .wrapping_add(chars as libc::c_ulong) as i32,
+                        (::std::mem::size_of::<vmSymbol_t>() as usize)
+                            .wrapping_add(chars as usize) as i32,
                         h_high,
                     ) as *mut vmSymbol_t;
                     *prev = sym;
@@ -484,9 +484,9 @@ pub unsafe extern "C" fn VM_DllSyscall(mut arg: intptr_t, mut args: ...) -> intp
     args_0[0 as i32 as usize] = arg;
     ap = args.clone();
     i = 1 as i32;
-    while (i as libc::c_ulong)
-        < (::std::mem::size_of::<[intptr_t; 16]>() as libc::c_ulong)
-            .wrapping_div(::std::mem::size_of::<intptr_t>() as libc::c_ulong)
+    while (i as usize)
+        < (::std::mem::size_of::<[intptr_t; 16]>() as usize)
+            .wrapping_div(::std::mem::size_of::<intptr_t>() as usize)
     {
         args_0[i as usize] = ap.as_va_list().arg::<intptr_t>();
         i += 1
@@ -517,7 +517,7 @@ pub unsafe extern "C" fn VM_LoadQVM(
     // load the image
     Com_sprintf(
         filename.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         b"vm/%s.qvm\x00" as *const u8 as *const libc::c_char,
         (*vm).name.as_mut_ptr(),
     );
@@ -546,9 +546,9 @@ pub unsafe extern "C" fn VM_LoadQVM(
         Com_Printf(b"...which has vmMagic VM_MAGIC_VER2\n\x00" as *const u8 as *const libc::c_char);
         // byte swap the header
         i = 0 as i32;
-        while (i as libc::c_ulong)
-            < (::std::mem::size_of::<vmHeader_t>() as libc::c_ulong)
-                .wrapping_div(4 as i32 as libc::c_ulong)
+        while (i as usize)
+            < (::std::mem::size_of::<vmHeader_t>() as usize)
+                .wrapping_div(4 as i32 as usize)
         {
             *(header.h as *mut i32).offset(i as isize) = *(header.h as *mut i32).offset(i as isize);
             i += 1
@@ -572,10 +572,10 @@ pub unsafe extern "C" fn VM_LoadQVM(
         // byte swap the header
         // sizeof( vmHeader_t ) - sizeof( int ) is the 1.32b vm header size
         i = 0 as i32;
-        while (i as libc::c_ulong)
-            < (::std::mem::size_of::<vmHeader_t>() as libc::c_ulong)
-                .wrapping_sub(::std::mem::size_of::<i32>() as libc::c_ulong)
-                .wrapping_div(4 as i32 as libc::c_ulong)
+        while (i as usize)
+            < (::std::mem::size_of::<vmHeader_t>() as usize)
+                .wrapping_sub(::std::mem::size_of::<i32>() as usize)
+                .wrapping_div(4 as i32 as usize)
         {
             *(header.h as *mut i32).offset(i as isize) = *(header.h as *mut i32).offset(i as isize);
             i += 1
@@ -633,14 +633,14 @@ pub unsafe extern "C" fn VM_LoadQVM(
         crate::stdlib::memset(
             (*vm).dataBase as *mut libc::c_void,
             0 as i32,
-            (*vm).dataAlloc as libc::c_ulong,
+            (*vm).dataAlloc as usize,
         );
     }
     // copy the intialized data
     crate::stdlib::memcpy(
         (*vm).dataBase as *mut libc::c_void,
         (header.h as *mut byte).offset((*header.h).dataOffset as isize) as *const libc::c_void,
-        ((*header.h).dataLength + (*header.h).litLength) as libc::c_ulong,
+        ((*header.h).dataLength + (*header.h).litLength) as usize,
     );
     // byte swap the longs
     i = 0 as i32;
@@ -673,7 +673,7 @@ pub unsafe extern "C" fn VM_LoadQVM(
             crate::stdlib::memset(
                 (*vm).jumpTableTargets as *mut libc::c_void,
                 0 as i32,
-                (*header.h).jtrgLength as libc::c_ulong,
+                (*header.h).jtrgLength as usize,
             );
         }
         crate::stdlib::memcpy(
@@ -682,7 +682,7 @@ pub unsafe extern "C" fn VM_LoadQVM(
                 .offset((*header.h).dataOffset as isize)
                 .offset((*header.h).dataLength as isize)
                 .offset((*header.h).litLength as isize) as *const libc::c_void,
-            (*header.h).jtrgLength as libc::c_ulong,
+            (*header.h).jtrgLength as usize,
         );
         // byte swap the longs
         i = 0 as i32;
@@ -717,7 +717,7 @@ pub unsafe extern "C" fn VM_Restart(mut vm: *mut vm_t, mut unpure: qboolean) -> 
         Q_strncpyz(
             name.as_mut_ptr(),
             (*vm).name.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         );
         VM_Free(vm);
         vm = VM_Create(name.as_mut_ptr(), systemCall, VMI_NATIVE);
@@ -792,13 +792,13 @@ pub unsafe extern "C" fn VM_Create(
     Q_strncpyz(
         (*vm).name.as_mut_ptr(),
         module,
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     loop {
         retval = FS_FindVM(
             &mut startSearch,
             filename.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
             module,
             (interpret as u32 == VMI_NATIVE as i32 as u32) as i32,
         );
@@ -829,7 +829,7 @@ pub unsafe extern "C" fn VM_Create(
             Q_strncpyz(
                 (*vm).name.as_mut_ptr(),
                 module,
-                ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             );
         }
         if !(retval >= 0 as i32) {
@@ -843,8 +843,8 @@ pub unsafe extern "C" fn VM_Create(
     // allocate space for the jump targets, which will be filled in by the compile/prep functions
     (*vm).instructionCount = (*header).instructionCount;
     (*vm).instructionPointers = Hunk_Alloc(
-        ((*vm).instructionCount as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<intptr_t>() as libc::c_ulong) as i32,
+        ((*vm).instructionCount as usize)
+            .wrapping_mul(::std::mem::size_of::<intptr_t>() as usize) as i32,
         h_high,
     ) as *mut intptr_t;
     // copy or compile the instructions
@@ -905,14 +905,14 @@ pub unsafe extern "C" fn VM_Free(mut vm: *mut vm_t) {
         crate::stdlib::memset(
             vm as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<vm_t>() as libc::c_ulong,
+            ::std::mem::size_of::<vm_t>() as usize,
         );
     }
     // now automatically freed by hunk
     crate::stdlib::memset(
         vm as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<vm_t>() as libc::c_ulong,
+        ::std::mem::size_of::<vm_t>() as usize,
     );
     currentVM = 0 as *mut vm_t;
     lastVM = 0 as *mut vm_t;
@@ -1140,9 +1140,9 @@ pub unsafe extern "C" fn VM_Call(mut vm: *mut vm_t, mut callnum: i32, mut args: 
         let mut ap: ::std::ffi::VaListImpl;
         ap = args.clone();
         i = 0 as i32;
-        while (i as libc::c_ulong)
-            < (::std::mem::size_of::<[i32; 12]>() as libc::c_ulong)
-                .wrapping_div(::std::mem::size_of::<i32>() as libc::c_ulong)
+        while (i as usize)
+            < (::std::mem::size_of::<[i32; 12]>() as usize)
+                .wrapping_div(::std::mem::size_of::<i32>() as usize)
         {
             args_0[i as usize] = ap.as_va_list().arg::<i32>();
             i += 1
@@ -1172,9 +1172,9 @@ pub unsafe extern "C" fn VM_Call(mut vm: *mut vm_t, mut callnum: i32, mut args: 
         a.callnum = callnum;
         ap_0 = args.clone();
         i = 0 as i32;
-        while (i as libc::c_ulong)
-            < (::std::mem::size_of::<[i32; 12]>() as libc::c_ulong)
-                .wrapping_div(::std::mem::size_of::<i32>() as libc::c_ulong)
+        while (i as usize)
+            < (::std::mem::size_of::<[i32; 12]>() as usize)
+                .wrapping_div(::std::mem::size_of::<i32>() as usize)
         {
             a.args[i as usize] = ap_0.as_va_list().arg::<i32>();
             i += 1
@@ -1228,8 +1228,8 @@ pub unsafe extern "C" fn VM_VmProfile_f() {
         return;
     }
     sorted = Z_Malloc(
-        ((*vm).numSymbols as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<*mut vmSymbol_t>() as libc::c_ulong) as i32,
+        ((*vm).numSymbols as usize)
+            .wrapping_mul(::std::mem::size_of::<*mut vmSymbol_t>() as usize) as i32,
     ) as *mut *mut vmSymbol_t;
     let ref mut fresh1 = *sorted.offset(0 as i32 as isize);
     *fresh1 = (*vm).symbols;
@@ -1244,7 +1244,7 @@ pub unsafe extern "C" fn VM_VmProfile_f() {
     qsort(
         sorted as *mut libc::c_void,
         (*vm).numSymbols as size_t,
-        ::std::mem::size_of::<*mut vmSymbol_t>() as libc::c_ulong,
+        ::std::mem::size_of::<*mut vmSymbol_t>() as usize,
         Some(
             VM_ProfileSort
                 as unsafe extern "C" fn(_: *const libc::c_void, _: *const libc::c_void) -> i32,
@@ -1404,10 +1404,10 @@ pub unsafe extern "C" fn VM_BlockCopy(mut dest: u32, mut src: u32, mut n: size_t
     let mut dataMask: u32 = (*currentVM).dataMask as u32;
     if dest & dataMask != dest
         || src & dataMask != src
-        || (dest as libc::c_ulong).wrapping_add(n) & dataMask as libc::c_ulong
-            != (dest as libc::c_ulong).wrapping_add(n)
-        || (src as libc::c_ulong).wrapping_add(n) & dataMask as libc::c_ulong
-            != (src as libc::c_ulong).wrapping_add(n)
+        || (dest as usize).wrapping_add(n) & dataMask as usize
+            != (dest as usize).wrapping_add(n)
+        || (src as usize).wrapping_add(n) & dataMask as usize
+            != (src as usize).wrapping_add(n)
     {
         Com_Error(
             ERR_DROP as i32,

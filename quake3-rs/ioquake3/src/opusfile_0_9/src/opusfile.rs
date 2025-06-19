@@ -188,7 +188,7 @@ pub unsafe extern "C" fn op_test(
     It will be at least 47 bytes (27 Ogg page header bytes + 1 lacing value +
      19 Opus header bytes using channel mapping family 0).
     If we don't have at least that much data, give up now.*/
-    if _initial_bytes < 47 as i32 as libc::c_ulong {
+    if _initial_bytes < 47 as i32 as usize {
         return -(1 as i32);
     }
     /*Only proceed if we start with the magic OggS string.
@@ -197,7 +197,7 @@ pub unsafe extern "C" fn op_test(
     if crate::stdlib::memcmp(
         _initial_data as *const libc::c_void,
         b"OggS\x00" as *const u8 as *const libc::c_char as *const libc::c_void,
-        4 as i32 as libc::c_ulong,
+        4 as i32 as usize,
     ) != 0 as i32
     {
         return -(132 as i32);
@@ -457,7 +457,7 @@ unsafe extern "C" fn op_add_serialno(
     cserialnos = *_cserialnos;
     if (nserialnos >= cserialnos) as i32 as isize != 0 {
         if (cserialnos
-            > 2147483647 as i32 / ::std::mem::size_of::<ogg_uint32_t>() as libc::c_ulong as i32
+            > 2147483647 as i32 / ::std::mem::size_of::<ogg_uint32_t>() as usize as i32
                 - 1 as i32
                 >> 1 as i32) as i32 as isize
             != 0
@@ -467,8 +467,8 @@ unsafe extern "C" fn op_add_serialno(
         cserialnos = 2 as i32 * cserialnos + 1 as i32;
         serialnos = crate::stdlib::realloc(
             serialnos as *mut libc::c_void,
-            (::std::mem::size_of::<ogg_uint32_t>() as libc::c_ulong)
-                .wrapping_mul(cserialnos as libc::c_ulong),
+            (::std::mem::size_of::<ogg_uint32_t>() as usize)
+                .wrapping_mul(cserialnos as usize),
         ) as *mut ogg_uint32_t;
         if serialnos.is_null() as i32 as isize != 0 {
             return -(129 as i32);
@@ -1781,8 +1781,8 @@ unsafe extern "C" fn op_bisect_forward_serialno(
             clinks = 2 as i32 * clinks + 1 as i32;
             links = crate::stdlib::realloc(
                 links as *mut libc::c_void,
-                (::std::mem::size_of::<OggOpusLink>() as libc::c_ulong)
-                    .wrapping_mul(clinks as libc::c_ulong),
+                (::std::mem::size_of::<OggOpusLink>() as usize)
+                    .wrapping_mul(clinks as usize),
             ) as *mut OggOpusLink;
             if links.is_null() as i32 as isize != 0 {
                 return -(129 as i32);
@@ -2004,8 +2004,8 @@ unsafe extern "C" fn op_bisect_forward_serialno(
     /*Trim back the links array if necessary.*/
     links = crate::stdlib::realloc(
         links as *mut libc::c_void,
-        (::std::mem::size_of::<OggOpusLink>() as libc::c_ulong)
-            .wrapping_mul(nlinks as libc::c_ulong),
+        (::std::mem::size_of::<OggOpusLink>() as usize)
+            .wrapping_mul(nlinks as usize),
     ) as *mut OggOpusLink;
     if !links.is_null() as i32 as isize != 0 {
         (*_of).links = links
@@ -2113,8 +2113,8 @@ unsafe extern "C" fn op_make_decode_ready(mut _of: *mut OggOpusFile) -> i32 {
         && crate::stdlib::memcmp(
             (*_of).od_mapping.as_mut_ptr() as *const libc::c_void,
             (*head).mapping.as_ptr() as *const libc::c_void,
-            (::std::mem::size_of::<u8>() as libc::c_ulong)
-                .wrapping_mul(channel_count as libc::c_ulong),
+            (::std::mem::size_of::<u8>() as usize)
+                .wrapping_mul(channel_count as usize),
         ) == 0 as i32
     {
         crate::src::opus_1_2_1::src::opus_multistream_decoder::opus_multistream_decoder_ctl(
@@ -2144,8 +2144,8 @@ unsafe extern "C" fn op_make_decode_ready(mut _of: *mut OggOpusFile) -> i32 {
         crate::stdlib::memcpy(
             (*_of).od_mapping.as_mut_ptr() as *mut libc::c_void,
             (*head).mapping.as_ptr() as *const libc::c_void,
-            (::std::mem::size_of::<u8>() as libc::c_ulong)
-                .wrapping_mul(channel_count as libc::c_ulong),
+            (::std::mem::size_of::<u8>() as usize)
+                .wrapping_mul(channel_count as usize),
         );
     }
     (*_of).ready_state = 4 as i32;
@@ -2209,8 +2209,8 @@ unsafe extern "C" fn op_open_seekable2_impl(mut _of: *mut OggOpusFile) -> i32 {
         _of,
         data_offset,
         sr.as_mut_ptr(),
-        (::std::mem::size_of::<[OpusSeekRecord; 64]>() as libc::c_ulong)
-            .wrapping_div(::std::mem::size_of::<OpusSeekRecord>() as libc::c_ulong) as i32,
+        (::std::mem::size_of::<[OpusSeekRecord; 64]>() as usize)
+            .wrapping_div(::std::mem::size_of::<OpusSeekRecord>() as usize) as i32,
         &mut (*_of).serialnos,
         &mut (*_of).nserialnos,
         &mut (*_of).cserialnos,
@@ -2265,8 +2265,8 @@ unsafe extern "C" fn op_open_seekable2(mut _of: *mut OggOpusFile) -> i32 {
     start_op_count = (*_of).op_count;
     /*This is a bit too large to put on the stack unconditionally.*/
     op_start = crate::stdlib::malloc(
-        (::std::mem::size_of::<ogg_packet>() as libc::c_ulong)
-            .wrapping_mul(start_op_count as libc::c_ulong),
+        (::std::mem::size_of::<ogg_packet>() as usize)
+            .wrapping_mul(start_op_count as usize),
     ) as *mut ogg_packet;
     if op_start.is_null() {
         return -(129 as i32);
@@ -2278,8 +2278,8 @@ unsafe extern "C" fn op_open_seekable2(mut _of: *mut OggOpusFile) -> i32 {
     crate::stdlib::memcpy(
         op_start as *mut libc::c_void,
         (*_of).op.as_mut_ptr() as *const libc::c_void,
-        (::std::mem::size_of::<ogg_packet>() as libc::c_ulong)
-            .wrapping_mul(start_op_count as libc::c_ulong),
+        (::std::mem::size_of::<ogg_packet>() as usize)
+            .wrapping_mul(start_op_count as usize),
     );
     ogg_sync_init(&mut (*_of).oy as *mut _ as *mut ogg_sync_state);
     ogg_stream_init(
@@ -2297,8 +2297,8 @@ unsafe extern "C" fn op_open_seekable2(mut _of: *mut OggOpusFile) -> i32 {
     crate::stdlib::memcpy(
         (*_of).op.as_mut_ptr() as *mut libc::c_void,
         op_start as *const libc::c_void,
-        (::std::mem::size_of::<ogg_packet>() as libc::c_ulong)
-            .wrapping_mul(start_op_count as libc::c_ulong),
+        (::std::mem::size_of::<ogg_packet>() as usize)
+            .wrapping_mul(start_op_count as usize),
     );
     libc::free(op_start as *mut libc::c_void);
     (*_of).prev_packet_gp = (*(*_of).links.offset(0 as i32 as isize)).pcm_start;
@@ -2393,7 +2393,7 @@ unsafe extern "C" fn op_open1(
     crate::stdlib::memset(
         _of as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<OggOpusFile>() as libc::c_ulong,
+        ::std::mem::size_of::<OggOpusFile>() as usize,
     );
     if (_initial_bytes > 9223372036854775807 as isize as size_t) as i32 as isize != 0 {
         return -(129 as i32);
@@ -2414,7 +2414,7 @@ unsafe extern "C" fn op_open1(
     This requires copying it into a buffer allocated by ogg_sync_buffer() and
      doesn't support seeking, so this is not a good mechanism to use for
      decoding entire files from RAM.*/
-    if _initial_bytes > 0 as i32 as libc::c_ulong {
+    if _initial_bytes > 0 as i32 as usize {
         let mut buffer: *mut libc::c_char = 0 as *mut libc::c_char;
         buffer = ogg_sync_buffer(
             &mut (*_of).oy as *mut _ as *mut ogg_sync_state,
@@ -2423,7 +2423,7 @@ unsafe extern "C" fn op_open1(
         crate::stdlib::memcpy(
             buffer as *mut libc::c_void,
             _initial_data as *const libc::c_void,
-            _initial_bytes.wrapping_mul(::std::mem::size_of::<libc::c_char>() as libc::c_ulong),
+            _initial_bytes.wrapping_mul(::std::mem::size_of::<libc::c_char>() as usize),
         );
         ogg_sync_wrote(
             &mut (*_of).oy as *mut _ as *mut ogg_sync_state,
@@ -2453,7 +2453,7 @@ unsafe extern "C" fn op_open1(
     (*_of).seekable = seekable;
     /*Don't seek yet.
     Set up a 'single' (current) logical bitstream entry for partial open.*/
-    (*_of).links = crate::stdlib::malloc(::std::mem::size_of::<OggOpusLink>() as libc::c_ulong)
+    (*_of).links = crate::stdlib::malloc(::std::mem::size_of::<OggOpusLink>() as usize)
         as *mut OggOpusLink;
     /*The serialno gets filled in later by op_fetch_headers().*/
     ogg_stream_init(
@@ -2538,7 +2538,7 @@ pub unsafe extern "C" fn op_test_callbacks(
 ) -> *mut OggOpusFile {
     let mut of: *mut OggOpusFile = 0 as *mut OggOpusFile;
     let mut ret: i32 = 0;
-    of = crate::stdlib::malloc(::std::mem::size_of::<OggOpusFile>() as libc::c_ulong)
+    of = crate::stdlib::malloc(::std::mem::size_of::<OggOpusFile>() as usize)
         as *mut OggOpusFile;
     ret = -(129 as i32);
     if !of.is_null() as i32 as isize != 0 {
@@ -2737,7 +2737,7 @@ pub unsafe extern "C" fn op_test_open(mut _of: *mut OggOpusFile) -> i32 {
         crate::stdlib::memset(
             _of as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<OggOpusFile>() as libc::c_ulong,
+            ::std::mem::size_of::<OggOpusFile>() as usize,
         );
     }
     return ret;
@@ -4194,10 +4194,10 @@ unsafe extern "C" fn op_init_buffer(mut _of: *mut OggOpusFile) -> i32 {
         nchannels_max = 8 as i32
     }
     (*_of).od_buffer = crate::stdlib::malloc(
-        (::std::mem::size_of::<op_sample>() as libc::c_ulong)
-            .wrapping_mul(nchannels_max as libc::c_ulong)
-            .wrapping_mul(120 as i32 as libc::c_ulong)
-            .wrapping_mul(48 as i32 as libc::c_ulong),
+        (::std::mem::size_of::<op_sample>() as usize)
+            .wrapping_mul(nchannels_max as usize)
+            .wrapping_mul(120 as i32 as usize)
+            .wrapping_mul(48 as i32 as usize),
     ) as *mut op_sample;
     if (*_of).od_buffer.is_null() {
         return -(129 as i32);
@@ -4292,9 +4292,9 @@ unsafe extern "C" fn op_read_native(
                         .od_buffer
                         .offset((nchannels * od_buffer_pos) as isize)
                         as *const libc::c_void,
-                    (::std::mem::size_of::<op_sample>() as libc::c_ulong)
-                        .wrapping_mul(nchannels as libc::c_ulong)
-                        .wrapping_mul(nsamples as libc::c_ulong),
+                    (::std::mem::size_of::<op_sample>() as usize)
+                        .wrapping_mul(nchannels as usize)
+                        .wrapping_mul(nsamples as usize),
                 );
                 od_buffer_pos += nsamples;
                 (*_of).od_buffer_pos = od_buffer_pos;
@@ -4390,9 +4390,9 @@ unsafe extern "C" fn op_read_native(
                                 _pcm as *mut libc::c_void,
                                 _pcm.offset((od_buffer_pos * nchannels) as isize)
                                     as *const libc::c_void,
-                                (::std::mem::size_of::<op_sample>() as libc::c_ulong)
-                                    .wrapping_mul(trimmed_duration as libc::c_ulong)
-                                    .wrapping_mul(nchannels as libc::c_ulong),
+                                (::std::mem::size_of::<op_sample>() as usize)
+                                    .wrapping_mul(trimmed_duration as usize)
+                                    .wrapping_mul(nchannels as usize),
                             );
                         }
                         /*Update bitrate tracking based on the actual samples we used from
@@ -4636,9 +4636,9 @@ unsafe extern "C" fn op_float2short_filter(
             crate::stdlib::memset(
                 (*_of).dither_a.as_mut_ptr() as *mut libc::c_void,
                 0 as i32,
-                (::std::mem::size_of::<f32>() as libc::c_ulong)
-                    .wrapping_mul(4 as i32 as libc::c_ulong)
-                    .wrapping_mul(_nchannels as libc::c_ulong),
+                (::std::mem::size_of::<f32>() as usize)
+                    .wrapping_mul(4 as i32 as usize)
+                    .wrapping_mul(_nchannels as usize),
             );
         }
         i = 0 as i32;
@@ -4817,8 +4817,8 @@ unsafe extern "C" fn op_stereo_filter(
         crate::stdlib::memcpy(
             _dst,
             _src as *const libc::c_void,
-            ((_nsamples * 2 as i32) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<op_sample>() as libc::c_ulong),
+            ((_nsamples * 2 as i32) as usize)
+                .wrapping_mul(::std::mem::size_of::<op_sample>() as usize),
         );
     } else {
         let mut dst: *mut f32 = 0 as *mut f32;

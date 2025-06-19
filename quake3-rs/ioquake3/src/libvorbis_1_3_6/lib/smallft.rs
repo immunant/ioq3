@@ -1919,12 +1919,12 @@ pub unsafe extern "C" fn drft_init(
 ) {
     (*l).n = n;
     (*l).trigcache = crate::stdlib::calloc(
-        (3 as i32 * n) as libc::c_ulong,
-        ::std::mem::size_of::<f32>() as libc::c_ulong,
+        (3 as i32 * n) as usize,
+        ::std::mem::size_of::<f32>() as usize,
     ) as *mut f32;
     (*l).splitcache = crate::stdlib::calloc(
-        32 as i32 as libc::c_ulong,
-        ::std::mem::size_of::<i32>() as libc::c_ulong,
+        32 as i32 as usize,
+        ::std::mem::size_of::<i32>() as usize,
     ) as *mut i32;
     fdrffti(n, (*l).trigcache, (*l).splitcache);
 }
@@ -1944,7 +1944,7 @@ pub unsafe extern "C" fn drft_clear(
             l as *mut libc::c_void,
             0 as i32,
             ::std::mem::size_of::<crate::src::libvorbis_1_3_6::lib::smallft::drft_lookup>()
-                as libc::c_ulong,
+                as usize,
         );
     };
 }

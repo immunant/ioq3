@@ -420,7 +420,7 @@ pub unsafe extern "C" fn Huff_Decompress(mut mbuf: *mut msg_t, mut offset: i32) 
     crate::stdlib::memset(
         &mut huff as *mut huff_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<huff_t>() as libc::c_ulong,
+        ::std::mem::size_of::<huff_t>() as usize,
     );
     // Initialize the tree & list with the NYT node
     let fresh5 = huff.blocNode;
@@ -473,7 +473,7 @@ pub unsafe extern "C" fn Huff_Decompress(mut mbuf: *mut msg_t, mut offset: i32) 
     crate::stdlib::memcpy(
         (*mbuf).data.offset(offset as isize) as *mut libc::c_void,
         seq.as_mut_ptr() as *const libc::c_void,
-        cch as libc::c_ulong,
+        cch as usize,
     );
 }
 #[no_mangle]
@@ -512,7 +512,7 @@ pub unsafe extern "C" fn Huff_Compress(mut mbuf: *mut msg_t, mut offset: i32) {
     crate::stdlib::memset(
         &mut huff as *mut huff_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<huff_t>() as libc::c_ulong,
+        ::std::mem::size_of::<huff_t>() as usize,
     );
     // Add the NYT (not yet transmitted) node into the tree/list */
     let fresh6 = huff.blocNode;
@@ -544,7 +544,7 @@ pub unsafe extern "C" fn Huff_Compress(mut mbuf: *mut msg_t, mut offset: i32) {
     crate::stdlib::memcpy(
         (*mbuf).data.offset(offset as isize) as *mut libc::c_void,
         seq.as_mut_ptr() as *const libc::c_void,
-        (bloc >> 3 as i32) as libc::c_ulong,
+        (bloc >> 3 as i32) as usize,
     );
 }
 /* This is based on the Adaptive Huffman algorithm described in Sayood's Data
@@ -561,12 +561,12 @@ pub unsafe extern "C" fn Huff_Init(mut huff: *mut huffman_t) {
     crate::stdlib::memset(
         &mut (*huff).compressor as *mut huff_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<huff_t>() as libc::c_ulong,
+        ::std::mem::size_of::<huff_t>() as usize,
     );
     crate::stdlib::memset(
         &mut (*huff).decompressor as *mut huff_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<huff_t>() as libc::c_ulong,
+        ::std::mem::size_of::<huff_t>() as usize,
     );
     // Initialize the tree & list with the NYT node
     let fresh7 = (*huff).decompressor.blocNode;

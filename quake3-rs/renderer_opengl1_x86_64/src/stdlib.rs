@@ -174,7 +174,7 @@ extern "C" {
     #[no_mangle]
     pub fn vsnprintf(
         _: *mut libc::c_char,
-        _: libc::c_ulong,
+        _: usize,
         _: *const libc::c_char,
         _: ::std::ffi::VaList,
     ) -> i32;
@@ -182,23 +182,23 @@ extern "C" {
     #[no_mangle]
     pub fn fread(
         _: *mut libc::c_void,
-        _: libc::c_ulong,
-        _: libc::c_ulong,
+        _: usize,
+        _: usize,
         _: *mut FILE,
-    ) -> libc::c_ulong;
+    ) -> usize;
 
     #[no_mangle]
     pub fn fwrite(
         _: *const libc::c_void,
-        _: libc::c_ulong,
-        _: libc::c_ulong,
+        _: usize,
+        _: usize,
         _: *mut FILE,
-    ) -> libc::c_ulong;
+    ) -> usize;
 
     #[no_mangle]
     pub fn ferror(__stream: *mut FILE) -> i32;
     #[no_mangle]
-    pub fn malloc(_: libc::c_ulong) -> *mut libc::c_void;
+    pub fn malloc(_: usize) -> *mut libc::c_void;
 
     #[no_mangle]
     pub fn qsort(
@@ -211,34 +211,34 @@ extern "C" {
     pub fn memcpy(
         _: *mut libc::c_void,
         _: *const libc::c_void,
-        _: libc::c_ulong,
+        _: usize,
     ) -> *mut libc::c_void;
 
     #[no_mangle]
     pub fn memmove(
         _: *mut libc::c_void,
         _: *const libc::c_void,
-        _: libc::c_ulong,
+        _: usize,
     ) -> *mut libc::c_void;
 
     #[no_mangle]
-    pub fn memset(_: *mut libc::c_void, _: i32, _: libc::c_ulong) -> *mut libc::c_void;
+    pub fn memset(_: *mut libc::c_void, _: i32, _: usize) -> *mut libc::c_void;
 
     #[no_mangle]
-    pub fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> i32;
+    pub fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: usize) -> i32;
 
     #[no_mangle]
     pub fn strncpy(
         _: *mut libc::c_char,
         _: *const libc::c_char,
-        _: libc::c_ulong,
+        _: usize,
     ) -> *mut libc::c_char;
 
     #[no_mangle]
-    pub fn strncmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> i32;
+    pub fn strncmp(_: *const libc::c_char, _: *const libc::c_char, _: usize) -> i32;
 
     #[no_mangle]
-    pub fn strlen(_: *const libc::c_char) -> libc::c_ulong;
+    pub fn strlen(_: *const libc::c_char) -> usize;
     pub type _IO_marker;
 
     pub type _IO_codecvt;
@@ -455,7 +455,7 @@ pub const SDL_GL_CONTEXT_PROFILE_ES: crate::src::jpeg_8c::jerror::C2RustUnnamed_
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct __sigset_t {
-    pub __val: [libc::c_ulong; 16],
+    pub __val: [usize; 16],
 }
 // ================ END __sigset_t_h ================
 // =============== BEGIN ctype_h ================

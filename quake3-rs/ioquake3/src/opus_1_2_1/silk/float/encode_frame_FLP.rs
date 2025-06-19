@@ -23,7 +23,7 @@ pub mod entcode_h {
         mut _this: *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
     ) -> i32 {
         return (*_this).nbits_total
-            - (::std::mem::size_of::<u32>() as libc::c_ulong as i32 * 8 as i32
+            - (::std::mem::size_of::<u32>() as usize as i32 * 8 as i32
                 - (*_this).rng.leading_zeros() as i32);
     }
 }
@@ -441,12 +441,12 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
         crate::stdlib::memcpy(
             &mut sRangeEnc_copy as *mut ec_enc as *mut libc::c_void,
             psRangeEnc as *const libc::c_void,
-            ::std::mem::size_of::<ec_enc>() as libc::c_ulong,
+            ::std::mem::size_of::<ec_enc>() as usize,
         );
         crate::stdlib::memcpy(
             &mut sNSQ_copy as *mut silk_nsq_state as *mut libc::c_void,
             &mut (*psEnc).sCmn.sNSQ as *mut silk_nsq_state as *const libc::c_void,
-            ::std::mem::size_of::<silk_nsq_state>() as libc::c_ulong,
+            ::std::mem::size_of::<silk_nsq_state>() as usize,
         );
         seed_copy = (*psEnc).sCmn.indices.Seed as opus_int32;
         ec_prevLagIndex_copy = (*psEnc).sCmn.ec_prevLagIndex;
@@ -463,12 +463,12 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
                     crate::stdlib::memcpy(
                         psRangeEnc as *mut libc::c_void,
                         &mut sRangeEnc_copy as *mut ec_enc as *const libc::c_void,
-                        ::std::mem::size_of::<ec_enc>() as libc::c_ulong,
+                        ::std::mem::size_of::<ec_enc>() as usize,
                     );
                     crate::stdlib::memcpy(
                         &mut (*psEnc).sCmn.sNSQ as *mut silk_nsq_state as *mut libc::c_void,
                         &mut sNSQ_copy as *mut silk_nsq_state as *const libc::c_void,
-                        ::std::mem::size_of::<silk_nsq_state>() as libc::c_ulong,
+                        ::std::mem::size_of::<silk_nsq_state>() as usize,
                     );
                     (*psEnc).sCmn.indices.Seed = seed_copy as i8;
                     (*psEnc).sCmn.ec_prevLagIndex = ec_prevLagIndex_copy;
@@ -489,7 +489,7 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
                     crate::stdlib::memcpy(
                         &mut sRangeEnc_copy2 as *mut ec_enc as *mut libc::c_void,
                         psRangeEnc as *const libc::c_void,
-                        ::std::mem::size_of::<ec_enc>() as libc::c_ulong,
+                        ::std::mem::size_of::<ec_enc>() as usize,
                     );
                 }
                 /* ***************************************/
@@ -518,7 +518,7 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
                     crate::stdlib::memcpy(
                         psRangeEnc as *mut libc::c_void,
                         &mut sRangeEnc_copy2 as *mut ec_enc as *const libc::c_void,
-                        ::std::mem::size_of::<ec_enc>() as libc::c_ulong,
+                        ::std::mem::size_of::<ec_enc>() as usize,
                     );
                     /* Keep gains the same as the last frame. */
                     (*psEnc).sShape.LastGainIndex = sEncCtrl.lastGainIndexPrev;
@@ -565,17 +565,17 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
                     crate::stdlib::memcpy(
                         psRangeEnc as *mut libc::c_void,
                         &mut sRangeEnc_copy2 as *mut ec_enc as *const libc::c_void,
-                        ::std::mem::size_of::<ec_enc>() as libc::c_ulong,
+                        ::std::mem::size_of::<ec_enc>() as usize,
                     );
                     crate::stdlib::memcpy(
                         (*psRangeEnc).buf as *mut libc::c_void,
                         ec_buf_copy.as_mut_ptr() as *const libc::c_void,
-                        sRangeEnc_copy2.offs as libc::c_ulong,
+                        sRangeEnc_copy2.offs as usize,
                     );
                     crate::stdlib::memcpy(
                         &mut (*psEnc).sCmn.sNSQ as *mut silk_nsq_state as *mut libc::c_void,
                         &mut sNSQ_copy2 as *mut silk_nsq_state as *const libc::c_void,
-                        ::std::mem::size_of::<silk_nsq_state>() as libc::c_ulong,
+                        ::std::mem::size_of::<silk_nsq_state>() as usize,
                     );
                     (*psEnc).sShape.LastGainIndex = LastGainIndex_copy2
                 }
@@ -612,17 +612,17 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
                         crate::stdlib::memcpy(
                             &mut sRangeEnc_copy2 as *mut ec_enc as *mut libc::c_void,
                             psRangeEnc as *const libc::c_void,
-                            ::std::mem::size_of::<ec_enc>() as libc::c_ulong,
+                            ::std::mem::size_of::<ec_enc>() as usize,
                         );
                         crate::stdlib::memcpy(
                             ec_buf_copy.as_mut_ptr() as *mut libc::c_void,
                             (*psRangeEnc).buf as *const libc::c_void,
-                            (*psRangeEnc).offs as libc::c_ulong,
+                            (*psRangeEnc).offs as usize,
                         );
                         crate::stdlib::memcpy(
                             &mut sNSQ_copy2 as *mut silk_nsq_state as *mut libc::c_void,
                             &mut (*psEnc).sCmn.sNSQ as *mut silk_nsq_state as *const libc::c_void,
-                            ::std::mem::size_of::<silk_nsq_state>() as libc::c_ulong,
+                            ::std::mem::size_of::<silk_nsq_state>() as usize,
                         );
                         LastGainIndex_copy2 = (*psEnc).sShape.LastGainIndex
                     }
@@ -767,8 +767,8 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
             .x_buf
             .as_mut_ptr()
             .offset((*psEnc).sCmn.frame_length as isize) as *mut f32 as *const libc::c_void,
-        (((*psEnc).sCmn.ltp_mem_length + 5 as i32 * (*psEnc).sCmn.fs_kHz) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
+        (((*psEnc).sCmn.ltp_mem_length + 5 as i32 * (*psEnc).sCmn.fs_kHz) as usize)
+            .wrapping_mul(::std::mem::size_of::<f32>() as usize),
     );
     /* Exit without entropy coding */
     if (*psEnc).sCmn.prefillFlag != 0 {
@@ -860,19 +860,19 @@ unsafe extern "C" fn silk_LBRR_encode_FLP(
         crate::stdlib::memcpy(
             &mut sNSQ_LBRR as *mut silk_nsq_state as *mut libc::c_void,
             &mut (*psEnc).sCmn.sNSQ as *mut silk_nsq_state as *const libc::c_void,
-            ::std::mem::size_of::<silk_nsq_state>() as libc::c_ulong,
+            ::std::mem::size_of::<silk_nsq_state>() as usize,
         );
         crate::stdlib::memcpy(
             psIndices_LBRR as *mut libc::c_void,
             &mut (*psEnc).sCmn.indices as *mut SideInfoIndices as *const libc::c_void,
-            ::std::mem::size_of::<SideInfoIndices>() as libc::c_ulong,
+            ::std::mem::size_of::<SideInfoIndices>() as usize,
         );
         /* Save original gains */
         crate::stdlib::memcpy(
             TempGains.as_mut_ptr() as *mut libc::c_void,
             (*psEncCtrl).Gains.as_mut_ptr() as *const libc::c_void,
-            ((*psEnc).sCmn.nb_subfr as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
+            ((*psEnc).sCmn.nb_subfr as usize)
+                .wrapping_mul(::std::mem::size_of::<f32>() as usize),
         );
         if (*psEnc).sCmn.nFramesEncoded == 0 as i32
             || (*psEnc).sCmn.LBRR_flags[((*psEnc).sCmn.nFramesEncoded - 1 as i32) as usize]
@@ -918,8 +918,8 @@ unsafe extern "C" fn silk_LBRR_encode_FLP(
         crate::stdlib::memcpy(
             (*psEncCtrl).Gains.as_mut_ptr() as *mut libc::c_void,
             TempGains.as_mut_ptr() as *const libc::c_void,
-            ((*psEnc).sCmn.nb_subfr as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
+            ((*psEnc).sCmn.nb_subfr as usize)
+                .wrapping_mul(::std::mem::size_of::<f32>() as usize),
         );
     };
 }

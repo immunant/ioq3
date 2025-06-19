@@ -256,7 +256,7 @@ pub unsafe extern "C" fn SV_ClearWorld() {
     crate::stdlib::memset(
         sv_worldSectors.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[worldSector_t; 64]>() as libc::c_ulong,
+        ::std::mem::size_of::<[worldSector_t; 64]>() as usize,
     );
     sv_numworldSectors = 0 as i32;
     // get world map bounds
@@ -587,7 +587,7 @@ pub unsafe extern "C" fn SV_ClipToEntity(
     crate::stdlib::memset(
         trace as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<trace_t>() as libc::c_ulong,
+        ::std::mem::size_of::<trace_t>() as usize,
     );
     // if it doesn't have any brushes of a type we
     // are looking for, ignore it
@@ -799,7 +799,7 @@ pub unsafe extern "C" fn SV_Trace(
     crate::stdlib::memset(
         &mut clip as *mut moveclip_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<moveclip_t>() as libc::c_ulong,
+        ::std::mem::size_of::<moveclip_t>() as usize,
     );
     // clip to world
     crate::src::qcommon::cm_trace::CM_BoxTrace(

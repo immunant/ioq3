@@ -50,7 +50,7 @@ unsafe extern "C" fn floor0_free_info(mut i: *mut libc::c_void) {
         crate::stdlib::memset(
             info as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<vorbis_info_floor0>() as libc::c_ulong,
+            ::std::mem::size_of::<vorbis_info_floor0>() as usize,
         );
         libc::free(info as *mut libc::c_void);
     };
@@ -71,7 +71,7 @@ unsafe extern "C" fn floor0_free_look(mut i: *mut libc::c_void) {
         crate::stdlib::memset(
             look as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<vorbis_look_floor0>() as libc::c_ulong,
+            ::std::mem::size_of::<vorbis_look_floor0>() as usize,
         );
         libc::free(look as *mut libc::c_void);
     };
@@ -86,7 +86,7 @@ unsafe extern "C" fn floor0_unpack(
     let mut j: i32 = 0;
     let mut info: *mut vorbis_info_floor0 = crate::stdlib::malloc(::std::mem::size_of::<
         vorbis_info_floor0,
-    >() as libc::c_ulong) as *mut vorbis_info_floor0;
+    >() as usize) as *mut vorbis_info_floor0;
     (*info).order = oggpack_read(opb as *mut oggpack_buffer, 8 as i32) as i32;
     (*info).rate = oggpack_read(opb as *mut oggpack_buffer, 16 as i32);
     (*info).barkmap = oggpack_read(opb as *mut oggpack_buffer, 16 as i32);
@@ -179,8 +179,8 @@ unsafe extern "C" fn floor0_map_lazy_init(
         accurate */
         let ref mut fresh0 = *(*look).linearmap.offset(W as isize); /* bark numbers represent band edges */
         *fresh0 = crate::stdlib::malloc(
-            ((n + 1 as i32) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+            ((n + 1 as i32) as usize)
+                .wrapping_mul(::std::mem::size_of::<i32>() as usize),
         ) as *mut i32; /* guard against the approximation */
         j = 0 as i32;
         while j < n {
@@ -216,15 +216,15 @@ unsafe extern "C" fn floor0_look(
 ) -> *mut libc::c_void {
     let mut info: *mut vorbis_info_floor0 = i as *mut vorbis_info_floor0;
     let mut look: *mut vorbis_look_floor0 = crate::stdlib::calloc(
-        1 as i32 as libc::c_ulong,
-        ::std::mem::size_of::<vorbis_look_floor0>() as libc::c_ulong,
+        1 as i32 as usize,
+        ::std::mem::size_of::<vorbis_look_floor0>() as usize,
     ) as *mut vorbis_look_floor0;
     (*look).m = (*info).order;
     (*look).ln = (*info).barkmap as i32;
     (*look).vi = info;
     (*look).linearmap = crate::stdlib::calloc(
-        2 as i32 as libc::c_ulong,
-        ::std::mem::size_of::<*mut i32>() as libc::c_ulong,
+        2 as i32 as usize,
+        ::std::mem::size_of::<*mut i32>() as usize,
     ) as *mut *mut i32;
     return look as *mut libc::c_void;
 }
@@ -262,8 +262,8 @@ unsafe extern "C" fn floor0_inverse1(
             vector */
             let mut lsp: *mut f32 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
                 vb as *mut vorbis_block,
-                (::std::mem::size_of::<f32>() as libc::c_ulong).wrapping_mul(
-                    ((*look).m as isize + (*b).dim + 1 as i32 as isize) as libc::c_ulong,
+                (::std::mem::size_of::<f32>() as usize).wrapping_mul(
+                    ((*look).m as isize + (*b).dim + 1 as i32 as isize) as usize,
                 ) as isize,
             ) as *mut f32;
             if !(vorbis_book_decodev_set(
@@ -319,8 +319,8 @@ unsafe extern "C" fn floor0_inverse2(
     crate::stdlib::memset(
         out as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<f32>() as libc::c_ulong)
-            .wrapping_mul((*look).n[(*vb).W as usize] as libc::c_ulong),
+        (::std::mem::size_of::<f32>() as usize)
+            .wrapping_mul((*look).n[(*vb).W as usize] as usize),
     );
     return 0 as i32;
 }

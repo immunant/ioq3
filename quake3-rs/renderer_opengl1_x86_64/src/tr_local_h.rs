@@ -550,7 +550,7 @@ pub struct glstate_t {
     pub finishCalled: crate::src::qcommon::q_shared::qboolean,
     pub texEnv: [i32; 2],
     pub faceCulling: i32,
-    pub glStateBits: libc::c_ulong,
+    pub glStateBits: usize,
 }
 #[repr(C)]
 #[derive(Copy, Clone)]

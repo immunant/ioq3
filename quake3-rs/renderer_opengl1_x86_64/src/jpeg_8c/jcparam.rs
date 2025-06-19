@@ -533,7 +533,7 @@ unsafe extern "C" fn add_huff_table(
     crate::stdlib::memcpy(
         (**htblptr).bits.as_mut_ptr() as *mut libc::c_void,
         bits as *const libc::c_void,
-        ::std::mem::size_of::<[UINT8; 17]>() as libc::c_ulong,
+        ::std::mem::size_of::<[UINT8; 17]>() as usize,
     );
     /* Validate the counts.  We do this here mainly so we can copy the right
      * number of symbols from the val[] array, without risking marching off
@@ -557,7 +557,7 @@ unsafe extern "C" fn add_huff_table(
     crate::stdlib::memcpy(
         (**htblptr).huffval.as_mut_ptr() as *mut libc::c_void,
         val as *const libc::c_void,
-        (nsymbols as libc::c_ulong).wrapping_mul(::std::mem::size_of::<UINT8>() as libc::c_ulong),
+        (nsymbols as usize).wrapping_mul(::std::mem::size_of::<UINT8>() as usize),
     );
     /* Initialize sent_table FALSE so table will be written to JPEG file. */
     (**htblptr).sent_table = 0 as i32;
@@ -1073,8 +1073,8 @@ pub unsafe extern "C" fn jpeg_set_defaults(mut cinfo: j_compress_ptr) {
         .expect("non-null function pointer")(
             cinfo as j_common_ptr,
             0 as i32,
-            (10 as i32 as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<jpeg_component_info>() as libc::c_ulong),
+            (10 as i32 as usize)
+                .wrapping_mul(::std::mem::size_of::<jpeg_component_info>() as usize),
         ) as *mut jpeg_component_info
     }
     /* Initialize everything not dependent on the color space */
@@ -1506,8 +1506,8 @@ pub unsafe extern "C" fn jpeg_simple_progression(mut cinfo: j_compress_ptr) {
         .expect("non-null function pointer")(
             cinfo as j_common_ptr,
             0 as i32,
-            ((*cinfo).script_space_size as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<jpeg_scan_info>() as libc::c_ulong),
+            ((*cinfo).script_space_size as usize)
+                .wrapping_mul(::std::mem::size_of::<jpeg_scan_info>() as usize),
         ) as *mut jpeg_scan_info
     }
     scanptr = (*cinfo).script_space;

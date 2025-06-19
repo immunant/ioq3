@@ -683,14 +683,14 @@ unsafe extern "C" fn UI_TeamOrdersMenu_ListEvent(mut ptr: *mut libc::c_void, mut
     if id == 11 as i32 {
         Com_sprintf(
             message.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
             ctfMessages[selection as usize],
             teamOrdersMenuInfo.botNames[teamOrdersMenuInfo.selectedBot as usize].as_mut_ptr(),
         );
     } else {
         Com_sprintf(
             message.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
             teamMessages[selection as usize],
             teamOrdersMenuInfo.botNames[teamOrdersMenuInfo.selectedBot as usize].as_mut_ptr(),
         );
@@ -740,7 +740,7 @@ unsafe extern "C" fn UI_TeamOrdersMenu_BuildBotList() {
     trap_GetConfigString(
         0 as i32,
         info.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     numPlayers = atoi(Info_ValueForKey(
         info.as_mut_ptr(),
@@ -804,7 +804,7 @@ unsafe extern "C" fn UI_TeamOrdersMenu_Init() {
     crate::stdlib::memset(
         &mut teamOrdersMenuInfo as *mut teamOrdersMenuInfo_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<teamOrdersMenuInfo_t>() as libc::c_ulong,
+        ::std::mem::size_of::<teamOrdersMenuInfo_t>() as usize,
     );
     teamOrdersMenuInfo.menu.fullscreen = qfalse;
     teamOrdersMenuInfo.menu.key =
@@ -1059,7 +1059,7 @@ pub unsafe extern "C" fn UI_TeamOrdersMenu_f() {
     trap_GetConfigString(
         0 as i32,
         info.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     teamOrdersMenuInfo.gametype = atoi(Info_ValueForKey(
         info.as_mut_ptr(),

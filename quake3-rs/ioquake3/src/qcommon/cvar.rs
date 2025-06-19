@@ -154,7 +154,7 @@ unsafe extern "C" fn generateHashValue(mut fname: *const libc::c_char) -> isize 
     while *fname.offset(i as isize) as i32 != '\u{0}' as i32 {
         letter = ({
             let mut __res: i32 = 0;
-            if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong > 1 as i32 as libc::c_ulong {
+            if ::std::mem::size_of::<libc::c_char>() as usize > 1 as i32 as usize {
                 if 0 != 0 {
                     let mut __c: i32 = *fname.offset(i as isize) as i32;
                     __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -422,7 +422,7 @@ unsafe extern "C" fn Cvar_Validate(
         if Q_isintegral(valuef) as u64 != 0 {
             Com_sprintf(
                 s.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
                 b"%d\x00" as *const u8 as *const libc::c_char,
                 valuef as i32,
             );
@@ -435,7 +435,7 @@ unsafe extern "C" fn Cvar_Validate(
         } else {
             Com_sprintf(
                 s.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
                 b"%f\x00" as *const u8 as *const libc::c_char,
                 valuef as f64,
             );
@@ -850,14 +850,14 @@ pub unsafe extern "C" fn Cvar_SetValue(mut var_name: *const libc::c_char, mut va
     if value == value as i32 as f32 {
         Com_sprintf(
             val.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 32]>() as usize as i32,
             b"%i\x00" as *const u8 as *const libc::c_char,
             value as i32,
         );
     } else {
         Com_sprintf(
             val.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 32]>() as usize as i32,
             b"%f\x00" as *const u8 as *const libc::c_char,
             value as f64,
         );
@@ -876,14 +876,14 @@ pub unsafe extern "C" fn Cvar_SetValueSafe(mut var_name: *const libc::c_char, mu
     if Q_isintegral(value) as u64 != 0 {
         Com_sprintf(
             val.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 32]>() as usize as i32,
             b"%i\x00" as *const u8 as *const libc::c_char,
             value as i32,
         );
     } else {
         Com_sprintf(
             val.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 32]>() as usize as i32,
             b"%f\x00" as *const u8 as *const libc::c_char,
             value as f64,
         );
@@ -1140,8 +1140,8 @@ pub unsafe extern "C" fn Cvar_WriteVariables(mut f: fileHandle_t) {
                 if !(*var).latchedString.is_null() {
                     if crate::stdlib::strlen((*var).name)
                         .wrapping_add(crate::stdlib::strlen((*var).latchedString))
-                        .wrapping_add(10 as i32 as libc::c_ulong)
-                        > ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong
+                        .wrapping_add(10 as i32 as usize)
+                        > ::std::mem::size_of::<[libc::c_char; 1024]>() as usize
                     {
                         Com_Printf(
                             b"^3WARNING: value of variable \"%s\" too long to write to file\n\x00"
@@ -1152,7 +1152,7 @@ pub unsafe extern "C" fn Cvar_WriteVariables(mut f: fileHandle_t) {
                     } else {
                         Com_sprintf(
                             buffer.as_mut_ptr(),
-                            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
                             b"seta %s \"%s\"\n\x00" as *const u8 as *const libc::c_char,
                             (*var).name,
                             (*var).latchedString,
@@ -1161,8 +1161,8 @@ pub unsafe extern "C" fn Cvar_WriteVariables(mut f: fileHandle_t) {
                     }
                 } else if crate::stdlib::strlen((*var).name)
                     .wrapping_add(crate::stdlib::strlen((*var).string))
-                    .wrapping_add(10 as i32 as libc::c_ulong)
-                    > ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong
+                    .wrapping_add(10 as i32 as usize)
+                    > ::std::mem::size_of::<[libc::c_char; 1024]>() as usize
                 {
                     Com_Printf(
                         b"^3WARNING: value of variable \"%s\" too long to write to file\n\x00"
@@ -1173,7 +1173,7 @@ pub unsafe extern "C" fn Cvar_WriteVariables(mut f: fileHandle_t) {
                 } else {
                     Com_sprintf(
                         buffer.as_mut_ptr(),
-                        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
                         b"seta %s \"%s\"\n\x00" as *const u8 as *const libc::c_char,
                         (*var).name,
                         (*var).string,
@@ -1417,7 +1417,7 @@ pub unsafe extern "C" fn Cvar_Unset(mut cv: *mut cvar_t) -> *mut cvar_t {
     crate::stdlib::memset(
         cv as *mut libc::c_void,
         '\u{0}' as i32,
-        ::std::mem::size_of::<cvar_t>() as libc::c_ulong,
+        ::std::mem::size_of::<cvar_t>() as usize,
     );
     return next;
 }
@@ -1716,8 +1716,8 @@ pub unsafe extern "C" fn Cvar_Update(mut vmCvar: *mut vmCvar_t) {
         // variable might have been cleared by a cvar_restart
     }
     (*vmCvar).modificationCount = (*cv).modificationCount;
-    if crate::stdlib::strlen((*cv).string).wrapping_add(1 as i32 as libc::c_ulong)
-        > 256 as i32 as libc::c_ulong
+    if crate::stdlib::strlen((*cv).string).wrapping_add(1 as i32 as usize)
+        > 256 as i32 as usize
     {
         Com_Error(
             ERR_DROP as i32,
@@ -1766,12 +1766,12 @@ pub unsafe extern "C" fn Cvar_Init() {
     crate::stdlib::memset(
         cvar_indexes.as_mut_ptr() as *mut libc::c_void,
         '\u{0}' as i32,
-        ::std::mem::size_of::<[cvar_t; 2048]>() as libc::c_ulong,
+        ::std::mem::size_of::<[cvar_t; 2048]>() as usize,
     );
     crate::stdlib::memset(
         hashTable.as_mut_ptr() as *mut libc::c_void,
         '\u{0}' as i32,
-        ::std::mem::size_of::<[*mut cvar_t; 256]>() as libc::c_ulong,
+        ::std::mem::size_of::<[*mut cvar_t; 256]>() as usize,
     );
     cvar_cheats = Cvar_Get(
         b"sv_cheats\x00" as *const u8 as *const libc::c_char,

@@ -105,7 +105,7 @@ pub unsafe extern "C" fn silk_resampler_init(
     crate::stdlib::memset(
         S as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<silk_resampler_state_struct>() as libc::c_ulong,
+        ::std::mem::size_of::<silk_resampler_state_struct>() as usize,
     );
     /* Input checking */
     if forEnc != 0 {
@@ -281,8 +281,8 @@ pub unsafe extern "C" fn silk_resampler(
         &mut *(*S).delayBuf.as_mut_ptr().offset((*S).inputDelay as isize) as *mut opus_int16
             as *mut libc::c_void,
         in_0 as *const libc::c_void,
-        (nSamples as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<opus_int16>() as libc::c_ulong),
+        (nSamples as usize)
+            .wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
     );
     match (*S).resampler_function {
         1 => {
@@ -326,14 +326,14 @@ pub unsafe extern "C" fn silk_resampler(
             crate::stdlib::memcpy(
                 out as *mut libc::c_void,
                 (*S).delayBuf.as_mut_ptr() as *const libc::c_void,
-                ((*S).Fs_in_kHz as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<opus_int16>() as libc::c_ulong),
+                ((*S).Fs_in_kHz as usize)
+                    .wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
             );
             crate::stdlib::memcpy(
                 &mut *out.offset((*S).Fs_out_kHz as isize) as *mut opus_int16 as *mut libc::c_void,
                 &*in_0.offset(nSamples as isize) as *const opus_int16 as *const libc::c_void,
-                ((inLen - (*S).Fs_in_kHz) as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<opus_int16>() as libc::c_ulong),
+                ((inLen - (*S).Fs_in_kHz) as usize)
+                    .wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
             );
         }
     }
@@ -342,8 +342,8 @@ pub unsafe extern "C" fn silk_resampler(
         (*S).delayBuf.as_mut_ptr() as *mut libc::c_void,
         &*in_0.offset((inLen - (*S).inputDelay) as isize) as *const opus_int16
             as *const libc::c_void,
-        ((*S).inputDelay as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<opus_int16>() as libc::c_ulong),
+        ((*S).inputDelay as usize)
+            .wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
     );
     return 0 as i32;
 }

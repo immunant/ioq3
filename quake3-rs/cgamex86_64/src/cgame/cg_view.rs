@@ -275,7 +275,7 @@ pub unsafe extern "C" fn CG_TestModel_f() {
     crate::stdlib::memset(
         &mut cg.testModelEntity as *mut refEntity_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
+        ::std::mem::size_of::<refEntity_t>() as usize,
     );
     if trap_Argc() < 2 as i32 {
         return;
@@ -874,7 +874,7 @@ unsafe extern "C" fn CG_DamageBlendBlob() {
     crate::stdlib::memset(
         &mut ent as *mut refEntity_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
+        ::std::mem::size_of::<refEntity_t>() as usize,
     );
     ent.reType = RT_SPRITE;
     ent.renderfx = 0x4 as i32;
@@ -921,7 +921,7 @@ unsafe extern "C" fn CG_CalcViewValues() -> i32 {
     crate::stdlib::memset(
         &mut cg.refdef as *mut refdef_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<refdef_t>() as libc::c_ulong,
+        ::std::mem::size_of::<refdef_t>() as usize,
     );
     // strings for in game rendering
     // Q_strncpyz( cg.refdef.text[0], "Park Ranger", sizeof(cg.refdef.text[0]) );
@@ -1357,7 +1357,7 @@ pub unsafe extern "C" fn CG_DrawActiveFrame(
     crate::stdlib::memcpy(
         cg.refdef.areamask.as_mut_ptr() as *mut libc::c_void,
         (*cg.snap).areamask.as_mut_ptr() as *const libc::c_void,
-        ::std::mem::size_of::<[byte; 32]>() as libc::c_ulong,
+        ::std::mem::size_of::<[byte; 32]>() as usize,
     );
     // warning sounds when powerup is wearing off
     CG_PowerupTimerSounds();

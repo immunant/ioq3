@@ -218,8 +218,8 @@ pub unsafe extern "C" fn AAS_InitAASLinkHeap() {
         crate::src::botlib::be_aas_main::aasworld.linkheapsize = max_aaslinks;
         crate::src::botlib::be_aas_main::aasworld.linkheap =
             crate::src::botlib::l_memory::GetHunkMemory(
-                (max_aaslinks as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<aas_link_t>() as libc::c_ulong),
+                (max_aaslinks as usize)
+                    .wrapping_mul(::std::mem::size_of::<aas_link_t>() as usize),
             ) as *mut aas_link_t
     }
     //link the links on the heap
@@ -377,8 +377,8 @@ pub unsafe extern "C" fn AAS_InitAASLinkedEntities() {
     }
     crate::src::botlib::be_aas_main::aasworld.arealinkedentities =
         crate::src::botlib::l_memory::GetClearedHunkMemory(
-            (crate::src::botlib::be_aas_main::aasworld.numareas as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<*mut aas_link_t>() as libc::c_ulong),
+            (crate::src::botlib::be_aas_main::aasworld.numareas as usize)
+                .wrapping_mul(::std::mem::size_of::<*mut aas_link_t>() as usize),
         ) as *mut *mut aas_link_t;
 }
 //end of the function AAS_InitAASLinkedEntities
@@ -712,7 +712,7 @@ pub unsafe extern "C" fn AAS_AreaEntityCollision(
     crate::stdlib::memset(
         &mut bsptrace as *mut bsp_trace_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<bsp_trace_t>() as libc::c_ulong,
+        ::std::mem::size_of::<bsp_trace_t>() as usize,
     );
     //assume no collision
     bsptrace.fraction = 1 as i32 as f32; //end for
@@ -802,7 +802,7 @@ pub unsafe extern "C" fn AAS_TraceClientBBox(
     crate::stdlib::memset(
         &mut trace as *mut aas_trace_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<aas_trace_t>() as libc::c_ulong,
+        ::std::mem::size_of::<aas_trace_t>() as usize,
     );
     if crate::src::botlib::be_aas_main::aasworld.loaded == 0 {
         return trace;
@@ -2181,7 +2181,7 @@ pub unsafe extern "C" fn AAS_AreaInfo(mut areanum: i32, mut info: *mut aas_areai
         .areas
         .offset(areanum as isize))
     .center[2 as i32 as usize];
-    return ::std::mem::size_of::<aas_areainfo_t>() as libc::c_ulong as i32;
+    return ::std::mem::size_of::<aas_areainfo_t>() as usize as i32;
 }
 /*
 ===========================================================================

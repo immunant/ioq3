@@ -568,13 +568,13 @@ pub unsafe extern "C" fn Com_Printf(mut fmt: *const libc::c_char, mut args: ...)
     argptr = args.clone();
     crate::stdlib::vsnprintf(
         msg.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong,
+        ::std::mem::size_of::<[libc::c_char; 4096]>() as usize,
         fmt,
         argptr.as_va_list(),
     );
     if !rd_buffer.is_null() {
         if crate::stdlib::strlen(msg.as_mut_ptr()).wrapping_add(crate::stdlib::strlen(rd_buffer))
-            > (rd_buffersize - 1 as i32) as libc::c_ulong
+            > (rd_buffersize - 1 as i32) as usize
         {
             rd_flush.expect("non-null function pointer")(rd_buffer);
             *rd_buffer = 0 as i32 as libc::c_char
@@ -648,7 +648,7 @@ pub unsafe extern "C" fn Com_DPrintf(mut fmt: *const libc::c_char, mut args: ...
     argptr = args.clone();
     crate::stdlib::vsnprintf(
         msg.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong,
+        ::std::mem::size_of::<[libc::c_char; 4096]>() as usize,
         fmt,
         argptr.as_va_list(),
     );
@@ -710,7 +710,7 @@ pub unsafe extern "C" fn Com_Error(
     argptr = args.clone();
     crate::stdlib::vsnprintf(
         com_errorMessage.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong,
+        ::std::mem::size_of::<[libc::c_char; 4096]>() as usize,
         fmt,
         argptr.as_va_list(),
     );
@@ -1028,7 +1028,7 @@ pub unsafe extern "C" fn Info_Print(mut s: *const libc::c_char) {
             crate::stdlib::memset(
                 o as *mut libc::c_void,
                 ' ' as i32,
-                (20 as i32 - l) as libc::c_ulong,
+                (20 as i32 - l) as usize,
             );
             key[20 as i32 as usize] = 0 as i32 as libc::c_char
         } else {
@@ -1087,8 +1087,8 @@ pub unsafe extern "C" fn Com_StringContains(
                 }
             } else if ({
                 let mut __res: i32 = 0;
-                if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong
-                    > 1 as i32 as libc::c_ulong
+                if ::std::mem::size_of::<libc::c_char>() as usize
+                    > 1 as i32 as usize
                 {
                     if 0 != 0 {
                         let mut __c: i32 = *str1.offset(j as isize) as i32;
@@ -1107,8 +1107,8 @@ pub unsafe extern "C" fn Com_StringContains(
                 __res
             }) != ({
                 let mut __res: i32 = 0;
-                if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong
-                    > 1 as i32 as libc::c_ulong
+                if ::std::mem::size_of::<libc::c_char>() as usize
+                    > 1 as i32 as usize
                 {
                     if 0 != 0 {
                         let mut __c: i32 = *str2.offset(j as isize) as i32;
@@ -1203,8 +1203,8 @@ pub unsafe extern "C" fn Com_Filter(
                         }
                     } else if ({
                         let mut __res: i32 = 0;
-                        if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong
-                            > 1 as i32 as libc::c_ulong
+                        if ::std::mem::size_of::<libc::c_char>() as usize
+                            > 1 as i32 as usize
                         {
                             if 0 != 0 {
                                 let mut __c: i32 = *name as i32;
@@ -1222,8 +1222,8 @@ pub unsafe extern "C" fn Com_Filter(
                         __res
                     }) >= ({
                         let mut __res: i32 = 0;
-                        if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong
-                            > 1 as i32 as libc::c_ulong
+                        if ::std::mem::size_of::<libc::c_char>() as usize
+                            > 1 as i32 as usize
                         {
                             if 0 != 0 {
                                 let mut __c: i32 = *filter as i32;
@@ -1241,8 +1241,8 @@ pub unsafe extern "C" fn Com_Filter(
                         __res
                     }) && ({
                         let mut __res: i32 = 0;
-                        if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong
-                            > 1 as i32 as libc::c_ulong
+                        if ::std::mem::size_of::<libc::c_char>() as usize
+                            > 1 as i32 as usize
                         {
                             if 0 != 0 {
                                 let mut __c: i32 = *name as i32;
@@ -1260,8 +1260,8 @@ pub unsafe extern "C" fn Com_Filter(
                         __res
                     }) <= ({
                         let mut __res: i32 = 0;
-                        if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong
-                            > 1 as i32 as libc::c_ulong
+                        if ::std::mem::size_of::<libc::c_char>() as usize
+                            > 1 as i32 as usize
                         {
                             if 0 != 0 {
                                 let mut __c: i32 = *filter.offset(2 as i32 as isize) as i32;
@@ -1289,8 +1289,8 @@ pub unsafe extern "C" fn Com_Filter(
                         }
                     } else if ({
                         let mut __res: i32 = 0;
-                        if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong
-                            > 1 as i32 as libc::c_ulong
+                        if ::std::mem::size_of::<libc::c_char>() as usize
+                            > 1 as i32 as usize
                         {
                             if 0 != 0 {
                                 let mut __c: i32 = *filter as i32;
@@ -1308,8 +1308,8 @@ pub unsafe extern "C" fn Com_Filter(
                         __res
                     }) == ({
                         let mut __res: i32 = 0;
-                        if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong
-                            > 1 as i32 as libc::c_ulong
+                        if ::std::mem::size_of::<libc::c_char>() as usize
+                            > 1 as i32 as usize
                         {
                             if 0 != 0 {
                                 let mut __c: i32 = *name as i32;
@@ -1351,8 +1351,8 @@ pub unsafe extern "C" fn Com_Filter(
                 }
             } else if ({
                 let mut __res: i32 = 0;
-                if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong
-                    > 1 as i32 as libc::c_ulong
+                if ::std::mem::size_of::<libc::c_char>() as usize
+                    > 1 as i32 as usize
                 {
                     if 0 != 0 {
                         let mut __c: i32 = *filter as i32;
@@ -1370,8 +1370,8 @@ pub unsafe extern "C" fn Com_Filter(
                 __res
             }) != ({
                 let mut __res: i32 = 0;
-                if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong
-                    > 1 as i32 as libc::c_ulong
+                if ::std::mem::size_of::<libc::c_char>() as usize
+                    > 1 as i32 as usize
                 {
                     if 0 != 0 {
                         let mut __c: i32 = *name as i32;
@@ -1485,7 +1485,7 @@ Z_ClearZone
 unsafe extern "C" fn Z_ClearZone(mut zone: *mut memzone_t, mut size: i32) {
     let mut block: *mut memblock_t = 0 as *mut memblock_t;
     // set the entire zone to one free block
-    block = (zone as *mut byte).offset(::std::mem::size_of::<memzone_t>() as libc::c_ulong as isize)
+    block = (zone as *mut byte).offset(::std::mem::size_of::<memzone_t>() as usize as isize)
         as *mut memblock_t; // in use block
     (*zone).blocklist.prev = block; // free block
     (*zone).blocklist.next = (*zone).blocklist.prev;
@@ -1499,8 +1499,8 @@ unsafe extern "C" fn Z_ClearZone(mut zone: *mut memzone_t, mut size: i32) {
     (*block).prev = (*block).next;
     (*block).tag = 0 as i32;
     (*block).id = 0x1d4a11 as i32;
-    (*block).size = (size as libc::c_ulong)
-        .wrapping_sub(::std::mem::size_of::<memzone_t>() as libc::c_ulong)
+    (*block).size = (size as usize)
+        .wrapping_sub(::std::mem::size_of::<memzone_t>() as usize)
         as i32;
 }
 /*
@@ -1541,7 +1541,7 @@ pub unsafe extern "C" fn Z_Free(mut ptr: *mut libc::c_void) {
         );
     }
     block = (ptr as *mut byte)
-        .offset(-(::std::mem::size_of::<memblock_t>() as libc::c_ulong as isize))
+        .offset(-(::std::mem::size_of::<memblock_t>() as usize as isize))
         as *mut memblock_t;
     if (*block).id != 0x1d4a11 as i32 {
         Com_Error(
@@ -1581,8 +1581,8 @@ pub unsafe extern "C" fn Z_Free(mut ptr: *mut libc::c_void) {
     crate::stdlib::memset(
         ptr,
         0xaa as i32,
-        ((*block).size as libc::c_ulong)
-            .wrapping_sub(::std::mem::size_of::<memblock_t>() as libc::c_ulong),
+        ((*block).size as usize)
+            .wrapping_sub(::std::mem::size_of::<memblock_t>() as usize),
     ); // mark as free
     (*block).tag = 0 as i32;
     other = (*block).prev;
@@ -1680,15 +1680,15 @@ pub unsafe extern "C" fn Z_TagMalloc(mut size: i32, mut tag: i32) -> *mut libc::
     // scan through the block list looking for the first free block
     // of sufficient size
     //
-    size = (size as libc::c_ulong)
-        .wrapping_add(::std::mem::size_of::<memblock_t>() as libc::c_ulong) as i32
+    size = (size as usize)
+        .wrapping_add(::std::mem::size_of::<memblock_t>() as usize) as i32
         as i32; // account for size of block header
     size += 4 as i32; // space for memory trash tester
-    size = ((size as libc::c_ulong)
-        .wrapping_add(::std::mem::size_of::<intptr_t>() as libc::c_ulong)
-        .wrapping_sub(1 as i32 as libc::c_ulong)
-        & !(::std::mem::size_of::<intptr_t>() as libc::c_ulong)
-            .wrapping_sub(1 as i32 as libc::c_ulong)) as i32; // align to 32/64 bit boundary
+    size = ((size as usize)
+        .wrapping_add(::std::mem::size_of::<intptr_t>() as usize)
+        .wrapping_sub(1 as i32 as usize)
+        & !(::std::mem::size_of::<intptr_t>() as usize)
+            .wrapping_sub(1 as i32 as usize)) as i32; // align to 32/64 bit boundary
     rover = (*zone).rover;
     base = rover;
     start = (*base).prev;
@@ -1741,7 +1741,7 @@ pub unsafe extern "C" fn Z_TagMalloc(mut size: i32, mut tag: i32) -> *mut libc::
     *((base as *mut byte)
         .offset((*base).size as isize)
         .offset(-(4 as i32 as isize)) as *mut i32) = 0x1d4a11 as i32;
-    return (base as *mut byte).offset(::std::mem::size_of::<memblock_t>() as libc::c_ulong as isize)
+    return (base as *mut byte).offset(::std::mem::size_of::<memblock_t>() as usize as isize)
         as *mut libc::c_void;
 }
 // NOT 0 filled memory
@@ -1756,7 +1756,7 @@ pub unsafe extern "C" fn Z_Malloc(mut size: i32) -> *mut libc::c_void {
     let mut buf: *mut libc::c_void = 0 as *mut libc::c_void;
     //Z_CheckHeap ();	// DEBUG
     buf = Z_TagMalloc(size, TAG_GENERAL as i32);
-    crate::stdlib::memset(buf, 0 as i32, size as libc::c_ulong);
+    crate::stdlib::memset(buf, 0 as i32, size as usize);
     return buf;
 }
 // returns 0 filled memory
@@ -1818,7 +1818,7 @@ pub unsafe extern "C" fn Z_LogZoneHeap(mut zone: *mut memzone_t, mut name: *mut 
     size = numBlocks;
     Com_sprintf(
         buf.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
         b"\r\n================\r\n%s log\r\n================\r\n\x00" as *const u8
             as *const libc::c_char,
         name,
@@ -1836,11 +1836,11 @@ pub unsafe extern "C" fn Z_LogZoneHeap(mut zone: *mut memzone_t, mut name: *mut 
         }
         block = (*block).next
     }
-    allocSize = (numBlocks as libc::c_ulong)
-        .wrapping_mul(::std::mem::size_of::<memblock_t>() as libc::c_ulong) as i32;
+    allocSize = (numBlocks as usize)
+        .wrapping_mul(::std::mem::size_of::<memblock_t>() as usize) as i32;
     Com_sprintf(
         buf.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
         b"%d %s memory in %d blocks\r\n\x00" as *const u8 as *const libc::c_char,
         size,
         name,
@@ -1853,7 +1853,7 @@ pub unsafe extern "C" fn Z_LogZoneHeap(mut zone: *mut memzone_t, mut name: *mut 
     );
     Com_sprintf(
         buf.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
         b"%d %s memory overhead\r\n\x00" as *const u8 as *const libc::c_char,
         size - allocSize,
         name,
@@ -1921,7 +1921,7 @@ pub unsafe extern "C" fn CopyString(mut in_0: *const libc::c_char) -> *mut libc:
     let mut out: *mut libc::c_char = 0 as *mut libc::c_char;
     if *in_0.offset(0 as i32 as isize) == 0 {
         return (&mut emptystring as *mut memstatic_t as *mut libc::c_char)
-            .offset(::std::mem::size_of::<memblock_t>() as libc::c_ulong as isize);
+            .offset(::std::mem::size_of::<memblock_t>() as usize as isize);
     } else {
         if *in_0.offset(1 as i32 as isize) == 0 {
             if *in_0.offset(0 as i32 as isize) as i32 >= '0' as i32
@@ -1931,11 +1931,11 @@ pub unsafe extern "C" fn CopyString(mut in_0: *const libc::c_char) -> *mut libc:
                     .as_mut_ptr()
                     .offset((*in_0.offset(0 as i32 as isize) as i32 - '0' as i32) as isize)
                     as *mut memstatic_t as *mut libc::c_char)
-                    .offset(::std::mem::size_of::<memblock_t>() as libc::c_ulong as isize);
+                    .offset(::std::mem::size_of::<memblock_t>() as usize as isize);
             }
         }
     }
-    out = S_Malloc(crate::stdlib::strlen(in_0).wrapping_add(1 as i32 as libc::c_ulong) as i32)
+    out = S_Malloc(crate::stdlib::strlen(in_0).wrapping_add(1 as i32 as usize) as i32)
         as *mut libc::c_char;
     libc::strcpy(out, in_0);
     return out;
@@ -2188,7 +2188,7 @@ Com_InitZoneMemory
 
 pub unsafe extern "C" fn Com_InitSmallZoneMemory() {
     s_smallZoneTotal = 512 as i32 * 1024 as i32;
-    smallzone = crate::stdlib::calloc(s_smallZoneTotal as libc::c_ulong, 1 as i32 as libc::c_ulong)
+    smallzone = crate::stdlib::calloc(s_smallZoneTotal as usize, 1 as i32 as usize)
         as *mut memzone_t;
     if smallzone.is_null() {
         Com_Error(
@@ -2220,7 +2220,7 @@ pub unsafe extern "C" fn Com_InitZoneMemory() {
     } else {
         s_zoneTotal = (*cv).integer * 1024 as i32 * 1024 as i32
     }
-    mainzone = crate::stdlib::calloc(s_zoneTotal as libc::c_ulong, 1 as i32 as libc::c_ulong)
+    mainzone = crate::stdlib::calloc(s_zoneTotal as usize, 1 as i32 as usize)
         as *mut memzone_t;
     if mainzone.is_null() {
         Com_Error(
@@ -2250,7 +2250,7 @@ pub unsafe extern "C" fn Hunk_Log() {
     numBlocks = 0 as i32;
     Com_sprintf(
         buf.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
         b"\r\n================\r\nHunk log\r\n================\r\n\x00" as *const u8
             as *const libc::c_char,
     );
@@ -2267,7 +2267,7 @@ pub unsafe extern "C" fn Hunk_Log() {
     }
     Com_sprintf(
         buf.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
         b"%d Hunk memory\r\n\x00" as *const u8 as *const libc::c_char,
         size,
     );
@@ -2278,7 +2278,7 @@ pub unsafe extern "C" fn Hunk_Log() {
     );
     Com_sprintf(
         buf.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
         b"%d hunk blocks\r\n\x00" as *const u8 as *const libc::c_char,
         numBlocks,
     );
@@ -2313,7 +2313,7 @@ pub unsafe extern "C" fn Hunk_SmallLog() {
     numBlocks = 0 as i32;
     Com_sprintf(
         buf.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
         b"\r\n================\r\nHunk Small log\r\n================\r\n\x00" as *const u8
             as *const libc::c_char,
     );
@@ -2342,7 +2342,7 @@ pub unsafe extern "C" fn Hunk_SmallLog() {
     }
     Com_sprintf(
         buf.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
         b"%d Hunk memory\r\n\x00" as *const u8 as *const libc::c_char,
         size,
     );
@@ -2353,7 +2353,7 @@ pub unsafe extern "C" fn Hunk_SmallLog() {
     );
     Com_sprintf(
         buf.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
         b"%d hunk blocks\r\n\x00" as *const u8 as *const libc::c_char,
         numBlocks,
     );
@@ -2412,8 +2412,8 @@ pub unsafe extern "C" fn Com_InitHunkMemory() {
         s_hunkTotal = (*cv).integer * 1024 as i32 * 1024 as i32
     }
     s_hunkData = crate::stdlib::calloc(
-        (s_hunkTotal + 31 as i32) as libc::c_ulong,
-        1 as i32 as libc::c_ulong,
+        (s_hunkTotal + 31 as i32) as usize,
+        1 as i32 as usize,
     ) as *mut byte;
     if s_hunkData.is_null() {
         Com_Error(
@@ -2587,7 +2587,7 @@ pub unsafe extern "C" fn Hunk_Alloc(mut size: i32, mut preference: ha_pref) -> *
             .offset(-((*hunk_permanent).permanent as isize)) as *mut libc::c_void
     }
     (*hunk_permanent).temp = (*hunk_permanent).permanent;
-    crate::stdlib::memset(buf, 0 as i32, size as libc::c_ulong);
+    crate::stdlib::memset(buf, 0 as i32, size as usize);
     return buf;
 }
 /*
@@ -2612,12 +2612,12 @@ pub unsafe extern "C" fn Hunk_AllocateTempMemory(mut size: i32) -> *mut libc::c_
         return Z_Malloc(size);
     }
     Hunk_SwapBanks();
-    size = ((size as libc::c_ulong)
-        .wrapping_add(::std::mem::size_of::<intptr_t>() as libc::c_ulong)
-        .wrapping_sub(1 as i32 as libc::c_ulong)
-        & !(::std::mem::size_of::<intptr_t>() as libc::c_ulong)
-            .wrapping_sub(1 as i32 as libc::c_ulong))
-    .wrapping_add(::std::mem::size_of::<hunkHeader_t>() as libc::c_ulong) as i32;
+    size = ((size as usize)
+        .wrapping_add(::std::mem::size_of::<intptr_t>() as usize)
+        .wrapping_sub(1 as i32 as usize)
+        & !(::std::mem::size_of::<intptr_t>() as usize)
+            .wrapping_sub(1 as i32 as usize))
+    .wrapping_add(::std::mem::size_of::<hunkHeader_t>() as usize) as i32;
     if (*hunk_temp).temp + (*hunk_permanent).permanent + size > s_hunkTotal {
         Com_Error(
             ERR_DROP as i32,
@@ -2867,7 +2867,7 @@ pub unsafe extern "C" fn Com_GetSystemEvent() -> sysEvent_t {
     if !s.is_null() {
         let mut b: *mut libc::c_char = 0 as *mut libc::c_char;
         let mut len: i32 = 0;
-        len = crate::stdlib::strlen(s).wrapping_add(1 as i32 as libc::c_ulong) as i32;
+        len = crate::stdlib::strlen(s).wrapping_add(1 as i32 as usize) as i32;
         b = Z_Malloc(len) as *mut libc::c_char;
         libc::strcpy(b, s);
         Com_QueueEvent(
@@ -2888,7 +2888,7 @@ pub unsafe extern "C" fn Com_GetSystemEvent() -> sysEvent_t {
     crate::stdlib::memset(
         &mut ev as *mut sysEvent_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<sysEvent_t>() as libc::c_ulong,
+        ::std::mem::size_of::<sysEvent_t>() as usize,
     );
     ev.evTime = Sys_Milliseconds();
     return ev;
@@ -2914,10 +2914,10 @@ pub unsafe extern "C" fn Com_GetRealEvent() -> sysEvent_t {
     if (*com_journal).integer == 2 as i32 {
         r = FS_Read(
             &mut ev as *mut sysEvent_t as *mut libc::c_void,
-            ::std::mem::size_of::<sysEvent_t>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<sysEvent_t>() as usize as i32,
             com_journalFile,
         );
-        if r as libc::c_ulong != ::std::mem::size_of::<sysEvent_t>() as libc::c_ulong {
+        if r as usize != ::std::mem::size_of::<sysEvent_t>() as usize {
             Com_Error(
                 ERR_FATAL as i32,
                 b"Error reading from journal file\x00" as *const u8 as *const libc::c_char,
@@ -2939,10 +2939,10 @@ pub unsafe extern "C" fn Com_GetRealEvent() -> sysEvent_t {
         if (*com_journal).integer == 1 as i32 {
             r = FS_Write(
                 &mut ev as *mut sysEvent_t as *const libc::c_void,
-                ::std::mem::size_of::<sysEvent_t>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<sysEvent_t>() as usize as i32,
                 com_journalFile,
             );
-            if r as libc::c_ulong != ::std::mem::size_of::<sysEvent_t>() as libc::c_ulong {
+            if r as usize != ::std::mem::size_of::<sysEvent_t>() as usize {
                 Com_Error(
                     ERR_FATAL as i32,
                     b"Error writing to journal file\x00" as *const u8 as *const libc::c_char,
@@ -2974,7 +2974,7 @@ pub unsafe extern "C" fn Com_InitPushEvent() {
     crate::stdlib::memset(
         com_pushedEvents.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[sysEvent_t; 1024]>() as libc::c_ulong,
+        ::std::mem::size_of::<[sysEvent_t; 1024]>() as usize,
     );
     // reset counters while we are at it
     // beware: GetEvent might still return an SE_NONE from the buffer
@@ -3097,7 +3097,7 @@ pub unsafe extern "C" fn Com_EventLoop() -> i32 {
     MSG_Init(
         &mut buf as *mut _ as *mut msg_t,
         bufData.as_mut_ptr(),
-        ::std::mem::size_of::<[byte; 16384]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[byte; 16384]>() as usize as i32,
     );
     loop {
         ev = Com_GetEvent();
@@ -3393,7 +3393,7 @@ pub unsafe extern "C" fn Com_ReadCDKey(mut filename: *const libc::c_char) {
     let mut fbuffer: [libc::c_char; 4096] = [0; 4096];
     Com_sprintf(
         fbuffer.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
         b"%s/q3key\x00" as *const u8 as *const libc::c_char,
         filename,
     );
@@ -3409,7 +3409,7 @@ pub unsafe extern "C" fn Com_ReadCDKey(mut filename: *const libc::c_char) {
     crate::stdlib::memset(
         buffer.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[libc::c_char; 33]>() as libc::c_ulong,
+        ::std::mem::size_of::<[libc::c_char; 33]>() as usize,
     );
     FS_Read(buffer.as_mut_ptr() as *mut libc::c_void, 16 as i32, f);
     FS_FCloseFile(f);
@@ -3436,7 +3436,7 @@ pub unsafe extern "C" fn Com_AppendCDKey(mut filename: *const libc::c_char) {
     let mut fbuffer: [libc::c_char; 4096] = [0; 4096];
     Com_sprintf(
         fbuffer.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
         b"%s/q3key\x00" as *const u8 as *const libc::c_char,
         filename,
     );
@@ -3452,7 +3452,7 @@ pub unsafe extern "C" fn Com_AppendCDKey(mut filename: *const libc::c_char) {
     crate::stdlib::memset(
         buffer.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[libc::c_char; 33]>() as libc::c_ulong,
+        ::std::mem::size_of::<[libc::c_char; 33]>() as usize,
     );
     FS_Read(buffer.as_mut_ptr() as *mut libc::c_void, 16 as i32, f);
     FS_FCloseFile(f);
@@ -3485,7 +3485,7 @@ unsafe extern "C" fn Com_WriteCDKey(
     let mut savedumask: mode_t = 0;
     Com_sprintf(
         fbuffer.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
         b"%s/q3key\x00" as *const u8 as *const libc::c_char,
         filename,
     );
@@ -3561,7 +3561,7 @@ unsafe extern "C" fn Com_InitRand() {
     let mut seed: u32 = 0;
     if Sys_RandomBytes(
         &mut seed as *mut u32 as *mut byte,
-        ::std::mem::size_of::<u32>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<u32>() as usize as i32,
     ) as u64
         != 0
     {
@@ -3595,8 +3595,8 @@ pub unsafe extern "C" fn Com_Init(mut commandLine: *mut libc::c_char) {
         &mut *eventQueue.as_mut_ptr().offset(0 as i32 as isize) as *mut sysEvent_t
             as *mut libc::c_void,
         0 as i32,
-        (256 as i32 as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<sysEvent_t>() as libc::c_ulong),
+        (256 as i32 as usize)
+            .wrapping_mul(::std::mem::size_of::<sysEvent_t>() as usize),
     );
     // initialize the weak pseudo-random number generator for use later.
     Com_InitRand();
@@ -3892,7 +3892,7 @@ pub unsafe extern "C" fn Com_Init(mut commandLine: *mut libc::c_char) {
     // Pick a random port value
     Com_RandomBytes(
         &mut qport as *mut i32 as *mut byte,
-        ::std::mem::size_of::<i32>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<i32>() as usize as i32,
     );
     Netchan_Init(qport & 0xffff as i32);
     VM_Init();
@@ -3963,9 +3963,9 @@ pub unsafe extern "C" fn Com_ReadFromPipe() {
     loop {
         read = FS_Read(
             buf.as_mut_ptr().offset(accu as isize) as *mut libc::c_void,
-            (::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong)
-                .wrapping_sub(accu as libc::c_ulong)
-                .wrapping_sub(1 as i32 as libc::c_ulong) as i32,
+            (::std::mem::size_of::<[libc::c_char; 1024]>() as usize)
+                .wrapping_sub(accu as usize)
+                .wrapping_sub(1 as i32 as usize) as i32,
             pipefile,
         );
         if !(read > 0 as i32) {
@@ -3994,11 +3994,11 @@ pub unsafe extern "C" fn Com_ReadFromPipe() {
             crate::stdlib::memmove(
                 buf.as_mut_ptr() as *mut libc::c_void,
                 brk as *const libc::c_void,
-                (accu + 1 as i32) as libc::c_ulong,
+                (accu + 1 as i32) as usize,
             );
-        } else if accu as libc::c_ulong
-            >= (::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong)
-                .wrapping_sub(1 as i32 as libc::c_ulong)
+        } else if accu as usize
+            >= (::std::mem::size_of::<[libc::c_char; 1024]>() as usize)
+                .wrapping_sub(1 as i32 as usize)
         {
             // full
             Cbuf_ExecuteText(EXEC_APPEND as i32, buf.as_mut_ptr());
@@ -4083,11 +4083,11 @@ pub unsafe extern "C" fn Com_WriteConfig_f() {
     Q_strncpyz(
         filename.as_mut_ptr(),
         Cmd_Argv(1 as i32),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     COM_DefaultExtension(
         filename.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         b".cfg\x00" as *const u8 as *const libc::c_char,
     );
     if COM_CompareExtension(
@@ -4415,7 +4415,7 @@ pub unsafe extern "C" fn Field_Clear(mut edit: *mut field_t) {
     crate::stdlib::memset(
         (*edit).buffer.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        256 as i32 as libc::c_ulong,
+        256 as i32 as usize,
     );
     (*edit).cursor = 0 as i32;
     (*edit).scroll = 0 as i32;
@@ -4451,21 +4451,21 @@ unsafe extern "C" fn FindMatches(mut s: *const libc::c_char) {
         Q_strncpyz(
             shortestMatch.as_mut_ptr(),
             s,
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
         );
         return;
     }
     // cut shortestMatch to the amount common with s
     i = 0 as i32;
     while shortestMatch[i as usize] != 0 {
-        if i as libc::c_ulong >= crate::stdlib::strlen(s) {
+        if i as usize >= crate::stdlib::strlen(s) {
             shortestMatch[i as usize] = 0 as i32 as libc::c_char;
             break;
         } else {
             if ({
                 let mut __res: i32 = 0;
-                if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong
-                    > 1 as i32 as libc::c_ulong
+                if ::std::mem::size_of::<libc::c_char>() as usize
+                    > 1 as i32 as usize
                 {
                     if 0 != 0 {
                         let mut __c: i32 = shortestMatch[i as usize] as i32;
@@ -4484,8 +4484,8 @@ unsafe extern "C" fn FindMatches(mut s: *const libc::c_char) {
                 __res
             }) != ({
                 let mut __res: i32 = 0;
-                if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong
-                    > 1 as i32 as libc::c_ulong
+                if ::std::mem::size_of::<libc::c_char>() as usize
+                    > 1 as i32 as usize
                 {
                     if 0 != 0 {
                         let mut __c: i32 = *s.offset(i as isize) as i32;
@@ -4557,7 +4557,7 @@ Field_FindFirstSeparator
 unsafe extern "C" fn Field_FindFirstSeparator(mut s: *mut libc::c_char) -> *mut libc::c_char {
     let mut i: i32 = 0;
     i = 0 as i32;
-    while (i as libc::c_ulong) < crate::stdlib::strlen(s) {
+    while (i as usize) < crate::stdlib::strlen(s) {
         if *s.offset(i as isize) as i32 == ';' as i32 {
             return &mut *s.offset(i as isize) as *mut libc::c_char;
         }
@@ -4584,15 +4584,15 @@ unsafe extern "C" fn Field_Complete() -> qboolean {
             .as_mut_ptr()
             .offset(completionOffset as isize),
         shortestMatch.as_mut_ptr(),
-        (::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong)
-            .wrapping_sub(completionOffset as libc::c_ulong) as i32,
+        (::std::mem::size_of::<[libc::c_char; 256]>() as usize)
+            .wrapping_sub(completionOffset as usize) as i32,
     );
     (*completionField).cursor =
         crate::stdlib::strlen((*completionField).buffer.as_mut_ptr()) as i32;
     if matchCount == 1 as i32 {
         Q_strcat(
             (*completionField).buffer.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
             b" \x00" as *const u8 as *const libc::c_char,
         );
         (*completionField).cursor += 1;
@@ -4694,8 +4694,8 @@ pub unsafe extern "C" fn Field_CompleteCommand(
         if (*completionField).buffer[0 as i32 as usize] as i32 != '/' as i32 {
             // Buffer is full, refuse to complete
             if crate::stdlib::strlen((*completionField).buffer.as_mut_ptr())
-                .wrapping_add(1 as i32 as libc::c_ulong)
-                >= ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong
+                .wrapping_add(1 as i32 as usize)
+                >= ::std::mem::size_of::<[libc::c_char; 256]>() as usize
             {
                 return;
             }
@@ -4711,7 +4711,7 @@ pub unsafe extern "C" fn Field_CompleteCommand(
                     .offset(0 as i32 as isize) as *mut libc::c_char
                     as *const libc::c_void,
                 crate::stdlib::strlen((*completionField).buffer.as_mut_ptr())
-                    .wrapping_add(1 as i32 as libc::c_ulong),
+                    .wrapping_add(1 as i32 as usize),
             );
             (*completionField).cursor += 1
         }
@@ -4740,7 +4740,7 @@ pub unsafe extern "C" fn Field_CompleteCommand(
         }
         matchCount = 0 as i32;
         shortestMatch[0 as i32 as usize] = 0 as i32 as libc::c_char;
-        if crate::stdlib::strlen(completionString) == 0 as i32 as libc::c_ulong {
+        if crate::stdlib::strlen(completionString) == 0 as i32 as usize {
             return;
         }
         if doCommands as u64 != 0 {
@@ -4856,15 +4856,15 @@ unsafe extern "C" fn Field_CompletePlayerNameFinal(mut whitespace: qboolean) -> 
             .as_mut_ptr()
             .offset(completionOffset as isize),
         shortestMatch.as_mut_ptr(),
-        (::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong)
-            .wrapping_sub(completionOffset as libc::c_ulong) as i32,
+        (::std::mem::size_of::<[libc::c_char; 256]>() as usize)
+            .wrapping_sub(completionOffset as usize) as i32,
     );
     (*completionField).cursor =
         crate::stdlib::strlen((*completionField).buffer.as_mut_ptr()) as i32;
     if matchCount == 1 as i32 && whitespace as u32 != 0 {
         Q_strcat(
             (*completionField).buffer.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
             b" \x00" as *const u8 as *const libc::c_char,
         );
         (*completionField).cursor += 1;
@@ -4907,7 +4907,7 @@ pub unsafe extern "C" fn Com_FieldStringToPlayerName(
             Q_strncpyz(
                 hex.as_mut_ptr(),
                 rawname.offset(1 as i32 as isize),
-                ::std::mem::size_of::<[libc::c_char; 5]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 5]>() as usize as i32,
             );
             ch = Com_HexStrToInt(hex.as_mut_ptr());
             if ch > -(1 as i32) {
@@ -5002,7 +5002,7 @@ pub unsafe extern "C" fn Field_CompletePlayerName(
     if *completionString.offset(0 as i32 as isize) as i32 == '\u{0}' as i32 {
         Com_PlayerNameToFieldString(
             shortestMatch.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
             *names.offset(0 as i32 as isize),
         );
     }
@@ -5022,7 +5022,7 @@ pub unsafe extern "C" fn Field_CompletePlayerName(
                 }
                 Com_PlayerNameToFieldString(
                     shortestMatch.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
                     *names.offset(i as isize),
                 );
                 break;
@@ -5064,10 +5064,10 @@ unsafe extern "C" fn run_static_initializers() {
         let mut init = memstatic_s {
             b: {
                 let mut init = memblock_s {
-                    size: ((::std::mem::size_of::<memblock_t>() as libc::c_ulong)
-                        .wrapping_add(2 as i32 as libc::c_ulong)
-                        .wrapping_add(3 as i32 as libc::c_ulong)
-                        & !(3 as i32) as libc::c_ulong) as i32,
+                    size: ((::std::mem::size_of::<memblock_t>() as usize)
+                        .wrapping_add(2 as i32 as usize)
+                        .wrapping_add(3 as i32 as usize)
+                        & !(3 as i32) as usize) as i32,
                     tag: TAG_STATIC as i32,
                     next: 0 as *mut memblock_s,
                     prev: 0 as *mut memblock_s,
@@ -5084,9 +5084,9 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = memstatic_s {
                 b: {
                     let mut init = memblock_s {
-                        size: ((::std::mem::size_of::<memstatic_t>() as libc::c_ulong)
-                            .wrapping_add(3 as i32 as libc::c_ulong)
-                            & !(3 as i32) as libc::c_ulong) as i32,
+                        size: ((::std::mem::size_of::<memstatic_t>() as usize)
+                            .wrapping_add(3 as i32 as usize)
+                            & !(3 as i32) as usize) as i32,
                         tag: TAG_STATIC as i32,
                         next: 0 as *mut memblock_s,
                         prev: 0 as *mut memblock_s,
@@ -5102,9 +5102,9 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = memstatic_s {
                 b: {
                     let mut init = memblock_s {
-                        size: ((::std::mem::size_of::<memstatic_t>() as libc::c_ulong)
-                            .wrapping_add(3 as i32 as libc::c_ulong)
-                            & !(3 as i32) as libc::c_ulong) as i32,
+                        size: ((::std::mem::size_of::<memstatic_t>() as usize)
+                            .wrapping_add(3 as i32 as usize)
+                            & !(3 as i32) as usize) as i32,
                         tag: TAG_STATIC as i32,
                         next: 0 as *mut memblock_s,
                         prev: 0 as *mut memblock_s,
@@ -5120,9 +5120,9 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = memstatic_s {
                 b: {
                     let mut init = memblock_s {
-                        size: ((::std::mem::size_of::<memstatic_t>() as libc::c_ulong)
-                            .wrapping_add(3 as i32 as libc::c_ulong)
-                            & !(3 as i32) as libc::c_ulong) as i32,
+                        size: ((::std::mem::size_of::<memstatic_t>() as usize)
+                            .wrapping_add(3 as i32 as usize)
+                            & !(3 as i32) as usize) as i32,
                         tag: TAG_STATIC as i32,
                         next: 0 as *mut memblock_s,
                         prev: 0 as *mut memblock_s,
@@ -5138,9 +5138,9 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = memstatic_s {
                 b: {
                     let mut init = memblock_s {
-                        size: ((::std::mem::size_of::<memstatic_t>() as libc::c_ulong)
-                            .wrapping_add(3 as i32 as libc::c_ulong)
-                            & !(3 as i32) as libc::c_ulong) as i32,
+                        size: ((::std::mem::size_of::<memstatic_t>() as usize)
+                            .wrapping_add(3 as i32 as usize)
+                            & !(3 as i32) as usize) as i32,
                         tag: TAG_STATIC as i32,
                         next: 0 as *mut memblock_s,
                         prev: 0 as *mut memblock_s,
@@ -5156,9 +5156,9 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = memstatic_s {
                 b: {
                     let mut init = memblock_s {
-                        size: ((::std::mem::size_of::<memstatic_t>() as libc::c_ulong)
-                            .wrapping_add(3 as i32 as libc::c_ulong)
-                            & !(3 as i32) as libc::c_ulong) as i32,
+                        size: ((::std::mem::size_of::<memstatic_t>() as usize)
+                            .wrapping_add(3 as i32 as usize)
+                            & !(3 as i32) as usize) as i32,
                         tag: TAG_STATIC as i32,
                         next: 0 as *mut memblock_s,
                         prev: 0 as *mut memblock_s,
@@ -5174,9 +5174,9 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = memstatic_s {
                 b: {
                     let mut init = memblock_s {
-                        size: ((::std::mem::size_of::<memstatic_t>() as libc::c_ulong)
-                            .wrapping_add(3 as i32 as libc::c_ulong)
-                            & !(3 as i32) as libc::c_ulong) as i32,
+                        size: ((::std::mem::size_of::<memstatic_t>() as usize)
+                            .wrapping_add(3 as i32 as usize)
+                            & !(3 as i32) as usize) as i32,
                         tag: TAG_STATIC as i32,
                         next: 0 as *mut memblock_s,
                         prev: 0 as *mut memblock_s,
@@ -5192,9 +5192,9 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = memstatic_s {
                 b: {
                     let mut init = memblock_s {
-                        size: ((::std::mem::size_of::<memstatic_t>() as libc::c_ulong)
-                            .wrapping_add(3 as i32 as libc::c_ulong)
-                            & !(3 as i32) as libc::c_ulong) as i32,
+                        size: ((::std::mem::size_of::<memstatic_t>() as usize)
+                            .wrapping_add(3 as i32 as usize)
+                            & !(3 as i32) as usize) as i32,
                         tag: TAG_STATIC as i32,
                         next: 0 as *mut memblock_s,
                         prev: 0 as *mut memblock_s,
@@ -5210,9 +5210,9 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = memstatic_s {
                 b: {
                     let mut init = memblock_s {
-                        size: ((::std::mem::size_of::<memstatic_t>() as libc::c_ulong)
-                            .wrapping_add(3 as i32 as libc::c_ulong)
-                            & !(3 as i32) as libc::c_ulong) as i32,
+                        size: ((::std::mem::size_of::<memstatic_t>() as usize)
+                            .wrapping_add(3 as i32 as usize)
+                            & !(3 as i32) as usize) as i32,
                         tag: TAG_STATIC as i32,
                         next: 0 as *mut memblock_s,
                         prev: 0 as *mut memblock_s,
@@ -5228,9 +5228,9 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = memstatic_s {
                 b: {
                     let mut init = memblock_s {
-                        size: ((::std::mem::size_of::<memstatic_t>() as libc::c_ulong)
-                            .wrapping_add(3 as i32 as libc::c_ulong)
-                            & !(3 as i32) as libc::c_ulong) as i32,
+                        size: ((::std::mem::size_of::<memstatic_t>() as usize)
+                            .wrapping_add(3 as i32 as usize)
+                            & !(3 as i32) as usize) as i32,
                         tag: TAG_STATIC as i32,
                         next: 0 as *mut memblock_s,
                         prev: 0 as *mut memblock_s,
@@ -5246,9 +5246,9 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = memstatic_s {
                 b: {
                     let mut init = memblock_s {
-                        size: ((::std::mem::size_of::<memstatic_t>() as libc::c_ulong)
-                            .wrapping_add(3 as i32 as libc::c_ulong)
-                            & !(3 as i32) as libc::c_ulong) as i32,
+                        size: ((::std::mem::size_of::<memstatic_t>() as usize)
+                            .wrapping_add(3 as i32 as usize)
+                            & !(3 as i32) as usize) as i32,
                         tag: TAG_STATIC as i32,
                         next: 0 as *mut memblock_s,
                         prev: 0 as *mut memblock_s,

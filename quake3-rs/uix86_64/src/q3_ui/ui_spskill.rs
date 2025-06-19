@@ -683,7 +683,7 @@ unsafe extern "C" fn UI_SPSkillMenu_Init() {
     crate::stdlib::memset(
         &mut skillMenuInfo as *mut skillMenuInfo_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<skillMenuInfo_t>() as libc::c_ulong,
+        ::std::mem::size_of::<skillMenuInfo_t>() as usize,
     );
     skillMenuInfo.menu.fullscreen = qtrue;
     skillMenuInfo.menu.key =

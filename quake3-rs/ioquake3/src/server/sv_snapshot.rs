@@ -813,7 +813,7 @@ unsafe extern "C" fn SV_BuildClientSnapshot(mut client: *mut client_t) {
     crate::stdlib::memset(
         (*frame).areabits.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[byte; 32]>() as libc::c_ulong,
+        ::std::mem::size_of::<[byte; 32]>() as usize,
     );
     // https://zerowing.idsoftware.com/bugzilla/show_bug.cgi?id=62
     (*frame).num_entities = 0 as i32;
@@ -850,7 +850,7 @@ unsafe extern "C" fn SV_BuildClientSnapshot(mut client: *mut client_t) {
     qsort(
         entityNumbers.snapshotEntities.as_mut_ptr() as *mut libc::c_void,
         entityNumbers.numSnapshotEntities as size_t,
-        ::std::mem::size_of::<i32>() as libc::c_ulong,
+        ::std::mem::size_of::<i32>() as usize,
         Some(
             SV_QsortEntityNumbers
                 as unsafe extern "C" fn(_: *const libc::c_void, _: *const libc::c_void) -> i32,
@@ -904,10 +904,10 @@ unsafe extern "C" fn SV_WriteVoipToClient(mut cl: *mut client_t, mut msg: *mut m
         i = 0 as i32;
         while i < (*cl).queuedVoipPackets {
             packet = (*cl).voipPacket
-                [((i + (*cl).queuedVoipIndex) as libc::c_ulong).wrapping_rem(
-                    (::std::mem::size_of::<[*mut voipServerPacket_t; 64]>() as libc::c_ulong)
+                [((i + (*cl).queuedVoipIndex) as usize).wrapping_rem(
+                    (::std::mem::size_of::<[*mut voipServerPacket_t; 64]>() as usize)
                         .wrapping_div(
-                            ::std::mem::size_of::<*mut voipServerPacket_t>() as libc::c_ulong
+                            ::std::mem::size_of::<*mut voipServerPacket_t>() as usize
                         ),
                 ) as usize];
             if *(*cl).downloadName.as_mut_ptr() == 0 {
@@ -933,9 +933,9 @@ unsafe extern "C" fn SV_WriteVoipToClient(mut cl: *mut client_t, mut msg: *mut m
         }
         (*cl).queuedVoipPackets -= i;
         (*cl).queuedVoipIndex += i;
-        (*cl).queuedVoipIndex = ((*cl).queuedVoipIndex as libc::c_ulong).wrapping_rem(
-            (::std::mem::size_of::<[*mut voipServerPacket_t; 64]>() as libc::c_ulong)
-                .wrapping_div(::std::mem::size_of::<*mut voipServerPacket_t>() as libc::c_ulong),
+        (*cl).queuedVoipIndex = ((*cl).queuedVoipIndex as usize).wrapping_rem(
+            (::std::mem::size_of::<[*mut voipServerPacket_t; 64]>() as usize)
+                .wrapping_div(::std::mem::size_of::<*mut voipServerPacket_t>() as usize),
         ) as i32
     };
 }
@@ -991,7 +991,7 @@ pub unsafe extern "C" fn SV_SendClientSnapshot(mut client: *mut client_t) {
     MSG_Init(
         &mut msg as *mut _ as *mut msg_t,
         msg_buf.as_mut_ptr(),
-        ::std::mem::size_of::<[byte; 16384]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[byte; 16384]>() as usize as i32,
     );
     msg.allowoverflow = qtrue;
     // NOTE, MRE: all server->client messages now acknowledge

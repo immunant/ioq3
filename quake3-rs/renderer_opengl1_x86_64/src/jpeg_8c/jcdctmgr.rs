@@ -841,8 +841,8 @@ unsafe extern "C" fn start_pass_fdctmgr(mut cinfo: j_compress_ptr) {
                     .expect("non-null function pointer")(
                         cinfo as j_common_ptr,
                         1 as i32,
-                        (64 as i32 as libc::c_ulong)
-                            .wrapping_mul(::std::mem::size_of::<DCTELEM>() as libc::c_ulong),
+                        (64 as i32 as usize)
+                            .wrapping_mul(::std::mem::size_of::<DCTELEM>() as usize),
                     ) as *mut DCTELEM
                 }
                 dtbl = (*fdct).divisors[qtblno as usize];
@@ -947,8 +947,8 @@ unsafe extern "C" fn start_pass_fdctmgr(mut cinfo: j_compress_ptr) {
                     .expect("non-null function pointer")(
                         cinfo as j_common_ptr,
                         1 as i32,
-                        (64 as i32 as libc::c_ulong)
-                            .wrapping_mul(::std::mem::size_of::<DCTELEM>() as libc::c_ulong),
+                        (64 as i32 as usize)
+                            .wrapping_mul(::std::mem::size_of::<DCTELEM>() as usize),
                     ) as *mut DCTELEM
                 }
                 dtbl = (*fdct).divisors[qtblno as usize];
@@ -1004,8 +1004,8 @@ unsafe extern "C" fn start_pass_fdctmgr(mut cinfo: j_compress_ptr) {
                     .expect("non-null function pointer")(
                         cinfo as j_common_ptr,
                         1 as i32,
-                        (64 as i32 as libc::c_ulong)
-                            .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
+                        (64 as i32 as usize)
+                            .wrapping_mul(::std::mem::size_of::<f32>() as usize),
                     ) as *mut f32
                 }
                 fdtbl = (*fdct).float_divisors[qtblno as usize];
@@ -1068,7 +1068,7 @@ pub unsafe extern "C" fn jinit_forward_dct(mut cinfo: j_compress_ptr) {
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         1 as i32,
-        ::std::mem::size_of::<my_fdct_controller>() as libc::c_ulong,
+        ::std::mem::size_of::<my_fdct_controller>() as usize,
     ) as my_fdct_ptr;
     (*cinfo).fdct = fdct as *mut jpeg_forward_dct;
     (*fdct).pub_0.start_pass =

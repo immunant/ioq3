@@ -259,7 +259,7 @@ pub unsafe extern "C" fn AAS_EntityCollision(
         crate::stdlib::memcpy(
             trace as *mut libc::c_void,
             &mut enttrace as *mut bsp_trace_t as *const libc::c_void,
-            ::std::mem::size_of::<bsp_trace_t>() as libc::c_ulong,
+            ::std::mem::size_of::<bsp_trace_t>() as usize,
         );
         return qtrue;
     }
@@ -415,7 +415,7 @@ pub unsafe extern "C" fn AAS_ValueForBSPEpairKey(
     epair = bspworld.entities[ent as usize].epairs;
     while !epair.is_null() {
         if libc::strcmp((*epair).key, key) == 0 {
-            crate::stdlib::strncpy(value, (*epair).value, (size - 1 as i32) as libc::c_ulong);
+            crate::stdlib::strncpy(value, (*epair).value, (size - 1 as i32) as usize);
             *value.offset((size - 1 as i32) as isize) = '\u{0}' as i32 as libc::c_char;
             return qtrue as i32;
         }
@@ -657,7 +657,7 @@ pub unsafe extern "C" fn AAS_ParseBSPEntities() {
                 epair = crate::src::botlib::l_memory::GetClearedHunkMemory(::std::mem::size_of::<
                     bsp_epair_t,
                 >()
-                    as libc::c_ulong) as *mut bsp_epair_t;
+                    as usize) as *mut bsp_epair_t;
                 (*epair).next = (*ent).epairs;
                 (*ent).epairs = epair;
                 if token.type_0 != 1 as i32 {
@@ -673,7 +673,7 @@ pub unsafe extern "C" fn AAS_ParseBSPEntities() {
                 StripDoubleQuotes(token.string.as_mut_ptr());
                 (*epair).key = crate::src::botlib::l_memory::GetHunkMemory(
                     crate::stdlib::strlen(token.string.as_mut_ptr())
-                        .wrapping_add(1 as i32 as libc::c_ulong),
+                        .wrapping_add(1 as i32 as usize),
                 ) as *mut libc::c_char;
                 libc::strcpy((*epair).key, token.string.as_mut_ptr());
                 if PS_ExpectTokenType(
@@ -690,7 +690,7 @@ pub unsafe extern "C" fn AAS_ParseBSPEntities() {
                 StripDoubleQuotes(token.string.as_mut_ptr());
                 (*epair).value = crate::src::botlib::l_memory::GetHunkMemory(
                     crate::stdlib::strlen(token.string.as_mut_ptr())
-                        .wrapping_add(1 as i32 as libc::c_ulong),
+                        .wrapping_add(1 as i32 as usize),
                 ) as *mut libc::c_char;
                 libc::strcpy((*epair).value, token.string.as_mut_ptr());
             }
@@ -752,7 +752,7 @@ pub unsafe extern "C" fn AAS_DumpBSPData() {
     crate::stdlib::memset(
         &mut bspworld as *mut bsp_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<bsp_t>() as libc::c_ulong,
+        ::std::mem::size_of::<bsp_t>() as usize,
     );
 }
 /*
@@ -828,14 +828,14 @@ pub unsafe extern "C" fn AAS_LoadBSPFile() -> i32 {
     AAS_DumpBSPData();
     bspworld.entdatasize =
         crate::stdlib::strlen(botimport.BSPEntityData.expect("non-null function pointer")())
-            .wrapping_add(1 as i32 as libc::c_ulong) as i32;
+            .wrapping_add(1 as i32 as usize) as i32;
     bspworld.dentdata =
-        crate::src::botlib::l_memory::GetClearedHunkMemory(bspworld.entdatasize as libc::c_ulong)
+        crate::src::botlib::l_memory::GetClearedHunkMemory(bspworld.entdatasize as usize)
             as *mut libc::c_char;
     crate::stdlib::memcpy(
         bspworld.dentdata as *mut libc::c_void,
         botimport.BSPEntityData.expect("non-null function pointer")() as *const libc::c_void,
-        bspworld.entdatasize as libc::c_ulong,
+        bspworld.entdatasize as usize,
     );
     AAS_ParseBSPEntities();
     bspworld.loaded = qtrue as i32;

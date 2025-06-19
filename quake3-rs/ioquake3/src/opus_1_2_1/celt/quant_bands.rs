@@ -37,7 +37,7 @@ pub mod entcode_h {
         mut _this: *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
     ) -> i32 {
         return (*_this).nbits_total
-            - (::std::mem::size_of::<u32>() as libc::c_ulong as i32 * 8 as i32
+            - (::std::mem::size_of::<u32>() as usize as i32 * 8 as i32
                 - (*_this).rng.leading_zeros() as i32);
     }
 }
@@ -780,24 +780,24 @@ pub unsafe extern "C" fn quant_coarse_energy(
     enc_start_state = *enc;
     let mut fresh0 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_val16>() as libc::c_ulong)
-            .wrapping_mul((C * (*m).nbEBands) as libc::c_ulong) as usize,
+        (::std::mem::size_of::<opus_val16>() as usize)
+            .wrapping_mul((C * (*m).nbEBands) as usize) as usize,
     );
     oldEBands_intra = fresh0.as_mut_ptr() as *mut opus_val16;
     let mut fresh1 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_val16>() as libc::c_ulong)
-            .wrapping_mul((C * (*m).nbEBands) as libc::c_ulong) as usize,
+        (::std::mem::size_of::<opus_val16>() as usize)
+            .wrapping_mul((C * (*m).nbEBands) as usize) as usize,
     );
     error_intra = fresh1.as_mut_ptr() as *mut opus_val16;
     crate::stdlib::memcpy(
         oldEBands_intra as *mut libc::c_void,
         oldEBands as *const libc::c_void,
-        ((C * (*m).nbEBands) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<opus_val16>() as libc::c_ulong)
+        ((C * (*m).nbEBands) as usize)
+            .wrapping_mul(::std::mem::size_of::<opus_val16>() as usize)
             .wrapping_add(
                 (0 as i32 as isize * oldEBands_intra.offset_from(oldEBands) as isize)
-                    as libc::c_ulong,
+                    as usize,
             ),
     );
     if two_pass != 0 || intra != 0 {
@@ -852,7 +852,7 @@ pub unsafe extern "C" fn quant_coarse_energy(
         }
         let mut fresh2 = ::std::vec::from_elem(
             0,
-            (::std::mem::size_of::<u8>() as libc::c_ulong).wrapping_mul(save_bytes as libc::c_ulong)
+            (::std::mem::size_of::<u8>() as usize).wrapping_mul(save_bytes as usize)
                 as usize,
         );
         intra_bits = fresh2.as_mut_ptr() as *mut u8;
@@ -860,11 +860,11 @@ pub unsafe extern "C" fn quant_coarse_energy(
         crate::stdlib::memcpy(
             intra_bits as *mut libc::c_void,
             intra_buf as *const libc::c_void,
-            (nintra_bytes.wrapping_sub(nstart_bytes) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<u8>() as libc::c_ulong)
+            (nintra_bytes.wrapping_sub(nstart_bytes) as usize)
+                .wrapping_mul(::std::mem::size_of::<u8>() as usize)
                 .wrapping_add(
                     (0 as i32 as isize * intra_bits.offset_from(intra_buf) as isize)
-                        as libc::c_ulong,
+                        as usize,
                 ),
         );
         *enc = enc_start_state;
@@ -895,31 +895,31 @@ pub unsafe extern "C" fn quant_coarse_energy(
             crate::stdlib::memcpy(
                 intra_buf as *mut libc::c_void,
                 intra_bits as *const libc::c_void,
-                (nintra_bytes.wrapping_sub(nstart_bytes) as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<u8>() as libc::c_ulong)
+                (nintra_bytes.wrapping_sub(nstart_bytes) as usize)
+                    .wrapping_mul(::std::mem::size_of::<u8>() as usize)
                     .wrapping_add(
                         (0 as i32 as isize * intra_buf.offset_from(intra_bits) as isize)
-                            as libc::c_ulong,
+                            as usize,
                     ),
             );
             crate::stdlib::memcpy(
                 oldEBands as *mut libc::c_void,
                 oldEBands_intra as *const libc::c_void,
-                ((C * (*m).nbEBands) as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<opus_val16>() as libc::c_ulong)
+                ((C * (*m).nbEBands) as usize)
+                    .wrapping_mul(::std::mem::size_of::<opus_val16>() as usize)
                     .wrapping_add(
                         (0 as i32 as isize * oldEBands.offset_from(oldEBands_intra) as isize)
-                            as libc::c_ulong,
+                            as usize,
                     ),
             );
             crate::stdlib::memcpy(
                 error as *mut libc::c_void,
                 error_intra as *const libc::c_void,
-                ((C * (*m).nbEBands) as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<opus_val16>() as libc::c_ulong)
+                ((C * (*m).nbEBands) as usize)
+                    .wrapping_mul(::std::mem::size_of::<opus_val16>() as usize)
                     .wrapping_add(
                         (0 as i32 as isize * error.offset_from(error_intra) as isize)
-                            as libc::c_ulong,
+                            as usize,
                     ),
             );
             intra = 1 as i32
@@ -928,20 +928,20 @@ pub unsafe extern "C" fn quant_coarse_energy(
         crate::stdlib::memcpy(
             oldEBands as *mut libc::c_void,
             oldEBands_intra as *const libc::c_void,
-            ((C * (*m).nbEBands) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<opus_val16>() as libc::c_ulong)
+            ((C * (*m).nbEBands) as usize)
+                .wrapping_mul(::std::mem::size_of::<opus_val16>() as usize)
                 .wrapping_add(
                     (0 as i32 as isize * oldEBands.offset_from(oldEBands_intra) as isize)
-                        as libc::c_ulong,
+                        as usize,
                 ),
         );
         crate::stdlib::memcpy(
             error as *mut libc::c_void,
             error_intra as *const libc::c_void,
-            ((C * (*m).nbEBands) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<opus_val16>() as libc::c_ulong)
+            ((C * (*m).nbEBands) as usize)
+                .wrapping_mul(::std::mem::size_of::<opus_val16>() as usize)
                 .wrapping_add(
-                    (0 as i32 as isize * error.offset_from(error_intra) as isize) as libc::c_ulong,
+                    (0 as i32 as isize * error.offset_from(error_intra) as isize) as usize,
                 ),
         );
     }

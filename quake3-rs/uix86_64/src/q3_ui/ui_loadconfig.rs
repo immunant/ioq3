@@ -594,7 +594,7 @@ unsafe extern "C" fn LoadConfig_MenuInit() {
     crate::stdlib::memset(
         &mut s_configs as *mut configs_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<configs_t>() as libc::c_ulong,
+        ::std::mem::size_of::<configs_t>() as usize,
     );
     s_configs.menu.wrapAround = qtrue;
     s_configs.menu.fullscreen = qtrue;

@@ -597,7 +597,7 @@ pub unsafe extern "C" fn RotatePointAroundVector(
     crate::stdlib::memcpy(
         im.as_mut_ptr() as *mut libc::c_void,
         m.as_mut_ptr() as *const libc::c_void,
-        ::std::mem::size_of::<[[f32; 3]; 3]>() as libc::c_ulong,
+        ::std::mem::size_of::<[[f32; 3]; 3]>() as usize,
     );
     im[0 as i32 as usize][1 as i32 as usize] = m[1 as i32 as usize][0 as i32 as usize];
     im[0 as i32 as usize][2 as i32 as usize] = m[2 as i32 as usize][0 as i32 as usize];
@@ -608,7 +608,7 @@ pub unsafe extern "C" fn RotatePointAroundVector(
     crate::stdlib::memset(
         zrot.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[[f32; 3]; 3]>() as libc::c_ulong,
+        ::std::mem::size_of::<[[f32; 3]; 3]>() as usize,
     );
     zrot[2 as i32 as usize][2 as i32 as usize] = 1.0f32;
     zrot[1 as i32 as usize][1 as i32 as usize] = zrot[2 as i32 as usize][2 as i32 as usize];

@@ -458,7 +458,7 @@ unsafe extern "C" fn Main_MenuDraw() {
     crate::stdlib::memset(
         &mut refdef as *mut refdef_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<refdef_t>() as libc::c_ulong,
+        ::std::mem::size_of::<refdef_t>() as usize,
     ); // JDC: Kenneth asked me to stop this 1.0 * sin( (float)uis.realtime / 1000 );
     refdef.rdflags = 0x1 as i32;
     AxisClear(refdef.viewaxis.as_mut_ptr());
@@ -483,7 +483,7 @@ unsafe extern "C" fn Main_MenuDraw() {
     crate::stdlib::memset(
         &mut ent as *mut refEntity_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
+        ::std::mem::size_of::<refEntity_t>() as usize,
     );
     adjust =
         (5.0f64 * crate::stdlib::sin((uis.realtime as f32 / 5000 as i32 as f32) as f64)) as f32;
@@ -562,12 +562,12 @@ unsafe extern "C" fn UI_TeamArenaExists() -> qboolean {
         b"$modlist\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
         dirlist.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 2048]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 2048]>() as usize as i32,
     );
     dirptr = dirlist.as_mut_ptr();
     i = 0 as i32;
     while i < numdirs {
-        dirlen = crate::stdlib::strlen(dirptr).wrapping_add(1 as i32 as libc::c_ulong) as i32;
+        dirlen = crate::stdlib::strlen(dirptr).wrapping_add(1 as i32 as usize) as i32;
         descptr = dirptr.offset(dirlen as isize);
         if Q_stricmp(
             dirptr,
@@ -577,9 +577,9 @@ unsafe extern "C" fn UI_TeamArenaExists() -> qboolean {
             return qtrue;
         }
         dirptr = dirptr.offset(
-            (dirlen as libc::c_ulong)
+            (dirlen as usize)
                 .wrapping_add(crate::stdlib::strlen(descptr))
-                .wrapping_add(1 as i32 as libc::c_ulong) as isize,
+                .wrapping_add(1 as i32 as usize) as isize,
         );
         i += 1
     }
@@ -652,7 +652,7 @@ pub unsafe extern "C" fn UI_MainMenu() {
         let mut key: [libc::c_char; 17] = [0; 17];
         trap_GetCDKey(
             key.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 17]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 17]>() as usize as i32,
         );
         if trap_VerifyCDKey(key.as_mut_ptr(), 0 as *const libc::c_char) as u32
             == qfalse as i32 as u32
@@ -664,19 +664,19 @@ pub unsafe extern "C" fn UI_MainMenu() {
     crate::stdlib::memset(
         &mut s_main as *mut mainmenu_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<mainmenu_t>() as libc::c_ulong,
+        ::std::mem::size_of::<mainmenu_t>() as usize,
     );
     crate::stdlib::memset(
         &mut s_errorMessage as *mut errorMessage_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<errorMessage_t>() as libc::c_ulong,
+        ::std::mem::size_of::<errorMessage_t>() as usize,
     );
     // com_errorMessage would need that too
     MainMenu_Cache();
     trap_Cvar_VariableStringBuffer(
         b"com_errorMessage\x00" as *const u8 as *const libc::c_char,
         s_errorMessage.errorMessage.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
     );
     if crate::stdlib::strlen(s_errorMessage.errorMessage.as_mut_ptr()) != 0 {
         s_errorMessage.menu.draw = Some(Main_MenuDraw as unsafe extern "C" fn() -> ());

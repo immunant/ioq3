@@ -1150,7 +1150,7 @@ pub unsafe extern "C" fn CL_CreateCmd() -> usercmd_t {
     crate::stdlib::memset(
         &mut cmd as *mut usercmd_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<usercmd_t>() as libc::c_ulong,
+        ::std::mem::size_of::<usercmd_t>() as usize,
     );
     CL_CmdButtons(&mut cmd);
     // get basic movement from keyboard
@@ -1338,13 +1338,13 @@ pub unsafe extern "C" fn CL_WritePacket() {
     crate::stdlib::memset(
         &mut nullcmd as *mut usercmd_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<usercmd_t>() as libc::c_ulong,
+        ::std::mem::size_of::<usercmd_t>() as usize,
     );
     oldcmd = &mut nullcmd;
     MSG_Init(
         &mut buf as *mut _ as *mut msg_t,
         data.as_mut_ptr(),
-        ::std::mem::size_of::<[byte; 16384]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[byte; 16384]>() as usize as i32,
     );
     MSG_Bitstream(&mut buf as *mut _ as *mut msg_t);
     // write the current serverId so the server
@@ -1392,7 +1392,7 @@ pub unsafe extern "C" fn CL_WritePacket() {
         if clc.voipFlags as i32 & 0x1 as i32 != 0
             || Com_IsVoipTarget(
                 clc.voipTargets.as_mut_ptr(),
-                ::std::mem::size_of::<[uint8_t; 8]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[uint8_t; 8]>() as usize as i32,
                 -(1 as i32),
             ) as u32
                 != 0
@@ -1407,7 +1407,7 @@ pub unsafe extern "C" fn CL_WritePacket() {
             MSG_WriteData(
                 &mut buf as *mut _ as *mut msg_t,
                 clc.voipTargets.as_mut_ptr() as *const libc::c_void,
-                ::std::mem::size_of::<[uint8_t; 8]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[uint8_t; 8]>() as usize as i32,
             );
             MSG_WriteByte(&mut buf as *mut _ as *mut msg_t, clc.voipFlags as i32);
             MSG_WriteShort(&mut buf as *mut _ as *mut msg_t, clc.voipOutgoingDataSize);
@@ -1436,7 +1436,7 @@ pub unsafe extern "C" fn CL_WritePacket() {
                 MSG_Init(
                     &mut fakemsg as *mut _ as *mut msg_t,
                     fakedata.as_mut_ptr(),
-                    ::std::mem::size_of::<[byte; 16384]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[byte; 16384]>() as usize as i32,
                 );
                 MSG_Bitstream(&mut fakemsg as *mut _ as *mut msg_t);
                 MSG_WriteLong(

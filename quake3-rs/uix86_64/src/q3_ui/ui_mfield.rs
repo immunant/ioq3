@@ -335,7 +335,7 @@ pub unsafe extern "C" fn MField_Draw(
     let mut cursorChar: i32 = 0;
     let mut str: [libc::c_char; 1024] = [0; 1024];
     drawLen = (*edit).widthInChars;
-    len = crate::stdlib::strlen((*edit).buffer.as_mut_ptr()).wrapping_add(1 as i32 as libc::c_ulong)
+    len = crate::stdlib::strlen((*edit).buffer.as_mut_ptr()).wrapping_add(1 as i32 as usize)
         as i32;
     // guarantee that cursor will be visible
     if len <= drawLen {
@@ -359,7 +359,7 @@ pub unsafe extern "C" fn MField_Draw(
     crate::stdlib::memcpy(
         str.as_mut_ptr() as *mut libc::c_void,
         (*edit).buffer.as_mut_ptr().offset(prestep as isize) as *const libc::c_void,
-        drawLen as libc::c_ulong,
+        drawLen as usize,
     );
     str[drawLen as usize] = 0 as i32 as libc::c_char;
     UI_DrawString(x, y, str.as_mut_ptr(), style, color);
@@ -447,7 +447,7 @@ pub unsafe extern "C" fn MField_KeyDownEvent(mut edit: *mut mfield_t, mut key: i
                     .as_mut_ptr()
                     .offset((*edit).cursor as isize)
                     .offset(1 as i32 as isize) as *const libc::c_void,
-                (len - (*edit).cursor) as libc::c_ulong,
+                (len - (*edit).cursor) as usize,
             );
         }
         return;
@@ -474,7 +474,7 @@ pub unsafe extern "C" fn MField_KeyDownEvent(mut edit: *mut mfield_t, mut key: i
         || key == K_KP_HOME as i32
         || ({
             let mut __res: i32 = 0;
-            if ::std::mem::size_of::<i32>() as libc::c_ulong > 1 as i32 as libc::c_ulong {
+            if ::std::mem::size_of::<i32>() as usize > 1 as i32 as usize {
                 if 0 != 0 {
                     let mut __c: i32 = key;
                     __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -500,7 +500,7 @@ pub unsafe extern "C" fn MField_KeyDownEvent(mut edit: *mut mfield_t, mut key: i
         || key == K_KP_END as i32
         || ({
             let mut __res: i32 = 0;
-            if ::std::mem::size_of::<i32>() as libc::c_ulong > 1 as i32 as libc::c_ulong {
+            if ::std::mem::size_of::<i32>() as usize > 1 as i32 as usize {
                 if 0 != 0 {
                     let mut __c: i32 = key;
                     __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -560,7 +560,7 @@ pub unsafe extern "C" fn MField_CharEvent(mut edit: *mut mfield_t, mut ch: i32) 
                     .offset((*edit).cursor as isize)
                     .offset(-(1 as i32 as isize)) as *mut libc::c_void,
                 (*edit).buffer.as_mut_ptr().offset((*edit).cursor as isize) as *const libc::c_void,
-                (len + 1 as i32 - (*edit).cursor) as libc::c_ulong,
+                (len + 1 as i32 - (*edit).cursor) as usize,
             );
             (*edit).cursor -= 1;
             if (*edit).cursor < (*edit).scroll {
@@ -608,7 +608,7 @@ pub unsafe extern "C" fn MField_CharEvent(mut edit: *mut mfield_t, mut ch: i32) 
                 .offset((*edit).cursor as isize)
                 .offset(1 as i32 as isize) as *mut libc::c_void,
             (*edit).buffer.as_mut_ptr().offset((*edit).cursor as isize) as *const libc::c_void,
-            (len + 1 as i32 - (*edit).cursor) as libc::c_ulong,
+            (len + 1 as i32 - (*edit).cursor) as usize,
         );
     }
     (*edit).buffer[(*edit).cursor as usize] = ch as libc::c_char;
@@ -655,8 +655,8 @@ pub unsafe extern "C" fn MenuField_Init(mut m: *mut menufield_s) {
     }
     if !(*m).generic.name.is_null() {
         l = crate::stdlib::strlen((*m).generic.name)
-            .wrapping_add(1 as i32 as libc::c_ulong)
-            .wrapping_mul(w as libc::c_ulong) as i32
+            .wrapping_add(1 as i32 as usize)
+            .wrapping_mul(w as usize) as i32
     } else {
         l = 0 as i32
     }

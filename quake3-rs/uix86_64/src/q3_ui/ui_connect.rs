@@ -384,7 +384,7 @@ unsafe extern "C" fn UI_ReadableSize(mut buf: *mut libc::c_char, mut bufsize: i3
         );
         Com_sprintf(
             buf.offset(crate::stdlib::strlen(buf) as isize),
-            (bufsize as libc::c_ulong).wrapping_sub(crate::stdlib::strlen(buf)) as i32,
+            (bufsize as usize).wrapping_sub(crate::stdlib::strlen(buf)) as i32,
             b".%02d GB\x00" as *const u8 as *const libc::c_char,
             value % (1024 as i32 * 1024 as i32 * 1024 as i32) * 100 as i32
                 / (1024 as i32 * 1024 as i32 * 1024 as i32),
@@ -399,7 +399,7 @@ unsafe extern "C" fn UI_ReadableSize(mut buf: *mut libc::c_char, mut bufsize: i3
         ); // bytes
         Com_sprintf(
             buf.offset(crate::stdlib::strlen(buf) as isize),
-            (bufsize as libc::c_ulong).wrapping_sub(crate::stdlib::strlen(buf)) as i32,
+            (bufsize as usize).wrapping_sub(crate::stdlib::strlen(buf)) as i32,
             b".%02d MB\x00" as *const u8 as *const libc::c_char,
             value % (1024 as i32 * 1024 as i32) * 100 as i32 / (1024 as i32 * 1024 as i32),
         );
@@ -526,12 +526,12 @@ unsafe extern "C" fn UI_DisplayDownloadInfo(mut downloadName: *const libc::c_cha
     UI_DrawProportionalString(leftWidth, 128 as i32, s, style, color_white.as_mut_ptr());
     UI_ReadableSize(
         dlSizeBuf.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         downloadCount,
     );
     UI_ReadableSize(
         totalSizeBuf.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         downloadSize,
     );
     if downloadCount < 4096 as i32 || downloadTime == 0 {
@@ -562,7 +562,7 @@ unsafe extern "C" fn UI_DisplayDownloadInfo(mut downloadName: *const libc::c_cha
         }
         UI_ReadableSize(
             xferRateBuf.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             xferRate,
         );
         // Extrapolate estimated completion time
@@ -572,7 +572,7 @@ unsafe extern "C" fn UI_DisplayDownloadInfo(mut downloadName: *const libc::c_cha
             n = (n - downloadCount / 1024 as i32 * n / (downloadSize / 1024 as i32)) * 1000 as i32;
             UI_PrintTime(
                 dlTimeBuf.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
                 n,
             );
             //(n - (((downloadCount/1024) * n) / (downloadSize/1024))) * 1000);
@@ -744,7 +744,7 @@ pub unsafe extern "C" fn UI_DrawConnectScreen(mut overlay: qboolean) {
     if trap_GetConfigString(
         0 as i32,
         info.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     ) != 0
     {
         UI_DrawProportionalString(
@@ -819,7 +819,7 @@ pub unsafe extern "C" fn UI_DrawConnectScreen(mut overlay: qboolean) {
             trap_Cvar_VariableStringBuffer(
                 b"cl_downloadName\x00" as *const u8 as *const libc::c_char,
                 downloadName.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
             );
             if *downloadName.as_mut_ptr() != 0 {
                 UI_DisplayDownloadInfo(downloadName.as_mut_ptr());

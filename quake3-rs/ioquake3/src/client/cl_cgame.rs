@@ -543,7 +543,7 @@ pub unsafe extern "C" fn CL_GetSnapshot(
     crate::stdlib::memcpy(
         (*snapshot).areamask.as_mut_ptr() as *mut libc::c_void,
         (*clSnap).areamask.as_mut_ptr() as *const libc::c_void,
-        ::std::mem::size_of::<[byte; 32]>() as libc::c_ulong,
+        ::std::mem::size_of::<[byte; 32]>() as usize,
     );
     (*snapshot).ps = (*clSnap).ps;
     count = (*clSnap).numEntities;
@@ -630,7 +630,7 @@ pub unsafe extern "C" fn CL_ConfigstringModified() {
     crate::stdlib::memset(
         &mut cl.gameState as *mut gameState_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<gameState_t>() as libc::c_ulong,
+        ::std::mem::size_of::<gameState_t>() as usize,
     );
     // leave the first 0 for uninitialized strings
     cl.gameState.dataCount = 1 as i32;
@@ -660,7 +660,7 @@ pub unsafe extern "C" fn CL_ConfigstringModified() {
                     .as_mut_ptr()
                     .offset(cl.gameState.dataCount as isize) as *mut libc::c_void,
                 dup as *const libc::c_void,
-                (len + 1 as i32) as libc::c_ulong,
+                (len + 1 as i32) as usize,
             );
             cl.gameState.dataCount += len + 1 as i32
         }
@@ -747,7 +747,7 @@ pub unsafe extern "C" fn CL_GetServerCommand(mut serverCommandNumber: i32) -> qb
             s = Cmd_Argv(2 as i32);
             if crate::stdlib::strlen(bigConfigString.as_mut_ptr())
                 .wrapping_add(crate::stdlib::strlen(s))
-                >= 8192 as i32 as libc::c_ulong
+                >= 8192 as i32 as usize
             {
                 Com_Error(
                     ERR_DROP as i32,
@@ -763,8 +763,8 @@ pub unsafe extern "C" fn CL_GetServerCommand(mut serverCommandNumber: i32) -> qb
         s = Cmd_Argv(2 as i32);
         if crate::stdlib::strlen(bigConfigString.as_mut_ptr())
             .wrapping_add(crate::stdlib::strlen(s))
-            .wrapping_add(1 as i32 as libc::c_ulong)
-            >= 8192 as i32 as libc::c_ulong
+            .wrapping_add(1 as i32 as usize)
+            >= 8192 as i32 as usize
         {
             Com_Error(
                 ERR_DROP as i32,
@@ -793,7 +793,7 @@ pub unsafe extern "C" fn CL_GetServerCommand(mut serverCommandNumber: i32) -> qb
         crate::stdlib::memset(
             cl.cmds.as_mut_ptr() as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<[usercmd_t; 64]>() as libc::c_ulong,
+            ::std::mem::size_of::<[usercmd_t; 64]>() as usize,
         );
         return qtrue;
     }
@@ -1373,7 +1373,7 @@ pub unsafe extern "C" fn CL_CgameSystemCalls(mut args: *mut intptr_t) -> intptr_
             crate::stdlib::memset(
                 VM_ArgPtr(*args.offset(1 as i32 as isize)),
                 *args.offset(2 as i32 as isize) as i32,
-                *args.offset(3 as i32 as isize) as libc::c_ulong,
+                *args.offset(3 as i32 as isize) as usize,
             );
             return 0 as i32 as intptr_t;
         }
@@ -1381,7 +1381,7 @@ pub unsafe extern "C" fn CL_CgameSystemCalls(mut args: *mut intptr_t) -> intptr_
             crate::stdlib::memcpy(
                 VM_ArgPtr(*args.offset(1 as i32 as isize)),
                 VM_ArgPtr(*args.offset(2 as i32 as isize)),
-                *args.offset(3 as i32 as isize) as libc::c_ulong,
+                *args.offset(3 as i32 as isize) as usize,
             );
             return 0 as i32 as intptr_t;
         }
@@ -1389,7 +1389,7 @@ pub unsafe extern "C" fn CL_CgameSystemCalls(mut args: *mut intptr_t) -> intptr_
             crate::stdlib::strncpy(
                 VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut libc::c_char,
                 VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const libc::c_char,
-                *args.offset(3 as i32 as isize) as libc::c_ulong,
+                *args.offset(3 as i32 as isize) as usize,
             );
             return *args.offset(1 as i32 as isize);
         }
@@ -1571,7 +1571,7 @@ pub unsafe extern "C" fn CL_InitCGame() {
     mapname = Info_ValueForKey(info, b"mapname\x00" as *const u8 as *const libc::c_char);
     Com_sprintf(
         cl.mapname.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         b"maps/%s.bsp\x00" as *const u8 as *const libc::c_char,
         mapname,
     );
@@ -2123,7 +2123,7 @@ pub unsafe extern "C" fn CL_FirstSnapshot() {
         crate::stdlib::memset(
             clc.voipTargets.as_mut_ptr() as *mut libc::c_void,
             !(0 as i32),
-            ::std::mem::size_of::<[uint8_t; 8]>() as libc::c_ulong,
+            ::std::mem::size_of::<[uint8_t; 8]>() as usize,
         );
     };
 }

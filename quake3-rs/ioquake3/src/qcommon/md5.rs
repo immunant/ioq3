@@ -549,14 +549,14 @@ unsafe extern "C" fn MD5Update(mut ctx: *mut MD5Context, mut buf: *const u8, mut
             crate::stdlib::memcpy(
                 p as *mut libc::c_void,
                 buf as *const libc::c_void,
-                len as libc::c_ulong,
+                len as usize,
             );
             return;
         }
         crate::stdlib::memcpy(
             p as *mut libc::c_void,
             buf as *const libc::c_void,
-            t as libc::c_ulong,
+            t as usize,
         );
         MD5Transform(
             (*ctx).buf.as_mut_ptr(),
@@ -570,7 +570,7 @@ unsafe extern "C" fn MD5Update(mut ctx: *mut MD5Context, mut buf: *const u8, mut
         crate::stdlib::memcpy(
             (*ctx).in_0.as_mut_ptr() as *mut libc::c_void,
             buf as *const libc::c_void,
-            64 as i32 as libc::c_ulong,
+            64 as i32 as usize,
         );
         MD5Transform(
             (*ctx).buf.as_mut_ptr(),
@@ -583,7 +583,7 @@ unsafe extern "C" fn MD5Update(mut ctx: *mut MD5Context, mut buf: *const u8, mut
     crate::stdlib::memcpy(
         (*ctx).in_0.as_mut_ptr() as *mut libc::c_void,
         buf as *const libc::c_void,
-        len as libc::c_ulong,
+        len as usize,
     );
 }
 /*
@@ -607,7 +607,7 @@ unsafe extern "C" fn MD5Final(mut ctx: *mut MD5Context, mut digest: *mut u8) {
     /* Pad out to 56 mod 64 */
     if count < 8 as i32 as u32 {
         /* Two lots of padding:  Pad the first block to 64 bytes */
-        crate::stdlib::memset(p as *mut libc::c_void, 0 as i32, count as libc::c_ulong);
+        crate::stdlib::memset(p as *mut libc::c_void, 0 as i32, count as usize);
         MD5Transform(
             (*ctx).buf.as_mut_ptr(),
             (*ctx).in_0.as_mut_ptr() as *mut uint32_t as *const uint32_t,
@@ -616,14 +616,14 @@ unsafe extern "C" fn MD5Final(mut ctx: *mut MD5Context, mut digest: *mut u8) {
         crate::stdlib::memset(
             (*ctx).in_0.as_mut_ptr() as *mut libc::c_void,
             0 as i32,
-            56 as i32 as libc::c_ulong,
+            56 as i32 as usize,
         );
     } else {
         /* Pad block to 56 bytes */
         crate::stdlib::memset(
             p as *mut libc::c_void,
             0 as i32,
-            count.wrapping_sub(8 as i32 as u32) as libc::c_ulong,
+            count.wrapping_sub(8 as i32 as u32) as usize,
         );
     }
     /* Append length in bits and transform */
@@ -639,13 +639,13 @@ unsafe extern "C" fn MD5Final(mut ctx: *mut MD5Context, mut digest: *mut u8) {
         crate::stdlib::memcpy(
             digest as *mut libc::c_void,
             (*ctx).buf.as_mut_ptr() as *const libc::c_void,
-            16 as i32 as libc::c_ulong,
+            16 as i32 as usize,
         );
     }
     crate::stdlib::memset(
         ctx as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<MD5Context>() as libc::c_ulong,
+        ::std::mem::size_of::<MD5Context>() as usize,
     );
     /* In case it's sensitive */
 }
@@ -678,7 +678,7 @@ pub unsafe extern "C" fn Com_MD5File(
     Q_strncpyz(
         final_0.as_mut_ptr(),
         b"\x00" as *const u8 as *const libc::c_char,
-        ::std::mem::size_of::<[libc::c_char; 33]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 33]>() as usize as i32,
     );
     filelen = crate::src::qcommon::files::FS_SV_FOpenFileRead(fn_0, &mut f) as i32;
     if f == 0 {
@@ -698,7 +698,7 @@ pub unsafe extern "C" fn Com_MD5File(
     loop {
         r = crate::src::qcommon::files::FS_Read(
             buffer.as_mut_ptr() as *mut libc::c_void,
-            ::std::mem::size_of::<[byte; 2048]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[byte; 2048]>() as usize as i32,
             f,
         );
         if r < 1 as i32 {
@@ -709,7 +709,7 @@ pub unsafe extern "C" fn Com_MD5File(
         }
         total += r;
         MD5Update(&mut md5, buffer.as_mut_ptr(), r as u32);
-        if (r as libc::c_ulong) < ::std::mem::size_of::<[byte; 2048]>() as libc::c_ulong
+        if (r as usize) < ::std::mem::size_of::<[byte; 2048]>() as usize
             || total >= length
         {
             break;
@@ -722,7 +722,7 @@ pub unsafe extern "C" fn Com_MD5File(
     while i < 16 as i32 {
         Q_strcat(
             final_0.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 33]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 33]>() as usize as i32,
             va(
                 b"%02X\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 digest[i as usize] as i32,

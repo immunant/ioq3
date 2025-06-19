@@ -2311,7 +2311,7 @@ pub unsafe extern "C" fn Field_VariableSizeDraw(
     crate::stdlib::memcpy(
         str.as_mut_ptr() as *mut libc::c_void,
         (*edit).buffer.as_mut_ptr().offset(prestep as isize) as *const libc::c_void,
-        drawLen as libc::c_ulong,
+        drawLen as usize,
     );
     str[drawLen as usize] = 0 as i32 as libc::c_char;
     // draw it
@@ -2344,7 +2344,7 @@ pub unsafe extern "C" fn Field_VariableSizeDraw(
         } else {
             cursorChar = 10 as i32
         }
-        i = (drawLen as libc::c_ulong).wrapping_sub(crate::stdlib::strlen(str.as_mut_ptr())) as i32;
+        i = (drawLen as usize).wrapping_sub(crate::stdlib::strlen(str.as_mut_ptr())) as i32;
         if size == 8 as i32 {
             SCR_DrawSmallChar(x + ((*edit).cursor - prestep - i) * size, y, cursorChar);
         } else {
@@ -2431,7 +2431,7 @@ pub unsafe extern "C" fn Field_KeyDownEvent(mut edit: *mut field_t, mut key: i32
     }
     key = {
         let mut __res: i32 = 0;
-        if ::std::mem::size_of::<i32>() as libc::c_ulong > 1 as i32 as libc::c_ulong {
+        if ::std::mem::size_of::<i32>() as usize > 1 as i32 as usize {
             if 0 != 0 {
                 let mut __c: i32 = key;
                 __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -2459,7 +2459,7 @@ pub unsafe extern "C" fn Field_KeyDownEvent(mut edit: *mut field_t, mut key: i32
                         .as_mut_ptr()
                         .offset((*edit).cursor as isize)
                         .offset(1 as i32 as isize) as *const libc::c_void,
-                    (len - (*edit).cursor) as libc::c_ulong,
+                    (len - (*edit).cursor) as usize,
                 );
             }
         }
@@ -2515,7 +2515,7 @@ pub unsafe extern "C" fn Field_CharEvent(mut edit: *mut field_t, mut ch: i32) {
                     .offset((*edit).cursor as isize)
                     .offset(-(1 as i32 as isize)) as *mut libc::c_void,
                 (*edit).buffer.as_mut_ptr().offset((*edit).cursor as isize) as *const libc::c_void,
-                (len + 1 as i32 - (*edit).cursor) as libc::c_ulong,
+                (len + 1 as i32 - (*edit).cursor) as usize,
             );
             (*edit).cursor -= 1;
             if (*edit).cursor < (*edit).scroll {
@@ -2562,7 +2562,7 @@ pub unsafe extern "C" fn Field_CharEvent(mut edit: *mut field_t, mut ch: i32) {
                 .offset((*edit).cursor as isize)
                 .offset(1 as i32 as isize) as *mut libc::c_void,
             (*edit).buffer.as_mut_ptr().offset((*edit).cursor as isize) as *const libc::c_void,
-            (len + 1 as i32 - (*edit).cursor) as libc::c_ulong,
+            (len + 1 as i32 - (*edit).cursor) as usize,
         );
         (*edit).buffer[(*edit).cursor as usize] = ch as libc::c_char;
         (*edit).cursor += 1
@@ -2609,11 +2609,11 @@ pub unsafe extern "C" fn Console_Key(mut key: i32) {
             Q_strncpyz(
                 temp.as_mut_ptr(),
                 g_consoleField.buffer.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 255]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 255]>() as usize as i32,
             );
             Com_sprintf(
                 g_consoleField.buffer.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
                 b"\\%s\x00" as *const u8 as *const libc::c_char,
                 temp.as_mut_ptr(),
             );
@@ -2664,7 +2664,7 @@ pub unsafe extern "C" fn Console_Key(mut key: i32) {
         || key == K_KP_UPARROW as i32
         || ({
             let mut __res: i32 = 0;
-            if ::std::mem::size_of::<i32>() as libc::c_ulong > 1 as i32 as libc::c_ulong {
+            if ::std::mem::size_of::<i32>() as usize > 1 as i32 as usize {
                 if 0 != 0 {
                     let mut __c: i32 = key;
                     __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -2693,7 +2693,7 @@ pub unsafe extern "C" fn Console_Key(mut key: i32) {
         || key == K_KP_DOWNARROW as i32
         || ({
             let mut __res: i32 = 0;
-            if ::std::mem::size_of::<i32>() as libc::c_ulong > 1 as i32 as libc::c_ulong {
+            if ::std::mem::size_of::<i32>() as usize > 1 as i32 as usize {
                 if 0 != 0 {
                     let mut __c: i32 = key;
                     __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -2787,7 +2787,7 @@ pub unsafe extern "C" fn Message_Key(mut key: i32) {
             if chat_playerNum != -(1 as i32) {
                 Com_sprintf(
                     buffer.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
                     b"tell %i \"%s\"\n\x00" as *const u8 as *const libc::c_char,
                     chat_playerNum,
                     chatField.buffer.as_mut_ptr(),
@@ -2795,14 +2795,14 @@ pub unsafe extern "C" fn Message_Key(mut key: i32) {
             } else if chat_team as u64 != 0 {
                 Com_sprintf(
                     buffer.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
                     b"say_team \"%s\"\n\x00" as *const u8 as *const libc::c_char,
                     chatField.buffer.as_mut_ptr(),
                 );
             } else {
                 Com_sprintf(
                     buffer.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
                     b"say \"%s\"\n\x00" as *const u8 as *const libc::c_char,
                     chatField.buffer.as_mut_ptr(),
                 );
@@ -2863,7 +2863,7 @@ pub unsafe extern "C" fn Key_StringToKeynum(mut str: *mut libc::c_char) -> i32 {
     if *str.offset(1 as i32 as isize) == 0 {
         return {
             let mut __res: i32 = 0;
-            if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong > 1 as i32 as libc::c_ulong {
+            if ::std::mem::size_of::<libc::c_char>() as usize > 1 as i32 as usize {
                 if 0 != 0 {
                     let mut __c: i32 = *str.offset(0 as i32 as isize) as i32;
                     __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -3323,7 +3323,7 @@ pub unsafe extern "C" fn CL_ParseBinding(mut key: i32, mut down: qboolean, mut t
     Q_strncpyz(
         buf.as_mut_ptr(),
         keys[key as usize].binding,
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     // run all bind commands if console, ui, etc aren't reading keys
     allCommands = (Key_GetCatcher() == 0 as i32) as i32 as qboolean;
@@ -3347,7 +3347,7 @@ pub unsafe extern "C" fn CL_ParseBinding(mut key: i32, mut down: qboolean, mut t
                 let mut cmd: [libc::c_char; 1024] = [0; 1024];
                 Com_sprintf(
                     cmd.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
                     b"%c%s %d %d\n\x00" as *const u8 as *const libc::c_char,
                     if down as u32 != 0 {
                         '+' as i32
@@ -4012,10 +4012,10 @@ pub unsafe extern "C" fn CL_LoadConsoleHistory() {
             }
             numChars = atoi(token);
             text_p = text_p.offset(1);
-            if numChars as libc::c_ulong
+            if numChars as usize
                 > crate::stdlib::strlen(consoleSaveBuffer.as_mut_ptr())
                     .wrapping_sub(text_p.offset_from(consoleSaveBuffer.as_mut_ptr()) as isize
-                        as libc::c_ulong)
+                        as usize)
             {
                 Com_DPrintf(
                     b"^3WARNING: probable corrupt history\n\x00" as *const u8
@@ -4026,7 +4026,7 @@ pub unsafe extern "C" fn CL_LoadConsoleHistory() {
                 crate::stdlib::memcpy(
                     historyEditLines[i as usize].buffer.as_mut_ptr() as *mut libc::c_void,
                     text_p as *const libc::c_void,
-                    numChars as libc::c_ulong,
+                    numChars as usize,
                 );
                 historyEditLines[i as usize].buffer[numChars as usize] =
                     '\u{0}' as i32 as libc::c_char;
@@ -4041,8 +4041,8 @@ pub unsafe extern "C" fn CL_LoadConsoleHistory() {
             &mut *historyEditLines
                 .as_mut_ptr()
                 .offset((i + 1 as i32) as isize) as *mut field_t as *const libc::c_void,
-            (numLines as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<field_t>() as libc::c_ulong),
+            (numLines as usize)
+                .wrapping_mul(::std::mem::size_of::<field_t>() as usize),
         );
         i = numLines;
         while i < 32 as i32 {
@@ -4272,7 +4272,7 @@ pub unsafe extern "C" fn CL_SaveConsoleHistory() {
                 crate::stdlib::strlen(historyEditLines[i as usize].buffer.as_mut_ptr()) as i32;
             saveBufferLength = crate::stdlib::strlen(consoleSaveBuffer.as_mut_ptr()) as i32;
             //ICK
-            additionalLength = (lineLength as libc::c_ulong).wrapping_add(crate::stdlib::strlen(
+            additionalLength = (lineLength as usize).wrapping_add(crate::stdlib::strlen(
                 b"999 999 999  \x00" as *const u8 as *const libc::c_char,
             )) as i32;
             if !(saveBufferLength + additionalLength < 1024 as i32) {

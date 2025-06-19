@@ -106,7 +106,7 @@ POSSIBILITY OF SUCH DAMAGE.
 pub unsafe extern "C" fn silk_Get_Decoder_Size(mut decSizeBytes: *mut i32) -> i32
 /* O    Number of bytes in SILK decoder state           */ {
     let mut ret: i32 = 0 as i32;
-    *decSizeBytes = ::std::mem::size_of::<silk_decoder>() as libc::c_ulong as i32;
+    *decSizeBytes = ::std::mem::size_of::<silk_decoder>() as usize as i32;
     return ret;
 }
 /* ************************/
@@ -133,7 +133,7 @@ pub unsafe extern "C" fn silk_InitDecoder(mut decState: *mut libc::c_void) -> i3
         &mut (*(decState as *mut silk_decoder)).sStereo as *mut stereo_dec_state
             as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<stereo_dec_state>() as libc::c_ulong,
+        ::std::mem::size_of::<stereo_dec_state>() as usize,
     );
     /* Not strictly needed, but it's cleaner that way */
     (*(decState as *mut silk_decoder)).prev_decode_only_middle = 0 as i32;
@@ -237,19 +237,19 @@ pub unsafe extern "C" fn silk_Decode(
         crate::stdlib::memset(
             (*psDec).sStereo.pred_prev_Q13.as_mut_ptr() as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<[opus_int16; 2]>() as libc::c_ulong,
+            ::std::mem::size_of::<[opus_int16; 2]>() as usize,
         );
         crate::stdlib::memset(
             (*psDec).sStereo.sSide.as_mut_ptr() as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<[opus_int16; 2]>() as libc::c_ulong,
+            ::std::mem::size_of::<[opus_int16; 2]>() as usize,
         );
         crate::stdlib::memcpy(
             &mut (*channel_state.offset(1 as i32 as isize)).resampler_state
                 as *mut silk_resampler_state_struct as *mut libc::c_void,
             &mut (*channel_state.offset(0 as i32 as isize)).resampler_state
                 as *mut silk_resampler_state_struct as *const libc::c_void,
-            ::std::mem::size_of::<silk_resampler_state_struct>() as libc::c_ulong,
+            ::std::mem::size_of::<silk_resampler_state_struct>() as usize,
         );
     }
     (*psDec).nChannelsAPI = (*decControl).nChannelsAPI;
@@ -288,7 +288,7 @@ pub unsafe extern "C" fn silk_Decode(
             crate::stdlib::memset(
                 (*channel_state.offset(n as isize)).LBRR_flags.as_mut_ptr() as *mut libc::c_void,
                 0 as i32,
-                ::std::mem::size_of::<[i32; 3]>() as libc::c_ulong,
+                ::std::mem::size_of::<[i32; 3]>() as usize,
             );
             if (*channel_state.offset(n as isize)).LBRR_flag != 0 {
                 if (*channel_state.offset(n as isize)).nFramesPerPacket == 1 as i32 {
@@ -409,14 +409,14 @@ pub unsafe extern "C" fn silk_Decode(
                 .outBuf
                 .as_mut_ptr() as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<[opus_int16; 480]>() as libc::c_ulong,
+            ::std::mem::size_of::<[opus_int16; 480]>() as usize,
         );
         crate::stdlib::memset(
             (*psDec).channel_state[1 as i32 as usize]
                 .sLPC_Q14_buf
                 .as_mut_ptr() as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<[opus_int32; 16]>() as libc::c_ulong,
+            ::std::mem::size_of::<[opus_int32; 16]>() as usize,
         );
         (*psDec).channel_state[1 as i32 as usize].lagPrev = 100 as i32;
         (*psDec).channel_state[1 as i32 as usize].LastGainIndex = 10 as i32 as i8;
@@ -430,13 +430,13 @@ pub unsafe extern "C" fn silk_Decode(
         < (*decControl).API_sampleRate * (*decControl).nChannelsAPI) as i32;
     let mut fresh0 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_int16>() as libc::c_ulong).wrapping_mul(
+        (::std::mem::size_of::<opus_int16>() as usize).wrapping_mul(
             (if delay_stack_alloc != 0 {
                 0 as i32
             } else {
                 ((*decControl).nChannelsInternal)
                     * ((*channel_state.offset(0 as i32 as isize)).frame_length + 2 as i32)
-            }) as libc::c_ulong,
+            }) as usize,
         ) as usize,
     );
     samplesOut1_tmp_storage1 = fresh0.as_mut_ptr() as *mut opus_int16;
@@ -501,8 +501,8 @@ pub unsafe extern "C" fn silk_Decode(
                 &mut *(*samplesOut1_tmp.as_mut_ptr().offset(n as isize)).offset(2 as i32 as isize)
                     as *mut opus_int16 as *mut libc::c_void,
                 0 as i32,
-                (nSamplesOutDec as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<opus_int16>() as libc::c_ulong),
+                (nSamplesOutDec as usize)
+                    .wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
             );
         }
         let ref mut fresh1 = (*channel_state.offset(n as isize)).nFramesDecoded;
@@ -524,16 +524,16 @@ pub unsafe extern "C" fn silk_Decode(
         crate::stdlib::memcpy(
             samplesOut1_tmp[0 as i32 as usize] as *mut libc::c_void,
             (*psDec).sStereo.sMid.as_mut_ptr() as *const libc::c_void,
-            (2 as i32 as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<opus_int16>() as libc::c_ulong),
+            (2 as i32 as usize)
+                .wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
         );
         crate::stdlib::memcpy(
             (*psDec).sStereo.sMid.as_mut_ptr() as *mut libc::c_void,
             &mut *(*samplesOut1_tmp.as_mut_ptr().offset(0 as i32 as isize))
                 .offset(nSamplesOutDec as isize) as *mut opus_int16
                 as *const libc::c_void,
-            (2 as i32 as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<opus_int16>() as libc::c_ulong),
+            (2 as i32 as usize)
+                .wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
         );
     }
     /* Number of output samples */
@@ -543,12 +543,12 @@ pub unsafe extern "C" fn silk_Decode(
     /* Set up pointers to temp buffers */
     let mut fresh2 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_int16>() as libc::c_ulong).wrapping_mul(
+        (::std::mem::size_of::<opus_int16>() as usize).wrapping_mul(
             (if (*decControl).nChannelsAPI == 2 as i32 {
                 *nSamplesOut
             } else {
                 0 as i32
-            }) as libc::c_ulong,
+            }) as usize,
         ) as usize,
     );
     samplesOut2_tmp = fresh2.as_mut_ptr() as *mut opus_int16;
@@ -559,13 +559,13 @@ pub unsafe extern "C" fn silk_Decode(
     }
     let mut fresh3 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_int16>() as libc::c_ulong).wrapping_mul(
+        (::std::mem::size_of::<opus_int16>() as usize).wrapping_mul(
             (if delay_stack_alloc != 0 {
                 ((*decControl).nChannelsInternal)
                     * ((*channel_state.offset(0 as i32 as isize)).frame_length + 2 as i32)
             } else {
                 0 as i32
-            }) as libc::c_ulong,
+            }) as usize,
         ) as usize,
     );
     samplesOut1_tmp_storage2 = fresh3.as_mut_ptr() as *mut opus_int16;
@@ -575,11 +575,11 @@ pub unsafe extern "C" fn silk_Decode(
             samplesOut as *const libc::c_void,
             (((*decControl).nChannelsInternal
                 * ((*channel_state.offset(0 as i32 as isize)).frame_length + 2 as i32))
-                as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<opus_int16>() as libc::c_ulong)
+                as usize)
+                .wrapping_mul(::std::mem::size_of::<opus_int16>() as usize)
                 .wrapping_add(
                     (0 as i32 as isize * samplesOut1_tmp_storage2.offset_from(samplesOut) as isize)
-                        as libc::c_ulong,
+                        as usize,
                 ),
         );
         samplesOut1_tmp[0 as i32 as usize] = samplesOut1_tmp_storage2;

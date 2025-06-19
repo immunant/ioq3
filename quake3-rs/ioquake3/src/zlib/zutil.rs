@@ -43,58 +43,58 @@ pub unsafe extern "C" fn zlibVersion() -> *const libc::c_char {
 pub unsafe extern "C" fn zlibCompileFlags() -> uLong {
     let mut flags: uLong = 0;
     flags = 0 as i32 as uLong;
-    match ::std::mem::size_of::<uInt>() as libc::c_ulong {
+    match ::std::mem::size_of::<uInt>() as usize {
         2 => {}
-        4 => flags = (flags as libc::c_ulong).wrapping_add(1 as i32 as libc::c_ulong) as uLong,
-        8 => flags = (flags as libc::c_ulong).wrapping_add(2 as i32 as libc::c_ulong) as uLong,
-        _ => flags = (flags as libc::c_ulong).wrapping_add(3 as i32 as libc::c_ulong) as uLong,
+        4 => flags = (flags as usize).wrapping_add(1 as i32 as usize) as uLong,
+        8 => flags = (flags as usize).wrapping_add(2 as i32 as usize) as uLong,
+        _ => flags = (flags as usize).wrapping_add(3 as i32 as usize) as uLong,
     }
-    match ::std::mem::size_of::<uLong>() as libc::c_ulong {
+    match ::std::mem::size_of::<uLong>() as usize {
         2 => {}
         4 => {
-            flags = (flags as libc::c_ulong).wrapping_add(((1 as i32) << 2 as i32) as libc::c_ulong)
+            flags = (flags as usize).wrapping_add(((1 as i32) << 2 as i32) as usize)
                 as uLong
         }
         8 => {
-            flags = (flags as libc::c_ulong).wrapping_add(((2 as i32) << 2 as i32) as libc::c_ulong)
+            flags = (flags as usize).wrapping_add(((2 as i32) << 2 as i32) as usize)
                 as uLong
         }
         _ => {
-            flags = (flags as libc::c_ulong).wrapping_add(((3 as i32) << 2 as i32) as libc::c_ulong)
+            flags = (flags as usize).wrapping_add(((3 as i32) << 2 as i32) as usize)
                 as uLong
         }
     }
-    match ::std::mem::size_of::<voidpf>() as libc::c_ulong {
+    match ::std::mem::size_of::<voidpf>() as usize {
         2 => {}
         4 => {
-            flags = (flags as libc::c_ulong).wrapping_add(((1 as i32) << 4 as i32) as libc::c_ulong)
+            flags = (flags as usize).wrapping_add(((1 as i32) << 4 as i32) as usize)
                 as uLong
         }
         8 => {
-            flags = (flags as libc::c_ulong).wrapping_add(((2 as i32) << 4 as i32) as libc::c_ulong)
+            flags = (flags as usize).wrapping_add(((2 as i32) << 4 as i32) as usize)
                 as uLong
         }
         _ => {
-            flags = (flags as libc::c_ulong).wrapping_add(((3 as i32) << 4 as i32) as libc::c_ulong)
+            flags = (flags as usize).wrapping_add(((3 as i32) << 4 as i32) as usize)
                 as uLong
         }
     }
-    match ::std::mem::size_of::<off_t>() as libc::c_ulong {
+    match ::std::mem::size_of::<off_t>() as usize {
         2 => {}
         4 => {
-            flags = (flags as libc::c_ulong).wrapping_add(((1 as i32) << 6 as i32) as libc::c_ulong)
+            flags = (flags as usize).wrapping_add(((1 as i32) << 6 as i32) as usize)
                 as uLong
         }
         8 => {
-            flags = (flags as libc::c_ulong).wrapping_add(((2 as i32) << 6 as i32) as libc::c_ulong)
+            flags = (flags as usize).wrapping_add(((2 as i32) << 6 as i32) as usize)
                 as uLong
         }
         _ => {
-            flags = (flags as libc::c_ulong).wrapping_add(((3 as i32) << 6 as i32) as libc::c_ulong)
+            flags = (flags as usize).wrapping_add(((3 as i32) << 6 as i32) as usize)
                 as uLong
         }
     }
-    flags = (flags as libc::c_ulong).wrapping_add(((1 as isize) << 17 as i32) as libc::c_ulong)
+    flags = (flags as usize).wrapping_add(((1 as isize) << 17 as i32) as usize)
         as uLong;
     return flags;
 }
@@ -672,10 +672,10 @@ pub unsafe extern "C" fn zcalloc(mut opaque: voidpf, mut items: u32, mut size: u
     if !opaque.is_null() {
         items = items.wrapping_add(size.wrapping_sub(size))
     } /* make compiler happy */
-    return if ::std::mem::size_of::<uInt>() as libc::c_ulong > 2 as i32 as libc::c_ulong {
-        crate::stdlib::malloc(items.wrapping_mul(size) as libc::c_ulong)
+    return if ::std::mem::size_of::<uInt>() as usize > 2 as i32 as usize {
+        crate::stdlib::malloc(items.wrapping_mul(size) as usize)
     } else {
-        crate::stdlib::calloc(items as libc::c_ulong, size as libc::c_ulong)
+        crate::stdlib::calloc(items as usize, size as usize)
     };
 }
 /* zutil.h -- internal interface and configuration of the compression library

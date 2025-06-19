@@ -138,7 +138,7 @@ pub unsafe extern "C" fn ec_tell_frac(
     let mut l: i32 = 0;
     let mut b: u32 = 0;
     nbits = ((*_this).nbits_total << 3 as i32) as opus_uint32;
-    l = ::std::mem::size_of::<u32>() as libc::c_ulong as i32 * 8 as i32
+    l = ::std::mem::size_of::<u32>() as usize as i32 * 8 as i32
         - (*_this).rng.leading_zeros() as i32;
     r = (*_this).rng >> l - 16 as i32;
     b = (r >> 12 as i32).wrapping_sub(8 as i32 as u32);

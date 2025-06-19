@@ -741,8 +741,8 @@ unsafe extern "C" fn select_colors(mut cinfo: j_decompress_ptr, mut desired_colo
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         1 as i32,
-        (desired_colors as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<box_0>() as libc::c_ulong),
+        (desired_colors as usize)
+            .wrapping_mul(::std::mem::size_of::<box_0>() as usize),
     ) as boxptr;
     /* Initialize one box containing whole space */
     numboxes = 1 as i32;
@@ -1394,8 +1394,8 @@ unsafe extern "C" fn init_error_limit(mut cinfo: j_decompress_ptr)
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         1 as i32,
-        ((255 as i32 * 2 as i32 + 1 as i32) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+        ((255 as i32 * 2 as i32 + 1 as i32) as usize)
+            .wrapping_mul(::std::mem::size_of::<i32>() as usize),
     ) as *mut i32;
     table = table.offset(255 as i32 as isize);
     (*cquantize).error_limiter = table;
@@ -1519,10 +1519,10 @@ unsafe extern "C" fn start_pass_2_quant(mut cinfo: j_decompress_ptr, mut is_pre_
         }
         if (*cinfo).dither_mode as u32 == JDITHER_FS as i32 as u32 {
             let mut arraysize: size_t = ((*cinfo).output_width.wrapping_add(2 as i32 as u32)
-                as libc::c_ulong)
+                as usize)
                 .wrapping_mul(
-                    (3 as i32 as libc::c_ulong)
-                        .wrapping_mul(::std::mem::size_of::<FSERROR>() as libc::c_ulong),
+                    (3 as i32 as usize)
+                        .wrapping_mul(::std::mem::size_of::<FSERROR>() as usize),
                 );
             /* Allocate Floyd-Steinberg workspace if we didn't already. */
             if (*cquantize).fserrors.is_null() {
@@ -1550,8 +1550,8 @@ unsafe extern "C" fn start_pass_2_quant(mut cinfo: j_decompress_ptr, mut is_pre_
         while i < (1 as i32) << 5 as i32 {
             jzero_far(
                 *histogram.offset(i as isize) as *mut libc::c_void,
-                ((((1 as i32) << 6 as i32) * ((1 as i32) << 5 as i32)) as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<histcell>() as libc::c_ulong),
+                ((((1 as i32) << 6 as i32) * ((1 as i32) << 5 as i32)) as usize)
+                    .wrapping_mul(::std::mem::size_of::<histcell>() as usize),
             );
             i += 1
         }
@@ -1583,7 +1583,7 @@ pub unsafe extern "C" fn jinit_2pass_quantizer(mut cinfo: j_decompress_ptr) {
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         1 as i32,
-        ::std::mem::size_of::<my_cquantizer>() as libc::c_ulong,
+        ::std::mem::size_of::<my_cquantizer>() as usize,
     ) as my_cquantize_ptr;
     (*cinfo).cquantize = cquantize as *mut jpeg_color_quantizer;
     (*cquantize).pub_0.start_pass =
@@ -1611,8 +1611,8 @@ pub unsafe extern "C" fn jinit_2pass_quantizer(mut cinfo: j_decompress_ptr) {
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         1 as i32,
-        (((1 as i32) << 5 as i32) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<hist2d>() as libc::c_ulong),
+        (((1 as i32) << 5 as i32) as usize)
+            .wrapping_mul(::std::mem::size_of::<hist2d>() as usize),
     ) as hist3d; /* histogram is garbage now */
     i = 0 as i32;
     while i < (1 as i32) << 5 as i32 {
@@ -1625,8 +1625,8 @@ pub unsafe extern "C" fn jinit_2pass_quantizer(mut cinfo: j_decompress_ptr) {
         .expect("non-null function pointer")(
             cinfo as j_common_ptr,
             1 as i32,
-            ((((1 as i32) << 6 as i32) * ((1 as i32) << 5 as i32)) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<histcell>() as libc::c_ulong),
+            ((((1 as i32) << 6 as i32) * ((1 as i32) << 5 as i32)) as usize)
+                .wrapping_mul(::std::mem::size_of::<histcell>() as usize),
         ) as hist2d;
         i += 1
     }
@@ -1694,9 +1694,9 @@ pub unsafe extern "C" fn jinit_2pass_quantizer(mut cinfo: j_decompress_ptr) {
         .expect("non-null function pointer")(
             cinfo as j_common_ptr,
             1 as i32,
-            ((*cinfo).output_width.wrapping_add(2 as i32 as u32) as libc::c_ulong).wrapping_mul(
-                (3 as i32 as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<FSERROR>() as libc::c_ulong),
+            ((*cinfo).output_width.wrapping_add(2 as i32 as u32) as usize).wrapping_mul(
+                (3 as i32 as usize)
+                    .wrapping_mul(::std::mem::size_of::<FSERROR>() as usize),
             ),
         ) as FSERRPTR;
         /* Might as well create the error-limiting table too. */

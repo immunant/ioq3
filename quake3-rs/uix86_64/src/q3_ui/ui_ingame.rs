@@ -477,7 +477,7 @@ pub unsafe extern "C" fn InGame_MenuInit() {
     crate::stdlib::memset(
         &mut s_ingame as *mut ingamemenu_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<ingamemenu_t>() as libc::c_ulong,
+        ::std::mem::size_of::<ingamemenu_t>() as usize,
     );
     InGame_Cache();
     s_ingame.menu.wrapAround = qtrue;

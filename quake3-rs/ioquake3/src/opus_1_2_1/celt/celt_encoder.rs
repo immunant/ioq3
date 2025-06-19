@@ -55,7 +55,7 @@ pub mod entcode_h {
         mut _this: *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
     ) -> i32 {
         return (*_this).nbits_total
-            - (::std::mem::size_of::<u32>() as libc::c_ulong as i32 * 8 as i32
+            - (::std::mem::size_of::<u32>() as usize as i32 * 8 as i32
                 - (*_this).rng.leading_zeros() as i32);
     }
 }
@@ -323,18 +323,18 @@ unsafe extern "C" fn opus_custom_encoder_get_size(
     mut mode: *const OpusCustomMode,
     mut channels: i32,
 ) -> i32 {
-    let mut size: i32 = (::std::mem::size_of::<OpusCustomEncoder>() as libc::c_ulong)
+    let mut size: i32 = (::std::mem::size_of::<OpusCustomEncoder>() as usize)
         .wrapping_add(
-            ((channels * (*mode).overlap - 1 as i32) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<celt_sig>() as libc::c_ulong),
+            ((channels * (*mode).overlap - 1 as i32) as usize)
+                .wrapping_mul(::std::mem::size_of::<celt_sig>() as usize),
         )
         .wrapping_add(
-            ((channels * 1024 as i32) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<celt_sig>() as libc::c_ulong),
+            ((channels * 1024 as i32) as usize)
+                .wrapping_mul(::std::mem::size_of::<celt_sig>() as usize),
         )
         .wrapping_add(
-            ((4 as i32 * channels * (*mode).nbEBands) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<opus_val16>() as libc::c_ulong),
+            ((4 as i32 * channels * (*mode).nbEBands) as usize)
+                .wrapping_mul(::std::mem::size_of::<opus_val16>() as usize),
         ) as i32;
     return size;
 }
@@ -355,8 +355,8 @@ unsafe extern "C" fn opus_custom_encoder_init_arch(
     crate::stdlib::memset(
         st as *mut libc::c_char as *mut libc::c_void,
         0 as i32,
-        (opus_custom_encoder_get_size(mode, channels) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<libc::c_char>() as libc::c_ulong),
+        (opus_custom_encoder_get_size(mode, channels) as usize)
+            .wrapping_mul(::std::mem::size_of::<libc::c_char>() as usize),
     );
     (*st).mode = mode;
     (*st).channels = channels;
@@ -557,7 +557,7 @@ unsafe extern "C" fn transient_analysis(
     ];
     let mut fresh0 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_val16>() as libc::c_ulong).wrapping_mul(len as libc::c_ulong)
+        (::std::mem::size_of::<opus_val16>() as usize).wrapping_mul(len as usize)
             as usize,
     );
     tmp = fresh0.as_mut_ptr() as *mut opus_val16;
@@ -596,8 +596,8 @@ unsafe extern "C" fn transient_analysis(
         crate::stdlib::memset(
             tmp as *mut libc::c_void,
             0 as i32,
-            (12 as i32 as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<opus_val16>() as libc::c_ulong),
+            (12 as i32 as usize)
+                .wrapping_mul(::std::mem::size_of::<opus_val16>() as usize),
         );
         mean = 0 as i32 as opus_val32;
         mem0 = 0 as i32 as opus_val32;
@@ -890,8 +890,8 @@ unsafe extern "C" fn compute_mdcts(
                 &mut *out.offset((c * B * N + bound) as isize) as *mut celt_sig
                     as *mut libc::c_void,
                 0 as i32,
-                ((B * N - bound) as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<celt_sig>() as libc::c_ulong),
+                ((B * N - bound) as usize)
+                    .wrapping_mul(::std::mem::size_of::<celt_sig>() as usize),
             );
             c += 1;
             if !(c < C) {
@@ -937,7 +937,7 @@ pub unsafe extern "C" fn celt_preemphasis(
         crate::stdlib::memset(
             inp as *mut libc::c_void,
             0 as i32,
-            (N as libc::c_ulong).wrapping_mul(::std::mem::size_of::<celt_sig>() as libc::c_ulong),
+            (N as usize).wrapping_mul(::std::mem::size_of::<celt_sig>() as usize),
         );
     }
     i = 0 as i32;
@@ -1028,35 +1028,35 @@ unsafe extern "C" fn tf_analysis(
     /*printf("%f ", bias);*/
     let mut fresh2 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(len as libc::c_ulong) as usize,
+        (::std::mem::size_of::<i32>() as usize).wrapping_mul(len as usize) as usize,
     );
     metric = fresh2.as_mut_ptr() as *mut i32;
     let mut fresh3 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<celt_norm>() as libc::c_ulong).wrapping_mul(
+        (::std::mem::size_of::<celt_norm>() as usize).wrapping_mul(
             ((*(*m).eBands.offset(len as isize) as i32
                 - *(*m).eBands.offset((len - 1 as i32) as isize) as i32)
-                << LM) as libc::c_ulong,
+                << LM) as usize,
         ) as usize,
     );
     tmp = fresh3.as_mut_ptr() as *mut celt_norm;
     let mut fresh4 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<celt_norm>() as libc::c_ulong).wrapping_mul(
+        (::std::mem::size_of::<celt_norm>() as usize).wrapping_mul(
             ((*(*m).eBands.offset(len as isize) as i32
                 - *(*m).eBands.offset((len - 1 as i32) as isize) as i32)
-                << LM) as libc::c_ulong,
+                << LM) as usize,
         ) as usize,
     );
     tmp_1 = fresh4.as_mut_ptr() as *mut celt_norm;
     let mut fresh5 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(len as libc::c_ulong) as usize,
+        (::std::mem::size_of::<i32>() as usize).wrapping_mul(len as usize) as usize,
     );
     path0 = fresh5.as_mut_ptr() as *mut i32;
     let mut fresh6 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(len as libc::c_ulong) as usize,
+        (::std::mem::size_of::<i32>() as usize).wrapping_mul(len as usize) as usize,
     );
     path1 = fresh6.as_mut_ptr() as *mut i32;
     i = 0 as i32;
@@ -1079,14 +1079,14 @@ unsafe extern "C" fn tf_analysis(
             &mut *X
                 .offset((tf_chan * N0 + ((*(*m).eBands.offset(i as isize) as i32) << LM)) as isize)
                 as *mut celt_norm as *const libc::c_void,
-            (N as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<celt_norm>() as libc::c_ulong)
+            (N as usize)
+                .wrapping_mul(::std::mem::size_of::<celt_norm>() as usize)
                 .wrapping_add(
                     (0 as i32 as isize
                         * tmp.offset_from(&mut *X.offset(
                             (tf_chan * N0 + ((*(*m).eBands.offset(i as isize) as i32) << LM))
                                 as isize,
-                        )) as isize) as libc::c_ulong,
+                        )) as isize) as usize,
                 ),
         );
         L1 = l1_metric(tmp, N, if isTransient != 0 { LM } else { 0 as i32 }, bias);
@@ -1095,10 +1095,10 @@ unsafe extern "C" fn tf_analysis(
             crate::stdlib::memcpy(
                 tmp_1 as *mut libc::c_void,
                 tmp as *const libc::c_void,
-                (N as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<celt_norm>() as libc::c_ulong)
+                (N as usize)
+                    .wrapping_mul(::std::mem::size_of::<celt_norm>() as usize)
                     .wrapping_add(
-                        (0 as i32 as isize * tmp_1.offset_from(tmp) as isize) as libc::c_ulong,
+                        (0 as i32 as isize * tmp_1.offset_from(tmp) as isize) as usize,
                     ),
             );
             crate::src::opus_1_2_1::celt::bands::haar1(tmp_1, N >> LM, (1 as i32) << LM);
@@ -1619,20 +1619,20 @@ unsafe extern "C" fn dynalloc_analysis(
     let mut noise_floor: *mut opus_val16 = 0 as *mut opus_val16;
     let mut fresh7 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_val16>() as libc::c_ulong)
-            .wrapping_mul((C * nbEBands) as libc::c_ulong) as usize,
+        (::std::mem::size_of::<opus_val16>() as usize)
+            .wrapping_mul((C * nbEBands) as usize) as usize,
     );
     follower = fresh7.as_mut_ptr() as *mut opus_val16;
     let mut fresh8 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_val16>() as libc::c_ulong)
-            .wrapping_mul((C * nbEBands) as libc::c_ulong) as usize,
+        (::std::mem::size_of::<opus_val16>() as usize)
+            .wrapping_mul((C * nbEBands) as usize) as usize,
     );
     noise_floor = fresh8.as_mut_ptr() as *mut opus_val16;
     crate::stdlib::memset(
         offsets as *mut libc::c_void,
         0 as i32,
-        (nbEBands as libc::c_ulong).wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+        (nbEBands as usize).wrapping_mul(::std::mem::size_of::<i32>() as usize),
     );
     /* Dynamic allocation code */
     maxDepth = -31.9f32;
@@ -1927,8 +1927,8 @@ unsafe extern "C" fn run_prefilter(
     overlap = (*mode).overlap;
     let mut fresh10 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<celt_sig>() as libc::c_ulong)
-            .wrapping_mul((CC * (N + 1024 as i32)) as libc::c_ulong) as usize,
+        (::std::mem::size_of::<celt_sig>() as usize)
+            .wrapping_mul((CC * (N + 1024 as i32)) as usize) as usize,
     );
     _pre = fresh10.as_mut_ptr() as *mut celt_sig;
     pre[0 as i32 as usize] = _pre;
@@ -1938,27 +1938,27 @@ unsafe extern "C" fn run_prefilter(
         crate::stdlib::memcpy(
             pre[c as usize] as *mut libc::c_void,
             prefilter_mem.offset((c * 1024 as i32) as isize) as *const libc::c_void,
-            (1024 as i32 as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<celt_sig>() as libc::c_ulong)
+            (1024 as i32 as usize)
+                .wrapping_mul(::std::mem::size_of::<celt_sig>() as usize)
                 .wrapping_add(
                     (0 as i32 as isize
                         * pre[c as usize]
                             .offset_from(prefilter_mem.offset((c * 1024 as i32) as isize))
-                            as isize) as libc::c_ulong,
+                            as isize) as usize,
                 ),
         );
         crate::stdlib::memcpy(
             pre[c as usize].offset(1024 as i32 as isize) as *mut libc::c_void,
             in_0.offset((c * (N + overlap)) as isize)
                 .offset(overlap as isize) as *const libc::c_void,
-            (N as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<celt_sig>() as libc::c_ulong)
+            (N as usize)
+                .wrapping_mul(::std::mem::size_of::<celt_sig>() as usize)
                 .wrapping_add(
                     (0 as i32 as isize
                         * pre[c as usize].offset(1024 as i32 as isize).offset_from(
                             in_0.offset((c * (N + overlap)) as isize)
                                 .offset(overlap as isize),
-                        ) as isize) as libc::c_ulong,
+                        ) as isize) as usize,
                 ),
         );
         c += 1;
@@ -1970,8 +1970,8 @@ unsafe extern "C" fn run_prefilter(
         let mut pitch_buf: *mut opus_val16 = 0 as *mut opus_val16;
         let mut fresh11 = ::std::vec::from_elem(
             0,
-            (::std::mem::size_of::<opus_val16>() as libc::c_ulong)
-                .wrapping_mul((1024 as i32 + N >> 1 as i32) as libc::c_ulong) as usize,
+            (::std::mem::size_of::<opus_val16>() as usize)
+                .wrapping_mul((1024 as i32 + N >> 1 as i32) as usize) as usize,
         );
         pitch_buf = fresh11.as_mut_ptr() as *mut opus_val16;
         pitch_downsample(
@@ -2079,14 +2079,14 @@ unsafe extern "C" fn run_prefilter(
         crate::stdlib::memcpy(
             in_0.offset((c * (N + overlap)) as isize) as *mut libc::c_void,
             (*st).in_mem.as_mut_ptr().offset((c * overlap) as isize) as *const libc::c_void,
-            (overlap as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<celt_sig>() as libc::c_ulong)
+            (overlap as usize)
+                .wrapping_mul(::std::mem::size_of::<celt_sig>() as usize)
                 .wrapping_add(
                     (0 as i32 as isize
                         * in_0
                             .offset((c * (N + overlap)) as isize)
                             .offset_from((*st).in_mem.as_mut_ptr().offset((c * overlap) as isize))
-                            as isize) as libc::c_ulong,
+                            as isize) as usize,
                 ),
         );
         if offset != 0 {
@@ -2127,8 +2127,8 @@ unsafe extern "C" fn run_prefilter(
         crate::stdlib::memcpy(
             (*st).in_mem.as_mut_ptr().offset((c * overlap) as isize) as *mut libc::c_void,
             in_0.offset((c * (N + overlap)) as isize).offset(N as isize) as *const libc::c_void,
-            (overlap as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<celt_sig>() as libc::c_ulong)
+            (overlap as usize)
+                .wrapping_mul(::std::mem::size_of::<celt_sig>() as usize)
                 .wrapping_add(
                     (0 as i32 as isize
                         * (*st)
@@ -2137,21 +2137,21 @@ unsafe extern "C" fn run_prefilter(
                             .offset((c * overlap) as isize)
                             .offset_from(
                                 in_0.offset((c * (N + overlap)) as isize).offset(N as isize),
-                            ) as isize) as libc::c_ulong,
+                            ) as isize) as usize,
                 ),
         );
         if N > 1024 as i32 {
             crate::stdlib::memcpy(
                 prefilter_mem.offset((c * 1024 as i32) as isize) as *mut libc::c_void,
                 pre[c as usize].offset(N as isize) as *const libc::c_void,
-                (1024 as i32 as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<celt_sig>() as libc::c_ulong)
+                (1024 as i32 as usize)
+                    .wrapping_mul(::std::mem::size_of::<celt_sig>() as usize)
                     .wrapping_add(
                         (0 as i32 as isize
                             * prefilter_mem
                                 .offset((c * 1024 as i32) as isize)
                                 .offset_from(pre[c as usize].offset(N as isize))
-                                as isize) as libc::c_ulong,
+                                as isize) as usize,
                     ),
             );
         } else {
@@ -2160,8 +2160,8 @@ unsafe extern "C" fn run_prefilter(
                 prefilter_mem
                     .offset((c * 1024 as i32) as isize)
                     .offset(N as isize) as *const libc::c_void,
-                ((1024 as i32 - N) as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<celt_sig>() as libc::c_ulong)
+                ((1024 as i32 - N) as usize)
+                    .wrapping_mul(::std::mem::size_of::<celt_sig>() as usize)
                     .wrapping_add(
                         (0 as i32 as isize
                             * prefilter_mem
@@ -2170,7 +2170,7 @@ unsafe extern "C" fn run_prefilter(
                                     prefilter_mem
                                         .offset((c * 1024 as i32) as isize)
                                         .offset(N as isize),
-                                ) as isize) as libc::c_ulong,
+                                ) as isize) as usize,
                     ),
             );
             crate::stdlib::memcpy(
@@ -2179,8 +2179,8 @@ unsafe extern "C" fn run_prefilter(
                     .offset(1024 as i32 as isize)
                     .offset(-(N as isize)) as *mut libc::c_void,
                 pre[c as usize].offset(1024 as i32 as isize) as *const libc::c_void,
-                (N as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<celt_sig>() as libc::c_ulong)
+                (N as usize)
+                    .wrapping_mul(::std::mem::size_of::<celt_sig>() as usize)
                     .wrapping_add(
                         (0 as i32 as isize
                             * prefilter_mem
@@ -2188,7 +2188,7 @@ unsafe extern "C" fn run_prefilter(
                                 .offset(1024 as i32 as isize)
                                 .offset(-(N as isize))
                                 .offset_from(pre[c as usize].offset(1024 as i32 as isize))
-                                as isize) as libc::c_ulong,
+                                as isize) as usize,
                     ),
             );
         }
@@ -2616,8 +2616,8 @@ pub unsafe extern "C" fn celt_encode_with_ec(
     }
     let mut fresh12 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<celt_sig>() as libc::c_ulong)
-            .wrapping_mul((CC * (N + overlap)) as libc::c_ulong) as usize,
+        (::std::mem::size_of::<celt_sig>() as usize)
+            .wrapping_mul((CC * (N + overlap)) as usize) as usize,
     );
     in_0 = fresh12.as_mut_ptr() as *mut celt_sig;
     sample_max = if (*st).overlap_max > celt_maxabs16(pcm, C * (N - overlap) / (*st).upsample) {
@@ -2733,7 +2733,7 @@ pub unsafe extern "C" fn celt_encode_with_ec(
             1 as i32 as u32,
         );
         pitch_index += 1 as i32;
-        octave = ::std::mem::size_of::<u32>() as libc::c_ulong as i32 * 8 as i32
+        octave = ::std::mem::size_of::<u32>() as usize as i32 * 8 as i32
             - (pitch_index as u32).leading_zeros() as i32
             - 5 as i32;
         crate::src::opus_1_2_1::celt::entenc::ec_enc_uint(
@@ -2788,27 +2788,27 @@ pub unsafe extern "C" fn celt_encode_with_ec(
     }
     let mut fresh13 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<celt_sig>() as libc::c_ulong).wrapping_mul((CC * N) as libc::c_ulong)
+        (::std::mem::size_of::<celt_sig>() as usize).wrapping_mul((CC * N) as usize)
             as usize,
     );
     freq = fresh13.as_mut_ptr() as *mut celt_sig;
     let mut fresh14 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<celt_ener>() as libc::c_ulong)
-            .wrapping_mul((nbEBands * CC) as libc::c_ulong) as usize,
+        (::std::mem::size_of::<celt_ener>() as usize)
+            .wrapping_mul((nbEBands * CC) as usize) as usize,
     );
     bandE = fresh14.as_mut_ptr() as *mut celt_ener;
     let mut fresh15 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_val16>() as libc::c_ulong)
-            .wrapping_mul((nbEBands * CC) as libc::c_ulong) as usize,
+        (::std::mem::size_of::<opus_val16>() as usize)
+            .wrapping_mul((nbEBands * CC) as usize) as usize,
     );
     bandLogE = fresh15.as_mut_ptr() as *mut opus_val16;
     secondMdct = (shortBlocks != 0 && (*st).complexity >= 8 as i32) as i32;
     let mut fresh16 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_val16>() as libc::c_ulong)
-            .wrapping_mul((C * nbEBands) as libc::c_ulong) as usize,
+        (::std::mem::size_of::<opus_val16>() as usize)
+            .wrapping_mul((C * nbEBands) as usize) as usize,
     );
     bandLogE2 = fresh16.as_mut_ptr() as *mut opus_val16;
     if secondMdct != 0 {
@@ -2897,14 +2897,14 @@ pub unsafe extern "C" fn celt_encode_with_ec(
     );
     let mut fresh18 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_val16>() as libc::c_ulong)
-            .wrapping_mul((C * nbEBands) as libc::c_ulong) as usize,
+        (::std::mem::size_of::<opus_val16>() as usize)
+            .wrapping_mul((C * nbEBands) as usize) as usize,
     );
     surround_dynalloc = fresh18.as_mut_ptr() as *mut opus_val16;
     crate::stdlib::memset(
         surround_dynalloc as *mut libc::c_void,
         0 as i32,
-        (end as libc::c_ulong).wrapping_mul(::std::mem::size_of::<opus_val16>() as libc::c_ulong),
+        (end as usize).wrapping_mul(::std::mem::size_of::<opus_val16>() as usize),
     );
     /* This computes how much masking takes place between surround channels */
     if hybrid == 0 && !(*st).energy_mask.is_null() && (*st).lfe == 0 {
@@ -3010,8 +3010,8 @@ pub unsafe extern "C" fn celt_encode_with_ec(
                 crate::stdlib::memset(
                     surround_dynalloc as *mut libc::c_void,
                     0 as i32,
-                    (mask_end as libc::c_ulong)
-                        .wrapping_mul(::std::mem::size_of::<opus_val16>() as libc::c_ulong),
+                    (mask_end as usize)
+                        .wrapping_mul(::std::mem::size_of::<opus_val16>() as usize),
                 );
             } else {
                 i = 0 as i32;
@@ -3081,10 +3081,10 @@ pub unsafe extern "C" fn celt_encode_with_ec(
         crate::stdlib::memcpy(
             bandLogE2 as *mut libc::c_void,
             bandLogE as *const libc::c_void,
-            ((C * nbEBands) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<opus_val16>() as libc::c_ulong)
+            ((C * nbEBands) as usize)
+                .wrapping_mul(::std::mem::size_of::<opus_val16>() as usize)
                 .wrapping_add(
-                    (0 as i32 as isize * bandLogE2.offset_from(bandLogE) as isize) as libc::c_ulong,
+                    (0 as i32 as isize * bandLogE2.offset_from(bandLogE) as isize) as usize,
                 ),
         );
     }
@@ -3147,7 +3147,7 @@ pub unsafe extern "C" fn celt_encode_with_ec(
     }
     let mut fresh20 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<celt_norm>() as libc::c_ulong).wrapping_mul((C * N) as libc::c_ulong)
+        (::std::mem::size_of::<celt_norm>() as usize).wrapping_mul((C * N) as usize)
             as usize,
     );
     X = fresh20.as_mut_ptr() as *mut celt_norm;
@@ -3163,7 +3163,7 @@ pub unsafe extern "C" fn celt_encode_with_ec(
     );
     let mut fresh21 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(nbEBands as libc::c_ulong)
+        (::std::mem::size_of::<i32>() as usize).wrapping_mul(nbEBands as usize)
             as usize,
     );
     tf_res = fresh21.as_mut_ptr() as *mut i32;
@@ -3224,8 +3224,8 @@ pub unsafe extern "C" fn celt_encode_with_ec(
     }
     let mut fresh22 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_val16>() as libc::c_ulong)
-            .wrapping_mul((C * nbEBands) as libc::c_ulong) as usize,
+        (::std::mem::size_of::<opus_val16>() as usize)
+            .wrapping_mul((C * nbEBands) as usize) as usize,
     );
     error = fresh22.as_mut_ptr() as *mut opus_val16;
     c = 0 as i32;
@@ -3320,7 +3320,7 @@ pub unsafe extern "C" fn celt_encode_with_ec(
     }
     let mut fresh24 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(nbEBands as libc::c_ulong)
+        (::std::mem::size_of::<i32>() as usize).wrapping_mul(nbEBands as usize)
             as usize,
     );
     offsets = fresh24.as_mut_ptr() as *mut i32;
@@ -3355,7 +3355,7 @@ pub unsafe extern "C" fn celt_encode_with_ec(
     }
     let mut fresh25 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(nbEBands as libc::c_ulong)
+        (::std::mem::size_of::<i32>() as usize).wrapping_mul(nbEBands as usize)
             as usize,
     );
     cap = fresh25.as_mut_ptr() as *mut i32;
@@ -3691,19 +3691,19 @@ pub unsafe extern "C" fn celt_encode_with_ec(
     /* Bit allocation */
     let mut fresh26 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(nbEBands as libc::c_ulong)
+        (::std::mem::size_of::<i32>() as usize).wrapping_mul(nbEBands as usize)
             as usize,
     );
     fine_quant = fresh26.as_mut_ptr() as *mut i32;
     let mut fresh27 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(nbEBands as libc::c_ulong)
+        (::std::mem::size_of::<i32>() as usize).wrapping_mul(nbEBands as usize)
             as usize,
     );
     pulses = fresh27.as_mut_ptr() as *mut i32;
     let mut fresh28 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(nbEBands as libc::c_ulong)
+        (::std::mem::size_of::<i32>() as usize).wrapping_mul(nbEBands as usize)
             as usize,
     );
     fine_priority = fresh28.as_mut_ptr() as *mut i32;
@@ -3791,7 +3791,7 @@ pub unsafe extern "C" fn celt_encode_with_ec(
     /* Residual quantisation */
     let mut fresh29 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<u8>() as libc::c_ulong).wrapping_mul((C * nbEBands) as libc::c_ulong)
+        (::std::mem::size_of::<u8>() as usize).wrapping_mul((C * nbEBands) as usize)
             as usize,
     );
     collapse_masks = fresh29.as_mut_ptr() as *mut u8;
@@ -3847,8 +3847,8 @@ pub unsafe extern "C" fn celt_encode_with_ec(
     crate::stdlib::memset(
         energyError as *mut libc::c_void,
         0 as i32,
-        ((nbEBands * CC) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<opus_val16>() as libc::c_ulong),
+        ((nbEBands * CC) as usize)
+            .wrapping_mul(::std::mem::size_of::<opus_val16>() as usize),
     );
     c = 0 as i32;
     loop {
@@ -3887,12 +3887,12 @@ pub unsafe extern "C" fn celt_encode_with_ec(
         crate::stdlib::memcpy(
             &mut *oldBandE.offset(nbEBands as isize) as *mut opus_val16 as *mut libc::c_void,
             oldBandE as *const libc::c_void,
-            (nbEBands as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<opus_val16>() as libc::c_ulong)
+            (nbEBands as usize)
+                .wrapping_mul(::std::mem::size_of::<opus_val16>() as usize)
                 .wrapping_add(
                     (0 as i32 as isize
                         * (&mut *oldBandE.offset(nbEBands as isize) as *mut opus_val16)
-                            .offset_from(oldBandE) as isize) as libc::c_ulong,
+                            .offset_from(oldBandE) as isize) as usize,
                 ),
         );
     }
@@ -3900,19 +3900,19 @@ pub unsafe extern "C" fn celt_encode_with_ec(
         crate::stdlib::memcpy(
             oldLogE2 as *mut libc::c_void,
             oldLogE as *const libc::c_void,
-            ((CC * nbEBands) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<opus_val16>() as libc::c_ulong)
+            ((CC * nbEBands) as usize)
+                .wrapping_mul(::std::mem::size_of::<opus_val16>() as usize)
                 .wrapping_add(
-                    (0 as i32 as isize * oldLogE2.offset_from(oldLogE) as isize) as libc::c_ulong,
+                    (0 as i32 as isize * oldLogE2.offset_from(oldLogE) as isize) as usize,
                 ),
         );
         crate::stdlib::memcpy(
             oldLogE as *mut libc::c_void,
             oldBandE as *const libc::c_void,
-            ((CC * nbEBands) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<opus_val16>() as libc::c_ulong)
+            ((CC * nbEBands) as usize)
+                .wrapping_mul(::std::mem::size_of::<opus_val16>() as usize)
                 .wrapping_add(
-                    (0 as i32 as isize * oldLogE.offset_from(oldBandE) as isize) as libc::c_ulong,
+                    (0 as i32 as isize * oldLogE.offset_from(oldBandE) as isize) as usize,
                 ),
         );
     } else {
@@ -4107,8 +4107,8 @@ pub unsafe extern "C" fn opus_custom_encoder_ctl(
                 ((opus_custom_encoder_get_size((*st).mode, (*st).channels) as isize
                     - (&mut (*st).rng as *mut opus_uint32 as *mut libc::c_char)
                         .offset_from(st as *mut libc::c_char) as isize)
-                    as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<libc::c_char>() as libc::c_ulong),
+                    as usize)
+                    .wrapping_mul(::std::mem::size_of::<libc::c_char>() as usize),
             );
             i = 0 as i32;
             while i < (*st).channels * (*(*st).mode).nbEBands {
@@ -4136,12 +4136,12 @@ pub unsafe extern "C" fn opus_custom_encoder_ctl(
                 crate::stdlib::memcpy(
                     &mut (*st).analysis as *mut AnalysisInfo as *mut libc::c_void,
                     info as *const libc::c_void,
-                    (1 as i32 as libc::c_ulong)
-                        .wrapping_mul(::std::mem::size_of::<AnalysisInfo>() as libc::c_ulong)
+                    (1 as i32 as usize)
+                        .wrapping_mul(::std::mem::size_of::<AnalysisInfo>() as usize)
                         .wrapping_add(
                             (0 as i32 as isize
                                 * (&mut (*st).analysis as *mut AnalysisInfo).offset_from(info)
-                                    as isize) as libc::c_ulong,
+                                    as isize) as usize,
                         ),
                 );
             }
@@ -4153,12 +4153,12 @@ pub unsafe extern "C" fn opus_custom_encoder_ctl(
                 crate::stdlib::memcpy(
                     &mut (*st).silk_info as *mut SILKInfo as *mut libc::c_void,
                     info_0 as *const libc::c_void,
-                    (1 as i32 as libc::c_ulong)
-                        .wrapping_mul(::std::mem::size_of::<SILKInfo>() as libc::c_ulong)
+                    (1 as i32 as usize)
+                        .wrapping_mul(::std::mem::size_of::<SILKInfo>() as usize)
                         .wrapping_add(
                             (0 as i32 as isize
                                 * (&mut (*st).silk_info as *mut SILKInfo).offset_from(info_0)
-                                    as isize) as libc::c_ulong,
+                                    as isize) as usize,
                         ),
                 );
             }

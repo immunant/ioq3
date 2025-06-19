@@ -1133,8 +1133,8 @@ pub unsafe extern "C" fn UI_UpdateCvars() {
     }
 }
 unsafe extern "C" fn run_static_initializers() {
-    cvarTableSize = (::std::mem::size_of::<[cvarTable_t; 49]>() as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<cvarTable_t>() as libc::c_ulong)
+    cvarTableSize = (::std::mem::size_of::<[cvarTable_t; 49]>() as usize)
+        .wrapping_div(::std::mem::size_of::<cvarTable_t>() as usize)
         as i32
 }
 #[used]

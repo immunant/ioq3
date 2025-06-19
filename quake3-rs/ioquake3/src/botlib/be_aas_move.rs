@@ -1275,12 +1275,12 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
     crate::stdlib::memset(
         move_0 as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<aas_clientmove_t>() as libc::c_ulong,
+        ::std::mem::size_of::<aas_clientmove_t>() as usize,
     );
     crate::stdlib::memset(
         &mut trace as *mut aas_trace_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<aas_trace_t>() as libc::c_ulong,
+        ::std::mem::size_of::<aas_trace_t>() as usize,
     );
     //start at the current origin
     org[0 as i32 as usize] = *origin.offset(0 as i32 as isize);

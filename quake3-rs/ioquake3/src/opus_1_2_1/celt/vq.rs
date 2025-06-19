@@ -291,13 +291,13 @@ pub unsafe extern "C" fn op_pvq_search_c(
     let mut yy: opus_val16 = 0.;
     let mut fresh2 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<celt_norm>() as libc::c_ulong).wrapping_mul(N as libc::c_ulong)
+        (::std::mem::size_of::<celt_norm>() as usize).wrapping_mul(N as usize)
             as usize,
     );
     y = fresh2.as_mut_ptr() as *mut celt_norm;
     let mut fresh3 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(N as libc::c_ulong) as usize,
+        (::std::mem::size_of::<i32>() as usize).wrapping_mul(N as usize) as usize,
     );
     signx = fresh3.as_mut_ptr() as *mut i32;
     /* Get rid of the sign */
@@ -464,8 +464,8 @@ pub unsafe extern "C" fn alg_quant(
     /* Covers vectorization by up to 4. */
     let mut fresh7 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as libc::c_ulong)
-            .wrapping_mul((N + 3 as i32) as libc::c_ulong) as usize,
+        (::std::mem::size_of::<i32>() as usize)
+            .wrapping_mul((N + 3 as i32) as usize) as usize,
     );
     iy = fresh7.as_mut_ptr() as *mut i32;
     exp_rotation(X, N, 1 as i32, B, K, spread);
@@ -496,7 +496,7 @@ pub unsafe extern "C" fn alg_unquant(
     let mut iy: *mut i32 = 0 as *mut i32;
     let mut fresh8 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(N as libc::c_ulong) as usize,
+        (::std::mem::size_of::<i32>() as usize).wrapping_mul(N as usize) as usize,
     );
     iy = fresh8.as_mut_ptr() as *mut i32;
     Ryy = crate::src::opus_1_2_1::celt::cwrs::decode_pulses(iy, N, K, dec as *mut ec_ctx);

@@ -438,7 +438,7 @@ unsafe extern "C" fn get_sof(
     (*cinfo).is_baseline = is_baseline;
     (*cinfo).progressive_mode = is_prog;
     (*cinfo).arith_code = is_arith;
-    if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+    if bytes_in_buffer == 0 as i32 as usize {
         if Some(
             (*datasrc)
                 .fill_input_buffer
@@ -456,7 +456,7 @@ unsafe extern "C" fn get_sof(
     let fresh0 = next_input_byte;
     next_input_byte = next_input_byte.offset(1);
     length = ((*fresh0 as u32) << 8 as i32) as INT32;
-    if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+    if bytes_in_buffer == 0 as i32 as usize {
         if Some(
             (*datasrc)
                 .fill_input_buffer
@@ -474,7 +474,7 @@ unsafe extern "C" fn get_sof(
     let fresh1 = next_input_byte;
     next_input_byte = next_input_byte.offset(1);
     length += *fresh1 as isize;
-    if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+    if bytes_in_buffer == 0 as i32 as usize {
         if Some(
             (*datasrc)
                 .fill_input_buffer
@@ -492,7 +492,7 @@ unsafe extern "C" fn get_sof(
     let fresh2 = next_input_byte;
     next_input_byte = next_input_byte.offset(1);
     (*cinfo).data_precision = *fresh2 as i32;
-    if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+    if bytes_in_buffer == 0 as i32 as usize {
         if Some(
             (*datasrc)
                 .fill_input_buffer
@@ -510,7 +510,7 @@ unsafe extern "C" fn get_sof(
     let fresh3 = next_input_byte;
     next_input_byte = next_input_byte.offset(1);
     (*cinfo).image_height = (*fresh3 as u32) << 8 as i32;
-    if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+    if bytes_in_buffer == 0 as i32 as usize {
         if Some(
             (*datasrc)
                 .fill_input_buffer
@@ -529,7 +529,7 @@ unsafe extern "C" fn get_sof(
     next_input_byte = next_input_byte.offset(1);
     (*cinfo).image_height =
         ((*cinfo).image_height as u32).wrapping_add(*fresh4 as u32) as JDIMENSION as JDIMENSION;
-    if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+    if bytes_in_buffer == 0 as i32 as usize {
         if Some(
             (*datasrc)
                 .fill_input_buffer
@@ -547,7 +547,7 @@ unsafe extern "C" fn get_sof(
     let fresh5 = next_input_byte;
     next_input_byte = next_input_byte.offset(1);
     (*cinfo).image_width = (*fresh5 as u32) << 8 as i32;
-    if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+    if bytes_in_buffer == 0 as i32 as usize {
         if Some(
             (*datasrc)
                 .fill_input_buffer
@@ -566,7 +566,7 @@ unsafe extern "C" fn get_sof(
     next_input_byte = next_input_byte.offset(1);
     (*cinfo).image_width =
         ((*cinfo).image_width as u32).wrapping_add(*fresh6 as u32) as JDIMENSION as JDIMENSION;
-    if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+    if bytes_in_buffer == 0 as i32 as usize {
         if Some(
             (*datasrc)
                 .fill_input_buffer
@@ -640,15 +640,15 @@ unsafe extern "C" fn get_sof(
         .expect("non-null function pointer")(
             cinfo as j_common_ptr,
             1 as i32,
-            ((*cinfo).num_components as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<jpeg_component_info>() as libc::c_ulong),
+            ((*cinfo).num_components as usize)
+                .wrapping_mul(::std::mem::size_of::<jpeg_component_info>() as usize),
         ) as *mut jpeg_component_info
     }
     ci = 0 as i32;
     compptr = (*cinfo).comp_info;
     while ci < (*cinfo).num_components {
         (*compptr).component_index = ci;
-        if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+        if bytes_in_buffer == 0 as i32 as usize {
             if Some(
                 (*datasrc)
                     .fill_input_buffer
@@ -666,7 +666,7 @@ unsafe extern "C" fn get_sof(
         let fresh8 = next_input_byte;
         next_input_byte = next_input_byte.offset(1);
         (*compptr).component_id = *fresh8 as i32;
-        if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+        if bytes_in_buffer == 0 as i32 as usize {
             if Some(
                 (*datasrc)
                     .fill_input_buffer
@@ -686,7 +686,7 @@ unsafe extern "C" fn get_sof(
         c = *fresh9 as i32;
         (*compptr).h_samp_factor = c >> 4 as i32 & 15 as i32;
         (*compptr).v_samp_factor = c & 15 as i32;
-        if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+        if bytes_in_buffer == 0 as i32 as usize {
             if Some(
                 (*datasrc)
                     .fill_input_buffer
@@ -746,7 +746,7 @@ unsafe extern "C" fn get_sos(mut cinfo: j_decompress_ptr) -> boolean
         )
         .expect("non-null function pointer")(cinfo as j_common_ptr);
     }
-    if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+    if bytes_in_buffer == 0 as i32 as usize {
         if Some(
             (*datasrc)
                 .fill_input_buffer
@@ -764,7 +764,7 @@ unsafe extern "C" fn get_sos(mut cinfo: j_decompress_ptr) -> boolean
     let fresh11 = next_input_byte;
     next_input_byte = next_input_byte.offset(1);
     length = ((*fresh11 as u32) << 8 as i32) as INT32;
-    if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+    if bytes_in_buffer == 0 as i32 as usize {
         if Some(
             (*datasrc)
                 .fill_input_buffer
@@ -782,7 +782,7 @@ unsafe extern "C" fn get_sos(mut cinfo: j_decompress_ptr) -> boolean
     let fresh12 = next_input_byte;
     next_input_byte = next_input_byte.offset(1);
     length += *fresh12 as isize;
-    if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+    if bytes_in_buffer == 0 as i32 as usize {
         if Some(
             (*datasrc)
                 .fill_input_buffer
@@ -826,7 +826,7 @@ unsafe extern "C" fn get_sos(mut cinfo: j_decompress_ptr) -> boolean
     i = 0 as i32;
     while i < n {
         let mut current_block_71: u64;
-        if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+        if bytes_in_buffer == 0 as i32 as usize {
             if Some(
                 (*datasrc)
                     .fill_input_buffer
@@ -844,7 +844,7 @@ unsafe extern "C" fn get_sos(mut cinfo: j_decompress_ptr) -> boolean
         let fresh14 = next_input_byte;
         next_input_byte = next_input_byte.offset(1);
         cc = *fresh14 as i32;
-        if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+        if bytes_in_buffer == 0 as i32 as usize {
             if Some(
                 (*datasrc)
                     .fill_input_buffer
@@ -906,7 +906,7 @@ unsafe extern "C" fn get_sos(mut cinfo: j_decompress_ptr) -> boolean
         i += 1
     }
     /* Collect the additional scan parameters Ss, Se, Ah/Al. */
-    if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+    if bytes_in_buffer == 0 as i32 as usize {
         if Some(
             (*datasrc)
                 .fill_input_buffer
@@ -925,7 +925,7 @@ unsafe extern "C" fn get_sos(mut cinfo: j_decompress_ptr) -> boolean
     next_input_byte = next_input_byte.offset(1);
     c = *fresh16 as i32;
     (*cinfo).Ss = c;
-    if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+    if bytes_in_buffer == 0 as i32 as usize {
         if Some(
             (*datasrc)
                 .fill_input_buffer
@@ -944,7 +944,7 @@ unsafe extern "C" fn get_sos(mut cinfo: j_decompress_ptr) -> boolean
     next_input_byte = next_input_byte.offset(1);
     c = *fresh17 as i32;
     (*cinfo).Se = c;
-    if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+    if bytes_in_buffer == 0 as i32 as usize {
         if Some(
             (*datasrc)
                 .fill_input_buffer
@@ -995,7 +995,7 @@ unsafe extern "C" fn get_dac(mut cinfo: j_decompress_ptr) -> boolean
     let mut datasrc: *mut jpeg_source_mgr = (*cinfo).src;
     let mut next_input_byte: *const JOCTET = (*datasrc).next_input_byte;
     let mut bytes_in_buffer: size_t = (*datasrc).bytes_in_buffer;
-    if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+    if bytes_in_buffer == 0 as i32 as usize {
         if Some(
             (*datasrc)
                 .fill_input_buffer
@@ -1013,7 +1013,7 @@ unsafe extern "C" fn get_dac(mut cinfo: j_decompress_ptr) -> boolean
     let fresh19 = next_input_byte;
     next_input_byte = next_input_byte.offset(1);
     length = ((*fresh19 as u32) << 8 as i32) as INT32;
-    if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+    if bytes_in_buffer == 0 as i32 as usize {
         if Some(
             (*datasrc)
                 .fill_input_buffer
@@ -1033,7 +1033,7 @@ unsafe extern "C" fn get_dac(mut cinfo: j_decompress_ptr) -> boolean
     length += *fresh20 as isize;
     length -= 2 as i32 as isize;
     while length > 0 as i32 as isize {
-        if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+        if bytes_in_buffer == 0 as i32 as usize {
             if Some(
                 (*datasrc)
                     .fill_input_buffer
@@ -1051,7 +1051,7 @@ unsafe extern "C" fn get_dac(mut cinfo: j_decompress_ptr) -> boolean
         let fresh21 = next_input_byte;
         next_input_byte = next_input_byte.offset(1);
         index = *fresh21 as i32;
-        if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+        if bytes_in_buffer == 0 as i32 as usize {
             if Some(
                 (*datasrc)
                     .fill_input_buffer
@@ -1137,7 +1137,7 @@ unsafe extern "C" fn get_dht(mut cinfo: j_decompress_ptr) -> boolean
     let mut datasrc: *mut jpeg_source_mgr = (*cinfo).src;
     let mut next_input_byte: *const JOCTET = (*datasrc).next_input_byte;
     let mut bytes_in_buffer: size_t = (*datasrc).bytes_in_buffer;
-    if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+    if bytes_in_buffer == 0 as i32 as usize {
         if Some(
             (*datasrc)
                 .fill_input_buffer
@@ -1155,7 +1155,7 @@ unsafe extern "C" fn get_dht(mut cinfo: j_decompress_ptr) -> boolean
     let fresh23 = next_input_byte;
     next_input_byte = next_input_byte.offset(1);
     length = ((*fresh23 as u32) << 8 as i32) as INT32;
-    if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+    if bytes_in_buffer == 0 as i32 as usize {
         if Some(
             (*datasrc)
                 .fill_input_buffer
@@ -1175,7 +1175,7 @@ unsafe extern "C" fn get_dht(mut cinfo: j_decompress_ptr) -> boolean
     length += *fresh24 as isize;
     length -= 2 as i32 as isize;
     while length > 16 as i32 as isize {
-        if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+        if bytes_in_buffer == 0 as i32 as usize {
             if Some(
                 (*datasrc)
                     .fill_input_buffer
@@ -1205,7 +1205,7 @@ unsafe extern "C" fn get_dht(mut cinfo: j_decompress_ptr) -> boolean
         count = 0 as i32;
         i = 1 as i32;
         while i <= 16 as i32 {
-            if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+            if bytes_in_buffer == 0 as i32 as usize {
                 if Some(
                     (*datasrc)
                         .fill_input_buffer
@@ -1273,7 +1273,7 @@ unsafe extern "C" fn get_dht(mut cinfo: j_decompress_ptr) -> boolean
         }
         i = 0 as i32;
         while i < count {
-            if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+            if bytes_in_buffer == 0 as i32 as usize {
                 if Some(
                     (*datasrc)
                         .fill_input_buffer
@@ -1324,12 +1324,12 @@ unsafe extern "C" fn get_dht(mut cinfo: j_decompress_ptr) -> boolean
         crate::stdlib::memcpy(
             (**htblptr).bits.as_mut_ptr() as *mut libc::c_void,
             bits.as_mut_ptr() as *const libc::c_void,
-            ::std::mem::size_of::<[UINT8; 17]>() as libc::c_ulong,
+            ::std::mem::size_of::<[UINT8; 17]>() as usize,
         );
         crate::stdlib::memcpy(
             (**htblptr).huffval.as_mut_ptr() as *mut libc::c_void,
             huffval.as_mut_ptr() as *const libc::c_void,
-            ::std::mem::size_of::<[UINT8; 256]>() as libc::c_ulong,
+            ::std::mem::size_of::<[UINT8; 256]>() as usize,
         );
     }
     if length != 0 as i32 as isize {
@@ -1359,7 +1359,7 @@ unsafe extern "C" fn get_dqt(mut cinfo: j_decompress_ptr) -> boolean
     let mut datasrc: *mut jpeg_source_mgr = (*cinfo).src;
     let mut next_input_byte: *const JOCTET = (*datasrc).next_input_byte;
     let mut bytes_in_buffer: size_t = (*datasrc).bytes_in_buffer;
-    if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+    if bytes_in_buffer == 0 as i32 as usize {
         if Some(
             (*datasrc)
                 .fill_input_buffer
@@ -1377,7 +1377,7 @@ unsafe extern "C" fn get_dqt(mut cinfo: j_decompress_ptr) -> boolean
     let fresh28 = next_input_byte;
     next_input_byte = next_input_byte.offset(1);
     length = ((*fresh28 as u32) << 8 as i32) as INT32;
-    if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+    if bytes_in_buffer == 0 as i32 as usize {
         if Some(
             (*datasrc)
                 .fill_input_buffer
@@ -1398,7 +1398,7 @@ unsafe extern "C" fn get_dqt(mut cinfo: j_decompress_ptr) -> boolean
     length -= 2 as i32 as isize;
     while length > 0 as i32 as isize {
         length -= 1;
-        if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+        if bytes_in_buffer == 0 as i32 as usize {
             if Some(
                 (*datasrc)
                     .fill_input_buffer
@@ -1478,7 +1478,7 @@ unsafe extern "C" fn get_dqt(mut cinfo: j_decompress_ptr) -> boolean
         i = 0 as i32 as INT32;
         while i < count {
             if prec != 0 {
-                if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+                if bytes_in_buffer == 0 as i32 as usize {
                     if Some(
                         (*datasrc)
                             .fill_input_buffer
@@ -1496,7 +1496,7 @@ unsafe extern "C" fn get_dqt(mut cinfo: j_decompress_ptr) -> boolean
                 let fresh31 = next_input_byte;
                 next_input_byte = next_input_byte.offset(1);
                 tmp = (*fresh31 as u32) << 8 as i32;
-                if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+                if bytes_in_buffer == 0 as i32 as usize {
                     if Some(
                         (*datasrc)
                             .fill_input_buffer
@@ -1515,7 +1515,7 @@ unsafe extern "C" fn get_dqt(mut cinfo: j_decompress_ptr) -> boolean
                 next_input_byte = next_input_byte.offset(1);
                 tmp = tmp.wrapping_add(*fresh32 as u32)
             } else {
-                if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+                if bytes_in_buffer == 0 as i32 as usize {
                     if Some(
                         (*datasrc)
                             .fill_input_buffer
@@ -1595,7 +1595,7 @@ unsafe extern "C" fn get_dri(mut cinfo: j_decompress_ptr) -> boolean
     let mut datasrc: *mut jpeg_source_mgr = (*cinfo).src;
     let mut next_input_byte: *const JOCTET = (*datasrc).next_input_byte;
     let mut bytes_in_buffer: size_t = (*datasrc).bytes_in_buffer;
-    if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+    if bytes_in_buffer == 0 as i32 as usize {
         if Some(
             (*datasrc)
                 .fill_input_buffer
@@ -1613,7 +1613,7 @@ unsafe extern "C" fn get_dri(mut cinfo: j_decompress_ptr) -> boolean
     let fresh34 = next_input_byte;
     next_input_byte = next_input_byte.offset(1);
     length = ((*fresh34 as u32) << 8 as i32) as INT32;
-    if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+    if bytes_in_buffer == 0 as i32 as usize {
         if Some(
             (*datasrc)
                 .fill_input_buffer
@@ -1640,7 +1640,7 @@ unsafe extern "C" fn get_dri(mut cinfo: j_decompress_ptr) -> boolean
         )
         .expect("non-null function pointer")(cinfo as j_common_ptr);
     }
-    if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+    if bytes_in_buffer == 0 as i32 as usize {
         if Some(
             (*datasrc)
                 .fill_input_buffer
@@ -1658,7 +1658,7 @@ unsafe extern "C" fn get_dri(mut cinfo: j_decompress_ptr) -> boolean
     let fresh36 = next_input_byte;
     next_input_byte = next_input_byte.offset(1);
     tmp = (*fresh36 as u32) << 8 as i32;
-    if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+    if bytes_in_buffer == 0 as i32 as usize {
         if Some(
             (*datasrc)
                 .fill_input_buffer
@@ -1919,7 +1919,7 @@ unsafe extern "C" fn get_interesting_appn(mut cinfo: j_decompress_ptr) -> boolea
     let mut datasrc: *mut jpeg_source_mgr = (*cinfo).src;
     let mut next_input_byte: *const JOCTET = (*datasrc).next_input_byte;
     let mut bytes_in_buffer: size_t = (*datasrc).bytes_in_buffer;
-    if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+    if bytes_in_buffer == 0 as i32 as usize {
         if Some(
             (*datasrc)
                 .fill_input_buffer
@@ -1937,7 +1937,7 @@ unsafe extern "C" fn get_interesting_appn(mut cinfo: j_decompress_ptr) -> boolea
     let fresh38 = next_input_byte;
     next_input_byte = next_input_byte.offset(1);
     length = ((*fresh38 as u32) << 8 as i32) as INT32;
-    if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+    if bytes_in_buffer == 0 as i32 as usize {
         if Some(
             (*datasrc)
                 .fill_input_buffer
@@ -1966,7 +1966,7 @@ unsafe extern "C" fn get_interesting_appn(mut cinfo: j_decompress_ptr) -> boolea
     }
     i = 0 as i32 as u32;
     while i < numtoread {
-        if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+        if bytes_in_buffer == 0 as i32 as usize {
             if Some(
                 (*datasrc)
                     .fill_input_buffer
@@ -2034,7 +2034,7 @@ unsafe extern "C" fn save_marker(mut cinfo: j_decompress_ptr) -> boolean
     let mut bytes_in_buffer: size_t = (*datasrc).bytes_in_buffer;
     if cur_marker.is_null() {
         /* begin reading a marker */
-        if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+        if bytes_in_buffer == 0 as i32 as usize {
             if Some(
                 (*datasrc)
                     .fill_input_buffer
@@ -2052,7 +2052,7 @@ unsafe extern "C" fn save_marker(mut cinfo: j_decompress_ptr) -> boolean
         let fresh41 = next_input_byte;
         next_input_byte = next_input_byte.offset(1);
         length = ((*fresh41 as u32) << 8 as i32) as INT32;
-        if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+        if bytes_in_buffer == 0 as i32 as usize {
             if Some(
                 (*datasrc)
                     .fill_input_buffer
@@ -2093,8 +2093,8 @@ unsafe extern "C" fn save_marker(mut cinfo: j_decompress_ptr) -> boolean
             .expect("non-null function pointer")(
                 cinfo as j_common_ptr,
                 1 as i32,
-                (::std::mem::size_of::<jpeg_marker_struct>() as libc::c_ulong)
-                    .wrapping_add(limit as libc::c_ulong),
+                (::std::mem::size_of::<jpeg_marker_struct>() as usize)
+                    .wrapping_add(limit as usize),
             ) as jpeg_saved_marker_ptr;
             (*cur_marker).next = 0 as jpeg_saved_marker_ptr;
             (*cur_marker).marker = (*cinfo).unread_marker as UINT8;
@@ -2124,7 +2124,7 @@ unsafe extern "C" fn save_marker(mut cinfo: j_decompress_ptr) -> boolean
         (*datasrc).bytes_in_buffer = bytes_in_buffer;
         (*marker).bytes_read = bytes_read;
         /* If there's not at least one byte in buffer, suspend */
-        if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+        if bytes_in_buffer == 0 as i32 as usize {
             if Some(
                 (*datasrc)
                     .fill_input_buffer
@@ -2139,7 +2139,7 @@ unsafe extern "C" fn save_marker(mut cinfo: j_decompress_ptr) -> boolean
             bytes_in_buffer = (*datasrc).bytes_in_buffer
         }
         /* Copy bytes with reasonable rapidity */
-        while bytes_read < data_length && bytes_in_buffer > 0 as i32 as libc::c_ulong {
+        while bytes_read < data_length && bytes_in_buffer > 0 as i32 as usize {
             let fresh43 = next_input_byte;
             next_input_byte = next_input_byte.offset(1);
             let fresh44 = data;
@@ -2209,7 +2209,7 @@ unsafe extern "C" fn skip_variable(mut cinfo: j_decompress_ptr) -> boolean
     let mut datasrc: *mut jpeg_source_mgr = (*cinfo).src;
     let mut next_input_byte: *const JOCTET = (*datasrc).next_input_byte;
     let mut bytes_in_buffer: size_t = (*datasrc).bytes_in_buffer;
-    if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+    if bytes_in_buffer == 0 as i32 as usize {
         if Some(
             (*datasrc)
                 .fill_input_buffer
@@ -2227,7 +2227,7 @@ unsafe extern "C" fn skip_variable(mut cinfo: j_decompress_ptr) -> boolean
     let fresh45 = next_input_byte;
     next_input_byte = next_input_byte.offset(1);
     length = ((*fresh45 as u32) << 8 as i32) as INT32;
-    if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+    if bytes_in_buffer == 0 as i32 as usize {
         if Some(
             (*datasrc)
                 .fill_input_buffer
@@ -2282,7 +2282,7 @@ unsafe extern "C" fn next_marker(mut cinfo: j_decompress_ptr) -> boolean {
     let mut next_input_byte: *const JOCTET = (*datasrc).next_input_byte;
     let mut bytes_in_buffer: size_t = (*datasrc).bytes_in_buffer;
     loop {
-        if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+        if bytes_in_buffer == 0 as i32 as usize {
             if Some(
                 (*datasrc)
                     .fill_input_buffer
@@ -2309,7 +2309,7 @@ unsafe extern "C" fn next_marker(mut cinfo: j_decompress_ptr) -> boolean {
             (*(*cinfo).marker).discarded_bytes = (*(*cinfo).marker).discarded_bytes.wrapping_add(1);
             (*datasrc).next_input_byte = next_input_byte;
             (*datasrc).bytes_in_buffer = bytes_in_buffer;
-            if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+            if bytes_in_buffer == 0 as i32 as usize {
                 if Some(
                     (*datasrc)
                         .fill_input_buffer
@@ -2335,7 +2335,7 @@ unsafe extern "C" fn next_marker(mut cinfo: j_decompress_ptr) -> boolean {
          * data source's input buffer.
          */
         {
-            if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+            if bytes_in_buffer == 0 as i32 as usize {
                 if Some(
                     (*datasrc)
                         .fill_input_buffer
@@ -2399,7 +2399,7 @@ unsafe extern "C" fn first_marker(mut cinfo: j_decompress_ptr) -> boolean
     let mut datasrc: *mut jpeg_source_mgr = (*cinfo).src;
     let mut next_input_byte: *const JOCTET = (*datasrc).next_input_byte;
     let mut bytes_in_buffer: size_t = (*datasrc).bytes_in_buffer;
-    if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+    if bytes_in_buffer == 0 as i32 as usize {
         if Some(
             (*datasrc)
                 .fill_input_buffer
@@ -2417,7 +2417,7 @@ unsafe extern "C" fn first_marker(mut cinfo: j_decompress_ptr) -> boolean
     let fresh50 = next_input_byte;
     next_input_byte = next_input_byte.offset(1);
     c = *fresh50 as i32;
-    if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+    if bytes_in_buffer == 0 as i32 as usize {
         if Some(
             (*datasrc)
                 .fill_input_buffer
@@ -3039,7 +3039,7 @@ pub unsafe extern "C" fn jinit_marker_reader(mut cinfo: j_decompress_ptr) {
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         0 as i32,
-        ::std::mem::size_of::<my_marker_reader>() as libc::c_ulong,
+        ::std::mem::size_of::<my_marker_reader>() as usize,
     ) as my_marker_ptr;
     (*cinfo).marker = marker as *mut jpeg_marker_reader;
     /* Initialize public method pointers */
@@ -3086,8 +3086,8 @@ pub unsafe extern "C" fn jpeg_save_markers(
     /* Length limit mustn't be larger than what we can allocate
      * (should only be a concern in a 16-bit environment).
      */
-    maxlength = ((*(*cinfo).mem).max_alloc_chunk as libc::c_ulong)
-        .wrapping_sub(::std::mem::size_of::<jpeg_marker_struct>() as libc::c_ulong)
+    maxlength = ((*(*cinfo).mem).max_alloc_chunk as usize)
+        .wrapping_sub(::std::mem::size_of::<jpeg_marker_struct>() as usize)
         as isize;
     if length_limit as isize > maxlength {
         length_limit = maxlength as u32

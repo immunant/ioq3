@@ -644,7 +644,7 @@ unsafe extern "C" fn BotImport_Print(mut type_0: i32, mut fmt: *mut libc::c_char
     ap = args.clone();
     crate::stdlib::vsnprintf(
         str.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 2048]>() as libc::c_ulong,
+        ::std::mem::size_of::<[libc::c_char; 2048]>() as usize,
         fmt,
         ap.as_va_list(),
     );
@@ -959,7 +959,7 @@ pub unsafe extern "C" fn BotImport_DebugPolygonCreate(
     crate::stdlib::memcpy(
         (*poly).points.as_mut_ptr() as *mut libc::c_void,
         points as *const libc::c_void,
-        (numPoints as libc::c_ulong).wrapping_mul(::std::mem::size_of::<vec3_t>() as libc::c_ulong),
+        (numPoints as usize).wrapping_mul(::std::mem::size_of::<vec3_t>() as usize),
     );
     //
     return i;
@@ -987,7 +987,7 @@ unsafe extern "C" fn BotImport_DebugPolygonShow(
     crate::stdlib::memcpy(
         (*poly).points.as_mut_ptr() as *mut libc::c_void,
         points as *const libc::c_void,
-        (numPoints as libc::c_ulong).wrapping_mul(::std::mem::size_of::<vec3_t>() as libc::c_ulong),
+        (numPoints as usize).wrapping_mul(::std::mem::size_of::<vec3_t>() as usize),
     );
 }
 /*
@@ -1401,8 +1401,8 @@ pub unsafe extern "C" fn SV_BotInitBotLib() {
     bot_maxdebugpolys =
         Cvar_VariableIntegerValue(b"bot_maxdebugpolys\x00" as *const u8 as *const libc::c_char);
     debugpolygons = Z_Malloc(
-        (::std::mem::size_of::<bot_debugpoly_t>() as libc::c_ulong)
-            .wrapping_mul(bot_maxdebugpolys as libc::c_ulong) as i32,
+        (::std::mem::size_of::<bot_debugpoly_t>() as usize)
+            .wrapping_mul(bot_maxdebugpolys as usize) as i32,
     ) as *mut bot_debugpoly_t;
     botlib_import.Print =
         Some(BotImport_Print as unsafe extern "C" fn(_: i32, _: *mut libc::c_char, _: ...) -> ());

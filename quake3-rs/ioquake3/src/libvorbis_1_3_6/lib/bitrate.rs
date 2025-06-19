@@ -97,7 +97,7 @@ pub unsafe extern "C" fn vorbis_bitrate_init(
         bm as *mut libc::c_void,
         0 as i32,
         ::std::mem::size_of::<crate::src::libvorbis_1_3_6::lib::bitrate::bitrate_manager_state>()
-            as libc::c_ulong,
+            as usize,
     );
     if !bi.is_null() && (*bi).reservoir_bits > 0 as i32 as isize {
         let mut ratesamples: isize = (*vi).rate;
@@ -131,7 +131,7 @@ pub unsafe extern "C" fn vorbis_bitrate_clear(
         bm as *mut libc::c_void,
         0 as i32,
         ::std::mem::size_of::<crate::src::libvorbis_1_3_6::lib::bitrate::bitrate_manager_state>()
-            as libc::c_ulong,
+            as usize,
     );
 }
 #[no_mangle]
@@ -299,7 +299,7 @@ pub unsafe extern "C" fn vorbis_bitrate_addblock(mut vb: *mut vorbis_block) -> i
             }
             oggpack_write(
                 (*vbi).packetblob[choice as usize] as *mut oggpack_buffer,
-                0 as i32 as libc::c_ulong,
+                0 as i32 as usize,
                 8 as i32,
             );
         }

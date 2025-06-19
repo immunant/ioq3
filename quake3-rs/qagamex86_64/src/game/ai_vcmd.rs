@@ -202,7 +202,7 @@ pub unsafe extern "C" fn BotVoiceChat_Defend(
                     &mut (*bs).teamgoal as *mut bot_goal_t as *mut libc::c_void,
                     &mut crate::src::game::ai_dmq3::ctf_redflag as *mut bot_goal_t
                         as *const libc::c_void,
-                    ::std::mem::size_of::<bot_goal_t>() as libc::c_ulong,
+                    ::std::mem::size_of::<bot_goal_t>() as usize,
                 );
             }
             2 => {
@@ -210,7 +210,7 @@ pub unsafe extern "C" fn BotVoiceChat_Defend(
                     &mut (*bs).teamgoal as *mut bot_goal_t as *mut libc::c_void,
                     &mut crate::src::game::ai_dmq3::ctf_blueflag as *mut bot_goal_t
                         as *const libc::c_void,
-                    ::std::mem::size_of::<bot_goal_t>() as libc::c_ulong,
+                    ::std::mem::size_of::<bot_goal_t>() as usize,
                 );
             }
             _ => return,
@@ -356,7 +356,7 @@ pub unsafe extern "C" fn BotVoiceChat_Camp(
             crate::src::game::ai_dmq3::EasyClientName(
                 client,
                 netname.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 36]>() as usize as i32,
             ),
             0 as *mut libc::c_void,
         );
@@ -451,7 +451,7 @@ pub unsafe extern "C" fn BotVoiceChat_FollowMe(
             crate::src::game::ai_dmq3::EasyClientName(
                 client,
                 netname.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 36]>() as usize as i32,
             ),
             0 as *mut libc::c_void,
         );
@@ -546,7 +546,7 @@ pub unsafe extern "C" fn BotVoiceChat_StartLeader(
     crate::src::game::ai_dmq3::ClientName(
         client,
         (*bs).teamleader.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 36]>() as usize as i32,
     );
 }
 /*
@@ -567,7 +567,7 @@ pub unsafe extern "C" fn BotVoiceChat_StopLeader(
         crate::src::game::ai_dmq3::ClientName(
             client,
             netname.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
         ),
     ) == 0
     {
@@ -594,7 +594,7 @@ pub unsafe extern "C" fn BotVoiceChat_WhoIsLeader(
     crate::src::game::ai_dmq3::ClientName(
         (*bs).client,
         netname.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
     );
     //if this bot IS the team leader
     if Q_stricmp(netname.as_mut_ptr(), (*bs).teamleader.as_mut_ptr()) == 0 {
@@ -638,7 +638,7 @@ pub unsafe extern "C" fn BotVoiceChat_WantOnDefense(
     crate::src::game::ai_dmq3::EasyClientName(
         client,
         netname.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 36]>() as usize as i32,
     );
     BotAI_BotInitialChat(
         bs as *mut bot_state_s,
@@ -681,7 +681,7 @@ pub unsafe extern "C" fn BotVoiceChat_WantOnOffense(
     crate::src::game::ai_dmq3::EasyClientName(
         client,
         netname.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 36]>() as usize as i32,
     );
     BotAI_BotInitialChat(
         bs as *mut bot_state_s,
@@ -915,7 +915,7 @@ pub unsafe extern "C" fn BotVoiceChatCommand(
     Q_strncpyz(
         buf.as_mut_ptr(),
         voiceChat,
-        ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
     );
     cmd = buf.as_mut_ptr();
     while *cmd as i32 != 0 && *cmd as i32 > ' ' as i32 {

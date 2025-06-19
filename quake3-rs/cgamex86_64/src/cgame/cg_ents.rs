@@ -464,7 +464,7 @@ unsafe extern "C" fn CG_General(mut cent: *mut centity_t) {
     crate::stdlib::memset(
         &mut ent as *mut refEntity_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
+        ::std::mem::size_of::<refEntity_t>() as usize,
     );
     // set frame
     ent.frame = (*s1).frame;
@@ -572,7 +572,7 @@ unsafe extern "C" fn CG_Item(mut cent: *mut centity_t) {
         crate::stdlib::memset(
             &mut ent as *mut refEntity_t as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
+            ::std::mem::size_of::<refEntity_t>() as usize,
         );
         ent.reType = RT_SPRITE;
         ent.origin[0 as i32 as usize] = (*cent).lerpOrigin[0 as i32 as usize];
@@ -596,7 +596,7 @@ unsafe extern "C" fn CG_Item(mut cent: *mut centity_t) {
     crate::stdlib::memset(
         &mut ent as *mut refEntity_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
+        ::std::mem::size_of::<refEntity_t>() as usize,
     );
     // autorotate at one of two speeds
     if (*item).giType as u32 == IT_HEALTH as i32 as u32 {
@@ -740,7 +740,7 @@ unsafe extern "C" fn CG_Item(mut cent: *mut centity_t) {
         crate::stdlib::memset(
             &mut barrel as *mut refEntity_t as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
+            ::std::mem::size_of::<refEntity_t>() as usize,
         );
         barrel.hModel = (*wi).barrelModel;
         barrel.lightingOrigin[0 as i32 as usize] = ent.lightingOrigin[0 as i32 as usize];
@@ -905,7 +905,7 @@ unsafe extern "C" fn CG_Missile(mut cent: *mut centity_t) {
     crate::stdlib::memset(
         &mut ent as *mut refEntity_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
+        ::std::mem::size_of::<refEntity_t>() as usize,
     );
     ent.origin[0 as i32 as usize] = (*cent).lerpOrigin[0 as i32 as usize];
     ent.origin[1 as i32 as usize] = (*cent).lerpOrigin[1 as i32 as usize];
@@ -995,7 +995,7 @@ unsafe extern "C" fn CG_Grapple(mut cent: *mut centity_t) {
     crate::stdlib::memset(
         &mut ent as *mut refEntity_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
+        ::std::mem::size_of::<refEntity_t>() as usize,
     );
     ent.origin[0 as i32 as usize] = (*cent).lerpOrigin[0 as i32 as usize];
     ent.origin[1 as i32 as usize] = (*cent).lerpOrigin[1 as i32 as usize];
@@ -1052,7 +1052,7 @@ unsafe extern "C" fn CG_Mover(mut cent: *mut centity_t) {
     crate::stdlib::memset(
         &mut ent as *mut refEntity_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
+        ::std::mem::size_of::<refEntity_t>() as usize,
     );
     ent.origin[0 as i32 as usize] = (*cent).lerpOrigin[0 as i32 as usize];
     ent.origin[1 as i32 as usize] = (*cent).lerpOrigin[1 as i32 as usize];
@@ -1120,7 +1120,7 @@ pub unsafe extern "C" fn CG_Beam(mut cent: *mut centity_t) {
     crate::stdlib::memset(
         &mut ent as *mut refEntity_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
+        ::std::mem::size_of::<refEntity_t>() as usize,
     );
     ent.origin[0 as i32 as usize] = (*s1).pos.trBase[0 as i32 as usize];
     ent.origin[1 as i32 as usize] = (*s1).pos.trBase[1 as i32 as usize];
@@ -1169,7 +1169,7 @@ unsafe extern "C" fn CG_Portal(mut cent: *mut centity_t) {
     crate::stdlib::memset(
         &mut ent as *mut refEntity_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
+        ::std::mem::size_of::<refEntity_t>() as usize,
     );
     ent.origin[0 as i32 as usize] = (*cent).lerpOrigin[0 as i32 as usize];
     ent.origin[1 as i32 as usize] = (*cent).lerpOrigin[1 as i32 as usize];
@@ -1511,7 +1511,7 @@ unsafe extern "C" fn CG_TeamBase(mut cent: *mut centity_t) {
         crate::stdlib::memset(
             &mut model as *mut refEntity_t as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
+            ::std::mem::size_of::<refEntity_t>() as usize,
         );
         model.reType = RT_MODEL;
         model.lightingOrigin[0 as i32 as usize] = (*cent).lerpOrigin[0 as i32 as usize];

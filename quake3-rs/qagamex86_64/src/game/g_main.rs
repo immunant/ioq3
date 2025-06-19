@@ -1675,7 +1675,7 @@ pub unsafe extern "C" fn G_Printf(mut fmt: *const libc::c_char, mut args: ...) {
     argptr = args.clone();
     crate::stdlib::vsnprintf(
         text.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize,
         fmt,
         argptr.as_va_list(),
     );
@@ -1689,7 +1689,7 @@ pub unsafe extern "C" fn G_Error(mut fmt: *const libc::c_char, mut args: ...) ->
     argptr = args.clone();
     crate::stdlib::vsnprintf(
         text.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize,
         fmt,
         argptr.as_va_list(),
     );
@@ -1881,7 +1881,7 @@ pub unsafe extern "C" fn G_InitGame(mut levelTime: i32, mut randomSeed: i32, mut
     crate::stdlib::memset(
         &mut level as *mut level_locals_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<level_locals_t>() as libc::c_ulong,
+        ::std::mem::size_of::<level_locals_t>() as usize,
     ); // FIXME standing in lava / slime
     level.time = levelTime;
     level.startTime = levelTime;
@@ -1909,7 +1909,7 @@ pub unsafe extern "C" fn G_InitGame(mut levelTime: i32, mut randomSeed: i32, mut
             let mut serverinfo: [libc::c_char; 1024] = [0; 1024];
             trap_GetServerinfo(
                 serverinfo.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
             );
             G_LogPrintf(
                 b"------------------------------------------------------------\n\x00" as *const u8
@@ -1928,8 +1928,8 @@ pub unsafe extern "C" fn G_InitGame(mut levelTime: i32, mut randomSeed: i32, mut
     crate::stdlib::memset(
         g_entities.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        (((1 as i32) << 10 as i32) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<gentity_t>() as libc::c_ulong),
+        (((1 as i32) << 10 as i32) as usize)
+            .wrapping_mul(::std::mem::size_of::<gentity_t>() as usize),
     );
     level.gentities = g_entities.as_mut_ptr();
     // initialize all clients for this game
@@ -1937,8 +1937,8 @@ pub unsafe extern "C" fn G_InitGame(mut levelTime: i32, mut randomSeed: i32, mut
     crate::stdlib::memset(
         g_clients.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        (64 as i32 as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<gclient_t>() as libc::c_ulong),
+        (64 as i32 as usize)
+            .wrapping_mul(::std::mem::size_of::<gclient_t>() as usize),
     );
     level.clients = g_clients.as_mut_ptr();
     // set client fields on player ents
@@ -1961,9 +1961,9 @@ pub unsafe extern "C" fn G_InitGame(mut levelTime: i32, mut randomSeed: i32, mut
     trap_LocateGameData(
         level.gentities as *mut gentity_s,
         level.num_entities,
-        ::std::mem::size_of::<gentity_t>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<gentity_t>() as usize as i32,
         &mut (*level.clients.offset(0 as i32 as isize)).ps as *mut _ as *mut playerState_s,
-        ::std::mem::size_of::<gclient_s>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<gclient_s>() as usize as i32,
     );
     // reserve some spots for dead player bodies
     InitBodyQue();
@@ -2033,7 +2033,7 @@ pub unsafe extern "C" fn Com_Error(
     argptr = args.clone();
     crate::stdlib::vsnprintf(
         text.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize,
         error,
         argptr.as_va_list(),
     );
@@ -2198,7 +2198,7 @@ pub unsafe extern "C" fn Com_Printf(mut msg: *const libc::c_char, mut args: ...)
     argptr = args.clone();
     crate::stdlib::vsnprintf(
         text.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize,
         msg,
         argptr.as_va_list(),
     );
@@ -2452,9 +2452,9 @@ pub unsafe extern "C" fn CalculateRanks() {
     level.numPlayingClients = 0 as i32;
     level.numVotingClients = 0 as i32;
     i = 0 as i32;
-    while (i as libc::c_ulong)
-        < (::std::mem::size_of::<[i32; 2]>() as libc::c_ulong)
-            .wrapping_div(::std::mem::size_of::<i32>() as libc::c_ulong)
+    while (i as usize)
+        < (::std::mem::size_of::<[i32; 2]>() as usize)
+            .wrapping_div(::std::mem::size_of::<i32>() as usize)
     {
         level.numteamVotingClients[i as usize] = 0 as i32;
         i += 1
@@ -2500,7 +2500,7 @@ pub unsafe extern "C" fn CalculateRanks() {
     qsort(
         level.sortedClients.as_mut_ptr() as *mut libc::c_void,
         level.numConnectedClients as size_t,
-        ::std::mem::size_of::<i32>() as libc::c_ulong,
+        ::std::mem::size_of::<i32>() as usize,
         Some(
             SortRanks
                 as unsafe extern "C" fn(_: *const libc::c_void, _: *const libc::c_void) -> i32,
@@ -2713,7 +2713,7 @@ pub unsafe extern "C" fn MoveClientToIntermission(mut ent: *mut gentity_t) {
     crate::stdlib::memset(
         (*(*ent).client).ps.powerups.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[i32; 16]>() as libc::c_ulong,
+        ::std::mem::size_of::<[i32; 16]>() as usize,
     );
     (*(*ent).client).ps.eFlags = 0 as i32;
     (*ent).s.eFlags = 0 as i32;
@@ -2852,12 +2852,12 @@ pub unsafe extern "C" fn ExitLevel() {
     trap_Cvar_VariableStringBuffer(
         b"nextmap\x00" as *const u8 as *const libc::c_char,
         nextmap.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     trap_Cvar_VariableStringBuffer(
         b"d1\x00" as *const u8 as *const libc::c_char,
         d1.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     if Q_stricmp(
         nextmap.as_mut_ptr(),
@@ -2927,7 +2927,7 @@ pub unsafe extern "C" fn G_LogPrintf(mut fmt: *const libc::c_char, mut args: ...
     sec -= tens * 10 as i32;
     Com_sprintf(
         string.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
         b"%3i:%i%i \x00" as *const u8 as *const libc::c_char,
         min,
         tens,
@@ -2936,8 +2936,8 @@ pub unsafe extern "C" fn G_LogPrintf(mut fmt: *const libc::c_char, mut args: ...
     argptr = args.clone();
     crate::stdlib::vsnprintf(
         string.as_mut_ptr().offset(7 as i32 as isize),
-        (::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong)
-            .wrapping_sub(7 as i32 as libc::c_ulong),
+        (::std::mem::size_of::<[libc::c_char; 1024]>() as usize)
+            .wrapping_sub(7 as i32 as usize),
         fmt,
         argptr.as_va_list(),
     );
@@ -4050,8 +4050,8 @@ pub unsafe extern "C" fn G_RunFrame(mut levelTime: i32) {
     };
 }
 unsafe extern "C" fn run_static_initializers() {
-    gameCvarTableSize = (::std::mem::size_of::<[cvarTable_t; 46]>() as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<cvarTable_t>() as libc::c_ulong)
+    gameCvarTableSize = (::std::mem::size_of::<[cvarTable_t; 46]>() as usize)
+        .wrapping_div(::std::mem::size_of::<cvarTable_t>() as usize)
         as i32
 }
 #[used]

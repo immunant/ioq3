@@ -502,7 +502,7 @@ pub unsafe extern "C" fn ClientImpacts(mut ent: *mut gentity_t, mut pm: *mut pmo
     crate::stdlib::memset(
         &mut trace as *mut trace_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<trace_t>() as libc::c_ulong,
+        ::std::mem::size_of::<trace_t>() as usize,
     );
     i = 0 as i32;
     while i < (*pm).numtouch {
@@ -666,7 +666,7 @@ pub unsafe extern "C" fn G_TouchTriggers(mut ent: *mut gentity_t) {
                                 crate::stdlib::memset(
                                     &mut trace as *mut trace_t as *mut libc::c_void,
                                     0 as i32,
-                                    ::std::mem::size_of::<trace_t>() as libc::c_ulong,
+                                    ::std::mem::size_of::<trace_t>() as usize,
                                 );
                                 if (*hit).touch.is_some() {
                                     (*hit).touch.expect("non-null function pointer")(
@@ -747,7 +747,7 @@ pub unsafe extern "C" fn SpectatorThink(mut ent: *mut gentity_t, mut ucmd: *mut 
         crate::stdlib::memset(
             &mut pm as *mut pmove_t as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<pmove_t>() as libc::c_ulong,
+            ::std::mem::size_of::<pmove_t>() as usize,
         ); // spectators can fly through bodies
         pm.ps = &mut (*client).ps;
         pm.cmd = *ucmd;
@@ -1178,7 +1178,7 @@ pub unsafe extern "C" fn ClientThink_real(mut ent: *mut gentity_t) {
     crate::stdlib::memset(
         &mut pm as *mut pmove_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<pmove_t>() as libc::c_ulong,
+        ::std::mem::size_of::<pmove_t>() as usize,
     );
     // check for the hit-scan gauntlet, don't let the action
     // go through as an attack unless it actually hits something

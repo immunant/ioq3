@@ -1143,7 +1143,7 @@ pub unsafe extern "C" fn AAS_ConnectedAreas(mut areanums: *mut i32, mut numareas
     crate::stdlib::memset(
         connectedareas.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[i32; 1024]>() as libc::c_ulong,
+        ::std::mem::size_of::<[i32; 1024]>() as usize,
     );
     if numareas < 1 as i32 {
         return qfalse;
@@ -1312,12 +1312,12 @@ pub unsafe extern "C" fn AAS_CheckAreaForPossiblePortals(mut areanum: i32) -> i3
     crate::stdlib::memset(
         numareafrontfaces.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[i32; 1024]>() as libc::c_ulong,
+        ::std::mem::size_of::<[i32; 1024]>() as usize,
     );
     crate::stdlib::memset(
         numareabackfaces.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[i32; 1024]>() as libc::c_ulong,
+        ::std::mem::size_of::<[i32; 1024]>() as usize,
     );
     numbackfaces = 0 as i32;
     numfrontfaces = numbackfaces;
@@ -1820,8 +1820,8 @@ pub unsafe extern "C" fn AAS_InitClustering() {
     }
     crate::src::botlib::be_aas_main::aasworld.portals =
         crate::src::botlib::l_memory::GetClearedMemory(
-            (65536 as i32 as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<aas_portal_t>() as libc::c_ulong),
+            (65536 as i32 as usize)
+                .wrapping_mul(::std::mem::size_of::<aas_portal_t>() as usize),
         ) as *mut aas_portal_t;
     //initialize portal index memory
     if !crate::src::botlib::be_aas_main::aasworld
@@ -1834,8 +1834,8 @@ pub unsafe extern "C" fn AAS_InitClustering() {
     }
     crate::src::botlib::be_aas_main::aasworld.portalindex =
         crate::src::botlib::l_memory::GetClearedMemory(
-            (65536 as i32 as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<aas_portalindex_t>() as libc::c_ulong),
+            (65536 as i32 as usize)
+                .wrapping_mul(::std::mem::size_of::<aas_portalindex_t>() as usize),
         ) as *mut aas_portalindex_t;
     //initialize cluster memory
     if !crate::src::botlib::be_aas_main::aasworld.clusters.is_null() {
@@ -1845,8 +1845,8 @@ pub unsafe extern "C" fn AAS_InitClustering() {
     }
     crate::src::botlib::be_aas_main::aasworld.clusters =
         crate::src::botlib::l_memory::GetClearedMemory(
-            (65536 as i32 as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<aas_cluster_t>() as libc::c_ulong),
+            (65536 as i32 as usize)
+                .wrapping_mul(::std::mem::size_of::<aas_cluster_t>() as usize),
         ) as *mut aas_cluster_t;
     //
     removedPortalAreas = 0 as i32; //end while

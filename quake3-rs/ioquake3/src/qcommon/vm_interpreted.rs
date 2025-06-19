@@ -120,7 +120,7 @@ unsafe extern "C" fn loadWord(mut addr: *mut libc::c_void) -> i32 {
     crate::stdlib::memcpy(
         &mut word as *mut i32 as *mut libc::c_void,
         addr,
-        4 as i32 as libc::c_ulong,
+        4 as i32 as usize,
     );
     return word;
 }
@@ -470,8 +470,8 @@ pub unsafe extern "C" fn VM_CallInterpreted(mut vm: *mut vm_t, mut args: *mut i3
                             //VM_LogSyscalls( (int *)&image[ programStack + 4 ] );
                             // the vm has ints on the stack, we expect
                             // pointers so we might have to convert it
-                            if ::std::mem::size_of::<intptr_t>() as libc::c_ulong
-                                != ::std::mem::size_of::<i32>() as libc::c_ulong
+                            if ::std::mem::size_of::<intptr_t>() as usize
+                                != ::std::mem::size_of::<i32>() as usize
                             {
                                 let mut argarr: [intptr_t; 16] = [0; 16];
                                 let mut imagePtr: *mut i32 =
@@ -479,10 +479,10 @@ pub unsafe extern "C" fn VM_CallInterpreted(mut vm: *mut vm_t, mut args: *mut i3
                                         as *mut i32;
                                 let mut i: i32 = 0;
                                 i = 0 as i32;
-                                while (i as libc::c_ulong)
-                                    < (::std::mem::size_of::<[intptr_t; 16]>() as libc::c_ulong)
+                                while (i as usize)
+                                    < (::std::mem::size_of::<[intptr_t; 16]>() as usize)
                                         .wrapping_div(
-                                            ::std::mem::size_of::<intptr_t>() as libc::c_ulong
+                                            ::std::mem::size_of::<intptr_t>() as usize
                                         )
                                 {
                                     imagePtr = imagePtr.offset(1);

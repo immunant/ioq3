@@ -474,7 +474,7 @@ pub unsafe extern "C" fn Export_BotLibSetup() -> i32 {
             as *mut libc::c_void,
         0 as i32,
         ::std::mem::size_of::<crate::src::botlib::be_interface::botlib_globals_t>()
-            as libc::c_ulong,
+            as usize,
     );
     //initialize byte swapping (litte endian etc.)
     //	Swap_Init();
@@ -601,7 +601,7 @@ pub unsafe extern "C" fn Export_BotLibVarGet(
 ) -> i32 {
     let mut varvalue: *mut libc::c_char = 0 as *mut libc::c_char;
     varvalue = crate::src::botlib::l_libvar::LibVarGetString(var_name);
-    crate::stdlib::strncpy(value, varvalue, (size - 1 as i32) as libc::c_ulong);
+    crate::stdlib::strncpy(value, varvalue, (size - 1 as i32) as usize);
     *value.offset((size - 1 as i32) as isize) = '\u{0}' as i32 as libc::c_char;
     return 0 as i32;
 }
@@ -1034,7 +1034,7 @@ unsafe extern "C" fn Init_AI_Export(mut ai: *mut ai_export_t) {
             as unsafe extern "C" fn(
                 _: *mut libc::c_char,
                 _: *mut bot_match_t,
-                _: libc::c_ulong,
+                _: usize,
             ) -> i32,
     );
     (*ai).BotMatchVariable = Some(
@@ -1049,7 +1049,7 @@ unsafe extern "C" fn Init_AI_Export(mut ai: *mut ai_export_t) {
     (*ai).UnifyWhiteSpaces =
         Some(UnifyWhiteSpaces as unsafe extern "C" fn(_: *mut libc::c_char) -> ());
     (*ai).BotReplaceSynonyms = Some(
-        BotReplaceSynonyms as unsafe extern "C" fn(_: *mut libc::c_char, _: libc::c_ulong) -> (),
+        BotReplaceSynonyms as unsafe extern "C" fn(_: *mut libc::c_char, _: usize) -> (),
     );
     (*ai).BotLoadChatFile = Some(
         BotLoadChatFile
@@ -1216,7 +1216,7 @@ pub unsafe extern "C" fn GetBotLibAPI(
     crate::stdlib::memset(
         &mut be_botlib_export as *mut botlib_export_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<botlib_export_t>() as libc::c_ulong,
+        ::std::mem::size_of::<botlib_export_t>() as usize,
     );
     if apiVersion != 2 as i32 {
         botimport.Print.expect("non-null function pointer")(

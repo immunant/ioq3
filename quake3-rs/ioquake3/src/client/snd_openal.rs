@@ -447,7 +447,7 @@ unsafe extern "C" fn S_AL_BufferFind(mut filename: *const libc::c_char) -> sfxHa
         Com_Printf(b"^3WARNING: Sound name is empty\n\x00" as *const u8 as *const libc::c_char);
         return 0 as i32;
     }
-    if crate::stdlib::strlen(filename) >= 64 as i32 as libc::c_ulong {
+    if crate::stdlib::strlen(filename) >= 64 as i32 as usize {
         Com_Printf(
             b"^3WARNING: Sound name is too long: %s\n\x00" as *const u8 as *const libc::c_char,
             filename,
@@ -480,7 +480,7 @@ unsafe extern "C" fn S_AL_BufferFind(mut filename: *const libc::c_char) -> sfxHa
         crate::stdlib::memset(
             ptr as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<alSfx_t>() as libc::c_ulong,
+            ::std::mem::size_of::<alSfx_t>() as usize,
         );
         (*ptr).masterLoopSrc = -(1 as i32);
         libc::strcpy((*ptr).filename.as_mut_ptr(), filename);
@@ -759,7 +759,7 @@ unsafe extern "C" fn S_AL_BufferInit() -> qboolean {
     crate::stdlib::memset(
         knownSfx.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[alSfx_t; 4096]>() as libc::c_ulong,
+        ::std::mem::size_of::<[alSfx_t; 4096]>() as usize,
     );
     numSfx = 0 as i32;
     // Load the default sound, and lock it
@@ -993,7 +993,7 @@ unsafe extern "C" fn S_AL_SrcInit() -> qboolean {
     crate::stdlib::memset(
         srcList.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[src_t; 128]>() as libc::c_ulong,
+        ::std::mem::size_of::<[src_t; 128]>() as usize,
     );
     srcCount = 0 as i32;
     srcActiveCnt = 0 as i32;
@@ -1063,7 +1063,7 @@ unsafe extern "C" fn S_AL_SrcShutdown() {
     crate::stdlib::memset(
         srcList.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[src_t; 128]>() as libc::c_ulong,
+        ::std::mem::size_of::<[src_t; 128]>() as usize,
     );
     alSourcesInitialised = qfalse;
 }
@@ -2237,7 +2237,7 @@ unsafe extern "C" fn S_AL_RawSamples(
             oldBuffers.as_mut_ptr() as *mut libc::c_void,
             &mut *streamBuffers.as_mut_ptr().offset(stream as isize) as *mut [ALuint; 20]
                 as *const libc::c_void,
-            ::std::mem::size_of::<[ALuint; 20]>() as libc::c_ulong,
+            ::std::mem::size_of::<[ALuint; 20]>() as usize,
         );
         // Reorder buffer array in order of oldest to newest
         i = 0 as i32;
@@ -2599,7 +2599,7 @@ unsafe extern "C" fn S_AL_StartBackgroundTrack(
     Q_strncpyz(
         s_backgroundLoop.as_mut_ptr(),
         loop_0,
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     if issame as u64 == 0 {
         // Open the intro and don't mind whether it succeeds.
@@ -2877,7 +2877,7 @@ unsafe extern "C" fn S_AL_AvailableCaptureSamples() -> i32 {
         crate::src::client::qal::qalcGetIntegerv.expect("non-null function pointer")(
             alCaptureDevice,
             0x312 as i32,
-            ::std::mem::size_of::<ALint>() as libc::c_ulong as ALCsizei,
+            ::std::mem::size_of::<ALint>() as usize as ALCsizei,
             &mut samples,
         );
         retval = samples
@@ -3231,12 +3231,12 @@ pub unsafe extern "C" fn S_AL_Init(mut si: *mut soundInterface_t) -> qboolean {
                 }
                 Q_strcat(
                     devicenames.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 16384]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 16384]>() as usize as i32,
                     devicelist,
                 );
                 Q_strcat(
                     devicenames.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 16384]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 16384]>() as usize as i32,
                     b"\n\x00" as *const u8 as *const libc::c_char,
                 );
                 devicelist = devicelist.offset((curlen + 1 as i32) as isize)
@@ -3340,12 +3340,12 @@ pub unsafe extern "C" fn S_AL_Init(mut si: *mut soundInterface_t) -> qboolean {
                 }
                 Q_strcat(
                     inputdevicenames.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 16384]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 16384]>() as usize as i32,
                     inputdevicelist,
                 );
                 Q_strcat(
                     inputdevicenames.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 16384]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 16384]>() as usize as i32,
                     b"\n\x00" as *const u8 as *const libc::c_char,
                 );
                 inputdevicelist = inputdevicelist.offset((curlen_0 + 1 as i32) as isize)

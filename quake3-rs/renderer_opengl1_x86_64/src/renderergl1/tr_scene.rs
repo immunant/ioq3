@@ -405,8 +405,8 @@ pub unsafe extern "C" fn RE_AddPolyToScene(
         crate::stdlib::memcpy(
             (*poly).verts as *mut libc::c_void,
             &*verts.offset((numVerts * j) as isize) as *const polyVert_t as *const libc::c_void,
-            (numVerts as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<polyVert_t>() as libc::c_ulong),
+            (numVerts as usize)
+                .wrapping_mul(::std::mem::size_of::<polyVert_t>() as usize),
         );
         if glConfig.hardwareType as u32 == GLHW_RAGEPRO as i32 as u32 {
             (*(*poly).verts).modulate[0 as i32 as usize] = 255 as i32 as byte;
@@ -1066,7 +1066,7 @@ pub unsafe extern "C" fn RE_RenderScene(mut fd: *const refdef_t) {
     crate::stdlib::memcpy(
         tr.refdef.text.as_mut_ptr() as *mut libc::c_void,
         (*fd).text.as_ptr() as *const libc::c_void,
-        ::std::mem::size_of::<[[libc::c_char; 32]; 8]>() as libc::c_ulong,
+        ::std::mem::size_of::<[[libc::c_char; 32]; 8]>() as usize,
     );
     tr.refdef.x = (*fd).x;
     tr.refdef.y = (*fd).y;
@@ -1159,7 +1159,7 @@ pub unsafe extern "C" fn RE_RenderScene(mut fd: *const refdef_t) {
     crate::stdlib::memset(
         &mut parms as *mut viewParms_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<viewParms_t>() as libc::c_ulong,
+        ::std::mem::size_of::<viewParms_t>() as usize,
     );
     parms.viewportX = tr.refdef.x;
     parms.viewportY = glConfig.vidHeight - (tr.refdef.y + tr.refdef.height);

@@ -836,7 +836,7 @@ pub unsafe extern "C" fn GL_CheckErrors() {
         _ => {
             Com_sprintf(
                 s.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
                 b"%i\x00" as *const u8 as *const libc::c_char,
                 err,
             );
@@ -1125,12 +1125,12 @@ pub unsafe extern "C" fn RB_ReadPixels(
     buffer = ri
         .Hunk_AllocateTempMemory
         .expect("non-null function pointer")(
-        ((padwidth * height) as libc::c_ulong)
+        ((padwidth * height) as usize)
             .wrapping_add(*offset)
-            .wrapping_add(packAlign as libc::c_ulong)
-            .wrapping_sub(1 as i32 as libc::c_ulong) as i32,
+            .wrapping_add(packAlign as usize)
+            .wrapping_sub(1 as i32 as usize) as i32,
     ) as *mut byte;
-    bufstart = ((buffer as intptr_t as libc::c_ulong).wrapping_add(*offset) as intptr_t
+    bufstart = ((buffer as intptr_t as usize).wrapping_add(*offset) as intptr_t
         + packAlign as isize
         - 1 as i32 as isize
         & !(packAlign - 1 as i32) as isize) as *mut libc::c_void as *mut byte;
@@ -1177,7 +1177,7 @@ pub unsafe extern "C" fn RB_TakeScreenshot(
     crate::stdlib::memset(
         buffer as *mut libc::c_void,
         0 as i32,
-        18 as i32 as libc::c_ulong,
+        18 as i32 as usize,
     );
     *buffer.offset(2 as i32 as isize) = 2 as i32 as byte;
     *buffer.offset(12 as i32 as isize) = (width & 255 as i32) as byte;
@@ -1216,7 +1216,7 @@ pub unsafe extern "C" fn RB_TakeScreenshot(
     ri.FS_WriteFile.expect("non-null function pointer")(
         fileName,
         buffer as *const libc::c_void,
-        memcount.wrapping_add(18 as i32 as libc::c_ulong) as i32,
+        memcount.wrapping_add(18 as i32 as usize) as i32,
     );
     ri.Hunk_FreeTempMemory.expect("non-null function pointer")(allbuf as *mut libc::c_void);
 }
@@ -1302,7 +1302,7 @@ pub unsafe extern "C" fn R_TakeScreenshot(
 ) {
     static mut fileName: [libc::c_char; 4096] = [0; 4096]; // bad things if two screenshots per frame?
     let mut cmd: *mut screenshotCommand_t = 0 as *mut screenshotCommand_t;
-    cmd = R_GetCommandBuffer(::std::mem::size_of::<screenshotCommand_t>() as libc::c_ulong as i32)
+    cmd = R_GetCommandBuffer(::std::mem::size_of::<screenshotCommand_t>() as usize as i32)
         as *mut screenshotCommand_t;
     if cmd.is_null() {
         return;
@@ -1315,7 +1315,7 @@ pub unsafe extern "C" fn R_TakeScreenshot(
     Q_strncpyz(
         fileName.as_mut_ptr(),
         name,
-        ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
     );
     (*cmd).fileName = fileName.as_mut_ptr();
     (*cmd).jpeg = jpeg;
@@ -1430,7 +1430,7 @@ pub unsafe extern "C" fn R_LevelShot() {
     let mut yy: i32 = 0;
     Com_sprintf(
         checkname.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
         b"levelshots/%s.tga\x00" as *const u8 as *const libc::c_char,
         (*tr.world).baseName.as_mut_ptr(),
     );
@@ -1451,7 +1451,7 @@ pub unsafe extern "C" fn R_LevelShot() {
     crate::stdlib::memset(
         buffer as *mut libc::c_void,
         0 as i32,
-        18 as i32 as libc::c_ulong,
+        18 as i32 as usize,
     );
     *buffer.offset(2 as i32 as isize) = 2 as i32 as byte;
     *buffer.offset(12 as i32 as isize) = 128 as i32 as byte;
@@ -1701,16 +1701,16 @@ pub unsafe extern "C" fn RB_TakeVideoFrameCmd(
     linelen = ((*cmd).width * 3 as i32) as size_t;
     // Alignment stuff for glReadPixels
     padwidth = (linelen
-        .wrapping_add(packAlign as libc::c_ulong)
-        .wrapping_sub(1 as i32 as libc::c_ulong)
-        & !(packAlign - 1 as i32) as libc::c_ulong) as i32;
-    padlen = (padwidth as libc::c_ulong).wrapping_sub(linelen) as i32;
+        .wrapping_add(packAlign as usize)
+        .wrapping_sub(1 as i32 as usize)
+        & !(packAlign - 1 as i32) as usize) as i32;
+    padlen = (padwidth as usize).wrapping_sub(linelen) as i32;
     // AVI line padding
     avipadwidth = (linelen
-        .wrapping_add(4 as i32 as libc::c_ulong)
-        .wrapping_sub(1 as i32 as libc::c_ulong)
-        & !(4 as i32 - 1 as i32) as libc::c_ulong) as i32;
-    avipadlen = (avipadwidth as libc::c_ulong).wrapping_sub(linelen) as i32;
+        .wrapping_add(4 as i32 as usize)
+        .wrapping_sub(1 as i32 as usize)
+        & !(4 as i32 - 1 as i32) as usize) as i32;
+    avipadlen = (avipadwidth as usize).wrapping_sub(linelen) as i32;
     cBuf = ((*cmd).captureBuffer as intptr_t + packAlign as isize - 1 as i32 as isize
         & !(packAlign - 1 as i32) as isize) as *mut libc::c_void as *mut byte;
     qglReadPixels.expect("non-null function pointer")(
@@ -1730,7 +1730,7 @@ pub unsafe extern "C" fn RB_TakeVideoFrameCmd(
     if (*cmd).motionJpeg as u64 != 0 {
         memcount = RE_SaveJPGToBuffer(
             (*cmd).encodeBuffer,
-            linelen.wrapping_mul((*cmd).height as libc::c_ulong),
+            linelen.wrapping_mul((*cmd).height as usize),
             (*r_aviMotionJpegQuality).integer,
             (*cmd).width,
             (*cmd).height,
@@ -1767,7 +1767,7 @@ pub unsafe extern "C" fn RB_TakeVideoFrameCmd(
             crate::stdlib::memset(
                 destptr as *mut libc::c_void,
                 '\u{0}' as i32,
-                avipadlen as libc::c_ulong,
+                avipadlen as usize,
             );
             destptr = destptr.offset(avipadlen as isize);
             srcptr = srcptr.offset(padlen as isize)
@@ -1814,7 +1814,7 @@ pub unsafe extern "C" fn GL_SetDefaultState() {
     //
     // make sure our GL state vector is set correctly
     //
-    glState.glStateBits = (0x10000 as i32 | 0x100 as i32) as libc::c_ulong;
+    glState.glStateBits = (0x10000 as i32 | 0x100 as i32) as usize;
     qglPolygonMode.expect("non-null function pointer")(
         0x408 as i32 as GLenum,
         0x1b02 as i32 as GLenum,
@@ -1843,7 +1843,7 @@ pub unsafe extern "C" fn R_PrintLongString(mut string: *const libc::c_char) {
         Q_strncpyz(
             buffer.as_mut_ptr(),
             p,
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
         );
         ri.Printf.expect("non-null function pointer")(
             PRINT_ALL as i32,
@@ -2688,24 +2688,24 @@ pub unsafe extern "C" fn R_Init() {
     crate::stdlib::memset(
         &mut tr as *mut trGlobals_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<trGlobals_t>() as libc::c_ulong,
+        ::std::mem::size_of::<trGlobals_t>() as usize,
     );
     crate::stdlib::memset(
         &mut backEnd as *mut backEndState_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<backEndState_t>() as libc::c_ulong,
+        ::std::mem::size_of::<backEndState_t>() as usize,
     );
     crate::stdlib::memset(
         &mut tess as *mut shaderCommands_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<shaderCommands_t>() as libc::c_ulong,
+        ::std::mem::size_of::<shaderCommands_t>() as usize,
     );
-    if ::std::mem::size_of::<glconfig_t>() as libc::c_ulong != 11332 as i32 as libc::c_ulong {
+    if ::std::mem::size_of::<glconfig_t>() as usize != 11332 as i32 as usize {
         ri.Error.expect("non-null function pointer")(
             ERR_FATAL as i32,
             b"Mod ABI incompatible: sizeof(glconfig_t) == %u != 11332\x00" as *const u8
                 as *const libc::c_char,
-            ::std::mem::size_of::<glconfig_t>() as libc::c_ulong as u32,
+            ::std::mem::size_of::<glconfig_t>() as usize as u32,
         );
     }
     //	Swap_Init();
@@ -2718,7 +2718,7 @@ pub unsafe extern "C" fn R_Init() {
     crate::stdlib::memset(
         tess.constantColor255.as_mut_ptr() as *mut libc::c_void,
         255 as i32,
-        ::std::mem::size_of::<[color4ub_t; 1000]>() as libc::c_ulong,
+        ::std::mem::size_of::<[color4ub_t; 1000]>() as usize,
     );
     //
     // init function tables
@@ -2761,26 +2761,26 @@ pub unsafe extern "C" fn R_Init() {
         max_polyverts = 3000 as i32
     }
     ptr = ri.Hunk_Alloc.expect("non-null function pointer")(
-        (::std::mem::size_of::<backEndData_t>() as libc::c_ulong)
+        (::std::mem::size_of::<backEndData_t>() as usize)
             .wrapping_add(
-                (::std::mem::size_of::<srfPoly_t>() as libc::c_ulong)
-                    .wrapping_mul(max_polys as libc::c_ulong),
+                (::std::mem::size_of::<srfPoly_t>() as usize)
+                    .wrapping_mul(max_polys as usize),
             )
             .wrapping_add(
-                (::std::mem::size_of::<polyVert_t>() as libc::c_ulong)
-                    .wrapping_mul(max_polyverts as libc::c_ulong),
+                (::std::mem::size_of::<polyVert_t>() as usize)
+                    .wrapping_mul(max_polyverts as usize),
             ) as i32,
         h_low,
     ) as *mut byte;
     backEndData = ptr as *mut backEndData_t;
     (*backEndData).polys = (ptr as *mut libc::c_char)
-        .offset(::std::mem::size_of::<backEndData_t>() as libc::c_ulong as isize)
+        .offset(::std::mem::size_of::<backEndData_t>() as usize as isize)
         as *mut srfPoly_t;
     (*backEndData).polyVerts = (ptr as *mut libc::c_char)
-        .offset(::std::mem::size_of::<backEndData_t>() as libc::c_ulong as isize)
+        .offset(::std::mem::size_of::<backEndData_t>() as usize as isize)
         .offset(
-            (::std::mem::size_of::<srfPoly_t>() as libc::c_ulong)
-                .wrapping_mul(max_polys as libc::c_ulong) as isize,
+            (::std::mem::size_of::<srfPoly_t>() as usize)
+                .wrapping_mul(max_polys as usize) as isize,
         ) as *mut polyVert_t;
     R_InitNextFrame();
     InitOpenGL();
@@ -3173,7 +3173,7 @@ pub unsafe extern "C" fn RE_Shutdown(mut destroyWindow: qboolean) {
         crate::stdlib::memset(
             &mut glConfig as *mut glconfig_t as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<glconfig_t>() as libc::c_ulong,
+            ::std::mem::size_of::<glconfig_t>() as usize,
         );
         textureFilterAnisotropic = qfalse;
         maxAnisotropy = 0 as i32;
@@ -3181,7 +3181,7 @@ pub unsafe extern "C" fn RE_Shutdown(mut destroyWindow: qboolean) {
         crate::stdlib::memset(
             &mut glState as *mut glstate_t as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<glstate_t>() as libc::c_ulong,
+            ::std::mem::size_of::<glstate_t>() as usize,
         );
     }
     tr.registered = qfalse;
@@ -3249,7 +3249,7 @@ pub unsafe extern "C" fn GetRefAPI(
     crate::stdlib::memset(
         &mut re as *mut refexport_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<refexport_t>() as libc::c_ulong,
+        ::std::mem::size_of::<refexport_t>() as usize,
     );
     if apiVersion != 8 as i32 {
         ri.Printf.expect("non-null function pointer")(
@@ -3392,8 +3392,8 @@ pub unsafe extern "C" fn GetRefAPI(
     return &mut re;
 }
 unsafe extern "C" fn run_static_initializers() {
-    s_numVidModes = (::std::mem::size_of::<[vidmode_t; 12]>() as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<vidmode_t>() as libc::c_ulong)
+    s_numVidModes = (::std::mem::size_of::<[vidmode_t; 12]>() as usize)
+        .wrapping_div(::std::mem::size_of::<vidmode_t>() as usize)
         as i32
 }
 #[used]

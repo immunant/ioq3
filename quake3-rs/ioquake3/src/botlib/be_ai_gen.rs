@@ -185,7 +185,7 @@ pub unsafe extern "C" fn GeneticParentsAndChildSelection(
     crate::stdlib::memcpy(
         rankings.as_mut_ptr() as *mut libc::c_void,
         ranks as *const libc::c_void,
-        (::std::mem::size_of::<f32>() as libc::c_ulong).wrapping_mul(numranks as libc::c_ulong),
+        (::std::mem::size_of::<f32>() as usize).wrapping_mul(numranks as usize),
     );
     //select first parent
     *parent1 = GeneticSelection(numranks, rankings.as_mut_ptr());

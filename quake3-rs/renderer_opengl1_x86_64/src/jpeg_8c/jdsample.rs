@@ -539,7 +539,7 @@ pub unsafe extern "C" fn jinit_upsampler(mut cinfo: j_decompress_ptr) {
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         1 as i32,
-        ::std::mem::size_of::<my_upsampler>() as libc::c_ulong,
+        ::std::mem::size_of::<my_upsampler>() as usize,
     ) as my_upsample_ptr;
     (*cinfo).upsample = upsample as *mut jpeg_upsampler;
     (*upsample).pub_0.start_pass =

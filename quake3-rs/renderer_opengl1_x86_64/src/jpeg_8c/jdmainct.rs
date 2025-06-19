@@ -235,8 +235,8 @@ unsafe extern "C" fn alloc_funny_pointers(mut cinfo: j_decompress_ptr)
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         1 as i32,
-        (((*cinfo).num_components * 2 as i32) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<JSAMPARRAY>() as libc::c_ulong),
+        (((*cinfo).num_components * 2 as i32) as usize)
+            .wrapping_mul(::std::mem::size_of::<JSAMPARRAY>() as usize),
     ) as JSAMPIMAGE; /* height of a row group of component */
     (*main_ptr).xbuffer[1 as i32 as usize] =
         (*main_ptr).xbuffer[0 as i32 as usize].offset((*cinfo).num_components as isize);
@@ -256,8 +256,8 @@ unsafe extern "C" fn alloc_funny_pointers(mut cinfo: j_decompress_ptr)
         .expect("non-null function pointer")(
             cinfo as j_common_ptr,
             1 as i32,
-            ((2 as i32 * (rgroup * (M + 4 as i32))) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<JSAMPROW>() as libc::c_ulong),
+            ((2 as i32 * (rgroup * (M + 4 as i32))) as usize)
+                .wrapping_mul(::std::mem::size_of::<JSAMPROW>() as usize),
         ) as JSAMPARRAY; /* want one row group at negative offsets */
         xbuf = xbuf.offset(rgroup as isize);
         let ref mut fresh0 = *(*main_ptr).xbuffer[0 as i32 as usize].offset(ci as isize);
@@ -727,7 +727,7 @@ pub unsafe extern "C" fn jinit_d_main_controller(
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         1 as i32,
-        ::std::mem::size_of::<my_main_controller>() as libc::c_ulong,
+        ::std::mem::size_of::<my_main_controller>() as usize,
     ) as my_main_ptr;
     (*cinfo).main = main_ptr as *mut jpeg_d_main_controller;
     (*main_ptr).pub_0.start_pass =

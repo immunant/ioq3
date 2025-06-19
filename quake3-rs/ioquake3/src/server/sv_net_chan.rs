@@ -321,20 +321,20 @@ pub unsafe extern "C" fn SV_Netchan_Transmit(mut client: *mut client_t, mut msg:
             b"#462 SV_Netchan_Transmit: unsent fragments, stacked\n\x00" as *const u8
                 as *const libc::c_char,
         );
-        netbuf = Z_Malloc(::std::mem::size_of::<netchan_buffer_t>() as libc::c_ulong as i32)
+        netbuf = Z_Malloc(::std::mem::size_of::<netchan_buffer_t>() as usize as i32)
             as *mut netchan_buffer_t;
         // store the msg, we can't store it encoded, as the encoding depends on stuff we still have to finish sending
         MSG_Copy(
             &mut (*netbuf).msg as *mut _ as *mut msg_t,
             (*netbuf).msgBuffer.as_mut_ptr(),
-            ::std::mem::size_of::<[byte; 16384]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[byte; 16384]>() as usize as i32,
             msg as *mut msg_t,
         );
         if (*client).compat as u64 != 0 {
             Q_strncpyz(
                 (*netbuf).clientCommandString.as_mut_ptr(),
                 (*client).lastClientCommandString.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
             );
         }
         (*netbuf).next = 0 as *mut netchan_buffer_s;

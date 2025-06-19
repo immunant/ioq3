@@ -484,7 +484,7 @@ unsafe extern "C" fn generateHashValue(mut fname: *const libc::c_char, size: i32
     while *fname.offset(i as isize) as i32 != '\u{0}' as i32 {
         letter = ({
             let mut __res: i32 = 0;
-            if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong > 1 as i32 as libc::c_ulong {
+            if ::std::mem::size_of::<libc::c_char>() as usize > 1 as i32 as usize {
                 if 0 != 0 {
                     let mut __c: i32 = *fname.offset(i as isize) as i32;
                     __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -559,7 +559,7 @@ pub unsafe extern "C" fn R_RemapShader(
     COM_StripExtension(
         shaderName,
         strippedName.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     hash = generateHashValue(strippedName.as_mut_ptr(), 1024 as i32) as i32;
     sh = hashTable[hash as usize];
@@ -1725,12 +1725,12 @@ unsafe extern "C" fn ParseStage(
                 }
                 Q_strcat(
                     buffer.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
                     token,
                 );
                 Q_strcat(
                     buffer.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
                     b" \x00" as *const u8 as *const libc::c_char,
                 );
             }
@@ -2027,7 +2027,7 @@ unsafe extern "C" fn ParseSkyParms(mut text: *mut *mut libc::c_char) {
         while i < 6 as i32 {
             Com_sprintf(
                 pathname.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
                 b"%s_%s.tga\x00" as *const u8 as *const libc::c_char,
                 token,
                 suf[i as usize],
@@ -2075,7 +2075,7 @@ unsafe extern "C" fn ParseSkyParms(mut text: *mut *mut libc::c_char) {
         while i < 6 as i32 {
             Com_sprintf(
                 pathname.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
                 b"%s_%s.tga\x00" as *const u8 as *const libc::c_char,
                 token,
                 suf[i as usize],
@@ -2434,8 +2434,8 @@ surfaceparm <name>
 
 unsafe extern "C" fn ParseSurfaceParm(mut text: *mut *mut libc::c_char) {
     let mut token: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut numInfoParms: i32 = (::std::mem::size_of::<[infoParm_t; 32]>() as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<infoParm_t>() as libc::c_ulong)
+    let mut numInfoParms: i32 = (::std::mem::size_of::<[infoParm_t; 32]>() as usize)
+        .wrapping_div(::std::mem::size_of::<infoParm_t>() as usize)
         as i32;
     let mut i: i32 = 0;
     token = COM_ParseExt(text, qfalse);
@@ -2951,7 +2951,7 @@ unsafe extern "C" fn CollapseMultitexture() -> qboolean {
                 as *const libc::c_void,
             &mut (*stages.as_mut_ptr().offset(1 as i32 as isize)).rgbWave as *mut waveForm_t
                 as *const libc::c_void,
-            ::std::mem::size_of::<waveForm_t>() as libc::c_ulong,
+            ::std::mem::size_of::<waveForm_t>() as usize,
         ) != 0
         {
             return qfalse;
@@ -2963,7 +2963,7 @@ unsafe extern "C" fn CollapseMultitexture() -> qboolean {
                 as *const libc::c_void,
             &mut (*stages.as_mut_ptr().offset(1 as i32 as isize)).alphaWave as *mut waveForm_t
                 as *const libc::c_void,
-            ::std::mem::size_of::<waveForm_t>() as libc::c_ulong,
+            ::std::mem::size_of::<waveForm_t>() as usize,
         ) != 0
         {
             return qfalse;
@@ -2991,14 +2991,14 @@ unsafe extern "C" fn CollapseMultitexture() -> qboolean {
             as *mut libc::c_void,
         &mut *stages.as_mut_ptr().offset(2 as i32 as isize) as *mut shaderStage_t
             as *const libc::c_void,
-        (::std::mem::size_of::<shaderStage_t>() as libc::c_ulong)
-            .wrapping_mul((8 as i32 - 2 as i32) as libc::c_ulong),
+        (::std::mem::size_of::<shaderStage_t>() as usize)
+            .wrapping_mul((8 as i32 - 2 as i32) as usize),
     );
     crate::stdlib::memset(
         &mut *stages.as_mut_ptr().offset((8 as i32 - 1 as i32) as isize) as *mut shaderStage_t
             as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<shaderStage_t>() as libc::c_ulong,
+        ::std::mem::size_of::<shaderStage_t>() as usize,
     );
     return qtrue;
 }
@@ -3019,11 +3019,11 @@ unsafe extern "C" fn FixRenderCommandList(mut newShader: i32) {
     if !cmdList.is_null() {
         let mut curCmd: *const libc::c_void = (*cmdList).cmds.as_mut_ptr() as *const libc::c_void;
         loop {
-            curCmd = ((curCmd as intptr_t as libc::c_ulong)
-                .wrapping_add(::std::mem::size_of::<*mut libc::c_void>() as libc::c_ulong)
-                .wrapping_sub(1 as i32 as libc::c_ulong)
-                & !(::std::mem::size_of::<*mut libc::c_void>() as libc::c_ulong)
-                    .wrapping_sub(1 as i32 as libc::c_ulong))
+            curCmd = ((curCmd as intptr_t as usize)
+                .wrapping_add(::std::mem::size_of::<*mut libc::c_void>() as usize)
+                .wrapping_sub(1 as i32 as usize)
+                & !(::std::mem::size_of::<*mut libc::c_void>() as usize)
+                    .wrapping_sub(1 as i32 as usize))
                 as *mut libc::c_void;
             match *(curCmd as *const i32) {
                 1 => {
@@ -3138,7 +3138,7 @@ unsafe extern "C" fn GeneratePermanentShader() -> *mut shader_t {
         return tr.defaultShader;
     }
     newShader = ri.Hunk_Alloc.expect("non-null function pointer")(
-        ::std::mem::size_of::<shader_t>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<shader_t>() as usize as i32,
         h_low,
     ) as *mut shader_t;
     *newShader = shader;
@@ -3158,22 +3158,22 @@ unsafe extern "C" fn GeneratePermanentShader() -> *mut shader_t {
             break;
         }
         (*newShader).stages[i as usize] = ri.Hunk_Alloc.expect("non-null function pointer")(
-            ::std::mem::size_of::<shaderStage_t>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<shaderStage_t>() as usize as i32,
             h_low,
         ) as *mut shaderStage_t;
         *(*newShader).stages[i as usize] = stages[i as usize];
         b = 0 as i32;
         while b < 2 as i32 {
             size = ((*(*newShader).stages[i as usize]).bundle[b as usize].numTexMods
-                as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<texModInfo_t>() as libc::c_ulong)
+                as usize)
+                .wrapping_mul(::std::mem::size_of::<texModInfo_t>() as usize)
                 as i32;
             (*(*newShader).stages[i as usize]).bundle[b as usize].texMods =
                 ri.Hunk_Alloc.expect("non-null function pointer")(size, h_low) as *mut texModInfo_t;
             crate::stdlib::memcpy(
                 (*(*newShader).stages[i as usize]).bundle[b as usize].texMods as *mut libc::c_void,
                 stages[i as usize].bundle[b as usize].texMods as *const libc::c_void,
-                size as libc::c_ulong,
+                size as usize,
             );
             b += 1
         }
@@ -3280,7 +3280,7 @@ unsafe extern "C" fn VertexLightingCollapse() {
         crate::stdlib::memset(
             pStage_0 as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<shaderStage_t>() as libc::c_ulong,
+            ::std::mem::size_of::<shaderStage_t>() as usize,
         );
         stage += 1
     }
@@ -3297,17 +3297,17 @@ unsafe extern "C" fn InitShader(mut name: *const libc::c_char, mut lightmapIndex
     crate::stdlib::memset(
         &mut shader as *mut shader_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<shader_t>() as libc::c_ulong,
+        ::std::mem::size_of::<shader_t>() as usize,
     );
     crate::stdlib::memset(
         &mut stages as *mut [shaderStage_t; 8] as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[shaderStage_t; 8]>() as libc::c_ulong,
+        ::std::mem::size_of::<[shaderStage_t; 8]>() as usize,
     );
     Q_strncpyz(
         shader.name.as_mut_ptr(),
         name,
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     shader.lightmapIndex = lightmapIndex;
     i = 0 as i32;
@@ -3375,23 +3375,23 @@ unsafe extern "C" fn FinishShader() -> *mut shader_t {
                 crate::stdlib::memmove(
                     pStage as *mut libc::c_void,
                     pStage.offset(1 as i32 as isize) as *const libc::c_void,
-                    (::std::mem::size_of::<shaderStage_t>() as libc::c_ulong)
-                        .wrapping_mul((index - stage) as libc::c_ulong),
+                    (::std::mem::size_of::<shaderStage_t>() as usize)
+                        .wrapping_mul((index - stage) as usize),
                 );
             } else {
                 if (stage + 1 as i32) < 8 as i32 {
                     crate::stdlib::memmove(
                         pStage as *mut libc::c_void,
                         pStage.offset(1 as i32 as isize) as *const libc::c_void,
-                        (::std::mem::size_of::<shaderStage_t>() as libc::c_ulong)
-                            .wrapping_mul((index - stage - 1 as i32) as libc::c_ulong),
+                        (::std::mem::size_of::<shaderStage_t>() as usize)
+                            .wrapping_mul((index - stage - 1 as i32) as usize),
                     );
                 }
                 crate::stdlib::memset(
                     &mut *stages.as_mut_ptr().offset((index - 1 as i32) as isize)
                         as *mut shaderStage_t as *mut libc::c_void,
                     0 as i32,
-                    ::std::mem::size_of::<shaderStage_t>() as libc::c_ulong,
+                    ::std::mem::size_of::<shaderStage_t>() as usize,
                 );
             }
         } else {
@@ -3577,7 +3577,7 @@ pub unsafe extern "C" fn R_FindShaderByName(mut name: *const libc::c_char) -> *m
     COM_StripExtension(
         name,
         strippedName.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     hash = generateHashValue(strippedName.as_mut_ptr(), 1024 as i32) as i32;
     //
@@ -3658,7 +3658,7 @@ pub unsafe extern "C" fn R_FindShader(
     COM_StripExtension(
         name,
         strippedName.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     hash = generateHashValue(strippedName.as_mut_ptr(), 1024 as i32) as i32;
     //
@@ -3889,7 +3889,7 @@ pub unsafe extern "C" fn RE_RegisterShaderLightMap(
     mut lightmapIndex: i32,
 ) -> qhandle_t {
     let mut sh: *mut shader_t = 0 as *mut shader_t;
-    if crate::stdlib::strlen(name) >= 64 as i32 as libc::c_ulong {
+    if crate::stdlib::strlen(name) >= 64 as i32 as usize {
         ri.Printf.expect("non-null function pointer")(
             PRINT_ALL as i32,
             b"Shader name exceeds MAX_QPATH\n\x00" as *const u8 as *const libc::c_char,
@@ -3922,7 +3922,7 @@ way to ask for different implicit lighting modes (vertex, lightmap, etc)
 
 pub unsafe extern "C" fn RE_RegisterShader(mut name: *const libc::c_char) -> qhandle_t {
     let mut sh: *mut shader_t = 0 as *mut shader_t;
-    if crate::stdlib::strlen(name) >= 64 as i32 as libc::c_ulong {
+    if crate::stdlib::strlen(name) >= 64 as i32 as usize {
         ri.Printf.expect("non-null function pointer")(
             PRINT_ALL as i32,
             b"Shader name exceeds MAX_QPATH\n\x00" as *const u8 as *const libc::c_char,
@@ -4004,7 +4004,7 @@ For menu graphics that should never be picmiped
 
 pub unsafe extern "C" fn RE_RegisterShaderNoMip(mut name: *const libc::c_char) -> qhandle_t {
     let mut sh: *mut shader_t = 0 as *mut shader_t;
-    if crate::stdlib::strlen(name) >= 64 as i32 as libc::c_ulong {
+    if crate::stdlib::strlen(name) >= 64 as i32 as usize {
         ri.Printf.expect("non-null function pointer")(
             PRINT_ALL as i32,
             b"Shader name exceeds MAX_QPATH\n\x00" as *const u8 as *const libc::c_char,
@@ -8324,7 +8324,7 @@ unsafe extern "C" fn ScanAndLoadShaderFiles() {
         let mut filename: [libc::c_char; 64] = [0; 64];
         Com_sprintf(
             filename.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             b"scripts/%s\x00" as *const u8 as *const libc::c_char,
             *shaderFiles.offset(i as isize),
         );
@@ -8356,7 +8356,7 @@ unsafe extern "C" fn ScanAndLoadShaderFiles() {
             Q_strncpyz(
                 shaderName.as_mut_ptr(),
                 token,
-                ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             );
             shaderLine = COM_GetCurrentParseLine();
             token = COM_ParseExt(&mut p, qtrue);
@@ -8440,7 +8440,7 @@ unsafe extern "C" fn ScanAndLoadShaderFiles() {
     crate::stdlib::memset(
         shaderTextHashTableSizes.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[i32; 2048]>() as libc::c_ulong,
+        ::std::mem::size_of::<[i32; 2048]>() as usize,
     );
     size = 0 as i32;
     p = s_shaderText;
@@ -8458,8 +8458,8 @@ unsafe extern "C" fn ScanAndLoadShaderFiles() {
     }
     size += 2048 as i32;
     hashMem = ri.Hunk_Alloc.expect("non-null function pointer")(
-        (size as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<*mut libc::c_char>() as libc::c_ulong)
+        (size as usize)
+            .wrapping_mul(::std::mem::size_of::<*mut libc::c_char>() as usize)
             as i32,
         h_low,
     ) as *mut libc::c_char;
@@ -8467,8 +8467,8 @@ unsafe extern "C" fn ScanAndLoadShaderFiles() {
     while i < 2048 as i32 {
         shaderTextHashTable[i as usize] = hashMem as *mut *mut libc::c_char;
         hashMem = hashMem.offset(
-            ((shaderTextHashTableSizes[i as usize] + 1 as i32) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<*mut libc::c_char>() as libc::c_ulong)
+            ((shaderTextHashTableSizes[i as usize] + 1 as i32) as usize)
+                .wrapping_mul(::std::mem::size_of::<*mut libc::c_char>() as usize)
                 as isize,
         );
         i += 1
@@ -8476,7 +8476,7 @@ unsafe extern "C" fn ScanAndLoadShaderFiles() {
     crate::stdlib::memset(
         shaderTextHashTableSizes.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[i32; 2048]>() as libc::c_ulong,
+        ::std::mem::size_of::<[i32; 2048]>() as usize,
     );
     p = s_shaderText;
     loop
@@ -8516,7 +8516,7 @@ unsafe extern "C" fn CreateInternalShaders() {
     Q_strncpyz(
         shader.name.as_mut_ptr(),
         b"<stencil shadow>\x00" as *const u8 as *const libc::c_char,
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     shader.sort = SS_STENCIL_SHADOW as i32 as f32;
     tr.shadowShader = FinishShader();
@@ -8887,7 +8887,7 @@ pub unsafe extern "C" fn R_InitShaders() {
     crate::stdlib::memset(
         hashTable.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[*mut shader_t; 1024]>() as libc::c_ulong,
+        ::std::mem::size_of::<[*mut shader_t; 1024]>() as usize,
     );
     CreateInternalShaders();
     ScanAndLoadShaderFiles();

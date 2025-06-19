@@ -1823,9 +1823,9 @@ pub unsafe extern "C" fn BG_PlayerStateToEntityStateExtraPolate(
     (*s).generic1 = (*ps).generic1;
 }
 unsafe extern "C" fn run_static_initializers() {
-    bg_numItems = (::std::mem::size_of::<[gitem_t; 37]>() as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<gitem_t>() as libc::c_ulong)
-        .wrapping_sub(1 as i32 as libc::c_ulong) as i32
+    bg_numItems = (::std::mem::size_of::<[gitem_t; 37]>() as usize)
+        .wrapping_div(::std::mem::size_of::<gitem_t>() as usize)
+        .wrapping_sub(1 as i32 as usize) as i32
 }
 #[used]
 #[cfg_attr(target_os = "linux", link_section = ".init_array")]

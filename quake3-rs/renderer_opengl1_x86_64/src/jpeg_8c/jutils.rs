@@ -157,7 +157,7 @@ pub unsafe extern "C" fn jcopy_sample_rows(
     let mut inptr: JSAMPROW = 0 as *mut JSAMPLE;
     let mut outptr: JSAMPROW = 0 as *mut JSAMPLE;
     let mut count: size_t =
-        (num_cols as libc::c_ulong).wrapping_mul(::std::mem::size_of::<JSAMPLE>() as libc::c_ulong);
+        (num_cols as usize).wrapping_mul(::std::mem::size_of::<JSAMPLE>() as usize);
     let mut row: i32 = 0;
     input_array = input_array.offset(source_row as isize);
     output_array = output_array.offset(dest_row as isize);
@@ -189,9 +189,9 @@ pub unsafe extern "C" fn jcopy_block_row(
     crate::stdlib::memcpy(
         output_row as *mut libc::c_void,
         input_row as *const libc::c_void,
-        (num_blocks as libc::c_ulong).wrapping_mul(
-            (64 as i32 as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<JCOEF>() as libc::c_ulong),
+        (num_blocks as usize).wrapping_mul(
+            (64 as i32 as usize)
+                .wrapping_mul(::std::mem::size_of::<JCOEF>() as usize),
         ),
     );
 }

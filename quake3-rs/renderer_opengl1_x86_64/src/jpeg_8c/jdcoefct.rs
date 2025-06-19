@@ -174,8 +174,8 @@ unsafe extern "C" fn decompress_onepass(
             /* Try to fetch an MCU.  Entropy decoder expects buffer to be zeroed. */
             jzero_far(
                 (*coef).MCU_buffer[0 as i32 as usize] as *mut libc::c_void,
-                ((*cinfo).blocks_in_MCU as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<JBLOCK>() as libc::c_ulong),
+                ((*cinfo).blocks_in_MCU as usize)
+                    .wrapping_mul(::std::mem::size_of::<JBLOCK>() as usize),
             );
             if Some(
                 (*(*cinfo).entropy)
@@ -520,9 +520,9 @@ unsafe extern "C" fn smoothing_ok(mut cinfo: j_decompress_ptr) -> boolean {
         .expect("non-null function pointer")(
             cinfo as j_common_ptr,
             1 as i32,
-            ((*cinfo).num_components as libc::c_ulong).wrapping_mul(
-                (6 as i32 as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+            ((*cinfo).num_components as usize).wrapping_mul(
+                (6 as i32 as usize)
+                    .wrapping_mul(::std::mem::size_of::<i32>() as usize),
             ),
         ) as *mut i32
     }
@@ -903,7 +903,7 @@ pub unsafe extern "C" fn jinit_d_coef_controller(
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         1 as i32,
-        ::std::mem::size_of::<my_coef_controller>() as libc::c_ulong,
+        ::std::mem::size_of::<my_coef_controller>() as usize,
     ) as my_coef_ptr;
     (*cinfo).coef = coef as *mut jpeg_d_coef_controller;
     (*coef).pub_0.start_input_pass =
@@ -967,8 +967,8 @@ pub unsafe extern "C" fn jinit_d_coef_controller(
         .expect("non-null function pointer")(
             cinfo as j_common_ptr,
             1 as i32,
-            (10 as i32 as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<JBLOCK>() as libc::c_ulong),
+            (10 as i32 as usize)
+                .wrapping_mul(::std::mem::size_of::<JBLOCK>() as usize),
         ) as JBLOCKROW;
         i = 0 as i32;
         while i < 10 as i32 {

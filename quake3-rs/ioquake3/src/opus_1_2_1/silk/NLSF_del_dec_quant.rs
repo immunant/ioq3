@@ -487,8 +487,8 @@ pub unsafe extern "C" fn silk_NLSF_del_dec_quant(
                 crate::stdlib::memcpy(
                     ind[ind_max_min as usize].as_mut_ptr() as *mut libc::c_void,
                     ind[ind_min_max as usize].as_mut_ptr() as *const libc::c_void,
-                    (16 as i32 as libc::c_ulong)
-                        .wrapping_mul(::std::mem::size_of::<i8>() as libc::c_ulong),
+                    (16 as i32 as usize)
+                        .wrapping_mul(::std::mem::size_of::<i8>() as usize),
                 );
             }
             /* increment index if it comes from the upper half */

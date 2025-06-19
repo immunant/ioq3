@@ -110,7 +110,7 @@ pub unsafe extern "C" fn fread_file_func(
     mut size: uLong,
 ) -> uLong {
     let mut ret: uLong = 0;
-    ret = crate::stdlib::fread(buf, 1 as i32 as libc::c_ulong, size, stream as *mut FILE);
+    ret = crate::stdlib::fread(buf, 1 as i32 as usize, size, stream as *mut FILE);
     return ret;
 }
 #[no_mangle]
@@ -122,7 +122,7 @@ pub unsafe extern "C" fn fwrite_file_func(
     mut size: uLong,
 ) -> uLong {
     let mut ret: uLong = 0;
-    ret = crate::stdlib::fwrite(buf, 1 as i32 as libc::c_ulong, size, stream as *mut FILE);
+    ret = crate::stdlib::fwrite(buf, 1 as i32 as usize, size, stream as *mut FILE);
     return ret;
 }
 #[no_mangle]

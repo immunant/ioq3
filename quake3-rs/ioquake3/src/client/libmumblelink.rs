@@ -82,7 +82,7 @@ pub unsafe extern "C" fn mumble_link(mut name: *const libc::c_char) -> i32 {
     }
     crate::stdlib::snprintf(
         file.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong,
+        ::std::mem::size_of::<[libc::c_char; 256]>() as usize,
         b"/MumbleLink.%d\x00" as *const u8 as *const libc::c_char,
         libc::getuid(),
     );
@@ -96,7 +96,7 @@ pub unsafe extern "C" fn mumble_link(mut name: *const libc::c_char) -> i32 {
     }
     lm = mmap(
         0 as *mut libc::c_void,
-        ::std::mem::size_of::<LinkedMem>() as libc::c_ulong,
+        ::std::mem::size_of::<LinkedMem>() as usize,
         0x1 as i32 | 0x2 as i32,
         0x1 as i32,
         shmfd,
@@ -111,13 +111,13 @@ pub unsafe extern "C" fn mumble_link(mut name: *const libc::c_char) -> i32 {
     crate::stdlib::memset(
         lm as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<LinkedMem>() as libc::c_ulong,
+        ::std::mem::size_of::<LinkedMem>() as usize,
     );
     crate::stdlib::mbstowcs(
         (*lm).name.as_mut_ptr(),
         name,
-        (::std::mem::size_of::<[wchar_t; 256]>() as libc::c_ulong)
-            .wrapping_div(::std::mem::size_of::<wchar_t>() as libc::c_ulong),
+        (::std::mem::size_of::<[wchar_t; 256]>() as usize)
+            .wrapping_div(::std::mem::size_of::<wchar_t>() as usize),
     );
     return 0 as i32;
 }
@@ -147,32 +147,32 @@ pub unsafe extern "C" fn mumble_update_coordinates2(
     crate::stdlib::memcpy(
         (*lm).fAvatarPosition.as_mut_ptr() as *mut libc::c_void,
         fAvatarPosition as *const libc::c_void,
-        ::std::mem::size_of::<[f32; 3]>() as libc::c_ulong,
+        ::std::mem::size_of::<[f32; 3]>() as usize,
     );
     crate::stdlib::memcpy(
         (*lm).fAvatarFront.as_mut_ptr() as *mut libc::c_void,
         fAvatarFront as *const libc::c_void,
-        ::std::mem::size_of::<[f32; 3]>() as libc::c_ulong,
+        ::std::mem::size_of::<[f32; 3]>() as usize,
     );
     crate::stdlib::memcpy(
         (*lm).fAvatarTop.as_mut_ptr() as *mut libc::c_void,
         fAvatarTop as *const libc::c_void,
-        ::std::mem::size_of::<[f32; 3]>() as libc::c_ulong,
+        ::std::mem::size_of::<[f32; 3]>() as usize,
     );
     crate::stdlib::memcpy(
         (*lm).fCameraPosition.as_mut_ptr() as *mut libc::c_void,
         fCameraPosition as *const libc::c_void,
-        ::std::mem::size_of::<[f32; 3]>() as libc::c_ulong,
+        ::std::mem::size_of::<[f32; 3]>() as usize,
     );
     crate::stdlib::memcpy(
         (*lm).fCameraFront.as_mut_ptr() as *mut libc::c_void,
         fCameraFront as *const libc::c_void,
-        ::std::mem::size_of::<[f32; 3]>() as libc::c_ulong,
+        ::std::mem::size_of::<[f32; 3]>() as usize,
     );
     crate::stdlib::memcpy(
         (*lm).fCameraTop.as_mut_ptr() as *mut libc::c_void,
         fCameraTop as *const libc::c_void,
-        ::std::mem::size_of::<[f32; 3]>() as libc::c_ulong,
+        ::std::mem::size_of::<[f32; 3]>() as usize,
     );
     (*lm).uiVersion = 2 as i32 as uint32_t;
     (*lm).uiTick = GetTickCount() as uint32_t;
@@ -184,14 +184,14 @@ pub unsafe extern "C" fn mumble_set_identity(mut identity: *const libc::c_char) 
     if lm.is_null() {
         return;
     }
-    len = if (::std::mem::size_of::<[wchar_t; 256]>() as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<wchar_t>() as libc::c_ulong)
-        < crate::stdlib::strlen(identity).wrapping_add(1 as i32 as libc::c_ulong)
+    len = if (::std::mem::size_of::<[wchar_t; 256]>() as usize)
+        .wrapping_div(::std::mem::size_of::<wchar_t>() as usize)
+        < crate::stdlib::strlen(identity).wrapping_add(1 as i32 as usize)
     {
-        (::std::mem::size_of::<[wchar_t; 256]>() as libc::c_ulong)
-            .wrapping_div(::std::mem::size_of::<wchar_t>() as libc::c_ulong)
+        (::std::mem::size_of::<[wchar_t; 256]>() as usize)
+            .wrapping_div(::std::mem::size_of::<wchar_t>() as usize)
     } else {
-        crate::stdlib::strlen(identity).wrapping_add(1 as i32 as libc::c_ulong)
+        crate::stdlib::strlen(identity).wrapping_add(1 as i32 as usize)
     };
     crate::stdlib::mbstowcs((*lm).identity.as_mut_ptr(), identity, len);
 }
@@ -201,8 +201,8 @@ pub unsafe extern "C" fn mumble_set_context(mut context: *const u8, mut len: siz
     if lm.is_null() {
         return;
     }
-    len = if (::std::mem::size_of::<[u8; 256]>() as libc::c_ulong) < len {
-        ::std::mem::size_of::<[u8; 256]>() as libc::c_ulong
+    len = if (::std::mem::size_of::<[u8; 256]>() as usize) < len {
+        ::std::mem::size_of::<[u8; 256]>() as usize
     } else {
         len
     };
@@ -220,14 +220,14 @@ pub unsafe extern "C" fn mumble_set_description(mut description: *const libc::c_
     if lm.is_null() {
         return;
     }
-    len = if (::std::mem::size_of::<[wchar_t; 2048]>() as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<wchar_t>() as libc::c_ulong)
-        < crate::stdlib::strlen(description).wrapping_add(1 as i32 as libc::c_ulong)
+    len = if (::std::mem::size_of::<[wchar_t; 2048]>() as usize)
+        .wrapping_div(::std::mem::size_of::<wchar_t>() as usize)
+        < crate::stdlib::strlen(description).wrapping_add(1 as i32 as usize)
     {
-        (::std::mem::size_of::<[wchar_t; 2048]>() as libc::c_ulong)
-            .wrapping_div(::std::mem::size_of::<wchar_t>() as libc::c_ulong)
+        (::std::mem::size_of::<[wchar_t; 2048]>() as usize)
+            .wrapping_div(::std::mem::size_of::<wchar_t>() as usize)
     } else {
-        crate::stdlib::strlen(description).wrapping_add(1 as i32 as libc::c_ulong)
+        crate::stdlib::strlen(description).wrapping_add(1 as i32 as usize)
     };
     crate::stdlib::mbstowcs((*lm).description.as_mut_ptr(), description, len);
 }
@@ -239,7 +239,7 @@ pub unsafe extern "C" fn mumble_unlink() {
     }
     munmap(
         lm as *mut libc::c_void,
-        ::std::mem::size_of::<LinkedMem>() as libc::c_ulong,
+        ::std::mem::size_of::<LinkedMem>() as usize,
     );
     lm = 0 as *mut LinkedMem;
 }

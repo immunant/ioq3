@@ -55,12 +55,12 @@ pub unsafe extern "C" fn mdct_init(
     mut n: i32,
 ) {
     let mut bitrev: *mut i32 = crate::stdlib::malloc(
-        (::std::mem::size_of::<i32>() as libc::c_ulong)
-            .wrapping_mul((n / 4 as i32) as libc::c_ulong),
+        (::std::mem::size_of::<i32>() as usize)
+            .wrapping_mul((n / 4 as i32) as usize),
     ) as *mut i32;
     let mut T: *mut f32 = crate::stdlib::malloc(
-        (::std::mem::size_of::<f32>() as libc::c_ulong)
-            .wrapping_mul((n + n / 4 as i32) as libc::c_ulong),
+        (::std::mem::size_of::<f32>() as usize)
+            .wrapping_mul((n + n / 4 as i32) as usize),
     ) as *mut f32;
     let mut i: i32 = 0;
     let mut n2: i32 = n >> 1 as i32;
@@ -390,7 +390,7 @@ pub unsafe extern "C" fn mdct_clear(
             l as *mut libc::c_void,
             0 as i32,
             ::std::mem::size_of::<crate::src::libvorbis_1_3_6::lib::mdct::mdct_lookup>()
-                as libc::c_ulong,
+                as usize,
         );
     };
 }
@@ -588,7 +588,7 @@ pub unsafe extern "C" fn mdct_forward(
     let mut n8: i32 = n >> 3 as i32;
     let mut fresh4 = ::std::vec::from_elem(
         0,
-        (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as usize,
+        (n as usize).wrapping_mul(::std::mem::size_of::<f32>() as usize) as usize,
     );
     let mut w: *mut f32 = fresh4.as_mut_ptr() as *mut f32;
     let mut w2: *mut f32 = w.offset(n2 as isize);

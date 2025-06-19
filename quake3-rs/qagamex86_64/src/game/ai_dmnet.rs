@@ -188,7 +188,7 @@ pub unsafe extern "C" fn BotDumpNodeSwitches(mut bs: *mut bot_state_t) {
     crate::src::game::ai_dmq3::ClientName(
         (*bs).client,
         netname.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 36]>() as usize as i32,
     );
     BotAI_Print(
         1 as i32,
@@ -229,7 +229,7 @@ pub unsafe extern "C" fn BotRecordNodeSwitch(
     crate::src::game::ai_dmq3::ClientName(
         (*bs).client,
         netname.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 36]>() as usize as i32,
     );
     Com_sprintf(
         nodeswitch[numnodeswitches as usize].as_mut_ptr(),
@@ -668,7 +668,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                 crate::src::game::ai_dmq3::EasyClientName(
                     (*bs).teammate,
                     netname.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 36]>() as usize as i32,
                 ),
                 0 as *mut libc::c_void,
             );
@@ -741,7 +741,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
         crate::stdlib::memcpy(
             goal as *mut libc::c_void,
             &mut (*bs).teamgoal as *mut bot_goal_t as *const libc::c_void,
-            ::std::mem::size_of::<bot_goal_t>() as libc::c_ulong,
+            ::std::mem::size_of::<bot_goal_t>() as usize,
         );
         return qtrue as i32;
     }
@@ -755,7 +755,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                 crate::src::game::ai_dmq3::EasyClientName(
                     (*bs).teammate,
                     netname.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 36]>() as usize as i32,
                 ),
                 0 as *mut libc::c_void,
             );
@@ -776,7 +776,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                 crate::src::game::ai_dmq3::EasyClientName(
                     (*bs).teammate,
                     netname.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 36]>() as usize as i32,
                 ),
                 0 as *mut libc::c_void,
             );
@@ -916,7 +916,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                             crate::src::game::ai_dmq3::EasyClientName(
                                 (*bs).teammate,
                                 netname.as_mut_ptr(),
-                                ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
+                                ::std::mem::size_of::<[libc::c_char; 36]>() as usize as i32,
                             ),
                             0 as *mut libc::c_void,
                         );
@@ -1012,7 +1012,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
         crate::stdlib::memcpy(
             goal as *mut libc::c_void,
             &mut (*bs).teamgoal as *mut bot_goal_t as *const libc::c_void,
-            ::std::mem::size_of::<bot_goal_t>() as libc::c_ulong,
+            ::std::mem::size_of::<bot_goal_t>() as usize,
         );
         //if the companion is NOT visible for too long
         if (*bs).teammatevisible_time < floattime - 60 as i32 as f32 {
@@ -1023,7 +1023,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                 crate::src::game::ai_dmq3::EasyClientName(
                     (*bs).teammate,
                     netname.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 36]>() as usize as i32,
                 ),
                 0 as *mut libc::c_void,
             );
@@ -1067,7 +1067,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
             trap_BotGoalName(
                 (*bs).teamgoal.number,
                 buf.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
             );
             BotAI_BotInitialChat(
                 bs as *mut bot_state_s,
@@ -1087,14 +1087,14 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
         crate::stdlib::memcpy(
             goal as *mut libc::c_void,
             &mut (*bs).teamgoal as *mut bot_goal_t as *const libc::c_void,
-            ::std::mem::size_of::<bot_goal_t>() as libc::c_ulong,
+            ::std::mem::size_of::<bot_goal_t>() as usize,
         );
         //stop after 2 minutes
         if (*bs).teamgoal_time < floattime {
             trap_BotGoalName(
                 (*bs).teamgoal.number,
                 buf.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
             );
             BotAI_BotInitialChat(
                 bs as *mut bot_state_s,
@@ -1134,7 +1134,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
             crate::src::game::ai_dmq3::EasyClientName(
                 (*bs).teamgoal.entitynum,
                 buf.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
             );
             BotAI_BotInitialChat(
                 bs as *mut bot_state_s,
@@ -1152,7 +1152,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
             crate::src::game::ai_dmq3::EasyClientName(
                 (*bs).teamgoal.entitynum,
                 buf.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
             );
             BotAI_BotInitialChat(
                 bs as *mut bot_state_s,
@@ -1177,7 +1177,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
             trap_BotGoalName(
                 (*bs).teamgoal.number,
                 buf.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
             );
             BotAI_BotInitialChat(
                 bs as *mut bot_state_s,
@@ -1198,7 +1198,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
         crate::stdlib::memcpy(
             goal as *mut libc::c_void,
             &mut (*bs).teamgoal as *mut bot_goal_t as *const libc::c_void,
-            ::std::mem::size_of::<bot_goal_t>() as libc::c_ulong,
+            ::std::mem::size_of::<bot_goal_t>() as usize,
         );
         //stop after some time
         if (*bs).teamgoal_time < floattime {
@@ -1215,7 +1215,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
             trap_BotGoalName(
                 (*bs).teamgoal.number,
                 buf.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
             );
             BotAI_BotInitialChat(
                 bs as *mut bot_state_s,
@@ -1229,7 +1229,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
             trap_BotGoalName(
                 (*bs).teamgoal.number,
                 buf.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
             );
             BotAI_BotInitialChat(
                 bs as *mut bot_state_s,
@@ -1253,7 +1253,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                     crate::src::game::ai_dmq3::EasyClientName(
                         (*bs).teammate,
                         netname.as_mut_ptr(),
-                        ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
+                        ::std::mem::size_of::<[libc::c_char; 36]>() as usize as i32,
                     ),
                     0 as *mut libc::c_void,
                 );
@@ -1271,7 +1271,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
         crate::stdlib::memcpy(
             goal as *mut libc::c_void,
             &mut (*bs).teamgoal as *mut bot_goal_t as *const libc::c_void,
-            ::std::mem::size_of::<bot_goal_t>() as libc::c_ulong,
+            ::std::mem::size_of::<bot_goal_t>() as usize,
         );
         //
         if (*bs).teamgoal_time < floattime {
@@ -1302,7 +1302,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                         crate::src::game::ai_dmq3::EasyClientName(
                             (*bs).teammate,
                             netname.as_mut_ptr(),
-                            ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
+                            ::std::mem::size_of::<[libc::c_char; 36]>() as usize as i32,
                         ),
                         0 as *mut libc::c_void,
                     );
@@ -1460,7 +1460,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
         crate::stdlib::memcpy(
             goal as *mut libc::c_void,
             &mut (*(*bs).curpatrolpoint).goal as *mut bot_goal_t as *const libc::c_void,
-            ::std::mem::size_of::<bot_goal_t>() as libc::c_ulong,
+            ::std::mem::size_of::<bot_goal_t>() as usize,
         );
         return qtrue as i32;
     }
@@ -1490,7 +1490,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                         goal as *mut libc::c_void,
                         &mut crate::src::game::ai_dmq3::ctf_blueflag as *mut bot_goal_t
                             as *const libc::c_void,
-                        ::std::mem::size_of::<bot_goal_t>() as libc::c_ulong,
+                        ::std::mem::size_of::<bot_goal_t>() as usize,
                     );
                 }
                 2 => {
@@ -1498,7 +1498,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                         goal as *mut libc::c_void,
                         &mut crate::src::game::ai_dmq3::ctf_redflag as *mut bot_goal_t
                             as *const libc::c_void,
-                        ::std::mem::size_of::<bot_goal_t>() as libc::c_ulong,
+                        ::std::mem::size_of::<bot_goal_t>() as usize,
                     );
                 }
                 _ => {
@@ -1535,7 +1535,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                         goal as *mut libc::c_void,
                         &mut crate::src::game::ai_dmq3::ctf_redflag as *mut bot_goal_t
                             as *const libc::c_void,
-                        ::std::mem::size_of::<bot_goal_t>() as libc::c_ulong,
+                        ::std::mem::size_of::<bot_goal_t>() as usize,
                     );
                 }
                 2 => {
@@ -1543,7 +1543,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                         goal as *mut libc::c_void,
                         &mut crate::src::game::ai_dmq3::ctf_blueflag as *mut bot_goal_t
                             as *const libc::c_void,
-                        ::std::mem::size_of::<bot_goal_t>() as libc::c_ulong,
+                        ::std::mem::size_of::<bot_goal_t>() as usize,
                     );
                 }
                 _ => {
@@ -1606,7 +1606,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                         goal as *mut libc::c_void,
                         &mut crate::src::game::ai_dmq3::ctf_blueflag as *mut bot_goal_t
                             as *const libc::c_void,
-                        ::std::mem::size_of::<bot_goal_t>() as libc::c_ulong,
+                        ::std::mem::size_of::<bot_goal_t>() as usize,
                     );
                 }
                 2 => {
@@ -1614,7 +1614,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                         goal as *mut libc::c_void,
                         &mut crate::src::game::ai_dmq3::ctf_redflag as *mut bot_goal_t
                             as *const libc::c_void,
-                        ::std::mem::size_of::<bot_goal_t>() as libc::c_ulong,
+                        ::std::mem::size_of::<bot_goal_t>() as usize,
                     );
                 }
                 _ => {
@@ -1695,7 +1695,7 @@ pub unsafe extern "C" fn BotLongTermGoal(
                 crate::src::game::ai_dmq3::EasyClientName(
                     (*bs).lead_teammate,
                     teammate.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
                 ),
                 0 as *mut libc::c_void,
             );
@@ -1711,7 +1711,7 @@ pub unsafe extern "C" fn BotLongTermGoal(
                 crate::src::game::ai_dmq3::EasyClientName(
                     (*bs).lead_teammate,
                     teammate.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
                 ),
                 0 as *mut libc::c_void,
             );
@@ -1773,7 +1773,7 @@ pub unsafe extern "C" fn BotLongTermGoal(
                     crate::src::game::ai_dmq3::EasyClientName(
                         (*bs).lead_teammate,
                         teammate.as_mut_ptr(),
-                        ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                        ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
                     ),
                     0 as *mut libc::c_void,
                 );
@@ -1788,7 +1788,7 @@ pub unsafe extern "C" fn BotLongTermGoal(
             crate::stdlib::memcpy(
                 goal as *mut libc::c_void,
                 &mut (*bs).lead_teamgoal as *mut bot_goal_t as *const libc::c_void,
-                ::std::mem::size_of::<bot_goal_t>() as libc::c_ulong,
+                ::std::mem::size_of::<bot_goal_t>() as usize,
             );
             return qtrue as i32;
         } else {
@@ -1801,7 +1801,7 @@ pub unsafe extern "C" fn BotLongTermGoal(
                         crate::src::game::ai_dmq3::EasyClientName(
                             (*bs).lead_teammate,
                             teammate.as_mut_ptr(),
-                            ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                            ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
                         ),
                         0 as *mut libc::c_void,
                     );
@@ -2558,7 +2558,7 @@ pub unsafe extern "C" fn AINode_Seek_ActivateEntity(mut bs: *mut bot_state_t) ->
         crate::stdlib::memset(
             &mut moveresult as *mut bot_moveresult_t as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<bot_moveresult_t>() as libc::c_ulong,
+            ::std::mem::size_of::<bot_moveresult_t>() as usize,
         );
     } else {
         // if the bot has no goal

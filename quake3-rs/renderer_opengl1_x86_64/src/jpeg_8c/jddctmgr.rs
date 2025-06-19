@@ -924,7 +924,7 @@ pub unsafe extern "C" fn jinit_inverse_dct(mut cinfo: j_decompress_ptr) {
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         1 as i32,
-        ::std::mem::size_of::<my_idct_controller>() as libc::c_ulong,
+        ::std::mem::size_of::<my_idct_controller>() as usize,
     ) as my_idct_ptr;
     (*cinfo).idct = idct as *mut jpeg_inverse_dct;
     (*idct).pub_0.start_pass = Some(start_pass as unsafe extern "C" fn(_: j_decompress_ptr) -> ());
@@ -940,12 +940,12 @@ pub unsafe extern "C" fn jinit_inverse_dct(mut cinfo: j_decompress_ptr) {
         .expect("non-null function pointer")(
             cinfo as j_common_ptr,
             1 as i32,
-            ::std::mem::size_of::<multiplier_table>() as libc::c_ulong,
+            ::std::mem::size_of::<multiplier_table>() as usize,
         );
         crate::stdlib::memset(
             (*compptr).dct_table,
             0 as i32,
-            ::std::mem::size_of::<multiplier_table>() as libc::c_ulong,
+            ::std::mem::size_of::<multiplier_table>() as usize,
         );
         /* Mark multiplier table not yet set up for any method */
         (*idct).cur_method[ci as usize] = -(1 as i32);

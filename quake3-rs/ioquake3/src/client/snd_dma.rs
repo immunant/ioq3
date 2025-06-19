@@ -552,7 +552,7 @@ pub unsafe extern "C" fn S_ChannelSetup() {
     crate::stdlib::memset(
         s_channels.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[channel_t; 96]>() as libc::c_ulong,
+        ::std::mem::size_of::<[channel_t; 96]>() as usize,
     );
     p = s_channels.as_mut_ptr();
     q = p.offset(96 as i32 as isize);
@@ -587,7 +587,7 @@ unsafe extern "C" fn S_HashSFXName(mut name: *const libc::c_char) -> isize {
     while *name.offset(i as isize) as i32 != '\u{0}' as i32 {
         letter = ({
             let mut __res: i32 = 0;
-            if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong > 1 as i32 as libc::c_ulong {
+            if ::std::mem::size_of::<libc::c_char>() as usize > 1 as i32 as usize {
                 if 0 != 0 {
                     let mut __c: i32 = *name.offset(i as isize) as i32;
                     __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -637,7 +637,7 @@ unsafe extern "C" fn S_FindName(mut name: *const libc::c_char) -> *mut sfx_t {
         Com_Printf(b"^3WARNING: Sound name is empty\n\x00" as *const u8 as *const libc::c_char);
         return 0 as *mut sfx_t;
     }
-    if crate::stdlib::strlen(name) >= 64 as i32 as libc::c_ulong {
+    if crate::stdlib::strlen(name) >= 64 as i32 as usize {
         Com_Printf(
             b"^3WARNING: Sound name is too long: %s\n\x00" as *const u8 as *const libc::c_char,
             name,
@@ -682,7 +682,7 @@ unsafe extern "C" fn S_FindName(mut name: *const libc::c_char) -> *mut sfx_t {
     crate::stdlib::memset(
         sfx as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<sfx_t>() as libc::c_ulong,
+        ::std::mem::size_of::<sfx_t>() as usize,
     );
     libc::strcpy((*sfx).soundName.as_mut_ptr(), name);
     (*sfx).next = sfxHash[hash as usize];
@@ -783,13 +783,13 @@ pub unsafe extern "C" fn S_Base_BeginRegistration() {
         crate::stdlib::memset(
             s_knownSfx.as_mut_ptr() as *mut libc::c_void,
             '\u{0}' as i32,
-            ::std::mem::size_of::<[sfx_t; 4096]>() as libc::c_ulong,
+            ::std::mem::size_of::<[sfx_t; 4096]>() as usize,
         );
         crate::stdlib::memset(
             sfxHash.as_mut_ptr() as *mut libc::c_void,
             '\u{0}' as i32,
-            (::std::mem::size_of::<*mut sfx_t>() as libc::c_ulong)
-                .wrapping_mul(128 as i32 as libc::c_ulong),
+            (::std::mem::size_of::<*mut sfx_t>() as usize)
+                .wrapping_mul(128 as i32 as usize),
         );
         S_Base_RegisterSound(
             b"sound/feedback/hit.wav\x00" as *const u8 as *const libc::c_char,
@@ -1145,21 +1145,21 @@ pub unsafe extern "C" fn S_Base_ClearSoundBuffer() {
     crate::stdlib::memset(
         loopSounds.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        (((1 as i32) << 10 as i32) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<loopSound_t>() as libc::c_ulong),
+        (((1 as i32) << 10 as i32) as usize)
+            .wrapping_mul(::std::mem::size_of::<loopSound_t>() as usize),
     );
     crate::stdlib::memset(
         loop_channels.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        (96 as i32 as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<channel_t>() as libc::c_ulong),
+        (96 as i32 as usize)
+            .wrapping_mul(::std::mem::size_of::<channel_t>() as usize),
     );
     numLoopChannels = 0 as i32;
     S_ChannelSetup();
     crate::stdlib::memset(
         s_rawend.as_mut_ptr() as *mut libc::c_void,
         '\u{0}' as i32,
-        ::std::mem::size_of::<[i32; 129]>() as libc::c_ulong,
+        ::std::mem::size_of::<[i32; 129]>() as usize,
     );
     if dma.samplebits == 8 as i32 {
         clear = 0x80 as i32
@@ -1171,7 +1171,7 @@ pub unsafe extern "C" fn S_Base_ClearSoundBuffer() {
         crate::stdlib::memset(
             dma.buffer as *mut libc::c_void,
             clear,
-            (dma.samples * dma.samplebits / 8 as i32) as libc::c_ulong,
+            (dma.samples * dma.samplebits / 8 as i32) as usize,
         );
     }
     SNDDMA_Submit();
@@ -2051,7 +2051,7 @@ pub unsafe extern "C" fn S_Base_StartBackgroundTrack(
     Q_strncpyz(
         s_backgroundLoop.as_mut_ptr(),
         loop_0,
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     S_OpenBackgroundStream(intro);
 }
@@ -2153,8 +2153,8 @@ pub unsafe extern "C" fn S_UpdateBackgroundTrack() {
         // our max buffer size
         fileBytes =
             fileSamples * ((*s_backgroundStream).info.width * (*s_backgroundStream).info.channels);
-        if fileBytes as libc::c_ulong > ::std::mem::size_of::<[byte; 30000]>() as libc::c_ulong {
-            fileBytes = ::std::mem::size_of::<[byte; 30000]>() as libc::c_ulong as i32;
+        if fileBytes as usize > ::std::mem::size_of::<[byte; 30000]>() as usize {
+            fileBytes = ::std::mem::size_of::<[byte; 30000]>() as usize as i32;
             fileSamples =
                 fileBytes / ((*s_backgroundStream).info.width * (*s_backgroundStream).info.channels)
         }
@@ -2347,8 +2347,8 @@ pub unsafe extern "C" fn S_Base_Init(mut si: *mut soundInterface_t) -> qboolean 
         crate::stdlib::memset(
             sfxHash.as_mut_ptr() as *mut libc::c_void,
             0 as i32,
-            (::std::mem::size_of::<*mut sfx_t>() as libc::c_ulong)
-                .wrapping_mul(128 as i32 as libc::c_ulong),
+            (::std::mem::size_of::<*mut sfx_t>() as usize)
+                .wrapping_mul(128 as i32 as usize),
         );
         s_soundtime = 0 as i32;
         s_paintedtime = 0 as i32;

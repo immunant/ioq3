@@ -69,12 +69,12 @@ pub unsafe extern "C" fn CON_LogWrite(mut in_0: *const libc::c_char) -> u32 {
     crate::stdlib::memcpy(
         consoleLog.as_mut_ptr().offset(writePos as isize) as *mut libc::c_void,
         in_0 as *const libc::c_void,
-        firstChunk as libc::c_ulong,
+        firstChunk as usize,
     );
     crate::stdlib::memcpy(
         consoleLog.as_mut_ptr() as *mut libc::c_void,
         in_0.offset(firstChunk as isize) as *const libc::c_void,
-        secondChunk as libc::c_ulong,
+        secondChunk as usize,
     );
     writePos = writePos
         .wrapping_add(length)
@@ -127,12 +127,12 @@ pub unsafe extern "C" fn CON_LogRead(mut out: *mut libc::c_char, mut outSize: u3
     crate::stdlib::memcpy(
         out as *mut libc::c_void,
         consoleLog.as_mut_ptr().offset(readPos as isize) as *const libc::c_void,
-        firstChunk as libc::c_ulong,
+        firstChunk as usize,
     );
     crate::stdlib::memcpy(
         out.offset(firstChunk as isize) as *mut libc::c_void,
         consoleLog.as_mut_ptr() as *const libc::c_void,
-        secondChunk as libc::c_ulong,
+        secondChunk as usize,
     );
     readPos = readPos
         .wrapping_add(outSize)

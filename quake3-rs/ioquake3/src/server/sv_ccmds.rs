@@ -254,7 +254,7 @@ unsafe extern "C" fn SV_GetPlayerByHandle() -> *mut client_t {
             Q_strncpyz(
                 cleanName.as_mut_ptr(),
                 (*cl).name.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             );
             Q_CleanStr(cleanName.as_mut_ptr());
             if Q_stricmp(cleanName.as_mut_ptr(), s) == 0 {
@@ -346,7 +346,7 @@ unsafe extern "C" fn SV_Map_f() {
     // a typo at the server console won't end the game
     Com_sprintf(
         expanded.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         b"maps/%s.bsp\x00" as *const u8 as *const libc::c_char,
         map,
     );
@@ -406,7 +406,7 @@ unsafe extern "C" fn SV_Map_f() {
     Q_strncpyz(
         mapname.as_mut_ptr(),
         map,
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     // start up the map
     SV_SpawnServer(mapname.as_mut_ptr(), killBots);
@@ -479,7 +479,7 @@ unsafe extern "C" fn SV_MapRestart_f() {
         Q_strncpyz(
             mapname.as_mut_ptr(),
             Cvar_VariableString(b"mapname\x00" as *const u8 as *const libc::c_char),
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         );
         SV_SpawnServer(mapname.as_mut_ptr(), qfalse);
         return;
@@ -942,7 +942,7 @@ unsafe extern "C" fn SV_RehashBans_f() {
     }
     Com_sprintf(
         filepath.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         b"%s/%s\x00" as *const u8 as *const libc::c_char,
         FS_GetCurrentGameDir(),
         (*sv_banFile).string,
@@ -1026,7 +1026,7 @@ unsafe extern "C" fn SV_WriteBans() {
     }
     Com_sprintf(
         filepath.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         b"%s/%s\x00" as *const u8 as *const libc::c_char,
         FS_GetCurrentGameDir(),
         (*sv_banFile).string,
@@ -1040,7 +1040,7 @@ unsafe extern "C" fn SV_WriteBans() {
             curban = &mut *serverBans.as_mut_ptr().offset(index as isize) as *mut serverBan_t;
             Com_sprintf(
                 writebuf.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 128]>() as usize as i32,
                 b"%d %s %d\n\x00" as *const u8 as *const libc::c_char,
                 (*curban).isexception as u32,
                 NET_AdrToString((*curban).ip as netadr_t),
@@ -1067,10 +1067,10 @@ Remove a ban or an exception from the list.
 unsafe extern "C" fn SV_DelBanEntryFromList(mut index: i32) -> qboolean {
     if index == serverBansCount - 1 as i32 {
         serverBansCount -= 1
-    } else if (index as libc::c_ulong)
-        < (::std::mem::size_of::<[serverBan_t; 1024]>() as libc::c_ulong)
-            .wrapping_div(::std::mem::size_of::<serverBan_t>() as libc::c_ulong)
-            .wrapping_sub(1 as i32 as libc::c_ulong)
+    } else if (index as usize)
+        < (::std::mem::size_of::<[serverBan_t; 1024]>() as usize)
+            .wrapping_div(::std::mem::size_of::<serverBan_t>() as usize)
+            .wrapping_sub(1 as i32 as usize)
     {
         crate::stdlib::memmove(
             serverBans.as_mut_ptr().offset(index as isize) as *mut libc::c_void,
@@ -1078,8 +1078,8 @@ unsafe extern "C" fn SV_DelBanEntryFromList(mut index: i32) -> qboolean {
                 .as_mut_ptr()
                 .offset(index as isize)
                 .offset(1 as i32 as isize) as *const libc::c_void,
-            ((serverBansCount - index - 1 as i32) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<serverBan_t>() as libc::c_ulong),
+            ((serverBansCount - index - 1 as i32) as usize)
+                .wrapping_mul(::std::mem::size_of::<serverBan_t>() as usize),
         );
         serverBansCount -= 1
     } else {
@@ -1161,9 +1161,9 @@ unsafe extern "C" fn SV_AddBanToList(mut isexception: qboolean) {
         );
         return;
     }
-    if serverBansCount as libc::c_ulong
-        >= (::std::mem::size_of::<[serverBan_t; 1024]>() as libc::c_ulong)
-            .wrapping_div(::std::mem::size_of::<serverBan_t>() as libc::c_ulong)
+    if serverBansCount as usize
+        >= (::std::mem::size_of::<[serverBan_t; 1024]>() as usize)
+            .wrapping_div(::std::mem::size_of::<serverBan_t>() as usize)
     {
         Com_Printf(
             b"Error: Maximum number of bans/exceptions exceeded.\n\x00" as *const u8
@@ -1235,7 +1235,7 @@ unsafe extern "C" fn SV_AddBanToList(mut isexception: qboolean) {
                 Q_strncpyz(
                     addy2.as_mut_ptr(),
                     NET_AdrToString(ip as netadr_t),
-                    ::std::mem::size_of::<[libc::c_char; 48]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 48]>() as usize as i32,
                 );
                 Com_Printf(
                     b"Error: %s %s/%d supersedes %s %s/%d\n\x00" as *const u8
@@ -1267,7 +1267,7 @@ unsafe extern "C" fn SV_AddBanToList(mut isexception: qboolean) {
                 Q_strncpyz(
                     addy2.as_mut_ptr(),
                     NET_AdrToString((*curban).ip as netadr_t),
-                    ::std::mem::size_of::<[libc::c_char; 48]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 48]>() as usize as i32,
                 );
                 Com_Printf(
                     b"Error: %s %s/%d supersedes already existing %s %s/%d\n\x00" as *const u8
@@ -1594,7 +1594,7 @@ unsafe extern "C" fn SV_Status_f() {
             // TTimo adding a ^7 to reset the color
             s = NET_AdrToString((*cl).netchan.remoteAddress as netadr_t);
             Com_Printf(b"^7%s\x00" as *const u8 as *const libc::c_char, s);
-            l = (39 as i32 as libc::c_ulong).wrapping_sub(crate::stdlib::strlen(s)) as i32;
+            l = (39 as i32 as usize).wrapping_sub(crate::stdlib::strlen(s)) as i32;
             j = 0 as i32;
             loop {
                 Com_Printf(b" \x00" as *const u8 as *const libc::c_char);
@@ -1635,7 +1635,7 @@ unsafe extern "C" fn SV_ConSay_f() {
     p = Cmd_Args();
     if *p as i32 == '\"' as i32 {
         p = p.offset(1);
-        *p.offset(crate::stdlib::strlen(p).wrapping_sub(1 as i32 as libc::c_ulong) as isize) =
+        *p.offset(crate::stdlib::strlen(p).wrapping_sub(1 as i32 as usize) as isize) =
             0 as i32 as libc::c_char
     }
     libc::strcat(text.as_mut_ptr(), p);
@@ -1679,7 +1679,7 @@ unsafe extern "C" fn SV_ConTell_f() {
     p = Cmd_ArgsFrom(2 as i32);
     if *p as i32 == '\"' as i32 {
         p = p.offset(1);
-        *p.offset(crate::stdlib::strlen(p).wrapping_sub(1 as i32 as libc::c_ulong) as isize) =
+        *p.offset(crate::stdlib::strlen(p).wrapping_sub(1 as i32 as usize) as isize) =
             0 as i32 as libc::c_char
     }
     libc::strcat(text.as_mut_ptr(), p);
@@ -1729,7 +1729,7 @@ unsafe extern "C" fn SV_ConSayto_f() {
             Q_strncpyz(
                 cleanName.as_mut_ptr(),
                 (*cl).name.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 32]>() as usize as i32,
             );
             Q_CleanStr(cleanName.as_mut_ptr());
             if Q_stricmp(cleanName.as_mut_ptr(), name.as_mut_ptr()) == 0 {
@@ -1754,7 +1754,7 @@ unsafe extern "C" fn SV_ConSayto_f() {
     p = Cmd_ArgsFrom(2 as i32);
     if *p as i32 == '\"' as i32 {
         p = p.offset(1);
-        *p.offset(crate::stdlib::strlen(p).wrapping_sub(1 as i32 as libc::c_ulong) as isize) =
+        *p.offset(crate::stdlib::strlen(p).wrapping_sub(1 as i32 as usize) as isize) =
             0 as i32 as libc::c_char
     }
     libc::strcat(text.as_mut_ptr(), p);
@@ -1902,7 +1902,7 @@ unsafe extern "C" fn SV_CompletePlayerName(mut _args: *mut libc::c_char, mut arg
                 Q_strncpyz(
                     names[nameCount as usize].as_mut_ptr(),
                     (*cl).name.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 32]>() as usize as i32,
                 );
                 Q_CleanStr(names[nameCount as usize].as_mut_ptr());
                 namesPtr[nameCount as usize] = names[nameCount as usize].as_mut_ptr();
@@ -1914,7 +1914,7 @@ unsafe extern "C" fn SV_CompletePlayerName(mut _args: *mut libc::c_char, mut arg
         qsort(
             namesPtr.as_mut_ptr() as *mut libc::c_void,
             nameCount as size_t,
-            ::std::mem::size_of::<*const libc::c_char>() as libc::c_ulong,
+            ::std::mem::size_of::<*const libc::c_char>() as usize,
             Some(
                 Com_strCompare
                     as unsafe extern "C" fn(_: *const libc::c_void, _: *const libc::c_void) -> i32,

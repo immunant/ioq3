@@ -385,15 +385,15 @@ pub unsafe extern "C" fn silk_decode_parameters(
         crate::stdlib::memcpy(
             (*psDecCtrl).PredCoef_Q12[0 as i32 as usize].as_mut_ptr() as *mut libc::c_void,
             (*psDecCtrl).PredCoef_Q12[1 as i32 as usize].as_mut_ptr() as *const libc::c_void,
-            ((*psDec).LPC_order as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<opus_int16>() as libc::c_ulong),
+            ((*psDec).LPC_order as usize)
+                .wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
         );
     }
     crate::stdlib::memcpy(
         (*psDec).prevNLSF_Q15.as_mut_ptr() as *mut libc::c_void,
         pNLSF_Q15.as_mut_ptr() as *const libc::c_void,
-        ((*psDec).LPC_order as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<opus_int16>() as libc::c_ulong),
+        ((*psDec).LPC_order as usize)
+            .wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
     );
     /* After a packet loss do BWE of LPC coefs */
     if (*psDec).lossCnt != 0 {
@@ -445,14 +445,14 @@ pub unsafe extern "C" fn silk_decode_parameters(
         crate::stdlib::memset(
             (*psDecCtrl).pitchL.as_mut_ptr() as *mut libc::c_void,
             0 as i32,
-            ((*psDec).nb_subfr as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+            ((*psDec).nb_subfr as usize)
+                .wrapping_mul(::std::mem::size_of::<i32>() as usize),
         );
         crate::stdlib::memset(
             (*psDecCtrl).LTPCoef_Q14.as_mut_ptr() as *mut libc::c_void,
             0 as i32,
-            ((5 as i32 * (*psDec).nb_subfr) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<opus_int16>() as libc::c_ulong),
+            ((5 as i32 * (*psDec).nb_subfr) as usize)
+                .wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
         );
         (*psDec).indices.PERIndex = 0 as i32 as i8;
         (*psDecCtrl).LTP_scale_Q14 = 0 as i32

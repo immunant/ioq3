@@ -1252,7 +1252,7 @@ unsafe extern "C" fn ArenaServers_UpdatePicture() {
         servernodeptr = g_arenaservers.table[g_arenaservers.list.curvalue as usize].servernode;
         Com_sprintf(
             picname.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             b"levelshots/%s.tga\x00" as *const u8 as *const libc::c_char,
             (*servernodeptr).mapname.as_mut_ptr(),
         );
@@ -1293,7 +1293,7 @@ unsafe extern "C" fn ArenaServers_UpdateMenu() {
             qsort(
                 g_arenaservers.serverlist as *mut libc::c_void,
                 *g_arenaservers.numservers as size_t,
-                ::std::mem::size_of::<servernode_t>() as libc::c_ulong,
+                ::std::mem::size_of::<servernode_t>() as usize,
                 Some(
                     ArenaServers_Compare
                         as unsafe extern "C" fn(
@@ -1520,7 +1520,7 @@ unsafe extern "C" fn ArenaServers_Remove() {
                         .offset((i + 1 as i32) as isize)
                         as *mut [libc::c_char; 64] as *const libc::c_void,
                     ((g_arenaservers.numfavoriteaddresses - i - 1 as i32) * 64 as i32)
-                        as libc::c_ulong,
+                        as usize,
                 );
             }
             g_arenaservers.numfavoriteaddresses -= 1;
@@ -1531,7 +1531,7 @@ unsafe extern "C" fn ArenaServers_Remove() {
                     .offset(g_arenaservers.numfavoriteaddresses as isize)
                     as *mut [libc::c_char; 64] as *mut libc::c_void,
                 0 as i32,
-                64 as i32 as libc::c_ulong,
+                64 as i32 as usize,
             );
             break;
         } else {
@@ -1554,8 +1554,8 @@ unsafe extern "C" fn ArenaServers_Remove() {
                         .as_mut_ptr()
                         .offset((i + 1 as i32) as isize) as *mut servernode_t
                         as *const libc::c_void,
-                    ((g_numfavoriteservers - i - 1 as i32) as libc::c_ulong)
-                        .wrapping_mul(::std::mem::size_of::<servernode_t>() as libc::c_ulong),
+                    ((g_numfavoriteservers - i - 1 as i32) as usize)
+                        .wrapping_mul(::std::mem::size_of::<servernode_t>() as usize),
                 );
             }
             g_numfavoriteservers -= 1;
@@ -1565,7 +1565,7 @@ unsafe extern "C" fn ArenaServers_Remove() {
                     .offset(g_numfavoriteservers as isize) as *mut servernode_t
                     as *mut libc::c_void,
                 0 as i32,
-                ::std::mem::size_of::<servernode_t>() as libc::c_ulong,
+                ::std::mem::size_of::<servernode_t>() as usize,
             );
             break;
         } else {
@@ -1663,10 +1663,10 @@ unsafe extern "C" fn ArenaServers_Insert(
         b"nettype\x00" as *const u8 as *const libc::c_char,
     )); //-1;
     if (*servernodeptr).nettype < 0 as i32
-        || (*servernodeptr).nettype as libc::c_ulong
-            >= (::std::mem::size_of::<[*mut libc::c_char; 4]>() as libc::c_ulong)
-                .wrapping_div(::std::mem::size_of::<*mut libc::c_char>() as libc::c_ulong)
-                .wrapping_sub(1 as i32 as libc::c_ulong)
+        || (*servernodeptr).nettype as usize
+            >= (::std::mem::size_of::<[*mut libc::c_char; 4]>() as usize)
+                .wrapping_div(::std::mem::size_of::<*mut libc::c_char>() as usize)
+                .wrapping_sub(1 as i32 as usize)
     {
         (*servernodeptr).nettype = 0 as i32
     }
@@ -1685,14 +1685,14 @@ unsafe extern "C" fn ArenaServers_Insert(
         Q_strncpyz(
             (*servernodeptr).gamename.as_mut_ptr(),
             s,
-            ::std::mem::size_of::<[libc::c_char; 12]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 12]>() as usize as i32,
         );
     } else {
         (*servernodeptr).gametype = i;
         Q_strncpyz(
             (*servernodeptr).gamename.as_mut_ptr(),
             gamenames[i as usize],
-            ::std::mem::size_of::<[libc::c_char; 12]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 12]>() as usize as i32,
         );
     };
 }
@@ -1730,16 +1730,16 @@ pub unsafe extern "C" fn ArenaServers_LoadFavorites() {
     crate::stdlib::memcpy(
         templist.as_mut_ptr() as *mut libc::c_void,
         g_favoriteserverlist.as_mut_ptr() as *const libc::c_void,
-        (::std::mem::size_of::<servernode_t>() as libc::c_ulong)
-            .wrapping_mul(16 as i32 as libc::c_ulong),
+        (::std::mem::size_of::<servernode_t>() as usize)
+            .wrapping_mul(16 as i32 as usize),
     );
     numtempitems = g_numfavoriteservers;
     // clear the current for sync
     crate::stdlib::memset(
         g_favoriteserverlist.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<servernode_t>() as libc::c_ulong)
-            .wrapping_mul(16 as i32 as libc::c_ulong),
+        (::std::mem::size_of::<servernode_t>() as usize)
+            .wrapping_mul(16 as i32 as usize),
     );
     g_numfavoriteservers = 0 as i32;
     // resync existing results with new or deleted cvars
@@ -1782,7 +1782,7 @@ pub unsafe extern "C" fn ArenaServers_LoadFavorites() {
                         as *mut servernode_t as *mut libc::c_void,
                     &mut *templist.as_mut_ptr().offset(j as isize) as *mut servernode_t
                         as *const libc::c_void,
-                    ::std::mem::size_of::<servernode_t>() as libc::c_ulong,
+                    ::std::mem::size_of::<servernode_t>() as usize,
                 );
                 found = qtrue
             } else {
@@ -1829,7 +1829,7 @@ unsafe extern "C" fn ArenaServers_StopRefresh() {
     qsort(
         g_arenaservers.serverlist as *mut libc::c_void,
         *g_arenaservers.numservers as size_t,
-        ::std::mem::size_of::<servernode_t>() as libc::c_ulong,
+        ::std::mem::size_of::<servernode_t>() as usize,
         Some(
             ArenaServers_Compare
                 as unsafe extern "C" fn(_: *const libc::c_void, _: *const libc::c_void) -> i32,
@@ -2036,8 +2036,8 @@ unsafe extern "C" fn ArenaServers_StartRefresh() {
     crate::stdlib::memset(
         g_arenaservers.serverlist as *mut libc::c_void,
         0 as i32,
-        (g_arenaservers.maxservers as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<table_t>() as libc::c_ulong),
+        (g_arenaservers.maxservers as usize)
+            .wrapping_mul(::std::mem::size_of::<table_t>() as usize),
     );
     i = 0 as i32;
     while i < 32 as i32 {
@@ -2106,7 +2106,7 @@ unsafe extern "C" fn ArenaServers_StartRefresh() {
         trap_Cvar_VariableStringBuffer(
             b"debug_protocol\x00" as *const u8 as *const libc::c_char,
             protocol.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 32]>() as usize as i32,
         );
         if crate::stdlib::strlen(protocol.as_mut_ptr()) != 0 {
             trap_Cmd_ExecuteText(
@@ -2180,7 +2180,7 @@ pub unsafe extern "C" fn ArenaServers_Sort(mut type_0: i32) {
     qsort(
         g_arenaservers.serverlist as *mut libc::c_void,
         *g_arenaservers.numservers as size_t,
-        ::std::mem::size_of::<servernode_t>() as libc::c_ulong,
+        ::std::mem::size_of::<servernode_t>() as usize,
         Some(
             ArenaServers_Compare
                 as unsafe extern "C" fn(_: *const libc::c_void, _: *const libc::c_void) -> i32,
@@ -2208,14 +2208,14 @@ pub unsafe extern "C" fn ArenaServers_SetType(mut type_0: i32) -> i32 {
         while type_0 >= 2 as i32 && type_0 <= 6 as i32 {
             Com_sprintf(
                 cvarname.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 11]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 11]>() as usize as i32,
                 b"sv_master%d\x00" as *const u8 as *const libc::c_char,
                 type_0 - 1 as i32,
             );
             trap_Cvar_VariableStringBuffer(
                 cvarname.as_mut_ptr(),
                 masterstr.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 2]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 2]>() as usize as i32,
             );
             if *masterstr.as_mut_ptr() != 0 {
                 break;
@@ -2455,7 +2455,7 @@ unsafe extern "C" fn ArenaServers_MenuInit() {
     crate::stdlib::memset(
         &mut g_arenaservers as *mut arenaservers_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<arenaservers_t>() as libc::c_ulong,
+        ::std::mem::size_of::<arenaservers_t>() as usize,
     );
     ArenaServers_Cache();
     g_arenaservers.menu.fullscreen = qtrue;

@@ -266,11 +266,11 @@ unsafe extern "C" fn UI_Mods_ParseInfos(
     let ref mut fresh0 = *s_mods.list.itemnames.offset(s_mods.list.numitems as isize);
     *fresh0 = s_mods.descriptionPtr;
     s_mods.descriptionPtr = s_mods.descriptionPtr.offset(
-        crate::stdlib::strlen(s_mods.descriptionPtr).wrapping_add(1 as i32 as libc::c_ulong)
+        crate::stdlib::strlen(s_mods.descriptionPtr).wrapping_add(1 as i32 as usize)
             as isize,
     );
     s_mods.fs_gamePtr = s_mods.fs_gamePtr.offset(
-        crate::stdlib::strlen(s_mods.fs_gamePtr).wrapping_add(1 as i32 as libc::c_ulong) as isize,
+        crate::stdlib::strlen(s_mods.fs_gamePtr).wrapping_add(1 as i32 as usize) as isize,
     );
     s_mods.list.numitems += 1;
 }
@@ -302,18 +302,18 @@ unsafe extern "C" fn UI_Mods_LoadMods() {
         b"$modlist\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
         dirlist.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 2048]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 2048]>() as usize as i32,
     );
     dirptr = dirlist.as_mut_ptr();
     i = 0 as i32;
     while i < numdirs {
-        dirlen = crate::stdlib::strlen(dirptr).wrapping_add(1 as i32 as libc::c_ulong) as i32;
+        dirlen = crate::stdlib::strlen(dirptr).wrapping_add(1 as i32 as usize) as i32;
         descptr = dirptr.offset(dirlen as isize);
         UI_Mods_ParseInfos(dirptr, descptr);
         dirptr = dirptr.offset(
-            (dirlen as libc::c_ulong)
+            (dirlen as usize)
                 .wrapping_add(crate::stdlib::strlen(descptr))
-                .wrapping_add(1 as i32 as libc::c_ulong) as isize,
+                .wrapping_add(1 as i32 as usize) as isize,
         );
         i += 1
     }
@@ -336,7 +336,7 @@ unsafe extern "C" fn UI_Mods_MenuInit() {
     crate::stdlib::memset(
         &mut s_mods as *mut mods_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<mods_t>() as libc::c_ulong,
+        ::std::mem::size_of::<mods_t>() as usize,
     );
     s_mods.menu.wrapAround = qtrue;
     s_mods.menu.fullscreen = qtrue;

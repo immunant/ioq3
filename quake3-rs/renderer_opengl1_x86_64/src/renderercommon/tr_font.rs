@@ -122,7 +122,7 @@ pub unsafe extern "C" fn RE_RegisterFont(
     }
     Com_sprintf(
         name.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
         b"fonts/fontImage_%i.dat\x00" as *const u8 as *const libc::c_char,
         pointSize,
     );
@@ -137,7 +137,7 @@ pub unsafe extern "C" fn RE_RegisterFont(
                 font as *mut libc::c_void,
                 &mut *registeredFont.as_mut_ptr().offset(i as isize) as *mut fontInfo_t
                     as *const libc::c_void,
-                ::std::mem::size_of::<fontInfo_t>() as libc::c_ulong,
+                ::std::mem::size_of::<fontInfo_t>() as usize,
             );
             return;
         }
@@ -148,7 +148,7 @@ pub unsafe extern "C" fn RE_RegisterFont(
         .expect("non-null function pointer")(
         name.as_mut_ptr(), 0 as *mut *mut libc::c_void
     ) as i32;
-    if len as libc::c_ulong == ::std::mem::size_of::<fontInfo_t>() as libc::c_ulong {
+    if len as usize == ::std::mem::size_of::<fontInfo_t>() as usize {
         crate::src::renderergl1::tr_main::ri
             .FS_ReadFile
             .expect("non-null function pointer")(name.as_mut_ptr(), &mut faceData);
@@ -171,10 +171,10 @@ pub unsafe extern "C" fn RE_RegisterFont(
             Q_strncpyz(
                 (*font).glyphs[i as usize].shaderName.as_mut_ptr(),
                 &mut *fdFile.offset(fdOffset as isize) as *mut byte as *const libc::c_char,
-                ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 32]>() as usize as i32,
             );
-            fdOffset = (fdOffset as libc::c_ulong)
-                .wrapping_add(::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong)
+            fdOffset = (fdOffset as usize)
+                .wrapping_add(::std::mem::size_of::<[libc::c_char; 32]>() as usize)
                 as i32;
             i += 1
         }
@@ -182,13 +182,13 @@ pub unsafe extern "C" fn RE_RegisterFont(
         crate::stdlib::memcpy(
             (*font).name.as_mut_ptr() as *mut libc::c_void,
             &mut *fdFile.offset(fdOffset as isize) as *mut byte as *const libc::c_void,
-            64 as i32 as libc::c_ulong,
+            64 as i32 as usize,
         );
         //		Com_Memcpy(font, faceData, sizeof(fontInfo_t));
         Q_strncpyz(
             (*font).name.as_mut_ptr(),
             name.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         );
         i = 0 as i32;
         while i <= 255 as i32 {
@@ -204,7 +204,7 @@ pub unsafe extern "C" fn RE_RegisterFont(
             &mut *registeredFont.as_mut_ptr().offset(fresh0 as isize) as *mut fontInfo_t
                 as *mut libc::c_void,
             font as *const libc::c_void,
-            ::std::mem::size_of::<fontInfo_t>() as libc::c_ulong,
+            ::std::mem::size_of::<fontInfo_t>() as usize,
         );
         crate::src::renderergl1::tr_main::ri
             .FS_FreeFile

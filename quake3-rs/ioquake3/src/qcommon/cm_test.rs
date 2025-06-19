@@ -605,7 +605,7 @@ pub unsafe extern "C" fn CM_WriteAreaBits(mut buffer: *mut byte, mut area: i32) 
         crate::stdlib::memset(
             buffer as *mut libc::c_void,
             255 as i32,
-            bytes as libc::c_ulong,
+            bytes as usize,
         );
     } else {
         floodnum = (*cm.areas.offset(area as isize)).floodnum;

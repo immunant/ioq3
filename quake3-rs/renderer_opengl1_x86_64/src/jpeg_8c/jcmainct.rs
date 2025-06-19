@@ -358,7 +358,7 @@ pub unsafe extern "C" fn jinit_c_main_controller(
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         1 as i32,
-        ::std::mem::size_of::<my_main_controller>() as libc::c_ulong,
+        ::std::mem::size_of::<my_main_controller>() as usize,
     ) as my_main_ptr;
     (*cinfo).main = main_ptr as *mut jpeg_c_main_controller;
     (*main_ptr).pub_0.start_pass =

@@ -207,7 +207,7 @@ pub unsafe extern "C" fn Favorites_Add() {
     trap_Cvar_VariableStringBuffer(
         b"cl_currentServerAddress\x00" as *const u8 as *const libc::c_char,
         serverbuff.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 128]>() as usize as i32,
     );
     if serverbuff[0 as i32 as usize] == 0 {
         return;
@@ -221,7 +221,7 @@ pub unsafe extern "C" fn Favorites_Add() {
                 i + 1 as i32,
             ),
             adrstr.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 128]>() as usize as i32,
         );
         if Q_stricmp(serverbuff.as_mut_ptr(), adrstr.as_mut_ptr()) == 0 {
             // already in list
@@ -452,7 +452,7 @@ pub unsafe extern "C" fn UI_ServerInfoMenu() {
     crate::stdlib::memset(
         &mut s_serverinfo as *mut serverinfo_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<serverinfo_t>() as libc::c_ulong,
+        ::std::mem::size_of::<serverinfo_t>() as usize,
     );
     ServerInfo_Cache();
     s_serverinfo.menu.draw = Some(ServerInfo_MenuDraw as unsafe extern "C" fn() -> ());

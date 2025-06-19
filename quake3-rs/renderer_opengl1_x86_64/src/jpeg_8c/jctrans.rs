@@ -350,7 +350,7 @@ pub unsafe extern "C" fn jpeg_copy_critical_parameters(
                 (*(*srcinfo).quant_tbl_ptrs[tblno as usize])
                     .quantval
                     .as_mut_ptr() as *const libc::c_void,
-                ::std::mem::size_of::<[UINT16; 64]>() as libc::c_ulong,
+                ::std::mem::size_of::<[UINT16; 64]>() as usize,
             );
             (**qtblptr).sent_table = 0 as i32
         }
@@ -686,7 +686,7 @@ unsafe extern "C" fn transencode_coef_controller(
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         1 as i32,
-        ::std::mem::size_of::<my_coef_controller>() as libc::c_ulong,
+        ::std::mem::size_of::<my_coef_controller>() as usize,
     ) as my_coef_ptr;
     (*cinfo).coef = coef as *mut jpeg_c_coef_controller;
     (*coef).pub_0.start_pass =
@@ -704,11 +704,11 @@ unsafe extern "C" fn transencode_coef_controller(
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         1 as i32,
-        (10 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<JBLOCK>() as libc::c_ulong),
+        (10 as i32 as usize).wrapping_mul(::std::mem::size_of::<JBLOCK>() as usize),
     ) as JBLOCKROW;
     jzero_far(
         buffer as *mut libc::c_void,
-        (10 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<JBLOCK>() as libc::c_ulong),
+        (10 as i32 as usize).wrapping_mul(::std::mem::size_of::<JBLOCK>() as usize),
     );
     i = 0 as i32;
     while i < 10 as i32 {

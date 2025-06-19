@@ -720,16 +720,16 @@ pub unsafe extern "C" fn GL_TexEnv(mut env: i32) {
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn GL_State(mut stateBits: libc::c_ulong) {
-    let mut diff: libc::c_ulong = stateBits ^ glState.glStateBits;
+pub unsafe extern "C" fn GL_State(mut stateBits: usize) {
+    let mut diff: usize = stateBits ^ glState.glStateBits;
     if diff == 0 {
         return;
     }
     //
     // check depthFunc bits
     //
-    if diff & 0x20000 as i32 as libc::c_ulong != 0 {
-        if stateBits & 0x20000 as i32 as libc::c_ulong != 0 {
+    if diff & 0x20000 as i32 as usize != 0 {
+        if stateBits & 0x20000 as i32 as usize != 0 {
             qglDepthFunc.expect("non-null function pointer")(0x202 as i32 as GLenum);
         } else {
             qglDepthFunc.expect("non-null function pointer")(0x203 as i32 as GLenum);
@@ -738,11 +738,11 @@ pub unsafe extern "C" fn GL_State(mut stateBits: libc::c_ulong) {
     //
     // check blend bits
     //
-    if diff & (0xf as i32 | 0xf0 as i32) as libc::c_ulong != 0 {
+    if diff & (0xf as i32 | 0xf0 as i32) as usize != 0 {
         let mut srcFactor: GLenum = 1 as i32 as GLenum;
         let mut dstFactor: GLenum = 1 as i32 as GLenum;
-        if stateBits & (0xf as i32 | 0xf0 as i32) as libc::c_ulong != 0 {
-            match stateBits & 0xf as i32 as libc::c_ulong {
+        if stateBits & (0xf as i32 | 0xf0 as i32) as usize != 0 {
+            match stateBits & 0xf as i32 as usize {
                 1 => srcFactor = 0 as i32 as GLenum,
                 2 => srcFactor = 1 as i32 as GLenum,
                 3 => srcFactor = 0x306 as i32 as GLenum,
@@ -760,7 +760,7 @@ pub unsafe extern "C" fn GL_State(mut stateBits: libc::c_ulong) {
                     );
                 }
             }
-            match stateBits & 0xf0 as i32 as libc::c_ulong {
+            match stateBits & 0xf0 as i32 as usize {
                 16 => dstFactor = 0 as i32 as GLenum,
                 32 => dstFactor = 1 as i32 as GLenum,
                 48 => dstFactor = 0x300 as i32 as GLenum,
@@ -786,8 +786,8 @@ pub unsafe extern "C" fn GL_State(mut stateBits: libc::c_ulong) {
     //
     // check depthmask
     //
-    if diff & 0x100 as i32 as libc::c_ulong != 0 {
-        if stateBits & 0x100 as i32 as libc::c_ulong != 0 {
+    if diff & 0x100 as i32 as usize != 0 {
+        if stateBits & 0x100 as i32 as usize != 0 {
             qglDepthMask.expect("non-null function pointer")(1 as i32 as GLboolean);
         } else {
             qglDepthMask.expect("non-null function pointer")(0 as i32 as GLboolean);
@@ -796,8 +796,8 @@ pub unsafe extern "C" fn GL_State(mut stateBits: libc::c_ulong) {
     //
     // fill/line mode
     //
-    if diff & 0x1000 as i32 as libc::c_ulong != 0 {
-        if stateBits & 0x1000 as i32 as libc::c_ulong != 0 {
+    if diff & 0x1000 as i32 as usize != 0 {
+        if stateBits & 0x1000 as i32 as usize != 0 {
             qglPolygonMode.expect("non-null function pointer")(
                 0x408 as i32 as GLenum,
                 0x1b01 as i32 as GLenum,
@@ -812,8 +812,8 @@ pub unsafe extern "C" fn GL_State(mut stateBits: libc::c_ulong) {
     //
     // depthtest
     //
-    if diff & 0x10000 as i32 as libc::c_ulong != 0 {
-        if stateBits & 0x10000 as i32 as libc::c_ulong != 0 {
+    if diff & 0x10000 as i32 as usize != 0 {
+        if stateBits & 0x10000 as i32 as usize != 0 {
             qglDisable.expect("non-null function pointer")(0xb71 as i32 as GLenum);
         } else {
             qglEnable.expect("non-null function pointer")(0xb71 as i32 as GLenum);
@@ -822,8 +822,8 @@ pub unsafe extern "C" fn GL_State(mut stateBits: libc::c_ulong) {
     //
     // alpha test
     //
-    if diff & 0x70000000 as i32 as libc::c_ulong != 0 {
-        match stateBits & 0x70000000 as i32 as libc::c_ulong {
+    if diff & 0x70000000 as i32 as usize != 0 {
+        match stateBits & 0x70000000 as i32 as usize {
             0 => {
                 qglDisable.expect("non-null function pointer")(0xbc0 as i32 as GLenum);
             }
@@ -909,7 +909,7 @@ pub unsafe extern "C" fn RB_BeginDrawingView() {
     //
     SetViewportAndScissor();
     // ensures that depth writes are enabled for the depth clear
-    GL_State(0x100 as i32 as libc::c_ulong);
+    GL_State(0x100 as i32 as usize);
     // clear relevant buffers
     clearBits = 0x100 as i32; // FIXME: only if sky shaders have been used
     if (*r_measureOverdraw).integer != 0 || (*r_shadows).integer == 2 as i32 {
@@ -1246,7 +1246,7 @@ pub unsafe extern "C" fn RB_SetGL2D() {
     );
     qglMatrixMode.expect("non-null function pointer")(0x1700 as i32 as GLenum);
     qglLoadIdentity.expect("non-null function pointer")();
-    GL_State((0x10000 as i32 | 0x5 as i32 | 0x60 as i32) as libc::c_ulong);
+    GL_State((0x10000 as i32 | 0x5 as i32 | 0x60 as i32) as usize);
     GL_Cull(CT_TWO_SIDED as i32);
     qglDisable.expect("non-null function pointer")(0x3000 as i32 as GLenum);
     // set time for 2D shaders
@@ -2140,11 +2140,11 @@ pub unsafe extern "C" fn RB_ExecuteRenderCommands(mut data: *const libc::c_void)
     let mut t2: i32 = 0;
     t1 = ri.Milliseconds.expect("non-null function pointer")();
     loop {
-        data = ((data as intptr_t as libc::c_ulong)
-            .wrapping_add(::std::mem::size_of::<*mut libc::c_void>() as libc::c_ulong)
-            .wrapping_sub(1 as i32 as libc::c_ulong)
-            & !(::std::mem::size_of::<*mut libc::c_void>() as libc::c_ulong)
-                .wrapping_sub(1 as i32 as libc::c_ulong)) as *mut libc::c_void;
+        data = ((data as intptr_t as usize)
+            .wrapping_add(::std::mem::size_of::<*mut libc::c_void>() as usize)
+            .wrapping_sub(1 as i32 as usize)
+            & !(::std::mem::size_of::<*mut libc::c_void>() as usize)
+                .wrapping_sub(1 as i32 as usize)) as *mut libc::c_void;
         match *(data as *const i32) {
             1 => data = RB_SetColor(data),
             2 => data = RB_StretchPic(data),

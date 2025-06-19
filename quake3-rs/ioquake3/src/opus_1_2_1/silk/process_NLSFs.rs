@@ -357,8 +357,8 @@ pub unsafe extern "C" fn silk_process_NLSFs(
         crate::stdlib::memcpy(
             (*PredCoef_Q12.offset(0 as i32 as isize)).as_mut_ptr() as *mut libc::c_void,
             (*PredCoef_Q12.offset(1 as i32 as isize)).as_mut_ptr() as *const libc::c_void,
-            ((*psEncC).predictLPCOrder as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<opus_int16>() as libc::c_ulong),
+            ((*psEncC).predictLPCOrder as usize)
+                .wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
         );
     };
 }

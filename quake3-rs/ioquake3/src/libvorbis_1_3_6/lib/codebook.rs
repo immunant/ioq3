@@ -76,17 +76,17 @@ pub unsafe extern "C" fn vorbis_staticbook_pack(
     /* first the basic parameters */
     oggpack_write(
         opb as *mut oggpack_buffer,
-        0x564342 as i32 as libc::c_ulong,
+        0x564342 as i32 as usize,
         24 as i32,
     );
     oggpack_write(
         opb as *mut oggpack_buffer,
-        (*c).dim as libc::c_ulong,
+        (*c).dim as usize,
         16 as i32,
     );
     oggpack_write(
         opb as *mut oggpack_buffer,
-        (*c).entries as libc::c_ulong,
+        (*c).entries as usize,
         24 as i32,
     );
     /* pack the codewords.  There are two packings; length ordered and
@@ -111,12 +111,12 @@ pub unsafe extern "C" fn vorbis_staticbook_pack(
         let mut count: isize = 0 as i32 as isize; /* ordered */
         oggpack_write(
             opb as *mut oggpack_buffer,
-            1 as i32 as libc::c_ulong,
+            1 as i32 as usize,
             1 as i32,
         ); /* 1 to 32 */
         oggpack_write(
             opb as *mut oggpack_buffer,
-            (*(*c).lengthlist.offset(0 as i32 as isize) as i32 - 1 as i32) as libc::c_ulong,
+            (*(*c).lengthlist.offset(0 as i32 as isize) as i32 - 1 as i32) as usize,
             5 as i32,
         );
         i = 1 as i32 as isize;
@@ -128,7 +128,7 @@ pub unsafe extern "C" fn vorbis_staticbook_pack(
                 while j < this as isize {
                     oggpack_write(
                         opb as *mut oggpack_buffer,
-                        (i - count) as libc::c_ulong,
+                        (i - count) as usize,
                         crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
                             ((*c).entries - count) as ogg_uint32_t,
                         ),
@@ -141,7 +141,7 @@ pub unsafe extern "C" fn vorbis_staticbook_pack(
         }
         oggpack_write(
             opb as *mut oggpack_buffer,
-            (i - count) as libc::c_ulong,
+            (i - count) as usize,
             crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
                 ((*c).entries - count) as ogg_uint32_t,
             ),
@@ -151,7 +151,7 @@ pub unsafe extern "C" fn vorbis_staticbook_pack(
         the length.  This time, though, we have to encode each length */
         oggpack_write(
             opb as *mut oggpack_buffer,
-            0 as i32 as libc::c_ulong,
+            0 as i32 as usize,
             1 as i32,
         ); /* unordered */
         /* algortihmic mapping has use for 'unused entries', which we tag
@@ -167,14 +167,14 @@ pub unsafe extern "C" fn vorbis_staticbook_pack(
         if i == (*c).entries {
             oggpack_write(
                 opb as *mut oggpack_buffer,
-                0 as i32 as libc::c_ulong,
+                0 as i32 as usize,
                 1 as i32,
             );
             i = 0 as i32 as isize;
             while i < (*c).entries {
                 oggpack_write(
                     opb as *mut oggpack_buffer,
-                    (*(*c).lengthlist.offset(i as isize) as i32 - 1 as i32) as libc::c_ulong,
+                    (*(*c).lengthlist.offset(i as isize) as i32 - 1 as i32) as usize,
                     5 as i32,
                 );
                 i += 1
@@ -182,7 +182,7 @@ pub unsafe extern "C" fn vorbis_staticbook_pack(
         } else {
             oggpack_write(
                 opb as *mut oggpack_buffer,
-                1 as i32 as libc::c_ulong,
+                1 as i32 as usize,
                 1 as i32,
             );
             i = 0 as i32 as isize;
@@ -190,18 +190,18 @@ pub unsafe extern "C" fn vorbis_staticbook_pack(
                 if *(*c).lengthlist.offset(i as isize) as i32 == 0 as i32 {
                     oggpack_write(
                         opb as *mut oggpack_buffer,
-                        0 as i32 as libc::c_ulong,
+                        0 as i32 as usize,
                         1 as i32,
                     );
                 } else {
                     oggpack_write(
                         opb as *mut oggpack_buffer,
-                        1 as i32 as libc::c_ulong,
+                        1 as i32 as usize,
                         1 as i32,
                     );
                     oggpack_write(
                         opb as *mut oggpack_buffer,
-                        (*(*c).lengthlist.offset(i as isize) as i32 - 1 as i32) as libc::c_ulong,
+                        (*(*c).lengthlist.offset(i as isize) as i32 - 1 as i32) as usize,
                         5 as i32,
                     );
                 }
@@ -213,7 +213,7 @@ pub unsafe extern "C" fn vorbis_staticbook_pack(
     mapping? If we have a mapping, what type? */
     oggpack_write(
         opb as *mut oggpack_buffer,
-        (*c).maptype as libc::c_ulong,
+        (*c).maptype as usize,
         4 as i32,
     );
     match (*c).maptype {
@@ -228,22 +228,22 @@ pub unsafe extern "C" fn vorbis_staticbook_pack(
             /* values that define the dequantization */
             oggpack_write(
                 opb as *mut oggpack_buffer,
-                (*c).q_min as libc::c_ulong,
+                (*c).q_min as usize,
                 32 as i32,
             );
             oggpack_write(
                 opb as *mut oggpack_buffer,
-                (*c).q_delta as libc::c_ulong,
+                (*c).q_delta as usize,
                 32 as i32,
             );
             oggpack_write(
                 opb as *mut oggpack_buffer,
-                ((*c).q_quant - 1 as i32) as libc::c_ulong,
+                ((*c).q_quant - 1 as i32) as usize,
                 4 as i32,
             );
             oggpack_write(
                 opb as *mut oggpack_buffer,
-                (*c).q_sequencep as libc::c_ulong,
+                (*c).q_sequencep as usize,
                 1 as i32,
             );
             let mut quantvals: i32 = 0;
@@ -269,7 +269,7 @@ pub unsafe extern "C" fn vorbis_staticbook_pack(
             while i < quantvals as isize {
                 oggpack_write(
                     opb as *mut oggpack_buffer,
-                    libc::labs(*(*c).quantlist.offset(i as isize) as libc::c_long) as libc::c_ulong,
+                    libc::labs(*(*c).quantlist.offset(i as isize) as libc::c_long) as usize,
                     (*c).q_quant,
                 );
                 i += 1
@@ -294,9 +294,9 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
     let mut j: isize = 0;
     let mut s: *mut crate::src::libvorbis_1_3_6::lib::codebook::static_codebook =
         crate::stdlib::calloc(
-            1 as i32 as libc::c_ulong,
+            1 as i32 as usize,
             ::std::mem::size_of::<crate::src::libvorbis_1_3_6::lib::codebook::static_codebook>()
-                as libc::c_ulong,
+                as usize,
         ) as *mut crate::src::libvorbis_1_3_6::lib::codebook::static_codebook;
     (*s).allocedp = 1 as i32;
     /* make sure alignment is correct */
@@ -330,8 +330,8 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                 } else {
                                     /* unordered */
                                     (*s).lengthlist = crate::stdlib::malloc(
-                                        (::std::mem::size_of::<libc::c_char>() as libc::c_ulong)
-                                            .wrapping_mul((*s).entries as libc::c_ulong),
+                                        (::std::mem::size_of::<libc::c_char>() as usize)
+                                            .wrapping_mul((*s).entries as usize),
                                     )
                                         as *mut libc::c_char;
                                     /* allocated but unused entries? */
@@ -393,8 +393,8 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                     current_block = 15187751986642917127;
                                 } else {
                                     (*s).lengthlist = crate::stdlib::malloc(
-                                        (::std::mem::size_of::<libc::c_char>() as libc::c_ulong)
-                                            .wrapping_mul((*s).entries as libc::c_ulong),
+                                        (::std::mem::size_of::<libc::c_char>() as usize)
+                                            .wrapping_mul((*s).entries as usize),
                                     )
                                         as *mut libc::c_char;
                                     i = 0 as i32 as isize;
@@ -505,9 +505,9 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                     } else {
                                                         (*s).quantlist = crate::stdlib::malloc(
                                                             (::std::mem::size_of::<isize>()
-                                                                as libc::c_ulong)
+                                                                as usize)
                                                                 .wrapping_mul(
-                                                                    quantvals as libc::c_ulong,
+                                                                    quantvals as usize,
                                                                 ),
                                                         )
                                                             as *mut isize;
@@ -599,9 +599,9 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                     } else {
                                                         (*s).quantlist = crate::stdlib::malloc(
                                                             (::std::mem::size_of::<isize>()
-                                                                as libc::c_ulong)
+                                                                as usize)
                                                                 .wrapping_mul(
-                                                                    quantvals as libc::c_ulong,
+                                                                    quantvals as usize,
                                                                 ),
                                                         )
                                                             as *mut isize;
@@ -653,8 +653,8 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                     current_block = 15187751986642917127;
                                 } else {
                                     (*s).lengthlist = crate::stdlib::malloc(
-                                        (::std::mem::size_of::<libc::c_char>() as libc::c_ulong)
-                                            .wrapping_mul((*s).entries as libc::c_ulong),
+                                        (::std::mem::size_of::<libc::c_char>() as usize)
+                                            .wrapping_mul((*s).entries as usize),
                                     )
                                         as *mut libc::c_char;
                                     if unused != 0 {
@@ -711,8 +711,8 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                     current_block = 15187751986642917127;
                                 } else {
                                     (*s).lengthlist = crate::stdlib::malloc(
-                                        (::std::mem::size_of::<libc::c_char>() as libc::c_ulong)
-                                            .wrapping_mul((*s).entries as libc::c_ulong),
+                                        (::std::mem::size_of::<libc::c_char>() as usize)
+                                            .wrapping_mul((*s).entries as usize),
                                     )
                                         as *mut libc::c_char;
                                     i = 0 as i32 as isize;
@@ -818,9 +818,9 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                     } else {
                                                         (*s).quantlist = crate::stdlib::malloc(
                                                             (::std::mem::size_of::<isize>()
-                                                                as libc::c_ulong)
+                                                                as usize)
                                                                 .wrapping_mul(
-                                                                    quantvals as libc::c_ulong,
+                                                                    quantvals as usize,
                                                                 ),
                                                         )
                                                             as *mut isize;
@@ -907,9 +907,9 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                     } else {
                                                         (*s).quantlist = crate::stdlib::malloc(
                                                             (::std::mem::size_of::<isize>()
-                                                                as libc::c_ulong)
+                                                                as usize)
                                                                 .wrapping_mul(
-                                                                    quantvals as libc::c_ulong,
+                                                                    quantvals as usize,
                                                                 ),
                                                         )
                                                             as *mut isize;
@@ -970,7 +970,7 @@ pub unsafe extern "C" fn vorbis_book_encode(
     }
     oggpack_write(
         b as *mut oggpack_buffer,
-        *(*book).codelist.offset(a as isize) as libc::c_ulong,
+        *(*book).codelist.offset(a as isize) as usize,
         *(*(*book).c).lengthlist.offset(a as isize) as i32,
     );
     return *(*(*book).c).lengthlist.offset(a as isize) as i32;
@@ -1002,7 +1002,7 @@ unsafe extern "C" fn decode_packed_entry_number(
     let mut lok: isize = oggpack_look(b as *mut oggpack_buffer, (*book).dec_firsttablen);
     if lok >= 0 as i32 as isize {
         let mut entry: isize = *(*book).dec_firsttable.offset(lok as isize) as isize;
-        if entry as libc::c_ulong & 0x80000000 as libc::c_ulong != 0 {
+        if entry as usize & 0x80000000 as usize != 0 {
             lo = entry >> 15 as i32 & 0x7fff as i32 as isize;
             hi = (*book).used_entries - (entry & 0x7fff as i32 as isize)
         } else {
@@ -1093,13 +1093,13 @@ pub unsafe extern "C" fn vorbis_book_decodevs_add(
         let mut step: i32 = (n as isize / (*book).dim) as i32;
         let mut fresh0 = ::std::vec::from_elem(
             0,
-            (::std::mem::size_of::<isize>() as libc::c_ulong).wrapping_mul(step as libc::c_ulong)
+            (::std::mem::size_of::<isize>() as usize).wrapping_mul(step as usize)
                 as usize,
         );
         let mut entry: *mut isize = fresh0.as_mut_ptr() as *mut isize;
         let mut fresh1 = ::std::vec::from_elem(
             0,
-            (::std::mem::size_of::<*mut f32>() as libc::c_ulong).wrapping_mul(step as libc::c_ulong)
+            (::std::mem::size_of::<*mut f32>() as usize).wrapping_mul(step as usize)
                 as usize,
         );
         let mut t: *mut *mut f32 = fresh1.as_mut_ptr() as *mut *mut f32;

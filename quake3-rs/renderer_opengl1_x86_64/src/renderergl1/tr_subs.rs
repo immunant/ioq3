@@ -59,7 +59,7 @@ pub unsafe extern "C" fn Com_Printf(mut msg: *const libc::c_char, mut args: ...)
     argptr = args.clone();
     crate::stdlib::vsnprintf(
         text.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize,
         msg,
         argptr.as_va_list(),
     );
@@ -83,7 +83,7 @@ pub unsafe extern "C" fn Com_Error(
     argptr = args.clone();
     crate::stdlib::vsnprintf(
         text.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize,
         error,
         argptr.as_va_list(),
     );

@@ -994,7 +994,7 @@ unsafe extern "C" fn RB_SurfaceBeam() {
         i += 1
     }
     GL_Bind(tr.whiteImage as *mut image_s);
-    GL_State((0x2 as i32 | 0x20 as i32) as libc::c_ulong);
+    GL_State((0x2 as i32 | 0x20 as i32) as usize);
     qglColor3f.expect("non-null function pointer")(
         1 as i32 as GLfloat,
         0 as i32 as GLfloat,
@@ -2324,7 +2324,7 @@ Draws x/y/z lines from the origin for orientation debugging
 
 unsafe extern "C" fn RB_SurfaceAxis() {
     GL_Bind(tr.whiteImage as *mut image_s);
-    GL_State(0x100 as i32 as libc::c_ulong);
+    GL_State(0x100 as i32 as usize);
     qglLineWidth.expect("non-null function pointer")(3 as i32 as GLfloat);
     qglBegin.expect("non-null function pointer")(0x1 as i32 as GLenum);
     qglColor3f.expect("non-null function pointer")(

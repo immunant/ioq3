@@ -536,7 +536,7 @@ pub unsafe extern "C" fn EA_GetInput(
     crate::stdlib::memcpy(
         input as *mut libc::c_void,
         bi as *const libc::c_void,
-        ::std::mem::size_of::<bot_input_t>() as libc::c_ulong,
+        ::std::mem::size_of::<bot_input_t>() as usize,
     );
 }
 //end of the function EA_GetInput
@@ -576,8 +576,8 @@ pub unsafe extern "C" fn EA_ResetInput(mut client: i32) {
 pub unsafe extern "C" fn EA_Setup() -> i32 {
     //initialize the bot inputs
     botinputs = crate::src::botlib::l_memory::GetClearedHunkMemory(
-        (botlibglobals.maxclients as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<bot_input_t>() as libc::c_ulong),
+        (botlibglobals.maxclients as usize)
+            .wrapping_mul(::std::mem::size_of::<bot_input_t>() as usize),
     ) as *mut bot_input_t;
     return 0 as i32;
 }

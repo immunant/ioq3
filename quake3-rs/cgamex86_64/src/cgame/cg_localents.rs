@@ -308,7 +308,7 @@ pub unsafe extern "C" fn CG_InitLocalEntities() {
     crate::stdlib::memset(
         cg_localEntities.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[localEntity_t; 512]>() as libc::c_ulong,
+        ::std::mem::size_of::<[localEntity_t; 512]>() as usize,
     );
     cg_activeLocalEntities.next = &mut cg_activeLocalEntities;
     cg_activeLocalEntities.prev = &mut cg_activeLocalEntities;
@@ -361,7 +361,7 @@ pub unsafe extern "C" fn CG_AllocLocalEntity() -> *mut localEntity_t {
     crate::stdlib::memset(
         le as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<localEntity_t>() as libc::c_ulong,
+        ::std::mem::size_of::<localEntity_t>() as usize,
     );
     // link into the active list
     (*le).next = cg_activeLocalEntities.next;

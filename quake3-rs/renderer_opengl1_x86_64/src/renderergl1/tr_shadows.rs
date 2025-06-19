@@ -392,7 +392,7 @@ pub unsafe extern "C" fn RB_ShadowTessEnd() {
     crate::stdlib::memset(
         numEdgeDefs.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        (4 as i32 * tess.numVertexes) as libc::c_ulong,
+        (4 as i32 * tess.numVertexes) as usize,
     );
     numTris = tess.numIndexes / 3 as i32;
     i = 0 as i32;
@@ -440,7 +440,7 @@ pub unsafe extern "C" fn RB_ShadowTessEnd() {
     }
     // draw the silhouette edges
     GL_Bind(tr.whiteImage as *mut image_s);
-    GL_State((0x2 as i32 | 0x10 as i32) as libc::c_ulong);
+    GL_State((0x2 as i32 | 0x10 as i32) as usize);
     qglColor3f.expect("non-null function pointer")(0.2f32, 0.2f32, 0.2f32);
     // don't write to the color buffer
     qglGetBooleanv.expect("non-null function pointer")(0xc23 as i32 as GLenum, rgba.as_mut_ptr());
@@ -508,7 +508,7 @@ pub unsafe extern "C" fn RB_ShadowFinish() {
     GL_Bind(tr.whiteImage as *mut image_s);
     qglLoadIdentity.expect("non-null function pointer")();
     qglColor3f.expect("non-null function pointer")(0.6f32, 0.6f32, 0.6f32);
-    GL_State((0x100 as i32 | 0x3 as i32 | 0x10 as i32) as libc::c_ulong);
+    GL_State((0x100 as i32 | 0x3 as i32 | 0x10 as i32) as usize);
     //	qglColor3f( 1, 0, 0 );
     //	GL_State( GLS_DEPTHMASK_TRUE | GLS_SRCBLEND_ONE | GLS_DSTBLEND_ZERO );
     qglBegin.expect("non-null function pointer")(0x7 as i32 as GLenum);

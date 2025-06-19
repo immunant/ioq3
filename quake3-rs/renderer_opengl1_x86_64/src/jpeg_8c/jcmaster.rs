@@ -1508,7 +1508,7 @@ pub unsafe extern "C" fn jinit_c_master_control(
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         1 as i32,
-        ::std::mem::size_of::<my_comp_master>() as libc::c_ulong,
+        ::std::mem::size_of::<my_comp_master>() as usize,
     ) as my_master_ptr;
     (*cinfo).master = master as *mut jpeg_comp_master;
     (*master).pub_0.prepare_for_pass =

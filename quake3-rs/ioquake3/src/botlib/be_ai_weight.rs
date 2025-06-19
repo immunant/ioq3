@@ -379,7 +379,7 @@ pub unsafe extern "C" fn ReadFuzzySeperators_r(
         {
             fs = crate::src::botlib::l_memory::GetClearedMemory(::std::mem::size_of::<
                 crate::src::botlib::be_ai_weight::fuzzyseperator_t,
-            >() as libc::c_ulong)
+            >() as usize)
                 as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t;
             (*fs).index = index;
             if !lastfs.is_null() {
@@ -517,7 +517,7 @@ pub unsafe extern "C" fn ReadFuzzySeperators_r(
         ); //end if
         fs = crate::src::botlib::l_memory::GetClearedMemory(::std::mem::size_of::<
             crate::src::botlib::be_ai_weight::fuzzyseperator_t,
-        >() as libc::c_ulong)
+        >() as usize)
             as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t;
         (*fs).index = index;
         (*fs).value = 999999 as i32;
@@ -616,12 +616,12 @@ pub unsafe extern "C" fn ReadWeightConfig(
     //
     config = crate::src::botlib::l_memory::GetClearedMemory(::std::mem::size_of::<
         crate::src::botlib::be_ai_weight::weightconfig_t,
-    >() as libc::c_ulong) as *mut crate::src::botlib::be_ai_weight::weightconfig_t;
+    >() as usize) as *mut crate::src::botlib::be_ai_weight::weightconfig_t;
     (*config).numweights = 0 as i32;
     Q_strncpyz(
         (*config).filename.as_mut_ptr(),
         filename,
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     //parse the item config file
     while PC_ReadToken(
@@ -657,7 +657,7 @@ pub unsafe extern "C" fn ReadWeightConfig(
                 (*config).weights[(*config).numweights as usize].name =
                     crate::src::botlib::l_memory::GetClearedMemory(
                         crate::stdlib::strlen(token.string.as_mut_ptr())
-                            .wrapping_add(1 as i32 as libc::c_ulong),
+                            .wrapping_add(1 as i32 as usize),
                     ) as *mut libc::c_char;
                 libc::strcpy(
                     (*config).weights[(*config).numweights as usize].name,
@@ -710,7 +710,7 @@ pub unsafe extern "C" fn ReadWeightConfig(
                     fs = crate::src::botlib::l_memory::GetClearedMemory(::std::mem::size_of::<
                         crate::src::botlib::be_ai_weight::fuzzyseperator_t,
                     >()
-                        as libc::c_ulong)
+                        as usize)
                         as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t; //end if
                     (*fs).index = 0 as i32;
                     (*fs).value = 999999 as i32;

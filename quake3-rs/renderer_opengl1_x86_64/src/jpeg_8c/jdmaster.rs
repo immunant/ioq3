@@ -443,8 +443,8 @@ unsafe extern "C" fn prepare_range_limit_table(mut cinfo: j_decompress_ptr)
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         1 as i32,
-        ((5 as i32 * (255 as i32 + 1 as i32) + 128 as i32) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<JSAMPLE>() as libc::c_ulong),
+        ((5 as i32 * (255 as i32 + 1 as i32) + 128 as i32) as usize)
+            .wrapping_mul(::std::mem::size_of::<JSAMPLE>() as usize),
     ) as *mut JSAMPLE;
     table = table.offset((255 as i32 + 1 as i32) as isize);
     (*cinfo).sample_range_limit = table;
@@ -452,8 +452,8 @@ unsafe extern "C" fn prepare_range_limit_table(mut cinfo: j_decompress_ptr)
     crate::stdlib::memset(
         table.offset(-((255 as i32 + 1 as i32) as isize)) as *mut libc::c_void,
         0 as i32,
-        ((255 as i32 + 1 as i32) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<JSAMPLE>() as libc::c_ulong),
+        ((255 as i32 + 1 as i32) as usize)
+            .wrapping_mul(::std::mem::size_of::<JSAMPLE>() as usize),
     );
     /* Main part of "simple" table: limit[x] = x */
     i = 0 as i32; /* Point to where post-IDCT table starts */
@@ -472,15 +472,15 @@ unsafe extern "C" fn prepare_range_limit_table(mut cinfo: j_decompress_ptr)
     crate::stdlib::memset(
         table.offset((2 as i32 * (255 as i32 + 1 as i32)) as isize) as *mut libc::c_void,
         0 as i32,
-        ((2 as i32 * (255 as i32 + 1 as i32) - 128 as i32) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<JSAMPLE>() as libc::c_ulong),
+        ((2 as i32 * (255 as i32 + 1 as i32) - 128 as i32) as usize)
+            .wrapping_mul(::std::mem::size_of::<JSAMPLE>() as usize),
     );
     crate::stdlib::memcpy(
         table.offset((4 as i32 * (255 as i32 + 1 as i32) - 128 as i32) as isize)
             as *mut libc::c_void,
         (*cinfo).sample_range_limit as *const libc::c_void,
-        (128 as i32 as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<JSAMPLE>() as libc::c_ulong),
+        (128 as i32 as usize)
+            .wrapping_mul(::std::mem::size_of::<JSAMPLE>() as usize),
     );
 }
 /*
@@ -842,7 +842,7 @@ pub unsafe extern "C" fn jinit_master_decompress(mut cinfo: j_decompress_ptr) {
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         1 as i32,
-        ::std::mem::size_of::<my_decomp_master>() as libc::c_ulong,
+        ::std::mem::size_of::<my_decomp_master>() as usize,
     ) as my_master_ptr;
     (*cinfo).master = master as *mut jpeg_decomp_master;
     (*master).pub_0.prepare_for_output_pass =

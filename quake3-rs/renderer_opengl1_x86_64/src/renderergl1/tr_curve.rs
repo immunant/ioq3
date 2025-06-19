@@ -455,7 +455,7 @@ unsafe extern "C" fn InvertErrorTable(
     crate::stdlib::memcpy(
         copy.as_mut_ptr() as *mut libc::c_void,
         errorTable as *const libc::c_void,
-        ::std::mem::size_of::<[[f32; 65]; 2]>() as libc::c_ulong,
+        ::std::mem::size_of::<[[f32; 65]; 2]>() as usize,
     );
     i = 0 as i32;
     while i < width {
@@ -572,13 +572,13 @@ pub unsafe extern "C" fn R_CreateSurfaceGridMesh(
     let mut tmpVec: vec3_t = [0.; 3];
     let mut grid: *mut srfGridMesh_t = 0 as *mut srfGridMesh_t;
     // copy the results out to a grid
-    size = ((width * height - 1 as i32) as libc::c_ulong)
-        .wrapping_mul(::std::mem::size_of::<drawVert_t>() as libc::c_ulong)
-        .wrapping_add(::std::mem::size_of::<srfGridMesh_t>() as libc::c_ulong) as i32;
+    size = ((width * height - 1 as i32) as usize)
+        .wrapping_mul(::std::mem::size_of::<drawVert_t>() as usize)
+        .wrapping_add(::std::mem::size_of::<srfGridMesh_t>() as usize) as i32;
     grid = crate::src::renderergl1::tr_main::ri
         .Malloc
         .expect("non-null function pointer")(size) as *mut srfGridMesh_t;
-    crate::stdlib::memset(grid as *mut libc::c_void, 0 as i32, size as libc::c_ulong);
+    crate::stdlib::memset(grid as *mut libc::c_void, 0 as i32, size as usize);
     (*grid).widthLodError = crate::src::renderergl1::tr_main::ri
         .Malloc
         .expect("non-null function pointer")(width * 4 as i32)
@@ -586,7 +586,7 @@ pub unsafe extern "C" fn R_CreateSurfaceGridMesh(
     crate::stdlib::memcpy(
         (*grid).widthLodError as *mut libc::c_void,
         (*errorTable.offset(0 as i32 as isize)).as_mut_ptr() as *const libc::c_void,
-        (width * 4 as i32) as libc::c_ulong,
+        (width * 4 as i32) as usize,
     );
     (*grid).heightLodError = crate::src::renderergl1::tr_main::ri
         .Malloc
@@ -595,7 +595,7 @@ pub unsafe extern "C" fn R_CreateSurfaceGridMesh(
     crate::stdlib::memcpy(
         (*grid).heightLodError as *mut libc::c_void,
         (*errorTable.offset(1 as i32 as isize)).as_mut_ptr() as *const libc::c_void,
-        (height * 4 as i32) as libc::c_ulong,
+        (height * 4 as i32) as usize,
     );
     (*grid).width = width;
     (*grid).height = height;

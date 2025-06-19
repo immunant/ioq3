@@ -273,8 +273,8 @@ pub unsafe extern "C" fn AAS_AlternativeRouteGoals(
     crate::stdlib::memset(
         midrangeareas as *mut libc::c_void,
         0 as i32,
-        (crate::src::botlib::be_aas_main::aasworld.numareas as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<midrangearea_t>() as libc::c_ulong),
+        (crate::src::botlib::be_aas_main::aasworld.numareas as usize)
+            .wrapping_mul(::std::mem::size_of::<midrangearea_t>() as usize),
     );
     numaltroutegoals = 0 as i32;
     //
@@ -478,15 +478,15 @@ pub unsafe extern "C" fn AAS_InitAlternativeRouting() {
         crate::src::botlib::l_memory::FreeMemory(midrangeareas as *mut libc::c_void);
     }
     midrangeareas = crate::src::botlib::l_memory::GetMemory(
-        (crate::src::botlib::be_aas_main::aasworld.numareas as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<midrangearea_t>() as libc::c_ulong),
+        (crate::src::botlib::be_aas_main::aasworld.numareas as usize)
+            .wrapping_mul(::std::mem::size_of::<midrangearea_t>() as usize),
     ) as *mut midrangearea_t;
     if !clusterareas.is_null() {
         crate::src::botlib::l_memory::FreeMemory(clusterareas as *mut libc::c_void);
     }
     clusterareas = crate::src::botlib::l_memory::GetMemory(
-        (crate::src::botlib::be_aas_main::aasworld.numareas as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+        (crate::src::botlib::be_aas_main::aasworld.numareas as usize)
+            .wrapping_mul(::std::mem::size_of::<i32>() as usize),
     ) as *mut i32;
 }
 /*

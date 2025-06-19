@@ -8,7 +8,7 @@ pub mod macros_h {
     ) -> crate::opus_types_h::opus_int32 {
         return if in32 != 0 {
             (32 as i32)
-                - (::std::mem::size_of::<u32>() as libc::c_ulong as i32 * 8 as i32
+                - (::std::mem::size_of::<u32>() as usize as i32 * 8 as i32
                     - (in32 as u32).leading_zeros() as i32)
         } else {
             32 as i32
@@ -223,7 +223,7 @@ pub unsafe extern "C" fn silk_VAD_Init(mut psSilk_VAD: *mut silk_VAD_state) -> i
     crate::stdlib::memset(
         psSilk_VAD as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<silk_VAD_state>() as libc::c_ulong,
+        ::std::mem::size_of::<silk_VAD_state>() as usize,
     );
     /* init noise levels */
     /* Initialize array with approx pink noise levels (psd proportional to inverse of frequency) */
@@ -501,8 +501,8 @@ pub unsafe extern "C" fn silk_VAD_GetSA_Q8_c(
     X_offset[3 as i32 as usize] = X_offset[2 as i32 as usize] + decimated_framelength2;
     let mut fresh0 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_int16>() as libc::c_ulong)
-            .wrapping_mul((X_offset[3 as i32 as usize] + decimated_framelength1) as libc::c_ulong)
+        (::std::mem::size_of::<opus_int16>() as usize)
+            .wrapping_mul((X_offset[3 as i32 as usize] + decimated_framelength1) as usize)
             as usize,
     );
     X = fresh0.as_mut_ptr() as *mut opus_int16;

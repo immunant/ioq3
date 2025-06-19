@@ -59,7 +59,7 @@ pub unsafe extern "C" fn res0_free_info(mut i: *mut libc::c_void) {
         crate::stdlib::memset(
             info as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<vorbis_info_residue0>() as libc::c_ulong,
+            ::std::mem::size_of::<vorbis_info_residue0>() as usize,
         );
         libc::free(info as *mut libc::c_void);
     };
@@ -110,7 +110,7 @@ pub unsafe extern "C" fn res0_free_look(mut i: *mut libc::c_void) {
         crate::stdlib::memset(
             look as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<vorbis_look_residue0>() as libc::c_ulong,
+            ::std::mem::size_of::<vorbis_look_residue0>() as usize,
         );
         libc::free(look as *mut libc::c_void);
     };
@@ -132,27 +132,27 @@ pub unsafe extern "C" fn res0_pack(mut vr: *mut libc::c_void, mut opb: *mut oggp
     let mut acc: i32 = 0 as i32;
     oggpack_write(
         opb as *mut oggpack_buffer,
-        (*info).begin as libc::c_ulong,
+        (*info).begin as usize,
         24 as i32,
     );
     oggpack_write(
         opb as *mut oggpack_buffer,
-        (*info).end as libc::c_ulong,
+        (*info).end as usize,
         24 as i32,
     );
     oggpack_write(
         opb as *mut oggpack_buffer,
-        ((*info).grouping - 1 as i32) as libc::c_ulong,
+        ((*info).grouping - 1 as i32) as usize,
         24 as i32,
     );
     oggpack_write(
         opb as *mut oggpack_buffer,
-        ((*info).partitions - 1 as i32) as libc::c_ulong,
+        ((*info).partitions - 1 as i32) as usize,
         6 as i32,
     );
     oggpack_write(
         opb as *mut oggpack_buffer,
-        (*info).groupbook as libc::c_ulong,
+        (*info).groupbook as usize,
         8 as i32,
     );
     /* secondstages is a bitmask; as encoding progresses pass by pass, a
@@ -167,23 +167,23 @@ pub unsafe extern "C" fn res0_pack(mut vr: *mut libc::c_void, mut opb: *mut oggp
             /* yes, this is a minor hack due to not thinking ahead */
             oggpack_write(
                 opb as *mut oggpack_buffer,
-                (*info).secondstages[j as usize] as libc::c_ulong,
+                (*info).secondstages[j as usize] as usize,
                 3 as i32,
             );
             oggpack_write(
                 opb as *mut oggpack_buffer,
-                1 as i32 as libc::c_ulong,
+                1 as i32 as usize,
                 1 as i32,
             );
             oggpack_write(
                 opb as *mut oggpack_buffer,
-                ((*info).secondstages[j as usize] >> 3 as i32) as libc::c_ulong,
+                ((*info).secondstages[j as usize] >> 3 as i32) as usize,
                 5 as i32,
             );
         } else {
             oggpack_write(
                 opb as *mut oggpack_buffer,
-                (*info).secondstages[j as usize] as libc::c_ulong,
+                (*info).secondstages[j as usize] as usize,
                 4 as i32,
             );
         }
@@ -194,7 +194,7 @@ pub unsafe extern "C" fn res0_pack(mut vr: *mut libc::c_void, mut opb: *mut oggp
     while j < acc {
         oggpack_write(
             opb as *mut oggpack_buffer,
-            (*info).booklist[j as usize] as libc::c_ulong,
+            (*info).booklist[j as usize] as usize,
             8 as i32,
         );
         j += 1
@@ -211,8 +211,8 @@ pub unsafe extern "C" fn res0_unpack(
     let mut j: i32 = 0;
     let mut acc: i32 = 0 as i32;
     let mut info: *mut vorbis_info_residue0 = crate::stdlib::calloc(
-        1 as i32 as libc::c_ulong,
-        ::std::mem::size_of::<vorbis_info_residue0>() as libc::c_ulong,
+        1 as i32 as usize,
+        ::std::mem::size_of::<vorbis_info_residue0>() as usize,
     ) as *mut vorbis_info_residue0;
     let mut ci: *mut codec_setup_info = (*vi).codec_setup as *mut codec_setup_info;
     (*info).begin = oggpack_read(opb as *mut oggpack_buffer, 24 as i32);
@@ -344,8 +344,8 @@ pub unsafe extern "C" fn res0_look(
 ) -> *mut libc::c_void {
     let mut info: *mut vorbis_info_residue0 = vr as *mut vorbis_info_residue0;
     let mut look: *mut vorbis_look_residue0 = crate::stdlib::calloc(
-        1 as i32 as libc::c_ulong,
-        ::std::mem::size_of::<vorbis_look_residue0>() as libc::c_ulong,
+        1 as i32 as usize,
+        ::std::mem::size_of::<vorbis_look_residue0>() as usize,
     ) as *mut vorbis_look_residue0;
     let mut ci: *mut codec_setup_info = (*(*vd).vi).codec_setup as *mut codec_setup_info;
     let mut j: i32 = 0;
@@ -359,8 +359,8 @@ pub unsafe extern "C" fn res0_look(
     (*look).phrasebook = (*ci).fullbooks.offset((*info).groupbook as isize);
     dim = (*(*look).phrasebook).dim as i32;
     (*look).partbooks = crate::stdlib::calloc(
-        (*look).parts as libc::c_ulong,
-        ::std::mem::size_of::<*mut *mut codebook>() as libc::c_ulong,
+        (*look).parts as usize,
+        ::std::mem::size_of::<*mut *mut codebook>() as usize,
     ) as *mut *mut *mut codebook;
     j = 0 as i32;
     while j < (*look).parts {
@@ -373,8 +373,8 @@ pub unsafe extern "C" fn res0_look(
             }
             let ref mut fresh0 = *(*look).partbooks.offset(j as isize);
             *fresh0 = crate::stdlib::calloc(
-                stages as libc::c_ulong,
-                ::std::mem::size_of::<*mut codebook>() as libc::c_ulong,
+                stages as usize,
+                ::std::mem::size_of::<*mut codebook>() as usize,
             ) as *mut *mut codebook;
             k = 0 as i32;
             while k < stages {
@@ -400,8 +400,8 @@ pub unsafe extern "C" fn res0_look(
     }
     (*look).stages = maxstage;
     (*look).decodemap = crate::stdlib::malloc(
-        ((*look).partvals as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<*mut i32>() as libc::c_ulong),
+        ((*look).partvals as usize)
+            .wrapping_mul(::std::mem::size_of::<*mut i32>() as usize),
     ) as *mut *mut i32;
     j = 0 as i32;
     while j < (*look).partvals {
@@ -409,7 +409,7 @@ pub unsafe extern "C" fn res0_look(
         let mut mult: isize = ((*look).partvals / (*look).parts) as isize;
         let ref mut fresh3 = *(*look).decodemap.offset(j as isize);
         *fresh3 = crate::stdlib::malloc(
-            (dim as libc::c_ulong).wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+            (dim as usize).wrapping_mul(::std::mem::size_of::<i32>() as usize),
         ) as *mut i32;
         k = 0 as i32;
         while k < dim {
@@ -502,7 +502,7 @@ unsafe extern "C" fn local_book_besterror(mut book: *mut codebook, mut a: *mut i
                     crate::stdlib::memcpy(
                         p.as_mut_ptr() as *mut libc::c_void,
                         e.as_mut_ptr() as *const libc::c_void,
-                        ::std::mem::size_of::<[i32; 8]>() as libc::c_ulong,
+                        ::std::mem::size_of::<[i32; 8]>() as usize,
                     );
                     best = this;
                     index = i
@@ -571,7 +571,7 @@ unsafe extern "C" fn _01class(
     let mut partvals: i32 = n / samples_per_partition;
     let mut partword: *mut *mut isize = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
         vb as *mut vorbis_block,
-        (ch as libc::c_ulong).wrapping_mul(::std::mem::size_of::<*mut isize>() as libc::c_ulong)
+        (ch as usize).wrapping_mul(::std::mem::size_of::<*mut isize>() as usize)
             as isize,
     ) as *mut *mut isize;
     let mut scale: f32 = (100.0f64 / samples_per_partition as f64) as f32;
@@ -583,14 +583,14 @@ unsafe extern "C" fn _01class(
         let ref mut fresh6 = *partword.offset(i as isize);
         *fresh6 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
             vb as *mut vorbis_block,
-            ((n / samples_per_partition) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<isize>() as libc::c_ulong) as isize,
+            ((n / samples_per_partition) as usize)
+                .wrapping_mul(::std::mem::size_of::<isize>() as usize) as isize,
         ) as *mut isize;
         crate::stdlib::memset(
             *partword.offset(i as isize) as *mut libc::c_void,
             0 as i32,
-            ((n / samples_per_partition) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<isize>() as libc::c_ulong),
+            ((n / samples_per_partition) as usize)
+                .wrapping_mul(::std::mem::size_of::<isize>() as usize),
         );
         i += 1
     }
@@ -656,18 +656,18 @@ unsafe extern "C" fn _2class(
     let mut partvals: i32 = n / samples_per_partition;
     let mut partword: *mut *mut isize = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
         vb as *mut vorbis_block,
-        ::std::mem::size_of::<*mut isize>() as libc::c_ulong as isize,
+        ::std::mem::size_of::<*mut isize>() as usize as isize,
     ) as *mut *mut isize;
     let ref mut fresh7 = *partword.offset(0 as i32 as isize);
     *fresh7 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
         vb as *mut vorbis_block,
-        (partvals as libc::c_ulong).wrapping_mul(::std::mem::size_of::<isize>() as libc::c_ulong)
+        (partvals as usize).wrapping_mul(::std::mem::size_of::<isize>() as usize)
             as isize,
     ) as *mut isize;
     crate::stdlib::memset(
         *partword.offset(0 as i32 as isize) as *mut libc::c_void,
         0 as i32,
-        (partvals as libc::c_ulong).wrapping_mul(::std::mem::size_of::<isize>() as libc::c_ulong),
+        (partvals as usize).wrapping_mul(::std::mem::size_of::<isize>() as usize),
     );
     i = 0 as i32 as isize;
     l = (*info).begin / ch as isize;
@@ -732,12 +732,12 @@ unsafe extern "C" fn _01forward(
     crate::stdlib::memset(
         resbits.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[isize; 128]>() as libc::c_ulong,
+        ::std::mem::size_of::<[isize; 128]>() as usize,
     );
     crate::stdlib::memset(
         resvals.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[isize; 128]>() as libc::c_ulong,
+        ::std::mem::size_of::<[isize; 128]>() as usize,
     );
     /* we code the partition words for each channel, then the residual
     words for a partition per channel until we've written all the
@@ -852,8 +852,8 @@ unsafe extern "C" fn _01inverse(
         let mut partwords: i32 = (partvals + partitions_per_word - 1 as i32) / partitions_per_word;
         let mut fresh8 = ::std::vec::from_elem(
             0,
-            (ch as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<*mut *mut i32>() as libc::c_ulong)
+            (ch as usize)
+                .wrapping_mul(::std::mem::size_of::<*mut *mut i32>() as usize)
                 as usize,
         );
         let mut partword: *mut *mut *mut i32 = fresh8.as_mut_ptr() as *mut *mut *mut i32;
@@ -862,8 +862,8 @@ unsafe extern "C" fn _01inverse(
             let ref mut fresh9 = *partword.offset(j as isize);
             *fresh9 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
                 vb as *mut vorbis_block,
-                (partwords as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<*mut i32>() as libc::c_ulong)
+                (partwords as usize)
+                    .wrapping_mul(::std::mem::size_of::<*mut i32>() as usize)
                     as isize,
             ) as *mut *mut i32;
             j += 1
@@ -1138,8 +1138,8 @@ pub unsafe extern "C" fn res2_forward(
     /* ugly; reallocs for each coupling pass :-( */
     let mut work: *mut i32 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
         vb as *mut vorbis_block,
-        ((ch as isize * n) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong) as isize,
+        ((ch as isize * n) as usize)
+            .wrapping_mul(::std::mem::size_of::<i32>() as usize) as isize,
     ) as *mut i32;
     i = 0 as i32 as isize;
     while i < ch as isize {
@@ -1209,8 +1209,8 @@ pub unsafe extern "C" fn res2_inverse(
         let mut partword: *mut *mut i32 =
             crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
                 vb as *mut vorbis_block,
-                (partwords as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<*mut i32>() as libc::c_ulong)
+                (partwords as usize)
+                    .wrapping_mul(::std::mem::size_of::<*mut i32>() as usize)
                     as isize,
             ) as *mut *mut i32;
         i = 0 as i32 as isize;

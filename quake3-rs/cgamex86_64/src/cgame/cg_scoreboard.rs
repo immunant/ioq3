@@ -288,7 +288,7 @@ unsafe extern "C" fn CG_DrawClientScore(
         } else if (*ci).handicap < 100 as i32 {
             Com_sprintf(
                 string.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
                 b"%i\x00" as *const u8 as *const libc::c_char,
                 (*ci).handicap,
             );
@@ -307,7 +307,7 @@ unsafe extern "C" fn CG_DrawClientScore(
         if cgs.gametype as u32 == GT_TOURNAMENT as i32 as u32 {
             Com_sprintf(
                 string.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
                 b"%i/%i\x00" as *const u8 as *const libc::c_char,
                 (*ci).wins,
                 (*ci).losses,
@@ -352,14 +352,14 @@ unsafe extern "C" fn CG_DrawClientScore(
     if (*score).ping == -(1 as i32) {
         Com_sprintf(
             string.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
             b" connecting    %s\x00" as *const u8 as *const libc::c_char,
             (*ci).name.as_mut_ptr(),
         );
     } else if (*ci).team as u32 == TEAM_SPECTATOR as i32 as u32 {
         Com_sprintf(
             string.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
             b" SPECT %3i %4i %s\x00" as *const u8 as *const libc::c_char,
             (*score).ping,
             (*score).time,
@@ -368,7 +368,7 @@ unsafe extern "C" fn CG_DrawClientScore(
     } else {
         Com_sprintf(
             string.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
             b"%5i %4i %4i %s\x00" as *const u8 as *const libc::c_char,
             (*score).score,
             (*score).ping,
@@ -1061,8 +1061,8 @@ pub unsafe extern "C" fn CG_DrawTourneyScoreboard() {
             cg.teamScores[0 as i32 as usize],
         );
         CG_DrawStringExt(
-            (632 as i32 as libc::c_ulong)
-                .wrapping_sub((32 as i32 as libc::c_ulong).wrapping_mul(crate::stdlib::strlen(s)))
+            (632 as i32 as usize)
+                .wrapping_sub((32 as i32 as usize).wrapping_mul(crate::stdlib::strlen(s)))
                 as i32,
             y,
             s,
@@ -1090,8 +1090,8 @@ pub unsafe extern "C" fn CG_DrawTourneyScoreboard() {
             cg.teamScores[1 as i32 as usize],
         );
         CG_DrawStringExt(
-            (632 as i32 as libc::c_ulong)
-                .wrapping_sub((32 as i32 as libc::c_ulong).wrapping_mul(crate::stdlib::strlen(s)))
+            (632 as i32 as usize)
+                .wrapping_sub((32 as i32 as usize).wrapping_mul(crate::stdlib::strlen(s)))
                 as i32,
             y,
             s,
@@ -1127,8 +1127,8 @@ pub unsafe extern "C" fn CG_DrawTourneyScoreboard() {
                         (*ci).score,
                     );
                     CG_DrawStringExt(
-                        (632 as i32 as libc::c_ulong).wrapping_sub(
-                            (32 as i32 as libc::c_ulong).wrapping_mul(crate::stdlib::strlen(s)),
+                        (632 as i32 as usize).wrapping_sub(
+                            (32 as i32 as usize).wrapping_mul(crate::stdlib::strlen(s)),
                         ) as i32,
                         y,
                         s,

@@ -910,7 +910,7 @@ unsafe extern "C" fn PlayerModel_UpdateModel() {
     crate::stdlib::memset(
         &mut s_playermodel.playerinfo as *mut playerInfo_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<playerInfo_t>() as libc::c_ulong,
+        ::std::mem::size_of::<playerInfo_t>() as usize,
     );
     viewangles[1 as i32 as usize] = (180 as i32 - 30 as i32) as vec_t;
     viewangles[0 as i32 as usize] = 0 as i32 as vec_t;
@@ -1114,7 +1114,7 @@ unsafe extern "C" fn PlayerModel_PicEvent(mut ptr: *mut libc::c_void, mut event:
         Q_strupr(s_playermodel.modelname.string);
         // separate the skin name
         maxlen = crate::stdlib::strlen(pdest.offset(5 as i32 as isize))
-            .wrapping_add(1 as i32 as libc::c_ulong) as i32;
+            .wrapping_add(1 as i32 as usize) as i32;
         if maxlen > 16 as i32 {
             maxlen = 16 as i32
         }
@@ -1216,7 +1216,7 @@ unsafe extern "C" fn PlayerModel_BuildList() {
                 COM_StripExtension(
                     fileptr,
                     skinname.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
                 );
                 // look for icon_????
                 if Q_stricmpn(
@@ -1229,7 +1229,7 @@ unsafe extern "C" fn PlayerModel_BuildList() {
                     s_playermodel.nummodels = s_playermodel.nummodels + 1;
                     Com_sprintf(
                         s_playermodel.modelnames[fresh0 as usize].as_mut_ptr(),
-                        ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong as i32,
+                        ::std::mem::size_of::<[libc::c_char; 128]>() as usize as i32,
                         b"models/players/%s/%s\x00" as *const u8 as *const libc::c_char,
                         dirptr,
                         skinname.as_mut_ptr(),
@@ -1324,7 +1324,7 @@ unsafe extern "C" fn PlayerModel_SetMenuItems() {
                 Q_strupr(s_playermodel.modelname.string);
                 // separate the skin name
                 maxlen = crate::stdlib::strlen(pdest.offset(5 as i32 as isize))
-                    .wrapping_add(1 as i32 as libc::c_ulong) as i32;
+                    .wrapping_add(1 as i32 as usize) as i32;
                 if maxlen > 16 as i32 {
                     maxlen = 16 as i32
                 }
@@ -1359,7 +1359,7 @@ unsafe extern "C" fn PlayerModel_MenuInit() {
     crate::stdlib::memset(
         &mut s_playermodel as *mut playermodel_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<playermodel_t>() as libc::c_ulong,
+        ::std::mem::size_of::<playermodel_t>() as usize,
     );
     PlayerModel_Cache();
     s_playermodel.menu.key =

@@ -2192,7 +2192,7 @@ unsafe extern "C" fn GLimp_DetectAvailableModes() {
     }
     modes = SDL_calloc(
         numSDLModes as size_t,
-        ::std::mem::size_of::<SDL_Rect>() as libc::c_ulong,
+        ::std::mem::size_of::<SDL_Rect>() as usize,
     ) as *mut SDL_Rect;
     if modes.is_null() {
         crate::src::renderergl1::tr_main::ri
@@ -2247,7 +2247,7 @@ unsafe extern "C" fn GLimp_DetectAvailableModes() {
         qsort(
             modes as *mut libc::c_void,
             numModes as size_t,
-            ::std::mem::size_of::<SDL_Rect>() as libc::c_ulong,
+            ::std::mem::size_of::<SDL_Rect>() as usize,
             Some(
                 GLimp_CompareModes
                     as unsafe extern "C" fn(_: *const libc::c_void, _: *const libc::c_void) -> i32,
@@ -2262,13 +2262,13 @@ unsafe extern "C" fn GLimp_DetectAvailableModes() {
             (*modes.offset(i as isize)).h,
         );
         if crate::stdlib::strlen(newModeString)
-            < (::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32
-                as libc::c_ulong)
+            < (::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32
+                as usize)
                 .wrapping_sub(crate::stdlib::strlen(buf.as_mut_ptr()))
         {
             Q_strcat(
                 buf.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
                 newModeString,
             );
         } else {
@@ -2284,7 +2284,7 @@ unsafe extern "C" fn GLimp_DetectAvailableModes() {
         i += 1
     }
     if *buf.as_mut_ptr() != 0 {
-        buf[crate::stdlib::strlen(buf.as_mut_ptr()).wrapping_sub(1 as i32 as libc::c_ulong)
+        buf[crate::stdlib::strlen(buf.as_mut_ptr()).wrapping_sub(1 as i32 as usize)
             as usize] = 0 as i32 as libc::c_char;
         crate::src::renderergl1::tr_main::ri
             .Printf
@@ -6297,7 +6297,7 @@ unsafe extern "C" fn GLimp_SetMode(
         crate::stdlib::memset(
             &mut desktopMode as *mut SDL_DisplayMode as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<SDL_DisplayMode>() as libc::c_ulong,
+            ::std::mem::size_of::<SDL_DisplayMode>() as usize,
         );
         crate::src::renderergl1::tr_main::ri
             .Printf
@@ -7350,7 +7350,7 @@ pub unsafe extern "C" fn GLimp_Init(mut fixedFunction: qboolean) {
             .as_mut_ptr(),
         qglGetString.expect("non-null function pointer")(0x1f00 as i32 as GLenum)
             as *mut libc::c_char,
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     Q_strncpyz(
         crate::src::renderergl1::tr_init::glConfig
@@ -7358,7 +7358,7 @@ pub unsafe extern "C" fn GLimp_Init(mut fixedFunction: qboolean) {
             .as_mut_ptr(),
         qglGetString.expect("non-null function pointer")(0x1f01 as i32 as GLenum)
             as *mut libc::c_char,
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     if *crate::src::renderergl1::tr_init::glConfig
         .renderer_string
@@ -7369,7 +7369,7 @@ pub unsafe extern "C" fn GLimp_Init(mut fixedFunction: qboolean) {
                 .renderer_string
                 .as_mut_ptr(),
         )
-        .wrapping_sub(1 as i32 as libc::c_ulong)
+        .wrapping_sub(1 as i32 as usize)
             as usize] as i32
             == '\n' as i32
     {
@@ -7378,7 +7378,7 @@ pub unsafe extern "C" fn GLimp_Init(mut fixedFunction: qboolean) {
                 .renderer_string
                 .as_mut_ptr(),
         )
-        .wrapping_sub(1 as i32 as libc::c_ulong)
+        .wrapping_sub(1 as i32 as usize)
             as usize] = 0 as i32 as libc::c_char
     }
     Q_strncpyz(
@@ -7387,7 +7387,7 @@ pub unsafe extern "C" fn GLimp_Init(mut fixedFunction: qboolean) {
             .as_mut_ptr(),
         qglGetString.expect("non-null function pointer")(0x1f02 as i32 as GLenum)
             as *mut libc::c_char,
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     // manually create extension list if using OpenGL 3
     if qglGetStringi.is_some() {
@@ -7408,8 +7408,8 @@ pub unsafe extern "C" fn GLimp_Init(mut fixedFunction: qboolean) {
                 i as GLuint,
             ) as *mut libc::c_char;
             extensionLength = crate::stdlib::strlen(extension) as i32;
-            if (listLength + extensionLength + 1 as i32) as libc::c_ulong
-                >= ::std::mem::size_of::<[libc::c_char; 8192]>() as libc::c_ulong
+            if (listLength + extensionLength + 1 as i32) as usize
+                >= ::std::mem::size_of::<[libc::c_char; 8192]>() as usize
             {
                 break;
             }
@@ -7418,7 +7418,7 @@ pub unsafe extern "C" fn GLimp_Init(mut fixedFunction: qboolean) {
                     crate::src::renderergl1::tr_init::glConfig
                         .extensions_string
                         .as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 8192]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 8192]>() as usize as i32,
                     b" \x00" as *const u8 as *const libc::c_char,
                 );
                 listLength += 1
@@ -7427,7 +7427,7 @@ pub unsafe extern "C" fn GLimp_Init(mut fixedFunction: qboolean) {
                 crate::src::renderergl1::tr_init::glConfig
                     .extensions_string
                     .as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 8192]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 8192]>() as usize as i32,
                 extension,
             );
             listLength += extensionLength;
@@ -7440,7 +7440,7 @@ pub unsafe extern "C" fn GLimp_Init(mut fixedFunction: qboolean) {
                 .as_mut_ptr(),
             qglGetString.expect("non-null function pointer")(0x1f03 as i32 as GLenum)
                 as *mut libc::c_char,
-            ::std::mem::size_of::<[libc::c_char; 8192]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 8192]>() as usize as i32,
         );
     }
     // initialize extensions

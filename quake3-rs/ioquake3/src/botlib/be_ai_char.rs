@@ -283,7 +283,7 @@ pub unsafe extern "C" fn BotDefaultCharacteristics(
                             .value
                             .string,
                     )
-                    .wrapping_add(1 as i32 as libc::c_ulong),
+                    .wrapping_add(1 as i32 as usize),
                 ) as *mut libc::c_char;
                 libc::strcpy(
                     (*(*ch).c.as_mut_ptr().offset(i as isize)).value.string,
@@ -343,9 +343,9 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
         return 0 as *mut bot_character_t;
     }
     ch = crate::src::botlib::l_memory::GetClearedMemory(
-        (::std::mem::size_of::<bot_character_t>() as libc::c_ulong).wrapping_add(
-            (80 as i32 as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<bot_characteristic_t>() as libc::c_ulong),
+        (::std::mem::size_of::<bot_character_t>() as usize).wrapping_add(
+            (80 as i32 as usize)
+                .wrapping_mul(::std::mem::size_of::<bot_characteristic_t>() as usize),
         ),
     ) as *mut bot_character_t;
     libc::strcpy((*ch).filename.as_mut_ptr(), charfile);
@@ -384,7 +384,7 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
                 crate::src::botlib::l_memory::FreeMemory(ch as *mut libc::c_void);
                 return 0 as *mut bot_character_t;
             }
-            if skill < 0 as i32 || token.intvalue == skill as libc::c_ulong {
+            if skill < 0 as i32 || token.intvalue == skill as usize {
                 //if it's the correct skill
                 foundcharacter = qtrue as i32; //end if
                 (*ch).skill = token.intvalue as f32;
@@ -470,7 +470,7 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
                             (*(*ch).c.as_mut_ptr().offset(index as isize)).value.string;
                         *fresh1 = crate::src::botlib::l_memory::GetMemory(
                             crate::stdlib::strlen(token.string.as_mut_ptr())
-                                .wrapping_add(1 as i32 as libc::c_ulong),
+                                .wrapping_add(1 as i32 as usize),
                         ) as *mut libc::c_char;
                         libc::strcpy(
                             (*(*ch).c.as_mut_ptr().offset(index as isize)).value.string,
@@ -852,9 +852,9 @@ pub unsafe extern "C" fn BotInterpolateCharacters(
         return 0 as i32;
     }
     out = crate::src::botlib::l_memory::GetClearedMemory(
-        (::std::mem::size_of::<bot_character_t>() as libc::c_ulong).wrapping_add(
-            (80 as i32 as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<bot_characteristic_t>() as libc::c_ulong),
+        (::std::mem::size_of::<bot_character_t>() as usize).wrapping_add(
+            (80 as i32 as usize)
+                .wrapping_mul(::std::mem::size_of::<bot_characteristic_t>() as usize),
         ),
     ) as *mut bot_character_t;
     (*out).skill = desiredskill;
@@ -882,7 +882,7 @@ pub unsafe extern "C" fn BotInterpolateCharacters(
             let ref mut fresh2 = (*(*out).c.as_mut_ptr().offset(i as isize)).value.string;
             *fresh2 = crate::src::botlib::l_memory::GetMemory(
                 crate::stdlib::strlen((*(*ch1).c.as_mut_ptr().offset(i as isize)).value.string)
-                    .wrapping_add(1 as i32 as libc::c_ulong),
+                    .wrapping_add(1 as i32 as usize),
             ) as *mut libc::c_char;
             libc::strcpy(
                 (*(*out).c.as_mut_ptr().offset(i as isize)).value.string,
@@ -1234,7 +1234,7 @@ pub unsafe extern "C" fn Characteristic_String(
         crate::stdlib::strncpy(
             buf,
             (*(*ch).c.as_mut_ptr().offset(index as isize)).value.string,
-            (size - 1 as i32) as libc::c_ulong,
+            (size - 1 as i32) as usize,
         ); //end if
         *buf.offset((size - 1 as i32) as isize) = '\u{0}' as i32 as libc::c_char
     } else {

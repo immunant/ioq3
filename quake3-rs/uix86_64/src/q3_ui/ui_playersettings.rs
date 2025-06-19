@@ -847,7 +847,7 @@ unsafe extern "C" fn PlayerSettings_DrawName(mut self_0: *mut libc::c_void) {
     Q_strncpyz(
         name.as_mut_ptr(),
         (*f).field.buffer.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 32]>() as usize as i32,
     );
     Q_CleanStr(name.as_mut_ptr());
     UI_DrawProportionalString(
@@ -946,7 +946,7 @@ unsafe extern "C" fn PlayerSettings_DrawPlayer(mut self_0: *mut libc::c_void) {
     trap_Cvar_VariableStringBuffer(
         b"model\x00" as *const u8 as *const libc::c_char,
         buf.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     if libc::strcmp(buf.as_mut_ptr(), s_playersettings.playerModel.as_mut_ptr()) != 0 as i32 {
         UI_PlayerInfo_SetModel(
@@ -1029,7 +1029,7 @@ unsafe extern "C" fn PlayerSettings_SetMenuItems() {
     Q_strncpyz(
         s_playersettings.name.field.buffer.as_mut_ptr(),
         UI_Cvar_VariableString(b"name\x00" as *const u8 as *const libc::c_char),
-        ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
     );
     // effects color
     c = (trap_Cvar_VariableValue(b"color1\x00" as *const u8 as *const libc::c_char)
@@ -1042,7 +1042,7 @@ unsafe extern "C" fn PlayerSettings_SetMenuItems() {
     crate::stdlib::memset(
         &mut s_playersettings.playerinfo as *mut playerInfo_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<playerInfo_t>() as libc::c_ulong,
+        ::std::mem::size_of::<playerInfo_t>() as usize,
     );
     viewangles[1 as i32 as usize] = (180 as i32 - 30 as i32) as vec_t;
     viewangles[0 as i32 as usize] = 0 as i32 as vec_t;
@@ -1110,7 +1110,7 @@ unsafe extern "C" fn PlayerSettings_MenuInit() {
     crate::stdlib::memset(
         &mut s_playersettings as *mut playersettings_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<playersettings_t>() as libc::c_ulong,
+        ::std::mem::size_of::<playersettings_t>() as usize,
     );
     PlayerSettings_Cache();
     s_playersettings.menu.key =

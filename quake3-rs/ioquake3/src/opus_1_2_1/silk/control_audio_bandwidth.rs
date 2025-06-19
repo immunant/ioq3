@@ -184,7 +184,7 @@ pub unsafe extern "C" fn silk_control_audio_bandwidth(
                     crate::stdlib::memset(
                         (*psEncC).sLP.In_LP_State.as_mut_ptr() as *mut libc::c_void,
                         0 as i32,
-                        ::std::mem::size_of::<[opus_int32; 2]>() as libc::c_ulong,
+                        ::std::mem::size_of::<[opus_int32; 2]>() as usize,
                     );
                 }
                 if (*encControl).opusCanSwitch != 0 {
@@ -224,7 +224,7 @@ pub unsafe extern "C" fn silk_control_audio_bandwidth(
                     crate::stdlib::memset(
                         (*psEncC).sLP.In_LP_State.as_mut_ptr() as *mut libc::c_void,
                         0 as i32,
-                        ::std::mem::size_of::<[opus_int32; 2]>() as libc::c_ulong,
+                        ::std::mem::size_of::<[opus_int32; 2]>() as usize,
                     );
                     /* Direction: up */
                     (*psEncC).sLP.mode = 1 as i32

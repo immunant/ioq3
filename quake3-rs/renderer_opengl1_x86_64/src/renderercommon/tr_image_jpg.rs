@@ -490,13 +490,13 @@ pub unsafe extern "C" fn R_LoadJPG(
     jpeg_CreateDecompress(
         &mut cinfo as *mut _ as *mut jpeg_decompress_struct,
         80 as i32,
-        ::std::mem::size_of::<jpeg_decompress_struct>() as libc::c_ulong,
+        ::std::mem::size_of::<jpeg_decompress_struct>() as usize,
     );
     /* Step 2: specify data source (eg, a file) */
     jpeg_mem_src(
         &mut cinfo as *mut _ as *mut jpeg_decompress_struct,
         fbuffer.b,
-        len as libc::c_ulong,
+        len as usize,
     );
     /* Step 3: read file parameters with jpeg_read_header() */
     jpeg_read_header(
@@ -704,7 +704,7 @@ unsafe extern "C" fn jpegDest(mut cinfo: j_compress_ptr, mut outfile: *mut byte,
         .expect("non-null function pointer")(
             cinfo as j_common_ptr,
             0 as i32,
-            ::std::mem::size_of::<my_destination_mgr>() as libc::c_ulong,
+            ::std::mem::size_of::<my_destination_mgr>() as usize,
         ) as *mut jpeg_destination_mgr
     }
     dest = (*cinfo).dest as my_dest_ptr;
@@ -865,7 +865,7 @@ pub unsafe extern "C" fn RE_SaveJPGToBuffer(
     jpeg_CreateCompress(
         &mut cinfo as *mut _ as *mut jpeg_compress_struct,
         80 as i32,
-        ::std::mem::size_of::<jpeg_compress_struct>() as libc::c_ulong,
+        ::std::mem::size_of::<jpeg_compress_struct>() as usize,
     );
     /* Step 2: specify data destination (eg, a file) */
     /* Note: steps 2 and 3 can be done in either order. */
@@ -913,7 +913,7 @@ pub unsafe extern "C" fn RE_SaveJPGToBuffer(
     /* Step 6: Finish compression */
     jpeg_finish_compress(&mut cinfo as *mut _ as *mut jpeg_compress_struct);
     dest = cinfo.dest as my_dest_ptr;
-    outcount = ((*dest).size as libc::c_ulong).wrapping_sub((*dest).pub_0.free_in_buffer);
+    outcount = ((*dest).size as usize).wrapping_sub((*dest).pub_0.free_in_buffer);
     /* Step 7: release JPEG compression object */
     jpeg_destroy_compress(&mut cinfo as *mut _ as *mut jpeg_compress_struct);
     /* And we're done! */

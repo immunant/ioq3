@@ -303,7 +303,7 @@ unsafe extern "C" fn jpeg_make_c_derived_tbl(
         .expect("non-null function pointer")(
             cinfo as j_common_ptr,
             1 as i32,
-            ::std::mem::size_of::<c_derived_tbl>() as libc::c_ulong,
+            ::std::mem::size_of::<c_derived_tbl>() as usize,
         ) as *mut c_derived_tbl
     }
     dtbl = *pdtbl;
@@ -372,7 +372,7 @@ unsafe extern "C" fn jpeg_make_c_derived_tbl(
     crate::stdlib::memset(
         (*dtbl).ehufsi.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong,
+        ::std::mem::size_of::<[libc::c_char; 256]>() as usize,
     );
     /* This is also a convenient place to check for out-of-range
      * and duplicated VAL entries.  We allow 0..255 for AC symbols
@@ -484,7 +484,7 @@ unsafe extern "C" fn emit_bits_s(
         (*state).next_output_byte = (*state).next_output_byte.offset(1);
         *fresh3 = c as JOCTET;
         (*state).free_in_buffer = (*state).free_in_buffer.wrapping_sub(1);
-        if (*state).free_in_buffer == 0 as i32 as libc::c_ulong {
+        if (*state).free_in_buffer == 0 as i32 as usize {
             if dump_buffer_s(state) == 0 {
                 return 0 as i32;
             }
@@ -495,7 +495,7 @@ unsafe extern "C" fn emit_bits_s(
             (*state).next_output_byte = (*state).next_output_byte.offset(1);
             *fresh4 = 0 as i32 as JOCTET;
             (*state).free_in_buffer = (*state).free_in_buffer.wrapping_sub(1);
-            if (*state).free_in_buffer == 0 as i32 as libc::c_ulong {
+            if (*state).free_in_buffer == 0 as i32 as usize {
                 if dump_buffer_s(state) == 0 {
                     return 0 as i32;
                 }
@@ -540,7 +540,7 @@ unsafe extern "C" fn emit_bits_e(mut entropy: huff_entropy_ptr, mut code: u32, m
         (*entropy).next_output_byte = (*entropy).next_output_byte.offset(1);
         *fresh5 = c as JOCTET;
         (*entropy).free_in_buffer = (*entropy).free_in_buffer.wrapping_sub(1);
-        if (*entropy).free_in_buffer == 0 as i32 as libc::c_ulong {
+        if (*entropy).free_in_buffer == 0 as i32 as usize {
             dump_buffer_e(entropy);
         }
         if c == 0xff as i32 {
@@ -549,7 +549,7 @@ unsafe extern "C" fn emit_bits_e(mut entropy: huff_entropy_ptr, mut code: u32, m
             (*entropy).next_output_byte = (*entropy).next_output_byte.offset(1);
             *fresh6 = 0 as i32 as JOCTET;
             (*entropy).free_in_buffer = (*entropy).free_in_buffer.wrapping_sub(1);
-            if (*entropy).free_in_buffer == 0 as i32 as libc::c_ulong {
+            if (*entropy).free_in_buffer == 0 as i32 as usize {
                 dump_buffer_e(entropy);
             }
         }
@@ -688,7 +688,7 @@ unsafe extern "C" fn emit_restart_s(
     (*state).next_output_byte = (*state).next_output_byte.offset(1);
     *fresh9 = 0xff as i32 as JOCTET;
     (*state).free_in_buffer = (*state).free_in_buffer.wrapping_sub(1);
-    if (*state).free_in_buffer == 0 as i32 as libc::c_ulong {
+    if (*state).free_in_buffer == 0 as i32 as usize {
         if dump_buffer_s(state) == 0 {
             return 0 as i32;
         }
@@ -697,7 +697,7 @@ unsafe extern "C" fn emit_restart_s(
     (*state).next_output_byte = (*state).next_output_byte.offset(1);
     *fresh10 = (0xd0 as i32 + restart_num) as JOCTET;
     (*state).free_in_buffer = (*state).free_in_buffer.wrapping_sub(1);
-    if (*state).free_in_buffer == 0 as i32 as libc::c_ulong {
+    if (*state).free_in_buffer == 0 as i32 as usize {
         if dump_buffer_s(state) == 0 {
             return 0 as i32;
         }
@@ -721,14 +721,14 @@ unsafe extern "C" fn emit_restart_e(mut entropy: huff_entropy_ptr, mut restart_n
         (*entropy).next_output_byte = (*entropy).next_output_byte.offset(1);
         *fresh11 = 0xff as i32 as JOCTET;
         (*entropy).free_in_buffer = (*entropy).free_in_buffer.wrapping_sub(1);
-        if (*entropy).free_in_buffer == 0 as i32 as libc::c_ulong {
+        if (*entropy).free_in_buffer == 0 as i32 as usize {
             dump_buffer_e(entropy);
         }
         let fresh12 = (*entropy).next_output_byte;
         (*entropy).next_output_byte = (*entropy).next_output_byte.offset(1);
         *fresh12 = (0xd0 as i32 + restart_num) as JOCTET;
         (*entropy).free_in_buffer = (*entropy).free_in_buffer.wrapping_sub(1);
-        if (*entropy).free_in_buffer == 0 as i32 as libc::c_ulong {
+        if (*entropy).free_in_buffer == 0 as i32 as usize {
             dump_buffer_e(entropy);
         }
     }
@@ -1582,12 +1582,12 @@ unsafe extern "C" fn jpeg_gen_optimal_table(
     crate::stdlib::memset(
         bits.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[UINT8; 33]>() as libc::c_ulong,
+        ::std::mem::size_of::<[UINT8; 33]>() as usize,
     ); /* init links to empty */
     crate::stdlib::memset(
         codesize.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[i32; 257]>() as libc::c_ulong,
+        ::std::mem::size_of::<[i32; 257]>() as usize,
     ); /* make sure 256 has a nonzero count */
     i = 0 as i32;
     while i < 257 as i32 {
@@ -1703,7 +1703,7 @@ unsafe extern "C" fn jpeg_gen_optimal_table(
     crate::stdlib::memcpy(
         (*htbl).bits.as_mut_ptr() as *mut libc::c_void,
         bits.as_mut_ptr() as *const libc::c_void,
-        ::std::mem::size_of::<[UINT8; 17]>() as libc::c_ulong,
+        ::std::mem::size_of::<[UINT8; 17]>() as usize,
     );
     /* Return a list of the symbols sorted by code length */
     /* It's not real clear to me why we don't need to consider the codelength
@@ -1747,12 +1747,12 @@ unsafe extern "C" fn finish_pass_gather(mut cinfo: j_compress_ptr) {
     crate::stdlib::memset(
         did_dc.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[boolean; 4]>() as libc::c_ulong,
+        ::std::mem::size_of::<[boolean; 4]>() as usize,
     );
     crate::stdlib::memset(
         did_ac.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[boolean; 4]>() as libc::c_ulong,
+        ::std::mem::size_of::<[boolean; 4]>() as usize,
     );
     ci = 0 as i32;
     while ci < (*cinfo).comps_in_scan {
@@ -1845,8 +1845,8 @@ unsafe extern "C" fn start_pass_huff(mut cinfo: j_compress_ptr, mut gather_stati
                 .expect("non-null function pointer")(
                     cinfo as j_common_ptr,
                     1 as i32,
-                    (1000 as i32 as libc::c_ulong)
-                        .wrapping_mul(::std::mem::size_of::<libc::c_char>() as libc::c_ulong),
+                    (1000 as i32 as usize)
+                        .wrapping_mul(::std::mem::size_of::<libc::c_char>() as usize),
                 ) as *mut libc::c_char
             }
         }
@@ -1895,15 +1895,15 @@ unsafe extern "C" fn start_pass_huff(mut cinfo: j_compress_ptr, mut gather_stati
                     .expect("non-null function pointer")(
                         cinfo as j_common_ptr,
                         1 as i32,
-                        (257 as i32 as libc::c_ulong)
-                            .wrapping_mul(::std::mem::size_of::<isize>() as libc::c_ulong),
+                        (257 as i32 as usize)
+                            .wrapping_mul(::std::mem::size_of::<isize>() as usize),
                     ) as *mut isize
                 }
                 crate::stdlib::memset(
                     (*entropy).dc_count_ptrs[tbl as usize] as *mut libc::c_void,
                     0 as i32,
-                    (257 as i32 as libc::c_ulong)
-                        .wrapping_mul(::std::mem::size_of::<isize>() as libc::c_ulong),
+                    (257 as i32 as usize)
+                        .wrapping_mul(::std::mem::size_of::<isize>() as usize),
                 );
             } else {
                 /* Compute derived values for Huffman tables */
@@ -1941,15 +1941,15 @@ unsafe extern "C" fn start_pass_huff(mut cinfo: j_compress_ptr, mut gather_stati
                     .expect("non-null function pointer")(
                         cinfo as j_common_ptr,
                         1 as i32,
-                        (257 as i32 as libc::c_ulong)
-                            .wrapping_mul(::std::mem::size_of::<isize>() as libc::c_ulong),
+                        (257 as i32 as usize)
+                            .wrapping_mul(::std::mem::size_of::<isize>() as usize),
                     ) as *mut isize
                 }
                 crate::stdlib::memset(
                     (*entropy).ac_count_ptrs[tbl as usize] as *mut libc::c_void,
                     0 as i32,
-                    (257 as i32 as libc::c_ulong)
-                        .wrapping_mul(::std::mem::size_of::<isize>() as libc::c_ulong),
+                    (257 as i32 as usize)
+                        .wrapping_mul(::std::mem::size_of::<isize>() as usize),
                 );
             } else {
                 jpeg_make_c_derived_tbl(
@@ -1985,7 +1985,7 @@ pub unsafe extern "C" fn jinit_huff_encoder(mut cinfo: j_compress_ptr) {
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         1 as i32,
-        ::std::mem::size_of::<huff_entropy_encoder>() as libc::c_ulong,
+        ::std::mem::size_of::<huff_entropy_encoder>() as usize,
     ) as huff_entropy_ptr;
     (*cinfo).entropy = entropy as *mut jpeg_entropy_encoder;
     (*entropy).pub_0.start_pass =

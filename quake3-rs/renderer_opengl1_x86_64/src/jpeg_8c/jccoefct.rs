@@ -376,8 +376,8 @@ unsafe extern "C" fn compress_data(
                             /* Create some dummy blocks at the right edge of the image. */
                             jzero_far(
                                 (*coef).MCU_buffer[(blkn + blockcnt) as usize] as *mut libc::c_void,
-                                (((*compptr).MCU_width - blockcnt) as libc::c_ulong)
-                                    .wrapping_mul(::std::mem::size_of::<JBLOCK>() as libc::c_ulong),
+                                (((*compptr).MCU_width - blockcnt) as usize)
+                                    .wrapping_mul(::std::mem::size_of::<JBLOCK>() as usize),
                             );
                             bi = blockcnt;
                             while bi < (*compptr).MCU_width {
@@ -394,8 +394,8 @@ unsafe extern "C" fn compress_data(
                         /* Create a row of dummy blocks at the bottom of the image. */
                         jzero_far(
                             (*coef).MCU_buffer[blkn as usize] as *mut libc::c_void,
-                            ((*compptr).MCU_width as libc::c_ulong)
-                                .wrapping_mul(::std::mem::size_of::<JBLOCK>() as libc::c_ulong),
+                            ((*compptr).MCU_width as usize)
+                                .wrapping_mul(::std::mem::size_of::<JBLOCK>() as usize),
                         );
                         bi = 0 as i32;
                         while bi < (*compptr).MCU_width {
@@ -542,8 +542,8 @@ unsafe extern "C" fn compress_first_pass(
                 thisblockrow = thisblockrow.offset(blocks_across as isize); /* => first dummy block */
                 jzero_far(
                     thisblockrow as *mut libc::c_void,
-                    (ndummy as libc::c_ulong)
-                        .wrapping_mul(::std::mem::size_of::<JBLOCK>() as libc::c_ulong),
+                    (ndummy as usize)
+                        .wrapping_mul(::std::mem::size_of::<JBLOCK>() as usize),
                 );
                 lastDC = (*thisblockrow.offset(-(1 as i32) as isize))[0 as i32 as usize];
                 bi = 0 as i32;
@@ -569,8 +569,8 @@ unsafe extern "C" fn compress_first_pass(
                 lastblockrow = *buffer.offset((block_row - 1 as i32) as isize);
                 jzero_far(
                     thisblockrow as *mut libc::c_void,
-                    (blocks_across as libc::c_ulong)
-                        .wrapping_mul(::std::mem::size_of::<JBLOCK>() as libc::c_ulong),
+                    (blocks_across as usize)
+                        .wrapping_mul(::std::mem::size_of::<JBLOCK>() as usize),
                 );
                 MCUindex = 0 as i32 as JDIMENSION;
                 while MCUindex < MCUs_across {
@@ -718,7 +718,7 @@ pub unsafe extern "C" fn jinit_c_coef_controller(
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         1 as i32,
-        ::std::mem::size_of::<my_coef_controller>() as libc::c_ulong,
+        ::std::mem::size_of::<my_coef_controller>() as usize,
     ) as my_coef_ptr;
     (*cinfo).coef = coef as *mut jpeg_c_coef_controller;
     (*coef).pub_0.start_pass =
@@ -766,8 +766,8 @@ pub unsafe extern "C" fn jinit_c_coef_controller(
         .expect("non-null function pointer")(
             cinfo as j_common_ptr,
             1 as i32,
-            (10 as i32 as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<JBLOCK>() as libc::c_ulong),
+            (10 as i32 as usize)
+                .wrapping_mul(::std::mem::size_of::<JBLOCK>() as usize),
         ) as JBLOCKROW;
         i = 0 as i32;
         while i < 10 as i32 {

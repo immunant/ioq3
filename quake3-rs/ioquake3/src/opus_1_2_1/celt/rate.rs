@@ -581,22 +581,22 @@ pub unsafe extern "C" fn compute_allocation(
     }
     let mut fresh2 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(len as libc::c_ulong) as usize,
+        (::std::mem::size_of::<i32>() as usize).wrapping_mul(len as usize) as usize,
     );
     bits1 = fresh2.as_mut_ptr() as *mut i32;
     let mut fresh3 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(len as libc::c_ulong) as usize,
+        (::std::mem::size_of::<i32>() as usize).wrapping_mul(len as usize) as usize,
     );
     bits2 = fresh3.as_mut_ptr() as *mut i32;
     let mut fresh4 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(len as libc::c_ulong) as usize,
+        (::std::mem::size_of::<i32>() as usize).wrapping_mul(len as usize) as usize,
     );
     thresh = fresh4.as_mut_ptr() as *mut i32;
     let mut fresh5 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(len as libc::c_ulong) as usize,
+        (::std::mem::size_of::<i32>() as usize).wrapping_mul(len as usize) as usize,
     );
     trim_offset = fresh5.as_mut_ptr() as *mut i32;
     j = start;

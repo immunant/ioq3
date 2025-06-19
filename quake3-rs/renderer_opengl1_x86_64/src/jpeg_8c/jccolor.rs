@@ -229,8 +229,8 @@ unsafe extern "C" fn rgb_ycc_start(mut cinfo: j_compress_ptr) {
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         1 as i32,
-        ((8 as i32 * (255 as i32 + 1 as i32)) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<INT32>() as libc::c_ulong),
+        ((8 as i32 * (255 as i32 + 1 as i32)) as usize)
+            .wrapping_mul(::std::mem::size_of::<INT32>() as usize),
     ) as *mut INT32;
     (*cconvert).rgb_ycc_tab = rgb_ycc_tab;
     i = 0 as i32 as INT32;
@@ -561,7 +561,7 @@ pub unsafe extern "C" fn jinit_color_converter(mut cinfo: j_compress_ptr) {
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         1 as i32,
-        ::std::mem::size_of::<my_color_converter>() as libc::c_ulong,
+        ::std::mem::size_of::<my_color_converter>() as usize,
     ) as my_cconvert_ptr;
     (*cinfo).cconvert = cconvert as *mut jpeg_color_converter;
     /* set start_pass to null method until we find out differently */

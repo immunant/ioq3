@@ -156,7 +156,7 @@ pub unsafe extern "C" fn R_LoadPCX(
     if raw.b.is_null() || len < 0 as i32 {
         return;
     }
-    if (len as u32 as libc::c_ulong) < ::std::mem::size_of::<pcx_t>() as libc::c_ulong {
+    if (len as u32 as usize) < ::std::mem::size_of::<pcx_t>() as usize {
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(

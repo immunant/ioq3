@@ -325,7 +325,7 @@ pub unsafe extern "C" fn DeathmatchScoreboardMessage(mut ent: *mut gentity_t) {
         };
         Com_sprintf(
             entry.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
             b" %i %i %i %i %i %i %i %i %i %i %i %i %i %i\x00" as *const u8 as *const libc::c_char,
             level.sortedClients[i as usize],
             (*cl).ps.persistant[PERS_SCORE as i32 as usize],
@@ -345,8 +345,8 @@ pub unsafe extern "C" fn DeathmatchScoreboardMessage(mut ent: *mut gentity_t) {
             (*cl).ps.persistant[PERS_CAPTURES as i32 as usize],
         );
         j = crate::stdlib::strlen(entry.as_mut_ptr()) as i32;
-        if (stringlength + j) as libc::c_ulong
-            >= ::std::mem::size_of::<[libc::c_char; 1000]>() as libc::c_ulong
+        if (stringlength + j) as usize
+            >= ::std::mem::size_of::<[libc::c_char; 1000]>() as usize
         {
             break;
         }
@@ -427,7 +427,7 @@ pub unsafe extern "C" fn ConcatArgs(mut start: i32) -> *mut libc::c_char {
         trap_Argv(
             i,
             arg.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
         );
         tlen = crate::stdlib::strlen(arg.as_mut_ptr()) as i32;
         if len + tlen >= 1024 as i32 - 1 as i32 {
@@ -436,7 +436,7 @@ pub unsafe extern "C" fn ConcatArgs(mut start: i32) -> *mut libc::c_char {
         crate::stdlib::memcpy(
             line.as_mut_ptr().offset(len as isize) as *mut libc::c_void,
             arg.as_mut_ptr() as *const libc::c_void,
-            tlen as libc::c_ulong,
+            tlen as usize,
         );
         len += tlen;
         if i != c - 1 as i32 {
@@ -514,7 +514,7 @@ pub unsafe extern "C" fn ClientNumberFromString(
                 Q_strncpyz(
                     cleanName.as_mut_ptr(),
                     (*cl).pers.netname.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
                 );
                 Q_CleanStr(cleanName.as_mut_ptr());
                 if Q_stricmp(cleanName.as_mut_ptr(), s) == 0 {
@@ -655,7 +655,7 @@ pub unsafe extern "C" fn Cmd_Give_f(mut ent: *mut gentity_t) {
         crate::stdlib::memset(
             &mut trace as *mut trace_t as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<trace_t>() as libc::c_ulong,
+            ::std::mem::size_of::<trace_t>() as usize,
         );
         Touch_Item(
             it_ent as *mut gentity_s,
@@ -812,13 +812,13 @@ pub unsafe extern "C" fn Cmd_TeamTask_f(mut ent: *mut gentity_t) {
     trap_Argv(
         1 as i32,
         arg.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     task = atoi(arg.as_mut_ptr());
     trap_GetUserinfo(
         client,
         userinfo.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     Info_SetValueForKey(
         userinfo.as_mut_ptr(),
@@ -1151,7 +1151,7 @@ pub unsafe extern "C" fn Cmd_Team_f(mut ent: *mut gentity_t) {
     trap_Argv(
         1 as i32,
         s.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     SetTeam(ent, s.as_mut_ptr());
     (*(*ent).client).switchTeamTime = level.time + 5000 as i32;
@@ -1175,7 +1175,7 @@ pub unsafe extern "C" fn Cmd_Follow_f(mut ent: *mut gentity_t) {
     trap_Argv(
         1 as i32,
         arg.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     i = ClientNumberFromString(ent, arg.as_mut_ptr(), qtrue, qtrue);
     if i == -(1 as i32) {
@@ -1347,13 +1347,13 @@ pub unsafe extern "C" fn G_Say(
             if crate::src::game::g_team::Team_GetLocationMsg(
                 ent as *mut gentity_s,
                 location.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             ) as u64
                 != 0
             {
                 Com_sprintf(
                     name.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
                     b"\x19(%s%c%c\x19) (%s)\x19: \x00" as *const u8 as *const libc::c_char,
                     (*(*ent).client).pers.netname.as_mut_ptr(),
                     '^' as i32,
@@ -1363,7 +1363,7 @@ pub unsafe extern "C" fn G_Say(
             } else {
                 Com_sprintf(
                     name.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
                     b"\x19(%s%c%c\x19)\x19: \x00" as *const u8 as *const libc::c_char,
                     (*(*ent).client).pers.netname.as_mut_ptr(),
                     '^' as i32,
@@ -1382,13 +1382,13 @@ pub unsafe extern "C" fn G_Say(
                 && crate::src::game::g_team::Team_GetLocationMsg(
                     ent as *mut gentity_s,
                     location.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
                 ) as u32
                     != 0
             {
                 Com_sprintf(
                     name.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
                     b"\x19[%s%c%c\x19] (%s)\x19: \x00" as *const u8 as *const libc::c_char,
                     (*(*ent).client).pers.netname.as_mut_ptr(),
                     '^' as i32,
@@ -1398,7 +1398,7 @@ pub unsafe extern "C" fn G_Say(
             } else {
                 Com_sprintf(
                     name.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
                     b"\x19[%s%c%c\x19]\x19: \x00" as *const u8 as *const libc::c_char,
                     (*(*ent).client).pers.netname.as_mut_ptr(),
                     '^' as i32,
@@ -1415,7 +1415,7 @@ pub unsafe extern "C" fn G_Say(
             );
             Com_sprintf(
                 name.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
                 b"%s%c%c\x19: \x00" as *const u8 as *const libc::c_char,
                 (*(*ent).client).pers.netname.as_mut_ptr(),
                 '^' as i32,
@@ -1427,7 +1427,7 @@ pub unsafe extern "C" fn G_Say(
     Q_strncpyz(
         text.as_mut_ptr(),
         chatText,
-        ::std::mem::size_of::<[libc::c_char; 150]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 150]>() as usize as i32,
     );
     if !target.is_null() {
         G_SayTo(
@@ -1517,7 +1517,7 @@ unsafe extern "C" fn Cmd_Tell_f(mut ent: *mut gentity_t) {
     trap_Argv(
         1 as i32,
         arg.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     targetNum = ClientNumberFromString(ent, arg.as_mut_ptr(), qtrue, qtrue);
     if targetNum == -(1 as i32) {
@@ -1576,7 +1576,7 @@ pub unsafe extern "C" fn Cmd_GameCommand_f(mut ent: *mut gentity_t) {
     trap_Argv(
         2 as i32,
         arg.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     order = atoi(arg.as_mut_ptr());
     if order < 0 as i32 || order >= numgc_orders {
@@ -1593,7 +1593,7 @@ pub unsafe extern "C" fn Cmd_GameCommand_f(mut ent: *mut gentity_t) {
     trap_Argv(
         1 as i32,
         arg.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     targetNum = ClientNumberFromString(ent, arg.as_mut_ptr(), qtrue, qtrue);
     if targetNum == -(1 as i32) {
@@ -1689,12 +1689,12 @@ pub unsafe extern "C" fn Cmd_CallVote_f(mut ent: *mut gentity_t) {
     trap_Argv(
         1 as i32,
         arg1.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     trap_Argv(
         2 as i32,
         arg2.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     // check for command separators in arg2
     c = arg2.as_mut_ptr();
@@ -1828,14 +1828,14 @@ pub unsafe extern "C" fn Cmd_CallVote_f(mut ent: *mut gentity_t) {
         }
         Com_sprintf(
             level.voteString.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
             b"%s %d\x00" as *const u8 as *const libc::c_char,
             arg1.as_mut_ptr(),
             i,
         );
         Com_sprintf(
             level.voteDisplayString.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
             b"%s %s\x00" as *const u8 as *const libc::c_char,
             arg1.as_mut_ptr(),
             gameNames[i as usize],
@@ -1851,12 +1851,12 @@ pub unsafe extern "C" fn Cmd_CallVote_f(mut ent: *mut gentity_t) {
         trap_Cvar_VariableStringBuffer(
             b"nextmap\x00" as *const u8 as *const libc::c_char,
             s.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
         );
         if *s.as_mut_ptr() != 0 {
             Com_sprintf(
                 level.voteString.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
                 b"%s %s; set nextmap \"%s\"\x00" as *const u8 as *const libc::c_char,
                 arg1.as_mut_ptr(),
                 arg2.as_mut_ptr(),
@@ -1865,7 +1865,7 @@ pub unsafe extern "C" fn Cmd_CallVote_f(mut ent: *mut gentity_t) {
         } else {
             Com_sprintf(
                 level.voteString.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
                 b"%s %s\x00" as *const u8 as *const libc::c_char,
                 arg1.as_mut_ptr(),
                 arg2.as_mut_ptr(),
@@ -1873,7 +1873,7 @@ pub unsafe extern "C" fn Cmd_CallVote_f(mut ent: *mut gentity_t) {
         }
         Com_sprintf(
             level.voteDisplayString.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
             b"%s\x00" as *const u8 as *const libc::c_char,
             level.voteString.as_mut_ptr(),
         );
@@ -1886,7 +1886,7 @@ pub unsafe extern "C" fn Cmd_CallVote_f(mut ent: *mut gentity_t) {
         trap_Cvar_VariableStringBuffer(
             b"nextmap\x00" as *const u8 as *const libc::c_char,
             s_0.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
         );
         if *s_0.as_mut_ptr() == 0 {
             trap_SendServerCommand(
@@ -1897,12 +1897,12 @@ pub unsafe extern "C" fn Cmd_CallVote_f(mut ent: *mut gentity_t) {
         }
         Com_sprintf(
             level.voteString.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
             b"vstr nextmap\x00" as *const u8 as *const libc::c_char,
         );
         Com_sprintf(
             level.voteDisplayString.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
             b"%s\x00" as *const u8 as *const libc::c_char,
             level.voteString.as_mut_ptr(),
         );
@@ -1939,13 +1939,13 @@ pub unsafe extern "C" fn Cmd_CallVote_f(mut ent: *mut gentity_t) {
         }
         Com_sprintf(
             level.voteString.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
             b"clientkick %d\x00" as *const u8 as *const libc::c_char,
             i,
         );
         Com_sprintf(
             level.voteDisplayString.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
             b"kick %s\x00" as *const u8 as *const libc::c_char,
             (*level.clients.offset(i as isize))
                 .pers
@@ -1955,14 +1955,14 @@ pub unsafe extern "C" fn Cmd_CallVote_f(mut ent: *mut gentity_t) {
     } else {
         Com_sprintf(
             level.voteString.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
             b"%s \"%s\"\x00" as *const u8 as *const libc::c_char,
             arg1.as_mut_ptr(),
             arg2.as_mut_ptr(),
         );
         Com_sprintf(
             level.voteDisplayString.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
             b"%s\x00" as *const u8 as *const libc::c_char,
             level.voteString.as_mut_ptr(),
         );
@@ -2047,11 +2047,11 @@ pub unsafe extern "C" fn Cmd_Vote_f(mut ent: *mut gentity_t) {
     trap_Argv(
         1 as i32,
         msg.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     if ({
         let mut __res: i32 = 0;
-        if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong > 1 as i32 as libc::c_ulong {
+        if ::std::mem::size_of::<libc::c_char>() as usize > 1 as i32 as usize {
             if 0 != 0 {
                 let mut __c: i32 = msg[0 as i32 as usize] as i32;
                 __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -2147,7 +2147,7 @@ pub unsafe extern "C" fn Cmd_CallTeamVote_f(mut ent: *mut gentity_t) {
     trap_Argv(
         1 as i32,
         arg1.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     arg2[0 as i32 as usize] = '\u{0}' as i32 as libc::c_char;
     i = 2 as i32;
@@ -2161,10 +2161,10 @@ pub unsafe extern "C" fn Cmd_CallTeamVote_f(mut ent: *mut gentity_t) {
         trap_Argv(
             i,
             &mut *arg2.as_mut_ptr().offset((crate::stdlib::strlen
-                as unsafe extern "C" fn(_: *const libc::c_char) -> libc::c_ulong)(
+                as unsafe extern "C" fn(_: *const libc::c_char) -> usize)(
                 arg2.as_mut_ptr()
             ) as isize),
-            (::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong)
+            (::std::mem::size_of::<[libc::c_char; 1024]>() as usize)
                 .wrapping_sub(crate::stdlib::strlen(arg2.as_mut_ptr())) as i32,
         );
         i += 1
@@ -2235,7 +2235,7 @@ pub unsafe extern "C" fn Cmd_CallTeamVote_f(mut ent: *mut gentity_t) {
                 Q_strncpyz(
                     leader.as_mut_ptr(),
                     arg2.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 36]>() as usize as i32,
                 );
                 Q_CleanStr(leader.as_mut_ptr());
                 i = 0 as i32;
@@ -2252,7 +2252,7 @@ pub unsafe extern "C" fn Cmd_CallTeamVote_f(mut ent: *mut gentity_t) {
                                     .pers
                                     .netname
                                     .as_mut_ptr(),
-                                ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
+                                ::std::mem::size_of::<[libc::c_char; 36]>() as usize as i32,
                             );
                             Q_CleanStr(netname.as_mut_ptr());
                             if Q_stricmp(netname.as_mut_ptr(), leader.as_mut_ptr()) == 0 {
@@ -2278,7 +2278,7 @@ pub unsafe extern "C" fn Cmd_CallTeamVote_f(mut ent: *mut gentity_t) {
         }
         Com_sprintf(
             arg2.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
             b"%d\x00" as *const u8 as *const libc::c_char,
             i,
         );
@@ -2296,7 +2296,7 @@ pub unsafe extern "C" fn Cmd_CallTeamVote_f(mut ent: *mut gentity_t) {
     }
     Com_sprintf(
         level.teamVoteString[cs_offset as usize].as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
         b"%s %s\x00" as *const u8 as *const libc::c_char,
         arg1.as_mut_ptr(),
         arg2.as_mut_ptr(),
@@ -2406,11 +2406,11 @@ pub unsafe extern "C" fn Cmd_TeamVote_f(mut ent: *mut gentity_t) {
     trap_Argv(
         1 as i32,
         msg.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     if ({
         let mut __res: i32 = 0;
-        if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong > 1 as i32 as libc::c_ulong {
+        if ::std::mem::size_of::<libc::c_char>() as usize > 1 as i32 as usize {
             if 0 != 0 {
                 let mut __c: i32 = msg[0 as i32 as usize] as i32;
                 __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -2484,7 +2484,7 @@ pub unsafe extern "C" fn Cmd_SetViewpos_f(mut ent: *mut gentity_t) {
         trap_Argv(
             i + 1 as i32,
             buffer.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
         );
         origin[i as usize] = atof(buffer.as_mut_ptr()) as vec_t;
         i += 1
@@ -2492,7 +2492,7 @@ pub unsafe extern "C" fn Cmd_SetViewpos_f(mut ent: *mut gentity_t) {
     trap_Argv(
         4 as i32,
         buffer.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     angles[1 as i32 as usize] = atof(buffer.as_mut_ptr()) as vec_t;
     TeleportPlayer(
@@ -2759,7 +2759,7 @@ pub unsafe extern "C" fn ClientCommand(mut clientNum: i32) {
             trap_Argv(
                 0 as i32,
                 cmd.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
             );
             if Q_stricmp(
                 cmd.as_mut_ptr(),
@@ -2775,7 +2775,7 @@ pub unsafe extern "C" fn ClientCommand(mut clientNum: i32) {
     trap_Argv(
         0 as i32,
         cmd.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     if Q_stricmp(
         cmd.as_mut_ptr(),
@@ -2940,8 +2940,8 @@ pub unsafe extern "C" fn ClientCommand(mut clientNum: i32) {
     };
 }
 unsafe extern "C" fn run_static_initializers() {
-    numgc_orders = (::std::mem::size_of::<[*mut libc::c_char; 7]>() as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<*mut libc::c_char>() as libc::c_ulong)
+    numgc_orders = (::std::mem::size_of::<[*mut libc::c_char; 7]>() as usize)
+        .wrapping_div(::std::mem::size_of::<*mut libc::c_char>() as usize)
         as i32
 }
 #[used]

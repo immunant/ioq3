@@ -100,7 +100,7 @@ pub mod zconf_h {
 
     pub type uInt = u32;
 
-    pub type uLong = libc::c_ulong;
+    pub type uLong = usize;
 
     pub type Bytef = crate::zconf_h::Byte;
 
@@ -2137,7 +2137,7 @@ pub mod tr_public_h {
 pub mod stddef_h {
     pub type ptrdiff_t = isize;
 
-    pub type size_t = libc::c_ulong;
+    pub type size_t = usize;
 
     pub type wchar_t = i32;
 }
@@ -3022,7 +3022,7 @@ pub mod botlib_h {
             unsafe extern "C" fn(
                 _: *mut libc::c_char,
                 _: *mut crate::src::botlib::be_ai_chat::bot_match_s,
-                _: libc::c_ulong,
+                _: usize,
             ) -> i32,
         >,
         pub BotMatchVariable: Option<
@@ -3035,7 +3035,7 @@ pub mod botlib_h {
         >,
         pub UnifyWhiteSpaces: Option<unsafe extern "C" fn(_: *mut libc::c_char) -> ()>,
         pub BotReplaceSynonyms:
-            Option<unsafe extern "C" fn(_: *mut libc::c_char, _: libc::c_ulong) -> ()>,
+            Option<unsafe extern "C" fn(_: *mut libc::c_char, _: usize) -> ()>,
         pub BotLoadChatFile:
             Option<unsafe extern "C" fn(_: i32, _: *mut libc::c_char, _: *mut libc::c_char) -> i32>,
         pub BotSetChatGender: Option<unsafe extern "C" fn(_: i32, _: i32) -> ()>,
@@ -6414,7 +6414,7 @@ pub mod qcommon_h {
         pub ip: [crate::src::qcommon::q_shared::byte; 4],
         pub ip6: [crate::src::qcommon::q_shared::byte; 16],
         pub port: u16,
-        pub scope_id: libc::c_ulong,
+        pub scope_id: usize,
     }
 
     #[repr(C)]
@@ -7207,7 +7207,7 @@ pub mod stdlib {
         #[no_mangle]
         pub fn snprintf(
             _: *mut libc::c_char,
-            _: libc::c_ulong,
+            _: usize,
             _: *const libc::c_char,
             _: ...
         ) -> i32;
@@ -7215,7 +7215,7 @@ pub mod stdlib {
         #[no_mangle]
         pub fn vsnprintf(
             _: *mut libc::c_char,
-            _: libc::c_ulong,
+            _: usize,
             _: *const libc::c_char,
             _: ::std::ffi::VaList,
         ) -> i32;
@@ -7226,18 +7226,18 @@ pub mod stdlib {
         #[no_mangle]
         pub fn fread(
             _: *mut libc::c_void,
-            _: libc::c_ulong,
-            _: libc::c_ulong,
+            _: usize,
+            _: usize,
             _: *mut crate::stdlib::FILE,
-        ) -> libc::c_ulong;
+        ) -> usize;
 
         #[no_mangle]
         pub fn fwrite(
             _: *const libc::c_void,
-            _: libc::c_ulong,
-            _: libc::c_ulong,
+            _: usize,
+            _: usize,
             _: *mut crate::stdlib::FILE,
-        ) -> libc::c_ulong;
+        ) -> usize;
 
         #[no_mangle]
         pub fn fseek(__stream: *mut crate::stdlib::FILE, __off: isize, __whence: i32) -> i32;
@@ -7264,13 +7264,13 @@ pub mod stdlib {
         #[no_mangle]
         pub fn fileno(__stream: *mut crate::stdlib::FILE) -> i32;
         #[no_mangle]
-        pub fn malloc(_: libc::c_ulong) -> *mut libc::c_void;
+        pub fn malloc(_: usize) -> *mut libc::c_void;
 
         #[no_mangle]
-        pub fn calloc(_: libc::c_ulong, _: libc::c_ulong) -> *mut libc::c_void;
+        pub fn calloc(_: usize, _: usize) -> *mut libc::c_void;
 
         #[no_mangle]
-        pub fn realloc(_: *mut libc::c_void, _: libc::c_ulong) -> *mut libc::c_void;
+        pub fn realloc(_: *mut libc::c_void, _: usize) -> *mut libc::c_void;
 
         #[no_mangle]
         pub fn qsort(
@@ -7290,47 +7290,47 @@ pub mod stdlib {
         pub fn memcpy(
             _: *mut libc::c_void,
             _: *const libc::c_void,
-            _: libc::c_ulong,
+            _: usize,
         ) -> *mut libc::c_void;
 
         #[no_mangle]
         pub fn memmove(
             _: *mut libc::c_void,
             _: *const libc::c_void,
-            _: libc::c_ulong,
+            _: usize,
         ) -> *mut libc::c_void;
 
         #[no_mangle]
-        pub fn memset(_: *mut libc::c_void, _: i32, _: libc::c_ulong) -> *mut libc::c_void;
+        pub fn memset(_: *mut libc::c_void, _: i32, _: usize) -> *mut libc::c_void;
 
         #[no_mangle]
-        pub fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> i32;
+        pub fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: usize) -> i32;
 
         #[no_mangle]
-        pub fn memchr(_: *const libc::c_void, _: i32, _: libc::c_ulong) -> *mut libc::c_void;
+        pub fn memchr(_: *const libc::c_void, _: i32, _: usize) -> *mut libc::c_void;
 
         #[no_mangle]
         pub fn strncpy(
             _: *mut libc::c_char,
             _: *const libc::c_char,
-            _: libc::c_ulong,
+            _: usize,
         ) -> *mut libc::c_char;
 
         #[no_mangle]
         pub fn strncat(
             _: *mut libc::c_char,
             _: *const libc::c_char,
-            _: libc::c_ulong,
+            _: usize,
         ) -> *mut libc::c_char;
 
         #[no_mangle]
-        pub fn strncmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> i32;
+        pub fn strncmp(_: *const libc::c_char, _: *const libc::c_char, _: usize) -> i32;
 
         #[no_mangle]
-        pub fn strspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
+        pub fn strspn(_: *const libc::c_char, _: *const libc::c_char) -> usize;
 
         #[no_mangle]
-        pub fn strlen(_: *const libc::c_char) -> libc::c_ulong;
+        pub fn strlen(_: *const libc::c_char) -> usize;
         pub type _IO_marker;
 
         pub type _IO_codecvt;
@@ -9058,7 +9058,7 @@ pub mod stdlib {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct __sigset_t {
-        pub __val: [libc::c_ulong; 16],
+        pub __val: [usize; 16],
     }
     pub type clock_t = crate::stdlib::__clock_t;
     pub const _ISupper: crate::be_aas_h::C2RustUnnamed_0 = 256;
@@ -9248,7 +9248,7 @@ pub mod stdlib {
     pub struct sockaddr_storage {
         pub ss_family: crate::stdlib::sa_family_t,
         pub __ss_padding: [libc::c_char; 118],
-        pub __ss_align: libc::c_ulong,
+        pub __ss_align: usize,
     }
     pub type __socket_type = u32;
 
@@ -9366,17 +9366,17 @@ pub mod stdlib {
 
     pub type __int64_t = isize;
 
-    pub type __dev_t = libc::c_ulong;
+    pub type __dev_t = usize;
 
     pub type __uid_t = u32;
 
     pub type __gid_t = u32;
 
-    pub type __ino_t = libc::c_ulong;
+    pub type __ino_t = usize;
 
     pub type __mode_t = u32;
 
-    pub type __nlink_t = libc::c_ulong;
+    pub type __nlink_t = usize;
 
     pub type __off_t = isize;
 

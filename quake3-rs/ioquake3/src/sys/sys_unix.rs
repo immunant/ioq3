@@ -12474,7 +12474,7 @@ pub unsafe extern "C" fn Sys_DefaultHomePath() -> *mut libc::c_char {
         if !p.is_null() {
             Com_sprintf(
                 homePath.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
                 b"%s%c\x00" as *const u8 as *const libc::c_char,
                 p,
                 '/' as i32,
@@ -12482,13 +12482,13 @@ pub unsafe extern "C" fn Sys_DefaultHomePath() -> *mut libc::c_char {
             if *(*com_homepath).string.offset(0 as i32 as isize) != 0 {
                 Q_strcat(
                     homePath.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
                     (*com_homepath).string,
                 );
             } else {
                 Q_strcat(
                     homePath.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
                     b".q3a\x00" as *const u8 as *const libc::c_char,
                 );
             }
@@ -12529,7 +12529,7 @@ timeval:tv_sec is an int:
 assuming this wraps every 0x7fffffff - ~68 years since the Epoch (1970) - we're safe till 2038 */
 #[no_mangle]
 
-pub static mut sys_timeBase: libc::c_ulong = 0 as i32 as libc::c_ulong;
+pub static mut sys_timeBase: usize = 0 as i32 as usize;
 /* current time in ms, using sys_timeBase as origin
 NOTE: sys_timeBase*1000 + curtime -> ms since the Epoch
   0x7fffffff ms - ~24 days
@@ -12547,13 +12547,13 @@ pub unsafe extern "C" fn Sys_Milliseconds() -> i32 {
     };
     gettimeofday(&mut tp, 0 as *mut timezone);
     if sys_timeBase == 0 {
-        sys_timeBase = tp.tv_sec as libc::c_ulong;
+        sys_timeBase = tp.tv_sec as usize;
         return (tp.tv_usec as isize / 1000) as i32;
     }
-    curtime = (tp.tv_sec as libc::c_ulong)
+    curtime = (tp.tv_sec as usize)
         .wrapping_sub(sys_timeBase)
-        .wrapping_mul(1000 as i32 as libc::c_ulong)
-        .wrapping_add((tp.tv_usec as isize / 1000) as libc::c_ulong) as i32;
+        .wrapping_mul(1000 as i32 as usize)
+        .wrapping_add((tp.tv_usec as isize / 1000) as usize) as i32;
     return curtime;
 }
 /*
@@ -12575,10 +12575,10 @@ pub unsafe extern "C" fn Sys_RandomBytes(mut string: *mut byte, mut len: i32) ->
     setvbuf(fp, 0 as *mut libc::c_char, 2 as i32, 0 as i32 as size_t);
     if fread(
         string as *mut libc::c_void,
-        ::std::mem::size_of::<byte>() as libc::c_ulong,
-        len as libc::c_ulong,
+        ::std::mem::size_of::<byte>() as usize,
+        len as usize,
         fp,
-    ) != len as libc::c_ulong
+    ) != len as usize
     {
         fclose(fp);
         return qfalse;
@@ -12755,8 +12755,8 @@ pub unsafe extern "C" fn Sys_Cwd() -> *mut libc::c_char {
     static mut cwd: [libc::c_char; 4096] = [0; 4096];
     let mut result: *mut libc::c_char = crate::stdlib::getcwd(
         cwd.as_mut_ptr(),
-        (::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong)
-            .wrapping_sub(1 as i32 as libc::c_ulong),
+        (::std::mem::size_of::<[libc::c_char; 4096]>() as usize)
+            .wrapping_sub(1 as i32 as usize),
     );
     if result != cwd.as_mut_ptr() {
         return 0 as *mut libc::c_char;
@@ -12815,7 +12815,7 @@ pub unsafe extern "C" fn Sys_ListFilteredFiles(
     if crate::stdlib::strlen(subdirs) != 0 {
         Com_sprintf(
             search.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
             b"%s/%s\x00" as *const u8 as *const libc::c_char,
             basedir,
             subdirs,
@@ -12823,7 +12823,7 @@ pub unsafe extern "C" fn Sys_ListFilteredFiles(
     } else {
         Com_sprintf(
             search.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
             b"%s\x00" as *const u8 as *const libc::c_char,
             basedir,
         );
@@ -12839,7 +12839,7 @@ pub unsafe extern "C" fn Sys_ListFilteredFiles(
         }
         Com_sprintf(
             filename.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
             b"%s/%s\x00" as *const u8 as *const libc::c_char,
             search.as_mut_ptr(),
             (*d).d_name.as_mut_ptr(),
@@ -12860,7 +12860,7 @@ pub unsafe extern "C" fn Sys_ListFilteredFiles(
                 if crate::stdlib::strlen(subdirs) != 0 {
                     Com_sprintf(
                         newsubdirs.as_mut_ptr(),
-                        ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+                        ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
                         b"%s/%s\x00" as *const u8 as *const libc::c_char,
                         subdirs,
                         (*d).d_name.as_mut_ptr(),
@@ -12868,7 +12868,7 @@ pub unsafe extern "C" fn Sys_ListFilteredFiles(
                 } else {
                     Com_sprintf(
                         newsubdirs.as_mut_ptr(),
-                        ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+                        ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
                         b"%s\x00" as *const u8 as *const libc::c_char,
                         (*d).d_name.as_mut_ptr(),
                     );
@@ -12881,7 +12881,7 @@ pub unsafe extern "C" fn Sys_ListFilteredFiles(
         }
         Com_sprintf(
             filename.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
             b"%s/%s\x00" as *const u8 as *const libc::c_char,
             subdirs,
             (*d).d_name.as_mut_ptr(),
@@ -12959,8 +12959,8 @@ pub unsafe extern "C" fn Sys_ListFiles(
             return 0 as *mut *mut libc::c_char;
         }
         listCopy = Z_Malloc(
-            ((nfiles + 1 as i32) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<*mut libc::c_char>() as libc::c_ulong)
+            ((nfiles + 1 as i32) as usize)
+                .wrapping_mul(::std::mem::size_of::<*mut libc::c_char>() as usize)
                 as i32,
         ) as *mut *mut libc::c_char;
         i = 0 as i32;
@@ -12998,7 +12998,7 @@ pub unsafe extern "C" fn Sys_ListFiles(
         }
         Com_sprintf(
             search.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
             b"%s/%s\x00" as *const u8 as *const libc::c_char,
             directory,
             (*d).d_name.as_mut_ptr(),
@@ -13012,7 +13012,7 @@ pub unsafe extern "C" fn Sys_ListFiles(
             continue;
         }
         if *extension != 0 {
-            if crate::stdlib::strlen((*d).d_name.as_mut_ptr()) < extLen as libc::c_ulong
+            if crate::stdlib::strlen((*d).d_name.as_mut_ptr()) < extLen as usize
                 || Q_stricmp(
                     (*d).d_name
                         .as_mut_ptr()
@@ -13038,8 +13038,8 @@ pub unsafe extern "C" fn Sys_ListFiles(
         return 0 as *mut *mut libc::c_char;
     }
     listCopy = Z_Malloc(
-        ((nfiles + 1 as i32) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<*mut libc::c_char>() as libc::c_ulong)
+        ((nfiles + 1 as i32) as usize)
+            .wrapping_mul(::std::mem::size_of::<*mut libc::c_char>() as usize)
             as i32,
     ) as *mut *mut libc::c_char;
     i = 0 as i32;
@@ -13094,8 +13094,8 @@ pub unsafe extern "C" fn Sys_Sleep(mut msec: i32) {
         let fresh6;
         let fresh7 = &mut __d1;
         let fresh8;
-        let fresh9 = (::std::mem::size_of::<fd_set>() as libc::c_ulong)
-            .wrapping_div(::std::mem::size_of::<__fd_mask>() as libc::c_ulong);
+        let fresh9 = (::std::mem::size_of::<fd_set>() as usize)
+            .wrapping_div(::std::mem::size_of::<__fd_mask>() as usize);
         let fresh10 =
             &mut *fdset.__fds_bits.as_mut_ptr().offset(0 as i32 as isize) as *mut __fd_mask;
         asm!("cld; rep; stosq" : "={cx}" (fresh6), "={di}" (fresh8) : "{ax}"
@@ -13106,9 +13106,9 @@ pub unsafe extern "C" fn Sys_Sleep(mut msec: i32) {
         c2rust_asm_casts::AsmCast::cast_out(fresh5, fresh9, fresh6);
         c2rust_asm_casts::AsmCast::cast_out(fresh7, fresh10, fresh8);
         fdset.__fds_bits[(0 as i32
-            / (8 as i32 * ::std::mem::size_of::<__fd_mask>() as libc::c_ulong as i32))
-            as usize] |= ((1 as libc::c_ulong)
-            << 0 as i32 % (8 as i32 * ::std::mem::size_of::<__fd_mask>() as libc::c_ulong as i32))
+            / (8 as i32 * ::std::mem::size_of::<__fd_mask>() as usize as i32))
+            as usize] |= ((1 as usize)
+            << 0 as i32 % (8 as i32 * ::std::mem::size_of::<__fd_mask>() as usize as i32))
             as __fd_mask;
         if msec < 0 as i32 {
             select(
@@ -13217,7 +13217,7 @@ pub unsafe extern "C" fn Sys_ErrorDialog(mut error: *const libc::c_char) {
     {
         size = crate::src::sys::con_log::CON_LogRead(
             buffer.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as u32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as u32,
         );
         if !(size > 0 as i32 as u32) {
             break;
@@ -13257,7 +13257,7 @@ unsafe extern "C" fn Sys_ClearExecBuffer() {
     crate::stdlib::memset(
         execArgv.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[*mut libc::c_char; 16]>() as libc::c_ulong,
+        ::std::mem::size_of::<[*mut libc::c_char; 16]>() as usize,
     );
     execArgc = 0 as i32;
 }
@@ -13268,16 +13268,16 @@ Sys_AppendToExecBuffer
 */
 
 unsafe extern "C" fn Sys_AppendToExecBuffer(mut text: *const libc::c_char) {
-    let mut size: size_t = (::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong)
+    let mut size: size_t = (::std::mem::size_of::<[libc::c_char; 1024]>() as usize)
         .wrapping_sub(
-            execBufferPointer.offset_from(execBuffer.as_mut_ptr()) as isize as libc::c_ulong,
+            execBufferPointer.offset_from(execBuffer.as_mut_ptr()) as isize as usize,
         );
     let mut length: i32 =
-        crate::stdlib::strlen(text).wrapping_add(1 as i32 as libc::c_ulong) as i32;
-    if length as libc::c_ulong > size
-        || execArgc as libc::c_ulong
-            >= (::std::mem::size_of::<[*mut libc::c_char; 16]>() as libc::c_ulong)
-                .wrapping_div(::std::mem::size_of::<*mut libc::c_char>() as libc::c_ulong)
+        crate::stdlib::strlen(text).wrapping_add(1 as i32 as usize) as i32;
+    if length as usize > size
+        || execArgc as usize
+            >= (::std::mem::size_of::<[*mut libc::c_char; 16]>() as usize)
+                .wrapping_div(::std::mem::size_of::<*mut libc::c_char>() as usize)
     {
         return;
     }

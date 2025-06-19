@@ -279,7 +279,7 @@ pub unsafe extern "C" fn AAS_OptimizeFace(
     crate::stdlib::memcpy(
         optface as *mut libc::c_void,
         face as *const libc::c_void,
-        ::std::mem::size_of::<aas_face_t>() as libc::c_ulong,
+        ::std::mem::size_of::<aas_face_t>() as usize,
     );
     (*optface).numedges = 0 as i32;
     (*optface).firstedge = (*optimized).edgeindexsize;
@@ -333,7 +333,7 @@ pub unsafe extern "C" fn AAS_OptimizeArea(mut optimized: *mut optimized_t, mut a
     crate::stdlib::memcpy(
         optarea as *mut libc::c_void,
         area as *const libc::c_void,
-        ::std::mem::size_of::<aas_area_t>() as libc::c_ulong,
+        ::std::mem::size_of::<aas_area_t>() as usize,
     );
     (*optarea).numfaces = 0 as i32;
     (*optarea).firstface = (*optimized).faceindexsize;
@@ -366,47 +366,47 @@ pub unsafe extern "C" fn AAS_OptimizeArea(mut optimized: *mut optimized_t, mut a
 
 pub unsafe extern "C" fn AAS_OptimizeAlloc(mut optimized: *mut optimized_t) {
     (*optimized).vertexes = crate::src::botlib::l_memory::GetClearedMemory(
-        (crate::src::botlib::be_aas_main::aasworld.numvertexes as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<aas_vertex_t>() as libc::c_ulong),
+        (crate::src::botlib::be_aas_main::aasworld.numvertexes as usize)
+            .wrapping_mul(::std::mem::size_of::<aas_vertex_t>() as usize),
     ) as *mut aas_vertex_t; //edge zero is a dummy
     (*optimized).numvertexes = 0 as i32; //face zero is a dummy
     (*optimized).edges = crate::src::botlib::l_memory::GetClearedMemory(
-        (crate::src::botlib::be_aas_main::aasworld.numedges as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<aas_edge_t>() as libc::c_ulong),
+        (crate::src::botlib::be_aas_main::aasworld.numedges as usize)
+            .wrapping_mul(::std::mem::size_of::<aas_edge_t>() as usize),
     ) as *mut aas_edge_t;
     (*optimized).numedges = 1 as i32;
     (*optimized).edgeindex = crate::src::botlib::l_memory::GetClearedMemory(
-        (crate::src::botlib::be_aas_main::aasworld.edgeindexsize as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<aas_edgeindex_t>() as libc::c_ulong),
+        (crate::src::botlib::be_aas_main::aasworld.edgeindexsize as usize)
+            .wrapping_mul(::std::mem::size_of::<aas_edgeindex_t>() as usize),
     ) as *mut aas_edgeindex_t;
     (*optimized).edgeindexsize = 0 as i32;
     (*optimized).faces = crate::src::botlib::l_memory::GetClearedMemory(
-        (crate::src::botlib::be_aas_main::aasworld.numfaces as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<aas_face_t>() as libc::c_ulong),
+        (crate::src::botlib::be_aas_main::aasworld.numfaces as usize)
+            .wrapping_mul(::std::mem::size_of::<aas_face_t>() as usize),
     ) as *mut aas_face_t;
     (*optimized).numfaces = 1 as i32;
     (*optimized).faceindex = crate::src::botlib::l_memory::GetClearedMemory(
-        (crate::src::botlib::be_aas_main::aasworld.faceindexsize as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<aas_faceindex_t>() as libc::c_ulong),
+        (crate::src::botlib::be_aas_main::aasworld.faceindexsize as usize)
+            .wrapping_mul(::std::mem::size_of::<aas_faceindex_t>() as usize),
     ) as *mut aas_faceindex_t;
     (*optimized).faceindexsize = 0 as i32;
     (*optimized).areas = crate::src::botlib::l_memory::GetClearedMemory(
-        (crate::src::botlib::be_aas_main::aasworld.numareas as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<aas_area_t>() as libc::c_ulong),
+        (crate::src::botlib::be_aas_main::aasworld.numareas as usize)
+            .wrapping_mul(::std::mem::size_of::<aas_area_t>() as usize),
     ) as *mut aas_area_t;
     (*optimized).numareas = crate::src::botlib::be_aas_main::aasworld.numareas;
     //
     (*optimized).vertexoptimizeindex = crate::src::botlib::l_memory::GetClearedMemory(
-        (crate::src::botlib::be_aas_main::aasworld.numvertexes as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+        (crate::src::botlib::be_aas_main::aasworld.numvertexes as usize)
+            .wrapping_mul(::std::mem::size_of::<i32>() as usize),
     ) as *mut i32;
     (*optimized).edgeoptimizeindex = crate::src::botlib::l_memory::GetClearedMemory(
-        (crate::src::botlib::be_aas_main::aasworld.numedges as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+        (crate::src::botlib::be_aas_main::aasworld.numedges as usize)
+            .wrapping_mul(::std::mem::size_of::<i32>() as usize),
     ) as *mut i32;
     (*optimized).faceoptimizeindex = crate::src::botlib::l_memory::GetClearedMemory(
-        (crate::src::botlib::be_aas_main::aasworld.numfaces as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+        (crate::src::botlib::be_aas_main::aasworld.numfaces as usize)
+            .wrapping_mul(::std::mem::size_of::<i32>() as usize),
     ) as *mut i32;
 }
 //end of the function AAS_OptimizeAlloc

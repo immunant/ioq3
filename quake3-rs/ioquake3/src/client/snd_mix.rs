@@ -105,7 +105,7 @@ pub unsafe extern "C" fn S_WriteLinearBlastStereo16() {
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn S_TransferStereo16(mut pbuf: *mut libc::c_ulong, mut endtime: i32) {
+pub unsafe extern "C" fn S_TransferStereo16(mut pbuf: *mut usize, mut endtime: i32) {
     let mut lpos: i32 = 0;
     let mut ls_paintedtime: i32 = 0;
     snd_p = paintbuffer.as_mut_ptr() as *mut i32;
@@ -148,8 +148,8 @@ pub unsafe extern "C" fn S_TransferPaintBuffer(mut endtime: i32) {
     let mut step: i32 = 0;
     let mut val: i32 = 0;
     let mut i: i32 = 0;
-    let mut pbuf: *mut libc::c_ulong = 0 as *mut libc::c_ulong;
-    pbuf = dma.buffer as *mut libc::c_ulong;
+    let mut pbuf: *mut usize = 0 as *mut usize;
+    pbuf = dma.buffer as *mut usize;
     if (*s_testsound).integer != 0 {
         // write a fixed sine wave
         count = endtime - s_paintedtime;
@@ -570,7 +570,7 @@ pub unsafe extern "C" fn S_PaintChannels(mut endtime: i32) {
         crate::stdlib::memset(
             paintbuffer.as_mut_ptr() as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<[portable_samplepair_t; 4096]>() as libc::c_ulong,
+            ::std::mem::size_of::<[portable_samplepair_t; 4096]>() as usize,
         );
         stream = 0 as i32;
         while stream < 64 as i32 * 2 as i32 + 1 as i32 {

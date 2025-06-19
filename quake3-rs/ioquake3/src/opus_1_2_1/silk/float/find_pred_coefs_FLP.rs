@@ -215,8 +215,8 @@ pub unsafe extern "C" fn silk_find_pred_coefs_FLP(
         crate::stdlib::memset(
             (*psEncCtrl).LTPCoef.as_mut_ptr() as *mut libc::c_void,
             0 as i32,
-            (((*psEnc).sCmn.nb_subfr * 5 as i32) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
+            (((*psEnc).sCmn.nb_subfr * 5 as i32) as usize)
+                .wrapping_mul(::std::mem::size_of::<f32>() as usize),
         );
         (*psEncCtrl).LTPredCodGain = 0.0f32;
         (*psEnc).sCmn.sum_log_gain_Q7 = 0 as i32
@@ -260,6 +260,6 @@ pub unsafe extern "C" fn silk_find_pred_coefs_FLP(
     crate::stdlib::memcpy(
         (*psEnc).sCmn.prev_NLSFq_Q15.as_mut_ptr() as *mut libc::c_void,
         NLSF_Q15.as_mut_ptr() as *const libc::c_void,
-        ::std::mem::size_of::<[opus_int16; 16]>() as libc::c_ulong,
+        ::std::mem::size_of::<[opus_int16; 16]>() as usize,
     );
 }

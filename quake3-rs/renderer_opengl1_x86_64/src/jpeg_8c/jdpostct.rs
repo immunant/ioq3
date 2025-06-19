@@ -544,7 +544,7 @@ pub unsafe extern "C" fn jinit_d_post_controller(
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         1 as i32,
-        ::std::mem::size_of::<my_post_controller>() as libc::c_ulong,
+        ::std::mem::size_of::<my_post_controller>() as usize,
     ) as my_post_ptr; /* flag for no strip buffer */
     (*cinfo).post = post as *mut jpeg_d_post_controller;
     (*post).pub_0.start_pass =

@@ -705,8 +705,8 @@ unsafe extern "C" fn downmix_and_resample(
     }
     let mut fresh0 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_val32>() as libc::c_ulong)
-            .wrapping_mul(subframe as libc::c_ulong) as usize,
+        (::std::mem::size_of::<opus_val32>() as usize)
+            .wrapping_mul(subframe as usize) as usize,
     );
     tmp = fresh0.as_mut_ptr() as *mut opus_val32;
     downmix.expect("non-null function pointer")(_x, tmp, subframe, offset, c1, c2, C);
@@ -728,16 +728,16 @@ unsafe extern "C" fn downmix_and_resample(
         crate::stdlib::memcpy(
             y as *mut libc::c_void,
             tmp as *const libc::c_void,
-            (subframe as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<opus_val32>() as libc::c_ulong)
-                .wrapping_add((0 as i32 as isize * y.offset_from(tmp) as isize) as libc::c_ulong),
+            (subframe as usize)
+                .wrapping_mul(::std::mem::size_of::<opus_val32>() as usize)
+                .wrapping_add((0 as i32 as isize * y.offset_from(tmp) as isize) as usize),
         );
     } else if Fs == 16000 as i32 {
         let mut tmp3x: *mut opus_val32 = 0 as *mut opus_val32;
         let mut fresh2 = ::std::vec::from_elem(
             0,
-            (::std::mem::size_of::<opus_val32>() as libc::c_ulong)
-                .wrapping_mul((3 as i32 * subframe) as libc::c_ulong) as usize,
+            (::std::mem::size_of::<opus_val32>() as usize)
+                .wrapping_mul((3 as i32 * subframe) as usize) as usize,
         );
         tmp3x = fresh2.as_mut_ptr() as *mut opus_val32;
         /* Don't do this at home! This resampler is horrible and it's only (barely)
@@ -787,9 +787,9 @@ pub unsafe extern "C" fn tonality_analysis_reset(
         start as *mut libc::c_void,
         0 as i32,
         (::std::mem::size_of::<crate::src::opus_1_2_1::src::analysis::TonalityAnalysisState>()
-            as libc::c_ulong)
-            .wrapping_sub(start.offset_from(tonal as *mut libc::c_char) as isize as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<libc::c_char>() as libc::c_ulong),
+            as usize)
+            .wrapping_sub(start.offset_from(tonal as *mut libc::c_char) as isize as usize)
+            .wrapping_mul(::std::mem::size_of::<libc::c_char>() as usize),
     );
     (*tonal).music_confidence = 0.9f32;
     (*tonal).speech_confidence = 0.1f32;
@@ -830,12 +830,12 @@ pub unsafe extern "C" fn tonality_get_info(
         info_out as *mut libc::c_void,
         &mut *(*tonal).info.as_mut_ptr().offset(pos as isize) as *mut AnalysisInfo
             as *const libc::c_void,
-        (1 as i32 as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<AnalysisInfo>() as libc::c_ulong)
+        (1 as i32 as usize)
+            .wrapping_mul(::std::mem::size_of::<AnalysisInfo>() as usize)
             .wrapping_add(
                 (0 as i32 as isize
                     * info_out.offset_from(&mut *(*tonal).info.as_mut_ptr().offset(pos as isize))
-                        as isize) as libc::c_ulong,
+                        as isize) as usize,
             ),
     );
     tonality_avg = (*info_out).tonality;
@@ -1035,25 +1035,25 @@ unsafe extern "C" fn tonality_analysis(
     }
     let mut fresh4 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<kiss_fft_cpx>() as libc::c_ulong)
-            .wrapping_mul(480 as i32 as libc::c_ulong) as usize,
+        (::std::mem::size_of::<kiss_fft_cpx>() as usize)
+            .wrapping_mul(480 as i32 as usize) as usize,
     );
     in_0 = fresh4.as_mut_ptr() as *mut kiss_fft_cpx;
     let mut fresh5 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<kiss_fft_cpx>() as libc::c_ulong)
-            .wrapping_mul(480 as i32 as libc::c_ulong) as usize,
+        (::std::mem::size_of::<kiss_fft_cpx>() as usize)
+            .wrapping_mul(480 as i32 as usize) as usize,
     );
     out = fresh5.as_mut_ptr() as *mut kiss_fft_cpx;
     let mut fresh6 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<f32>() as libc::c_ulong).wrapping_mul(240 as i32 as libc::c_ulong)
+        (::std::mem::size_of::<f32>() as usize).wrapping_mul(240 as i32 as usize)
             as usize,
     );
     tonality = fresh6.as_mut_ptr() as *mut f32;
     let mut fresh7 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<f32>() as libc::c_ulong).wrapping_mul(240 as i32 as libc::c_ulong)
+        (::std::mem::size_of::<f32>() as usize).wrapping_mul(240 as i32 as usize)
             as usize,
     );
     noisiness = fresh7.as_mut_ptr() as *mut f32;
@@ -1075,8 +1075,8 @@ unsafe extern "C" fn tonality_analysis(
             .as_mut_ptr()
             .offset(720 as i32 as isize)
             .offset(-(240 as i32 as isize)) as *const libc::c_void,
-        (240 as i32 as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<opus_val32>() as libc::c_ulong)
+        (240 as i32 as usize)
+            .wrapping_mul(::std::mem::size_of::<opus_val32>() as usize)
             .wrapping_add(
                 (0 as i32 as isize
                     * (*tonal).inmem.as_mut_ptr().offset_from(
@@ -1085,7 +1085,7 @@ unsafe extern "C" fn tonality_analysis(
                             .as_mut_ptr()
                             .offset(720 as i32 as isize)
                             .offset(-(240 as i32 as isize)),
-                    ) as isize) as libc::c_ulong,
+                    ) as isize) as usize,
             ),
     );
     remaining = len - (720 as i32 - (*tonal).mem_fill);

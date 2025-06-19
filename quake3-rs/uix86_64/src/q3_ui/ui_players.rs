@@ -235,11 +235,11 @@ unsafe extern "C" fn UI_PlayerInfo_SetWeapon(mut pi: *mut playerInfo_t, mut weap
         COM_StripExtension(
             (*item).world_model[0 as i32 as usize],
             path.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         );
         Q_strcat(
             path.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             b"_barrel.md3\x00" as *const u8 as *const libc::c_char,
         );
         (*pi).barrelModel = trap_R_RegisterModel(path.as_mut_ptr())
@@ -247,11 +247,11 @@ unsafe extern "C" fn UI_PlayerInfo_SetWeapon(mut pi: *mut playerInfo_t, mut weap
     COM_StripExtension(
         (*item).world_model[0 as i32 as usize],
         path.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     Q_strcat(
         path.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         b"_flash.md3\x00" as *const u8 as *const libc::c_char,
     );
     (*pi).flashModel = trap_R_RegisterModel(path.as_mut_ptr());
@@ -941,7 +941,7 @@ unsafe extern "C" fn UI_PlayerFloatSprite(
     crate::stdlib::memset(
         &mut ent as *mut refEntity_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
+        ::std::mem::size_of::<refEntity_t>() as usize,
     );
     ent.origin[0 as i32 as usize] = *origin.offset(0 as i32 as isize);
     ent.origin[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
@@ -1199,22 +1199,22 @@ pub unsafe extern "C" fn UI_DrawPlayer(
     crate::stdlib::memset(
         &mut refdef as *mut refdef_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<refdef_t>() as libc::c_ulong,
+        ::std::mem::size_of::<refdef_t>() as usize,
     );
     crate::stdlib::memset(
         &mut legs as *mut refEntity_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
+        ::std::mem::size_of::<refEntity_t>() as usize,
     );
     crate::stdlib::memset(
         &mut torso as *mut refEntity_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
+        ::std::mem::size_of::<refEntity_t>() as usize,
     );
     crate::stdlib::memset(
         &mut head as *mut refEntity_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
+        ::std::mem::size_of::<refEntity_t>() as usize,
     );
     refdef.rdflags = 0x1 as i32;
     AxisClear(refdef.viewaxis.as_mut_ptr());
@@ -1323,7 +1323,7 @@ pub unsafe extern "C" fn UI_DrawPlayer(
         crate::stdlib::memset(
             &mut gun as *mut refEntity_t as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
+            ::std::mem::size_of::<refEntity_t>() as usize,
         );
         gun.hModel = (*pi).weaponModel;
         if (*pi).currentWeapon as u32 == WP_RAILGUN as i32 as u32 {
@@ -1360,7 +1360,7 @@ pub unsafe extern "C" fn UI_DrawPlayer(
         crate::stdlib::memset(
             &mut barrel as *mut refEntity_t as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
+            ::std::mem::size_of::<refEntity_t>() as usize,
         );
         barrel.lightingOrigin[0 as i32 as usize] = origin[0 as i32 as usize];
         barrel.lightingOrigin[1 as i32 as usize] = origin[1 as i32 as usize];
@@ -1390,7 +1390,7 @@ pub unsafe extern "C" fn UI_DrawPlayer(
             crate::stdlib::memset(
                 &mut flash as *mut refEntity_t as *mut libc::c_void,
                 0 as i32,
-                ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
+                ::std::mem::size_of::<refEntity_t>() as usize,
             );
             flash.hModel = (*pi).flashModel;
             if (*pi).currentWeapon as u32 == WP_RAILGUN as i32 as u32 {
@@ -1479,7 +1479,7 @@ unsafe extern "C" fn UI_RegisterClientSkin(
     let mut filename: [libc::c_char; 64] = [0; 64];
     Com_sprintf(
         filename.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         b"models/players/%s/lower_%s.skin\x00" as *const u8 as *const libc::c_char,
         modelName,
         skinName,
@@ -1487,7 +1487,7 @@ unsafe extern "C" fn UI_RegisterClientSkin(
     (*pi).legsSkin = trap_R_RegisterSkin(filename.as_mut_ptr());
     Com_sprintf(
         filename.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         b"models/players/%s/upper_%s.skin\x00" as *const u8 as *const libc::c_char,
         modelName,
         skinName,
@@ -1495,7 +1495,7 @@ unsafe extern "C" fn UI_RegisterClientSkin(
     (*pi).torsoSkin = trap_R_RegisterSkin(filename.as_mut_ptr());
     Com_sprintf(
         filename.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         b"models/players/%s/head_%s.skin\x00" as *const u8 as *const libc::c_char,
         modelName,
         skinName,
@@ -1530,8 +1530,8 @@ unsafe extern "C" fn UI_ParseAnimationFile(
     crate::stdlib::memset(
         animations as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<animation_t>() as libc::c_ulong)
-            .wrapping_mul(MAX_ANIMATIONS as i32 as libc::c_ulong),
+        (::std::mem::size_of::<animation_t>() as usize)
+            .wrapping_mul(MAX_ANIMATIONS as i32 as usize),
     );
     (*pi).fixedlegs = qfalse;
     (*pi).fixedtorso = qfalse;
@@ -1540,9 +1540,9 @@ unsafe extern "C" fn UI_ParseAnimationFile(
     if len <= 0 as i32 {
         return qfalse;
     }
-    if len as libc::c_ulong
-        >= (::std::mem::size_of::<[libc::c_char; 20000]>() as libc::c_ulong)
-            .wrapping_sub(1 as i32 as libc::c_ulong)
+    if len as usize
+        >= (::std::mem::size_of::<[libc::c_char; 20000]>() as usize)
+            .wrapping_sub(1 as i32 as usize)
     {
         Com_Printf(
             b"File %s too long\n\x00" as *const u8 as *const libc::c_char,
@@ -1695,7 +1695,7 @@ pub unsafe extern "C" fn UI_RegisterClientModelname(
     Q_strncpyz(
         modelName.as_mut_ptr(),
         modelSkinName,
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     slash = libc::strchr(modelName.as_mut_ptr(), '/' as i32);
     if slash.is_null() {
@@ -1703,13 +1703,13 @@ pub unsafe extern "C" fn UI_RegisterClientModelname(
         Q_strncpyz(
             skinName.as_mut_ptr(),
             b"default\x00" as *const u8 as *const libc::c_char,
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         );
     } else {
         Q_strncpyz(
             skinName.as_mut_ptr(),
             slash.offset(1 as i32 as isize),
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         );
         // truncate modelName
         *slash = 0 as i32 as libc::c_char
@@ -1717,7 +1717,7 @@ pub unsafe extern "C" fn UI_RegisterClientModelname(
     // load cmodels before models so filecache works
     Com_sprintf(
         filename.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         b"models/players/%s/lower.md3\x00" as *const u8 as *const libc::c_char,
         modelName.as_mut_ptr(),
     );
@@ -1731,7 +1731,7 @@ pub unsafe extern "C" fn UI_RegisterClientModelname(
     }
     Com_sprintf(
         filename.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         b"models/players/%s/upper.md3\x00" as *const u8 as *const libc::c_char,
         modelName.as_mut_ptr(),
     );
@@ -1745,7 +1745,7 @@ pub unsafe extern "C" fn UI_RegisterClientModelname(
     }
     Com_sprintf(
         filename.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         b"models/players/%s/head.md3\x00" as *const u8 as *const libc::c_char,
         modelName.as_mut_ptr(),
     );
@@ -1777,7 +1777,7 @@ pub unsafe extern "C" fn UI_RegisterClientModelname(
     // load the animations
     Com_sprintf(
         filename.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         b"models/players/%s/animation.cfg\x00" as *const u8 as *const libc::c_char,
         modelName.as_mut_ptr(),
     );
@@ -1804,7 +1804,7 @@ pub unsafe extern "C" fn UI_PlayerInfo_SetModel(
     crate::stdlib::memset(
         pi as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<playerInfo_t>() as libc::c_ulong,
+        ::std::mem::size_of::<playerInfo_t>() as usize,
     );
     UI_RegisterClientModelname(pi, model);
     (*pi).weapon = WP_MACHINEGUN;

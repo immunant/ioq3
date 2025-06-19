@@ -227,7 +227,7 @@ pub unsafe extern "C" fn CG_SetInitialSnapshot(mut snap: *mut snapshot_t) {
         crate::stdlib::memcpy(
             &mut (*cent).currentState as *mut entityState_t as *mut libc::c_void,
             state as *const libc::c_void,
-            ::std::mem::size_of::<entityState_t>() as libc::c_ulong,
+            ::std::mem::size_of::<entityState_t>() as usize,
         );
         //cent->currentState = *state;
         (*cent).interpolate = qfalse;
@@ -347,7 +347,7 @@ unsafe extern "C" fn CG_SetNextSnap(mut snap: *mut snapshot_t) {
         crate::stdlib::memcpy(
             &mut (*cent).nextState as *mut entityState_t as *mut libc::c_void,
             es as *const libc::c_void,
-            ::std::mem::size_of::<entityState_t>() as libc::c_ulong,
+            ::std::mem::size_of::<entityState_t>() as usize,
         );
         //cent->nextState = *es;
         // if this frame is a teleport, or the entity wasn't in the

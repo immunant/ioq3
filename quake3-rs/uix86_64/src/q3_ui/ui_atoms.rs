@@ -215,7 +215,7 @@ pub unsafe extern "C" fn Com_Error(
     argptr = args.clone();
     crate::stdlib::vsnprintf(
         text.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize,
         error,
         argptr.as_va_list(),
     );
@@ -380,7 +380,7 @@ pub unsafe extern "C" fn Com_Printf(mut msg: *const libc::c_char, mut args: ...)
     argptr = args.clone();
     crate::stdlib::vsnprintf(
         text.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize,
         msg,
         argptr.as_va_list(),
     );
@@ -984,7 +984,7 @@ pub unsafe extern "C" fn UI_DrawProportionalString_AutoWrapped(
     Q_strncpyz(
         buf.as_mut_ptr(),
         str,
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     s3 = buf.as_mut_ptr();
     s2 = s3;
@@ -1078,7 +1078,7 @@ unsafe extern "C" fn UI_DrawString2(
                     g_color_table
                         [(*s.offset(1 as i32 as isize) as i32 - '0' as i32 & 0x7 as i32) as usize]
                         .as_mut_ptr() as *const libc::c_void,
-                    ::std::mem::size_of::<vec4_t>() as libc::c_ulong,
+                    ::std::mem::size_of::<vec4_t>() as usize,
                 );
                 tempcolor[3 as i32 as usize] = *color.offset(3 as i32 as isize);
                 trap_R_SetColor(tempcolor.as_mut_ptr());
@@ -1380,7 +1380,7 @@ pub unsafe extern "C" fn UI_Argv(mut arg: i32) -> *mut libc::c_char {
     trap_Argv(
         arg,
         buffer.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     return buffer.as_mut_ptr();
 }
@@ -1393,7 +1393,7 @@ pub unsafe extern "C" fn UI_Cvar_VariableString(
     trap_Cvar_VariableStringBuffer(
         var_name,
         buffer.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     return buffer.as_mut_ptr();
 }

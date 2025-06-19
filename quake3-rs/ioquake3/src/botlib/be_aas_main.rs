@@ -187,7 +187,7 @@ pub unsafe extern "C" fn AAS_Error(mut fmt: *mut libc::c_char, mut args: ...) {
     arglist = args.clone();
     crate::stdlib::vsnprintf(
         str.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize,
         fmt,
         arglist.as_va_list(),
     );
@@ -446,7 +446,7 @@ pub unsafe extern "C" fn AAS_LoadFiles(mut mapname: *const libc::c_char) -> i32 
     Q_strncpyz(
         aasworld.mapname.as_mut_ptr(),
         mapname,
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     //NOTE: first reset the entity links into the AAS areas and BSP leaves
     // the AAS link heap and BSP link heap are reset after respectively the
@@ -457,7 +457,7 @@ pub unsafe extern "C" fn AAS_LoadFiles(mut mapname: *const libc::c_char) -> i32 
     //load the aas file
     Com_sprintf(
         aasfile.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         b"maps/%s.aas\x00" as *const u8 as *const libc::c_char,
         mapname,
     );
@@ -475,7 +475,7 @@ pub unsafe extern "C" fn AAS_LoadFiles(mut mapname: *const libc::c_char) -> i32 
     Q_strncpyz(
         aasworld.filename.as_mut_ptr(),
         aasfile.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     return 0 as i32;
 }
@@ -550,8 +550,8 @@ pub unsafe extern "C" fn AAS_Setup() -> i32 {
         crate::src::botlib::l_memory::FreeMemory(aasworld.entities as *mut libc::c_void);
     }
     aasworld.entities = crate::src::botlib::l_memory::GetClearedHunkMemory(
-        (aasworld.maxentities as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<aas_entity_t>() as libc::c_ulong),
+        (aasworld.maxentities as usize)
+            .wrapping_mul(::std::mem::size_of::<aas_entity_t>() as usize),
     ) as *mut aas_entity_t;
     //invalidate all the entities
     crate::src::botlib::be_aas_entity::AAS_InvalidateEntities();
@@ -652,7 +652,7 @@ pub unsafe extern "C" fn AAS_Shutdown() {
     crate::stdlib::memset(
         &mut aasworld as *mut aas_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<aas_t>() as libc::c_ulong,
+        ::std::mem::size_of::<aas_t>() as usize,
     );
     //aas has not been initialized
     aasworld.initialized = qfalse as i32;

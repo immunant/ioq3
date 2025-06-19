@@ -215,7 +215,7 @@ pub unsafe extern "C" fn R_LoadBMP(
     bmpHeader.importantColors = *(buf_p as *mut i32) as u32;
     buf_p = buf_p.offset(4 as i32 as isize);
     if bmpHeader.bitsPerPixel as i32 == 8 as i32 {
-        if buf_p.offset(::std::mem::size_of::<[[u8; 4]; 256]>() as libc::c_ulong as isize) > end {
+        if buf_p.offset(::std::mem::size_of::<[[u8; 4]; 256]>() as usize as isize) > end {
             crate::src::renderergl1::tr_main::ri
                 .Error
                 .expect("non-null function pointer")(
@@ -227,7 +227,7 @@ pub unsafe extern "C" fn R_LoadBMP(
         crate::stdlib::memcpy(
             bmpHeader.palette.as_mut_ptr() as *mut libc::c_void,
             buf_p as *const libc::c_void,
-            ::std::mem::size_of::<[[u8; 4]; 256]>() as libc::c_ulong,
+            ::std::mem::size_of::<[[u8; 4]; 256]>() as usize,
         );
     }
     if buffer.b.offset(bmpHeader.bitmapDataOffset as isize) > end {

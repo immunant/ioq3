@@ -374,8 +374,8 @@ pub unsafe extern "C" fn S_AdpcmMemoryNeeded(mut info: *const wavinfo_t) -> i32 
         blockCount += 1
     }
     // calc memory needed to store the block headers
-    headerMemory = (blockCount as libc::c_ulong)
-        .wrapping_mul(::std::mem::size_of::<adpcm_state_t>() as libc::c_ulong)
+    headerMemory = (blockCount as usize)
+        .wrapping_mul(::std::mem::size_of::<adpcm_state_t>() as usize)
         as i32;
     return sampleMemory + headerMemory;
 }

@@ -133,14 +133,14 @@ pub unsafe extern "C" fn LibVarAlloc(
         0 as *mut crate::src::botlib::l_libvar::libvar_t;
     v = crate::src::botlib::l_memory::GetMemory(::std::mem::size_of::<
         crate::src::botlib::l_libvar::libvar_t,
-    >() as libc::c_ulong) as *mut crate::src::botlib::l_libvar::libvar_t;
+    >() as usize) as *mut crate::src::botlib::l_libvar::libvar_t;
     crate::stdlib::memset(
         v as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::src::botlib::l_libvar::libvar_t>() as libc::c_ulong,
+        ::std::mem::size_of::<crate::src::botlib::l_libvar::libvar_t>() as usize,
     );
     (*v).name = crate::src::botlib::l_memory::GetMemory(
-        crate::stdlib::strlen(var_name).wrapping_add(1 as i32 as libc::c_ulong),
+        crate::stdlib::strlen(var_name).wrapping_add(1 as i32 as usize),
     ) as *mut libc::c_char;
     libc::strcpy((*v).name, var_name);
     //add the variable in the list
@@ -276,7 +276,7 @@ pub unsafe extern "C" fn LibVar(
     v = LibVarAlloc(var_name);
     //variable string
     (*v).string = crate::src::botlib::l_memory::GetMemory(
-        crate::stdlib::strlen(value).wrapping_add(1 as i32 as libc::c_ulong),
+        crate::stdlib::strlen(value).wrapping_add(1 as i32 as usize),
     ) as *mut libc::c_char;
     libc::strcpy((*v).string, value);
     //the value
@@ -348,7 +348,7 @@ pub unsafe extern "C" fn LibVarSet(
     }
     //variable string
     (*v).string = crate::src::botlib::l_memory::GetMemory(
-        crate::stdlib::strlen(value).wrapping_add(1 as i32 as libc::c_ulong),
+        crate::stdlib::strlen(value).wrapping_add(1 as i32 as usize),
     ) as *mut libc::c_char;
     libc::strcpy((*v).string, value);
     //the value

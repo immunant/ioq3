@@ -254,7 +254,7 @@ unsafe extern "C" fn emit_byte(mut val: i32, mut cinfo: j_compress_ptr)
     (*dest).next_output_byte = (*dest).next_output_byte.offset(1);
     *fresh0 = val as JOCTET;
     (*dest).free_in_buffer = (*dest).free_in_buffer.wrapping_sub(1);
-    if (*dest).free_in_buffer == 0 as i32 as libc::c_ulong {
+    if (*dest).free_in_buffer == 0 as i32 as usize {
         if Some(
             (*dest)
                 .empty_output_buffer
@@ -1321,7 +1321,7 @@ pub unsafe extern "C" fn jinit_arith_encoder(mut cinfo: j_compress_ptr) {
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         1 as i32,
-        ::std::mem::size_of::<arith_entropy_encoder>() as libc::c_ulong,
+        ::std::mem::size_of::<arith_entropy_encoder>() as usize,
     ) as arith_entropy_ptr;
     (*cinfo).entropy = entropy as *mut jpeg_entropy_encoder;
     (*entropy).pub_0.start_pass =

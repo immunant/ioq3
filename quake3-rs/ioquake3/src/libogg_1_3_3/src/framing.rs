@@ -392,21 +392,21 @@ pub unsafe extern "C" fn ogg_stream_init(mut os: *mut ogg_stream_state, mut seri
         crate::stdlib::memset(
             os as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<ogg_stream_state>() as libc::c_ulong,
+            ::std::mem::size_of::<ogg_stream_state>() as usize,
         );
         (*os).body_storage = (16 as i32 * 1024 as i32) as isize;
         (*os).lacing_storage = 1024 as i32 as isize;
         (*os).body_data = crate::stdlib::malloc(
-            ((*os).body_storage as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<u8>() as libc::c_ulong),
+            ((*os).body_storage as usize)
+                .wrapping_mul(::std::mem::size_of::<u8>() as usize),
         ) as *mut u8;
         (*os).lacing_vals = crate::stdlib::malloc(
-            ((*os).lacing_storage as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+            ((*os).lacing_storage as usize)
+                .wrapping_mul(::std::mem::size_of::<i32>() as usize),
         ) as *mut i32;
         (*os).granule_vals = crate::stdlib::malloc(
-            ((*os).lacing_storage as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<ogg_int64_t>() as libc::c_ulong),
+            ((*os).lacing_storage as usize)
+                .wrapping_mul(::std::mem::size_of::<ogg_int64_t>() as usize),
         ) as *mut ogg_int64_t;
         if (*os).body_data.is_null() || (*os).lacing_vals.is_null() || (*os).granule_vals.is_null()
         {
@@ -444,7 +444,7 @@ pub unsafe extern "C" fn ogg_stream_clear(mut os: *mut ogg_stream_state) -> i32 
         crate::stdlib::memset(
             os as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<ogg_stream_state>() as libc::c_ulong,
+            ::std::mem::size_of::<ogg_stream_state>() as usize,
         );
     }
     return 0 as i32;
@@ -475,8 +475,8 @@ unsafe extern "C" fn _os_body_expand(mut os: *mut ogg_stream_state, mut needed: 
         }
         ret = crate::stdlib::realloc(
             (*os).body_data as *mut libc::c_void,
-            (body_storage as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<u8>() as libc::c_ulong),
+            (body_storage as usize)
+                .wrapping_mul(::std::mem::size_of::<u8>() as usize),
         );
         if ret.is_null() {
             ogg_stream_clear(os);
@@ -502,8 +502,8 @@ unsafe extern "C" fn _os_lacing_expand(mut os: *mut ogg_stream_state, mut needed
         }
         ret = crate::stdlib::realloc(
             (*os).lacing_vals as *mut libc::c_void,
-            (lacing_storage as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+            (lacing_storage as usize)
+                .wrapping_mul(::std::mem::size_of::<i32>() as usize),
         );
         if ret.is_null() {
             ogg_stream_clear(os);
@@ -512,8 +512,8 @@ unsafe extern "C" fn _os_lacing_expand(mut os: *mut ogg_stream_state, mut needed
         (*os).lacing_vals = ret as *mut i32;
         ret = crate::stdlib::realloc(
             (*os).granule_vals as *mut libc::c_void,
-            (lacing_storage as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<ogg_int64_t>() as libc::c_ulong),
+            (lacing_storage as usize)
+                .wrapping_mul(::std::mem::size_of::<ogg_int64_t>() as usize),
         );
         if ret.is_null() {
             ogg_stream_clear(os);
@@ -581,7 +581,7 @@ pub unsafe extern "C" fn ogg_stream_iovecin(
     }
     i = 0 as i32;
     while i < count {
-        if (*iov.offset(i as isize)).iov_len > 9223372036854775807 as isize as libc::c_ulong {
+        if (*iov.offset(i as isize)).iov_len > 9223372036854775807 as isize as usize {
             return -(1 as i32);
         }
         if bytes > 9223372036854775807 as isize - (*iov.offset(i as isize)).iov_len as isize {
@@ -600,7 +600,7 @@ pub unsafe extern "C" fn ogg_stream_iovecin(
             crate::stdlib::memmove(
                 (*os).body_data as *mut libc::c_void,
                 (*os).body_data.offset((*os).body_returned as isize) as *const libc::c_void,
-                (*os).body_fill as libc::c_ulong,
+                (*os).body_fill as usize,
             );
         }
         (*os).body_returned = 0 as i32 as isize
@@ -748,7 +748,7 @@ unsafe extern "C" fn ogg_stream_flush_i(
     crate::stdlib::memcpy(
         (*os).header.as_mut_ptr() as *mut libc::c_void,
         b"OggS\x00" as *const u8 as *const libc::c_char as *const libc::c_void,
-        4 as i32 as libc::c_ulong,
+        4 as i32 as usize,
     );
     /* stream structure version */
     (*os).header[4 as i32 as usize] = 0 as i32 as u8;
@@ -827,14 +827,14 @@ unsafe extern "C" fn ogg_stream_flush_i(
     crate::stdlib::memmove(
         (*os).lacing_vals as *mut libc::c_void,
         (*os).lacing_vals.offset(vals as isize) as *const libc::c_void,
-        ((*os).lacing_fill as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+        ((*os).lacing_fill as usize)
+            .wrapping_mul(::std::mem::size_of::<i32>() as usize),
     );
     crate::stdlib::memmove(
         (*os).granule_vals as *mut libc::c_void,
         (*os).granule_vals.offset(vals as isize) as *const libc::c_void,
-        ((*os).lacing_fill as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<ogg_int64_t>() as libc::c_ulong),
+        ((*os).lacing_fill as usize)
+            .wrapping_mul(::std::mem::size_of::<ogg_int64_t>() as usize),
     );
     (*os).body_returned += bytes as isize;
     /* calculate the checksum */
@@ -945,7 +945,7 @@ pub unsafe extern "C" fn ogg_sync_init(mut oy: *mut ogg_sync_state) -> i32 {
         crate::stdlib::memset(
             oy as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<ogg_sync_state>() as libc::c_ulong,
+            ::std::mem::size_of::<ogg_sync_state>() as usize,
         );
     }
     return 0 as i32;
@@ -961,7 +961,7 @@ pub unsafe extern "C" fn ogg_sync_clear(mut oy: *mut ogg_sync_state) -> i32 {
         crate::stdlib::memset(
             oy as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<ogg_sync_state>() as libc::c_ulong,
+            ::std::mem::size_of::<ogg_sync_state>() as usize,
         );
     }
     return 0 as i32;
@@ -999,7 +999,7 @@ pub unsafe extern "C" fn ogg_sync_buffer(
             crate::stdlib::memmove(
                 (*oy).data as *mut libc::c_void,
                 (*oy).data.offset((*oy).returned as isize) as *const libc::c_void,
-                (*oy).fill as libc::c_ulong,
+                (*oy).fill as usize,
             );
         }
         (*oy).returned = 0 as i32
@@ -1009,9 +1009,9 @@ pub unsafe extern "C" fn ogg_sync_buffer(
         let mut newsize: isize = size + (*oy).fill as isize + 4096 as i32 as isize; /* an extra page to be nice */
         let mut ret: *mut libc::c_void = 0 as *mut libc::c_void;
         if !(*oy).data.is_null() {
-            ret = crate::stdlib::realloc((*oy).data as *mut libc::c_void, newsize as libc::c_ulong)
+            ret = crate::stdlib::realloc((*oy).data as *mut libc::c_void, newsize as usize)
         } else {
-            ret = crate::stdlib::malloc(newsize as libc::c_ulong)
+            ret = crate::stdlib::malloc(newsize as usize)
         }
         if ret.is_null() {
             ogg_sync_clear(oy);
@@ -1067,7 +1067,7 @@ pub unsafe extern "C" fn ogg_sync_pageseek(
         if crate::stdlib::memcmp(
             page as *const libc::c_void,
             b"OggS\x00" as *const u8 as *const libc::c_char as *const libc::c_void,
-            4 as i32 as libc::c_ulong,
+            4 as i32 as usize,
         ) != 0
         {
             current_block = 8719873228262180869; /* not enough for header + seg table */
@@ -1105,12 +1105,12 @@ pub unsafe extern "C" fn ogg_sync_pageseek(
             crate::stdlib::memcpy(
                 chksum.as_mut_ptr() as *mut libc::c_void,
                 page.offset(22 as i32 as isize) as *const libc::c_void,
-                4 as i32 as libc::c_ulong,
+                4 as i32 as usize,
             );
             crate::stdlib::memset(
                 page.offset(22 as i32 as isize) as *mut libc::c_void,
                 0 as i32,
-                4 as i32 as libc::c_ulong,
+                4 as i32 as usize,
             );
             /* set up a temp page struct and recompute the checksum */
             log.header = page;
@@ -1122,7 +1122,7 @@ pub unsafe extern "C" fn ogg_sync_pageseek(
             if crate::stdlib::memcmp(
                 chksum.as_mut_ptr() as *const libc::c_void,
                 page.offset(22 as i32 as isize) as *const libc::c_void,
-                4 as i32 as libc::c_ulong,
+                4 as i32 as usize,
             ) != 0
             {
                 /* D'oh.  Mismatch! Corrupt page (or miscapture and not a page
@@ -1131,7 +1131,7 @@ pub unsafe extern "C" fn ogg_sync_pageseek(
                 crate::stdlib::memcpy(
                     page.offset(22 as i32 as isize) as *mut libc::c_void,
                     chksum.as_mut_ptr() as *const libc::c_void,
-                    4 as i32 as libc::c_ulong,
+                    4 as i32 as usize,
                 );
             } else {
                 /* yes, have a whole page all ready to go */
@@ -1160,7 +1160,7 @@ pub unsafe extern "C" fn ogg_sync_pageseek(
     next = crate::stdlib::memchr(
         page.offset(1 as i32 as isize) as *const libc::c_void,
         'O' as i32,
-        (bytes - 1 as i32 as isize) as libc::c_ulong,
+        (bytes - 1 as i32 as isize) as usize,
     ) as *mut u8;
     if next.is_null() {
         next = (*oy).data.offset((*oy).fill as isize)
@@ -1242,7 +1242,7 @@ pub unsafe extern "C" fn ogg_stream_pagein(
             crate::stdlib::memmove(
                 (*os).body_data as *mut libc::c_void,
                 (*os).body_data.offset(br as isize) as *const libc::c_void,
-                (*os).body_fill as libc::c_ulong,
+                (*os).body_fill as usize,
             );
         }
         (*os).body_returned = 0 as i32 as isize
@@ -1253,14 +1253,14 @@ pub unsafe extern "C" fn ogg_stream_pagein(
             crate::stdlib::memmove(
                 (*os).lacing_vals as *mut libc::c_void,
                 (*os).lacing_vals.offset(lr as isize) as *const libc::c_void,
-                (((*os).lacing_fill - lr) as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+                (((*os).lacing_fill - lr) as usize)
+                    .wrapping_mul(::std::mem::size_of::<i32>() as usize),
             );
             crate::stdlib::memmove(
                 (*os).granule_vals as *mut libc::c_void,
                 (*os).granule_vals.offset(lr as isize) as *const libc::c_void,
-                (((*os).lacing_fill - lr) as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<ogg_int64_t>() as libc::c_ulong),
+                (((*os).lacing_fill - lr) as usize)
+                    .wrapping_mul(::std::mem::size_of::<ogg_int64_t>() as usize),
             );
         }
         (*os).lacing_fill -= lr;
@@ -1330,7 +1330,7 @@ pub unsafe extern "C" fn ogg_stream_pagein(
         crate::stdlib::memcpy(
             (*os).body_data.offset((*os).body_fill as isize) as *mut libc::c_void,
             body as *const libc::c_void,
-            bodysize as libc::c_ulong,
+            bodysize as usize,
         );
         (*os).body_fill += bodysize
     }
@@ -1496,6 +1496,6 @@ pub unsafe extern "C" fn ogg_packet_clear(mut op: *mut ogg_packet) {
     crate::stdlib::memset(
         op as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<ogg_packet>() as libc::c_ulong,
+        ::std::mem::size_of::<ogg_packet>() as usize,
     );
 }

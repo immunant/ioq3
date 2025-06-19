@@ -219,7 +219,7 @@ pub struct arith_entropy_decoder {
 unsafe extern "C" fn get_byte(mut cinfo: j_decompress_ptr) -> i32
 /* Read next input byte; we do not support suspension in this module. */ {
     let mut src: *mut jpeg_source_mgr = (*cinfo).src;
-    if (*src).bytes_in_buffer == 0 as i32 as libc::c_ulong {
+    if (*src).bytes_in_buffer == 0 as i32 as usize {
         if Some((*src).fill_input_buffer.expect("non-null function pointer"))
             .expect("non-null function pointer")(cinfo)
             == 0
@@ -1240,7 +1240,7 @@ pub unsafe extern "C" fn jinit_arith_decoder(mut cinfo: j_decompress_ptr) {
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         1 as i32,
-        ::std::mem::size_of::<arith_entropy_decoder>() as libc::c_ulong,
+        ::std::mem::size_of::<arith_entropy_decoder>() as usize,
     ) as arith_entropy_ptr;
     (*cinfo).entropy = entropy as *mut jpeg_entropy_decoder;
     (*entropy).pub_0.start_pass =
@@ -1266,8 +1266,8 @@ pub unsafe extern "C" fn jinit_arith_decoder(mut cinfo: j_decompress_ptr) {
         .expect("non-null function pointer")(
             cinfo as j_common_ptr,
             1 as i32,
-            (((*cinfo).num_components * 64 as i32) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+            (((*cinfo).num_components * 64 as i32) as usize)
+                .wrapping_mul(::std::mem::size_of::<i32>() as usize),
         ) as *mut [i32; 64];
         coef_bit_ptr = &mut *(*(*cinfo).coef_bits.offset(0 as i32 as isize))
             .as_mut_ptr()

@@ -425,7 +425,7 @@ unsafe extern "C" fn jpeg_make_d_derived_tbl(
         .expect("non-null function pointer")(
             cinfo as j_common_ptr,
             1 as i32,
-            ::std::mem::size_of::<d_derived_tbl>() as libc::c_ulong,
+            ::std::mem::size_of::<d_derived_tbl>() as usize,
         ) as *mut d_derived_tbl
     } /* fill in back link */
     dtbl = *pdtbl;
@@ -514,7 +514,7 @@ unsafe extern "C" fn jpeg_make_d_derived_tbl(
     crate::stdlib::memset(
         (*dtbl).look_nbits.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[i32; 256]>() as libc::c_ulong,
+        ::std::mem::size_of::<[i32; 256]>() as usize,
     );
     p = 0 as i32;
     l = 1 as i32;
@@ -584,7 +584,7 @@ unsafe extern "C" fn jpeg_fill_bit_buffer(
             }
             let mut c: i32 = 0;
             /* Attempt to read a byte */
-            if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+            if bytes_in_buffer == 0 as i32 as usize {
                 if Some(
                     (*(*cinfo).src)
                         .fill_input_buffer
@@ -611,7 +611,7 @@ unsafe extern "C" fn jpeg_fill_bit_buffer(
                  * byte.  This data pattern is not valid according to the standard.
                  */
                 {
-                    if bytes_in_buffer == 0 as i32 as libc::c_ulong {
+                    if bytes_in_buffer == 0 as i32 as usize {
                         if Some(
                             (*(*cinfo).src)
                                 .fill_input_buffer
@@ -2547,7 +2547,7 @@ pub unsafe extern "C" fn jinit_huff_decoder(mut cinfo: j_decompress_ptr) {
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         1 as i32,
-        ::std::mem::size_of::<huff_entropy_decoder>() as libc::c_ulong,
+        ::std::mem::size_of::<huff_entropy_decoder>() as usize,
     ) as huff_entropy_ptr;
     (*cinfo).entropy = entropy as *mut jpeg_entropy_decoder;
     (*entropy).pub_0.start_pass =
@@ -2564,8 +2564,8 @@ pub unsafe extern "C" fn jinit_huff_decoder(mut cinfo: j_decompress_ptr) {
         .expect("non-null function pointer")(
             cinfo as j_common_ptr,
             1 as i32,
-            (((*cinfo).num_components * 64 as i32) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+            (((*cinfo).num_components * 64 as i32) as usize)
+                .wrapping_mul(::std::mem::size_of::<i32>() as usize),
         ) as *mut [i32; 64];
         coef_bit_ptr = &mut *(*(*cinfo).coef_bits.offset(0 as i32 as isize))
             .as_mut_ptr()

@@ -94,12 +94,12 @@ pub unsafe extern "C" fn clt_mdct_forward_c(
     N4 = N >> 2 as i32;
     let mut fresh0 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<f32>() as libc::c_ulong).wrapping_mul(N2 as libc::c_ulong) as usize,
+        (::std::mem::size_of::<f32>() as usize).wrapping_mul(N2 as usize) as usize,
     );
     f = fresh0.as_mut_ptr() as *mut f32;
     let mut fresh1 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<kiss_fft_cpx>() as libc::c_ulong).wrapping_mul(N4 as libc::c_ulong)
+        (::std::mem::size_of::<kiss_fft_cpx>() as usize).wrapping_mul(N4 as usize)
             as usize,
     );
     f2 = fresh1.as_mut_ptr() as *mut kiss_fft_cpx;

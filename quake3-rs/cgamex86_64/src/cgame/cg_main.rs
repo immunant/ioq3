@@ -2926,7 +2926,7 @@ pub unsafe extern "C" fn CG_RegisterCvars() {
     trap_Cvar_VariableStringBuffer(
         b"sv_running\x00" as *const u8 as *const libc::c_char,
         var.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     cgs.localServer = atoi(var.as_mut_ptr()) as qboolean;
     forceModelModificationCount = cg_forceModel.modificationCount;
@@ -3037,7 +3037,7 @@ pub unsafe extern "C" fn CG_Printf(mut msg: *const libc::c_char, mut args: ...) 
     argptr = args.clone();
     crate::stdlib::vsnprintf(
         text.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize,
         msg,
         argptr.as_va_list(),
     );
@@ -3051,7 +3051,7 @@ pub unsafe extern "C" fn CG_Error(mut msg: *const libc::c_char, mut args: ...) -
     argptr = args.clone();
     crate::stdlib::vsnprintf(
         text.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize,
         msg,
         argptr.as_va_list(),
     );
@@ -3069,7 +3069,7 @@ pub unsafe extern "C" fn Com_Error(
     argptr = args.clone();
     crate::stdlib::vsnprintf(
         text.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize,
         error,
         argptr.as_va_list(),
     );
@@ -3234,7 +3234,7 @@ pub unsafe extern "C" fn Com_Printf(mut msg: *const libc::c_char, mut args: ...)
     argptr = args.clone();
     crate::stdlib::vsnprintf(
         text.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize,
         msg,
         argptr.as_va_list(),
     );
@@ -3252,7 +3252,7 @@ pub unsafe extern "C" fn CG_Argv(mut arg: i32) -> *const libc::c_char {
     trap_Argv(
         arg,
         buffer.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     return buffer.as_mut_ptr();
 }
@@ -3295,7 +3295,7 @@ unsafe extern "C" fn CG_RegisterItemSounds(mut itemNum: i32) {
         crate::stdlib::memcpy(
             data.as_mut_ptr() as *mut libc::c_void,
             start as *const libc::c_void,
-            len as libc::c_ulong,
+            len as usize,
         );
         data[len as usize] = 0 as i32 as libc::c_char;
         if *s != 0 {
@@ -3566,7 +3566,7 @@ unsafe extern "C" fn CG_RegisterSounds() {
     while i < 4 as i32 {
         Com_sprintf(
             name.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             b"sound/player/footsteps/step%i.wav\x00" as *const u8 as *const libc::c_char,
             i + 1 as i32,
         );
@@ -3574,7 +3574,7 @@ unsafe extern "C" fn CG_RegisterSounds() {
             trap_S_RegisterSound(name.as_mut_ptr(), qfalse);
         Com_sprintf(
             name.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             b"sound/player/footsteps/boot%i.wav\x00" as *const u8 as *const libc::c_char,
             i + 1 as i32,
         );
@@ -3582,7 +3582,7 @@ unsafe extern "C" fn CG_RegisterSounds() {
             trap_S_RegisterSound(name.as_mut_ptr(), qfalse);
         Com_sprintf(
             name.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             b"sound/player/footsteps/flesh%i.wav\x00" as *const u8 as *const libc::c_char,
             i + 1 as i32,
         );
@@ -3590,7 +3590,7 @@ unsafe extern "C" fn CG_RegisterSounds() {
             trap_S_RegisterSound(name.as_mut_ptr(), qfalse);
         Com_sprintf(
             name.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             b"sound/player/footsteps/mech%i.wav\x00" as *const u8 as *const libc::c_char,
             i + 1 as i32,
         );
@@ -3598,7 +3598,7 @@ unsafe extern "C" fn CG_RegisterSounds() {
             trap_S_RegisterSound(name.as_mut_ptr(), qfalse);
         Com_sprintf(
             name.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             b"sound/player/footsteps/energy%i.wav\x00" as *const u8 as *const libc::c_char,
             i + 1 as i32,
         );
@@ -3606,7 +3606,7 @@ unsafe extern "C" fn CG_RegisterSounds() {
             trap_S_RegisterSound(name.as_mut_ptr(), qfalse);
         Com_sprintf(
             name.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             b"sound/player/footsteps/splash%i.wav\x00" as *const u8 as *const libc::c_char,
             i + 1 as i32,
         );
@@ -3614,7 +3614,7 @@ unsafe extern "C" fn CG_RegisterSounds() {
             trap_S_RegisterSound(name.as_mut_ptr(), qfalse);
         Com_sprintf(
             name.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             b"sound/player/footsteps/clank%i.wav\x00" as *const u8 as *const libc::c_char,
             i + 1 as i32,
         );
@@ -3626,7 +3626,7 @@ unsafe extern "C" fn CG_RegisterSounds() {
     Q_strncpyz(
         items.as_mut_ptr(),
         CG_ConfigString(27 as i32),
-        ::std::mem::size_of::<[libc::c_char; 257]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 257]>() as usize as i32,
     );
     i = 1 as i32;
     while i < bg_numItems {
@@ -3731,7 +3731,7 @@ unsafe extern "C" fn CG_RegisterGraphics() {
     crate::stdlib::memset(
         &mut cg.refdef as *mut refdef_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<refdef_t>() as libc::c_ulong,
+        ::std::mem::size_of::<refdef_t>() as usize,
     );
     trap_R_ClearScene();
     CG_LoadingString(cgs.mapname.as_mut_ptr());
@@ -3903,18 +3903,18 @@ unsafe extern "C" fn CG_RegisterGraphics() {
     crate::stdlib::memset(
         cg_items.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[itemInfo_t; 256]>() as libc::c_ulong,
+        ::std::mem::size_of::<[itemInfo_t; 256]>() as usize,
     );
     crate::stdlib::memset(
         cg_weapons.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[weaponInfo_t; 16]>() as libc::c_ulong,
+        ::std::mem::size_of::<[weaponInfo_t; 16]>() as usize,
     );
     // only register the items that the server says we need
     Q_strncpyz(
         items.as_mut_ptr(),
         CG_ConfigString(27 as i32),
-        ::std::mem::size_of::<[libc::c_char; 257]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 257]>() as usize as i32,
     );
     i = 1 as i32;
     while i < bg_numItems {
@@ -3949,7 +3949,7 @@ unsafe extern "C" fn CG_RegisterGraphics() {
         let mut j: i32 = 0;
         Com_sprintf(
             name.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 10]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 10]>() as usize as i32,
             b"*%i\x00" as *const u8 as *const libc::c_char,
             i,
         );
@@ -4011,7 +4011,7 @@ pub unsafe extern "C" fn CG_BuildSpectatorString() {
         {
             Q_strcat(
                 cg.spectatorList.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
                 va(
                     b"%s     \x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     cgs.clientinfo[i as usize].name.as_mut_ptr(),
@@ -4089,12 +4089,12 @@ pub unsafe extern "C" fn CG_StartMusic() {
     Q_strncpyz(
         parm1.as_mut_ptr(),
         COM_Parse(&mut s),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     Q_strncpyz(
         parm2.as_mut_ptr(),
         COM_Parse(&mut s),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     trap_S_StartBackgroundTrack(parm1.as_mut_ptr(), parm2.as_mut_ptr());
 }
@@ -4118,27 +4118,27 @@ pub unsafe extern "C" fn CG_Init(
     crate::stdlib::memset(
         &mut cgs as *mut cgs_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<cgs_t>() as libc::c_ulong,
+        ::std::mem::size_of::<cgs_t>() as usize,
     );
     crate::stdlib::memset(
         &mut cg as *mut cg_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<cg_t>() as libc::c_ulong,
+        ::std::mem::size_of::<cg_t>() as usize,
     );
     crate::stdlib::memset(
         cg_entities.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[centity_t; 1024]>() as libc::c_ulong,
+        ::std::mem::size_of::<[centity_t; 1024]>() as usize,
     );
     crate::stdlib::memset(
         cg_weapons.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[weaponInfo_t; 16]>() as libc::c_ulong,
+        ::std::mem::size_of::<[weaponInfo_t; 16]>() as usize,
     );
     crate::stdlib::memset(
         cg_items.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[itemInfo_t; 256]>() as libc::c_ulong,
+        ::std::mem::size_of::<[itemInfo_t; 256]>() as usize,
     );
     cg.clientNum = clientNum;
     cgs.processedSnapshotNum = serverMessageNum;
@@ -4437,8 +4437,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 pub unsafe extern "C" fn CG_MouseEvent(mut _x: i32, mut _y: i32) {}
 unsafe extern "C" fn run_static_initializers() {
-    cvarTableSize = (::std::mem::size_of::<[cvarTable_t; 83]>() as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<cvarTable_t>() as libc::c_ulong)
+    cvarTableSize = (::std::mem::size_of::<[cvarTable_t; 83]>() as usize)
+        .wrapping_div(::std::mem::size_of::<cvarTable_t>() as usize)
         as i32
 }
 #[used]

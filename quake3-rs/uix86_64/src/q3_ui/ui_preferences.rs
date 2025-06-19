@@ -608,7 +608,7 @@ unsafe extern "C" fn Preferences_MenuInit() {
     crate::stdlib::memset(
         &mut s_preferences as *mut preferences_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<preferences_t>() as libc::c_ulong,
+        ::std::mem::size_of::<preferences_t>() as usize,
     );
     Preferences_Cache();
     s_preferences.menu.wrapAround = qtrue;
@@ -650,10 +650,10 @@ unsafe extern "C" fn Preferences_MenuInit() {
     s_preferences.crosshair.generic.id = 127 as i32;
     s_preferences.crosshair.generic.top = y - 4 as i32;
     s_preferences.crosshair.generic.bottom = y + 20 as i32;
-    s_preferences.crosshair.generic.left = (360 as i32 as libc::c_ulong).wrapping_sub(
+    s_preferences.crosshair.generic.left = (360 as i32 as usize).wrapping_sub(
         crate::stdlib::strlen(s_preferences.crosshair.generic.name)
-            .wrapping_add(1 as i32 as libc::c_ulong)
-            .wrapping_mul(8 as i32 as libc::c_ulong),
+            .wrapping_add(1 as i32 as usize)
+            .wrapping_mul(8 as i32 as usize),
     ) as i32;
     s_preferences.crosshair.generic.right = 360 as i32 + 48 as i32;
     s_preferences.crosshair.numitems = 10 as i32;

@@ -488,7 +488,7 @@ unsafe extern "C" fn PlayerIcon(
     Q_strncpyz(
         model.as_mut_ptr(),
         modelAndSkin,
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     skin = libc::strrchr(model.as_mut_ptr(), '/' as i32);
     if !skin.is_null() {
@@ -527,7 +527,7 @@ unsafe extern "C" fn PlayerIconHandle(mut modelAndSkin: *const libc::c_char) -> 
     PlayerIcon(
         modelAndSkin,
         iconName.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     return trap_R_RegisterShaderNoMip(iconName.as_mut_ptr());
 }
@@ -552,7 +552,7 @@ unsafe extern "C" fn UI_SPLevelMenu_SetBots() {
             levelMenuInfo.selectedArenaInfo,
             b"bots\x00" as *const u8 as *const libc::c_char,
         ),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     p = &mut *bots.as_mut_ptr().offset(0 as i32 as isize) as *mut libc::c_char;
     while *p as i32 != 0 && levelMenuInfo.numBots < 7 as i32 {
@@ -614,12 +614,12 @@ unsafe extern "C" fn UI_SPLevelMenu_SetMenuArena(
     Q_strncpyz(
         map.as_mut_ptr(),
         Info_ValueForKey(arenaInfo, b"map\x00" as *const u8 as *const libc::c_char),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     Q_strncpyz(
         levelMenuInfo.levelNames[n as usize].as_mut_ptr(),
         map.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 16]>() as usize as i32,
     );
     Q_strupr(levelMenuInfo.levelNames[n as usize].as_mut_ptr());
     UI_GetBestScore(
@@ -635,7 +635,7 @@ unsafe extern "C" fn UI_SPLevelMenu_SetMenuArena(
     }
     Com_sprintf(
         levelMenuInfo.levelPicNames[n as usize].as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         b"levelshots/%s.tga\x00" as *const u8 as *const libc::c_char,
         map.as_mut_ptr(),
     );
@@ -1012,18 +1012,18 @@ unsafe extern "C" fn UI_SPLevelMenu_MenuDraw() {
     trap_Cvar_VariableStringBuffer(
         b"model\x00" as *const u8 as *const libc::c_char,
         buf.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     if Q_stricmp(buf.as_mut_ptr(), levelMenuInfo.playerModel.as_mut_ptr()) != 0 as i32 {
         Q_strncpyz(
             levelMenuInfo.playerModel.as_mut_ptr(),
             buf.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         );
         PlayerIcon(
             levelMenuInfo.playerModel.as_mut_ptr(),
             levelMenuInfo.playerPicName.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         );
         levelMenuInfo.item_player.shader = 0 as i32
     }
@@ -1046,21 +1046,21 @@ unsafe extern "C" fn UI_SPLevelMenu_MenuDraw() {
                 if level >= 1000000 as i32 {
                     Com_sprintf(
                         string.as_mut_ptr(),
-                        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
                         b"%im\x00" as *const u8 as *const libc::c_char,
                         level / 1000000 as i32,
                     );
                 } else if level >= 1000 as i32 {
                     Com_sprintf(
                         string.as_mut_ptr(),
-                        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
                         b"%ik\x00" as *const u8 as *const libc::c_char,
                         level / 1000 as i32,
                     );
                 } else {
                     Com_sprintf(
                         string.as_mut_ptr(),
-                        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
                         b"%i\x00" as *const u8 as *const libc::c_char,
                         level,
                     );
@@ -1181,7 +1181,7 @@ unsafe extern "C" fn UI_SPLevelMenu_MenuDraw() {
     Q_strupr(buf.as_mut_ptr());
     Com_sprintf(
         string.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         b"%s: %s\x00" as *const u8 as *const libc::c_char,
         buf.as_mut_ptr(),
         Info_ValueForKey(
@@ -1316,7 +1316,7 @@ unsafe extern "C" fn UI_SPLevelMenu_Init() {
     crate::stdlib::memset(
         &mut levelMenuInfo as *mut levelMenuInfo_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<levelMenuInfo_t>() as libc::c_ulong,
+        ::std::mem::size_of::<levelMenuInfo_t>() as usize,
     );
     levelMenuInfo.menu.fullscreen = qtrue;
     levelMenuInfo.menu.wrapAround = qtrue;
@@ -1404,12 +1404,12 @@ unsafe extern "C" fn UI_SPLevelMenu_Init() {
     trap_Cvar_VariableStringBuffer(
         b"model\x00" as *const u8 as *const libc::c_char,
         levelMenuInfo.playerModel.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     PlayerIcon(
         levelMenuInfo.playerModel.as_mut_ptr(),
         levelMenuInfo.playerPicName.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     levelMenuInfo.item_player.generic.type_0 = 6 as i32;
     levelMenuInfo.item_player.generic.name = levelMenuInfo.playerPicName.as_mut_ptr();
@@ -1597,7 +1597,7 @@ unsafe extern "C" fn UI_SPLevelMenu_Init() {
     trap_Cvar_VariableStringBuffer(
         b"ui_spSelection\x00" as *const u8 as *const libc::c_char,
         buf.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     if *buf.as_mut_ptr() != 0 {
         n = atoi(buf.as_mut_ptr());

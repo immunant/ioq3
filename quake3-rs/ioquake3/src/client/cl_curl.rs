@@ -932,16 +932,16 @@ pub unsafe extern "C" fn CL_cURL_BeginDownload(
     Q_strncpyz(
         clc.downloadURL.as_mut_ptr(),
         remoteURL,
-        ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
     );
     Q_strncpyz(
         clc.downloadName.as_mut_ptr(),
         localName,
-        ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
     );
     Com_sprintf(
         clc.downloadTempName.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
         b"%s.tmp\x00" as *const u8 as *const libc::c_char,
         localName,
     );

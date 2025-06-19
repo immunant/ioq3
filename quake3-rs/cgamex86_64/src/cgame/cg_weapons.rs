@@ -1015,7 +1015,7 @@ pub unsafe extern "C" fn CG_GrappleTrail(mut ent: *mut centity_t, mut _wi: *cons
     crate::stdlib::memset(
         &mut beam as *mut refEntity_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
+        ::std::mem::size_of::<refEntity_t>() as usize,
     );
     //FIXME adjust for muzzle position
     beam.origin[0 as i32 as usize] =
@@ -1094,7 +1094,7 @@ pub unsafe extern "C" fn CG_RegisterWeapon(mut weaponNum: i32) {
     crate::stdlib::memset(
         weaponInfo as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<weaponInfo_t>() as libc::c_ulong,
+        ::std::mem::size_of::<weaponInfo_t>() as usize,
     );
     (*weaponInfo).registered = qtrue;
     item = bg_itemlist.as_mut_ptr().offset(1 as i32 as isize);
@@ -1143,33 +1143,33 @@ pub unsafe extern "C" fn CG_RegisterWeapon(mut weaponNum: i32) {
     COM_StripExtension(
         (*item).world_model[0 as i32 as usize],
         path.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     Q_strcat(
         path.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         b"_flash.md3\x00" as *const u8 as *const libc::c_char,
     );
     (*weaponInfo).flashModel = trap_R_RegisterModel(path.as_mut_ptr());
     COM_StripExtension(
         (*item).world_model[0 as i32 as usize],
         path.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     Q_strcat(
         path.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         b"_barrel.md3\x00" as *const u8 as *const libc::c_char,
     );
     (*weaponInfo).barrelModel = trap_R_RegisterModel(path.as_mut_ptr());
     COM_StripExtension(
         (*item).world_model[0 as i32 as usize],
         path.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     Q_strcat(
         path.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         b"_hand.md3\x00" as *const u8 as *const libc::c_char,
     );
     (*weaponInfo).handsModel = trap_R_RegisterModel(path.as_mut_ptr());
@@ -1438,7 +1438,7 @@ pub unsafe extern "C" fn CG_RegisterItemVisuals(mut itemNum: i32) {
     crate::stdlib::memset(
         itemInfo as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<itemInfo_t>() as libc::c_ulong,
+        ::std::mem::size_of::<itemInfo_t>() as usize,
     );
     (*itemInfo).registered = qtrue;
     (*itemInfo).models[0 as i32 as usize] =
@@ -1609,7 +1609,7 @@ unsafe extern "C" fn CG_LightningBolt(mut cent: *mut centity_t, mut origin: *mut
     crate::stdlib::memset(
         &mut beam as *mut refEntity_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
+        ::std::mem::size_of::<refEntity_t>() as usize,
     );
     // CPMA  "true" lightning
     if (*cent).currentState.number == cg.predictedPlayerState.clientNum
@@ -1711,7 +1711,7 @@ unsafe extern "C" fn CG_LightningBolt(mut cent: *mut centity_t, mut origin: *mut
         crate::stdlib::memset(
             &mut beam as *mut refEntity_t as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
+            ::std::mem::size_of::<refEntity_t>() as usize,
         );
         beam.hModel = cgs.media.lightningExplosionModel;
         beam.origin[0 as i32 as usize] =
@@ -1875,7 +1875,7 @@ pub unsafe extern "C" fn CG_AddPlayerWeapon(
     crate::stdlib::memset(
         &mut gun as *mut refEntity_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
+        ::std::mem::size_of::<refEntity_t>() as usize,
     );
     gun.lightingOrigin[0 as i32 as usize] = (*parent).lightingOrigin[0 as i32 as usize];
     gun.lightingOrigin[1 as i32 as usize] = (*parent).lightingOrigin[1 as i32 as usize];
@@ -1987,7 +1987,7 @@ pub unsafe extern "C" fn CG_AddPlayerWeapon(
         crate::stdlib::memset(
             &mut barrel as *mut refEntity_t as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
+            ::std::mem::size_of::<refEntity_t>() as usize,
         );
         barrel.lightingOrigin[0 as i32 as usize] = (*parent).lightingOrigin[0 as i32 as usize];
         barrel.lightingOrigin[1 as i32 as usize] = (*parent).lightingOrigin[1 as i32 as usize];
@@ -2036,7 +2036,7 @@ pub unsafe extern "C" fn CG_AddPlayerWeapon(
     crate::stdlib::memset(
         &mut flash as *mut refEntity_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
+        ::std::mem::size_of::<refEntity_t>() as usize,
     );
     flash.lightingOrigin[0 as i32 as usize] = (*parent).lightingOrigin[0 as i32 as usize];
     flash.lightingOrigin[1 as i32 as usize] = (*parent).lightingOrigin[1 as i32 as usize];
@@ -2179,7 +2179,7 @@ pub unsafe extern "C" fn CG_AddViewWeapon(mut ps: *mut playerState_t) {
     crate::stdlib::memset(
         &mut hand as *mut refEntity_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
+        ::std::mem::size_of::<refEntity_t>() as usize,
     );
     // set up gun position
     CG_CalculateWeaponPosition(hand.origin.as_mut_ptr(), angles.as_mut_ptr());

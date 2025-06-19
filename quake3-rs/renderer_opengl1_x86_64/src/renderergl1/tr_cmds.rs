@@ -324,12 +324,12 @@ pub unsafe extern "C" fn R_PerformanceCounters() {
         crate::stdlib::memset(
             &mut tr.pc as *mut frontEndCounters_t as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<frontEndCounters_t>() as libc::c_ulong,
+            ::std::mem::size_of::<frontEndCounters_t>() as usize,
         );
         crate::stdlib::memset(
             &mut backEnd.pc as *mut backEndCounters_t as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<backEndCounters_t>() as libc::c_ulong,
+            ::std::mem::size_of::<backEndCounters_t>() as usize,
         );
         return;
     }
@@ -406,12 +406,12 @@ pub unsafe extern "C" fn R_PerformanceCounters() {
     crate::stdlib::memset(
         &mut tr.pc as *mut frontEndCounters_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<frontEndCounters_t>() as libc::c_ulong,
+        ::std::mem::size_of::<frontEndCounters_t>() as usize,
     );
     crate::stdlib::memset(
         &mut backEnd.pc as *mut backEndCounters_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<backEndCounters_t>() as libc::c_ulong,
+        ::std::mem::size_of::<backEndCounters_t>() as usize,
     );
 }
 /*
@@ -523,20 +523,20 @@ pub unsafe extern "C" fn R_GetCommandBufferReserved(
 ) -> *mut libc::c_void {
     let mut cmdList: *mut renderCommandList_t = 0 as *mut renderCommandList_t;
     cmdList = &mut (*backEndData).commands;
-    bytes = ((bytes as libc::c_ulong)
-        .wrapping_add(::std::mem::size_of::<*mut libc::c_void>() as libc::c_ulong)
-        .wrapping_sub(1 as i32 as libc::c_ulong)
-        & !(::std::mem::size_of::<*mut libc::c_void>() as libc::c_ulong)
-            .wrapping_sub(1 as i32 as libc::c_ulong)) as i32;
+    bytes = ((bytes as usize)
+        .wrapping_add(::std::mem::size_of::<*mut libc::c_void>() as usize)
+        .wrapping_sub(1 as i32 as usize)
+        & !(::std::mem::size_of::<*mut libc::c_void>() as usize)
+            .wrapping_sub(1 as i32 as usize)) as i32;
     // always leave room for the end of list command
-    if (((*cmdList).used + bytes) as libc::c_ulong)
-        .wrapping_add(::std::mem::size_of::<i32>() as libc::c_ulong)
-        .wrapping_add(reservedBytes as libc::c_ulong)
-        > 0x40000 as i32 as libc::c_ulong
+    if (((*cmdList).used + bytes) as usize)
+        .wrapping_add(::std::mem::size_of::<i32>() as usize)
+        .wrapping_add(reservedBytes as usize)
+        > 0x40000 as i32 as usize
     {
-        if bytes as libc::c_ulong
-            > (0x40000 as i32 as libc::c_ulong)
-                .wrapping_sub(::std::mem::size_of::<i32>() as libc::c_ulong)
+        if bytes as usize
+            > (0x40000 as i32 as usize)
+                .wrapping_sub(::std::mem::size_of::<i32>() as usize)
         {
             ri.Error.expect("non-null function pointer")(
                 ERR_FATAL as i32,
@@ -566,11 +566,11 @@ returns NULL if there is not enough space for important commands
 pub unsafe extern "C" fn R_GetCommandBuffer(mut bytes: i32) -> *mut libc::c_void {
     return R_GetCommandBufferReserved(
         bytes,
-        ((::std::mem::size_of::<swapBuffersCommand_t>() as libc::c_ulong)
-            .wrapping_add(::std::mem::size_of::<*mut libc::c_void>() as libc::c_ulong)
-            .wrapping_sub(1 as i32 as libc::c_ulong)
-            & !(::std::mem::size_of::<*mut libc::c_void>() as libc::c_ulong)
-                .wrapping_sub(1 as i32 as libc::c_ulong)) as i32,
+        ((::std::mem::size_of::<swapBuffersCommand_t>() as usize)
+            .wrapping_add(::std::mem::size_of::<*mut libc::c_void>() as usize)
+            .wrapping_sub(1 as i32 as usize)
+            & !(::std::mem::size_of::<*mut libc::c_void>() as usize)
+                .wrapping_sub(1 as i32 as usize)) as i32,
     );
 }
 /*
@@ -583,7 +583,7 @@ R_AddDrawSurfCmd
 
 pub unsafe extern "C" fn R_AddDrawSurfCmd(mut drawSurfs: *mut drawSurf_t, mut numDrawSurfs: i32) {
     let mut cmd: *mut drawSurfsCommand_t = 0 as *mut drawSurfsCommand_t;
-    cmd = R_GetCommandBuffer(::std::mem::size_of::<drawSurfsCommand_t>() as libc::c_ulong as i32)
+    cmd = R_GetCommandBuffer(::std::mem::size_of::<drawSurfsCommand_t>() as usize as i32)
         as *mut drawSurfsCommand_t;
     if cmd.is_null() {
         return;
@@ -608,7 +608,7 @@ pub unsafe extern "C" fn RE_SetColor(mut rgba: *const f32) {
     if tr.registered as u64 == 0 {
         return;
     }
-    cmd = R_GetCommandBuffer(::std::mem::size_of::<setColorCommand_t>() as libc::c_ulong as i32)
+    cmd = R_GetCommandBuffer(::std::mem::size_of::<setColorCommand_t>() as usize as i32)
         as *mut setColorCommand_t;
     if cmd.is_null() {
         return;
@@ -650,7 +650,7 @@ pub unsafe extern "C" fn RE_StretchPic(
     if tr.registered as u64 == 0 {
         return;
     }
-    cmd = R_GetCommandBuffer(::std::mem::size_of::<stretchPicCommand_t>() as libc::c_ulong as i32)
+    cmd = R_GetCommandBuffer(::std::mem::size_of::<stretchPicCommand_t>() as usize as i32)
         as *mut stretchPicCommand_t;
     if cmd.is_null() {
         return;
@@ -812,7 +812,7 @@ pub unsafe extern "C" fn RE_BeginFrame(mut stereoFrame: stereoFrame_t) {
     }
     if glConfig.stereoEnabled as u64 != 0 {
         cmd = R_GetCommandBuffer(
-            ::std::mem::size_of::<drawBufferCommand_t>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<drawBufferCommand_t>() as usize as i32,
         ) as *mut drawBufferCommand_t;
         if cmd.is_null() {
             return;
@@ -849,13 +849,13 @@ pub unsafe extern "C" fn RE_BeginFrame(mut stereoFrame: stereoFrame_t) {
             }
             if stereoFrame as u32 == STEREO_LEFT as i32 as u32 {
                 cmd = R_GetCommandBuffer(
-                    ::std::mem::size_of::<drawBufferCommand_t>() as libc::c_ulong as i32
+                    ::std::mem::size_of::<drawBufferCommand_t>() as usize as i32
                 ) as *mut drawBufferCommand_t;
                 if cmd.is_null() {
                     return;
                 }
                 colcmd = R_GetCommandBuffer(
-                    ::std::mem::size_of::<colorMaskCommand_t>() as libc::c_ulong as i32
+                    ::std::mem::size_of::<colorMaskCommand_t>() as usize as i32
                 ) as *mut colorMaskCommand_t;
                 if colcmd.is_null() {
                     return;
@@ -863,14 +863,14 @@ pub unsafe extern "C" fn RE_BeginFrame(mut stereoFrame: stereoFrame_t) {
             } else if stereoFrame as u32 == STEREO_RIGHT as i32 as u32 {
                 let mut cldcmd: *mut clearDepthCommand_t = 0 as *mut clearDepthCommand_t;
                 cldcmd = R_GetCommandBuffer(
-                    ::std::mem::size_of::<clearDepthCommand_t>() as libc::c_ulong as i32
+                    ::std::mem::size_of::<clearDepthCommand_t>() as usize as i32
                 ) as *mut clearDepthCommand_t;
                 if cldcmd.is_null() {
                     return;
                 }
                 (*cldcmd).commandId = RC_CLEARDEPTH as i32;
                 colcmd = R_GetCommandBuffer(
-                    ::std::mem::size_of::<colorMaskCommand_t>() as libc::c_ulong as i32
+                    ::std::mem::size_of::<colorMaskCommand_t>() as usize as i32
                 ) as *mut colorMaskCommand_t;
                 if colcmd.is_null() {
                     return;
@@ -899,7 +899,7 @@ pub unsafe extern "C" fn RE_BeginFrame(mut stereoFrame: stereoFrame_t) {
                 );
             }
             cmd = R_GetCommandBuffer(
-                ::std::mem::size_of::<drawBufferCommand_t>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<drawBufferCommand_t>() as usize as i32,
             ) as *mut drawBufferCommand_t;
             if cmd.is_null() {
                 return;
@@ -944,7 +944,7 @@ pub unsafe extern "C" fn RE_EndFrame(mut frontEndMsec: *mut i32, mut backEndMsec
         return;
     }
     cmd = R_GetCommandBufferReserved(
-        ::std::mem::size_of::<swapBuffersCommand_t>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<swapBuffersCommand_t>() as usize as i32,
         0 as i32,
     ) as *mut swapBuffersCommand_t;
     if cmd.is_null() {
@@ -1407,7 +1407,7 @@ pub unsafe extern "C" fn RE_TakeVideoFrame(
     if tr.registered as u64 == 0 {
         return;
     }
-    cmd = R_GetCommandBuffer(::std::mem::size_of::<videoFrameCommand_t>() as libc::c_ulong as i32)
+    cmd = R_GetCommandBuffer(::std::mem::size_of::<videoFrameCommand_t>() as usize as i32)
         as *mut videoFrameCommand_t;
     if cmd.is_null() {
         return;

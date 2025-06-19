@@ -606,13 +606,13 @@ unsafe extern "C" fn UpdateIPBans() {
                 if m[j as usize] as i32 != 255 as i32 {
                     Q_strcat(
                         ip.as_mut_ptr(),
-                        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
                         b"*\x00" as *const u8 as *const libc::c_char,
                     );
                 } else {
                     Q_strcat(
                         ip.as_mut_ptr(),
-                        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
                         va(
                             b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                             b[j as usize] as i32,
@@ -621,7 +621,7 @@ unsafe extern "C" fn UpdateIPBans() {
                 }
                 Q_strcat(
                     ip.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
                     if j < 3 as i32 {
                         b".\x00" as *const u8 as *const libc::c_char
                     } else {
@@ -632,11 +632,11 @@ unsafe extern "C" fn UpdateIPBans() {
             }
             if crate::stdlib::strlen(iplist_final.as_mut_ptr())
                 .wrapping_add(crate::stdlib::strlen(ip.as_mut_ptr()))
-                < 256 as i32 as libc::c_ulong
+                < 256 as i32 as usize
             {
                 Q_strcat(
                     iplist_final.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
                     ip.as_mut_ptr(),
                 );
             } else {
@@ -731,7 +731,7 @@ pub unsafe extern "C" fn G_ProcessIPBans() {
     Q_strncpyz(
         str.as_mut_ptr(),
         g_banIPs.string.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
     );
     s = g_banIPs.string.as_mut_ptr();
     t = s;
@@ -768,7 +768,7 @@ pub unsafe extern "C" fn Svcmd_AddIP_f() {
     trap_Argv(
         1 as i32,
         str.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     AddIP(str.as_mut_ptr());
 }
@@ -793,7 +793,7 @@ pub unsafe extern "C" fn Svcmd_RemoveIP_f() {
     trap_Argv(
         1 as i32,
         str.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     if StringToFilter(str.as_mut_ptr(), &mut f) as u64 == 0 {
         return;
@@ -949,7 +949,7 @@ pub unsafe extern "C" fn Svcmd_ForceTeam_f() {
     trap_Argv(
         1 as i32,
         str.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     cl = ClientForString(str.as_mut_ptr());
     if cl.is_null() {
@@ -959,7 +959,7 @@ pub unsafe extern "C" fn Svcmd_ForceTeam_f() {
     trap_Argv(
         2 as i32,
         str.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     SetTeam(
         &mut *g_entities
@@ -1184,7 +1184,7 @@ pub unsafe extern "C" fn ConsoleCommand() -> qboolean {
     trap_Argv(
         0 as i32,
         cmd.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     if Q_stricmp(
         cmd.as_mut_ptr(),

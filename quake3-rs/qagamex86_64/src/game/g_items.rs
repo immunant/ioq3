@@ -954,7 +954,7 @@ pub unsafe extern "C" fn ClearRegisteredItems() {
     crate::stdlib::memset(
         itemRegistered.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[qboolean; 256]>() as libc::c_ulong,
+        ::std::mem::size_of::<[qboolean; 256]>() as usize,
     );
     // players always start with the base weapon
     RegisterItem(BG_FindItemForWeapon(WP_MACHINEGUN) as *mut gitem_s);
@@ -1018,7 +1018,7 @@ pub unsafe extern "C" fn G_ItemDisabled(mut item: *mut gitem_t) -> i32 {
     let mut name: [libc::c_char; 128] = [0; 128];
     Com_sprintf(
         name.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 128]>() as usize as i32,
         b"disable_%s\x00" as *const u8 as *const libc::c_char,
         (*item).classname,
     );

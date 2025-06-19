@@ -210,7 +210,7 @@ extern "C" {
     /* this is not a core library module, so it doesn't define JPEG_INTERNALS */
     /* <stdlib.h> should declare malloc(),free() */
     #[no_mangle]
-    pub fn malloc(_: libc::c_ulong) -> *mut libc::c_void;
+    pub fn malloc(_: usize) -> *mut libc::c_void;
     #[no_mangle]
     pub fn free(ptr: *mut libc::c_void);
 }
@@ -232,7 +232,7 @@ pub type my_mem_dest_ptr = *mut my_mem_destination_mgr;
 pub struct my_mem_destination_mgr {
     pub pub_0: jpeg_destination_mgr,
     pub outbuffer: *mut *mut u8,
-    pub outsize: *mut libc::c_ulong,
+    pub outsize: *mut usize,
     pub newbuffer: *mut u8,
     pub buffer: *mut JOCTET,
     pub bufsize: size_t,
@@ -253,8 +253,8 @@ unsafe extern "C" fn init_destination(mut cinfo: j_compress_ptr) {
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         1 as i32,
-        (4096 as i32 as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<JOCTET>() as libc::c_ulong),
+        (4096 as i32 as usize)
+            .wrapping_mul(::std::mem::size_of::<JOCTET>() as usize),
     ) as *mut JOCTET;
     (*dest).pub_0.next_output_byte = (*dest).buffer;
     (*dest).pub_0.free_in_buffer = 4096 as i32 as size_t;
@@ -313,7 +313,7 @@ unsafe extern "C" fn empty_mem_output_buffer(mut cinfo: j_compress_ptr) -> boole
     let mut nextbuffer: *mut JOCTET = 0 as *mut JOCTET;
     let mut dest: my_mem_dest_ptr = (*cinfo).dest as my_mem_dest_ptr;
     /* Try to allocate new buffer with double size */
-    nextsize = (*dest).bufsize.wrapping_mul(2 as i32 as libc::c_ulong);
+    nextsize = (*dest).bufsize.wrapping_mul(2 as i32 as usize);
     nextbuffer = malloc(nextsize) as *mut JOCTET;
     if nextbuffer.is_null() {
         (*(*cinfo).err).msg_code = JERR_OUT_OF_MEMORY as i32;
@@ -352,9 +352,9 @@ unsafe extern "C" fn empty_mem_output_buffer(mut cinfo: j_compress_ptr) -> boole
 unsafe extern "C" fn term_destination(mut cinfo: j_compress_ptr) {
     let mut dest: my_dest_ptr = (*cinfo).dest as my_dest_ptr;
     let mut datacount: size_t =
-        (4096 as i32 as libc::c_ulong).wrapping_sub((*dest).pub_0.free_in_buffer);
+        (4096 as i32 as usize).wrapping_sub((*dest).pub_0.free_in_buffer);
     /* Write any data remaining in the buffer */
-    if datacount > 0 as i32 as libc::c_ulong {
+    if datacount > 0 as i32 as usize {
         if crate::stdlib::fwrite(
             (*dest).buffer as *const libc::c_void,
             1 as i32 as size_t,
@@ -416,7 +416,7 @@ pub unsafe extern "C" fn jpeg_stdio_dest(mut cinfo: j_compress_ptr, mut outfile:
         .expect("non-null function pointer")(
             cinfo as j_common_ptr,
             0 as i32,
-            ::std::mem::size_of::<my_destination_mgr>() as libc::c_ulong,
+            ::std::mem::size_of::<my_destination_mgr>() as usize,
         ) as *mut jpeg_destination_mgr
     }
     dest = (*cinfo).dest as my_dest_ptr;
@@ -444,7 +444,7 @@ pub unsafe extern "C" fn jpeg_stdio_dest(mut cinfo: j_compress_ptr, mut outfile:
 pub unsafe extern "C" fn jpeg_mem_dest(
     mut cinfo: j_compress_ptr,
     mut outbuffer: *mut *mut u8,
-    mut outsize: *mut libc::c_ulong,
+    mut outsize: *mut usize,
 ) {
     let mut dest: my_mem_dest_ptr = 0 as *mut my_mem_destination_mgr;
     if outbuffer.is_null() || outsize.is_null() {
@@ -470,7 +470,7 @@ pub unsafe extern "C" fn jpeg_mem_dest(
         .expect("non-null function pointer")(
             cinfo as j_common_ptr,
             0 as i32,
-            ::std::mem::size_of::<my_mem_destination_mgr>() as libc::c_ulong,
+            ::std::mem::size_of::<my_mem_destination_mgr>() as usize,
         ) as *mut jpeg_destination_mgr
     }
     dest = (*cinfo).dest as my_mem_dest_ptr;
@@ -483,9 +483,9 @@ pub unsafe extern "C" fn jpeg_mem_dest(
     (*dest).outbuffer = outbuffer;
     (*dest).outsize = outsize;
     (*dest).newbuffer = 0 as *mut u8;
-    if (*outbuffer).is_null() || *outsize == 0 as i32 as libc::c_ulong {
+    if (*outbuffer).is_null() || *outsize == 0 as i32 as usize {
         /* Allocate initial buffer */
-        *outbuffer = malloc(4096 as i32 as libc::c_ulong) as *mut u8;
+        *outbuffer = malloc(4096 as i32 as usize) as *mut u8;
         (*dest).newbuffer = *outbuffer;
         if (*dest).newbuffer.is_null() {
             (*(*cinfo).err).msg_code = JERR_OUT_OF_MEMORY as i32;
@@ -497,7 +497,7 @@ pub unsafe extern "C" fn jpeg_mem_dest(
             )
             .expect("non-null function pointer")(cinfo as j_common_ptr);
         }
-        *outsize = 4096 as i32 as libc::c_ulong
+        *outsize = 4096 as i32 as usize
     }
     (*dest).buffer = *outbuffer;
     (*dest).pub_0.next_output_byte = (*dest).buffer;

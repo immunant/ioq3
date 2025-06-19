@@ -13,7 +13,7 @@ pub use crate::src::qcommon::q_shared::qfalse;
 pub use crate::src::qcommon::q_shared::qtrue;
 #[no_mangle]
 
-pub unsafe extern "C" fn daub4(mut b: *mut f32, mut n: libc::c_ulong, mut isign: i32) {
+pub unsafe extern "C" fn daub4(mut b: *mut f32, mut n: usize, mut isign: i32) {
     let mut wksp: [f32; 4097] = [
         0.0f32, 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
         0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
@@ -196,165 +196,165 @@ pub unsafe extern "C" fn daub4(mut b: *mut f32, mut n: libc::c_ulong, mut isign:
         0., 0., 0., 0.,
     ];
     // numerical recipies so a[1] = b[0]
-    let mut nh: libc::c_ulong = 0;
-    let mut nh1: libc::c_ulong = 0;
-    let mut i: libc::c_ulong = 0;
-    let mut j: libc::c_ulong = 0;
-    if n < 4 as i32 as libc::c_ulong {
+    let mut nh: usize = 0;
+    let mut nh1: usize = 0;
+    let mut i: usize = 0;
+    let mut j: usize = 0;
+    if n < 4 as i32 as usize {
         return;
     }
     nh = n >> 1 as i32;
-    nh1 = nh.wrapping_add(1 as i32 as libc::c_ulong);
+    nh1 = nh.wrapping_add(1 as i32 as usize);
     if isign >= 0 as i32 {
-        i = 1 as i32 as libc::c_ulong;
-        j = 1 as i32 as libc::c_ulong;
-        while j <= n.wrapping_sub(3 as i32 as libc::c_ulong) {
+        i = 1 as i32 as usize;
+        j = 1 as i32 as usize;
+        while j <= n.wrapping_sub(3 as i32 as usize) {
             wksp[i as usize] = (0.4829629131445341f64
-                * *b.offset(j.wrapping_sub(1 as i32 as libc::c_ulong) as isize) as f64
+                * *b.offset(j.wrapping_sub(1 as i32 as usize) as isize) as f64
                 + 0.8365163037378079f64
                     * *b.offset(
-                        j.wrapping_add(1 as i32 as libc::c_ulong)
-                            .wrapping_sub(1 as i32 as libc::c_ulong)
+                        j.wrapping_add(1 as i32 as usize)
+                            .wrapping_sub(1 as i32 as usize)
                             as isize,
                     ) as f64
                 + 0.2241438680420134f64
                     * *b.offset(
-                        j.wrapping_add(2 as i32 as libc::c_ulong)
-                            .wrapping_sub(1 as i32 as libc::c_ulong)
+                        j.wrapping_add(2 as i32 as usize)
+                            .wrapping_sub(1 as i32 as usize)
                             as isize,
                     ) as f64
                 + -0.1294095225512604f64
                     * *b.offset(
-                        j.wrapping_add(3 as i32 as libc::c_ulong)
-                            .wrapping_sub(1 as i32 as libc::c_ulong)
+                        j.wrapping_add(3 as i32 as usize)
+                            .wrapping_sub(1 as i32 as usize)
                             as isize,
                     ) as f64) as f32;
             wksp[i.wrapping_add(nh) as usize] = (-0.1294095225512604f64
-                * *b.offset(j.wrapping_sub(1 as i32 as libc::c_ulong) as isize) as f64
+                * *b.offset(j.wrapping_sub(1 as i32 as usize) as isize) as f64
                 - 0.2241438680420134f64
                     * *b.offset(
-                        j.wrapping_add(1 as i32 as libc::c_ulong)
-                            .wrapping_sub(1 as i32 as libc::c_ulong)
+                        j.wrapping_add(1 as i32 as usize)
+                            .wrapping_sub(1 as i32 as usize)
                             as isize,
                     ) as f64
                 + 0.8365163037378079f64
                     * *b.offset(
-                        j.wrapping_add(2 as i32 as libc::c_ulong)
-                            .wrapping_sub(1 as i32 as libc::c_ulong)
+                        j.wrapping_add(2 as i32 as usize)
+                            .wrapping_sub(1 as i32 as usize)
                             as isize,
                     ) as f64
                 - 0.4829629131445341f64
                     * *b.offset(
-                        j.wrapping_add(3 as i32 as libc::c_ulong)
-                            .wrapping_sub(1 as i32 as libc::c_ulong)
+                        j.wrapping_add(3 as i32 as usize)
+                            .wrapping_sub(1 as i32 as usize)
                             as isize,
                     ) as f64) as f32;
-            j = j.wrapping_add(2 as i32 as libc::c_ulong);
+            j = j.wrapping_add(2 as i32 as usize);
             i = i.wrapping_add(1)
         }
         wksp[i as usize] = (0.4829629131445341f64
             * *b.offset(
-                n.wrapping_sub(1 as i32 as libc::c_ulong)
-                    .wrapping_sub(1 as i32 as libc::c_ulong) as isize,
+                n.wrapping_sub(1 as i32 as usize)
+                    .wrapping_sub(1 as i32 as usize) as isize,
             ) as f64
             + 0.8365163037378079f64
-                * *b.offset(n.wrapping_sub(1 as i32 as libc::c_ulong) as isize) as f64
+                * *b.offset(n.wrapping_sub(1 as i32 as usize) as isize) as f64
             + 0.2241438680420134f64 * *b.offset((1 as i32 - 1 as i32) as isize) as f64
             + -0.1294095225512604f64 * *b.offset((2 as i32 - 1 as i32) as isize) as f64)
             as f32;
         wksp[i.wrapping_add(nh) as usize] = (-0.1294095225512604f64
             * *b.offset(
-                n.wrapping_sub(1 as i32 as libc::c_ulong)
-                    .wrapping_sub(1 as i32 as libc::c_ulong) as isize,
+                n.wrapping_sub(1 as i32 as usize)
+                    .wrapping_sub(1 as i32 as usize) as isize,
             ) as f64
             - 0.2241438680420134f64
-                * *b.offset(n.wrapping_sub(1 as i32 as libc::c_ulong) as isize) as f64
+                * *b.offset(n.wrapping_sub(1 as i32 as usize) as isize) as f64
             + 0.8365163037378079f64 * *b.offset((1 as i32 - 1 as i32) as isize) as f64
             - 0.4829629131445341f64 * *b.offset((2 as i32 - 1 as i32) as isize) as f64)
             as f32
     } else {
         wksp[1 as i32 as usize] = (0.2241438680420134f64
-            * *b.offset(nh.wrapping_sub(1 as i32 as libc::c_ulong) as isize) as f64
+            * *b.offset(nh.wrapping_sub(1 as i32 as usize) as isize) as f64
             + 0.8365163037378079f64
-                * *b.offset(n.wrapping_sub(1 as i32 as libc::c_ulong) as isize) as f64
+                * *b.offset(n.wrapping_sub(1 as i32 as usize) as isize) as f64
             + 0.4829629131445341f64 * *b.offset((1 as i32 - 1 as i32) as isize) as f64
             + -0.1294095225512604f64
-                * *b.offset(nh1.wrapping_sub(1 as i32 as libc::c_ulong) as isize) as f64)
+                * *b.offset(nh1.wrapping_sub(1 as i32 as usize) as isize) as f64)
             as f32;
         wksp[2 as i32 as usize] = (-0.1294095225512604f64
-            * *b.offset(nh.wrapping_sub(1 as i32 as libc::c_ulong) as isize) as f64
+            * *b.offset(nh.wrapping_sub(1 as i32 as usize) as isize) as f64
             - 0.4829629131445341f64
-                * *b.offset(n.wrapping_sub(1 as i32 as libc::c_ulong) as isize) as f64
+                * *b.offset(n.wrapping_sub(1 as i32 as usize) as isize) as f64
             + 0.8365163037378079f64 * *b.offset((1 as i32 - 1 as i32) as isize) as f64
             - 0.2241438680420134f64
-                * *b.offset(nh1.wrapping_sub(1 as i32 as libc::c_ulong) as isize) as f64)
+                * *b.offset(nh1.wrapping_sub(1 as i32 as usize) as isize) as f64)
             as f32;
-        i = 1 as i32 as libc::c_ulong;
-        j = 3 as i32 as libc::c_ulong;
+        i = 1 as i32 as usize;
+        j = 3 as i32 as usize;
         while i < nh {
             let fresh0 = j;
             j = j.wrapping_add(1);
             wksp[fresh0 as usize] =
                 (0.2241438680420134f64
-                    * *b.offset(i.wrapping_sub(1 as i32 as libc::c_ulong) as isize) as f64
+                    * *b.offset(i.wrapping_sub(1 as i32 as usize) as isize) as f64
                     + 0.8365163037378079f64
                         * *b.offset(
-                            i.wrapping_add(nh).wrapping_sub(1 as i32 as libc::c_ulong) as isize
+                            i.wrapping_add(nh).wrapping_sub(1 as i32 as usize) as isize
                         ) as f64
                     + 0.4829629131445341f64
                         * *b.offset(
-                            i.wrapping_add(1 as i32 as libc::c_ulong)
-                                .wrapping_sub(1 as i32 as libc::c_ulong)
+                            i.wrapping_add(1 as i32 as usize)
+                                .wrapping_sub(1 as i32 as usize)
                                 as isize,
                         ) as f64
                     + -0.1294095225512604f64
                         * *b.offset(
-                            i.wrapping_add(nh1).wrapping_sub(1 as i32 as libc::c_ulong) as isize
+                            i.wrapping_add(nh1).wrapping_sub(1 as i32 as usize) as isize
                         ) as f64) as f32;
             let fresh1 = j;
             j = j.wrapping_add(1);
             wksp[fresh1 as usize] =
                 (-0.1294095225512604f64
-                    * *b.offset(i.wrapping_sub(1 as i32 as libc::c_ulong) as isize) as f64
+                    * *b.offset(i.wrapping_sub(1 as i32 as usize) as isize) as f64
                     - 0.4829629131445341f64
                         * *b.offset(
-                            i.wrapping_add(nh).wrapping_sub(1 as i32 as libc::c_ulong) as isize
+                            i.wrapping_add(nh).wrapping_sub(1 as i32 as usize) as isize
                         ) as f64
                     + 0.8365163037378079f64
                         * *b.offset(
-                            i.wrapping_add(1 as i32 as libc::c_ulong)
-                                .wrapping_sub(1 as i32 as libc::c_ulong)
+                            i.wrapping_add(1 as i32 as usize)
+                                .wrapping_sub(1 as i32 as usize)
                                 as isize,
                         ) as f64
                     - 0.2241438680420134f64
                         * *b.offset(
-                            i.wrapping_add(nh1).wrapping_sub(1 as i32 as libc::c_ulong) as isize
+                            i.wrapping_add(nh1).wrapping_sub(1 as i32 as usize) as isize
                         ) as f64) as f32;
             i = i.wrapping_add(1)
         }
     }
-    i = 1 as i32 as libc::c_ulong;
+    i = 1 as i32 as usize;
     while i <= n {
-        *b.offset(i.wrapping_sub(1 as i32 as libc::c_ulong) as isize) = wksp[i as usize];
+        *b.offset(i.wrapping_sub(1 as i32 as usize) as isize) = wksp[i as usize];
         i = i.wrapping_add(1)
     }
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn wt1(mut a: *mut f32, mut n: libc::c_ulong, mut isign: i32) {
-    let mut nn: libc::c_ulong = 0;
-    let mut inverseStartLength: i32 = n.wrapping_div(4 as i32 as libc::c_ulong) as i32;
-    if n < inverseStartLength as libc::c_ulong {
+pub unsafe extern "C" fn wt1(mut a: *mut f32, mut n: usize, mut isign: i32) {
+    let mut nn: usize = 0;
+    let mut inverseStartLength: i32 = n.wrapping_div(4 as i32 as usize) as i32;
+    if n < inverseStartLength as usize {
         return;
     }
     if isign >= 0 as i32 {
         nn = n;
-        while nn >= inverseStartLength as libc::c_ulong {
+        while nn >= inverseStartLength as usize {
             daub4(a, nn, isign);
             nn >>= 1 as i32
         }
     } else {
-        nn = inverseStartLength as libc::c_ulong;
+        nn = inverseStartLength as usize;
         while nn <= n {
             daub4(a, nn, isign);
             nn <<= 1 as i32
@@ -624,7 +624,7 @@ static mut numBits: [u8; 256] = [
 #[no_mangle]
 
 pub unsafe extern "C" fn MuLawEncode(mut s: i16) -> byte {
-    let mut adjusted: libc::c_ulong = 0;
+    let mut adjusted: usize = 0;
     let mut sign: byte = 0;
     let mut exponent: byte = 0;
     let mut mantissa: byte = 0;
@@ -637,16 +637,16 @@ pub unsafe extern "C" fn MuLawEncode(mut s: i16) -> byte {
         s = -(s as i32) as i16
     }
     adjusted = ((s as isize)
-        << (16 as i32 as libc::c_ulong).wrapping_sub(
-            (::std::mem::size_of::<i16>() as libc::c_ulong).wrapping_mul(8 as i32 as libc::c_ulong),
-        )) as libc::c_ulong;
-    adjusted = adjusted.wrapping_add((128 as isize + 4 as isize) as libc::c_ulong);
-    if adjusted > 32767 as i32 as libc::c_ulong {
-        adjusted = 32767 as i32 as libc::c_ulong
+        << (16 as i32 as usize).wrapping_sub(
+            (::std::mem::size_of::<i16>() as usize).wrapping_mul(8 as i32 as usize),
+        )) as usize;
+    adjusted = adjusted.wrapping_add((128 as isize + 4 as isize) as usize);
+    if adjusted > 32767 as i32 as usize {
+        adjusted = 32767 as i32 as usize
     }
-    exponent = (numBits[(adjusted >> 7 as i32 & 0xff as i32 as libc::c_ulong) as usize] as i32
+    exponent = (numBits[(adjusted >> 7 as i32 & 0xff as i32 as usize) as usize] as i32
         - 1 as i32) as byte;
-    mantissa = (adjusted >> exponent as i32 + 3 as i32 & 0xf as i32 as libc::c_ulong) as byte;
+    mantissa = (adjusted >> exponent as i32 + 3 as i32 & 0xf as i32 as usize) as byte;
     return !(sign as i32 | (exponent as i32) << 4 as i32 | mantissa as i32) as byte;
 }
 #[no_mangle]
@@ -4819,7 +4819,7 @@ pub unsafe extern "C" fn encodeWavelet(mut sfx: *mut sfx_t, mut packets: *mut i1
             packets = packets.offset(1);
             i += 1
         }
-        wt1(wksp.as_mut_ptr(), size as libc::c_ulong, 1 as i32);
+        wt1(wksp.as_mut_ptr(), size as usize, 1 as i32);
         out = (*chunk).sndChunk.as_mut_ptr() as *mut byte;
         i = 0 as i32;
         while i < size {
@@ -8947,7 +8947,7 @@ pub unsafe extern "C" fn decodeWavelet(mut chunk: *mut sndBuffer, mut to: *mut i
         wksp[i as usize] = mulawToShort[*out.offset(i as isize) as usize] as f32;
         i += 1
     }
-    wt1(wksp.as_mut_ptr(), size as libc::c_ulong, -(1 as i32));
+    wt1(wksp.as_mut_ptr(), size as usize, -(1 as i32));
     if to.is_null() {
         return;
     }

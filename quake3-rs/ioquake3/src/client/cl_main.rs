@@ -1443,7 +1443,7 @@ pub unsafe extern "C" fn CL_VoipParseTargets() {
     crate::stdlib::memset(
         clc.voipTargets.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[uint8_t; 8]>() as libc::c_ulong,
+        ::std::mem::size_of::<[uint8_t; 8]>() as usize,
     );
     clc.voipFlags = (clc.voipFlags as i32 & !(0x1 as i32)) as uint8_t;
     while !target.is_null() {
@@ -1469,7 +1469,7 @@ pub unsafe extern "C" fn CL_VoipParseTargets() {
                 crate::stdlib::memset(
                     clc.voipTargets.as_mut_ptr() as *mut libc::c_void,
                     !(0 as i32),
-                    ::std::mem::size_of::<[uint8_t; 8]>() as libc::c_ulong,
+                    ::std::mem::size_of::<[uint8_t; 8]>() as usize,
                 );
                 return;
             }
@@ -1689,7 +1689,7 @@ unsafe extern "C" fn CL_CaptureVoip() {
                 sampbuffer.as_mut_ptr(),
                 samples,
                 clc.voipOutgoingData.as_mut_ptr() as *mut u8,
-                ::std::mem::size_of::<[byte; 1024]>() as libc::c_ulong as opus_int32,
+                ::std::mem::size_of::<[byte; 1024]>() as usize as opus_int32,
             );
             if bytes <= 0 as i32 {
                 Com_DPrintf(
@@ -1765,7 +1765,7 @@ pub unsafe extern "C" fn CL_AddReliableCommand(
     Q_strncpyz(
         clc.reliableCommands[(clc.reliableSequence & 64 as i32 - 1 as i32) as usize].as_mut_ptr(),
         cmd,
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
 }
 //
@@ -1980,12 +1980,12 @@ pub unsafe extern "C" fn CL_Record_f() {
         Q_strncpyz(
             demoName.as_mut_ptr(),
             s,
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         );
         if clc.compat as u64 != 0 {
             Com_sprintf(
                 name.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
                 b"demos/%s.%s%d\x00" as *const u8 as *const libc::c_char,
                 demoName.as_mut_ptr(),
                 b"dm_\x00" as *const u8 as *const libc::c_char,
@@ -1994,7 +1994,7 @@ pub unsafe extern "C" fn CL_Record_f() {
         } else {
             Com_sprintf(
                 name.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
                 b"demos/%s.%s%d\x00" as *const u8 as *const libc::c_char,
                 demoName.as_mut_ptr(),
                 b"dm_\x00" as *const u8 as *const libc::c_char,
@@ -2009,12 +2009,12 @@ pub unsafe extern "C" fn CL_Record_f() {
             CL_DemoFilename(
                 number,
                 demoName.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             );
             if clc.compat as u64 != 0 {
                 Com_sprintf(
                     name.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
                     b"demos/%s.%s%d\x00" as *const u8 as *const libc::c_char,
                     demoName.as_mut_ptr(),
                     b"dm_\x00" as *const u8 as *const libc::c_char,
@@ -2023,7 +2023,7 @@ pub unsafe extern "C" fn CL_Record_f() {
             } else {
                 Com_sprintf(
                     name.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
                     b"demos/%s.%s%d\x00" as *const u8 as *const libc::c_char,
                     demoName.as_mut_ptr(),
                     b"dm_\x00" as *const u8 as *const libc::c_char,
@@ -2056,7 +2056,7 @@ pub unsafe extern "C" fn CL_Record_f() {
     Q_strncpyz(
         clc.demoName.as_mut_ptr(),
         demoName.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     // don't start saving messages until a non-delta compressed message is received
     clc.demowaiting = qtrue;
@@ -2064,7 +2064,7 @@ pub unsafe extern "C" fn CL_Record_f() {
     MSG_Init(
         &mut buf as *mut _ as *mut msg_t,
         bufData.as_mut_ptr(),
-        ::std::mem::size_of::<[byte; 16384]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[byte; 16384]>() as usize as i32,
     );
     MSG_Bitstream(&mut buf as *mut _ as *mut msg_t);
     // NOTE, MRE: all server->client messages now acknowledge
@@ -2090,7 +2090,7 @@ pub unsafe extern "C" fn CL_Record_f() {
     crate::stdlib::memset(
         &mut nullstate as *mut entityState_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<entityState_t>() as libc::c_ulong,
+        ::std::mem::size_of::<entityState_t>() as usize,
     );
     i = 0 as i32;
     while i < (1 as i32) << 10 as i32 {
@@ -2185,7 +2185,7 @@ pub unsafe extern "C" fn CL_DemoCompleted() {
             // minimum/average/maximum/std deviation
             Com_sprintf(
                 buffer.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
                 b"%i frames %3.1f seconds %3.1f fps %d.0/%.1f/%d.0/%.1f ms\n\x00" as *const u8
                     as *const libc::c_char,
                 clc.timeDemoFrames,
@@ -2202,7 +2202,7 @@ pub unsafe extern "C" fn CL_DemoCompleted() {
             );
             // Write a log of all the frame durations
             if !cl_timedemoLog.is_null()
-                && crate::stdlib::strlen((*cl_timedemoLog).string) > 0 as i32 as libc::c_ulong
+                && crate::stdlib::strlen((*cl_timedemoLog).string) > 0 as i32 as usize
             {
                 let mut i: i32 = 0;
                 let mut numFrames: i32 = 0;
@@ -2285,7 +2285,7 @@ pub unsafe extern "C" fn CL_ReadDemoMessage() {
     MSG_Init(
         &mut buf as *mut _ as *mut msg_t,
         bufData.as_mut_ptr(),
-        ::std::mem::size_of::<[byte; 16384]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[byte; 16384]>() as usize as i32,
     );
     // get the length
     r = FS_Read(
@@ -2414,7 +2414,7 @@ unsafe extern "C" fn CL_CompleteDemoName(mut _args: *mut libc::c_char, mut argNu
         let mut demoExt: [libc::c_char; 16] = [0; 16];
         Com_sprintf(
             demoExt.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 16]>() as usize as i32,
             b".%s%d\x00" as *const u8 as *const libc::c_char,
             b"dm_\x00" as *const u8 as *const libc::c_char,
             (*com_protocol).integer,
@@ -2458,7 +2458,7 @@ pub unsafe extern "C" fn CL_PlayDemo_f() {
     Q_strncpyz(
         arg.as_mut_ptr(),
         Cmd_Argv(1 as i32),
-        ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
     );
     CL_Disconnect(qtrue);
     // check for an extension .DEMOEXT_?? (?? is protocol)
@@ -2467,15 +2467,15 @@ pub unsafe extern "C" fn CL_PlayDemo_f() {
         && Q_stricmpn(
             ext_test.offset(1 as i32 as isize),
             b"dm_\x00" as *const u8 as *const libc::c_char,
-            (::std::mem::size_of::<[libc::c_char; 4]>() as libc::c_ulong)
-                .wrapping_div(::std::mem::size_of::<libc::c_char>() as libc::c_ulong)
-                .wrapping_sub(1 as i32 as libc::c_ulong) as i32,
+            (::std::mem::size_of::<[libc::c_char; 4]>() as usize)
+                .wrapping_div(::std::mem::size_of::<libc::c_char>() as usize)
+                .wrapping_sub(1 as i32 as usize) as i32,
         ) == 0
     {
         protocol = atoi(
             ext_test.offset(
-                (::std::mem::size_of::<[libc::c_char; 4]>() as libc::c_ulong)
-                    .wrapping_div(::std::mem::size_of::<libc::c_char>() as libc::c_ulong)
+                (::std::mem::size_of::<[libc::c_char; 4]>() as usize)
+                    .wrapping_div(::std::mem::size_of::<libc::c_char>() as usize)
                     as isize,
             ),
         );
@@ -2492,7 +2492,7 @@ pub unsafe extern "C" fn CL_PlayDemo_f() {
         {
             Com_sprintf(
                 name.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
                 b"demos/%s\x00" as *const u8 as *const libc::c_char,
                 arg.as_mut_ptr(),
             );
@@ -2504,13 +2504,13 @@ pub unsafe extern "C" fn CL_PlayDemo_f() {
                 protocol,
             );
             len = ext_test.offset_from(arg.as_mut_ptr()) as isize as i32;
-            if len as libc::c_ulong
-                >= (::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong)
-                    .wrapping_div(::std::mem::size_of::<libc::c_char>() as libc::c_ulong)
+            if len as usize
+                >= (::std::mem::size_of::<[libc::c_char; 4096]>() as usize)
+                    .wrapping_div(::std::mem::size_of::<libc::c_char>() as usize)
             {
-                len = (::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong)
-                    .wrapping_div(::std::mem::size_of::<libc::c_char>() as libc::c_ulong)
-                    .wrapping_sub(1 as i32 as libc::c_ulong) as i32
+                len = (::std::mem::size_of::<[libc::c_char; 4096]>() as usize)
+                    .wrapping_div(::std::mem::size_of::<libc::c_char>() as usize)
+                    .wrapping_sub(1 as i32 as usize) as i32
             }
             Q_strncpyz(retry.as_mut_ptr(), arg.as_mut_ptr(), len + 1 as i32);
             retry[len as usize] = '\u{0}' as i32 as libc::c_char;
@@ -2529,7 +2529,7 @@ pub unsafe extern "C" fn CL_PlayDemo_f() {
     Q_strncpyz(
         clc.demoName.as_mut_ptr(),
         arg.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     Con_Close();
     clc.state = CA_CONNECTED;
@@ -2537,7 +2537,7 @@ pub unsafe extern "C" fn CL_PlayDemo_f() {
     Q_strncpyz(
         clc.servername.as_mut_ptr(),
         arg.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
     );
     if protocol <= (*com_legacyprotocol).integer {
         clc.compat = qtrue
@@ -2583,7 +2583,7 @@ pub unsafe extern "C" fn CL_NextDemo() {
     Q_strncpyz(
         v.as_mut_ptr(),
         Cvar_VariableString(b"nextdemo\x00" as *const u8 as *const libc::c_char),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     v[(1024 as i32 - 1 as i32) as usize] = 0 as i32 as libc::c_char;
     Com_DPrintf(
@@ -2705,17 +2705,17 @@ pub unsafe extern "C" fn CL_MapLoading() {
         crate::stdlib::memset(
             cls.updateInfoString.as_mut_ptr() as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize,
         );
         crate::stdlib::memset(
             clc.serverMessage.as_mut_ptr() as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize,
         );
         crate::stdlib::memset(
             &mut cl.gameState as *mut gameState_t as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<gameState_t>() as libc::c_ulong,
+            ::std::mem::size_of::<gameState_t>() as usize,
         );
         clc.lastPacketSentTime = -(9999 as i32);
         SCR_UpdateScreen();
@@ -2729,7 +2729,7 @@ pub unsafe extern "C" fn CL_MapLoading() {
         Q_strncpyz(
             clc.servername.as_mut_ptr(),
             b"localhost\x00" as *const u8 as *const libc::c_char,
-            ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
         );
         clc.state = CA_CHALLENGING;
         Key_SetCatcher(0 as i32);
@@ -2758,7 +2758,7 @@ pub unsafe extern "C" fn CL_ClearState() {
     crate::stdlib::memset(
         &mut cl as *mut clientActive_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<clientActive_t>() as libc::c_ulong,
+        ::std::mem::size_of::<clientActive_t>() as usize,
     );
 }
 /*
@@ -2901,7 +2901,7 @@ pub unsafe extern "C" fn CL_Disconnect(mut showMainMenu: qboolean) {
     crate::stdlib::memset(
         &mut clc as *mut clientConnection_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<clientConnection_t>() as libc::c_ulong,
+        ::std::mem::size_of::<clientConnection_t>() as usize,
     );
     clc.state = CA_DISCONNECTED;
     // allow cheats locally
@@ -2999,7 +2999,7 @@ pub unsafe extern "C" fn CL_RequestMotd() {
     info[0 as i32 as usize] = 0 as i32 as libc::c_char;
     Com_sprintf(
         cls.updateChallenge.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
         b"%i\x00" as *const u8 as *const libc::c_char,
         ((rand() as u32) << 16 as i32 ^ rand() as u32 ^ Com_Milliseconds() as u32) as i32,
     );
@@ -3221,7 +3221,7 @@ pub unsafe extern "C" fn CL_Connect_f() {
         Q_strncpyz(
             server.as_mut_ptr(),
             Cmd_Argv(1 as i32),
-            ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
         );
     } else {
         if libc::strcmp(
@@ -3245,14 +3245,14 @@ pub unsafe extern "C" fn CL_Connect_f() {
         Q_strncpyz(
             server.as_mut_ptr(),
             Cmd_Argv(2 as i32),
-            ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
         );
     }
     // save arguments for reconnect
     Q_strncpyz(
         cl_reconnectArgs.as_mut_ptr(),
         Cmd_Args(),
-        ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
     );
     Cvar_Set(
         b"ui_singlePlayerActive\x00" as *const u8 as *const libc::c_char,
@@ -3283,7 +3283,7 @@ pub unsafe extern "C" fn CL_Connect_f() {
     Q_strncpyz(
         clc.servername.as_mut_ptr(),
         server.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
     );
     if NET_StringToAdr(
         clc.servername.as_mut_ptr(),
@@ -3386,7 +3386,7 @@ unsafe extern "C" fn CL_CompletePlayerName(mut _args: *mut libc::c_char, mut arg
                     Q_strncpyz(
                         names[nameCount as usize].as_mut_ptr(),
                         name,
-                        ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
+                        ::std::mem::size_of::<[libc::c_char; 32]>() as usize as i32,
                     );
                     Q_CleanStr(names[nameCount as usize].as_mut_ptr());
                     namesPtr[nameCount as usize] = names[nameCount as usize].as_mut_ptr();
@@ -3398,7 +3398,7 @@ unsafe extern "C" fn CL_CompletePlayerName(mut _args: *mut libc::c_char, mut arg
         qsort(
             namesPtr.as_mut_ptr() as *mut libc::c_void,
             nameCount as size_t,
-            ::std::mem::size_of::<*const libc::c_char>() as libc::c_ulong,
+            ::std::mem::size_of::<*const libc::c_char>() as usize,
             Some(
                 Com_strCompare
                     as unsafe extern "C" fn(_: *const libc::c_void, _: *const libc::c_void) -> i32,
@@ -3478,7 +3478,7 @@ pub unsafe extern "C" fn CL_Rcon_f() {
     }
     NET_SendPacket(
         NS_CLIENT,
-        crate::stdlib::strlen(message.as_mut_ptr()).wrapping_add(1 as i32 as libc::c_ulong) as i32,
+        crate::stdlib::strlen(message.as_mut_ptr()).wrapping_add(1 as i32 as usize) as i32,
         message.as_mut_ptr() as *const libc::c_void,
         to as netadr_t,
     );
@@ -3496,7 +3496,7 @@ pub unsafe extern "C" fn CL_SendPureChecksums() {
     // if we are pure we need to send back a command with our referenced pk3 checksums
     Com_sprintf(
         cMsg.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
         b"cp %d %s\x00" as *const u8 as *const libc::c_char,
         cl.serverId,
         FS_ReferencedPakPureChecksums(),
@@ -3765,11 +3765,11 @@ pub unsafe extern "C" fn CL_BeginDownload(
     Q_strncpyz(
         clc.downloadName.as_mut_ptr(),
         localName,
-        ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
     );
     Com_sprintf(
         clc.downloadTempName.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
         b"%s.tmp\x00" as *const u8 as *const libc::c_char,
         localName,
     );
@@ -3822,7 +3822,7 @@ pub unsafe extern "C" fn CL_NextDownload() {
             b"\x00" as *const u8 as *const libc::c_char,
         );
         *zippath.offset(
-            crate::stdlib::strlen(zippath).wrapping_sub(1 as i32 as libc::c_ulong) as isize,
+            crate::stdlib::strlen(zippath).wrapping_sub(1 as i32 as usize) as isize,
         ) = '\u{0}' as i32 as libc::c_char;
         if FS_CompareZipChecksum(zippath) as u64 == 0 {
             Com_Error(
@@ -3912,7 +3912,7 @@ pub unsafe extern "C" fn CL_NextDownload() {
         crate::stdlib::memmove(
             clc.downloadList.as_mut_ptr() as *mut libc::c_void,
             s as *const libc::c_void,
-            crate::stdlib::strlen(s).wrapping_add(1 as i32 as libc::c_ulong),
+            crate::stdlib::strlen(s).wrapping_add(1 as i32 as usize),
         );
         return;
     }
@@ -3935,7 +3935,7 @@ pub unsafe extern "C" fn CL_InitDownloads() {
         // but it's possible that some referenced files on the server are missing
         if FS_ComparePaks(
             missingfiles.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
             qfalse,
         ) as u64
             != 0
@@ -3948,7 +3948,7 @@ pub unsafe extern "C" fn CL_InitDownloads() {
         }
     } else if FS_ComparePaks(
         clc.downloadList.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
         qtrue,
     ) as u64
         != 0
@@ -4015,7 +4015,7 @@ pub unsafe extern "C" fn CL_CheckForResend() {
             // with a meaningful message
             Com_sprintf(
                 data.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 1034]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 1034]>() as usize as i32,
                 b"getchallenge %d %s\x00" as *const u8 as *const libc::c_char,
                 clc.challenge,
                 (*com_gamename).string,
@@ -4033,7 +4033,7 @@ pub unsafe extern "C" fn CL_CheckForResend() {
             Q_strncpyz(
                 info.as_mut_ptr(),
                 Cvar_InfoString(0x2 as i32),
-                ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
             );
             if (*com_legacyprotocol).integer == (*com_protocol).integer {
                 clc.compat = qtrue
@@ -4075,7 +4075,7 @@ pub unsafe extern "C" fn CL_CheckForResend() {
             );
             Com_sprintf(
                 data.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 1034]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 1034]>() as usize as i32,
                 b"connect \"%s\"\x00" as *const u8 as *const libc::c_char,
                 info.as_mut_ptr(),
             );
@@ -4122,7 +4122,7 @@ pub unsafe extern "C" fn CL_MotdPacket(mut from: netadr_t) {
     Q_strncpyz(
         cls.updateInfoString.as_mut_ptr(),
         info,
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     Cvar_Set(
         b"cl_motdString\x00" as *const u8 as *const libc::c_char,
@@ -4206,15 +4206,15 @@ pub unsafe extern "C" fn CL_ServersResponsePacket(
         // IPv4 address
         if *buffptr as i32 == '\\' as i32 {
             buffptr = buffptr.offset(1);
-            if (buffend.offset_from(buffptr) as isize as libc::c_ulong)
-                < (::std::mem::size_of::<[byte; 4]>() as libc::c_ulong)
-                    .wrapping_add(::std::mem::size_of::<u16>() as libc::c_ulong)
-                    .wrapping_add(1 as i32 as libc::c_ulong)
+            if (buffend.offset_from(buffptr) as isize as usize)
+                < (::std::mem::size_of::<[byte; 4]>() as usize)
+                    .wrapping_add(::std::mem::size_of::<u16>() as usize)
+                    .wrapping_add(1 as i32 as usize)
             {
                 break;
             }
             i = 0 as i32;
-            while (i as libc::c_ulong) < ::std::mem::size_of::<[byte; 4]>() as libc::c_ulong {
+            while (i as usize) < ::std::mem::size_of::<[byte; 4]>() as usize {
                 let fresh5 = buffptr;
                 buffptr = buffptr.offset(1);
                 addresses[numservers as usize].ip[i as usize] = *fresh5;
@@ -4227,15 +4227,15 @@ pub unsafe extern "C" fn CL_ServersResponsePacket(
                 break;
             }
             buffptr = buffptr.offset(1);
-            if (buffend.offset_from(buffptr) as isize as libc::c_ulong)
-                < (::std::mem::size_of::<[byte; 16]>() as libc::c_ulong)
-                    .wrapping_add(::std::mem::size_of::<u16>() as libc::c_ulong)
-                    .wrapping_add(1 as i32 as libc::c_ulong)
+            if (buffend.offset_from(buffptr) as isize as usize)
+                < (::std::mem::size_of::<[byte; 16]>() as usize)
+                    .wrapping_add(::std::mem::size_of::<u16>() as usize)
+                    .wrapping_add(1 as i32 as usize)
             {
                 break;
             }
             i = 0 as i32;
-            while (i as libc::c_ulong) < ::std::mem::size_of::<[byte; 16]>() as libc::c_ulong {
+            while (i as usize) < ::std::mem::size_of::<[byte; 16]>() as usize {
                 let fresh6 = buffptr;
                 buffptr = buffptr.offset(1);
                 addresses[numservers as usize].ip6[i as usize] = *fresh6;
@@ -4508,7 +4508,7 @@ pub unsafe extern "C" fn CL_ConnectionlessPacket(mut from: netadr_t, mut msg: *m
             Q_strncpyz(
                 clc.serverMessage.as_mut_ptr(),
                 s,
-                ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
             );
             Com_Printf(b"%s\x00" as *const u8 as *const libc::c_char, s);
         }
@@ -4785,12 +4785,12 @@ pub unsafe extern "C" fn CL_Frame(mut msec: i32) {
             Q_strncpyz(
                 mapName.as_mut_ptr(),
                 COM_SkipPath(cl.mapname.as_mut_ptr()),
-                ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             );
             COM_StripExtension(
                 mapName.as_mut_ptr(),
                 mapName.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             );
             Cbuf_ExecuteText(
                 EXEC_NOW as i32,
@@ -4855,7 +4855,7 @@ unsafe extern "C" fn CL_RefPrintf(
     argptr = args.clone();
     crate::stdlib::vsnprintf(
         msg.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong,
+        ::std::mem::size_of::<[libc::c_char; 4096]>() as usize,
         fmt,
         argptr.as_va_list(),
     );
@@ -4892,7 +4892,7 @@ pub unsafe extern "C" fn CL_ShutdownRef() {
     crate::stdlib::memset(
         &mut re as *mut refexport_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<refexport_t>() as libc::c_ulong,
+        ::std::mem::size_of::<refexport_t>() as usize,
     );
     if !rendererLib.is_null() {
         crate::stdlib::SDL_UnloadObject(rendererLib);
@@ -5038,7 +5038,7 @@ pub unsafe extern "C" fn CL_InitRef() {
     ) as *mut cvar_s;
     Com_sprintf(
         dllName.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
         b"renderer_%s_x86_64.so\x00" as *const u8 as *const libc::c_char,
         (*cl_renderer).string,
     );
@@ -5052,7 +5052,7 @@ pub unsafe extern "C" fn CL_InitRef() {
         Cvar_ForceReset(b"cl_renderer\x00" as *const u8 as *const libc::c_char);
         Com_sprintf(
             dllName.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
             b"renderer_opengl2_x86_64.so\x00" as *const u8 as *const libc::c_char,
         );
         rendererLib = crate::src::sys::sys_main::Sys_LoadDll(dllName.as_mut_ptr(), qfalse)
@@ -5209,7 +5209,7 @@ pub unsafe extern "C" fn CL_SetModel_f() {
         Cvar_VariableStringBuffer(
             b"model\x00" as *const u8 as *const libc::c_char,
             name.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
         );
         Com_Printf(
             b"model is set to %s\n\x00" as *const u8 as *const libc::c_char,
@@ -5326,7 +5326,7 @@ unsafe extern "C" fn CL_GenerateQKey() {
         Com_Printf(b"QKEY building random string\n\x00" as *const u8 as *const libc::c_char);
         Com_RandomBytes(
             buff.as_mut_ptr(),
-            ::std::mem::size_of::<[u8; 2048]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[u8; 2048]>() as usize as i32,
         );
         f = FS_SV_FOpenFileWrite(b"qkey\x00" as *const u8 as *const libc::c_char);
         if f == 0 {
@@ -5338,7 +5338,7 @@ unsafe extern "C" fn CL_GenerateQKey() {
         }
         FS_Write(
             buff.as_mut_ptr() as *const libc::c_void,
-            ::std::mem::size_of::<[u8; 2048]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[u8; 2048]>() as usize as i32,
             f,
         );
         FS_FCloseFile(f);
@@ -5380,7 +5380,7 @@ pub unsafe extern "C" fn CL_Sayto_f() {
         Q_strncpyz(
             cleanName.as_mut_ptr(),
             Info_ValueForKey(info, b"n\x00" as *const u8 as *const libc::c_char),
-            ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 32]>() as usize as i32,
         );
         Q_CleanStr(cleanName.as_mut_ptr());
         if Q_stricmp(cleanName.as_mut_ptr(), name.as_mut_ptr()) == 0 {
@@ -5400,7 +5400,7 @@ pub unsafe extern "C" fn CL_Sayto_f() {
     p = Cmd_ArgsFrom(2 as i32);
     if *p as i32 == '\"' as i32 {
         p = p.offset(1);
-        *p.offset(crate::stdlib::strlen(p).wrapping_sub(1 as i32 as libc::c_ulong) as isize) =
+        *p.offset(crate::stdlib::strlen(p).wrapping_sub(1 as i32 as usize) as isize) =
             0 as i32 as libc::c_char
     }
     CL_AddReliableCommand(
@@ -6131,7 +6131,7 @@ pub unsafe extern "C" fn CL_Shutdown(
     crate::stdlib::memset(
         &mut cls as *mut clientStatic_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<clientStatic_t>() as libc::c_ulong,
+        ::std::mem::size_of::<clientStatic_t>() as usize,
     );
     Key_SetCatcher(0 as i32);
     Com_Printf(b"-----------------------\n\x00" as *const u8 as *const libc::c_char);
@@ -6321,7 +6321,7 @@ pub unsafe extern "C" fn CL_ServerInfoPacket(mut from: netadr_t, mut msg: *mut m
             Q_strncpyz(
                 cl_pinglist[i as usize].info.as_mut_ptr(),
                 infoString,
-                ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
             );
             // tack on the net type
             // NOTE: make sure these types are in sync with the netnames strings in the UI
@@ -6383,13 +6383,13 @@ pub unsafe extern "C" fn CL_ServerInfoPacket(mut from: netadr_t, mut msg: *mut m
         1024 as i32,
     );
     if crate::stdlib::strlen(info.as_mut_ptr()) != 0 {
-        if info[crate::stdlib::strlen(info.as_mut_ptr()).wrapping_sub(1 as i32 as libc::c_ulong)
+        if info[crate::stdlib::strlen(info.as_mut_ptr()).wrapping_sub(1 as i32 as usize)
             as usize] as i32
             != '\n' as i32
         {
             Q_strcat(
                 info.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
                 b"\n\x00" as *const u8 as *const libc::c_char,
             );
         }
@@ -6743,8 +6743,8 @@ pub unsafe extern "C" fn CL_ServerStatusResponse(mut from: netadr_t, mut msg: *m
     len = 0 as i32;
     Com_sprintf(
         &mut *(*serverStatus).string.as_mut_ptr().offset(len as isize) as *mut libc::c_char,
-        (::std::mem::size_of::<[libc::c_char; 8192]>() as libc::c_ulong)
-            .wrapping_sub(len as libc::c_ulong) as i32,
+        (::std::mem::size_of::<[libc::c_char; 8192]>() as usize)
+            .wrapping_sub(len as usize) as i32,
         b"%s\x00" as *const u8 as *const libc::c_char,
         s,
     );
@@ -6789,8 +6789,8 @@ pub unsafe extern "C" fn CL_ServerStatusResponse(mut from: netadr_t, mut msg: *m
     len = crate::stdlib::strlen((*serverStatus).string.as_mut_ptr()) as i32;
     Com_sprintf(
         &mut *(*serverStatus).string.as_mut_ptr().offset(len as isize) as *mut libc::c_char,
-        (::std::mem::size_of::<[libc::c_char; 8192]>() as libc::c_ulong)
-            .wrapping_sub(len as libc::c_ulong) as i32,
+        (::std::mem::size_of::<[libc::c_char; 8192]>() as usize)
+            .wrapping_sub(len as usize) as i32,
         b"\\\x00" as *const u8 as *const libc::c_char,
     );
     if (*serverStatus).print as u64 != 0 {
@@ -6803,8 +6803,8 @@ pub unsafe extern "C" fn CL_ServerStatusResponse(mut from: netadr_t, mut msg: *m
         len = crate::stdlib::strlen((*serverStatus).string.as_mut_ptr()) as i32;
         Com_sprintf(
             &mut *(*serverStatus).string.as_mut_ptr().offset(len as isize) as *mut libc::c_char,
-            (::std::mem::size_of::<[libc::c_char; 8192]>() as libc::c_ulong)
-                .wrapping_sub(len as libc::c_ulong) as i32,
+            (::std::mem::size_of::<[libc::c_char; 8192]>() as usize)
+                .wrapping_sub(len as usize) as i32,
             b"\\%s\x00" as *const u8 as *const libc::c_char,
             s,
         );
@@ -6840,8 +6840,8 @@ pub unsafe extern "C" fn CL_ServerStatusResponse(mut from: netadr_t, mut msg: *m
     len = crate::stdlib::strlen((*serverStatus).string.as_mut_ptr()) as i32;
     Com_sprintf(
         &mut *(*serverStatus).string.as_mut_ptr().offset(len as isize) as *mut libc::c_char,
-        (::std::mem::size_of::<[libc::c_char; 8192]>() as libc::c_ulong)
-            .wrapping_sub(len as libc::c_ulong) as i32,
+        (::std::mem::size_of::<[libc::c_char; 8192]>() as usize)
+            .wrapping_sub(len as usize) as i32,
         b"\\\x00" as *const u8 as *const libc::c_char,
     );
     (*serverStatus).time = Com_Milliseconds();
@@ -6882,7 +6882,7 @@ pub unsafe extern "C" fn CL_LocalServers_f() {
             &mut *cls.localServers.as_mut_ptr().offset(i as isize) as *mut serverInfo_t
                 as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<serverInfo_t>() as libc::c_ulong,
+            ::std::mem::size_of::<serverInfo_t>() as usize,
         );
         cls.localServers[i as usize].visible = b;
         i += 1
@@ -6890,7 +6890,7 @@ pub unsafe extern "C" fn CL_LocalServers_f() {
     crate::stdlib::memset(
         &mut to as *mut netadr_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<netadr_t>() as libc::c_ulong,
+        ::std::mem::size_of::<netadr_t>() as usize,
     );
     // The 'xxx' in the message is a challenge that will be echoed back
     // by the server.  We don't care about that here, but master servers
@@ -6979,7 +6979,7 @@ pub unsafe extern "C" fn CL_GlobalServers_f() {
                 numAddress += 1;
                 Com_sprintf(
                     command.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
                     b"globalservers %d %s %s\n\x00" as *const u8 as *const libc::c_char,
                     i,
                     Cmd_Argv(2 as i32),
@@ -7040,7 +7040,7 @@ pub unsafe extern "C" fn CL_GlobalServers_f() {
         if v4enabled != 0 {
             Com_sprintf(
                 command.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
                 b"getserversExt %s %s\x00" as *const u8 as *const libc::c_char,
                 (*com_gamename).string,
                 Cmd_Argv(2 as i32),
@@ -7048,7 +7048,7 @@ pub unsafe extern "C" fn CL_GlobalServers_f() {
         } else {
             Com_sprintf(
                 command.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
                 b"getserversExt %s %s ipv6\x00" as *const u8 as *const libc::c_char,
                 (*com_gamename).string,
                 Cmd_Argv(2 as i32),
@@ -7061,14 +7061,14 @@ pub unsafe extern "C" fn CL_GlobalServers_f() {
     {
         Com_sprintf(
             command.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
             b"getservers %s\x00" as *const u8 as *const libc::c_char,
             Cmd_Argv(2 as i32),
         );
     } else {
         Com_sprintf(
             command.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
             b"getservers %s %s\x00" as *const u8 as *const libc::c_char,
             (*com_gamename).string,
             Cmd_Argv(2 as i32),
@@ -7078,12 +7078,12 @@ pub unsafe extern "C" fn CL_GlobalServers_f() {
     while i < count {
         Q_strcat(
             command.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
             b" \x00" as *const u8 as *const libc::c_char,
         );
         Q_strcat(
             command.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
             Cmd_Argv(i),
         );
         i += 1
@@ -7305,7 +7305,7 @@ pub unsafe extern "C" fn CL_Ping_f() {
     crate::stdlib::memset(
         &mut to as *mut netadr_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<netadr_t>() as libc::c_ulong,
+        ::std::mem::size_of::<netadr_t>() as usize,
     );
     if NET_StringToAdr(server, &mut to as *mut _ as *mut netadr_t, family) == 0 {
         return;
@@ -7314,7 +7314,7 @@ pub unsafe extern "C" fn CL_Ping_f() {
     crate::stdlib::memcpy(
         &mut (*pingptr).adr as *mut netadr_t as *mut libc::c_void,
         &mut to as *mut netadr_t as *const libc::c_void,
-        ::std::mem::size_of::<netadr_t>() as libc::c_ulong,
+        ::std::mem::size_of::<netadr_t>() as usize,
     );
     (*pingptr).start = Sys_Milliseconds();
     (*pingptr).time = 0 as i32;
@@ -7400,7 +7400,7 @@ pub unsafe extern "C" fn CL_UpdateVisiblePings_f(mut source: i32) -> qboolean {
                                 as *mut libc::c_void,
                             &mut (*server.offset(i as isize)).adr as *mut netadr_t
                                 as *const libc::c_void,
-                            ::std::mem::size_of::<netadr_t>() as libc::c_ulong,
+                            ::std::mem::size_of::<netadr_t>() as usize,
                         );
                         cl_pinglist[j as usize].start = Sys_Milliseconds();
                         cl_pinglist[j as usize].time = 0 as i32;
@@ -7486,7 +7486,7 @@ pub unsafe extern "C" fn CL_ServerStatus_f() {
         crate::stdlib::memset(
             &mut to as *mut netadr_t as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<netadr_t>() as libc::c_ulong,
+            ::std::mem::size_of::<netadr_t>() as usize,
         );
         if argc == 2 as i32 {
             server = Cmd_Argv(1 as i32)
@@ -7556,7 +7556,7 @@ pub unsafe extern "C" fn CL_CDKeyValidate(
     if len != 16 as i32 {
         return qfalse;
     }
-    if !checksum.is_null() && crate::stdlib::strlen(checksum) != 2 as i32 as libc::c_ulong {
+    if !checksum.is_null() && crate::stdlib::strlen(checksum) != 2 as i32 as usize {
         return qfalse;
     }
     sum = 0 as i32 as byte;

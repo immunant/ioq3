@@ -493,8 +493,8 @@ unsafe extern "C" fn create_context_buffer(mut cinfo: j_compress_ptr) {
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         1 as i32,
-        (((*cinfo).num_components * 5 as i32 * rgroup_height) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<JSAMPROW>() as libc::c_ulong),
+        (((*cinfo).num_components * 5 as i32 * rgroup_height) as usize)
+            .wrapping_mul(::std::mem::size_of::<JSAMPROW>() as usize),
     ) as JSAMPARRAY;
     ci = 0 as i32;
     compptr = (*cinfo).comp_info;
@@ -521,8 +521,8 @@ unsafe extern "C" fn create_context_buffer(mut cinfo: j_compress_ptr) {
         crate::stdlib::memcpy(
             fake_buffer.offset(rgroup_height as isize) as *mut libc::c_void,
             true_buffer as *const libc::c_void,
-            ((3 as i32 * rgroup_height) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<JSAMPROW>() as libc::c_ulong),
+            ((3 as i32 * rgroup_height) as usize)
+                .wrapping_mul(::std::mem::size_of::<JSAMPROW>() as usize),
         );
         i = 0 as i32;
         while i < rgroup_height {
@@ -585,7 +585,7 @@ pub unsafe extern "C" fn jinit_c_prep_controller(
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         1 as i32,
-        ::std::mem::size_of::<my_prep_controller>() as libc::c_ulong,
+        ::std::mem::size_of::<my_prep_controller>() as usize,
     ) as my_prep_ptr;
     (*cinfo).prep = prep as *mut jpeg_c_prep_controller;
     (*prep).pub_0.start_pass =

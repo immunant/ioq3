@@ -318,10 +318,10 @@ unsafe extern "C" fn SockadrToNetadr(mut s: *mut sockaddr, mut a: *mut netadr_t)
         crate::stdlib::memcpy(
             (*a).ip6.as_mut_ptr() as *mut libc::c_void,
             &mut (*(s as *mut sockaddr_in6)).sin6_addr as *mut in6_addr as *const libc::c_void,
-            ::std::mem::size_of::<[byte; 16]>() as libc::c_ulong,
+            ::std::mem::size_of::<[byte; 16]>() as usize,
         );
         (*a).port = (*(s as *mut sockaddr_in6)).sin6_port;
-        (*a).scope_id = (*(s as *mut sockaddr_in6)).sin6_scope_id as libc::c_ulong
+        (*a).scope_id = (*(s as *mut sockaddr_in6)).sin6_scope_id as usize
     };
 }
 
@@ -366,12 +366,12 @@ unsafe extern "C" fn Sys_StringToSockaddr(
     crate::stdlib::memset(
         sadr as *mut libc::c_void,
         '\u{0}' as i32,
-        ::std::mem::size_of::<sockaddr>() as libc::c_ulong,
+        ::std::mem::size_of::<sockaddr>() as usize,
     );
     crate::stdlib::memset(
         &mut hints as *mut addrinfo as *mut libc::c_void,
         '\u{0}' as i32,
-        ::std::mem::size_of::<addrinfo>() as libc::c_ulong,
+        ::std::mem::size_of::<addrinfo>() as usize,
     );
     hintsp = &mut hints;
     (*hintsp).ai_family = family as i32;
@@ -410,7 +410,7 @@ unsafe extern "C" fn Sys_StringToSockaddr(
             crate::stdlib::memcpy(
                 sadr as *mut libc::c_void,
                 (*search).ai_addr as *const libc::c_void,
-                (*search).ai_addrlen as libc::c_ulong,
+                (*search).ai_addrlen as usize,
             );
             freeaddrinfo(res as *mut addrinfo);
             return qtrue;
@@ -444,9 +444,9 @@ unsafe extern "C" fn Sys_SockaddrToString(
 ) {
     let mut inputlen: socklen_t = 0;
     if (*input).sa_family as i32 == 10 as i32 {
-        inputlen = ::std::mem::size_of::<sockaddr_in6>() as libc::c_ulong as socklen_t
+        inputlen = ::std::mem::size_of::<sockaddr_in6>() as usize as socklen_t
     } else {
-        inputlen = ::std::mem::size_of::<sockaddr_in>() as libc::c_ulong as socklen_t
+        inputlen = ::std::mem::size_of::<sockaddr_in>() as usize as socklen_t
     }
     if getnameinfo(
         input as *const sockaddr,
@@ -488,7 +488,7 @@ pub unsafe extern "C" fn Sys_StringToAdr(
     if Sys_StringToSockaddr(
         s,
         &mut sadr as *mut sockaddr_storage as *mut sockaddr,
-        ::std::mem::size_of::<sockaddr_storage>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<sockaddr_storage>() as usize as i32,
         fam,
     ) as u64
         == 0
@@ -545,7 +545,7 @@ pub unsafe extern "C" fn NET_CompareBaseAdrMask(
         && crate::stdlib::memcmp(
             addra as *const libc::c_void,
             addrb as *const libc::c_void,
-            curbyte as libc::c_ulong,
+            curbyte as usize,
         ) != 0
     {
         return qfalse;
@@ -583,13 +583,13 @@ pub unsafe extern "C" fn NET_AdrToString(mut a: netadr_t) -> *const libc::c_char
     if a.type_0 as u32 == NA_LOOPBACK as i32 as u32 {
         Com_sprintf(
             s.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 48]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 48]>() as usize as i32,
             b"loopback\x00" as *const u8 as *const libc::c_char,
         );
     } else if a.type_0 as u32 == NA_BOT as i32 as u32 {
         Com_sprintf(
             s.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 48]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 48]>() as usize as i32,
             b"bot\x00" as *const u8 as *const libc::c_char,
         );
     } else if a.type_0 as u32 == NA_IP as i32 as u32 || a.type_0 as u32 == NA_IP6 as i32 as u32 {
@@ -601,12 +601,12 @@ pub unsafe extern "C" fn NET_AdrToString(mut a: netadr_t) -> *const libc::c_char
         crate::stdlib::memset(
             &mut sadr as *mut sockaddr_storage as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<sockaddr_storage>() as libc::c_ulong,
+            ::std::mem::size_of::<sockaddr_storage>() as usize,
         );
         NetadrToSockadr(&mut a, &mut sadr as *mut sockaddr_storage as *mut sockaddr);
         Sys_SockaddrToString(
             s.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 48]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 48]>() as usize as i32,
             &mut sadr as *mut sockaddr_storage as *mut sockaddr,
         );
     }
@@ -619,19 +619,19 @@ pub unsafe extern "C" fn NET_AdrToStringwPort(mut a: netadr_t) -> *const libc::c
     if a.type_0 as u32 == NA_LOOPBACK as i32 as u32 {
         Com_sprintf(
             s.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 48]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 48]>() as usize as i32,
             b"loopback\x00" as *const u8 as *const libc::c_char,
         );
     } else if a.type_0 as u32 == NA_BOT as i32 as u32 {
         Com_sprintf(
             s.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 48]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 48]>() as usize as i32,
             b"bot\x00" as *const u8 as *const libc::c_char,
         );
     } else if a.type_0 as u32 == NA_IP as i32 as u32 {
         Com_sprintf(
             s.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 48]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 48]>() as usize as i32,
             b"%s:%hu\x00" as *const u8 as *const libc::c_char,
             NET_AdrToString(a),
             __bswap_16(a.port) as i32,
@@ -639,7 +639,7 @@ pub unsafe extern "C" fn NET_AdrToStringwPort(mut a: netadr_t) -> *const libc::c
     } else if a.type_0 as u32 == NA_IP6 as i32 as u32 {
         Com_sprintf(
             s.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 48]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 48]>() as usize as i32,
             b"[%s]:%hu\x00" as *const u8 as *const libc::c_char,
             NET_AdrToString(a),
             __bswap_16(a.port) as i32,
@@ -692,15 +692,15 @@ pub unsafe extern "C" fn NET_GetPacket(
     let mut err: i32 = 0;
     if ip_socket != -(1 as i32)
         && (*fdr).__fds_bits[(ip_socket
-            / (8 as i32 * ::std::mem::size_of::<__fd_mask>() as libc::c_ulong as i32))
+            / (8 as i32 * ::std::mem::size_of::<__fd_mask>() as usize as i32))
             as usize]
-            & ((1 as libc::c_ulong)
+            & ((1 as usize)
                 << ip_socket
-                    % (8 as i32 * ::std::mem::size_of::<__fd_mask>() as libc::c_ulong as i32))
+                    % (8 as i32 * ::std::mem::size_of::<__fd_mask>() as usize as i32))
                 as __fd_mask
             != 0 as i32 as isize
     {
-        fromlen = ::std::mem::size_of::<sockaddr_storage>() as libc::c_ulong as socklen_t;
+        fromlen = ::std::mem::size_of::<sockaddr_storage>() as usize as socklen_t;
         ret = crate::stdlib::recvfrom(
             ip_socket,
             (*net_message).data as *mut libc::c_void,
@@ -723,13 +723,13 @@ pub unsafe extern "C" fn NET_GetPacket(
                     .sin_zero
                     .as_mut_ptr() as *mut libc::c_void,
                 0 as i32,
-                8 as i32 as libc::c_ulong,
+                8 as i32 as usize,
             );
             if usingSocks as u32 != 0
                 && crate::stdlib::memcmp(
                     &mut from as *mut sockaddr_storage as *const libc::c_void,
                     &mut socksRelayAddr as *mut sockaddr as *const libc::c_void,
-                    fromlen as libc::c_ulong,
+                    fromlen as usize,
                 ) == 0 as i32
             {
                 if ret < 10 as i32
@@ -768,15 +768,15 @@ pub unsafe extern "C" fn NET_GetPacket(
     }
     if ip6_socket != -(1 as i32)
         && (*fdr).__fds_bits[(ip6_socket
-            / (8 as i32 * ::std::mem::size_of::<__fd_mask>() as libc::c_ulong as i32))
+            / (8 as i32 * ::std::mem::size_of::<__fd_mask>() as usize as i32))
             as usize]
-            & ((1 as libc::c_ulong)
+            & ((1 as usize)
                 << ip6_socket
-                    % (8 as i32 * ::std::mem::size_of::<__fd_mask>() as libc::c_ulong as i32))
+                    % (8 as i32 * ::std::mem::size_of::<__fd_mask>() as usize as i32))
                 as __fd_mask
             != 0 as i32 as isize
     {
-        fromlen = ::std::mem::size_of::<sockaddr_storage>() as libc::c_ulong as socklen_t;
+        fromlen = ::std::mem::size_of::<sockaddr_storage>() as usize as socklen_t;
         ret = crate::stdlib::recvfrom(
             ip6_socket,
             (*net_message).data as *mut libc::c_void,
@@ -813,15 +813,15 @@ pub unsafe extern "C" fn NET_GetPacket(
     if multicast6_socket != -(1 as i32)
         && multicast6_socket != ip6_socket
         && (*fdr).__fds_bits[(multicast6_socket
-            / (8 as i32 * ::std::mem::size_of::<__fd_mask>() as libc::c_ulong as i32))
+            / (8 as i32 * ::std::mem::size_of::<__fd_mask>() as usize as i32))
             as usize]
-            & ((1 as libc::c_ulong)
+            & ((1 as usize)
                 << multicast6_socket
-                    % (8 as i32 * ::std::mem::size_of::<__fd_mask>() as libc::c_ulong as i32))
+                    % (8 as i32 * ::std::mem::size_of::<__fd_mask>() as usize as i32))
                 as __fd_mask
             != 0 as i32 as isize
     {
-        fromlen = ::std::mem::size_of::<sockaddr_storage>() as libc::c_ulong as socklen_t;
+        fromlen = ::std::mem::size_of::<sockaddr_storage>() as usize as socklen_t;
         ret = crate::stdlib::recvfrom(
             multicast6_socket,
             (*net_message).data as *mut libc::c_void,
@@ -901,7 +901,7 @@ pub unsafe extern "C" fn Sys_SendPacket(
     crate::stdlib::memset(
         &mut addr as *mut sockaddr_storage as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<sockaddr_storage>() as libc::c_ulong,
+        ::std::mem::size_of::<sockaddr_storage>() as usize,
     );
     NetadrToSockadr(&mut to, &mut addr as *mut sockaddr_storage as *mut sockaddr);
     if usingSocks as u32 != 0 && to.type_0 as u32 == NA_IP as i32 as u32 {
@@ -919,7 +919,7 @@ pub unsafe extern "C" fn Sys_SendPacket(
             &mut *socksBuf.as_mut_ptr().offset(10 as i32 as isize) as *mut libc::c_char
                 as *mut libc::c_void,
             data,
-            length as libc::c_ulong,
+            length as usize,
         );
         ret = crate::stdlib::sendto(
             ip_socket,
@@ -927,7 +927,7 @@ pub unsafe extern "C" fn Sys_SendPacket(
             (length + 10 as i32) as size_t,
             0 as i32,
             &mut socksRelayAddr,
-            ::std::mem::size_of::<sockaddr>() as libc::c_ulong as socklen_t,
+            ::std::mem::size_of::<sockaddr>() as usize as socklen_t,
         ) as i32
     } else if addr.ss_family as i32 == 2 as i32 {
         ret = crate::stdlib::sendto(
@@ -936,7 +936,7 @@ pub unsafe extern "C" fn Sys_SendPacket(
             length as size_t,
             0 as i32,
             &mut addr as *mut sockaddr_storage as *mut sockaddr,
-            ::std::mem::size_of::<sockaddr_in>() as libc::c_ulong as socklen_t,
+            ::std::mem::size_of::<sockaddr_in>() as usize as socklen_t,
         ) as i32
     } else if addr.ss_family as i32 == 10 as i32 {
         ret = crate::stdlib::sendto(
@@ -945,7 +945,7 @@ pub unsafe extern "C" fn Sys_SendPacket(
             length as size_t,
             0 as i32,
             &mut addr as *mut sockaddr_storage as *mut sockaddr,
-            ::std::mem::size_of::<sockaddr_in6>() as libc::c_ulong as socklen_t,
+            ::std::mem::size_of::<sockaddr_in6>() as usize as socklen_t,
         ) as i32
     }
     if ret == -(1 as i32) {
@@ -1032,7 +1032,7 @@ pub unsafe extern "C" fn Sys_IsLANAddress(mut adr: netadr_t) -> qboolean {
                     .sin_addr
                     .s_addr as *mut in_addr_t as *mut byte;
                 compareadr = adr.ip.as_mut_ptr();
-                addrsize = ::std::mem::size_of::<[byte; 4]>() as libc::c_ulong as i32
+                addrsize = ::std::mem::size_of::<[byte; 4]>() as usize as i32
             } else {
                 // TODO? should we check the scope_id here?
                 compareip = &mut (*(&mut (*localIP.as_mut_ptr().offset(index as isize)).addr
@@ -1044,7 +1044,7 @@ pub unsafe extern "C" fn Sys_IsLANAddress(mut adr: netadr_t) -> qboolean {
                     as *mut sockaddr_in6))
                     .sin6_addr as *mut in6_addr as *mut byte;
                 compareadr = adr.ip6.as_mut_ptr();
-                addrsize = ::std::mem::size_of::<[byte; 16]>() as libc::c_ulong as i32
+                addrsize = ::std::mem::size_of::<[byte; 16]>() as usize as i32
             }
             differed = qfalse;
             run = 0 as i32;
@@ -1134,7 +1134,7 @@ pub unsafe extern "C" fn Sys_ShowIP() {
     while i < numIP {
         Sys_SockaddrToString(
             addrbuf.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 48]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 48]>() as usize as i32,
             &mut (*localIP.as_mut_ptr().offset(i as isize)).addr as *mut sockaddr_storage
                 as *mut sockaddr,
         );
@@ -1199,7 +1199,7 @@ pub unsafe extern "C" fn NET_IPSocket(
     // make it non-blocking
     if libc::ioctl(
         newsocket,
-        0x5421 as i32 as libc::c_ulong,
+        0x5421u64,
         &mut _true as *mut ioctlarg_t,
     ) == -(1 as i32)
     {
@@ -1217,7 +1217,7 @@ pub unsafe extern "C" fn NET_IPSocket(
         1 as i32,
         6 as i32,
         &mut i as *mut i32 as *mut libc::c_char as *const libc::c_void,
-        ::std::mem::size_of::<i32>() as libc::c_ulong as socklen_t,
+        ::std::mem::size_of::<i32>() as usize as socklen_t,
     ) == -(1 as i32)
     {
         Com_Printf(
@@ -1232,7 +1232,7 @@ pub unsafe extern "C" fn NET_IPSocket(
     } else if Sys_StringToSockaddr(
         net_interface,
         &mut address as *mut sockaddr_in as *mut sockaddr,
-        ::std::mem::size_of::<sockaddr_in>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<sockaddr_in>() as usize as i32,
         2 as i32 as sa_family_t,
     ) as u64
         == 0
@@ -1248,7 +1248,7 @@ pub unsafe extern "C" fn NET_IPSocket(
     if libc::bind(
         newsocket,
         &mut address as *mut sockaddr_in as *mut libc::c_void as *const sockaddr as *const sockaddr,
-        ::std::mem::size_of::<sockaddr_in>() as libc::c_ulong as socklen_t,
+        ::std::mem::size_of::<sockaddr_in>() as usize as socklen_t,
     ) == -(1 as i32)
     {
         Com_Printf(
@@ -1321,7 +1321,7 @@ pub unsafe extern "C" fn NET_IP6Socket(
     // make it non-blocking
     if libc::ioctl(
         newsocket,
-        0x5421 as i32 as libc::c_ulong,
+        0x5421u64,
         &mut _true as *mut ioctlarg_t,
     ) == -(1 as i32)
     {
@@ -1340,7 +1340,7 @@ pub unsafe extern "C" fn NET_IP6Socket(
         IPPROTO_IPV6 as i32,
         26 as i32,
         &mut i as *mut i32 as *mut libc::c_char as *const libc::c_void,
-        ::std::mem::size_of::<i32>() as libc::c_ulong as socklen_t,
+        ::std::mem::size_of::<i32>() as usize as socklen_t,
     ) == -(1 as i32)
     {
         // win32 systems don't seem to support this anyways.
@@ -1356,7 +1356,7 @@ pub unsafe extern "C" fn NET_IP6Socket(
     } else if Sys_StringToSockaddr(
         net_interface,
         &mut address as *mut sockaddr_in6 as *mut sockaddr,
-        ::std::mem::size_of::<sockaddr_in6>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<sockaddr_in6>() as usize as i32,
         10 as i32 as sa_family_t,
     ) as u64
         == 0
@@ -1373,7 +1373,7 @@ pub unsafe extern "C" fn NET_IP6Socket(
         newsocket,
         &mut address as *mut sockaddr_in6 as *mut libc::c_void as *const sockaddr
             as *const sockaddr,
-        ::std::mem::size_of::<sockaddr_in6>() as libc::c_ulong as socklen_t,
+        ::std::mem::size_of::<sockaddr_in6>() as usize as socklen_t,
     ) == -(1 as i32)
     {
         Com_Printf(
@@ -1413,7 +1413,7 @@ pub unsafe extern "C" fn NET_SetMulticast6() {
         || Sys_StringToSockaddr(
             (*net_mcast6addr).string,
             &mut addr as *mut sockaddr_in6 as *mut sockaddr,
-            ::std::mem::size_of::<sockaddr_in6>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<sockaddr_in6>() as usize as i32,
             10 as i32 as sa_family_t,
         ) as u64
             == 0
@@ -1430,7 +1430,7 @@ pub unsafe extern "C" fn NET_SetMulticast6() {
     crate::stdlib::memcpy(
         &mut curgroup.ipv6mr_multiaddr as *mut in6_addr as *mut libc::c_void,
         &mut addr.sin6_addr as *mut in6_addr as *const libc::c_void,
-        ::std::mem::size_of::<in6_addr>() as libc::c_ulong,
+        ::std::mem::size_of::<in6_addr>() as usize,
     );
     if *(*net_mcast6iface).string != 0 {
         curgroup.ipv6mr_interface = if_nametoindex((*net_mcast6iface).string)
@@ -1486,7 +1486,7 @@ pub unsafe extern "C" fn NET_JoinMulticast6() {
             IPPROTO_IPV6 as i32,
             17 as i32,
             &mut curgroup.ipv6mr_interface as *mut u32 as *mut libc::c_char as *const libc::c_void,
-            ::std::mem::size_of::<u32>() as libc::c_ulong as socklen_t,
+            ::std::mem::size_of::<u32>() as usize as socklen_t,
         ) < 0 as i32
         {
             Com_Printf(
@@ -1506,7 +1506,7 @@ pub unsafe extern "C" fn NET_JoinMulticast6() {
         IPPROTO_IPV6 as i32,
         20 as i32,
         &mut curgroup as *mut ipv6_mreq as *mut libc::c_char as *const libc::c_void,
-        ::std::mem::size_of::<ipv6_mreq>() as libc::c_ulong as socklen_t,
+        ::std::mem::size_of::<ipv6_mreq>() as usize as socklen_t,
     ) != 0
     {
         Com_Printf(
@@ -1533,7 +1533,7 @@ pub unsafe extern "C" fn NET_LeaveMulticast6() {
                 IPPROTO_IPV6 as i32,
                 21 as i32,
                 &mut curgroup as *mut ipv6_mreq as *mut libc::c_char as *const libc::c_void,
-                ::std::mem::size_of::<ipv6_mreq>() as libc::c_ulong as socklen_t,
+                ::std::mem::size_of::<ipv6_mreq>() as usize as socklen_t,
             );
         }
         multicast6_socket = -(1 as i32)
@@ -1589,7 +1589,7 @@ pub unsafe extern "C" fn NET_OpenSocks(mut port: i32) {
     if libc::connect(
         socks_socket,
         &mut address as *mut sockaddr_in as *mut sockaddr as *const sockaddr,
-        ::std::mem::size_of::<sockaddr_in>() as libc::c_ulong as socklen_t,
+        ::std::mem::size_of::<sockaddr_in>() as usize as socklen_t,
     ) == -(1 as i32)
     {
         Com_Printf(
@@ -1670,7 +1670,7 @@ pub unsafe extern "C" fn NET_OpenSocks(mut port: i32) {
             crate::stdlib::memcpy(
                 &mut *buf.as_mut_ptr().offset(2 as i32 as isize) as *mut u8 as *mut libc::c_void,
                 (*net_socksUsername).string as *const libc::c_void,
-                ulen as libc::c_ulong,
+                ulen as usize,
             );
         }
         buf[(2 as i32 + ulen) as usize] = plen as u8;
@@ -1679,7 +1679,7 @@ pub unsafe extern "C" fn NET_OpenSocks(mut port: i32) {
                 &mut *buf.as_mut_ptr().offset((3 as i32 + ulen) as isize) as *mut u8
                     as *mut libc::c_void,
                 (*net_socksPassword).string as *const libc::c_void,
-                plen as libc::c_ulong,
+                plen as usize,
             );
         }
         // send it
@@ -1790,7 +1790,7 @@ pub unsafe extern "C" fn NET_OpenSocks(mut port: i32) {
             .sin_zero
             .as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        8 as i32 as libc::c_ulong,
+        8 as i32 as usize,
     );
     usingSocks = qtrue;
 }
@@ -1814,10 +1814,10 @@ unsafe extern "C" fn NET_AddLocalAddress(
     family = (*addr).sa_family;
     if numIP < 32 as i32 {
         if family as i32 == 2 as i32 {
-            addrlen = ::std::mem::size_of::<sockaddr_in>() as libc::c_ulong as i32;
+            addrlen = ::std::mem::size_of::<sockaddr_in>() as usize as i32;
             localIP[numIP as usize].type_0 = NA_IP
         } else if family as i32 == 10 as i32 {
-            addrlen = ::std::mem::size_of::<sockaddr_in6>() as libc::c_ulong as i32;
+            addrlen = ::std::mem::size_of::<sockaddr_in6>() as usize as i32;
             localIP[numIP as usize].type_0 = NA_IP6
         } else {
             return;
@@ -1825,20 +1825,20 @@ unsafe extern "C" fn NET_AddLocalAddress(
         Q_strncpyz(
             localIP[numIP as usize].ifname.as_mut_ptr(),
             ifname,
-            ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 16]>() as usize as i32,
         );
         localIP[numIP as usize].family = family;
         crate::stdlib::memcpy(
             &mut (*localIP.as_mut_ptr().offset(numIP as isize)).addr as *mut sockaddr_storage
                 as *mut libc::c_void,
             addr as *const libc::c_void,
-            addrlen as libc::c_ulong,
+            addrlen as usize,
         );
         crate::stdlib::memcpy(
             &mut (*localIP.as_mut_ptr().offset(numIP as isize)).netmask as *mut sockaddr_storage
                 as *mut libc::c_void,
             netmask as *const libc::c_void,
-            addrlen as libc::c_ulong,
+            addrlen as usize,
         );
         numIP += 1
     };
@@ -2181,7 +2181,7 @@ pub unsafe extern "C" fn NET_Event(mut fdr: *mut fd_set) {
         MSG_Init(
             &mut netmsg as *mut _ as *mut msg_t,
             bufData.as_mut_ptr(),
-            ::std::mem::size_of::<[byte; 16385]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[byte; 16385]>() as usize as i32,
         );
         if !(NET_GetPacket(&mut from, &mut netmsg, fdr) as u64 != 0) {
             break;
@@ -2233,8 +2233,8 @@ pub unsafe extern "C" fn NET_Sleep(mut msec: i32) {
     let fresh1;
     let fresh2 = &mut __d1;
     let fresh3;
-    let fresh4 = (::std::mem::size_of::<fd_set>() as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<__fd_mask>() as libc::c_ulong);
+    let fresh4 = (::std::mem::size_of::<fd_set>() as usize)
+        .wrapping_div(::std::mem::size_of::<__fd_mask>() as usize);
     let fresh5 = &mut *fdr.__fds_bits.as_mut_ptr().offset(0 as i32 as isize) as *mut __fd_mask;
     asm!("cld; rep; stosq" : "={cx}" (fresh1), "={di}" (fresh3) : "{ax}"
      (0 as i32), "0"
@@ -2245,17 +2245,17 @@ pub unsafe extern "C" fn NET_Sleep(mut msec: i32) {
     c2rust_asm_casts::AsmCast::cast_out(fresh2, fresh5, fresh3);
     if ip_socket != -(1 as i32) {
         fdr.__fds_bits[(ip_socket
-            / (8 as i32 * ::std::mem::size_of::<__fd_mask>() as libc::c_ulong as i32))
-            as usize] |= ((1 as libc::c_ulong)
-            << ip_socket % (8 as i32 * ::std::mem::size_of::<__fd_mask>() as libc::c_ulong as i32))
+            / (8 as i32 * ::std::mem::size_of::<__fd_mask>() as usize as i32))
+            as usize] |= ((1 as usize)
+            << ip_socket % (8 as i32 * ::std::mem::size_of::<__fd_mask>() as usize as i32))
             as __fd_mask;
         highestfd = ip_socket
     }
     if ip6_socket != -(1 as i32) {
         fdr.__fds_bits[(ip6_socket
-            / (8 as i32 * ::std::mem::size_of::<__fd_mask>() as libc::c_ulong as i32))
-            as usize] |= ((1 as libc::c_ulong)
-            << ip6_socket % (8 as i32 * ::std::mem::size_of::<__fd_mask>() as libc::c_ulong as i32))
+            / (8 as i32 * ::std::mem::size_of::<__fd_mask>() as usize as i32))
+            as usize] |= ((1 as usize)
+            << ip6_socket % (8 as i32 * ::std::mem::size_of::<__fd_mask>() as usize as i32))
             as __fd_mask;
         if highestfd == -(1 as i32) || ip6_socket > highestfd {
             highestfd = ip6_socket

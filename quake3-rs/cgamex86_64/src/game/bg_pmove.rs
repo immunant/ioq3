@@ -2157,7 +2157,7 @@ pub unsafe extern "C" fn PmoveSingle(mut pmove: *mut pmove_t) {
     crate::stdlib::memset(
         &mut pml as *mut pml_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<pml_t>() as libc::c_ulong,
+        ::std::mem::size_of::<pml_t>() as usize,
     );
     // determine the time
     pml.msec = (*pmove).cmd.serverTime - (*(*pm).ps).commandTime;

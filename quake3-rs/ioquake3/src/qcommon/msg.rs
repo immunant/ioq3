@@ -149,7 +149,7 @@ pub unsafe extern "C" fn MSG_Init(mut buf: *mut msg_t, mut data: *mut byte, mut 
     crate::stdlib::memset(
         buf as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<msg_t>() as libc::c_ulong,
+        ::std::mem::size_of::<msg_t>() as usize,
     );
     (*buf).data = data;
     (*buf).maxsize = length;
@@ -163,7 +163,7 @@ pub unsafe extern "C" fn MSG_InitOOB(mut buf: *mut msg_t, mut data: *mut byte, m
     crate::stdlib::memset(
         buf as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<msg_t>() as libc::c_ulong,
+        ::std::mem::size_of::<msg_t>() as usize,
     );
     (*buf).data = data;
     (*buf).maxsize = length;
@@ -218,13 +218,13 @@ pub unsafe extern "C" fn MSG_Copy(
     crate::stdlib::memcpy(
         buf as *mut libc::c_void,
         src as *const libc::c_void,
-        ::std::mem::size_of::<msg_t>() as libc::c_ulong,
+        ::std::mem::size_of::<msg_t>() as usize,
     );
     (*buf).data = data;
     crate::stdlib::memcpy(
         (*buf).data as *mut libc::c_void,
         (*src).data as *const libc::c_void,
-        (*src).cursize as libc::c_ulong,
+        (*src).cursize as usize,
     );
 }
 /*
@@ -267,7 +267,7 @@ pub unsafe extern "C" fn MSG_WriteBits(mut msg: *mut msg_t, mut value: i32, mut 
             crate::stdlib::memcpy(
                 &mut *(*msg).data.offset((*msg).cursize as isize) as *mut byte as *mut libc::c_void,
                 &mut temp as *mut i16 as *const libc::c_void,
-                2 as i32 as libc::c_ulong,
+                2 as i32 as usize,
             );
             (*msg).cursize += 2 as i32;
             (*msg).bit += 16 as i32
@@ -275,7 +275,7 @@ pub unsafe extern "C" fn MSG_WriteBits(mut msg: *mut msg_t, mut value: i32, mut 
             crate::stdlib::memcpy(
                 &mut *(*msg).data.offset((*msg).cursize as isize) as *mut byte as *mut libc::c_void,
                 &mut value as *mut i32 as *const libc::c_void,
-                4 as i32 as libc::c_ulong,
+                4 as i32 as usize,
             );
             (*msg).cursize += 4 as i32;
             (*msg).bit += 32 as i32
@@ -358,7 +358,7 @@ pub unsafe extern "C" fn MSG_ReadBits(mut msg: *mut msg_t, mut bits: i32) -> i32
                 &mut temp as *mut i16 as *mut libc::c_void,
                 &mut *(*msg).data.offset((*msg).readcount as isize) as *mut byte
                     as *const libc::c_void,
-                2 as i32 as libc::c_ulong,
+                2 as i32 as usize,
             );
             value = temp as i32;
             (*msg).readcount += 2 as i32;
@@ -368,7 +368,7 @@ pub unsafe extern "C" fn MSG_ReadBits(mut msg: *mut msg_t, mut bits: i32) -> i32
                 &mut value as *mut i32 as *mut libc::c_void,
                 &mut *(*msg).data.offset((*msg).readcount as isize) as *mut byte
                     as *const libc::c_void,
-                4 as i32 as libc::c_ulong,
+                4 as i32 as usize,
             );
             (*msg).readcount += 4 as i32;
             (*msg).bit += 32 as i32
@@ -497,7 +497,7 @@ pub unsafe extern "C" fn MSG_WriteString(mut sb: *mut msg_t, mut s: *const libc:
         Q_strncpyz(
             string.as_mut_ptr(),
             s,
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
         );
         // get rid of 0x80+ and '%' chars, because old clients don't like them
         i = 0 as i32;
@@ -538,7 +538,7 @@ pub unsafe extern "C" fn MSG_WriteBigString(mut sb: *mut msg_t, mut s: *const li
         Q_strncpyz(
             string.as_mut_ptr(),
             s,
-            ::std::mem::size_of::<[libc::c_char; 8192]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 8192]>() as usize as i32,
         );
         // get rid of 0x80+ and '%' chars, because old clients don't like them
         i = 0 as i32;
@@ -657,9 +657,9 @@ pub unsafe extern "C" fn MSG_ReadString(mut msg: *mut msg_t) -> *mut libc::c_cha
             c = '.' as i32
         }
         // break only after reading all expected data from bitstream
-        if l as libc::c_ulong
-            >= (::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong)
-                .wrapping_sub(1 as i32 as libc::c_ulong)
+        if l as usize
+            >= (::std::mem::size_of::<[libc::c_char; 1024]>() as usize)
+                .wrapping_sub(1 as i32 as usize)
         {
             break; // use ReadByte so -1 is out of bounds
         }
@@ -691,9 +691,9 @@ pub unsafe extern "C" fn MSG_ReadBigString(mut msg: *mut msg_t) -> *mut libc::c_
             c = '.' as i32
         }
         // break only after reading all expected data from bitstream
-        if l as libc::c_ulong
-            >= (::std::mem::size_of::<[libc::c_char; 8192]>() as libc::c_ulong)
-                .wrapping_sub(1 as i32 as libc::c_ulong)
+        if l as usize
+            >= (::std::mem::size_of::<[libc::c_char; 8192]>() as usize)
+                .wrapping_sub(1 as i32 as usize)
         {
             break; // use ReadByte so -1 is out of bounds
         }
@@ -725,9 +725,9 @@ pub unsafe extern "C" fn MSG_ReadStringLine(mut msg: *mut msg_t) -> *mut libc::c
             c = '.' as i32
         }
         // break only after reading all expected data from bitstream
-        if l as libc::c_ulong
-            >= (::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong)
-                .wrapping_sub(1 as i32 as libc::c_ulong)
+        if l as usize
+            >= (::std::mem::size_of::<[libc::c_char; 1024]>() as usize)
+                .wrapping_sub(1 as i32 as usize)
         {
             break;
         }
@@ -1092,8 +1092,8 @@ pub unsafe extern "C" fn MSG_WriteDeltaEntity(
     let mut fullFloat: f32 = 0.;
     let mut fromF: *mut i32 = 0 as *mut i32;
     let mut toF: *mut i32 = 0 as *mut i32;
-    numFields = (::std::mem::size_of::<[netField_t; 51]>() as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<netField_t>() as libc::c_ulong) as i32;
+    numFields = (::std::mem::size_of::<[netField_t; 51]>() as usize)
+        .wrapping_div(::std::mem::size_of::<netField_t>() as usize) as i32;
     // all fields should be 32 bits to avoid any compiler packing issues
     // the "number" field is not part of the field list
     // if this assert fails, someone added a field to the entityState_t
@@ -1234,7 +1234,7 @@ pub unsafe extern "C" fn MSG_ReadDeltaEntity(
         crate::stdlib::memset(
             to as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<entityState_t>() as libc::c_ulong,
+            ::std::mem::size_of::<entityState_t>() as usize,
         );
         (*to).number = ((1 as i32) << 10 as i32) - 1 as i32;
         if !cl_shownet.is_null()
@@ -1254,8 +1254,8 @@ pub unsafe extern "C" fn MSG_ReadDeltaEntity(
         (*to).number = number;
         return;
     }
-    numFields = (::std::mem::size_of::<[netField_t; 51]>() as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<netField_t>() as libc::c_ulong) as i32;
+    numFields = (::std::mem::size_of::<[netField_t; 51]>() as usize)
+        .wrapping_div(::std::mem::size_of::<netField_t>() as usize) as i32;
     lc = MSG_ReadByte(msg);
     if lc > numFields || lc < 0 as i32 {
         Com_Error(
@@ -1446,11 +1446,11 @@ pub unsafe extern "C" fn MSG_WriteDeltaPlayerstate(
         crate::stdlib::memset(
             &mut dummy as *mut playerState_t as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<playerState_t>() as libc::c_ulong,
+            ::std::mem::size_of::<playerState_t>() as usize,
         );
     }
-    numFields = (::std::mem::size_of::<[netField_t; 48]>() as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<netField_t>() as libc::c_ulong) as i32;
+    numFields = (::std::mem::size_of::<[netField_t; 48]>() as usize)
+        .wrapping_div(::std::mem::size_of::<netField_t>() as usize) as i32;
     lc = 0 as i32;
     i = 0 as i32;
     field = playerStateFields.as_mut_ptr();
@@ -1672,7 +1672,7 @@ pub unsafe extern "C" fn MSG_ReadDeltaPlayerstate(
         crate::stdlib::memset(
             &mut dummy as *mut playerState_t as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<playerState_t>() as libc::c_ulong,
+            ::std::mem::size_of::<playerState_t>() as usize,
         );
     }
     *to = *from;
@@ -1694,8 +1694,8 @@ pub unsafe extern "C" fn MSG_ReadDeltaPlayerstate(
     } else {
         print = 0 as i32
     }
-    numFields = (::std::mem::size_of::<[netField_t; 48]>() as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<netField_t>() as libc::c_ulong) as i32;
+    numFields = (::std::mem::size_of::<[netField_t; 48]>() as usize)
+        .wrapping_div(::std::mem::size_of::<netField_t>() as usize) as i32;
     lc = MSG_ReadByte(msg);
     if lc > numFields || lc < 0 as i32 {
         Com_Error(

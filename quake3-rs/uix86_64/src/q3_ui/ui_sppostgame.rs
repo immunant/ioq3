@@ -644,7 +644,7 @@ unsafe extern "C" fn UI_SPPostgameMenu_DrawAwardsMedals(mut max: i32) {
         if medal == AWARD_ACCURACY as i32 {
             Com_sprintf(
                 buf.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 16]>() as usize as i32,
                 b"%i%%\x00" as *const u8 as *const libc::c_char,
                 amount,
             );
@@ -654,7 +654,7 @@ unsafe extern "C" fn UI_SPPostgameMenu_DrawAwardsMedals(mut max: i32) {
         } else {
             Com_sprintf(
                 buf.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 16]>() as usize as i32,
                 b"%i\x00" as *const u8 as *const libc::c_char,
                 amount,
             );
@@ -743,7 +743,7 @@ unsafe extern "C" fn UI_SPPostgameMenu_MenuDrawScoreLine(mut n: i32, mut y: i32)
             info.as_mut_ptr(),
             b"n\x00" as *const u8 as *const libc::c_char,
         ),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     Q_CleanStr(name.as_mut_ptr());
     UI_DrawString(
@@ -773,7 +773,7 @@ unsafe extern "C" fn UI_SPPostgameMenu_MenuDraw() {
     trap_GetConfigString(
         1 as i32,
         info.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     serverId = atoi(Info_ValueForKey(
         info.as_mut_ptr(),
@@ -1025,7 +1025,7 @@ unsafe extern "C" fn Prepname(mut index: i32) {
             info.as_mut_ptr(),
             b"n\x00" as *const u8 as *const libc::c_char,
         ),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     Q_CleanStr(name.as_mut_ptr());
     len = crate::stdlib::strlen(name.as_mut_ptr()) as i32;
@@ -1036,7 +1036,7 @@ unsafe extern "C" fn Prepname(mut index: i32) {
     Q_strncpyz(
         postgameMenuInfo.placeNames[index as usize].as_mut_ptr(),
         name.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
 }
 /*
@@ -1188,12 +1188,12 @@ pub unsafe extern "C" fn UI_SPPostgameMenu_f() {
     crate::stdlib::memset(
         &mut postgameMenuInfo as *mut postgameMenuInfo_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<postgameMenuInfo_t>() as libc::c_ulong,
+        ::std::mem::size_of::<postgameMenuInfo_t>() as usize,
     );
     trap_GetConfigString(
         1 as i32,
         info.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     postgameMenuInfo.serverId = atoi(Info_ValueForKey(
         info.as_mut_ptr(),
@@ -1202,7 +1202,7 @@ pub unsafe extern "C" fn UI_SPPostgameMenu_f() {
     trap_GetConfigString(
         0 as i32,
         info.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     Q_strncpyz(
         map.as_mut_ptr(),
@@ -1210,7 +1210,7 @@ pub unsafe extern "C" fn UI_SPPostgameMenu_f() {
             info.as_mut_ptr(),
             b"mapname\x00" as *const u8 as *const libc::c_char,
         ),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     arena = UI_GetArenaInfoByMap(map.as_mut_ptr());
     if arena.is_null() {
@@ -1219,7 +1219,7 @@ pub unsafe extern "C" fn UI_SPPostgameMenu_f() {
     Q_strncpyz(
         arenainfo.as_mut_ptr(),
         arena,
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     postgameMenuInfo.level = atoi(Info_ValueForKey(
         arenainfo.as_mut_ptr(),

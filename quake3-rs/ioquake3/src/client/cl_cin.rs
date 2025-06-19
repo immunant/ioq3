@@ -560,7 +560,7 @@ unsafe extern "C" fn move8_32(mut src: *mut byte, mut dst: *mut byte, mut spl: i
         crate::stdlib::memcpy(
             dst as *mut libc::c_void,
             src as *const libc::c_void,
-            32 as i32 as libc::c_ulong,
+            32 as i32 as usize,
         );
         src = src.offset(spl as isize);
         dst = dst.offset(spl as isize);
@@ -582,7 +582,7 @@ unsafe extern "C" fn move4_32(mut src: *mut byte, mut dst: *mut byte, mut spl: i
         crate::stdlib::memcpy(
             dst as *mut libc::c_void,
             src as *const libc::c_void,
-            16 as i32 as libc::c_ulong,
+            16 as i32 as usize,
         );
         src = src.offset(spl as isize);
         dst = dst.offset(spl as isize);
@@ -604,7 +604,7 @@ unsafe extern "C" fn blit8_32(mut src: *mut byte, mut dst: *mut byte, mut spl: i
         crate::stdlib::memcpy(
             dst as *mut libc::c_void,
             src as *const libc::c_void,
-            32 as i32 as libc::c_ulong,
+            32 as i32 as usize,
         );
         src = src.offset(32 as i32 as isize);
         dst = dst.offset(spl as isize);
@@ -626,7 +626,7 @@ unsafe extern "C" fn blit4_32(mut src: *mut byte, mut dst: *mut byte, mut spl: i
         crate::stdlib::memmove(
             dst as *mut libc::c_void,
             src as *const libc::c_void,
-            16 as i32 as libc::c_ulong,
+            16 as i32 as usize,
         );
         src = src.offset(16 as i32 as isize);
         dst = dst.offset(spl as isize);
@@ -645,12 +645,12 @@ unsafe extern "C" fn blit2_32(mut src: *mut byte, mut dst: *mut byte, mut spl: i
     crate::stdlib::memcpy(
         dst as *mut libc::c_void,
         src as *const libc::c_void,
-        8 as i32 as libc::c_ulong,
+        8 as i32 as usize,
     );
     crate::stdlib::memcpy(
         dst.offset(spl as isize) as *mut libc::c_void,
         src.offset(8 as i32 as isize) as *const libc::c_void,
-        8 as i32 as libc::c_ulong,
+        8 as i32 as usize,
     );
 }
 /* *****************************************************************************
@@ -891,8 +891,8 @@ unsafe extern "C" fn yuv_to_rgb24(mut y: isize, mut u: isize, mut v: isize) -> u
     if b > 255 as i32 as isize {
         b = 255 as i32 as isize
     }
-    return ((r | g << 8 as i32 | b << 16 as i32) as libc::c_ulong
-        | (255 as libc::c_ulong) << 24 as i32) as u32;
+    return ((r | g << 8 as i32 | b << 16 as i32) as usize
+        | (255 as usize) << 24 as i32) as u32;
 }
 /* *****************************************************************************
 *
@@ -2454,7 +2454,7 @@ unsafe extern "C" fn RoQInterrupt() {
                         cin.linbuf.as_mut_ptr() as *const libc::c_void,
                         (cinTable[currentHandle as usize].samplesPerLine
                             * cinTable[currentHandle as usize].ysize as isize)
-                            as libc::c_ulong,
+                            as usize,
                     ); // for header
                 }
                 cinTable[currentHandle as usize].numQuads += 1;
@@ -2798,14 +2798,14 @@ pub unsafe extern "C" fn CIN_PlayCinematic(
     {
         Com_sprintf(
             name.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
             b"video/%s\x00" as *const u8 as *const libc::c_char,
             arg,
         );
     } else {
         Com_sprintf(
             name.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
             b"%s\x00" as *const u8 as *const libc::c_char,
             arg,
         );
@@ -2830,7 +2830,7 @@ pub unsafe extern "C" fn CIN_PlayCinematic(
     crate::stdlib::memset(
         &mut cin as *mut cinematics_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<cinematics_t>() as libc::c_ulong,
+        ::std::mem::size_of::<cinematics_t>() as usize,
     );
     currentHandle = CIN_HandleForVideo();
     cin.currentHandle = currentHandle;

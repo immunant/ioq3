@@ -272,7 +272,7 @@ pub unsafe extern "C" fn ec_dec_uint(mut _this: *mut ec_dec, mut _ft: opus_uint3
     let mut ftb: i32 = 0;
     /*In order to optimize EC_ILOG(), it is undefined for the value 0.*/
     _ft = _ft.wrapping_sub(1);
-    ftb = ::std::mem::size_of::<u32>() as libc::c_ulong as i32 * 8 as i32
+    ftb = ::std::mem::size_of::<u32>() as usize as i32 * 8 as i32
         - _ft.leading_zeros() as i32;
     if ftb > 8 as i32 {
         let mut t: opus_uint32 = 0;
@@ -383,7 +383,7 @@ pub unsafe extern "C" fn ec_dec_bits(mut _this: *mut ec_dec, mut _bits: u32) -> 
             window |= (ec_read_byte_from_end(_this) as ec_window) << available;
             available += 8 as i32;
             if !(available
-                <= ::std::mem::size_of::<ec_window>() as libc::c_ulong as i32 * 8 as i32 - 8 as i32)
+                <= ::std::mem::size_of::<ec_window>() as usize as i32 * 8 as i32 - 8 as i32)
             {
                 break;
             }

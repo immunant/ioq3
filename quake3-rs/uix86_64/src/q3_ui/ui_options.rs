@@ -314,7 +314,7 @@ pub unsafe extern "C" fn Options_MenuInit() {
     crate::stdlib::memset(
         &mut s_options as *mut optionsmenu_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<optionsmenu_t>() as libc::c_ulong,
+        ::std::mem::size_of::<optionsmenu_t>() as usize,
     );
     SystemConfig_Cache();
     s_options.menu.wrapAround = qtrue;

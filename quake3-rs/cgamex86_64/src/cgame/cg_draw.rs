@@ -370,7 +370,7 @@ unsafe extern "C" fn CG_DrawField(mut x: i32, mut y: i32, mut width: i32, mut va
     }
     Com_sprintf(
         num.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 16]>() as usize as i32,
         b"%i\x00" as *const u8 as *const libc::c_char,
         value,
     );
@@ -460,12 +460,12 @@ pub unsafe extern "C" fn CG_Draw3DModel(
     crate::stdlib::memset(
         &mut refdef as *mut refdef_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<refdef_t>() as libc::c_ulong,
+        ::std::mem::size_of::<refdef_t>() as usize,
     );
     crate::stdlib::memset(
         &mut ent as *mut refEntity_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
+        ::std::mem::size_of::<refEntity_t>() as usize,
     );
     AnglesToAxis(angles as *const vec_t, ent.axis.as_mut_ptr());
     ent.origin[0 as i32 as usize] = *origin.offset(0 as i32 as isize);
@@ -1263,7 +1263,7 @@ unsafe extern "C" fn CG_DrawTeamOverlay(
             CG_GetColorForHealth((*ci).health, (*ci).armor, hcolor.as_mut_ptr());
             Com_sprintf(
                 st.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 16]>() as usize as i32,
                 b"%3i %3i\x00" as *const u8 as *const libc::c_char,
                 (*ci).health,
                 (*ci).armor,
@@ -1935,7 +1935,7 @@ unsafe extern "C" fn CG_DrawReward() {
         );
         Com_sprintf(
             buf.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 32]>() as usize as i32,
             b"%d\x00" as *const u8 as *const libc::c_char,
             cg.rewardCount[0 as i32 as usize],
         );
@@ -2261,7 +2261,7 @@ pub unsafe extern "C" fn CG_CenterPrint(
     Q_strncpyz(
         cg.centerPrint.as_mut_ptr(),
         str,
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     cg.centerPrintTime = cg.time;
     cg.centerPrintY = y;
@@ -2488,13 +2488,13 @@ unsafe extern "C" fn CG_DrawCrosshair3D() {
     trap_Cvar_VariableStringBuffer(
         b"r_zProj\x00" as *const u8 as *const libc::c_char,
         rendererinfos.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 128]>() as usize as i32,
     );
     zProj = atof(rendererinfos.as_mut_ptr()) as f32;
     trap_Cvar_VariableStringBuffer(
         b"r_stereoSeparation\x00" as *const u8 as *const libc::c_char,
         rendererinfos.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 128]>() as usize as i32,
     );
     stereoSep = (zProj as f64 / atof(rendererinfos.as_mut_ptr())) as f32;
     xmax = (zProj as f64
@@ -2520,7 +2520,7 @@ unsafe extern "C" fn CG_DrawCrosshair3D() {
     crate::stdlib::memset(
         &mut ent as *mut refEntity_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
+        ::std::mem::size_of::<refEntity_t>() as usize,
     );
     ent.reType = RT_SPRITE;
     ent.renderfx = 0x8 as i32 | 0x10 as i32;

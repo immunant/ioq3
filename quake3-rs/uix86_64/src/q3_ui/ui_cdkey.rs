@@ -232,7 +232,7 @@ UI_CDKeyMenu_PreValidateKey
 
 unsafe extern "C" fn UI_CDKeyMenu_PreValidateKey(mut key: *const libc::c_char) -> i32 {
     let mut ch: libc::c_char = 0;
-    if crate::stdlib::strlen(key) != 16 as i32 as libc::c_ulong {
+    if crate::stdlib::strlen(key) != 16 as i32 as usize {
         return 1 as i32;
     }
     loop {
@@ -345,7 +345,7 @@ unsafe extern "C" fn UI_CDKeyMenu_Init() {
     crate::stdlib::memset(
         &mut cdkeyMenuInfo as *mut cdkeyMenuInfo_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<cdkeyMenuInfo_t>() as libc::c_ulong,
+        ::std::mem::size_of::<cdkeyMenuInfo_t>() as usize,
     );
     cdkeyMenuInfo.menu.wrapAround = qtrue;
     cdkeyMenuInfo.menu.fullscreen = qtrue;

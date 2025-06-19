@@ -427,7 +427,7 @@ pub unsafe extern "C" fn CG_DrawStringExt(
                     g_color_table
                         [(*s.offset(1 as i32 as isize) as i32 - '0' as i32 & 0x7 as i32) as usize]
                         .as_mut_ptr() as *const libc::c_void,
-                    ::std::mem::size_of::<vec4_t>() as libc::c_ulong,
+                    ::std::mem::size_of::<vec4_t>() as usize,
                 );
                 color[3 as i32 as usize] = *setColor.offset(3 as i32 as isize);
                 trap_R_SetColor(color.as_mut_ptr());

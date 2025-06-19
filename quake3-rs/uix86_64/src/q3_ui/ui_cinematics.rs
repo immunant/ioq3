@@ -486,7 +486,7 @@ unsafe extern "C" fn UI_CinematicsMenu_Init() {
     crate::stdlib::memset(
         &mut cinematicsMenuInfo as *mut cinematicsMenuInfo_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<cinematicsMenuInfo_t>() as libc::c_ulong,
+        ::std::mem::size_of::<cinematicsMenuInfo_t>() as usize,
     );
     cinematicsMenuInfo.menu.fullscreen = qtrue;
     cinematicsMenuInfo.banner.generic.type_0 = 10 as i32;

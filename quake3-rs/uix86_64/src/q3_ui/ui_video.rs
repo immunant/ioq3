@@ -399,7 +399,7 @@ unsafe extern "C" fn UI_DriverInfo_Menu() {
     crate::stdlib::memset(
         &mut s_driverinfo as *mut driverinfo_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<driverinfo_t>() as libc::c_ulong,
+        ::std::mem::size_of::<driverinfo_t>() as usize,
     );
     DriverInfo_Cache();
     s_driverinfo.menu.fullscreen = qtrue;
@@ -1325,7 +1325,7 @@ unsafe extern "C" fn GraphicsOptions_GetAspectRatios() {
         h = atoi(x);
         Com_sprintf(
             str.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 8]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 8]>() as usize as i32,
             b"%.2f:1\x00" as *const u8 as *const libc::c_char,
             (w as f32 / h as f32) as f64,
         );
@@ -1336,7 +1336,7 @@ unsafe extern "C" fn GraphicsOptions_GetAspectRatios() {
                 Q_strncpyz(
                     str.as_mut_ptr(),
                     knownRatios[i as usize][1 as i32 as usize],
-                    ::std::mem::size_of::<[libc::c_char; 8]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 8]>() as usize as i32,
                 );
                 break;
             } else {
@@ -1356,7 +1356,7 @@ unsafe extern "C" fn GraphicsOptions_GetAspectRatios() {
             Q_strncpyz(
                 ratioBuf[i as usize].as_mut_ptr(),
                 str.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 8]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 8]>() as usize as i32,
             );
             ratioToRes[i as usize] = r
         }
@@ -1394,16 +1394,16 @@ unsafe extern "C" fn GraphicsOptions_GetResolutions() {
     Q_strncpyz(
         resbuf.as_mut_ptr(),
         UI_Cvar_VariableString(b"r_availableModes\x00" as *const u8 as *const libc::c_char),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     if *resbuf.as_mut_ptr() != 0 {
         let mut s: *mut libc::c_char = resbuf.as_mut_ptr();
         let mut i: u32 = 0 as i32 as u32;
         while !s.is_null()
-            && (i as libc::c_ulong)
-                < (::std::mem::size_of::<[*const libc::c_char; 32]>() as libc::c_ulong)
-                    .wrapping_div(::std::mem::size_of::<*const libc::c_char>() as libc::c_ulong)
-                    .wrapping_sub(1 as i32 as libc::c_ulong)
+            && (i as usize)
+                < (::std::mem::size_of::<[*const libc::c_char; 32]>() as usize)
+                    .wrapping_div(::std::mem::size_of::<*const libc::c_char>() as usize)
+                    .wrapping_sub(1 as i32 as usize)
         {
             let fresh2 = i;
             i = i.wrapping_add(1);
@@ -1431,10 +1431,10 @@ GraphicsOptions_CheckConfig
 unsafe extern "C" fn GraphicsOptions_CheckConfig() {
     let mut i: i32 = 0;
     i = 0 as i32;
-    while (i as libc::c_ulong)
-        < (::std::mem::size_of::<[InitialVideoOptions_s; 6]>() as libc::c_ulong)
-            .wrapping_div(::std::mem::size_of::<InitialVideoOptions_s>() as libc::c_ulong)
-            .wrapping_sub(1 as i32 as libc::c_ulong)
+    while (i as usize)
+        < (::std::mem::size_of::<[InitialVideoOptions_s; 6]>() as usize)
+            .wrapping_div(::std::mem::size_of::<InitialVideoOptions_s>() as usize)
+            .wrapping_sub(1 as i32 as usize)
     {
         if !(s_ivo_templates[i as usize].colordepth != s_graphicsoptions.colordepth.curvalue) {
             if !(s_ivo_templates[i as usize].driver != s_graphicsoptions.driver.curvalue) {
@@ -1471,9 +1471,9 @@ unsafe extern "C" fn GraphicsOptions_CheckConfig() {
     }
     // return 'Custom' ivo template
     s_graphicsoptions.list.curvalue = (::std::mem::size_of::<[InitialVideoOptions_s; 6]>()
-        as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<InitialVideoOptions_s>() as libc::c_ulong)
-        .wrapping_sub(1 as i32 as libc::c_ulong) as i32;
+        as usize)
+        .wrapping_div(::std::mem::size_of::<InitialVideoOptions_s>() as usize)
+        .wrapping_sub(1 as i32 as usize) as i32;
 }
 /*
 =================
@@ -1579,9 +1579,9 @@ unsafe extern "C" fn GraphicsOptions_ApplyChanges(
         // search for builtin mode that matches the detected mode
         let mut mode: i32 = 0;
         if s_graphicsoptions.mode.curvalue == -(1 as i32)
-            || s_graphicsoptions.mode.curvalue as libc::c_ulong
-                >= (::std::mem::size_of::<[*const libc::c_char; 32]>() as libc::c_ulong)
-                    .wrapping_div(::std::mem::size_of::<*const libc::c_char>() as libc::c_ulong)
+            || s_graphicsoptions.mode.curvalue as usize
+                >= (::std::mem::size_of::<[*const libc::c_char; 32]>() as usize)
+                    .wrapping_div(::std::mem::size_of::<*const libc::c_char>() as usize)
         {
             s_graphicsoptions.mode.curvalue = 0 as i32
         }
@@ -1592,7 +1592,7 @@ unsafe extern "C" fn GraphicsOptions_ApplyChanges(
             Q_strncpyz(
                 w.as_mut_ptr(),
                 detectedResolutions[s_graphicsoptions.mode.curvalue as usize],
-                ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 16]>() as usize as i32,
             );
             *libc::strchr(w.as_mut_ptr(), 'x' as i32) = 0 as i32 as libc::c_char;
             Q_strncpyz(
@@ -1602,7 +1602,7 @@ unsafe extern "C" fn GraphicsOptions_ApplyChanges(
                     'x' as i32,
                 )
                 .offset(1 as i32 as isize),
-                ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 16]>() as usize as i32,
             );
             trap_Cvar_Set(
                 b"r_customwidth\x00" as *const u8 as *const libc::c_char,
@@ -1838,17 +1838,17 @@ unsafe extern "C" fn GraphicsOptions_SetMenuItems() {
             trap_Cvar_VariableStringBuffer(
                 b"r_customwidth\x00" as *const u8 as *const libc::c_char,
                 buf.as_mut_ptr(),
-                (::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong)
-                    .wrapping_sub(2 as i32 as libc::c_ulong) as i32,
+                (::std::mem::size_of::<[libc::c_char; 1024]>() as usize)
+                    .wrapping_sub(2 as i32 as usize) as i32,
             );
-            buf[crate::stdlib::strlen(buf.as_mut_ptr()).wrapping_add(1 as i32 as libc::c_ulong)
+            buf[crate::stdlib::strlen(buf.as_mut_ptr()).wrapping_add(1 as i32 as usize)
                 as usize] = 0 as i32 as libc::c_char;
             buf[crate::stdlib::strlen(buf.as_mut_ptr()) as usize] = 'x' as i32 as libc::c_char;
             trap_Cvar_VariableStringBuffer(
                 b"r_customheight\x00" as *const u8 as *const libc::c_char,
                 buf.as_mut_ptr()
                     .offset(crate::stdlib::strlen(buf.as_mut_ptr()) as isize),
-                (::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong)
+                (::std::mem::size_of::<[libc::c_char; 1024]>() as usize)
                     .wrapping_sub(crate::stdlib::strlen(buf.as_mut_ptr())) as i32,
             );
             i = 0 as i32;
@@ -2004,7 +2004,7 @@ pub unsafe extern "C" fn GraphicsOptions_MenuInit() {
     crate::stdlib::memset(
         &mut s_graphicsoptions as *mut graphicsoptions_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<graphicsoptions_t>() as libc::c_ulong,
+        ::std::mem::size_of::<graphicsoptions_t>() as usize,
     );
     GraphicsOptions_GetResolutions();
     GraphicsOptions_GetAspectRatios();

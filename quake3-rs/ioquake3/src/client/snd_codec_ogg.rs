@@ -111,10 +111,10 @@ pub unsafe extern "C" fn S_OGG_Callback_read(
     // update the file position
     (*stream).pos += bytesRead;
     // this function returns the number of elements read not the number of bytes
-    nMembRead = (bytesRead as libc::c_ulong).wrapping_div(size);
+    nMembRead = (bytesRead as usize).wrapping_div(size);
     // even if the last member is only read partially
     // it is counted as a whole in the return value
-    if (bytesRead as libc::c_ulong).wrapping_rem(size) != 0 {
+    if (bytesRead as usize).wrapping_rem(size) != 0 {
         nMembRead = nMembRead.wrapping_add(1)
     }
     return nMembRead;
@@ -262,7 +262,7 @@ pub unsafe extern "C" fn S_OGG_CodecOpenStream(
     }
     // alloctate the OggVorbis_File
     vf = crate::src::qcommon::common::Z_Malloc(
-        ::std::mem::size_of::<OggVorbis_File>() as libc::c_ulong as i32
+        ::std::mem::size_of::<OggVorbis_File>() as usize as i32
     ) as *mut OggVorbis_File;
     if vf.is_null() {
         S_CodecUtilClose(&mut stream as *mut _ as *mut *mut snd_stream_s);

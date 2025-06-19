@@ -491,7 +491,7 @@ pub unsafe extern "C" fn Team_InitGame() {
     crate::stdlib::memset(
         &mut teamgame as *mut teamgame_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<teamgame_t>() as libc::c_ulong,
+        ::std::mem::size_of::<teamgame_t>() as usize,
     );
     match g_gametype.integer {
         4 => {
@@ -563,11 +563,11 @@ unsafe extern "C" fn PrintMsg(
     argptr = args.clone();
     if crate::stdlib::vsnprintf(
         msg.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize,
         fmt,
         argptr.as_va_list(),
-    ) as libc::c_ulong
-        >= ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong
+    ) as usize
+        >= ::std::mem::size_of::<[libc::c_char; 1024]>() as usize
     {
         G_Error(b"PrintMsg overrun\x00" as *const u8 as *const libc::c_char);
     }
@@ -1679,7 +1679,7 @@ pub unsafe extern "C" fn TeamplayInfoMessage(mut ent: *mut gentity_t) {
     qsort(
         clients.as_mut_ptr() as *mut libc::c_void,
         cnt as size_t,
-        ::std::mem::size_of::<i32>() as libc::c_ulong,
+        ::std::mem::size_of::<i32>() as usize,
         Some(
             SortClients
                 as unsafe extern "C" fn(_: *const libc::c_void, _: *const libc::c_void) -> i32,
@@ -1704,7 +1704,7 @@ pub unsafe extern "C" fn TeamplayInfoMessage(mut ent: *mut gentity_t) {
             }
             Com_sprintf(
                 entry.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
                 b" %i %i %i %i %i %i\x00" as *const u8 as *const libc::c_char,
                 i,
                 (*(*player).client).pers.teamState.location,
@@ -1714,8 +1714,8 @@ pub unsafe extern "C" fn TeamplayInfoMessage(mut ent: *mut gentity_t) {
                 (*player).s.powerups,
             );
             j = crate::stdlib::strlen(entry.as_mut_ptr()) as i32;
-            if (stringlength + j) as libc::c_ulong
-                >= ::std::mem::size_of::<[libc::c_char; 8192]>() as libc::c_ulong
+            if (stringlength + j) as usize
+                >= ::std::mem::size_of::<[libc::c_char; 8192]>() as usize
             {
                 break;
             }

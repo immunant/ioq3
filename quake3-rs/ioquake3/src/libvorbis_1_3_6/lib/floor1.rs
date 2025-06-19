@@ -67,7 +67,7 @@ unsafe extern "C" fn floor1_free_info(mut i: *mut libc::c_void) {
         crate::stdlib::memset(
             info as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<vorbis_info_floor1>() as libc::c_ulong,
+            ::std::mem::size_of::<vorbis_info_floor1>() as usize,
         );
         free(info as *mut libc::c_void);
     };
@@ -83,7 +83,7 @@ unsafe extern "C" fn floor1_free_look(mut i: *mut libc::c_void) {
         crate::stdlib::memset(
             look as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<vorbis_look_floor1>() as libc::c_ulong,
+            ::std::mem::size_of::<vorbis_look_floor1>() as usize,
         );
         free(look as *mut libc::c_void);
     };
@@ -100,14 +100,14 @@ unsafe extern "C" fn floor1_pack(mut i: *mut libc::c_void, mut opb: *mut oggpack
     /* save out partitions */
     oggpack_write(
         opb as *mut oggpack_buffer,
-        (*info).partitions as libc::c_ulong,
+        (*info).partitions as usize,
         5 as i32,
     ); /* only 0 to 31 legal */
     j = 0 as i32; /* only 0 to 15 legal */
     while j < (*info).partitions {
         oggpack_write(
             opb as *mut oggpack_buffer,
-            (*info).partitionclass[j as usize] as libc::c_ulong,
+            (*info).partitionclass[j as usize] as usize,
             4 as i32,
         );
         if maxclass < (*info).partitionclass[j as usize] {
@@ -120,18 +120,18 @@ unsafe extern "C" fn floor1_pack(mut i: *mut libc::c_void, mut opb: *mut oggpack
     while j < maxclass + 1 as i32 {
         oggpack_write(
             opb as *mut oggpack_buffer,
-            ((*info).class_dim[j as usize] - 1 as i32) as libc::c_ulong,
+            ((*info).class_dim[j as usize] - 1 as i32) as usize,
             3 as i32,
         ); /* 0 to 3 */
         oggpack_write(
             opb as *mut oggpack_buffer,
-            (*info).class_subs[j as usize] as libc::c_ulong,
+            (*info).class_subs[j as usize] as usize,
             2 as i32,
         );
         if (*info).class_subs[j as usize] != 0 {
             oggpack_write(
                 opb as *mut oggpack_buffer,
-                (*info).class_book[j as usize] as libc::c_ulong,
+                (*info).class_book[j as usize] as usize,
                 8 as i32,
             );
         }
@@ -139,7 +139,7 @@ unsafe extern "C" fn floor1_pack(mut i: *mut libc::c_void, mut opb: *mut oggpack
         while k < (1 as i32) << (*info).class_subs[j as usize] {
             oggpack_write(
                 opb as *mut oggpack_buffer,
-                ((*info).class_subbook[j as usize][k as usize] + 1 as i32) as libc::c_ulong,
+                ((*info).class_subbook[j as usize][k as usize] + 1 as i32) as usize,
                 8 as i32,
             );
             k += 1
@@ -149,7 +149,7 @@ unsafe extern "C" fn floor1_pack(mut i: *mut libc::c_void, mut opb: *mut oggpack
     /* save out the post list */
     oggpack_write(
         opb as *mut oggpack_buffer,
-        ((*info).mult - 1 as i32) as libc::c_ulong,
+        ((*info).mult - 1 as i32) as usize,
         2 as i32,
     ); /* only 1,2,3,4 legal now */
     /* maxposit cannot legally be less than 1; this is encode-side, we
@@ -157,7 +157,7 @@ unsafe extern "C" fn floor1_pack(mut i: *mut libc::c_void, mut opb: *mut oggpack
     oggpack_write(
         opb as *mut oggpack_buffer,
         crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog((maxposit - 1 as i32) as ogg_uint32_t)
-            as libc::c_ulong,
+            as usize,
         4 as i32,
     );
     rangebits = crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
@@ -170,7 +170,7 @@ unsafe extern "C" fn floor1_pack(mut i: *mut libc::c_void, mut opb: *mut oggpack
         while k < count {
             oggpack_write(
                 opb as *mut oggpack_buffer,
-                (*info).postlist[(k + 2 as i32) as usize] as libc::c_ulong,
+                (*info).postlist[(k + 2 as i32) as usize] as usize,
                 rangebits,
             );
             k += 1
@@ -195,8 +195,8 @@ unsafe extern "C" fn floor1_unpack(
     let mut maxclass: i32 = -(1 as i32);
     let mut rangebits: i32 = 0;
     let mut info: *mut vorbis_info_floor1 = calloc(
-        1 as i32 as libc::c_ulong,
-        ::std::mem::size_of::<vorbis_info_floor1>() as libc::c_ulong,
+        1 as i32 as usize,
+        ::std::mem::size_of::<vorbis_info_floor1>() as usize,
     ) as *mut vorbis_info_floor1;
     /* read partitions */
     (*info).partitions = oggpack_read(opb as *mut oggpack_buffer, 5 as i32) as i32; /* only 0 to 31 legal */
@@ -309,7 +309,7 @@ unsafe extern "C" fn floor1_unpack(
                                 qsort(
                                     sortpointer.as_mut_ptr() as *mut libc::c_void,
                                     (count + 2 as i32) as size_t,
-                                    ::std::mem::size_of::<*mut i32>() as libc::c_ulong,
+                                    ::std::mem::size_of::<*mut i32>() as usize,
                                     Some(
                                         icomp
                                             as unsafe extern "C" fn(
@@ -356,8 +356,8 @@ unsafe extern "C" fn floor1_look(
     let mut sortpointer: [*mut i32; 65] = [0 as *mut i32; 65];
     let mut info: *mut vorbis_info_floor1 = in_0 as *mut vorbis_info_floor1;
     let mut look: *mut vorbis_look_floor1 = calloc(
-        1 as i32 as libc::c_ulong,
-        ::std::mem::size_of::<vorbis_look_floor1>() as libc::c_ulong,
+        1 as i32 as usize,
+        ::std::mem::size_of::<vorbis_look_floor1>() as usize,
     ) as *mut vorbis_look_floor1;
     let mut i: i32 = 0;
     let mut j: i32 = 0;
@@ -386,7 +386,7 @@ unsafe extern "C" fn floor1_look(
     qsort(
         sortpointer.as_mut_ptr() as *mut libc::c_void,
         n as size_t,
-        ::std::mem::size_of::<*mut i32>() as libc::c_ulong,
+        ::std::mem::size_of::<*mut i32>() as usize,
         Some(icomp as unsafe extern "C" fn(_: *const libc::c_void, _: *const libc::c_void) -> i32),
     );
     /* points from sort order back to range number */
@@ -860,7 +860,7 @@ unsafe extern "C" fn accumulate_fit(
     crate::stdlib::memset(
         a as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<lsfit_acc>() as libc::c_ulong,
+        ::std::mem::size_of::<lsfit_acc>() as usize,
     );
     (*a).x0 = x0;
     (*a).x1 = x1;
@@ -1258,7 +1258,7 @@ pub unsafe extern "C" fn floor1_fit(
         }
         output = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
             vb as *mut vorbis_block,
-            (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(posts as libc::c_ulong)
+            (::std::mem::size_of::<i32>() as usize).wrapping_mul(posts as usize)
                 as isize,
         ) as *mut i32;
         *output.offset(0 as i32 as isize) =
@@ -1303,7 +1303,7 @@ pub unsafe extern "C" fn floor1_interpolate_fit(
     if !A.is_null() && !B.is_null() {
         output = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
             vb as *mut vorbis_block,
-            (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(posts as libc::c_ulong)
+            (::std::mem::size_of::<i32>() as usize).wrapping_mul(posts as usize)
                 as isize,
         ) as *mut i32;
         /* overly simpleminded--- look again post 1.2 */
@@ -1444,7 +1444,7 @@ pub unsafe extern "C" fn floor1_encode(
         /* mark nontrivial floor */
         oggpack_write(
             opb as *mut oggpack_buffer,
-            1 as i32 as libc::c_ulong,
+            1 as i32 as usize,
             1 as i32,
         );
         /* beginning/end post */
@@ -1454,14 +1454,14 @@ pub unsafe extern "C" fn floor1_encode(
         ) * 2 as i32) as isize;
         oggpack_write(
             opb as *mut oggpack_buffer,
-            out[0 as i32 as usize] as libc::c_ulong,
+            out[0 as i32 as usize] as usize,
             crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
                 ((*look).quant_q - 1 as i32) as ogg_uint32_t,
             ),
         );
         oggpack_write(
             opb as *mut oggpack_buffer,
-            out[1 as i32 as usize] as libc::c_ulong,
+            out[1 as i32 as usize] as usize,
             crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
                 ((*look).quant_q - 1 as i32) as ogg_uint32_t,
             ),
@@ -1575,14 +1575,14 @@ pub unsafe extern "C" fn floor1_encode(
     } else {
         oggpack_write(
             opb as *mut oggpack_buffer,
-            0 as i32 as libc::c_ulong,
+            0 as i32 as usize,
             1 as i32,
         );
         crate::stdlib::memset(
             ilogmask as *mut libc::c_void,
             0 as i32,
-            (((*vb).pcmend / 2 as i32) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+            (((*vb).pcmend / 2 as i32) as usize)
+                .wrapping_mul(::std::mem::size_of::<i32>() as usize),
         );
         return 0 as i32;
     };
@@ -1605,8 +1605,8 @@ unsafe extern "C" fn floor1_inverse1(
     {
         let mut fit_value: *mut i32 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
             vb as *mut vorbis_block,
-            ((*look).posts as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong) as isize,
+            ((*look).posts as usize)
+                .wrapping_mul(::std::mem::size_of::<i32>() as usize) as isize,
         ) as *mut i32;
         *fit_value.offset(0 as i32 as isize) = oggpack_read(
             &mut (*vb).opb as *mut _ as *mut oggpack_buffer,
@@ -1769,7 +1769,7 @@ unsafe extern "C" fn floor1_inverse2(
     crate::stdlib::memset(
         out as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<f32>() as libc::c_ulong).wrapping_mul(n as libc::c_ulong),
+        (::std::mem::size_of::<f32>() as usize).wrapping_mul(n as usize),
     );
     return 0 as i32;
 }

@@ -161,7 +161,7 @@ pub unsafe extern "C" fn Netchan_Setup(
     crate::stdlib::memset(
         chan as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<netchan_t>() as libc::c_ulong,
+        ::std::mem::size_of::<netchan_t>() as usize,
     );
     (*chan).sock = sock;
     (*chan).remoteAddress = adr;
@@ -198,7 +198,7 @@ pub unsafe extern "C" fn Netchan_TransmitNextFragment(mut chan: *mut netchan_t) 
     MSG_InitOOB(
         &mut send as *mut _ as *mut msg_t,
         send_buf.as_mut_ptr(),
-        ::std::mem::size_of::<[byte; 1400]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[byte; 1400]>() as usize as i32,
     ); // <-- only do the oob here
     outgoingSequence = ((*chan).outgoingSequence as u32 | (1 as u32) << 31 as i32) as i32;
     MSG_WriteLong(&mut send as *mut _ as *mut msg_t, outgoingSequence);
@@ -303,7 +303,7 @@ pub unsafe extern "C" fn Netchan_Transmit(
         crate::stdlib::memcpy(
             (*chan).unsentBuffer.as_mut_ptr() as *mut libc::c_void,
             data as *const libc::c_void,
-            length as libc::c_ulong,
+            length as usize,
         );
         // only send the first fragment now
         Netchan_TransmitNextFragment(chan);
@@ -313,7 +313,7 @@ pub unsafe extern "C" fn Netchan_Transmit(
     MSG_InitOOB(
         &mut send as *mut _ as *mut msg_t,
         send_buf.as_mut_ptr(),
-        ::std::mem::size_of::<[byte; 1400]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[byte; 1400]>() as usize as i32,
     );
     MSG_WriteLong(&mut send as *mut _ as *mut msg_t, (*chan).outgoingSequence);
     // send the qport if we are a client
@@ -481,8 +481,8 @@ pub unsafe extern "C" fn Netchan_Process(
         // copy the fragment to the fragment buffer
         if fragmentLength < 0 as i32
             || (*msg).readcount + fragmentLength > (*msg).cursize
-            || ((*chan).fragmentLength + fragmentLength) as libc::c_ulong
-                > ::std::mem::size_of::<[byte; 16384]>() as libc::c_ulong
+            || ((*chan).fragmentLength + fragmentLength) as usize
+                > ::std::mem::size_of::<[byte; 16384]>() as usize
         {
             if (*showdrop).integer != 0 || (*showpackets).integer != 0 {
                 Com_Printf(
@@ -498,7 +498,7 @@ pub unsafe extern "C" fn Netchan_Process(
                 .as_mut_ptr()
                 .offset((*chan).fragmentLength as isize) as *mut libc::c_void,
             (*msg).data.offset((*msg).readcount as isize) as *const libc::c_void,
-            fragmentLength as libc::c_ulong,
+            fragmentLength as usize,
         );
         (*chan).fragmentLength += fragmentLength;
         // if this wasn't the last fragment, don't process anything
@@ -519,7 +519,7 @@ pub unsafe extern "C" fn Netchan_Process(
         crate::stdlib::memcpy(
             (*msg).data.offset(4 as i32 as isize) as *mut libc::c_void,
             (*chan).fragmentBuffer.as_mut_ptr() as *const libc::c_void,
-            (*chan).fragmentLength as libc::c_ulong,
+            (*chan).fragmentLength as usize,
         ); // past the sequence number
         (*msg).cursize = (*chan).fragmentLength + 4 as i32;
         (*chan).fragmentLength = 0 as i32;
@@ -567,13 +567,13 @@ pub unsafe extern "C" fn NET_GetLoopPacket(
     crate::stdlib::memcpy(
         (*net_message).data as *mut libc::c_void,
         (*loop_0).msgs[i as usize].data.as_mut_ptr() as *const libc::c_void,
-        (*loop_0).msgs[i as usize].datalen as libc::c_ulong,
+        (*loop_0).msgs[i as usize].datalen as usize,
     );
     (*net_message).cursize = (*loop_0).msgs[i as usize].datalen;
     crate::stdlib::memset(
         net_from as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<netadr_t>() as libc::c_ulong,
+        ::std::mem::size_of::<netadr_t>() as usize,
     );
     (*net_from).type_0 = NA_LOOPBACK;
     return qtrue;
@@ -596,7 +596,7 @@ pub unsafe extern "C" fn NET_SendLoopPacket(
     crate::stdlib::memcpy(
         (*loop_0).msgs[i as usize].data.as_mut_ptr() as *mut libc::c_void,
         data,
-        length as libc::c_ulong,
+        length as usize,
     );
     (*loop_0).msgs[i as usize].datalen = length;
 }
@@ -615,13 +615,13 @@ unsafe extern "C" fn NET_QueuePacket(
     if offset > 999 as i32 {
         offset = 999 as i32
     }
-    new = S_Malloc(::std::mem::size_of::<packetQueue_t>() as libc::c_ulong as i32)
+    new = S_Malloc(::std::mem::size_of::<packetQueue_t>() as usize as i32)
         as *mut packetQueue_t;
     (*new).data = S_Malloc(length) as *mut byte;
     crate::stdlib::memcpy(
         (*new).data as *mut libc::c_void,
         data,
-        length as libc::c_ulong,
+        length as usize,
     );
     (*new).length = length;
     (*new).to = to;
@@ -718,8 +718,8 @@ pub unsafe extern "C" fn NET_OutOfBandPrint(
     argptr = args.clone();
     crate::stdlib::vsnprintf(
         string.as_mut_ptr().offset(4 as i32 as isize),
-        (::std::mem::size_of::<[libc::c_char; 16384]>() as libc::c_ulong)
-            .wrapping_sub(4 as i32 as libc::c_ulong),
+        (::std::mem::size_of::<[libc::c_char; 16384]>() as usize)
+            .wrapping_sub(4 as i32 as usize),
         format,
         argptr.as_va_list(),
     );
@@ -796,7 +796,7 @@ pub unsafe extern "C" fn NET_StringToAdr(
         crate::stdlib::memset(
             a as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<netadr_t>() as libc::c_ulong,
+            ::std::mem::size_of::<netadr_t>() as usize,
         );
         (*a).type_0 = NA_LOOPBACK;
         // as NA_LOOPBACK doesn't require ports report port was given.
@@ -805,7 +805,7 @@ pub unsafe extern "C" fn NET_StringToAdr(
     Q_strncpyz(
         base.as_mut_ptr(),
         s,
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     if *base.as_mut_ptr() as i32 == '[' as i32
         || Q_CountChar(base.as_mut_ptr(), ':' as i32 as libc::c_char) > 1 as i32

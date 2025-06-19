@@ -342,9 +342,9 @@ pub unsafe extern "C" fn bitexact_cos(mut x: opus_int16) -> opus_int16 {
 pub unsafe extern "C" fn bitexact_log2tan(mut isin: i32, mut icos: i32) -> i32 {
     let mut lc: i32 = 0;
     let mut ls: i32 = 0;
-    lc = ::std::mem::size_of::<u32>() as libc::c_ulong as i32 * 8 as i32
+    lc = ::std::mem::size_of::<u32>() as usize as i32 * 8 as i32
         - (icos as u32).leading_zeros() as i32;
-    ls = ::std::mem::size_of::<u32>() as libc::c_ulong as i32 * 8 as i32
+    ls = ::std::mem::size_of::<u32>() as usize as i32 * 8 as i32
         - (isin as u32).leading_zeros() as i32;
     icos <<= 15 as i32 - lc;
     isin <<= 15 as i32 - ls;
@@ -517,8 +517,8 @@ pub unsafe extern "C" fn denormalise_bands(
     crate::stdlib::memset(
         &mut *freq.offset(bound as isize) as *mut celt_sig as *mut libc::c_void,
         0 as i32,
-        ((N - bound) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<celt_sig>() as libc::c_ulong),
+        ((N - bound) as usize)
+            .wrapping_mul(::std::mem::size_of::<celt_sig>() as usize),
     );
 }
 /* This prevents energy collapse for transients with multiple short MDCTs */
@@ -727,9 +727,9 @@ unsafe extern "C" fn stereo_merge(
         crate::stdlib::memcpy(
             Y as *mut libc::c_void,
             X as *const libc::c_void,
-            (N as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<celt_norm>() as libc::c_ulong)
-                .wrapping_add((0 as i32 as isize * Y.offset_from(X) as isize) as libc::c_ulong),
+            (N as usize)
+                .wrapping_mul(::std::mem::size_of::<celt_norm>() as usize)
+                .wrapping_add((0 as i32 as isize * Y.offset_from(X) as isize) as usize),
         );
         return;
     }
@@ -897,7 +897,7 @@ unsafe extern "C" fn deinterleave_hadamard(
     N = N0 * stride;
     let mut fresh3 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<celt_norm>() as libc::c_ulong).wrapping_mul(N as libc::c_ulong)
+        (::std::mem::size_of::<celt_norm>() as usize).wrapping_mul(N as usize)
             as usize,
     );
     tmp = fresh3.as_mut_ptr() as *mut celt_norm;
@@ -930,9 +930,9 @@ unsafe extern "C" fn deinterleave_hadamard(
     crate::stdlib::memcpy(
         X as *mut libc::c_void,
         tmp as *const libc::c_void,
-        (N as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<celt_norm>() as libc::c_ulong)
-            .wrapping_add((0 as i32 as isize * X.offset_from(tmp) as isize) as libc::c_ulong),
+        (N as usize)
+            .wrapping_mul(::std::mem::size_of::<celt_norm>() as usize)
+            .wrapping_add((0 as i32 as isize * X.offset_from(tmp) as isize) as usize),
     );
 }
 
@@ -949,7 +949,7 @@ unsafe extern "C" fn interleave_hadamard(
     N = N0 * stride;
     let mut fresh4 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<celt_norm>() as libc::c_ulong).wrapping_mul(N as libc::c_ulong)
+        (::std::mem::size_of::<celt_norm>() as usize).wrapping_mul(N as usize)
             as usize,
     );
     tmp = fresh4.as_mut_ptr() as *mut celt_norm;
@@ -982,9 +982,9 @@ unsafe extern "C" fn interleave_hadamard(
     crate::stdlib::memcpy(
         X as *mut libc::c_void,
         tmp as *const libc::c_void,
-        (N as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<celt_norm>() as libc::c_ulong)
-            .wrapping_add((0 as i32 as isize * X.offset_from(tmp) as isize) as libc::c_ulong),
+        (N as usize)
+            .wrapping_mul(::std::mem::size_of::<celt_norm>() as usize)
+            .wrapping_add((0 as i32 as isize * X.offset_from(tmp) as isize) as usize),
     );
 }
 #[no_mangle]
@@ -1592,14 +1592,14 @@ unsafe extern "C" fn quant_partition(
                 let mut cm_mask: u32 = 0;
                 /* B can be as large as 16, so this shift might overflow an int on a
                 16-bit platform; use a long to get defined behavior.*/
-                cm_mask = (((1 as libc::c_ulong) << B) as u32).wrapping_sub(1 as i32 as u32);
+                cm_mask = (((1 as usize) << B) as u32).wrapping_sub(1 as i32 as u32);
                 fill = (fill as u32 & cm_mask) as i32;
                 if fill == 0 {
                     crate::stdlib::memset(
                         X as *mut libc::c_void,
                         0 as i32,
-                        (N as libc::c_ulong)
-                            .wrapping_mul(::std::mem::size_of::<celt_norm>() as libc::c_ulong),
+                        (N as usize)
+                            .wrapping_mul(::std::mem::size_of::<celt_norm>() as usize),
                     );
                 } else {
                     if lowband.is_null() {
@@ -1682,11 +1682,11 @@ unsafe extern "C" fn quant_band(
         crate::stdlib::memcpy(
             lowband_scratch as *mut libc::c_void,
             lowband as *const libc::c_void,
-            (N as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<celt_norm>() as libc::c_ulong)
+            (N as usize)
+                .wrapping_mul(::std::mem::size_of::<celt_norm>() as usize)
                 .wrapping_add(
                     (0 as i32 as isize * lowband_scratch.offset_from(lowband) as isize)
-                        as libc::c_ulong,
+                        as usize,
                 ),
         );
         lowband = lowband_scratch
@@ -2060,13 +2060,13 @@ unsafe extern "C" fn special_hybrid_folding(
     crate::stdlib::memcpy(
         &mut *norm.offset(n1 as isize) as *mut celt_norm as *mut libc::c_void,
         &mut *norm.offset((2 as i32 * n1 - n2) as isize) as *mut celt_norm as *const libc::c_void,
-        ((n2 - n1) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<celt_norm>() as libc::c_ulong)
+        ((n2 - n1) as usize)
+            .wrapping_mul(::std::mem::size_of::<celt_norm>() as usize)
             .wrapping_add(
                 (0 as i32 as isize
                     * (&mut *norm.offset(n1 as isize) as *mut celt_norm)
                         .offset_from(&mut *norm.offset((2 as i32 * n1 - n2) as isize))
-                        as isize) as libc::c_ulong,
+                        as isize) as usize,
             ),
     );
     if dual_stereo != 0 {
@@ -2074,13 +2074,13 @@ unsafe extern "C" fn special_hybrid_folding(
             &mut *norm2.offset(n1 as isize) as *mut celt_norm as *mut libc::c_void,
             &mut *norm2.offset((2 as i32 * n1 - n2) as isize) as *mut celt_norm
                 as *const libc::c_void,
-            ((n2 - n1) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<celt_norm>() as libc::c_ulong)
+            ((n2 - n1) as usize)
+                .wrapping_mul(::std::mem::size_of::<celt_norm>() as usize)
                 .wrapping_add(
                     (0 as i32 as isize
                         * (&mut *norm2.offset(n1 as isize) as *mut celt_norm)
                             .offset_from(&mut *norm2.offset((2 as i32 * n1 - n2) as isize))
-                            as isize) as libc::c_ulong,
+                            as isize) as usize,
                 ),
         );
     };
@@ -2227,9 +2227,9 @@ pub unsafe extern "C" fn quant_all_bands(
     output in that band. */
     let mut fresh5 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<celt_norm>() as libc::c_ulong).wrapping_mul(
+        (::std::mem::size_of::<celt_norm>() as usize).wrapping_mul(
             (C * (M * *eBands.offset(((*m).nbEBands - 1 as i32) as isize) as i32 - norm_offset))
-                as libc::c_ulong,
+                as usize,
         ) as usize,
     );
     _norm = fresh5.as_mut_ptr() as *mut celt_norm;
@@ -2249,8 +2249,8 @@ pub unsafe extern "C" fn quant_all_bands(
     }
     let mut fresh6 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<celt_norm>() as libc::c_ulong)
-            .wrapping_mul(resynth_alloc as libc::c_ulong) as usize,
+        (::std::mem::size_of::<celt_norm>() as usize)
+            .wrapping_mul(resynth_alloc as usize) as usize,
     );
     _lowband_scratch = fresh6.as_mut_ptr() as *mut celt_norm;
     if encode != 0 && resynth != 0 {
@@ -2261,32 +2261,32 @@ pub unsafe extern "C" fn quant_all_bands(
     }
     let mut fresh7 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<celt_norm>() as libc::c_ulong)
-            .wrapping_mul(resynth_alloc as libc::c_ulong) as usize,
+        (::std::mem::size_of::<celt_norm>() as usize)
+            .wrapping_mul(resynth_alloc as usize) as usize,
     );
     X_save = fresh7.as_mut_ptr() as *mut celt_norm;
     let mut fresh8 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<celt_norm>() as libc::c_ulong)
-            .wrapping_mul(resynth_alloc as libc::c_ulong) as usize,
+        (::std::mem::size_of::<celt_norm>() as usize)
+            .wrapping_mul(resynth_alloc as usize) as usize,
     );
     Y_save = fresh8.as_mut_ptr() as *mut celt_norm;
     let mut fresh9 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<celt_norm>() as libc::c_ulong)
-            .wrapping_mul(resynth_alloc as libc::c_ulong) as usize,
+        (::std::mem::size_of::<celt_norm>() as usize)
+            .wrapping_mul(resynth_alloc as usize) as usize,
     );
     X_save2 = fresh9.as_mut_ptr() as *mut celt_norm;
     let mut fresh10 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<celt_norm>() as libc::c_ulong)
-            .wrapping_mul(resynth_alloc as libc::c_ulong) as usize,
+        (::std::mem::size_of::<celt_norm>() as usize)
+            .wrapping_mul(resynth_alloc as usize) as usize,
     );
     Y_save2 = fresh10.as_mut_ptr() as *mut celt_norm;
     let mut fresh11 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<celt_norm>() as libc::c_ulong)
-            .wrapping_mul(resynth_alloc as libc::c_ulong) as usize,
+        (::std::mem::size_of::<celt_norm>() as usize)
+            .wrapping_mul(resynth_alloc as usize) as usize,
     );
     norm_save2 = fresh11.as_mut_ptr() as *mut celt_norm;
     lowband_offset = 0 as i32;
@@ -2591,21 +2591,21 @@ pub unsafe extern "C" fn quant_all_bands(
                     crate::stdlib::memcpy(
                         X_save as *mut libc::c_void,
                         X as *const libc::c_void,
-                        (N as libc::c_ulong)
-                            .wrapping_mul(::std::mem::size_of::<celt_norm>() as libc::c_ulong)
+                        (N as usize)
+                            .wrapping_mul(::std::mem::size_of::<celt_norm>() as usize)
                             .wrapping_add(
                                 (0 as i32 as isize * X_save.offset_from(X) as isize)
-                                    as libc::c_ulong,
+                                    as usize,
                             ),
                     );
                     crate::stdlib::memcpy(
                         Y_save as *mut libc::c_void,
                         Y as *const libc::c_void,
-                        (N as libc::c_ulong)
-                            .wrapping_mul(::std::mem::size_of::<celt_norm>() as libc::c_ulong)
+                        (N as usize)
+                            .wrapping_mul(::std::mem::size_of::<celt_norm>() as usize)
                             .wrapping_add(
                                 (0 as i32 as isize * Y_save.offset_from(Y) as isize)
-                                    as libc::c_ulong,
+                                    as usize,
                             ),
                     );
                     /* Encode and round down. */
@@ -2641,21 +2641,21 @@ pub unsafe extern "C" fn quant_all_bands(
                     crate::stdlib::memcpy(
                         X_save2 as *mut libc::c_void,
                         X as *const libc::c_void,
-                        (N as libc::c_ulong)
-                            .wrapping_mul(::std::mem::size_of::<celt_norm>() as libc::c_ulong)
+                        (N as usize)
+                            .wrapping_mul(::std::mem::size_of::<celt_norm>() as usize)
                             .wrapping_add(
                                 (0 as i32 as isize * X_save2.offset_from(X) as isize)
-                                    as libc::c_ulong,
+                                    as usize,
                             ),
                     );
                     crate::stdlib::memcpy(
                         Y_save2 as *mut libc::c_void,
                         Y as *const libc::c_void,
-                        (N as libc::c_ulong)
-                            .wrapping_mul(::std::mem::size_of::<celt_norm>() as libc::c_ulong)
+                        (N as usize)
+                            .wrapping_mul(::std::mem::size_of::<celt_norm>() as usize)
                             .wrapping_add(
                                 (0 as i32 as isize * Y_save2.offset_from(Y) as isize)
-                                    as libc::c_ulong,
+                                    as usize,
                             ),
                     );
                     if last == 0 {
@@ -2664,8 +2664,8 @@ pub unsafe extern "C" fn quant_all_bands(
                             norm.offset((M * *eBands.offset(i as isize) as i32) as isize)
                                 .offset(-(norm_offset as isize))
                                 as *const libc::c_void,
-                            (N as libc::c_ulong)
-                                .wrapping_mul(::std::mem::size_of::<celt_norm>() as libc::c_ulong)
+                            (N as usize)
+                                .wrapping_mul(::std::mem::size_of::<celt_norm>() as usize)
                                 .wrapping_add(
                                     (0 as i32 as isize
                                         * norm_save2.offset_from(
@@ -2674,7 +2674,7 @@ pub unsafe extern "C" fn quant_all_bands(
                                             )
                                             .offset(-(norm_offset as isize)),
                                         ) as isize)
-                                        as libc::c_ulong,
+                                        as usize,
                                 ),
                         );
                     }
@@ -2685,12 +2685,12 @@ pub unsafe extern "C" fn quant_all_bands(
                     crate::stdlib::memcpy(
                         bytes_save.as_mut_ptr() as *mut libc::c_void,
                         bytes_buf as *const libc::c_void,
-                        (save_bytes as libc::c_ulong)
-                            .wrapping_mul(::std::mem::size_of::<u8>() as libc::c_ulong)
+                        (save_bytes as usize)
+                            .wrapping_mul(::std::mem::size_of::<u8>() as usize)
                             .wrapping_add(
                                 (0 as i32 as isize
                                     * bytes_save.as_mut_ptr().offset_from(bytes_buf) as isize)
-                                    as libc::c_ulong,
+                                    as usize,
                             ),
                     );
                     /* Restore */
@@ -2699,21 +2699,21 @@ pub unsafe extern "C" fn quant_all_bands(
                     crate::stdlib::memcpy(
                         X as *mut libc::c_void,
                         X_save as *const libc::c_void,
-                        (N as libc::c_ulong)
-                            .wrapping_mul(::std::mem::size_of::<celt_norm>() as libc::c_ulong)
+                        (N as usize)
+                            .wrapping_mul(::std::mem::size_of::<celt_norm>() as usize)
                             .wrapping_add(
                                 (0 as i32 as isize * X.offset_from(X_save) as isize)
-                                    as libc::c_ulong,
+                                    as usize,
                             ),
                     );
                     crate::stdlib::memcpy(
                         Y as *mut libc::c_void,
                         Y_save as *const libc::c_void,
-                        (N as libc::c_ulong)
-                            .wrapping_mul(::std::mem::size_of::<celt_norm>() as libc::c_ulong)
+                        (N as usize)
+                            .wrapping_mul(::std::mem::size_of::<celt_norm>() as usize)
                             .wrapping_add(
                                 (0 as i32 as isize * Y.offset_from(Y_save) as isize)
-                                    as libc::c_ulong,
+                                    as usize,
                             ),
                     );
                     if i == start + 1 as i32 {
@@ -2752,21 +2752,21 @@ pub unsafe extern "C" fn quant_all_bands(
                         crate::stdlib::memcpy(
                             X as *mut libc::c_void,
                             X_save2 as *const libc::c_void,
-                            (N as libc::c_ulong)
-                                .wrapping_mul(::std::mem::size_of::<celt_norm>() as libc::c_ulong)
+                            (N as usize)
+                                .wrapping_mul(::std::mem::size_of::<celt_norm>() as usize)
                                 .wrapping_add(
                                     (0 as i32 as isize * X.offset_from(X_save2) as isize)
-                                        as libc::c_ulong,
+                                        as usize,
                                 ),
                         );
                         crate::stdlib::memcpy(
                             Y as *mut libc::c_void,
                             Y_save2 as *const libc::c_void,
-                            (N as libc::c_ulong)
-                                .wrapping_mul(::std::mem::size_of::<celt_norm>() as libc::c_ulong)
+                            (N as usize)
+                                .wrapping_mul(::std::mem::size_of::<celt_norm>() as usize)
                                 .wrapping_add(
                                     (0 as i32 as isize * Y.offset_from(Y_save2) as isize)
-                                        as libc::c_ulong,
+                                        as usize,
                                 ),
                         );
                         if last == 0 {
@@ -2775,9 +2775,9 @@ pub unsafe extern "C" fn quant_all_bands(
                                     .offset(-(norm_offset as isize))
                                     as *mut libc::c_void,
                                 norm_save2 as *const libc::c_void,
-                                (N as libc::c_ulong)
+                                (N as usize)
                                     .wrapping_mul(
-                                        ::std::mem::size_of::<celt_norm>() as libc::c_ulong
+                                        ::std::mem::size_of::<celt_norm>() as usize
                                     )
                                     .wrapping_add(
                                         (0 as i32 as isize
@@ -2789,19 +2789,19 @@ pub unsafe extern "C" fn quant_all_bands(
                                                 .offset(-(norm_offset as isize))
                                                 .offset_from(norm_save2)
                                                 as isize)
-                                            as libc::c_ulong,
+                                            as usize,
                                     ),
                             );
                         }
                         crate::stdlib::memcpy(
                             bytes_buf as *mut libc::c_void,
                             bytes_save.as_mut_ptr() as *const libc::c_void,
-                            (save_bytes as libc::c_ulong)
-                                .wrapping_mul(::std::mem::size_of::<u8>() as libc::c_ulong)
+                            (save_bytes as usize)
+                                .wrapping_mul(::std::mem::size_of::<u8>() as usize)
                                 .wrapping_add(
                                     (0 as i32 as isize
                                         * bytes_buf.offset_from(bytes_save.as_mut_ptr()) as isize)
-                                        as libc::c_ulong,
+                                        as usize,
                                 ),
                         );
                     }

@@ -12,21 +12,21 @@ pub use crate::zconf_h::Bytef;
 #[no_mangle]
 
 pub unsafe extern "C" fn adler32(mut adler: uLong, mut buf: *const Bytef, mut len: uInt) -> uLong {
-    let mut sum2: libc::c_ulong = 0;
+    let mut sum2: usize = 0;
     let mut n: u32 = 0;
     /* split Adler-32 into component sums */
-    sum2 = adler >> 16 as i32 & 0xffff as i32 as libc::c_ulong;
-    adler &= 0xffff as i32 as libc::c_ulong;
+    sum2 = adler >> 16 as i32 & 0xffff as i32 as usize;
+    adler &= 0xffff as i32 as usize;
     /* in case user likes doing a byte at a time, keep it fast */
     if len == 1 as i32 as u32 {
-        adler = (adler as libc::c_ulong)
-            .wrapping_add(*buf.offset(0 as i32 as isize) as libc::c_ulong) as uLong;
-        if adler >= 65521 as libc::c_ulong {
-            adler = (adler as libc::c_ulong).wrapping_sub(65521 as libc::c_ulong) as uLong
+        adler = (adler as usize)
+            .wrapping_add(*buf.offset(0 as i32 as isize) as usize) as uLong;
+        if adler >= 65521 as usize {
+            adler = (adler as usize).wrapping_sub(65521 as usize) as uLong
         }
         sum2 = sum2.wrapping_add(adler);
-        if sum2 >= 65521 as libc::c_ulong {
-            sum2 = sum2.wrapping_sub(65521 as libc::c_ulong)
+        if sum2 >= 65521 as usize {
+            sum2 = sum2.wrapping_sub(65521 as usize)
         }
         return adler | sum2 << 16 as i32;
     }
@@ -44,13 +44,13 @@ pub unsafe extern "C" fn adler32(mut adler: uLong, mut buf: *const Bytef, mut le
             }
             let fresh1 = buf;
             buf = buf.offset(1);
-            adler = (adler as libc::c_ulong).wrapping_add(*fresh1 as libc::c_ulong) as uLong;
+            adler = (adler as usize).wrapping_add(*fresh1 as usize) as uLong;
             sum2 = sum2.wrapping_add(adler)
         }
-        if adler >= 65521 as libc::c_ulong {
-            adler = (adler as libc::c_ulong).wrapping_sub(65521 as libc::c_ulong) as uLong
+        if adler >= 65521 as usize {
+            adler = (adler as usize).wrapping_sub(65521 as usize) as uLong
         }
-        sum2 = sum2.wrapping_rem(65521 as libc::c_ulong);
+        sum2 = sum2.wrapping_rem(65521 as usize);
         return adler | sum2 << 16 as i32;
     }
     /* do length NMAX blocks -- requires just one modulo operation */
@@ -58,68 +58,68 @@ pub unsafe extern "C" fn adler32(mut adler: uLong, mut buf: *const Bytef, mut le
         len = (len as u32).wrapping_sub(5552 as i32 as u32) as uInt; /* NMAX is divisible by 16 */
         n = (5552 as i32 / 16 as i32) as u32;
         loop {
-            adler = (adler as libc::c_ulong)
-                .wrapping_add(*buf.offset(0 as i32 as isize) as libc::c_ulong)
+            adler = (adler as usize)
+                .wrapping_add(*buf.offset(0 as i32 as isize) as usize)
                 as uLong;
             sum2 = sum2.wrapping_add(adler);
-            adler = (adler as libc::c_ulong)
-                .wrapping_add(*buf.offset((0 as i32 + 1 as i32) as isize) as libc::c_ulong)
+            adler = (adler as usize)
+                .wrapping_add(*buf.offset((0 as i32 + 1 as i32) as isize) as usize)
                 as uLong;
             sum2 = sum2.wrapping_add(adler);
-            adler = (adler as libc::c_ulong)
-                .wrapping_add(*buf.offset((0 as i32 + 2 as i32) as isize) as libc::c_ulong)
+            adler = (adler as usize)
+                .wrapping_add(*buf.offset((0 as i32 + 2 as i32) as isize) as usize)
                 as uLong;
             sum2 = sum2.wrapping_add(adler);
-            adler = (adler as libc::c_ulong).wrapping_add(
-                *buf.offset((0 as i32 + 2 as i32 + 1 as i32) as isize) as libc::c_ulong,
+            adler = (adler as usize).wrapping_add(
+                *buf.offset((0 as i32 + 2 as i32 + 1 as i32) as isize) as usize,
             ) as uLong;
             sum2 = sum2.wrapping_add(adler);
-            adler = (adler as libc::c_ulong)
-                .wrapping_add(*buf.offset((0 as i32 + 4 as i32) as isize) as libc::c_ulong)
+            adler = (adler as usize)
+                .wrapping_add(*buf.offset((0 as i32 + 4 as i32) as isize) as usize)
                 as uLong;
             sum2 = sum2.wrapping_add(adler);
-            adler = (adler as libc::c_ulong).wrapping_add(
-                *buf.offset((0 as i32 + 4 as i32 + 1 as i32) as isize) as libc::c_ulong,
+            adler = (adler as usize).wrapping_add(
+                *buf.offset((0 as i32 + 4 as i32 + 1 as i32) as isize) as usize,
             ) as uLong;
             sum2 = sum2.wrapping_add(adler);
-            adler = (adler as libc::c_ulong).wrapping_add(
-                *buf.offset((0 as i32 + 4 as i32 + 2 as i32) as isize) as libc::c_ulong,
+            adler = (adler as usize).wrapping_add(
+                *buf.offset((0 as i32 + 4 as i32 + 2 as i32) as isize) as usize,
             ) as uLong;
             sum2 = sum2.wrapping_add(adler);
-            adler = (adler as libc::c_ulong).wrapping_add(
-                *buf.offset((0 as i32 + 4 as i32 + 2 as i32 + 1 as i32) as isize) as libc::c_ulong,
+            adler = (adler as usize).wrapping_add(
+                *buf.offset((0 as i32 + 4 as i32 + 2 as i32 + 1 as i32) as isize) as usize,
             ) as uLong;
             sum2 = sum2.wrapping_add(adler);
-            adler = (adler as libc::c_ulong)
-                .wrapping_add(*buf.offset(8 as i32 as isize) as libc::c_ulong)
+            adler = (adler as usize)
+                .wrapping_add(*buf.offset(8 as i32 as isize) as usize)
                 as uLong;
             sum2 = sum2.wrapping_add(adler);
-            adler = (adler as libc::c_ulong)
-                .wrapping_add(*buf.offset((8 as i32 + 1 as i32) as isize) as libc::c_ulong)
+            adler = (adler as usize)
+                .wrapping_add(*buf.offset((8 as i32 + 1 as i32) as isize) as usize)
                 as uLong;
             sum2 = sum2.wrapping_add(adler);
-            adler = (adler as libc::c_ulong)
-                .wrapping_add(*buf.offset((8 as i32 + 2 as i32) as isize) as libc::c_ulong)
+            adler = (adler as usize)
+                .wrapping_add(*buf.offset((8 as i32 + 2 as i32) as isize) as usize)
                 as uLong;
             sum2 = sum2.wrapping_add(adler);
-            adler = (adler as libc::c_ulong).wrapping_add(
-                *buf.offset((8 as i32 + 2 as i32 + 1 as i32) as isize) as libc::c_ulong,
+            adler = (adler as usize).wrapping_add(
+                *buf.offset((8 as i32 + 2 as i32 + 1 as i32) as isize) as usize,
             ) as uLong;
             sum2 = sum2.wrapping_add(adler);
-            adler = (adler as libc::c_ulong)
-                .wrapping_add(*buf.offset((8 as i32 + 4 as i32) as isize) as libc::c_ulong)
+            adler = (adler as usize)
+                .wrapping_add(*buf.offset((8 as i32 + 4 as i32) as isize) as usize)
                 as uLong;
             sum2 = sum2.wrapping_add(adler);
-            adler = (adler as libc::c_ulong).wrapping_add(
-                *buf.offset((8 as i32 + 4 as i32 + 1 as i32) as isize) as libc::c_ulong,
+            adler = (adler as usize).wrapping_add(
+                *buf.offset((8 as i32 + 4 as i32 + 1 as i32) as isize) as usize,
             ) as uLong;
             sum2 = sum2.wrapping_add(adler);
-            adler = (adler as libc::c_ulong).wrapping_add(
-                *buf.offset((8 as i32 + 4 as i32 + 2 as i32) as isize) as libc::c_ulong,
+            adler = (adler as usize).wrapping_add(
+                *buf.offset((8 as i32 + 4 as i32 + 2 as i32) as isize) as usize,
             ) as uLong;
             sum2 = sum2.wrapping_add(adler);
-            adler = (adler as libc::c_ulong).wrapping_add(
-                *buf.offset((8 as i32 + 4 as i32 + 2 as i32 + 1 as i32) as isize) as libc::c_ulong,
+            adler = (adler as usize).wrapping_add(
+                *buf.offset((8 as i32 + 4 as i32 + 2 as i32 + 1 as i32) as isize) as usize,
             ) as uLong;
             sum2 = sum2.wrapping_add(adler);
             /* 16 sums unrolled */
@@ -129,76 +129,76 @@ pub unsafe extern "C" fn adler32(mut adler: uLong, mut buf: *const Bytef, mut le
                 break;
             }
         }
-        adler = (adler as libc::c_ulong).wrapping_rem(65521 as libc::c_ulong) as uLong;
-        sum2 = sum2.wrapping_rem(65521 as libc::c_ulong)
+        adler = (adler as usize).wrapping_rem(65521 as usize) as uLong;
+        sum2 = sum2.wrapping_rem(65521 as usize)
     }
     /* do remaining bytes (less than NMAX, still just one modulo) */
     if len != 0 {
         /* avoid modulos if none remaining */
         while len >= 16 as i32 as u32 {
             len = (len as u32).wrapping_sub(16 as i32 as u32) as uInt;
-            adler = (adler as libc::c_ulong)
-                .wrapping_add(*buf.offset(0 as i32 as isize) as libc::c_ulong)
+            adler = (adler as usize)
+                .wrapping_add(*buf.offset(0 as i32 as isize) as usize)
                 as uLong;
             sum2 = sum2.wrapping_add(adler);
-            adler = (adler as libc::c_ulong)
-                .wrapping_add(*buf.offset((0 as i32 + 1 as i32) as isize) as libc::c_ulong)
+            adler = (adler as usize)
+                .wrapping_add(*buf.offset((0 as i32 + 1 as i32) as isize) as usize)
                 as uLong;
             sum2 = sum2.wrapping_add(adler);
-            adler = (adler as libc::c_ulong)
-                .wrapping_add(*buf.offset((0 as i32 + 2 as i32) as isize) as libc::c_ulong)
+            adler = (adler as usize)
+                .wrapping_add(*buf.offset((0 as i32 + 2 as i32) as isize) as usize)
                 as uLong;
             sum2 = sum2.wrapping_add(adler);
-            adler = (adler as libc::c_ulong).wrapping_add(
-                *buf.offset((0 as i32 + 2 as i32 + 1 as i32) as isize) as libc::c_ulong,
+            adler = (adler as usize).wrapping_add(
+                *buf.offset((0 as i32 + 2 as i32 + 1 as i32) as isize) as usize,
             ) as uLong;
             sum2 = sum2.wrapping_add(adler);
-            adler = (adler as libc::c_ulong)
-                .wrapping_add(*buf.offset((0 as i32 + 4 as i32) as isize) as libc::c_ulong)
+            adler = (adler as usize)
+                .wrapping_add(*buf.offset((0 as i32 + 4 as i32) as isize) as usize)
                 as uLong;
             sum2 = sum2.wrapping_add(adler);
-            adler = (adler as libc::c_ulong).wrapping_add(
-                *buf.offset((0 as i32 + 4 as i32 + 1 as i32) as isize) as libc::c_ulong,
+            adler = (adler as usize).wrapping_add(
+                *buf.offset((0 as i32 + 4 as i32 + 1 as i32) as isize) as usize,
             ) as uLong;
             sum2 = sum2.wrapping_add(adler);
-            adler = (adler as libc::c_ulong).wrapping_add(
-                *buf.offset((0 as i32 + 4 as i32 + 2 as i32) as isize) as libc::c_ulong,
+            adler = (adler as usize).wrapping_add(
+                *buf.offset((0 as i32 + 4 as i32 + 2 as i32) as isize) as usize,
             ) as uLong;
             sum2 = sum2.wrapping_add(adler);
-            adler = (adler as libc::c_ulong).wrapping_add(
-                *buf.offset((0 as i32 + 4 as i32 + 2 as i32 + 1 as i32) as isize) as libc::c_ulong,
+            adler = (adler as usize).wrapping_add(
+                *buf.offset((0 as i32 + 4 as i32 + 2 as i32 + 1 as i32) as isize) as usize,
             ) as uLong;
             sum2 = sum2.wrapping_add(adler);
-            adler = (adler as libc::c_ulong)
-                .wrapping_add(*buf.offset(8 as i32 as isize) as libc::c_ulong)
+            adler = (adler as usize)
+                .wrapping_add(*buf.offset(8 as i32 as isize) as usize)
                 as uLong;
             sum2 = sum2.wrapping_add(adler);
-            adler = (adler as libc::c_ulong)
-                .wrapping_add(*buf.offset((8 as i32 + 1 as i32) as isize) as libc::c_ulong)
+            adler = (adler as usize)
+                .wrapping_add(*buf.offset((8 as i32 + 1 as i32) as isize) as usize)
                 as uLong;
             sum2 = sum2.wrapping_add(adler);
-            adler = (adler as libc::c_ulong)
-                .wrapping_add(*buf.offset((8 as i32 + 2 as i32) as isize) as libc::c_ulong)
+            adler = (adler as usize)
+                .wrapping_add(*buf.offset((8 as i32 + 2 as i32) as isize) as usize)
                 as uLong;
             sum2 = sum2.wrapping_add(adler);
-            adler = (adler as libc::c_ulong).wrapping_add(
-                *buf.offset((8 as i32 + 2 as i32 + 1 as i32) as isize) as libc::c_ulong,
+            adler = (adler as usize).wrapping_add(
+                *buf.offset((8 as i32 + 2 as i32 + 1 as i32) as isize) as usize,
             ) as uLong;
             sum2 = sum2.wrapping_add(adler);
-            adler = (adler as libc::c_ulong)
-                .wrapping_add(*buf.offset((8 as i32 + 4 as i32) as isize) as libc::c_ulong)
+            adler = (adler as usize)
+                .wrapping_add(*buf.offset((8 as i32 + 4 as i32) as isize) as usize)
                 as uLong;
             sum2 = sum2.wrapping_add(adler);
-            adler = (adler as libc::c_ulong).wrapping_add(
-                *buf.offset((8 as i32 + 4 as i32 + 1 as i32) as isize) as libc::c_ulong,
+            adler = (adler as usize).wrapping_add(
+                *buf.offset((8 as i32 + 4 as i32 + 1 as i32) as isize) as usize,
             ) as uLong;
             sum2 = sum2.wrapping_add(adler);
-            adler = (adler as libc::c_ulong).wrapping_add(
-                *buf.offset((8 as i32 + 4 as i32 + 2 as i32) as isize) as libc::c_ulong,
+            adler = (adler as usize).wrapping_add(
+                *buf.offset((8 as i32 + 4 as i32 + 2 as i32) as isize) as usize,
             ) as uLong;
             sum2 = sum2.wrapping_add(adler);
-            adler = (adler as libc::c_ulong).wrapping_add(
-                *buf.offset((8 as i32 + 4 as i32 + 2 as i32 + 1 as i32) as isize) as libc::c_ulong,
+            adler = (adler as usize).wrapping_add(
+                *buf.offset((8 as i32 + 4 as i32 + 2 as i32 + 1 as i32) as isize) as usize,
             ) as uLong;
             sum2 = sum2.wrapping_add(adler);
             buf = buf.offset(16 as i32 as isize)
@@ -211,11 +211,11 @@ pub unsafe extern "C" fn adler32(mut adler: uLong, mut buf: *const Bytef, mut le
             }
             let fresh3 = buf;
             buf = buf.offset(1);
-            adler = (adler as libc::c_ulong).wrapping_add(*fresh3 as libc::c_ulong) as uLong;
+            adler = (adler as usize).wrapping_add(*fresh3 as usize) as uLong;
             sum2 = sum2.wrapping_add(adler)
         }
-        adler = (adler as libc::c_ulong).wrapping_rem(65521 as libc::c_ulong) as uLong;
-        sum2 = sum2.wrapping_rem(65521 as libc::c_ulong)
+        adler = (adler as usize).wrapping_rem(65521 as usize) as uLong;
+        sum2 = sum2.wrapping_rem(65521 as usize)
     }
     /* return recombined sums */
     return adler | sum2 << 16 as i32;
@@ -1287,36 +1287,36 @@ pub unsafe extern "C" fn adler32_combine(
     mut adler2: uLong,
     mut len2: off_t,
 ) -> uLong {
-    let mut sum1: libc::c_ulong = 0;
-    let mut sum2: libc::c_ulong = 0;
+    let mut sum1: usize = 0;
+    let mut sum2: usize = 0;
     let mut rem: u32 = 0;
     /* the derivation of this formula is left as an exercise for the reader */
-    rem = (len2 as libc::c_ulong).wrapping_rem(65521 as libc::c_ulong) as u32;
-    sum1 = adler1 & 0xffff as i32 as libc::c_ulong;
-    sum2 = (rem as libc::c_ulong).wrapping_mul(sum1);
-    sum2 = sum2.wrapping_rem(65521 as libc::c_ulong);
+    rem = (len2 as usize).wrapping_rem(65521 as usize) as u32;
+    sum1 = adler1 & 0xffff as i32 as usize;
+    sum2 = (rem as usize).wrapping_mul(sum1);
+    sum2 = sum2.wrapping_rem(65521 as usize);
     sum1 = sum1.wrapping_add(
-        (adler2 & 0xffff as i32 as libc::c_ulong)
-            .wrapping_add(65521 as libc::c_ulong)
-            .wrapping_sub(1 as i32 as libc::c_ulong),
+        (adler2 & 0xffff as i32 as usize)
+            .wrapping_add(65521 as usize)
+            .wrapping_sub(1 as i32 as usize),
     );
     sum2 = sum2.wrapping_add(
-        (adler1 >> 16 as i32 & 0xffff as i32 as libc::c_ulong)
-            .wrapping_add(adler2 >> 16 as i32 & 0xffff as i32 as libc::c_ulong)
-            .wrapping_add(65521 as libc::c_ulong)
-            .wrapping_sub(rem as libc::c_ulong),
+        (adler1 >> 16 as i32 & 0xffff as i32 as usize)
+            .wrapping_add(adler2 >> 16 as i32 & 0xffff as i32 as usize)
+            .wrapping_add(65521 as usize)
+            .wrapping_sub(rem as usize),
     );
-    if sum1 > 65521 as libc::c_ulong {
-        sum1 = sum1.wrapping_sub(65521 as libc::c_ulong)
+    if sum1 > 65521 as usize {
+        sum1 = sum1.wrapping_sub(65521 as usize)
     }
-    if sum1 > 65521 as libc::c_ulong {
-        sum1 = sum1.wrapping_sub(65521 as libc::c_ulong)
+    if sum1 > 65521 as usize {
+        sum1 = sum1.wrapping_sub(65521 as usize)
     }
-    if sum2 > (65521 as libc::c_ulong) << 1 as i32 {
-        sum2 = sum2.wrapping_sub((65521 as libc::c_ulong) << 1 as i32)
+    if sum2 > (65521 as usize) << 1 as i32 {
+        sum2 = sum2.wrapping_sub((65521 as usize) << 1 as i32)
     }
-    if sum2 > 65521 as libc::c_ulong {
-        sum2 = sum2.wrapping_sub(65521 as libc::c_ulong)
+    if sum2 > 65521 as usize {
+        sum2 = sum2.wrapping_sub(65521 as usize)
     }
     return sum1 | sum2 << 16 as i32;
 }

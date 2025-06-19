@@ -527,13 +527,13 @@ unsafe extern "C" fn mdfour_tail(mut in_0: *mut byte, mut n: i32) {
     crate::stdlib::memset(
         buf.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        128 as i32 as libc::c_ulong,
+        128 as i32 as usize,
     );
     if n != 0 {
         crate::stdlib::memcpy(
             buf.as_mut_ptr() as *mut libc::c_void,
             in_0 as *const libc::c_void,
-            n as libc::c_ulong,
+            n as usize,
         );
     }
     buf[n as usize] = 0x80 as i32 as byte;

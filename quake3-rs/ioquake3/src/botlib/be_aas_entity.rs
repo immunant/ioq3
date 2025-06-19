@@ -342,7 +342,7 @@ pub unsafe extern "C" fn AAS_EntityInfo(mut entnum: i32, mut info: *mut aas_enti
         crate::stdlib::memset(
             info as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<aas_entityinfo_t>() as libc::c_ulong,
+            ::std::mem::size_of::<aas_entityinfo_t>() as usize,
         ); //end if
         return;
     }
@@ -358,7 +358,7 @@ pub unsafe extern "C" fn AAS_EntityInfo(mut entnum: i32, mut info: *mut aas_enti
         crate::stdlib::memset(
             info as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<aas_entityinfo_t>() as libc::c_ulong,
+            ::std::mem::size_of::<aas_entityinfo_t>() as usize,
         );
         return;
     }
@@ -368,7 +368,7 @@ pub unsafe extern "C" fn AAS_EntityInfo(mut entnum: i32, mut info: *mut aas_enti
             .entities
             .offset(entnum as isize))
         .i as *mut aas_entityinfo_t as *const libc::c_void,
-        ::std::mem::size_of::<aas_entityinfo_t>() as libc::c_ulong,
+        ::std::mem::size_of::<aas_entityinfo_t>() as usize,
     );
 }
 //end of the function AAS_EntityInfo

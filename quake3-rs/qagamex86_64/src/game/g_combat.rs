@@ -1031,9 +1031,9 @@ pub unsafe extern "C" fn player_die(
         killerName = b"<world>\x00" as *const u8 as *const libc::c_char as *mut libc::c_char
     }
     if meansOfDeath < 0 as i32
-        || meansOfDeath as libc::c_ulong
-            >= (::std::mem::size_of::<[*mut libc::c_char; 24]>() as libc::c_ulong)
-                .wrapping_div(::std::mem::size_of::<*mut libc::c_char>() as libc::c_ulong)
+        || meansOfDeath as usize
+            >= (::std::mem::size_of::<[*mut libc::c_char; 24]>() as usize)
+                .wrapping_div(::std::mem::size_of::<*mut libc::c_char>() as usize)
     {
         obit = b"<bad obituary>\x00" as *const u8 as *const libc::c_char as *mut libc::c_char
     } else {
@@ -1162,7 +1162,7 @@ pub unsafe extern "C" fn player_die(
     crate::stdlib::memset(
         (*(*self_0).client).ps.powerups.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[i32; 16]>() as libc::c_ulong,
+        ::std::mem::size_of::<[i32; 16]>() as usize,
     );
     // never gib in a nodrop
     contents = trap_PointContents(

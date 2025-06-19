@@ -53,8 +53,8 @@ pub unsafe extern "C" fn SND_free(mut v: *mut sndBuffer) {
     let ref mut fresh0 = *(v as *mut *mut sndBuffer);
     *fresh0 = freelist;
     freelist = v;
-    inUse = (inUse as libc::c_ulong)
-        .wrapping_add(::std::mem::size_of::<sndBuffer>() as libc::c_ulong) as i32;
+    inUse = (inUse as usize)
+        .wrapping_add(::std::mem::size_of::<sndBuffer>() as usize) as i32;
 }
 #[no_mangle]
 
@@ -63,10 +63,10 @@ pub unsafe extern "C" fn SND_malloc() -> *mut sndBuffer {
     while freelist.is_null() {
         S_FreeOldestSound();
     }
-    inUse = (inUse as libc::c_ulong)
-        .wrapping_sub(::std::mem::size_of::<sndBuffer>() as libc::c_ulong) as i32;
-    totalInUse = (totalInUse as libc::c_ulong)
-        .wrapping_add(::std::mem::size_of::<sndBuffer>() as libc::c_ulong) as i32;
+    inUse = (inUse as usize)
+        .wrapping_sub(::std::mem::size_of::<sndBuffer>() as usize) as i32;
+    totalInUse = (totalInUse as usize)
+        .wrapping_add(::std::mem::size_of::<sndBuffer>() as usize) as i32;
     v = freelist;
     freelist = *(freelist as *mut *mut sndBuffer);
     (*v).next = 0 as *mut sndBuffer_s;
@@ -86,16 +86,16 @@ pub unsafe extern "C" fn SND_setup() {
     ) as *mut cvar_s;
     scs = (*cv).integer * 1536 as i32;
     buffer = crate::stdlib::malloc(
-        (scs as libc::c_ulong).wrapping_mul(::std::mem::size_of::<sndBuffer>() as libc::c_ulong),
+        (scs as usize).wrapping_mul(::std::mem::size_of::<sndBuffer>() as usize),
     ) as *mut sndBuffer;
     // allocate the stack based hunk allocator
     sfxScratchBuffer = crate::stdlib::malloc(
-        (1024 as i32 as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<i16>() as libc::c_ulong)
-            .wrapping_mul(4 as i32 as libc::c_ulong),
+        (1024 as i32 as usize)
+            .wrapping_mul(::std::mem::size_of::<i16>() as usize)
+            .wrapping_mul(4 as i32 as usize),
     ) as *mut i16; //Hunk_Alloc(SND_CHUNK_SIZE * sizeof(short) * 4);
     sfxScratchPointer = 0 as *mut sfx_t;
-    inUse = (scs as libc::c_ulong).wrapping_mul(::std::mem::size_of::<sndBuffer>() as libc::c_ulong)
+    inUse = (scs as usize).wrapping_mul(::std::mem::size_of::<sndBuffer>() as usize)
         as i32;
     p = buffer;
     q = p.offset(scs as isize);
@@ -332,9 +332,9 @@ pub unsafe extern "C" fn S_LoadSound(mut sfx: *mut sfx_t) -> qboolean {
         );
     }
     samples = crate::src::qcommon::common::Hunk_AllocateTempMemory(
-        ((info.channels * info.samples) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<i16>() as libc::c_ulong)
-            .wrapping_mul(2 as i32 as libc::c_ulong) as i32,
+        ((info.channels * info.samples) as usize)
+            .wrapping_mul(::std::mem::size_of::<i16>() as usize)
+            .wrapping_mul(2 as i32 as usize) as i32,
     ) as *mut i16;
     (*sfx).lastTimeUsed = crate::src::qcommon::common::Com_Milliseconds() + 1 as i32;
     // each of these compression schemes works just fine

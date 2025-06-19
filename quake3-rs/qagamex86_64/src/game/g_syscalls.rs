@@ -1603,7 +1603,7 @@ pub unsafe extern "C" fn trap_StringContains(
 pub unsafe extern "C" fn trap_BotFindMatch(
     mut str: *mut libc::c_char,
     mut match_0: *mut libc::c_void,
-    mut context: libc::c_ulong,
+    mut context: usize,
 ) -> i32 {
     return syscall.expect("non-null function pointer")(
         BOTLIB_AI_FIND_MATCH as i32 as intptr_t,
@@ -1640,7 +1640,7 @@ pub unsafe extern "C" fn trap_UnifyWhiteSpaces(mut string: *mut libc::c_char) {
 
 pub unsafe extern "C" fn trap_BotReplaceSynonyms(
     mut string: *mut libc::c_char,
-    mut context: libc::c_ulong,
+    mut context: usize,
 ) {
     syscall.expect("non-null function pointer")(
         BOTLIB_AI_REPLACE_SYNONYMS as i32 as intptr_t,

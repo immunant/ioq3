@@ -81,7 +81,7 @@ pub unsafe extern "C" fn isqrt32(mut _val: opus_uint32) -> u32 {
     The main idea is to search for the largest binary digit b such that
      (g+b)*(g+b) <= _val, and add it to the solution g.*/
     g = 0 as i32 as u32;
-    bshift = ::std::mem::size_of::<u32>() as libc::c_ulong as i32 * 8 as i32
+    bshift = ::std::mem::size_of::<u32>() as usize as i32 * 8 as i32
         - _val.leading_zeros() as i32
         - 1 as i32
         >> 1 as i32;

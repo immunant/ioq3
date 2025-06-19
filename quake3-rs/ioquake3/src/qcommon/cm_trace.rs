@@ -1861,7 +1861,7 @@ pub unsafe extern "C" fn CM_Trace(
     crate::stdlib::memset(
         &mut tw as *mut traceWork_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<traceWork_t>() as libc::c_ulong,
+        ::std::mem::size_of::<traceWork_t>() as usize,
     ); // assume it goes the entire distance until shown otherwise
     tw.trace.fraction = 1 as i32 as f32;
     tw.modelOrigin[0 as i32 as usize] = *origin.offset(0 as i32 as isize);

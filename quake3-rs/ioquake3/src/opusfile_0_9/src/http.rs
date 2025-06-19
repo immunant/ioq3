@@ -59,18 +59,18 @@ unsafe extern "C" fn op_string_range_dup(
     let mut ret: *mut libc::c_char = 0 as *mut libc::c_char;
     len = _end.offset_from(_start) as isize as size_t;
     /*This is to help avoid overflow elsewhere, later.*/
-    if (len >= 2147483647 as i32 as libc::c_ulong) as i32 as isize != 0 {
+    if (len >= 2147483647 as i32 as usize) as i32 as isize != 0 {
         return 0 as *mut libc::c_char;
     }
     ret = crate::stdlib::malloc(
-        (::std::mem::size_of::<libc::c_char>() as libc::c_ulong)
-            .wrapping_mul(len.wrapping_add(1 as i32 as libc::c_ulong)),
+        (::std::mem::size_of::<libc::c_char>() as usize)
+            .wrapping_mul(len.wrapping_add(1 as i32 as usize)),
     ) as *mut libc::c_char;
     if !ret.is_null() as i32 as isize != 0 {
         ret = crate::stdlib::memcpy(
             ret as *mut libc::c_void,
             _start as *const libc::c_void,
-            (::std::mem::size_of::<libc::c_char>() as libc::c_ulong).wrapping_mul(len),
+            (::std::mem::size_of::<libc::c_char>() as usize).wrapping_mul(len),
         ) as *mut libc::c_char;
         *ret.offset(len as isize) = '\u{0}' as i32 as libc::c_char
     }
@@ -237,8 +237,8 @@ unsafe extern "C" fn op_parse_file_url(mut _src: *const libc::c_char) -> *const 
             crate::stdlib::memcpy(
                 host_buf.as_mut_ptr() as *mut libc::c_void,
                 host as *const libc::c_void,
-                (::std::mem::size_of::<libc::c_char>() as libc::c_ulong)
-                    .wrapping_mul(host_end.offset_from(host) as isize as libc::c_ulong),
+                (::std::mem::size_of::<libc::c_char>() as usize)
+                    .wrapping_mul(host_end.offset_from(host) as isize as usize),
             );
             host_buf[host_end.offset_from(host) as isize as usize] = '\u{0}' as i32 as libc::c_char;
             op_unescape_url_component(host_buf.as_mut_ptr());

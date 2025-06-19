@@ -598,7 +598,7 @@ pub unsafe extern "C" fn BotAI_Print(mut type_0: i32, mut fmt: *mut libc::c_char
     ap = args.clone();
     crate::stdlib::vsnprintf(
         str.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 2048]>() as libc::c_ulong,
+        ::std::mem::size_of::<[libc::c_char; 2048]>() as usize,
         fmt,
         ap.as_va_list(),
     );
@@ -721,7 +721,7 @@ pub unsafe extern "C" fn BotAI_GetClientState(
     crate::stdlib::memcpy(
         state as *mut libc::c_void,
         &mut (*(*ent).client).ps as *mut playerState_t as *const libc::c_void,
-        ::std::mem::size_of::<playerState_t>() as libc::c_ulong,
+        ::std::mem::size_of::<playerState_t>() as usize,
     );
     return qtrue as i32;
 }
@@ -741,7 +741,7 @@ pub unsafe extern "C" fn BotAI_GetEntityState(
     crate::stdlib::memset(
         state as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<entityState_t>() as libc::c_ulong,
+        ::std::mem::size_of::<entityState_t>() as usize,
     );
     if (*ent).inuse as u64 == 0 {
         return qfalse as i32;
@@ -755,7 +755,7 @@ pub unsafe extern "C" fn BotAI_GetEntityState(
     crate::stdlib::memcpy(
         state as *mut libc::c_void,
         &mut (*ent).s as *mut entityState_t as *const libc::c_void,
-        ::std::mem::size_of::<entityState_t>() as libc::c_ulong,
+        ::std::mem::size_of::<entityState_t>() as usize,
     );
     return qtrue as i32;
 }
@@ -777,7 +777,7 @@ pub unsafe extern "C" fn BotAI_GetSnapshotEntity(
         crate::stdlib::memset(
             state as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<entityState_t>() as libc::c_ulong,
+            ::std::mem::size_of::<entityState_t>() as usize,
         );
         return -(1 as i32);
     }
@@ -804,7 +804,7 @@ pub unsafe extern "C" fn BotAI_BotInitialChat(
     crate::stdlib::memset(
         vars.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[*mut libc::c_char; 8]>() as libc::c_ulong,
+        ::std::mem::size_of::<[*mut libc::c_char; 8]>() as usize,
     );
     ap = args.clone();
     p = ap.as_va_list().arg::<*mut libc::c_char>();
@@ -912,7 +912,7 @@ pub unsafe extern "C" fn BotReportStatus(mut bs: *mut crate::src::game::ai_main:
     crate::src::game::ai_dmq3::ClientName(
         (*bs).client,
         netname.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
     );
     if Q_stricmp(netname.as_mut_ptr(), (*bs).teamleader.as_mut_ptr()) == 0 as i32 {
         leader = b"L\x00" as *const u8 as *const libc::c_char as *mut libc::c_char
@@ -948,7 +948,7 @@ pub unsafe extern "C" fn BotReportStatus(mut bs: *mut crate::src::game::ai_main:
             crate::src::game::ai_dmq3::EasyClientName(
                 (*bs).teammate,
                 goalname.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
             );
             BotAI_Print(
                 1 as i32,
@@ -964,7 +964,7 @@ pub unsafe extern "C" fn BotReportStatus(mut bs: *mut crate::src::game::ai_main:
             crate::src::game::ai_dmq3::EasyClientName(
                 (*bs).teammate,
                 goalname.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
             );
             BotAI_Print(
                 1 as i32,
@@ -980,7 +980,7 @@ pub unsafe extern "C" fn BotReportStatus(mut bs: *mut crate::src::game::ai_main:
             trap_BotGoalName(
                 (*bs).teamgoal.number,
                 goalname.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
             );
             BotAI_Print(
                 1 as i32,
@@ -996,7 +996,7 @@ pub unsafe extern "C" fn BotReportStatus(mut bs: *mut crate::src::game::ai_main:
             trap_BotGoalName(
                 (*bs).teamgoal.number,
                 goalname.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
             );
             BotAI_Print(
                 1 as i32,
@@ -1012,7 +1012,7 @@ pub unsafe extern "C" fn BotReportStatus(mut bs: *mut crate::src::game::ai_main:
             crate::src::game::ai_dmq3::ClientName(
                 (*bs).teamgoal.entitynum,
                 goalname.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
             );
             BotAI_Print(
                 1 as i32,
@@ -1128,7 +1128,7 @@ pub unsafe extern "C" fn BotTeamplayReport() {
             trap_GetConfigstring(
                 32 as i32 + 256 as i32 + 256 as i32 + i,
                 buf.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
             );
             //if no config string or no name
             if !(crate::stdlib::strlen(buf.as_mut_ptr()) == 0
@@ -1161,7 +1161,7 @@ pub unsafe extern "C" fn BotTeamplayReport() {
             trap_GetConfigstring(
                 32 as i32 + 256 as i32 + 256 as i32 + i,
                 buf.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
             );
             //if no config string or no name
             if !(crate::stdlib::strlen(buf.as_mut_ptr()) == 0
@@ -1213,7 +1213,7 @@ pub unsafe extern "C" fn BotSetInfoConfigString(
     crate::src::game::ai_dmq3::ClientName(
         (*bs).client,
         netname.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
     );
     if Q_stricmp(netname.as_mut_ptr(), (*bs).teamleader.as_mut_ptr()) == 0 as i32 {
         leader = b"L\x00" as *const u8 as *const libc::c_char as *mut libc::c_char
@@ -1240,11 +1240,11 @@ pub unsafe extern "C" fn BotSetInfoConfigString(
             crate::src::game::ai_dmq3::EasyClientName(
                 (*bs).teammate,
                 goalname.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
             );
             Com_sprintf(
                 action.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
                 b"helping %s\x00" as *const u8 as *const libc::c_char,
                 goalname.as_mut_ptr(),
             );
@@ -1253,11 +1253,11 @@ pub unsafe extern "C" fn BotSetInfoConfigString(
             crate::src::game::ai_dmq3::EasyClientName(
                 (*bs).teammate,
                 goalname.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
             );
             Com_sprintf(
                 action.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
                 b"accompanying %s\x00" as *const u8 as *const libc::c_char,
                 goalname.as_mut_ptr(),
             );
@@ -1266,11 +1266,11 @@ pub unsafe extern "C" fn BotSetInfoConfigString(
             trap_BotGoalName(
                 (*bs).teamgoal.number,
                 goalname.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
             );
             Com_sprintf(
                 action.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
                 b"defending %s\x00" as *const u8 as *const libc::c_char,
                 goalname.as_mut_ptr(),
             );
@@ -1279,11 +1279,11 @@ pub unsafe extern "C" fn BotSetInfoConfigString(
             trap_BotGoalName(
                 (*bs).teamgoal.number,
                 goalname.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
             );
             Com_sprintf(
                 action.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
                 b"getting item %s\x00" as *const u8 as *const libc::c_char,
                 goalname.as_mut_ptr(),
             );
@@ -1292,11 +1292,11 @@ pub unsafe extern "C" fn BotSetInfoConfigString(
             crate::src::game::ai_dmq3::ClientName(
                 (*bs).teamgoal.entitynum,
                 goalname.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
             );
             Com_sprintf(
                 action.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
                 b"killing %s\x00" as *const u8 as *const libc::c_char,
                 goalname.as_mut_ptr(),
             );
@@ -1304,49 +1304,49 @@ pub unsafe extern "C" fn BotSetInfoConfigString(
         7 | 8 => {
             Com_sprintf(
                 action.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
                 b"camping\x00" as *const u8 as *const libc::c_char,
             );
         }
         9 => {
             Com_sprintf(
                 action.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
                 b"patrolling\x00" as *const u8 as *const libc::c_char,
             );
         }
         4 => {
             Com_sprintf(
                 action.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
                 b"capturing flag\x00" as *const u8 as *const libc::c_char,
             );
         }
         5 => {
             Com_sprintf(
                 action.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
                 b"rushing base\x00" as *const u8 as *const libc::c_char,
             );
         }
         6 => {
             Com_sprintf(
                 action.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
                 b"returning flag\x00" as *const u8 as *const libc::c_char,
             );
         }
         13 => {
             Com_sprintf(
                 action.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
                 b"attacking the enemy base\x00" as *const u8 as *const libc::c_char,
             );
         }
         12 => {
             Com_sprintf(
                 action.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
                 b"harvesting\x00" as *const u8 as *const libc::c_char,
             );
         }
@@ -1355,11 +1355,11 @@ pub unsafe extern "C" fn BotSetInfoConfigString(
             trap_BotGoalName(
                 goal.number,
                 goalname.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
             );
             Com_sprintf(
                 action.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
                 b"roaming %s\x00" as *const u8 as *const libc::c_char,
                 goalname.as_mut_ptr(),
             );
@@ -1391,7 +1391,7 @@ pub unsafe extern "C" fn BotUpdateInfoConfigStrings() {
             trap_GetConfigstring(
                 32 as i32 + 256 as i32 + 256 as i32 + i,
                 buf.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
             );
             //if no config string or no name
             if !(crate::stdlib::strlen(buf.as_mut_ptr()) == 0
@@ -1794,7 +1794,7 @@ pub unsafe extern "C" fn BotInputToUserCommand(
     crate::stdlib::memset(
         ucmd as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<usercmd_t>() as libc::c_ulong,
+        ::std::mem::size_of::<usercmd_t>() as usize,
     );
     //the duration for the user command in milli seconds
     (*ucmd).serverTime = time;
@@ -2069,7 +2069,7 @@ pub unsafe extern "C" fn BotAI(mut client: i32, mut thinktime: f32) -> i32 {
     while trap_BotGetServerCommand(
         client,
         buf.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     ) != 0
     {
         //have buf point to the command and args to the command arguments
@@ -2104,7 +2104,7 @@ pub unsafe extern "C" fn BotAI(mut client: i32, mut thinktime: f32) -> i32 {
                         crate::stdlib::strlen(args),
                     );
                     *args.offset(
-                        crate::stdlib::strlen(args).wrapping_sub(1 as i32 as libc::c_ulong)
+                        crate::stdlib::strlen(args).wrapping_sub(1 as i32 as usize)
                             as isize,
                     ) = '\u{0}' as i32 as libc::c_char;
                     trap_BotQueueConsoleMessage((*bs).cs, 0 as i32, args);
@@ -2120,7 +2120,7 @@ pub unsafe extern "C" fn BotAI(mut client: i32, mut thinktime: f32) -> i32 {
                         crate::stdlib::strlen(args),
                     );
                     *args.offset(
-                        crate::stdlib::strlen(args).wrapping_sub(1 as i32 as libc::c_ulong)
+                        crate::stdlib::strlen(args).wrapping_sub(1 as i32 as usize)
                             as isize,
                     ) = '\u{0}' as i32 as libc::c_char;
                     trap_BotQueueConsoleMessage((*bs).cs, 1 as i32, args);
@@ -2136,7 +2136,7 @@ pub unsafe extern "C" fn BotAI(mut client: i32, mut thinktime: f32) -> i32 {
                         crate::stdlib::strlen(args),
                     );
                     *args.offset(
-                        crate::stdlib::strlen(args).wrapping_sub(1 as i32 as libc::c_ulong)
+                        crate::stdlib::strlen(args).wrapping_sub(1 as i32 as usize)
                             as isize,
                     ) = '\u{0}' as i32 as libc::c_char;
                     trap_BotQueueConsoleMessage((*bs).cs, 1 as i32, args);
@@ -2274,7 +2274,7 @@ pub unsafe extern "C" fn BotReadSessionData(mut bs: *mut crate::src::game::ai_ma
     trap_Cvar_VariableStringBuffer(
         var,
         s.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     libc::sscanf(
         s.as_mut_ptr(),
@@ -2357,7 +2357,7 @@ pub unsafe extern "C" fn BotAISetupClient(
     if botstates[client as usize].is_null() {
         botstates[client as usize] = G_Alloc(::std::mem::size_of::<
             crate::src::game::ai_main::bot_state_t,
-        >() as libc::c_ulong as i32)
+        >() as usize as i32)
             as *mut crate::src::game::ai_main::bot_state_t
     }
     bs = botstates[client as usize];
@@ -2397,7 +2397,7 @@ pub unsafe extern "C" fn BotAISetupClient(
     crate::stdlib::memcpy(
         &mut (*bs).settings as *mut bot_settings_t as *mut libc::c_void,
         settings as *const libc::c_void,
-        ::std::mem::size_of::<bot_settings_t>() as libc::c_ulong,
+        ::std::mem::size_of::<bot_settings_t>() as usize,
     );
     //allocate a goal state
     (*bs).gs = trap_BotAllocGoalState(client);
@@ -2406,7 +2406,7 @@ pub unsafe extern "C" fn BotAISetupClient(
         (*bs).character,
         40 as i32,
         filename.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 144]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 144]>() as usize as i32,
     );
     errnum = trap_BotLoadItemWeights((*bs).gs, filename.as_mut_ptr());
     if errnum != 0 as i32 {
@@ -2420,7 +2420,7 @@ pub unsafe extern "C" fn BotAISetupClient(
         (*bs).character,
         3 as i32,
         filename.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 144]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 144]>() as usize as i32,
     );
     errnum = trap_BotLoadWeaponWeights((*bs).ws, filename.as_mut_ptr());
     if errnum != 0 as i32 {
@@ -2435,13 +2435,13 @@ pub unsafe extern "C" fn BotAISetupClient(
         (*bs).character,
         21 as i32,
         filename.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 144]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 144]>() as usize as i32,
     );
     trap_Characteristic_String(
         (*bs).character,
         22 as i32,
         name.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 144]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 144]>() as usize as i32,
     );
     errnum = trap_BotLoadChatFile((*bs).cs, filename.as_mut_ptr(), name.as_mut_ptr());
     if errnum != 0 as i32 {
@@ -2455,7 +2455,7 @@ pub unsafe extern "C" fn BotAISetupClient(
         (*bs).character,
         1 as i32,
         gender.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 144]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 144]>() as usize as i32,
     );
     //set the chat gender
     if *gender.as_mut_ptr() as i32 == 'f' as i32 || *gender.as_mut_ptr() as i32 == 'F' as i32 {
@@ -2544,7 +2544,7 @@ pub unsafe extern "C" fn BotAIShutdownClient(mut client: i32, mut restart: qbool
     crate::stdlib::memset(
         bs as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::src::game::ai_main::bot_state_t>() as libc::c_ulong,
+        ::std::mem::size_of::<crate::src::game::ai_main::bot_state_t>() as usize,
     );
     //set the inuse flag to qfalse
     (*bs).inuse = qfalse as i32;
@@ -2629,12 +2629,12 @@ pub unsafe extern "C" fn BotResetState(mut bs: *mut crate::src::game::ai_main::b
     crate::stdlib::memcpy(
         &mut settings as *mut bot_settings_t as *mut libc::c_void,
         &mut (*bs).settings as *mut bot_settings_t as *const libc::c_void,
-        ::std::mem::size_of::<bot_settings_t>() as libc::c_ulong,
+        ::std::mem::size_of::<bot_settings_t>() as usize,
     );
     crate::stdlib::memcpy(
         &mut ps as *mut playerState_t as *mut libc::c_void,
         &mut (*bs).cur_ps as *mut playerState_t as *const libc::c_void,
-        ::std::mem::size_of::<playerState_t>() as libc::c_ulong,
+        ::std::mem::size_of::<playerState_t>() as usize,
     );
     inuse = (*bs).inuse;
     client = (*bs).client;
@@ -2656,7 +2656,7 @@ pub unsafe extern "C" fn BotResetState(mut bs: *mut crate::src::game::ai_main::b
     crate::stdlib::memset(
         bs as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::src::game::ai_main::bot_state_t>() as libc::c_ulong,
+        ::std::mem::size_of::<crate::src::game::ai_main::bot_state_t>() as usize,
     );
     //copy back some state stuff that should not be reset
     (*bs).ms = movestate;
@@ -2666,12 +2666,12 @@ pub unsafe extern "C" fn BotResetState(mut bs: *mut crate::src::game::ai_main::b
     crate::stdlib::memcpy(
         &mut (*bs).cur_ps as *mut playerState_t as *mut libc::c_void,
         &mut ps as *mut playerState_t as *const libc::c_void,
-        ::std::mem::size_of::<playerState_t>() as libc::c_ulong,
+        ::std::mem::size_of::<playerState_t>() as usize,
     );
     crate::stdlib::memcpy(
         &mut (*bs).settings as *mut bot_settings_t as *mut libc::c_void,
         &mut settings as *mut bot_settings_t as *const libc::c_void,
-        ::std::mem::size_of::<bot_settings_t>() as libc::c_ulong,
+        ::std::mem::size_of::<bot_settings_t>() as usize,
     );
     (*bs).inuse = inuse;
     (*bs).client = client;
@@ -2878,7 +2878,7 @@ pub unsafe extern "C" fn BotAIStartFrame(mut time: i32) -> i32 {
                 crate::stdlib::memset(
                     &mut state as *mut bot_entitystate_t as *mut libc::c_void,
                     0 as i32,
-                    ::std::mem::size_of::<bot_entitystate_t>() as libc::c_ulong,
+                    ::std::mem::size_of::<bot_entitystate_t>() as usize,
                 );
                 //
                 state.origin[0 as i32 as usize] = (*ent).r.currentOrigin[0 as i32 as usize];
@@ -2982,7 +2982,7 @@ pub unsafe extern "C" fn BotInitLibrary() -> i32 {
     //set the maxclients and maxentities library variables before calling BotSetupLibrary
     Com_sprintf(
         buf.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 144]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 144]>() as usize as i32,
         b"%d\x00" as *const u8 as *const libc::c_char,
         level.maxclients,
     );
@@ -2992,7 +2992,7 @@ pub unsafe extern "C" fn BotInitLibrary() -> i32 {
     );
     Com_sprintf(
         buf.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 144]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 144]>() as usize as i32,
         b"%d\x00" as *const u8 as *const libc::c_char,
         (1 as i32) << 10 as i32,
     );
@@ -3004,7 +3004,7 @@ pub unsafe extern "C" fn BotInitLibrary() -> i32 {
     trap_Cvar_VariableStringBuffer(
         b"sv_mapChecksum\x00" as *const u8 as *const libc::c_char,
         buf.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 144]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 144]>() as usize as i32,
     );
     if crate::stdlib::strlen(buf.as_mut_ptr()) != 0 {
         trap_BotLibVarSet(
@@ -3016,7 +3016,7 @@ pub unsafe extern "C" fn BotInitLibrary() -> i32 {
     trap_Cvar_VariableStringBuffer(
         b"max_aaslinks\x00" as *const u8 as *const libc::c_char,
         buf.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 144]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 144]>() as usize as i32,
     );
     if crate::stdlib::strlen(buf.as_mut_ptr()) != 0 {
         trap_BotLibVarSet(
@@ -3028,7 +3028,7 @@ pub unsafe extern "C" fn BotInitLibrary() -> i32 {
     trap_Cvar_VariableStringBuffer(
         b"max_levelitems\x00" as *const u8 as *const libc::c_char,
         buf.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 144]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 144]>() as usize as i32,
     );
     if crate::stdlib::strlen(buf.as_mut_ptr()) != 0 {
         trap_BotLibVarSet(
@@ -3040,7 +3040,7 @@ pub unsafe extern "C" fn BotInitLibrary() -> i32 {
     trap_Cvar_VariableStringBuffer(
         b"g_gametype\x00" as *const u8 as *const libc::c_char,
         buf.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 144]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 144]>() as usize as i32,
     );
     if crate::stdlib::strlen(buf.as_mut_ptr()) == 0 {
         libc::strcpy(
@@ -3060,7 +3060,7 @@ pub unsafe extern "C" fn BotInitLibrary() -> i32 {
     trap_Cvar_VariableStringBuffer(
         b"logfile\x00" as *const u8 as *const libc::c_char,
         buf.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 144]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 144]>() as usize as i32,
     );
     trap_BotLibVarSet(
         b"log\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -3070,7 +3070,7 @@ pub unsafe extern "C" fn BotInitLibrary() -> i32 {
     trap_Cvar_VariableStringBuffer(
         b"bot_nochat\x00" as *const u8 as *const libc::c_char,
         buf.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 144]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 144]>() as usize as i32,
     );
     if crate::stdlib::strlen(buf.as_mut_ptr()) != 0 {
         trap_BotLibVarSet(
@@ -3082,7 +3082,7 @@ pub unsafe extern "C" fn BotInitLibrary() -> i32 {
     trap_Cvar_VariableStringBuffer(
         b"bot_visualizejumppads\x00" as *const u8 as *const libc::c_char,
         buf.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 144]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 144]>() as usize as i32,
     );
     if crate::stdlib::strlen(buf.as_mut_ptr()) != 0 {
         trap_BotLibVarSet(
@@ -3094,7 +3094,7 @@ pub unsafe extern "C" fn BotInitLibrary() -> i32 {
     trap_Cvar_VariableStringBuffer(
         b"bot_forceclustering\x00" as *const u8 as *const libc::c_char,
         buf.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 144]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 144]>() as usize as i32,
     );
     if crate::stdlib::strlen(buf.as_mut_ptr()) != 0 {
         trap_BotLibVarSet(
@@ -3106,7 +3106,7 @@ pub unsafe extern "C" fn BotInitLibrary() -> i32 {
     trap_Cvar_VariableStringBuffer(
         b"bot_forcereachability\x00" as *const u8 as *const libc::c_char,
         buf.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 144]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 144]>() as usize as i32,
     );
     if crate::stdlib::strlen(buf.as_mut_ptr()) != 0 {
         trap_BotLibVarSet(
@@ -3118,7 +3118,7 @@ pub unsafe extern "C" fn BotInitLibrary() -> i32 {
     trap_Cvar_VariableStringBuffer(
         b"bot_forcewrite\x00" as *const u8 as *const libc::c_char,
         buf.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 144]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 144]>() as usize as i32,
     );
     if crate::stdlib::strlen(buf.as_mut_ptr()) != 0 {
         trap_BotLibVarSet(
@@ -3130,7 +3130,7 @@ pub unsafe extern "C" fn BotInitLibrary() -> i32 {
     trap_Cvar_VariableStringBuffer(
         b"bot_aasoptimize\x00" as *const u8 as *const libc::c_char,
         buf.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 144]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 144]>() as usize as i32,
     );
     if crate::stdlib::strlen(buf.as_mut_ptr()) != 0 {
         trap_BotLibVarSet(
@@ -3142,7 +3142,7 @@ pub unsafe extern "C" fn BotInitLibrary() -> i32 {
     trap_Cvar_VariableStringBuffer(
         b"bot_saveroutingcache\x00" as *const u8 as *const libc::c_char,
         buf.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 144]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 144]>() as usize as i32,
     );
     if crate::stdlib::strlen(buf.as_mut_ptr()) != 0 {
         trap_BotLibVarSet(
@@ -3154,7 +3154,7 @@ pub unsafe extern "C" fn BotInitLibrary() -> i32 {
     trap_Cvar_VariableStringBuffer(
         b"bot_reloadcharacters\x00" as *const u8 as *const libc::c_char,
         buf.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 144]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 144]>() as usize as i32,
     );
     if crate::stdlib::strlen(buf.as_mut_ptr()) == 0 {
         libc::strcpy(
@@ -3170,7 +3170,7 @@ pub unsafe extern "C" fn BotInitLibrary() -> i32 {
     trap_Cvar_VariableStringBuffer(
         b"fs_basepath\x00" as *const u8 as *const libc::c_char,
         buf.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 144]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 144]>() as usize as i32,
     );
     if crate::stdlib::strlen(buf.as_mut_ptr()) != 0 {
         trap_BotLibVarSet(
@@ -3182,7 +3182,7 @@ pub unsafe extern "C" fn BotInitLibrary() -> i32 {
     trap_Cvar_VariableStringBuffer(
         b"fs_game\x00" as *const u8 as *const libc::c_char,
         buf.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 144]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 144]>() as usize as i32,
     );
     if crate::stdlib::strlen(buf.as_mut_ptr()) != 0 {
         trap_BotLibVarSet(
@@ -3194,7 +3194,7 @@ pub unsafe extern "C" fn BotInitLibrary() -> i32 {
     trap_Cvar_VariableStringBuffer(
         b"fs_homepath\x00" as *const u8 as *const libc::c_char,
         buf.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 144]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 144]>() as usize as i32,
     );
     if crate::stdlib::strlen(buf.as_mut_ptr()) != 0 {
         trap_BotLibVarSet(
@@ -3295,7 +3295,7 @@ pub unsafe extern "C" fn BotAISetup(mut restart: i32) -> i32 {
     crate::stdlib::memset(
         botstates.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[*mut crate::src::game::ai_main::bot_state_t; 64]>() as libc::c_ulong,
+        ::std::mem::size_of::<[*mut crate::src::game::ai_main::bot_state_t; 64]>() as usize,
     );
     errnum = BotInitLibrary();
     if errnum != 0 as i32 {

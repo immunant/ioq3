@@ -1890,7 +1890,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(mut args: *mut intptr_t) -> intptr_t
                 .expect("non-null function pointer")(
                 VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut libc::c_char,
                 VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut bot_match_s,
-                *args.offset(3 as i32 as isize) as libc::c_ulong,
+                *args.offset(3 as i32 as isize) as usize,
             ) as intptr_t
         }
         519 => {
@@ -1921,7 +1921,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(mut args: *mut intptr_t) -> intptr_t
                 .BotReplaceSynonyms
                 .expect("non-null function pointer")(
                 VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut libc::c_char,
-                *args.offset(2 as i32 as isize) as libc::c_ulong,
+                *args.offset(2 as i32 as isize) as usize,
             );
             return 0 as i32 as intptr_t;
         }
@@ -2420,7 +2420,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(mut args: *mut intptr_t) -> intptr_t
             crate::stdlib::memset(
                 VM_ArgPtr(*args.offset(1 as i32 as isize)),
                 *args.offset(2 as i32 as isize) as i32,
-                *args.offset(3 as i32 as isize) as libc::c_ulong,
+                *args.offset(3 as i32 as isize) as usize,
             );
             return 0 as i32 as intptr_t;
         }
@@ -2428,7 +2428,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(mut args: *mut intptr_t) -> intptr_t
             crate::stdlib::memcpy(
                 VM_ArgPtr(*args.offset(1 as i32 as isize)),
                 VM_ArgPtr(*args.offset(2 as i32 as isize)),
-                *args.offset(3 as i32 as isize) as libc::c_ulong,
+                *args.offset(3 as i32 as isize) as usize,
             );
             return 0 as i32 as intptr_t;
         }
@@ -2436,7 +2436,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(mut args: *mut intptr_t) -> intptr_t
             crate::stdlib::strncpy(
                 VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut libc::c_char,
                 VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const libc::c_char,
-                *args.offset(3 as i32 as isize) as libc::c_ulong,
+                *args.offset(3 as i32 as isize) as usize,
             );
             return *args.offset(1 as i32 as isize);
         }

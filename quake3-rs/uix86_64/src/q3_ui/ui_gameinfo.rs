@@ -167,7 +167,7 @@ pub unsafe extern "C" fn UI_ParseInfos(
                     Q_strncpyz(
                         key.as_mut_ptr(),
                         token,
-                        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
                     );
                     token = COM_ParseExt(&mut buf, qfalse);
                     if *token.offset(0 as i32 as isize) == 0 {
@@ -187,7 +187,7 @@ pub unsafe extern "C" fn UI_ParseInfos(
                         b"%d\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                         1024 as i32,
                     )))
-                    .wrapping_add(1 as i32 as libc::c_ulong) as i32,
+                    .wrapping_add(1 as i32 as usize) as i32,
             ) as *mut libc::c_char;
             if !(*infos.offset(count as isize)).is_null() {
                 libc::strcpy(*infos.offset(count as isize), info.as_mut_ptr());
@@ -689,7 +689,7 @@ pub unsafe extern "C" fn UI_GetBestScore(mut level: i32, mut score: *mut i32, mu
         );
         Com_sprintf(
             arenaKey.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 16]>() as usize as i32,
             b"l%i\x00" as *const u8 as *const libc::c_char,
             level,
         );
@@ -740,7 +740,7 @@ pub unsafe extern "C" fn UI_SetBestScore(mut level: i32, mut score: i32) {
     // see if this is better
     Com_sprintf(
         arenaKey.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 16]>() as usize as i32,
         b"l%i\x00" as *const u8 as *const libc::c_char,
         level,
     );
@@ -790,11 +790,11 @@ pub unsafe extern "C" fn UI_LogAwardData(mut award: i32, mut data: i32) {
     trap_Cvar_VariableStringBuffer(
         b"g_spAwards\x00" as *const u8 as *const libc::c_char,
         awardData.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     Com_sprintf(
         key.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 16]>() as usize as i32,
         b"a%i\x00" as *const u8 as *const libc::c_char,
         award,
     );
@@ -825,11 +825,11 @@ pub unsafe extern "C" fn UI_GetAwardLevel(mut award: i32) -> i32 {
     trap_Cvar_VariableStringBuffer(
         b"g_spAwards\x00" as *const u8 as *const libc::c_char,
         awardData.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     Com_sprintf(
         key.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 16]>() as usize as i32,
         b"a%i\x00" as *const u8 as *const libc::c_char,
         award,
     );
@@ -900,11 +900,11 @@ pub unsafe extern "C" fn UI_ShowTierVideo(mut tier: i32) -> qboolean {
     trap_Cvar_VariableStringBuffer(
         b"g_spVideos\x00" as *const u8 as *const libc::c_char,
         videos.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     Com_sprintf(
         key.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 16]>() as usize as i32,
         b"tier%i\x00" as *const u8 as *const libc::c_char,
         tier,
     );
@@ -944,11 +944,11 @@ pub unsafe extern "C" fn UI_CanShowTierVideo(mut tier: i32) -> qboolean {
     trap_Cvar_VariableStringBuffer(
         b"g_spVideos\x00" as *const u8 as *const libc::c_char,
         videos.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     Com_sprintf(
         key.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 16]>() as usize as i32,
         b"tier%i\x00" as *const u8 as *const libc::c_char,
         tier,
     );
@@ -1101,7 +1101,7 @@ pub unsafe extern "C" fn UI_SPUnlock_f() {
     while level < ui_numSinglePlayerArenas + ui_numSpecialSinglePlayerArenas {
         Com_sprintf(
             arenaKey.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 16]>() as usize as i32,
             b"l%i\x00" as *const u8 as *const libc::c_char,
             level,
         );
@@ -1145,7 +1145,7 @@ pub unsafe extern "C" fn UI_SPUnlockMedals_f() {
     while n < 6 as i32 {
         Com_sprintf(
             key.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 16]>() as usize as i32,
             b"a%i\x00" as *const u8 as *const libc::c_char,
             n,
         );

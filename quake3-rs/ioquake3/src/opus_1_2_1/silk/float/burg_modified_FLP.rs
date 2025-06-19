@@ -135,7 +135,7 @@ pub unsafe extern "C" fn silk_burg_modified_FLP(
     crate::stdlib::memset(
         C_first_row.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        (24 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f64>() as libc::c_ulong),
+        (24 as i32 as usize).wrapping_mul(::std::mem::size_of::<f64>() as usize),
     );
     s = 0 as i32;
     while s < nb_subfr {
@@ -155,7 +155,7 @@ pub unsafe extern "C" fn silk_burg_modified_FLP(
     crate::stdlib::memcpy(
         C_last_row.as_mut_ptr() as *mut libc::c_void,
         C_first_row.as_mut_ptr() as *const libc::c_void,
-        (24 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f64>() as libc::c_ulong),
+        (24 as i32 as usize).wrapping_mul(::std::mem::size_of::<f64>() as usize),
     );
     /* Initialize */
     CAf[0 as i32 as usize] = C0 + 1e-5f32 as f64 * C0 + 1e-9f32 as f64;

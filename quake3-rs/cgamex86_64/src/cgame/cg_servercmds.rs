@@ -195,7 +195,7 @@ unsafe extern "C" fn CG_ParseScores() {
     crate::stdlib::memset(
         cg.scores.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[score_t; 64]>() as libc::c_ulong,
+        ::std::mem::size_of::<[score_t; 64]>() as usize,
     );
     i = 0 as i32;
     while i < cg.numScores {
@@ -312,14 +312,14 @@ pub unsafe extern "C" fn CG_ParseServerinfo() {
     mapname = Info_ValueForKey(info, b"mapname\x00" as *const u8 as *const libc::c_char);
     Com_sprintf(
         cgs.mapname.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         b"maps/%s.bsp\x00" as *const u8 as *const libc::c_char,
         mapname,
     );
     Q_strncpyz(
         cgs.redTeam.as_mut_ptr(),
         Info_ValueForKey(info, b"g_redTeam\x00" as *const u8 as *const libc::c_char),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     trap_Cvar_Set(
         b"g_redTeam\x00" as *const u8 as *const libc::c_char,
@@ -328,7 +328,7 @@ pub unsafe extern "C" fn CG_ParseServerinfo() {
     Q_strncpyz(
         cgs.blueTeam.as_mut_ptr(),
         Info_ValueForKey(info, b"g_blueTeam\x00" as *const u8 as *const libc::c_char),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     trap_Cvar_Set(
         b"g_blueTeam\x00" as *const u8 as *const libc::c_char,
@@ -398,7 +398,7 @@ pub unsafe extern "C" fn CG_ShaderStateChanged() {
         crate::stdlib::strncpy(
             originalShader.as_mut_ptr(),
             o,
-            n.offset_from(o) as isize as libc::c_ulong,
+            n.offset_from(o) as isize as usize,
         );
         originalShader[n.offset_from(o) as isize as usize] = 0 as i32 as libc::c_char;
         n = n.offset(1);
@@ -409,7 +409,7 @@ pub unsafe extern "C" fn CG_ShaderStateChanged() {
         crate::stdlib::strncpy(
             newShader.as_mut_ptr(),
             n,
-            t.offset_from(n) as isize as libc::c_ulong,
+            t.offset_from(n) as isize as usize,
         );
         newShader[t.offset_from(n) as isize as usize] = 0 as i32 as libc::c_char;
         t = t.offset(1);
@@ -418,7 +418,7 @@ pub unsafe extern "C" fn CG_ShaderStateChanged() {
             crate::stdlib::strncpy(
                 timeOffset.as_mut_ptr(),
                 t,
-                o.offset_from(t) as isize as libc::c_ulong,
+                o.offset_from(t) as isize as usize,
             );
             timeOffset[o.offset_from(t) as isize as usize] = 0 as i32 as libc::c_char;
             o = o.offset(1);
@@ -472,7 +472,7 @@ unsafe extern "C" fn CG_ConfigStringModified() {
         Q_strncpyz(
             cgs.voteString.as_mut_ptr(),
             str,
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
         );
     //MISSIONPACK
     } else if num >= 12 as i32 && num <= 12 as i32 + 1 as i32 {
@@ -488,7 +488,7 @@ unsafe extern "C" fn CG_ConfigStringModified() {
         Q_strncpyz(
             cgs.teamVoteString[(num - 14 as i32) as usize].as_mut_ptr(),
             str,
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
         );
     } else if num == 22 as i32 {
         cg.intermissionStarted = atoi(str) as qboolean
@@ -744,17 +744,17 @@ unsafe extern "C" fn CG_ServerCommand() {
             Q_strncpyz(
                 shader1.as_mut_ptr(),
                 CG_Argv(1 as i32),
-                ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             );
             Q_strncpyz(
                 shader2.as_mut_ptr(),
                 CG_Argv(2 as i32),
-                ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             );
             Q_strncpyz(
                 shader3.as_mut_ptr(),
                 CG_Argv(3 as i32),
-                ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             );
             trap_R_RemapShader(
                 shader1.as_mut_ptr(),

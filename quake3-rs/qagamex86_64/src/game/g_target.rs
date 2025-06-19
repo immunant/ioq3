@@ -298,7 +298,7 @@ pub unsafe extern "C" fn Use_Target_Give(
     crate::stdlib::memset(
         &mut trace as *mut trace_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<trace_t>() as libc::c_ulong,
+        ::std::mem::size_of::<trace_t>() as usize,
     );
     t = 0 as *mut gentity_t;
     loop {
@@ -356,7 +356,7 @@ pub unsafe extern "C" fn Use_target_remove_powerups(
     crate::stdlib::memset(
         (*(*activator).client).ps.powerups.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[i32; 16]>() as libc::c_ulong,
+        ::std::mem::size_of::<[i32; 16]>() as usize,
     );
 }
 #[no_mangle]
@@ -591,7 +591,7 @@ pub unsafe extern "C" fn SP_target_speaker(mut ent: *mut gentity_t) {
     if libc::strstr(s, b".wav\x00" as *const u8 as *const libc::c_char).is_null() {
         Com_sprintf(
             buffer.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             b"%s.wav\x00" as *const u8 as *const libc::c_char,
             s,
         );
@@ -599,7 +599,7 @@ pub unsafe extern "C" fn SP_target_speaker(mut ent: *mut gentity_t) {
         Q_strncpyz(
             buffer.as_mut_ptr(),
             s,
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         );
     }
     (*ent).noise_index = G_SoundIndex(buffer.as_mut_ptr());

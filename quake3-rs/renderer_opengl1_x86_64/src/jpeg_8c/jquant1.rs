@@ -860,7 +860,7 @@ unsafe extern "C" fn make_odither_array(
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         1 as i32,
-        ::std::mem::size_of::<ODITHER_MATRIX>() as libc::c_ulong,
+        ::std::mem::size_of::<ODITHER_MATRIX>() as usize,
     ) as ODITHER_MATRIX_PTR;
     /* The inter-value distance for this color is MAXJSAMPLE/(ncolors-1).
      * Hence the dither value for the matrix cell with fill order f
@@ -1037,8 +1037,8 @@ unsafe extern "C" fn quantize_ord_dither(
         /* Initialize output values to 0 so can process components separately */
         jzero_far(
             *output_buf.offset(row as isize) as *mut libc::c_void,
-            (width as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<JSAMPLE>() as libc::c_ulong),
+            (width as usize)
+                .wrapping_mul(::std::mem::size_of::<JSAMPLE>() as usize),
         );
         row_index = (*cquantize).row_index;
         ci = 0 as i32;
@@ -1172,8 +1172,8 @@ unsafe extern "C" fn quantize_fs_dither(
         /* Initialize output values to 0 so can process components separately */
         jzero_far(
             *output_buf.offset(row as isize) as *mut libc::c_void,
-            (width as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<JSAMPLE>() as libc::c_ulong),
+            (width as usize)
+                .wrapping_mul(::std::mem::size_of::<JSAMPLE>() as usize),
         );
         ci = 0 as i32;
         while ci < nc {
@@ -1279,8 +1279,8 @@ unsafe extern "C" fn alloc_fs_workspace(mut cinfo: j_decompress_ptr) {
     let mut cquantize: my_cquantize_ptr = (*cinfo).cquantize as my_cquantize_ptr;
     let mut arraysize: size_t = 0;
     let mut i: i32 = 0;
-    arraysize = ((*cinfo).output_width.wrapping_add(2 as i32 as u32) as libc::c_ulong)
-        .wrapping_mul(::std::mem::size_of::<FSERROR>() as libc::c_ulong);
+    arraysize = ((*cinfo).output_width.wrapping_add(2 as i32 as u32) as usize)
+        .wrapping_mul(::std::mem::size_of::<FSERROR>() as usize);
     i = 0 as i32;
     while i < (*cinfo).out_color_components {
         (*cquantize).fserrors[i as usize] = Some(
@@ -1381,8 +1381,8 @@ unsafe extern "C" fn start_pass_1_quant(mut cinfo: j_decompress_ptr, mut _is_pre
                 alloc_fs_workspace(cinfo);
             }
             /* Initialize the propagated errors to zero. */
-            arraysize = ((*cinfo).output_width.wrapping_add(2 as i32 as u32) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<FSERROR>() as libc::c_ulong);
+            arraysize = ((*cinfo).output_width.wrapping_add(2 as i32 as u32) as usize)
+                .wrapping_mul(::std::mem::size_of::<FSERROR>() as usize);
             i = 0 as i32;
             while i < (*cinfo).out_color_components {
                 jzero_far(
@@ -1439,7 +1439,7 @@ pub unsafe extern "C" fn jinit_1pass_quantizer(mut cinfo: j_decompress_ptr) {
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         1 as i32,
-        ::std::mem::size_of::<my_cquantizer>() as libc::c_ulong,
+        ::std::mem::size_of::<my_cquantizer>() as usize,
     ) as my_cquantize_ptr; /* Also flag odither arrays not allocated */
     (*cinfo).cquantize = cquantize as *mut jpeg_color_quantizer;
     (*cquantize).pub_0.start_pass =

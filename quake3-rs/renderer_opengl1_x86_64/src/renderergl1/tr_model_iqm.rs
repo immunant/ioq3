@@ -838,14 +838,14 @@ pub unsafe extern "C" fn R_LoadIQM(
     let mut allocateInfluences: i32 = 0;
     let mut blendIndexes: *mut byte = 0 as *mut byte;
     let mut blendWeights: C2RustUnnamed_128 = C2RustUnnamed_128 { b: 0 as *mut byte };
-    if (filesize as libc::c_ulong) < ::std::mem::size_of::<iqmHeader_t>() as libc::c_ulong {
+    if (filesize as usize) < ::std::mem::size_of::<iqmHeader_t>() as usize {
         return qfalse;
     }
     header = buffer as *mut iqmHeader_t;
     if Q_strncmp(
         (*header).magic.as_mut_ptr(),
         b"INTERQUAKEMODEL\x00" as *const u8 as *const libc::c_char,
-        ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 16]>() as usize as i32,
     ) != 0
     {
         return qfalse;
@@ -906,9 +906,9 @@ pub unsafe extern "C" fn R_LoadIQM(
         return qfalse;
     }
     i = 0 as i32;
-    while (i as libc::c_ulong)
-        < (::std::mem::size_of::<[i32; 7]>() as libc::c_ulong)
-            .wrapping_div(::std::mem::size_of::<i32>() as libc::c_ulong)
+    while (i as usize)
+        < (::std::mem::size_of::<[i32; 7]>() as usize)
+            .wrapping_div(::std::mem::size_of::<i32>() as usize)
     {
         vertexArrayFormat[i as usize] = -(1 as i32);
         i += 1
@@ -922,7 +922,7 @@ pub unsafe extern "C" fn R_LoadIQM(
             header,
             (*header).ofs_vertexarrays as i32,
             (*header).num_vertexarrays as i32,
-            ::std::mem::size_of::<iqmVertexArray_t>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<iqmVertexArray_t>() as usize as i32,
         ) as u64
             != 0
         {
@@ -946,7 +946,7 @@ pub unsafe extern "C" fn R_LoadIQM(
                         header,
                         (*vertexarray).offset as i32,
                         n,
-                        ::std::mem::size_of::<byte>() as libc::c_ulong as i32,
+                        ::std::mem::size_of::<byte>() as usize as i32,
                     ) as u64
                         != 0
                     {
@@ -959,7 +959,7 @@ pub unsafe extern "C" fn R_LoadIQM(
                         header,
                         (*vertexarray).offset as i32,
                         n,
-                        ::std::mem::size_of::<f32>() as libc::c_ulong as i32,
+                        ::std::mem::size_of::<f32>() as usize as i32,
                     ) as u64
                         != 0
                     {
@@ -979,9 +979,9 @@ pub unsafe extern "C" fn R_LoadIQM(
                     return qfalse;
                 }
             }
-            if ((*vertexarray).type_0 as libc::c_ulong)
-                < (::std::mem::size_of::<[i32; 7]>() as libc::c_ulong)
-                    .wrapping_div(::std::mem::size_of::<i32>() as libc::c_ulong)
+            if ((*vertexarray).type_0 as usize)
+                < (::std::mem::size_of::<[i32; 7]>() as usize)
+                    .wrapping_div(::std::mem::size_of::<i32>() as usize)
             {
                 vertexArrayFormat[(*vertexarray).type_0 as usize] = (*vertexarray).format as i32
             }
@@ -1081,7 +1081,7 @@ pub unsafe extern "C" fn R_LoadIQM(
             header,
             (*header).ofs_triangles as i32,
             (*header).num_triangles as i32,
-            ::std::mem::size_of::<iqmTriangle_t>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<iqmTriangle_t>() as usize as i32,
         ) as u64
             != 0
         {
@@ -1108,7 +1108,7 @@ pub unsafe extern "C" fn R_LoadIQM(
             header,
             (*header).ofs_meshes as i32,
             (*header).num_meshes as i32,
-            ::std::mem::size_of::<iqmMesh_t>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<iqmMesh_t>() as usize as i32,
         ) as u64
             != 0
         {
@@ -1129,7 +1129,7 @@ pub unsafe extern "C" fn R_LoadIQM(
                     (header as *mut libc::c_char)
                         .offset((*header).ofs_text as isize)
                         .offset((*mesh).name as isize),
-                    ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
                 );
             } else {
                 meshName[0 as i32 as usize] = '\u{0}' as i32 as libc::c_char
@@ -1258,7 +1258,7 @@ pub unsafe extern "C" fn R_LoadIQM(
             header,
             (*header).ofs_joints as i32,
             (*header).num_joints as i32,
-            ::std::mem::size_of::<iqmJoint_t>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<iqmJoint_t>() as usize as i32,
         ) as u64
             != 0
         {
@@ -1285,13 +1285,13 @@ pub unsafe extern "C" fn R_LoadIQM(
             {
                 return qfalse;
             }
-            joint_names = (joint_names as libc::c_ulong).wrapping_add(
+            joint_names = (joint_names as usize).wrapping_add(
                 crate::stdlib::strlen(
                     (header as *mut libc::c_char)
                         .offset((*header).ofs_text as isize)
                         .offset((*joint).name as isize),
                 )
-                .wrapping_add(1 as i32 as libc::c_ulong),
+                .wrapping_add(1 as i32 as usize),
             ) as size_t;
             i += 1;
             joint = joint.offset(1)
@@ -1303,7 +1303,7 @@ pub unsafe extern "C" fn R_LoadIQM(
             header,
             (*header).ofs_poses as i32,
             (*header).num_poses as i32,
-            ::std::mem::size_of::<iqmPose_t>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<iqmPose_t>() as usize as i32,
         ) as u64
             != 0
         {
@@ -1344,7 +1344,7 @@ pub unsafe extern "C" fn R_LoadIQM(
             header,
             (*header).ofs_bounds as i32,
             (*header).num_frames as i32,
-            ::std::mem::size_of::<iqmBounds_t>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<iqmBounds_t>() as usize as i32,
         ) as u64
             != 0
         {
@@ -1364,97 +1364,97 @@ pub unsafe extern "C" fn R_LoadIQM(
         }
     }
     // allocate the model and copy the data
-    size = ::std::mem::size_of::<iqmData_t>() as libc::c_ulong; // surfaces
+    size = ::std::mem::size_of::<iqmData_t>() as usize; // surfaces
     if (*header).num_meshes != 0 {
-        size = (size as libc::c_ulong).wrapping_add(
-            ((*header).num_meshes as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<srfIQModel_t>() as libc::c_ulong),
+        size = (size as usize).wrapping_add(
+            ((*header).num_meshes as usize)
+                .wrapping_mul(::std::mem::size_of::<srfIQModel_t>() as usize),
         ) as size_t; // triangles
-        size = (size as libc::c_ulong).wrapping_add(
-            ((*header).num_triangles.wrapping_mul(3 as i32 as u32) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+        size = (size as usize).wrapping_add(
+            ((*header).num_triangles.wrapping_mul(3 as i32 as u32) as usize)
+                .wrapping_mul(::std::mem::size_of::<i32>() as usize),
         ) as size_t; // positions
-        size = (size as libc::c_ulong).wrapping_add(
-            ((*header).num_vertexes.wrapping_mul(3 as i32 as u32) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
+        size = (size as usize).wrapping_add(
+            ((*header).num_vertexes.wrapping_mul(3 as i32 as u32) as usize)
+                .wrapping_mul(::std::mem::size_of::<f32>() as usize),
         ) as size_t; // texcoords
-        size = (size as libc::c_ulong).wrapping_add(
-            ((*header).num_vertexes.wrapping_mul(2 as i32 as u32) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
+        size = (size as usize).wrapping_add(
+            ((*header).num_vertexes.wrapping_mul(2 as i32 as u32) as usize)
+                .wrapping_mul(::std::mem::size_of::<f32>() as usize),
         ) as size_t; // normals
-        size = (size as libc::c_ulong).wrapping_add(
-            ((*header).num_vertexes.wrapping_mul(3 as i32 as u32) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
+        size = (size as usize).wrapping_add(
+            ((*header).num_vertexes.wrapping_mul(3 as i32 as u32) as usize)
+                .wrapping_mul(::std::mem::size_of::<f32>() as usize),
         ) as size_t;
         if vertexArrayFormat[IQM_TANGENT as i32 as usize] != -(1 as i32) {
-            size = (size as libc::c_ulong).wrapping_add(
-                ((*header).num_vertexes.wrapping_mul(4 as i32 as u32) as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
+            size = (size as usize).wrapping_add(
+                ((*header).num_vertexes.wrapping_mul(4 as i32 as u32) as usize)
+                    .wrapping_mul(::std::mem::size_of::<f32>() as usize),
             ) as size_t
             // tangents
         }
         if vertexArrayFormat[IQM_COLOR as i32 as usize] != -(1 as i32) {
-            size = (size as libc::c_ulong).wrapping_add(
-                ((*header).num_vertexes.wrapping_mul(4 as i32 as u32) as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<byte>() as libc::c_ulong),
+            size = (size as usize).wrapping_add(
+                ((*header).num_vertexes.wrapping_mul(4 as i32 as u32) as usize)
+                    .wrapping_mul(::std::mem::size_of::<byte>() as usize),
             ) as size_t
             // colors
         } // influences
         if allocateInfluences != 0 {
-            size = (size as libc::c_ulong).wrapping_add(
-                ((*header).num_vertexes as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+            size = (size as usize).wrapping_add(
+                ((*header).num_vertexes as usize)
+                    .wrapping_mul(::std::mem::size_of::<i32>() as usize),
             ) as size_t; // influenceBlendIndexes
-            size = (size as libc::c_ulong).wrapping_add(
-                ((allocateInfluences * 4 as i32) as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<byte>() as libc::c_ulong),
+            size = (size as usize).wrapping_add(
+                ((allocateInfluences * 4 as i32) as usize)
+                    .wrapping_mul(::std::mem::size_of::<byte>() as usize),
             ) as size_t;
             if vertexArrayFormat[IQM_BLENDWEIGHTS as i32 as usize] == IQM_UBYTE as i32 {
-                size = (size as libc::c_ulong).wrapping_add(
-                    ((allocateInfluences * 4 as i32) as libc::c_ulong)
-                        .wrapping_mul(::std::mem::size_of::<byte>() as libc::c_ulong),
+                size = (size as usize).wrapping_add(
+                    ((allocateInfluences * 4 as i32) as usize)
+                        .wrapping_mul(::std::mem::size_of::<byte>() as usize),
                 ) as size_t
             // influenceBlendWeights
             } else if vertexArrayFormat[IQM_BLENDWEIGHTS as i32 as usize] == IQM_FLOAT as i32 {
-                size = (size as libc::c_ulong).wrapping_add(
-                    ((allocateInfluences * 4 as i32) as libc::c_ulong)
-                        .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
+                size = (size as usize).wrapping_add(
+                    ((allocateInfluences * 4 as i32) as usize)
+                        .wrapping_mul(::std::mem::size_of::<f32>() as usize),
                 ) as size_t
                 // influenceBlendWeights
             }
         }
     } // joint names
     if (*header).num_joints != 0 {
-        size = (size as libc::c_ulong).wrapping_add(joint_names) as size_t;
+        size = (size as usize).wrapping_add(joint_names) as size_t;
         // joint mats
-        size = (size as libc::c_ulong).wrapping_add(
-            ((*header).num_joints as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+        size = (size as usize).wrapping_add(
+            ((*header).num_joints as usize)
+                .wrapping_mul(::std::mem::size_of::<i32>() as usize),
         ) as size_t; // joint parents
-        size = (size as libc::c_ulong).wrapping_add(
-            ((*header).num_joints.wrapping_mul(12 as i32 as u32) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
+        size = (size as usize).wrapping_add(
+            ((*header).num_joints.wrapping_mul(12 as i32 as u32) as usize)
+                .wrapping_mul(::std::mem::size_of::<f32>() as usize),
         ) as size_t
     }
     if (*header).num_poses != 0 {
-        size = (size as libc::c_ulong).wrapping_add(
+        size = (size as usize).wrapping_add(
             ((*header)
                 .num_poses
                 .wrapping_mul((*header).num_frames)
-                .wrapping_mul(12 as i32 as u32) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
+                .wrapping_mul(12 as i32 as u32) as usize)
+                .wrapping_mul(::std::mem::size_of::<f32>() as usize),
         ) as size_t
         // pose mats
     }
     if (*header).ofs_bounds != 0 {
-        size = (size as libc::c_ulong).wrapping_add(
-            ((*header).num_frames.wrapping_mul(6 as i32 as u32) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
+        size = (size as usize).wrapping_add(
+            ((*header).num_frames.wrapping_mul(6 as i32 as u32) as usize)
+                .wrapping_mul(::std::mem::size_of::<f32>() as usize),
         ) as size_t
     // model bounds
     } else if (*header).num_meshes != 0 && (*header).num_frames == 0 as i32 as u32 {
-        size = (size as libc::c_ulong).wrapping_add(
-            (6 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
+        size = (size as usize).wrapping_add(
+            (6 as i32 as usize).wrapping_mul(::std::mem::size_of::<f32>() as usize),
         ) as size_t
         // model bounds
     }
@@ -1479,39 +1479,39 @@ pub unsafe extern "C" fn R_LoadIQM(
     (*iqmData).num_poses = (*header).num_poses as i32;
     (*iqmData).blendWeightsType = vertexArrayFormat[IQM_BLENDWEIGHTS as i32 as usize];
     dataPtr =
-        (iqmData as *mut byte).offset(::std::mem::size_of::<iqmData_t>() as libc::c_ulong as isize);
+        (iqmData as *mut byte).offset(::std::mem::size_of::<iqmData_t>() as usize as isize);
     if (*header).num_meshes != 0 {
         (*iqmData).surfaces = dataPtr as *mut srfIQModel_s;
         dataPtr = dataPtr.offset(
-            ((*header).num_meshes as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<srfIQModel_t>() as libc::c_ulong)
+            ((*header).num_meshes as usize)
+                .wrapping_mul(::std::mem::size_of::<srfIQModel_t>() as usize)
                 as isize,
         );
         (*iqmData).triangles = dataPtr as *mut i32;
         dataPtr = dataPtr.offset(
-            ((*header).num_triangles.wrapping_mul(3 as i32 as u32) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong) as isize,
+            ((*header).num_triangles.wrapping_mul(3 as i32 as u32) as usize)
+                .wrapping_mul(::std::mem::size_of::<i32>() as usize) as isize,
         );
         (*iqmData).positions = dataPtr as *mut f32;
         dataPtr = dataPtr.offset(
-            ((*header).num_vertexes.wrapping_mul(3 as i32 as u32) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as isize,
+            ((*header).num_vertexes.wrapping_mul(3 as i32 as u32) as usize)
+                .wrapping_mul(::std::mem::size_of::<f32>() as usize) as isize,
         );
         (*iqmData).texcoords = dataPtr as *mut f32;
         dataPtr = dataPtr.offset(
-            ((*header).num_vertexes.wrapping_mul(2 as i32 as u32) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as isize,
+            ((*header).num_vertexes.wrapping_mul(2 as i32 as u32) as usize)
+                .wrapping_mul(::std::mem::size_of::<f32>() as usize) as isize,
         );
         (*iqmData).normals = dataPtr as *mut f32;
         dataPtr = dataPtr.offset(
-            ((*header).num_vertexes.wrapping_mul(3 as i32 as u32) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as isize,
+            ((*header).num_vertexes.wrapping_mul(3 as i32 as u32) as usize)
+                .wrapping_mul(::std::mem::size_of::<f32>() as usize) as isize,
         );
         if vertexArrayFormat[IQM_TANGENT as i32 as usize] != -(1 as i32) {
             (*iqmData).tangents = dataPtr as *mut f32;
             dataPtr = dataPtr.offset(
-                ((*header).num_vertexes.wrapping_mul(4 as i32 as u32) as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong)
+                ((*header).num_vertexes.wrapping_mul(4 as i32 as u32) as usize)
+                    .wrapping_mul(::std::mem::size_of::<f32>() as usize)
                     as isize,
             )
             // tangents
@@ -1519,8 +1519,8 @@ pub unsafe extern "C" fn R_LoadIQM(
         if vertexArrayFormat[IQM_COLOR as i32 as usize] != -(1 as i32) {
             (*iqmData).colors = dataPtr;
             dataPtr = dataPtr.offset(
-                ((*header).num_vertexes.wrapping_mul(4 as i32 as u32) as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<byte>() as libc::c_ulong)
+                ((*header).num_vertexes.wrapping_mul(4 as i32 as u32) as usize)
+                    .wrapping_mul(::std::mem::size_of::<byte>() as usize)
                     as isize,
             )
             // colors
@@ -1528,29 +1528,29 @@ pub unsafe extern "C" fn R_LoadIQM(
         if allocateInfluences != 0 {
             (*iqmData).influences = dataPtr as *mut i32; // influenceBlendIndexes
             dataPtr = dataPtr.offset(
-                ((*header).num_vertexes as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong)
+                ((*header).num_vertexes as usize)
+                    .wrapping_mul(::std::mem::size_of::<i32>() as usize)
                     as isize,
             );
             (*iqmData).influenceBlendIndexes = dataPtr;
             dataPtr = dataPtr.offset(
-                ((allocateInfluences * 4 as i32) as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<byte>() as libc::c_ulong)
+                ((allocateInfluences * 4 as i32) as usize)
+                    .wrapping_mul(::std::mem::size_of::<byte>() as usize)
                     as isize,
             );
             if vertexArrayFormat[IQM_BLENDWEIGHTS as i32 as usize] == IQM_UBYTE as i32 {
                 (*iqmData).influenceBlendWeights.b = dataPtr;
                 dataPtr = dataPtr.offset(
-                    ((allocateInfluences * 4 as i32) as libc::c_ulong)
-                        .wrapping_mul(::std::mem::size_of::<byte>() as libc::c_ulong)
+                    ((allocateInfluences * 4 as i32) as usize)
+                        .wrapping_mul(::std::mem::size_of::<byte>() as usize)
                         as isize,
                 )
             // influenceBlendWeights
             } else if vertexArrayFormat[IQM_BLENDWEIGHTS as i32 as usize] == IQM_FLOAT as i32 {
                 (*iqmData).influenceBlendWeights.f = dataPtr as *mut f32;
                 dataPtr = dataPtr.offset(
-                    ((allocateInfluences * 4 as i32) as libc::c_ulong)
-                        .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong)
+                    ((allocateInfluences * 4 as i32) as usize)
+                        .wrapping_mul(::std::mem::size_of::<f32>() as usize)
                         as isize,
                 )
                 // influenceBlendWeights
@@ -1563,13 +1563,13 @@ pub unsafe extern "C" fn R_LoadIQM(
         dataPtr = dataPtr.offset(joint_names as isize); // joint names
         (*iqmData).jointParents = dataPtr as *mut i32; // joint parents
         dataPtr = dataPtr.offset(
-            ((*header).num_joints as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong) as isize,
+            ((*header).num_joints as usize)
+                .wrapping_mul(::std::mem::size_of::<i32>() as usize) as isize,
         );
         (*iqmData).jointMats = dataPtr as *mut f32;
         dataPtr = dataPtr.offset(
-            ((*header).num_joints.wrapping_mul(12 as i32 as u32) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as isize,
+            ((*header).num_joints.wrapping_mul(12 as i32 as u32) as usize)
+                .wrapping_mul(::std::mem::size_of::<f32>() as usize) as isize,
         )
     }
     if (*header).num_poses != 0 {
@@ -1578,22 +1578,22 @@ pub unsafe extern "C" fn R_LoadIQM(
             ((*header)
                 .num_poses
                 .wrapping_mul((*header).num_frames)
-                .wrapping_mul(12 as i32 as u32) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as isize,
+                .wrapping_mul(12 as i32 as u32) as usize)
+                .wrapping_mul(::std::mem::size_of::<f32>() as usize) as isize,
         )
         // pose mats
     }
     if (*header).ofs_bounds != 0 {
         (*iqmData).bounds = dataPtr as *mut f32;
         dataPtr = dataPtr.offset(
-            ((*header).num_frames.wrapping_mul(6 as i32 as u32) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as isize,
+            ((*header).num_frames.wrapping_mul(6 as i32 as u32) as usize)
+                .wrapping_mul(::std::mem::size_of::<f32>() as usize) as isize,
         )
     // model bounds
     } else if (*header).num_meshes != 0 && (*header).num_frames == 0 as i32 as u32 {
         (*iqmData).bounds = dataPtr as *mut f32;
         dataPtr = dataPtr.offset(
-            (6 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong)
+            (6 as i32 as usize).wrapping_mul(::std::mem::size_of::<f32>() as usize)
                 as isize,
         )
         // model bounds
@@ -1610,7 +1610,7 @@ pub unsafe extern "C" fn R_LoadIQM(
             Q_strncpyz(
                 (*surface).name.as_mut_ptr(),
                 str.offset((*mesh).name as isize),
-                ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             );
             Q_strlwr((*surface).name.as_mut_ptr());
             (*surface).shader =
@@ -1655,9 +1655,9 @@ pub unsafe extern "C" fn R_LoadIQM(
         while (i as u32) < (*header).num_vertexarrays {
             let mut n_0: i32 = 0;
             // skip disabled arrays
-            if !(((*vertexarray).type_0 as libc::c_ulong)
-                < (::std::mem::size_of::<[i32; 7]>() as libc::c_ulong)
-                    .wrapping_div(::std::mem::size_of::<i32>() as libc::c_ulong)
+            if !(((*vertexarray).type_0 as usize)
+                < (::std::mem::size_of::<[i32; 7]>() as usize)
+                    .wrapping_div(::std::mem::size_of::<i32>() as usize)
                 && vertexArrayFormat[(*vertexarray).type_0 as usize] == -(1 as i32))
             {
                 // total number of values
@@ -1668,8 +1668,8 @@ pub unsafe extern "C" fn R_LoadIQM(
                             (*iqmData).positions as *mut libc::c_void,
                             (header as *mut byte).offset((*vertexarray).offset as isize)
                                 as *const libc::c_void,
-                            (n_0 as libc::c_ulong)
-                                .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
+                            (n_0 as usize)
+                                .wrapping_mul(::std::mem::size_of::<f32>() as usize),
                         );
                     }
                     2 => {
@@ -1677,8 +1677,8 @@ pub unsafe extern "C" fn R_LoadIQM(
                             (*iqmData).normals as *mut libc::c_void,
                             (header as *mut byte).offset((*vertexarray).offset as isize)
                                 as *const libc::c_void,
-                            (n_0 as libc::c_ulong)
-                                .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
+                            (n_0 as usize)
+                                .wrapping_mul(::std::mem::size_of::<f32>() as usize),
                         );
                     }
                     3 => {
@@ -1686,8 +1686,8 @@ pub unsafe extern "C" fn R_LoadIQM(
                             (*iqmData).tangents as *mut libc::c_void,
                             (header as *mut byte).offset((*vertexarray).offset as isize)
                                 as *const libc::c_void,
-                            (n_0 as libc::c_ulong)
-                                .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
+                            (n_0 as usize)
+                                .wrapping_mul(::std::mem::size_of::<f32>() as usize),
                         );
                     }
                     1 => {
@@ -1695,8 +1695,8 @@ pub unsafe extern "C" fn R_LoadIQM(
                             (*iqmData).texcoords as *mut libc::c_void,
                             (header as *mut byte).offset((*vertexarray).offset as isize)
                                 as *const libc::c_void,
-                            (n_0 as libc::c_ulong)
-                                .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
+                            (n_0 as usize)
+                                .wrapping_mul(::std::mem::size_of::<f32>() as usize),
                         );
                     }
                     6 => {
@@ -1704,8 +1704,8 @@ pub unsafe extern "C" fn R_LoadIQM(
                             (*iqmData).colors as *mut libc::c_void,
                             (header as *mut byte).offset((*vertexarray).offset as isize)
                                 as *const libc::c_void,
-                            (n_0 as libc::c_ulong)
-                                .wrapping_mul(::std::mem::size_of::<byte>() as libc::c_ulong),
+                            (n_0 as usize)
+                                .wrapping_mul(::std::mem::size_of::<byte>() as usize),
                         );
                     }
                     4 | 5 | _ => {}
@@ -1882,11 +1882,11 @@ pub unsafe extern "C" fn R_LoadIQM(
                 .offset((*header).ofs_text as isize)
                 .offset((*joint).name as isize);
             let mut len: i32 =
-                crate::stdlib::strlen(name).wrapping_add(1 as i32 as libc::c_ulong) as i32;
+                crate::stdlib::strlen(name).wrapping_add(1 as i32 as usize) as i32;
             crate::stdlib::memcpy(
                 str as *mut libc::c_void,
                 name as *const libc::c_void,
-                len as libc::c_ulong,
+                len as usize,
             );
             str = str.offset(len as isize);
             i += 1;
@@ -1937,13 +1937,13 @@ pub unsafe extern "C" fn R_LoadIQM(
                 crate::stdlib::memcpy(
                     mat as *mut libc::c_void,
                     baseFrame.as_mut_ptr() as *const libc::c_void,
-                    ::std::mem::size_of::<[f32; 12]>() as libc::c_ulong,
+                    ::std::mem::size_of::<[f32; 12]>() as usize,
                 );
                 mat = mat.offset(12 as i32 as isize);
                 crate::stdlib::memcpy(
                     matInv as *mut libc::c_void,
                     invBaseFrame.as_mut_ptr() as *const libc::c_void,
-                    ::std::mem::size_of::<[f32; 12]>() as libc::c_ulong,
+                    ::std::mem::size_of::<[f32; 12]>() as usize,
                 );
                 matInv = matInv.offset(12 as i32 as isize)
             }
@@ -2054,7 +2054,7 @@ pub unsafe extern "C" fn R_LoadIQM(
                     crate::stdlib::memcpy(
                         mat2.as_mut_ptr() as *mut libc::c_void,
                         mat1.as_mut_ptr() as *const libc::c_void,
-                        ::std::mem::size_of::<[f32; 12]>() as libc::c_ulong,
+                        ::std::mem::size_of::<[f32; 12]>() as usize,
                     );
                 }
                 Matrix34Multiply(
@@ -2392,8 +2392,8 @@ unsafe extern "C" fn ComputePoseMats(
                 crate::stdlib::memcpy(
                     mat.offset((12 as i32 * i) as isize) as *mut libc::c_void,
                     mat1.offset((12 as i32 * i) as isize) as *const libc::c_void,
-                    (12 as i32 as libc::c_ulong)
-                        .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
+                    (12 as i32 as usize)
+                        .wrapping_mul(::std::mem::size_of::<f32>() as usize),
                 );
             }
             i += 1;
@@ -2448,8 +2448,8 @@ unsafe extern "C" fn ComputeJointMats(
         crate::stdlib::memcpy(
             mat as *mut libc::c_void,
             (*data).jointMats as *const libc::c_void,
-            (((*data).num_joints * 12 as i32) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
+            (((*data).num_joints * 12 as i32) as usize)
+                .wrapping_mul(::std::mem::size_of::<f32>() as usize),
         );
         return;
     }
@@ -2461,7 +2461,7 @@ unsafe extern "C" fn ComputeJointMats(
         crate::stdlib::memcpy(
             outmat.as_mut_ptr() as *mut libc::c_void,
             mat1 as *const libc::c_void,
-            ::std::mem::size_of::<[f32; 12]>() as libc::c_ulong,
+            ::std::mem::size_of::<[f32; 12]>() as usize,
         );
         Matrix34Multiply(
             outmat.as_mut_ptr(),
@@ -2878,15 +2878,15 @@ pub unsafe extern "C" fn RB_IQMSurfaceAnim(mut surface: *mut surfaceType_t) {
         crate::stdlib::memcpy(
             outColor as *mut libc::c_void,
             color as *const libc::c_void,
-            ((*surf).num_vertexes as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<color4ub_t>() as libc::c_ulong),
+            ((*surf).num_vertexes as usize)
+                .wrapping_mul(::std::mem::size_of::<color4ub_t>() as usize),
         );
     } else {
         crate::stdlib::memset(
             outColor as *mut libc::c_void,
             0 as i32,
-            ((*surf).num_vertexes as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<color4ub_t>() as libc::c_ulong),
+            ((*surf).num_vertexes as usize)
+                .wrapping_mul(::std::mem::size_of::<color4ub_t>() as usize),
         );
     }
     tri = (*data)
@@ -3337,7 +3337,7 @@ pub unsafe extern "C" fn R_IQMLerpTag(
             break;
         }
         names = names
-            .offset(crate::stdlib::strlen(names).wrapping_add(1 as i32 as libc::c_ulong) as isize);
+            .offset(crate::stdlib::strlen(names).wrapping_add(1 as i32 as usize) as isize);
         joint += 1
     }
     if joint >= (*data).num_joints {

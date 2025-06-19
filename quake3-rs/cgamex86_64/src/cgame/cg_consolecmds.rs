@@ -258,7 +258,7 @@ unsafe extern "C" fn CG_StartOrbit_f() {
     trap_Cvar_VariableStringBuffer(
         b"developer\x00" as *const u8 as *const libc::c_char,
         var.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     if atoi(var.as_mut_ptr()) == 0 {
         return;
@@ -458,9 +458,9 @@ pub unsafe extern "C" fn CG_ConsoleCommand() -> qboolean {
     let mut i: i32 = 0;
     cmd = CG_Argv(0 as i32);
     i = 0 as i32;
-    while (i as libc::c_ulong)
-        < (::std::mem::size_of::<[consoleCommand_t; 21]>() as libc::c_ulong)
-            .wrapping_div(::std::mem::size_of::<consoleCommand_t>() as libc::c_ulong)
+    while (i as usize)
+        < (::std::mem::size_of::<[consoleCommand_t; 21]>() as usize)
+            .wrapping_div(::std::mem::size_of::<consoleCommand_t>() as usize)
     {
         if Q_stricmp(cmd, commands[i as usize].cmd) == 0 {
             commands[i as usize]
@@ -733,9 +733,9 @@ so it can perform tab completion
 pub unsafe extern "C" fn CG_InitConsoleCommands() {
     let mut i: i32 = 0;
     i = 0 as i32;
-    while (i as libc::c_ulong)
-        < (::std::mem::size_of::<[consoleCommand_t; 21]>() as libc::c_ulong)
-            .wrapping_div(::std::mem::size_of::<consoleCommand_t>() as libc::c_ulong)
+    while (i as usize)
+        < (::std::mem::size_of::<[consoleCommand_t; 21]>() as usize)
+            .wrapping_div(::std::mem::size_of::<consoleCommand_t>() as usize)
     {
         trap_AddCommand(commands[i as usize].cmd);
         i += 1

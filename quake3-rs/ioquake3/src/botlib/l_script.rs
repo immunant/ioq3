@@ -77,7 +77,7 @@ pub struct token_s {
     pub string: [libc::c_char; 1024],
     pub type_0: i32,
     pub subtype: i32,
-    pub intvalue: libc::c_ulong,
+    pub intvalue: usize,
     pub floatvalue: f32,
     pub whitespace_p: *mut libc::c_char,
     pub endwhitespace_p: *mut libc::c_char,
@@ -695,17 +695,17 @@ pub unsafe extern "C" fn PS_CreatePunctuationTable(
     //get memory for the table
     if (*script).punctuationtable.is_null() {
         (*script).punctuationtable =
-            crate::src::botlib::l_memory::GetMemory((256 as i32 as libc::c_ulong).wrapping_mul(
+            crate::src::botlib::l_memory::GetMemory((256 as i32 as usize).wrapping_mul(
                 ::std::mem::size_of::<*mut crate::src::botlib::l_script::punctuation_t>()
-                    as libc::c_ulong,
+                    as usize,
             )) as *mut *mut crate::src::botlib::l_script::punctuation_t
     }
     crate::stdlib::memset(
         (*script).punctuationtable as *mut libc::c_void,
         0 as i32,
-        (256 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
+        (256 as i32 as usize).wrapping_mul(::std::mem::size_of::<
             *mut crate::src::botlib::l_script::punctuation_t,
-        >() as libc::c_ulong),
+        >() as usize),
     );
     //add the punctuations in the list to the punctuation table
     i = 0 as i32;
@@ -798,7 +798,7 @@ pub unsafe extern "C" fn ScriptError(
     ap = args.clone();
     crate::stdlib::vsnprintf(
         text.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize,
         str,
         ap.as_va_list(),
     );
@@ -838,7 +838,7 @@ pub unsafe extern "C" fn ScriptWarning(
     ap = args.clone();
     crate::stdlib::vsnprintf(
         text.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize,
         str,
         ap.as_va_list(),
     );
@@ -1249,11 +1249,11 @@ pub unsafe extern "C" fn PS_ReadName(
 pub unsafe extern "C" fn NumberValue(
     mut string: *mut libc::c_char,
     mut subtype: i32,
-    mut intvalue: *mut libc::c_ulong,
+    mut intvalue: *mut usize,
     mut floatvalue: *mut f32,
 ) {
-    let mut dotfound: libc::c_ulong = 0 as i32 as libc::c_ulong;
-    *intvalue = 0 as i32 as libc::c_ulong;
+    let mut dotfound: usize = 0 as i32 as usize;
+    *intvalue = 0 as i32 as usize;
     *floatvalue = 0 as i32 as f32;
     //floating point number
     if subtype & 0x800 as i32 != 0 {
@@ -1264,12 +1264,12 @@ pub unsafe extern "C" fn NumberValue(
                 if dotfound != 0 {
                     return;
                 } //end if
-                dotfound = 10 as i32 as libc::c_ulong; //end else
+                dotfound = 10 as i32 as usize; //end else
                 string = string.offset(1)
             } //end if
             if dotfound != 0 {
                 *floatvalue = *floatvalue + (*string as i32 - '0' as i32) as f32 / dotfound as f32; //end else if
-                dotfound = dotfound.wrapping_mul(10 as i32 as libc::c_ulong)
+                dotfound = dotfound.wrapping_mul(10 as i32 as usize)
             } else {
                 *floatvalue = (*floatvalue as f64 * 10.0f64
                     + (*string as i32 - '0' as i32) as f32 as f64)
@@ -1277,14 +1277,14 @@ pub unsafe extern "C" fn NumberValue(
             } //end else if
             string = string.offset(1)
         }
-        *intvalue = *floatvalue as libc::c_ulong
+        *intvalue = *floatvalue as usize
     } else if subtype & 0x8 as i32 != 0 {
         while *string != 0 {
             let fresh9 = string;
             string = string.offset(1);
             *intvalue = (*intvalue)
-                .wrapping_mul(10 as i32 as libc::c_ulong)
-                .wrapping_add((*fresh9 as i32 - '0' as i32) as libc::c_ulong)
+                .wrapping_mul(10 as i32 as usize)
+                .wrapping_add((*fresh9 as i32 - '0' as i32) as usize)
         }
         *floatvalue = *intvalue as f32
     } else if subtype & 0x100 as i32 != 0 {
@@ -1294,12 +1294,12 @@ pub unsafe extern "C" fn NumberValue(
             *intvalue <<= 4 as i32; //end else if
             if *string as i32 >= 'a' as i32 && *string as i32 <= 'f' as i32 {
                 *intvalue = (*intvalue)
-                    .wrapping_add((*string as i32 - 'a' as i32 + 10 as i32) as libc::c_ulong)
+                    .wrapping_add((*string as i32 - 'a' as i32 + 10 as i32) as usize)
             } else if *string as i32 >= 'A' as i32 && *string as i32 <= 'F' as i32 {
                 *intvalue = (*intvalue)
-                    .wrapping_add((*string as i32 - 'A' as i32 + 10 as i32) as libc::c_ulong)
+                    .wrapping_add((*string as i32 - 'A' as i32 + 10 as i32) as usize)
             } else {
-                *intvalue = (*intvalue).wrapping_add((*string as i32 - '0' as i32) as libc::c_ulong)
+                *intvalue = (*intvalue).wrapping_add((*string as i32 - '0' as i32) as usize)
             }
             string = string.offset(1)
         }
@@ -1311,7 +1311,7 @@ pub unsafe extern "C" fn NumberValue(
             let fresh10 = string;
             string = string.offset(1);
             *intvalue = (*intvalue << 3 as i32)
-                .wrapping_add((*fresh10 as i32 - '0' as i32) as libc::c_ulong)
+                .wrapping_add((*fresh10 as i32 - '0' as i32) as usize)
         }
         *floatvalue = *intvalue as f32
     } else if subtype & 0x400 as i32 != 0 {
@@ -1321,7 +1321,7 @@ pub unsafe extern "C" fn NumberValue(
             let fresh11 = string;
             string = string.offset(1);
             *intvalue = (*intvalue << 1 as i32)
-                .wrapping_add((*fresh11 as i32 - '0' as i32) as libc::c_ulong)
+                .wrapping_add((*fresh11 as i32 - '0' as i32) as usize)
         }
         *floatvalue = *intvalue as f32
     };
@@ -1593,7 +1593,7 @@ pub unsafe extern "C" fn PS_ReadPunctuation(
         if (*script).script_p.offset(len as isize) <= (*script).end_p {
             //if the script contains at least as much characters as the punctuation
             //if the script contains the punctuation
-            if crate::stdlib::strncmp((*script).script_p, p, len as libc::c_ulong) == 0 {
+            if crate::stdlib::strncmp((*script).script_p, p, len as usize) == 0 {
                 Q_strncpyz((*token).string.as_mut_ptr(), p, 1024 as i32);
                 (*script).script_p = (*script).script_p.offset(len as isize);
                 (*token).type_0 = 5 as i32;
@@ -1643,7 +1643,7 @@ pub unsafe extern "C" fn PS_ReadPrimitive(
     crate::stdlib::memcpy(
         &mut (*script).token as *mut crate::src::botlib::l_script::token_t as *mut libc::c_void,
         token as *const libc::c_void,
-        ::std::mem::size_of::<crate::src::botlib::l_script::token_t>() as libc::c_ulong,
+        ::std::mem::size_of::<crate::src::botlib::l_script::token_t>() as usize,
     );
     //primitive reading successful
     return 1 as i32;
@@ -1669,7 +1669,7 @@ pub unsafe extern "C" fn PS_ReadToken(
             token as *mut libc::c_void,
             &mut (*script).token as *mut crate::src::botlib::l_script::token_t
                 as *const libc::c_void,
-            ::std::mem::size_of::<crate::src::botlib::l_script::token_t>() as libc::c_ulong,
+            ::std::mem::size_of::<crate::src::botlib::l_script::token_t>() as usize,
         );
         return 1 as i32;
     }
@@ -1681,7 +1681,7 @@ pub unsafe extern "C" fn PS_ReadToken(
     crate::stdlib::memset(
         token as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::src::botlib::l_script::token_t>() as libc::c_ulong,
+        ::std::mem::size_of::<crate::src::botlib::l_script::token_t>() as usize,
     );
     //start of the white space
     (*script).whitespace_p = (*script).script_p;
@@ -1747,7 +1747,7 @@ pub unsafe extern "C" fn PS_ReadToken(
     crate::stdlib::memcpy(
         &mut (*script).token as *mut crate::src::botlib::l_script::token_t as *mut libc::c_void,
         token as *const libc::c_void,
-        ::std::mem::size_of::<crate::src::botlib::l_script::token_t>() as libc::c_ulong,
+        ::std::mem::size_of::<crate::src::botlib::l_script::token_t>() as usize,
     );
     //successfully read a token
     return 1 as i32;
@@ -2052,7 +2052,7 @@ pub unsafe extern "C" fn PS_CheckTokenType(
         crate::stdlib::memcpy(
             token as *mut libc::c_void,
             &mut tok as *mut crate::src::botlib::l_script::token_t as *const libc::c_void,
-            ::std::mem::size_of::<crate::src::botlib::l_script::token_t>() as libc::c_ulong,
+            ::std::mem::size_of::<crate::src::botlib::l_script::token_t>() as usize,
         ); //end if
         return 1 as i32;
     }
@@ -2125,7 +2125,7 @@ pub unsafe extern "C" fn PS_UnreadToken(
     crate::stdlib::memcpy(
         &mut (*script).token as *mut crate::src::botlib::l_script::token_t as *mut libc::c_void,
         token as *const libc::c_void,
-        ::std::mem::size_of::<crate::src::botlib::l_script::token_t>() as libc::c_ulong,
+        ::std::mem::size_of::<crate::src::botlib::l_script::token_t>() as usize,
     );
     (*script).tokenavailable = 1 as i32;
 }
@@ -2171,12 +2171,12 @@ pub unsafe extern "C" fn StripDoubleQuotes(mut string: *mut libc::c_char) {
         ); //end if
     }
     if *string
-        .offset(crate::stdlib::strlen(string).wrapping_sub(1 as i32 as libc::c_ulong) as isize)
+        .offset(crate::stdlib::strlen(string).wrapping_sub(1 as i32 as usize) as isize)
         as i32
         == '\"' as i32
     {
         *string.offset(
-            crate::stdlib::strlen(string).wrapping_sub(1 as i32 as libc::c_ulong) as isize,
+            crate::stdlib::strlen(string).wrapping_sub(1 as i32 as usize) as isize,
         ) = '\u{0}' as i32 as libc::c_char
     };
     //end if
@@ -2200,12 +2200,12 @@ pub unsafe extern "C" fn StripSingleQuotes(mut string: *mut libc::c_char) {
         ); //end if
     }
     if *string
-        .offset(crate::stdlib::strlen(string).wrapping_sub(1 as i32 as libc::c_ulong) as isize)
+        .offset(crate::stdlib::strlen(string).wrapping_sub(1 as i32 as usize) as isize)
         as i32
         == '\'' as i32
     {
         *string.offset(
-            crate::stdlib::strlen(string).wrapping_sub(1 as i32 as libc::c_ulong) as isize,
+            crate::stdlib::strlen(string).wrapping_sub(1 as i32 as usize) as isize,
         ) = '\u{0}' as i32 as libc::c_char
     };
     //end if
@@ -2313,7 +2313,7 @@ pub unsafe extern "C" fn ReadSignedInt(
         );
         return 0 as i32 as isize;
     }
-    return (sign as libc::c_ulong).wrapping_mul(token.intvalue) as isize;
+    return (sign as usize).wrapping_mul(token.intvalue) as isize;
 }
 //set script flags
 //end of the function ReadSignedInt
@@ -2374,7 +2374,7 @@ pub unsafe extern "C" fn ResetScript(mut script: *mut crate::src::botlib::l_scri
     crate::stdlib::memset(
         &mut (*script).token as *mut crate::src::botlib::l_script::token_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::src::botlib::l_script::token_t>() as libc::c_ulong,
+        ::std::mem::size_of::<crate::src::botlib::l_script::token_t>() as usize,
     );
 }
 //returns true if at the end of the script
@@ -2429,7 +2429,7 @@ pub unsafe extern "C" fn ScriptSkipTo(
             return 0 as i32;
         }
         if *(*script).script_p as i32 == firstchar as i32 {
-            if crate::stdlib::strncmp((*script).script_p, value, len as libc::c_ulong) == 0 {
+            if crate::stdlib::strncmp((*script).script_p, value, len as usize) == 0 {
                 return 1 as i32;
             }
             //end if
@@ -2459,7 +2459,7 @@ pub unsafe extern "C" fn LoadScriptFile(
     if crate::stdlib::strlen(basefolder.as_mut_ptr()) != 0 {
         Com_sprintf(
             pathname.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             b"%s/%s\x00" as *const u8 as *const libc::c_char,
             basefolder.as_mut_ptr(),
             filename,
@@ -2467,7 +2467,7 @@ pub unsafe extern "C" fn LoadScriptFile(
     } else {
         Com_sprintf(
             pathname.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             b"%s\x00" as *const u8 as *const libc::c_char,
             filename,
         );
@@ -2479,24 +2479,24 @@ pub unsafe extern "C" fn LoadScriptFile(
         return 0 as *mut crate::src::botlib::l_script::script_t;
     }
     buffer = crate::src::botlib::l_memory::GetClearedMemory(
-        (::std::mem::size_of::<crate::src::botlib::l_script::script_t>() as libc::c_ulong)
-            .wrapping_add(length as libc::c_ulong)
-            .wrapping_add(1 as i32 as libc::c_ulong),
+        (::std::mem::size_of::<crate::src::botlib::l_script::script_t>() as usize)
+            .wrapping_add(length as usize)
+            .wrapping_add(1 as i32 as usize),
     );
     script = buffer as *mut crate::src::botlib::l_script::script_t;
     crate::stdlib::memset(
         script as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::src::botlib::l_script::script_t>() as libc::c_ulong,
+        ::std::mem::size_of::<crate::src::botlib::l_script::script_t>() as usize,
     );
     Q_strncpyz(
         (*script).filename.as_mut_ptr(),
         filename,
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     (*script).buffer = (buffer as *mut libc::c_char).offset(::std::mem::size_of::<
         crate::src::botlib::l_script::script_t,
-    >() as libc::c_ulong as isize);
+    >() as usize as isize);
     *(*script).buffer.offset(length as isize) = 0 as i32 as libc::c_char;
     (*script).length = length;
     //pointer in script buffer
@@ -2543,24 +2543,24 @@ pub unsafe extern "C" fn LoadScriptMemory(
     let mut script: *mut crate::src::botlib::l_script::script_t =
         0 as *mut crate::src::botlib::l_script::script_t;
     buffer = crate::src::botlib::l_memory::GetClearedMemory(
-        (::std::mem::size_of::<crate::src::botlib::l_script::script_t>() as libc::c_ulong)
-            .wrapping_add(length as libc::c_ulong)
-            .wrapping_add(1 as i32 as libc::c_ulong),
+        (::std::mem::size_of::<crate::src::botlib::l_script::script_t>() as usize)
+            .wrapping_add(length as usize)
+            .wrapping_add(1 as i32 as usize),
     );
     script = buffer as *mut crate::src::botlib::l_script::script_t;
     crate::stdlib::memset(
         script as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::src::botlib::l_script::script_t>() as libc::c_ulong,
+        ::std::mem::size_of::<crate::src::botlib::l_script::script_t>() as usize,
     );
     Q_strncpyz(
         (*script).filename.as_mut_ptr(),
         name,
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     (*script).buffer = (buffer as *mut libc::c_char).offset(::std::mem::size_of::<
         crate::src::botlib::l_script::script_t,
-    >() as libc::c_ulong as isize);
+    >() as usize as isize);
     *(*script).buffer.offset(length as isize) = 0 as i32 as libc::c_char;
     (*script).length = length;
     //pointer in script buffer
@@ -2583,7 +2583,7 @@ pub unsafe extern "C" fn LoadScriptMemory(
     crate::stdlib::memcpy(
         (*script).buffer as *mut libc::c_void,
         ptr as *const libc::c_void,
-        length as libc::c_ulong,
+        length as usize,
     );
     //
     return script;
@@ -2618,7 +2618,7 @@ pub unsafe extern "C" fn FreeScript(mut script: *mut crate::src::botlib::l_scrip
 pub unsafe extern "C" fn PS_SetBaseFolder(mut path: *mut libc::c_char) {
     Com_sprintf(
         basefolder.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         b"%s\x00" as *const u8 as *const libc::c_char,
         path,
     );

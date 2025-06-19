@@ -413,8 +413,8 @@ pub unsafe extern "C" fn silk_decode_pulses(
                         as isize,
                 ) as *mut opus_int16 as *mut libc::c_void,
                 0 as i32,
-                (16 as i32 as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<opus_int16>() as libc::c_ulong),
+                (16 as i32 as usize)
+                    .wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
             );
         }
         i += 1

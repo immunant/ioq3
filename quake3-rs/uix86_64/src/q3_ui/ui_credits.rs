@@ -71,8 +71,8 @@ unsafe extern "C" fn UI_CreditMenu_Draw_ioq3() {
     ];
     // Center text vertically on the screen
     y = ((480 as i32 as f64
-        - (::std::mem::size_of::<[*const libc::c_char; 14]>() as libc::c_ulong)
-            .wrapping_div(::std::mem::size_of::<*const libc::c_char>() as libc::c_ulong)
+        - (::std::mem::size_of::<[*const libc::c_char; 14]>() as usize)
+            .wrapping_div(::std::mem::size_of::<*const libc::c_char>() as usize)
             as f64
             * (1.42f64 * 27 as i32 as f64 * 0.75f64))
         / 2 as i32 as f64) as i32;
@@ -354,7 +354,7 @@ pub unsafe extern "C" fn UI_CreditMenu() {
     crate::stdlib::memset(
         &mut s_credits as *mut creditsmenu_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<creditsmenu_t>() as libc::c_ulong,
+        ::std::mem::size_of::<creditsmenu_t>() as usize,
     );
     s_credits.menu.draw = Some(UI_CreditMenu_Draw as unsafe extern "C" fn() -> ());
     s_credits.menu.key = Some(UI_CreditMenu_Key as unsafe extern "C" fn(_: i32) -> sfxHandle_t);

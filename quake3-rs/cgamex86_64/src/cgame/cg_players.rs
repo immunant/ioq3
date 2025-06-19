@@ -416,9 +416,9 @@ unsafe extern "C" fn CG_ParseAnimationFile(
     if len <= 0 as i32 {
         return qfalse;
     }
-    if len as libc::c_ulong
-        >= (::std::mem::size_of::<[libc::c_char; 20000]>() as libc::c_ulong)
-            .wrapping_sub(1 as i32 as libc::c_ulong)
+    if len as usize
+        >= (::std::mem::size_of::<[libc::c_char; 20000]>() as usize)
+            .wrapping_sub(1 as i32 as usize)
     {
         CG_Printf(
             b"File %s too long\n\x00" as *const u8 as *const libc::c_char,
@@ -590,7 +590,7 @@ unsafe extern "C" fn CG_ParseAnimationFile(
             as *mut libc::c_void,
         &mut *animations.offset(LEGS_WALKCR as i32 as isize) as *mut animation_t
             as *const libc::c_void,
-        ::std::mem::size_of::<animation_t>() as libc::c_ulong,
+        ::std::mem::size_of::<animation_t>() as usize,
     );
     (*animations.offset(LEGS_BACKCR as i32 as isize)).reversed = qtrue as i32;
     // walk backward animation
@@ -599,7 +599,7 @@ unsafe extern "C" fn CG_ParseAnimationFile(
             as *mut libc::c_void,
         &mut *animations.offset(LEGS_WALK as i32 as isize) as *mut animation_t
             as *const libc::c_void,
-        ::std::mem::size_of::<animation_t>() as libc::c_ulong,
+        ::std::mem::size_of::<animation_t>() as usize,
     );
     (*animations.offset(LEGS_BACKWALK as i32 as isize)).reversed = qtrue as i32;
     // flag moving fast
@@ -949,7 +949,7 @@ unsafe extern "C" fn CG_RegisterClientSkin(
     */
     if CG_FindClientModelFile(
         filename.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         ci,
         teamName,
         modelName,
@@ -969,7 +969,7 @@ unsafe extern "C" fn CG_RegisterClientSkin(
     }
     if CG_FindClientModelFile(
         filename.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         ci,
         teamName,
         modelName,
@@ -989,7 +989,7 @@ unsafe extern "C" fn CG_RegisterClientSkin(
     }
     if CG_FindClientHeadFile(
         filename.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         ci,
         teamName,
         headModelName,
@@ -1037,7 +1037,7 @@ unsafe extern "C" fn CG_RegisterClientModelname(
     }
     Com_sprintf(
         filename.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         b"models/players/%s/lower.md3\x00" as *const u8 as *const libc::c_char,
         modelName,
     );
@@ -1045,7 +1045,7 @@ unsafe extern "C" fn CG_RegisterClientModelname(
     if (*ci).legsModel == 0 {
         Com_sprintf(
             filename.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             b"models/players/characters/%s/lower.md3\x00" as *const u8 as *const libc::c_char,
             modelName,
         );
@@ -1060,7 +1060,7 @@ unsafe extern "C" fn CG_RegisterClientModelname(
     }
     Com_sprintf(
         filename.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         b"models/players/%s/upper.md3\x00" as *const u8 as *const libc::c_char,
         modelName,
     );
@@ -1068,7 +1068,7 @@ unsafe extern "C" fn CG_RegisterClientModelname(
     if (*ci).torsoModel == 0 {
         Com_sprintf(
             filename.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             b"models/players/characters/%s/upper.md3\x00" as *const u8 as *const libc::c_char,
             modelName,
         );
@@ -1084,7 +1084,7 @@ unsafe extern "C" fn CG_RegisterClientModelname(
     if *headName.offset(0 as i32 as isize) as i32 == '*' as i32 {
         Com_sprintf(
             filename.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             b"models/players/heads/%s/%s.md3\x00" as *const u8 as *const libc::c_char,
             &*headModelName.offset(1 as i32 as isize) as *const libc::c_char,
             &*headModelName.offset(1 as i32 as isize) as *const libc::c_char,
@@ -1092,7 +1092,7 @@ unsafe extern "C" fn CG_RegisterClientModelname(
     } else {
         Com_sprintf(
             filename.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             b"models/players/%s/head.md3\x00" as *const u8 as *const libc::c_char,
             headName,
         );
@@ -1102,7 +1102,7 @@ unsafe extern "C" fn CG_RegisterClientModelname(
     if (*ci).headModel == 0 && *headName.offset(0 as i32 as isize) as i32 != '*' as i32 {
         Com_sprintf(
             filename.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             b"models/players/heads/%s/%s.md3\x00" as *const u8 as *const libc::c_char,
             headModelName,
             headModelName,
@@ -1132,14 +1132,14 @@ unsafe extern "C" fn CG_RegisterClientModelname(
             if (*ci).team as u32 == TEAM_BLUE as i32 as u32 {
                 Com_sprintf(
                     newTeamName.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
                     b"%s/\x00" as *const u8 as *const libc::c_char,
                     b"Pagans\x00" as *const u8 as *const libc::c_char,
                 );
             } else {
                 Com_sprintf(
                     newTeamName.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
                     b"%s/\x00" as *const u8 as *const libc::c_char,
                     b"Stroggs\x00" as *const u8 as *const libc::c_char,
                 );
@@ -1180,14 +1180,14 @@ unsafe extern "C" fn CG_RegisterClientModelname(
     // load the animations
     Com_sprintf(
         filename.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         b"models/players/%s/animation.cfg\x00" as *const u8 as *const libc::c_char,
         modelName,
     );
     if CG_ParseAnimationFile(filename.as_mut_ptr(), ci) as u64 == 0 {
         Com_sprintf(
             filename.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             b"models/players/characters/%s/animation.cfg\x00" as *const u8 as *const libc::c_char,
             modelName,
         );
@@ -1201,7 +1201,7 @@ unsafe extern "C" fn CG_RegisterClientModelname(
     }
     if CG_FindClientHeadFile(
         filename.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         ci,
         teamName,
         headName,
@@ -1214,7 +1214,7 @@ unsafe extern "C" fn CG_RegisterClientModelname(
         (*ci).modelIcon = trap_R_RegisterShaderNoMip(filename.as_mut_ptr())
     } else if CG_FindClientHeadFile(
         filename.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         ci,
         teamName,
         headName,
@@ -1307,13 +1307,13 @@ unsafe extern "C" fn CG_LoadClientInfo(mut clientNum: i32, mut ci: *mut clientIn
                 Q_strncpyz(
                     teamname.as_mut_ptr(),
                     b"Pagans\x00" as *const u8 as *const libc::c_char,
-                    ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
                 );
             } else {
                 Q_strncpyz(
                     teamname.as_mut_ptr(),
                     b"Stroggs\x00" as *const u8 as *const libc::c_char,
-                    ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
                 );
             }
             if CG_RegisterClientModelname(
@@ -1447,12 +1447,12 @@ unsafe extern "C" fn CG_CopyClientInfoModel(
     crate::stdlib::memcpy(
         (*to).animations.as_mut_ptr() as *mut libc::c_void,
         (*from).animations.as_mut_ptr() as *const libc::c_void,
-        ::std::mem::size_of::<[animation_t; 37]>() as libc::c_ulong,
+        ::std::mem::size_of::<[animation_t; 37]>() as usize,
     );
     crate::stdlib::memcpy(
         (*to).sounds.as_mut_ptr() as *mut libc::c_void,
         (*from).sounds.as_mut_ptr() as *const libc::c_void,
-        ::std::mem::size_of::<[sfxHandle_t; 32]>() as libc::c_ulong,
+        ::std::mem::size_of::<[sfxHandle_t; 32]>() as usize,
     );
 }
 /*
@@ -1659,7 +1659,7 @@ pub unsafe extern "C" fn CG_NewClientInfo(mut clientNum: i32) {
         crate::stdlib::memset(
             ci as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<clientInfo_t>() as libc::c_ulong,
+            ::std::mem::size_of::<clientInfo_t>() as usize,
         );
         return;
         // player just left
@@ -1669,14 +1669,14 @@ pub unsafe extern "C" fn CG_NewClientInfo(mut clientNum: i32) {
     crate::stdlib::memset(
         &mut newInfo as *mut clientInfo_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<clientInfo_t>() as libc::c_ulong,
+        ::std::mem::size_of::<clientInfo_t>() as usize,
     );
     // isolate the player's name
     v = Info_ValueForKey(configstring, b"n\x00" as *const u8 as *const libc::c_char);
     Q_strncpyz(
         newInfo.name.as_mut_ptr(),
         v,
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     // colors
     v = Info_ValueForKey(configstring, b"c1\x00" as *const u8 as *const libc::c_char);
@@ -1745,18 +1745,18 @@ pub unsafe extern "C" fn CG_NewClientInfo(mut clientNum: i32) {
             Q_strncpyz(
                 newInfo.modelName.as_mut_ptr(),
                 b"sarge\x00" as *const u8 as *const libc::c_char,
-                ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             );
             Q_strncpyz(
                 newInfo.skinName.as_mut_ptr(),
                 b"default\x00" as *const u8 as *const libc::c_char,
-                ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             );
         } else {
             trap_Cvar_VariableStringBuffer(
                 b"model\x00" as *const u8 as *const libc::c_char,
                 modelStr.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             );
             skin = libc::strchr(modelStr.as_mut_ptr(), '/' as i32);
             if skin.is_null() {
@@ -1769,12 +1769,12 @@ pub unsafe extern "C" fn CG_NewClientInfo(mut clientNum: i32) {
             Q_strncpyz(
                 newInfo.skinName.as_mut_ptr(),
                 skin,
-                ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             );
             Q_strncpyz(
                 newInfo.modelName.as_mut_ptr(),
                 modelStr.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             );
         }
         if cgs.gametype as u32 >= GT_TEAM as i32 as u32 {
@@ -1784,7 +1784,7 @@ pub unsafe extern "C" fn CG_NewClientInfo(mut clientNum: i32) {
                 Q_strncpyz(
                     newInfo.skinName.as_mut_ptr(),
                     slash.offset(1 as i32 as isize),
-                    ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
                 );
             }
         }
@@ -1792,7 +1792,7 @@ pub unsafe extern "C" fn CG_NewClientInfo(mut clientNum: i32) {
         Q_strncpyz(
             newInfo.modelName.as_mut_ptr(),
             v,
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         );
         slash = libc::strchr(newInfo.modelName.as_mut_ptr(), '/' as i32);
         if slash.is_null() {
@@ -1800,13 +1800,13 @@ pub unsafe extern "C" fn CG_NewClientInfo(mut clientNum: i32) {
             Q_strncpyz(
                 newInfo.skinName.as_mut_ptr(),
                 b"default\x00" as *const u8 as *const libc::c_char,
-                ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             );
         } else {
             Q_strncpyz(
                 newInfo.skinName.as_mut_ptr(),
                 slash.offset(1 as i32 as isize),
-                ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             );
             // truncate modelName
             *slash = 0 as i32 as libc::c_char
@@ -1826,18 +1826,18 @@ pub unsafe extern "C" fn CG_NewClientInfo(mut clientNum: i32) {
             Q_strncpyz(
                 newInfo.headModelName.as_mut_ptr(),
                 b"sarge\x00" as *const u8 as *const libc::c_char,
-                ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             );
             Q_strncpyz(
                 newInfo.headSkinName.as_mut_ptr(),
                 b"default\x00" as *const u8 as *const libc::c_char,
-                ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             );
         } else {
             trap_Cvar_VariableStringBuffer(
                 b"headmodel\x00" as *const u8 as *const libc::c_char,
                 modelStr_0.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             );
             skin_0 = libc::strchr(modelStr_0.as_mut_ptr(), '/' as i32);
             if skin_0.is_null() {
@@ -1850,12 +1850,12 @@ pub unsafe extern "C" fn CG_NewClientInfo(mut clientNum: i32) {
             Q_strncpyz(
                 newInfo.headSkinName.as_mut_ptr(),
                 skin_0,
-                ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             );
             Q_strncpyz(
                 newInfo.headModelName.as_mut_ptr(),
                 modelStr_0.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             );
         }
         if cgs.gametype as u32 >= GT_TEAM as i32 as u32 {
@@ -1865,7 +1865,7 @@ pub unsafe extern "C" fn CG_NewClientInfo(mut clientNum: i32) {
                 Q_strncpyz(
                     newInfo.headSkinName.as_mut_ptr(),
                     slash.offset(1 as i32 as isize),
-                    ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
                 );
             }
         }
@@ -1873,7 +1873,7 @@ pub unsafe extern "C" fn CG_NewClientInfo(mut clientNum: i32) {
         Q_strncpyz(
             newInfo.headModelName.as_mut_ptr(),
             v,
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         );
         slash = libc::strchr(newInfo.headModelName.as_mut_ptr(), '/' as i32);
         if slash.is_null() {
@@ -1881,13 +1881,13 @@ pub unsafe extern "C" fn CG_NewClientInfo(mut clientNum: i32) {
             Q_strncpyz(
                 newInfo.headSkinName.as_mut_ptr(),
                 b"default\x00" as *const u8 as *const libc::c_char,
-                ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             );
         } else {
             Q_strncpyz(
                 newInfo.headSkinName.as_mut_ptr(),
                 slash.offset(1 as i32 as isize),
-                ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             );
             // truncate modelName
             *slash = 0 as i32 as libc::c_char
@@ -2509,7 +2509,7 @@ unsafe extern "C" fn CG_TrailItem(mut cent: *mut centity_t, mut hModel: qhandle_
     crate::stdlib::memset(
         &mut ent as *mut refEntity_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
+        ::std::mem::size_of::<refEntity_t>() as usize,
     );
     ent.origin[0 as i32 as usize] = (*cent).lerpOrigin[0 as i32 as usize]
         + axis[0 as i32 as usize][0 as i32 as usize] * -(16 as i32) as f32;
@@ -2590,7 +2590,7 @@ unsafe extern "C" fn CG_PlayerFlag(
     crate::stdlib::memset(
         &mut pole as *mut refEntity_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
+        ::std::mem::size_of::<refEntity_t>() as usize,
     );
     pole.hModel = cgs.media.flagPoleModel;
     pole.lightingOrigin[0 as i32 as usize] = (*torso).lightingOrigin[0 as i32 as usize];
@@ -2609,7 +2609,7 @@ unsafe extern "C" fn CG_PlayerFlag(
     crate::stdlib::memset(
         &mut flag as *mut refEntity_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
+        ::std::mem::size_of::<refEntity_t>() as usize,
     );
     flag.hModel = cgs.media.flagFlapModel;
     flag.customSkin = hSkin;
@@ -2850,7 +2850,7 @@ unsafe extern "C" fn CG_PlayerFloatSprite(mut cent: *mut centity_t, mut shader: 
     crate::stdlib::memset(
         &mut ent as *mut refEntity_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
+        ::std::mem::size_of::<refEntity_t>() as usize,
     );
     ent.origin[0 as i32 as usize] = (*cent).lerpOrigin[0 as i32 as usize];
     ent.origin[1 as i32 as usize] = (*cent).lerpOrigin[1 as i32 as usize];
@@ -3337,17 +3337,17 @@ pub unsafe extern "C" fn CG_Player(mut cent: *mut centity_t) {
     crate::stdlib::memset(
         &mut legs as *mut refEntity_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
+        ::std::mem::size_of::<refEntity_t>() as usize,
     );
     crate::stdlib::memset(
         &mut torso as *mut refEntity_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
+        ::std::mem::size_of::<refEntity_t>() as usize,
     );
     crate::stdlib::memset(
         &mut head as *mut refEntity_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
+        ::std::mem::size_of::<refEntity_t>() as usize,
     );
     // get the rotation information
     CG_PlayerAngles(
@@ -3504,7 +3504,7 @@ pub unsafe extern "C" fn CG_ResetPlayerEntity(mut cent: *mut centity_t) {
     crate::stdlib::memset(
         &mut (*cent).pe.legs as *mut lerpFrame_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<lerpFrame_t>() as libc::c_ulong,
+        ::std::mem::size_of::<lerpFrame_t>() as usize,
     );
     (*cent).pe.legs.yawAngle = (*cent).rawAngles[1 as i32 as usize];
     (*cent).pe.legs.yawing = qfalse;
@@ -3513,7 +3513,7 @@ pub unsafe extern "C" fn CG_ResetPlayerEntity(mut cent: *mut centity_t) {
     crate::stdlib::memset(
         &mut (*cent).pe.torso as *mut lerpFrame_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<lerpFrame_t>() as libc::c_ulong,
+        ::std::mem::size_of::<lerpFrame_t>() as usize,
     );
     (*cent).pe.torso.yawAngle = (*cent).rawAngles[1 as i32 as usize];
     (*cent).pe.torso.yawing = qfalse;

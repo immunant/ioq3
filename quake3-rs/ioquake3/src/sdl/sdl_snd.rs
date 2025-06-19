@@ -123,7 +123,7 @@ unsafe extern "C" fn SNDDMA_AudioCallback(
         crate::stdlib::memset(
             stream as *mut libc::c_void,
             '\u{0}' as i32,
-            len as libc::c_ulong,
+            len as usize,
         ); /* bytes to buffer's end. */
         return;
     } else {
@@ -137,7 +137,7 @@ unsafe extern "C" fn SNDDMA_AudioCallback(
         crate::stdlib::memcpy(
             stream as *mut libc::c_void,
             dma.buffer.offset(pos as isize) as *const libc::c_void,
-            len1 as libc::c_ulong,
+            len1 as usize,
         );
         if len2 <= 0 as i32 {
             dmapos += len1 / (dma.samplebits / 8 as i32)
@@ -146,7 +146,7 @@ unsafe extern "C" fn SNDDMA_AudioCallback(
             crate::stdlib::memcpy(
                 stream.offset(len1 as isize) as *mut libc::c_void,
                 dma.buffer as *const libc::c_void,
-                len2 as libc::c_ulong,
+                len2 as usize,
             );
             dmapos = len2 / (dma.samplebits / 8 as i32)
         }
@@ -158,7 +158,7 @@ unsafe extern "C" fn SNDDMA_AudioCallback(
         let mut i: i32 = 0;
         if dma.isfloat != 0 && dma.samplebits == 32 as i32 {
             let mut ptr: *mut f32 = stream as *mut f32;
-            len = (len as libc::c_ulong).wrapping_div(::std::mem::size_of::<f32>() as libc::c_ulong)
+            len = (len as usize).wrapping_div(::std::mem::size_of::<f32>() as usize)
                 as i32;
             i = 0 as i32;
             while i < len {
@@ -168,8 +168,8 @@ unsafe extern "C" fn SNDDMA_AudioCallback(
             }
         } else if dma.samplebits == 16 as i32 {
             let mut ptr_0: *mut Sint16 = stream as *mut Sint16;
-            len = (len as libc::c_ulong)
-                .wrapping_div(::std::mem::size_of::<Sint16>() as libc::c_ulong)
+            len = (len as usize)
+                .wrapping_div(::std::mem::size_of::<Sint16>() as usize)
                 as i32;
             i = 0 as i32;
             while i < len {
@@ -179,8 +179,8 @@ unsafe extern "C" fn SNDDMA_AudioCallback(
             }
         } else if dma.samplebits == 8 as i32 {
             let mut ptr_1: *mut Uint8 = stream;
-            len = (len as libc::c_ulong)
-                .wrapping_div(::std::mem::size_of::<Uint8>() as libc::c_ulong)
+            len = (len as usize)
+                .wrapping_div(::std::mem::size_of::<Uint8>() as usize)
                 as i32;
             i = 0 as i32;
             while i < len {
@@ -377,12 +377,12 @@ pub unsafe extern "C" fn SNDDMA_Init() -> qboolean {
     crate::stdlib::memset(
         &mut desired as *mut SDL_AudioSpec as *mut libc::c_void,
         '\u{0}' as i32,
-        ::std::mem::size_of::<SDL_AudioSpec>() as libc::c_ulong,
+        ::std::mem::size_of::<SDL_AudioSpec>() as usize,
     );
     crate::stdlib::memset(
         &mut obtained as *mut SDL_AudioSpec as *mut libc::c_void,
         '\u{0}' as i32,
-        ::std::mem::size_of::<SDL_AudioSpec>() as libc::c_ulong,
+        ::std::mem::size_of::<SDL_AudioSpec>() as usize,
     );
     tmp = (*s_sdlBits).value as i32;
     if tmp != 16 as i32 && tmp != 8 as i32 {
@@ -459,7 +459,7 @@ pub unsafe extern "C" fn SNDDMA_Init() -> qboolean {
     dma.speed = obtained.freq;
     dmasize = dma.samples * (dma.samplebits / 8 as i32);
     dma.buffer =
-        crate::stdlib::calloc(1 as i32 as libc::c_ulong, dmasize as libc::c_ulong) as *mut byte;
+        crate::stdlib::calloc(1 as i32 as usize, dmasize as usize) as *mut byte;
     // !!! FIXME: some of these SDL_OpenAudioDevice() values should be cvars.
     s_sdlCapture = crate::src::qcommon::cvar::Cvar_Get(
         b"s_sdlCapture\x00" as *const u8 as *const libc::c_char,
@@ -500,7 +500,7 @@ pub unsafe extern "C" fn SNDDMA_Init() -> qboolean {
         SDL_memset(
             &mut spec as *mut SDL_AudioSpec as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<SDL_AudioSpec>() as libc::c_ulong,
+            ::std::mem::size_of::<SDL_AudioSpec>() as usize,
         );
         spec.freq = 48000 as i32;
         spec.format = 0x8010 as i32 as SDL_AudioFormat;
@@ -700,8 +700,8 @@ pub unsafe extern "C" fn SNDDMA_MasterGain(mut val: f32) {
     sdlMasterGain = val;
 }
 unsafe extern "C" fn run_static_initializers() {
-    formatToStringTableSize = (::std::mem::size_of::<[C2RustUnnamed_155; 8]>() as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<C2RustUnnamed_155>() as libc::c_ulong)
+    formatToStringTableSize = (::std::mem::size_of::<[C2RustUnnamed_155; 8]>() as usize)
+        .wrapping_div(::std::mem::size_of::<C2RustUnnamed_155>() as usize)
         as i32
 }
 #[used]

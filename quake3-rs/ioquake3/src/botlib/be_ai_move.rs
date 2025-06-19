@@ -269,7 +269,7 @@ pub unsafe extern "C" fn BotAllocMoveState() -> i32 {
     while i <= 64 as i32 {
         if botmovestates[i as usize].is_null() {
             botmovestates[i as usize] = crate::src::botlib::l_memory::GetClearedMemory(
-                ::std::mem::size_of::<bot_movestate_t>() as libc::c_ulong,
+                ::std::mem::size_of::<bot_movestate_t>() as usize,
             ) as *mut bot_movestate_t;
             return i;
         }
@@ -929,7 +929,7 @@ pub unsafe extern "C" fn BotSetBrushModelTypes() {
     crate::stdlib::memset(
         modeltypes.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        (256 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+        (256 as i32 as usize).wrapping_mul(::std::mem::size_of::<i32>() as usize),
     );
     //
     ent = crate::src::botlib::be_aas_bspq3::AAS_NextBSPEntity(0 as i32); //end if
@@ -1690,7 +1690,7 @@ pub unsafe extern "C" fn BotPredictVisiblePosition(
     crate::stdlib::memset(
         avoidreach.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        (1 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+        (1 as i32 as usize).wrapping_mul(::std::mem::size_of::<i32>() as usize),
     );
     lastgoalareanum = (*goal).areanum;
     lastareanum = areanum;
@@ -5543,7 +5543,7 @@ pub unsafe extern "C" fn BotMoveToGoal(
             crate::stdlib::memset(
                 &mut reach as *mut aas_reachability_t as *mut libc::c_void,
                 0 as i32,
-                ::std::mem::size_of::<aas_reachability_t>() as libc::c_ulong,
+                ::std::mem::size_of::<aas_reachability_t>() as usize,
             );
         }
     } else {
@@ -5708,17 +5708,17 @@ pub unsafe extern "C" fn BotResetAvoidReach(mut movestate: i32) {
     crate::stdlib::memset(
         (*ms).avoidreach.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        (1 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+        (1 as i32 as usize).wrapping_mul(::std::mem::size_of::<i32>() as usize),
     );
     crate::stdlib::memset(
         (*ms).avoidreachtimes.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        (1 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
+        (1 as i32 as usize).wrapping_mul(::std::mem::size_of::<f32>() as usize),
     );
     crate::stdlib::memset(
         (*ms).avoidreachtries.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        (1 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+        (1 as i32 as usize).wrapping_mul(::std::mem::size_of::<i32>() as usize),
     );
 }
 //resets the last avoid reachability
@@ -5778,7 +5778,7 @@ pub unsafe extern "C" fn BotResetMoveState(mut movestate: i32) {
     crate::stdlib::memset(
         ms as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<bot_movestate_t>() as libc::c_ulong,
+        ::std::mem::size_of::<bot_movestate_t>() as usize,
     );
 }
 //setup movement AI

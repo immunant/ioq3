@@ -236,10 +236,10 @@ pub unsafe extern "C" fn jpeg_CreateCompress(
         )
         .expect("non-null function pointer")(cinfo as j_common_ptr);
     }
-    if structsize != ::std::mem::size_of::<jpeg_compress_struct>() as libc::c_ulong {
+    if structsize != ::std::mem::size_of::<jpeg_compress_struct>() as usize {
         (*(*cinfo).err).msg_code = JERR_BAD_STRUCT_SIZE as i32;
         (*(*cinfo).err).msg_parm.i[0 as i32 as usize] =
-            ::std::mem::size_of::<jpeg_compress_struct>() as libc::c_ulong as i32;
+            ::std::mem::size_of::<jpeg_compress_struct>() as usize as i32;
         (*(*cinfo).err).msg_parm.i[1 as i32 as usize] = structsize as i32;
         Some(
             (*(*cinfo).err)
@@ -259,7 +259,7 @@ pub unsafe extern "C" fn jpeg_CreateCompress(
     crate::stdlib::memset(
         cinfo as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<jpeg_compress_struct>() as libc::c_ulong,
+        ::std::mem::size_of::<jpeg_compress_struct>() as usize,
     );
     (*cinfo).err = err;
     (*cinfo).client_data = client_data;

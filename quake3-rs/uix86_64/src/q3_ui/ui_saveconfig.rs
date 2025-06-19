@@ -215,7 +215,7 @@ unsafe extern "C" fn UI_SaveConfigMenu_SaveEvent(mut _ptr: *mut libc::c_void, mu
     COM_StripExtension(
         saveConfig.savename.field.buffer.as_mut_ptr(),
         configname.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     trap_Cmd_ExecuteText(
         EXEC_APPEND as i32,
@@ -278,7 +278,7 @@ unsafe extern "C" fn UI_SaveConfigMenu_Init() {
     crate::stdlib::memset(
         &mut saveConfig as *mut saveConfig_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<saveConfig_t>() as libc::c_ulong,
+        ::std::mem::size_of::<saveConfig_t>() as usize,
     );
     UI_SaveConfigMenu_Cache();
     saveConfig.menu.wrapAround = qtrue;

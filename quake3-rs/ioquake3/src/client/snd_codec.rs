@@ -169,7 +169,7 @@ unsafe extern "C" fn S_CodecGetSound(
         if !(codec == orgCodec) {
             Com_sprintf(
                 altName.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
                 b"%s.%s\x00" as *const u8 as *const libc::c_char,
                 localName.as_mut_ptr(),
                 (*codec).ext,
@@ -318,7 +318,7 @@ pub unsafe extern "C" fn S_CodecUtilOpen(
     // Allocate a stream
     stream = crate::src::qcommon::common::Z_Malloc(::std::mem::size_of::<
         crate::src::client::snd_codec::snd_stream_t,
-    >() as libc::c_ulong as i32) as *mut crate::src::client::snd_codec::snd_stream_t;
+    >() as usize as i32) as *mut crate::src::client::snd_codec::snd_stream_t;
     if stream.is_null() {
         crate::src::qcommon::files::FS_FCloseFile(hnd);
         return 0 as *mut crate::src::client::snd_codec::snd_stream_t;

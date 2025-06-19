@@ -165,8 +165,8 @@ pub unsafe extern "C" fn silk_find_pitch_lags_FLP(
         Wsig_ptr as *mut libc::c_void,
         x_buf_ptr as *const libc::c_void,
         (((*psEnc).sCmn.pitch_LPC_win_length - ((*psEnc).sCmn.la_pitch << 1 as i32))
-            as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
+            as usize)
+            .wrapping_mul(::std::mem::size_of::<f32>() as usize),
     );
     /* Last LA_LTP samples */
     Wsig_ptr = Wsig_ptr.offset(
@@ -255,7 +255,7 @@ pub unsafe extern "C" fn silk_find_pitch_lags_FLP(
         crate::stdlib::memset(
             (*psEncCtrl).pitchL.as_mut_ptr() as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<[i32; 4]>() as libc::c_ulong,
+            ::std::mem::size_of::<[i32; 4]>() as usize,
         );
         (*psEnc).sCmn.indices.lagIndex = 0 as i32 as opus_int16;
         (*psEnc).sCmn.indices.contourIndex = 0 as i32 as i8;

@@ -385,17 +385,17 @@ unsafe extern "C" fn GetClientState(mut state: *mut uiClientState_t) {
     Q_strncpyz(
         (*state).servername.as_mut_ptr(),
         clc.servername.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     Q_strncpyz(
         (*state).updateInfoString.as_mut_ptr(),
         cls.updateInfoString.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     Q_strncpyz(
         (*state).messageString.as_mut_ptr(),
         clc.serverMessage.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     (*state).clientNum = cl.snap.ps.clientNum;
 }
@@ -419,31 +419,31 @@ pub unsafe extern "C" fn LAN_LoadCachedServers() {
     {
         FS_Read(
             &mut cls.numglobalservers as *mut i32 as *mut libc::c_void,
-            ::std::mem::size_of::<i32>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<i32>() as usize as i32,
             fileIn,
         );
         FS_Read(
             &mut cls.numfavoriteservers as *mut i32 as *mut libc::c_void,
-            ::std::mem::size_of::<i32>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<i32>() as usize as i32,
             fileIn,
         );
         FS_Read(
             &mut size as *mut i32 as *mut libc::c_void,
-            ::std::mem::size_of::<i32>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<i32>() as usize as i32,
             fileIn,
         );
-        if size as libc::c_ulong
-            == (::std::mem::size_of::<[serverInfo_t; 4096]>() as libc::c_ulong)
-                .wrapping_add(::std::mem::size_of::<[serverInfo_t; 128]>() as libc::c_ulong)
+        if size as usize
+            == (::std::mem::size_of::<[serverInfo_t; 4096]>() as usize)
+                .wrapping_add(::std::mem::size_of::<[serverInfo_t; 128]>() as usize)
         {
             FS_Read(
                 &mut cls.globalServers as *mut [serverInfo_t; 4096] as *mut libc::c_void,
-                ::std::mem::size_of::<[serverInfo_t; 4096]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[serverInfo_t; 4096]>() as usize as i32,
                 fileIn,
             );
             FS_Read(
                 &mut cls.favoriteServers as *mut [serverInfo_t; 128] as *mut libc::c_void,
-                ::std::mem::size_of::<[serverInfo_t; 128]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[serverInfo_t; 128]>() as usize as i32,
                 fileIn,
             );
         } else {
@@ -467,30 +467,30 @@ pub unsafe extern "C" fn LAN_SaveServersToCache() {
         FS_SV_FOpenFileWrite(b"servercache.dat\x00" as *const u8 as *const libc::c_char);
     FS_Write(
         &mut cls.numglobalservers as *mut i32 as *const libc::c_void,
-        ::std::mem::size_of::<i32>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<i32>() as usize as i32,
         fileOut,
     );
     FS_Write(
         &mut cls.numfavoriteservers as *mut i32 as *const libc::c_void,
-        ::std::mem::size_of::<i32>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<i32>() as usize as i32,
         fileOut,
     );
-    size = (::std::mem::size_of::<[serverInfo_t; 4096]>() as libc::c_ulong)
-        .wrapping_add(::std::mem::size_of::<[serverInfo_t; 128]>() as libc::c_ulong)
+    size = (::std::mem::size_of::<[serverInfo_t; 4096]>() as usize)
+        .wrapping_add(::std::mem::size_of::<[serverInfo_t; 128]>() as usize)
         as i32;
     FS_Write(
         &mut size as *mut i32 as *const libc::c_void,
-        ::std::mem::size_of::<i32>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<i32>() as usize as i32,
         fileOut,
     );
     FS_Write(
         &mut cls.globalServers as *mut [serverInfo_t; 4096] as *const libc::c_void,
-        ::std::mem::size_of::<[serverInfo_t; 4096]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[serverInfo_t; 4096]>() as usize as i32,
         fileOut,
     );
     FS_Write(
         &mut cls.favoriteServers as *mut [serverInfo_t; 128] as *const libc::c_void,
-        ::std::mem::size_of::<[serverInfo_t; 128]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[serverInfo_t; 128]>() as usize as i32,
         fileOut,
     );
     FS_FCloseFile(fileOut);
@@ -594,7 +594,7 @@ unsafe extern "C" fn LAN_AddServer(
             Q_strncpyz(
                 (*servers.offset(*count as isize)).hostName.as_mut_ptr(),
                 name,
-                ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 32]>() as usize as i32,
             );
             (*servers.offset(*count as isize)).visible = qtrue;
             *count += 1;
@@ -656,7 +656,7 @@ unsafe extern "C" fn LAN_RemoveServer(mut source: i32, mut addr: *const libc::c_
                         &mut *servers.offset(j as isize) as *mut serverInfo_t as *mut libc::c_void,
                         &mut *servers.offset((j + 1 as i32) as isize) as *mut serverInfo_t
                             as *const libc::c_void,
-                        ::std::mem::size_of::<serverInfo_t>() as libc::c_ulong,
+                        ::std::mem::size_of::<serverInfo_t>() as usize,
                     );
                     j += 1
                 }
@@ -1236,14 +1236,14 @@ unsafe extern "C" fn CLUI_GetCDKey(mut buf: *mut libc::c_char, mut _buflen: i32)
             buf as *mut libc::c_void,
             &mut *cl_cdkey.as_mut_ptr().offset(16 as i32 as isize) as *mut libc::c_char
                 as *const libc::c_void,
-            16 as i32 as libc::c_ulong,
+            16 as i32 as usize,
         );
         *buf.offset(16 as i32 as isize) = 0 as i32 as libc::c_char
     } else {
         crate::stdlib::memcpy(
             buf as *mut libc::c_void,
             cl_cdkey.as_mut_ptr() as *const libc::c_void,
-            16 as i32 as libc::c_ulong,
+            16 as i32 as usize,
         );
         *buf.offset(16 as i32 as isize) = 0 as i32 as libc::c_char
     };
@@ -1262,7 +1262,7 @@ unsafe extern "C" fn CLUI_SetCDKey(mut buf: *mut libc::c_char) {
             &mut *cl_cdkey.as_mut_ptr().offset(16 as i32 as isize) as *mut libc::c_char
                 as *mut libc::c_void,
             buf as *const libc::c_void,
-            16 as i32 as libc::c_ulong,
+            16 as i32 as usize,
         );
         cl_cdkey[32 as i32 as usize] = 0 as i32 as libc::c_char;
         // set the flag so the fle will be written at the next opportunity
@@ -1271,7 +1271,7 @@ unsafe extern "C" fn CLUI_SetCDKey(mut buf: *mut libc::c_char) {
         crate::stdlib::memcpy(
             cl_cdkey.as_mut_ptr() as *mut libc::c_void,
             buf as *const libc::c_void,
-            16 as i32 as libc::c_ulong,
+            16 as i32 as usize,
         );
         // set the flag so the fle will be written at the next opportunity
         cvar_modifiedFlags |= 0x1 as i32
@@ -1420,17 +1420,17 @@ pub unsafe extern "C" fn CL_UISystemCalls(mut args: *mut intptr_t) -> intptr_t {
                 && (crate::stdlib::strncmp(
                     VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const libc::c_char,
                     b"snd_restart\x00" as *const u8 as *const libc::c_char,
-                    11 as i32 as libc::c_ulong,
+                    11 as i32 as usize,
                 ) == 0
                     || crate::stdlib::strncmp(
                         VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const libc::c_char,
                         b"vid_restart\x00" as *const u8 as *const libc::c_char,
-                        11 as i32 as libc::c_ulong,
+                        11 as i32 as usize,
                     ) == 0
                     || crate::stdlib::strncmp(
                         VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const libc::c_char,
                         b"quit\x00" as *const u8 as *const libc::c_char,
-                        5 as i32 as libc::c_ulong,
+                        5 as i32 as usize,
                     ) == 0)
             {
                 Com_Printf(
@@ -1795,7 +1795,7 @@ pub unsafe extern "C" fn CL_UISystemCalls(mut args: *mut intptr_t) -> intptr_t {
             crate::stdlib::memset(
                 VM_ArgPtr(*args.offset(1 as i32 as isize)),
                 *args.offset(2 as i32 as isize) as i32,
-                *args.offset(3 as i32 as isize) as libc::c_ulong,
+                *args.offset(3 as i32 as isize) as usize,
             );
             return 0 as i32 as intptr_t;
         }
@@ -1803,7 +1803,7 @@ pub unsafe extern "C" fn CL_UISystemCalls(mut args: *mut intptr_t) -> intptr_t {
             crate::stdlib::memcpy(
                 VM_ArgPtr(*args.offset(1 as i32 as isize)),
                 VM_ArgPtr(*args.offset(2 as i32 as isize)),
-                *args.offset(3 as i32 as isize) as libc::c_ulong,
+                *args.offset(3 as i32 as isize) as usize,
             );
             return 0 as i32 as intptr_t;
         }
@@ -1811,7 +1811,7 @@ pub unsafe extern "C" fn CL_UISystemCalls(mut args: *mut intptr_t) -> intptr_t {
             crate::stdlib::strncpy(
                 VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut libc::c_char,
                 VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const libc::c_char,
-                *args.offset(3 as i32 as isize) as libc::c_ulong,
+                *args.offset(3 as i32 as isize) as usize,
             );
             return *args.offset(1 as i32 as isize);
         }

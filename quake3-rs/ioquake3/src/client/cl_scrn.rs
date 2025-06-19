@@ -430,7 +430,7 @@ pub unsafe extern "C" fn SCR_DrawStringExt(
                     g_color_table
                         [(*s.offset(1 as i32 as isize) as i32 - '0' as i32 & 0x7 as i32) as usize]
                         .as_mut_ptr() as *const libc::c_void,
-                    ::std::mem::size_of::<vec4_t>() as libc::c_ulong,
+                    ::std::mem::size_of::<vec4_t>() as usize,
                 );
                 color[3 as i32 as usize] = *setColor.offset(3 as i32 as isize);
                 re.SetColor.expect("non-null function pointer")(color.as_mut_ptr());
@@ -517,7 +517,7 @@ pub unsafe extern "C" fn SCR_DrawSmallStringExt(
                     g_color_table
                         [(*s.offset(1 as i32 as isize) as i32 - '0' as i32 & 0x7 as i32) as usize]
                         .as_mut_ptr() as *const libc::c_void,
-                    ::std::mem::size_of::<vec4_t>() as libc::c_ulong,
+                    ::std::mem::size_of::<vec4_t>() as usize,
                 );
                 color[3 as i32 as usize] = *setColor.offset(3 as i32 as isize);
                 re.SetColor.expect("non-null function pointer")(color.as_mut_ptr());
@@ -583,8 +583,8 @@ pub unsafe extern "C" fn SCR_DrawDemoRecording() {
         pos / 1024 as i32,
     );
     SCR_DrawStringExt(
-        (320 as i32 as libc::c_ulong).wrapping_sub(
-            crate::stdlib::strlen(string.as_mut_ptr()).wrapping_mul(4 as i32 as libc::c_ulong),
+        (320 as i32 as usize).wrapping_sub(
+            crate::stdlib::strlen(string.as_mut_ptr()).wrapping_mul(4 as i32 as usize),
         ) as i32,
         20 as i32,
         8 as i32 as f32,
@@ -651,8 +651,8 @@ pub unsafe extern "C" fn SCR_DrawVoipMeter() {
         buffer.as_mut_ptr(),
     );
     SCR_DrawStringExt(
-        (320 as i32 as libc::c_ulong).wrapping_sub(
-            crate::stdlib::strlen(string.as_mut_ptr()).wrapping_mul(4 as i32 as libc::c_ulong),
+        (320 as i32 as usize).wrapping_sub(
+            crate::stdlib::strlen(string.as_mut_ptr()).wrapping_mul(4 as i32 as usize),
         ) as i32,
         10 as i32,
         8 as i32 as f32,
@@ -1023,9 +1023,9 @@ SCR_DebugGraph
 
 pub unsafe extern "C" fn SCR_DebugGraph(mut value: f32) {
     values[current as usize] = value;
-    current = ((current + 1 as i32) as libc::c_ulong).wrapping_rem(
-        (::std::mem::size_of::<[f32; 1024]>() as libc::c_ulong)
-            .wrapping_div(::std::mem::size_of::<f32>() as libc::c_ulong),
+    current = ((current + 1 as i32) as usize).wrapping_rem(
+        (::std::mem::size_of::<[f32; 1024]>() as usize)
+            .wrapping_div(::std::mem::size_of::<f32>() as usize),
     ) as i32;
 }
 /*
@@ -1064,19 +1064,19 @@ pub unsafe extern "C" fn SCR_DrawDebugGraph() {
     re.SetColor.expect("non-null function pointer")(0 as *const f32);
     a = 0 as i32;
     while a < w {
-        i = (::std::mem::size_of::<[f32; 1024]>() as libc::c_ulong)
-            .wrapping_div(::std::mem::size_of::<f32>() as libc::c_ulong)
-            .wrapping_add(current as libc::c_ulong)
-            .wrapping_sub(1 as i32 as libc::c_ulong)
+        i = (::std::mem::size_of::<[f32; 1024]>() as usize)
+            .wrapping_div(::std::mem::size_of::<f32>() as usize)
+            .wrapping_add(current as usize)
+            .wrapping_sub(1 as i32 as usize)
             .wrapping_sub(
-                (a as libc::c_ulong).wrapping_rem(
-                    (::std::mem::size_of::<[f32; 1024]>() as libc::c_ulong)
-                        .wrapping_div(::std::mem::size_of::<f32>() as libc::c_ulong),
+                (a as usize).wrapping_rem(
+                    (::std::mem::size_of::<[f32; 1024]>() as usize)
+                        .wrapping_div(::std::mem::size_of::<f32>() as usize),
                 ),
             )
             .wrapping_rem(
-                (::std::mem::size_of::<[f32; 1024]>() as libc::c_ulong)
-                    .wrapping_div(::std::mem::size_of::<f32>() as libc::c_ulong),
+                (::std::mem::size_of::<[f32; 1024]>() as usize)
+                    .wrapping_div(::std::mem::size_of::<f32>() as usize),
             ) as i32;
         v = values[i as usize];
         v = v * (*cl_graphscale).integer as f32 + (*cl_graphshift).integer as f32;

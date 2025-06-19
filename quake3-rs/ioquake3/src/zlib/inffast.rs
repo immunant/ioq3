@@ -105,7 +105,7 @@ pub unsafe extern "C" fn inflate_fast(mut strm: z_streamp, mut start: u32)
     let mut whave: u32 = 0; /* window write index */
     let mut write: u32 = 0; /* allocated sliding window, if wsize != 0 */
     let mut window: *mut u8 = 0 as *mut u8; /* local strm->hold */
-    let mut hold: libc::c_ulong = 0; /* local strm->bits */
+    let mut hold: usize = 0; /* local strm->bits */
     let mut bits: u32 = 0; /* local strm->lencode */
     let mut lcode: *const code = 0 as *const code; /* local strm->distcode */
     let mut dcode: *const code = 0 as *const code; /* mask for first level of length codes */
@@ -145,13 +145,13 @@ pub unsafe extern "C" fn inflate_fast(mut strm: z_streamp, mut start: u32)
     {
         if bits < 15 as i32 as u32 {
             in_0 = in_0.offset(1);
-            hold = hold.wrapping_add((*in_0 as libc::c_ulong) << bits);
+            hold = hold.wrapping_add((*in_0 as usize) << bits);
             bits = bits.wrapping_add(8 as i32 as u32);
             in_0 = in_0.offset(1);
-            hold = hold.wrapping_add((*in_0 as libc::c_ulong) << bits);
+            hold = hold.wrapping_add((*in_0 as usize) << bits);
             bits = bits.wrapping_add(8 as i32 as u32)
         }
-        this = *lcode.offset((hold & lmask as libc::c_ulong) as isize);
+        this = *lcode.offset((hold & lmask as usize) as isize);
         loop {
             op = this.bits as u32;
             hold >>= op;
@@ -170,7 +170,7 @@ pub unsafe extern "C" fn inflate_fast(mut strm: z_streamp, mut start: u32)
                 if op != 0 {
                     if bits < op {
                         in_0 = in_0.offset(1);
-                        hold = hold.wrapping_add((*in_0 as libc::c_ulong) << bits);
+                        hold = hold.wrapping_add((*in_0 as usize) << bits);
                         bits = bits.wrapping_add(8 as i32 as u32)
                     }
                     len = len.wrapping_add(
@@ -181,19 +181,19 @@ pub unsafe extern "C" fn inflate_fast(mut strm: z_streamp, mut start: u32)
                 }
                 if bits < 15 as i32 as u32 {
                     in_0 = in_0.offset(1);
-                    hold = hold.wrapping_add((*in_0 as libc::c_ulong) << bits);
+                    hold = hold.wrapping_add((*in_0 as usize) << bits);
                     bits = bits.wrapping_add(8 as i32 as u32);
                     in_0 = in_0.offset(1);
-                    hold = hold.wrapping_add((*in_0 as libc::c_ulong) << bits);
+                    hold = hold.wrapping_add((*in_0 as usize) << bits);
                     bits = bits.wrapping_add(8 as i32 as u32)
                 }
-                this = *dcode.offset((hold & dmask as libc::c_ulong) as isize);
+                this = *dcode.offset((hold & dmask as usize) as isize);
                 current_block_141 = 719419377338824450;
                 break;
             } else if op & 64 as i32 as u32 == 0 as i32 as u32 {
                 /* 2nd level length code */
-                this = *lcode.offset((this.val as libc::c_ulong).wrapping_add(
-                    hold & ((1 as u32) << op).wrapping_sub(1 as i32 as u32) as libc::c_ulong,
+                this = *lcode.offset((this.val as usize).wrapping_add(
+                    hold & ((1 as u32) << op).wrapping_sub(1 as i32 as u32) as usize,
                 ) as isize)
             } else if op & 32 as i32 as u32 != 0 {
                 current_block_141 = 5250576585193495047;
@@ -216,11 +216,11 @@ pub unsafe extern "C" fn inflate_fast(mut strm: z_streamp, mut start: u32)
                         op &= 15 as i32 as u32; /* max distance in output */
                         if bits < op {
                             in_0 = in_0.offset(1);
-                            hold = hold.wrapping_add((*in_0 as libc::c_ulong) << bits);
+                            hold = hold.wrapping_add((*in_0 as usize) << bits);
                             bits = bits.wrapping_add(8 as i32 as u32);
                             if bits < op {
                                 in_0 = in_0.offset(1);
-                                hold = hold.wrapping_add((*in_0 as libc::c_ulong) << bits);
+                                hold = hold.wrapping_add((*in_0 as usize) << bits);
                                 bits = bits.wrapping_add(8 as i32 as u32)
                             }
                         }
@@ -239,9 +239,9 @@ pub unsafe extern "C" fn inflate_fast(mut strm: z_streamp, mut start: u32)
                         }
                     } else if op & 64 as i32 as u32 == 0 as i32 as u32 {
                         /* 2nd level distance code */
-                        this = *dcode.offset((this.val as libc::c_ulong).wrapping_add(
+                        this = *dcode.offset((this.val as usize).wrapping_add(
                             hold & ((1 as u32) << op).wrapping_sub(1 as i32 as u32)
-                                as libc::c_ulong,
+                                as usize,
                         ) as isize)
                     } else {
                         (*strm).msg = b"invalid distance code\x00" as *const u8
@@ -412,7 +412,7 @@ pub unsafe extern "C" fn inflate_fast(mut strm: z_streamp, mut start: u32)
     len = bits >> 3 as i32;
     in_0 = in_0.offset(-(len as isize));
     bits = bits.wrapping_sub(len << 3 as i32);
-    hold &= ((1 as u32) << bits).wrapping_sub(1 as i32 as u32) as libc::c_ulong;
+    hold &= ((1 as u32) << bits).wrapping_sub(1 as i32 as u32) as usize;
     /* update state and return */
     (*strm).next_in = in_0.offset(1 as i32 as isize);
     (*strm).next_out = out.offset(1 as i32 as isize);

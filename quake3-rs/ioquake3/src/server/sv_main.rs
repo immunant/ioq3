@@ -440,9 +440,9 @@ unsafe extern "C" fn SV_ExpandNewlines(mut in_0: *mut libc::c_char) -> *mut libc
     let mut l: i32 = 0;
     l = 0 as i32;
     while *in_0 as i32 != 0
-        && (l as libc::c_ulong)
-            < (::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong)
-                .wrapping_sub(3 as i32 as libc::c_ulong)
+        && (l as usize)
+            < (::std::mem::size_of::<[libc::c_char; 1024]>() as usize)
+                .wrapping_sub(3 as i32 as usize)
     {
         if *in_0 as i32 == '\n' as i32 {
             let fresh0 = l;
@@ -527,7 +527,7 @@ pub unsafe extern "C" fn SV_AddServerCommand(
     Q_strncpyz(
         (*client).reliableCommands[index as usize].as_mut_ptr(),
         cmd,
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
 }
 /*
@@ -553,7 +553,7 @@ pub unsafe extern "C" fn SV_SendServerCommand(
     argptr = args.clone();
     crate::stdlib::vsnprintf(
         message.as_mut_ptr() as *mut libc::c_char,
-        ::std::mem::size_of::<[byte; 16384]>() as libc::c_ulong,
+        ::std::mem::size_of::<[byte; 16384]>() as usize,
         fmt,
         argptr.as_va_list(),
     );
@@ -562,7 +562,7 @@ pub unsafe extern "C" fn SV_SendServerCommand(
     // and should maybe be addressed later, but this certainly
     // fixes the problem for now
     if crate::stdlib::strlen(message.as_mut_ptr() as *mut libc::c_char)
-        > 1022 as i32 as libc::c_ulong
+        > 1022 as i32 as usize
     {
         return;
     }
@@ -575,7 +575,7 @@ pub unsafe extern "C" fn SV_SendServerCommand(
         && crate::stdlib::strncmp(
             message.as_mut_ptr() as *mut libc::c_char,
             b"print\x00" as *const u8 as *const libc::c_char,
-            5 as i32 as libc::c_ulong,
+            5 as i32 as usize,
         ) == 0
     {
         Com_Printf(
@@ -796,7 +796,7 @@ unsafe extern "C" fn SVC_HashForAddress(mut address: netadr_t) -> isize {
         _ => {}
     }
     i = 0 as i32;
-    while (i as libc::c_ulong) < size {
+    while (i as usize) < size {
         hash += *ip.offset(i as isize) as isize * (i + 119 as i32) as isize;
         i += 1
     }
@@ -828,7 +828,7 @@ unsafe extern "C" fn SVC_BucketForAddress(
                 if crate::stdlib::memcmp(
                     (*bucket).ipv._4.as_mut_ptr() as *const libc::c_void,
                     address.ip.as_mut_ptr() as *const libc::c_void,
-                    4 as i32 as libc::c_ulong,
+                    4 as i32 as usize,
                 ) == 0 as i32
                 {
                     return bucket;
@@ -838,7 +838,7 @@ unsafe extern "C" fn SVC_BucketForAddress(
                 if crate::stdlib::memcmp(
                     (*bucket).ipv._6.as_mut_ptr() as *const libc::c_void,
                     address.ip6.as_mut_ptr() as *const libc::c_void,
-                    16 as i32 as libc::c_ulong,
+                    16 as i32 as usize,
                 ) == 0 as i32
                 {
                     return bucket;
@@ -866,7 +866,7 @@ unsafe extern "C" fn SVC_BucketForAddress(
             crate::stdlib::memset(
                 bucket as *mut libc::c_void,
                 0 as i32,
-                ::std::mem::size_of::<leakyBucket_t>() as libc::c_ulong,
+                ::std::mem::size_of::<leakyBucket_t>() as usize,
             );
         }
         if (*bucket).type_0 as u32 == NA_BAD as i32 as u32 {
@@ -876,14 +876,14 @@ unsafe extern "C" fn SVC_BucketForAddress(
                     crate::stdlib::memcpy(
                         (*bucket).ipv._4.as_mut_ptr() as *mut libc::c_void,
                         address.ip.as_mut_ptr() as *const libc::c_void,
-                        4 as i32 as libc::c_ulong,
+                        4 as i32 as usize,
                     );
                 }
                 5 => {
                     crate::stdlib::memcpy(
                         (*bucket).ipv._6.as_mut_ptr() as *mut libc::c_void,
                         address.ip6.as_mut_ptr() as *const libc::c_void,
-                        16 as i32 as libc::c_ulong,
+                        16 as i32 as usize,
                     );
                 }
                 _ => {}
@@ -999,7 +999,7 @@ unsafe extern "C" fn SVC_Status(mut from: netadr_t) {
         return;
     }
     // A maximum challenge length of 128 should be more than plenty.
-    if crate::stdlib::strlen(Cmd_Argv(1 as i32)) > 128 as i32 as libc::c_ulong {
+    if crate::stdlib::strlen(Cmd_Argv(1 as i32)) > 128 as i32 as usize {
         return;
     }
     libc::strcpy(infostring.as_mut_ptr(), Cvar_InfoString(0x4 as i32));
@@ -1019,15 +1019,15 @@ unsafe extern "C" fn SVC_Status(mut from: netadr_t) {
             ps = SV_GameClientNum(i) as *mut playerState_s;
             Com_sprintf(
                 player.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
                 b"%i %i \"%s\"\n\x00" as *const u8 as *const libc::c_char,
                 (*ps).persistant[0 as i32 as usize],
                 (*cl).ping,
                 (*cl).name.as_mut_ptr(),
             );
             playerLength = crate::stdlib::strlen(player.as_mut_ptr()) as i32;
-            if (statusLength + playerLength) as libc::c_ulong
-                >= ::std::mem::size_of::<[libc::c_char; 16384]>() as libc::c_ulong
+            if (statusLength + playerLength) as usize
+                >= ::std::mem::size_of::<[libc::c_char; 16384]>() as usize
             {
                 break;
             }
@@ -1094,7 +1094,7 @@ pub unsafe extern "C" fn SVC_Info(mut from: netadr_t) {
      * to the Infostring bug discovered by Luigi Auriemma. See http://aluigi.altervista.org/ for the advisory.
      */
     // A maximum challenge length of 128 should be more than plenty.
-    if crate::stdlib::strlen(Cmd_Argv(1 as i32)) > 128 as i32 as libc::c_ulong {
+    if crate::stdlib::strlen(Cmd_Argv(1 as i32)) > 128 as i32 as usize {
         return;
     }
     // don't count privateclients
@@ -1355,7 +1355,7 @@ unsafe extern "C" fn SVC_RemoteCommand(mut from: netadr_t, mut _msg: *mut msg_t)
         }
         Q_strcat(
             remaining.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
             cmd_aux,
         );
         Cmd_ExecuteString(remaining.as_mut_ptr());

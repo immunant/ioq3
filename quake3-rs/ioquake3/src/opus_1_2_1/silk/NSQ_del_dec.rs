@@ -8,7 +8,7 @@ pub mod macros_h {
     ) -> crate::opus_types_h::opus_int32 {
         return if in32 != 0 {
             (32 as i32)
-                - (::std::mem::size_of::<u32>() as libc::c_ulong as i32 * 8 as i32
+                - (::std::mem::size_of::<u32>() as usize as i32 * 8 as i32
                     - (in32 as u32).leading_zeros() as i32)
         } else {
             32 as i32
@@ -620,15 +620,15 @@ pub unsafe extern "C" fn silk_NSQ_del_dec_c(
     /* Initialize delayed decision states */
     let mut fresh0 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<NSQ_del_dec_struct>() as libc::c_ulong)
-            .wrapping_mul((*psEncC).nStatesDelayedDecision as libc::c_ulong) as usize,
+        (::std::mem::size_of::<NSQ_del_dec_struct>() as usize)
+            .wrapping_mul((*psEncC).nStatesDelayedDecision as usize) as usize,
     ); /* index of oldest samples */
     psDelDec = fresh0.as_mut_ptr() as *mut NSQ_del_dec_struct;
     crate::stdlib::memset(
         psDelDec as *mut libc::c_void,
         0 as i32,
-        ((*psEncC).nStatesDelayedDecision as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<NSQ_del_dec_struct>() as libc::c_ulong),
+        ((*psEncC).nStatesDelayedDecision as usize)
+            .wrapping_mul(::std::mem::size_of::<NSQ_del_dec_struct>() as usize),
     );
     k = 0 as i32;
     while k < (*psEncC).nStatesDelayedDecision {
@@ -643,13 +643,13 @@ pub unsafe extern "C" fn silk_NSQ_del_dec_c(
         crate::stdlib::memcpy(
             (*psDD).sLPC_Q14.as_mut_ptr() as *mut libc::c_void,
             (*NSQ).sLPC_Q14.as_mut_ptr() as *const libc::c_void,
-            (16 as i32 as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<opus_int32>() as libc::c_ulong),
+            (16 as i32 as usize)
+                .wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
         );
         crate::stdlib::memcpy(
             (*psDD).sAR2_Q14.as_mut_ptr() as *mut libc::c_void,
             (*NSQ).sAR2_Q14.as_mut_ptr() as *const libc::c_void,
-            ::std::mem::size_of::<[opus_int32; 24]>() as libc::c_ulong,
+            ::std::mem::size_of::<[opus_int32; 24]>() as usize,
         );
         k += 1
     }
@@ -678,28 +678,28 @@ pub unsafe extern "C" fn silk_NSQ_del_dec_c(
     }
     let mut fresh1 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_int32>() as libc::c_ulong)
-            .wrapping_mul(((*psEncC).ltp_mem_length + (*psEncC).frame_length) as libc::c_ulong)
+        (::std::mem::size_of::<opus_int32>() as usize)
+            .wrapping_mul(((*psEncC).ltp_mem_length + (*psEncC).frame_length) as usize)
             as usize,
     );
     sLTP_Q15 = fresh1.as_mut_ptr() as *mut opus_int32;
     let mut fresh2 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_int16>() as libc::c_ulong)
-            .wrapping_mul(((*psEncC).ltp_mem_length + (*psEncC).frame_length) as libc::c_ulong)
+        (::std::mem::size_of::<opus_int16>() as usize)
+            .wrapping_mul(((*psEncC).ltp_mem_length + (*psEncC).frame_length) as usize)
             as usize,
     );
     sLTP = fresh2.as_mut_ptr() as *mut opus_int16;
     let mut fresh3 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_int32>() as libc::c_ulong)
-            .wrapping_mul((*psEncC).subfr_length as libc::c_ulong) as usize,
+        (::std::mem::size_of::<opus_int32>() as usize)
+            .wrapping_mul((*psEncC).subfr_length as usize) as usize,
     );
     x_sc_Q10 = fresh3.as_mut_ptr() as *mut opus_int32;
     let mut fresh4 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_int32>() as libc::c_ulong)
-            .wrapping_mul(40 as i32 as libc::c_ulong) as usize,
+        (::std::mem::size_of::<opus_int32>() as usize)
+            .wrapping_mul(40 as i32 as usize) as usize,
     );
     delayedGain_Q10 = fresh4.as_mut_ptr() as *mut opus_int32;
     /* Set up pointers to start of sub frame */
@@ -990,13 +990,13 @@ pub unsafe extern "C" fn silk_NSQ_del_dec_c(
             .as_mut_ptr()
             .offset((*psEncC).subfr_length as isize) as *mut opus_int32
             as *const libc::c_void,
-        (16 as i32 as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<opus_int32>() as libc::c_ulong),
+        (16 as i32 as usize)
+            .wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
     );
     crate::stdlib::memcpy(
         (*NSQ).sAR2_Q14.as_mut_ptr() as *mut libc::c_void,
         (*psDD).sAR2_Q14.as_mut_ptr() as *const libc::c_void,
-        ::std::mem::size_of::<[opus_int32; 24]>() as libc::c_ulong,
+        ::std::mem::size_of::<[opus_int32; 24]>() as usize,
     );
     /* Update states */
     (*NSQ).sLF_AR_shp_Q14 = (*psDD).LF_AR_Q14;
@@ -1010,8 +1010,8 @@ pub unsafe extern "C" fn silk_NSQ_del_dec_c(
             .as_mut_ptr()
             .offset((*psEncC).frame_length as isize) as *mut opus_int16
             as *const libc::c_void,
-        ((*psEncC).ltp_mem_length as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<opus_int16>() as libc::c_ulong),
+        ((*psEncC).ltp_mem_length as usize)
+            .wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
     );
     crate::stdlib::memmove(
         (*NSQ).sLTP_shp_Q14.as_mut_ptr() as *mut libc::c_void,
@@ -1020,8 +1020,8 @@ pub unsafe extern "C" fn silk_NSQ_del_dec_c(
             .as_mut_ptr()
             .offset((*psEncC).frame_length as isize) as *mut opus_int32
             as *const libc::c_void,
-        ((*psEncC).ltp_mem_length as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<opus_int32>() as libc::c_ulong),
+        ((*psEncC).ltp_mem_length as usize)
+            .wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
     );
 }
 /* *****************************************/
@@ -1100,8 +1100,8 @@ unsafe extern "C" fn silk_noise_shape_quantizer_del_dec(
     let mut psSS: *mut NSQ_sample_struct = 0 as *mut NSQ_sample_struct;
     let mut fresh7 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<NSQ_sample_pair>() as libc::c_ulong)
-            .wrapping_mul(nStatesDelayedDecision as libc::c_ulong) as usize,
+        (::std::mem::size_of::<NSQ_sample_pair>() as usize)
+            .wrapping_mul(nStatesDelayedDecision as usize) as usize,
     );
     psSampleState = fresh7.as_mut_ptr() as *mut NSQ_sample_pair;
     shp_lag_ptr = &mut *(*NSQ)
@@ -1436,9 +1436,9 @@ unsafe extern "C" fn silk_noise_shape_quantizer_del_dec(
                 (&mut *psDelDec.offset(RDmin_ind as isize) as *mut NSQ_del_dec_struct
                     as *mut opus_int32)
                     .offset(i as isize) as *const libc::c_void,
-                (::std::mem::size_of::<NSQ_del_dec_struct>() as libc::c_ulong).wrapping_sub(
-                    (i as libc::c_ulong)
-                        .wrapping_mul(::std::mem::size_of::<opus_int32>() as libc::c_ulong),
+                (::std::mem::size_of::<NSQ_del_dec_struct>() as usize).wrapping_sub(
+                    (i as usize)
+                        .wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
                 ),
             );
             crate::stdlib::memcpy(
@@ -1450,7 +1450,7 @@ unsafe extern "C" fn silk_noise_shape_quantizer_del_dec(
                     .as_mut_ptr()
                     .offset(1 as i32 as isize) as *mut NSQ_sample_struct
                     as *const libc::c_void,
-                ::std::mem::size_of::<NSQ_sample_struct>() as libc::c_ulong,
+                ::std::mem::size_of::<NSQ_sample_struct>() as usize,
             );
         }
         /* Write samples from winner to output and long-term filter states */
@@ -1562,8 +1562,8 @@ unsafe extern "C" fn silk_noise_shape_quantizer_del_dec(
             (*psDD).sLPC_Q14.as_mut_ptr() as *mut libc::c_void,
             &mut *(*psDD).sLPC_Q14.as_mut_ptr().offset(length as isize) as *mut opus_int32
                 as *const libc::c_void,
-            (16 as i32 as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<opus_int32>() as libc::c_ulong),
+            (16 as i32 as usize)
+                .wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
         );
         k += 1
     }

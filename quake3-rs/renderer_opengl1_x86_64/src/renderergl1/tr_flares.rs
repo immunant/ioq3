@@ -573,7 +573,7 @@ pub unsafe extern "C" fn R_ClearFlares() {
     crate::stdlib::memset(
         r_flareStructs.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[flare_t; 256]>() as libc::c_ulong,
+        ::std::mem::size_of::<[flare_t; 256]>() as usize,
     );
     r_activeFlares = 0 as *mut flare_t;
     r_inactiveFlares = 0 as *mut flare_t;

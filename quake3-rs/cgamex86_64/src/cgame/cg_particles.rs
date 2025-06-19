@@ -374,7 +374,7 @@ pub unsafe extern "C" fn CG_ClearParticles() {
     crate::stdlib::memset(
         particles.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[cparticle_t; 1024]>() as libc::c_ulong,
+        ::std::mem::size_of::<[cparticle_t; 1024]>() as usize,
     );
     free_particles = &mut *particles.as_mut_ptr().offset(0 as i32 as isize) as *mut cparticle_t;
     active_particles = 0 as *mut cparticle_t;

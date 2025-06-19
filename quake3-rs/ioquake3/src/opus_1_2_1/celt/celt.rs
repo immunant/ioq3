@@ -132,9 +132,9 @@ pub unsafe extern "C" fn comb_filter(
             crate::stdlib::memmove(
                 y as *mut libc::c_void,
                 x as *const libc::c_void,
-                (N as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<opus_val32>() as libc::c_ulong)
-                    .wrapping_add((0 as i32 as isize * y.offset_from(x) as isize) as libc::c_ulong),
+                (N as usize)
+                    .wrapping_mul(::std::mem::size_of::<opus_val32>() as usize)
+                    .wrapping_add((0 as i32 as isize * y.offset_from(x) as isize) as usize),
             );
         }
         return;
@@ -188,13 +188,13 @@ pub unsafe extern "C" fn comb_filter(
             crate::stdlib::memmove(
                 y.offset(overlap as isize) as *mut libc::c_void,
                 x.offset(overlap as isize) as *const libc::c_void,
-                ((N - overlap) as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<opus_val32>() as libc::c_ulong)
+                ((N - overlap) as usize)
+                    .wrapping_mul(::std::mem::size_of::<opus_val32>() as usize)
                     .wrapping_add(
                         (0 as i32 as isize
                             * y.offset(overlap as isize)
                                 .offset_from(x.offset(overlap as isize))
-                                as isize) as libc::c_ulong,
+                                as isize) as usize,
                     ),
             );
         }

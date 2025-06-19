@@ -185,7 +185,7 @@ pub unsafe extern "C" fn BotNumActivePlayers() -> i32 {
         trap_GetConfigstring(
             32 as i32 + 256 as i32 + 256 as i32 + i,
             buf.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
         );
         //if no config string or no name
         if !(crate::stdlib::strlen(buf.as_mut_ptr()) == 0
@@ -272,7 +272,7 @@ pub unsafe extern "C" fn BotIsFirstInRankings(mut bs: *mut bot_state_t) -> i32 {
         trap_GetConfigstring(
             32 as i32 + 256 as i32 + 256 as i32 + i,
             buf.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
         );
         //if no config string or no name
         if !(crate::stdlib::strlen(buf.as_mut_ptr()) == 0
@@ -363,7 +363,7 @@ pub unsafe extern "C" fn BotIsLastInRankings(mut bs: *mut bot_state_t) -> i32 {
         trap_GetConfigstring(
             32 as i32 + 256 as i32 + 256 as i32 + i,
             buf.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
         );
         //if no config string or no name
         if !(crate::stdlib::strlen(buf.as_mut_ptr()) == 0
@@ -457,7 +457,7 @@ pub unsafe extern "C" fn BotFirstClientInRankings() -> *mut libc::c_char {
         trap_GetConfigstring(
             32 as i32 + 256 as i32 + 256 as i32 + i,
             buf.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
         );
         //if no config string or no name
         if !(crate::stdlib::strlen(buf.as_mut_ptr()) == 0
@@ -553,7 +553,7 @@ pub unsafe extern "C" fn BotLastClientInRankings() -> *mut libc::c_char {
         trap_GetConfigstring(
             32 as i32 + 256 as i32 + 256 as i32 + i,
             buf.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
         );
         //if no config string or no name
         if !(crate::stdlib::strlen(buf.as_mut_ptr()) == 0
@@ -605,7 +605,7 @@ pub unsafe extern "C" fn BotRandomOpponentName(mut bs: *mut bot_state_t) -> *mut
             trap_GetConfigstring(
                 32 as i32 + 256 as i32 + 256 as i32 + i,
                 buf.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
             );
             //if no config string or no name
             if !(crate::stdlib::strlen(buf.as_mut_ptr()) == 0
@@ -639,7 +639,7 @@ pub unsafe extern "C" fn BotRandomOpponentName(mut bs: *mut bot_state_t) -> *mut
             crate::src::game::ai_dmq3::EasyClientName(
                 opponents[i as usize],
                 name.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 32]>() as usize as i32,
             );
             return name.as_mut_ptr();
         }
@@ -648,7 +648,7 @@ pub unsafe extern "C" fn BotRandomOpponentName(mut bs: *mut bot_state_t) -> *mut
     crate::src::game::ai_dmq3::EasyClientName(
         opponents[0 as i32 as usize],
         name.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 32]>() as usize as i32,
     );
     return name.as_mut_ptr();
 }
@@ -664,7 +664,7 @@ pub unsafe extern "C" fn BotMapTitle() -> *mut libc::c_char {
     static mut mapname: [libc::c_char; 128] = [0; 128];
     trap_GetServerinfo(
         info.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     crate::stdlib::strncpy(
         mapname.as_mut_ptr(),
@@ -672,11 +672,11 @@ pub unsafe extern "C" fn BotMapTitle() -> *mut libc::c_char {
             info.as_mut_ptr(),
             b"mapname\x00" as *const u8 as *const libc::c_char,
         ),
-        (::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong)
-            .wrapping_sub(1 as i32 as libc::c_ulong),
+        (::std::mem::size_of::<[libc::c_char; 128]>() as usize)
+            .wrapping_sub(1 as i32 as usize),
     );
-    mapname[(::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong)
-        .wrapping_sub(1 as i32 as libc::c_ulong) as usize] = '\u{0}' as i32 as libc::c_char;
+    mapname[(::std::mem::size_of::<[libc::c_char; 128]>() as usize)
+        .wrapping_sub(1 as i32 as usize) as usize] = '\u{0}' as i32 as libc::c_char;
     return mapname.as_mut_ptr();
 }
 /*
@@ -1565,7 +1565,7 @@ pub unsafe extern "C" fn BotChat_HitTalking(mut bs: *mut bot_state_t) -> i32 {
     crate::src::game::ai_dmq3::ClientName(
         (*g_entities[(*bs).client as usize].client).lasthurt_client,
         name.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 32]>() as usize as i32,
     );
     weap = BotWeaponNameForMeansOfDeath((*g_entities[(*bs).client as usize].client).lasthurt_mod);
     //
@@ -1673,7 +1673,7 @@ pub unsafe extern "C" fn BotChat_HitNoDeath(mut bs: *mut bot_state_t) -> i32 {
     crate::src::game::ai_dmq3::ClientName(
         lasthurt_client,
         name.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 32]>() as usize as i32,
     );
     weap = BotWeaponNameForMeansOfDeath((*g_entities[(*bs).client as usize].client).lasthurt_mod);
     //
@@ -1768,7 +1768,7 @@ pub unsafe extern "C" fn BotChat_HitNoKill(mut bs: *mut bot_state_t) -> i32 {
     crate::src::game::ai_dmq3::ClientName(
         (*bs).enemy,
         name.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 32]>() as usize as i32,
     );
     weap = BotWeaponNameForMeansOfDeath((*g_entities[(*bs).enemy as usize].client).lasthurt_mod);
     //
@@ -1844,7 +1844,7 @@ pub unsafe extern "C" fn BotChat_Random(mut bs: *mut bot_state_t) -> i32 {
         crate::src::game::ai_dmq3::EasyClientName(
             (*bs).lastkilledplayer,
             name.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 32]>() as usize as i32,
         );
     }
     if crate::src::game::ai_dmq3::TeamPlayIsOn() != 0 {
@@ -2023,7 +2023,7 @@ pub unsafe extern "C" fn BotChatTest(mut bs: *mut bot_state_t) {
     crate::src::game::ai_dmq3::EasyClientName(
         (*bs).lastkilledby,
         name.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 32]>() as usize as i32,
     );
     num = trap_BotNumInitialChats(
         (*bs).cs,
@@ -2293,7 +2293,7 @@ pub unsafe extern "C" fn BotChatTest(mut bs: *mut bot_state_t) {
     crate::src::game::ai_dmq3::ClientName(
         (*g_entities[(*bs).client as usize].client).lasthurt_client,
         name.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 32]>() as usize as i32,
     );
     weap =
         BotWeaponNameForMeansOfDeath((*g_entities[(*bs).client as usize].client).lasthurt_client);
@@ -2352,7 +2352,7 @@ pub unsafe extern "C" fn BotChatTest(mut bs: *mut bot_state_t) {
         crate::src::game::ai_dmq3::EasyClientName(
             (*bs).lastkilledplayer,
             name.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 32]>() as usize as i32,
         );
     }
     //

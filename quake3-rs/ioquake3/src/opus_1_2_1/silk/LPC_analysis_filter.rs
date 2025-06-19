@@ -207,6 +207,6 @@ pub unsafe extern "C" fn silk_LPC_analysis_filter(
     crate::stdlib::memset(
         out as *mut libc::c_void,
         0 as i32,
-        (d as libc::c_ulong).wrapping_mul(::std::mem::size_of::<opus_int16>() as libc::c_ulong),
+        (d as usize).wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
     );
 }

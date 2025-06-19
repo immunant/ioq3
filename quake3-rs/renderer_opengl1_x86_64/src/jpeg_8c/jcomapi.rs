@@ -204,7 +204,7 @@ pub unsafe extern "C" fn jpeg_alloc_quant_table(mut cinfo: j_common_ptr) -> *mut
     .expect("non-null function pointer")(
         cinfo,
         0 as i32,
-        ::std::mem::size_of::<JQUANT_TBL>() as libc::c_ulong,
+        ::std::mem::size_of::<JQUANT_TBL>() as usize,
     ) as *mut JQUANT_TBL;
     (*tbl).sent_table = 0 as i32;
     return tbl;
@@ -249,7 +249,7 @@ pub unsafe extern "C" fn jpeg_alloc_huff_table(mut cinfo: j_common_ptr) -> *mut 
     .expect("non-null function pointer")(
         cinfo,
         0 as i32,
-        ::std::mem::size_of::<JHUFF_TBL>() as libc::c_ulong,
+        ::std::mem::size_of::<JHUFF_TBL>() as usize,
     ) as *mut JHUFF_TBL;
     (*tbl).sent_table = 0 as i32;
     return tbl;

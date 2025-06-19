@@ -517,7 +517,7 @@ pub unsafe extern "C" fn UI_ConfirmMenu_Style(
     crate::stdlib::memset(
         &mut s_confirm as *mut confirmMenu_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<confirmMenu_t>() as libc::c_ulong,
+        ::std::mem::size_of::<confirmMenu_t>() as usize,
     );
     ConfirmMenu_Cache();
     n1 = UI_ProportionalStringWidth(b"YES/NO\x00" as *const u8 as *const libc::c_char);
@@ -664,7 +664,7 @@ pub unsafe extern "C" fn UI_Message(mut lines: *mut *const libc::c_char) {
     crate::stdlib::memset(
         &mut s_confirm as *mut confirmMenu_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<confirmMenu_t>() as libc::c_ulong,
+        ::std::mem::size_of::<confirmMenu_t>() as usize,
     );
     ConfirmMenu_Cache();
     n1 = UI_ProportionalStringWidth(b"OK\x00" as *const u8 as *const libc::c_char);

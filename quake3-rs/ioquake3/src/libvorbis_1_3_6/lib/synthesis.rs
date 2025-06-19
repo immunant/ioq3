@@ -132,16 +132,16 @@ pub unsafe extern "C" fn vorbis_synthesis(
     (*vb).pcmend = (*ci).blocksizes[(*vb).W as usize] as i32;
     (*vb).pcm = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
         vb as *mut vorbis_block,
-        (::std::mem::size_of::<*mut f32>() as libc::c_ulong)
-            .wrapping_mul((*vi).channels as libc::c_ulong) as isize,
+        (::std::mem::size_of::<*mut f32>() as usize)
+            .wrapping_mul((*vi).channels as usize) as isize,
     ) as *mut *mut f32;
     i = 0 as i32;
     while i < (*vi).channels {
         let ref mut fresh0 = *(*vb).pcm.offset(i as isize);
         *fresh0 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
             vb as *mut vorbis_block,
-            ((*vb).pcmend as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as isize,
+            ((*vb).pcmend as usize)
+                .wrapping_mul(::std::mem::size_of::<f32>() as usize) as isize,
         ) as *mut f32;
         i += 1
     }

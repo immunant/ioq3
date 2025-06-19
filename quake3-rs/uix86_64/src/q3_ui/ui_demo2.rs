@@ -600,7 +600,7 @@ unsafe extern "C" fn Demos_MenuInit() {
     crate::stdlib::memset(
         &mut s_demos as *mut demos_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<demos_t>() as libc::c_ulong,
+        ::std::mem::size_of::<demos_t>() as usize,
     );
     Demos_Cache();
     s_demos.menu.fullscreen = qtrue;
@@ -703,7 +703,7 @@ unsafe extern "C" fn Demos_MenuInit() {
     }
     Com_sprintf(
         extension.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 32]>() as usize as i32,
         b".%s%d\x00" as *const u8 as *const libc::c_char,
         b"dm_\x00" as *const u8 as *const libc::c_char,
         protocol,
@@ -712,8 +712,8 @@ unsafe extern "C" fn Demos_MenuInit() {
         b"demos\x00" as *const u8 as *const libc::c_char,
         extension.as_mut_ptr(),
         s_demos.names.as_mut_ptr(),
-        (::std::mem::size_of::<[libc::c_char; 32768]>() as libc::c_ulong)
-            .wrapping_div(::std::mem::size_of::<libc::c_char>() as libc::c_ulong) as i32,
+        (::std::mem::size_of::<[libc::c_char; 32768]>() as usize)
+            .wrapping_div(::std::mem::size_of::<libc::c_char>() as usize) as i32,
     );
     demoname = s_demos.names.as_mut_ptr();
     i = 0 as i32;
@@ -735,7 +735,7 @@ unsafe extern "C" fn Demos_MenuInit() {
             }
             Com_sprintf(
                 extension.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 32]>() as usize as i32,
                 b".%s%d\x00" as *const u8 as *const libc::c_char,
                 b"dm_\x00" as *const u8 as *const libc::c_char,
                 protocolLegacy,
@@ -744,10 +744,10 @@ unsafe extern "C" fn Demos_MenuInit() {
                 b"demos\x00" as *const u8 as *const libc::c_char,
                 extension.as_mut_ptr(),
                 demoname,
-                (::std::mem::size_of::<[libc::c_char; 32768]>() as libc::c_ulong)
-                    .wrapping_div(::std::mem::size_of::<libc::c_char>() as libc::c_ulong)
+                (::std::mem::size_of::<[libc::c_char; 32768]>() as usize)
+                    .wrapping_div(::std::mem::size_of::<libc::c_char>() as usize)
                     .wrapping_sub(
-                        demoname.offset_from(s_demos.names.as_mut_ptr()) as isize as libc::c_ulong
+                        demoname.offset_from(s_demos.names.as_mut_ptr()) as isize as usize
                     ) as i32,
             )
         }

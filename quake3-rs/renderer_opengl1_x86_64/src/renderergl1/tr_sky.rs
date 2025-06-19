@@ -912,7 +912,7 @@ unsafe extern "C" fn DrawSkyBox(mut shader: *mut shader_t) {
     crate::stdlib::memset(
         s_skyTexCoords.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[[[f32; 2]; 9]; 9]>() as libc::c_ulong,
+        ::std::mem::size_of::<[[[f32; 2]; 9]; 9]>() as usize,
     );
     i = 0 as i32;
     while i < 6 as i32 {
@@ -1740,7 +1740,7 @@ pub unsafe extern "C" fn RB_StageIteratorSky() {
             tr.identityLight,
         );
         qglPushMatrix.expect("non-null function pointer")();
-        GL_State(0 as i32 as libc::c_ulong);
+        GL_State(0 as i32 as usize);
         GL_Cull(CT_FRONT_SIDED as i32);
         qglTranslatef.expect("non-null function pointer")(
             backEnd.viewParms.or.origin[0 as i32 as usize],

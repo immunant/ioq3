@@ -101,26 +101,26 @@ pub unsafe extern "C" fn silk_stereo_MS_to_LR(
     crate::stdlib::memcpy(
         x1 as *mut libc::c_void,
         (*state).sMid.as_mut_ptr() as *const libc::c_void,
-        (2 as i32 as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<opus_int16>() as libc::c_ulong),
+        (2 as i32 as usize)
+            .wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
     );
     crate::stdlib::memcpy(
         x2 as *mut libc::c_void,
         (*state).sSide.as_mut_ptr() as *const libc::c_void,
-        (2 as i32 as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<opus_int16>() as libc::c_ulong),
+        (2 as i32 as usize)
+            .wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
     );
     crate::stdlib::memcpy(
         (*state).sMid.as_mut_ptr() as *mut libc::c_void,
         &mut *x1.offset(frame_length as isize) as *mut opus_int16 as *const libc::c_void,
-        (2 as i32 as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<opus_int16>() as libc::c_ulong),
+        (2 as i32 as usize)
+            .wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
     );
     crate::stdlib::memcpy(
         (*state).sSide.as_mut_ptr() as *mut libc::c_void,
         &mut *x2.offset(frame_length as isize) as *mut opus_int16 as *const libc::c_void,
-        (2 as i32 as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<opus_int16>() as libc::c_ulong),
+        (2 as i32 as usize)
+            .wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
     );
     /* Interpolate predictors and add prediction to side channel */
     pred0_Q13 = (*state).pred_prev_Q13[0 as i32 as usize] as opus_int32; /* Q11 */

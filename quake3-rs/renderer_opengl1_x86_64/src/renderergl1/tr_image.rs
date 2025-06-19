@@ -431,7 +431,7 @@ unsafe extern "C" fn generateHashValue(mut fname: *const libc::c_char) -> isize 
     while *fname.offset(i as isize) as i32 != '\u{0}' as i32 {
         letter = ({
             let mut __res: i32 = 0;
-            if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong > 1 as i32 as libc::c_ulong {
+            if ::std::mem::size_of::<libc::c_char>() as usize > 1 as i32 as usize {
                 if 0 != 0 {
                     let mut __c: i32 = *fname.offset(i as isize) as i32;
                     __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -984,7 +984,7 @@ unsafe extern "C" fn R_MipMap2(mut in_0: *mut u32, mut inWidth: i32, mut inHeigh
     crate::stdlib::memcpy(
         in_0 as *mut libc::c_void,
         temp as *const libc::c_void,
-        (outWidth * outHeight * 4 as i32) as libc::c_ulong,
+        (outWidth * outHeight * 4 as i32) as usize,
     );
     ri.Hunk_FreeTempMemory.expect("non-null function pointer")(temp as *mut libc::c_void);
 }
@@ -1299,9 +1299,9 @@ unsafe extern "C" fn Upload32(
     scaledBuffer = ri
         .Hunk_AllocateTempMemory
         .expect("non-null function pointer")(
-        (::std::mem::size_of::<u32>() as libc::c_ulong)
-            .wrapping_mul(scaled_width as libc::c_ulong)
-            .wrapping_mul(scaled_height as libc::c_ulong) as i32,
+        (::std::mem::size_of::<u32>() as usize)
+            .wrapping_mul(scaled_width as usize)
+            .wrapping_mul(scaled_height as usize) as i32,
     ) as *mut u32;
     //
     // scan the texture for each channel's max values
@@ -1429,7 +1429,7 @@ unsafe extern "C" fn Upload32(
             crate::stdlib::memcpy(
                 scaledBuffer as *mut libc::c_void,
                 data as *const libc::c_void,
-                (width * height * 4 as i32) as libc::c_ulong,
+                (width * height * 4 as i32) as usize,
             );
             current_block = 7244994750255146185;
         }
@@ -1449,7 +1449,7 @@ unsafe extern "C" fn Upload32(
         crate::stdlib::memcpy(
             scaledBuffer as *mut libc::c_void,
             data as *const libc::c_void,
-            (width * height * 4 as i32) as libc::c_ulong,
+            (width * height * 4 as i32) as usize,
         );
         current_block = 7244994750255146185;
     }
@@ -1587,7 +1587,7 @@ pub unsafe extern "C" fn R_CreateImage(
     let mut isLightmap: qboolean = qfalse;
     let mut hash: isize = 0;
     let mut glWrapClampMode: i32 = 0;
-    if crate::stdlib::strlen(name) >= 64 as i32 as libc::c_ulong {
+    if crate::stdlib::strlen(name) >= 64 as i32 as usize {
         ri.Error.expect("non-null function pointer")(
             ERR_DROP as i32,
             b"R_CreateImage: \"%s\" is too long\x00" as *const u8 as *const libc::c_char,
@@ -1597,7 +1597,7 @@ pub unsafe extern "C" fn R_CreateImage(
     if crate::stdlib::strncmp(
         name,
         b"*lightmap\x00" as *const u8 as *const libc::c_char,
-        9 as i32 as libc::c_ulong,
+        9 as i32 as usize,
     ) == 0
     {
         isLightmap = qtrue
@@ -1609,7 +1609,7 @@ pub unsafe extern "C" fn R_CreateImage(
         );
     }
     tr.images[tr.numImages as usize] = ri.Hunk_Alloc.expect("non-null function pointer")(
-        ::std::mem::size_of::<image_t>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<image_t>() as usize as i32,
         h_low,
     ) as *mut image_t;
     image = tr.images[tr.numImages as usize];
@@ -2122,7 +2122,7 @@ unsafe extern "C" fn R_CreateDefaultImage() {
     crate::stdlib::memset(
         data.as_mut_ptr() as *mut libc::c_void,
         32 as i32,
-        ::std::mem::size_of::<[[[byte; 4]; 16]; 16]>() as libc::c_ulong,
+        ::std::mem::size_of::<[[[byte; 4]; 16]; 16]>() as usize,
     );
     x = 0 as i32;
     while x < 16 as i32 {
@@ -2182,7 +2182,7 @@ pub unsafe extern "C" fn R_CreateBuiltinImages() {
     crate::stdlib::memset(
         data.as_mut_ptr() as *mut libc::c_void,
         255 as i32,
-        ::std::mem::size_of::<[[[byte; 4]; 16]; 16]>() as libc::c_ulong,
+        ::std::mem::size_of::<[[[byte; 4]; 16]; 16]>() as usize,
     );
     tr.whiteImage = R_CreateImage(
         b"*white\x00" as *const u8 as *const libc::c_char,
@@ -2337,7 +2337,7 @@ pub unsafe extern "C" fn R_InitImages() {
     crate::stdlib::memset(
         hashTable.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[*mut image_t; 1024]>() as libc::c_ulong,
+        ::std::mem::size_of::<[*mut image_t; 1024]>() as usize,
     );
     // build brightness translation tables
     R_SetColorMappings();
@@ -2364,13 +2364,13 @@ pub unsafe extern "C" fn R_DeleteTextures() {
     crate::stdlib::memset(
         tr.images.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[*mut image_t; 2048]>() as libc::c_ulong,
+        ::std::mem::size_of::<[*mut image_t; 2048]>() as usize,
     );
     tr.numImages = 0 as i32;
     crate::stdlib::memset(
         glState.currenttextures.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[i32; 2]>() as libc::c_ulong,
+        ::std::mem::size_of::<[i32; 2]>() as usize,
     );
     if qglActiveTextureARB.is_some() {
         GL_SelectTexture(1 as i32);
@@ -2524,7 +2524,7 @@ pub unsafe extern "C" fn RE_RegisterSkin(mut name: *const libc::c_char) -> qhand
         );
         return 0 as i32;
     }
-    if crate::stdlib::strlen(name) >= 64 as i32 as libc::c_ulong {
+    if crate::stdlib::strlen(name) >= 64 as i32 as usize {
         ri.Printf.expect("non-null function pointer")(
             PRINT_DEVELOPER as i32,
             b"Skin name exceeds MAX_QPATH\n\x00" as *const u8 as *const libc::c_char,
@@ -2556,14 +2556,14 @@ pub unsafe extern "C" fn RE_RegisterSkin(mut name: *const libc::c_char) -> qhand
     }
     tr.numSkins += 1;
     skin = ri.Hunk_Alloc.expect("non-null function pointer")(
-        ::std::mem::size_of::<skin_t>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<skin_t>() as usize as i32,
         h_low,
     ) as *mut skin_t;
     tr.skins[hSkin as usize] = skin;
     Q_strncpyz(
         (*skin).name.as_mut_ptr(),
         name,
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     (*skin).numSurfaces = 0 as i32;
     R_IssuePendingRenderCommands();
@@ -2576,7 +2576,7 @@ pub unsafe extern "C" fn RE_RegisterSkin(mut name: *const libc::c_char) -> qhand
     {
         (*skin).numSurfaces = 1 as i32;
         (*skin).surfaces = ri.Hunk_Alloc.expect("non-null function pointer")(
-            ::std::mem::size_of::<skinSurface_t>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<skinSurface_t>() as usize as i32,
             h_low,
         ) as *mut skinSurface_t;
         let ref mut fresh3 = (*(*skin).surfaces.offset(0 as i32 as isize)).shader;
@@ -2596,7 +2596,7 @@ pub unsafe extern "C" fn RE_RegisterSkin(mut name: *const libc::c_char) -> qhand
         Q_strncpyz(
             surfName.as_mut_ptr(),
             token,
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         );
         if *token.offset(0 as i32 as isize) == 0 {
             break;
@@ -2618,7 +2618,7 @@ pub unsafe extern "C" fn RE_RegisterSkin(mut name: *const libc::c_char) -> qhand
             Q_strncpyz(
                 (*surf).name.as_mut_ptr(),
                 surfName.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             );
             (*surf).shader = R_FindShader(token, -(1 as i32), qtrue) as *mut shader_s;
             (*skin).numSurfaces += 1
@@ -2643,15 +2643,15 @@ pub unsafe extern "C" fn RE_RegisterSkin(mut name: *const libc::c_char) -> qhand
     }
     // copy surfaces to skin
     (*skin).surfaces = ri.Hunk_Alloc.expect("non-null function pointer")(
-        ((*skin).numSurfaces as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<skinSurface_t>() as libc::c_ulong) as i32,
+        ((*skin).numSurfaces as usize)
+            .wrapping_mul(::std::mem::size_of::<skinSurface_t>() as usize) as i32,
         h_low,
     ) as *mut skinSurface_t;
     crate::stdlib::memcpy(
         (*skin).surfaces as *mut libc::c_void,
         parseSurfaces.as_mut_ptr() as *const libc::c_void,
-        ((*skin).numSurfaces as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<skinSurface_t>() as libc::c_ulong),
+        ((*skin).numSurfaces as usize)
+            .wrapping_mul(::std::mem::size_of::<skinSurface_t>() as usize),
     );
     return hSkin;
 }
@@ -2667,18 +2667,18 @@ pub unsafe extern "C" fn R_InitSkins() {
     tr.numSkins = 1 as i32;
     // make the default skin have all default shaders
     tr.skins[0 as i32 as usize] = ri.Hunk_Alloc.expect("non-null function pointer")(
-        ::std::mem::size_of::<skin_t>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<skin_t>() as usize as i32,
         h_low,
     ) as *mut skin_t;
     skin = tr.skins[0 as i32 as usize];
     Q_strncpyz(
         (*skin).name.as_mut_ptr(),
         b"<default skin>\x00" as *const u8 as *const libc::c_char,
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     (*skin).numSurfaces = 1 as i32;
     (*skin).surfaces = ri.Hunk_Alloc.expect("non-null function pointer")(
-        ::std::mem::size_of::<skinSurface_t>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<skinSurface_t>() as usize as i32,
         h_low,
     ) as *mut skinSurface_t;
     let ref mut fresh4 = (*(*skin).surfaces.offset(0 as i32 as isize)).shader;
@@ -3061,8 +3061,8 @@ pub unsafe extern "C" fn R_SkinList_f() {
     );
 }
 unsafe extern "C" fn run_static_initializers() {
-    numImageLoaders = (::std::mem::size_of::<[imageExtToLoaderMap_t; 6]>() as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<imageExtToLoaderMap_t>() as libc::c_ulong)
+    numImageLoaders = (::std::mem::size_of::<[imageExtToLoaderMap_t; 6]>() as usize)
+        .wrapping_div(::std::mem::size_of::<imageExtToLoaderMap_t>() as usize)
         as i32
 }
 #[used]

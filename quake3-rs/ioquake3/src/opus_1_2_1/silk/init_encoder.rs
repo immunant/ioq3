@@ -104,7 +104,7 @@ pub unsafe extern "C" fn silk_init_encoder(
     crate::stdlib::memset(
         psEnc as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<silk_encoder_state_FLP>() as libc::c_ulong,
+        ::std::mem::size_of::<silk_encoder_state_FLP>() as usize,
     );
     (*psEnc).sCmn.arch = arch;
     (*psEnc).sCmn.variable_HP_smth1_Q15 = (((crate::src::opus_1_2_1::silk::lin2log::silk_lin2log(

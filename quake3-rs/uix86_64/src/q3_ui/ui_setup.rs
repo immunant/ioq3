@@ -397,7 +397,7 @@ unsafe extern "C" fn UI_SetupMenu_Init() {
     crate::stdlib::memset(
         &mut setupMenuInfo as *mut setupMenuInfo_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<setupMenuInfo_t>() as libc::c_ulong,
+        ::std::mem::size_of::<setupMenuInfo_t>() as usize,
     );
     setupMenuInfo.menu.wrapAround = qtrue;
     setupMenuInfo.menu.fullscreen = qtrue;

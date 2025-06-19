@@ -349,7 +349,7 @@ unsafe extern "C" fn UI_NetworkOptionsMenu_Init() {
     crate::stdlib::memset(
         &mut networkOptionsInfo as *mut networkOptionsInfo_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<networkOptionsInfo_t>() as libc::c_ulong,
+        ::std::mem::size_of::<networkOptionsInfo_t>() as usize,
     );
     UI_NetworkOptionsMenu_Cache();
     networkOptionsInfo.menu.wrapAround = qtrue;

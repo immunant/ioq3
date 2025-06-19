@@ -176,7 +176,7 @@ pub unsafe extern "C" fn SourceError(
     ap = args.clone();
     crate::stdlib::vsnprintf(
         text.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize,
         str,
         ap.as_va_list(),
     );
@@ -213,7 +213,7 @@ pub unsafe extern "C" fn SourceWarning(
     ap = args.clone();
     crate::stdlib::vsnprintf(
         text.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize,
         str,
         ap.as_va_list(),
     );
@@ -248,7 +248,7 @@ pub unsafe extern "C" fn PC_PushIndent(
         0 as *mut crate::src::botlib::l_precomp::indent_t;
     indent = crate::src::botlib::l_memory::GetMemory(::std::mem::size_of::<
         crate::src::botlib::l_precomp::indent_t,
-    >() as libc::c_ulong) as *mut crate::src::botlib::l_precomp::indent_t;
+    >() as usize) as *mut crate::src::botlib::l_precomp::indent_t;
     (*indent).type_0 = type_0;
     (*indent).script = (*source).scriptstack;
     (*indent).skip = (skip != 0 as i32) as i32;
@@ -355,7 +355,7 @@ pub unsafe extern "C" fn PC_InitTokenHeap() {
 pub unsafe extern "C" fn PC_CopyToken(mut token: *mut token_t) -> *mut token_t {
     let mut t: *mut token_t = 0 as *mut token_t;
     //	t = (token_t *) malloc(sizeof(token_t));
-    t = crate::src::botlib::l_memory::GetMemory(::std::mem::size_of::<token_t>() as libc::c_ulong)
+    t = crate::src::botlib::l_memory::GetMemory(::std::mem::size_of::<token_t>() as usize)
         as *mut token_t;
     //	t = freetokens;
     if t.is_null() {
@@ -368,7 +368,7 @@ pub unsafe extern "C" fn PC_CopyToken(mut token: *mut token_t) -> *mut token_t {
     crate::stdlib::memcpy(
         t as *mut libc::c_void,
         token as *const libc::c_void,
-        ::std::mem::size_of::<token_t>() as libc::c_ulong,
+        ::std::mem::size_of::<token_t>() as usize,
     );
     (*t).next = 0 as *mut token_s;
     numtokens += 1;
@@ -446,7 +446,7 @@ pub unsafe extern "C" fn PC_ReadSourceToken(
     crate::stdlib::memcpy(
         token as *mut libc::c_void,
         (*source).tokens as *const libc::c_void,
-        ::std::mem::size_of::<token_t>() as libc::c_ulong,
+        ::std::mem::size_of::<token_t>() as usize,
     );
     //free the read token
     t = (*source).tokens;
@@ -680,18 +680,18 @@ pub unsafe extern "C" fn PC_StringizeTokens(
         crate::stdlib::strncat(
             (*token).string.as_mut_ptr(),
             (*t).string.as_mut_ptr(),
-            (1024 as i32 as libc::c_ulong)
+            (1024 as i32 as usize)
                 .wrapping_sub(crate::stdlib::strlen((*token).string.as_mut_ptr()))
-                .wrapping_sub(1 as i32 as libc::c_ulong),
+                .wrapping_sub(1 as i32 as usize),
         );
         t = (*t).next
     }
     crate::stdlib::strncat(
         (*token).string.as_mut_ptr(),
         b"\"\x00" as *const u8 as *const libc::c_char,
-        (1024 as i32 as libc::c_ulong)
+        (1024 as i32 as usize)
             .wrapping_sub(crate::stdlib::strlen((*token).string.as_mut_ptr()))
-            .wrapping_sub(1 as i32 as libc::c_ulong),
+            .wrapping_sub(1 as i32 as usize),
     );
     return qtrue as i32;
 }
@@ -715,7 +715,7 @@ pub unsafe extern "C" fn PC_MergeTokens(mut t1: *mut token_t, mut t2: *mut token
         //end if
         //remove trailing double quote
         (*t1).string[crate::stdlib::strlen((*t1).string.as_mut_ptr())
-            .wrapping_sub(1 as i32 as libc::c_ulong) as usize] = '\u{0}' as i32 as libc::c_char;
+            .wrapping_sub(1 as i32 as usize) as usize] = '\u{0}' as i32 as libc::c_char;
         //concat without leading double quote
         libc::strcat(
             (*t1).string.as_mut_ptr(),
@@ -987,15 +987,15 @@ pub unsafe extern "C" fn PC_AddBuiltinDefines(
     while !builtin_0[i as usize].string.is_null() {
         define = crate::src::botlib::l_memory::GetMemory(::std::mem::size_of::<
             crate::src::botlib::l_precomp::define_t,
-        >() as libc::c_ulong) as *mut crate::src::botlib::l_precomp::define_t;
+        >() as usize) as *mut crate::src::botlib::l_precomp::define_t;
         crate::stdlib::memset(
             define as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<crate::src::botlib::l_precomp::define_t>() as libc::c_ulong,
+            ::std::mem::size_of::<crate::src::botlib::l_precomp::define_t>() as usize,
         );
         (*define).name = crate::src::botlib::l_memory::GetMemory(
             crate::stdlib::strlen(builtin_0[i as usize].string)
-                .wrapping_add(1 as i32 as libc::c_ulong),
+                .wrapping_add(1 as i32 as usize),
         ) as *mut libc::c_char;
         libc::strcpy((*define).name, builtin_0[i as usize].string);
         (*define).flags |= 0x1 as i32;
@@ -1034,7 +1034,7 @@ pub unsafe extern "C" fn PC_ExpandBuiltinDefine(
                 b"%d\x00" as *const u8 as *const libc::c_char,
                 (*deftoken).line,
             );
-            (*token).intvalue = (*deftoken).line as libc::c_ulong;
+            (*token).intvalue = (*deftoken).line as usize;
             (*token).floatvalue = (*deftoken).line as f32;
             //end case
             //NUMBERVALUE
@@ -1063,12 +1063,12 @@ pub unsafe extern "C" fn PC_ExpandBuiltinDefine(
             crate::stdlib::strncat(
                 (*token).string.as_mut_ptr(),
                 curtime.offset(4 as i32 as isize),
-                7 as i32 as libc::c_ulong,
+                7 as i32 as usize,
             );
             crate::stdlib::strncat(
                 (*token).string.as_mut_ptr().offset(7 as i32 as isize),
                 curtime.offset(20 as i32 as isize),
-                4 as i32 as libc::c_ulong,
+                4 as i32 as usize,
             );
             libc::strcat(
                 (*token).string.as_mut_ptr(),
@@ -1090,7 +1090,7 @@ pub unsafe extern "C" fn PC_ExpandBuiltinDefine(
             crate::stdlib::strncat(
                 (*token).string.as_mut_ptr(),
                 curtime.offset(11 as i32 as isize),
-                8 as i32 as libc::c_ulong,
+                8 as i32 as usize,
             );
             libc::strcat(
                 (*token).string.as_mut_ptr(),
@@ -1546,11 +1546,11 @@ pub unsafe extern "C" fn PC_Directive_include(
             Q_strncpyz(
                 path.as_mut_ptr(),
                 (*source).includepath.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             );
             Q_strcat(
                 path.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
                 token.string.as_mut_ptr(),
             );
             script = LoadScriptFile(path.as_mut_ptr()) as *mut script_s
@@ -1560,7 +1560,7 @@ pub unsafe extern "C" fn PC_Directive_include(
         Q_strncpyz(
             path.as_mut_ptr(),
             (*source).includepath.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         ); //end if
         while PC_ReadSourceToken(source, &mut token) != 0 {
             //end while
@@ -1573,7 +1573,7 @@ pub unsafe extern "C" fn PC_Directive_include(
                 }
                 Q_strcat(
                     path.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
                     token.string.as_mut_ptr(),
                 );
             }
@@ -1836,14 +1836,14 @@ pub unsafe extern "C" fn PC_Directive_define(
     //allocate define
     define = crate::src::botlib::l_memory::GetMemory(::std::mem::size_of::<
         crate::src::botlib::l_precomp::define_t,
-    >() as libc::c_ulong) as *mut crate::src::botlib::l_precomp::define_t;
+    >() as usize) as *mut crate::src::botlib::l_precomp::define_t;
     crate::stdlib::memset(
         define as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::src::botlib::l_precomp::define_t>() as libc::c_ulong,
+        ::std::mem::size_of::<crate::src::botlib::l_precomp::define_t>() as usize,
     );
     (*define).name = crate::src::botlib::l_memory::GetMemory(
-        crate::stdlib::strlen(token.string.as_mut_ptr()).wrapping_add(1 as i32 as libc::c_ulong),
+        crate::stdlib::strlen(token.string.as_mut_ptr()).wrapping_add(1 as i32 as usize),
     ) as *mut libc::c_char;
     libc::strcpy((*define).name, token.string.as_mut_ptr());
     //add the define to the source
@@ -2045,17 +2045,17 @@ pub unsafe extern "C" fn PC_DefineFromString(
     crate::stdlib::memset(
         &mut src as *mut crate::src::botlib::l_precomp::source_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::src::botlib::l_precomp::source_t>() as libc::c_ulong,
+        ::std::mem::size_of::<crate::src::botlib::l_precomp::source_t>() as usize,
     );
     Q_strncpyz(
         src.filename.as_mut_ptr(),
         b"*extern\x00" as *const u8 as *const libc::c_char,
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     src.scriptstack = script;
     src.definehash =
-        crate::src::botlib::l_memory::GetClearedMemory((1024 as i32 as libc::c_ulong).wrapping_mul(
-            ::std::mem::size_of::<*mut crate::src::botlib::l_precomp::define_t>() as libc::c_ulong,
+        crate::src::botlib::l_memory::GetClearedMemory((1024 as i32 as usize).wrapping_mul(
+            ::std::mem::size_of::<*mut crate::src::botlib::l_precomp::define_t>() as usize,
         )) as *mut *mut crate::src::botlib::l_precomp::define_t;
     //DEFINEHASHING
     //create a define from the source
@@ -2205,10 +2205,10 @@ pub unsafe extern "C" fn PC_CopyDefine(
     let mut lasttoken: *mut token_t = 0 as *mut token_t;
     newdefine = crate::src::botlib::l_memory::GetMemory(::std::mem::size_of::<
         crate::src::botlib::l_precomp::define_t,
-    >() as libc::c_ulong) as *mut crate::src::botlib::l_precomp::define_t;
+    >() as usize) as *mut crate::src::botlib::l_precomp::define_t;
     //copy the define name
     (*newdefine).name = crate::src::botlib::l_memory::GetMemory(
-        crate::stdlib::strlen((*define).name).wrapping_add(1 as i32 as libc::c_ulong),
+        crate::stdlib::strlen((*define).name).wrapping_add(1 as i32 as usize),
     ) as *mut libc::c_char;
     libc::strcpy((*newdefine).name, (*define).name);
     (*newdefine).flags = (*define).flags;
@@ -3918,7 +3918,7 @@ pub unsafe extern "C" fn PC_DollarDirective_evalint(
     );
     token.type_0 = 3 as i32;
     token.subtype = 0x1000 as i32 | 0x2000 as i32 | 0x8 as i32;
-    token.intvalue = libc::labs(value as libc::c_long) as libc::c_ulong;
+    token.intvalue = libc::labs(value as libc::c_long) as usize;
     token.floatvalue = token.intvalue as f32;
     //NUMBERVALUE
     PC_UnreadSourceToken(source, &mut token);
@@ -3967,7 +3967,7 @@ pub unsafe extern "C" fn PC_DollarDirective_evalfloat(
     token.type_0 = 3 as i32;
     token.subtype = 0x800 as i32 | 0x2000 as i32 | 0x8 as i32;
     token.floatvalue = crate::stdlib::fabs(value as f64) as f32;
-    token.intvalue = token.floatvalue as libc::c_ulong;
+    token.intvalue = token.floatvalue as usize;
     //NUMBERVALUE
     PC_UnreadSourceToken(source, &mut token);
     if value < 0 as i32 as f32 {
@@ -4204,14 +4204,14 @@ pub unsafe extern "C" fn PC_ReadToken(
                 if PC_ReadToken(source, &mut newtoken) != 0 {
                     if newtoken.type_0 == 1 as i32 {
                         (*token).string[crate::stdlib::strlen((*token).string.as_mut_ptr())
-                            .wrapping_sub(1 as i32 as libc::c_ulong)
+                            .wrapping_sub(1 as i32 as usize)
                             as usize] = '\u{0}' as i32 as libc::c_char;
                         if crate::stdlib::strlen((*token).string.as_mut_ptr())
                             .wrapping_add(crate::stdlib::strlen(
                                 newtoken.string.as_mut_ptr().offset(1 as i32 as isize),
                             ))
-                            .wrapping_add(1 as i32 as libc::c_ulong)
-                            >= 1024 as i32 as libc::c_ulong
+                            .wrapping_add(1 as i32 as usize)
+                            >= 1024 as i32 as usize
                         {
                             SourceError(
                                 source,
@@ -4255,7 +4255,7 @@ pub unsafe extern "C" fn PC_ReadToken(
             crate::stdlib::memcpy(
                 &mut (*source).token as *mut token_t as *mut libc::c_void,
                 token as *const libc::c_void,
-                ::std::mem::size_of::<token_t>() as libc::c_ulong,
+                ::std::mem::size_of::<token_t>() as usize,
             );
             //found a token
             return qtrue as i32;
@@ -4553,7 +4553,7 @@ pub unsafe extern "C" fn PC_CheckTokenType(
         crate::stdlib::memcpy(
             token as *mut libc::c_void,
             &mut tok as *mut token_t as *const libc::c_void,
-            ::std::mem::size_of::<token_t>() as libc::c_ulong,
+            ::std::mem::size_of::<token_t>() as usize,
         ); //end if
         return qtrue as i32;
     }
@@ -4643,15 +4643,15 @@ pub unsafe extern "C" fn PC_SetIncludePath(
     Q_strncpyz(
         (*source).includepath.as_mut_ptr(),
         path,
-        (::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong)
-            .wrapping_sub(1 as i32 as libc::c_ulong) as i32,
+        (::std::mem::size_of::<[libc::c_char; 1024]>() as usize)
+            .wrapping_sub(1 as i32 as usize) as i32,
     );
     len = crate::stdlib::strlen((*source).includepath.as_mut_ptr());
     //add trailing path seperator
-    if len > 0 as i32 as libc::c_ulong
-        && (*source).includepath[len.wrapping_sub(1 as i32 as libc::c_ulong) as usize] as i32
+    if len > 0 as i32 as usize
+        && (*source).includepath[len.wrapping_sub(1 as i32 as usize) as usize] as i32
             != '\\' as i32
-        && (*source).includepath[len.wrapping_sub(1 as i32 as libc::c_ulong) as usize] as i32
+        && (*source).includepath[len.wrapping_sub(1 as i32 as usize) as usize] as i32
             != '/' as i32
     {
         libc::strcat(
@@ -4701,16 +4701,16 @@ pub unsafe extern "C" fn LoadSourceFile(
     (*script).next = 0 as *mut script_s;
     source = crate::src::botlib::l_memory::GetMemory(::std::mem::size_of::<
         crate::src::botlib::l_precomp::source_t,
-    >() as libc::c_ulong) as *mut crate::src::botlib::l_precomp::source_t;
+    >() as usize) as *mut crate::src::botlib::l_precomp::source_t;
     crate::stdlib::memset(
         source as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::src::botlib::l_precomp::source_t>() as libc::c_ulong,
+        ::std::mem::size_of::<crate::src::botlib::l_precomp::source_t>() as usize,
     );
     Q_strncpyz(
         (*source).filename.as_mut_ptr(),
         filename,
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     (*source).scriptstack = script;
     (*source).tokens = 0 as *mut token_t;
@@ -4718,8 +4718,8 @@ pub unsafe extern "C" fn LoadSourceFile(
     (*source).indentstack = 0 as *mut crate::src::botlib::l_precomp::indent_t;
     (*source).skip = 0 as i32;
     (*source).definehash =
-        crate::src::botlib::l_memory::GetClearedMemory((1024 as i32 as libc::c_ulong).wrapping_mul(
-            ::std::mem::size_of::<*mut crate::src::botlib::l_precomp::define_t>() as libc::c_ulong,
+        crate::src::botlib::l_memory::GetClearedMemory((1024 as i32 as usize).wrapping_mul(
+            ::std::mem::size_of::<*mut crate::src::botlib::l_precomp::define_t>() as usize,
         )) as *mut *mut crate::src::botlib::l_precomp::define_t;
     //DEFINEHASHING
     PC_AddGlobalDefinesToSource(source);
@@ -4751,16 +4751,16 @@ pub unsafe extern "C" fn LoadSourceMemory(
     (*script).next = 0 as *mut script_s;
     source = crate::src::botlib::l_memory::GetMemory(::std::mem::size_of::<
         crate::src::botlib::l_precomp::source_t,
-    >() as libc::c_ulong) as *mut crate::src::botlib::l_precomp::source_t;
+    >() as usize) as *mut crate::src::botlib::l_precomp::source_t;
     crate::stdlib::memset(
         source as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::src::botlib::l_precomp::source_t>() as libc::c_ulong,
+        ::std::mem::size_of::<crate::src::botlib::l_precomp::source_t>() as usize,
     );
     Q_strncpyz(
         (*source).filename.as_mut_ptr(),
         name,
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     (*source).scriptstack = script;
     (*source).tokens = 0 as *mut token_t;
@@ -4768,8 +4768,8 @@ pub unsafe extern "C" fn LoadSourceMemory(
     (*source).indentstack = 0 as *mut crate::src::botlib::l_precomp::indent_t;
     (*source).skip = 0 as i32;
     (*source).definehash =
-        crate::src::botlib::l_memory::GetClearedMemory((1024 as i32 as libc::c_ulong).wrapping_mul(
-            ::std::mem::size_of::<*mut crate::src::botlib::l_precomp::define_t>() as libc::c_ulong,
+        crate::src::botlib::l_memory::GetClearedMemory((1024 as i32 as usize).wrapping_mul(
+            ::std::mem::size_of::<*mut crate::src::botlib::l_precomp::define_t>() as usize,
         )) as *mut *mut crate::src::botlib::l_precomp::define_t;
     //DEFINEHASHING
     PC_AddGlobalDefinesToSource(source);

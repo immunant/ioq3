@@ -306,7 +306,7 @@ unsafe extern "C" fn UI_RemoveBotsMenu_SetBotNames() {
                 info.as_mut_ptr(),
                 b"n\x00" as *const u8 as *const libc::c_char,
             ),
-            ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 32]>() as usize as i32,
         );
         Q_CleanStr(removeBotsMenuInfo.botnames[n as usize].as_mut_ptr());
         n += 1
@@ -403,7 +403,7 @@ unsafe extern "C" fn UI_RemoveBotsMenu_GetBots() {
     trap_GetConfigString(
         0 as i32,
         info.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     numPlayers = atoi(Info_ValueForKey(
         info.as_mut_ptr(),
@@ -455,7 +455,7 @@ unsafe extern "C" fn UI_RemoveBotsMenu_Init() {
     crate::stdlib::memset(
         &mut removeBotsMenuInfo as *mut removeBotsMenuInfo_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<removeBotsMenuInfo_t>() as libc::c_ulong,
+        ::std::mem::size_of::<removeBotsMenuInfo_t>() as usize,
     );
     removeBotsMenuInfo.menu.fullscreen = qfalse;
     removeBotsMenuInfo.menu.wrapAround = qtrue;

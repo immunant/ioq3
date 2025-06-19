@@ -716,7 +716,7 @@ unsafe extern "C" fn DrawTris(mut input: *mut shaderCommands_t) {
         1 as i32 as GLfloat,
         1 as i32 as GLfloat,
     );
-    GL_State((0x1000 as i32 | 0x100 as i32) as libc::c_ulong);
+    GL_State((0x1000 as i32 | 0x100 as i32) as usize);
     qglDepthRange.expect("non-null function pointer")(0 as i32 as GLclampd, 0 as i32 as GLclampd);
     qglDisableClientState.expect("non-null function pointer")(0x8076 as i32 as GLenum);
     qglDisableClientState.expect("non-null function pointer")(0x8078 as i32 as GLenum);
@@ -759,7 +759,7 @@ unsafe extern "C" fn DrawNormals(mut input: *mut shaderCommands_t) {
         1 as i32 as GLfloat,
     );
     qglDepthRange.expect("non-null function pointer")(0 as i32 as GLclampd, 0 as i32 as GLclampd);
-    GL_State((0x1000 as i32 | 0x100 as i32) as libc::c_ulong);
+    GL_State((0x1000 as i32 | 0x100 as i32) as usize);
     qglBegin.expect("non-null function pointer")(0x1 as i32 as GLenum);
     i = 0 as i32;
     while i < (*input).numVertexes {
@@ -820,7 +820,7 @@ t1 = most downstream according to spec
 unsafe extern "C" fn DrawMultitextured(mut input: *mut shaderCommands_t, mut stage: i32) {
     let mut pStage: *mut shaderStage_t = 0 as *mut shaderStage_t;
     pStage = *tess.xstages.offset(stage as isize);
-    GL_State((*pStage).stateBits as libc::c_ulong);
+    GL_State((*pStage).stateBits as usize);
     // this is an ugly hack to work around a GeForce driver
     // bug with multitexture and clip planes
     if backEnd.viewParms.isPortal as u64 != 0 {
@@ -1039,9 +1039,9 @@ unsafe extern "C" fn ProjectDlightTexture_scalar() {
                 // include GLS_DEPTHFUNC_EQUAL so alpha tested surfaces don't add light
                 // where they aren't rendered
                 if (*dl).additive != 0 {
-                    GL_State((0x2 as i32 | 0x20 as i32 | 0x20000 as i32) as libc::c_ulong);
+                    GL_State((0x2 as i32 | 0x20 as i32 | 0x20000 as i32) as usize);
                 } else {
-                    GL_State((0x3 as i32 | 0x20 as i32 | 0x20000 as i32) as libc::c_ulong);
+                    GL_State((0x3 as i32 | 0x20 as i32 | 0x20000 as i32) as usize);
                 }
                 R_DrawElements(numIndexes, hitIndexes.as_mut_ptr());
                 backEnd.pc.c_totalIndexes += numIndexes;
@@ -1091,9 +1091,9 @@ unsafe extern "C" fn RB_FogPass() {
     RB_CalcFogTexCoords(tess.svars.texcoords[0 as i32 as usize].as_mut_ptr() as *mut f32);
     GL_Bind(tr.fogImage as *mut image_s);
     if (*tess.shader).fogPass as u32 == FP_EQUAL as i32 as u32 {
-        GL_State((0x5 as i32 | 0x60 as i32 | 0x20000 as i32) as libc::c_ulong);
+        GL_State((0x5 as i32 | 0x60 as i32 | 0x20000 as i32) as usize);
     } else {
-        GL_State((0x5 as i32 | 0x60 as i32) as libc::c_ulong);
+        GL_State((0x5 as i32 | 0x60 as i32) as usize);
     }
     R_DrawElements(tess.numIndexes, tess.indexes.as_mut_ptr());
 }
@@ -1113,7 +1113,7 @@ unsafe extern "C" fn ComputeColors(mut pStage: *mut shaderStage_t) {
             crate::stdlib::memset(
                 tess.svars.colors.as_mut_ptr() as *mut libc::c_void,
                 0xff as i32,
-                (tess.numVertexes * 4 as i32) as libc::c_ulong,
+                (tess.numVertexes * 4 as i32) as usize,
             );
         }
         9 => {
@@ -1123,8 +1123,8 @@ unsafe extern "C" fn ComputeColors(mut pStage: *mut shaderStage_t) {
             crate::stdlib::memcpy(
                 tess.svars.colors.as_mut_ptr() as *mut libc::c_void,
                 tess.vertexColors.as_mut_ptr() as *const libc::c_void,
-                (tess.numVertexes as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<color4ub_t>() as libc::c_ulong),
+                (tess.numVertexes as usize)
+                    .wrapping_mul(::std::mem::size_of::<color4ub_t>() as usize),
             );
         }
         11 => {
@@ -1140,8 +1140,8 @@ unsafe extern "C" fn ComputeColors(mut pStage: *mut shaderStage_t) {
                 crate::stdlib::memcpy(
                     tess.svars.colors.as_mut_ptr() as *mut libc::c_void,
                     tess.vertexColors.as_mut_ptr() as *const libc::c_void,
-                    (tess.numVertexes as libc::c_ulong)
-                        .wrapping_mul(::std::mem::size_of::<color4ub_t>() as libc::c_ulong),
+                    (tess.numVertexes as usize)
+                        .wrapping_mul(::std::mem::size_of::<color4ub_t>() as usize),
                 );
             } else {
                 i = 0 as i32;
@@ -1221,7 +1221,7 @@ unsafe extern "C" fn ComputeColors(mut pStage: *mut shaderStage_t) {
             crate::stdlib::memset(
                 tess.svars.colors.as_mut_ptr() as *mut libc::c_void,
                 tr.identityLightByte,
-                (tess.numVertexes * 4 as i32) as libc::c_ulong,
+                (tess.numVertexes * 4 as i32) as usize,
             );
         }
     }
@@ -1389,9 +1389,9 @@ unsafe extern "C" fn ComputeTexCoords(mut pStage: *mut shaderStage_t) {
                 crate::stdlib::memset(
                     tess.svars.texcoords[b as usize].as_mut_ptr() as *mut libc::c_void,
                     0 as i32,
-                    (::std::mem::size_of::<f32>() as libc::c_ulong)
-                        .wrapping_mul(2 as i32 as libc::c_ulong)
-                        .wrapping_mul(tess.numVertexes as libc::c_ulong),
+                    (::std::mem::size_of::<f32>() as usize)
+                        .wrapping_mul(2 as i32 as usize)
+                        .wrapping_mul(tess.numVertexes as usize),
                 );
             }
             3 => {
@@ -1569,7 +1569,7 @@ unsafe extern "C" fn RB_IterateStagesGeneric(mut input: *mut shaderCommands_t) {
             // set state
             //
             R_BindAnimatedImage(&mut *(*pStage).bundle.as_mut_ptr().offset(0 as i32 as isize));
-            GL_State((*pStage).stateBits as libc::c_ulong);
+            GL_State((*pStage).stateBits as usize);
             //
             // draw
             //
@@ -1772,7 +1772,7 @@ pub unsafe extern "C" fn RB_StageIteratorVertexLitTexture() {
             .as_mut_ptr()
             .offset(0 as i32 as isize),
     );
-    GL_State((**tess.xstages.offset(0 as i32 as isize)).stateBits as libc::c_ulong);
+    GL_State((**tess.xstages.offset(0 as i32 as isize)).stateBits as usize);
     R_DrawElements((*input).numIndexes, (*input).indexes.as_mut_ptr());
     //
     // now do any dynamic lighting needed
@@ -1823,7 +1823,7 @@ pub unsafe extern "C" fn RB_StageIteratorLightmappedMultitexture() {
     //
     // set color, pointers, and lock
     //
-    GL_State(0x100 as i32 as libc::c_ulong);
+    GL_State(0x100 as i32 as usize);
     qglVertexPointer.expect("non-null function pointer")(
         3 as i32,
         0x1406 as i32 as GLenum,

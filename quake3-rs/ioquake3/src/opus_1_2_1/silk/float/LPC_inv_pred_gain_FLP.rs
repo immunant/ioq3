@@ -88,7 +88,7 @@ pub unsafe extern "C" fn silk_LPC_inverse_pred_gain_FLP(
     crate::stdlib::memcpy(
         Atmp.as_mut_ptr() as *mut libc::c_void,
         A as *const libc::c_void,
-        (order as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
+        (order as usize).wrapping_mul(::std::mem::size_of::<f32>() as usize),
     );
     invGain = 1.0f64;
     k = order - 1 as i32;

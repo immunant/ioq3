@@ -239,7 +239,7 @@ pub unsafe extern "C" fn BotGetMessageTeamGoal(
         crate::stdlib::memcpy(
             goal as *mut libc::c_void,
             &mut (*cp).goal as *mut bot_goal_t as *const libc::c_void,
-            ::std::mem::size_of::<bot_goal_t>() as libc::c_ulong,
+            ::std::mem::size_of::<bot_goal_t>() as usize,
         );
         return qtrue as i32;
     }
@@ -277,7 +277,7 @@ pub unsafe extern "C" fn BotGetTime(mut match_0: *mut bot_match_t) -> f32 {
         if trap_BotFindMatch(
             timestring.as_mut_ptr(),
             &mut timematch as *mut bot_match_t as *mut libc::c_void,
-            8 as i32 as libc::c_ulong,
+            8 as i32 as usize,
         ) != 0
         {
             if timematch.type_0 == 107 as i32 {
@@ -326,7 +326,7 @@ pub unsafe extern "C" fn FindClientByName(mut name: *mut libc::c_char) -> i32 {
         crate::src::game::ai_dmq3::ClientName(
             i,
             buf.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
         );
         if Q_stricmp(buf.as_mut_ptr(), name) == 0 {
             return i;
@@ -338,7 +338,7 @@ pub unsafe extern "C" fn FindClientByName(mut name: *mut libc::c_char) -> i32 {
         crate::src::game::ai_dmq3::ClientName(
             i,
             buf.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
         );
         if !crate::src::game::ai_dmq3::stristr(buf.as_mut_ptr(), name).is_null() {
             return i;
@@ -366,7 +366,7 @@ pub unsafe extern "C" fn FindEnemyByName(
             crate::src::game::ai_dmq3::ClientName(
                 i,
                 buf.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
             );
             if Q_stricmp(buf.as_mut_ptr(), name) == 0 {
                 return i;
@@ -380,7 +380,7 @@ pub unsafe extern "C" fn FindEnemyByName(
             crate::src::game::ai_dmq3::ClientName(
                 i,
                 buf.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
             );
             if !crate::src::game::ai_dmq3::stristr(buf.as_mut_ptr(), name).is_null() {
                 return i;
@@ -468,7 +468,7 @@ pub unsafe extern "C" fn BotGetPatrolWaypoints(
         if trap_BotFindMatch(
             keyarea.as_mut_ptr(),
             &mut keyareamatch as *mut bot_match_t as *mut libc::c_void,
-            64 as i32 as libc::c_ulong,
+            64 as i32 as usize,
         ) == 0
         {
             trap_EA_SayTeam(
@@ -582,7 +582,7 @@ pub unsafe extern "C" fn BotAddressedToBot(
         match_0 as *mut libc::c_void,
         0 as i32,
         netname.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
     );
     client = crate::src::game::ai_dmq3::ClientOnSameTeamFromName(
         bs as *mut bot_state_s,
@@ -597,7 +597,7 @@ pub unsafe extern "C" fn BotAddressedToBot(
             match_0 as *mut libc::c_void,
             2 as i32,
             addressedto.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
         );
         //the name of this bot
         crate::src::game::ai_dmq3::ClientName((*bs).client, botname.as_mut_ptr(), 128 as i32);
@@ -605,7 +605,7 @@ pub unsafe extern "C" fn BotAddressedToBot(
         while trap_BotFindMatch(
             addressedto.as_mut_ptr(),
             &mut addresseematch as *mut bot_match_t as *mut libc::c_void,
-            32 as i32 as libc::c_ulong,
+            32 as i32 as usize,
         ) != 0
         {
             if addresseematch.type_0 == 101 as i32 {
@@ -615,7 +615,7 @@ pub unsafe extern "C" fn BotAddressedToBot(
                     &mut addresseematch as *mut bot_match_t as *mut libc::c_void,
                     4 as i32,
                     name.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
                 );
                 if crate::stdlib::strlen(name.as_mut_ptr()) != 0 {
                     if !crate::src::game::ai_dmq3::stristr(botname.as_mut_ptr(), name.as_mut_ptr())
@@ -681,7 +681,7 @@ pub unsafe extern "C" fn BotAddressedToBot(
         if trap_BotFindMatch(
             (*match_0).string.as_mut_ptr(),
             &mut tellmatch as *mut bot_match_t as *mut libc::c_void,
-            128 as i32 as libc::c_ulong,
+            128 as i32 as usize,
         ) == 0
             || tellmatch.type_0 != 202 as i32
         {
@@ -806,13 +806,13 @@ pub unsafe extern "C" fn BotMatch_HelpAccompany(
         match_0 as *mut libc::c_void,
         4 as i32,
         teammate.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
     );
     //get the client to help
     if trap_BotFindMatch(
         teammate.as_mut_ptr(),
         &mut teammatematch as *mut bot_match_t as *mut libc::c_void,
-        16 as i32 as libc::c_ulong,
+        16 as i32 as usize,
     ) != 0
         && teammatematch.type_0 == 100 as i32
     {
@@ -821,7 +821,7 @@ pub unsafe extern "C" fn BotMatch_HelpAccompany(
             match_0 as *mut libc::c_void,
             0 as i32,
             netname.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
         );
         client = crate::src::game::ai_dmq3::ClientFromName(netname.as_mut_ptr());
         other = qfalse as i32
@@ -893,7 +893,7 @@ pub unsafe extern "C" fn BotMatch_HelpAccompany(
                 match_0 as *mut libc::c_void,
                 3 as i32,
                 itemname.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
             );
             //
             if BotGetMessageTeamGoal(bs, itemname.as_mut_ptr(), &mut (*bs).teamgoal) == 0 {
@@ -931,7 +931,7 @@ pub unsafe extern "C" fn BotMatch_HelpAccompany(
         match_0 as *mut libc::c_void,
         0 as i32,
         netname.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
     );
     //
     client = crate::src::game::ai_dmq3::ClientFromName(netname.as_mut_ptr());
@@ -992,7 +992,7 @@ pub unsafe extern "C" fn BotMatch_DefendKeyArea(
         match_0 as *mut libc::c_void,
         5 as i32,
         itemname.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
     );
     //
     if BotGetMessageTeamGoal(bs, itemname.as_mut_ptr(), &mut (*bs).teamgoal) == 0 {
@@ -1005,7 +1005,7 @@ pub unsafe extern "C" fn BotMatch_DefendKeyArea(
         match_0 as *mut libc::c_void,
         0 as i32,
         netname.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
     );
     //
     client = crate::src::game::ai_dmq3::ClientFromName(netname.as_mut_ptr());
@@ -1055,7 +1055,7 @@ pub unsafe extern "C" fn BotMatch_GetItem(mut bs: *mut bot_state_t, mut match_0:
         match_0 as *mut libc::c_void,
         3 as i32,
         itemname.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
     );
     //
     if BotGetMessageTeamGoal(bs, itemname.as_mut_ptr(), &mut (*bs).teamgoal) == 0 {
@@ -1067,7 +1067,7 @@ pub unsafe extern "C" fn BotMatch_GetItem(mut bs: *mut bot_state_t, mut match_0:
         match_0 as *mut libc::c_void,
         0 as i32,
         netname.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
     );
     client = crate::src::game::ai_dmq3::ClientOnSameTeamFromName(
         bs as *mut bot_state_s,
@@ -1137,7 +1137,7 @@ pub unsafe extern "C" fn BotMatch_Camp(mut bs: *mut bot_state_t, mut match_0: *m
         match_0 as *mut libc::c_void,
         0 as i32,
         netname.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
     );
     //asked for someone else
     client = FindClientByName(netname.as_mut_ptr());
@@ -1157,7 +1157,7 @@ pub unsafe extern "C" fn BotMatch_Camp(mut bs: *mut bot_state_t, mut match_0: *m
         match_0 as *mut libc::c_void,
         5 as i32,
         itemname.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
     );
     //in CTF it could be the base
     if (*match_0).subtype & 64 as i32 != 0 {
@@ -1269,7 +1269,7 @@ pub unsafe extern "C" fn BotMatch_Patrol(mut bs: *mut bot_state_t, mut match_0: 
         match_0 as *mut libc::c_void,
         0 as i32,
         netname.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
     );
     //
     client = FindClientByName(netname.as_mut_ptr());
@@ -1322,7 +1322,7 @@ pub unsafe extern "C" fn BotMatch_GetFlag(mut bs: *mut bot_state_t, mut match_0:
         match_0 as *mut libc::c_void,
         0 as i32,
         netname.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
     );
     //
     client = FindClientByName(netname.as_mut_ptr());
@@ -1378,7 +1378,7 @@ pub unsafe extern "C" fn BotMatch_AttackEnemyBase(
         match_0 as *mut libc::c_void,
         0 as i32,
         netname.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
     );
     //
     client = FindClientByName(netname.as_mut_ptr());
@@ -1431,7 +1431,7 @@ pub unsafe extern "C" fn BotMatch_RushBase(
         match_0 as *mut libc::c_void,
         0 as i32,
         netname.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
     );
     //
     client = FindClientByName(netname.as_mut_ptr());
@@ -1469,7 +1469,7 @@ pub unsafe extern "C" fn BotMatch_TaskPreference(
     crate::src::game::ai_dmq3::ClientName(
         (*bs).client,
         netname.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 36]>() as usize as i32,
     );
     if Q_stricmp(netname.as_mut_ptr(), (*bs).teamleader.as_mut_ptr()) != 0 as i32 {
         return;
@@ -1478,7 +1478,7 @@ pub unsafe extern "C" fn BotMatch_TaskPreference(
         match_0 as *mut libc::c_void,
         0 as i32,
         teammatename.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
     );
     teammate = crate::src::game::ai_dmq3::ClientFromName(teammatename.as_mut_ptr());
     if teammate < 0 as i32 {
@@ -1507,7 +1507,7 @@ pub unsafe extern "C" fn BotMatch_TaskPreference(
     crate::src::game::ai_dmq3::EasyClientName(
         teammate,
         teammatename.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
     );
     BotAI_BotInitialChat(
         bs as *mut bot_state_s,
@@ -1549,7 +1549,7 @@ pub unsafe extern "C" fn BotMatch_ReturnFlag(
         match_0 as *mut libc::c_void,
         0 as i32,
         netname.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
     );
     //
     client = FindClientByName(netname.as_mut_ptr());
@@ -1595,13 +1595,13 @@ pub unsafe extern "C" fn BotMatch_JoinSubteam(
         match_0 as *mut libc::c_void,
         4 as i32,
         teammate.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
     );
     //set the sub team name
     crate::stdlib::strncpy(
         (*bs).subteam.as_mut_ptr(),
         teammate.as_mut_ptr(),
-        32 as i32 as libc::c_ulong,
+        32 as i32 as usize,
     );
     (*bs).subteam[31 as i32 as usize] = '\u{0}' as i32 as libc::c_char;
     //
@@ -1609,7 +1609,7 @@ pub unsafe extern "C" fn BotMatch_JoinSubteam(
         match_0 as *mut libc::c_void,
         0 as i32,
         netname.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
     );
     BotAI_BotInitialChat(
         bs as *mut bot_state_s,
@@ -1652,7 +1652,7 @@ pub unsafe extern "C" fn BotMatch_LeaveSubteam(
             match_0 as *mut libc::c_void,
             0 as i32,
             netname.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
         );
         client = crate::src::game::ai_dmq3::ClientFromName(netname.as_mut_ptr());
         trap_BotEnterChat((*bs).cs, client, 2 as i32);
@@ -1732,7 +1732,7 @@ pub unsafe extern "C" fn BotMatch_CheckPoint(
         match_0 as *mut libc::c_void,
         0 as i32,
         netname.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
     );
     client = crate::src::game::ai_dmq3::ClientFromName(netname.as_mut_ptr());
     //BotGPSToPosition(buf, position);
@@ -1795,7 +1795,7 @@ pub unsafe extern "C" fn BotMatch_CheckPoint(
     if BotAddressedToBot(bs, match_0) != 0 {
         Com_sprintf(
             buf.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
             b"%1.0f %1.0f %1.0f\x00" as *const u8 as *const libc::c_char,
             (*cp).goal.origin[0 as i32 as usize] as f64,
             (*cp).goal.origin[1 as i32 as usize] as f64,
@@ -1872,7 +1872,7 @@ pub unsafe extern "C" fn BotMatch_Dismiss(mut bs: *mut bot_state_t, mut match_0:
         match_0 as *mut libc::c_void,
         0 as i32,
         netname.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
     );
     client = crate::src::game::ai_dmq3::ClientFromName(netname.as_mut_ptr());
     //
@@ -1916,7 +1916,7 @@ pub unsafe extern "C" fn BotMatch_Suicide(mut bs: *mut bot_state_t, mut match_0:
         match_0 as *mut libc::c_void,
         0 as i32,
         netname.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
     );
     client = crate::src::game::ai_dmq3::ClientFromName(netname.as_mut_ptr());
     //
@@ -1950,15 +1950,15 @@ pub unsafe extern "C" fn BotMatch_StartTeamLeaderShip(
             match_0 as *mut libc::c_void,
             0 as i32,
             teammate.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
         );
         crate::stdlib::strncpy(
             (*bs).teamleader.as_mut_ptr(),
             teammate.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong,
+            ::std::mem::size_of::<[libc::c_char; 36]>() as usize,
         );
-        (*bs).teamleader[(::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong)
-            .wrapping_sub(1 as i32 as libc::c_ulong) as usize] = '\u{0}' as i32 as libc::c_char
+        (*bs).teamleader[(::std::mem::size_of::<[libc::c_char; 36]>() as usize)
+            .wrapping_sub(1 as i32 as usize) as usize] = '\u{0}' as i32 as libc::c_char
     } else {
         //chats for someone else
         //get the team mate that will be the team leader
@@ -1966,14 +1966,14 @@ pub unsafe extern "C" fn BotMatch_StartTeamLeaderShip(
             match_0 as *mut libc::c_void,
             4 as i32,
             teammate.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
         );
         client = FindClientByName(teammate.as_mut_ptr());
         if client >= 0 as i32 {
             crate::src::game::ai_dmq3::ClientName(
                 client,
                 (*bs).teamleader.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 36]>() as usize as i32,
             );
         }
     };
@@ -2000,7 +2000,7 @@ pub unsafe extern "C" fn BotMatch_StopTeamLeaderShip(
         match_0 as *mut libc::c_void,
         4 as i32,
         teammate.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
     );
     //if chats for him or herself
     if (*match_0).subtype & 128 as i32 != 0 {
@@ -2008,7 +2008,7 @@ pub unsafe extern "C" fn BotMatch_StopTeamLeaderShip(
             match_0 as *mut libc::c_void,
             0 as i32,
             netname.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
         ); //end else
         client = FindClientByName(netname.as_mut_ptr())
     } else {
@@ -2021,7 +2021,7 @@ pub unsafe extern "C" fn BotMatch_StopTeamLeaderShip(
             crate::src::game::ai_dmq3::ClientName(
                 client,
                 netname.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
             ),
         ) == 0
         {
@@ -2048,7 +2048,7 @@ pub unsafe extern "C" fn BotMatch_WhoIsTeamLeader(
     crate::src::game::ai_dmq3::ClientName(
         (*bs).client,
         netname.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
     );
     //if this bot IS the team leader
     if Q_stricmp(netname.as_mut_ptr(), (*bs).teamleader.as_mut_ptr()) == 0 {
@@ -2082,7 +2082,7 @@ pub unsafe extern "C" fn BotMatch_WhatAreYouDoing(
             crate::src::game::ai_dmq3::EasyClientName(
                 (*bs).teammate,
                 netname.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
             );
             BotAI_BotInitialChat(
                 bs as *mut bot_state_s,
@@ -2095,7 +2095,7 @@ pub unsafe extern "C" fn BotMatch_WhatAreYouDoing(
             crate::src::game::ai_dmq3::EasyClientName(
                 (*bs).teammate,
                 netname.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
             );
             BotAI_BotInitialChat(
                 bs as *mut bot_state_s,
@@ -2108,7 +2108,7 @@ pub unsafe extern "C" fn BotMatch_WhatAreYouDoing(
             trap_BotGoalName(
                 (*bs).teamgoal.number,
                 goalname.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
             );
             BotAI_BotInitialChat(
                 bs as *mut bot_state_s,
@@ -2121,7 +2121,7 @@ pub unsafe extern "C" fn BotMatch_WhatAreYouDoing(
             trap_BotGoalName(
                 (*bs).teamgoal.number,
                 goalname.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
             );
             BotAI_BotInitialChat(
                 bs as *mut bot_state_s,
@@ -2134,7 +2134,7 @@ pub unsafe extern "C" fn BotMatch_WhatAreYouDoing(
             crate::src::game::ai_dmq3::ClientName(
                 (*bs).teamgoal.entitynum,
                 netname.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
             );
             BotAI_BotInitialChat(
                 bs as *mut bot_state_s,
@@ -2191,7 +2191,7 @@ pub unsafe extern "C" fn BotMatch_WhatAreYouDoing(
         match_0 as *mut libc::c_void,
         0 as i32,
         netname.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
     );
     client = crate::src::game::ai_dmq3::ClientFromName(netname.as_mut_ptr());
     trap_BotEnterChat((*bs).cs, client, 2 as i32);
@@ -2211,7 +2211,7 @@ pub unsafe extern "C" fn BotMatch_WhatIsMyCommand(
     crate::src::game::ai_dmq3::ClientName(
         (*bs).client,
         netname.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 36]>() as usize as i32,
     );
     if Q_stricmp(netname.as_mut_ptr(), (*bs).teamleader.as_mut_ptr()) != 0 as i32 {
         return;
@@ -2278,7 +2278,7 @@ pub unsafe extern "C" fn BotNearestVisibleItem(
         trap_BotGoalName(
             tmpgoal.number,
             name.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         );
         if !(Q_stricmp(itemname, name.as_mut_ptr()) != 0 as i32) {
             dir[0 as i32 as usize] =
@@ -2304,7 +2304,7 @@ pub unsafe extern "C" fn BotNearestVisibleItem(
                     crate::stdlib::memcpy(
                         goal as *mut libc::c_void,
                         &mut tmpgoal as *mut bot_goal_t as *const libc::c_void,
-                        ::std::mem::size_of::<bot_goal_t>() as libc::c_ulong,
+                        ::std::mem::size_of::<bot_goal_t>() as usize,
                     );
                 }
             }
@@ -2459,7 +2459,7 @@ pub unsafe extern "C" fn BotMatch_WhereAreYou(
             match_0 as *mut libc::c_void,
             0 as i32,
             netname.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
         );
         client = crate::src::game::ai_dmq3::ClientFromName(netname.as_mut_ptr());
         trap_BotEnterChat((*bs).cs, client, 2 as i32);
@@ -2520,7 +2520,7 @@ pub unsafe extern "C" fn BotMatch_LeadTheWay(
             match_0 as *mut libc::c_void,
             4 as i32,
             teammate.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
         );
         client = FindClientByName(teammate.as_mut_ptr());
         //if this is the bot self
@@ -2538,7 +2538,7 @@ pub unsafe extern "C" fn BotMatch_LeadTheWay(
             match_0 as *mut libc::c_void,
             0 as i32,
             netname.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
         );
         client = crate::src::game::ai_dmq3::ClientFromName(netname.as_mut_ptr());
         other = qfalse as i32
@@ -2622,7 +2622,7 @@ pub unsafe extern "C" fn BotMatch_Kill(mut bs: *mut bot_state_t, mut match_0: *m
         match_0 as *mut libc::c_void,
         4 as i32,
         enemy.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
     );
     //
     client = FindEnemyByName(bs, enemy.as_mut_ptr());
@@ -2637,7 +2637,7 @@ pub unsafe extern "C" fn BotMatch_Kill(mut bs: *mut bot_state_t, mut match_0: *m
             match_0 as *mut libc::c_void,
             0 as i32,
             netname.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
         );
         client = crate::src::game::ai_dmq3::ClientFromName(netname.as_mut_ptr());
         trap_BotEnterChat((*bs).cs, client, 2 as i32);
@@ -2670,7 +2670,7 @@ pub unsafe extern "C" fn BotMatch_CTF(mut bs: *mut bot_state_t, mut match_0: *mu
             match_0 as *mut libc::c_void,
             1 as i32,
             flag.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 128]>() as usize as i32,
         );
         if (*match_0).subtype & 4096 as i32 != 0 {
             if Q_stricmp(
@@ -2684,7 +2684,7 @@ pub unsafe extern "C" fn BotMatch_CTF(mut bs: *mut bot_state_t, mut match_0: *mu
                         match_0 as *mut libc::c_void,
                         0 as i32,
                         netname.as_mut_ptr(),
-                        ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
+                        ::std::mem::size_of::<[libc::c_char; 36]>() as usize as i32,
                     );
                     (*bs).flagcarrier =
                         crate::src::game::ai_dmq3::ClientFromName(netname.as_mut_ptr())
@@ -2696,7 +2696,7 @@ pub unsafe extern "C" fn BotMatch_CTF(mut bs: *mut bot_state_t, mut match_0: *mu
                         match_0 as *mut libc::c_void,
                         0 as i32,
                         netname.as_mut_ptr(),
-                        ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
+                        ::std::mem::size_of::<[libc::c_char; 36]>() as usize as i32,
                     );
                     (*bs).flagcarrier =
                         crate::src::game::ai_dmq3::ClientFromName(netname.as_mut_ptr())
@@ -2735,7 +2735,7 @@ pub unsafe extern "C" fn BotMatch_EnterGame(
         match_0 as *mut libc::c_void,
         0 as i32,
         netname.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 36]>() as usize as i32,
     );
     client = FindClientByName(netname.as_mut_ptr());
     if client >= 0 as i32 {
@@ -2757,7 +2757,7 @@ pub unsafe extern "C" fn BotMatch_NewLeader(
         match_0 as *mut libc::c_void,
         0 as i32,
         netname.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 36]>() as usize as i32,
     );
     client = FindClientByName(netname.as_mut_ptr());
     if crate::src::game::ai_dmq3::BotSameTeam(bs as *mut bot_state_s, client) == 0 {
@@ -2766,7 +2766,7 @@ pub unsafe extern "C" fn BotMatch_NewLeader(
     Q_strncpyz(
         (*bs).teamleader.as_mut_ptr(),
         netname.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 36]>() as usize as i32,
     );
 }
 /*
@@ -2824,7 +2824,7 @@ pub unsafe extern "C" fn BotMatchMessage(
     if trap_BotFindMatch(
         message,
         &mut match_0 as *mut bot_match_t as *mut libc::c_void,
-        (2 as i32 | 4 as i32 | 256 as i32) as libc::c_ulong,
+        (2 as i32 | 4 as i32 | 256 as i32) as usize,
     ) == 0
     {
         return qfalse as i32;

@@ -2615,7 +2615,7 @@ unsafe extern "C" fn Controls_DrawPlayer(mut self_0: *mut libc::c_void) {
     trap_Cvar_VariableStringBuffer(
         b"model\x00" as *const u8 as *const libc::c_char,
         buf.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     if libc::strcmp(buf.as_mut_ptr(), s_controls.playerModel.as_mut_ptr()) != 0 as i32 {
         UI_PlayerInfo_SetModel(
@@ -3120,7 +3120,7 @@ unsafe extern "C" fn Controls_InitModel() {
     crate::stdlib::memset(
         &mut s_controls.playerinfo as *mut playerInfo_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<playerInfo_t>() as libc::c_ulong,
+        ::std::mem::size_of::<playerInfo_t>() as usize,
     );
     UI_PlayerInfo_SetModel(
         &mut s_controls.playerinfo as *mut _ as *mut playerInfo_t,
@@ -3156,7 +3156,7 @@ unsafe extern "C" fn Controls_MenuInit() {
     crate::stdlib::memset(
         &mut s_controls as *mut controls_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<controls_t>() as libc::c_ulong,
+        ::std::mem::size_of::<controls_t>() as usize,
     );
     Controls_Cache();
     s_controls.menu.key = Some(Controls_MenuKey as unsafe extern "C" fn(_: i32) -> sfxHandle_t);

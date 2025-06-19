@@ -110,8 +110,8 @@ unsafe extern "C" fn build_ycc_rgb_table(mut cinfo: j_decompress_ptr) {
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         1 as i32,
-        ((255 as i32 + 1 as i32) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+        ((255 as i32 + 1 as i32) as usize)
+            .wrapping_mul(::std::mem::size_of::<i32>() as usize),
     ) as *mut i32;
     (*upsample).Cb_b_tab = Some(
         (*(*cinfo).mem)
@@ -121,8 +121,8 @@ unsafe extern "C" fn build_ycc_rgb_table(mut cinfo: j_decompress_ptr) {
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         1 as i32,
-        ((255 as i32 + 1 as i32) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+        ((255 as i32 + 1 as i32) as usize)
+            .wrapping_mul(::std::mem::size_of::<i32>() as usize),
     ) as *mut i32;
     (*upsample).Cr_g_tab = Some(
         (*(*cinfo).mem)
@@ -132,8 +132,8 @@ unsafe extern "C" fn build_ycc_rgb_table(mut cinfo: j_decompress_ptr) {
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         1 as i32,
-        ((255 as i32 + 1 as i32) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<INT32>() as libc::c_ulong),
+        ((255 as i32 + 1 as i32) as usize)
+            .wrapping_mul(::std::mem::size_of::<INT32>() as usize),
     ) as *mut INT32;
     (*upsample).Cb_g_tab = Some(
         (*(*cinfo).mem)
@@ -143,8 +143,8 @@ unsafe extern "C" fn build_ycc_rgb_table(mut cinfo: j_decompress_ptr) {
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         1 as i32,
-        ((255 as i32 + 1 as i32) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<INT32>() as libc::c_ulong),
+        ((255 as i32 + 1 as i32) as usize)
+            .wrapping_mul(::std::mem::size_of::<INT32>() as usize),
     ) as *mut INT32;
     i = 0 as i32;
     x = -(128 as i32) as INT32;
@@ -504,7 +504,7 @@ pub unsafe extern "C" fn jinit_merged_upsampler(mut cinfo: j_decompress_ptr) {
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         1 as i32,
-        ::std::mem::size_of::<my_upsampler>() as libc::c_ulong,
+        ::std::mem::size_of::<my_upsampler>() as usize,
     ) as my_upsample_ptr;
     (*cinfo).upsample = upsample as *mut jpeg_upsampler;
     (*upsample).pub_0.start_pass =
@@ -544,8 +544,8 @@ pub unsafe extern "C" fn jinit_merged_upsampler(mut cinfo: j_decompress_ptr) {
         .expect("non-null function pointer")(
             cinfo as j_common_ptr,
             1 as i32,
-            ((*upsample).out_row_width as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<JSAMPLE>() as libc::c_ulong),
+            ((*upsample).out_row_width as usize)
+                .wrapping_mul(::std::mem::size_of::<JSAMPLE>() as usize),
         ) as JSAMPROW
     } else {
         (*upsample).pub_0.upsample = Some(

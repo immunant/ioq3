@@ -338,7 +338,7 @@ pub unsafe extern "C" fn silk_init_decoder(mut psDec: *mut silk_decoder_state) -
     crate::stdlib::memset(
         psDec as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<silk_decoder_state>() as libc::c_ulong,
+        ::std::mem::size_of::<silk_decoder_state>() as usize,
     );
     /* Used to deactivate LSF interpolation */
     (*psDec).first_frame_after_reset = 1 as i32;

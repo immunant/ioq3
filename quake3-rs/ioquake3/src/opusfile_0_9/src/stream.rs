@@ -46,12 +46,12 @@ unsafe extern "C" fn op_fread(
     stream = _stream as *mut FILE;
     ret = crate::stdlib::fread(
         _ptr as *mut libc::c_void,
-        1 as i32 as libc::c_ulong,
-        _buf_size as libc::c_ulong,
+        1 as i32 as usize,
+        _buf_size as usize,
         stream,
     );
     /*If ret==0 and !feof(stream), there was a read error.*/
-    return if ret > 0 as i32 as libc::c_ulong || crate::stdlib::feof(stream) != 0 {
+    return if ret > 0 as i32 as usize || crate::stdlib::feof(stream) != 0 {
         ret as i32
     } else {
         -(128 as i32)
@@ -166,7 +166,7 @@ unsafe extern "C" fn op_mem_read(
     crate::stdlib::memcpy(
         _ptr as *mut libc::c_void,
         (*stream).data.offset(pos as isize) as *const libc::c_void,
-        _buf_size as libc::c_ulong,
+        _buf_size as usize,
     );
     pos += _buf_size as isize;
     (*stream).pos = pos;
@@ -1000,7 +1000,7 @@ pub unsafe extern "C" fn op_mem_stream_create(
     if _size > !(0 as i32 as size_t) >> 1 as i32 {
         return 0 as *mut libc::c_void;
     }
-    stream = crate::stdlib::malloc(::std::mem::size_of::<OpusMemStream>() as libc::c_ulong)
+    stream = crate::stdlib::malloc(::std::mem::size_of::<OpusMemStream>() as usize)
         as *mut OpusMemStream;
     if !stream.is_null() {
         *_cb = OP_MEM_CALLBACKS;

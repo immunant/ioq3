@@ -1181,7 +1181,7 @@ pub unsafe extern "C" fn S_Shutdown() {
     crate::stdlib::memset(
         &mut si as *mut soundInterface_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<soundInterface_t>() as libc::c_ulong,
+        ::std::mem::size_of::<soundInterface_t>() as usize,
     );
     Cmd_RemoveCommand(b"play\x00" as *const u8 as *const libc::c_char);
     Cmd_RemoveCommand(b"music\x00" as *const u8 as *const libc::c_char);

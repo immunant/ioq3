@@ -70,15 +70,15 @@ pub struct inflate_state {
     pub havedict: i32,
     pub flags: i32,
     pub dmax: u32,
-    pub check: libc::c_ulong,
-    pub total: libc::c_ulong,
+    pub check: usize,
+    pub total: usize,
     pub head: crate::zlib_h::gz_headerp,
     pub wbits: u32,
     pub wsize: u32,
     pub whave: u32,
     pub write: u32,
     pub window: *mut u8,
-    pub hold: libc::c_ulong,
+    pub hold: usize,
     pub bits: u32,
     pub length: u32,
     pub offset: u32,
@@ -130,7 +130,7 @@ pub unsafe extern "C" fn inflateReset(mut strm: z_streamp) -> i32 {
         return -(2 as i32);
     } /* in case we return an error */
     state = (*strm).state as *mut crate::src::zlib::inflate::inflate_state;
-    (*state).total = 0 as i32 as libc::c_ulong;
+    (*state).total = 0 as i32 as usize;
     (*strm).total_out = (*state).total;
     (*strm).total_in = (*strm).total_out;
     (*strm).msg = 0 as *mut libc::c_char;
@@ -143,7 +143,7 @@ pub unsafe extern "C" fn inflateReset(mut strm: z_streamp) -> i32 {
     (*state).wsize = 0 as i32 as u32;
     (*state).whave = 0 as i32 as u32;
     (*state).write = 0 as i32 as u32;
-    (*state).hold = 0 as i32 as libc::c_ulong;
+    (*state).hold = 0 as i32 as usize;
     (*state).bits = 0 as i32 as u32;
     (*state).next = (*state).codes.as_mut_ptr();
     (*state).distcode = (*state).next;
@@ -165,7 +165,7 @@ pub unsafe extern "C" fn inflatePrime(mut strm: z_streamp, mut bits: i32, mut va
     value = (value as isize & ((1 as isize) << bits) - 1 as i32 as isize) as i32;
     (*state).hold = (*state)
         .hold
-        .wrapping_add((value << (*state).bits) as libc::c_ulong);
+        .wrapping_add((value << (*state).bits) as usize);
     (*state).bits = (*state).bits.wrapping_add(bits as u32);
     return 0 as i32;
 }
@@ -183,7 +183,7 @@ pub unsafe extern "C" fn inflateInit2_(
         || *version.offset(0 as i32 as isize) as i32
             != (*::std::mem::transmute::<&[u8; 6], &[libc::c_char; 6]>(b"1.2.3\x00"))
                 [0 as i32 as usize] as i32
-        || stream_size != ::std::mem::size_of::<z_stream>() as libc::c_ulong as i32
+        || stream_size != ::std::mem::size_of::<z_stream>() as usize as i32
     {
         return -(6 as i32);
     }
@@ -207,7 +207,7 @@ pub unsafe extern "C" fn inflateInit2_(
         .expect("non-null function pointer")(
         (*strm).opaque,
         1 as i32 as uInt,
-        ::std::mem::size_of::<crate::src::zlib::inflate::inflate_state>() as libc::c_ulong as uInt,
+        ::std::mem::size_of::<crate::src::zlib::inflate::inflate_state>() as usize as uInt,
     ) as *mut crate::src::zlib::inflate::inflate_state;
     if state.is_null() {
         return -(4 as i32);
@@ -4731,7 +4731,7 @@ unsafe extern "C" fn updatewindow(mut strm: z_streamp, mut out: u32) -> i32 {
             .expect("non-null function pointer")(
             (*strm).opaque,
             (1 as u32) << (*state).wbits,
-            ::std::mem::size_of::<u8>() as libc::c_ulong as uInt,
+            ::std::mem::size_of::<u8>() as usize as uInt,
         ) as *mut u8;
         if (*state).window.is_null() {
             return 1 as i32;
@@ -4749,7 +4749,7 @@ unsafe extern "C" fn updatewindow(mut strm: z_streamp, mut out: u32) -> i32 {
         crate::stdlib::memcpy(
             (*state).window as *mut libc::c_void,
             (*strm).next_out.offset(-((*state).wsize as isize)) as *const libc::c_void,
-            (*state).wsize as libc::c_ulong,
+            (*state).wsize as usize,
         );
         (*state).write = 0 as i32 as u32;
         (*state).whave = (*state).wsize
@@ -4761,14 +4761,14 @@ unsafe extern "C" fn updatewindow(mut strm: z_streamp, mut out: u32) -> i32 {
         crate::stdlib::memcpy(
             (*state).window.offset((*state).write as isize) as *mut libc::c_void,
             (*strm).next_out.offset(-(copy as isize)) as *const libc::c_void,
-            dist as libc::c_ulong,
+            dist as usize,
         );
         copy = copy.wrapping_sub(dist);
         if copy != 0 {
             crate::stdlib::memcpy(
                 (*state).window as *mut libc::c_void,
                 (*strm).next_out.offset(-(copy as isize)) as *const libc::c_void,
-                copy as libc::c_ulong,
+                copy as usize,
             );
             (*state).write = copy;
             (*state).whave = (*state).wsize
@@ -4889,7 +4889,7 @@ pub unsafe extern "C" fn inflate(mut strm: z_streamp, mut flush: i32) -> i32 {
     let mut put: *mut u8 = 0 as *mut u8; /* bit buffer */
     let mut have: u32 = 0; /* bits in bit buffer */
     let mut left: u32 = 0; /* save starting available input and output */
-    let mut hold: libc::c_ulong = 0; /* number of stored or match bytes to copy */
+    let mut hold: usize = 0; /* number of stored or match bytes to copy */
     let mut bits: u32 = 0; /* where to copy match bytes from */
     let mut in_0: u32 = 0; /* current decoding table entry */
     let mut out: u32 = 0; /* parent table entry */
@@ -4962,13 +4962,13 @@ pub unsafe extern "C" fn inflate(mut strm: z_streamp, mut flush: i32) -> i32 {
                         have = have.wrapping_sub(1);
                         let fresh0 = next;
                         next = next.offset(1);
-                        hold = hold.wrapping_add((*fresh0 as libc::c_ulong) << bits);
+                        hold = hold.wrapping_add((*fresh0 as usize) << bits);
                         bits = bits.wrapping_add(8 as i32 as u32)
                     }
                     if (((hold as u32 & ((1 as u32) << 8 as i32).wrapping_sub(1 as i32 as u32))
-                        << 8 as i32) as libc::c_ulong)
+                        << 8 as i32) as usize)
                         .wrapping_add(hold >> 8 as i32)
-                        .wrapping_rem(31 as i32 as libc::c_ulong)
+                        .wrapping_rem(31 as i32 as usize)
                         != 0
                     {
                         (*strm).msg = b"incorrect header check\x00" as *const u8
@@ -5001,13 +5001,13 @@ pub unsafe extern "C" fn inflate(mut strm: z_streamp, mut flush: i32) -> i32 {
                             (*state).check =
                                 adler32(0 as isize as uLong, 0 as *const Bytef, 0 as i32 as uInt);
                             (*strm).adler = (*state).check;
-                            (*state).mode = if hold & 0x200 as i32 as libc::c_ulong != 0 {
+                            (*state).mode = if hold & 0x200 as i32 as usize != 0 {
                                 crate::src::zlib::inflate::DICTID as i32
                             } else {
                                 crate::src::zlib::inflate::TYPE as i32
                             }
                                 as crate::src::zlib::inflate::inflate_mode;
-                            hold = 0 as i32 as libc::c_ulong;
+                            hold = 0 as i32 as usize;
                             bits = 0 as i32 as u32;
                             continue;
                         }
@@ -5022,15 +5022,15 @@ pub unsafe extern "C" fn inflate(mut strm: z_streamp, mut flush: i32) -> i32 {
                     have = have.wrapping_sub(1);
                     let fresh1 = next;
                     next = next.offset(1);
-                    hold = hold.wrapping_add((*fresh1 as libc::c_ulong) << bits);
+                    hold = hold.wrapping_add((*fresh1 as usize) << bits);
                     bits = bits.wrapping_add(8 as i32 as u32)
                 }
-                (*state).check = (hold >> 24 as i32 & 0xff as i32 as libc::c_ulong)
-                    .wrapping_add(hold >> 8 as i32 & 0xff00 as i32 as libc::c_ulong)
-                    .wrapping_add((hold & 0xff00 as i32 as libc::c_ulong) << 8 as i32)
-                    .wrapping_add((hold & 0xff as i32 as libc::c_ulong) << 24 as i32);
+                (*state).check = (hold >> 24 as i32 & 0xff as i32 as usize)
+                    .wrapping_add(hold >> 8 as i32 & 0xff00 as i32 as usize)
+                    .wrapping_add((hold & 0xff00 as i32 as usize) << 8 as i32)
+                    .wrapping_add((hold & 0xff as i32 as usize) << 24 as i32);
                 (*strm).adler = (*state).check;
-                hold = 0 as i32 as libc::c_ulong;
+                hold = 0 as i32 as usize;
                 bits = 0 as i32 as u32;
                 (*state).mode = crate::src::zlib::inflate::DICT;
                 current_block = 210528378685203046;
@@ -5054,11 +5054,11 @@ pub unsafe extern "C" fn inflate(mut strm: z_streamp, mut flush: i32) -> i32 {
                     have = have.wrapping_sub(1);
                     let fresh3 = next;
                     next = next.offset(1);
-                    hold = hold.wrapping_add((*fresh3 as libc::c_ulong) << bits);
+                    hold = hold.wrapping_add((*fresh3 as usize) << bits);
                     bits = bits.wrapping_add(8 as i32 as u32)
                 }
-                if hold & 0xffff as i32 as libc::c_ulong
-                    != hold >> 16 as i32 ^ 0xffff as i32 as libc::c_ulong
+                if hold & 0xffff as i32 as usize
+                    != hold >> 16 as i32 ^ 0xffff as i32 as usize
                 {
                     (*strm).msg = b"invalid stored block lengths\x00" as *const u8
                         as *const libc::c_char
@@ -5067,7 +5067,7 @@ pub unsafe extern "C" fn inflate(mut strm: z_streamp, mut flush: i32) -> i32 {
                     continue;
                 } else {
                     (*state).length = hold as u32 & 0xffff as i32 as u32;
-                    hold = 0 as i32 as libc::c_ulong;
+                    hold = 0 as i32 as usize;
                     bits = 0 as i32 as u32;
                     (*state).mode = crate::src::zlib::inflate::COPY
                 }
@@ -5084,7 +5084,7 @@ pub unsafe extern "C" fn inflate(mut strm: z_streamp, mut flush: i32) -> i32 {
                     have = have.wrapping_sub(1);
                     let fresh4 = next;
                     next = next.offset(1);
-                    hold = hold.wrapping_add((*fresh4 as libc::c_ulong) << bits);
+                    hold = hold.wrapping_add((*fresh4 as usize) << bits);
                     bits = bits.wrapping_add(8 as i32 as u32)
                 }
                 (*state).nlen = (hold as u32
@@ -5155,23 +5155,23 @@ pub unsafe extern "C" fn inflate(mut strm: z_streamp, mut flush: i32) -> i32 {
                         have = have.wrapping_sub(1);
                         let fresh25 = next;
                         next = next.offset(1);
-                        hold = hold.wrapping_add((*fresh25 as libc::c_ulong) << bits);
+                        hold = hold.wrapping_add((*fresh25 as usize) << bits);
                         bits = bits.wrapping_add(8 as i32 as u32)
                     }
                     out = out.wrapping_sub(left);
-                    (*strm).total_out = ((*strm).total_out as libc::c_ulong)
-                        .wrapping_add(out as libc::c_ulong)
+                    (*strm).total_out = ((*strm).total_out as usize)
+                        .wrapping_add(out as usize)
                         as uLong;
-                    (*state).total = (*state).total.wrapping_add(out as libc::c_ulong);
+                    (*state).total = (*state).total.wrapping_add(out as usize);
                     if out != 0 {
                         (*state).check = adler32((*state).check, put.offset(-(out as isize)), out);
                         (*strm).adler = (*state).check
                     }
                     out = left;
-                    if (hold >> 24 as i32 & 0xff as i32 as libc::c_ulong)
-                        .wrapping_add(hold >> 8 as i32 & 0xff00 as i32 as libc::c_ulong)
-                        .wrapping_add((hold & 0xff00 as i32 as libc::c_ulong) << 8 as i32)
-                        .wrapping_add((hold & 0xff as i32 as libc::c_ulong) << 24 as i32)
+                    if (hold >> 24 as i32 & 0xff as i32 as usize)
+                        .wrapping_add(hold >> 8 as i32 & 0xff00 as i32 as usize)
+                        .wrapping_add((hold & 0xff00 as i32 as usize) << 8 as i32)
+                        .wrapping_add((hold & 0xff as i32 as usize) << 24 as i32)
                         != (*state).check
                     {
                         (*strm).msg = b"incorrect data check\x00" as *const u8
@@ -5180,7 +5180,7 @@ pub unsafe extern "C" fn inflate(mut strm: z_streamp, mut flush: i32) -> i32 {
                         (*state).mode = crate::src::zlib::inflate::BAD;
                         continue;
                     } else {
-                        hold = 0 as i32 as libc::c_ulong;
+                        hold = 0 as i32 as usize;
                         bits = 0 as i32 as u32
                     }
                 }
@@ -5207,7 +5207,7 @@ pub unsafe extern "C" fn inflate(mut strm: z_streamp, mut flush: i32) -> i32 {
                         have = have.wrapping_sub(1);
                         let fresh5 = next;
                         next = next.offset(1);
-                        hold = hold.wrapping_add((*fresh5 as libc::c_ulong) << bits);
+                        hold = hold.wrapping_add((*fresh5 as usize) << bits);
                         bits = bits.wrapping_add(8 as i32 as u32)
                     }
                     let fresh6 = (*state).have;
@@ -5261,7 +5261,7 @@ pub unsafe extern "C" fn inflate(mut strm: z_streamp, mut flush: i32) -> i32 {
                     crate::stdlib::memcpy(
                         put as *mut libc::c_void,
                         next as *const libc::c_void,
-                        copy as libc::c_ulong,
+                        copy as usize,
                     );
                     have = have.wrapping_sub(copy);
                     next = next.offset(copy as isize);
@@ -5313,7 +5313,7 @@ pub unsafe extern "C" fn inflate(mut strm: z_streamp, mut flush: i32) -> i32 {
                         have = have.wrapping_sub(1);
                         let fresh8 = next;
                         next = next.offset(1);
-                        hold = hold.wrapping_add((*fresh8 as libc::c_ulong) << bits);
+                        hold = hold.wrapping_add((*fresh8 as usize) << bits);
                         bits = bits.wrapping_add(8 as i32 as u32)
                     }
                     if (this.val as i32) < 16 as i32 {
@@ -5324,7 +5324,7 @@ pub unsafe extern "C" fn inflate(mut strm: z_streamp, mut flush: i32) -> i32 {
                             have = have.wrapping_sub(1);
                             let fresh9 = next;
                             next = next.offset(1);
-                            hold = hold.wrapping_add((*fresh9 as libc::c_ulong) << bits);
+                            hold = hold.wrapping_add((*fresh9 as usize) << bits);
                             bits = bits.wrapping_add(8 as i32 as u32)
                         }
                         hold >>= this.bits as i32;
@@ -5341,7 +5341,7 @@ pub unsafe extern "C" fn inflate(mut strm: z_streamp, mut flush: i32) -> i32 {
                                 have = have.wrapping_sub(1);
                                 let fresh11 = next;
                                 next = next.offset(1);
-                                hold = hold.wrapping_add((*fresh11 as libc::c_ulong) << bits);
+                                hold = hold.wrapping_add((*fresh11 as usize) << bits);
                                 bits = bits.wrapping_add(8 as i32 as u32)
                             }
                             hold >>= this.bits as i32;
@@ -5371,7 +5371,7 @@ pub unsafe extern "C" fn inflate(mut strm: z_streamp, mut flush: i32) -> i32 {
                                 have = have.wrapping_sub(1);
                                 let fresh12 = next;
                                 next = next.offset(1);
-                                hold = hold.wrapping_add((*fresh12 as libc::c_ulong) << bits);
+                                hold = hold.wrapping_add((*fresh12 as usize) << bits);
                                 bits = bits.wrapping_add(8 as i32 as u32)
                             }
                             hold >>= this.bits as i32;
@@ -5391,7 +5391,7 @@ pub unsafe extern "C" fn inflate(mut strm: z_streamp, mut flush: i32) -> i32 {
                                 have = have.wrapping_sub(1);
                                 let fresh13 = next;
                                 next = next.offset(1);
-                                hold = hold.wrapping_add((*fresh13 as libc::c_ulong) << bits);
+                                hold = hold.wrapping_add((*fresh13 as usize) << bits);
                                 bits = bits.wrapping_add(8 as i32 as u32)
                             }
                             hold >>= this.bits as i32;
@@ -5512,7 +5512,7 @@ pub unsafe extern "C" fn inflate(mut strm: z_streamp, mut flush: i32) -> i32 {
                         have = have.wrapping_sub(1);
                         let fresh16 = next;
                         next = next.offset(1);
-                        hold = hold.wrapping_add((*fresh16 as libc::c_ulong) << bits);
+                        hold = hold.wrapping_add((*fresh16 as usize) << bits);
                         bits = bits.wrapping_add(8 as i32 as u32)
                     }
                     if this.op as i32 != 0 && this.op as i32 & 0xf0 as i32 == 0 as i32 {
@@ -5535,7 +5535,7 @@ pub unsafe extern "C" fn inflate(mut strm: z_streamp, mut flush: i32) -> i32 {
                             have = have.wrapping_sub(1);
                             let fresh17 = next;
                             next = next.offset(1);
-                            hold = hold.wrapping_add((*fresh17 as libc::c_ulong) << bits);
+                            hold = hold.wrapping_add((*fresh17 as usize) << bits);
                             bits = bits.wrapping_add(8 as i32 as u32)
                         }
                         hold >>= last.bits as i32;
@@ -5577,7 +5577,7 @@ pub unsafe extern "C" fn inflate(mut strm: z_streamp, mut flush: i32) -> i32 {
                         have = have.wrapping_sub(1);
                         let fresh2 = next;
                         next = next.offset(1);
-                        hold = hold.wrapping_add((*fresh2 as libc::c_ulong) << bits);
+                        hold = hold.wrapping_add((*fresh2 as usize) << bits);
                         bits = bits.wrapping_add(8 as i32 as u32)
                     }
                     (*state).last = (hold as u32
@@ -5624,7 +5624,7 @@ pub unsafe extern "C" fn inflate(mut strm: z_streamp, mut flush: i32) -> i32 {
                         have = have.wrapping_sub(1);
                         let fresh18 = next;
                         next = next.offset(1);
-                        hold = hold.wrapping_add((*fresh18 as libc::c_ulong) << bits);
+                        hold = hold.wrapping_add((*fresh18 as usize) << bits);
                         bits = bits.wrapping_add(8 as i32 as u32)
                     }
                     (*state).length = (*state).length.wrapping_add(
@@ -5667,7 +5667,7 @@ pub unsafe extern "C" fn inflate(mut strm: z_streamp, mut flush: i32) -> i32 {
                                 have = have.wrapping_sub(1);
                                 let fresh20 = next;
                                 next = next.offset(1);
-                                hold = hold.wrapping_add((*fresh20 as libc::c_ulong) << bits);
+                                hold = hold.wrapping_add((*fresh20 as usize) << bits);
                                 bits = bits.wrapping_add(8 as i32 as u32)
                             }
                             hold >>= last.bits as i32;
@@ -5694,7 +5694,7 @@ pub unsafe extern "C" fn inflate(mut strm: z_streamp, mut flush: i32) -> i32 {
                         have = have.wrapping_sub(1);
                         let fresh19 = next;
                         next = next.offset(1);
-                        hold = hold.wrapping_add((*fresh19 as libc::c_ulong) << bits);
+                        hold = hold.wrapping_add((*fresh19 as usize) << bits);
                         bits = bits.wrapping_add(8 as i32 as u32);
                         current_block = 583050819838508811;
                     }
@@ -5708,7 +5708,7 @@ pub unsafe extern "C" fn inflate(mut strm: z_streamp, mut flush: i32) -> i32 {
                             have = have.wrapping_sub(1);
                             let fresh21 = next;
                             next = next.offset(1);
-                            hold = hold.wrapping_add((*fresh21 as libc::c_ulong) << bits);
+                            hold = hold.wrapping_add((*fresh21 as usize) << bits);
                             bits = bits.wrapping_add(8 as i32 as u32)
                         }
                         (*state).offset = (*state).offset.wrapping_add(
@@ -5803,10 +5803,10 @@ pub unsafe extern "C" fn inflate(mut strm: z_streamp, mut flush: i32) -> i32 {
     in_0 = in_0.wrapping_sub((*strm).avail_in);
     out = out.wrapping_sub((*strm).avail_out);
     (*strm).total_in =
-        ((*strm).total_in as libc::c_ulong).wrapping_add(in_0 as libc::c_ulong) as uLong;
+        ((*strm).total_in as usize).wrapping_add(in_0 as usize) as uLong;
     (*strm).total_out =
-        ((*strm).total_out as libc::c_ulong).wrapping_add(out as libc::c_ulong) as uLong;
-    (*state).total = (*state).total.wrapping_add(out as libc::c_ulong);
+        ((*strm).total_out as usize).wrapping_add(out as usize) as uLong;
+    (*state).total = (*state).total.wrapping_add(out as usize);
     if (*state).wrap != 0 && out != 0 {
         (*state).check = adler32(
             (*state).check,
@@ -5867,7 +5867,7 @@ pub unsafe extern "C" fn inflateSetDictionary(
 ) -> i32 {
     let mut state: *mut crate::src::zlib::inflate::inflate_state =
         0 as *mut crate::src::zlib::inflate::inflate_state;
-    let mut id: libc::c_ulong = 0;
+    let mut id: usize = 0;
     /* check state */
     if strm.is_null() || (*strm).state.is_null() {
         return -(2 as i32);
@@ -5897,7 +5897,7 @@ pub unsafe extern "C" fn inflateSetDictionary(
             dictionary
                 .offset(dictLength as isize)
                 .offset(-((*state).wsize as isize)) as *const libc::c_void,
-            (*state).wsize as libc::c_ulong,
+            (*state).wsize as usize,
         );
         (*state).whave = (*state).wsize
     } else {
@@ -5907,7 +5907,7 @@ pub unsafe extern "C" fn inflateSetDictionary(
                 .offset((*state).wsize as isize)
                 .offset(-(dictLength as isize)) as *mut libc::c_void,
             dictionary as *const libc::c_void,
-            dictLength as libc::c_ulong,
+            dictLength as usize,
         );
         (*state).whave = dictLength
     }
@@ -5972,8 +5972,8 @@ unsafe extern "C" fn syncsearch(mut have: *mut u32, mut buf: *mut u8, mut len: u
 
 pub unsafe extern "C" fn inflateSync(mut strm: z_streamp) -> i32 {
     let mut len: u32 = 0;
-    let mut in_0: libc::c_ulong = 0;
-    let mut out: libc::c_ulong = 0;
+    let mut in_0: usize = 0;
+    let mut out: usize = 0;
     let mut buf: [u8; 4] = [0; 4];
     let mut state: *mut crate::src::zlib::inflate::inflate_state =
         0 as *mut crate::src::zlib::inflate::inflate_state;
@@ -6006,7 +6006,7 @@ pub unsafe extern "C" fn inflateSync(mut strm: z_streamp) -> i32 {
     (*strm).avail_in = ((*strm).avail_in as u32).wrapping_sub(len) as uInt;
     (*strm).next_in = (*strm).next_in.offset(len as isize);
     (*strm).total_in =
-        ((*strm).total_in as libc::c_ulong).wrapping_add(len as libc::c_ulong) as uLong;
+        ((*strm).total_in as usize).wrapping_add(len as usize) as uLong;
     /* return no joy or set up to restart inflate() on a new block */
     if (*state).have != 4 as i32 as u32 {
         return -(3 as i32);
@@ -6708,7 +6708,7 @@ pub unsafe extern "C" fn inflateCopy(mut dest: z_streamp, mut source: z_streamp)
         .expect("non-null function pointer")(
         (*source).opaque,
         1 as i32 as uInt,
-        ::std::mem::size_of::<crate::src::zlib::inflate::inflate_state>() as libc::c_ulong as uInt,
+        ::std::mem::size_of::<crate::src::zlib::inflate::inflate_state>() as usize as uInt,
     ) as *mut crate::src::zlib::inflate::inflate_state;
     if copy.is_null() {
         return -(4 as i32);
@@ -6719,7 +6719,7 @@ pub unsafe extern "C" fn inflateCopy(mut dest: z_streamp, mut source: z_streamp)
             .expect("non-null function pointer")(
             (*source).opaque,
             (1 as u32) << (*state).wbits,
-            ::std::mem::size_of::<u8>() as libc::c_ulong as uInt,
+            ::std::mem::size_of::<u8>() as usize as uInt,
         ) as *mut u8;
         if window.is_null() {
             Some((*source).zfree.expect("non-null function pointer"))
@@ -6731,12 +6731,12 @@ pub unsafe extern "C" fn inflateCopy(mut dest: z_streamp, mut source: z_streamp)
     crate::stdlib::memcpy(
         dest as *mut libc::c_void,
         source as *const libc::c_void,
-        ::std::mem::size_of::<z_stream>() as libc::c_ulong,
+        ::std::mem::size_of::<z_stream>() as usize,
     );
     crate::stdlib::memcpy(
         copy as *mut libc::c_void,
         state as *const libc::c_void,
-        ::std::mem::size_of::<crate::src::zlib::inflate::inflate_state>() as libc::c_ulong,
+        ::std::mem::size_of::<crate::src::zlib::inflate::inflate_state>() as usize,
     );
     if (*state).lencode >= (*state).codes.as_mut_ptr() as *const code
         && (*state).lencode
@@ -6764,7 +6764,7 @@ pub unsafe extern "C" fn inflateCopy(mut dest: z_streamp, mut source: z_streamp)
         crate::stdlib::memcpy(
             window as *mut libc::c_void,
             (*state).window as *const libc::c_void,
-            wsize as libc::c_ulong,
+            wsize as usize,
         );
     }
     (*copy).window = window;

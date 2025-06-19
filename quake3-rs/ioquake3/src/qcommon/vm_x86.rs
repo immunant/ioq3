@@ -474,9 +474,9 @@ unsafe extern "C" fn DoSyscall() {
         ret = &mut *vm_opStackBase.offset((vm_opStackOfs as i32 + 1 as i32) as isize) as *mut i32;
         args[0 as i32 as usize] = !vm_syscallNum as intptr_t;
         index = 1 as i32;
-        while (index as libc::c_ulong)
-            < (::std::mem::size_of::<[intptr_t; 16]>() as libc::c_ulong)
-                .wrapping_div(::std::mem::size_of::<intptr_t>() as libc::c_ulong)
+        while (index as usize)
+            < (::std::mem::size_of::<[intptr_t; 16]>() as usize)
+                .wrapping_div(::std::mem::size_of::<intptr_t>() as usize)
         {
             args[index as usize] = *data.offset(index as isize) as intptr_t;
             index += 1
@@ -1145,12 +1145,12 @@ pub unsafe extern "C" fn VM_Compile(mut vm: *mut vm_t, mut header: *mut vmHeader
     crate::stdlib::memset(
         jused as *mut libc::c_void,
         0 as i32,
-        jusedSize as libc::c_ulong,
+        jusedSize as usize,
     );
     crate::stdlib::memset(
         buf as *mut libc::c_void,
         0 as i32,
-        maxLength as libc::c_ulong,
+        maxLength as usize,
     );
     // copy code in larger buffer and put some zeros at the end
     // so we can safely look ahead for a few instructions in it
@@ -1158,12 +1158,12 @@ pub unsafe extern "C" fn VM_Compile(mut vm: *mut vm_t, mut header: *mut vmHeader
     crate::stdlib::memset(
         code as *mut libc::c_void,
         0 as i32,
-        ((*header).codeLength + 32 as i32) as libc::c_ulong,
+        ((*header).codeLength + 32 as i32) as usize,
     );
     crate::stdlib::memcpy(
         code as *mut libc::c_void,
         (header as *mut byte).offset((*header).codeOffset as isize) as *const libc::c_void,
-        (*header).codeLength as libc::c_ulong,
+        (*header).codeLength as usize,
     );
     // ensure that the optimisation pass knows about all the jump
     // table targets
@@ -1171,12 +1171,12 @@ pub unsafe extern "C" fn VM_Compile(mut vm: *mut vm_t, mut header: *mut vmHeader
     i = 0 as i32;
     while i < (*vm).numJumpTableTargets {
         if (*((*vm).jumpTableTargets.offset(
-            (i as libc::c_ulong).wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong)
+            (i as usize).wrapping_mul(::std::mem::size_of::<i32>() as usize)
                 as isize,
         ) as *mut i32))
             < 0 as i32
             || *((*vm).jumpTableTargets.offset(
-                (i as libc::c_ulong).wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong)
+                (i as usize).wrapping_mul(::std::mem::size_of::<i32>() as usize)
                     as isize,
             ) as *mut i32)
                 >= (*vm).instructionCount
@@ -1192,7 +1192,7 @@ pub unsafe extern "C" fn VM_Compile(mut vm: *mut vm_t, mut header: *mut vmHeader
         }
         *jused.offset(
             *((*vm).jumpTableTargets.offset(
-                (i as libc::c_ulong).wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong)
+                (i as usize).wrapping_mul(::std::mem::size_of::<i32>() as usize)
                     as isize,
             ) as *mut i32) as isize,
         ) = 1 as i32 as byte;
@@ -1763,7 +1763,7 @@ pub unsafe extern "C" fn VM_Compile(mut vm: *mut vm_t, mut header: *mut vmHeader
     crate::stdlib::memcpy(
         (*vm).codeBase as *mut libc::c_void,
         buf as *const libc::c_void,
-        compiledOfs as libc::c_ulong,
+        compiledOfs as usize,
     );
     if crate::stdlib::mprotect(
         (*vm).codeBase as *mut libc::c_void,

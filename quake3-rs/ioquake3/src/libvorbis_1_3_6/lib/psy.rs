@@ -6209,9 +6209,9 @@ pub unsafe extern "C" fn _vp_global_look(
     let mut gi: *mut crate::src::libvorbis_1_3_6::lib::psy::vorbis_info_psy_global =
         &mut (*ci).psy_g_param;
     let mut look: *mut crate::src::libvorbis_1_3_6::lib::psy::vorbis_look_psy_global = calloc(
-        1 as i32 as libc::c_ulong,
+        1 as i32 as usize,
         ::std::mem::size_of::<crate::src::libvorbis_1_3_6::lib::psy::vorbis_look_psy_global>()
-            as libc::c_ulong,
+            as usize,
     )
         as *mut crate::src::libvorbis_1_3_6::lib::psy::vorbis_look_psy_global;
     (*look).channels = (*vi).channels;
@@ -6229,7 +6229,7 @@ pub unsafe extern "C" fn _vp_global_free(
             look as *mut libc::c_void,
             0 as i32,
             ::std::mem::size_of::<crate::src::libvorbis_1_3_6::lib::psy::vorbis_look_psy_global>()
-                as libc::c_ulong,
+                as usize,
         );
         free(look as *mut libc::c_void);
     };
@@ -6244,7 +6244,7 @@ pub unsafe extern "C" fn _vi_gpsy_free(
             i as *mut libc::c_void,
             0 as i32,
             ::std::mem::size_of::<crate::src::libvorbis_1_3_6::lib::psy::vorbis_info_psy_global>()
-                as libc::c_ulong,
+                as usize,
         );
         free(i as *mut libc::c_void);
     };
@@ -6259,7 +6259,7 @@ pub unsafe extern "C" fn _vi_psy_free(
             i as *mut libc::c_void,
             0 as i32,
             ::std::mem::size_of::<crate::src::libvorbis_1_3_6::lib::psy::vorbis_info_psy>()
-                as libc::c_ulong,
+                as usize,
         );
         free(i as *mut libc::c_void);
     };
@@ -6312,17 +6312,17 @@ unsafe extern "C" fn setup_tone_curves(
     let mut athc: [[f32; 56]; 8] = [[0.; 56]; 8];
     let mut fresh0 = ::std::vec::from_elem(
         0,
-        (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as usize,
+        (n as usize).wrapping_mul(::std::mem::size_of::<f32>() as usize) as usize,
     );
     let mut brute_buffer: *mut f32 = fresh0.as_mut_ptr() as *mut f32;
     let mut ret: *mut *mut *mut f32 = malloc(
-        (::std::mem::size_of::<*mut *mut f32>() as libc::c_ulong)
-            .wrapping_mul(17 as i32 as libc::c_ulong),
+        (::std::mem::size_of::<*mut *mut f32>() as usize)
+            .wrapping_mul(17 as i32 as usize),
     ) as *mut *mut *mut f32;
     crate::stdlib::memset(
         workc.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[[[f32; 56]; 8]; 17]>() as libc::c_ulong,
+        ::std::mem::size_of::<[[[f32; 56]; 8]; 17]>() as usize,
     );
     i = 0 as i32;
     while i < 17 as i32 {
@@ -6356,22 +6356,22 @@ unsafe extern "C" fn setup_tone_curves(
             crate::stdlib::memcpy(
                 workc[i as usize][(j + 2 as i32) as usize].as_mut_ptr() as *mut libc::c_void,
                 tonemasks[i as usize][j as usize].as_ptr() as *const libc::c_void,
-                (56 as i32 as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
+                (56 as i32 as usize)
+                    .wrapping_mul(::std::mem::size_of::<f32>() as usize),
             );
             j += 1
         }
         crate::stdlib::memcpy(
             workc[i as usize][0 as i32 as usize].as_mut_ptr() as *mut libc::c_void,
             tonemasks[i as usize][0 as i32 as usize].as_ptr() as *const libc::c_void,
-            (56 as i32 as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
+            (56 as i32 as usize)
+                .wrapping_mul(::std::mem::size_of::<f32>() as usize),
         );
         crate::stdlib::memcpy(
             workc[i as usize][1 as i32 as usize].as_mut_ptr() as *mut libc::c_void,
             tonemasks[i as usize][0 as i32 as usize].as_ptr() as *const libc::c_void,
-            (56 as i32 as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
+            (56 as i32 as usize)
+                .wrapping_mul(::std::mem::size_of::<f32>() as usize),
         );
         /* apply centered curve boost/decay */
         j = 0 as i32;
@@ -6403,8 +6403,8 @@ unsafe extern "C" fn setup_tone_curves(
             crate::stdlib::memcpy(
                 athc[j as usize].as_mut_ptr() as *mut libc::c_void,
                 ath.as_mut_ptr() as *const libc::c_void,
-                (56 as i32 as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
+                (56 as i32 as usize)
+                    .wrapping_mul(::std::mem::size_of::<f32>() as usize),
             );
             attenuate_curve(
                 athc[j as usize].as_mut_ptr(),
@@ -6446,8 +6446,8 @@ unsafe extern "C" fn setup_tone_curves(
         let mut bin: i32 = 0;
         let ref mut fresh1 = *ret.offset(i as isize);
         *fresh1 = malloc(
-            (::std::mem::size_of::<*mut f32>() as libc::c_ulong)
-                .wrapping_mul(8 as i32 as libc::c_ulong),
+            (::std::mem::size_of::<*mut f32>() as usize)
+                .wrapping_mul(8 as i32 as usize),
         ) as *mut *mut f32;
         /* low frequency curves are measured with greater resolution than
         the MDCT/FFT will actually give us; we want the curve applied
@@ -6486,8 +6486,8 @@ unsafe extern "C" fn setup_tone_curves(
         while m < 8 as i32 {
             let ref mut fresh2 = *(*ret.offset(i as isize)).offset(m as isize);
             *fresh2 = malloc(
-                (::std::mem::size_of::<f32>() as libc::c_ulong)
-                    .wrapping_mul((56 as i32 + 2 as i32) as libc::c_ulong),
+                (::std::mem::size_of::<f32>() as usize)
+                    .wrapping_mul((56 as i32 + 2 as i32) as usize),
             ) as *mut f32;
             j = 0 as i32;
             while j < n {
@@ -6662,7 +6662,7 @@ pub unsafe extern "C" fn _vp_psy_init(
         p as *mut libc::c_void,
         0 as i32,
         ::std::mem::size_of::<crate::src::libvorbis_1_3_6::lib::psy::vorbis_look_psy>()
-            as libc::c_ulong,
+            as usize,
     );
     (*p).eighth_octave_lines = (*gi).eighth_octave_lines;
     (*p).shiftoc = (crate::stdlib::rint(
@@ -6681,13 +6681,13 @@ pub unsafe extern "C" fn _vp_psy_init(
         + 0.5f32 as f64) as isize;
     (*p).total_octave_lines = (maxoc - (*p).firstoc + 1 as i32 as isize) as i32;
     (*p).ath =
-        malloc((n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong))
+        malloc((n as usize).wrapping_mul(::std::mem::size_of::<f32>() as usize))
             as *mut f32;
     (*p).octave =
-        malloc((n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<isize>() as libc::c_ulong))
+        malloc((n as usize).wrapping_mul(::std::mem::size_of::<isize>() as usize))
             as *mut isize;
     (*p).bark =
-        malloc((n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<isize>() as libc::c_ulong))
+        malloc((n as usize).wrapping_mul(::std::mem::size_of::<isize>() as usize))
             as *mut isize;
     (*p).vi = vi;
     (*p).n = n;
@@ -6803,14 +6803,14 @@ pub unsafe extern "C" fn _vp_psy_init(
     );
     /* set up rolling noise median */
     (*p).noiseoffset = malloc(
-        (3 as i32 as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<*mut f32>() as libc::c_ulong),
+        (3 as i32 as usize)
+            .wrapping_mul(::std::mem::size_of::<*mut f32>() as usize),
     ) as *mut *mut f32;
     i = 0 as i32 as isize;
     while i < 3 as i32 as isize {
         let ref mut fresh3 = *(*p).noiseoffset.offset(i as isize);
         *fresh3 = malloc(
-            (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
+            (n as usize).wrapping_mul(::std::mem::size_of::<f32>() as usize),
         ) as *mut f32;
         i += 1
     }
@@ -6885,7 +6885,7 @@ pub unsafe extern "C" fn _vp_psy_clear(
             p as *mut libc::c_void,
             0 as i32,
             ::std::mem::size_of::<crate::src::libvorbis_1_3_6::lib::psy::vorbis_look_psy>()
-                as libc::c_ulong,
+                as usize,
         );
     };
 }
@@ -6983,12 +6983,12 @@ unsafe extern "C" fn seed_loop(
 unsafe extern "C" fn seed_chase(mut seeds: *mut f32, mut linesper: i32, mut n: isize) {
     let mut fresh4 = ::std::vec::from_elem(
         0,
-        (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<isize>() as libc::c_ulong) as usize,
+        (n as usize).wrapping_mul(::std::mem::size_of::<isize>() as usize) as usize,
     );
     let mut posstack: *mut isize = fresh4.as_mut_ptr() as *mut isize;
     let mut fresh5 = ::std::vec::from_elem(
         0,
-        (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as usize,
+        (n as usize).wrapping_mul(::std::mem::size_of::<f32>() as usize) as usize,
     );
     let mut ampstack: *mut f32 = fresh5.as_mut_ptr() as *mut f32;
     let mut stack: isize = 0 as i32 as isize;
@@ -7119,27 +7119,27 @@ unsafe extern "C" fn bark_noise_hybridmp(
 ) {
     let mut fresh9 = ::std::vec::from_elem(
         0,
-        (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as usize,
+        (n as usize).wrapping_mul(::std::mem::size_of::<f32>() as usize) as usize,
     );
     let mut N: *mut f32 = fresh9.as_mut_ptr() as *mut f32;
     let mut fresh10 = ::std::vec::from_elem(
         0,
-        (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as usize,
+        (n as usize).wrapping_mul(::std::mem::size_of::<f32>() as usize) as usize,
     );
     let mut X: *mut f32 = fresh10.as_mut_ptr() as *mut f32;
     let mut fresh11 = ::std::vec::from_elem(
         0,
-        (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as usize,
+        (n as usize).wrapping_mul(::std::mem::size_of::<f32>() as usize) as usize,
     );
     let mut XX: *mut f32 = fresh11.as_mut_ptr() as *mut f32;
     let mut fresh12 = ::std::vec::from_elem(
         0,
-        (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as usize,
+        (n as usize).wrapping_mul(::std::mem::size_of::<f32>() as usize) as usize,
     );
     let mut Y: *mut f32 = fresh12.as_mut_ptr() as *mut f32;
     let mut fresh13 = ::std::vec::from_elem(
         0,
-        (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as usize,
+        (n as usize).wrapping_mul(::std::mem::size_of::<f32>() as usize) as usize,
     );
     let mut XY: *mut f32 = fresh13.as_mut_ptr() as *mut f32;
     let mut tN: f32 = 0.;
@@ -7318,7 +7318,7 @@ pub unsafe extern "C" fn _vp_noisemask(
     let mut n: i32 = (*p).n;
     let mut fresh14 = ::std::vec::from_elem(
         0,
-        (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as usize,
+        (n as usize).wrapping_mul(::std::mem::size_of::<f32>() as usize) as usize,
     );
     let mut work: *mut f32 = fresh14.as_mut_ptr() as *mut f32;
     bark_noise_hybridmp(n, (*p).bark, logmdct, logmask, 140.0f64 as f32, -(1 as i32));
@@ -7367,8 +7367,8 @@ pub unsafe extern "C" fn _vp_tonemask(
     let mut n: i32 = (*p).n;
     let mut fresh15 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<f32>() as libc::c_ulong)
-            .wrapping_mul((*p).total_octave_lines as libc::c_ulong) as usize,
+        (::std::mem::size_of::<f32>() as usize)
+            .wrapping_mul((*p).total_octave_lines as usize) as usize,
     );
     let mut seed: *mut f32 = fresh15.as_mut_ptr() as *mut f32;
     let mut att: f32 = local_specmax + (*(*p).vi).ath_adjatt;
@@ -7789,7 +7789,7 @@ unsafe extern "C" fn noise_normalize(
     let mut vi: *mut crate::src::libvorbis_1_3_6::lib::psy::vorbis_info_psy = (*p).vi;
     let mut fresh16 = ::std::vec::from_elem(
         0,
-        (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<*mut f32>() as libc::c_ulong)
+        (n as usize).wrapping_mul(::std::mem::size_of::<*mut f32>() as usize)
             as usize,
     );
     let mut sort: *mut *mut f32 = fresh16.as_mut_ptr() as *mut *mut f32;
@@ -7865,7 +7865,7 @@ unsafe extern "C" fn noise_normalize(
         qsort(
             sort as *mut libc::c_void,
             count as size_t,
-            ::std::mem::size_of::<*mut f32>() as libc::c_ulong,
+            ::std::mem::size_of::<*mut f32>() as usize,
             Some(
                 apsort
                     as unsafe extern "C" fn(_: *const libc::c_void, _: *const libc::c_void) -> i32,
@@ -7944,42 +7944,42 @@ pub unsafe extern "C" fn _vp_couple_quantize_normalize(
     /* unquantized energy (negative indicates amplitude has negative sign) */
     let mut fresh19 = ::std::vec::from_elem(
         0,
-        (ch as libc::c_ulong).wrapping_mul(::std::mem::size_of::<*mut f32>() as libc::c_ulong)
+        (ch as usize).wrapping_mul(::std::mem::size_of::<*mut f32>() as usize)
             as usize,
     );
     let mut raw: *mut *mut f32 = fresh19.as_mut_ptr() as *mut *mut f32;
     /* dual pupose; quantized energy (if flag set), othersize fabs(raw) */
     let mut fresh20 = ::std::vec::from_elem(
         0,
-        (ch as libc::c_ulong).wrapping_mul(::std::mem::size_of::<*mut f32>() as libc::c_ulong)
+        (ch as usize).wrapping_mul(::std::mem::size_of::<*mut f32>() as usize)
             as usize,
     );
     let mut quant: *mut *mut f32 = fresh20.as_mut_ptr() as *mut *mut f32;
     /* floor energy */
     let mut fresh21 = ::std::vec::from_elem(
         0,
-        (ch as libc::c_ulong).wrapping_mul(::std::mem::size_of::<*mut f32>() as libc::c_ulong)
+        (ch as usize).wrapping_mul(::std::mem::size_of::<*mut f32>() as usize)
             as usize,
     );
     let mut floor_0: *mut *mut f32 = fresh21.as_mut_ptr() as *mut *mut f32;
     /* flags indicating raw/quantized status of elements in raw vector */
     let mut fresh22 = ::std::vec::from_elem(
         0,
-        (ch as libc::c_ulong).wrapping_mul(::std::mem::size_of::<*mut i32>() as libc::c_ulong)
+        (ch as usize).wrapping_mul(::std::mem::size_of::<*mut i32>() as usize)
             as usize,
     );
     let mut flag: *mut *mut i32 = fresh22.as_mut_ptr() as *mut *mut i32;
     /* non-zero flag working vector */
     let mut fresh23 = ::std::vec::from_elem(
         0,
-        (ch as libc::c_ulong).wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong) as usize,
+        (ch as usize).wrapping_mul(::std::mem::size_of::<i32>() as usize) as usize,
     );
     let mut nz: *mut i32 = fresh23.as_mut_ptr() as *mut i32;
     /* energy surplus/defecit tracking */
     let mut fresh24 = ::std::vec::from_elem(
         0,
-        ((ch + (*vi).coupling_steps) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as usize,
+        ((ch + (*vi).coupling_steps) as usize)
+            .wrapping_mul(::std::mem::size_of::<f32>() as usize) as usize,
     );
     let mut acc: *mut f32 = fresh24.as_mut_ptr() as *mut f32;
     /* The threshold of a stereo is changed with the size of n */
@@ -7989,29 +7989,29 @@ pub unsafe extern "C" fn _vp_couple_quantize_normalize(
     }
     let mut fresh25 = ::std::vec::from_elem(
         0,
-        ((ch * partition) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as usize,
+        ((ch * partition) as usize)
+            .wrapping_mul(::std::mem::size_of::<f32>() as usize) as usize,
     );
     let ref mut fresh26 = *raw.offset(0 as i32 as isize);
     *fresh26 = fresh25.as_mut_ptr() as *mut f32;
     let mut fresh27 = ::std::vec::from_elem(
         0,
-        ((ch * partition) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as usize,
+        ((ch * partition) as usize)
+            .wrapping_mul(::std::mem::size_of::<f32>() as usize) as usize,
     );
     let ref mut fresh28 = *quant.offset(0 as i32 as isize);
     *fresh28 = fresh27.as_mut_ptr() as *mut f32;
     let mut fresh29 = ::std::vec::from_elem(
         0,
-        ((ch * partition) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as usize,
+        ((ch * partition) as usize)
+            .wrapping_mul(::std::mem::size_of::<f32>() as usize) as usize,
     );
     let ref mut fresh30 = *floor_0.offset(0 as i32 as isize);
     *fresh30 = fresh29.as_mut_ptr() as *mut f32;
     let mut fresh31 = ::std::vec::from_elem(
         0,
-        ((ch * partition) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong) as usize,
+        ((ch * partition) as usize)
+            .wrapping_mul(::std::mem::size_of::<i32>() as usize) as usize,
     );
     let ref mut fresh32 = *flag.offset(0 as i32 as isize);
     *fresh32 = fresh31.as_mut_ptr() as *mut i32;
@@ -8050,14 +8050,14 @@ pub unsafe extern "C" fn _vp_couple_quantize_normalize(
         crate::stdlib::memcpy(
             nz as *mut libc::c_void,
             nonzero as *const libc::c_void,
-            (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(ch as libc::c_ulong),
+            (::std::mem::size_of::<i32>() as usize).wrapping_mul(ch as usize),
         );
         /* prefill */
         crate::stdlib::memset(
             *flag.offset(0 as i32 as isize) as *mut libc::c_void,
             0 as i32,
-            ((ch * partition) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+            ((ch * partition) as usize)
+                .wrapping_mul(::std::mem::size_of::<i32>() as usize),
         );
         k = 0 as i32;
         while k < ch {

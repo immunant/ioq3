@@ -252,7 +252,7 @@ pub static mut iteminfo_fields: [fielddef_t; 9] = [fielddef_t {
 pub static mut iteminfo_struct: structdef_t = unsafe {
     {
         let mut init = structdef_s {
-            size: ::std::mem::size_of::<iteminfo_t>() as libc::c_ulong as i32,
+            size: ::std::mem::size_of::<iteminfo_t>() as usize as i32,
             fields: iteminfo_fields.as_ptr() as *mut _,
         };
         init
@@ -443,7 +443,7 @@ pub unsafe extern "C" fn LoadItemConfig(mut filename: *mut libc::c_char) -> *mut
     Q_strncpyz(
         path.as_mut_ptr(),
         filename,
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     PC_SetBaseFolder(b"botfiles\x00" as *const u8 as *const libc::c_char as *mut libc::c_char);
     source = LoadSourceFile(path.as_mut_ptr()) as *mut source_s;
@@ -459,13 +459,13 @@ pub unsafe extern "C" fn LoadItemConfig(mut filename: *mut libc::c_char) -> *mut
     }
     //initialize item config
     ic = crate::src::botlib::l_memory::GetClearedHunkMemory(
-        (::std::mem::size_of::<itemconfig_t>() as libc::c_ulong).wrapping_add(
-            (max_iteminfo as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<iteminfo_t>() as libc::c_ulong),
+        (::std::mem::size_of::<itemconfig_t>() as usize).wrapping_add(
+            (max_iteminfo as usize)
+                .wrapping_mul(::std::mem::size_of::<iteminfo_t>() as usize),
         ),
     ) as *mut itemconfig_t;
     (*ic).iteminfo = (ic as *mut libc::c_char)
-        .offset(::std::mem::size_of::<itemconfig_t>() as libc::c_ulong as isize)
+        .offset(::std::mem::size_of::<itemconfig_t>() as usize as isize)
         as *mut iteminfo_t;
     (*ic).numiteminfo = 0 as i32;
     //parse the item config file
@@ -495,7 +495,7 @@ pub unsafe extern "C" fn LoadItemConfig(mut filename: *mut libc::c_char) -> *mut
             crate::stdlib::memset(
                 ii as *mut libc::c_void,
                 0 as i32,
-                ::std::mem::size_of::<iteminfo_t>() as libc::c_ulong,
+                ::std::mem::size_of::<iteminfo_t>() as usize,
             );
             if PC_ExpectTokenType(
                 source as *mut source_s,
@@ -512,7 +512,7 @@ pub unsafe extern "C" fn LoadItemConfig(mut filename: *mut libc::c_char) -> *mut
             Q_strncpyz(
                 (*ii).classname.as_mut_ptr(),
                 token.string.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 32]>() as usize as i32,
             );
             if ReadStructure(
                 source as *mut source_s,
@@ -576,8 +576,8 @@ pub unsafe extern "C" fn ItemWeightIndex(
     let mut i: i32 = 0;
     //initialize item weight index
     index = crate::src::botlib::l_memory::GetClearedMemory(
-        (::std::mem::size_of::<i32>() as libc::c_ulong)
-            .wrapping_mul((*ic).numiteminfo as libc::c_ulong),
+        (::std::mem::size_of::<i32>() as usize)
+            .wrapping_mul((*ic).numiteminfo as usize),
     ) as *mut i32; //end for
     i = 0 as i32;
     while i < (*ic).numiteminfo {
@@ -618,8 +618,8 @@ pub unsafe extern "C" fn InitLevelItemHeap() {
         b"256\x00" as *const u8 as *const libc::c_char,
     ) as i32;
     levelitemheap = crate::src::botlib::l_memory::GetClearedMemory(
-        (max_levelitems as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<levelitem_t>() as libc::c_ulong),
+        (max_levelitems as usize)
+            .wrapping_mul(::std::mem::size_of::<levelitem_t>() as usize),
     ) as *mut levelitem_t;
     i = 0 as i32;
     while i < max_levelitems - 1 as i32 {
@@ -658,7 +658,7 @@ pub unsafe extern "C" fn AllocLevelItem() -> *mut levelitem_t {
     crate::stdlib::memset(
         li as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<levelitem_t>() as libc::c_ulong,
+        ::std::mem::size_of::<levelitem_t>() as usize,
     );
     return li;
 }
@@ -778,7 +778,7 @@ pub unsafe extern "C" fn BotInitInfoEntities() {
                 ml = crate::src::botlib::l_memory::GetClearedMemory(::std::mem::size_of::<
                     maplocation_t,
                 >()
-                    as libc::c_ulong) as *mut maplocation_t; //end if
+                    as usize) as *mut maplocation_t; //end if
                 crate::src::botlib::be_aas_bspq3::AAS_VectorForBSPEpairKey(
                     ent,
                     b"origin\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -788,7 +788,7 @@ pub unsafe extern "C" fn BotInitInfoEntities() {
                     ent,
                     b"message\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     (*ml).name.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 128]>() as usize as i32,
                 );
                 (*ml).areanum =
                     crate::src::botlib::be_aas_sample::AAS_PointAreaNum((*ml).origin.as_mut_ptr());
@@ -801,7 +801,7 @@ pub unsafe extern "C" fn BotInitInfoEntities() {
             ) == 0
             {
                 cs = crate::src::botlib::l_memory::GetClearedMemory(
-                    ::std::mem::size_of::<campspot_t>() as libc::c_ulong,
+                    ::std::mem::size_of::<campspot_t>() as usize,
                 ) as *mut campspot_t;
                 crate::src::botlib::be_aas_bspq3::AAS_VectorForBSPEpairKey(
                     ent,
@@ -814,7 +814,7 @@ pub unsafe extern "C" fn BotInitInfoEntities() {
                     ent,
                     b"message\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     (*cs).name.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 128]>() as usize as i32,
                 ); //end if
                 crate::src::botlib::be_aas_bspq3::AAS_FloatForBSPEpairKey(
                     ent,
@@ -1247,12 +1247,12 @@ pub unsafe extern "C" fn BotResetAvoidGoals(mut goalstate: i32) {
     crate::stdlib::memset(
         (*gs).avoidgoals.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        (256 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+        (256 as i32 as usize).wrapping_mul(::std::mem::size_of::<i32>() as usize),
     );
     crate::stdlib::memset(
         (*gs).avoidgoaltimes.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        (256 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
+        (256 as i32 as usize).wrapping_mul(::std::mem::size_of::<f32>() as usize),
     );
 }
 //dump the avoid goals
@@ -2081,7 +2081,7 @@ pub unsafe extern "C" fn BotPushGoal(
             .offset((*gs).goalstacktop as isize)
             as *mut crate::src::botlib::be_ai_goal::bot_goal_t as *mut libc::c_void,
         goal as *const libc::c_void,
-        ::std::mem::size_of::<crate::src::botlib::be_ai_goal::bot_goal_t>() as libc::c_ulong,
+        ::std::mem::size_of::<crate::src::botlib::be_ai_goal::bot_goal_t>() as usize,
     );
 }
 //pop a goal from the goal stack
@@ -2151,7 +2151,7 @@ pub unsafe extern "C" fn BotGetTopGoal(
             .as_mut_ptr()
             .offset((*gs).goalstacktop as isize)
             as *mut crate::src::botlib::be_ai_goal::bot_goal_t as *const libc::c_void,
-        ::std::mem::size_of::<crate::src::botlib::be_ai_goal::bot_goal_t>() as libc::c_ulong,
+        ::std::mem::size_of::<crate::src::botlib::be_ai_goal::bot_goal_t>() as usize,
     );
     return qtrue as i32;
 }
@@ -2184,7 +2184,7 @@ pub unsafe extern "C" fn BotGetSecondGoal(
             .as_mut_ptr()
             .offset(((*gs).goalstacktop - 1 as i32) as isize)
             as *mut crate::src::botlib::be_ai_goal::bot_goal_t as *const libc::c_void,
-        ::std::mem::size_of::<crate::src::botlib::be_ai_goal::bot_goal_t>() as libc::c_ulong,
+        ::std::mem::size_of::<crate::src::botlib::be_ai_goal::bot_goal_t>() as usize,
     );
     return qtrue as i32;
 }
@@ -2259,7 +2259,7 @@ pub unsafe extern "C" fn BotChooseLTGItem(
     crate::stdlib::memset(
         &mut goal as *mut crate::src::botlib::be_ai_goal::bot_goal_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::src::botlib::be_ai_goal::bot_goal_t>() as libc::c_ulong,
+        ::std::mem::size_of::<crate::src::botlib::be_ai_goal::bot_goal_t>() as usize,
     );
     let mut current_block_32: u64;
     //go through the items in the level
@@ -2503,7 +2503,7 @@ pub unsafe extern "C" fn BotChooseNBGItem(
     crate::stdlib::memset(
         &mut goal as *mut crate::src::botlib::be_ai_goal::bot_goal_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::src::botlib::be_ai_goal::bot_goal_t>() as libc::c_ulong,
+        ::std::mem::size_of::<crate::src::botlib::be_ai_goal::bot_goal_t>() as usize,
     );
     let mut current_block_41: u64;
     //go through the items in the level
@@ -2836,9 +2836,9 @@ pub unsafe extern "C" fn BotResetGoalState(mut goalstate: i32) {
     crate::stdlib::memset(
         (*gs).goalstack.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        (8 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
+        (8 as i32 as usize).wrapping_mul(::std::mem::size_of::<
             crate::src::botlib::be_ai_goal::bot_goal_t,
-        >() as libc::c_ulong),
+        >() as usize),
     );
     (*gs).goalstacktop = 0 as i32;
     BotResetAvoidGoals(goalstate);
@@ -2922,7 +2922,7 @@ pub unsafe extern "C" fn BotAllocGoalState(mut client: i32) -> i32 {
     while i <= 64 as i32 {
         if botgoalstates[i as usize].is_null() {
             botgoalstates[i as usize] = crate::src::botlib::l_memory::GetClearedMemory(
-                ::std::mem::size_of::<bot_goalstate_t>() as libc::c_ulong,
+                ::std::mem::size_of::<bot_goalstate_t>() as usize,
             ) as *mut bot_goalstate_t;
             (*botgoalstates[i as usize]).client = client;
             return i;

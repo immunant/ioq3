@@ -179,7 +179,7 @@ pub unsafe extern "C" fn Cbuf_AddText(mut text: *const libc::c_char) {
     crate::stdlib::memcpy(
         &mut *cmd_text.data.offset(cmd_text.cursize as isize) as *mut byte as *mut libc::c_void,
         text as *const libc::c_void,
-        l as libc::c_ulong,
+        l as usize,
     );
     cmd_text.cursize += l;
 }
@@ -196,7 +196,7 @@ Adds a \n to the text
 pub unsafe extern "C" fn Cbuf_InsertText(mut text: *const libc::c_char) {
     let mut len: i32 = 0;
     let mut i: i32 = 0;
-    len = crate::stdlib::strlen(text).wrapping_add(1 as i32 as libc::c_ulong) as i32;
+    len = crate::stdlib::strlen(text).wrapping_add(1 as i32 as usize) as i32;
     if len + cmd_text.cursize > cmd_text.maxsize {
         Com_Printf(b"Cbuf_InsertText overflowed\n\x00" as *const u8 as *const libc::c_char);
         return;
@@ -211,7 +211,7 @@ pub unsafe extern "C" fn Cbuf_InsertText(mut text: *const libc::c_char) {
     crate::stdlib::memcpy(
         cmd_text.data as *mut libc::c_void,
         text as *const libc::c_void,
-        (len - 1 as i32) as libc::c_ulong,
+        (len - 1 as i32) as usize,
     );
     // add a \n
     *cmd_text.data.offset((len - 1 as i32) as isize) = '\n' as i32 as byte;
@@ -228,7 +228,7 @@ Cbuf_ExecuteText
 pub unsafe extern "C" fn Cbuf_ExecuteText(mut exec_when: i32, mut text: *const libc::c_char) {
     match exec_when {
         0 => {
-            if !text.is_null() && crate::stdlib::strlen(text) > 0 as i32 as libc::c_ulong {
+            if !text.is_null() && crate::stdlib::strlen(text) > 0 as i32 as usize {
                 Com_DPrintf(
                     b"^3EXEC_NOW %s\n\x00" as *const u8 as *const libc::c_char,
                     text,
@@ -336,7 +336,7 @@ pub unsafe extern "C" fn Cbuf_Execute() {
             crate::stdlib::memcpy(
                 line.as_mut_ptr() as *mut libc::c_void,
                 text as *const libc::c_void,
-                i as libc::c_ulong,
+                i as usize,
             );
             line[i as usize] = 0 as i32 as libc::c_char;
             // delete the text from the command buffer and move remaining commands down
@@ -350,7 +350,7 @@ pub unsafe extern "C" fn Cbuf_Execute() {
                 crate::stdlib::memmove(
                     text as *mut libc::c_void,
                     text.offset(i as isize) as *const libc::c_void,
-                    cmd_text.cursize as libc::c_ulong,
+                    cmd_text.cursize as usize,
                 );
             }
             // execute the command line
@@ -402,11 +402,11 @@ pub unsafe extern "C" fn Cmd_Exec_f() {
     Q_strncpyz(
         filename.as_mut_ptr(),
         Cmd_Argv(1 as i32),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     COM_DefaultExtension(
         filename.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         b".cfg\x00" as *const u8 as *const libc::c_char,
     );
     FS_ReadFile(filename.as_mut_ptr(), &mut f.v);
@@ -612,7 +612,7 @@ pub unsafe extern "C" fn Cmd_Args_Sanitize() {
     i = 1 as i32;
     while i < cmd_argc {
         let mut c: *mut libc::c_char = cmd_argv[i as usize];
-        if crate::stdlib::strlen(c) > (256 as i32 - 1 as i32) as libc::c_ulong {
+        if crate::stdlib::strlen(c) > (256 as i32 - 1 as i32) as usize {
             *c.offset((256 as i32 - 1 as i32) as isize) = '\u{0}' as i32 as libc::c_char
         }
         loop {
@@ -653,7 +653,7 @@ unsafe extern "C" fn Cmd_TokenizeString2(
     Q_strncpyz(
         cmd_cmd.as_mut_ptr(),
         text_in,
-        ::std::mem::size_of::<[libc::c_char; 8192]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 8192]>() as usize as i32,
     );
     text = text_in;
     textOut = cmd_tokenized.as_mut_ptr();
@@ -819,7 +819,7 @@ pub unsafe extern "C" fn Cmd_AddCommand(
         return;
     }
     // use a small malloc to avoid zone fragmentation
-    cmd = S_Malloc(::std::mem::size_of::<cmd_function_t>() as libc::c_ulong as i32)
+    cmd = S_Malloc(::std::mem::size_of::<cmd_function_t>() as usize as i32)
         as *mut cmd_function_t;
     (*cmd).name = CopyString(cmd_name);
     (*cmd).function = function;

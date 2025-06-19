@@ -535,7 +535,7 @@ unsafe extern "C" fn UI_SoundOptionsMenu_Init() {
     crate::stdlib::memset(
         &mut soundOptionsInfo as *mut soundOptionsInfo_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<soundOptionsInfo_t>() as libc::c_ulong,
+        ::std::mem::size_of::<soundOptionsInfo_t>() as usize,
     );
     UI_SoundOptionsMenu_Cache();
     soundOptionsInfo.menu.wrapAround = qtrue;

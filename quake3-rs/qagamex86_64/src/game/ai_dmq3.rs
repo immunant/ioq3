@@ -661,7 +661,7 @@ pub unsafe extern "C" fn BotSetUserInfo(
     trap_GetUserinfo(
         (*bs).client,
         userinfo.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     Info_SetValueForKey(userinfo.as_mut_ptr(), key, value);
     trap_SetUserinfo((*bs).client, userinfo.as_mut_ptr());
@@ -918,7 +918,7 @@ pub unsafe extern "C" fn BotRememberLastOrderedTask(mut bs: *mut bot_state_t) {
     crate::stdlib::memcpy(
         &mut (*bs).lastgoal_teamgoal as *mut bot_goal_t as *mut libc::c_void,
         &mut (*bs).teamgoal as *mut bot_goal_t as *const libc::c_void,
-        ::std::mem::size_of::<bot_goal_t>() as libc::c_ulong,
+        ::std::mem::size_of::<bot_goal_t>() as usize,
     );
     (*bs).lastgoal_teammate = (*bs).teammate;
 }
@@ -959,7 +959,7 @@ pub unsafe extern "C" fn BotSetLastOrderedTask(mut bs: *mut bot_state_t) -> i32 
         crate::stdlib::memcpy(
             &mut (*bs).teamgoal as *mut bot_goal_t as *mut libc::c_void,
             &mut (*bs).lastgoal_teamgoal as *mut bot_goal_t as *const libc::c_void,
-            ::std::mem::size_of::<bot_goal_t>() as libc::c_ulong,
+            ::std::mem::size_of::<bot_goal_t>() as usize,
         );
         (*bs).teammate = (*bs).lastgoal_teammate;
         (*bs).teamgoal_time = floattime + 300 as i32 as f32;
@@ -1386,13 +1386,13 @@ pub unsafe extern "C" fn BotCTFSeekGoals(mut bs: *mut bot_state_t) {
             crate::stdlib::memcpy(
                 &mut (*bs).teamgoal as *mut bot_goal_t as *mut libc::c_void,
                 &mut ctf_redflag as *mut bot_goal_t as *const libc::c_void,
-                ::std::mem::size_of::<bot_goal_t>() as libc::c_ulong,
+                ::std::mem::size_of::<bot_goal_t>() as usize,
             );
         } else {
             crate::stdlib::memcpy(
                 &mut (*bs).teamgoal as *mut bot_goal_t as *mut libc::c_void,
                 &mut ctf_blueflag as *mut bot_goal_t as *const libc::c_void,
-                ::std::mem::size_of::<bot_goal_t>() as libc::c_ulong,
+                ::std::mem::size_of::<bot_goal_t>() as usize,
             );
         }
         //set the ltg type
@@ -1513,7 +1513,7 @@ pub unsafe extern "C" fn ClientName(
     trap_GetConfigstring(
         32 as i32 + 256 as i32 + 256 as i32 + client,
         buf.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     crate::stdlib::strncpy(
         name,
@@ -1521,7 +1521,7 @@ pub unsafe extern "C" fn ClientName(
             buf.as_mut_ptr(),
             b"n\x00" as *const u8 as *const libc::c_char,
         ),
-        (size - 1 as i32) as libc::c_ulong,
+        (size - 1 as i32) as usize,
     );
     *name.offset((size - 1 as i32) as isize) = '\u{0}' as i32 as libc::c_char;
     Q_CleanStr(name);
@@ -1553,7 +1553,7 @@ pub unsafe extern "C" fn ClientSkin(
     trap_GetConfigstring(
         32 as i32 + 256 as i32 + 256 as i32 + client,
         buf.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     crate::stdlib::strncpy(
         skin,
@@ -1561,7 +1561,7 @@ pub unsafe extern "C" fn ClientSkin(
             buf.as_mut_ptr(),
             b"model\x00" as *const u8 as *const libc::c_char,
         ),
-        (size - 1 as i32) as libc::c_ulong,
+        (size - 1 as i32) as usize,
     );
     *skin.offset((size - 1 as i32) as isize) = '\u{0}' as i32 as libc::c_char;
     return skin;
@@ -1582,7 +1582,7 @@ pub unsafe extern "C" fn ClientFromName(mut name: *mut libc::c_char) -> i32 {
         trap_GetConfigstring(
             32 as i32 + 256 as i32 + 256 as i32 + i,
             buf.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
         );
         Q_CleanStr(buf.as_mut_ptr());
         if Q_stricmp(
@@ -1618,7 +1618,7 @@ pub unsafe extern "C" fn ClientOnSameTeamFromName(
             trap_GetConfigstring(
                 32 as i32 + 256 as i32 + 256 as i32 + i,
                 buf.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
             );
             Q_CleanStr(buf.as_mut_ptr());
             if Q_stricmp(
@@ -1654,8 +1654,8 @@ pub unsafe extern "C" fn stristr(
         while *charset.offset(i as isize) as i32 != 0 && *str.offset(i as isize) as i32 != 0 {
             if ({
                 let mut __res: i32 = 0;
-                if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong
-                    > 1 as i32 as libc::c_ulong
+                if ::std::mem::size_of::<libc::c_char>() as usize
+                    > 1 as i32 as usize
                 {
                     if 0 != 0 {
                         let mut __c: i32 = *charset.offset(i as isize) as i32;
@@ -1674,8 +1674,8 @@ pub unsafe extern "C" fn stristr(
                 __res
             }) != ({
                 let mut __res: i32 = 0;
-                if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong
-                    > 1 as i32 as libc::c_ulong
+                if ::std::mem::size_of::<libc::c_char>() as usize
+                    > 1 as i32 as usize
                 {
                     if 0 != 0 {
                         let mut __c: i32 = *str.offset(i as isize) as i32;
@@ -1855,7 +1855,7 @@ pub unsafe extern "C" fn EasyClientName(
     ClientName(
         client,
         name.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 128]>() as usize as i32,
     );
     i = 0 as i32;
     while name[i as usize] != 0 {
@@ -1872,7 +1872,7 @@ pub unsafe extern "C" fn EasyClientName(
             ptr as *mut libc::c_void,
             ptr.offset(1 as i32 as isize) as *const libc::c_void,
             crate::stdlib::strlen(ptr.offset(1 as i32 as isize))
-                .wrapping_add(1 as i32 as libc::c_ulong),
+                .wrapping_add(1 as i32 as usize),
         );
         ptr = libc::strstr(
             name.as_mut_ptr(),
@@ -1894,14 +1894,14 @@ pub unsafe extern "C" fn EasyClientName(
                 str1 as *mut libc::c_void,
                 str2.offset(1 as i32 as isize) as *const libc::c_void,
                 crate::stdlib::strlen(str2.offset(1 as i32 as isize))
-                    .wrapping_add(1 as i32 as libc::c_ulong),
+                    .wrapping_add(1 as i32 as usize),
             );
         } else {
             crate::stdlib::memmove(
                 str2 as *mut libc::c_void,
                 str1.offset(1 as i32 as isize) as *const libc::c_void,
                 crate::stdlib::strlen(str1.offset(1 as i32 as isize))
-                    .wrapping_add(1 as i32 as libc::c_ulong),
+                    .wrapping_add(1 as i32 as usize),
             );
         }
     }
@@ -1915,7 +1915,7 @@ pub unsafe extern "C" fn EasyClientName(
             name.as_mut_ptr() as *mut libc::c_void,
             name.as_mut_ptr().offset(2 as i32 as isize) as *const libc::c_void,
             crate::stdlib::strlen(name.as_mut_ptr().offset(2 as i32 as isize))
-                .wrapping_add(1 as i32 as libc::c_ulong),
+                .wrapping_add(1 as i32 as usize),
         );
     }
     //only allow lower case alphabet characters
@@ -1935,11 +1935,11 @@ pub unsafe extern "C" fn EasyClientName(
                 ptr as *mut libc::c_void,
                 ptr.offset(1 as i32 as isize) as *const libc::c_void,
                 crate::stdlib::strlen(ptr.offset(1 as i32 as isize))
-                    .wrapping_add(1 as i32 as libc::c_ulong),
+                    .wrapping_add(1 as i32 as usize),
             );
         }
     }
-    crate::stdlib::strncpy(buf, name.as_mut_ptr(), (size - 1 as i32) as libc::c_ulong);
+    crate::stdlib::strncpy(buf, name.as_mut_ptr(), (size - 1 as i32) as usize);
     *buf.offset((size - 1 as i32) as isize) = '\u{0}' as i32 as libc::c_char;
     return buf;
 }
@@ -2011,7 +2011,7 @@ pub unsafe extern "C" fn BotSetupForMovement(mut bs: *mut bot_state_t) {
     crate::stdlib::memset(
         &mut initmove as *mut bot_initmove_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<bot_initmove_t>() as libc::c_ulong,
+        ::std::mem::size_of::<bot_initmove_t>() as usize,
     );
     initmove.origin[0 as i32 as usize] = (*bs).cur_ps.origin[0 as i32 as usize];
     initmove.origin[1 as i32 as usize] = (*bs).cur_ps.origin[1 as i32 as usize];
@@ -2083,7 +2083,7 @@ pub unsafe extern "C" fn BotUpdateInventory(mut bs: *mut bot_state_t) {
     crate::stdlib::memcpy(
         oldinventory.as_mut_ptr() as *mut libc::c_void,
         (*bs).inventory.as_mut_ptr() as *const libc::c_void,
-        ::std::mem::size_of::<[i32; 256]>() as libc::c_ulong,
+        ::std::mem::size_of::<[i32; 256]>() as usize,
     );
     //armor
     (*bs).inventory[1 as i32 as usize] = (*bs).cur_ps.stats[STAT_ARMOR as i32 as usize];
@@ -2257,7 +2257,7 @@ pub unsafe extern "C" fn BotIsObserver(mut bs: *mut bot_state_t) -> qboolean {
     trap_GetConfigstring(
         32 as i32 + 256 as i32 + 256 as i32 + (*bs).client,
         buf.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     if atoi(Info_ValueForKey(
         buf.as_mut_ptr(),
@@ -2333,7 +2333,7 @@ pub unsafe extern "C" fn BotCreateWayPoint(
     Q_strncpyz(
         (*wp).name.as_mut_ptr(),
         name,
-        ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 32]>() as usize as i32,
     );
     (*wp).goal.origin[0 as i32 as usize] = *origin.offset(0 as i32 as isize);
     (*wp).goal.origin[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
@@ -2773,7 +2773,7 @@ pub unsafe extern "C" fn BotGoCamp(mut bs: *mut bot_state_t, mut goal: *mut bot_
     crate::stdlib::memcpy(
         &mut (*bs).teamgoal as *mut bot_goal_t as *mut libc::c_void,
         goal as *const libc::c_void,
-        ::std::mem::size_of::<bot_goal_t>() as libc::c_ulong,
+        ::std::mem::size_of::<bot_goal_t>() as usize,
     );
     //get the team goal time
     camper =
@@ -2896,7 +2896,7 @@ pub unsafe extern "C" fn BotWantsToCamp(mut bs: *mut bot_state_t) -> i32 {
             crate::stdlib::memcpy(
                 &mut bestgoal as *mut bot_goal_t as *mut libc::c_void,
                 &mut goal as *mut bot_goal_t as *const libc::c_void,
-                ::std::mem::size_of::<bot_goal_t>() as libc::c_ulong,
+                ::std::mem::size_of::<bot_goal_t>() as usize,
             );
         }
         cs = trap_BotGetNextCampSpotGoal(cs, &mut goal as *mut bot_goal_t as *mut libc::c_void)
@@ -3210,7 +3210,7 @@ pub unsafe extern "C" fn BotAttackMove(mut bs: *mut bot_state_t, mut tfl: i32) -
     crate::stdlib::memset(
         &mut moveresult as *mut bot_moveresult_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<bot_moveresult_t>() as libc::c_ulong,
+        ::std::mem::size_of::<bot_moveresult_t>() as usize,
     );
     //
     attack_skill =
@@ -5321,7 +5321,7 @@ pub unsafe extern "C" fn BotMapScripts(mut bs: *mut bot_state_t) {
     let mut dir: vec3_t = [0.; 3];
     trap_GetServerinfo(
         info.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     crate::stdlib::strncpy(
         mapname.as_mut_ptr(),
@@ -5329,11 +5329,11 @@ pub unsafe extern "C" fn BotMapScripts(mut bs: *mut bot_state_t) {
             info.as_mut_ptr(),
             b"mapname\x00" as *const u8 as *const libc::c_char,
         ),
-        (::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong)
-            .wrapping_sub(1 as i32 as libc::c_ulong),
+        (::std::mem::size_of::<[libc::c_char; 128]>() as usize)
+            .wrapping_sub(1 as i32 as usize),
     );
-    mapname[(::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong)
-        .wrapping_sub(1 as i32 as libc::c_ulong) as usize] = '\u{0}' as i32 as libc::c_char;
+    mapname[(::std::mem::size_of::<[libc::c_char; 128]>() as usize)
+        .wrapping_sub(1 as i32 as usize) as usize] = '\u{0}' as i32 as libc::c_char;
     if Q_stricmp(
         mapname.as_mut_ptr(),
         b"q3tourney6\x00" as *const u8 as *const libc::c_char,
@@ -5650,7 +5650,7 @@ pub unsafe extern "C" fn BotFuncButtonActivateGoal(
         bspent,
         b"model\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         model.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 128]>() as usize as i32,
     );
     if *model.as_mut_ptr() == 0 {
         return qfalse as i32;
@@ -5963,7 +5963,7 @@ pub unsafe extern "C" fn BotFuncDoorActivateGoal(
         bspent,
         b"model\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         model.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     if *model.as_mut_ptr() == 0 {
         return qfalse as i32;
@@ -6039,7 +6039,7 @@ pub unsafe extern "C" fn BotTriggerMultipleActivateGoal(
         bspent,
         b"model\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         model.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 128]>() as usize as i32,
     );
     if *model.as_mut_ptr() == 0 {
         return qfalse as i32;
@@ -6164,7 +6164,7 @@ pub unsafe extern "C" fn BotPushOntoActivateGoalStack(
             &mut *(*bs).activategoalheap.as_mut_ptr().offset(best as isize)
                 as *mut bot_activategoal_t as *mut libc::c_void,
             activategoal as *const libc::c_void,
-            ::std::mem::size_of::<bot_activategoal_t>() as libc::c_ulong,
+            ::std::mem::size_of::<bot_activategoal_t>() as usize,
         );
         (*bs).activategoalheap[best as usize].inuse = qtrue as i32;
         (*bs).activategoalheap[best as usize].next = (*bs).activatestack;
@@ -6317,12 +6317,12 @@ pub unsafe extern "C" fn BotGetActivateGoal(
     crate::stdlib::memset(
         activategoal as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<bot_activategoal_t>() as libc::c_ulong,
+        ::std::mem::size_of::<bot_activategoal_t>() as usize,
     );
     BotEntityInfo(entitynum, &mut entinfo as *mut _ as *mut aas_entityinfo_s);
     Com_sprintf(
         model.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
         b"*%d\x00" as *const u8 as *const libc::c_char,
         entinfo.modelindex,
     );
@@ -6332,7 +6332,7 @@ pub unsafe extern "C" fn BotGetActivateGoal(
             ent,
             b"model\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             tmpmodel.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 128]>() as usize as i32,
         ) == 0)
         {
             if libc::strcmp(model.as_mut_ptr(), tmpmodel.as_mut_ptr()) == 0 {
@@ -6354,7 +6354,7 @@ pub unsafe extern "C" fn BotGetActivateGoal(
         ent,
         b"classname\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         classname.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 128]>() as usize as i32,
     );
     if *classname.as_mut_ptr() == 0 {
         BotAI_Print(
@@ -6417,7 +6417,7 @@ pub unsafe extern "C" fn BotGetActivateGoal(
             ent,
             b"model\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             model.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
         );
         if *model.as_mut_ptr() != 0 {
             modelindex = atoi(model.as_mut_ptr().offset(1 as i32 as isize));
@@ -6490,7 +6490,7 @@ pub unsafe extern "C" fn BotGetActivateGoal(
         ent,
         b"targetname\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         targetname[0 as i32 as usize].as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 128]>() as usize as i32,
     ) == 0
     {
         if bot_developer.integer != 0 {
@@ -6514,7 +6514,7 @@ pub unsafe extern "C" fn BotGetActivateGoal(
                 ent,
                 b"target\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 target.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 128]>() as usize as i32,
             ) == 0)
             {
                 if libc::strcmp(targetname[i as usize].as_mut_ptr(), target.as_mut_ptr()) == 0 {
@@ -6538,7 +6538,7 @@ pub unsafe extern "C" fn BotGetActivateGoal(
             ent,
             b"classname\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             classname.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 128]>() as usize as i32,
         ) == 0
         {
             if bot_developer.integer != 0 {
@@ -6648,7 +6648,7 @@ pub unsafe extern "C" fn BotGetActivateGoal(
                     ent,
                     b"targetname\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     targetname[(i + 1 as i32) as usize].as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 128]>() as usize as i32,
                 ) != 0
                 {
                     i += 1;
@@ -6739,18 +6739,18 @@ pub unsafe extern "C" fn BotPrintActivateGoalInfo(
     ClientName(
         (*bs).client,
         netname.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 36]>() as usize as i32,
     );
     trap_AAS_ValueForBSPEpairKey(
         bspent,
         b"classname\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         classname.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 128]>() as usize as i32,
     );
     if (*activategoal).shoot != 0 {
         Com_sprintf(
             buf.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 128]>() as usize as i32,
             b"%s: I have to shoot at a %s from %1.1f %1.1f %1.1f in area %d\n\x00" as *const u8
                 as *const libc::c_char,
             netname.as_mut_ptr(),
@@ -6763,7 +6763,7 @@ pub unsafe extern "C" fn BotPrintActivateGoalInfo(
     } else {
         Com_sprintf(
             buf.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 128]>() as usize as i32,
             b"%s: I have to activate a %s at %1.1f %1.1f %1.1f in area %d\n\x00" as *const u8
                 as *const libc::c_char,
             netname.as_mut_ptr(),
@@ -7167,7 +7167,7 @@ pub unsafe extern "C" fn BotCheckConsoleMessages(mut bs: *mut bot_state_t) {
     ClientName(
         (*bs).client,
         botname.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 36]>() as usize as i32,
     );
     loop
     //
@@ -7199,7 +7199,7 @@ pub unsafe extern "C" fn BotCheckConsoleMessages(mut bs: *mut bot_state_t) {
             if trap_BotFindMatch(
                 m.message.as_mut_ptr(),
                 &mut match_0 as *mut bot_match_t as *mut libc::c_void,
-                128 as i32 as libc::c_ulong,
+                128 as i32 as usize,
             ) != 0
             {
                 ptr = m
@@ -7212,7 +7212,7 @@ pub unsafe extern "C" fn BotCheckConsoleMessages(mut bs: *mut bot_state_t) {
         trap_UnifyWhiteSpaces(ptr);
         //replace synonyms in the right context
         context = BotSynonymContext(bs);
-        trap_BotReplaceSynonyms(ptr, context as libc::c_ulong);
+        trap_BotReplaceSynonyms(ptr, context as usize);
         //if there's no match
         if crate::src::game::ai_cmd::BotMatchMessage(bs as *mut bot_state_s, m.message.as_mut_ptr())
             == 0
@@ -7223,7 +7223,7 @@ pub unsafe extern "C" fn BotCheckConsoleMessages(mut bs: *mut bot_state_t) {
                 if trap_BotFindMatch(
                     m.message.as_mut_ptr(),
                     &mut match_0 as *mut bot_match_t as *mut libc::c_void,
-                    128 as i32 as libc::c_ulong,
+                    128 as i32 as usize,
                 ) == 0
                 {
                     trap_BotRemoveConsoleMessage((*bs).cs, handle);
@@ -7238,13 +7238,13 @@ pub unsafe extern "C" fn BotCheckConsoleMessages(mut bs: *mut bot_state_t) {
                         &mut match_0 as *mut bot_match_t as *mut libc::c_void,
                         0 as i32,
                         netname.as_mut_ptr(),
-                        ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
+                        ::std::mem::size_of::<[libc::c_char; 36]>() as usize as i32,
                     );
                     trap_BotMatchVariable(
                         &mut match_0 as *mut bot_match_t as *mut libc::c_void,
                         2 as i32,
                         message.as_mut_ptr(),
-                        ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                        ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
                     );
                     //if this is a message from the bot self
                     if (*bs).client == ClientFromName(netname.as_mut_ptr()) {
@@ -7450,7 +7450,7 @@ pub unsafe extern "C" fn BotCheckEvents(mut bs: *mut bot_state_t, mut state: *mu
                 trap_GetConfigstring(
                     32 as i32 + 256 as i32 + (*state).eventParm,
                     buf.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 128]>() as usize as i32,
                 );
                 /*
                 if (!strcmp(buf, "sound/teamplay/flagret_red.wav")) {
@@ -7533,7 +7533,7 @@ pub unsafe extern "C" fn BotCheckEvents(mut bs: *mut bot_state_t, mut state: *mu
                     trap_GetConfigstring(
                         32 as i32 + 256 as i32 + (*state).eventParm,
                         buf.as_mut_ptr(),
-                        ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong as i32,
+                        ::std::mem::size_of::<[libc::c_char; 128]>() as usize as i32,
                     );
                     //if falling into a death pit
                     if libc::strcmp(
@@ -7691,7 +7691,7 @@ pub unsafe extern "C" fn BotAlternateRoute(
         crate::stdlib::memcpy(
             goal as *mut libc::c_void,
             &mut (*bs).altroutegoal as *mut bot_goal_t as *const libc::c_void,
-            ::std::mem::size_of::<bot_goal_t>() as libc::c_ulong,
+            ::std::mem::size_of::<bot_goal_t>() as usize,
         );
         return &mut (*bs).altroutegoal;
     }
@@ -7784,13 +7784,13 @@ pub unsafe extern "C" fn BotDeathmatchAI(mut bs: *mut bot_state_t, mut _thinktim
             (*bs).character,
             1 as i32,
             gender.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 144]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 144]>() as usize as i32,
         );
         //set the bot gender
         trap_GetUserinfo(
             (*bs).client,
             userinfo.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
         );
         Info_SetValueForKey(
             userinfo.as_mut_ptr(),
@@ -7810,7 +7810,7 @@ pub unsafe extern "C" fn BotDeathmatchAI(mut bs: *mut bot_state_t, mut _thinktim
         ClientName(
             (*bs).client,
             name.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 144]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 144]>() as usize as i32,
         );
         trap_BotSetChatName((*bs).cs, name.as_mut_ptr(), (*bs).client);
         //
@@ -7884,7 +7884,7 @@ pub unsafe extern "C" fn BotDeathmatchAI(mut bs: *mut bot_state_t, mut _thinktim
         ClientName(
             (*bs).client,
             name.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 144]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 144]>() as usize as i32,
         );
         BotAI_Print(
             3 as i32,
@@ -8036,7 +8036,7 @@ pub unsafe extern "C" fn BotGoalForBSPEntity(
     crate::stdlib::memset(
         goal as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<bot_goal_t>() as libc::c_ulong,
+        ::std::mem::size_of::<bot_goal_t>() as usize,
     );
     ent = trap_AAS_NextBSPEntity(0 as i32);
     while ent != 0 {
@@ -8044,7 +8044,7 @@ pub unsafe extern "C" fn BotGoalForBSPEntity(
             ent,
             b"classname\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             value.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
         ) == 0)
         {
             if libc::strcmp(value.as_mut_ptr(), classname) == 0 {
@@ -8211,7 +8211,7 @@ pub unsafe extern "C" fn BotSetupDeathmatchAI() {
             ent,
             b"model\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             model.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 128]>() as usize as i32,
         ) == 0)
         {
             if model[0 as i32 as usize] as i32 == '*' as i32 {

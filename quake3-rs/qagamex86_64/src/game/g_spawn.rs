@@ -801,7 +801,7 @@ pub unsafe extern "C" fn G_NewString(mut string: *const libc::c_char) -> *mut li
     let mut new_p: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut i: i32 = 0;
     let mut l: i32 = 0;
-    l = crate::stdlib::strlen(string).wrapping_add(1 as i32 as libc::c_ulong) as i32;
+    l = crate::stdlib::strlen(string).wrapping_add(1 as i32 as usize) as i32;
     newb = G_Alloc(l) as *mut libc::c_char;
     new_p = newb;
     // turn \n into a real linefeed
@@ -1039,7 +1039,7 @@ pub unsafe extern "C" fn G_AddSpawnVarToken(mut string: *const libc::c_char) -> 
     crate::stdlib::memcpy(
         dest as *mut libc::c_void,
         string as *const libc::c_void,
-        (l + 1 as i32) as libc::c_ulong,
+        (l + 1 as i32) as usize,
     );
     level.numSpawnVarChars += l + 1 as i32;
     return dest;
@@ -1064,7 +1064,7 @@ pub unsafe extern "C" fn G_ParseSpawnVars() -> qboolean {
     // parse the opening brace
     if trap_GetEntityToken(
         com_token.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     ) as u64
         == 0
     {
@@ -1083,7 +1083,7 @@ pub unsafe extern "C" fn G_ParseSpawnVars() -> qboolean {
     {
         if trap_GetEntityToken(
             keyname.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
         ) as u64
             == 0
         {
@@ -1098,7 +1098,7 @@ pub unsafe extern "C" fn G_ParseSpawnVars() -> qboolean {
         // parse value
         if trap_GetEntityToken(
             com_token.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
         ) as u64
             == 0
         {

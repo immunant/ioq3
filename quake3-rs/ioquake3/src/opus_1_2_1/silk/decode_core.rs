@@ -8,7 +8,7 @@ pub mod macros_h {
     ) -> crate::opus_types_h::opus_int32 {
         return if in32 != 0 {
             (32 as i32)
-                - (::std::mem::size_of::<u32>() as libc::c_ulong as i32 * 8 as i32
+                - (::std::mem::size_of::<u32>() as usize as i32 * 8 as i32
                     - (in32 as u32).leading_zeros() as i32)
         } else {
             32 as i32
@@ -532,27 +532,27 @@ pub unsafe extern "C" fn silk_decode_core(
     let mut sLPC_Q14: *mut opus_int32 = 0 as *mut opus_int32;
     let mut fresh0 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_int16>() as libc::c_ulong)
-            .wrapping_mul((*psDec).ltp_mem_length as libc::c_ulong) as usize,
+        (::std::mem::size_of::<opus_int16>() as usize)
+            .wrapping_mul((*psDec).ltp_mem_length as usize) as usize,
     );
     sLTP = fresh0.as_mut_ptr() as *mut opus_int16;
     let mut fresh1 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_int32>() as libc::c_ulong)
-            .wrapping_mul(((*psDec).ltp_mem_length + (*psDec).frame_length) as libc::c_ulong)
+        (::std::mem::size_of::<opus_int32>() as usize)
+            .wrapping_mul(((*psDec).ltp_mem_length + (*psDec).frame_length) as usize)
             as usize,
     );
     sLTP_Q15 = fresh1.as_mut_ptr() as *mut opus_int32;
     let mut fresh2 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_int32>() as libc::c_ulong)
-            .wrapping_mul((*psDec).subfr_length as libc::c_ulong) as usize,
+        (::std::mem::size_of::<opus_int32>() as usize)
+            .wrapping_mul((*psDec).subfr_length as usize) as usize,
     );
     res_Q14 = fresh2.as_mut_ptr() as *mut opus_int32;
     let mut fresh3 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_int32>() as libc::c_ulong)
-            .wrapping_mul(((*psDec).subfr_length + 16 as i32) as libc::c_ulong) as usize,
+        (::std::mem::size_of::<opus_int32>() as usize)
+            .wrapping_mul(((*psDec).subfr_length + 16 as i32) as usize) as usize,
     );
     sLPC_Q14 = fresh3.as_mut_ptr() as *mut opus_int32;
     offset_Q10 = crate::src::opus_1_2_1::silk::tables_other::silk_Quantization_Offsets_Q10
@@ -590,8 +590,8 @@ pub unsafe extern "C" fn silk_decode_core(
     crate::stdlib::memcpy(
         sLPC_Q14 as *mut libc::c_void,
         (*psDec).sLPC_Q14_buf.as_mut_ptr() as *const libc::c_void,
-        (16 as i32 as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<opus_int32>() as libc::c_ulong),
+        (16 as i32 as usize)
+            .wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
     );
     pexc_Q14 = (*psDec).exc_Q14.as_mut_ptr();
     pxq = xq;
@@ -605,8 +605,8 @@ pub unsafe extern "C" fn silk_decode_core(
         crate::stdlib::memcpy(
             A_Q12_tmp.as_mut_ptr() as *mut libc::c_void,
             A_Q12 as *const libc::c_void,
-            ((*psDec).LPC_order as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<opus_int16>() as libc::c_ulong),
+            ((*psDec).LPC_order as usize)
+                .wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
         );
         B_Q14 = &mut *(*psDecCtrl)
             .LTPCoef_Q14
@@ -644,8 +644,8 @@ pub unsafe extern "C" fn silk_decode_core(
             crate::stdlib::memset(
                 B_Q14 as *mut libc::c_void,
                 0 as i32,
-                (5 as i32 as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<opus_int16>() as libc::c_ulong),
+                (5 as i32 as usize)
+                    .wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
             );
             *B_Q14.offset((5 as i32 / 2 as i32) as isize) =
                 (0.25f64 * ((1 as i32 as i64) << 14 as i32) as f64 + 0.5f64) as opus_int32
@@ -669,8 +669,8 @@ pub unsafe extern "C" fn silk_decode_core(
                             .offset((*psDec).ltp_mem_length as isize)
                             as *mut opus_int16 as *mut libc::c_void,
                         xq as *const libc::c_void,
-                        ((2 as i32 * (*psDec).subfr_length) as libc::c_ulong)
-                            .wrapping_mul(::std::mem::size_of::<opus_int16>() as libc::c_ulong),
+                        ((2 as i32 * (*psDec).subfr_length) as usize)
+                            .wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
                     );
                 }
                 crate::src::opus_1_2_1::silk::LPC_analysis_filter::silk_LPC_analysis_filter(
@@ -1023,8 +1023,8 @@ pub unsafe extern "C" fn silk_decode_core(
             sLPC_Q14 as *mut libc::c_void,
             &mut *sLPC_Q14.offset((*psDec).subfr_length as isize) as *mut opus_int32
                 as *const libc::c_void,
-            (16 as i32 as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<opus_int32>() as libc::c_ulong),
+            (16 as i32 as usize)
+                .wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
         );
         pexc_Q14 = pexc_Q14.offset((*psDec).subfr_length as isize);
         pxq = pxq.offset((*psDec).subfr_length as isize);
@@ -1034,7 +1034,7 @@ pub unsafe extern "C" fn silk_decode_core(
     crate::stdlib::memcpy(
         (*psDec).sLPC_Q14_buf.as_mut_ptr() as *mut libc::c_void,
         sLPC_Q14 as *const libc::c_void,
-        (16 as i32 as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<opus_int32>() as libc::c_ulong),
+        (16 as i32 as usize)
+            .wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
     );
 }

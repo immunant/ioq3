@@ -201,7 +201,7 @@ unsafe extern "C" fn WRITE_STRING(mut s: *const libc::c_char) {
         s as *const libc::c_void,
         crate::stdlib::strlen(s),
     );
-    bufIndex = (bufIndex as libc::c_ulong).wrapping_add(crate::stdlib::strlen(s)) as i32;
+    bufIndex = (bufIndex as usize).wrapping_add(crate::stdlib::strlen(s)) as i32;
 }
 /*
 ===============
@@ -407,7 +407,7 @@ pub unsafe extern "C" fn CL_OpenAVIForWriting(mut fileName: *const libc::c_char)
     crate::stdlib::memset(
         &mut afd as *mut aviFileData_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<aviFileData_t>() as libc::c_ulong,
+        ::std::mem::size_of::<aviFileData_t>() as usize,
     );
     // Don't start if a framerate has not been chosen
     if (*cl_aviFrameRate).integer <= 0 as i32 {
@@ -44707,7 +44707,7 @@ pub unsafe extern "C" fn CL_WriteAVIAudioFrame(mut pcmBuffer: *const byte, mut s
         &mut *pcmCaptureBuffer.as_mut_ptr().offset(bytesInBuffer as isize) as *mut byte
             as *mut libc::c_void,
         pcmBuffer as *const libc::c_void,
-        size as libc::c_ulong,
+        size as usize,
     );
     bytesInBuffer += size;
     // Only write if we have a frame's worth of audio

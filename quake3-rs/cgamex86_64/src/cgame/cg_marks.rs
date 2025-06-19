@@ -223,7 +223,7 @@ pub unsafe extern "C" fn CG_InitMarkPolys() {
     crate::stdlib::memset(
         cg_markPolys.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[markPoly_t; 256]>() as libc::c_ulong,
+        ::std::mem::size_of::<[markPoly_t; 256]>() as usize,
     );
     cg_activeMarkPolys.nextMark = &mut cg_activeMarkPolys;
     cg_activeMarkPolys.prevMark = &mut cg_activeMarkPolys;
@@ -279,7 +279,7 @@ pub unsafe extern "C" fn CG_AllocMark() -> *mut markPoly_t {
     crate::stdlib::memset(
         le as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<markPoly_t>() as libc::c_ulong,
+        ::std::mem::size_of::<markPoly_t>() as usize,
     );
     // link into the active list
     (*le).nextMark = cg_activeMarkPolys.nextMark;
@@ -444,8 +444,8 @@ pub unsafe extern "C" fn CG_ImpactMark(
             crate::stdlib::memcpy(
                 (*mark).verts.as_mut_ptr() as *mut libc::c_void,
                 verts.as_mut_ptr() as *const libc::c_void,
-                ((*mf).numPoints as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<polyVert_t>() as libc::c_ulong),
+                ((*mf).numPoints as usize)
+                    .wrapping_mul(::std::mem::size_of::<polyVert_t>() as usize),
             );
             markTotal += 1
         }

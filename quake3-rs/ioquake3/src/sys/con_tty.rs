@@ -464,8 +464,8 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
                             TTY_con.buffer.as_mut_ptr().offset(1 as i32 as isize)
                                 as *mut libc::c_void,
                             TTY_con.buffer.as_mut_ptr() as *const libc::c_void,
-                            (::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong)
-                                .wrapping_sub(1 as i32 as libc::c_ulong),
+                            (::std::mem::size_of::<[libc::c_char; 256]>() as usize)
+                                .wrapping_sub(1 as i32 as usize),
                         );
                         TTY_con.buffer[0 as i32 as usize] = '\\' as i32 as libc::c_char;
                         TTY_con.cursor += 1
@@ -476,13 +476,13 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
                         Q_strncpyz(
                             text.as_mut_ptr(),
                             TTY_con.buffer.as_mut_ptr().offset(1 as i32 as isize),
-                            ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+                            ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
                         );
                     } else if TTY_con.cursor != 0 {
                         if (*con_autochat).integer != 0 {
                             Com_sprintf(
                                 text.as_mut_ptr(),
-                                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong
+                                ::std::mem::size_of::<[libc::c_char; 256]>() as usize
                                     as i32,
                                 b"cmd say %s\x00" as *const u8 as *const libc::c_char,
                                 TTY_con.buffer.as_mut_ptr(),
@@ -491,7 +491,7 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
                             Q_strncpyz(
                                 text.as_mut_ptr(),
                                 TTY_con.buffer.as_mut_ptr(),
-                                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong
+                                ::std::mem::size_of::<[libc::c_char; 256]>() as usize
                                     as i32,
                             );
                         }
@@ -569,9 +569,9 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
                 libc::tcflush(0 as i32, 0 as i32);
                 return 0 as *mut libc::c_char;
             }
-            if TTY_con.cursor as libc::c_ulong
-                >= (::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong)
-                    .wrapping_sub(1 as i32 as libc::c_ulong)
+            if TTY_con.cursor as usize
+                >= (::std::mem::size_of::<[libc::c_char; 256]>() as usize)
+                    .wrapping_sub(1 as i32 as usize)
             {
                 return 0 as *mut libc::c_char;
             }
@@ -602,8 +602,8 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
             let fresh1;
             let fresh2 = &mut __d1;
             let fresh3;
-            let fresh4 = (::std::mem::size_of::<fd_set>() as libc::c_ulong)
-                .wrapping_div(::std::mem::size_of::<__fd_mask>() as libc::c_ulong);
+            let fresh4 = (::std::mem::size_of::<fd_set>() as usize)
+                .wrapping_div(::std::mem::size_of::<__fd_mask>() as usize);
             let fresh5 =
                 &mut *fdset.__fds_bits.as_mut_ptr().offset(0 as i32 as isize) as *mut __fd_mask;
             asm!("cld; rep; stosq" : "={cx}" (fresh1), "={di}" (fresh3) : "{ax}"
@@ -614,10 +614,10 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
             c2rust_asm_casts::AsmCast::cast_out(fresh0, fresh4, fresh1);
             c2rust_asm_casts::AsmCast::cast_out(fresh2, fresh5, fresh3);
             fdset.__fds_bits[(0 as i32
-                / (8 as i32 * ::std::mem::size_of::<__fd_mask>() as libc::c_ulong as i32))
-                as usize] |= ((1 as libc::c_ulong)
+                / (8 as i32 * ::std::mem::size_of::<__fd_mask>() as usize as i32))
+                as usize] |= ((1 as usize)
                 << 0 as i32
-                    % (8 as i32 * ::std::mem::size_of::<__fd_mask>() as libc::c_ulong as i32))
+                    % (8 as i32 * ::std::mem::size_of::<__fd_mask>() as usize as i32))
                 as __fd_mask;
             timeout.tv_sec = (0 as i32 as __time_t) as libc::time_t;
             timeout.tv_usec = (0 as i32 as __suseconds_t) as libc::suseconds_t;
@@ -629,12 +629,12 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
                 &mut timeout,
             ) == -(1 as i32)
                 || !(fdset.__fds_bits[(0 as i32
-                    / (8 as i32 * ::std::mem::size_of::<__fd_mask>() as libc::c_ulong as i32))
+                    / (8 as i32 * ::std::mem::size_of::<__fd_mask>() as usize as i32))
                     as usize]
-                    & ((1 as libc::c_ulong)
+                    & ((1 as usize)
                         << 0 as i32
                             % (8 as i32
-                                * ::std::mem::size_of::<__fd_mask>() as libc::c_ulong as i32))
+                                * ::std::mem::size_of::<__fd_mask>() as usize as i32))
                         as __fd_mask
                     != 0 as i32 as isize)
             {
@@ -643,7 +643,7 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
             len = crate::stdlib::read(
                 0 as i32,
                 text.as_mut_ptr() as *mut libc::c_void,
-                ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong,
+                ::std::mem::size_of::<[libc::c_char; 256]>() as usize,
             ) as i32;
             if len == 0 as i32 {
                 // eof!
@@ -705,7 +705,7 @@ pub unsafe extern "C" fn CON_Print(mut msg: *const libc::c_char) {
     }
     // Only print prompt when msg ends with a newline, otherwise the console
     //   might get garbled when output does not fit on one line.
-    if *msg.offset(crate::stdlib::strlen(msg).wrapping_sub(1 as i32 as libc::c_ulong) as isize)
+    if *msg.offset(crate::stdlib::strlen(msg).wrapping_sub(1 as i32 as usize) as isize)
         as i32
         == '\n' as i32
     {

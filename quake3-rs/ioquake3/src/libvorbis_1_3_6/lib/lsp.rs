@@ -141,8 +141,8 @@ unsafe extern "C" fn Laguerre_With_Deflation(
     let mut m: i32 = 0;
     let mut fresh0 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<f64>() as libc::c_ulong)
-            .wrapping_mul((ord + 1 as i32) as libc::c_ulong) as usize,
+        (::std::mem::size_of::<f64>() as usize)
+            .wrapping_mul((ord + 1 as i32) as usize) as usize,
     );
     let mut defl: *mut f64 = fresh0.as_mut_ptr() as *mut f64;
     i = 0 as i32;
@@ -215,7 +215,7 @@ unsafe extern "C" fn Newton_Raphson(mut a: *mut f32, mut ord: i32, mut r: *mut f
     let mut error: f64 = 1.0f32 as f64;
     let mut fresh1 = ::std::vec::from_elem(
         0,
-        (ord as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f64>() as libc::c_ulong) as usize,
+        (ord as usize).wrapping_mul(::std::mem::size_of::<f64>() as usize) as usize,
     );
     let mut root: *mut f64 = fresh1.as_mut_ptr() as *mut f64;
     i = 0 as i32;
@@ -285,26 +285,26 @@ pub unsafe extern "C" fn vorbis_lpc_to_lsp(
     let mut g2_order: i32 = 0;
     let mut fresh2 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<f32>() as libc::c_ulong)
-            .wrapping_mul((order2 + 1 as i32) as libc::c_ulong) as usize,
+        (::std::mem::size_of::<f32>() as usize)
+            .wrapping_mul((order2 + 1 as i32) as usize) as usize,
     );
     let mut g1: *mut f32 = fresh2.as_mut_ptr() as *mut f32;
     let mut fresh3 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<f32>() as libc::c_ulong)
-            .wrapping_mul((order2 + 1 as i32) as libc::c_ulong) as usize,
+        (::std::mem::size_of::<f32>() as usize)
+            .wrapping_mul((order2 + 1 as i32) as usize) as usize,
     );
     let mut g2: *mut f32 = fresh3.as_mut_ptr() as *mut f32;
     let mut fresh4 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<f32>() as libc::c_ulong)
-            .wrapping_mul((order2 + 1 as i32) as libc::c_ulong) as usize,
+        (::std::mem::size_of::<f32>() as usize)
+            .wrapping_mul((order2 + 1 as i32) as usize) as usize,
     );
     let mut g1r: *mut f32 = fresh4.as_mut_ptr() as *mut f32;
     let mut fresh5 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<f32>() as libc::c_ulong)
-            .wrapping_mul((order2 + 1 as i32) as libc::c_ulong) as usize,
+        (::std::mem::size_of::<f32>() as usize)
+            .wrapping_mul((order2 + 1 as i32) as usize) as usize,
     );
     let mut g2r: *mut f32 = fresh5.as_mut_ptr() as *mut f32;
     let mut i: i32 = 0;
@@ -361,13 +361,13 @@ pub unsafe extern "C" fn vorbis_lpc_to_lsp(
     qsort(
         g1r as *mut libc::c_void,
         g1_order as size_t,
-        ::std::mem::size_of::<f32>() as libc::c_ulong,
+        ::std::mem::size_of::<f32>() as usize,
         Some(comp as unsafe extern "C" fn(_: *const libc::c_void, _: *const libc::c_void) -> i32),
     );
     qsort(
         g2r as *mut libc::c_void,
         g2_order as size_t,
-        ::std::mem::size_of::<f32>() as libc::c_ulong,
+        ::std::mem::size_of::<f32>() as usize,
         Some(comp as unsafe extern "C" fn(_: *const libc::c_void, _: *const libc::c_void) -> i32),
     );
     i = 0 as i32;

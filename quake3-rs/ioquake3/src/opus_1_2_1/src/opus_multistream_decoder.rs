@@ -19,7 +19,7 @@ pub mod opus_private_h {
     #[inline]
 
     pub unsafe extern "C" fn align(mut i: i32) -> i32 {
-        let mut alignment: u32 = 8 as libc::c_ulong as u32;
+        let mut alignment: u32 = 8 as usize as u32;
         /* Optimizing compilers should optimize div and multiply into and
         for all sensible alignment values. */
         return (i as u32)
@@ -261,7 +261,7 @@ pub unsafe extern "C" fn opus_multistream_decoder_get_size(
     }
     coupled_size = crate::src::opus_1_2_1::src::opus_decoder::opus_decoder_get_size(2 as i32);
     mono_size = crate::src::opus_1_2_1::src::opus_decoder::opus_decoder_get_size(1 as i32);
-    return align(::std::mem::size_of::<OpusMSDecoder>() as libc::c_ulong as i32)
+    return align(::std::mem::size_of::<OpusMSDecoder>() as usize as i32)
         + nb_coupled_streams * align(coupled_size)
         + (nb_streams - nb_coupled_streams) * align(mono_size);
 }
@@ -301,7 +301,7 @@ pub unsafe extern "C" fn opus_multistream_decoder_init(
         return -(1 as i32);
     }
     ptr = (st as *mut libc::c_char)
-        .offset(align(::std::mem::size_of::<OpusMSDecoder>() as libc::c_ulong as i32) as isize);
+        .offset(align(::std::mem::size_of::<OpusMSDecoder>() as usize as i32) as isize);
     coupled_size = crate::src::opus_1_2_1::src::opus_decoder::opus_decoder_get_size(2 as i32);
     mono_size = crate::src::opus_1_2_1::src::opus_decoder::opus_decoder_get_size(1 as i32);
     i = 0 as i32;
@@ -454,12 +454,12 @@ unsafe extern "C" fn opus_multistream_decode_native(
     };
     let mut fresh0 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_val16>() as libc::c_ulong)
-            .wrapping_mul((2 as i32 * frame_size) as libc::c_ulong) as usize,
+        (::std::mem::size_of::<opus_val16>() as usize)
+            .wrapping_mul((2 as i32 * frame_size) as usize) as usize,
     );
     buf = fresh0.as_mut_ptr() as *mut opus_val16;
     ptr = (st as *mut libc::c_char)
-        .offset(align(::std::mem::size_of::<OpusMSDecoder>() as libc::c_ulong as i32) as isize);
+        .offset(align(::std::mem::size_of::<OpusMSDecoder>() as usize as i32) as isize);
     coupled_size = crate::src::opus_1_2_1::src::opus_decoder::opus_decoder_get_size(2 as i32);
     mono_size = crate::src::opus_1_2_1::src::opus_decoder::opus_decoder_get_size(1 as i32);
     if len == 0 as i32 {
@@ -737,7 +737,7 @@ pub unsafe extern "C" fn opus_multistream_decoder_ctl(
     coupled_size = crate::src::opus_1_2_1::src::opus_decoder::opus_decoder_get_size(2 as i32);
     mono_size = crate::src::opus_1_2_1::src::opus_decoder::opus_decoder_get_size(1 as i32);
     ptr = (st as *mut libc::c_char)
-        .offset(align(::std::mem::size_of::<OpusMSDecoder>() as libc::c_ulong as i32) as isize);
+        .offset(align(::std::mem::size_of::<OpusMSDecoder>() as usize as i32) as isize);
     match request {
         4009 | 4029 | 4045 | 4039 | 4047 => {
             let mut dec: *mut crate::src::opus_1_2_1::src::opus_decoder::OpusDecoder =

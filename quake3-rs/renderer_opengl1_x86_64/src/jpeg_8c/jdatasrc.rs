@@ -268,7 +268,7 @@ unsafe extern "C" fn fill_input_buffer(mut cinfo: j_decompress_ptr) -> boolean {
         4096 as i32 as size_t,
         (*src).infile,
     );
-    if nbytes <= 0 as i32 as libc::c_ulong {
+    if nbytes <= 0 as i32 as usize {
         if (*src).start_of_file != 0 {
             /* Treat empty input file as fatal error */
             (*(*cinfo).err).msg_code = JERR_INPUT_EMPTY as i32;
@@ -346,7 +346,7 @@ unsafe extern "C" fn skip_input_data(mut cinfo: j_decompress_ptr, mut num_bytes:
         }
         (*src).next_input_byte = (*src).next_input_byte.offset(num_bytes as size_t as isize);
         (*src).bytes_in_buffer =
-            ((*src).bytes_in_buffer as libc::c_ulong).wrapping_sub(num_bytes as size_t) as size_t
+            ((*src).bytes_in_buffer as usize).wrapping_sub(num_bytes as size_t) as size_t
     };
 }
 /*
@@ -394,7 +394,7 @@ pub unsafe extern "C" fn jpeg_stdio_src(mut cinfo: j_decompress_ptr, mut infile:
         .expect("non-null function pointer")(
             cinfo as j_common_ptr,
             0 as i32,
-            ::std::mem::size_of::<my_source_mgr>() as libc::c_ulong,
+            ::std::mem::size_of::<my_source_mgr>() as usize,
         ) as *mut jpeg_source_mgr; /* use default method */
         src = (*cinfo).src as my_src_ptr; /* forces fill_input_buffer on first read */
         (*src).buffer = Some(
@@ -405,8 +405,8 @@ pub unsafe extern "C" fn jpeg_stdio_src(mut cinfo: j_decompress_ptr, mut infile:
         .expect("non-null function pointer")(
             cinfo as j_common_ptr,
             0 as i32,
-            (4096 as i32 as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<JOCTET>() as libc::c_ulong),
+            (4096 as i32 as usize)
+                .wrapping_mul(::std::mem::size_of::<JOCTET>() as usize),
         ) as *mut JOCTET
     }
     src = (*cinfo).src as my_src_ptr;
@@ -433,10 +433,10 @@ pub unsafe extern "C" fn jpeg_stdio_src(mut cinfo: j_decompress_ptr, mut infile:
 pub unsafe extern "C" fn jpeg_mem_src(
     mut cinfo: j_decompress_ptr,
     mut inbuffer: *mut u8,
-    mut insize: libc::c_ulong,
+    mut insize: usize,
 ) {
     let mut src: *mut jpeg_source_mgr = 0 as *mut jpeg_source_mgr;
-    if inbuffer.is_null() || insize == 0 as i32 as libc::c_ulong {
+    if inbuffer.is_null() || insize == 0 as i32 as usize {
         /* Treat empty input as fatal error */
         (*(*cinfo).err).msg_code = JERR_INPUT_EMPTY as i32;
         Some(
@@ -460,7 +460,7 @@ pub unsafe extern "C" fn jpeg_mem_src(
         .expect("non-null function pointer")(
             cinfo as j_common_ptr,
             0 as i32,
-            ::std::mem::size_of::<jpeg_source_mgr>() as libc::c_ulong,
+            ::std::mem::size_of::<jpeg_source_mgr>() as usize,
         ) as *mut jpeg_source_mgr
     } /* use default method */
     src = (*cinfo).src;

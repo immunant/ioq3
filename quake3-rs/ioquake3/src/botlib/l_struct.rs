@@ -398,7 +398,7 @@ pub unsafe extern "C" fn ReadString(
     crate::stdlib::strncpy(
         p as *mut libc::c_char,
         token.string.as_mut_ptr(),
-        (80 as i32 - 1 as i32) as libc::c_ulong,
+        (80 as i32 - 1 as i32) as usize,
     );
     //make sure the string is closed with a zero
     *(p as *mut libc::c_char).offset((80 as i32 - 1 as i32) as isize) =
@@ -505,7 +505,7 @@ pub unsafe extern "C" fn ReadStructure(
                         return qfalse as i32;
                     }
                     p = (p as *mut libc::c_char)
-                        .offset(::std::mem::size_of::<libc::c_char>() as libc::c_ulong as isize)
+                        .offset(::std::mem::size_of::<libc::c_char>() as usize as isize)
                         as *mut libc::c_void
                     //end case
                 }
@@ -514,7 +514,7 @@ pub unsafe extern "C" fn ReadStructure(
                         return qfalse as i32;
                     } //end case
                     p = (p as *mut libc::c_char)
-                        .offset(::std::mem::size_of::<i32>() as libc::c_ulong as isize)
+                        .offset(::std::mem::size_of::<i32>() as usize as isize)
                         as *mut libc::c_void
                 }
                 3 => {
@@ -522,7 +522,7 @@ pub unsafe extern "C" fn ReadStructure(
                         return qfalse as i32;
                     } //end case
                     p = (p as *mut libc::c_char)
-                        .offset(::std::mem::size_of::<f32>() as libc::c_ulong as isize)
+                        .offset(::std::mem::size_of::<f32>() as usize as isize)
                         as *mut libc::c_void
                 }
                 4 => {
@@ -620,7 +620,7 @@ pub unsafe extern "C" fn WriteFloat(mut fp: *mut FILE, mut value: f32) -> i32 {
     let mut l: i32 = 0;
     Com_sprintf(
         buf.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 128]>() as usize as i32,
         b"%f\x00" as *const u8 as *const libc::c_char,
         value as f64,
     );
@@ -724,7 +724,7 @@ pub unsafe extern "C" fn WriteStructWithIndent(
                         return qfalse as i32;
                     }
                     p = (p as *mut libc::c_char)
-                        .offset(::std::mem::size_of::<libc::c_char>() as libc::c_ulong as isize)
+                        .offset(::std::mem::size_of::<libc::c_char>() as usize as isize)
                         as *mut libc::c_void
                     //end case
                 }
@@ -738,7 +738,7 @@ pub unsafe extern "C" fn WriteStructWithIndent(
                         return qfalse as i32;
                     } //end case
                     p = (p as *mut libc::c_char)
-                        .offset(::std::mem::size_of::<i32>() as libc::c_ulong as isize)
+                        .offset(::std::mem::size_of::<i32>() as usize as isize)
                         as *mut libc::c_void
                 }
                 3 => {
@@ -746,7 +746,7 @@ pub unsafe extern "C" fn WriteStructWithIndent(
                         return qfalse as i32;
                     } //end case
                     p = (p as *mut libc::c_char)
-                        .offset(::std::mem::size_of::<f32>() as libc::c_ulong as isize)
+                        .offset(::std::mem::size_of::<f32>() as usize as isize)
                         as *mut libc::c_void
                 }
                 4 => {

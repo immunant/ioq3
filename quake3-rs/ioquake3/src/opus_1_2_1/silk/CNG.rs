@@ -8,7 +8,7 @@ pub mod macros_h {
     ) -> crate::opus_types_h::opus_int32 {
         return if in32 != 0 {
             (32 as i32)
-                - (::std::mem::size_of::<u32>() as libc::c_ulong as i32 * 8 as i32
+                - (::std::mem::size_of::<u32>() as usize as i32 * 8 as i32
                     - (in32 as u32).leading_zeros() as i32)
         } else {
             32 as i32
@@ -567,8 +567,8 @@ pub unsafe extern "C" fn silk_CNG(
                 .offset((*psDec).subfr_length as isize) as *mut opus_int32
                 as *mut libc::c_void,
             (*psCNG).CNG_exc_buf_Q14.as_mut_ptr() as *const libc::c_void,
-            ((((*psDec).nb_subfr - 1 as i32) * (*psDec).subfr_length) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<opus_int32>() as libc::c_ulong),
+            ((((*psDec).nb_subfr - 1 as i32) * (*psDec).subfr_length) as usize)
+                .wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
         );
         crate::stdlib::memcpy(
             (*psCNG).CNG_exc_buf_Q14.as_mut_ptr() as *mut libc::c_void,
@@ -577,8 +577,8 @@ pub unsafe extern "C" fn silk_CNG(
                 .as_mut_ptr()
                 .offset((subfr * (*psDec).subfr_length) as isize) as *mut opus_int32
                 as *const libc::c_void,
-            ((*psDec).subfr_length as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<opus_int32>() as libc::c_ulong),
+            ((*psDec).subfr_length as usize)
+                .wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
         );
         /* Smooth gains */
         i = 0 as i32;
@@ -595,8 +595,8 @@ pub unsafe extern "C" fn silk_CNG(
         let mut CNG_sig_Q14: *mut opus_int32 = 0 as *mut opus_int32;
         let mut fresh0 = ::std::vec::from_elem(
             0,
-            (::std::mem::size_of::<opus_int32>() as libc::c_ulong)
-                .wrapping_mul((length + 16 as i32) as libc::c_ulong) as usize,
+            (::std::mem::size_of::<opus_int32>() as usize)
+                .wrapping_mul((length + 16 as i32) as usize) as usize,
         );
         CNG_sig_Q14 = fresh0.as_mut_ptr() as *mut opus_int32;
         /* Generate CNG excitation */
@@ -636,8 +636,8 @@ pub unsafe extern "C" fn silk_CNG(
         crate::stdlib::memcpy(
             CNG_sig_Q14 as *mut libc::c_void,
             (*psCNG).CNG_synth_state.as_mut_ptr() as *const libc::c_void,
-            (16 as i32 as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<opus_int32>() as libc::c_ulong),
+            (16 as i32 as usize)
+                .wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
         );
         i = 0 as i32;
         while i < length {
@@ -1034,15 +1034,15 @@ pub unsafe extern "C" fn silk_CNG(
         crate::stdlib::memcpy(
             (*psCNG).CNG_synth_state.as_mut_ptr() as *mut libc::c_void,
             &mut *CNG_sig_Q14.offset(length as isize) as *mut opus_int32 as *const libc::c_void,
-            (16 as i32 as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<opus_int32>() as libc::c_ulong),
+            (16 as i32 as usize)
+                .wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
         );
     } else {
         crate::stdlib::memset(
             (*psCNG).CNG_synth_state.as_mut_ptr() as *mut libc::c_void,
             0 as i32,
-            ((*psDec).LPC_order as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<opus_int32>() as libc::c_ulong),
+            ((*psDec).LPC_order as usize)
+                .wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
         );
     };
 }

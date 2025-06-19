@@ -249,8 +249,8 @@ pub unsafe extern "C" fn silk_process_gains_FLP(
     crate::stdlib::memcpy(
         (*psEncCtrl).GainsUnq_Q16.as_mut_ptr() as *mut libc::c_void,
         pGains_Q16.as_mut_ptr() as *const libc::c_void,
-        ((*psEnc).sCmn.nb_subfr as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<opus_int32>() as libc::c_ulong),
+        ((*psEnc).sCmn.nb_subfr as usize)
+            .wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
     );
     (*psEncCtrl).lastGainIndexPrev = (*psShapeSt).LastGainIndex;
     /* Quantize gains */

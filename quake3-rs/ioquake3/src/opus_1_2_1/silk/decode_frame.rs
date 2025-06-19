@@ -329,8 +329,8 @@ pub unsafe extern "C" fn silk_decode_frame(
     L = (*psDec).frame_length;
     let mut fresh0 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<silk_decoder_control>() as libc::c_ulong)
-            .wrapping_mul(1 as i32 as libc::c_ulong) as usize,
+        (::std::mem::size_of::<silk_decoder_control>() as usize)
+            .wrapping_mul(1 as i32 as usize) as usize,
     );
     psDecCtrl = fresh0.as_mut_ptr() as *mut silk_decoder_control;
     (*psDecCtrl).LTP_scale_Q14 = 0 as i32;
@@ -341,8 +341,8 @@ pub unsafe extern "C" fn silk_decode_frame(
         let mut pulses: *mut opus_int16 = 0 as *mut opus_int16;
         let mut fresh1 = ::std::vec::from_elem(
             0,
-            (::std::mem::size_of::<opus_int16>() as libc::c_ulong)
-                .wrapping_mul((L + 16 as i32 - 1 as i32 & !(16 as i32 - 1 as i32)) as libc::c_ulong)
+            (::std::mem::size_of::<opus_int16>() as usize)
+                .wrapping_mul((L + 16 as i32 - 1 as i32 & !(16 as i32 - 1 as i32)) as usize)
                 as usize,
         );
         pulses = fresh1.as_mut_ptr() as *mut opus_int16;
@@ -420,15 +420,15 @@ pub unsafe extern "C" fn silk_decode_frame(
             .as_mut_ptr()
             .offset((*psDec).frame_length as isize) as *mut opus_int16
             as *const libc::c_void,
-        (mv_len as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<opus_int16>() as libc::c_ulong),
+        (mv_len as usize)
+            .wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
     );
     crate::stdlib::memcpy(
         &mut *(*psDec).outBuf.as_mut_ptr().offset(mv_len as isize) as *mut opus_int16
             as *mut libc::c_void,
         pOut as *const libc::c_void,
-        ((*psDec).frame_length as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<opus_int16>() as libc::c_ulong),
+        ((*psDec).frame_length as usize)
+            .wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
     );
     /* ***********************************************/
     /* Comfort noise generation / estimation        */

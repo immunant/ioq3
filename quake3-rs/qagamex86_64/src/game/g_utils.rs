@@ -546,7 +546,7 @@ pub unsafe extern "C" fn BuildShaderStateConfig() -> *const libc::c_char {
     crate::stdlib::memset(
         buff.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        1024 as i32 as libc::c_ulong,
+        1024 as i32 as usize,
     );
     i = 0 as i32;
     while i < remapCount {
@@ -560,7 +560,7 @@ pub unsafe extern "C" fn BuildShaderStateConfig() -> *const libc::c_char {
         );
         Q_strcat(
             buff.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
             out.as_mut_ptr(),
         );
         i += 1
@@ -598,7 +598,7 @@ pub unsafe extern "C" fn G_FindConfigstringIndex(
         trap_GetConfigstring(
             start + i,
             s.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
         );
         if s[0 as i32 as usize] == 0 {
             break;
@@ -975,9 +975,9 @@ pub unsafe extern "C" fn G_Spawn() -> *mut gentity_t {
     trap_LocateGameData(
         level.gentities as *mut gentity_s,
         level.num_entities,
-        ::std::mem::size_of::<gentity_t>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<gentity_t>() as usize as i32,
         &mut (*level.clients.offset(0 as i32 as isize)).ps as *mut _ as *mut playerState_s,
-        ::std::mem::size_of::<gclient_s>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<gclient_s>() as usize as i32,
     );
     G_InitGentity(e);
     return e;
@@ -1026,7 +1026,7 @@ pub unsafe extern "C" fn G_FreeEntity(mut ed: *mut gentity_t) {
     crate::stdlib::memset(
         ed as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<gentity_t>() as libc::c_ulong,
+        ::std::mem::size_of::<gentity_t>() as usize,
     );
     (*ed).classname = b"freed\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     (*ed).freetime = level.time;

@@ -23,7 +23,7 @@ pub mod entcode_h {
         mut _this: *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
     ) -> i32 {
         return (*_this).nbits_total
-            - (::std::mem::size_of::<u32>() as libc::c_ulong as i32 * 8 as i32
+            - (::std::mem::size_of::<u32>() as usize as i32 * 8 as i32
                 - (*_this).rng.leading_zeros() as i32);
     }
 }
@@ -34,7 +34,7 @@ pub mod opus_private_h {
     #[inline]
 
     pub unsafe extern "C" fn align(mut i: i32) -> i32 {
-        let mut alignment: u32 = 8 as libc::c_ulong as u32;
+        let mut alignment: u32 = 8 as usize as u32;
         /* Optimizing compilers should optimize div and multiply into and
         for all sensible alignment values. */
         return (i as u32)
@@ -336,7 +336,7 @@ pub unsafe extern "C" fn opus_decoder_get_size(mut channels: i32) -> i32 {
     }
     silkDecSizeBytes = align(silkDecSizeBytes);
     celtDecSizeBytes = crate::src::opus_1_2_1::celt::celt_decoder::celt_decoder_get_size(channels);
-    return align(::std::mem::size_of::<OpusDecoder>() as libc::c_ulong as i32)
+    return align(::std::mem::size_of::<OpusDecoder>() as usize as i32)
         + silkDecSizeBytes
         + celtDecSizeBytes;
 }
@@ -375,8 +375,8 @@ pub unsafe extern "C" fn opus_decoder_init(
     crate::stdlib::memset(
         st as *mut libc::c_char as *mut libc::c_void,
         0 as i32,
-        (opus_decoder_get_size(channels) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<libc::c_char>() as libc::c_ulong),
+        (opus_decoder_get_size(channels) as usize)
+            .wrapping_mul(::std::mem::size_of::<libc::c_char>() as usize),
     );
     /* Initialize SILK encoder */
     ret = crate::src::opus_1_2_1::silk::dec_API::silk_Get_Decoder_Size(&mut silkDecSizeBytes);
@@ -384,7 +384,7 @@ pub unsafe extern "C" fn opus_decoder_init(
         return -(3 as i32);
     }
     silkDecSizeBytes = align(silkDecSizeBytes);
-    (*st).silk_dec_offset = align(::std::mem::size_of::<OpusDecoder>() as libc::c_ulong as i32);
+    (*st).silk_dec_offset = align(::std::mem::size_of::<OpusDecoder>() as usize as i32);
     (*st).celt_dec_offset = (*st).silk_dec_offset + silkDecSizeBytes;
     silk_dec =
         (st as *mut libc::c_char).offset((*st).silk_dec_offset as isize) as *mut libc::c_void;
@@ -659,8 +659,8 @@ unsafe extern "C" fn opus_decode_frame(
     }
     let mut fresh0 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_val16>() as libc::c_ulong)
-            .wrapping_mul(pcm_transition_celt_size as libc::c_ulong) as usize,
+        (::std::mem::size_of::<opus_val16>() as usize)
+            .wrapping_mul(pcm_transition_celt_size as usize) as usize,
     );
     pcm_transition_celt = fresh0.as_mut_ptr() as *mut opus_val16;
     if transition != 0 && mode == 1002 as i32 {
@@ -688,8 +688,8 @@ unsafe extern "C" fn opus_decode_frame(
     };
     let mut fresh1 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_int16>() as libc::c_ulong)
-            .wrapping_mul(pcm_silk_size as libc::c_ulong) as usize,
+        (::std::mem::size_of::<opus_int16>() as usize)
+            .wrapping_mul(pcm_silk_size as usize) as usize,
     );
     pcm_silk = fresh1.as_mut_ptr() as *mut opus_int16;
     /* SILK processing */
@@ -835,8 +835,8 @@ unsafe extern "C" fn opus_decode_frame(
     }
     let mut fresh2 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_val16>() as libc::c_ulong)
-            .wrapping_mul(pcm_transition_silk_size as libc::c_ulong) as usize,
+        (::std::mem::size_of::<opus_val16>() as usize)
+            .wrapping_mul(pcm_transition_silk_size as usize) as usize,
     );
     pcm_transition_silk = fresh2.as_mut_ptr() as *mut opus_val16;
     if transition != 0 && mode != 1002 as i32 {
@@ -858,8 +858,8 @@ unsafe extern "C" fn opus_decode_frame(
     };
     let mut fresh3 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_val16>() as libc::c_ulong)
-            .wrapping_mul(redundant_audio_size as libc::c_ulong) as usize,
+        (::std::mem::size_of::<opus_val16>() as usize)
+            .wrapping_mul(redundant_audio_size as usize) as usize,
     );
     redundant_audio = fresh3.as_mut_ptr() as *mut opus_val16;
     /* 5 ms redundant frame for CELT->SILK*/
@@ -1310,8 +1310,8 @@ pub unsafe extern "C" fn opus_decode(
     }
     let mut fresh4 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<f32>() as libc::c_ulong)
-            .wrapping_mul((frame_size * (*st).channels) as libc::c_ulong) as usize,
+        (::std::mem::size_of::<f32>() as usize)
+            .wrapping_mul((frame_size * (*st).channels) as usize) as usize,
     );
     out = fresh4.as_mut_ptr() as *mut f32;
     ret = opus_decode_native(
@@ -1427,13 +1427,13 @@ pub unsafe extern "C" fn opus_decoder_ctl(
             crate::stdlib::memset(
                 &mut (*st).stream_channels as *mut i32 as *mut libc::c_char as *mut libc::c_void,
                 0 as i32,
-                (::std::mem::size_of::<OpusDecoder>() as libc::c_ulong)
+                (::std::mem::size_of::<OpusDecoder>() as usize)
                     .wrapping_sub(
                         (&mut (*st).stream_channels as *mut i32 as *mut libc::c_char)
                             .offset_from(st as *mut libc::c_char) as isize
-                            as libc::c_ulong,
+                            as usize,
                     )
-                    .wrapping_mul(::std::mem::size_of::<libc::c_char>() as libc::c_ulong),
+                    .wrapping_mul(::std::mem::size_of::<libc::c_char>() as usize),
             );
             crate::src::opus_1_2_1::celt::celt_decoder::opus_custom_decoder_ctl(
                 celt_dec,

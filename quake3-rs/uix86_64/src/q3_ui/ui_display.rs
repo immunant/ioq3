@@ -359,7 +359,7 @@ unsafe extern "C" fn UI_DisplayOptionsMenu_Init() {
     crate::stdlib::memset(
         &mut displayOptionsInfo as *mut displayOptionsInfo_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<displayOptionsInfo_t>() as libc::c_ulong,
+        ::std::mem::size_of::<displayOptionsInfo_t>() as usize,
     );
     UI_DisplayOptionsMenu_Cache();
     displayOptionsInfo.menu.wrapAround = qtrue;

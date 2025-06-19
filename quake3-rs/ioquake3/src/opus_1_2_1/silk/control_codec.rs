@@ -342,12 +342,12 @@ unsafe extern "C" fn silk_setup_resamplers(
             new_buf_samples = buf_length_ms * fs_kHz;
             let mut fresh0 = ::std::vec::from_elem(
                 0,
-                (::std::mem::size_of::<opus_int16>() as libc::c_ulong).wrapping_mul(
+                (::std::mem::size_of::<opus_int16>() as usize).wrapping_mul(
                     (if old_buf_samples > new_buf_samples {
                         old_buf_samples
                     } else {
                         new_buf_samples
-                    }) as libc::c_ulong,
+                    }) as usize,
                 ) as usize,
             );
             x_bufFIX = fresh0.as_mut_ptr() as *mut opus_int16;
@@ -355,8 +355,8 @@ unsafe extern "C" fn silk_setup_resamplers(
             /* Initialize resampler for temporary resampling of x_buf data to API_fs_Hz */
             let mut fresh1 = ::std::vec::from_elem(
                 0,
-                (::std::mem::size_of::<silk_resampler_state_struct>() as libc::c_ulong)
-                    .wrapping_mul(1 as i32 as libc::c_ulong) as usize,
+                (::std::mem::size_of::<silk_resampler_state_struct>() as usize)
+                    .wrapping_mul(1 as i32 as usize) as usize,
             );
             temp_resampler_state = fresh1.as_mut_ptr() as *mut silk_resampler_state_struct;
             ret += silk_resampler_init(
@@ -371,8 +371,8 @@ unsafe extern "C" fn silk_setup_resamplers(
             /* Temporary resampling of x_buf data to API_fs_Hz */
             let mut fresh2 = ::std::vec::from_elem(
                 0,
-                (::std::mem::size_of::<opus_int16>() as libc::c_ulong)
-                    .wrapping_mul(api_buf_samples as libc::c_ulong) as usize,
+                (::std::mem::size_of::<opus_int16>() as usize)
+                    .wrapping_mul(api_buf_samples as usize) as usize,
             );
             x_buf_API_fs_Hz = fresh2.as_mut_ptr() as *mut opus_int16;
             ret += silk_resampler(
@@ -466,22 +466,22 @@ unsafe extern "C" fn silk_setup_fs(
         crate::stdlib::memset(
             &mut (*psEnc).sShape as *mut silk_shape_state_FLP as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<silk_shape_state_FLP>() as libc::c_ulong,
+            ::std::mem::size_of::<silk_shape_state_FLP>() as usize,
         ); /* trigger new SNR computation */
         crate::stdlib::memset(
             &mut (*psEnc).sCmn.sNSQ as *mut silk_nsq_state as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<silk_nsq_state>() as libc::c_ulong,
+            ::std::mem::size_of::<silk_nsq_state>() as usize,
         );
         crate::stdlib::memset(
             (*psEnc).sCmn.prev_NLSFq_Q15.as_mut_ptr() as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<[opus_int16; 16]>() as libc::c_ulong,
+            ::std::mem::size_of::<[opus_int16; 16]>() as usize,
         );
         crate::stdlib::memset(
             &mut (*psEnc).sCmn.sLP.In_LP_State as *mut [opus_int32; 2] as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<[opus_int32; 2]>() as libc::c_ulong,
+            ::std::mem::size_of::<[opus_int32; 2]>() as usize,
         );
         (*psEnc).sCmn.inputBufIx = 0 as i32;
         (*psEnc).sCmn.nFramesEncoded = 0 as i32;

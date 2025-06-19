@@ -517,7 +517,7 @@ pub unsafe extern "C" fn AAS_ShowBoundingBox(
     crate::stdlib::memcpy(
         bboxcorners[4 as i32 as usize].as_mut_ptr() as *mut libc::c_void,
         bboxcorners[0 as i32 as usize].as_mut_ptr() as *const libc::c_void,
-        (::std::mem::size_of::<vec3_t>() as libc::c_ulong).wrapping_mul(4 as i32 as libc::c_ulong),
+        (::std::mem::size_of::<vec3_t>() as usize).wrapping_mul(4 as i32 as usize),
     );
     i = 0 as i32;
     while i < 4 as i32 {
@@ -1374,7 +1374,7 @@ pub unsafe extern "C" fn AAS_ShowReachableAreas(mut areanum: i32) {
                 .reachability
                 .offset(((*settings).firstreachablearea + index) as isize)
                 as *mut aas_reachability_t as *const libc::c_void,
-            ::std::mem::size_of::<aas_reachability_t>() as libc::c_ulong,
+            ::std::mem::size_of::<aas_reachability_t>() as usize,
         ); //end if
         index += 1;
         lasttime = crate::src::botlib::be_aas_main::AAS_Time();
@@ -1483,8 +1483,8 @@ pub unsafe extern "C" fn AAS_FloodAreas(mut origin: *mut vec_t) {
     let mut cluster: i32 = 0;
     let mut done: *mut i32 = 0 as *mut i32;
     done = crate::src::botlib::l_memory::GetClearedMemory(
-        (crate::src::botlib::be_aas_main::aasworld.numareas as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+        (crate::src::botlib::be_aas_main::aasworld.numareas as usize)
+            .wrapping_mul(::std::mem::size_of::<i32>() as usize),
     ) as *mut i32;
     areanum = crate::src::botlib::be_aas_sample::AAS_PointAreaNum(origin);
     cluster = crate::src::botlib::be_aas_sample::AAS_AreaCluster(areanum);

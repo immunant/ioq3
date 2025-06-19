@@ -226,7 +226,7 @@ pub unsafe extern "C" fn trap_Cvar_VariableValue(mut var_name: *const libc::c_ch
     trap_Cvar_VariableStringBuffer(
         var_name,
         buf.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 128]>() as usize as i32,
     );
     return atof(buf.as_mut_ptr()) as f32;
 }
@@ -274,7 +274,7 @@ pub unsafe extern "C" fn G_ParseInfos(
                     Q_strncpyz(
                         key.as_mut_ptr(),
                         token,
-                        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
                     );
                     token = COM_ParseExt(&mut buf, qfalse);
                     if *token.offset(0 as i32 as isize) == 0 {
@@ -294,7 +294,7 @@ pub unsafe extern "C" fn G_ParseInfos(
                         b"%d\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                         1024 as i32,
                     )))
-                    .wrapping_add(1 as i32 as libc::c_ulong) as i32,
+                    .wrapping_add(1 as i32 as usize) as i32,
             ) as *mut libc::c_char;
             if !(*infos.offset(count as isize)).is_null() {
                 libc::strcpy(*infos.offset(count as isize), info.as_mut_ptr());
@@ -451,7 +451,7 @@ unsafe extern "C" fn PlayerIntroSound(mut modelAndSkin: *const libc::c_char) {
     Q_strncpyz(
         model.as_mut_ptr(),
         modelAndSkin,
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     skin = libc::strrchr(model.as_mut_ptr(), '/' as i32);
     if !skin.is_null() {
@@ -779,7 +779,7 @@ pub unsafe extern "C" fn G_CheckBotSpawn() {
                     trap_GetUserinfo(
                         botSpawnQueue[n as usize].clientNum,
                         userinfo.as_mut_ptr(),
-                        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
                     );
                     PlayerIntroSound(Info_ValueForKey(
                         userinfo.as_mut_ptr(),
@@ -848,7 +848,7 @@ pub unsafe extern "C" fn G_BotConnect(mut clientNum: i32, mut restart: qboolean)
     trap_GetUserinfo(
         clientNum,
         userinfo.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     Q_strncpyz(
         settings.characterfile.as_mut_ptr(),
@@ -856,7 +856,7 @@ pub unsafe extern "C" fn G_BotConnect(mut clientNum: i32, mut restart: qboolean)
             userinfo.as_mut_ptr(),
             b"characterfile\x00" as *const u8 as *const libc::c_char,
         ),
-        ::std::mem::size_of::<[libc::c_char; 144]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 144]>() as usize as i32,
     );
     settings.skill = atof(Info_ValueForKey(
         userinfo.as_mut_ptr(),
@@ -1108,7 +1108,7 @@ pub unsafe extern "C" fn Svcmd_AddBot_f() {
     trap_Argv(
         1 as i32,
         name.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     if name[0 as i32 as usize] == 0 {
         trap_Print(
@@ -1121,7 +1121,7 @@ pub unsafe extern "C" fn Svcmd_AddBot_f() {
     trap_Argv(
         2 as i32,
         string.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     if string[0 as i32 as usize] == 0 {
         skill = 4 as i32 as f32
@@ -1136,13 +1136,13 @@ pub unsafe extern "C" fn Svcmd_AddBot_f() {
     trap_Argv(
         3 as i32,
         team.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     // delay
     trap_Argv(
         4 as i32,
         string.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     if string[0 as i32 as usize] == 0 {
         delay = 0 as i32
@@ -1153,7 +1153,7 @@ pub unsafe extern "C" fn Svcmd_AddBot_f() {
     trap_Argv(
         5 as i32,
         altname.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     G_AddBot(
         name.as_mut_ptr(),
@@ -1200,7 +1200,7 @@ pub unsafe extern "C" fn Svcmd_BotList_f() {
                 g_botInfos[i as usize],
                 b"name\x00" as *const u8 as *const libc::c_char,
             ),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
         );
         if *name.as_mut_ptr() == 0 {
             libc::strcpy(
@@ -1214,7 +1214,7 @@ pub unsafe extern "C" fn Svcmd_BotList_f() {
                 g_botInfos[i as usize],
                 b"funname\x00" as *const u8 as *const libc::c_char,
             ),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
         );
         if *funname.as_mut_ptr() == 0 {
             libc::strcpy(
@@ -1228,7 +1228,7 @@ pub unsafe extern "C" fn Svcmd_BotList_f() {
                 g_botInfos[i as usize],
                 b"model\x00" as *const u8 as *const libc::c_char,
             ),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
         );
         if *model.as_mut_ptr() == 0 {
             libc::strcpy(
@@ -1242,7 +1242,7 @@ pub unsafe extern "C" fn Svcmd_BotList_f() {
                 g_botInfos[i as usize],
                 b"aifile\x00" as *const u8 as *const libc::c_char,
             ),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
         );
         if *aifile.as_mut_ptr() == 0 {
             libc::strcpy(
@@ -1293,7 +1293,7 @@ unsafe extern "C" fn G_SpawnBots(mut botList: *mut libc::c_char, mut baseDelay: 
     Q_strncpyz(
         bots.as_mut_ptr(),
         botList,
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     p = &mut *bots.as_mut_ptr().offset(0 as i32 as isize) as *mut libc::c_char;
     delay = baseDelay;
@@ -1498,7 +1498,7 @@ pub unsafe extern "C" fn G_InitBots(mut restart: qboolean) {
     if g_gametype.integer == GT_SINGLE_PLAYER as i32 {
         trap_GetServerinfo(
             serverinfo.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
         );
         Q_strncpyz(
             map.as_mut_ptr(),
@@ -1506,7 +1506,7 @@ pub unsafe extern "C" fn G_InitBots(mut restart: qboolean) {
                 serverinfo.as_mut_ptr(),
                 b"mapname\x00" as *const u8 as *const libc::c_char,
             ),
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         );
         arenainfo = G_GetArenaInfoByMap(map.as_mut_ptr());
         if arenainfo.is_null() {

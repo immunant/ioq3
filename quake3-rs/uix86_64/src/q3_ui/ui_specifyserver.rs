@@ -298,7 +298,7 @@ pub unsafe extern "C" fn SpecifyServer_MenuInit() {
     crate::stdlib::memset(
         &mut s_specifyserver as *mut specifyserver_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<specifyserver_t>() as libc::c_ulong,
+        ::std::mem::size_of::<specifyserver_t>() as usize,
     );
     SpecifyServer_Cache();
     s_specifyserver.menu.wrapAround = qtrue;

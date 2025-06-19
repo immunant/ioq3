@@ -101,7 +101,7 @@ Written by Jean-Marc Valin */
 #[no_mangle]
 
 pub unsafe extern "C" fn opus_repacketizer_get_size() -> i32 {
-    return ::std::mem::size_of::<OpusRepacketizer>() as libc::c_ulong as i32;
+    return ::std::mem::size_of::<OpusRepacketizer>() as usize as i32;
 }
 #[no_mangle]
 
@@ -347,11 +347,11 @@ pub unsafe extern "C" fn opus_repacketizer_out_range_impl(
         crate::stdlib::memmove(
             ptr as *mut libc::c_void,
             *frames.offset(i as isize) as *const libc::c_void,
-            (*len.offset(i as isize) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<u8>() as libc::c_ulong)
+            (*len.offset(i as isize) as usize)
+                .wrapping_mul(::std::mem::size_of::<u8>() as usize)
                 .wrapping_add(
                     (0 as i32 as isize * ptr.offset_from(*frames.offset(i as isize)) as isize)
-                        as libc::c_ulong,
+                        as usize,
                 ),
         );
         ptr = ptr.offset(*len.offset(i as isize) as i32 as isize);
@@ -425,14 +425,14 @@ pub unsafe extern "C" fn opus_packet_pad(
     crate::stdlib::memmove(
         data.offset(new_len as isize).offset(-(len as isize)) as *mut libc::c_void,
         data as *const libc::c_void,
-        (len as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<u8>() as libc::c_ulong)
+        (len as usize)
+            .wrapping_mul(::std::mem::size_of::<u8>() as usize)
             .wrapping_add(
                 (0 as i32 as isize
                     * data
                         .offset(new_len as isize)
                         .offset(-(len as isize))
-                        .offset_from(data) as isize) as libc::c_ulong,
+                        .offset_from(data) as isize) as usize,
             ),
     );
     ret = opus_repacketizer_cat(

@@ -1211,7 +1211,7 @@ pub unsafe extern "C" fn R_LightForPoint(
     crate::stdlib::memset(
         &mut ent as *mut trRefEntity_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<trRefEntity_t>() as libc::c_ulong,
+        ::std::mem::size_of::<trRefEntity_t>() as usize,
     );
     ent.e.origin[0 as i32 as usize] = *point.offset(0 as i32 as isize);
     ent.e.origin[1 as i32 as usize] = *point.offset(1 as i32 as isize);

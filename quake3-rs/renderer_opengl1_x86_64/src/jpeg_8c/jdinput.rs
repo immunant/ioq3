@@ -854,12 +854,12 @@ unsafe extern "C" fn latch_quant_tables(mut cinfo: j_decompress_ptr) {
             .expect("non-null function pointer")(
                 cinfo as j_common_ptr,
                 1 as i32,
-                ::std::mem::size_of::<JQUANT_TBL>() as libc::c_ulong,
+                ::std::mem::size_of::<JQUANT_TBL>() as usize,
             ) as *mut JQUANT_TBL;
             crate::stdlib::memcpy(
                 qtbl as *mut libc::c_void,
                 (*cinfo).quant_tbl_ptrs[qtblno as usize] as *const libc::c_void,
-                ::std::mem::size_of::<JQUANT_TBL>() as libc::c_ulong,
+                ::std::mem::size_of::<JQUANT_TBL>() as usize,
             );
             (*compptr).quant_table = qtbl
         }
@@ -1069,7 +1069,7 @@ pub unsafe extern "C" fn jinit_input_controller(mut cinfo: j_decompress_ptr) {
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         0 as i32,
-        ::std::mem::size_of::<my_input_controller>() as libc::c_ulong,
+        ::std::mem::size_of::<my_input_controller>() as usize,
     ) as my_inputctl_ptr;
     (*cinfo).inputctl = inputctl as *mut jpeg_input_controller;
     /* Initialize method pointers */

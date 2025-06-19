@@ -8,7 +8,7 @@ pub mod macros_h {
     ) -> crate::opus_types_h::opus_int32 {
         return if in32 != 0 {
             (32 as i32)
-                - (::std::mem::size_of::<u32>() as libc::c_ulong as i32 * 8 as i32
+                - (::std::mem::size_of::<u32>() as usize as i32 * 8 as i32
                     - (in32 as u32).leading_zeros() as i32)
         } else {
             32 as i32
@@ -397,8 +397,8 @@ pub unsafe extern "C" fn silk_NLSF_encode(
     /* First stage: VQ */
     let mut fresh0 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_int32>() as libc::c_ulong)
-            .wrapping_mul((*psNLSF_CB).nVectors as libc::c_ulong) as usize,
+        (::std::mem::size_of::<opus_int32>() as usize)
+            .wrapping_mul((*psNLSF_CB).nVectors as usize) as usize,
     );
     err_Q24 = fresh0.as_mut_ptr() as *mut opus_int32;
     crate::src::opus_1_2_1::silk::NLSF_VQ::silk_NLSF_VQ(
@@ -412,7 +412,7 @@ pub unsafe extern "C" fn silk_NLSF_encode(
     /* Sort the quantization errors */
     let mut fresh1 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(nSurvivors as libc::c_ulong)
+        (::std::mem::size_of::<i32>() as usize).wrapping_mul(nSurvivors as usize)
             as usize,
     );
     tempIndices1 = fresh1.as_mut_ptr() as *mut i32;
@@ -424,14 +424,14 @@ pub unsafe extern "C" fn silk_NLSF_encode(
     );
     let mut fresh2 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_int32>() as libc::c_ulong)
-            .wrapping_mul(nSurvivors as libc::c_ulong) as usize,
+        (::std::mem::size_of::<opus_int32>() as usize)
+            .wrapping_mul(nSurvivors as usize) as usize,
     );
     RD_Q25 = fresh2.as_mut_ptr() as *mut opus_int32;
     let mut fresh3 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i8>() as libc::c_ulong)
-            .wrapping_mul((nSurvivors * 16 as i32) as libc::c_ulong) as usize,
+        (::std::mem::size_of::<i8>() as usize)
+            .wrapping_mul((nSurvivors * 16 as i32) as usize) as usize,
     );
     tempIndices2 = fresh3.as_mut_ptr() as *mut i8;
     /* Loop over survivors */
@@ -515,8 +515,8 @@ pub unsafe extern "C" fn silk_NLSF_encode(
         &mut *NLSFIndices.offset(1 as i32 as isize) as *mut i8 as *mut libc::c_void,
         &mut *tempIndices2.offset((bestIndex * 16 as i32) as isize) as *mut i8
             as *const libc::c_void,
-        ((*psNLSF_CB).order as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<i8>() as libc::c_ulong),
+        ((*psNLSF_CB).order as usize)
+            .wrapping_mul(::std::mem::size_of::<i8>() as usize),
     );
     /* Decode */
     crate::src::opus_1_2_1::silk::NLSF_decode::silk_NLSF_decode(

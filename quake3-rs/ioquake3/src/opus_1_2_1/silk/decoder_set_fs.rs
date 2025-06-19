@@ -369,12 +369,12 @@ pub unsafe extern "C" fn silk_decoder_set_fs(
             crate::stdlib::memset(
                 (*psDec).outBuf.as_mut_ptr() as *mut libc::c_void,
                 0 as i32,
-                ::std::mem::size_of::<[opus_int16; 480]>() as libc::c_ulong,
+                ::std::mem::size_of::<[opus_int16; 480]>() as usize,
             );
             crate::stdlib::memset(
                 (*psDec).sLPC_Q14_buf.as_mut_ptr() as *mut libc::c_void,
                 0 as i32,
-                ::std::mem::size_of::<[opus_int32; 16]>() as libc::c_ulong,
+                ::std::mem::size_of::<[opus_int32; 16]>() as usize,
             );
         }
         (*psDec).fs_kHz = fs_kHz;

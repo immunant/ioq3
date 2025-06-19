@@ -1556,7 +1556,7 @@ unsafe extern "C" fn IN_InitJoystick() {
     crate::stdlib::memset(
         &mut stick_state as *mut C2RustUnnamed_151 as *mut libc::c_void,
         '\u{0}' as i32,
-        ::std::mem::size_of::<C2RustUnnamed_151>() as libc::c_ulong,
+        ::std::mem::size_of::<C2RustUnnamed_151>() as usize,
     );
     // SDL 2.0.4 requires SDL_INIT_JOYSTICK to be initialized separately from
     // SDL_INIT_GAMECONTROLLER for SDL_JoystickOpen() to work correctly,
@@ -1604,12 +1604,12 @@ unsafe extern "C" fn IN_InitJoystick() {
     while i < total {
         Q_strcat(
             buf.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 16384]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 16384]>() as usize as i32,
             SDL_JoystickNameForIndex(i),
         );
         Q_strcat(
             buf.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 16384]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 16384]>() as usize as i32,
             b"\n\x00" as *const u8 as *const libc::c_char,
         );
         i += 1
@@ -2043,12 +2043,12 @@ unsafe extern "C" fn IN_JoyMove() {
     // now query the stick buttons...
     total = SDL_JoystickNumButtons(stick);
     if total > 0 as i32 {
-        if total as libc::c_ulong
-            > (::std::mem::size_of::<[qboolean; 16]>() as libc::c_ulong)
-                .wrapping_div(::std::mem::size_of::<qboolean>() as libc::c_ulong)
+        if total as usize
+            > (::std::mem::size_of::<[qboolean; 16]>() as usize)
+                .wrapping_div(::std::mem::size_of::<qboolean>() as usize)
         {
-            total = (::std::mem::size_of::<[qboolean; 16]>() as libc::c_ulong)
-                .wrapping_div(::std::mem::size_of::<qboolean>() as libc::c_ulong)
+            total = (::std::mem::size_of::<[qboolean; 16]>() as usize)
+                .wrapping_div(::std::mem::size_of::<qboolean>() as usize)
                 as i32
         }
         i = 0 as i32;

@@ -196,7 +196,7 @@ pub unsafe extern "C" fn CG_LoadingString(mut s: *const libc::c_char) {
     Q_strncpyz(
         cg.infoScreenText.as_mut_ptr(),
         s,
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     trap_UpdateScreen();
 }
@@ -235,7 +235,7 @@ pub unsafe extern "C" fn CG_LoadingClient(mut clientNum: i32) {
         Q_strncpyz(
             model.as_mut_ptr(),
             Info_ValueForKey(info, b"model\x00" as *const u8 as *const libc::c_char),
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         );
         skin = libc::strrchr(model.as_mut_ptr(), '/' as i32);
         if !skin.is_null() {
@@ -283,7 +283,7 @@ pub unsafe extern "C" fn CG_LoadingClient(mut clientNum: i32) {
     Q_strncpyz(
         personality.as_mut_ptr(),
         Info_ValueForKey(info, b"n\x00" as *const u8 as *const libc::c_char),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     Q_CleanStr(personality.as_mut_ptr());
     if cgs.gametype as u32 == GT_SINGLE_PLAYER as i32 as u32 {
@@ -621,7 +621,7 @@ pub unsafe extern "C" fn CG_DrawInformation() {
     trap_Cvar_VariableStringBuffer(
         b"sv_running\x00" as *const u8 as *const libc::c_char,
         buf.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     if atoi(buf.as_mut_ptr()) == 0 {
         // server hostname

@@ -387,12 +387,12 @@ pub unsafe extern "C" fn SV_SetUserinfo(mut index: i32, mut val: *const libc::c_
     Q_strncpyz(
         (*svs.clients.offset(index as isize)).userinfo.as_mut_ptr(),
         val,
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     Q_strncpyz(
         (*svs.clients.offset(index as isize)).name.as_mut_ptr(),
         Info_ValueForKey(val, b"name\x00" as *const u8 as *const libc::c_char),
-        ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 32]>() as usize as i32,
     );
 }
 /*
@@ -508,8 +508,8 @@ unsafe extern "C" fn SV_Startup() {
     }
     SV_BoundMaxClients(1 as i32);
     svs.clients = Z_Malloc(
-        (::std::mem::size_of::<client_t>() as libc::c_ulong)
-            .wrapping_mul((*sv_maxclients).integer as libc::c_ulong) as i32,
+        (::std::mem::size_of::<client_t>() as usize)
+            .wrapping_mul((*sv_maxclients).integer as usize) as i32,
     ) as *mut client_t;
     if (*com_dedicated).integer != 0 {
         svs.numSnapshotEntities = (*sv_maxclients).integer * 32 as i32 * 256 as i32
@@ -564,7 +564,7 @@ pub unsafe extern "C" fn SV_ChangeMaxClients() {
         return;
     }
     oldClients = Hunk_AllocateTempMemory(
-        (count as libc::c_ulong).wrapping_mul(::std::mem::size_of::<client_t>() as libc::c_ulong)
+        (count as usize).wrapping_mul(::std::mem::size_of::<client_t>() as usize)
             as i32,
     ) as *mut client_t;
     // copy the clients to hunk memory
@@ -576,7 +576,7 @@ pub unsafe extern "C" fn SV_ChangeMaxClients() {
             crate::stdlib::memset(
                 &mut *oldClients.offset(i as isize) as *mut client_t as *mut libc::c_void,
                 0 as i32,
-                ::std::mem::size_of::<client_t>() as libc::c_ulong,
+                ::std::mem::size_of::<client_t>() as usize,
             );
         }
         i += 1
@@ -585,14 +585,14 @@ pub unsafe extern "C" fn SV_ChangeMaxClients() {
     Z_Free(svs.clients as *mut libc::c_void);
     // allocate new clients
     svs.clients = Z_Malloc(
-        ((*sv_maxclients).integer as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<client_t>() as libc::c_ulong) as i32,
+        ((*sv_maxclients).integer as usize)
+            .wrapping_mul(::std::mem::size_of::<client_t>() as usize) as i32,
     ) as *mut client_t;
     crate::stdlib::memset(
         svs.clients as *mut libc::c_void,
         0 as i32,
-        ((*sv_maxclients).integer as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<client_t>() as libc::c_ulong),
+        ((*sv_maxclients).integer as usize)
+            .wrapping_mul(::std::mem::size_of::<client_t>() as usize),
     );
     // copy the clients over
     i = 0 as i32;
@@ -630,7 +630,7 @@ unsafe extern "C" fn SV_ClearServer() {
     crate::stdlib::memset(
         &mut sv as *mut server_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<server_t>() as libc::c_ulong,
+        ::std::mem::size_of::<server_t>() as usize,
     );
 }
 /*
@@ -693,8 +693,8 @@ pub unsafe extern "C" fn SV_SpawnServer(mut server: *mut libc::c_char, mut killB
     FS_ClearPakReferences(0 as i32);
     // allocate the snapshot entities on the hunk
     svs.snapshotEntities = Hunk_Alloc(
-        (::std::mem::size_of::<entityState_t>() as libc::c_ulong)
-            .wrapping_mul(svs.numSnapshotEntities as libc::c_ulong) as i32,
+        (::std::mem::size_of::<entityState_t>() as usize)
+            .wrapping_mul(svs.numSnapshotEntities as usize) as i32,
         h_high,
     ) as *mut entityState_t;
     svs.nextSnapshotEntities = 0 as i32;
@@ -860,7 +860,7 @@ pub unsafe extern "C" fn SV_SpawnServer(mut server: *mut libc::c_char, mut killB
         // load pk3s also loaded at the server
         p = FS_LoadedPakChecksums();
         Cvar_Set(b"sv_paks\x00" as *const u8 as *const libc::c_char, p);
-        if crate::stdlib::strlen(p) == 0 as i32 as libc::c_ulong {
+        if crate::stdlib::strlen(p) == 0 as i32 as usize {
             Com_Printf(
                 b"WARNING: sv_pure set but no PK3 files loaded\n\x00" as *const u8
                     as *const libc::c_char,
@@ -899,7 +899,7 @@ pub unsafe extern "C" fn SV_SpawnServer(mut server: *mut libc::c_char, mut killB
     Q_strncpyz(
         systemInfo.as_mut_ptr(),
         Cvar_InfoString_Big(0x8 as i32),
-        ::std::mem::size_of::<[libc::c_char; 16384]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 16384]>() as usize as i32,
     );
     cvar_modifiedFlags &= !(0x8 as i32);
     SV_SetConfigstring(1 as i32, systemInfo.as_mut_ptr());
@@ -1743,7 +1743,7 @@ pub unsafe extern "C" fn SV_Shutdown(mut finalmsg: *mut libc::c_char) {
     crate::stdlib::memset(
         &mut svs as *mut serverStatic_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<serverStatic_t>() as libc::c_ulong,
+        ::std::mem::size_of::<serverStatic_t>() as usize,
     );
     Cvar_Set(
         b"sv_running\x00" as *const u8 as *const libc::c_char,

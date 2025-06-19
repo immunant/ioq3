@@ -785,7 +785,7 @@ pub unsafe extern "C" fn AAS_BestReachableFromJumpPadArea(
                         crate::stdlib::memset(
                             &mut move_0 as *mut aas_clientmove_t as *mut libc::c_void,
                             0 as i32,
-                            ::std::mem::size_of::<aas_clientmove_t>() as libc::c_ulong,
+                            ::std::mem::size_of::<aas_clientmove_t>() as usize,
                         );
                         crate::src::botlib::be_aas_move::AAS_ClientMovementHitBBox(
                             &mut move_0 as *mut _ as *mut aas_clientmove_s,
@@ -997,8 +997,8 @@ pub unsafe extern "C" fn AAS_BestReachableArea(
 pub unsafe extern "C" fn AAS_SetupReachabilityHeap() {
     let mut i: i32 = 0; //end for
     reachabilityheap = crate::src::botlib::l_memory::GetClearedMemory(
-        (65536 as i32 as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<aas_lreachability_t>() as libc::c_ulong),
+        (65536 as i32 as usize)
+            .wrapping_mul(::std::mem::size_of::<aas_lreachability_t>() as usize),
     ) as *mut aas_lreachability_t;
     i = 0 as i32;
     while i < 65536 as i32 - 1 as i32 {
@@ -1067,7 +1067,7 @@ pub unsafe extern "C" fn AAS_FreeReachability(mut lreach: *mut aas_lreachability
     crate::stdlib::memset(
         lreach as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<aas_lreachability_t>() as libc::c_ulong,
+        ::std::mem::size_of::<aas_lreachability_t>() as usize,
     );
     (*lreach).next = nextreachability;
     nextreachability = lreach;
@@ -1801,7 +1801,7 @@ pub unsafe extern "C" fn AAS_Reachability_EqualFloorHeight(
     crate::stdlib::memset(
         &mut lr as *mut aas_lreachability_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<aas_lreachability_t>() as libc::c_ulong,
+        ::std::mem::size_of::<aas_lreachability_t>() as usize,
     );
     //
     //check if the areas have ground faces with a common edge
@@ -3051,8 +3051,8 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
                             end.as_mut_ptr(),
                             areas.as_mut_ptr(),
                             0 as *mut vec3_t,
-                            (::std::mem::size_of::<[i32; 10]>() as libc::c_ulong)
-                                .wrapping_div(::std::mem::size_of::<i32>() as libc::c_ulong)
+                            (::std::mem::size_of::<[i32; 10]>() as usize)
+                                .wrapping_div(::std::mem::size_of::<i32>() as usize)
                                 as i32,
                         );
                         i = 0 as i32;
@@ -4255,8 +4255,8 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(mut area1num: i32, mut area2num: 
                 teststart.as_mut_ptr(),
                 areas.as_mut_ptr(),
                 0 as *mut vec3_t,
-                (::std::mem::size_of::<[i32; 10]>() as libc::c_ulong)
-                    .wrapping_div(::std::mem::size_of::<i32>() as libc::c_ulong)
+                (::std::mem::size_of::<[i32; 10]>() as usize)
+                    .wrapping_div(::std::mem::size_of::<i32>() as usize)
                     as i32,
             );
             j = 0 as i32;
@@ -7039,7 +7039,7 @@ pub unsafe extern "C" fn AAS_Reachability_JumpPad() {
                             crate::stdlib::memset(
                                 &mut move_0 as *mut aas_clientmove_t as *mut libc::c_void,
                                 0 as i32,
-                                ::std::mem::size_of::<aas_clientmove_t>() as libc::c_ulong,
+                                ::std::mem::size_of::<aas_clientmove_t>() as usize,
                             );
                             area2num = 0 as i32;
                             i = 0 as i32;
@@ -8651,9 +8651,9 @@ pub unsafe extern "C" fn AAS_Reachability_WalkOffLedge(mut areanum: i32) {
                                                 areas.as_mut_ptr(),
                                                 0 as *mut vec3_t,
                                                 (::std::mem::size_of::<[i32; 10]>()
-                                                    as libc::c_ulong)
+                                                    as usize)
                                                     .wrapping_div(::std::mem::size_of::<i32>()
-                                                        as libc::c_ulong)
+                                                        as usize)
                                                     as i32,
                                             );
                                         p = 0 as i32;
@@ -8783,8 +8783,8 @@ pub unsafe extern "C" fn AAS_StoreReachability() {
     }
     crate::src::botlib::be_aas_main::aasworld.reachability =
         crate::src::botlib::l_memory::GetClearedMemory(
-            ((numlreachabilities + 10 as i32) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<aas_reachability_t>() as libc::c_ulong),
+            ((numlreachabilities + 10 as i32) as usize)
+                .wrapping_mul(::std::mem::size_of::<aas_reachability_t>() as usize),
         ) as *mut aas_reachability_t;
     crate::src::botlib::be_aas_main::aasworld.reachabilitysize = 1 as i32;
     i = 0 as i32;
@@ -9163,8 +9163,8 @@ pub unsafe extern "C" fn AAS_InitReachability() {
     AAS_SetupReachabilityHeap();
     //allocate area reachability link array
     areareachability = crate::src::botlib::l_memory::GetClearedMemory(
-        (crate::src::botlib::be_aas_main::aasworld.numareas as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<*mut aas_lreachability_t>() as libc::c_ulong),
+        (crate::src::botlib::be_aas_main::aasworld.numareas as usize)
+            .wrapping_mul(::std::mem::size_of::<*mut aas_lreachability_t>() as usize),
     ) as *mut *mut aas_lreachability_t;
     //
     AAS_SetWeaponJumpAreaFlags();

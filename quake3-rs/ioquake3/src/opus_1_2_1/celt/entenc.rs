@@ -271,7 +271,7 @@ pub unsafe extern "C" fn ec_enc_uint(
     let mut ftb: i32 = 0;
     /*In order to optimize EC_ILOG(), it is undefined for the value 0.*/
     _ft = _ft.wrapping_sub(1);
-    ftb = ::std::mem::size_of::<u32>() as libc::c_ulong as i32 * 8 as i32
+    ftb = ::std::mem::size_of::<u32>() as usize as i32 * 8 as i32
         - _ft.leading_zeros() as i32;
     if ftb > 8 as i32 {
         ftb -= 8 as i32;
@@ -300,7 +300,7 @@ pub unsafe extern "C" fn ec_enc_bits(mut _this: *mut ec_enc, mut _fl: opus_uint3
     window = (*_this).end_window;
     used = (*_this).nend_bits;
     if (used as u32).wrapping_add(_bits)
-        > (::std::mem::size_of::<ec_window>() as libc::c_ulong as i32 * 8 as i32) as u32
+        > (::std::mem::size_of::<ec_window>() as usize as i32 * 8 as i32) as u32
     {
         loop {
             (*_this).error |= ec_write_byte_at_end(
@@ -359,8 +359,8 @@ pub unsafe extern "C" fn ec_enc_shrink(mut _this: *mut ec_enc, mut _size: opus_u
             .buf
             .offset((*_this).storage as isize)
             .offset(-((*_this).end_offs as isize)) as *const libc::c_void,
-        ((*_this).end_offs as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<u8>() as libc::c_ulong)
+        ((*_this).end_offs as usize)
+            .wrapping_mul(::std::mem::size_of::<u8>() as usize)
             .wrapping_add(
                 (0 as i32 as isize
                     * (*_this)
@@ -372,7 +372,7 @@ pub unsafe extern "C" fn ec_enc_shrink(mut _this: *mut ec_enc, mut _size: opus_u
                                 .buf
                                 .offset((*_this).storage as isize)
                                 .offset(-((*_this).end_offs as isize)),
-                        ) as isize) as libc::c_ulong,
+                        ) as isize) as usize,
             ),
     );
     (*_this).storage = _size;
@@ -472,7 +472,7 @@ pub unsafe extern "C" fn ec_enc_done(mut _this: *mut ec_enc) {
     /*We output the minimum number of bits that ensures that the symbols encoded
     thus far will be decoded correctly regardless of the bits that follow.*/
     l = 32 as i32
-        - (::std::mem::size_of::<u32>() as libc::c_ulong as i32 * 8 as i32
+        - (::std::mem::size_of::<u32>() as usize as i32 * 8 as i32
             - (*_this).rng.leading_zeros() as i32);
     msk = ((1 as u32) << 32 as i32 - 1 as i32).wrapping_sub(1 as i32 as u32) >> l;
     end = (*_this).val.wrapping_add(msk) & !msk;
@@ -509,8 +509,8 @@ pub unsafe extern "C" fn ec_enc_done(mut _this: *mut ec_enc) {
             ((*_this)
                 .storage
                 .wrapping_sub((*_this).offs)
-                .wrapping_sub((*_this).end_offs) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<u8>() as libc::c_ulong),
+                .wrapping_sub((*_this).end_offs) as usize)
+                .wrapping_mul(::std::mem::size_of::<u8>() as usize),
         );
         if used > 0 as i32 {
             /*If there's no range coder data at all, give up.*/

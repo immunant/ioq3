@@ -320,7 +320,7 @@ pub unsafe extern "C" fn R_RegisterMD3(
         if lod != 0 {
             Com_sprintf(
                 namebuf.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 84]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 84]>() as usize as i32,
                 b"%s_%d.%s\x00" as *const u8 as *const libc::c_char,
                 filename.as_mut_ptr(),
                 lod,
@@ -329,7 +329,7 @@ pub unsafe extern "C" fn R_RegisterMD3(
         } else {
             Com_sprintf(
                 namebuf.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 84]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 84]>() as usize as i32,
                 b"%s.%s\x00" as *const u8 as *const libc::c_char,
                 filename.as_mut_ptr(),
                 fext,
@@ -536,7 +536,7 @@ pub unsafe extern "C" fn R_AllocModel() -> *mut model_t {
         return 0 as *mut model_t;
     }
     mod_0 = ri.Hunk_Alloc.expect("non-null function pointer")(
-        ::std::mem::size_of::<model_t>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<model_t>() as usize as i32,
         h_low,
     ) as *mut model_t;
     (*mod_0).index = tr.numModels;
@@ -574,7 +574,7 @@ pub unsafe extern "C" fn RE_RegisterModel(mut name: *const libc::c_char) -> qhan
         );
         return 0 as i32;
     }
-    if crate::stdlib::strlen(name) >= 64 as i32 as libc::c_ulong {
+    if crate::stdlib::strlen(name) >= 64 as i32 as usize {
         ri.Printf.expect("non-null function pointer")(
             PRINT_ALL as i32,
             b"Model name exceeds MAX_QPATH\n\x00" as *const u8 as *const libc::c_char,
@@ -610,7 +610,7 @@ pub unsafe extern "C" fn RE_RegisterModel(mut name: *const libc::c_char) -> qhan
     Q_strncpyz(
         (*mod_0).name.as_mut_ptr(),
         name,
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     R_IssuePendingRenderCommands();
     (*mod_0).type_0 = MOD_BAD;
@@ -657,7 +657,7 @@ pub unsafe extern "C" fn RE_RegisterModel(mut name: *const libc::c_char) -> qhan
         if !(i == orgLoader) {
             Com_sprintf(
                 altName.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
                 b"%s.%s\x00" as *const u8 as *const libc::c_char,
                 localName.as_mut_ptr(),
                 modelLoaders[i as usize].ext,
@@ -752,7 +752,7 @@ unsafe extern "C" fn R_LoadMD3(
     crate::stdlib::memcpy(
         (*mod_0).md3[lod as usize] as *mut libc::c_void,
         buffer,
-        (*pinmodel).ofsEnd as libc::c_ulong,
+        (*pinmodel).ofsEnd as usize,
     );
     (*(*mod_0).md3[lod as usize]).ident = (*(*mod_0).md3[lod as usize]).ident;
     (*(*mod_0).md3[lod as usize]).version = (*(*mod_0).md3[lod as usize]).version;
@@ -977,28 +977,28 @@ unsafe extern "C" fn R_LoadMDR(
     // over and over again, we'll uncompress it in this function already, so we must adjust the size of the target mdr.
     if (*pinmodel).ofsFrames < 0 as i32 {
         // mdrFrame_t is larger than mdrCompFrame_t:
-        size = (size as libc::c_ulong).wrapping_add(
-            ((*pinmodel).numFrames as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong),
+        size = (size as usize).wrapping_add(
+            ((*pinmodel).numFrames as usize)
+                .wrapping_mul(::std::mem::size_of::<[libc::c_char; 16]>() as usize),
         ) as i32;
         // now add enough space for the uncompressed bones.
-        size = (size as libc::c_ulong).wrapping_add(
-            (((*pinmodel).numFrames * (*pinmodel).numBones) as libc::c_ulong).wrapping_mul(
-                (::std::mem::size_of::<mdrBone_t>() as libc::c_ulong)
-                    .wrapping_sub(::std::mem::size_of::<mdrCompBone_t>() as libc::c_ulong),
+        size = (size as usize).wrapping_add(
+            (((*pinmodel).numFrames * (*pinmodel).numBones) as usize).wrapping_mul(
+                (::std::mem::size_of::<mdrBone_t>() as usize)
+                    .wrapping_sub(::std::mem::size_of::<mdrCompBone_t>() as usize),
             ),
         ) as i32
     }
     // simple bounds check
     if (*pinmodel).numBones < 0 as i32
-        || (::std::mem::size_of::<mdrHeader_t>() as libc::c_ulong).wrapping_add(
-            ((*pinmodel).numFrames as libc::c_ulong).wrapping_mul(
-                (::std::mem::size_of::<mdrFrame_t>() as libc::c_ulong).wrapping_add(
-                    (((*pinmodel).numBones - 1 as i32) as libc::c_ulong)
-                        .wrapping_mul(::std::mem::size_of::<mdrBone_t>() as libc::c_ulong),
+        || (::std::mem::size_of::<mdrHeader_t>() as usize).wrapping_add(
+            ((*pinmodel).numFrames as usize).wrapping_mul(
+                (::std::mem::size_of::<mdrFrame_t>() as usize).wrapping_add(
+                    (((*pinmodel).numBones - 1 as i32) as usize)
+                        .wrapping_mul(::std::mem::size_of::<mdrBone_t>() as usize),
                 ),
             ),
-        ) > size as libc::c_ulong
+        ) > size as usize
     {
         ri.Printf.expect("non-null function pointer")(
             PRINT_WARNING as i32,
@@ -1016,7 +1016,7 @@ unsafe extern "C" fn R_LoadMDR(
     Q_strncpyz(
         (*mdr).name.as_mut_ptr(),
         (*pinmodel).name.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     (*mdr).numFrames = (*pinmodel).numFrames;
     (*mdr).numBones = (*pinmodel).numBones;
@@ -1056,9 +1056,9 @@ unsafe extern "C" fn R_LoadMDR(
             j = 0 as i32;
             while j < (*mdr).numBones {
                 k = 0 as i32;
-                while (k as libc::c_ulong)
-                    < (::std::mem::size_of::<[u8; 24]>() as libc::c_ulong)
-                        .wrapping_div(2 as i32 as libc::c_ulong)
+                while (k as usize)
+                    < (::std::mem::size_of::<[u8; 24]>() as usize)
+                        .wrapping_div(2 as i32 as usize)
                 {
                     // Do swapping for the uncompressing functions. They seem to use shorts
                     // values only, so I assume this will work. Never tested it on other
@@ -1112,13 +1112,13 @@ unsafe extern "C" fn R_LoadMDR(
             Q_strncpyz(
                 (*frame).name.as_mut_ptr(),
                 (*curframe).name.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 16]>() as usize as i32,
             );
             j = 0 as i32;
             while j
-                < ((*mdr).numBones as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<mdrBone_t>() as libc::c_ulong)
-                    .wrapping_div(4 as i32 as libc::c_ulong) as i32
+                < ((*mdr).numBones as usize)
+                    .wrapping_mul(::std::mem::size_of::<mdrBone_t>() as usize)
+                    .wrapping_div(4 as i32 as usize) as i32
             {
                 *((*frame).bones.as_mut_ptr() as *mut f32).offset(j as isize) =
                     *((*curframe).bones.as_mut_ptr() as *mut f32).offset(j as isize);
@@ -1174,12 +1174,12 @@ unsafe extern "C" fn R_LoadMDR(
             Q_strncpyz(
                 (*surf).name.as_mut_ptr(),
                 (*cursurf).name.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             );
             Q_strncpyz(
                 (*surf).shader.as_mut_ptr(),
                 (*cursurf).shader.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             );
             (*surf).ofsHeader = (mdr as *mut byte).offset_from(surf as *mut byte) as isize as i32;
             (*surf).numVerts = (*cursurf).numVerts;
@@ -1237,8 +1237,8 @@ unsafe extern "C" fn R_LoadMDR(
                 // simple bounds check
                 if (*curv).numWeights < 0 as i32
                     || (v.offset(1 as i32 as isize) as *mut byte).offset(
-                        (((*curv).numWeights - 1 as i32) as libc::c_ulong)
-                            .wrapping_mul(::std::mem::size_of::<mdrWeight_t>() as libc::c_ulong)
+                        (((*curv).numWeights - 1 as i32) as usize)
+                            .wrapping_mul(::std::mem::size_of::<mdrWeight_t>() as usize)
                             as isize,
                     ) > (mdr as *mut byte).offset(size as isize)
                 {
@@ -1341,7 +1341,7 @@ unsafe extern "C" fn R_LoadMDR(
         Q_strncpyz(
             (*tag).name.as_mut_ptr(),
             (*curtag).name.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 32]>() as usize as i32,
         );
         tag = tag.offset(1);
         curtag = curtag.offset(1);
@@ -1599,7 +1599,7 @@ pub unsafe extern "C" fn R_GetAnimTag(
             Q_strncpyz(
                 (*dest).name.as_mut_ptr(),
                 (*tag).name.as_mut_ptr(),
-                ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             );
             // uncompressed model...
             //
@@ -2041,8 +2041,8 @@ pub unsafe extern "C" fn R_ModelBounds(
     *maxs.offset(0 as i32 as isize) = *fresh3;
 }
 unsafe extern "C" fn run_static_initializers() {
-    numModelLoaders = (::std::mem::size_of::<[modelExtToLoaderMap_t; 3]>() as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<modelExtToLoaderMap_t>() as libc::c_ulong)
+    numModelLoaders = (::std::mem::size_of::<[modelExtToLoaderMap_t; 3]>() as usize)
+        .wrapping_div(::std::mem::size_of::<modelExtToLoaderMap_t>() as usize)
         as i32
 }
 #[used]

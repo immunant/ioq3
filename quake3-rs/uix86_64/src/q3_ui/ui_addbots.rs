@@ -432,7 +432,7 @@ unsafe extern "C" fn UI_AddBotsMenu_SetBotNames() {
         Q_strncpyz(
             addBotsMenuInfo.botnames[n as usize].as_mut_ptr(),
             Info_ValueForKey(info, b"name\x00" as *const u8 as *const libc::c_char),
-            ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 32]>() as usize as i32,
         );
         n += 1
     }
@@ -503,7 +503,7 @@ unsafe extern "C" fn UI_AddBotsMenu_GetSortedBotNums() {
     qsort(
         addBotsMenuInfo.sortedBotNums.as_mut_ptr() as *mut libc::c_void,
         addBotsMenuInfo.numBots as size_t,
-        ::std::mem::size_of::<i32>() as libc::c_ulong,
+        ::std::mem::size_of::<i32>() as usize,
         Some(
             UI_AddBotsMenu_SortCompare
                 as unsafe extern "C" fn(_: *const libc::c_void, _: *const libc::c_void) -> i32,
@@ -550,7 +550,7 @@ unsafe extern "C" fn UI_AddBotsMenu_Init() {
     crate::stdlib::memset(
         &mut addBotsMenuInfo as *mut addBotsMenuInfo_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<addBotsMenuInfo_t>() as libc::c_ulong,
+        ::std::mem::size_of::<addBotsMenuInfo_t>() as usize,
     );
     addBotsMenuInfo.menu.fullscreen = qfalse;
     addBotsMenuInfo.menu.wrapAround = qtrue;

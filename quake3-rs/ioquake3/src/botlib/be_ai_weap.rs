@@ -191,7 +191,7 @@ static mut weaponinfo_struct: structdef_t = unsafe {
     {
         let mut init = structdef_s {
             size: ::std::mem::size_of::<crate::src::botlib::be_ai_weap::weaponinfo_t>()
-                as libc::c_ulong as i32,
+                as usize as i32,
             fields: weaponinfo_fields.as_ptr() as *mut _,
         };
         init
@@ -202,7 +202,7 @@ static mut projectileinfo_struct: structdef_t = unsafe {
     {
         let mut init = structdef_s {
             size: ::std::mem::size_of::<crate::src::botlib::be_ai_weap::projectileinfo_t>()
-                as libc::c_ulong as i32,
+                as usize as i32,
             fields: projectileinfo_fields.as_ptr() as *mut _,
         };
         init
@@ -386,7 +386,7 @@ pub unsafe extern "C" fn LoadWeaponConfig(mut filename: *mut libc::c_char) -> *m
     Q_strncpyz(
         path.as_mut_ptr(),
         filename,
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     PC_SetBaseFolder(b"botfiles\x00" as *const u8 as *const libc::c_char as *mut libc::c_char);
     source = LoadSourceFile(path.as_mut_ptr()) as *mut source_s;
@@ -402,25 +402,25 @@ pub unsafe extern "C" fn LoadWeaponConfig(mut filename: *mut libc::c_char) -> *m
     }
     //initialize weapon config
     wc = crate::src::botlib::l_memory::GetClearedHunkMemory(
-        (::std::mem::size_of::<weaponconfig_t>() as libc::c_ulong)
+        (::std::mem::size_of::<weaponconfig_t>() as usize)
             .wrapping_add(
-                (max_weaponinfo as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
+                (max_weaponinfo as usize).wrapping_mul(::std::mem::size_of::<
                     crate::src::botlib::be_ai_weap::weaponinfo_t,
                 >()
-                    as libc::c_ulong),
+                    as usize),
             )
-            .wrapping_add((max_projectileinfo as libc::c_ulong).wrapping_mul(
+            .wrapping_add((max_projectileinfo as usize).wrapping_mul(
                 ::std::mem::size_of::<crate::src::botlib::be_ai_weap::projectileinfo_t>()
-                    as libc::c_ulong,
+                    as usize,
             )),
     ) as *mut weaponconfig_t;
     (*wc).weaponinfo = (wc as *mut libc::c_char)
-        .offset(::std::mem::size_of::<weaponconfig_t>() as libc::c_ulong as isize)
+        .offset(::std::mem::size_of::<weaponconfig_t>() as usize as isize)
         as *mut crate::src::botlib::be_ai_weap::weaponinfo_t;
     (*wc).projectileinfo = ((*wc).weaponinfo as *mut libc::c_char).offset(
-        (max_weaponinfo as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
+        (max_weaponinfo as usize).wrapping_mul(::std::mem::size_of::<
             crate::src::botlib::be_ai_weap::weaponinfo_t,
-        >() as libc::c_ulong) as isize,
+        >() as usize) as isize,
     ) as *mut crate::src::botlib::be_ai_weap::projectileinfo_t;
     (*wc).numweapons = max_weaponinfo;
     (*wc).numprojectiles = 0 as i32;
@@ -441,7 +441,7 @@ pub unsafe extern "C" fn LoadWeaponConfig(mut filename: *mut libc::c_char) -> *m
                     as *mut libc::c_void,
                 0 as i32,
                 ::std::mem::size_of::<crate::src::botlib::be_ai_weap::weaponinfo_t>()
-                    as libc::c_ulong,
+                    as usize,
             ); //end if
             if ReadStructure(
                 source as *mut source_s,
@@ -475,7 +475,7 @@ pub unsafe extern "C" fn LoadWeaponConfig(mut filename: *mut libc::c_char) -> *m
                 &mut weaponinfo as *mut crate::src::botlib::be_ai_weap::weaponinfo_t
                     as *const libc::c_void,
                 ::std::mem::size_of::<crate::src::botlib::be_ai_weap::weaponinfo_t>()
-                    as libc::c_ulong,
+                    as usize,
             );
             (*(*wc).weaponinfo.offset(weaponinfo.number as isize)).valid = qtrue as i32
         } else if libc::strcmp(
@@ -503,7 +503,7 @@ pub unsafe extern "C" fn LoadWeaponConfig(mut filename: *mut libc::c_char) -> *m
                     as *mut libc::c_void,
                 0 as i32,
                 ::std::mem::size_of::<crate::src::botlib::be_ai_weap::projectileinfo_t>()
-                    as libc::c_ulong,
+                    as usize,
             );
             if ReadStructure(
                 source as *mut source_s,
@@ -583,7 +583,7 @@ pub unsafe extern "C" fn LoadWeaponConfig(mut filename: *mut libc::c_char) -> *m
                             as *mut crate::src::botlib::be_ai_weap::projectileinfo_t
                             as *const libc::c_void,
                         ::std::mem::size_of::<crate::src::botlib::be_ai_weap::projectileinfo_t>()
-                            as libc::c_ulong,
+                            as usize,
                     );
                     break;
                 } else {
@@ -642,8 +642,8 @@ pub unsafe extern "C" fn WeaponWeightIndex(
     let mut i: i32 = 0;
     //initialize item weight index
     index = crate::src::botlib::l_memory::GetClearedMemory(
-        (::std::mem::size_of::<i32>() as libc::c_ulong)
-            .wrapping_mul((*wc).numweapons as libc::c_ulong),
+        (::std::mem::size_of::<i32>() as usize)
+            .wrapping_mul((*wc).numweapons as usize),
     ) as *mut i32; //end for
     i = 0 as i32;
     while i < (*wc).numweapons {
@@ -746,7 +746,7 @@ pub unsafe extern "C" fn BotGetWeaponInfo(
         weaponinfo as *mut libc::c_void,
         &mut *(*weaponconfig).weaponinfo.offset(weapon as isize)
             as *mut crate::src::botlib::be_ai_weap::weaponinfo_t as *const libc::c_void,
-        ::std::mem::size_of::<crate::src::botlib::be_ai_weap::weaponinfo_t>() as libc::c_ulong,
+        ::std::mem::size_of::<crate::src::botlib::be_ai_weap::weaponinfo_t>() as usize,
     );
 }
 //returns the best weapon to fight with
@@ -834,7 +834,7 @@ pub unsafe extern "C" fn BotAllocWeaponState() -> i32 {
             botweaponstates[i as usize] =
                 crate::src::botlib::l_memory::GetClearedMemory(::std::mem::size_of::<
                     bot_weaponstate_t,
-                >() as libc::c_ulong) as *mut bot_weaponstate_t;
+                >() as usize) as *mut bot_weaponstate_t;
             return i;
         }
         i += 1

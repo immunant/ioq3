@@ -1097,7 +1097,7 @@ pub unsafe extern "C" fn R_RotateForViewer() {
     crate::stdlib::memset(
         &mut tr.or as *mut orientationr_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<orientationr_t>() as libc::c_ulong,
+        ::std::mem::size_of::<orientationr_t>() as usize,
     );
     tr.or.axis[0 as i32 as usize][0 as i32 as usize] = 1 as i32 as vec_t;
     tr.or.axis[1 as i32 as usize][1 as i32 as usize] = 1 as i32 as vec_t;
@@ -1521,7 +1521,7 @@ pub unsafe extern "C" fn R_PlaneForSurface(
         crate::stdlib::memset(
             plane as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<cplane_t>() as libc::c_ulong,
+            ::std::mem::size_of::<cplane_t>() as usize,
         );
         (*plane).normal[0 as i32 as usize] = 1 as i32 as vec_t;
         return;
@@ -1572,7 +1572,7 @@ pub unsafe extern "C" fn R_PlaneForSurface(
             crate::stdlib::memset(
                 plane as *mut libc::c_void,
                 0 as i32,
-                ::std::mem::size_of::<cplane_t>() as libc::c_ulong,
+                ::std::mem::size_of::<cplane_t>() as usize,
             );
             (*plane).normal[0 as i32 as usize] = 1 as i32 as vec_t;
             return;
@@ -2255,12 +2255,12 @@ unsafe extern "C" fn R_Radix(
     sortKey = (&mut (*source.offset(0 as i32 as isize)).sort as *mut u32 as *mut u8)
         .offset(byte as isize);
     end = sortKey.offset(
-        (size as libc::c_ulong).wrapping_mul(::std::mem::size_of::<drawSurf_t>() as libc::c_ulong)
+        (size as usize).wrapping_mul(::std::mem::size_of::<drawSurf_t>() as usize)
             as isize,
     );
     while sortKey < end {
         count[*sortKey as usize] += 1;
-        sortKey = sortKey.offset(::std::mem::size_of::<drawSurf_t>() as libc::c_ulong as isize)
+        sortKey = sortKey.offset(::std::mem::size_of::<drawSurf_t>() as usize as isize)
     }
     index[0 as i32 as usize] = 0 as i32;
     i = 1 as i32;
@@ -2276,7 +2276,7 @@ unsafe extern "C" fn R_Radix(
         index[*sortKey as usize] = index[*sortKey as usize] + 1;
         *dest.offset(fresh2 as isize) = *source.offset(i as isize);
         i += 1;
-        sortKey = sortKey.offset(::std::mem::size_of::<drawSurf_t>() as libc::c_ulong as isize)
+        sortKey = sortKey.offset(::std::mem::size_of::<drawSurf_t>() as usize as isize)
     }
 }
 /*
@@ -2692,7 +2692,7 @@ R_DebugPolygon
 
 pub unsafe extern "C" fn R_DebugPolygon(mut color: i32, mut numPoints: i32, mut points: *mut f32) {
     let mut i: i32 = 0;
-    GL_State((0x100 as i32 | 0x2 as i32 | 0x20 as i32) as libc::c_ulong);
+    GL_State((0x100 as i32 | 0x2 as i32 | 0x20 as i32) as usize);
     // draw solid shade
     qglColor3f.expect("non-null function pointer")(
         (color & 1 as i32) as GLfloat,
@@ -2707,7 +2707,7 @@ pub unsafe extern "C" fn R_DebugPolygon(mut color: i32, mut numPoints: i32, mut 
     }
     qglEnd.expect("non-null function pointer")();
     // draw wireframe outline
-    GL_State((0x1000 as i32 | 0x100 as i32 | 0x2 as i32 | 0x20 as i32) as libc::c_ulong);
+    GL_State((0x1000 as i32 | 0x100 as i32 | 0x2 as i32 | 0x20 as i32) as usize);
     qglDepthRange.expect("non-null function pointer")(0 as i32 as GLclampd, 0 as i32 as GLclampd);
     qglColor3f.expect("non-null function pointer")(
         1 as i32 as GLfloat,

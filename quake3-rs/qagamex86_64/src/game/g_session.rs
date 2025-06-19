@@ -189,7 +189,7 @@ pub unsafe extern "C" fn G_ReadSessionData(mut client: *mut gclient_t) {
     trap_Cvar_VariableStringBuffer(
         var,
         s.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     libc::sscanf(
         s.as_mut_ptr(),
@@ -297,7 +297,7 @@ pub unsafe extern "C" fn G_InitWorldSession() {
     trap_Cvar_VariableStringBuffer(
         b"session\x00" as *const u8 as *const libc::c_char,
         s.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     gt = atoi(s.as_mut_ptr());
     // if the gametype changed since the last session, don't use any

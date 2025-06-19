@@ -56,7 +56,7 @@ unsafe extern "C" fn FGetLittleLong(mut f: fileHandle_t) -> i32 {
     let mut v: i32 = 0;
     crate::src::qcommon::files::FS_Read(
         &mut v as *mut i32 as *mut libc::c_void,
-        ::std::mem::size_of::<i32>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<i32>() as usize as i32,
         f,
     );
     return v;
@@ -71,7 +71,7 @@ unsafe extern "C" fn FGetLittleShort(mut f: fileHandle_t) -> i16 {
     let mut v: i16 = 0;
     crate::src::qcommon::files::FS_Read(
         &mut v as *mut i16 as *mut libc::c_void,
-        ::std::mem::size_of::<i16>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<i16>() as usize as i32,
         f,
     );
     return v;

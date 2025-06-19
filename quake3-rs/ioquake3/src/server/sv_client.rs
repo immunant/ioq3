@@ -501,7 +501,7 @@ pub unsafe extern "C" fn SV_AuthorizeIpPacket(mut from: netadr_t) {
         crate::stdlib::memset(
             challengeptr as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<challenge_t>() as libc::c_ulong,
+            ::std::mem::size_of::<challenge_t>() as usize,
         );
         return;
     }
@@ -535,7 +535,7 @@ pub unsafe extern "C" fn SV_AuthorizeIpPacket(mut from: netadr_t) {
         crate::stdlib::memset(
             challengeptr as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<challenge_t>() as libc::c_ulong,
+            ::std::mem::size_of::<challenge_t>() as usize,
         );
         return;
     }
@@ -558,7 +558,7 @@ pub unsafe extern "C" fn SV_AuthorizeIpPacket(mut from: netadr_t) {
     crate::stdlib::memset(
         challengeptr as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<challenge_t>() as libc::c_ulong,
+        ::std::mem::size_of::<challenge_t>() as usize,
     );
 }
 /*
@@ -775,7 +775,7 @@ pub unsafe extern "C" fn SV_DirectConnect(mut from: netadr_t) {
     Q_strncpyz(
         userinfo.as_mut_ptr(),
         Cmd_Argv(1 as i32),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     version = atoi(Info_ValueForKey(
         userinfo.as_mut_ptr(),
@@ -838,8 +838,8 @@ pub unsafe extern "C" fn SV_DirectConnect(mut from: netadr_t) {
     }
     if crate::stdlib::strlen(ip)
         .wrapping_add(crate::stdlib::strlen(userinfo.as_mut_ptr()))
-        .wrapping_add(4 as i32 as libc::c_ulong)
-        >= 1024 as i32 as libc::c_ulong
+        .wrapping_add(4 as i32 as usize)
+        >= 1024 as i32 as usize
     {
         NET_OutOfBandPrint(NS_SERVER,  from as netadr_t,
                            b"print\nUserinfo string length exceeded.  Try removing setu cvars from your config.\n\x00"
@@ -926,7 +926,7 @@ pub unsafe extern "C" fn SV_DirectConnect(mut from: netadr_t) {
     crate::stdlib::memset(
         newcl as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<client_t>() as libc::c_ulong,
+        ::std::mem::size_of::<client_t>() as usize,
     );
     // if there is already a slot for this ip, reuse it
     i = 0 as i32;
@@ -1065,7 +1065,7 @@ pub unsafe extern "C" fn SV_DirectConnect(mut from: netadr_t) {
     Q_strncpyz(
         (*newcl).userinfo.as_mut_ptr(),
         userinfo.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     // get the game a chance to reject this connection or modify the userinfo
     denied = VM_Call(
@@ -1139,9 +1139,9 @@ pub unsafe extern "C" fn SV_FreeClient(mut client: *mut client_t) {
     let mut index: i32 = 0;
     index = (*client).queuedVoipIndex;
     while index < (*client).queuedVoipPackets {
-        index = (index as libc::c_ulong).wrapping_rem(
-            (::std::mem::size_of::<[*mut voipServerPacket_t; 64]>() as libc::c_ulong)
-                .wrapping_div(::std::mem::size_of::<*mut voipServerPacket_t>() as libc::c_ulong),
+        index = (index as usize).wrapping_rem(
+            (::std::mem::size_of::<[*mut voipServerPacket_t; 64]>() as usize)
+                .wrapping_div(::std::mem::size_of::<*mut voipServerPacket_t>() as usize),
         ) as i32;
         Z_Free((*client).voipPacket[index as usize] as *mut libc::c_void);
         index += 1
@@ -1184,7 +1184,7 @@ pub unsafe extern "C" fn SV_DropClient(mut drop_0: *mut client_t, mut reason: *c
                 crate::stdlib::memset(
                     challenge as *mut libc::c_void,
                     0 as i32,
-                    ::std::mem::size_of::<challenge_t>() as libc::c_ulong,
+                    ::std::mem::size_of::<challenge_t>() as usize,
                 );
                 break;
             } else {
@@ -1333,7 +1333,7 @@ unsafe extern "C" fn SV_SendClientGameState(mut client: *mut client_t) {
     MSG_Init(
         &mut msg as *mut _ as *mut msg_t,
         msgBuffer.as_mut_ptr(),
-        ::std::mem::size_of::<[byte; 16384]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[byte; 16384]>() as usize as i32,
     );
     // NOTE, MRE: all server->client messages now acknowledge
     // let the client know which reliable clientCommands we have received
@@ -1366,7 +1366,7 @@ unsafe extern "C" fn SV_SendClientGameState(mut client: *mut client_t) {
     crate::stdlib::memset(
         &mut nullstate as *mut entityState_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<entityState_t>() as libc::c_ulong,
+        ::std::mem::size_of::<entityState_t>() as usize,
     );
     start = 0 as i32;
     while start < (1 as i32) << 10 as i32 {
@@ -1421,13 +1421,13 @@ pub unsafe extern "C" fn SV_ClientEnterWorld(mut client: *mut client_t, mut cmd:
         crate::stdlib::memcpy(
             &mut (*client).lastUsercmd as *mut usercmd_t as *mut libc::c_void,
             cmd as *const libc::c_void,
-            ::std::mem::size_of::<usercmd_t>() as libc::c_ulong,
+            ::std::mem::size_of::<usercmd_t>() as usize,
         );
     } else {
         crate::stdlib::memset(
             &mut (*client).lastUsercmd as *mut usercmd_t as *mut libc::c_void,
             '\u{0}' as i32,
-            ::std::mem::size_of::<usercmd_t>() as libc::c_ulong,
+            ::std::mem::size_of::<usercmd_t>() as usize,
         );
     }
     // call the game begin function
@@ -1584,7 +1584,7 @@ unsafe extern "C" fn SV_BeginDownload_f(mut cl: *mut client_t) {
     Q_strncpyz(
         (*cl).downloadName.as_mut_ptr(),
         Cmd_Argv(1 as i32),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
 }
 /*
@@ -1616,7 +1616,7 @@ pub unsafe extern "C" fn SV_WriteDownloadToClient(
         // Chop off filename extension.
         Com_sprintf(
             pakbuf.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
             b"%s\x00" as *const u8 as *const libc::c_char,
             (*cl).downloadName.as_mut_ptr(),
         );
@@ -1685,7 +1685,7 @@ pub unsafe extern "C" fn SV_WriteDownloadToClient(
                 );
                 Com_sprintf(
                     errorMessage.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
                     b"File \"%s\" is not referenced and cannot be downloaded.\x00" as *const u8
                         as *const libc::c_char,
                     (*cl).downloadName.as_mut_ptr(),
@@ -1700,14 +1700,14 @@ pub unsafe extern "C" fn SV_WriteDownloadToClient(
                 if missionPack as u64 != 0 {
                     Com_sprintf(errorMessage.as_mut_ptr(),
                                 ::std::mem::size_of::<[libc::c_char; 1024]>()
-                                    as libc::c_ulong as i32,
+                                    as usize as i32,
                                 b"Cannot autodownload Team Arena file \"%s\"\nThe Team Arena mission pack can be found in your local game store.\x00"
                                     as *const u8 as *const libc::c_char,
                                 (*cl).downloadName.as_mut_ptr());
                 } else {
                     Com_sprintf(
                         errorMessage.as_mut_ptr(),
-                        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
                         b"Cannot autodownload id pk3 file \"%s\"\x00" as *const u8
                             as *const libc::c_char,
                         (*cl).downloadName.as_mut_ptr(),
@@ -1725,14 +1725,14 @@ pub unsafe extern "C" fn SV_WriteDownloadToClient(
                 if (*sv_pure).integer != 0 {
                     Com_sprintf(errorMessage.as_mut_ptr(),
                                 ::std::mem::size_of::<[libc::c_char; 1024]>()
-                                    as libc::c_ulong as i32,
+                                    as usize as i32,
                                 b"Could not download \"%s\" because autodownloading is disabled on the server.\n\nYou will need to get this file elsewhere before you can connect to this pure server.\n\x00"
                                     as *const u8 as *const libc::c_char,
                                 (*cl).downloadName.as_mut_ptr());
                 } else {
                     Com_sprintf(errorMessage.as_mut_ptr(),
                                 ::std::mem::size_of::<[libc::c_char; 1024]>()
-                                    as libc::c_ulong as i32,
+                                    as usize as i32,
                                 b"Could not download \"%s\" because autodownloading is disabled on the server.\n\nThe server you are connecting to is not a pure server, set autodownload to No in your settings and you might be able to join the game anyway.\n\x00"
                                     as *const u8 as *const libc::c_char,
                                 (*cl).downloadName.as_mut_ptr());
@@ -1748,7 +1748,7 @@ pub unsafe extern "C" fn SV_WriteDownloadToClient(
                 ); // client is expecting block zero
                 Com_sprintf(
                     errorMessage.as_mut_ptr(),
-                    ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
                     b"File \"%s\" not found on server for autodownloading.\n\x00" as *const u8
                         as *const libc::c_char,
                     (*cl).downloadName.as_mut_ptr(),
@@ -1916,7 +1916,7 @@ pub unsafe extern "C" fn SV_SendDownloadMessages() -> i32 {
             MSG_Init(
                 &mut msg as *mut _ as *mut msg_t,
                 msgBuffer.as_mut_ptr(),
-                ::std::mem::size_of::<[byte; 16384]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[byte; 16384]>() as usize as i32,
             );
             MSG_WriteLong(&mut msg as *mut _ as *mut msg_t, (*cl).lastClientCommand);
             retval = SV_WriteDownloadToClient(cl, &mut msg);
@@ -2159,7 +2159,7 @@ pub unsafe extern "C" fn SV_UserinfoChanged(mut cl: *mut client_t) {
             (*cl).userinfo.as_mut_ptr(),
             b"name\x00" as *const u8 as *const libc::c_char,
         ),
-        ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 32]>() as usize as i32,
     );
     // rate command
     // if the client is on the same subnet as the server and we aren't running an
@@ -2193,7 +2193,7 @@ pub unsafe extern "C" fn SV_UserinfoChanged(mut cl: *mut client_t) {
     );
     if crate::stdlib::strlen(val) != 0 {
         i = atoi(val);
-        if i <= 0 as i32 || i > 100 as i32 || crate::stdlib::strlen(val) > 4 as i32 as libc::c_ulong
+        if i <= 0 as i32 || i > 100 as i32 || crate::stdlib::strlen(val) > 4 as i32 as usize
         {
             Info_SetValueForKey(
                 (*cl).userinfo.as_mut_ptr(),
@@ -2251,7 +2251,7 @@ pub unsafe extern "C" fn SV_UserinfoChanged(mut cl: *mut client_t) {
             .wrapping_add(crate::stdlib::strlen((*cl).userinfo.as_mut_ptr())) as i32
     } else {
         len = crate::stdlib::strlen(ip)
-            .wrapping_add(4 as i32 as libc::c_ulong)
+            .wrapping_add(4 as i32 as usize)
             .wrapping_add(crate::stdlib::strlen((*cl).userinfo.as_mut_ptr())) as i32
     }
     if len >= 1024 as i32 {
@@ -2277,7 +2277,7 @@ unsafe extern "C" fn SV_UpdateUserinfo_f(mut cl: *mut client_t) {
     Q_strncpyz(
         (*cl).userinfo.as_mut_ptr(),
         Cmd_Argv(1 as i32),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     SV_UserinfoChanged(cl);
     // call prog code to allow overrides
@@ -2500,7 +2500,7 @@ unsafe extern "C" fn SV_ClientCommand(mut cl: *mut client_t, mut msg: *mut msg_t
     (*cl).lastClientCommand = seq;
     Com_sprintf(
         (*cl).lastClientCommandString.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
         b"%s\x00" as *const u8 as *const libc::c_char,
         s,
     );
@@ -2593,7 +2593,7 @@ unsafe extern "C" fn SV_UserMove(mut cl: *mut client_t, mut msg: *mut msg_t, mut
     crate::stdlib::memset(
         &mut nullcmd as *mut usercmd_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<usercmd_t>() as libc::c_ulong,
+        ::std::mem::size_of::<usercmd_t>() as usize,
     );
     oldcmd = &mut nullcmd;
     i = 0 as i32;
@@ -2712,20 +2712,20 @@ unsafe extern "C" fn SV_UserVoip(
     MSG_ReadData(
         msg as *mut msg_t,
         recips.as_mut_ptr() as *mut libc::c_void,
-        ::std::mem::size_of::<[uint8_t; 8]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[uint8_t; 8]>() as usize as i32,
     );
     flags = MSG_ReadByte(msg as *mut msg_t);
     packetsize = MSG_ReadShort(msg as *mut msg_t);
     if (*msg).readcount > (*msg).cursize {
         return;
     }
-    if packetsize as libc::c_ulong > ::std::mem::size_of::<[byte; 4000]>() as libc::c_ulong {
+    if packetsize as usize > ::std::mem::size_of::<[byte; 4000]>() as usize {
         // overlarge packet?
         let mut bytesleft: i32 = packetsize;
         while bytesleft != 0 {
             let mut br: i32 = bytesleft;
-            if br as libc::c_ulong > ::std::mem::size_of::<[byte; 4000]>() as libc::c_ulong {
-                br = ::std::mem::size_of::<[byte; 4000]>() as libc::c_ulong as i32
+            if br as usize > ::std::mem::size_of::<[byte; 4000]>() as usize {
+                br = ::std::mem::size_of::<[byte; 4000]>() as usize as i32
             }
             MSG_ReadData(
                 msg as *mut msg_t,
@@ -2760,7 +2760,7 @@ unsafe extern "C" fn SV_UserVoip(
                             if !(*(*cl).downloadName.as_mut_ptr() != 0) {
                                 if Com_IsVoipTarget(
                                     recips.as_mut_ptr(),
-                                    ::std::mem::size_of::<[uint8_t; 8]>() as libc::c_ulong as i32,
+                                    ::std::mem::size_of::<[uint8_t; 8]>() as usize as i32,
                                     i,
                                 ) as u64
                                     != 0
@@ -2771,14 +2771,14 @@ unsafe extern "C" fn SV_UserVoip(
                                 }
                                 if !(flags & (0x1 as i32 | 0x2 as i32) == 0) {
                                     // Transmit this packet to the client.
-                                    if (*client).queuedVoipPackets as libc::c_ulong
+                                    if (*client).queuedVoipPackets as usize
                                         >= (::std::mem::size_of::<[*mut voipServerPacket_t; 64]>()
-                                            as libc::c_ulong)
+                                            as usize)
                                             .wrapping_div(::std::mem::size_of::<
                                                 *mut voipServerPacket_t,
                                             >(
                                             )
-                                                as libc::c_ulong)
+                                                as usize)
                                     {
                                         Com_Printf(
                                             b"Too many VoIP packets queued for client #%d\n\x00"
@@ -2790,7 +2790,7 @@ unsafe extern "C" fn SV_UserVoip(
                                     } else {
                                         packet =
                                             Z_Malloc(::std::mem::size_of::<voipServerPacket_t>()
-                                                as libc::c_ulong
+                                                as usize
                                                 as i32)
                                                 as *mut voipServerPacket_t;
                                         (*packet).sender = sender;
@@ -2802,23 +2802,23 @@ unsafe extern "C" fn SV_UserVoip(
                                         crate::stdlib::memcpy(
                                             (*packet).data.as_mut_ptr() as *mut libc::c_void,
                                             encoded.as_mut_ptr() as *const libc::c_void,
-                                            packetsize as libc::c_ulong,
+                                            packetsize as usize,
                                         );
                                         (*client).voipPacket
                                             [(((*client).queuedVoipIndex
                                                 + (*client).queuedVoipPackets)
-                                                as libc::c_ulong)
+                                                as usize)
                                                 .wrapping_rem(
                                                     (::std::mem::size_of::<
                                                         [*mut voipServerPacket_t; 64],
                                                     >(
                                                     )
-                                                        as libc::c_ulong)
+                                                        as usize)
                                                         .wrapping_div(::std::mem::size_of::<
                                                             *mut voipServerPacket_t,
                                                         >(
                                                         )
-                                                            as libc::c_ulong),
+                                                            as usize),
                                                 )
                                                 as usize] = packet;
                                         (*client).queuedVoipPackets += 1

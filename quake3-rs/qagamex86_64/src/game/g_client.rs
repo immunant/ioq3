@@ -1237,7 +1237,7 @@ pub unsafe extern "C" fn ClientUserinfoChanged(mut clientNum: i32) {
     trap_GetUserinfo(
         clientNum,
         userinfo.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     // check for malformed or illegal info strings
     if Info_Validate(userinfo.as_mut_ptr()) as u64 == 0 {
@@ -1265,7 +1265,7 @@ pub unsafe extern "C" fn ClientUserinfoChanged(mut clientNum: i32) {
     Q_strncpyz(
         oldname.as_mut_ptr(),
         (*client).pers.netname.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     s = Info_ValueForKey(
         userinfo.as_mut_ptr(),
@@ -1274,14 +1274,14 @@ pub unsafe extern "C" fn ClientUserinfoChanged(mut clientNum: i32) {
     ClientCleanName(
         s,
         (*client).pers.netname.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 36]>() as usize as i32,
     );
     if (*client).sess.sessionTeam as u32 == TEAM_SPECTATOR as i32 as u32 {
         if (*client).sess.spectatorState as u32 == SPECTATOR_SCOREBOARD as i32 as u32 {
             Q_strncpyz(
                 (*client).pers.netname.as_mut_ptr(),
                 b"scoreboard\x00" as *const u8 as *const libc::c_char,
-                ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
+                ::std::mem::size_of::<[libc::c_char; 36]>() as usize as i32,
             );
         }
     }
@@ -1316,7 +1316,7 @@ pub unsafe extern "C" fn ClientUserinfoChanged(mut clientNum: i32) {
                 userinfo.as_mut_ptr(),
                 b"team_model\x00" as *const u8 as *const libc::c_char,
             ),
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         );
         Q_strncpyz(
             headModel.as_mut_ptr(),
@@ -1324,7 +1324,7 @@ pub unsafe extern "C" fn ClientUserinfoChanged(mut clientNum: i32) {
                 userinfo.as_mut_ptr(),
                 b"team_headmodel\x00" as *const u8 as *const libc::c_char,
             ),
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         );
     } else {
         Q_strncpyz(
@@ -1333,7 +1333,7 @@ pub unsafe extern "C" fn ClientUserinfoChanged(mut clientNum: i32) {
                 userinfo.as_mut_ptr(),
                 b"model\x00" as *const u8 as *const libc::c_char,
             ),
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         );
         Q_strncpyz(
             headModel.as_mut_ptr(),
@@ -1341,7 +1341,7 @@ pub unsafe extern "C" fn ClientUserinfoChanged(mut clientNum: i32) {
                 userinfo.as_mut_ptr(),
                 b"headmodel\x00" as *const u8 as *const libc::c_char,
             ),
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         );
     }
     /*	NOTE: all client side now
@@ -1397,7 +1397,7 @@ pub unsafe extern "C" fn ClientUserinfoChanged(mut clientNum: i32) {
             userinfo.as_mut_ptr(),
             b"color1\x00" as *const u8 as *const libc::c_char,
         ),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     Q_strncpyz(
         c2.as_mut_ptr(),
@@ -1405,7 +1405,7 @@ pub unsafe extern "C" fn ClientUserinfoChanged(mut clientNum: i32) {
             userinfo.as_mut_ptr(),
             b"color2\x00" as *const u8 as *const libc::c_char,
         ),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     Q_strncpyz(
         redTeam.as_mut_ptr(),
@@ -1413,7 +1413,7 @@ pub unsafe extern "C" fn ClientUserinfoChanged(mut clientNum: i32) {
             userinfo.as_mut_ptr(),
             b"g_redteam\x00" as *const u8 as *const libc::c_char,
         ),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     Q_strncpyz(
         blueTeam.as_mut_ptr(),
@@ -1421,7 +1421,7 @@ pub unsafe extern "C" fn ClientUserinfoChanged(mut clientNum: i32) {
             userinfo.as_mut_ptr(),
             b"g_blueteam\x00" as *const u8 as *const libc::c_char,
         ),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     // send over a subset of the userinfo keys so other clients can
     // print scoreboards, display models, and play custom sounds
@@ -1493,7 +1493,7 @@ pub unsafe extern "C" fn ClientConnect(
     trap_GetUserinfo(
         clientNum,
         userinfo.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     // IP filtering
     // https://zerowing.idsoftware.com/bugzilla/show_bug.cgi?id=500
@@ -1545,7 +1545,7 @@ pub unsafe extern "C" fn ClientConnect(
     crate::stdlib::memset(
         client as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<gclient_t>() as libc::c_ulong,
+        ::std::mem::size_of::<gclient_t>() as usize,
     );
     (*client).pers.connected = CON_CONNECTING;
     // check for local client
@@ -1635,7 +1635,7 @@ pub unsafe extern "C" fn ClientBegin(mut clientNum: i32) {
     crate::stdlib::memset(
         &mut (*client).ps as *mut playerState_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<playerState_t>() as libc::c_ulong,
+        ::std::mem::size_of::<playerState_t>() as usize,
     );
     (*client).ps.eFlags = flags;
     // locate ent at a spawn point
@@ -1790,7 +1790,7 @@ pub unsafe extern "C" fn ClientSpawn(mut ent: *mut gentity_t) {
     crate::stdlib::memset(
         client as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<gclient_t>() as libc::c_ulong,
+        ::std::mem::size_of::<gclient_t>() as usize,
     );
     (*client).pers = saved;
     (*client).sess = savedSess;
@@ -1812,7 +1812,7 @@ pub unsafe extern "C" fn ClientSpawn(mut ent: *mut gentity_t) {
     trap_GetUserinfo(
         index,
         userinfo.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     // set max health
     (*client).pers.maxHealth = atoi(Info_ValueForKey(

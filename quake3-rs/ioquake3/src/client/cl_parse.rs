@@ -726,7 +726,7 @@ pub unsafe extern "C" fn CL_ParseSnapshot(mut msg: *mut msg_t) {
     crate::stdlib::memset(
         &mut newSnap as *mut clSnapshot_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<clSnapshot_t>() as libc::c_ulong,
+        ::std::mem::size_of::<clSnapshot_t>() as usize,
     );
     // we will have read any new server commands in this
     // message before we got to svc_snapshot
@@ -782,7 +782,7 @@ pub unsafe extern "C" fn CL_ParseSnapshot(mut msg: *mut msg_t) {
     }
     // read areamask
     len = MSG_ReadByte(msg as *mut msg_t);
-    if len as libc::c_ulong > ::std::mem::size_of::<[byte; 32]>() as libc::c_ulong {
+    if len as usize > ::std::mem::size_of::<[byte; 32]>() as usize {
         Com_Error(
             ERR_DROP as i32,
             b"CL_ParseSnapshot: Invalid size %d for areamask\x00" as *const u8
@@ -1037,7 +1037,7 @@ unsafe extern "C" fn CL_ParseServerInfo() {
             serverInfo,
             b"sv_dlURL\x00" as *const u8 as *const libc::c_char,
         ),
-        ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
     );
 }
 /*
@@ -1134,7 +1134,7 @@ pub unsafe extern "C" fn CL_ParseGamestate(mut msg: *mut msg_t) {
                     .as_mut_ptr()
                     .offset(cl.gameState.dataCount as isize) as *mut libc::c_void,
                 s as *const libc::c_void,
-                (len + 1 as i32) as libc::c_ulong,
+                (len + 1 as i32) as usize,
             );
             cl.gameState.dataCount += len + 1 as i32
         } else if cmd == svc_baseline as i32 {
@@ -1149,7 +1149,7 @@ pub unsafe extern "C" fn CL_ParseGamestate(mut msg: *mut msg_t) {
             crate::stdlib::memset(
                 &mut nullstate as *mut entityState_t as *mut libc::c_void,
                 0 as i32,
-                ::std::mem::size_of::<entityState_t>() as libc::c_ulong,
+                ::std::mem::size_of::<entityState_t>() as usize,
             );
             es =
                 &mut *cl.entityBaselines.as_mut_ptr().offset(newnum as isize) as *mut entityState_t;
@@ -1173,7 +1173,7 @@ pub unsafe extern "C" fn CL_ParseGamestate(mut msg: *mut msg_t) {
     Cvar_VariableStringBuffer(
         b"fs_game\x00" as *const u8 as *const libc::c_char,
         oldGame.as_mut_ptr(),
-        ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
     );
     // parse useful values out of CS_SERVERINFO
     CL_ParseServerInfo();
@@ -1191,7 +1191,7 @@ pub unsafe extern "C" fn CL_ParseGamestate(mut msg: *mut msg_t) {
         Q_strncpyz(
             cl_oldGame.as_mut_ptr(),
             oldGame.as_mut_ptr(),
-            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
         );
     }
     FS_ConditionalRestart(clc.checksumFeed, qfalse);
@@ -1245,7 +1245,7 @@ pub unsafe extern "C" fn CL_ParseDownload(mut msg: *mut msg_t) {
     }
     size = MSG_ReadShort(msg as *mut msg_t);
     if size < 0 as i32
-        || size as libc::c_ulong > ::std::mem::size_of::<[u8; 16384]>() as libc::c_ulong
+        || size as usize > ::std::mem::size_of::<[u8; 16384]>() as usize
     {
         Com_Error(
             ERR_DROP as i32,
@@ -1430,13 +1430,13 @@ unsafe extern "C" fn CL_ParseVoip(mut msg: *mut msg_t, mut ignoreData: qboolean)
             }
         }
     }
-    if packetsize as libc::c_ulong > ::std::mem::size_of::<[u8; 4000]>() as libc::c_ulong {
+    if packetsize as usize > ::std::mem::size_of::<[u8; 4000]>() as usize {
         // overlarge packet?
         let mut bytesleft: i32 = packetsize;
         while bytesleft != 0 {
             let mut br: i32 = bytesleft;
-            if br as libc::c_ulong > ::std::mem::size_of::<[u8; 4000]>() as libc::c_ulong {
-                br = ::std::mem::size_of::<[u8; 4000]>() as libc::c_ulong as i32
+            if br as usize > ::std::mem::size_of::<[u8; 4000]>() as usize {
+                br = ::std::mem::size_of::<[u8; 4000]>() as usize as i32
             }
             MSG_ReadData(
                 msg as *mut msg_t,
@@ -1501,8 +1501,8 @@ unsafe extern "C" fn CL_ParseVoip(mut msg: *mut msg_t, mut ignoreData: qboolean)
             4028 as i32,
         );
         seqdiff = 0 as i32
-    } else if (seqdiff * (20 as i32 * 48 as i32 * 3 as i32) * 2 as i32) as libc::c_ulong
-        >= ::std::mem::size_of::<[i16; 11520]>() as libc::c_ulong
+    } else if (seqdiff * (20 as i32 * 48 as i32 * 3 as i32) * 2 as i32) as usize
+        >= ::std::mem::size_of::<[i16; 11520]>() as usize
     {
         // dropped more than we can handle?
         // just start over.
@@ -1553,9 +1553,9 @@ unsafe extern "C" fn CL_ParseVoip(mut msg: *mut msg_t, mut ignoreData: qboolean)
         encoded.as_mut_ptr(),
         packetsize,
         decoded.as_mut_ptr().offset(written as isize),
-        (::std::mem::size_of::<[i16; 11520]>() as libc::c_ulong)
-            .wrapping_div(::std::mem::size_of::<i16>() as libc::c_ulong)
-            .wrapping_sub(written as libc::c_ulong) as i32,
+        (::std::mem::size_of::<[i16; 11520]>() as usize)
+            .wrapping_div(::std::mem::size_of::<i16>() as usize)
+            .wrapping_sub(written as usize) as i32,
         0 as i32,
     );
     if numSamples <= 0 as i32 {
@@ -1603,7 +1603,7 @@ pub unsafe extern "C" fn CL_ParseCommandString(mut msg: *mut msg_t) {
     Q_strncpyz(
         clc.serverCommands[index as usize].as_mut_ptr(),
         s,
-        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
 }
 /*

@@ -190,7 +190,7 @@ pub unsafe extern "C" fn silk_encode_pulses(
     crate::stdlib::memset(
         pulses_comb.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        (8 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+        (8 as i32 as usize).wrapping_mul(::std::mem::size_of::<i32>() as usize),
     );
     /* ***************************/
     /* Prepare for shell coding */
@@ -203,14 +203,14 @@ pub unsafe extern "C" fn silk_encode_pulses(
         crate::stdlib::memset(
             &mut *pulses.offset(frame_length as isize) as *mut i8 as *mut libc::c_void,
             0 as i32,
-            (16 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<i8>() as libc::c_ulong),
+            (16 as i32 as usize).wrapping_mul(::std::mem::size_of::<i8>() as usize),
         );
     }
     /* Take the absolute value of the pulses */
     let mut fresh0 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as libc::c_ulong)
-            .wrapping_mul((iter * 16 as i32) as libc::c_ulong) as usize,
+        (::std::mem::size_of::<i32>() as usize)
+            .wrapping_mul((iter * 16 as i32) as usize) as usize,
     );
     abs_pulses = fresh0.as_mut_ptr() as *mut i32;
     i = 0 as i32;
@@ -244,13 +244,13 @@ pub unsafe extern "C" fn silk_encode_pulses(
     /* Calc sum pulses per shell code frame */
     let mut fresh1 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(iter as libc::c_ulong)
+        (::std::mem::size_of::<i32>() as usize).wrapping_mul(iter as usize)
             as usize,
     );
     sum_pulses = fresh1.as_mut_ptr() as *mut i32;
     let mut fresh2 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(iter as libc::c_ulong)
+        (::std::mem::size_of::<i32>() as usize).wrapping_mul(iter as usize)
             as usize,
     );
     nRshifts = fresh2.as_mut_ptr() as *mut i32;
