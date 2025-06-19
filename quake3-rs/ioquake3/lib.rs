@@ -13,7 +13,6 @@
 #![feature(main)]
 #![feature(ptr_offset_from)]
 #![feature(register_tool)]
-#![feature(stdsimd)]
 #![register_tool(c2rust)]
 
 pub mod mathops_h {
