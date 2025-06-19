@@ -943,7 +943,7 @@ pub unsafe extern "C" fn qcurl_easy_setopt_warn(
     let mut argp: ::std::ffi::VaListImpl;
     argp = args.clone();
     if (option as u32) < 10000 as i32 as u32 {
-        let mut longValue: libc::c_long = argp.as_va_list().arg::<libc::c_long>();
+        let mut longValue: isize = argp.as_va_list().arg::<isize>();
         result = qcurl_easy_setopt.expect("non-null function pointer")(curl, option, longValue)
     } else if (option as u32) < 30000 as i32 as u32 {
         let mut pointerValue: *mut libc::c_void = argp.as_va_list().arg::<*mut libc::c_void>();
@@ -1249,11 +1249,11 @@ pub unsafe extern "C" fn CL_cURL_PerformDownload() {
         );
         crate::src::client::cl_main::clc.downloadRestart = crate::src::qcommon::q_shared::qtrue
     } else {
-        let mut code: libc::c_long = 0;
+        let mut code: isize = 0;
         qcurl_easy_getinfo.expect("non-null function pointer")(
             (*msg).easy_handle,
             crate::curl_h::CURLINFO_RESPONSE_CODE,
-            &mut code as *mut libc::c_long,
+            &mut code as *mut isize,
         );
         crate::src::qcommon::common::Com_Error(
             crate::src::qcommon::q_shared::ERR_DROP as i32,

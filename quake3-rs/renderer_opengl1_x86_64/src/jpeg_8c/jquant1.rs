@@ -571,20 +571,20 @@ unsafe extern "C" fn select_ncolors(
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut changed: crate::jmorecfg_h::boolean = 0;
-    let mut temp: libc::c_long = 0;
+    let mut temp: isize = 0;
     static mut RGB_order: [i32; 3] = [1 as i32, 0 as i32, 2 as i32];
     /* We can allocate at least the nc'th root of max_colors per component. */
     /* Compute floor(nc'th root of max_colors). */
     iroot = 1 as i32; /* repeat till iroot exceeds root */
     loop {
         iroot += 1; /* set temp = iroot ** nc */
-        temp = iroot as libc::c_long; /* now iroot = floor(root) */
+        temp = iroot as isize; /* now iroot = floor(root) */
         i = 1 as i32;
         while i < nc {
-            temp *= iroot as libc::c_long;
+            temp *= iroot as isize;
             i += 1
         }
-        if !(temp <= max_colors as libc::c_long) {
+        if !(temp <= max_colors as isize) {
             break;
         }
     }
@@ -625,9 +625,9 @@ unsafe extern "C" fn select_ncolors(
                 i
             };
             /* calculate new total_colors if Ncolors[j] is incremented */
-            temp = (total_colors / *Ncolors.offset(j as isize)) as libc::c_long; /* done in long arith to avoid oflo */
-            temp *= (*Ncolors.offset(j as isize) + 1 as i32) as libc::c_long; /* won't fit, done with this pass */
-            if temp > max_colors as libc::c_long {
+            temp = (total_colors / *Ncolors.offset(j as isize)) as isize; /* done in long arith to avoid oflo */
+            temp *= (*Ncolors.offset(j as isize) + 1 as i32) as isize; /* won't fit, done with this pass */
+            if temp > max_colors as isize {
                 break; /* OK, apply the increment */
             }
             let ref mut fresh0 = *Ncolors.offset(j as isize);
@@ -656,9 +656,9 @@ unsafe extern "C" fn output_value(
      * (Forcing the upper and lower values to the limits ensures that
      * dithering can't produce a color outside the selected gamut.)
      */
-    return ((j as crate::jmorecfg_h::INT32 * 255 as i32 as libc::c_long
-        + (maxj / 2 as i32) as libc::c_long)
-        / maxj as libc::c_long) as i32;
+    return ((j as crate::jmorecfg_h::INT32 * 255 as i32 as isize
+        + (maxj / 2 as i32) as isize)
+        / maxj as isize) as i32;
 }
 
 unsafe extern "C" fn largest_input_value(
@@ -670,9 +670,9 @@ unsafe extern "C" fn largest_input_value(
 /* Return largest input value that should map to j'th output value */
 /* Must have largest(j=0) >= 0, and largest(j=maxj) >= MAXJSAMPLE */ {
     /* Breakpoints are halfway between values returned by output_value */
-    return (((2 as i32 * j + 1 as i32) as crate::jmorecfg_h::INT32 * 255 as i32 as libc::c_long
-        + maxj as libc::c_long)
-        / (2 as i32 * maxj) as libc::c_long) as i32;
+    return (((2 as i32 * j + 1 as i32) as crate::jmorecfg_h::INT32 * 255 as i32 as isize
+        + maxj as isize)
+        / (2 as i32 * maxj) as isize) as i32;
 }
 /*
  * Create the colormap.
@@ -877,7 +877,7 @@ unsafe extern "C" fn make_odither_array(
      * (f=0..N-1) should be (N-1-2*f)/(2*N) * MAXJSAMPLE/(ncolors-1).
      * On 16-bit-int machine, be careful to avoid overflow.
      */
-    den = (2 as i32 * (16 as i32 * 16 as i32)) as libc::c_long
+    den = (2 as i32 * (16 as i32 * 16 as i32)) as isize
         * (ncolors - 1 as i32) as crate::jmorecfg_h::INT32;
     j = 0 as i32;
     while j < 16 as i32 {
@@ -887,11 +887,11 @@ unsafe extern "C" fn make_odither_array(
                 - 1 as i32
                 - 2 as i32 * base_dither_matrix[j as usize][k as usize] as i32)
                 as crate::jmorecfg_h::INT32
-                * 255 as i32 as libc::c_long;
+                * 255 as i32 as isize;
             /* Ensure round towards zero despite C's lack of consistency
              * about rounding negative values in integer division...
              */
-            (*odither.offset(j as isize))[k as usize] = if num < 0 as i32 as libc::c_long {
+            (*odither.offset(j as isize))[k as usize] = if num < 0 as i32 as isize {
                 -(-num / den)
             } else {
                 (num) / den

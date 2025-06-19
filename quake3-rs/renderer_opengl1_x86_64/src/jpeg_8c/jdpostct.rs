@@ -589,8 +589,8 @@ pub unsafe extern "C" fn jinit_d_post_controller(
                     .output_width
                     .wrapping_mul((*cinfo).out_color_components as u32),
                 crate::src::jpeg_8c::jutils::jround_up(
-                    (*cinfo).output_height as libc::c_long,
-                    (*post).strip_height as libc::c_long,
+                    (*cinfo).output_height as isize,
+                    (*post).strip_height as isize,
                 ) as crate::jmorecfg_h::JDIMENSION,
                 (*post).strip_height,
             )

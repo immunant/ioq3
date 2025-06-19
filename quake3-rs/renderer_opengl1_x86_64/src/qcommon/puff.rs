@@ -77,7 +77,7 @@ unsafe extern "C" fn bits(
     (*s).bitbuf = val >> need;
     (*s).bitcnt -= need;
     /* return need bits, zeroing the bits above that */
-    return (val as libc::c_long & ((1 as libc::c_long) << need) - 1 as i32 as libc::c_long)
+    return (val as isize & ((1 as isize) << need) - 1 as i32 as isize)
         as crate::stdlib::int32_t;
 }
 /*

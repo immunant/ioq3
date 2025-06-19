@@ -267,7 +267,7 @@ pub struct box_0 {
     pub c2min: i32,
     pub c2max: i32,
     pub volume: crate::jmorecfg_h::INT32,
-    pub colorcount: libc::c_long,
+    pub colorcount: isize,
 }
 /* histogram cell; prefer an unsigned type */
 
@@ -326,12 +326,12 @@ unsafe extern "C" fn find_biggest_color_pop(mut boxlist: boxptr, mut numboxes: i
 /* Returns NULL if no splittable boxes remain */ {
     let mut boxp: boxptr = 0 as *mut box_0;
     let mut i: i32 = 0;
-    let mut maxc: libc::c_long = 0 as i32 as libc::c_long;
+    let mut maxc: isize = 0 as i32 as isize;
     let mut which: boxptr = 0 as boxptr;
     i = 0 as i32;
     boxp = boxlist;
     while i < numboxes {
-        if (*boxp).colorcount > maxc && (*boxp).volume > 0 as i32 as libc::c_long {
+        if (*boxp).colorcount > maxc && (*boxp).volume > 0 as i32 as isize {
             which = boxp;
             maxc = (*boxp).colorcount
         }
@@ -380,7 +380,7 @@ unsafe extern "C" fn update_box(mut cinfo: crate::jpeglib_h::j_decompress_ptr, m
     let mut dist0: crate::jmorecfg_h::INT32 = 0;
     let mut dist1: crate::jmorecfg_h::INT32 = 0;
     let mut dist2: crate::jmorecfg_h::INT32 = 0;
-    let mut ccount: libc::c_long = 0;
+    let mut ccount: isize = 0;
     c0min = (*boxp).c0min;
     c0max = (*boxp).c0max;
     c1min = (*boxp).c1min;
@@ -548,7 +548,7 @@ unsafe extern "C" fn update_box(mut cinfo: crate::jpeglib_h::j_decompress_ptr, m
     dist2 = ((c2max - c2min << 8 as i32 - 5 as i32) * 1 as i32) as crate::jmorecfg_h::INT32;
     (*boxp).volume = dist0 * dist0 + dist1 * dist1 + dist2 * dist2;
     /* Now scan remaining volume of box and compute population */
-    ccount = 0 as i32 as libc::c_long;
+    ccount = 0 as i32 as isize;
     c0 = c0min;
     while c0 <= c0max {
         c1 = c1min;
@@ -678,11 +678,11 @@ unsafe extern "C" fn compute_color(
     let mut c1max: i32 = 0;
     let mut c2min: i32 = 0;
     let mut c2max: i32 = 0;
-    let mut count: libc::c_long = 0;
-    let mut total: libc::c_long = 0 as i32 as libc::c_long;
-    let mut c0total: libc::c_long = 0 as i32 as libc::c_long;
-    let mut c1total: libc::c_long = 0 as i32 as libc::c_long;
-    let mut c2total: libc::c_long = 0 as i32 as libc::c_long;
+    let mut count: isize = 0;
+    let mut total: isize = 0 as i32 as isize;
+    let mut c0total: isize = 0 as i32 as isize;
+    let mut c1total: isize = 0 as i32 as isize;
+    let mut c2total: isize = 0 as i32 as isize;
     c0min = (*boxp).c0min;
     c0max = (*boxp).c0max;
     c1min = (*boxp).c1min;
@@ -700,20 +700,20 @@ unsafe extern "C" fn compute_color(
             while c2 <= c2max {
                 let fresh4 = histp;
                 histp = histp.offset(1);
-                count = *fresh4 as libc::c_long;
-                if count != 0 as i32 as libc::c_long {
+                count = *fresh4 as isize;
+                if count != 0 as i32 as isize {
                     total += count;
                     c0total += ((c0 << 8 as i32 - 5 as i32)
                         + ((1 as i32) << 8 as i32 - 5 as i32 >> 1 as i32))
-                        as libc::c_long
+                        as isize
                         * count;
                     c1total += ((c1 << 8 as i32 - 6 as i32)
                         + ((1 as i32) << 8 as i32 - 6 as i32 >> 1 as i32))
-                        as libc::c_long
+                        as isize
                         * count;
                     c2total += ((c2 << 8 as i32 - 5 as i32)
                         + ((1 as i32) << 8 as i32 - 5 as i32 >> 1 as i32))
-                        as libc::c_long
+                        as isize
                         * count
                 }
                 c2 += 1
@@ -843,7 +843,7 @@ unsafe extern "C" fn find_nearby_colors(
      * We save the minimum distance for each color in mindist[];
      * only the smallest maximum distance is of interest.
      */
-    minmaxdist = 0x7fffffff as libc::c_long;
+    minmaxdist = 0x7fffffff as isize;
     i = 0 as i32;
     while i < numcolors {
         /* We compute the squared-c0-distance term, then add in the other two. */
@@ -973,7 +973,7 @@ unsafe extern "C" fn find_best_colors(
     while i >= 0 as i32 {
         let fresh6 = bptr;
         bptr = bptr.offset(1);
-        *fresh6 = 0x7fffffff as libc::c_long;
+        *fresh6 = 0x7fffffff as isize;
         i -= 1
     }
     /* For each color selected by find_nearby_colors,
@@ -998,18 +998,18 @@ unsafe extern "C" fn find_best_colors(
             * 1 as i32) as crate::jmorecfg_h::INT32;
         dist0 += inc2 * inc2;
         /* Form the initial difference increments */
-        inc0 = inc0 * (2 as i32 * (((1 as i32) << 8 as i32 - 5 as i32) * 2 as i32)) as libc::c_long
+        inc0 = inc0 * (2 as i32 * (((1 as i32) << 8 as i32 - 5 as i32) * 2 as i32)) as isize
             + (((1 as i32) << 8 as i32 - 5 as i32)
                 * 2 as i32
-                * (((1 as i32) << 8 as i32 - 5 as i32) * 2 as i32)) as libc::c_long;
-        inc1 = inc1 * (2 as i32 * (((1 as i32) << 8 as i32 - 6 as i32) * 3 as i32)) as libc::c_long
+                * (((1 as i32) << 8 as i32 - 5 as i32) * 2 as i32)) as isize;
+        inc1 = inc1 * (2 as i32 * (((1 as i32) << 8 as i32 - 6 as i32) * 3 as i32)) as isize
             + (((1 as i32) << 8 as i32 - 6 as i32)
                 * 3 as i32
-                * (((1 as i32) << 8 as i32 - 6 as i32) * 3 as i32)) as libc::c_long;
-        inc2 = inc2 * (2 as i32 * (((1 as i32) << 8 as i32 - 5 as i32) * 1 as i32)) as libc::c_long
+                * (((1 as i32) << 8 as i32 - 6 as i32) * 3 as i32)) as isize;
+        inc2 = inc2 * (2 as i32 * (((1 as i32) << 8 as i32 - 5 as i32) * 1 as i32)) as isize
             + (((1 as i32) << 8 as i32 - 5 as i32)
                 * 1 as i32
-                * (((1 as i32) << 8 as i32 - 5 as i32) * 1 as i32)) as libc::c_long;
+                * (((1 as i32) << 8 as i32 - 5 as i32) * 1 as i32)) as isize;
         /* Now loop over all cells in box, updating distance per Thomas method */
         bptr = bestdist.as_mut_ptr();
         cptr = bestcolor;
@@ -1032,7 +1032,7 @@ unsafe extern "C" fn find_best_colors(
                     xx2 += (2 as i32
                         * (((1 as i32) << 8 as i32 - 5 as i32) * 1 as i32)
                         * (((1 as i32) << 8 as i32 - 5 as i32) * 1 as i32))
-                        as libc::c_long;
+                        as isize;
                     bptr = bptr.offset(1);
                     cptr = cptr.offset(1);
                     ic2 -= 1
@@ -1041,14 +1041,14 @@ unsafe extern "C" fn find_best_colors(
                 xx1 += (2 as i32
                     * (((1 as i32) << 8 as i32 - 6 as i32) * 3 as i32)
                     * (((1 as i32) << 8 as i32 - 6 as i32) * 3 as i32))
-                    as libc::c_long;
+                    as isize;
                 ic1 -= 1
             }
             dist0 += xx0;
             xx0 += (2 as i32
                 * (((1 as i32) << 8 as i32 - 5 as i32) * 2 as i32)
                 * (((1 as i32) << 8 as i32 - 5 as i32) * 2 as i32))
-                as libc::c_long;
+                as isize;
             ic0 -= 1
         }
         i += 1

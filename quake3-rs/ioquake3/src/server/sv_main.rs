@@ -829,12 +829,12 @@ SVC_HashForAddress
 ================
 */
 
-unsafe extern "C" fn SVC_HashForAddress(mut address: crate::qcommon_h::netadr_t) -> libc::c_long {
+unsafe extern "C" fn SVC_HashForAddress(mut address: crate::qcommon_h::netadr_t) -> isize {
     let mut ip: *mut crate::src::qcommon::q_shared::byte =
         0 as *mut crate::src::qcommon::q_shared::byte;
     let mut size: crate::stddef_h::size_t = 0 as i32 as crate::stddef_h::size_t;
     let mut i: i32 = 0;
-    let mut hash: libc::c_long = 0 as i32 as libc::c_long;
+    let mut hash: isize = 0 as i32 as isize;
     match address.type_0 as u32 {
         4 => {
             ip = address.ip.as_mut_ptr();
@@ -848,11 +848,11 @@ unsafe extern "C" fn SVC_HashForAddress(mut address: crate::qcommon_h::netadr_t)
     }
     i = 0 as i32;
     while (i as libc::c_ulong) < size {
-        hash += *ip.offset(i as isize) as libc::c_long * (i + 119 as i32) as libc::c_long;
+        hash += *ip.offset(i as isize) as isize * (i + 119 as i32) as isize;
         i += 1
     }
     hash = hash ^ hash >> 10 as i32 ^ hash >> 20 as i32;
-    hash &= (1024 as i32 - 1 as i32) as libc::c_long;
+    hash &= (1024 as i32 - 1 as i32) as isize;
     return hash;
 }
 /*
@@ -870,7 +870,7 @@ unsafe extern "C" fn SVC_BucketForAddress(
 ) -> *mut crate::server_h::leakyBucket_t {
     let mut bucket: *mut crate::server_h::leakyBucket_t = 0 as *mut crate::server_h::leakyBucket_t;
     let mut i: i32 = 0;
-    let mut hash: libc::c_long = SVC_HashForAddress(address);
+    let mut hash: isize = SVC_HashForAddress(address);
     let mut now: i32 = crate::src::sys::sys_unix::Sys_Milliseconds();
     bucket = bucketHashes[hash as usize];
     while !bucket.is_null() {

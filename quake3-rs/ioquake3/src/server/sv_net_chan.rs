@@ -110,8 +110,8 @@ unsafe extern "C" fn SV_Netchan_Encode(
     mut msg: *mut crate::qcommon_h::msg_t,
     mut clientCommandString: *const libc::c_char,
 ) {
-    let mut i: libc::c_long = 0;
-    let mut index: libc::c_long = 0;
+    let mut i: isize = 0;
+    let mut index: isize = 0;
     let mut key: crate::src::qcommon::q_shared::byte = 0;
     let mut string: *mut crate::src::qcommon::q_shared::byte =
         0 as *mut crate::src::qcommon::q_shared::byte;
@@ -133,24 +133,24 @@ unsafe extern "C" fn SV_Netchan_Encode(
     (*msg).bit = sbit;
     (*msg).readcount = srdc;
     string = clientCommandString as *mut crate::src::qcommon::q_shared::byte;
-    index = 0 as i32 as libc::c_long;
+    index = 0 as i32 as isize;
     // xor the client challenge with the netchan sequence number
     key = ((*client).challenge ^ (*client).netchan.outgoingSequence)
         as crate::src::qcommon::q_shared::byte;
-    i = 4 as i32 as libc::c_long;
-    while i < (*msg).cursize as libc::c_long {
+    i = 4 as i32 as isize;
+    while i < (*msg).cursize as isize {
         // modify the key with the last received and with this message acknowledged client command
         if *string.offset(index as isize) == 0 {
-            index = 0 as i32 as libc::c_long
+            index = 0 as i32 as isize
         }
         if *string.offset(index as isize) as i32 > 127 as i32
             || *string.offset(index as isize) as i32 == '%' as i32
         {
-            key = (key as i32 ^ ('.' as i32) << (i & 1 as i32 as libc::c_long))
+            key = (key as i32 ^ ('.' as i32) << (i & 1 as i32 as isize))
                 as crate::src::qcommon::q_shared::byte
         } else {
             key = (key as i32
-                ^ (*string.offset(index as isize) as i32) << (i & 1 as i32 as libc::c_long))
+                ^ (*string.offset(index as isize) as i32) << (i & 1 as i32 as isize))
                 as crate::src::qcommon::q_shared::byte
         }
         index += 1;

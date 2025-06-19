@@ -1929,7 +1929,7 @@ pub unsafe extern "C" fn opus_encode_native(
                 .offset_from(
                     &mut celt_mode
                         as *mut *const crate::src::opus_1_2_1::celt::modes::OpusCustomMode,
-                ) as libc::c_long as isize,
+                ) as isize as isize,
         ),
     );
     analysis_info.valid = 0 as i32;
@@ -2543,12 +2543,12 @@ pub unsafe extern "C" fn opus_encode_native(
         ((total_buffer * (*st).channels) as libc::c_ulong)
             .wrapping_mul(::std::mem::size_of::<crate::arch_h::opus_val16>() as libc::c_ulong)
             .wrapping_add(
-                (0 as i32 as libc::c_long
+                (0 as i32 as isize
                     * pcm_buf.offset_from(
                         &mut *(*st).delay_buffer.as_mut_ptr().offset(
                             (((*st).encoder_buffer - total_buffer) * (*st).channels) as isize,
                         ),
-                    ) as libc::c_long) as libc::c_ulong,
+                    ) as isize) as libc::c_ulong,
             ),
     );
     if (*st).mode == 1002 as i32 {
@@ -2980,11 +2980,11 @@ pub unsafe extern "C" fn opus_encode_native(
             (((*st).channels * (*st).Fs / 400 as i32) as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<crate::arch_h::opus_val16>() as libc::c_ulong)
                 .wrapping_add(
-                    (0 as i32 as libc::c_long
+                    (0 as i32 as isize
                         * tmp_prefill.offset_from(&mut *(*st).delay_buffer.as_mut_ptr().offset(
                             (((*st).encoder_buffer - total_buffer - (*st).Fs / 400 as i32)
                                 * (*st).channels) as isize,
-                        )) as libc::c_long) as libc::c_ulong,
+                        )) as isize) as libc::c_ulong,
                 ),
         );
     }
@@ -3000,13 +3000,13 @@ pub unsafe extern "C" fn opus_encode_native(
                 as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<crate::arch_h::opus_val16>() as libc::c_ulong)
                 .wrapping_add(
-                    (0 as i32 as libc::c_long
+                    (0 as i32 as isize
                         * (*st).delay_buffer.as_mut_ptr().offset_from(
                             &mut *(*st)
                                 .delay_buffer
                                 .as_mut_ptr()
                                 .offset(((*st).channels * frame_size) as isize),
-                        ) as libc::c_long) as libc::c_ulong,
+                        ) as isize) as libc::c_ulong,
                 ),
         );
         crate::stdlib::memcpy(
@@ -3018,13 +3018,13 @@ pub unsafe extern "C" fn opus_encode_native(
             (((frame_size + total_buffer) * (*st).channels) as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<crate::arch_h::opus_val16>() as libc::c_ulong)
                 .wrapping_add(
-                    (0 as i32 as libc::c_long
+                    (0 as i32 as isize
                         * (&mut *(*st).delay_buffer.as_mut_ptr().offset(
                             ((*st).channels * ((*st).encoder_buffer - frame_size - total_buffer))
                                 as isize,
                         ) as *mut crate::arch_h::opus_val16)
                             .offset_from(&mut *pcm_buf.offset(0 as i32 as isize))
-                            as libc::c_long) as libc::c_ulong,
+                            as isize) as libc::c_ulong,
                 ),
         );
     } else {
@@ -3036,14 +3036,14 @@ pub unsafe extern "C" fn opus_encode_native(
             (((*st).encoder_buffer * (*st).channels) as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<crate::arch_h::opus_val16>() as libc::c_ulong)
                 .wrapping_add(
-                    (0 as i32 as libc::c_long
+                    (0 as i32 as isize
                         * (*st)
                             .delay_buffer
                             .as_mut_ptr()
                             .offset_from(&mut *pcm_buf.offset(
                                 ((frame_size + total_buffer - (*st).encoder_buffer)
                                     * (*st).channels) as isize,
-                            )) as libc::c_long) as libc::c_ulong,
+                            )) as isize) as libc::c_ulong,
                 ),
         );
     }
@@ -3194,7 +3194,7 @@ pub unsafe extern "C" fn opus_encode_native(
                 (&mut analysis_info as *mut crate::celt_h::AnalysisInfo).offset_from(
                     &mut analysis_info as *mut crate::celt_h::AnalysisInfo
                         as *const crate::celt_h::AnalysisInfo,
-                ) as libc::c_long as isize,
+                ) as isize as isize,
             ),
         );
     }
@@ -3211,7 +3211,7 @@ pub unsafe extern "C" fn opus_encode_native(
             (&mut info as *mut crate::celt_h::SILKInfo).offset(
                 (&mut info as *mut crate::celt_h::SILKInfo).offset_from(
                     &mut info as *mut crate::celt_h::SILKInfo as *const crate::celt_h::SILKInfo,
-                ) as libc::c_long as isize,
+                ) as isize as isize,
             ),
         );
     } else {
@@ -3222,7 +3222,7 @@ pub unsafe extern "C" fn opus_encode_native(
                 (0 as *mut libc::c_void as *mut crate::celt_h::SILKInfo).offset_from(
                     0 as *mut libc::c_void as *mut crate::celt_h::SILKInfo
                         as *const crate::celt_h::SILKInfo,
-                ) as libc::c_long as isize,
+                ) as isize as isize,
             ),
         );
     }
@@ -3262,7 +3262,7 @@ pub unsafe extern "C" fn opus_encode_native(
             (&mut redundant_rng as *mut crate::opus_types_h::opus_uint32).offset(
                 (&mut redundant_rng as *mut crate::opus_types_h::opus_uint32)
                     .offset_from(&mut redundant_rng as *mut crate::opus_types_h::opus_uint32)
-                    as libc::c_long as isize,
+                    as isize as isize,
             ),
         );
         crate::src::opus_1_2_1::celt::celt_encoder::opus_custom_encoder_ctl(celt_enc, 4028 as i32);
@@ -3337,11 +3337,11 @@ pub unsafe extern "C" fn opus_encode_native(
                     (redundancy_bytes as libc::c_ulong)
                         .wrapping_mul(::std::mem::size_of::<u8>() as libc::c_ulong)
                         .wrapping_add(
-                            (0 as i32 as libc::c_long
+                            (0 as i32 as isize
                                 * data
                                     .offset(ret as isize)
                                     .offset_from(data.offset(nb_compr_bytes as isize))
-                                    as libc::c_long) as libc::c_ulong,
+                                    as isize) as libc::c_ulong,
                         ),
                 );
                 nb_compr_bytes = nb_compr_bytes + redundancy_bytes
@@ -3413,7 +3413,7 @@ pub unsafe extern "C" fn opus_encode_native(
             (&mut redundant_rng as *mut crate::opus_types_h::opus_uint32).offset(
                 (&mut redundant_rng as *mut crate::opus_types_h::opus_uint32)
                     .offset_from(&mut redundant_rng as *mut crate::opus_types_h::opus_uint32)
-                    as libc::c_long as isize,
+                    as isize as isize,
             ),
         );
     }
@@ -4127,7 +4127,7 @@ pub unsafe extern "C" fn opus_encoder_ctl(
                 crate::src::opus_1_2_1::celt::celt_encoder::opus_custom_encoder_ctl(
                     celt_enc,
                     4047 as i32,
-                    value_35.offset(value_35.offset_from(value_35) as libc::c_long as isize),
+                    value_35.offset(value_35.offset_from(value_35) as isize as isize),
                 );
                 current_block = 12032176231992402880;
             }
@@ -4175,7 +4175,7 @@ pub unsafe extern "C" fn opus_encoder_ctl(
                 0 as i32,
                 (::std::mem::size_of::<OpusEncoder>() as libc::c_ulong)
                     .wrapping_sub(
-                        start.offset_from(st as *mut libc::c_char) as libc::c_long as libc::c_ulong
+                        start.offset_from(st as *mut libc::c_char) as isize as libc::c_ulong
                     )
                     .wrapping_mul(::std::mem::size_of::<libc::c_char>() as libc::c_ulong),
             );
@@ -4229,7 +4229,7 @@ pub unsafe extern "C" fn opus_encoder_ctl(
             ret = crate::src::opus_1_2_1::celt::celt_encoder::opus_custom_encoder_ctl(
                 celt_enc,
                 10026 as i32,
-                value_38.offset(value_38.offset_from(value_38) as libc::c_long as isize),
+                value_38.offset(value_38.offset_from(value_38) as isize as isize),
             );
             current_block = 12032176231992402880;
         }
@@ -4243,7 +4243,7 @@ pub unsafe extern "C" fn opus_encoder_ctl(
                 ret = crate::src::opus_1_2_1::celt::celt_encoder::opus_custom_encoder_ctl(
                     celt_enc,
                     10015 as i32,
-                    value_39.offset(value_39.offset_from(value_39) as libc::c_long as isize),
+                    value_39.offset(value_39.offset_from(value_39) as isize as isize),
                 );
                 current_block = 12032176231992402880;
             }

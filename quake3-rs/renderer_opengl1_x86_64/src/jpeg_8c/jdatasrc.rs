@@ -339,16 +339,16 @@ unsafe extern "C" fn fill_mem_input_buffer(
 
 unsafe extern "C" fn skip_input_data(
     mut cinfo: crate::jpeglib_h::j_decompress_ptr,
-    mut num_bytes: libc::c_long,
+    mut num_bytes: isize,
 ) {
     let mut src: *mut crate::jpeglib_h::jpeg_source_mgr = (*cinfo).src;
     /* Just a dumb implementation for now.  Could use fseek() except
      * it doesn't work on pipes.  Not clear that being smart is worth
      * any trouble anyway --- large skips are infrequent.
      */
-    if num_bytes > 0 as i32 as libc::c_long {
-        while num_bytes > (*src).bytes_in_buffer as libc::c_long {
-            num_bytes -= (*src).bytes_in_buffer as libc::c_long;
+    if num_bytes > 0 as i32 as isize {
+        while num_bytes > (*src).bytes_in_buffer as isize {
+            num_bytes -= (*src).bytes_in_buffer as isize;
             Some((*src).fill_input_buffer.expect("non-null function pointer"))
                 .expect("non-null function pointer")(cinfo);
             /* note we assume that fill_input_buffer will never return FALSE,
@@ -437,7 +437,7 @@ pub unsafe extern "C" fn jpeg_stdio_src(
     );
     (*src).pub_0.skip_input_data = Some(
         skip_input_data
-            as unsafe extern "C" fn(_: crate::jpeglib_h::j_decompress_ptr, _: libc::c_long) -> (),
+            as unsafe extern "C" fn(_: crate::jpeglib_h::j_decompress_ptr, _: isize) -> (),
     );
     (*src).pub_0.resync_to_restart = Some(
         crate::src::jpeg_8c::jdmarker::jpeg_resync_to_restart
@@ -504,7 +504,7 @@ pub unsafe extern "C" fn jpeg_mem_src(
     );
     (*src).skip_input_data = Some(
         skip_input_data
-            as unsafe extern "C" fn(_: crate::jpeglib_h::j_decompress_ptr, _: libc::c_long) -> (),
+            as unsafe extern "C" fn(_: crate::jpeglib_h::j_decompress_ptr, _: isize) -> (),
     );
     (*src).resync_to_restart = Some(
         crate::src::jpeg_8c::jdmarker::jpeg_resync_to_restart

@@ -1202,9 +1202,9 @@ pub unsafe extern "C" fn BotLoadSynonyms(
                         len = crate::stdlib::strlen(token.string.as_mut_ptr())
                             .wrapping_add(1 as i32 as libc::c_ulong);
                         len = len
-                            .wrapping_add(::std::mem::size_of::<libc::c_long>() as libc::c_ulong)
+                            .wrapping_add(::std::mem::size_of::<isize>() as libc::c_ulong)
                             .wrapping_sub(1 as i32 as libc::c_ulong)
-                            & !(::std::mem::size_of::<libc::c_long>() as libc::c_ulong)
+                            & !(::std::mem::size_of::<isize>() as libc::c_ulong)
                                 .wrapping_sub(1 as i32 as libc::c_ulong);
                         size = (size as libc::c_ulong).wrapping_add(
                             (::std::mem::size_of::<bot_synonym_t>() as libc::c_ulong)
@@ -1751,9 +1751,9 @@ pub unsafe extern "C" fn BotLoadRandomStrings(
             len = crate::stdlib::strlen(token.string.as_mut_ptr())
                 .wrapping_add(1 as i32 as libc::c_ulong);
             len = len
-                .wrapping_add(::std::mem::size_of::<libc::c_long>() as libc::c_ulong)
+                .wrapping_add(::std::mem::size_of::<isize>() as libc::c_ulong)
                 .wrapping_sub(1 as i32 as libc::c_ulong)
-                & !(::std::mem::size_of::<libc::c_long>() as libc::c_ulong)
+                & !(::std::mem::size_of::<isize>() as libc::c_ulong)
                     .wrapping_sub(1 as i32 as libc::c_ulong);
             size = (size as libc::c_ulong).wrapping_add(
                 (::std::mem::size_of::<bot_randomlist_t>() as libc::c_ulong).wrapping_add(len),
@@ -1803,9 +1803,9 @@ pub unsafe extern "C" fn BotLoadRandomStrings(
                 len = crate::stdlib::strlen(chatmessagestring.as_mut_ptr())
                     .wrapping_add(1 as i32 as libc::c_ulong);
                 len = len
-                    .wrapping_add(::std::mem::size_of::<libc::c_long>() as libc::c_ulong)
+                    .wrapping_add(::std::mem::size_of::<isize>() as libc::c_ulong)
                     .wrapping_sub(1 as i32 as libc::c_ulong)
-                    & !(::std::mem::size_of::<libc::c_long>() as libc::c_ulong)
+                    & !(::std::mem::size_of::<isize>() as libc::c_ulong)
                         .wrapping_sub(1 as i32 as libc::c_ulong);
                 size = (size as libc::c_ulong).wrapping_add(
                     (::std::mem::size_of::<bot_randomstring_t>() as libc::c_ulong)
@@ -2421,9 +2421,9 @@ pub unsafe extern "C" fn StringsMatch(
                         if lastvariable >= 0 as i32 {
                             (*match_0).variables[lastvariable as usize].length =
                                 (newstrptr.offset_from((*match_0).string.as_mut_ptr())
-                                    as libc::c_long
+                                    as isize
                                     - (*match_0).variables[lastvariable as usize].offset
-                                        as libc::c_long) as i32;
+                                        as isize) as i32;
                             //newstrptr - match->variables[lastvariable].ptr;
                             lastvariable = -(1 as i32);
                             break;
@@ -2446,7 +2446,7 @@ pub unsafe extern "C" fn StringsMatch(
             //if it is a variable piece of string
             //Log_Write("MT_VARIABLE");
             (*match_0).variables[(*mp).variable as usize].offset =
-                strptr.offset_from((*match_0).string.as_mut_ptr()) as libc::c_long as libc::c_char;
+                strptr.offset_from((*match_0).string.as_mut_ptr()) as isize as libc::c_char;
             lastvariable = (*mp).variable
         }
         mp = (*mp).next
@@ -3654,10 +3654,10 @@ pub unsafe extern "C" fn BotLoadInitialChat(
                                 .wrapping_add(1 as i32 as libc::c_ulong);
                             len =
                                 len.wrapping_add(
-                                    ::std::mem::size_of::<libc::c_long>() as libc::c_ulong
+                                    ::std::mem::size_of::<isize>() as libc::c_ulong
                                 )
                                 .wrapping_sub(1 as i32 as libc::c_ulong)
-                                    & !(::std::mem::size_of::<libc::c_long>() as libc::c_ulong)
+                                    & !(::std::mem::size_of::<isize>() as libc::c_ulong)
                                         .wrapping_sub(1 as i32 as libc::c_ulong);
                             if pass != 0 && !ptr.is_null() {
                                 chatmessage = ptr as *mut bot_chatmessage_t;

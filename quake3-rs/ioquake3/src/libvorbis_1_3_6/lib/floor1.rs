@@ -245,7 +245,7 @@ unsafe extern "C" fn floor1_unpack(
                     (crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
                         opb as *mut crate::ogg_h::oggpack_buffer,
                         3 as i32,
-                    ) + 1 as i32 as libc::c_long) as i32;
+                    ) + 1 as i32 as isize) as i32;
                 (*info).class_subs[j as usize] =
                     crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
                         opb as *mut crate::ogg_h::oggpack_buffer,
@@ -274,7 +274,7 @@ unsafe extern "C" fn floor1_unpack(
                         (crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
                             opb as *mut crate::ogg_h::oggpack_buffer,
                             8 as i32,
-                        ) - 1 as i32 as libc::c_long) as i32;
+                        ) - 1 as i32 as isize) as i32;
                     if (*info).class_subbook[j as usize][k as usize] < -(1 as i32)
                         || (*info).class_subbook[j as usize][k as usize] >= (*ci).books
                     {
@@ -292,7 +292,7 @@ unsafe extern "C" fn floor1_unpack(
                     (*info).mult = (crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
                         opb as *mut crate::ogg_h::oggpack_buffer,
                         2 as i32,
-                    ) + 1 as i32 as libc::c_long) as i32; /* only 1,2,3,4 legal now */
+                    ) + 1 as i32 as isize) as i32; /* only 1,2,3,4 legal now */
                     rangebits = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
                         opb as *mut crate::ogg_h::oggpack_buffer,
                         4 as i32,
@@ -429,7 +429,7 @@ unsafe extern "C" fn floor1_look(
     while i < n {
         (*look).forward_index[i as usize] = sortpointer[i as usize]
             .offset_from((*info).postlist.as_mut_ptr())
-            as libc::c_long as i32;
+            as isize as i32;
         i += 1
     }
     /* points from range order to sorted position */
@@ -880,7 +880,7 @@ unsafe extern "C" fn accumulate_fit(
     mut n: i32,
     mut info: *mut crate::backends_h::vorbis_info_floor1,
 ) -> i32 {
-    let mut i: libc::c_long = 0;
+    let mut i: isize = 0;
     let mut xa: i32 = 0 as i32;
     let mut ya: i32 = 0 as i32;
     let mut x2a: i32 = 0 as i32;
@@ -903,23 +903,23 @@ unsafe extern "C" fn accumulate_fit(
     if x1 >= n {
         x1 = n - 1 as i32
     }
-    i = x0 as libc::c_long;
-    while i <= x1 as libc::c_long {
+    i = x0 as isize;
+    while i <= x1 as isize {
         let mut quantized: i32 = vorbis_dBquant(flr.offset(i as isize));
         if quantized != 0 {
             if *mdct.offset(i as isize) + (*info).twofitatten >= *flr.offset(i as isize) {
-                xa = (xa as libc::c_long + i) as i32;
+                xa = (xa as isize + i) as i32;
                 ya += quantized;
-                x2a = (x2a as libc::c_long + i * i) as i32;
+                x2a = (x2a as isize + i * i) as i32;
                 y2a += quantized * quantized;
-                xya = (xya as libc::c_long + i * quantized as libc::c_long) as i32;
+                xya = (xya as isize + i * quantized as isize) as i32;
                 na += 1
             } else {
-                xb = (xb as libc::c_long + i) as i32;
+                xb = (xb as isize + i) as i32;
                 yb += quantized;
-                x2b = (x2b as libc::c_long + i * i) as i32;
+                x2b = (x2b as isize + i * i) as i32;
                 y2b += quantized * quantized;
-                xyb = (xyb as libc::c_long + i * quantized as libc::c_long) as i32;
+                xyb = (xyb as isize + i * quantized as isize) as i32;
                 nb += 1
             }
         }
@@ -1104,12 +1104,12 @@ pub unsafe extern "C" fn floor1_fit(
     mut logmdct: *const f32,
     mut logmask: *const f32,
 ) -> *mut i32 {
-    let mut i: libc::c_long = 0;
-    let mut j: libc::c_long = 0;
+    let mut i: isize = 0;
+    let mut j: isize = 0;
     let mut info: *mut crate::backends_h::vorbis_info_floor1 = (*look).vi;
-    let mut n: libc::c_long = (*look).n as libc::c_long;
-    let mut posts: libc::c_long = (*look).posts as libc::c_long;
-    let mut nonzero: libc::c_long = 0 as i32 as libc::c_long;
+    let mut n: isize = (*look).n as isize;
+    let mut posts: isize = (*look).posts as isize;
+    let mut nonzero: isize = 0 as i32 as isize;
     let mut fits: [lsfit_acc; 64] = [lsfit_acc {
         x0: 0,
         x1: 0,
@@ -1132,34 +1132,34 @@ pub unsafe extern "C" fn floor1_fit(
     let mut hineighbor: [i32; 65] = [0; 65];
     let mut output: *mut i32 = 0 as *mut i32;
     let mut memo: [i32; 65] = [0; 65];
-    i = 0 as i32 as libc::c_long;
+    i = 0 as i32 as isize;
     while i < posts {
         fit_valueA[i as usize] = -(200 as i32);
         i += 1
     }
-    i = 0 as i32 as libc::c_long;
+    i = 0 as i32 as isize;
     while i < posts {
         fit_valueB[i as usize] = -(200 as i32);
         i += 1
     }
-    i = 0 as i32 as libc::c_long;
+    i = 0 as i32 as isize;
     while i < posts {
         loneighbor[i as usize] = 0 as i32;
         i += 1
     }
-    i = 0 as i32 as libc::c_long;
+    i = 0 as i32 as isize;
     while i < posts {
         hineighbor[i as usize] = 1 as i32;
         i += 1
     }
-    i = 0 as i32 as libc::c_long;
+    i = 0 as i32 as isize;
     while i < posts {
         memo[i as usize] = -(1 as i32);
         i += 1
     }
     /* quantize the relevant floor points and collect them into line fit
     structures (one per minimal division) at the same time */
-    if posts == 0 as i32 as libc::c_long {
+    if posts == 0 as i32 as isize {
         nonzero += accumulate_fit(
             logmask,
             logmdct,
@@ -1168,19 +1168,19 @@ pub unsafe extern "C" fn floor1_fit(
             fits.as_mut_ptr(),
             n as i32,
             info,
-        ) as libc::c_long
+        ) as isize
     } else {
-        i = 0 as i32 as libc::c_long;
-        while i < posts - 1 as i32 as libc::c_long {
+        i = 0 as i32 as isize;
+        while i < posts - 1 as i32 as isize {
             nonzero += accumulate_fit(
                 logmask,
                 logmdct,
                 (*look).sorted_index[i as usize],
-                (*look).sorted_index[(i + 1 as i32 as libc::c_long) as usize],
+                (*look).sorted_index[(i + 1 as i32 as isize) as usize],
                 fits.as_mut_ptr().offset(i as isize),
                 n as i32,
                 info,
-            ) as libc::c_long;
+            ) as isize;
             i += 1
         }
     }
@@ -1190,7 +1190,7 @@ pub unsafe extern "C" fn floor1_fit(
         let mut y1: i32 = -(200 as i32);
         fit_line(
             fits.as_mut_ptr(),
-            (posts - 1 as i32 as libc::c_long) as i32,
+            (posts - 1 as i32 as isize) as i32,
             &mut y0,
             &mut y1,
             info,
@@ -1203,7 +1203,7 @@ pub unsafe extern "C" fn floor1_fit(
         /* start progressive splitting.  This is a greedy, non-optimal
         algorithm, but simple and close enough to the best
         answer. */
-        i = 2 as i32 as libc::c_long;
+        i = 2 as i32 as isize;
         while i < posts {
             let mut sortpos: i32 = (*look).reverse_index[i as usize];
             let mut ln: i32 = loneighbor[sortpos as usize];
@@ -1267,15 +1267,15 @@ pub unsafe extern "C" fn floor1_fit(
                         }
                         if ly1 >= 0 as i32 || hy0 >= 0 as i32 {
                             /* store new neighbor values */
-                            j = (sortpos - 1 as i32) as libc::c_long;
-                            while j >= 0 as i32 as libc::c_long {
+                            j = (sortpos - 1 as i32) as isize;
+                            while j >= 0 as i32 as isize {
                                 if !(hineighbor[j as usize] == hn) {
                                     break;
                                 }
                                 hineighbor[j as usize] = i as i32;
                                 j -= 1
                             }
-                            j = (sortpos + 1 as i32) as libc::c_long;
+                            j = (sortpos + 1 as i32) as isize;
                             while j < posts {
                                 if !(loneighbor[j as usize] == ln) {
                                     break;
@@ -1295,7 +1295,7 @@ pub unsafe extern "C" fn floor1_fit(
         output = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
             vb as *mut crate::codec_h::vorbis_block,
             (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(posts as libc::c_ulong)
-                as libc::c_long,
+                as isize,
         ) as *mut i32;
         *output.offset(0 as i32 as isize) =
             post_Y(fit_valueA.as_mut_ptr(), fit_valueB.as_mut_ptr(), 0 as i32);
@@ -1304,10 +1304,10 @@ pub unsafe extern "C" fn floor1_fit(
         /* fill in posts marked as not using a fit; we will zero
         back out to 'unused' when encoding them so long as curve
         interpolation doesn't force them into use */
-        i = 2 as i32 as libc::c_long;
+        i = 2 as i32 as isize;
         while i < posts {
-            let mut ln_0: i32 = (*look).loneighbor[(i - 2 as i32 as libc::c_long) as usize];
-            let mut hn_0: i32 = (*look).hineighbor[(i - 2 as i32 as libc::c_long) as usize];
+            let mut ln_0: i32 = (*look).loneighbor[(i - 2 as i32 as isize) as usize];
+            let mut hn_0: i32 = (*look).hineighbor[(i - 2 as i32 as isize) as usize];
             let mut x0: i32 = (*info).postlist[ln_0 as usize];
             let mut x1: i32 = (*info).postlist[hn_0 as usize];
             let mut y0_0: i32 = *output.offset(ln_0 as isize);
@@ -1333,17 +1333,17 @@ pub unsafe extern "C" fn floor1_interpolate_fit(
     mut B: *mut i32,
     mut del: i32,
 ) -> *mut i32 {
-    let mut i: libc::c_long = 0;
-    let mut posts: libc::c_long = (*look).posts as libc::c_long;
+    let mut i: isize = 0;
+    let mut posts: isize = (*look).posts as isize;
     let mut output: *mut i32 = 0 as *mut i32;
     if !A.is_null() && !B.is_null() {
         output = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
             vb as *mut crate::codec_h::vorbis_block,
             (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(posts as libc::c_ulong)
-                as libc::c_long,
+                as isize,
         ) as *mut i32;
         /* overly simpleminded--- look again post 1.2 */
-        i = 0 as i32 as libc::c_long;
+        i = 0 as i32 as isize;
         while i < posts {
             *output.offset(i as isize) = (65536 as i32 - del)
                 * (*A.offset(i as isize) & 0x7fff as i32)
@@ -1394,10 +1394,10 @@ pub unsafe extern "C" fn floor1_encode(
     mut post: *mut i32,
     mut ilogmask: *mut i32,
 ) -> i32 {
-    let mut i: libc::c_long = 0;
-    let mut j: libc::c_long = 0;
+    let mut i: isize = 0;
+    let mut j: isize = 0;
     let mut info: *mut crate::backends_h::vorbis_info_floor1 = (*look).vi;
-    let mut posts: libc::c_long = (*look).posts as libc::c_long;
+    let mut posts: isize = (*look).posts as isize;
     let mut ci: *mut crate::codec_internal_h::codec_setup_info =
         (*(*(*vb).vd).vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info;
     let mut out: [i32; 65] = [0; 65];
@@ -1406,7 +1406,7 @@ pub unsafe extern "C" fn floor1_encode(
     let mut books: *mut crate::src::libvorbis_1_3_6::lib::codebook::codebook = (*ci).fullbooks;
     /* quantize values to multiplier spec */
     if !post.is_null() {
-        i = 0 as i32 as libc::c_long;
+        i = 0 as i32 as isize;
         while i < posts {
             let mut val: i32 = *post.offset(i as isize) & 0x7fff as i32;
             match (*info).mult {
@@ -1434,11 +1434,11 @@ pub unsafe extern "C" fn floor1_encode(
         out[0 as i32 as usize] = *post.offset(0 as i32 as isize);
         out[1 as i32 as usize] = *post.offset(1 as i32 as isize);
         /* find prediction values for each post and subtract them */
-        i = 2 as i32 as libc::c_long; /* in case there was roundoff jitter
+        i = 2 as i32 as isize; /* in case there was roundoff jitter
                                       in interpolation */
         while i < posts {
-            let mut ln: i32 = (*look).loneighbor[(i - 2 as i32 as libc::c_long) as usize];
-            let mut hn: i32 = (*look).hineighbor[(i - 2 as i32 as libc::c_long) as usize];
+            let mut ln: i32 = (*look).loneighbor[(i - 2 as i32 as isize) as usize];
+            let mut hn: i32 = (*look).hineighbor[(i - 2 as i32 as isize) as usize];
             let mut x0: i32 = (*info).postlist[ln as usize];
             let mut x1: i32 = (*info).postlist[hn as usize];
             let mut y0: i32 = *post.offset(ln as isize);
@@ -1489,7 +1489,7 @@ pub unsafe extern "C" fn floor1_encode(
         (*look).frames += 1;
         (*look).postbits += (crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
             ((*look).quant_q - 1 as i32) as crate::config_types_h::ogg_uint32_t,
-        ) * 2 as i32) as libc::c_long;
+        ) * 2 as i32) as isize;
         crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
             opb as *mut crate::ogg_h::oggpack_buffer,
             out[0 as i32 as usize] as libc::c_ulong,
@@ -1505,9 +1505,9 @@ pub unsafe extern "C" fn floor1_encode(
             ),
         );
         /* partition by partition */
-        i = 0 as i32 as libc::c_long;
-        j = 2 as i32 as libc::c_long;
-        while i < (*info).partitions as libc::c_long {
+        i = 0 as i32 as isize;
+        j = 2 as i32 as isize;
+        while i < (*info).partitions as isize {
             let mut class: i32 = (*info).partitionclass[i as usize];
             let mut cdim: i32 = (*info).class_dim[class as usize];
             let mut csubbits: i32 = (*info).class_subs[class as usize];
@@ -1542,7 +1542,7 @@ pub unsafe extern "C" fn floor1_encode(
                 while k < cdim {
                     l = 0 as i32;
                     while l < csub {
-                        let mut val_1: i32 = out[(j + k as libc::c_long) as usize];
+                        let mut val_1: i32 = out[(j + k as isize) as usize];
                         if val_1 < maxval[l as usize] {
                             bookas[k as usize] = l;
                             break;
@@ -1560,7 +1560,7 @@ pub unsafe extern "C" fn floor1_encode(
                         as *mut crate::src::libvorbis_1_3_6::lib::codebook::codebook,
                     cval,
                     opb as *mut crate::ogg_h::oggpack_buffer,
-                ) as libc::c_long
+                ) as isize
             }
             /* write post values */
             k = 0 as i32;
@@ -1569,23 +1569,23 @@ pub unsafe extern "C" fn floor1_encode(
                     (*info).class_subbook[class as usize][bookas[k as usize] as usize];
                 if book >= 0 as i32 {
                     /* hack to allow training with 'bad' books */
-                    if (out[(j + k as libc::c_long) as usize] as libc::c_long)
+                    if (out[(j + k as isize) as usize] as isize)
                         < (*books.offset(book as isize)).entries
                     {
                         (*look).postbits +=
                             crate::src::libvorbis_1_3_6::lib::codebook::vorbis_book_encode(
                                 books.offset(book as isize)
                                     as *mut crate::src::libvorbis_1_3_6::lib::codebook::codebook,
-                                out[(j + k as libc::c_long) as usize],
+                                out[(j + k as isize) as usize],
                                 opb as *mut crate::ogg_h::oggpack_buffer,
-                            ) as libc::c_long
+                            ) as isize
                     }
                     /*else
                     fprintf(stderr,"+!");*/
                 }
                 k += 1
             }
-            j += cdim as libc::c_long;
+            j += cdim as isize;
             i += 1
         }
         /* generate quantized floor equivalent to what we'd unpack in decode */
@@ -1593,9 +1593,9 @@ pub unsafe extern "C" fn floor1_encode(
         let mut hx: i32 = 0 as i32; /* be certain */
         let mut lx: i32 = 0 as i32;
         let mut ly: i32 = *post.offset(0 as i32 as isize) * (*info).mult;
-        let mut n: i32 = ((*ci).blocksizes[(*vb).W as usize] / 2 as i32 as libc::c_long) as i32;
-        j = 1 as i32 as libc::c_long;
-        while j < (*look).posts as libc::c_long {
+        let mut n: i32 = ((*ci).blocksizes[(*vb).W as usize] / 2 as i32 as isize) as i32;
+        j = 1 as i32 as isize;
+        while j < (*look).posts as isize {
             let mut current: i32 = (*look).forward_index[j as usize];
             let mut hy: i32 = *post.offset(current as isize) & 0x7fff as i32;
             if hy == *post.offset(current as isize) {
@@ -1607,8 +1607,8 @@ pub unsafe extern "C" fn floor1_encode(
             }
             j += 1
         }
-        j = hx as libc::c_long;
-        while j < ((*vb).pcmend / 2 as i32) as libc::c_long {
+        j = hx as isize;
+        while j < ((*vb).pcmend / 2 as i32) as isize {
             *ilogmask.offset(j as isize) = ly;
             j += 1
         }
@@ -1647,13 +1647,13 @@ unsafe extern "C" fn floor1_inverse1(
     if crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
         &mut (*vb).opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,
         1 as i32,
-    ) == 1 as i32 as libc::c_long
+    ) == 1 as i32 as isize
     {
         let mut fit_value: *mut i32 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
             vb as *mut crate::codec_h::vorbis_block,
             ((*look).posts as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong)
-                as libc::c_long,
+                as isize,
         ) as *mut i32;
         *fit_value.offset(0 as i32 as isize) = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
             &mut (*vb).opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,
@@ -1773,7 +1773,7 @@ unsafe extern "C" fn floor1_inverse2(
     let mut info: *mut crate::backends_h::vorbis_info_floor1 = (*look).vi;
     let mut ci: *mut crate::codec_internal_h::codec_setup_info =
         (*(*(*vb).vd).vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info;
-    let mut n: i32 = ((*ci).blocksizes[(*vb).W as usize] / 2 as i32 as libc::c_long) as i32;
+    let mut n: i32 = ((*ci).blocksizes[(*vb).W as usize] / 2 as i32 as isize) as i32;
     let mut j: i32 = 0;
     if !memo.is_null() {
         /* render the lines */

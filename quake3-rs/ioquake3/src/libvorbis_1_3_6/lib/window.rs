@@ -8236,7 +8236,7 @@ pub unsafe extern "C" fn _vorbis_window_get(mut n: i32) -> *const f32 {
 pub unsafe extern "C" fn _vorbis_apply_window(
     mut d: *mut f32,
     mut winno: *mut i32,
-    mut blocksizes: *mut libc::c_long,
+    mut blocksizes: *mut isize,
     mut lW: i32,
     mut W: i32,
     mut nW: i32,
@@ -8245,35 +8245,35 @@ pub unsafe extern "C" fn _vorbis_apply_window(
     nW = if W != 0 { nW } else { 0 as i32 };
     let mut windowLW: *const f32 = vwin[*winno.offset(lW as isize) as usize];
     let mut windowNW: *const f32 = vwin[*winno.offset(nW as isize) as usize];
-    let mut n: libc::c_long = *blocksizes.offset(W as isize);
-    let mut ln: libc::c_long = *blocksizes.offset(lW as isize);
-    let mut rn: libc::c_long = *blocksizes.offset(nW as isize);
-    let mut leftbegin: libc::c_long = n / 4 as i32 as libc::c_long - ln / 4 as i32 as libc::c_long;
-    let mut leftend: libc::c_long = leftbegin + ln / 2 as i32 as libc::c_long;
-    let mut rightbegin: libc::c_long =
-        n / 2 as i32 as libc::c_long + n / 4 as i32 as libc::c_long - rn / 4 as i32 as libc::c_long;
-    let mut rightend: libc::c_long = rightbegin + rn / 2 as i32 as libc::c_long;
+    let mut n: isize = *blocksizes.offset(W as isize);
+    let mut ln: isize = *blocksizes.offset(lW as isize);
+    let mut rn: isize = *blocksizes.offset(nW as isize);
+    let mut leftbegin: isize = n / 4 as i32 as isize - ln / 4 as i32 as isize;
+    let mut leftend: isize = leftbegin + ln / 2 as i32 as isize;
+    let mut rightbegin: isize =
+        n / 2 as i32 as isize + n / 4 as i32 as isize - rn / 4 as i32 as isize;
+    let mut rightend: isize = rightbegin + rn / 2 as i32 as isize;
     let mut i: i32 = 0;
     let mut p: i32 = 0;
     i = 0 as i32;
-    while (i as libc::c_long) < leftbegin {
+    while (i as isize) < leftbegin {
         *d.offset(i as isize) = 0.0f32;
         i += 1
     }
     p = 0 as i32;
-    while (i as libc::c_long) < leftend {
+    while (i as isize) < leftend {
         *d.offset(i as isize) *= *windowLW.offset(p as isize);
         i += 1;
         p += 1
     }
     i = rightbegin as i32;
-    p = (rn / 2 as i32 as libc::c_long - 1 as i32 as libc::c_long) as i32;
-    while (i as libc::c_long) < rightend {
+    p = (rn / 2 as i32 as isize - 1 as i32 as isize) as i32;
+    while (i as isize) < rightend {
         *d.offset(i as isize) *= *windowNW.offset(p as isize);
         i += 1;
         p -= 1
     }
-    while (i as libc::c_long) < n {
+    while (i as isize) < n {
         *d.offset(i as isize) = 0.0f32;
         i += 1
     }

@@ -237,12 +237,12 @@ pub unsafe extern "C" fn jpeg_core_output_dimensions(
     if (*cinfo).scale_num.wrapping_mul((*cinfo).block_size as u32) <= (*cinfo).scale_denom {
         /* Provide 1/block_size scaling */
         (*cinfo).output_width = crate::src::jpeg_8c::jutils::jdiv_round_up(
-            (*cinfo).image_width as libc::c_long,
-            (*cinfo).block_size as libc::c_long,
+            (*cinfo).image_width as isize,
+            (*cinfo).block_size as isize,
         ) as crate::jmorecfg_h::JDIMENSION;
         (*cinfo).output_height = crate::src::jpeg_8c::jutils::jdiv_round_up(
-            (*cinfo).image_height as libc::c_long,
-            (*cinfo).block_size as libc::c_long,
+            (*cinfo).image_height as isize,
+            (*cinfo).block_size as isize,
         ) as crate::jmorecfg_h::JDIMENSION;
         (*cinfo).min_DCT_h_scaled_size = 1 as i32;
         (*cinfo).min_DCT_v_scaled_size = 1 as i32
@@ -251,12 +251,12 @@ pub unsafe extern "C" fn jpeg_core_output_dimensions(
     {
         /* Provide 2/block_size scaling */
         (*cinfo).output_width = crate::src::jpeg_8c::jutils::jdiv_round_up(
-            (*cinfo).image_width as libc::c_long * 2 as libc::c_long,
-            (*cinfo).block_size as libc::c_long,
+            (*cinfo).image_width as isize * 2 as isize,
+            (*cinfo).block_size as isize,
         ) as crate::jmorecfg_h::JDIMENSION;
         (*cinfo).output_height = crate::src::jpeg_8c::jutils::jdiv_round_up(
-            (*cinfo).image_height as libc::c_long * 2 as libc::c_long,
-            (*cinfo).block_size as libc::c_long,
+            (*cinfo).image_height as isize * 2 as isize,
+            (*cinfo).block_size as isize,
         ) as crate::jmorecfg_h::JDIMENSION;
         (*cinfo).min_DCT_h_scaled_size = 2 as i32;
         (*cinfo).min_DCT_v_scaled_size = 2 as i32
@@ -265,12 +265,12 @@ pub unsafe extern "C" fn jpeg_core_output_dimensions(
     {
         /* Provide 3/block_size scaling */
         (*cinfo).output_width = crate::src::jpeg_8c::jutils::jdiv_round_up(
-            (*cinfo).image_width as libc::c_long * 3 as libc::c_long,
-            (*cinfo).block_size as libc::c_long,
+            (*cinfo).image_width as isize * 3 as isize,
+            (*cinfo).block_size as isize,
         ) as crate::jmorecfg_h::JDIMENSION;
         (*cinfo).output_height = crate::src::jpeg_8c::jutils::jdiv_round_up(
-            (*cinfo).image_height as libc::c_long * 3 as libc::c_long,
-            (*cinfo).block_size as libc::c_long,
+            (*cinfo).image_height as isize * 3 as isize,
+            (*cinfo).block_size as isize,
         ) as crate::jmorecfg_h::JDIMENSION;
         (*cinfo).min_DCT_h_scaled_size = 3 as i32;
         (*cinfo).min_DCT_v_scaled_size = 3 as i32
@@ -279,12 +279,12 @@ pub unsafe extern "C" fn jpeg_core_output_dimensions(
     {
         /* Provide 4/block_size scaling */
         (*cinfo).output_width = crate::src::jpeg_8c::jutils::jdiv_round_up(
-            (*cinfo).image_width as libc::c_long * 4 as libc::c_long,
-            (*cinfo).block_size as libc::c_long,
+            (*cinfo).image_width as isize * 4 as isize,
+            (*cinfo).block_size as isize,
         ) as crate::jmorecfg_h::JDIMENSION;
         (*cinfo).output_height = crate::src::jpeg_8c::jutils::jdiv_round_up(
-            (*cinfo).image_height as libc::c_long * 4 as libc::c_long,
-            (*cinfo).block_size as libc::c_long,
+            (*cinfo).image_height as isize * 4 as isize,
+            (*cinfo).block_size as isize,
         ) as crate::jmorecfg_h::JDIMENSION;
         (*cinfo).min_DCT_h_scaled_size = 4 as i32;
         (*cinfo).min_DCT_v_scaled_size = 4 as i32
@@ -293,12 +293,12 @@ pub unsafe extern "C" fn jpeg_core_output_dimensions(
     {
         /* Provide 5/block_size scaling */
         (*cinfo).output_width = crate::src::jpeg_8c::jutils::jdiv_round_up(
-            (*cinfo).image_width as libc::c_long * 5 as libc::c_long,
-            (*cinfo).block_size as libc::c_long,
+            (*cinfo).image_width as isize * 5 as isize,
+            (*cinfo).block_size as isize,
         ) as crate::jmorecfg_h::JDIMENSION;
         (*cinfo).output_height = crate::src::jpeg_8c::jutils::jdiv_round_up(
-            (*cinfo).image_height as libc::c_long * 5 as libc::c_long,
-            (*cinfo).block_size as libc::c_long,
+            (*cinfo).image_height as isize * 5 as isize,
+            (*cinfo).block_size as isize,
         ) as crate::jmorecfg_h::JDIMENSION;
         (*cinfo).min_DCT_h_scaled_size = 5 as i32;
         (*cinfo).min_DCT_v_scaled_size = 5 as i32
@@ -307,12 +307,12 @@ pub unsafe extern "C" fn jpeg_core_output_dimensions(
     {
         /* Provide 6/block_size scaling */
         (*cinfo).output_width = crate::src::jpeg_8c::jutils::jdiv_round_up(
-            (*cinfo).image_width as libc::c_long * 6 as libc::c_long,
-            (*cinfo).block_size as libc::c_long,
+            (*cinfo).image_width as isize * 6 as isize,
+            (*cinfo).block_size as isize,
         ) as crate::jmorecfg_h::JDIMENSION;
         (*cinfo).output_height = crate::src::jpeg_8c::jutils::jdiv_round_up(
-            (*cinfo).image_height as libc::c_long * 6 as libc::c_long,
-            (*cinfo).block_size as libc::c_long,
+            (*cinfo).image_height as isize * 6 as isize,
+            (*cinfo).block_size as isize,
         ) as crate::jmorecfg_h::JDIMENSION;
         (*cinfo).min_DCT_h_scaled_size = 6 as i32;
         (*cinfo).min_DCT_v_scaled_size = 6 as i32
@@ -321,12 +321,12 @@ pub unsafe extern "C" fn jpeg_core_output_dimensions(
     {
         /* Provide 7/block_size scaling */
         (*cinfo).output_width = crate::src::jpeg_8c::jutils::jdiv_round_up(
-            (*cinfo).image_width as libc::c_long * 7 as libc::c_long,
-            (*cinfo).block_size as libc::c_long,
+            (*cinfo).image_width as isize * 7 as isize,
+            (*cinfo).block_size as isize,
         ) as crate::jmorecfg_h::JDIMENSION;
         (*cinfo).output_height = crate::src::jpeg_8c::jutils::jdiv_round_up(
-            (*cinfo).image_height as libc::c_long * 7 as libc::c_long,
-            (*cinfo).block_size as libc::c_long,
+            (*cinfo).image_height as isize * 7 as isize,
+            (*cinfo).block_size as isize,
         ) as crate::jmorecfg_h::JDIMENSION;
         (*cinfo).min_DCT_h_scaled_size = 7 as i32;
         (*cinfo).min_DCT_v_scaled_size = 7 as i32
@@ -335,12 +335,12 @@ pub unsafe extern "C" fn jpeg_core_output_dimensions(
     {
         /* Provide 8/block_size scaling */
         (*cinfo).output_width = crate::src::jpeg_8c::jutils::jdiv_round_up(
-            (*cinfo).image_width as libc::c_long * 8 as libc::c_long,
-            (*cinfo).block_size as libc::c_long,
+            (*cinfo).image_width as isize * 8 as isize,
+            (*cinfo).block_size as isize,
         ) as crate::jmorecfg_h::JDIMENSION;
         (*cinfo).output_height = crate::src::jpeg_8c::jutils::jdiv_round_up(
-            (*cinfo).image_height as libc::c_long * 8 as libc::c_long,
-            (*cinfo).block_size as libc::c_long,
+            (*cinfo).image_height as isize * 8 as isize,
+            (*cinfo).block_size as isize,
         ) as crate::jmorecfg_h::JDIMENSION;
         (*cinfo).min_DCT_h_scaled_size = 8 as i32;
         (*cinfo).min_DCT_v_scaled_size = 8 as i32
@@ -349,12 +349,12 @@ pub unsafe extern "C" fn jpeg_core_output_dimensions(
     {
         /* Provide 9/block_size scaling */
         (*cinfo).output_width = crate::src::jpeg_8c::jutils::jdiv_round_up(
-            (*cinfo).image_width as libc::c_long * 9 as libc::c_long,
-            (*cinfo).block_size as libc::c_long,
+            (*cinfo).image_width as isize * 9 as isize,
+            (*cinfo).block_size as isize,
         ) as crate::jmorecfg_h::JDIMENSION;
         (*cinfo).output_height = crate::src::jpeg_8c::jutils::jdiv_round_up(
-            (*cinfo).image_height as libc::c_long * 9 as libc::c_long,
-            (*cinfo).block_size as libc::c_long,
+            (*cinfo).image_height as isize * 9 as isize,
+            (*cinfo).block_size as isize,
         ) as crate::jmorecfg_h::JDIMENSION;
         (*cinfo).min_DCT_h_scaled_size = 9 as i32;
         (*cinfo).min_DCT_v_scaled_size = 9 as i32
@@ -363,12 +363,12 @@ pub unsafe extern "C" fn jpeg_core_output_dimensions(
     {
         /* Provide 10/block_size scaling */
         (*cinfo).output_width = crate::src::jpeg_8c::jutils::jdiv_round_up(
-            (*cinfo).image_width as libc::c_long * 10 as libc::c_long,
-            (*cinfo).block_size as libc::c_long,
+            (*cinfo).image_width as isize * 10 as isize,
+            (*cinfo).block_size as isize,
         ) as crate::jmorecfg_h::JDIMENSION;
         (*cinfo).output_height = crate::src::jpeg_8c::jutils::jdiv_round_up(
-            (*cinfo).image_height as libc::c_long * 10 as libc::c_long,
-            (*cinfo).block_size as libc::c_long,
+            (*cinfo).image_height as isize * 10 as isize,
+            (*cinfo).block_size as isize,
         ) as crate::jmorecfg_h::JDIMENSION;
         (*cinfo).min_DCT_h_scaled_size = 10 as i32;
         (*cinfo).min_DCT_v_scaled_size = 10 as i32
@@ -377,12 +377,12 @@ pub unsafe extern "C" fn jpeg_core_output_dimensions(
     {
         /* Provide 11/block_size scaling */
         (*cinfo).output_width = crate::src::jpeg_8c::jutils::jdiv_round_up(
-            (*cinfo).image_width as libc::c_long * 11 as libc::c_long,
-            (*cinfo).block_size as libc::c_long,
+            (*cinfo).image_width as isize * 11 as isize,
+            (*cinfo).block_size as isize,
         ) as crate::jmorecfg_h::JDIMENSION;
         (*cinfo).output_height = crate::src::jpeg_8c::jutils::jdiv_round_up(
-            (*cinfo).image_height as libc::c_long * 11 as libc::c_long,
-            (*cinfo).block_size as libc::c_long,
+            (*cinfo).image_height as isize * 11 as isize,
+            (*cinfo).block_size as isize,
         ) as crate::jmorecfg_h::JDIMENSION;
         (*cinfo).min_DCT_h_scaled_size = 11 as i32;
         (*cinfo).min_DCT_v_scaled_size = 11 as i32
@@ -391,12 +391,12 @@ pub unsafe extern "C" fn jpeg_core_output_dimensions(
     {
         /* Provide 12/block_size scaling */
         (*cinfo).output_width = crate::src::jpeg_8c::jutils::jdiv_round_up(
-            (*cinfo).image_width as libc::c_long * 12 as libc::c_long,
-            (*cinfo).block_size as libc::c_long,
+            (*cinfo).image_width as isize * 12 as isize,
+            (*cinfo).block_size as isize,
         ) as crate::jmorecfg_h::JDIMENSION;
         (*cinfo).output_height = crate::src::jpeg_8c::jutils::jdiv_round_up(
-            (*cinfo).image_height as libc::c_long * 12 as libc::c_long,
-            (*cinfo).block_size as libc::c_long,
+            (*cinfo).image_height as isize * 12 as isize,
+            (*cinfo).block_size as isize,
         ) as crate::jmorecfg_h::JDIMENSION;
         (*cinfo).min_DCT_h_scaled_size = 12 as i32;
         (*cinfo).min_DCT_v_scaled_size = 12 as i32
@@ -405,12 +405,12 @@ pub unsafe extern "C" fn jpeg_core_output_dimensions(
     {
         /* Provide 13/block_size scaling */
         (*cinfo).output_width = crate::src::jpeg_8c::jutils::jdiv_round_up(
-            (*cinfo).image_width as libc::c_long * 13 as libc::c_long,
-            (*cinfo).block_size as libc::c_long,
+            (*cinfo).image_width as isize * 13 as isize,
+            (*cinfo).block_size as isize,
         ) as crate::jmorecfg_h::JDIMENSION;
         (*cinfo).output_height = crate::src::jpeg_8c::jutils::jdiv_round_up(
-            (*cinfo).image_height as libc::c_long * 13 as libc::c_long,
-            (*cinfo).block_size as libc::c_long,
+            (*cinfo).image_height as isize * 13 as isize,
+            (*cinfo).block_size as isize,
         ) as crate::jmorecfg_h::JDIMENSION;
         (*cinfo).min_DCT_h_scaled_size = 13 as i32;
         (*cinfo).min_DCT_v_scaled_size = 13 as i32
@@ -419,12 +419,12 @@ pub unsafe extern "C" fn jpeg_core_output_dimensions(
     {
         /* Provide 14/block_size scaling */
         (*cinfo).output_width = crate::src::jpeg_8c::jutils::jdiv_round_up(
-            (*cinfo).image_width as libc::c_long * 14 as libc::c_long,
-            (*cinfo).block_size as libc::c_long,
+            (*cinfo).image_width as isize * 14 as isize,
+            (*cinfo).block_size as isize,
         ) as crate::jmorecfg_h::JDIMENSION;
         (*cinfo).output_height = crate::src::jpeg_8c::jutils::jdiv_round_up(
-            (*cinfo).image_height as libc::c_long * 14 as libc::c_long,
-            (*cinfo).block_size as libc::c_long,
+            (*cinfo).image_height as isize * 14 as isize,
+            (*cinfo).block_size as isize,
         ) as crate::jmorecfg_h::JDIMENSION;
         (*cinfo).min_DCT_h_scaled_size = 14 as i32;
         (*cinfo).min_DCT_v_scaled_size = 14 as i32
@@ -433,24 +433,24 @@ pub unsafe extern "C" fn jpeg_core_output_dimensions(
     {
         /* Provide 15/block_size scaling */
         (*cinfo).output_width = crate::src::jpeg_8c::jutils::jdiv_round_up(
-            (*cinfo).image_width as libc::c_long * 15 as libc::c_long,
-            (*cinfo).block_size as libc::c_long,
+            (*cinfo).image_width as isize * 15 as isize,
+            (*cinfo).block_size as isize,
         ) as crate::jmorecfg_h::JDIMENSION;
         (*cinfo).output_height = crate::src::jpeg_8c::jutils::jdiv_round_up(
-            (*cinfo).image_height as libc::c_long * 15 as libc::c_long,
-            (*cinfo).block_size as libc::c_long,
+            (*cinfo).image_height as isize * 15 as isize,
+            (*cinfo).block_size as isize,
         ) as crate::jmorecfg_h::JDIMENSION;
         (*cinfo).min_DCT_h_scaled_size = 15 as i32;
         (*cinfo).min_DCT_v_scaled_size = 15 as i32
     } else {
         /* Provide 16/block_size scaling */
         (*cinfo).output_width = crate::src::jpeg_8c::jutils::jdiv_round_up(
-            (*cinfo).image_width as libc::c_long * 16 as libc::c_long,
-            (*cinfo).block_size as libc::c_long,
+            (*cinfo).image_width as isize * 16 as isize,
+            (*cinfo).block_size as isize,
         ) as crate::jmorecfg_h::JDIMENSION;
         (*cinfo).output_height = crate::src::jpeg_8c::jutils::jdiv_round_up(
-            (*cinfo).image_height as libc::c_long * 16 as libc::c_long,
-            (*cinfo).block_size as libc::c_long,
+            (*cinfo).image_height as isize * 16 as isize,
+            (*cinfo).block_size as isize,
         ) as crate::jmorecfg_h::JDIMENSION;
         (*cinfo).min_DCT_h_scaled_size = 16 as i32;
         (*cinfo).min_DCT_v_scaled_size = 16 as i32
@@ -475,11 +475,11 @@ unsafe extern "C" fn initial_setup(mut cinfo: crate::jpeglib_h::j_decompress_ptr
     let mut compptr: *mut crate::jpeglib_h::jpeg_component_info =
         0 as *mut crate::jpeglib_h::jpeg_component_info;
     /* Make sure image isn't bigger than I can handle */
-    if (*cinfo).image_height as libc::c_long > 65500 as libc::c_long
-        || (*cinfo).image_width as libc::c_long > 65500 as libc::c_long
+    if (*cinfo).image_height as isize > 65500 as isize
+        || (*cinfo).image_width as isize > 65500 as isize
     {
         (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_IMAGE_TOO_BIG as i32;
-        (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = 65500 as libc::c_long as u32 as i32;
+        (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = 65500 as isize as u32 as i32;
         Some(
             (*(*cinfo).err)
                 .error_exit
@@ -665,12 +665,12 @@ unsafe extern "C" fn initial_setup(mut cinfo: crate::jpeglib_h::j_decompress_ptr
         (*compptr).DCT_v_scaled_size = (*cinfo).block_size;
         /* Size in DCT blocks */
         (*compptr).width_in_blocks = crate::src::jpeg_8c::jutils::jdiv_round_up(
-            (*cinfo).image_width as libc::c_long * (*compptr).h_samp_factor as libc::c_long,
-            ((*cinfo).max_h_samp_factor * (*cinfo).block_size) as libc::c_long,
+            (*cinfo).image_width as isize * (*compptr).h_samp_factor as isize,
+            ((*cinfo).max_h_samp_factor * (*cinfo).block_size) as isize,
         ) as crate::jmorecfg_h::JDIMENSION;
         (*compptr).height_in_blocks = crate::src::jpeg_8c::jutils::jdiv_round_up(
-            (*cinfo).image_height as libc::c_long * (*compptr).v_samp_factor as libc::c_long,
-            ((*cinfo).max_v_samp_factor * (*cinfo).block_size) as libc::c_long,
+            (*cinfo).image_height as isize * (*compptr).v_samp_factor as isize,
+            ((*cinfo).max_v_samp_factor * (*cinfo).block_size) as isize,
         ) as crate::jmorecfg_h::JDIMENSION;
         /* downsampled_width and downsampled_height will also be overridden by
          * jdmaster.c if we are doing full decompression.  The transcoder library
@@ -678,12 +678,12 @@ unsafe extern "C" fn initial_setup(mut cinfo: crate::jpeglib_h::j_decompress_ptr
          */
         /* Size in samples */
         (*compptr).downsampled_width = crate::src::jpeg_8c::jutils::jdiv_round_up(
-            (*cinfo).image_width as libc::c_long * (*compptr).h_samp_factor as libc::c_long,
-            (*cinfo).max_h_samp_factor as libc::c_long,
+            (*cinfo).image_width as isize * (*compptr).h_samp_factor as isize,
+            (*cinfo).max_h_samp_factor as isize,
         ) as crate::jmorecfg_h::JDIMENSION;
         (*compptr).downsampled_height = crate::src::jpeg_8c::jutils::jdiv_round_up(
-            (*cinfo).image_height as libc::c_long * (*compptr).v_samp_factor as libc::c_long,
-            (*cinfo).max_v_samp_factor as libc::c_long,
+            (*cinfo).image_height as isize * (*compptr).v_samp_factor as isize,
+            (*cinfo).max_v_samp_factor as isize,
         ) as crate::jmorecfg_h::JDIMENSION;
         /* Mark component needed, until color conversion says otherwise */
         (*compptr).component_needed = 1 as i32;
@@ -694,8 +694,8 @@ unsafe extern "C" fn initial_setup(mut cinfo: crate::jpeglib_h::j_decompress_ptr
     }
     /* Compute number of fully interleaved MCU rows. */
     (*cinfo).total_iMCU_rows = crate::src::jpeg_8c::jutils::jdiv_round_up(
-        (*cinfo).image_height as libc::c_long,
-        ((*cinfo).max_v_samp_factor * (*cinfo).block_size) as libc::c_long,
+        (*cinfo).image_height as isize,
+        ((*cinfo).max_v_samp_factor * (*cinfo).block_size) as isize,
     ) as crate::jmorecfg_h::JDIMENSION;
     /* Decide whether file contains multiple scans */
     if (*cinfo).comps_in_scan < (*cinfo).num_components || (*cinfo).progressive_mode != 0 {
@@ -756,12 +756,12 @@ unsafe extern "C" fn per_scan_setup(mut cinfo: crate::jpeglib_h::j_decompress_pt
         }
         /* Overall image size in MCUs */
         (*cinfo).MCUs_per_row = crate::src::jpeg_8c::jutils::jdiv_round_up(
-            (*cinfo).image_width as libc::c_long,
-            ((*cinfo).max_h_samp_factor * (*cinfo).block_size) as libc::c_long,
+            (*cinfo).image_width as isize,
+            ((*cinfo).max_h_samp_factor * (*cinfo).block_size) as isize,
         ) as crate::jmorecfg_h::JDIMENSION;
         (*cinfo).MCU_rows_in_scan = crate::src::jpeg_8c::jutils::jdiv_round_up(
-            (*cinfo).image_height as libc::c_long,
-            ((*cinfo).max_v_samp_factor * (*cinfo).block_size) as libc::c_long,
+            (*cinfo).image_height as isize,
+            ((*cinfo).max_v_samp_factor * (*cinfo).block_size) as isize,
         ) as crate::jmorecfg_h::JDIMENSION;
         (*cinfo).blocks_in_MCU = 0 as i32;
         ci = 0 as i32;

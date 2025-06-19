@@ -61,7 +61,7 @@ pub unsafe extern "C" fn oggpack_writeinit(mut b: *mut crate::ogg_h::oggpack_buf
     (*b).buffer = crate::stdlib::malloc(256 as i32 as libc::c_ulong) as *mut u8;
     (*b).ptr = (*b).buffer;
     *(*b).buffer.offset(0 as i32 as isize) = '\u{0}' as i32 as u8;
-    (*b).storage = 256 as i32 as libc::c_long;
+    (*b).storage = 256 as i32 as isize;
 }
 #[no_mangle]
 
@@ -85,11 +85,11 @@ pub unsafe extern "C" fn oggpackB_writecheck(mut b: *mut crate::ogg_h::oggpack_b
 
 pub unsafe extern "C" fn oggpack_writetrunc(
     mut b: *mut crate::ogg_h::oggpack_buffer,
-    mut bits: libc::c_long,
+    mut bits: isize,
 ) {
-    let mut bytes: libc::c_long = bits >> 3 as i32;
+    let mut bytes: isize = bits >> 3 as i32;
     if !(*b).ptr.is_null() {
-        bits -= bytes * 8 as i32 as libc::c_long;
+        bits -= bytes * 8 as i32 as isize;
         (*b).ptr = (*b).buffer.offset(bytes as isize);
         (*b).endbit = bits as i32;
         (*b).endbyte = bytes;
@@ -100,11 +100,11 @@ pub unsafe extern "C" fn oggpack_writetrunc(
 
 pub unsafe extern "C" fn oggpackB_writetrunc(
     mut b: *mut crate::ogg_h::oggpack_buffer,
-    mut bits: libc::c_long,
+    mut bits: isize,
 ) {
-    let mut bytes: libc::c_long = bits >> 3 as i32;
+    let mut bytes: isize = bits >> 3 as i32;
     if !(*b).ptr.is_null() {
-        bits -= bytes * 8 as i32 as libc::c_long;
+        bits -= bytes * 8 as i32 as isize;
         (*b).ptr = (*b).buffer.offset(bytes as isize);
         (*b).endbit = bits as i32;
         (*b).endbyte = bytes;
@@ -121,23 +121,23 @@ pub unsafe extern "C" fn oggpack_write(
 ) {
     let mut current_block: u64;
     if !(bits < 0 as i32 || bits > 32 as i32) {
-        if (*b).endbyte >= (*b).storage - 4 as i32 as libc::c_long {
+        if (*b).endbyte >= (*b).storage - 4 as i32 as isize {
             let mut ret: *mut libc::c_void = 0 as *mut libc::c_void;
             if (*b).ptr.is_null() {
                 return;
             }
-            if (*b).storage > 9223372036854775807 as libc::c_long - 256 as i32 as libc::c_long {
+            if (*b).storage > 9223372036854775807 as isize - 256 as i32 as isize {
                 current_block = 11736846078876452800;
             } else {
                 ret = crate::stdlib::realloc(
                     (*b).buffer as *mut libc::c_void,
-                    ((*b).storage + 256 as i32 as libc::c_long) as libc::c_ulong,
+                    ((*b).storage + 256 as i32 as isize) as libc::c_ulong,
                 );
                 if ret.is_null() {
                     current_block = 11736846078876452800;
                 } else {
                     (*b).buffer = ret as *mut u8;
-                    (*b).storage += 256 as i32 as libc::c_long;
+                    (*b).storage += 256 as i32 as isize;
                     (*b).ptr = (*b).buffer.offset((*b).endbyte as isize);
                     current_block = 13109137661213826276;
                 }
@@ -171,7 +171,7 @@ pub unsafe extern "C" fn oggpack_write(
                         }
                     }
                 }
-                (*b).endbyte += (bits / 8 as i32) as libc::c_long;
+                (*b).endbyte += (bits / 8 as i32) as isize;
                 (*b).ptr = (*b).ptr.offset((bits / 8 as i32) as isize);
                 (*b).endbit = bits & 7 as i32;
                 return;
@@ -190,23 +190,23 @@ pub unsafe extern "C" fn oggpackB_write(
 ) {
     let mut current_block: u64;
     if !(bits < 0 as i32 || bits > 32 as i32) {
-        if (*b).endbyte >= (*b).storage - 4 as i32 as libc::c_long {
+        if (*b).endbyte >= (*b).storage - 4 as i32 as isize {
             let mut ret: *mut libc::c_void = 0 as *mut libc::c_void;
             if (*b).ptr.is_null() {
                 return;
             }
-            if (*b).storage > 9223372036854775807 as libc::c_long - 256 as i32 as libc::c_long {
+            if (*b).storage > 9223372036854775807 as isize - 256 as i32 as isize {
                 current_block = 2612814309992382393;
             } else {
                 ret = crate::stdlib::realloc(
                     (*b).buffer as *mut libc::c_void,
-                    ((*b).storage + 256 as i32 as libc::c_long) as libc::c_ulong,
+                    ((*b).storage + 256 as i32 as isize) as libc::c_ulong,
                 );
                 if ret.is_null() {
                     current_block = 2612814309992382393;
                 } else {
                     (*b).buffer = ret as *mut u8;
-                    (*b).storage += 256 as i32 as libc::c_long;
+                    (*b).storage += 256 as i32 as isize;
                     (*b).ptr = (*b).buffer.offset((*b).endbyte as isize);
                     current_block = 13109137661213826276;
                 }
@@ -239,7 +239,7 @@ pub unsafe extern "C" fn oggpackB_write(
                         }
                     }
                 }
-                (*b).endbyte += (bits / 8 as i32) as libc::c_long;
+                (*b).endbyte += (bits / 8 as i32) as isize;
                 (*b).ptr = (*b).ptr.offset((bits / 8 as i32) as isize);
                 (*b).endbit = bits & 7 as i32;
                 return;
@@ -268,7 +268,7 @@ pub unsafe extern "C" fn oggpackB_writealign(mut b: *mut crate::ogg_h::oggpack_b
 unsafe extern "C" fn oggpack_writecopy_helper(
     mut b: *mut crate::ogg_h::oggpack_buffer,
     mut source: *mut libc::c_void,
-    mut bits: libc::c_long,
+    mut bits: isize,
     mut w: Option<
         unsafe extern "C" fn(_: *mut crate::ogg_h::oggpack_buffer, _: libc::c_ulong, _: i32) -> (),
     >,
@@ -276,18 +276,18 @@ unsafe extern "C" fn oggpack_writecopy_helper(
 ) {
     let mut current_block: u64;
     let mut ptr: *mut u8 = source as *mut u8;
-    let mut bytes: libc::c_long = bits / 8 as i32 as libc::c_long;
-    let mut pbytes: libc::c_long = ((*b).endbit as libc::c_long + bits) / 8 as i32 as libc::c_long;
-    bits -= bytes * 8 as i32 as libc::c_long;
+    let mut bytes: isize = bits / 8 as i32 as isize;
+    let mut pbytes: isize = ((*b).endbit as isize + bits) / 8 as i32 as isize;
+    bits -= bytes * 8 as i32 as isize;
     /* expand storage up-front */
     if (*b).endbyte + pbytes >= (*b).storage {
         let mut ret: *mut libc::c_void = 0 as *mut libc::c_void;
         if (*b).ptr.is_null() {
             current_block = 1692384543052803397;
-        } else if (*b).storage > (*b).endbyte + pbytes + 256 as i32 as libc::c_long {
+        } else if (*b).storage > (*b).endbyte + pbytes + 256 as i32 as isize {
             current_block = 1692384543052803397;
         } else {
-            (*b).storage = (*b).endbyte + pbytes + 256 as i32 as libc::c_long;
+            (*b).storage = (*b).endbyte + pbytes + 256 as i32 as isize;
             ret = crate::stdlib::realloc(
                 (*b).buffer as *mut libc::c_void,
                 (*b).storage as libc::c_ulong,
@@ -313,7 +313,7 @@ unsafe extern "C" fn oggpack_writecopy_helper(
         let mut i: i32 = 0;
         /* unaligned copy.  Do it the hard way. */
         i = 0 as i32;
-        while (i as libc::c_long) < bytes {
+        while (i as isize) < bytes {
             w.expect("non-null function pointer")(
                 b,
                 *ptr.offset(i as isize) as libc::c_ulong,
@@ -337,7 +337,7 @@ unsafe extern "C" fn oggpack_writecopy_helper(
         if msb != 0 {
             w.expect("non-null function pointer")(
                 b,
-                (*ptr.offset(bytes as isize) as i32 >> 8 as i32 as libc::c_long - bits)
+                (*ptr.offset(bytes as isize) as i32 >> 8 as i32 as isize - bits)
                     as libc::c_ulong,
                 bits as i32,
             );
@@ -355,7 +355,7 @@ unsafe extern "C" fn oggpack_writecopy_helper(
 pub unsafe extern "C" fn oggpack_writecopy(
     mut b: *mut crate::ogg_h::oggpack_buffer,
     mut source: *mut libc::c_void,
-    mut bits: libc::c_long,
+    mut bits: isize,
 ) {
     oggpack_writecopy_helper(
         b,
@@ -377,7 +377,7 @@ pub unsafe extern "C" fn oggpack_writecopy(
 pub unsafe extern "C" fn oggpackB_writecopy(
     mut b: *mut crate::ogg_h::oggpack_buffer,
     mut source: *mut libc::c_void,
-    mut bits: libc::c_long,
+    mut bits: isize,
 ) {
     oggpack_writecopy_helper(
         b,
@@ -402,7 +402,7 @@ pub unsafe extern "C" fn oggpack_reset(mut b: *mut crate::ogg_h::oggpack_buffer)
     }
     (*b).ptr = (*b).buffer;
     *(*b).buffer.offset(0 as i32 as isize) = 0 as i32 as u8;
-    (*b).endbyte = 0 as i32 as libc::c_long;
+    (*b).endbyte = 0 as i32 as isize;
     (*b).endbit = (*b).endbyte as i32;
 }
 #[no_mangle]
@@ -441,7 +441,7 @@ pub unsafe extern "C" fn oggpack_readinit(
     );
     (*b).ptr = buf;
     (*b).buffer = (*b).ptr;
-    (*b).storage = bytes as libc::c_long;
+    (*b).storage = bytes as isize;
 }
 #[no_mangle]
 
@@ -458,23 +458,23 @@ pub unsafe extern "C" fn oggpackB_readinit(
 pub unsafe extern "C" fn oggpack_look(
     mut b: *mut crate::ogg_h::oggpack_buffer,
     mut bits: i32,
-) -> libc::c_long {
+) -> isize {
     let mut ret: libc::c_ulong = 0;
     let mut m: libc::c_ulong = 0;
     if bits < 0 as i32 || bits > 32 as i32 {
-        return -(1 as i32) as libc::c_long;
+        return -(1 as i32) as isize;
     }
     m = mask[bits as usize];
     bits += (*b).endbit;
-    if (*b).endbyte >= (*b).storage - 4 as i32 as libc::c_long {
+    if (*b).endbyte >= (*b).storage - 4 as i32 as isize {
         /* not the main path */
-        if (*b).endbyte > (*b).storage - (bits + 7 as i32 >> 3 as i32) as libc::c_long {
-            return -(1 as i32) as libc::c_long;
+        if (*b).endbyte > (*b).storage - (bits + 7 as i32 >> 3 as i32) as isize {
+            return -(1 as i32) as isize;
         } else {
             /* special case to avoid reading b->ptr[0], which might be past the end of
             the buffer; also skips some useless accounting */
             if bits == 0 {
-                return 0 as libc::c_long;
+                return 0 as isize;
             }
         }
     }
@@ -495,7 +495,7 @@ pub unsafe extern "C" fn oggpack_look(
             }
         }
     }
-    return (m & ret) as libc::c_long;
+    return (m & ret) as isize;
 }
 /* Read in bits without advancing the bitptr; bits <= 32 */
 #[no_mangle]
@@ -503,22 +503,22 @@ pub unsafe extern "C" fn oggpack_look(
 pub unsafe extern "C" fn oggpackB_look(
     mut b: *mut crate::ogg_h::oggpack_buffer,
     mut bits: i32,
-) -> libc::c_long {
+) -> isize {
     let mut ret: libc::c_ulong = 0;
     let mut m: i32 = 32 as i32 - bits;
     if m < 0 as i32 || m > 32 as i32 {
-        return -(1 as i32) as libc::c_long;
+        return -(1 as i32) as isize;
     }
     bits += (*b).endbit;
-    if (*b).endbyte >= (*b).storage - 4 as i32 as libc::c_long {
+    if (*b).endbyte >= (*b).storage - 4 as i32 as isize {
         /* not the main path */
-        if (*b).endbyte > (*b).storage - (bits + 7 as i32 >> 3 as i32) as libc::c_long {
-            return -(1 as i32) as libc::c_long;
+        if (*b).endbyte > (*b).storage - (bits + 7 as i32 >> 3 as i32) as isize {
+            return -(1 as i32) as isize;
         } else {
             /* special case to avoid reading b->ptr[0], which might be past the end of
             the buffer; also skips some useless accounting */
             if bits == 0 {
-                return 0 as libc::c_long;
+                return 0 as isize;
             }
         }
     }
@@ -542,37 +542,37 @@ pub unsafe extern "C" fn oggpackB_look(
     }
     return ((ret & 0xffffffff as u32 as libc::c_ulong)
         >> (m >> 1 as i32)
-        >> (m + 1 as i32 >> 1 as i32)) as libc::c_long;
+        >> (m + 1 as i32 >> 1 as i32)) as isize;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn oggpack_look1(mut b: *mut crate::ogg_h::oggpack_buffer) -> libc::c_long {
+pub unsafe extern "C" fn oggpack_look1(mut b: *mut crate::ogg_h::oggpack_buffer) -> isize {
     if (*b).endbyte >= (*b).storage {
-        return -(1 as i32) as libc::c_long;
+        return -(1 as i32) as isize;
     }
-    return (*(*b).ptr.offset(0 as i32 as isize) as i32 >> (*b).endbit & 1 as i32) as libc::c_long;
+    return (*(*b).ptr.offset(0 as i32 as isize) as i32 >> (*b).endbit & 1 as i32) as isize;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn oggpackB_look1(mut b: *mut crate::ogg_h::oggpack_buffer) -> libc::c_long {
+pub unsafe extern "C" fn oggpackB_look1(mut b: *mut crate::ogg_h::oggpack_buffer) -> isize {
     if (*b).endbyte >= (*b).storage {
-        return -(1 as i32) as libc::c_long;
+        return -(1 as i32) as isize;
     }
     return (*(*b).ptr.offset(0 as i32 as isize) as i32 >> 7 as i32 - (*b).endbit & 1 as i32)
-        as libc::c_long;
+        as isize;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn oggpack_adv(mut b: *mut crate::ogg_h::oggpack_buffer, mut bits: i32) {
     bits += (*b).endbit;
-    if (*b).endbyte > (*b).storage - (bits + 7 as i32 >> 3 as i32) as libc::c_long {
+    if (*b).endbyte > (*b).storage - (bits + 7 as i32 >> 3 as i32) as isize {
         (*b).ptr = 0 as *mut u8;
         (*b).endbyte = (*b).storage;
         (*b).endbit = 1 as i32;
         return;
     } else {
         (*b).ptr = (*b).ptr.offset((bits / 8 as i32) as isize);
-        (*b).endbyte += (bits / 8 as i32) as libc::c_long;
+        (*b).endbyte += (bits / 8 as i32) as isize;
         (*b).endbit = bits & 7 as i32;
         return;
     };
@@ -603,22 +603,22 @@ pub unsafe extern "C" fn oggpackB_adv1(mut b: *mut crate::ogg_h::oggpack_buffer)
 pub unsafe extern "C" fn oggpack_read(
     mut b: *mut crate::ogg_h::oggpack_buffer,
     mut bits: i32,
-) -> libc::c_long {
+) -> isize {
     let mut current_block: u64;
-    let mut ret: libc::c_long = 0;
+    let mut ret: isize = 0;
     let mut m: libc::c_ulong = 0;
     if !(bits < 0 as i32 || bits > 32 as i32) {
         m = mask[bits as usize];
         bits += (*b).endbit;
-        if (*b).endbyte >= (*b).storage - 4 as i32 as libc::c_long {
+        if (*b).endbyte >= (*b).storage - 4 as i32 as isize {
             /* not the main path */
-            if (*b).endbyte > (*b).storage - (bits + 7 as i32 >> 3 as i32) as libc::c_long {
+            if (*b).endbyte > (*b).storage - (bits + 7 as i32 >> 3 as i32) as isize {
                 current_block = 7073085723881536557;
             } else {
                 /* special case to avoid reading b->ptr[0], which might be past the end of
                 the buffer; also skips some useless accounting */
                 if bits == 0 {
-                    return 0 as libc::c_long;
+                    return 0 as isize;
                 }
                 current_block = 14523784380283086299;
             }
@@ -628,29 +628,29 @@ pub unsafe extern "C" fn oggpack_read(
         match current_block {
             7073085723881536557 => {}
             _ => {
-                ret = (*(*b).ptr.offset(0 as i32 as isize) as i32 >> (*b).endbit) as libc::c_long;
+                ret = (*(*b).ptr.offset(0 as i32 as isize) as i32 >> (*b).endbit) as isize;
                 if bits > 8 as i32 {
                     ret |= ((*(*b).ptr.offset(1 as i32 as isize) as i32) << 8 as i32 - (*b).endbit)
-                        as libc::c_long;
+                        as isize;
                     if bits > 16 as i32 {
                         ret |= ((*(*b).ptr.offset(2 as i32 as isize) as i32)
                             << 16 as i32 - (*b).endbit)
-                            as libc::c_long;
+                            as isize;
                         if bits > 24 as i32 {
                             ret |= ((*(*b).ptr.offset(3 as i32 as isize) as i32)
                                 << 24 as i32 - (*b).endbit)
-                                as libc::c_long;
+                                as isize;
                             if bits > 32 as i32 && (*b).endbit != 0 {
                                 ret |= ((*(*b).ptr.offset(4 as i32 as isize) as i32)
                                     << 32 as i32 - (*b).endbit)
-                                    as libc::c_long
+                                    as isize
                             }
                         }
                     }
                 }
-                ret = (ret as libc::c_ulong & m) as libc::c_long;
+                ret = (ret as libc::c_ulong & m) as isize;
                 (*b).ptr = (*b).ptr.offset((bits / 8 as i32) as isize);
-                (*b).endbyte += (bits / 8 as i32) as libc::c_long;
+                (*b).endbyte += (bits / 8 as i32) as isize;
                 (*b).endbit = bits & 7 as i32;
                 return ret;
             }
@@ -659,7 +659,7 @@ pub unsafe extern "C" fn oggpack_read(
     (*b).ptr = 0 as *mut u8;
     (*b).endbyte = (*b).storage;
     (*b).endbit = 1 as i32;
-    return -(1 as libc::c_long);
+    return -(1 as isize);
 }
 /* bits <= 32 */
 #[no_mangle]
@@ -667,21 +667,21 @@ pub unsafe extern "C" fn oggpack_read(
 pub unsafe extern "C" fn oggpackB_read(
     mut b: *mut crate::ogg_h::oggpack_buffer,
     mut bits: i32,
-) -> libc::c_long {
+) -> isize {
     let mut current_block: u64;
-    let mut ret: libc::c_long = 0;
-    let mut m: libc::c_long = (32 as i32 - bits) as libc::c_long;
-    if !(m < 0 as i32 as libc::c_long || m > 32 as i32 as libc::c_long) {
+    let mut ret: isize = 0;
+    let mut m: isize = (32 as i32 - bits) as isize;
+    if !(m < 0 as i32 as isize || m > 32 as i32 as isize) {
         bits += (*b).endbit;
-        if (*b).endbyte + 4 as i32 as libc::c_long >= (*b).storage {
+        if (*b).endbyte + 4 as i32 as isize >= (*b).storage {
             /* not the main path */
-            if (*b).endbyte > (*b).storage - (bits + 7 as i32 >> 3 as i32) as libc::c_long {
+            if (*b).endbyte > (*b).storage - (bits + 7 as i32 >> 3 as i32) as isize {
                 current_block = 11946596175837608108;
             } else {
                 /* special case to avoid reading b->ptr[0], which might be past the end of
                 the buffer; also skips some useless accounting */
                 if bits == 0 {
-                    return 0 as libc::c_long;
+                    return 0 as isize;
                 }
                 current_block = 7351195479953500246;
             }
@@ -692,31 +692,31 @@ pub unsafe extern "C" fn oggpackB_read(
             11946596175837608108 => {}
             _ => {
                 ret = ((*(*b).ptr.offset(0 as i32 as isize) as i32) << 24 as i32 + (*b).endbit)
-                    as libc::c_long;
+                    as isize;
                 if bits > 8 as i32 {
                     ret |= ((*(*b).ptr.offset(1 as i32 as isize) as i32) << 16 as i32 + (*b).endbit)
-                        as libc::c_long;
+                        as isize;
                     if bits > 16 as i32 {
                         ret |= ((*(*b).ptr.offset(2 as i32 as isize) as i32)
                             << 8 as i32 + (*b).endbit)
-                            as libc::c_long;
+                            as isize;
                         if bits > 24 as i32 {
                             ret |= ((*(*b).ptr.offset(3 as i32 as isize) as i32) << (*b).endbit)
-                                as libc::c_long;
+                                as isize;
                             if bits > 32 as i32 && (*b).endbit != 0 {
                                 ret |= (*(*b).ptr.offset(4 as i32 as isize) as i32
                                     >> 8 as i32 - (*b).endbit)
-                                    as libc::c_long
+                                    as isize
                             }
                         }
                     }
                 }
                 ret = ((ret as libc::c_ulong & 0xffffffff as libc::c_ulong)
                     >> (m >> 1 as i32)
-                    >> (m + 1 as i32 as libc::c_long >> 1 as i32))
-                    as libc::c_long;
+                    >> (m + 1 as i32 as isize >> 1 as i32))
+                    as isize;
                 (*b).ptr = (*b).ptr.offset((bits / 8 as i32) as isize);
-                (*b).endbyte += (bits / 8 as i32) as libc::c_long;
+                (*b).endbyte += (bits / 8 as i32) as isize;
                 (*b).endbit = bits & 7 as i32;
                 return ret;
             }
@@ -725,20 +725,20 @@ pub unsafe extern "C" fn oggpackB_read(
     (*b).ptr = 0 as *mut u8;
     (*b).endbyte = (*b).storage;
     (*b).endbit = 1 as i32;
-    return -(1 as libc::c_long);
+    return -(1 as isize);
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn oggpack_read1(mut b: *mut crate::ogg_h::oggpack_buffer) -> libc::c_long {
-    let mut ret: libc::c_long = 0;
+pub unsafe extern "C" fn oggpack_read1(mut b: *mut crate::ogg_h::oggpack_buffer) -> isize {
+    let mut ret: isize = 0;
     if (*b).endbyte >= (*b).storage {
         (*b).ptr = 0 as *mut u8;
         (*b).endbyte = (*b).storage;
         (*b).endbit = 1 as i32;
-        return -(1 as libc::c_long);
+        return -(1 as isize);
     } else {
         ret =
-            (*(*b).ptr.offset(0 as i32 as isize) as i32 >> (*b).endbit & 1 as i32) as libc::c_long;
+            (*(*b).ptr.offset(0 as i32 as isize) as i32 >> (*b).endbit & 1 as i32) as isize;
         (*b).endbit += 1;
         if (*b).endbit > 7 as i32 {
             (*b).endbit = 0 as i32;
@@ -750,16 +750,16 @@ pub unsafe extern "C" fn oggpack_read1(mut b: *mut crate::ogg_h::oggpack_buffer)
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn oggpackB_read1(mut b: *mut crate::ogg_h::oggpack_buffer) -> libc::c_long {
-    let mut ret: libc::c_long = 0;
+pub unsafe extern "C" fn oggpackB_read1(mut b: *mut crate::ogg_h::oggpack_buffer) -> isize {
+    let mut ret: isize = 0;
     if (*b).endbyte >= (*b).storage {
         (*b).ptr = 0 as *mut u8;
         (*b).endbyte = (*b).storage;
         (*b).endbit = 1 as i32;
-        return -(1 as libc::c_long);
+        return -(1 as isize);
     } else {
         ret = (*(*b).ptr.offset(0 as i32 as isize) as i32 >> 7 as i32 - (*b).endbit & 1 as i32)
-            as libc::c_long;
+            as isize;
         (*b).endbit += 1;
         if (*b).endbit > 7 as i32 {
             (*b).endbit = 0 as i32;
@@ -771,22 +771,22 @@ pub unsafe extern "C" fn oggpackB_read1(mut b: *mut crate::ogg_h::oggpack_buffer
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn oggpack_bytes(mut b: *mut crate::ogg_h::oggpack_buffer) -> libc::c_long {
-    return (*b).endbyte + (((*b).endbit + 7 as i32) / 8 as i32) as libc::c_long;
+pub unsafe extern "C" fn oggpack_bytes(mut b: *mut crate::ogg_h::oggpack_buffer) -> isize {
+    return (*b).endbyte + (((*b).endbit + 7 as i32) / 8 as i32) as isize;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn oggpack_bits(mut b: *mut crate::ogg_h::oggpack_buffer) -> libc::c_long {
-    return (*b).endbyte * 8 as i32 as libc::c_long + (*b).endbit as libc::c_long;
+pub unsafe extern "C" fn oggpack_bits(mut b: *mut crate::ogg_h::oggpack_buffer) -> isize {
+    return (*b).endbyte * 8 as i32 as isize + (*b).endbit as isize;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn oggpackB_bytes(mut b: *mut crate::ogg_h::oggpack_buffer) -> libc::c_long {
+pub unsafe extern "C" fn oggpackB_bytes(mut b: *mut crate::ogg_h::oggpack_buffer) -> isize {
     return oggpack_bytes(b);
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn oggpackB_bits(mut b: *mut crate::ogg_h::oggpack_buffer) -> libc::c_long {
+pub unsafe extern "C" fn oggpackB_bits(mut b: *mut crate::ogg_h::oggpack_buffer) -> isize {
     return oggpack_bits(b);
 }
 #[no_mangle]

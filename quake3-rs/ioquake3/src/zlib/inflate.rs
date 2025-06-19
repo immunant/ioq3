@@ -167,7 +167,7 @@ pub unsafe extern "C" fn inflatePrime(
         return -(2 as i32);
     }
     value =
-        (value as libc::c_long & ((1 as libc::c_long) << bits) - 1 as i32 as libc::c_long) as i32;
+        (value as isize & ((1 as isize) << bits) - 1 as i32 as isize) as i32;
     (*state).hold = (*state)
         .hold
         .wrapping_add((value << (*state).bits) as libc::c_ulong);
@@ -5010,7 +5010,7 @@ pub unsafe extern "C" fn inflate(mut strm: crate::zlib_h::z_streamp, mut flush: 
                         } else {
                             (*state).dmax = (1 as u32) << len;
                             (*state).check = crate::src::zlib::adler32::adler32(
-                                0 as libc::c_long as crate::zconf_h::uLong,
+                                0 as isize as crate::zconf_h::uLong,
                                 0 as *const crate::zconf_h::Bytef,
                                 0 as i32 as crate::zconf_h::uInt,
                             );
@@ -5303,7 +5303,7 @@ pub unsafe extern "C" fn inflate(mut strm: crate::zlib_h::z_streamp, mut flush: 
                     return 2 as i32;
                 }
                 (*state).check = crate::src::zlib::adler32::adler32(
-                    0 as libc::c_long as crate::zconf_h::uLong,
+                    0 as isize as crate::zconf_h::uLong,
                     0 as *const crate::zconf_h::Bytef,
                     0 as i32 as crate::zconf_h::uInt,
                 );
@@ -5906,7 +5906,7 @@ pub unsafe extern "C" fn inflateSetDictionary(
     /* check for correct dictionary id */
     if (*state).mode as u32 == crate::src::zlib::inflate::DICT as i32 as u32 {
         id = crate::src::zlib::adler32::adler32(
-            0 as libc::c_long as crate::zconf_h::uLong,
+            0 as isize as crate::zconf_h::uLong,
             0 as *const crate::zconf_h::Bytef,
             0 as i32 as crate::zconf_h::uInt,
         );
@@ -6787,16 +6787,16 @@ pub unsafe extern "C" fn inflateCopy(
                 as *const crate::src::zlib::inftrees::code
     {
         (*copy).lencode = (*copy).codes.as_mut_ptr().offset(
-            (*state).lencode.offset_from((*state).codes.as_mut_ptr()) as libc::c_long as isize,
+            (*state).lencode.offset_from((*state).codes.as_mut_ptr()) as isize as isize,
         );
         (*copy).distcode = (*copy).codes.as_mut_ptr().offset(
-            (*state).distcode.offset_from((*state).codes.as_mut_ptr()) as libc::c_long as isize,
+            (*state).distcode.offset_from((*state).codes.as_mut_ptr()) as isize as isize,
         )
     }
     (*copy).next = (*copy)
         .codes
         .as_mut_ptr()
-        .offset((*state).next.offset_from((*state).codes.as_mut_ptr()) as libc::c_long as isize);
+        .offset((*state).next.offset_from((*state).codes.as_mut_ptr()) as isize as isize);
     if !window.is_null() {
         wsize = (1 as u32) << (*state).wbits;
         crate::stdlib::memcpy(

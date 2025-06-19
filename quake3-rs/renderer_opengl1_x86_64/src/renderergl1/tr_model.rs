@@ -1120,7 +1120,7 @@ unsafe extern "C" fn R_LoadMDR(
     frame = mdr.offset(1 as i32 as isize) as *mut crate::qfiles_h::mdrFrame_t;
     (*mdr).ofsFrames = (frame as *mut crate::src::qcommon::q_shared::byte)
         .offset_from(mdr as *mut crate::src::qcommon::q_shared::byte)
-        as libc::c_long as i32;
+        as isize as i32;
     if (*pinmodel).ofsFrames < 0 as i32 {
         let mut cframe: *mut crate::qfiles_h::mdrCompFrame_t =
             0 as *mut crate::qfiles_h::mdrCompFrame_t;
@@ -1233,7 +1233,7 @@ unsafe extern "C" fn R_LoadMDR(
     lod = frame as *mut crate::qfiles_h::mdrLOD_t;
     (*mdr).ofsLODs = (lod as *mut crate::src::qcommon::q_shared::byte)
         .offset_from(mdr as *mut crate::src::qcommon::q_shared::byte)
-        as libc::c_long as i32;
+        as isize as i32;
     curlod = (pinmodel as *mut crate::src::qcommon::q_shared::byte)
         .offset((*pinmodel).ofsLODs as isize) as *mut crate::qfiles_h::mdrLOD_t;
     // swap all the LOD's
@@ -1257,7 +1257,7 @@ unsafe extern "C" fn R_LoadMDR(
         surf = lod.offset(1 as i32 as isize) as *mut crate::qfiles_h::mdrSurface_t;
         (*lod).ofsSurfaces = (surf as *mut crate::src::qcommon::q_shared::byte)
             .offset_from(lod as *mut crate::src::qcommon::q_shared::byte)
-            as libc::c_long as i32;
+            as isize as i32;
         cursurf = (curlod as *mut crate::src::qcommon::q_shared::byte)
             .offset((*curlod).ofsSurfaces as isize)
             as *mut crate::qfiles_h::mdrSurface_t;
@@ -1291,7 +1291,7 @@ unsafe extern "C" fn R_LoadMDR(
             );
             (*surf).ofsHeader = (mdr as *mut crate::src::qcommon::q_shared::byte)
                 .offset_from(surf as *mut crate::src::qcommon::q_shared::byte)
-                as libc::c_long as i32;
+                as isize as i32;
             (*surf).numVerts = (*cursurf).numVerts;
             (*surf).numTriangles = (*cursurf).numTriangles;
             // numBoneReferences and BoneReferences generally seem to be unused
@@ -1349,7 +1349,7 @@ unsafe extern "C" fn R_LoadMDR(
             v = surf.offset(1 as i32 as isize) as *mut crate::qfiles_h::mdrVertex_t;
             (*surf).ofsVerts = (v as *mut crate::src::qcommon::q_shared::byte)
                 .offset_from(surf as *mut crate::src::qcommon::q_shared::byte)
-                as libc::c_long as i32;
+                as isize as i32;
             curv = (cursurf as *mut crate::src::qcommon::q_shared::byte)
                 .offset((*cursurf).ofsVerts as isize)
                 as *mut crate::qfiles_h::mdrVertex_t;
@@ -1406,7 +1406,7 @@ unsafe extern "C" fn R_LoadMDR(
             tri = v as *mut crate::qfiles_h::mdrTriangle_t;
             (*surf).ofsTriangles = (tri as *mut crate::src::qcommon::q_shared::byte)
                 .offset_from(surf as *mut crate::src::qcommon::q_shared::byte)
-                as libc::c_long as i32;
+                as isize as i32;
             curtri = (cursurf as *mut crate::src::qcommon::q_shared::byte)
                 .offset((*cursurf).ofsTriangles as isize)
                 as *mut crate::qfiles_h::mdrTriangle_t;
@@ -1438,7 +1438,7 @@ unsafe extern "C" fn R_LoadMDR(
             // tri now points to the end of the surface.
             (*surf).ofsEnd = (tri as *mut crate::src::qcommon::q_shared::byte)
                 .offset_from(surf as *mut crate::src::qcommon::q_shared::byte)
-                as libc::c_long as i32;
+                as isize as i32;
             surf = tri as *mut crate::qfiles_h::mdrSurface_t;
             // find the next surface.
             cursurf = (cursurf as *mut crate::src::qcommon::q_shared::byte)
@@ -1449,7 +1449,7 @@ unsafe extern "C" fn R_LoadMDR(
         // surf points to the next lod now.
         (*lod).ofsEnd = (surf as *mut crate::src::qcommon::q_shared::byte)
             .offset_from(lod as *mut crate::src::qcommon::q_shared::byte)
-            as libc::c_long as i32;
+            as isize as i32;
         lod = surf as *mut crate::qfiles_h::mdrLOD_t;
         // find the next LOD.
         curlod = (curlod as *mut crate::src::qcommon::q_shared::byte)
@@ -1460,7 +1460,7 @@ unsafe extern "C" fn R_LoadMDR(
     tag = lod as *mut crate::qfiles_h::mdrTag_t;
     (*mdr).ofsTags = (tag as *mut crate::src::qcommon::q_shared::byte)
         .offset_from(mdr as *mut crate::src::qcommon::q_shared::byte)
-        as libc::c_long as i32;
+        as isize as i32;
     curtag = (pinmodel as *mut crate::src::qcommon::q_shared::byte)
         .offset((*pinmodel).ofsTags as isize) as *mut crate::qfiles_h::mdrTag_t;
     // simple bounds check
@@ -1492,7 +1492,7 @@ unsafe extern "C" fn R_LoadMDR(
     // And finally we know the real offset to the end.
     (*mdr).ofsEnd = (tag as *mut crate::src::qcommon::q_shared::byte)
         .offset_from(mdr as *mut crate::src::qcommon::q_shared::byte)
-        as libc::c_long as i32;
+        as isize as i32;
     // phew! we're done.
     return crate::src::qcommon::q_shared::qtrue;
 }

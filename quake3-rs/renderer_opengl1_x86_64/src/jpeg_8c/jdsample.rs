@@ -673,8 +673,8 @@ pub unsafe extern "C" fn jinit_upsampler(mut cinfo: crate::jpeglib_h::j_decompre
                 cinfo as crate::jpeglib_h::j_common_ptr,
                 1 as i32,
                 crate::src::jpeg_8c::jutils::jround_up(
-                    (*cinfo).output_width as libc::c_long,
-                    (*cinfo).max_h_samp_factor as libc::c_long,
+                    (*cinfo).output_width as isize,
+                    (*cinfo).max_h_samp_factor as isize,
                 ) as crate::jmorecfg_h::JDIMENSION,
                 (*cinfo).max_v_samp_factor as crate::jmorecfg_h::JDIMENSION,
             )

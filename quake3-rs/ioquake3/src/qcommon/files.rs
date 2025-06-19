@@ -421,11 +421,11 @@ return a hash value for the filename
 unsafe extern "C" fn FS_HashFileName(
     mut fname: *const libc::c_char,
     mut hashSize: i32,
-) -> libc::c_long {
+) -> isize {
     let mut i: i32 = 0; // don't include extension
-    let mut hash: libc::c_long = 0; // damn path names
+    let mut hash: isize = 0; // damn path names
     let mut letter: libc::c_char = 0; // damn path names
-    hash = 0 as i32 as libc::c_long;
+    hash = 0 as i32 as isize;
     i = 0 as i32;
     while *fname.offset(i as isize) as i32 != '\u{0}' as i32 {
         letter = ({
@@ -456,11 +456,11 @@ unsafe extern "C" fn FS_HashFileName(
         if letter as i32 == '/' as i32 {
             letter = '/' as i32 as libc::c_char
         }
-        hash += letter as libc::c_long * (i + 119 as i32) as libc::c_long;
+        hash += letter as isize * (i + 119 as i32) as isize;
         i += 1
     }
     hash = hash ^ hash >> 10 as i32 ^ hash >> 20 as i32;
-    hash &= (hashSize - 1 as i32) as libc::c_long;
+    hash &= (hashSize - 1 as i32) as isize;
     return hash;
 }
 
@@ -522,11 +522,11 @@ FS_fplength
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn FS_fplength(mut h: *mut crate::stdlib::FILE) -> libc::c_long {
-    let mut pos: libc::c_long = 0;
-    let mut end: libc::c_long = 0;
+pub unsafe extern "C" fn FS_fplength(mut h: *mut crate::stdlib::FILE) -> isize {
+    let mut pos: isize = 0;
+    let mut end: isize = 0;
     pos = crate::stdlib::ftell(h);
-    crate::stdlib::fseek(h, 0 as i32 as libc::c_long, 2 as i32);
+    crate::stdlib::fseek(h, 0 as i32 as isize, 2 as i32);
     end = crate::stdlib::ftell(h);
     crate::stdlib::fseek(h, pos, 0 as i32);
     return end;
@@ -544,11 +544,11 @@ size of the file.
 
 pub unsafe extern "C" fn FS_filelength(
     mut f: crate::src::qcommon::q_shared::fileHandle_t,
-) -> libc::c_long {
+) -> isize {
     let mut h: *mut crate::stdlib::FILE = 0 as *mut crate::stdlib::FILE;
     h = FS_FileForHandle(f);
     if h.is_null() {
-        return -(1 as i32) as libc::c_long;
+        return -(1 as i32) as isize;
     } else {
         return FS_fplength(h);
     };
@@ -887,7 +887,7 @@ in that order
 pub unsafe extern "C" fn FS_SV_FOpenFileRead(
     mut filename: *const libc::c_char,
     mut fp: *mut crate::src::qcommon::q_shared::fileHandle_t,
-) -> libc::c_long {
+) -> isize {
     let mut ospath: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut f: crate::src::qcommon::q_shared::fileHandle_t = 0 as i32;
     if fs_searchpaths.is_null() {
@@ -1010,7 +1010,7 @@ pub unsafe extern "C" fn FS_SV_FOpenFileRead(
     if f != 0 {
         return FS_filelength(f);
     }
-    return -(1 as i32) as libc::c_long;
+    return -(1 as i32) as isize;
 }
 /*
 ===========
@@ -1440,8 +1440,8 @@ pub unsafe extern "C" fn FS_FOpenFileReadDir(
     mut file: *mut crate::src::qcommon::q_shared::fileHandle_t,
     mut uniqueFILE: crate::src::qcommon::q_shared::qboolean,
     mut unpure: crate::src::qcommon::q_shared::qboolean,
-) -> libc::c_long {
-    let mut hash: libc::c_long = 0;
+) -> isize {
+    let mut hash: isize = 0;
     let mut pak: *mut pack_t = 0 as *mut pack_t;
     let mut pakFile: *mut fileInPack_t = 0 as *mut fileInPack_t;
     let mut dir: *mut directory_t = 0 as *mut directory_t;
@@ -1468,10 +1468,10 @@ pub unsafe extern "C" fn FS_FOpenFileReadDir(
         || !::libc::strstr(filename, b"::\x00" as *const u8 as *const libc::c_char).is_null()
     {
         if file.is_null() {
-            return crate::src::qcommon::q_shared::qfalse as i32 as libc::c_long;
+            return crate::src::qcommon::q_shared::qfalse as i32 as isize;
         }
         *file = 0 as i32;
-        return -(1 as i32) as libc::c_long;
+        return -(1 as i32) as isize;
     }
     // make sure the q3key file is only readable by the quake3.exe at initialization
     // any other time the key should only be accessed in memory using the provided functions
@@ -1479,10 +1479,10 @@ pub unsafe extern "C" fn FS_FOpenFileReadDir(
         && !::libc::strstr(filename, b"q3key\x00" as *const u8 as *const libc::c_char).is_null()
     {
         if file.is_null() {
-            return crate::src::qcommon::q_shared::qfalse as i32 as libc::c_long;
+            return crate::src::qcommon::q_shared::qfalse as i32 as isize;
         }
         *file = 0 as i32;
-        return -(1 as i32) as libc::c_long;
+        return -(1 as i32) as isize;
     }
     if file.is_null() {
         // just wants to see if file is there
@@ -1498,12 +1498,12 @@ pub unsafe extern "C" fn FS_FOpenFileReadDir(
                     if FS_FilenameCompare((*pakFile).name, filename) as u64 == 0 {
                         // found it!
                         if (*pakFile).len != 0 {
-                            return (*pakFile).len as libc::c_long;
+                            return (*pakFile).len as isize;
                         } else {
                             // It's not nice, but legacy code depends
                             // on positive value if file exists no matter
                             // what size
-                            return 1 as i32 as libc::c_long;
+                            return 1 as i32 as isize;
                         }
                     }
                     pakFile = (*pakFile).next;
@@ -1527,13 +1527,13 @@ pub unsafe extern "C" fn FS_FOpenFileReadDir(
                 len = FS_fplength(filep) as i32;
                 crate::stdlib::fclose(filep);
                 if len != 0 {
-                    return len as libc::c_long;
+                    return len as isize;
                 } else {
-                    return 1 as i32 as libc::c_long;
+                    return 1 as i32 as isize;
                 }
             }
         }
-        return 0 as i32 as libc::c_long;
+        return 0 as i32 as isize;
     }
     *file = FS_HandleForFile();
     fsh[*file as usize].handleFiles.unique = uniqueFILE;
@@ -1544,7 +1544,7 @@ pub unsafe extern "C" fn FS_FOpenFileReadDir(
             // disregard if it doesn't match one of the allowed pure pak files
             if unpure as u64 == 0 && FS_PakIsPure((*search).pack) as u64 == 0 {
                 *file = 0 as i32;
-                return -(1 as i32) as libc::c_long;
+                return -(1 as i32) as isize;
             }
             // look through all the pak file elements
             pak = (*search).pack;
@@ -1666,7 +1666,7 @@ pub unsafe extern "C" fn FS_FOpenFileReadDir(
                             (*pak).pakFilename.as_mut_ptr(),
                         );
                     }
-                    return (*pakFile).len as libc::c_long;
+                    return (*pakFile).len as isize;
                 }
                 pakFile = (*pakFile).next;
                 if pakFile.is_null() {
@@ -1713,7 +1713,7 @@ pub unsafe extern "C" fn FS_FOpenFileReadDir(
             {
                 // demos
                 *file = 0 as i32;
-                return -(1 as i32) as libc::c_long;
+                return -(1 as i32) as isize;
             }
         }
         dir = (*search).dir;
@@ -1728,7 +1728,7 @@ pub unsafe extern "C" fn FS_FOpenFileReadDir(
         ) as *mut crate::stdlib::_IO_FILE;
         if filep.is_null() {
             *file = 0 as i32;
-            return -(1 as i32) as libc::c_long;
+            return -(1 as i32) as isize;
         }
         crate::src::qcommon::q_shared::Q_strncpyz(
             fsh[*file as usize].name.as_mut_ptr(),
@@ -1750,7 +1750,7 @@ pub unsafe extern "C" fn FS_FOpenFileReadDir(
         return FS_fplength(filep);
     }
     *file = 0 as i32;
-    return -(1 as i32) as libc::c_long;
+    return -(1 as i32) as isize;
 }
 /*
 ===========
@@ -1768,9 +1768,9 @@ pub unsafe extern "C" fn FS_FOpenFileRead(
     mut filename: *const libc::c_char,
     mut file: *mut crate::src::qcommon::q_shared::fileHandle_t,
     mut uniqueFILE: crate::src::qcommon::q_shared::qboolean,
-) -> libc::c_long {
+) -> isize {
     let mut search: *mut searchpath_t = 0 as *mut searchpath_t;
-    let mut len: libc::c_long = 0;
+    let mut len: isize = 0;
     let mut isLocalConfig: crate::src::qcommon::q_shared::qboolean =
         crate::src::qcommon::q_shared::qfalse;
     if fs_searchpaths.is_null() {
@@ -1799,10 +1799,10 @@ pub unsafe extern "C" fn FS_FOpenFileRead(
                 crate::src::qcommon::q_shared::qfalse,
             );
             if file.is_null() {
-                if len > 0 as i32 as libc::c_long {
+                if len > 0 as i32 as isize {
                     return len;
                 }
-            } else if len >= 0 as i32 as libc::c_long && *file != 0 {
+            } else if len >= 0 as i32 as isize && *file != 0 {
                 return len;
             }
         }
@@ -1810,11 +1810,11 @@ pub unsafe extern "C" fn FS_FOpenFileRead(
     }
     if !file.is_null() {
         *file = 0 as i32;
-        return -(1 as i32) as libc::c_long;
+        return -(1 as i32) as isize;
     } else {
         // When file is NULL, we're querying the existence of the file
         // If we've got here, it doesn't exist
-        return 0 as i32 as libc::c_long;
+        return 0 as i32 as isize;
     };
 }
 /*
@@ -1896,7 +1896,7 @@ pub unsafe extern "C" fn FS_FindVM(
                 0 as *mut crate::src::qcommon::q_shared::fileHandle_t,
                 crate::src::qcommon::q_shared::qfalse,
                 crate::src::qcommon::q_shared::qfalse,
-            ) > 0 as i32 as libc::c_long
+            ) > 0 as i32 as isize
             {
                 *startSearch = search as *mut libc::c_void;
                 return crate::qcommon_h::VMI_COMPILED as i32;
@@ -1922,7 +1922,7 @@ pub unsafe extern "C" fn FS_FindVM(
                 0 as *mut crate::src::qcommon::q_shared::fileHandle_t,
                 crate::src::qcommon::q_shared::qfalse,
                 crate::src::qcommon::q_shared::qfalse,
-            ) > 0 as i32 as libc::c_long
+            ) > 0 as i32 as isize
             {
                 *startSearch = search as *mut libc::c_void;
                 return crate::qcommon_h::VMI_COMPILED as i32;
@@ -2100,7 +2100,7 @@ FS_Seek
 
 pub unsafe extern "C" fn FS_Seek(
     mut f: crate::src::qcommon::q_shared::fileHandle_t,
-    mut offset: libc::c_long,
+    mut offset: isize,
     mut origin: i32,
 ) -> i32 {
     let mut _origin: i32 = 0;
@@ -2117,10 +2117,10 @@ pub unsafe extern "C" fn FS_Seek(
         let mut remainder: i32 = 0;
         let mut currentPosition: i32 = FS_FTell(f);
         // change negative offsets into FS_SEEK_SET
-        if offset < 0 as i32 as libc::c_long {
+        if offset < 0 as i32 as isize {
             match origin {
-                1 => remainder = (fsh[f as usize].zipFileLen as libc::c_long + offset) as i32,
-                0 => remainder = (currentPosition as libc::c_long + offset) as i32,
+                1 => remainder = (fsh[f as usize].zipFileLen as isize + offset) as i32,
+                0 => remainder = (currentPosition as isize + offset) as i32,
                 2 | _ => remainder = 0 as i32,
             }
             if remainder < 0 as i32 {
@@ -2129,7 +2129,7 @@ pub unsafe extern "C" fn FS_Seek(
             origin = crate::src::qcommon::q_shared::FS_SEEK_SET as i32
         } else if origin == crate::src::qcommon::q_shared::FS_SEEK_END as i32 {
             remainder =
-                ((fsh[f as usize].zipFileLen - currentPosition) as libc::c_long + offset) as i32
+                ((fsh[f as usize].zipFileLen - currentPosition) as isize + offset) as i32
         } else {
             remainder = offset as i32
         }
@@ -2192,7 +2192,7 @@ pub unsafe extern "C" fn FS_FileIsInPAK(
     let mut search: *mut searchpath_t = 0 as *mut searchpath_t;
     let mut pak: *mut pack_t = 0 as *mut pack_t;
     let mut pakFile: *mut fileInPack_t = 0 as *mut fileInPack_t;
-    let mut hash: libc::c_long = 0 as i32 as libc::c_long;
+    let mut hash: isize = 0 as i32 as isize;
     if fs_searchpaths.is_null() {
         crate::src::qcommon::common::Com_Error(
             crate::src::qcommon::q_shared::ERR_FATAL as i32,
@@ -2273,14 +2273,14 @@ pub unsafe extern "C" fn FS_ReadFileDir(
     mut searchPath: *mut libc::c_void,
     mut unpure: crate::src::qcommon::q_shared::qboolean,
     mut buffer: *mut *mut libc::c_void,
-) -> libc::c_long {
+) -> isize {
     let mut h: crate::src::qcommon::q_shared::fileHandle_t = 0; // quiet compiler warning
     let mut search: *mut searchpath_t = 0 as *mut searchpath_t;
     let mut buf: *mut crate::src::qcommon::q_shared::byte =
         0 as *mut crate::src::qcommon::q_shared::byte;
     let mut isConfig: crate::src::qcommon::q_shared::qboolean =
         crate::src::qcommon::q_shared::qfalse;
-    let mut len: libc::c_long = 0;
+    let mut len: isize = 0;
     if fs_searchpaths.is_null() {
         crate::src::qcommon::common::Com_Error(
             crate::src::qcommon::q_shared::ERR_FATAL as i32,
@@ -2307,30 +2307,30 @@ pub unsafe extern "C" fn FS_ReadFileDir(
                 qpath,
             );
             r = FS_Read(
-                &mut len as *mut libc::c_long as *mut libc::c_void,
-                ::std::mem::size_of::<libc::c_long>() as libc::c_ulong as i32,
+                &mut len as *mut isize as *mut libc::c_void,
+                ::std::mem::size_of::<isize>() as libc::c_ulong as i32,
                 crate::src::qcommon::common::com_journalDataFile,
             );
-            if r as libc::c_ulong != ::std::mem::size_of::<libc::c_long>() as libc::c_ulong {
+            if r as libc::c_ulong != ::std::mem::size_of::<isize>() as libc::c_ulong {
                 if !buffer.is_null() {
                     *buffer = 0 as *mut libc::c_void
                 }
-                return -(1 as i32) as libc::c_long;
+                return -(1 as i32) as isize;
             }
             // if the file didn't exist when the journal was created
             if len == 0 {
                 if buffer.is_null() {
-                    return 1 as i32 as libc::c_long;
+                    return 1 as i32 as isize;
                     // hack for old journal files
                 }
                 *buffer = 0 as *mut libc::c_void;
-                return -(1 as i32) as libc::c_long;
+                return -(1 as i32) as isize;
             }
             if buffer.is_null() {
                 return len;
             }
             buf = crate::src::qcommon::common::Hunk_AllocateTempMemory(
-                (len + 1 as i32 as libc::c_long) as i32,
+                (len + 1 as i32 as isize) as i32,
             ) as *mut crate::src::qcommon::q_shared::byte;
             *buffer = buf as *mut libc::c_void;
             r = FS_Read(
@@ -2338,7 +2338,7 @@ pub unsafe extern "C" fn FS_ReadFileDir(
                 len as i32,
                 crate::src::qcommon::common::com_journalDataFile,
             );
-            if r as libc::c_long != len {
+            if r as isize != len {
                 crate::src::qcommon::common::Com_Error(
                     crate::src::qcommon::q_shared::ERR_FATAL as i32,
                     b"Read from journalDataFile failed\x00" as *const u8 as *const libc::c_char,
@@ -2380,15 +2380,15 @@ pub unsafe extern "C" fn FS_ReadFileDir(
                 b"Writing zero for %s to journal file.\n\x00" as *const u8 as *const libc::c_char,
                 qpath,
             );
-            len = 0 as i32 as libc::c_long;
+            len = 0 as i32 as isize;
             FS_Write(
-                &mut len as *mut libc::c_long as *const libc::c_void,
-                ::std::mem::size_of::<libc::c_long>() as libc::c_ulong as i32,
+                &mut len as *mut isize as *const libc::c_void,
+                ::std::mem::size_of::<isize>() as libc::c_ulong as i32,
                 crate::src::qcommon::common::com_journalDataFile,
             );
             FS_Flush(crate::src::qcommon::common::com_journalDataFile);
         }
-        return -(1 as i32) as libc::c_long;
+        return -(1 as i32) as isize;
     }
     if buffer.is_null() {
         if isConfig as u32 != 0
@@ -2400,8 +2400,8 @@ pub unsafe extern "C" fn FS_ReadFileDir(
                 qpath,
             );
             FS_Write(
-                &mut len as *mut libc::c_long as *const libc::c_void,
-                ::std::mem::size_of::<libc::c_long>() as libc::c_ulong as i32,
+                &mut len as *mut isize as *const libc::c_void,
+                ::std::mem::size_of::<isize>() as libc::c_ulong as i32,
                 crate::src::qcommon::common::com_journalDataFile,
             );
             FS_Flush(crate::src::qcommon::common::com_journalDataFile);
@@ -2412,7 +2412,7 @@ pub unsafe extern "C" fn FS_ReadFileDir(
     fs_loadCount += 1;
     fs_loadStack += 1;
     buf = crate::src::qcommon::common::Hunk_AllocateTempMemory(
-        (len + 1 as i32 as libc::c_long) as i32,
+        (len + 1 as i32 as isize) as i32,
     ) as *mut crate::src::qcommon::q_shared::byte;
     *buffer = buf as *mut libc::c_void;
     FS_Read(buf as *mut libc::c_void, len as i32, h);
@@ -2429,8 +2429,8 @@ pub unsafe extern "C" fn FS_ReadFileDir(
             qpath,
         );
         FS_Write(
-            &mut len as *mut libc::c_long as *const libc::c_void,
-            ::std::mem::size_of::<libc::c_long>() as libc::c_ulong as i32,
+            &mut len as *mut isize as *const libc::c_void,
+            ::std::mem::size_of::<isize>() as libc::c_ulong as i32,
             crate::src::qcommon::common::com_journalDataFile,
         );
         FS_Write(
@@ -2455,7 +2455,7 @@ a null buffer will just return the file length without loading
 pub unsafe extern "C" fn FS_ReadFile(
     mut qpath: *const libc::c_char,
     mut buffer: *mut *mut libc::c_void,
-) -> libc::c_long {
+) -> isize {
     return FS_ReadFileDir(
         qpath,
         0 as *mut libc::c_void,
@@ -2585,7 +2585,7 @@ unsafe extern "C" fn FS_LoadZipFile(
         };
     let mut i: i32 = 0;
     let mut len: i32 = 0;
-    let mut hash: libc::c_long = 0;
+    let mut hash: isize = 0;
     let mut fs_numHeaderLongs: i32 = 0;
     let mut fs_headerLongs: *mut i32 = 0 as *mut i32;
     let mut namePtr: *mut libc::c_char = 0 as *mut libc::c_char;
@@ -3700,7 +3700,7 @@ pub unsafe extern "C" fn FS_Which(
         0 as *mut crate::src::qcommon::q_shared::fileHandle_t,
         crate::src::qcommon::q_shared::qfalse,
         crate::src::qcommon::q_shared::qfalse,
-    ) > 0 as i32 as libc::c_long
+    ) > 0 as i32 as isize
     {
         if !(*search).pack.is_null() {
             crate::src::qcommon::common::Com_Printf(
@@ -4207,7 +4207,7 @@ pub unsafe extern "C" fn FS_ComparePaks(
                         // Find out whether it might have overflowed the buffer and don't add this file to the
                         // list if that is the case.
                         if crate::stdlib::strlen(origpos).wrapping_add(
-                            origpos.offset_from(neededpaks) as libc::c_long as libc::c_ulong,
+                            origpos.offset_from(neededpaks) as isize as libc::c_ulong,
                         ) >= (len - 1 as i32) as libc::c_ulong
                         {
                             *origpos = '\u{0}' as i32 as libc::c_char;
@@ -5213,7 +5213,7 @@ pub unsafe extern "C" fn FS_InitFilesystem() {
     if FS_ReadFile(
         b"default.cfg\x00" as *const u8 as *const libc::c_char,
         0 as *mut *mut libc::c_void,
-    ) <= 0 as i32 as libc::c_long
+    ) <= 0 as i32 as isize
     {
         crate::src::qcommon::common::Com_Error(
             crate::src::qcommon::q_shared::ERR_FATAL as i32,
@@ -5265,7 +5265,7 @@ pub unsafe extern "C" fn FS_Restart(mut checksumFeed: i32) {
     if FS_ReadFile(
         b"default.cfg\x00" as *const u8 as *const libc::c_char,
         0 as *mut *mut libc::c_void,
-    ) <= 0 as i32 as libc::c_long
+    ) <= 0 as i32 as isize
     {
         // this might happen when connecting to a pure server not using BASEGAME/pak0.pk3
         // (for instance a TA demo server)

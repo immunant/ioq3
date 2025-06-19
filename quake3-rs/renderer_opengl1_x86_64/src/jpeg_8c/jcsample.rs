@@ -413,7 +413,7 @@ unsafe extern "C" fn int_downsample(
             }
             let fresh2 = outptr;
             outptr = outptr.offset(1);
-            *fresh2 = ((outvalue + numpix2 as libc::c_long) / numpix as libc::c_long)
+            *fresh2 = ((outvalue + numpix2 as isize) / numpix as isize)
                 as crate::jmorecfg_h::JSAMPLE;
             outcol = outcol.wrapping_add(1);
             outcol_h = (outcol_h as u32).wrapping_add(h_expand as u32)
@@ -646,12 +646,12 @@ unsafe extern "C" fn h2v2_smooth_downsample(
         neighsum += (*above_ptr as i32
             + *above_ptr.offset(2 as i32 as isize) as i32
             + *below_ptr as i32
-            + *below_ptr.offset(2 as i32 as isize) as i32) as libc::c_long;
+            + *below_ptr.offset(2 as i32 as isize) as i32) as isize;
         membersum = membersum * memberscale + neighsum * neighscale;
         let fresh5 = outptr;
         outptr = outptr.offset(1);
         *fresh5 =
-            (membersum + 32768 as i32 as libc::c_long >> 16 as i32) as crate::jmorecfg_h::JSAMPLE;
+            (membersum + 32768 as i32 as isize >> 16 as i32) as crate::jmorecfg_h::JSAMPLE;
         inptr0 = inptr0.offset(2 as i32 as isize);
         inptr1 = inptr1.offset(2 as i32 as isize);
         above_ptr = above_ptr.offset(2 as i32 as isize);
@@ -681,13 +681,13 @@ unsafe extern "C" fn h2v2_smooth_downsample(
                 + *above_ptr.offset(2 as i32 as isize) as i32
                 + *below_ptr.offset(-(1 as i32) as isize) as i32
                 + *below_ptr.offset(2 as i32 as isize) as i32)
-                as libc::c_long;
+                as isize;
             /* form final output scaled up by 2^16 */
             membersum = membersum * memberscale + neighsum * neighscale;
             /* round, descale and output it */
             let fresh6 = outptr;
             outptr = outptr.offset(1);
-            *fresh6 = (membersum + 32768 as i32 as libc::c_long >> 16 as i32)
+            *fresh6 = (membersum + 32768 as i32 as isize >> 16 as i32)
                 as crate::jmorecfg_h::JSAMPLE;
             inptr0 = inptr0.offset(2 as i32 as isize);
             inptr1 = inptr1.offset(2 as i32 as isize);
@@ -714,10 +714,10 @@ unsafe extern "C" fn h2v2_smooth_downsample(
         neighsum += (*above_ptr.offset(-(1 as i32) as isize) as i32
             + *above_ptr.offset(1 as i32 as isize) as i32
             + *below_ptr.offset(-(1 as i32) as isize) as i32
-            + *below_ptr.offset(1 as i32 as isize) as i32) as libc::c_long;
+            + *below_ptr.offset(1 as i32 as isize) as i32) as isize;
         membersum = membersum * memberscale + neighsum * neighscale;
         *outptr =
-            (membersum + 32768 as i32 as libc::c_long >> 16 as i32) as crate::jmorecfg_h::JSAMPLE;
+            (membersum + 32768 as i32 as isize >> 16 as i32) as crate::jmorecfg_h::JSAMPLE;
         inrow += 2 as i32;
         outrow += 1
     }
@@ -766,7 +766,7 @@ unsafe extern "C" fn fullsize_smooth_downsample(
      * Also recall that SF = smoothing_factor / 1024.
      */
     memberscale =
-        65536 as libc::c_long - (*cinfo).smoothing_factor as libc::c_long * 512 as libc::c_long; /* scaled 1-8*SF */
+        65536 as isize - (*cinfo).smoothing_factor as isize * 512 as isize; /* scaled 1-8*SF */
     neighscale = ((*cinfo).smoothing_factor * 64 as i32) as crate::jmorecfg_h::INT32; /* scaled SF */
     inrow = 0 as i32;
     while inrow < (*cinfo).max_v_samp_factor {
@@ -784,14 +784,14 @@ unsafe extern "C" fn fullsize_smooth_downsample(
         inptr = inptr.offset(1);
         membersum = *fresh9 as i32 as crate::jmorecfg_h::INT32;
         nextcolsum = *above_ptr as i32 + *below_ptr as i32 + *inptr as i32;
-        neighsum = colsum as libc::c_long
-            + (colsum as libc::c_long - membersum)
-            + nextcolsum as libc::c_long;
+        neighsum = colsum as isize
+            + (colsum as isize - membersum)
+            + nextcolsum as isize;
         membersum = membersum * memberscale + neighsum * neighscale;
         let fresh10 = outptr;
         outptr = outptr.offset(1);
         *fresh10 =
-            (membersum + 32768 as i32 as libc::c_long >> 16 as i32) as crate::jmorecfg_h::JSAMPLE;
+            (membersum + 32768 as i32 as isize >> 16 as i32) as crate::jmorecfg_h::JSAMPLE;
         lastcolsum = colsum;
         colsum = nextcolsum;
         colctr = output_cols.wrapping_sub(2 as i32 as u32);
@@ -802,13 +802,13 @@ unsafe extern "C" fn fullsize_smooth_downsample(
             above_ptr = above_ptr.offset(1);
             below_ptr = below_ptr.offset(1);
             nextcolsum = *above_ptr as i32 + *below_ptr as i32 + *inptr as i32;
-            neighsum = lastcolsum as libc::c_long
-                + (colsum as libc::c_long - membersum)
-                + nextcolsum as libc::c_long;
+            neighsum = lastcolsum as isize
+                + (colsum as isize - membersum)
+                + nextcolsum as isize;
             membersum = membersum * memberscale + neighsum * neighscale;
             let fresh12 = outptr;
             outptr = outptr.offset(1);
-            *fresh12 = (membersum + 32768 as i32 as libc::c_long >> 16 as i32)
+            *fresh12 = (membersum + 32768 as i32 as isize >> 16 as i32)
                 as crate::jmorecfg_h::JSAMPLE;
             lastcolsum = colsum;
             colsum = nextcolsum;
@@ -816,12 +816,12 @@ unsafe extern "C" fn fullsize_smooth_downsample(
         }
         /* Special case for last column */
         membersum = *inptr as i32 as crate::jmorecfg_h::INT32;
-        neighsum = lastcolsum as libc::c_long
-            + (colsum as libc::c_long - membersum)
-            + colsum as libc::c_long;
+        neighsum = lastcolsum as isize
+            + (colsum as isize - membersum)
+            + colsum as isize;
         membersum = membersum * memberscale + neighsum * neighscale;
         *outptr =
-            (membersum + 32768 as i32 as libc::c_long >> 16 as i32) as crate::jmorecfg_h::JSAMPLE;
+            (membersum + 32768 as i32 as isize >> 16 as i32) as crate::jmorecfg_h::JSAMPLE;
         inrow += 1
     }
 }

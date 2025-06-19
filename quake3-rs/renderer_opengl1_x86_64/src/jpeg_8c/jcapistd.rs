@@ -336,8 +336,8 @@ pub unsafe extern "C" fn jpeg_write_scanlines(
     }
     /* Call progress monitor hook if present */
     if !(*cinfo).progress.is_null() {
-        (*(*cinfo).progress).pass_counter = (*cinfo).next_scanline as libc::c_long;
-        (*(*cinfo).progress).pass_limit = (*cinfo).image_height as libc::c_long;
+        (*(*cinfo).progress).pass_counter = (*cinfo).next_scanline as isize;
+        (*(*cinfo).progress).pass_limit = (*cinfo).image_height as isize;
         Some(
             (*(*cinfo).progress)
                 .progress_monitor
@@ -412,8 +412,8 @@ pub unsafe extern "C" fn jpeg_write_raw_data(
     }
     /* Call progress monitor hook if present */
     if !(*cinfo).progress.is_null() {
-        (*(*cinfo).progress).pass_counter = (*cinfo).next_scanline as libc::c_long;
-        (*(*cinfo).progress).pass_limit = (*cinfo).image_height as libc::c_long;
+        (*(*cinfo).progress).pass_counter = (*cinfo).next_scanline as isize;
+        (*(*cinfo).progress).pass_limit = (*cinfo).image_height as isize;
         Some(
             (*(*cinfo).progress)
                 .progress_monitor

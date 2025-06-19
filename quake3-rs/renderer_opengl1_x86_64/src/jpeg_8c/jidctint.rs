@@ -3665,7 +3665,7 @@ pub unsafe extern "C" fn jpeg_idct_16x16(
             as crate::jmorecfg_h::INT32;
         tmp0 <<= 13 as i32;
         /* Add fudge factor here for final descale. */
-        tmp0 += ((1 as i32) << 13 as i32 - 2 as i32 - 1 as i32) as libc::c_long; /* c4[16] = c2[8] */
+        tmp0 += ((1 as i32) << 13 as i32 - 2 as i32 - 1 as i32) as isize; /* c4[16] = c2[8] */
         z1 = (*inptr.offset((8 as i32 * 4 as i32) as isize) as crate::jdct_h::ISLOW_MULT_TYPE
             * *quantptr.offset((8 as i32 * 4 as i32) as isize))
             as crate::jmorecfg_h::INT32; /* c12[16] = c6[8] */

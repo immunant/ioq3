@@ -84,7 +84,7 @@ pub unsafe extern "C" fn GetMemory(mut size: libc::c_ulong) -> *mut libc::c_void
         return 0 as *mut libc::c_void;
     }
     memid = ptr as *mut libc::c_ulong;
-    *memid = 0x12345678 as libc::c_long as libc::c_ulong;
+    *memid = 0x12345678 as isize as libc::c_ulong;
     return (ptr as *mut libc::c_char)
         .offset(::std::mem::size_of::<libc::c_ulong>() as libc::c_ulong as isize)
         as *mut libc::c_ulong as *mut libc::c_void;
@@ -133,7 +133,7 @@ pub unsafe extern "C" fn GetHunkMemory(mut size: libc::c_ulong) -> *mut libc::c_
         return 0 as *mut libc::c_void;
     }
     memid = ptr as *mut libc::c_ulong;
-    *memid = 0x87654321 as libc::c_long as libc::c_ulong;
+    *memid = 0x87654321 as isize as libc::c_ulong;
     return (ptr as *mut libc::c_char)
         .offset(::std::mem::size_of::<libc::c_ulong>() as libc::c_ulong as isize)
         as *mut libc::c_ulong as *mut libc::c_void;
@@ -172,7 +172,7 @@ pub unsafe extern "C" fn FreeMemory(mut ptr: *mut libc::c_void) {
     memid = (ptr as *mut libc::c_char)
         .offset(-(::std::mem::size_of::<libc::c_ulong>() as libc::c_ulong as isize))
         as *mut libc::c_ulong;
-    if *memid == 0x12345678 as libc::c_long as libc::c_ulong {
+    if *memid == 0x12345678 as isize as libc::c_ulong {
         crate::src::botlib::be_interface::botimport
             .FreeMemory
             .expect("non-null function pointer")(memid as *mut libc::c_void);

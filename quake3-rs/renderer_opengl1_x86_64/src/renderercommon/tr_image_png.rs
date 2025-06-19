@@ -220,7 +220,7 @@ unsafe extern "C" fn BufferedFileRewind(
     /*
      *  How many bytes do we have already read?
      */
-    BytesRead = (*BF).Ptr.offset_from((*BF).Buffer) as libc::c_long as u32;
+    BytesRead = (*BF).Ptr.offset_from((*BF).Buffer) as isize as u32;
     /*
      *  We can only rewind to the beginning of the BufferedFile.
      */

@@ -43,10 +43,10 @@ pub unsafe extern "C" fn vorbis_analysis(
     let mut i: i32 = 0;
     let mut vbi: *mut crate::codec_internal_h::vorbis_block_internal =
         (*vb).internal as *mut crate::codec_internal_h::vorbis_block_internal;
-    (*vb).glue_bits = 0 as i32 as libc::c_long;
-    (*vb).time_bits = 0 as i32 as libc::c_long;
-    (*vb).floor_bits = 0 as i32 as libc::c_long;
-    (*vb).res_bits = 0 as i32 as libc::c_long;
+    (*vb).glue_bits = 0 as i32 as isize;
+    (*vb).time_bits = 0 as i32 as isize;
+    (*vb).floor_bits = 0 as i32 as isize;
+    (*vb).res_bits = 0 as i32 as isize;
     /* first things first.  Make sure encode is ready */
     i = 0 as i32;
     while i < 15 as i32 {
@@ -81,8 +81,8 @@ pub unsafe extern "C" fn vorbis_analysis(
         (*op).bytes = crate::src::libogg_1_3_3::src::bitwise::oggpack_bytes(
             &mut (*vb).opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,
         );
-        (*op).b_o_s = 0 as i32 as libc::c_long;
-        (*op).e_o_s = (*vb).eofflag as libc::c_long;
+        (*op).b_o_s = 0 as i32 as isize;
+        (*op).e_o_s = (*vb).eofflag as isize;
         (*op).granulepos = (*vb).granulepos;
         (*op).packetno = (*vb).sequence
         /* for sake of completeness */

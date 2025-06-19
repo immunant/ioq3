@@ -189,7 +189,7 @@ unsafe extern "C" fn silk_A2NLSF_eval_poly(
     y32 = *p.offset(dd as isize);
     x_Q16 =
         ((x as crate::opus_types_h::opus_uint32) << 4 as i32) as crate::opus_types_h::opus_int32;
-    if (8 as i32 == dd) as i32 as libc::c_long != 0 {
+    if (8 as i32 == dd) as i32 as isize != 0 {
         y32 = (*p.offset(7 as i32 as isize) as i64 + (y32 as i64 * x_Q16 as i64 >> 16 as i32))
             as crate::opus_types_h::opus_int32;
         y32 = (*p.offset(6 as i32 as isize) as i64 + (y32 as i64 * x_Q16 as i64 >> 16 as i32))

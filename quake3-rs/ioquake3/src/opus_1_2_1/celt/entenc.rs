@@ -386,7 +386,7 @@ pub unsafe extern "C" fn ec_enc_shrink(
         ((*_this).end_offs as libc::c_ulong)
             .wrapping_mul(::std::mem::size_of::<u8>() as libc::c_ulong)
             .wrapping_add(
-                (0 as i32 as libc::c_long
+                (0 as i32 as isize
                     * (*_this)
                         .buf
                         .offset(_size as isize)
@@ -396,7 +396,7 @@ pub unsafe extern "C" fn ec_enc_shrink(
                                 .buf
                                 .offset((*_this).storage as isize)
                                 .offset(-((*_this).end_offs as isize)),
-                        ) as libc::c_long) as libc::c_ulong,
+                        ) as isize) as libc::c_ulong,
             ),
     );
     (*_this).storage = _size;

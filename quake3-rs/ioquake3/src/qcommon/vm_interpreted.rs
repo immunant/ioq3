@@ -376,9 +376,9 @@ pub unsafe extern "C" fn VM_CallInterpreted(
     // leave a free spot at start of stack so
     // that as long as opStack is valid, opStack-1 will
     // not corrupt anything
-    opStack = (stack.as_mut_ptr() as crate::stdlib::intptr_t + 16 as i32 as libc::c_long
-        - 1 as i32 as libc::c_long
-        & !(16 as i32 - 1 as i32) as libc::c_long) as *mut libc::c_void as *mut i32;
+    opStack = (stack.as_mut_ptr() as crate::stdlib::intptr_t + 16 as i32 as isize
+        - 1 as i32 as isize
+        & !(16 as i32 - 1 as i32) as isize) as *mut libc::c_void as *mut i32;
     *opStack = 0xdeadbeef as u32 as i32;
     opStackOfs = 0 as i32 as crate::stdlib::uint8_t;
     's_105: loop

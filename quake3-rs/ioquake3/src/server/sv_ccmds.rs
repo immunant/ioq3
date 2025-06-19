@@ -360,7 +360,7 @@ unsafe extern "C" fn SV_Map_f() {
         map,
     );
     if crate::src::qcommon::files::FS_ReadFile(expanded.as_mut_ptr(), 0 as *mut *mut libc::c_void)
-        == -(1 as i32) as libc::c_long
+        == -(1 as i32) as isize
     {
         crate::src::qcommon::common::Com_Printf(
             b"Can\'t find map %s\n\x00" as *const u8 as *const libc::c_char,

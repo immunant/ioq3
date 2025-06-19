@@ -244,7 +244,7 @@ pub unsafe extern "C" fn jpeg_idct_ifast(
             tmp10 = tmp0 + tmp2;
             tmp11 = tmp0 - tmp2;
             tmp13 = tmp1 + tmp3;
-            tmp12 = ((tmp1 - tmp3) as libc::c_long * 362 as i32 as crate::jmorecfg_h::INT32
+            tmp12 = ((tmp1 - tmp3) as isize * 362 as i32 as crate::jmorecfg_h::INT32
                 >> 8 as i32) as crate::jdct_h::DCTELEM
                 - tmp13;
             tmp0 = tmp10 + tmp13;
@@ -265,14 +265,14 @@ pub unsafe extern "C" fn jpeg_idct_ifast(
             z11 = tmp4 + tmp7; /* phase 2 */
             z12 = tmp4 - tmp7; /* advance pointers to next column */
             tmp7 = z11 + z13;
-            tmp11 = ((z11 - z13) as libc::c_long * 362 as i32 as crate::jmorecfg_h::INT32
+            tmp11 = ((z11 - z13) as isize * 362 as i32 as crate::jmorecfg_h::INT32
                 >> 8 as i32) as crate::jdct_h::DCTELEM;
-            z5 = ((z10 + z12) as libc::c_long * 473 as i32 as crate::jmorecfg_h::INT32 >> 8 as i32)
+            z5 = ((z10 + z12) as isize * 473 as i32 as crate::jmorecfg_h::INT32 >> 8 as i32)
                 as crate::jdct_h::DCTELEM;
-            tmp10 = (z12 as libc::c_long * 277 as i32 as crate::jmorecfg_h::INT32 >> 8 as i32)
+            tmp10 = (z12 as isize * 277 as i32 as crate::jmorecfg_h::INT32 >> 8 as i32)
                 as crate::jdct_h::DCTELEM
                 - z5;
-            tmp12 = (z10 as libc::c_long * -(669 as i32 as crate::jmorecfg_h::INT32) >> 8 as i32)
+            tmp12 = (z10 as isize * -(669 as i32 as crate::jmorecfg_h::INT32) >> 8 as i32)
                 as crate::jdct_h::DCTELEM
                 + z5;
             tmp6 = tmp12 - tmp7;
@@ -335,7 +335,7 @@ pub unsafe extern "C" fn jpeg_idct_ifast(
             tmp11 = *wsptr.offset(0 as i32 as isize) - *wsptr.offset(4 as i32 as isize);
             tmp13 = *wsptr.offset(2 as i32 as isize) + *wsptr.offset(6 as i32 as isize);
             tmp12 = ((*wsptr.offset(2 as i32 as isize) - *wsptr.offset(6 as i32 as isize))
-                as libc::c_long
+                as isize
                 * 362 as i32 as crate::jmorecfg_h::INT32
                 >> 8 as i32) as crate::jdct_h::DCTELEM
                 - tmp13;
@@ -349,14 +349,14 @@ pub unsafe extern "C" fn jpeg_idct_ifast(
             z11 = *wsptr.offset(1 as i32 as isize) + *wsptr.offset(7 as i32 as isize); /* 2*c2 */
             z12 = *wsptr.offset(1 as i32 as isize) - *wsptr.offset(7 as i32 as isize); /* 2*(c2-c6) */
             tmp7 = z11 + z13; /* -2*(c2+c6) */
-            tmp11 = ((z11 - z13) as libc::c_long * 362 as i32 as crate::jmorecfg_h::INT32
+            tmp11 = ((z11 - z13) as isize * 362 as i32 as crate::jmorecfg_h::INT32
                 >> 8 as i32) as crate::jdct_h::DCTELEM; /* phase 2 */
-            z5 = ((z10 + z12) as libc::c_long * 473 as i32 as crate::jmorecfg_h::INT32 >> 8 as i32)
+            z5 = ((z10 + z12) as isize * 473 as i32 as crate::jmorecfg_h::INT32 >> 8 as i32)
                 as crate::jdct_h::DCTELEM;
-            tmp10 = (z12 as libc::c_long * 277 as i32 as crate::jmorecfg_h::INT32 >> 8 as i32)
+            tmp10 = (z12 as isize * 277 as i32 as crate::jmorecfg_h::INT32 >> 8 as i32)
                 as crate::jdct_h::DCTELEM
                 - z5;
-            tmp12 = (z10 as libc::c_long * -(669 as i32 as crate::jmorecfg_h::INT32) >> 8 as i32)
+            tmp12 = (z10 as isize * -(669 as i32 as crate::jmorecfg_h::INT32) >> 8 as i32)
                 as crate::jdct_h::DCTELEM
                 + z5;
             tmp6 = tmp12 - tmp7;
