@@ -71,9 +71,9 @@ static mut removeBotsMenuInfo: removeBotsMenuInfo_t = removeBotsMenuInfo_t {
         items: [0 as *const libc::c_void as *mut libc::c_void; 64],
         draw: None,
         key: None,
-        wrapAround: crate::src::qcommon::q_shared::qfalse,
-        fullscreen: crate::src::qcommon::q_shared::qfalse,
-        showlogo: crate::src::qcommon::q_shared::qfalse,
+        wrapAround: qfalse,
+        fullscreen: qfalse,
+        showlogo: qfalse,
     },
     banner: crate::ui_local_h::menutext_s {
         generic: crate::ui_local_h::menucommon_s {
@@ -308,15 +308,15 @@ unsafe extern "C" fn UI_RemoveBotsMenu_SetBotNames() {
             info.as_mut_ptr(),
             1024 as i32,
         );
-        crate::src::qcommon::q_shared::Q_strncpyz(
+        Q_strncpyz(
             removeBotsMenuInfo.botnames[n as usize].as_mut_ptr(),
-            crate::src::qcommon::q_shared::Info_ValueForKey(
+            Info_ValueForKey(
                 info.as_mut_ptr(),
                 b"n\x00" as *const u8 as *const libc::c_char,
             ),
             ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
         );
-        crate::src::qcommon::q_shared::Q_CleanStr(
+        Q_CleanStr(
             removeBotsMenuInfo.botnames[n as usize].as_mut_ptr(),
         );
         n += 1
@@ -333,8 +333,8 @@ unsafe extern "C" fn UI_RemoveBotsMenu_DeleteEvent(mut _ptr: *mut libc::c_void, 
         return;
     }
     crate::src::ui::ui_syscalls::trap_Cmd_ExecuteText(
-        crate::src::qcommon::q_shared::EXEC_APPEND as i32,
-        crate::src::qcommon::q_shared::va(
+        EXEC_APPEND as i32,
+        va(
             b"clientkick %i\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             removeBotsMenuInfo.botClientNums
                 [(removeBotsMenuInfo.baseBotNum + removeBotsMenuInfo.selectedBotNum) as usize],
@@ -416,7 +416,7 @@ unsafe extern "C" fn UI_RemoveBotsMenu_GetBots() {
         info.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
-    numPlayers = atoi(crate::src::qcommon::q_shared::Info_ValueForKey(
+    numPlayers = atoi(Info_ValueForKey(
         info.as_mut_ptr(),
         b"sv_maxclients\x00" as *const u8 as *const libc::c_char,
     ));
@@ -428,7 +428,7 @@ unsafe extern "C" fn UI_RemoveBotsMenu_GetBots() {
             info.as_mut_ptr(),
             1024 as i32,
         );
-        isBot = atoi(crate::src::qcommon::q_shared::Info_ValueForKey(
+        isBot = atoi(Info_ValueForKey(
             info.as_mut_ptr(),
             b"skill\x00" as *const u8 as *const libc::c_char,
         ));
@@ -478,8 +478,8 @@ unsafe extern "C" fn UI_RemoveBotsMenu_Init() {
         0 as i32,
         ::std::mem::size_of::<removeBotsMenuInfo_t>() as libc::c_ulong,
     );
-    removeBotsMenuInfo.menu.fullscreen = crate::src::qcommon::q_shared::qfalse;
-    removeBotsMenuInfo.menu.wrapAround = crate::src::qcommon::q_shared::qtrue;
+    removeBotsMenuInfo.menu.fullscreen = qfalse;
+    removeBotsMenuInfo.menu.wrapAround = qtrue;
     UI_RemoveBots_Cache();
     UI_RemoveBotsMenu_GetBots();
     UI_RemoveBotsMenu_SetBotNames();
