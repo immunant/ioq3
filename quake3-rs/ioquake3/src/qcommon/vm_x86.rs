@@ -2010,7 +2010,7 @@ pub unsafe extern "C" fn VM_CallCompiled(
         as *mut libc::c_void as *mut libc::c_int;
     *opStack = 0xdeadbeef as libc::c_uint as libc::c_int;
     opStackOfs = 0 as libc::c_int;
-    std::arch::asm!("movq $5, %rax\nmovq $3, %r8\nmovq $4, %r9\npush %r15\npush %r14\npush %r13\npush %r12\ncallq *%rax\npop %r12\npop %r13\npop %r14\npop %r15\n"
+    asm!("movq $5, %rax\nmovq $3, %r8\nmovq $4, %r9\npush %r15\npush %r14\npush %r13\npush %r12\ncallq *%rax\npop %r12\npop %r13\npop %r14\npop %r15\n"
      : "+{si}" (programStack), "+{di}" (opStack), "+{bx}" (opStackOfs) : "imr"
      ((*vm).instructionPointers), "imr" ((*vm).dataBase), "imr" (entryPoint) :
      "cc", "memory", "rax", "rcx", "rdx", "r8", "r9", "r10", "r11" :

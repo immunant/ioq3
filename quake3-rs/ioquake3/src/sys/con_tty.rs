@@ -651,11 +651,11 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
                 .as_mut_ptr()
                 .offset(0 as libc::c_int as isize)
                 as *mut crate::stdlib::__fd_mask;
-            std::arch::asm!("cld; rep; stosq" : "={cx}" (fresh1), "={di}" (fresh3) : "{ax}"
-             (0 as libc::c_int), "0"
-             (c2rust_asm_casts::AsmCast::cast_in(fresh0, fresh4)), "1"
-             (c2rust_asm_casts::AsmCast::cast_in(fresh2, fresh5)) : "memory" :
-             "volatile");
+            asm!("cld; rep; stosq" : "={cx}" (fresh1), "={di}" (fresh3) : "{ax}"
+     (0 as libc::c_int), "0"
+     (c2rust_asm_casts::AsmCast::cast_in(fresh0, fresh4)), "1"
+     (c2rust_asm_casts::AsmCast::cast_in(fresh2, fresh5)) : "memory" :
+     "volatile");
             c2rust_asm_casts::AsmCast::cast_out(fresh0, fresh4, fresh1);
             c2rust_asm_casts::AsmCast::cast_out(fresh2, fresh5, fresh3);
             fdset.__fds_bits[(0 as libc::c_int

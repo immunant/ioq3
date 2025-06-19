@@ -13134,7 +13134,7 @@ pub unsafe extern "C" fn Sys_Sleep(mut msec: libc::c_int) {
             .as_mut_ptr()
             .offset(0 as libc::c_int as isize)
             as *mut crate::stdlib::__fd_mask;
-        std::arch::asm!("cld; rep; stosq" : "={cx}" (fresh6), "={di}" (fresh8) : "{ax}"
+        asm!("cld; rep; stosq" : "={cx}" (fresh6), "={di}" (fresh8) : "{ax}"
      (0 as libc::c_int), "0"
      (c2rust_asm_casts::AsmCast::cast_in(fresh5, fresh9)), "1"
      (c2rust_asm_casts::AsmCast::cast_in(fresh7, fresh10)) : "memory" :

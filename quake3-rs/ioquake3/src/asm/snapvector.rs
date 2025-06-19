@@ -123,13 +123,13 @@ MATHLIB
 #[no_mangle]
 
 pub unsafe extern "C" fn qsnapvectorsse(mut vec: *mut crate::src::qcommon::q_shared::vec_t) {
-    std::arch::asm!("movaps ($0), %xmm1\nmovups ($1), %xmm0\nmovaps %xmm0, %xmm2\nandps %xmm1, %xmm0\nandnps %xmm2, %xmm1\ncvtps2dq %xmm0, %xmm0\ncvtdq2ps %xmm0, %xmm0\norps %xmm1, %xmm0\nmovups %xmm0, ($1)\n"
+    asm!("movaps ($0), %xmm1\nmovups ($1), %xmm0\nmovaps %xmm0, %xmm2\nandps %xmm1, %xmm0\nandnps %xmm2, %xmm1\ncvtps2dq %xmm0, %xmm0\ncvtdq2ps %xmm0, %xmm0\norps %xmm1, %xmm0\nmovups %xmm0, ($1)\n"
      : : "r" (ssemask.0.as_mut_ptr()), "r" (vec) : "memory", "xmm0", "xmm1",
      "xmm2" : "volatile");
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn qsnapvectorx87(mut vec: *mut crate::src::qcommon::q_shared::vec_t) {
-    std::arch::asm!("flds ($0)\nfistpl ($0)\nfildl ($0)\nfstps ($0)\nflds 4($0)\nfistpl 4($0)\nfildl 4($0)\nfstps 4($0)\nflds 8($0)\nfistpl 8($0)\nfildl 8($0)\nfstps 8($0)\n"
+    asm!("flds ($0)\nfistpl ($0)\nfildl ($0)\nfstps ($0)\nflds 4($0)\nfistpl 4($0)\nfildl 4($0)\nfstps 4($0)\nflds 8($0)\nfistpl 8($0)\nfildl 8($0)\nfstps 8($0)\n"
      : : "r" (vec) : "memory" : "volatile");
 }
