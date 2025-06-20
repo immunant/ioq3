@@ -1252,7 +1252,7 @@ pub unsafe extern "C" fn BotChat_Death(mut bs: *mut bot_state_t) -> i32 {
                 bs as *mut bot_state_s,
                 b"death_cratered\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 BotRandomOpponentName(bs),
-                std::ptr::null_mut(),
+                std::ptr::null_mut::<libc::c_char>(),
             );
         } else if (*bs).botsuicide != 0
             || (*bs).botdeathtype == MOD_CRUSH as i32
@@ -1265,14 +1265,14 @@ pub unsafe extern "C" fn BotChat_Death(mut bs: *mut bot_state_t) -> i32 {
                 bs as *mut bot_state_s,
                 b"death_suicide\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 BotRandomOpponentName(bs),
-                std::ptr::null_mut(),
+                std::ptr::null_mut::<libc::c_char>(),
             );
         } else if (*bs).botdeathtype == MOD_TELEFRAG as i32 {
             BotAI_BotInitialChat(
                 bs as *mut bot_state_s,
                 b"death_telefrag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 name.as_mut_ptr(),
-                std::ptr::null_mut(),
+                std::ptr::null_mut::<libc::c_char>(),
             );
         } else if ((*bs).botdeathtype == MOD_GAUNTLET as i32
             || (*bs).botdeathtype == MOD_RAILGUN as i32
@@ -1286,7 +1286,7 @@ pub unsafe extern "C" fn BotChat_Death(mut bs: *mut bot_state_t) -> i32 {
                     b"death_gauntlet\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     name.as_mut_ptr(),
                     BotWeaponNameForMeansOfDeath((*bs).botdeathtype),
-                    std::ptr::null_mut(),
+                    std::ptr::null_mut::<libc::c_char>(),
                 );
             } else if (*bs).botdeathtype == MOD_RAILGUN as i32 {
                 BotAI_BotInitialChat(
@@ -1294,7 +1294,7 @@ pub unsafe extern "C" fn BotChat_Death(mut bs: *mut bot_state_t) -> i32 {
                     b"death_rail\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     name.as_mut_ptr(),
                     BotWeaponNameForMeansOfDeath((*bs).botdeathtype),
-                    std::ptr::null_mut(),
+                    std::ptr::null_mut::<libc::c_char>(),
                 );
             } else {
                 BotAI_BotInitialChat(
@@ -1302,7 +1302,7 @@ pub unsafe extern "C" fn BotChat_Death(mut bs: *mut bot_state_t) -> i32 {
                     b"death_bfg\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     name.as_mut_ptr(),
                     BotWeaponNameForMeansOfDeath((*bs).botdeathtype),
-                    std::ptr::null_mut(),
+                    std::ptr::null_mut::<libc::c_char>(),
                 );
             }
         } else if ((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32)
@@ -1318,7 +1318,7 @@ pub unsafe extern "C" fn BotChat_Death(mut bs: *mut bot_state_t) -> i32 {
                 b"death_insult\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 name.as_mut_ptr(),
                 BotWeaponNameForMeansOfDeath((*bs).botdeathtype),
-                std::ptr::null_mut(),
+                std::ptr::null_mut::<libc::c_char>(),
             );
         } else {
             BotAI_BotInitialChat(
@@ -1326,7 +1326,7 @@ pub unsafe extern "C" fn BotChat_Death(mut bs: *mut bot_state_t) -> i32 {
                 b"death_praise\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 name.as_mut_ptr(),
                 BotWeaponNameForMeansOfDeath((*bs).botdeathtype),
-                std::ptr::null_mut(),
+                std::ptr::null_mut::<libc::c_char>(),
             );
         }
         (*bs).chatto = 0 as i32
@@ -1403,21 +1403,21 @@ pub unsafe extern "C" fn BotChat_Kill(mut bs: *mut bot_state_t) -> i32 {
                 bs as *mut bot_state_s,
                 b"kill_gauntlet\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 name.as_mut_ptr(),
-                std::ptr::null_mut(),
+                std::ptr::null_mut::<libc::c_char>(),
             );
         } else if (*bs).enemydeathtype == MOD_RAILGUN as i32 {
             BotAI_BotInitialChat(
                 bs as *mut bot_state_s,
                 b"kill_rail\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 name.as_mut_ptr(),
-                std::ptr::null_mut(),
+                std::ptr::null_mut::<libc::c_char>(),
             );
         } else if (*bs).enemydeathtype == MOD_TELEFRAG as i32 {
             BotAI_BotInitialChat(
                 bs as *mut bot_state_s,
                 b"kill_telefrag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 name.as_mut_ptr(),
-                std::ptr::null_mut(),
+                std::ptr::null_mut::<libc::c_char>(),
             );
         } else if ((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32)
             < trap_Characteristic_BFloat(
@@ -1431,14 +1431,14 @@ pub unsafe extern "C" fn BotChat_Kill(mut bs: *mut bot_state_t) -> i32 {
                 bs as *mut bot_state_s,
                 b"kill_insult\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 name.as_mut_ptr(),
-                std::ptr::null_mut(),
+                std::ptr::null_mut::<libc::c_char>(),
             );
         } else {
             BotAI_BotInitialChat(
                 bs as *mut bot_state_s,
                 b"kill_praise\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 name.as_mut_ptr(),
-                std::ptr::null_mut(),
+                std::ptr::null_mut::<libc::c_char>(),
             );
         }
     }
@@ -1863,7 +1863,7 @@ pub unsafe extern "C" fn BotChat_Random(mut bs: *mut bot_state_t) -> i32 {
             b"[invalid var]\x00" as *const u8 as *const libc::c_char,
             BotMapTitle(),
             BotRandomWeaponName(),
-            std::ptr::null_mut(),
+            std::ptr::null_mut::<libc::c_char>(),
         );
     } else {
         BotAI_BotInitialChat(
@@ -1875,7 +1875,7 @@ pub unsafe extern "C" fn BotChat_Random(mut bs: *mut bot_state_t) -> i32 {
             b"[invalid var]\x00" as *const u8 as *const libc::c_char,
             BotMapTitle(),
             BotRandomWeaponName(),
-            std::ptr::null_mut(),
+            std::ptr::null_mut::<libc::c_char>(),
         );
     }
     (*bs).lastchat_time = floattime;
@@ -1923,7 +1923,7 @@ pub unsafe extern "C" fn BotChatTest(mut bs: *mut bot_state_t) {
             b"[invalid var]\x00" as *const u8 as *const libc::c_char,
             b"[invalid var]\x00" as *const u8 as *const libc::c_char,
             BotMapTitle(),
-            std::ptr::null_mut(),
+            std::ptr::null_mut::<libc::c_char>(),
         );
         trap_BotEnterChat((*bs).cs, 0 as i32, 0 as i32);
         i += 1
@@ -1942,7 +1942,7 @@ pub unsafe extern "C" fn BotChatTest(mut bs: *mut bot_state_t) {
             b"[invalid var]\x00" as *const u8 as *const libc::c_char,
             b"[invalid var]\x00" as *const u8 as *const libc::c_char,
             BotMapTitle(),
-            std::ptr::null_mut(),
+            std::ptr::null_mut::<libc::c_char>(),
         );
         trap_BotEnterChat((*bs).cs, 0 as i32, 0 as i32);
         i += 1
@@ -1957,7 +1957,7 @@ pub unsafe extern "C" fn BotChatTest(mut bs: *mut bot_state_t) {
             bs as *mut bot_state_s,
             b"level_start\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             crate::src::game::ai_dmq3::EasyClientName((*bs).client, name.as_mut_ptr(), 32 as i32),
-            std::ptr::null_mut(),
+            std::ptr::null_mut::<libc::c_char>(),
         );
         trap_BotEnterChat((*bs).cs, 0 as i32, 0 as i32);
         i += 1
@@ -1976,7 +1976,7 @@ pub unsafe extern "C" fn BotChatTest(mut bs: *mut bot_state_t) {
             BotFirstClientInRankings(),
             BotLastClientInRankings(),
             BotMapTitle(),
-            std::ptr::null_mut(),
+            std::ptr::null_mut::<libc::c_char>(),
         );
         trap_BotEnterChat((*bs).cs, 0 as i32, 0 as i32);
         i += 1
@@ -1995,7 +1995,7 @@ pub unsafe extern "C" fn BotChatTest(mut bs: *mut bot_state_t) {
             BotFirstClientInRankings(),
             BotLastClientInRankings(),
             BotMapTitle(),
-            std::ptr::null_mut(),
+            std::ptr::null_mut::<libc::c_char>(),
         );
         trap_BotEnterChat((*bs).cs, 0 as i32, 0 as i32);
         i += 1
@@ -2014,7 +2014,7 @@ pub unsafe extern "C" fn BotChatTest(mut bs: *mut bot_state_t) {
             BotFirstClientInRankings(),
             BotLastClientInRankings(),
             BotMapTitle(),
-            std::ptr::null_mut(),
+            std::ptr::null_mut::<libc::c_char>(),
         );
         trap_BotEnterChat((*bs).cs, 0 as i32, 0 as i32);
         i += 1
@@ -2035,7 +2035,7 @@ pub unsafe extern "C" fn BotChatTest(mut bs: *mut bot_state_t) {
             bs as *mut bot_state_s,
             b"death_drown\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             name.as_mut_ptr(),
-            std::ptr::null_mut(),
+            std::ptr::null_mut::<libc::c_char>(),
         );
         trap_BotEnterChat((*bs).cs, 0 as i32, 0 as i32);
         i += 1
@@ -2050,7 +2050,7 @@ pub unsafe extern "C" fn BotChatTest(mut bs: *mut bot_state_t) {
             bs as *mut bot_state_s,
             b"death_slime\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             name.as_mut_ptr(),
-            std::ptr::null_mut(),
+            std::ptr::null_mut::<libc::c_char>(),
         );
         trap_BotEnterChat((*bs).cs, 0 as i32, 0 as i32);
         i += 1

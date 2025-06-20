@@ -1447,7 +1447,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"model2\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(std::ptr::null_mut())).model2 as *mut *mut libc::c_char as size_t,
+                ofs: &mut (*(std::ptr::null_mut::<gentity_s>())).model2 as *mut *mut libc::c_char as size_t,
                 type_0: F_STRING,
             };
             init
@@ -1455,7 +1455,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"spawnflags\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(std::ptr::null_mut())).spawnflags as *mut i32 as size_t,
+                ofs: &mut (*(std::ptr::null_mut::<gentity_s>())).spawnflags as *mut i32 as size_t,
                 type_0: F_INT,
             };
             init
@@ -1463,7 +1463,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"speed\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(std::ptr::null_mut())).speed as *mut f32 as size_t,
+                ofs: &mut (*(std::ptr::null_mut::<gentity_s>())).speed as *mut f32 as size_t,
                 type_0: F_FLOAT,
             };
             init
@@ -1471,7 +1471,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"target\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(std::ptr::null_mut())).target as *mut *mut libc::c_char as size_t,
+                ofs: &mut (*(std::ptr::null_mut::<gentity_s>())).target as *mut *mut libc::c_char as size_t,
                 type_0: F_STRING,
             };
             init
@@ -1479,7 +1479,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"targetname\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(std::ptr::null_mut())).targetname as *mut *mut libc::c_char as size_t,
+                ofs: &mut (*(std::ptr::null_mut::<gentity_s>())).targetname as *mut *mut libc::c_char as size_t,
                 type_0: F_STRING,
             };
             init
@@ -1487,7 +1487,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"message\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(std::ptr::null_mut())).message as *mut *mut libc::c_char as size_t,
+                ofs: &mut (*(std::ptr::null_mut::<gentity_s>())).message as *mut *mut libc::c_char as size_t,
                 type_0: F_STRING,
             };
             init
@@ -1495,7 +1495,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"team\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(std::ptr::null_mut())).team as *mut *mut libc::c_char as size_t,
+                ofs: &mut (*(std::ptr::null_mut::<gentity_s>())).team as *mut *mut libc::c_char as size_t,
                 type_0: F_STRING,
             };
             init
