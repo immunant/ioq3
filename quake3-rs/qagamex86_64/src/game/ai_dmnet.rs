@@ -1025,7 +1025,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                     netname.as_mut_ptr(),
                     ::std::mem::size_of::<[libc::c_char; 36]>() as usize as i32,
                 ),
-                std::ptr::null_mut(),
+                std::ptr::null_mut::<libc::c_char>(),
             );
             trap_BotEnterChat((*bs).cs, (*bs).teammate, 2 as i32);
             (*bs).ltgtype = 0 as i32;
@@ -1073,7 +1073,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                 bs as *mut bot_state_s,
                 b"defend_start\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 buf.as_mut_ptr(),
-                std::ptr::null_mut(),
+                std::ptr::null_mut::<libc::c_char>(),
             );
             trap_BotEnterChat((*bs).cs, 0 as i32, 1 as i32);
             crate::src::game::ai_team::BotVoiceChatOnly(
@@ -1100,7 +1100,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                 bs as *mut bot_state_s,
                 b"defend_stop\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 buf.as_mut_ptr(),
-                std::ptr::null_mut(),
+                std::ptr::null_mut::<libc::c_char>(),
             );
             trap_BotEnterChat((*bs).cs, 0 as i32, 1 as i32);
             (*bs).ltgtype = 0 as i32
@@ -1140,7 +1140,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                 bs as *mut bot_state_s,
                 b"kill_start\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 buf.as_mut_ptr(),
-                std::ptr::null_mut(),
+                std::ptr::null_mut::<libc::c_char>(),
             );
             trap_BotEnterChat((*bs).cs, (*bs).decisionmaker, 2 as i32);
             (*bs).teammessage_time = 0 as i32 as f32
@@ -1158,7 +1158,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                 bs as *mut bot_state_s,
                 b"kill_done\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 buf.as_mut_ptr(),
-                std::ptr::null_mut(),
+                std::ptr::null_mut::<libc::c_char>(),
             );
             trap_BotEnterChat((*bs).cs, (*bs).decisionmaker, 2 as i32);
             (*bs).ltgtype = 0 as i32
@@ -1183,7 +1183,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                 bs as *mut bot_state_s,
                 b"getitem_start\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 buf.as_mut_ptr(),
-                std::ptr::null_mut(),
+                std::ptr::null_mut::<libc::c_char>(),
             );
             trap_BotEnterChat((*bs).cs, (*bs).decisionmaker, 2 as i32);
             crate::src::game::ai_team::BotVoiceChatOnly(
@@ -1221,7 +1221,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                 bs as *mut bot_state_s,
                 b"getitem_notthere\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 buf.as_mut_ptr(),
-                std::ptr::null_mut(),
+                std::ptr::null_mut::<libc::c_char>(),
             );
             trap_BotEnterChat((*bs).cs, (*bs).decisionmaker, 2 as i32);
             (*bs).ltgtype = 0 as i32
@@ -1235,7 +1235,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                 bs as *mut bot_state_s,
                 b"getitem_gotit\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 buf.as_mut_ptr(),
-                std::ptr::null_mut(),
+                std::ptr::null_mut::<libc::c_char>(),
             );
             trap_BotEnterChat((*bs).cs, (*bs).decisionmaker, 2 as i32);
             (*bs).ltgtype = 0 as i32
@@ -1255,7 +1255,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                         netname.as_mut_ptr(),
                         ::std::mem::size_of::<[libc::c_char; 36]>() as usize as i32,
                     ),
-                    std::ptr::null_mut(),
+                    std::ptr::null_mut::<libc::c_char>(),
                 );
                 trap_BotEnterChat((*bs).cs, (*bs).decisionmaker, 2 as i32);
                 crate::src::game::ai_team::BotVoiceChatOnly(
@@ -1279,7 +1279,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                 BotAI_BotInitialChat(
                     bs as *mut bot_state_s,
                     b"camp_stop\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                    std::ptr::null_mut(),
+                    std::ptr::null_mut::<libc::c_char>(),
                 );
                 trap_BotEnterChat((*bs).cs, (*bs).decisionmaker, 2 as i32);
             }
@@ -1697,7 +1697,7 @@ pub unsafe extern "C" fn BotLongTermGoal(
                     teammate.as_mut_ptr(),
                     ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
                 ),
-                std::ptr::null_mut(),
+                std::ptr::null_mut::<libc::c_char>(),
             );
             trap_BotEnterChat((*bs).cs, (*bs).teammate, 2 as i32);
             (*bs).lead_time = 0 as i32 as f32;
@@ -1713,7 +1713,7 @@ pub unsafe extern "C" fn BotLongTermGoal(
                     teammate.as_mut_ptr(),
                     ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
                 ),
-                std::ptr::null_mut(),
+                std::ptr::null_mut::<libc::c_char>(),
             );
             trap_BotEnterChat((*bs).cs, (*bs).teammate, 2 as i32);
             (*bs).leadmessage_time = floattime
@@ -1775,7 +1775,7 @@ pub unsafe extern "C" fn BotLongTermGoal(
                         teammate.as_mut_ptr(),
                         ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
                     ),
-                    std::ptr::null_mut(),
+                    std::ptr::null_mut::<libc::c_char>(),
                 );
                 trap_BotEnterChat((*bs).cs, (*bs).teammate, 2 as i32);
                 (*bs).leadmessage_time = floattime
@@ -1803,7 +1803,7 @@ pub unsafe extern "C" fn BotLongTermGoal(
                             teammate.as_mut_ptr(),
                             ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
                         ),
-                        std::ptr::null_mut(),
+                        std::ptr::null_mut::<libc::c_char>(),
                     );
                     trap_BotEnterChat((*bs).cs, (*bs).teammate, 2 as i32);
                     (*bs).leadmessage_time = floattime

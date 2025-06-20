@@ -960,7 +960,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"level\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut())).level as *mut i32 as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).level as *mut i32 as size_t as i32,
                 type_0: 2 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -972,7 +972,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"model\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut())).model as *mut [libc::c_char; 80] as size_t
+                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).model as *mut [libc::c_char; 80] as size_t
                     as i32,
                 type_0: 4 as i32,
                 maxarray: 0,
@@ -985,7 +985,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"weaponindex\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut())).weaponindex as *mut i32 as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).weaponindex as *mut i32 as size_t as i32,
                 type_0: 2 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -997,7 +997,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"flags\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut())).flags as *mut i32 as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).flags as *mut i32 as size_t as i32,
                 type_0: 2 as i32,
                 maxarray: 0,
                 floatmin: 0.,
