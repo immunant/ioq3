@@ -12780,8 +12780,8 @@ pub unsafe extern "C" fn Sys_ListFilteredFiles(
     let mut search: [libc::c_char; 4096] = [0; 4096];
     let mut newsubdirs: [libc::c_char; 4096] = [0; 4096];
     let mut filename: [libc::c_char; 4096] = [0; 4096];
-    let mut fdir: *mut DIR = std::ptr::null_mut();
-    let mut d: *mut dirent = std::ptr::null_mut();
+    let mut fdir: *mut DIR = 0 as *mut DIR;
+    let mut d: *mut dirent = 0 as *mut dirent;
     let mut st: stat = stat {
         st_dev: 0,
         st_ino: 0,
@@ -12908,8 +12908,8 @@ pub unsafe extern "C" fn Sys_ListFiles(
     mut numfiles: *mut i32,
     mut wantsubs: qboolean,
 ) -> *mut *mut libc::c_char {
-    let mut d: *mut dirent = std::ptr::null_mut();
-    let mut fdir: *mut DIR = std::ptr::null_mut();
+    let mut d: *mut dirent = 0 as *mut dirent;
+    let mut fdir: *mut DIR = 0 as *mut DIR;
     let mut dironly: qboolean = wantsubs;
     let mut search: [libc::c_char; 4096] = [0; 4096];
     let mut nfiles: i32 = 0;

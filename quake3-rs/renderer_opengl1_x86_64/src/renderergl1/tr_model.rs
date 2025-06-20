@@ -1608,7 +1608,7 @@ pub unsafe extern "C" fn R_GetAnimTag(
             );
             // uncompressed model...
             //
-            frameSize = &mut *(*(std::ptr::null_mut()))
+            frameSize = &mut *(*(std::ptr::null_mut::<mdrFrame_t>()))
                 .bones
                 .as_mut_ptr()
                 .offset((*mod_0).numBones as isize) as *mut mdrBone_t

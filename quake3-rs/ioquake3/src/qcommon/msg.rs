@@ -2131,7 +2131,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"pos.trTime\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut())).pos.trTime as *mut i32 as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut::<entityState_s>())).pos.trTime as *mut i32 as size_t as i32,
                 bits: 32 as i32,
             };
             init

@@ -551,7 +551,7 @@ pub const RSERR_UNKNOWN: rserr_t = 3;
 pub const RSERR_OK: rserr_t = 0;
 #[no_mangle]
 
-pub static mut SDL_window: *mut SDL_Window = std::ptr::null_mut();
+pub static mut SDL_window: *mut SDL_Window = 0 as *mut SDL_Window;
 
 static mut SDL_glContext: SDL_GLContext = std::ptr::null_mut();
 #[no_mangle]
@@ -6381,7 +6381,7 @@ unsafe extern "C" fn GLimp_SetMode(
             y,
         );
         SDL_DestroyWindow(SDL_window);
-        SDL_window = std::ptr::null_mut()
+        SDL_window = 0 as *mut SDL_Window
     }
     if fullscreen as u64 != 0 {
         flags |= SDL_WINDOW_FULLSCREEN as i32 as u32;
@@ -6694,7 +6694,7 @@ unsafe extern "C" fn GLimp_SetMode(
                                 crate::stdlib::SDL_GetError(),
                             );
                             SDL_DestroyWindow(SDL_window);
-                            SDL_window = std::ptr::null_mut();
+                            SDL_window = 0 as *mut SDL_Window;
                             current_block_184 = 5597585068398118923;
                         } else if GLimp_GetProcAddresses(fixedFunction) as u64 == 0 {
                             crate::src::renderergl1::tr_main::ri
@@ -6706,9 +6706,9 @@ unsafe extern "C" fn GLimp_SetMode(
                             );
                             GLimp_ClearProcAddresses();
                             SDL_GL_DeleteContext(SDL_glContext);
-                            SDL_glContext = std::ptr::null_mut();
+                            SDL_glContext = 0 as SDL_GLContext;
                             SDL_DestroyWindow(SDL_window);
-                            SDL_window = std::ptr::null_mut();
+                            SDL_window = 0 as *mut SDL_Window;
                             current_block_184 = 5597585068398118923;
                         } else {
                             current_block_184 = 1953367063549441504;

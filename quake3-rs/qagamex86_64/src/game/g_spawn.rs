@@ -1423,7 +1423,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"classname\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(std::ptr::null_mut())).classname as *mut *mut libc::c_char as size_t,
+                ofs: &mut (*(std::ptr::null_mut::<gentity_s>())).classname as *mut *mut libc::c_char as size_t,
                 type_0: F_STRING,
             };
             init
@@ -1431,7 +1431,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"origin\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(std::ptr::null_mut())).s.origin as *mut vec3_t as size_t,
+                ofs: &mut (*(std::ptr::null_mut::<gentity_s>())).s.origin as *mut vec3_t as size_t,
                 type_0: F_VECTOR,
             };
             init
@@ -1439,7 +1439,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"model\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(std::ptr::null_mut())).model as *mut *mut libc::c_char as size_t,
+                ofs: &mut (*(std::ptr::null_mut::<gentity_s>())).model as *mut *mut libc::c_char as size_t,
                 type_0: F_STRING,
             };
             init

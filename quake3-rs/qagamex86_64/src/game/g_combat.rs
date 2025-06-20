@@ -883,7 +883,7 @@ pub unsafe extern "C" fn CheckAlmostCapture(
         loop {
             ent = G_Find(
                 ent as *mut gentity_s,
-                &mut (*(std::ptr::null_mut())).classname as *mut *mut libc::c_char as size_t as i32,
+                &mut (*(std::ptr::null_mut::<gentity_s>())).classname as *mut *mut libc::c_char as size_t as i32,
                 classname,
             ) as *mut gentity_s;
             if !(!ent.is_null() && (*ent).flags & 0x1000 as i32 != 0) {
@@ -934,7 +934,7 @@ pub unsafe extern "C" fn CheckAlmostScored(
         }
         ent = G_Find(
             std::ptr::null_mut() as *mut gentity_s,
-            &mut (*(std::ptr::null_mut())).classname as *mut *mut libc::c_char as size_t as i32,
+            &mut (*(std::ptr::null_mut::<gentity_s>())).classname as *mut *mut libc::c_char as size_t as i32,
             classname,
         ) as *mut gentity_s;
         // if we found the destination obelisk

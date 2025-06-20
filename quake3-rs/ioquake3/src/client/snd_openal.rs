@@ -2702,11 +2702,11 @@ unsafe extern "C" fn S_AL_MusicUpdate() {
 //===========================================================================
 // Local state variables
 
-static mut alDevice: *mut ALCdevice = std::ptr::null_mut();
+static mut alDevice: *mut ALCdevice = 0 as *mut ALCdevice;
 
-static mut alContext: *mut ALCcontext = std::ptr::null_mut();
+static mut alContext: *mut ALCcontext = 0 as *mut ALCcontext;
 
-static mut alCaptureDevice: *mut ALCdevice = std::ptr::null_mut();
+static mut alCaptureDevice: *mut ALCdevice = 0 as *mut ALCdevice;
 
 static mut s_alCapture: *mut cvar_t = std::ptr::null_mut();
 /*
@@ -3002,7 +3002,7 @@ unsafe extern "C" fn S_AL_Shutdown() {
         crate::src::client::qal::qalcCaptureCloseDevice.expect("non-null function pointer")(
             alCaptureDevice,
         );
-        alCaptureDevice = std::ptr::null_mut();
+        alCaptureDevice = 0 as *mut ALCdevice;
         Com_Printf(b"OpenAL capture device closed.\n\x00" as *const u8 as *const libc::c_char);
     }
     i = 0 as i32;
@@ -3194,12 +3194,12 @@ pub unsafe extern "C" fn S_AL_Init(mut si: *mut soundInterface_t) -> qboolean {
     // Device enumeration support
     enumeration_all_ext = crate::src::client::qal::qalcIsExtensionPresent
         .expect("non-null function pointer")(
-        std::ptr::null_mut(),
+        0 as *mut ALCdevice,
         b"ALC_ENUMERATE_ALL_EXT\x00" as *const u8 as *const libc::c_char,
     ) as qboolean;
     enumeration_ext = crate::src::client::qal::qalcIsExtensionPresent
         .expect("non-null function pointer")(
-        std::ptr::null_mut(),
+        0 as *mut ALCdevice,
         b"ALC_ENUMERATION_EXT\x00" as *const u8 as *const libc::c_char,
     ) as qboolean;
     if enumeration_ext as u32 != 0 || enumeration_all_ext as u32 != 0 {
@@ -3211,13 +3211,13 @@ pub unsafe extern "C" fn S_AL_Init(mut si: *mut soundInterface_t) -> qboolean {
         // get all available devices + the default device name.
         if enumeration_all_ext as u64 != 0 {
             devicelist = crate::src::client::qal::qalcGetString.expect("non-null function pointer")(
-                std::ptr::null_mut(),
+                0 as *mut ALCdevice,
                 0x1013 as i32,
             )
         } else {
             // We don't have ALC_ENUMERATE_ALL_EXT but normal enumeration.
             devicelist = crate::src::client::qal::qalcGetString.expect("non-null function pointer")(
-                std::ptr::null_mut(),
+                0 as *mut ALCdevice,
                 0x1005 as i32,
             );
             enumeration_ext = qtrue
@@ -3306,7 +3306,7 @@ pub unsafe extern "C" fn S_AL_Init(mut si: *mut soundInterface_t) -> qboolean {
                 as *const libc::c_char,
         );
     } else if crate::src::client::qal::qalcIsExtensionPresent.expect("non-null function pointer")(
-        std::ptr::null_mut(),
+        0 as *mut ALCdevice,
         b"ALC_EXT_capture\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
@@ -3325,11 +3325,11 @@ pub unsafe extern "C" fn S_AL_Init(mut si: *mut soundInterface_t) -> qboolean {
         // get all available input devices + the default input device name.
         inputdevicelist = crate::src::client::qal::qalcGetString
             .expect("non-null function pointer")(
-            std::ptr::null_mut(), 0x310 as i32
+            0 as *mut ALCdevice, 0x310 as i32
         );
         defaultinputdevice = crate::src::client::qal::qalcGetString
             .expect("non-null function pointer")(
-            std::ptr::null_mut(), 0x311 as i32
+            0 as *mut ALCdevice, 0x311 as i32
         );
         // dump a list of available devices to a cvar for the user to see.
         if !inputdevicelist.is_null() {

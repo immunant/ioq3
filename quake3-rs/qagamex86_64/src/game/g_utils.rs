@@ -710,7 +710,7 @@ pub unsafe extern "C" fn G_PickTarget(mut targetname: *mut libc::c_char) -> *mut
     loop {
         ent = G_Find(
             ent,
-            &mut (*(std::ptr::null_mut())).targetname as *mut *mut libc::c_char as size_t as i32,
+            &mut (*(std::ptr::null_mut::<gentity_s>())).targetname as *mut *mut libc::c_char as size_t as i32,
             targetname,
         );
         if ent.is_null() {
@@ -762,7 +762,7 @@ pub unsafe extern "C" fn G_UseTargets(mut ent: *mut gentity_t, mut activator: *m
     loop {
         t = G_Find(
             t,
-            &mut (*(std::ptr::null_mut())).targetname as *mut *mut libc::c_char as size_t as i32,
+            &mut (*(std::ptr::null_mut::<gentity_s>())).targetname as *mut *mut libc::c_char as size_t as i32,
             (*ent).target,
         );
         if t.is_null() {

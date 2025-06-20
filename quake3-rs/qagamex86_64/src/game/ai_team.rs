@@ -644,7 +644,7 @@ pub unsafe extern "C" fn BotCTFOrders_BothFlagsNotAtBase(mut bs: *mut bot_state_
                 bs as *mut bot_state_s,
                 b"cmd_getflag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 name.as_mut_ptr(),
-                std::ptr::null_mut(),
+                std::ptr::null_mut::<libc::c_char>(),
             );
             BotSayTeamOrder(bs, other);
             BotSayVoiceTeamOrder(
@@ -677,7 +677,7 @@ pub unsafe extern "C" fn BotCTFOrders_BothFlagsNotAtBase(mut bs: *mut bot_state_
                         b"cmd_accompanyme\x00" as *const u8 as *const libc::c_char
                             as *mut libc::c_char,
                         name.as_mut_ptr(),
-                        std::ptr::null_mut(),
+                        std::ptr::null_mut::<libc::c_char>(),
                     );
                     BotSayVoiceTeamOrder(
                         bs,
@@ -691,7 +691,7 @@ pub unsafe extern "C" fn BotCTFOrders_BothFlagsNotAtBase(mut bs: *mut bot_state_
                             as *mut libc::c_char,
                         name.as_mut_ptr(),
                         carriername.as_mut_ptr(),
-                        std::ptr::null_mut(),
+                        std::ptr::null_mut::<libc::c_char>(),
                     );
                     BotSayVoiceTeamOrder(
                         bs,
@@ -706,7 +706,7 @@ pub unsafe extern "C" fn BotCTFOrders_BothFlagsNotAtBase(mut bs: *mut bot_state_
                     bs as *mut bot_state_s,
                     b"cmd_getflag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     name.as_mut_ptr(),
-                    std::ptr::null_mut(),
+                    std::ptr::null_mut::<libc::c_char>(),
                 );
                 BotSayVoiceTeamOrder(
                     bs,
@@ -730,7 +730,7 @@ pub unsafe extern "C" fn BotCTFOrders_BothFlagsNotAtBase(mut bs: *mut bot_state_
                 bs as *mut bot_state_s,
                 b"cmd_getflag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 name.as_mut_ptr(),
-                std::ptr::null_mut(),
+                std::ptr::null_mut::<libc::c_char>(),
             );
             BotSayTeamOrder(bs, other);
             BotSayVoiceTeamOrder(
@@ -890,7 +890,7 @@ pub unsafe extern "C" fn BotCTFOrders_FlagNotAtBase(mut bs: *mut bot_state_t) {
                     bs as *mut bot_state_s,
                     b"cmd_defendbase\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     name.as_mut_ptr(),
-                    std::ptr::null_mut(),
+                    std::ptr::null_mut::<libc::c_char>(),
                 );
                 BotSayTeamOrder(bs, teammates[0 as i32 as usize]);
                 BotSayVoiceTeamOrder(
@@ -908,7 +908,7 @@ pub unsafe extern "C" fn BotCTFOrders_FlagNotAtBase(mut bs: *mut bot_state_t) {
                     bs as *mut bot_state_s,
                     b"cmd_getflag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     name.as_mut_ptr(),
-                    std::ptr::null_mut(),
+                    std::ptr::null_mut::<libc::c_char>(),
                 );
                 BotSayTeamOrder(bs, teammates[1 as i32 as usize]);
                 BotSayVoiceTeamOrder(
@@ -928,7 +928,7 @@ pub unsafe extern "C" fn BotCTFOrders_FlagNotAtBase(mut bs: *mut bot_state_t) {
                     bs as *mut bot_state_s,
                     b"cmd_defendbase\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     name.as_mut_ptr(),
-                    std::ptr::null_mut(),
+                    std::ptr::null_mut::<libc::c_char>(),
                 );
                 BotSayTeamOrder(bs, teammates[0 as i32 as usize]);
                 BotSayVoiceTeamOrder(
@@ -946,7 +946,7 @@ pub unsafe extern "C" fn BotCTFOrders_FlagNotAtBase(mut bs: *mut bot_state_t) {
                     bs as *mut bot_state_s,
                     b"cmd_getflag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     name.as_mut_ptr(),
-                    std::ptr::null_mut(),
+                    std::ptr::null_mut::<libc::c_char>(),
                 );
                 BotSayTeamOrder(bs, teammates[1 as i32 as usize]);
                 BotSayVoiceTeamOrder(
@@ -964,7 +964,7 @@ pub unsafe extern "C" fn BotCTFOrders_FlagNotAtBase(mut bs: *mut bot_state_t) {
                     bs as *mut bot_state_s,
                     b"cmd_getflag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     name.as_mut_ptr(),
-                    std::ptr::null_mut(),
+                    std::ptr::null_mut::<libc::c_char>(),
                 );
                 BotSayTeamOrder(bs, teammates[2 as i32 as usize]);
                 BotSayVoiceTeamOrder(
@@ -1228,7 +1228,7 @@ pub unsafe extern "C" fn BotCTFOrders_EnemyFlagNotAtBase(mut bs: *mut bot_state_
                 bs as *mut bot_state_s,
                 b"cmd_defendbase\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 name.as_mut_ptr(),
-                std::ptr::null_mut(),
+                std::ptr::null_mut::<libc::c_char>(),
             );
             BotSayTeamOrder(bs, other);
             BotSayVoiceTeamOrder(
@@ -1253,7 +1253,7 @@ pub unsafe extern "C" fn BotCTFOrders_EnemyFlagNotAtBase(mut bs: *mut bot_state_
                 bs as *mut bot_state_s,
                 b"cmd_defendbase\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 name.as_mut_ptr(),
-                std::ptr::null_mut(),
+                std::ptr::null_mut::<libc::c_char>(),
             );
             BotSayTeamOrder(bs, other);
             BotSayVoiceTeamOrder(
@@ -1276,7 +1276,7 @@ pub unsafe extern "C" fn BotCTFOrders_EnemyFlagNotAtBase(mut bs: *mut bot_state_
                 bs as *mut bot_state_s,
                 b"cmd_defendbase\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 name.as_mut_ptr(),
-                std::ptr::null_mut(),
+                std::ptr::null_mut::<libc::c_char>(),
             );
             BotSayTeamOrder(bs, other);
             BotSayVoiceTeamOrder(
