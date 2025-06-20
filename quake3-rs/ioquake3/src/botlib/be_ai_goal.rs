@@ -3058,7 +3058,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"model\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut())).model as *mut [libc::c_char; 80] as size_t
+                offset: &mut (*(std::ptr::null_mut::<iteminfo_s>())).model as *mut [libc::c_char; 80] as size_t
                     as i32,
                 type_0: 4 as i32,
                 maxarray: 0,
@@ -3071,7 +3071,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"modelindex\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut())).modelindex as *mut i32 as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut::<iteminfo_s>())).modelindex as *mut i32 as size_t as i32,
                 type_0: 2 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -3083,7 +3083,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"type\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut())).type_0 as *mut i32 as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut::<iteminfo_s>())).type_0 as *mut i32 as size_t as i32,
                 type_0: 2 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -3095,7 +3095,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"index\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut())).index as *mut i32 as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut::<iteminfo_s>())).index as *mut i32 as size_t as i32,
                 type_0: 2 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -3107,7 +3107,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"respawntime\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut())).respawntime as *mut f32 as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut::<iteminfo_s>())).respawntime as *mut f32 as size_t as i32,
                 type_0: 3 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -3119,7 +3119,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"mins\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut())).mins as *mut vec3_t as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut::<iteminfo_s>())).mins as *mut vec3_t as size_t as i32,
                 type_0: 3 as i32 | 0x100 as i32,
                 maxarray: 3 as i32,
                 floatmin: 0.,
@@ -3131,7 +3131,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"maxs\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut())).maxs as *mut vec3_t as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut::<iteminfo_s>())).maxs as *mut vec3_t as size_t as i32,
                 type_0: 3 as i32 | 0x100 as i32,
                 maxarray: 3 as i32,
                 floatmin: 0.,

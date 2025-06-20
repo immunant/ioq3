@@ -437,7 +437,7 @@ pub unsafe extern "C" fn R_ComputeLOD(mut ent: *mut trRefEntity_t) -> i32 {
         if (*tr.currentModel).type_0 as u32 == MOD_MDR as i32 as u32 {
             let mut frameSize: i32 = 0;
             mdr = (*tr.currentModel).modelData as *mut mdrHeader_t;
-            frameSize = &mut *(*(std::ptr::null_mut()))
+            frameSize = &mut *(*(std::ptr::null_mut::<mdrFrame_t>()))
                 .bones
                 .as_mut_ptr()
                 .offset((*mdr).numBones as isize) as *mut mdrBone_t

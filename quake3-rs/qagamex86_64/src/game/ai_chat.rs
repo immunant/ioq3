@@ -988,7 +988,7 @@ pub unsafe extern "C" fn BotChat_EnterGame(mut bs: *mut bot_state_t) -> i32 {
         b"[invalid var]\x00" as *const u8 as *const libc::c_char,
         b"[invalid var]\x00" as *const u8 as *const libc::c_char,
         BotMapTitle(),
-        std::ptr::null_mut(),
+        std::ptr::null_mut::<libc::c_char>(),
     );
     (*bs).lastchat_time = floattime;
     (*bs).chatto = 0 as i32;
@@ -1037,7 +1037,7 @@ pub unsafe extern "C" fn BotChat_ExitGame(mut bs: *mut bot_state_t) -> i32 {
         b"[invalid var]\x00" as *const u8 as *const libc::c_char,
         b"[invalid var]\x00" as *const u8 as *const libc::c_char,
         BotMapTitle(),
-        std::ptr::null_mut(),
+        std::ptr::null_mut::<libc::c_char>(),
     );
     (*bs).lastchat_time = floattime;
     (*bs).chatto = 0 as i32;
@@ -1084,7 +1084,7 @@ pub unsafe extern "C" fn BotChat_StartLevel(mut bs: *mut bot_state_t) -> i32 {
         bs as *mut bot_state_s,
         b"level_start\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         crate::src::game::ai_dmq3::EasyClientName((*bs).client, name.as_mut_ptr(), 32 as i32),
-        std::ptr::null_mut(),
+        std::ptr::null_mut::<libc::c_char>(),
     );
     (*bs).lastchat_time = floattime;
     (*bs).chatto = 0 as i32;
@@ -1137,7 +1137,7 @@ pub unsafe extern "C" fn BotChat_EndLevel(mut bs: *mut bot_state_t) -> i32 {
             b"[invalid var]\x00" as *const u8 as *const libc::c_char,
             BotLastClientInRankings(),
             BotMapTitle(),
-            std::ptr::null_mut(),
+            std::ptr::null_mut::<libc::c_char>(),
         );
     } else if BotIsLastInRankings(bs) != 0 {
         BotAI_BotInitialChat(
@@ -1148,7 +1148,7 @@ pub unsafe extern "C" fn BotChat_EndLevel(mut bs: *mut bot_state_t) -> i32 {
             BotFirstClientInRankings(),
             b"[invalid var]\x00" as *const u8 as *const libc::c_char,
             BotMapTitle(),
-            std::ptr::null_mut(),
+            std::ptr::null_mut::<libc::c_char>(),
         );
     } else {
         BotAI_BotInitialChat(
@@ -1159,7 +1159,7 @@ pub unsafe extern "C" fn BotChat_EndLevel(mut bs: *mut bot_state_t) -> i32 {
             BotFirstClientInRankings(),
             BotLastClientInRankings(),
             BotMapTitle(),
-            std::ptr::null_mut(),
+            std::ptr::null_mut::<libc::c_char>(),
         );
     }
     (*bs).lastchat_time = floattime;
@@ -1217,7 +1217,7 @@ pub unsafe extern "C" fn BotChat_Death(mut bs: *mut bot_state_t) -> i32 {
             bs as *mut bot_state_s,
             b"death_teammate\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             name.as_mut_ptr(),
-            std::ptr::null_mut(),
+            std::ptr::null_mut::<libc::c_char>(),
         );
         (*bs).chatto = 1 as i32
     } else {
@@ -1231,21 +1231,21 @@ pub unsafe extern "C" fn BotChat_Death(mut bs: *mut bot_state_t) -> i32 {
                 bs as *mut bot_state_s,
                 b"death_drown\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 BotRandomOpponentName(bs),
-                std::ptr::null_mut(),
+                std::ptr::null_mut::<libc::c_char>(),
             );
         } else if (*bs).botdeathtype == MOD_SLIME as i32 {
             BotAI_BotInitialChat(
                 bs as *mut bot_state_s,
                 b"death_slime\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 BotRandomOpponentName(bs),
-                std::ptr::null_mut(),
+                std::ptr::null_mut::<libc::c_char>(),
             );
         } else if (*bs).botdeathtype == MOD_LAVA as i32 {
             BotAI_BotInitialChat(
                 bs as *mut bot_state_s,
                 b"death_lava\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 BotRandomOpponentName(bs),
-                std::ptr::null_mut(),
+                std::ptr::null_mut::<libc::c_char>(),
             );
         } else if (*bs).botdeathtype == MOD_FALLING as i32 {
             BotAI_BotInitialChat(
@@ -1388,7 +1388,7 @@ pub unsafe extern "C" fn BotChat_Kill(mut bs: *mut bot_state_t) -> i32 {
             bs as *mut bot_state_s,
             b"kill_teammate\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             name.as_mut_ptr(),
-            std::ptr::null_mut(),
+            std::ptr::null_mut::<libc::c_char>(),
         );
         (*bs).chatto = 1 as i32
     } else {
@@ -1502,7 +1502,7 @@ pub unsafe extern "C" fn BotChat_EnemySuicide(mut bs: *mut bot_state_t) -> i32 {
         bs as *mut bot_state_s,
         b"enemy_suicide\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         name.as_mut_ptr(),
-        std::ptr::null_mut(),
+        std::ptr::null_mut::<libc::c_char>(),
     );
     (*bs).lastchat_time = floattime;
     (*bs).chatto = 0 as i32;
@@ -1573,7 +1573,7 @@ pub unsafe extern "C" fn BotChat_HitTalking(mut bs: *mut bot_state_t) -> i32 {
         b"hit_talking\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         name.as_mut_ptr(),
         weap,
-        std::ptr::null_mut(),
+        std::ptr::null_mut::<libc::c_char>(),
     );
     (*bs).lastchat_time = floattime;
     (*bs).chatto = 0 as i32;
@@ -1681,7 +1681,7 @@ pub unsafe extern "C" fn BotChat_HitNoDeath(mut bs: *mut bot_state_t) -> i32 {
         b"hit_nodeath\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         name.as_mut_ptr(),
         weap,
-        std::ptr::null_mut(),
+        std::ptr::null_mut::<libc::c_char>(),
     );
     (*bs).lastchat_time = floattime;
     (*bs).chatto = 0 as i32;
@@ -1776,7 +1776,7 @@ pub unsafe extern "C" fn BotChat_HitNoKill(mut bs: *mut bot_state_t) -> i32 {
         b"hit_nokill\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         name.as_mut_ptr(),
         weap,
-        std::ptr::null_mut(),
+        std::ptr::null_mut::<libc::c_char>(),
     );
     (*bs).lastchat_time = floattime;
     (*bs).chatto = 0 as i32;

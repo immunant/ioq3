@@ -273,7 +273,7 @@ pub unsafe extern "C" fn BotVoiceChat_Patrol(
     BotAI_BotInitialChat(
         bs as *mut bot_state_s,
         b"dismissed\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-        std::ptr::null_mut(),
+        std::ptr::null_mut::<libc::c_char>(),
     );
     trap_BotEnterChat((*bs).cs, client, 2 as i32);
     crate::src::game::ai_team::BotVoiceChatOnly(
@@ -358,7 +358,7 @@ pub unsafe extern "C" fn BotVoiceChat_Camp(
                 netname.as_mut_ptr(),
                 ::std::mem::size_of::<[libc::c_char; 36]>() as usize as i32,
             ),
-            std::ptr::null_mut(),
+            std::ptr::null_mut::<libc::c_char>(),
         );
         trap_BotEnterChat((*bs).cs, client, 2 as i32);
         return;
@@ -453,7 +453,7 @@ pub unsafe extern "C" fn BotVoiceChat_FollowMe(
                 netname.as_mut_ptr(),
                 ::std::mem::size_of::<[libc::c_char; 36]>() as usize as i32,
             ),
-            std::ptr::null_mut(),
+            std::ptr::null_mut::<libc::c_char>(),
         );
         trap_BotEnterChat((*bs).cs, client, 2 as i32);
         return;
@@ -601,7 +601,7 @@ pub unsafe extern "C" fn BotVoiceChat_WhoIsLeader(
         BotAI_BotInitialChat(
             bs as *mut bot_state_s,
             b"iamteamleader\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            std::ptr::null_mut(),
+            std::ptr::null_mut::<libc::c_char>(),
         );
         trap_BotEnterChat((*bs).cs, 0 as i32, 1 as i32);
         crate::src::game::ai_team::BotVoiceChatOnly(
@@ -644,7 +644,7 @@ pub unsafe extern "C" fn BotVoiceChat_WantOnDefense(
         bs as *mut bot_state_s,
         b"keepinmind\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         netname.as_mut_ptr(),
-        std::ptr::null_mut(),
+        std::ptr::null_mut::<libc::c_char>(),
     );
     trap_BotEnterChat((*bs).cs, client, 2 as i32);
     crate::src::game::ai_team::BotVoiceChatOnly(
@@ -687,7 +687,7 @@ pub unsafe extern "C" fn BotVoiceChat_WantOnOffense(
         bs as *mut bot_state_s,
         b"keepinmind\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         netname.as_mut_ptr(),
-        std::ptr::null_mut(),
+        std::ptr::null_mut::<libc::c_char>(),
     );
     trap_BotEnterChat((*bs).cs, client, 2 as i32);
     crate::src::game::ai_team::BotVoiceChatOnly(

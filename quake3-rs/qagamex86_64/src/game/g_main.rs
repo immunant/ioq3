@@ -2738,7 +2738,7 @@ pub unsafe extern "C" fn FindIntermissionPoint() {
     // find the intermission spot
     ent = G_Find(
         std::ptr::null_mut() as *mut gentity_s,
-        &mut (*(std::ptr::null_mut())).classname as *mut *mut libc::c_char as size_t as i32,
+        &mut (*(std::ptr::null_mut::<gentity_s>())).classname as *mut *mut libc::c_char as size_t as i32,
         b"info_player_intermission\x00" as *const u8 as *const libc::c_char,
     ) as *mut gentity_s;
     if ent.is_null() {

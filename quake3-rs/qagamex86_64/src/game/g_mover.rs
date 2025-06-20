@@ -2283,7 +2283,7 @@ pub unsafe extern "C" fn Think_SetupTrainTargets(mut ent: *mut gentity_t) {
     let mut start: *mut gentity_t = std::ptr::null_mut();
     (*ent).nextTrain = G_Find(
         std::ptr::null_mut() as *mut gentity_s,
-        &mut (*(std::ptr::null_mut())).targetname as *mut *mut libc::c_char as size_t as i32,
+        &mut (*(std::ptr::null_mut::<gentity_s>())).targetname as *mut *mut libc::c_char as size_t as i32,
         (*ent).target,
     ) as *mut gentity_s;
     if (*ent).nextTrain.is_null() {
@@ -2313,7 +2313,7 @@ pub unsafe extern "C" fn Think_SetupTrainTargets(mut ent: *mut gentity_t) {
         loop {
             next = G_Find(
                 next as *mut gentity_s,
-                &mut (*(std::ptr::null_mut())).targetname as *mut *mut libc::c_char as size_t
+                &mut (*(std::ptr::null_mut::<gentity_s>())).targetname as *mut *mut libc::c_char as size_t
                     as i32,
                 (*path).target,
             ) as *mut gentity_s;

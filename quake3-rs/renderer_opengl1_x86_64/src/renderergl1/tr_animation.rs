@@ -291,7 +291,7 @@ unsafe extern "C" fn R_MDRCullModel(
     let mut newFrame: *mut mdrFrame_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut frameSize: i32 = 0;
-    frameSize = &mut *(*(std::ptr::null_mut()))
+    frameSize = &mut *(*(std::ptr::null_mut::<mdrFrame_t>()))
         .bones
         .as_mut_ptr()
         .offset((*header).numBones as isize) as *mut mdrBone_t as size_t as i32;
@@ -405,7 +405,7 @@ pub unsafe extern "C" fn R_MDRComputeFogNum(
     if tr.refdef.rdflags & 0x1 as i32 != 0 {
         return 0 as i32;
     }
-    frameSize = &mut *(*(std::ptr::null_mut()))
+    frameSize = &mut *(*(std::ptr::null_mut::<mdrFrame_t>()))
         .bones
         .as_mut_ptr()
         .offset((*header).numBones as isize) as *mut mdrBone_t as size_t as i32;
@@ -635,7 +635,7 @@ pub unsafe extern "C" fn RB_MDRSurfaceAnim(mut surface: *mut mdrSurface_t) {
         frontlerp = 1.0f32 - backlerp
     }
     header = (surface as *mut byte).offset((*surface).ofsHeader as isize) as *mut mdrHeader_t;
-    frameSize = &mut *(*(std::ptr::null_mut()))
+    frameSize = &mut *(*(std::ptr::null_mut::<mdrFrame_t>()))
         .bones
         .as_mut_ptr()
         .offset((*header).numBones as isize) as *mut mdrBone_t as size_t as i32;

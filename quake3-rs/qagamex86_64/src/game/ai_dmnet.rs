@@ -670,7 +670,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                     netname.as_mut_ptr(),
                     ::std::mem::size_of::<[libc::c_char; 36]>() as usize as i32,
                 ),
-                std::ptr::null_mut(),
+                std::ptr::null_mut::<libc::c_char>(),
             );
             trap_BotEnterChat((*bs).cs, (*bs).decisionmaker, 2 as i32);
             crate::src::game::ai_team::BotVoiceChatOnly(
@@ -757,7 +757,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                     netname.as_mut_ptr(),
                     ::std::mem::size_of::<[libc::c_char; 36]>() as usize as i32,
                 ),
-                std::ptr::null_mut(),
+                std::ptr::null_mut::<libc::c_char>(),
             );
             trap_BotEnterChat((*bs).cs, (*bs).decisionmaker, 2 as i32);
             crate::src::game::ai_team::BotVoiceChatOnly(
@@ -778,7 +778,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                     netname.as_mut_ptr(),
                     ::std::mem::size_of::<[libc::c_char; 36]>() as usize as i32,
                 ),
-                std::ptr::null_mut(),
+                std::ptr::null_mut::<libc::c_char>(),
             );
             trap_BotEnterChat((*bs).cs, (*bs).teammate, 2 as i32);
             (*bs).ltgtype = 0 as i32
@@ -918,7 +918,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                                 netname.as_mut_ptr(),
                                 ::std::mem::size_of::<[libc::c_char; 36]>() as usize as i32,
                             ),
-                            std::ptr::null_mut(),
+                            std::ptr::null_mut::<libc::c_char>(),
                         );
                         trap_BotEnterChat((*bs).cs, (*bs).teammate, 2 as i32);
                         (*bs).arrive_time = floattime

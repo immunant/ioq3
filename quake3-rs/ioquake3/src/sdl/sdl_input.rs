@@ -1115,9 +1115,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 static mut in_keyboardDebug: *mut cvar_t = std::ptr::null_mut();
 
-static mut gamepad: *mut SDL_GameController = std::ptr::null_mut();
+static mut gamepad: *mut SDL_GameController = 0 as *mut SDL_GameController;
 
-static mut stick: *mut SDL_Joystick = std::ptr::null_mut();
+static mut stick: *mut SDL_Joystick = 0 as *mut SDL_Joystick;
 
 static mut mouseAvailable: qboolean = qfalse;
 
@@ -1139,7 +1139,7 @@ static mut vidRestartTime: i32 = 0 as i32;
 
 static mut in_eventTime: i32 = 0 as i32;
 
-static mut SDL_window: *mut SDL_Window = std::ptr::null_mut();
+static mut SDL_window: *mut SDL_Window = 0 as *mut SDL_Window;
 /*
 ===============
 IN_PrintKey
@@ -1550,8 +1550,8 @@ unsafe extern "C" fn IN_InitJoystick() {
     if !stick.is_null() {
         SDL_JoystickClose(stick);
     }
-    stick = std::ptr::null_mut();
-    gamepad = std::ptr::null_mut();
+    stick = 0 as *mut SDL_Joystick;
+    gamepad = 0 as *mut SDL_GameController;
     crate::stdlib::memset(
         &mut stick_state as *mut C2RustUnnamed_151 as *mut libc::c_void,
         '\u{0}' as i32,
@@ -1709,11 +1709,11 @@ unsafe extern "C" fn IN_ShutdownJoystick() {
     }
     if !gamepad.is_null() {
         SDL_GameControllerClose(gamepad);
-        gamepad = std::ptr::null_mut()
+        gamepad = 0 as *mut SDL_GameController
     }
     if !stick.is_null() {
         SDL_JoystickClose(stick);
-        stick = std::ptr::null_mut()
+        stick = 0 as *mut SDL_Joystick
     }
     crate::stdlib::SDL_QuitSubSystem(0x2000 as u32);
     crate::stdlib::SDL_QuitSubSystem(0x200 as u32);
@@ -2824,7 +2824,7 @@ pub unsafe extern "C" fn IN_Shutdown() {
     );
     mouseAvailable = qfalse;
     IN_ShutdownJoystick();
-    SDL_window = std::ptr::null_mut();
+    SDL_window = 0 as *mut SDL_Window;
 }
 /*
 ===========================================================================
