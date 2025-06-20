@@ -551,7 +551,7 @@ pub const RSERR_UNKNOWN: rserr_t = 3;
 pub const RSERR_OK: rserr_t = 0;
 #[no_mangle]
 
-pub static mut SDL_window: *mut SDL_Window = std::ptr::null_mut();
+pub static mut SDL_window: *mut SDL_Window = 0 as *mut SDL_Window;
 
 static mut SDL_glContext: SDL_GLContext = std::ptr::null_mut();
 #[no_mangle]

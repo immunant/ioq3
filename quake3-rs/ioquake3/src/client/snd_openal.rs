@@ -2702,11 +2702,11 @@ unsafe extern "C" fn S_AL_MusicUpdate() {
 //===========================================================================
 // Local state variables
 
-static mut alDevice: *mut ALCdevice = std::ptr::null_mut();
+static mut alDevice: *mut ALCdevice = 0 as *mut ALCdevice;
 
-static mut alContext: *mut ALCcontext = std::ptr::null_mut();
+static mut alContext: *mut ALCcontext = 0 as *mut ALCcontext;
 
-static mut alCaptureDevice: *mut ALCdevice = std::ptr::null_mut();
+static mut alCaptureDevice: *mut ALCdevice = 0 as *mut ALCdevice;
 
 static mut s_alCapture: *mut cvar_t = std::ptr::null_mut();
 /*
