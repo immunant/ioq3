@@ -192,34 +192,34 @@ pub struct bot_movestate_s {
 }
 #[no_mangle]
 
-pub static mut sv_maxstep: *mut libvar_t = 0 as *const libvar_t as *mut libvar_t;
+pub static mut sv_maxstep: *mut libvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut sv_maxbarrier: *mut libvar_t = 0 as *const libvar_t as *mut libvar_t;
+pub static mut sv_maxbarrier: *mut libvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut sv_gravity: *mut libvar_t = 0 as *const libvar_t as *mut libvar_t;
+pub static mut sv_gravity: *mut libvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut weapindex_rocketlauncher: *mut libvar_t = 0 as *const libvar_t as *mut libvar_t;
+pub static mut weapindex_rocketlauncher: *mut libvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut weapindex_bfg10k: *mut libvar_t = 0 as *const libvar_t as *mut libvar_t;
+pub static mut weapindex_bfg10k: *mut libvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut weapindex_grapple: *mut libvar_t = 0 as *const libvar_t as *mut libvar_t;
+pub static mut weapindex_grapple: *mut libvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut entitytypemissile: *mut libvar_t = 0 as *const libvar_t as *mut libvar_t;
+pub static mut entitytypemissile: *mut libvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut offhandgrapple: *mut libvar_t = 0 as *const libvar_t as *mut libvar_t;
+pub static mut offhandgrapple: *mut libvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cmd_grappleoff: *mut libvar_t = 0 as *const libvar_t as *mut libvar_t;
+pub static mut cmd_grappleoff: *mut libvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cmd_grappleon: *mut libvar_t = 0 as *const libvar_t as *mut libvar_t;
+pub static mut cmd_grappleon: *mut libvar_t = std::ptr::null_mut();
 //input vars (all set outside the movement code)
 //origin of the bot
 //velocity of the bot
@@ -252,8 +252,7 @@ pub static mut cmd_grappleon: *mut libvar_t = 0 as *const libvar_t as *mut libva
 pub static mut modeltypes: [i32; 256] = [0; 256];
 #[no_mangle]
 
-pub static mut botmovestates: [*mut bot_movestate_t; 65] =
-    [0 as *const bot_movestate_t as *mut bot_movestate_t; 65];
+pub static mut botmovestates: [*mut bot_movestate_t; 65] = [std::ptr::null_mut(); 65];
 //returns the handle of a newly allocated movestate
 //========================================================================
 //

@@ -31,19 +31,19 @@ memory management
 ===============================================================================
 */
 
-static mut buffer: *mut sndBuffer = 0 as *const sndBuffer as *mut sndBuffer;
+static mut buffer: *mut sndBuffer = std::ptr::null_mut();
 
-static mut freelist: *mut sndBuffer = 0 as *const sndBuffer as *mut sndBuffer;
+static mut freelist: *mut sndBuffer = std::ptr::null_mut();
 
 static mut inUse: i32 = 0 as i32;
 
 static mut totalInUse: i32 = 0 as i32;
 #[no_mangle]
 
-pub static mut sfxScratchBuffer: *mut i16 = 0 as *const i16 as *mut i16;
+pub static mut sfxScratchBuffer: *mut i16 = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut sfxScratchPointer: *mut sfx_t = 0 as *const sfx_t as *mut sfx_t;
+pub static mut sfxScratchPointer: *mut sfx_t = std::ptr::null_mut();
 #[no_mangle]
 
 pub static mut sfxScratchIndex: i32 = 0 as i32;

@@ -471,193 +471,193 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // cl_main.c  -- client main loop
 #[no_mangle]
 
-pub static mut cl_useMumble: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_useMumble: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_mumbleScale: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_mumbleScale: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_voipUseVAD: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_voipUseVAD: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_voipVADThreshold: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_voipVADThreshold: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_voipSend: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_voipSend: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_voipSendTarget: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_voipSendTarget: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_voipGainDuringCapture: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_voipGainDuringCapture: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_voipCaptureMult: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_voipCaptureMult: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_voipShowMeter: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_voipShowMeter: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_voipProtocol: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_voipProtocol: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_voip: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_voip: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_renderer: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_renderer: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_nodelta: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_nodelta: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_debugMove: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_debugMove: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_noprint: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_noprint: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_motd: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_motd: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut rcon_client_password: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut rcon_client_password: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut rconAddress: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut rconAddress: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_timeout: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_timeout: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_maxpackets: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_maxpackets: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_packetdup: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_packetdup: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_timeNudge: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_timeNudge: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_showTimeDelta: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_showTimeDelta: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_freezeDemo: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_freezeDemo: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_shownet: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_shownet: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_showSend: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_showSend: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_timedemo: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_timedemo: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_timedemoLog: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_timedemoLog: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_autoRecordDemo: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_autoRecordDemo: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_aviFrameRate: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_aviFrameRate: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_aviMotionJpeg: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_aviMotionJpeg: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_forceavidemo: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_forceavidemo: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_freelook: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_freelook: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_sensitivity: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_sensitivity: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_mouseAccel: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_mouseAccel: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_mouseAccelOffset: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_mouseAccelOffset: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_mouseAccelStyle: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_mouseAccelStyle: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_showMouseRate: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_showMouseRate: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut m_pitch: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut m_pitch: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut m_yaw: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut m_yaw: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut m_forward: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut m_forward: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut m_side: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut m_side: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut m_filter: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut m_filter: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut j_pitch: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut j_pitch: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut j_yaw: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut j_yaw: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut j_forward: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut j_forward: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut j_side: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut j_side: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut j_up: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut j_up: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut j_pitch_axis: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut j_pitch_axis: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut j_yaw_axis: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut j_yaw_axis: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut j_forward_axis: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut j_forward_axis: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut j_side_axis: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut j_side_axis: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut j_up_axis: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut j_up_axis: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_activeAction: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_activeAction: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_motdString: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_motdString: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_allowDownload: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_allowDownload: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_conXOffset: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_conXOffset: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_inGameVideo: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_inGameVideo: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_serverStatusResendTime: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_serverStatusResendTime: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_lanForcePackets: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_lanForcePackets: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_guidServerUniq: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_guidServerUniq: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_consoleKeys: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_consoleKeys: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_rate: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_rate: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
 pub static mut cl: clientActive_t = clientActive_t {
@@ -937,8 +937,8 @@ pub static mut clc: clientConnection_t = clientConnection_t {
     cURLUsed: qfalse,
     cURLDisconnected: qfalse,
     downloadURL: [0; 4096],
-    downloadCURL: 0 as *const libc::c_void as *mut libc::c_void,
-    downloadCURLM: 0 as *const libc::c_void as *mut libc::c_void,
+    downloadCURL: std::ptr::null_mut(),
+    downloadCURLM: std::ptr::null_mut(),
     sv_allowDownload: 0,
     sv_dlURL: [0; 256],
     downloadNumber: 0,
@@ -965,8 +965,7 @@ pub static mut clc: clientConnection_t = clientConnection_t {
     aviSoundFrameRemainder: 0.,
     voipEnabled: qfalse,
     voipCodecInitialized: qfalse,
-    opusDecoder: [0 as *const crate::src::opus_1_2_1::src::opus_decoder::OpusDecoder
-        as *mut crate::src::opus_1_2_1::src::opus_decoder::OpusDecoder; 64],
+    opusDecoder: [std::ptr::null_mut(); 64],
     voipIncomingGeneration: [0; 64],
     voipIncomingSequence: [0; 64],
     voipGain: [0.; 64],
@@ -974,8 +973,7 @@ pub static mut clc: clientConnection_t = clientConnection_t {
     voipMuteAll: qfalse,
     voipTargets: [0; 8],
     voipFlags: 0,
-    opusEncoder: 0 as *const crate::src::opus_1_2_1::src::opus_encoder::OpusEncoder
-        as *mut crate::src::opus_1_2_1::src::opus_encoder::OpusEncoder,
+    opusEncoder: std::ptr::null_mut(),
     voipOutgoingDataSize: 0,
     voipOutgoingDataFrames: 0,
     voipOutgoingSequence: 0,
@@ -1155,7 +1153,7 @@ pub static mut cls: clientStatic_t = clientStatic_t {
 };
 #[no_mangle]
 
-pub static mut cgvm: *mut vm_t = 0 as *const vm_t as *mut vm_t;
+pub static mut cgvm: *mut vm_t = std::ptr::null_mut();
 #[no_mangle]
 
 pub static mut cl_reconnectArgs: [libc::c_char; 4096] = [0; 4096];
@@ -1201,7 +1199,7 @@ pub static mut re: refexport_t = refexport_t {
     TakeVideoFrame: None,
 };
 
-static mut rendererLib: *mut libc::c_void = 0 as *const libc::c_void as *mut libc::c_void;
+static mut rendererLib: *mut libc::c_void = std::ptr::null_mut();
 #[no_mangle]
 
 pub static mut cl_pinglist: [ping_t; 32] = [ping_t {

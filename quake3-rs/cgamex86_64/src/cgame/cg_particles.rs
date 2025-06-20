@@ -253,37 +253,37 @@ pub const P_NONE: C2RustUnnamed_25 = 0;
 
 static mut shaderAnimNames: [*mut libc::c_char; 32] = [
     b"explode1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-    0 as *const libc::c_char as *mut libc::c_char,
-    0 as *const libc::c_char as *mut libc::c_char,
-    0 as *const libc::c_char as *mut libc::c_char,
-    0 as *const libc::c_char as *mut libc::c_char,
-    0 as *const libc::c_char as *mut libc::c_char,
-    0 as *const libc::c_char as *mut libc::c_char,
-    0 as *const libc::c_char as *mut libc::c_char,
-    0 as *const libc::c_char as *mut libc::c_char,
-    0 as *const libc::c_char as *mut libc::c_char,
-    0 as *const libc::c_char as *mut libc::c_char,
-    0 as *const libc::c_char as *mut libc::c_char,
-    0 as *const libc::c_char as *mut libc::c_char,
-    0 as *const libc::c_char as *mut libc::c_char,
-    0 as *const libc::c_char as *mut libc::c_char,
-    0 as *const libc::c_char as *mut libc::c_char,
-    0 as *const libc::c_char as *mut libc::c_char,
-    0 as *const libc::c_char as *mut libc::c_char,
-    0 as *const libc::c_char as *mut libc::c_char,
-    0 as *const libc::c_char as *mut libc::c_char,
-    0 as *const libc::c_char as *mut libc::c_char,
-    0 as *const libc::c_char as *mut libc::c_char,
-    0 as *const libc::c_char as *mut libc::c_char,
-    0 as *const libc::c_char as *mut libc::c_char,
-    0 as *const libc::c_char as *mut libc::c_char,
-    0 as *const libc::c_char as *mut libc::c_char,
-    0 as *const libc::c_char as *mut libc::c_char,
-    0 as *const libc::c_char as *mut libc::c_char,
-    0 as *const libc::c_char as *mut libc::c_char,
-    0 as *const libc::c_char as *mut libc::c_char,
-    0 as *const libc::c_char as *mut libc::c_char,
-    0 as *const libc::c_char as *mut libc::c_char,
+    std::ptr::null_mut(),
+    std::ptr::null_mut(),
+    std::ptr::null_mut(),
+    std::ptr::null_mut(),
+    std::ptr::null_mut(),
+    std::ptr::null_mut(),
+    std::ptr::null_mut(),
+    std::ptr::null_mut(),
+    std::ptr::null_mut(),
+    std::ptr::null_mut(),
+    std::ptr::null_mut(),
+    std::ptr::null_mut(),
+    std::ptr::null_mut(),
+    std::ptr::null_mut(),
+    std::ptr::null_mut(),
+    std::ptr::null_mut(),
+    std::ptr::null_mut(),
+    std::ptr::null_mut(),
+    std::ptr::null_mut(),
+    std::ptr::null_mut(),
+    std::ptr::null_mut(),
+    std::ptr::null_mut(),
+    std::ptr::null_mut(),
+    std::ptr::null_mut(),
+    std::ptr::null_mut(),
+    std::ptr::null_mut(),
+    std::ptr::null_mut(),
+    std::ptr::null_mut(),
+    std::ptr::null_mut(),
+    std::ptr::null_mut(),
+    std::ptr::null_mut(),
 ];
 
 static mut shaderAnims: [[qhandle_t; 64]; 32] = [[0; 64]; 32];
@@ -301,14 +301,14 @@ static mut shaderAnimSTRatio: [f32; 32] = [
 static mut numShaderAnims: i32 = 0;
 #[no_mangle]
 
-pub static mut active_particles: *mut cparticle_t = 0 as *const cparticle_t as *mut cparticle_t;
+pub static mut active_particles: *mut cparticle_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut free_particles: *mut cparticle_t = 0 as *const cparticle_t as *mut cparticle_t;
+pub static mut free_particles: *mut cparticle_t = std::ptr::null_mut();
 #[no_mangle]
 
 pub static mut particles: [cparticle_t; 1024] = [cparticle_t {
-    next: 0 as *const particle_s as *mut particle_s,
+    next: std::ptr::null_mut(),
     time: 0.,
     endtime: 0.,
     org: [0.; 3],

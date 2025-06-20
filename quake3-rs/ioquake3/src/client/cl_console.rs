@@ -469,13 +469,13 @@ pub static mut con: console_t = console_t {
 };
 #[no_mangle]
 
-pub static mut con_conspeed: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut con_conspeed: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut con_autoclear: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut con_autoclear: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut con_notifytime: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut con_notifytime: *mut cvar_t = std::ptr::null_mut();
 /*
 ================
 Con_ToggleConsole_f

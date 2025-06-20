@@ -353,7 +353,7 @@ pub static mut passwordField: menufield_s = menufield_s {
         top: 0,
         right: 0,
         bottom: 0,
-        parent: 0 as *const menuframework_s as *mut menuframework_s,
+        parent: std::ptr::null_mut(),
         menuPosition: 0,
         flags: 0,
         callback: None,

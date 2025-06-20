@@ -32,7 +32,7 @@ static mut s_credits: creditsmenu_t = creditsmenu_t {
         cursor: 0,
         cursor_prev: 0,
         nitems: 0,
-        items: [0 as *const libc::c_void as *mut libc::c_void; 64],
+        items: [std::ptr::null_mut(); 64],
         draw: None,
         key: None,
         wrapAround: qfalse,

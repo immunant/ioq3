@@ -196,8 +196,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b">>=\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 1 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -205,8 +204,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b"<<=\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 2 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -214,8 +212,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b"...\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 3 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -223,8 +220,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b"##\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 4 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -232,8 +228,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b"&&\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 5 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -241,8 +236,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b"||\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 6 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -250,8 +244,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b">=\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 7 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -259,8 +252,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b"<=\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 8 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -268,8 +260,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b"==\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 9 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -277,8 +268,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b"!=\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 10 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -286,8 +276,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b"*=\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 11 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -295,8 +284,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b"/=\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 12 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -304,8 +292,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b"%=\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 13 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -313,8 +300,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b"+=\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 14 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -322,8 +308,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b"-=\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 15 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -331,8 +316,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b"++\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 16 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -340,8 +324,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b"--\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 17 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -349,8 +332,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b"&=\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 18 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -358,8 +340,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b"|=\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 19 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -367,8 +348,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b"^=\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 20 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -376,8 +356,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b">>\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 21 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -385,8 +364,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b"<<\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 22 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -394,8 +372,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b"->\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 23 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -403,8 +380,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b"::\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 24 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -412,8 +388,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b".*\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 25 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -421,8 +396,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b"*\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 26 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -430,8 +404,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b"/\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 27 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -439,8 +412,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b"%\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 28 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -448,8 +420,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b"+\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 29 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -457,8 +428,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b"-\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 30 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -466,8 +436,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b"=\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 31 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -475,8 +444,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b"&\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 32 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -484,8 +452,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b"|\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 33 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -493,8 +460,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b"^\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 34 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -502,8 +468,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b"~\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 35 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -511,8 +476,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b"!\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 36 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -520,8 +484,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b">\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 37 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -529,8 +492,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b"<\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 38 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -538,8 +500,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b".\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 39 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -547,8 +508,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b",\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 40 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -556,8 +516,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b";\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 41 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -565,8 +524,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b":\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 42 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -574,8 +532,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b"?\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 43 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -583,8 +540,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b"(\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 44 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -592,8 +548,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b")\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 45 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -601,8 +556,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b"{\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 46 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -610,8 +564,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b"}\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 47 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -619,8 +572,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b"[\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 48 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -628,8 +580,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b"]\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 49 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -637,8 +588,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b"\\\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 50 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -646,8 +596,7 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b"#\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 51 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
@@ -655,17 +604,15 @@ pub static mut default_punctuations: [crate::src::botlib::l_script::punctuation_
         let mut init = crate::src::botlib::l_script::punctuation_s {
             p: b"$\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             n: 52 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },
     {
         let mut init = crate::src::botlib::l_script::punctuation_s {
-            p: 0 as *const libc::c_char as *mut libc::c_char,
+            p: std::ptr::null_mut(),
             n: 0 as i32,
-            next: 0 as *const crate::src::botlib::l_script::punctuation_s
-                as *mut crate::src::botlib::l_script::punctuation_s,
+            next: std::ptr::null_mut(),
         };
         init
     },

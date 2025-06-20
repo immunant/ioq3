@@ -101,9 +101,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ===========================================================================
 */
 
-static mut codecs: *mut crate::src::client::snd_codec::snd_codec_t = 0
-    as *const crate::src::client::snd_codec::snd_codec_t
-    as *mut crate::src::client::snd_codec::snd_codec_t;
+static mut codecs: *mut crate::src::client::snd_codec::snd_codec_t = std::ptr::null_mut();
 /*
 =================
 S_CodecGetSound

@@ -239,7 +239,7 @@ pub static mut wav_codec: snd_codec_t = {
                     ) -> i32,
             ),
             close: Some(S_WAV_CodecCloseStream as unsafe extern "C" fn(_: *mut snd_stream_t) -> ()),
-            next: 0 as *const snd_codec_t as *mut snd_codec_t,
+            next: std::ptr::null_mut(),
         };
         init
     }

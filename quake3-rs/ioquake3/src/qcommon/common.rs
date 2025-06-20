@@ -343,8 +343,7 @@ pub static mut demo_protocols: [i32; 3] = [67 as i32, 66 as i32, 0 as i32];
 pub static mut com_argc: i32 = 0;
 #[no_mangle]
 
-pub static mut com_argv: [*mut libc::c_char; 51] =
-    [0 as *const libc::c_char as *mut libc::c_char; 51];
+pub static mut com_argv: [*mut libc::c_char; 51] = [std::ptr::null_mut(); 51];
 #[no_mangle]
 
 pub static mut abortframe: jmp_buf = [__jmp_buf_tag {
@@ -355,7 +354,7 @@ pub static mut abortframe: jmp_buf = [__jmp_buf_tag {
 // an ERR_DROP occurred, exit the entire frame
 #[no_mangle]
 
-pub static mut debuglogfile: *mut FILE = 0 as *const FILE as *mut FILE;
+pub static mut debuglogfile: *mut FILE = std::ptr::null_mut();
 
 static mut pipefile: fileHandle_t = 0;
 
@@ -370,117 +369,117 @@ pub static mut com_journalDataFile: fileHandle_t = 0;
 // config files are written here
 #[no_mangle]
 
-pub static mut com_speeds: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut com_speeds: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut com_developer: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut com_developer: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut com_dedicated: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut com_dedicated: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut com_timescale: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut com_timescale: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut com_fixedtime: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut com_fixedtime: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut com_journal: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut com_journal: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut com_maxfps: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut com_maxfps: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut com_altivec: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut com_altivec: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut com_timedemo: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut com_timedemo: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut com_sv_running: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut com_sv_running: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut com_cl_running: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut com_cl_running: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut com_logfile: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut com_logfile: *mut cvar_t = std::ptr::null_mut();
 // 1 = buffer log, 2 = flush after each print
 #[no_mangle]
 
-pub static mut com_pipefile: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut com_pipefile: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut com_showtrace: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut com_showtrace: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut com_version: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut com_version: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut com_blood: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut com_blood: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut com_buildScript: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut com_buildScript: *mut cvar_t = std::ptr::null_mut();
 // for automated data building scripts
 #[no_mangle]
 
-pub static mut com_introPlayed: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut com_introPlayed: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_paused: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_paused: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut sv_paused: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_paused: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_packetdelay: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_packetdelay: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut sv_packetdelay: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_packetdelay: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut com_cameraMode: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut com_cameraMode: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut com_ansiColor: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut com_ansiColor: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut com_unfocused: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut com_unfocused: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut com_maxfpsUnfocused: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut com_maxfpsUnfocused: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut com_minimized: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut com_minimized: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut com_maxfpsMinimized: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut com_maxfpsMinimized: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut com_abnormalExit: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut com_abnormalExit: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut com_standalone: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut com_standalone: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut com_gamename: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut com_gamename: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut com_protocol: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut com_protocol: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut com_legacyprotocol: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut com_legacyprotocol: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut com_basegame: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut com_basegame: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut com_homepath: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut com_homepath: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut com_busyWait: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut com_busyWait: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut con_autochat: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut con_autochat: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
 pub static mut Q_VMftol: Option<unsafe extern "C" fn() -> i32> = None;
@@ -519,7 +518,7 @@ pub static mut com_gameClientRestarting: qboolean = qfalse;
 pub static mut com_errorMessage: [libc::c_char; 4096] = [0; 4096];
 //============================================================================
 
-static mut rd_buffer: *mut libc::c_char = 0 as *const libc::c_char as *mut libc::c_char;
+static mut rd_buffer: *mut libc::c_char = std::ptr::null_mut();
 
 static mut rd_buffersize: i32 = 0;
 
@@ -862,8 +861,7 @@ pub unsafe extern "C" fn Com_Quit_f() -> ! {
 pub static mut com_numConsoleLines: i32 = 0;
 #[no_mangle]
 
-pub static mut com_consoleLines: [*mut libc::c_char; 32] =
-    [0 as *const libc::c_char as *mut libc::c_char; 32];
+pub static mut com_consoleLines: [*mut libc::c_char; 32] = [std::ptr::null_mut(); 32];
 /*
 ==================
 Com_ParseCommandLine
@@ -1447,11 +1445,11 @@ pub unsafe extern "C" fn Com_RealTime(mut qtime: *mut qtime_t) -> i32 {
 }
 // main zone for all "dynamic" memory allocation
 
-static mut mainzone: *mut memzone_t = 0 as *const memzone_t as *mut memzone_t;
+static mut mainzone: *mut memzone_t = std::ptr::null_mut();
 // we also have a small zone for small allocations that would only
 // fragment the main zone (think of cvar and cmd strings)
 
-static mut smallzone: *mut memzone_t = 0 as *const memzone_t as *mut memzone_t;
+static mut smallzone: *mut memzone_t = std::ptr::null_mut();
 /*
 ========================
 Z_ClearZone
@@ -1859,8 +1857,8 @@ pub static mut emptystring: memstatic_t = memstatic_t {
     b: memblock_t {
         size: 0,
         tag: 0,
-        next: 0 as *const memblock_s as *mut memblock_s,
-        prev: 0 as *const memblock_s as *mut memblock_s,
+        next: std::ptr::null_mut(),
+        prev: std::ptr::null_mut(),
         id: 0,
     },
     mem: [0; 2],
@@ -1872,8 +1870,8 @@ pub static mut numberstring: [memstatic_t; 10] = [memstatic_t {
     b: memblock_t {
         size: 0,
         tag: 0,
-        next: 0 as *const memblock_s as *mut memblock_s,
-        prev: 0 as *const memblock_s as *mut memblock_s,
+        next: std::ptr::null_mut(),
+        prev: std::ptr::null_mut(),
         id: 0,
     },
     mem: [0; 2],
@@ -1912,7 +1910,7 @@ pub unsafe extern "C" fn CopyString(mut in_0: *const libc::c_char) -> *mut libc:
     return out;
 }
 
-static mut hunkblocks: *mut hunkblock_t = 0 as *const hunkblock_t as *mut hunkblock_t;
+static mut hunkblocks: *mut hunkblock_t = std::ptr::null_mut();
 
 static mut hunk_low: hunkUsed_t = hunkUsed_t {
     mark: 0,
@@ -1928,11 +1926,11 @@ static mut hunk_high: hunkUsed_t = hunkUsed_t {
     tempHighwater: 0,
 };
 
-static mut hunk_permanent: *mut hunkUsed_t = 0 as *const hunkUsed_t as *mut hunkUsed_t;
+static mut hunk_permanent: *mut hunkUsed_t = std::ptr::null_mut();
 
-static mut hunk_temp: *mut hunkUsed_t = 0 as *const hunkUsed_t as *mut hunkUsed_t;
+static mut hunk_temp: *mut hunkUsed_t = std::ptr::null_mut();
 
-static mut s_hunkData: *mut byte = 0 as *const byte as *mut byte;
+static mut s_hunkData: *mut byte = std::ptr::null_mut();
 
 static mut s_hunkTotal: i32 = 0;
 
@@ -2692,7 +2690,7 @@ static mut com_pushedEvents: [sysEvent_t; 1024] = [sysEvent_t {
     evValue: 0,
     evValue2: 0,
     evPtrLength: 0,
-    evPtr: 0 as *const libc::c_void as *mut libc::c_void,
+    evPtr: std::ptr::null_mut(),
 }; 1024];
 /*
 =================
@@ -2746,7 +2744,7 @@ static mut eventQueue: [sysEvent_t; 256] = [sysEvent_t {
     evValue: 0,
     evValue2: 0,
     evPtrLength: 0,
-    evPtr: 0 as *const libc::c_void as *mut libc::c_void,
+    evPtr: std::ptr::null_mut(),
 }; 256];
 
 static mut eventHead: i32 = 0 as i32;
@@ -2821,7 +2819,7 @@ pub unsafe extern "C" fn Com_GetSystemEvent() -> sysEvent_t {
         evValue: 0,
         evValue2: 0,
         evPtrLength: 0,
-        evPtr: 0 as *const libc::c_void as *mut libc::c_void,
+        evPtr: std::ptr::null_mut(),
     };
     let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
     // return if we have data
@@ -2875,7 +2873,7 @@ pub unsafe extern "C" fn Com_GetRealEvent() -> sysEvent_t {
         evValue: 0,
         evValue2: 0,
         evPtrLength: 0,
-        evPtr: 0 as *const libc::c_void as *mut libc::c_void,
+        evPtr: std::ptr::null_mut(),
     };
     // either get an event from the system or the journal file
     if (*com_journal).integer == 2 as i32 {
@@ -3041,7 +3039,7 @@ pub unsafe extern "C" fn Com_EventLoop() -> i32 {
         evValue: 0,
         evValue2: 0,
         evPtrLength: 0,
-        evPtr: 0 as *const libc::c_void as *mut libc::c_void,
+        evPtr: std::ptr::null_mut(),
     };
     let mut evFrom: netadr_t = netadr_t {
         type_0: NA_BAD,
@@ -3142,7 +3140,7 @@ pub unsafe extern "C" fn Com_Milliseconds() -> i32 {
         evValue: 0,
         evValue2: 0,
         evPtrLength: 0,
-        evPtr: 0 as *const libc::c_void as *mut libc::c_void,
+        evPtr: std::ptr::null_mut(),
     };
     loop
     // get events and push them until we get a null event with the current time
@@ -4394,7 +4392,7 @@ static mut shortestMatch: [libc::c_char; 1024] = [0; 1024];
 static mut matchCount: i32 = 0;
 // field we are working on, passed to Field_AutoComplete(&g_consoleCommand for instance)
 
-static mut completionField: *mut field_t = 0 as *const field_t as *mut field_t;
+static mut completionField: *mut field_t = std::ptr::null_mut();
 /*
 ===============
 FindMatches

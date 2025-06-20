@@ -47,7 +47,7 @@ pub struct mdfour {
    It assumes that an int is at least 32 bits long
 */
 
-static mut m: *mut mdfour = 0 as *const mdfour as *mut mdfour;
+static mut m: *mut mdfour = std::ptr::null_mut();
 /* this applies md4 to 64 byte chunks */
 
 unsafe extern "C" fn mdfour64(mut M: *mut uint32_t) {

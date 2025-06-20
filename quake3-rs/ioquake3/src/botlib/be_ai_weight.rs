@@ -83,8 +83,7 @@ pub use crate::src::qcommon::q_shared::FS_WRITE;
 #[no_mangle]
 
 pub static mut weightFileList: [*mut crate::src::botlib::be_ai_weight::weightconfig_t; 128] =
-    [0 as *const crate::src::botlib::be_ai_weight::weightconfig_t
-        as *mut crate::src::botlib::be_ai_weight::weightconfig_t; 128];
+    [std::ptr::null_mut(); 128];
 //===========================================================================
 //
 // Parameter:				-

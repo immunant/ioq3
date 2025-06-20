@@ -169,11 +169,10 @@ pub struct midrangearea_s {
 }
 #[no_mangle]
 
-pub static mut midrangeareas: *mut midrangearea_t =
-    0 as *const midrangearea_t as *mut midrangearea_t;
+pub static mut midrangeareas: *mut midrangearea_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut clusterareas: *mut i32 = 0 as *const i32 as *mut i32;
+pub static mut clusterareas: *mut i32 = std::ptr::null_mut();
 #[no_mangle]
 
 pub static mut numclusterareas: i32 = 0;

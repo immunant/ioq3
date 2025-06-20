@@ -181,8 +181,8 @@ pub use crate::src::cgame::cg_syscalls::trap_S_StartSound;
 #[no_mangle]
 
 pub static mut cg_localEntities: [localEntity_t; 512] = [localEntity_t {
-    prev: 0 as *const localEntity_s as *mut localEntity_s,
-    next: 0 as *const localEntity_s as *mut localEntity_s,
+    prev: std::ptr::null_mut(),
+    next: std::ptr::null_mut(),
     leType: LE_MARK,
     leFlags: 0,
     startTime: 0,
@@ -236,8 +236,8 @@ pub static mut cg_localEntities: [localEntity_t; 512] = [localEntity_t {
 #[no_mangle]
 
 pub static mut cg_activeLocalEntities: localEntity_t = localEntity_t {
-    prev: 0 as *const localEntity_s as *mut localEntity_s,
-    next: 0 as *const localEntity_s as *mut localEntity_s,
+    prev: std::ptr::null_mut(),
+    next: std::ptr::null_mut(),
     leType: LE_MARK,
     leFlags: 0,
     startTime: 0,
@@ -291,8 +291,7 @@ pub static mut cg_activeLocalEntities: localEntity_t = localEntity_t {
 // double linked list
 #[no_mangle]
 
-pub static mut cg_freeLocalEntities: *mut localEntity_t =
-    0 as *const localEntity_t as *mut localEntity_t;
+pub static mut cg_freeLocalEntities: *mut localEntity_t = std::ptr::null_mut();
 // single linked list
 /*
 ===================

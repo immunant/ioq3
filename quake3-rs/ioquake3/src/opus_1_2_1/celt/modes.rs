@@ -5156,8 +5156,7 @@ pub mod static_modes_float_h {
                 ],
                 bitrev: fft_bitrev480.as_ptr(),
                 twiddles: fft_twiddles48000_960.as_ptr(),
-                arch_fft: 0 as *const crate::src::opus_1_2_1::celt::kiss_fft::arch_fft_state
-                    as *mut crate::src::opus_1_2_1::celt::kiss_fft::arch_fft_state,
+                arch_fft: std::ptr::null_mut(),
             };
             init
         }
@@ -5189,8 +5188,7 @@ pub mod static_modes_float_h {
                 ],
                 bitrev: fft_bitrev240.as_ptr(),
                 twiddles: fft_twiddles48000_960.as_ptr(),
-                arch_fft: 0 as *const crate::src::opus_1_2_1::celt::kiss_fft::arch_fft_state
-                    as *mut crate::src::opus_1_2_1::celt::kiss_fft::arch_fft_state,
+                arch_fft: std::ptr::null_mut(),
             };
             init
         }
@@ -5222,8 +5220,7 @@ pub mod static_modes_float_h {
                 ],
                 bitrev: fft_bitrev120.as_ptr(),
                 twiddles: fft_twiddles48000_960.as_ptr(),
-                arch_fft: 0 as *const crate::src::opus_1_2_1::celt::kiss_fft::arch_fft_state
-                    as *mut crate::src::opus_1_2_1::celt::kiss_fft::arch_fft_state,
+                arch_fft: std::ptr::null_mut(),
             };
             init
         }
@@ -5255,8 +5252,7 @@ pub mod static_modes_float_h {
                 ],
                 bitrev: fft_bitrev60.as_ptr(),
                 twiddles: fft_twiddles48000_960.as_ptr(),
-                arch_fft: 0 as *const crate::src::opus_1_2_1::celt::kiss_fft::arch_fft_state
-                    as *mut crate::src::opus_1_2_1::celt::kiss_fft::arch_fft_state,
+                arch_fft: std::ptr::null_mut(),
             };
             init
         }

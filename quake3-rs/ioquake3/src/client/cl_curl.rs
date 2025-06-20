@@ -532,7 +532,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 #[no_mangle]
 
-pub static mut cl_cURLLib: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_cURLLib: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
 pub static mut qcurl_version: Option<unsafe extern "C" fn() -> *mut libc::c_char> = None;
@@ -614,7 +614,7 @@ pub static mut qcurl_multi_strerror: Option<
     unsafe extern "C" fn(_: CURLMcode) -> *const libc::c_char,
 > = None;
 
-static mut cURLLib: *mut libc::c_void = 0 as *const libc::c_void as *mut libc::c_void;
+static mut cURLLib: *mut libc::c_void = std::ptr::null_mut();
 /*
 =================
 GPA

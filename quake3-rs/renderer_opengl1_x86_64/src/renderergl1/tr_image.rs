@@ -346,7 +346,7 @@ pub static mut gl_filter_min: i32 = 0x2701 as i32;
 
 pub static mut gl_filter_max: i32 = 0x2601 as i32;
 
-static mut hashTable: [*mut image_t; 1024] = [0 as *const image_t as *mut image_t; 1024];
+static mut hashTable: [*mut image_t; 1024] = [std::ptr::null_mut(); 1024];
 /*
 ** R_GammaCorrect
 */

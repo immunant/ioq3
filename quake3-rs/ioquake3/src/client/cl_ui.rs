@@ -372,7 +372,7 @@ extern "C" {
 }
 #[no_mangle]
 
-pub static mut uivm: *mut vm_t = 0 as *const vm_t as *mut vm_t;
+pub static mut uivm: *mut vm_t = std::ptr::null_mut();
 /*
 ====================
 GetClientState

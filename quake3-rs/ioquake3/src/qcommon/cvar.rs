@@ -104,20 +104,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // cvar.c -- dynamic variable tracking
 #[no_mangle]
 
-pub static mut cvar_vars: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cvar_vars: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cvar_cheats: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cvar_cheats: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
 pub static mut cvar_modifiedFlags: i32 = 0;
 #[no_mangle]
 
 pub static mut cvar_indexes: [cvar_t; 2048] = [cvar_t {
-    name: 0 as *const libc::c_char as *mut libc::c_char,
-    string: 0 as *const libc::c_char as *mut libc::c_char,
-    resetString: 0 as *const libc::c_char as *mut libc::c_char,
-    latchedString: 0 as *const libc::c_char as *mut libc::c_char,
+    name: std::ptr::null_mut(),
+    string: std::ptr::null_mut(),
+    resetString: std::ptr::null_mut(),
+    latchedString: std::ptr::null_mut(),
     flags: 0,
     modified: qfalse,
     modificationCount: 0,
@@ -127,18 +127,18 @@ pub static mut cvar_indexes: [cvar_t; 2048] = [cvar_t {
     integral: qfalse,
     min: 0.,
     max: 0.,
-    description: 0 as *const libc::c_char as *mut libc::c_char,
-    next: 0 as *const cvar_t as *mut cvar_t,
-    prev: 0 as *const cvar_t as *mut cvar_t,
-    hashNext: 0 as *const cvar_t as *mut cvar_t,
-    hashPrev: 0 as *const cvar_t as *mut cvar_t,
+    description: std::ptr::null_mut(),
+    next: std::ptr::null_mut(),
+    prev: std::ptr::null_mut(),
+    hashNext: std::ptr::null_mut(),
+    hashPrev: std::ptr::null_mut(),
     hashIndex: 0,
 }; 2048];
 #[no_mangle]
 
 pub static mut cvar_numIndexes: i32 = 0;
 
-static mut hashTable: [*mut cvar_t; 256] = [0 as *const cvar_t as *mut cvar_t; 256];
+static mut hashTable: [*mut cvar_t; 256] = [std::ptr::null_mut(); 256];
 /*
 ================
 return a hash value for the filename

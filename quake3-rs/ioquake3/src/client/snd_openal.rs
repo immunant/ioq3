@@ -266,46 +266,46 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // Console variables specific to OpenAL
 #[no_mangle]
 
-pub static mut s_alPrecache: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut s_alPrecache: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut s_alGain: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut s_alGain: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut s_alSources: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut s_alSources: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut s_alDopplerFactor: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut s_alDopplerFactor: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut s_alDopplerSpeed: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut s_alDopplerSpeed: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut s_alMinDistance: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut s_alMinDistance: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut s_alMaxDistance: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut s_alMaxDistance: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut s_alRolloff: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut s_alRolloff: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut s_alGraceDistance: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut s_alGraceDistance: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut s_alDriver: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut s_alDriver: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut s_alDevice: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut s_alDevice: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut s_alInputDevice: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut s_alInputDevice: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut s_alAvailableDevices: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut s_alAvailableDevices: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut s_alAvailableInputDevices: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut s_alAvailableInputDevices: *mut cvar_t = std::ptr::null_mut();
 
 static mut enumeration_ext: qboolean = qfalse;
 
@@ -2372,9 +2372,9 @@ static mut musicSource: ALuint = 0;
 
 static mut musicBuffers: [ALuint; 4] = [0; 4];
 
-static mut mus_stream: *mut snd_stream_t = 0 as *const snd_stream_t as *mut snd_stream_t;
+static mut mus_stream: *mut snd_stream_t = std::ptr::null_mut();
 
-static mut intro_stream: *mut snd_stream_t = 0 as *const snd_stream_t as *mut snd_stream_t;
+static mut intro_stream: *mut snd_stream_t = std::ptr::null_mut();
 
 static mut s_backgroundLoop: [libc::c_char; 64] = [0; 64];
 
@@ -2702,13 +2702,13 @@ unsafe extern "C" fn S_AL_MusicUpdate() {
 //===========================================================================
 // Local state variables
 
-static mut alDevice: *mut ALCdevice = 0 as *const ALCdevice as *mut ALCdevice;
+static mut alDevice: *mut ALCdevice = std::ptr::null_mut();
 
-static mut alContext: *mut ALCcontext = 0 as *const ALCcontext as *mut ALCcontext;
+static mut alContext: *mut ALCcontext = std::ptr::null_mut();
 
-static mut alCaptureDevice: *mut ALCdevice = 0 as *const ALCdevice as *mut ALCdevice;
+static mut alCaptureDevice: *mut ALCdevice = std::ptr::null_mut();
 
-static mut s_alCapture: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+static mut s_alCapture: *mut cvar_t = std::ptr::null_mut();
 /*
 =================
 S_AL_StopAllSounds

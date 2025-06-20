@@ -193,31 +193,31 @@ static mut usingSocks: qboolean = qfalse;
 
 static mut networkingEnabled: i32 = 0 as i32;
 
-static mut net_enabled: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+static mut net_enabled: *mut cvar_t = std::ptr::null_mut();
 
-static mut net_socksEnabled: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+static mut net_socksEnabled: *mut cvar_t = std::ptr::null_mut();
 
-static mut net_socksServer: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+static mut net_socksServer: *mut cvar_t = std::ptr::null_mut();
 
-static mut net_socksPort: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+static mut net_socksPort: *mut cvar_t = std::ptr::null_mut();
 
-static mut net_socksUsername: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+static mut net_socksUsername: *mut cvar_t = std::ptr::null_mut();
 
-static mut net_socksPassword: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+static mut net_socksPassword: *mut cvar_t = std::ptr::null_mut();
 
-static mut net_ip: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+static mut net_ip: *mut cvar_t = std::ptr::null_mut();
 
-static mut net_ip6: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+static mut net_ip6: *mut cvar_t = std::ptr::null_mut();
 
-static mut net_port: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+static mut net_port: *mut cvar_t = std::ptr::null_mut();
 
-static mut net_port6: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+static mut net_port6: *mut cvar_t = std::ptr::null_mut();
 
-static mut net_mcast6addr: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+static mut net_mcast6addr: *mut cvar_t = std::ptr::null_mut();
 
-static mut net_mcast6iface: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+static mut net_mcast6iface: *mut cvar_t = std::ptr::null_mut();
 
-static mut net_dropsim: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+static mut net_dropsim: *mut cvar_t = std::ptr::null_mut();
 
 static mut socksRelayAddr: sockaddr = sockaddr {
     sa_family: 0,

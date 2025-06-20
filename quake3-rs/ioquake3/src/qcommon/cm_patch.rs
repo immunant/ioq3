@@ -2120,7 +2120,7 @@ pub unsafe extern "C" fn CM_TracePointThroughPatchCollide(
     let mut offset: f32 = 0.;
     let mut d1: f32 = 0.;
     let mut d2: f32 = 0.;
-    static mut cv: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+    static mut cv: *mut cvar_t = std::ptr::null_mut();
     //BSPC
     if (*cm_playerCurveClip).integer == 0 || (*tw).isPoint as u64 == 0 {
         return;
@@ -2331,7 +2331,7 @@ pub unsafe extern "C" fn CM_TraceThroughPatchCollide(
     ];
     let mut startp: vec3_t = [0.; 3];
     let mut endp: vec3_t = [0.; 3];
-    static mut cv: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+    static mut cv: *mut cvar_t = std::ptr::null_mut();
     //BSPC
     if CM_BoundsIntersect(
         (*tw).bounds[0 as i32 as usize].as_mut_ptr() as *const vec_t,
@@ -2782,8 +2782,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 pub unsafe extern "C" fn CM_DrawDebugSurface(
     mut drawPoly: Option<unsafe extern "C" fn(_: i32, _: i32, _: *mut f32) -> ()>,
 ) {
-    static mut cv: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
-    static mut cv2: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+    static mut cv: *mut cvar_t = std::ptr::null_mut();
+    static mut cv2: *mut cvar_t = std::ptr::null_mut();
     let mut pc: *const crate::src::qcommon::cm_patch::patchCollide_t =
         0 as *const crate::src::qcommon::cm_patch::patchCollide_t;
     let mut facet: *mut crate::src::qcommon::cm_patch::facet_t =

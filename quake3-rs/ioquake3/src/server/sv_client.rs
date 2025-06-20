@@ -2385,7 +2385,7 @@ static mut ucmds: [ucmd_t; 10] = {
         },
         {
             let mut init = ucmd_t {
-                name: 0 as *const libc::c_char as *mut libc::c_char,
+                name: std::ptr::null_mut(),
                 func: None,
             };
             init

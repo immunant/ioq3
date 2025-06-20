@@ -260,34 +260,33 @@ pub static mut iteminfo_struct: structdef_t = unsafe {
 };
 #[no_mangle]
 
-pub static mut botgoalstates: [*mut bot_goalstate_t; 65] =
-    [0 as *const bot_goalstate_t as *mut bot_goalstate_t; 65];
+pub static mut botgoalstates: [*mut bot_goalstate_t; 65] = [std::ptr::null_mut(); 65];
 // FIXME: init?
 //item configuration
 #[no_mangle]
 
-pub static mut itemconfig: *mut itemconfig_t = 0 as *const itemconfig_t as *mut itemconfig_t;
+pub static mut itemconfig: *mut itemconfig_t = std::ptr::null_mut();
 //level items
 #[no_mangle]
 
-pub static mut levelitemheap: *mut levelitem_t = 0 as *const levelitem_t as *mut levelitem_t;
+pub static mut levelitemheap: *mut levelitem_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut freelevelitems: *mut levelitem_t = 0 as *const levelitem_t as *mut levelitem_t;
+pub static mut freelevelitems: *mut levelitem_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut levelitems: *mut levelitem_t = 0 as *const levelitem_t as *mut levelitem_t;
+pub static mut levelitems: *mut levelitem_t = std::ptr::null_mut();
 #[no_mangle]
 
 pub static mut numlevelitems: i32 = 0 as i32;
 //map locations
 #[no_mangle]
 
-pub static mut maplocations: *mut maplocation_t = 0 as *const maplocation_t as *mut maplocation_t;
+pub static mut maplocations: *mut maplocation_t = std::ptr::null_mut();
 //camp spots
 #[no_mangle]
 
-pub static mut campspots: *mut campspot_t = 0 as *const campspot_t as *mut campspot_t;
+pub static mut campspots: *mut campspot_t = std::ptr::null_mut();
 //the game type
 #[no_mangle]
 
@@ -295,7 +294,7 @@ pub static mut g_gametype: i32 = 0 as i32;
 //additional dropped item weight
 #[no_mangle]
 
-pub static mut droppedweight: *mut libvar_t = 0 as *const libvar_t as *mut libvar_t;
+pub static mut droppedweight: *mut libvar_t = std::ptr::null_mut();
 //========================================================================
 //
 // Parameter:				-

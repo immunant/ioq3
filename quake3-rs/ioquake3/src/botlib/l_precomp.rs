@@ -154,9 +154,7 @@ token_t *freetokens;					//free tokens from the heap
 //list with global defines added to every source loaded
 #[no_mangle]
 
-pub static mut globaldefines: *mut crate::src::botlib::l_precomp::define_t = 0
-    as *const crate::src::botlib::l_precomp::define_t
-    as *mut crate::src::botlib::l_precomp::define_t;
+pub static mut globaldefines: *mut crate::src::botlib::l_precomp::define_t = std::ptr::null_mut();
 //print a source error
 //============================================================================
 //
@@ -3791,29 +3789,29 @@ pub static mut directives: [directive_t; 20] = {
         },
         {
             let mut init = directive_s {
-                name: 0 as *const libc::c_char as *mut libc::c_char,
+                name: std::ptr::null_mut(),
                 func: None,
             };
             init
         },
         directive_t {
-            name: 0 as *const libc::c_char as *mut libc::c_char,
+            name: std::ptr::null_mut(),
             func: None,
         },
         directive_t {
-            name: 0 as *const libc::c_char as *mut libc::c_char,
+            name: std::ptr::null_mut(),
             func: None,
         },
         directive_t {
-            name: 0 as *const libc::c_char as *mut libc::c_char,
+            name: std::ptr::null_mut(),
             func: None,
         },
         directive_t {
-            name: 0 as *const libc::c_char as *mut libc::c_char,
+            name: std::ptr::null_mut(),
             func: None,
         },
         directive_t {
-            name: 0 as *const libc::c_char as *mut libc::c_char,
+            name: std::ptr::null_mut(),
             func: None,
         },
     ]
@@ -4011,77 +4009,77 @@ pub static mut dollardirectives: [directive_t; 20] = {
         },
         {
             let mut init = directive_s {
-                name: 0 as *const libc::c_char as *mut libc::c_char,
+                name: std::ptr::null_mut(),
                 func: None,
             };
             init
         },
         directive_t {
-            name: 0 as *const libc::c_char as *mut libc::c_char,
+            name: std::ptr::null_mut(),
             func: None,
         },
         directive_t {
-            name: 0 as *const libc::c_char as *mut libc::c_char,
+            name: std::ptr::null_mut(),
             func: None,
         },
         directive_t {
-            name: 0 as *const libc::c_char as *mut libc::c_char,
+            name: std::ptr::null_mut(),
             func: None,
         },
         directive_t {
-            name: 0 as *const libc::c_char as *mut libc::c_char,
+            name: std::ptr::null_mut(),
             func: None,
         },
         directive_t {
-            name: 0 as *const libc::c_char as *mut libc::c_char,
+            name: std::ptr::null_mut(),
             func: None,
         },
         directive_t {
-            name: 0 as *const libc::c_char as *mut libc::c_char,
+            name: std::ptr::null_mut(),
             func: None,
         },
         directive_t {
-            name: 0 as *const libc::c_char as *mut libc::c_char,
+            name: std::ptr::null_mut(),
             func: None,
         },
         directive_t {
-            name: 0 as *const libc::c_char as *mut libc::c_char,
+            name: std::ptr::null_mut(),
             func: None,
         },
         directive_t {
-            name: 0 as *const libc::c_char as *mut libc::c_char,
+            name: std::ptr::null_mut(),
             func: None,
         },
         directive_t {
-            name: 0 as *const libc::c_char as *mut libc::c_char,
+            name: std::ptr::null_mut(),
             func: None,
         },
         directive_t {
-            name: 0 as *const libc::c_char as *mut libc::c_char,
+            name: std::ptr::null_mut(),
             func: None,
         },
         directive_t {
-            name: 0 as *const libc::c_char as *mut libc::c_char,
+            name: std::ptr::null_mut(),
             func: None,
         },
         directive_t {
-            name: 0 as *const libc::c_char as *mut libc::c_char,
+            name: std::ptr::null_mut(),
             func: None,
         },
         directive_t {
-            name: 0 as *const libc::c_char as *mut libc::c_char,
+            name: std::ptr::null_mut(),
             func: None,
         },
         directive_t {
-            name: 0 as *const libc::c_char as *mut libc::c_char,
+            name: std::ptr::null_mut(),
             func: None,
         },
         directive_t {
-            name: 0 as *const libc::c_char as *mut libc::c_char,
+            name: std::ptr::null_mut(),
             func: None,
         },
         directive_t {
-            name: 0 as *const libc::c_char as *mut libc::c_char,
+            name: std::ptr::null_mut(),
             func: None,
         },
     ]
@@ -4833,8 +4831,7 @@ pub unsafe extern "C" fn FreeSource(mut source: *mut crate::src::botlib::l_preco
 #[no_mangle]
 
 pub static mut sourceFiles: [*mut crate::src::botlib::l_precomp::source_t; 64] =
-    [0 as *const crate::src::botlib::l_precomp::source_t
-        as *mut crate::src::botlib::l_precomp::source_t; 64];
+    [std::ptr::null_mut(); 64];
 //BSPC
 //
 #[no_mangle]

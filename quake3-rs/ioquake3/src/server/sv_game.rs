@@ -439,8 +439,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // sv_game.c -- interface to the game dll
 #[no_mangle]
 
-pub static mut botlib_export: *mut botlib_export_t =
-    0 as *const botlib_export_t as *mut botlib_export_t;
+pub static mut botlib_export: *mut botlib_export_t = std::ptr::null_mut();
 // these functions must be used instead of pointer arithmetic, because
 // the game allocates gentities with private information after the server shared part
 #[no_mangle]

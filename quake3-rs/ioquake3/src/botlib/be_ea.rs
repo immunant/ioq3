@@ -31,7 +31,7 @@ pub use crate::src::qcommon::q_shared::FS_WRITE;
 
 #[no_mangle]
 
-pub static mut botinputs: *mut bot_input_t = 0 as *const bot_input_t as *mut bot_input_t;
+pub static mut botinputs: *mut bot_input_t = std::ptr::null_mut();
 /*
 ===========================================================================
 Copyright (C) 1999-2005 Id Software, Inc.

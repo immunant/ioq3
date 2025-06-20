@@ -63,25 +63,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 #[no_mangle]
 
-pub static mut s_volume: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut s_volume: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut s_muted: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut s_muted: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut s_musicVolume: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut s_musicVolume: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut s_doppler: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut s_doppler: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut s_backend: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut s_backend: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut s_muteWhenMinimized: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut s_muteWhenMinimized: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut s_muteWhenUnfocused: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut s_muteWhenUnfocused: *mut cvar_t = std::ptr::null_mut();
 
 static mut si: soundInterface_t = soundInterface_t {
     Shutdown: None,

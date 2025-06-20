@@ -520,11 +520,11 @@ pub struct flare_s {
 #[no_mangle]
 
 pub static mut r_flareStructs: [flare_t; 256] = [flare_t {
-    next: 0 as *const flare_s as *mut flare_s,
+    next: std::ptr::null_mut(),
     addedFrame: 0,
     inPortal: qfalse,
     frameSceneNum: 0,
-    surface: 0 as *const libc::c_void as *mut libc::c_void,
+    surface: std::ptr::null_mut(),
     fogNum: 0,
     fadeTime: 0,
     visible: qfalse,
@@ -537,10 +537,10 @@ pub static mut r_flareStructs: [flare_t; 256] = [flare_t {
 }; 256];
 #[no_mangle]
 
-pub static mut r_activeFlares: *mut flare_t = 0 as *const flare_t as *mut flare_t;
+pub static mut r_activeFlares: *mut flare_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_inactiveFlares: *mut flare_t = 0 as *const flare_t as *mut flare_t;
+pub static mut r_inactiveFlares: *mut flare_t = std::ptr::null_mut();
 #[no_mangle]
 
 pub static mut flareCoeff: i32 = 0;

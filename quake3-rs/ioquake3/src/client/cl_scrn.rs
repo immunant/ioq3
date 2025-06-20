@@ -161,19 +161,19 @@ pub static mut scr_initialized: qboolean = qfalse;
 // ready to draw
 #[no_mangle]
 
-pub static mut cl_timegraph: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_timegraph: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_debuggraph: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_debuggraph: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_graphheight: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_graphheight: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_graphscale: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_graphscale: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_graphshift: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_graphshift: *mut cvar_t = std::ptr::null_mut();
 /*
 ================
 SCR_DrawNamedPic

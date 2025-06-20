@@ -78,8 +78,7 @@ pub union cvalue {
 }
 #[no_mangle]
 
-pub static mut botcharacters: [*mut bot_character_t; 65] =
-    [0 as *const bot_character_t as *mut bot_character_t; 65];
+pub static mut botcharacters: [*mut bot_character_t; 65] = [std::ptr::null_mut(); 65];
 //========================================================================
 //
 // Parameter:			-

@@ -810,16 +810,16 @@ pub unsafe extern "C" fn IN_CenterView() {
 //==========================================================================
 #[no_mangle]
 
-pub static mut cl_yawspeed: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_yawspeed: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_pitchspeed: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_pitchspeed: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_run: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_run: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cl_anglespeedkey: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_anglespeedkey: *mut cvar_t = std::ptr::null_mut();
 /*
 ================
 CL_AdjustAngles

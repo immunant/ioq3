@@ -78,13 +78,11 @@ pub use ::libc::strtol;
 
 pub static mut ui_numBots: i32 = 0;
 
-static mut ui_botInfos: [*mut libc::c_char; 1024] =
-    [0 as *const libc::c_char as *mut libc::c_char; 1024];
+static mut ui_botInfos: [*mut libc::c_char; 1024] = [std::ptr::null_mut(); 1024];
 
 static mut ui_numArenas: i32 = 0;
 
-static mut ui_arenaInfos: [*mut libc::c_char; 1024] =
-    [0 as *const libc::c_char as *mut libc::c_char; 1024];
+static mut ui_arenaInfos: [*mut libc::c_char; 1024] = [std::ptr::null_mut(); 1024];
 
 static mut ui_numSinglePlayerArenas: i32 = 0;
 

@@ -165,8 +165,8 @@ MARK POLYS
 #[no_mangle]
 
 pub static mut cg_activeMarkPolys: markPoly_t = markPoly_t {
-    prevMark: 0 as *const markPoly_s as *mut markPoly_s,
-    nextMark: 0 as *const markPoly_s as *mut markPoly_s,
+    prevMark: std::ptr::null_mut(),
+    nextMark: std::ptr::null_mut(),
     time: 0,
     markShader: 0,
     alphaFade: qfalse,
@@ -174,7 +174,7 @@ pub static mut cg_activeMarkPolys: markPoly_t = markPoly_t {
     poly: poly_t {
         hShader: 0,
         numVerts: 0,
-        verts: 0 as *const polyVert_t as *mut polyVert_t,
+        verts: std::ptr::null_mut(),
     },
     verts: [polyVert_t {
         xyz: [0.; 3],
@@ -185,13 +185,13 @@ pub static mut cg_activeMarkPolys: markPoly_t = markPoly_t {
 // double linked list
 #[no_mangle]
 
-pub static mut cg_freeMarkPolys: *mut markPoly_t = 0 as *const markPoly_t as *mut markPoly_t;
+pub static mut cg_freeMarkPolys: *mut markPoly_t = std::ptr::null_mut();
 // single linked list
 #[no_mangle]
 
 pub static mut cg_markPolys: [markPoly_t; 256] = [markPoly_t {
-    prevMark: 0 as *const markPoly_s as *mut markPoly_s,
-    nextMark: 0 as *const markPoly_s as *mut markPoly_s,
+    prevMark: std::ptr::null_mut(),
+    nextMark: std::ptr::null_mut(),
     time: 0,
     markShader: 0,
     alphaFade: qfalse,
@@ -199,7 +199,7 @@ pub static mut cg_markPolys: [markPoly_t; 256] = [markPoly_t {
     poly: poly_t {
         hShader: 0,
         numVerts: 0,
-        verts: 0 as *const polyVert_t as *mut polyVert_t,
+        verts: std::ptr::null_mut(),
     },
     verts: [polyVert_t {
         xyz: [0.; 3],

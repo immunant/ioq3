@@ -157,8 +157,8 @@ pub static mut uis: uiStatic_t = uiStatic_t {
     cursorx: 0,
     cursory: 0,
     menusp: 0,
-    activemenu: 0 as *const menuframework_s as *mut menuframework_s,
-    stack: [0 as *const menuframework_s as *mut menuframework_s; 8],
+    activemenu: std::ptr::null_mut(),
+    stack: [std::ptr::null_mut(); 8],
     glconfig: glconfig_t {
         renderer_string: [0; 1024],
         vendor_string: [0; 1024],

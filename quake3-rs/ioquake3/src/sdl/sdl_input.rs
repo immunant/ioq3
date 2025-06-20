@@ -1113,34 +1113,33 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ===========================================================================
 */
 
-static mut in_keyboardDebug: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+static mut in_keyboardDebug: *mut cvar_t = std::ptr::null_mut();
 
-static mut gamepad: *mut SDL_GameController =
-    0 as *const SDL_GameController as *mut SDL_GameController;
+static mut gamepad: *mut SDL_GameController = std::ptr::null_mut();
 
-static mut stick: *mut SDL_Joystick = 0 as *const SDL_Joystick as *mut SDL_Joystick;
+static mut stick: *mut SDL_Joystick = std::ptr::null_mut();
 
 static mut mouseAvailable: qboolean = qfalse;
 
 static mut mouseActive: qboolean = qfalse;
 
-static mut in_mouse: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+static mut in_mouse: *mut cvar_t = std::ptr::null_mut();
 
-static mut in_nograb: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+static mut in_nograb: *mut cvar_t = std::ptr::null_mut();
 
-static mut in_joystick: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+static mut in_joystick: *mut cvar_t = std::ptr::null_mut();
 
-static mut in_joystickThreshold: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+static mut in_joystickThreshold: *mut cvar_t = std::ptr::null_mut();
 
-static mut in_joystickNo: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+static mut in_joystickNo: *mut cvar_t = std::ptr::null_mut();
 
-static mut in_joystickUseAnalog: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+static mut in_joystickUseAnalog: *mut cvar_t = std::ptr::null_mut();
 
 static mut vidRestartTime: i32 = 0 as i32;
 
 static mut in_eventTime: i32 = 0 as i32;
 
-static mut SDL_window: *mut SDL_Window = 0 as *const SDL_Window as *mut SDL_Window;
+static mut SDL_window: *mut SDL_Window = std::ptr::null_mut();
 /*
 ===============
 IN_PrintKey

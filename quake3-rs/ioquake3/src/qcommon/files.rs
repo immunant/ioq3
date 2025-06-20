@@ -271,21 +271,21 @@ static mut fs_gamedir: [libc::c_char; 4096] = [0; 4096];
 // next file in the hash
 // this will be a single file name with no separators
 
-static mut fs_debug: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+static mut fs_debug: *mut cvar_t = std::ptr::null_mut();
 
-static mut fs_homepath: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+static mut fs_homepath: *mut cvar_t = std::ptr::null_mut();
 
-static mut fs_steampath: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+static mut fs_steampath: *mut cvar_t = std::ptr::null_mut();
 
-static mut fs_gogpath: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+static mut fs_gogpath: *mut cvar_t = std::ptr::null_mut();
 
-static mut fs_basepath: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+static mut fs_basepath: *mut cvar_t = std::ptr::null_mut();
 
-static mut fs_basegame: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+static mut fs_basegame: *mut cvar_t = std::ptr::null_mut();
 
-static mut fs_gamedirvar: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+static mut fs_gamedirvar: *mut cvar_t = std::ptr::null_mut();
 
-static mut fs_searchpaths: *mut searchpath_t = 0 as *const searchpath_t as *mut searchpath_t;
+static mut fs_searchpaths: *mut searchpath_t = std::ptr::null_mut();
 
 static mut fs_readCount: i32 = 0;
 // total bytes read
@@ -304,7 +304,7 @@ static mut fs_checksumFeed: i32 = 0;
 static mut fsh: [fileHandleData_t; 64] = [fileHandleData_t {
     handleFiles: qfile_ut {
         file: qfile_gus {
-            o: 0 as *const FILE as *mut FILE,
+            o: std::ptr::null_mut(),
         },
         unique: qfalse,
     },
@@ -326,8 +326,7 @@ static mut fs_numServerPaks: i32 = 0 as i32;
 static mut fs_serverPaks: [i32; 4096] = [0; 4096];
 // checksums
 
-static mut fs_serverPakNames: [*mut libc::c_char; 4096] =
-    [0 as *const libc::c_char as *mut libc::c_char; 4096];
+static mut fs_serverPakNames: [*mut libc::c_char; 4096] = [std::ptr::null_mut(); 4096];
 // pk3 names
 // only used for autodownload, to make sure the client has at least
 // all the pk3 files that are referenced at the server side
@@ -337,8 +336,7 @@ static mut fs_numServerReferencedPaks: i32 = 0;
 static mut fs_serverReferencedPaks: [i32; 4096] = [0; 4096];
 // checksums
 
-static mut fs_serverReferencedPakNames: [*mut libc::c_char; 4096] =
-    [0 as *const libc::c_char as *mut libc::c_char; 4096];
+static mut fs_serverReferencedPakNames: [*mut libc::c_char; 4096] = [std::ptr::null_mut(); 4096];
 // pk3 names
 // last valid game folder used
 #[no_mangle]

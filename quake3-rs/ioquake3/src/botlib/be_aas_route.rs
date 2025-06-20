@@ -3651,7 +3651,7 @@ pub unsafe extern "C" fn AAS_NearestHideArea(
     let mut bestarea: i32 = 0;
     let mut t: u16 = 0;
     let mut besttraveltime: u16 = 0;
-    static mut hidetraveltimes: *mut u16 = 0 as *const u16 as *mut u16;
+    static mut hidetraveltimes: *mut u16 = std::ptr::null_mut();
     let mut updateliststart: *mut aas_routingupdate_t = 0 as *mut aas_routingupdate_t;
     let mut updatelistend: *mut aas_routingupdate_t = 0 as *mut aas_routingupdate_t;
     let mut curupdate: *mut aas_routingupdate_t = 0 as *mut aas_routingupdate_t;

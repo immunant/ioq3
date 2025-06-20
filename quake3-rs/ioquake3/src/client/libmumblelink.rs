@@ -41,7 +41,7 @@ pub struct LinkedMem {
     pub description: [wchar_t; 2048],
 }
 
-static mut lm: *mut LinkedMem = 0 as *const LinkedMem as *mut LinkedMem;
+static mut lm: *mut LinkedMem = std::ptr::null_mut();
 
 unsafe extern "C" fn GetTickCount() -> int32_t {
     let mut tv: timeval = timeval {

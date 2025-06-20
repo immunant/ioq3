@@ -52,7 +52,7 @@ pub struct logfile_s {
 
 static mut logfile: logfile_t = logfile_t {
     filename: [0; 1024],
-    fp: 0 as *const FILE as *mut FILE,
+    fp: std::ptr::null_mut(),
     numwrites: 0,
 };
 /*

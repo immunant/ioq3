@@ -348,7 +348,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // It also handles local physics interaction, like fragments bouncing off walls
 
 static mut cg_pmove: pmove_t = pmove_t {
-    ps: 0 as *const playerState_t as *mut playerState_t,
+    ps: std::ptr::null_mut(),
     cmd: usercmd_t {
         serverTime: 0,
         angles: [0; 3],
@@ -378,12 +378,11 @@ static mut cg_pmove: pmove_t = pmove_t {
 
 static mut cg_numSolidEntities: i32 = 0;
 
-static mut cg_solidEntities: [*mut centity_t; 256] = [0 as *const centity_t as *mut centity_t; 256];
+static mut cg_solidEntities: [*mut centity_t; 256] = [std::ptr::null_mut(); 256];
 
 static mut cg_numTriggerEntities: i32 = 0;
 
-static mut cg_triggerEntities: [*mut centity_t; 256] =
-    [0 as *const centity_t as *mut centity_t; 256];
+static mut cg_triggerEntities: [*mut centity_t; 256] = [std::ptr::null_mut(); 256];
 /*
 ====================
 CG_BuildSolidList

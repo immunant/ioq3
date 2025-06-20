@@ -74,7 +74,7 @@ pub static mut opus_codec: snd_codec_t = {
             close: Some(
                 S_OggOpus_CodecCloseStream as unsafe extern "C" fn(_: *mut snd_stream_t) -> (),
             ),
-            next: 0 as *const snd_codec_t as *mut snd_codec_t,
+            next: std::ptr::null_mut(),
         };
         init
     }

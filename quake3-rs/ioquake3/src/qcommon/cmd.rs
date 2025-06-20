@@ -94,7 +94,7 @@ pub static mut cmd_wait: i32 = 0;
 #[no_mangle]
 
 pub static mut cmd_text: cmd_t = cmd_t {
-    data: 0 as *const byte as *mut byte,
+    data: std::ptr::null_mut(),
     maxsize: 0,
     cursize: 0,
 };
@@ -465,8 +465,7 @@ pub unsafe extern "C" fn Cmd_Echo_f() {
 
 static mut cmd_argc: i32 = 0;
 
-static mut cmd_argv: [*mut libc::c_char; 1024] =
-    [0 as *const libc::c_char as *mut libc::c_char; 1024];
+static mut cmd_argv: [*mut libc::c_char; 1024] = [std::ptr::null_mut(); 1024];
 // points into cmd_tokenized
 
 static mut cmd_tokenized: [libc::c_char; 9216] = [0; 9216];
@@ -475,7 +474,7 @@ static mut cmd_tokenized: [libc::c_char; 9216] = [0; 9216];
 static mut cmd_cmd: [libc::c_char; 8192] = [0; 8192];
 // the original command we received (no token processing)
 
-static mut cmd_functions: *mut cmd_function_t = 0 as *const cmd_function_t as *mut cmd_function_t;
+static mut cmd_functions: *mut cmd_function_t = std::ptr::null_mut();
 // possible commands to execute
 /*
 ============

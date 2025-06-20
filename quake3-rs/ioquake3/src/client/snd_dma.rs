@@ -268,8 +268,7 @@ pub use crate::tr_types_h::TC_S3TC_ARB;
 
 #[no_mangle]
 
-pub static mut s_backgroundStream: *mut snd_stream_t =
-    0 as *const snd_stream_t as *mut snd_stream_t;
+pub static mut s_backgroundStream: *mut snd_stream_t = std::ptr::null_mut();
 
 static mut s_backgroundLoop: [libc::c_char; 64] = [0; 64];
 #[no_mangle]
@@ -286,7 +285,7 @@ pub static mut s_channels: [channel_t; 96] = [channel_t {
     oldDopplerScale: 0.,
     origin: [0.; 3],
     fixed_origin: qfalse,
-    thesfx: 0 as *const sfx_t as *mut sfx_t,
+    thesfx: std::ptr::null_mut(),
     doppler: qfalse,
     fullVolume: qfalse,
 }; 96];
@@ -304,7 +303,7 @@ pub static mut loop_channels: [channel_t; 96] = [channel_t {
     oldDopplerScale: 0.,
     origin: [0.; 3],
     fixed_origin: qfalse,
-    thesfx: 0 as *const sfx_t as *mut sfx_t,
+    thesfx: std::ptr::null_mut(),
     doppler: qfalse,
     fullVolume: qfalse,
 }; 96];
@@ -325,7 +324,7 @@ pub static mut dma: dma_t = dma_t {
     samplebits: 0,
     isfloat: 0,
     speed: 0,
-    buffer: 0 as *const byte as *mut byte,
+    buffer: std::ptr::null_mut(),
 };
 
 static mut listener_number: i32 = 0;
@@ -343,7 +342,7 @@ pub static mut s_paintedtime: i32 = 0;
 #[no_mangle]
 
 pub static mut s_knownSfx: [sfx_t; 4096] = [sfx_t {
-    soundData: 0 as *const sndBuffer as *mut sndBuffer,
+    soundData: std::ptr::null_mut(),
     defaultSound: qfalse,
     inMemory: qfalse,
     soundCompressed: qfalse,
@@ -352,30 +351,30 @@ pub static mut s_knownSfx: [sfx_t; 4096] = [sfx_t {
     soundChannels: 0,
     soundName: [0; 64],
     lastTimeUsed: 0,
-    next: 0 as *const sfx_s as *mut sfx_s,
+    next: std::ptr::null_mut(),
 }; 4096];
 #[no_mangle]
 
 pub static mut s_numSfx: i32 = 0 as i32;
 
-static mut sfxHash: [*mut sfx_t; 128] = [0 as *const sfx_t as *mut sfx_t; 128];
+static mut sfxHash: [*mut sfx_t; 128] = [std::ptr::null_mut(); 128];
 #[no_mangle]
 
-pub static mut s_testsound: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut s_testsound: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut s_show: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut s_show: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut s_mixahead: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut s_mixahead: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut s_mixPreStep: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut s_mixPreStep: *mut cvar_t = std::ptr::null_mut();
 
 static mut loopSounds: [loopSound_t; 1024] = [loopSound_t {
     origin: [0.; 3],
     velocity: [0.; 3],
-    sfx: 0 as *const sfx_t as *mut sfx_t,
+    sfx: std::ptr::null_mut(),
     mergeFrame: 0,
     active: qfalse,
     kill: qfalse,
@@ -385,7 +384,7 @@ static mut loopSounds: [loopSound_t; 1024] = [loopSound_t {
     framenum: 0,
 }; 1024];
 
-static mut freelist: *mut channel_t = 0 as *const channel_t as *mut channel_t;
+static mut freelist: *mut channel_t = std::ptr::null_mut();
 #[no_mangle]
 
 pub static mut s_rawend: [i32; 129] = [0; 129];

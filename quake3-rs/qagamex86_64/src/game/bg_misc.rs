@@ -261,16 +261,16 @@ An item fires all of its targets when it is picked up.  If the toucher can't car
 pub static mut bg_itemlist: [gitem_t; 37] = [
     {
         let mut init = gitem_s {
-            classname: 0 as *const libc::c_char as *mut libc::c_char,
-            pickup_sound: 0 as *const libc::c_char as *mut libc::c_char,
+            classname: std::ptr::null_mut(),
+            pickup_sound: std::ptr::null_mut(),
             world_model: [
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
             ],
-            icon: 0 as *const libc::c_char as *mut libc::c_char,
-            pickup_name: 0 as *const libc::c_char as *mut libc::c_char,
+            icon: std::ptr::null_mut(),
+            pickup_name: std::ptr::null_mut(),
             quantity: 0 as i32,
             giType: IT_BAD,
             giTag: 0 as i32,
@@ -290,8 +290,8 @@ pub static mut bg_itemlist: [gitem_t; 37] = [
                     as *mut libc::c_char,
                 b"models/powerups/armor/shard_sphere.md3\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
             ],
             icon: b"icons/iconr_shard\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             pickup_name: b"Armor Shard\x00" as *const u8 as *const libc::c_char
@@ -313,9 +313,9 @@ pub static mut bg_itemlist: [gitem_t; 37] = [
             world_model: [
                 b"models/powerups/armor/armor_yel.md3\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
             ],
             icon: b"icons/iconr_yellow\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
@@ -337,9 +337,9 @@ pub static mut bg_itemlist: [gitem_t; 37] = [
             world_model: [
                 b"models/powerups/armor/armor_red.md3\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
             ],
             icon: b"icons/iconr_red\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             pickup_name: b"Heavy Armor\x00" as *const u8 as *const libc::c_char
@@ -363,8 +363,8 @@ pub static mut bg_itemlist: [gitem_t; 37] = [
                     as *mut libc::c_char,
                 b"models/powerups/health/small_sphere.md3\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
             ],
             icon: b"icons/iconh_green\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             pickup_name: b"5 Health\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -386,8 +386,8 @@ pub static mut bg_itemlist: [gitem_t; 37] = [
                     as *mut libc::c_char,
                 b"models/powerups/health/medium_sphere.md3\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
             ],
             icon: b"icons/iconh_yellow\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
@@ -411,8 +411,8 @@ pub static mut bg_itemlist: [gitem_t; 37] = [
                     as *mut libc::c_char,
                 b"models/powerups/health/large_sphere.md3\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
             ],
             icon: b"icons/iconh_red\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             pickup_name: b"50 Health\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -435,8 +435,8 @@ pub static mut bg_itemlist: [gitem_t; 37] = [
                     as *mut libc::c_char,
                 b"models/powerups/health/mega_sphere.md3\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
             ],
             icon: b"icons/iconh_mega\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             pickup_name: b"Mega Health\x00" as *const u8 as *const libc::c_char
@@ -458,9 +458,9 @@ pub static mut bg_itemlist: [gitem_t; 37] = [
             world_model: [
                 b"models/weapons2/gauntlet/gauntlet.md3\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
             ],
             icon: b"icons/iconw_gauntlet\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
@@ -482,9 +482,9 @@ pub static mut bg_itemlist: [gitem_t; 37] = [
             world_model: [
                 b"models/weapons2/shotgun/shotgun.md3\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
             ],
             icon: b"icons/iconw_shotgun\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
@@ -506,9 +506,9 @@ pub static mut bg_itemlist: [gitem_t; 37] = [
             world_model: [
                 b"models/weapons2/machinegun/machinegun.md3\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
             ],
             icon: b"icons/iconw_machinegun\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
@@ -530,9 +530,9 @@ pub static mut bg_itemlist: [gitem_t; 37] = [
             world_model: [
                 b"models/weapons2/grenadel/grenadel.md3\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
             ],
             icon: b"icons/iconw_grenade\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
@@ -556,9 +556,9 @@ pub static mut bg_itemlist: [gitem_t; 37] = [
             world_model: [
                 b"models/weapons2/rocketl/rocketl.md3\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
             ],
             icon: b"icons/iconw_rocket\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
@@ -581,9 +581,9 @@ pub static mut bg_itemlist: [gitem_t; 37] = [
             world_model: [
                 b"models/weapons2/lightning/lightning.md3\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
             ],
             icon: b"icons/iconw_lightning\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
@@ -606,9 +606,9 @@ pub static mut bg_itemlist: [gitem_t; 37] = [
             world_model: [
                 b"models/weapons2/railgun/railgun.md3\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
             ],
             icon: b"icons/iconw_railgun\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
@@ -630,9 +630,9 @@ pub static mut bg_itemlist: [gitem_t; 37] = [
             world_model: [
                 b"models/weapons2/plasma/plasma.md3\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
             ],
             icon: b"icons/iconw_plasma\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
@@ -653,9 +653,9 @@ pub static mut bg_itemlist: [gitem_t; 37] = [
             world_model: [
                 b"models/weapons2/bfg/bfg.md3\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
             ],
             icon: b"icons/iconw_bfg\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             pickup_name: b"BFG10K\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -676,9 +676,9 @@ pub static mut bg_itemlist: [gitem_t; 37] = [
             world_model: [
                 b"models/weapons2/grapple/grapple.md3\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
             ],
             icon: b"icons/iconw_grapple\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
@@ -700,9 +700,9 @@ pub static mut bg_itemlist: [gitem_t; 37] = [
             world_model: [
                 b"models/powerups/ammo/shotgunam.md3\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
             ],
             icon: b"icons/icona_shotgun\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
@@ -723,9 +723,9 @@ pub static mut bg_itemlist: [gitem_t; 37] = [
             world_model: [
                 b"models/powerups/ammo/machinegunam.md3\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
             ],
             icon: b"icons/icona_machinegun\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
@@ -747,9 +747,9 @@ pub static mut bg_itemlist: [gitem_t; 37] = [
             world_model: [
                 b"models/powerups/ammo/grenadeam.md3\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
             ],
             icon: b"icons/icona_grenade\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
@@ -770,9 +770,9 @@ pub static mut bg_itemlist: [gitem_t; 37] = [
             world_model: [
                 b"models/powerups/ammo/plasmaam.md3\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
             ],
             icon: b"icons/icona_plasma\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
@@ -794,9 +794,9 @@ pub static mut bg_itemlist: [gitem_t; 37] = [
             world_model: [
                 b"models/powerups/ammo/lightningam.md3\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
             ],
             icon: b"icons/icona_lightning\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
@@ -817,9 +817,9 @@ pub static mut bg_itemlist: [gitem_t; 37] = [
             world_model: [
                 b"models/powerups/ammo/rocketam.md3\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
             ],
             icon: b"icons/icona_rocket\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
@@ -840,9 +840,9 @@ pub static mut bg_itemlist: [gitem_t; 37] = [
             world_model: [
                 b"models/powerups/ammo/railgunam.md3\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
             ],
             icon: b"icons/icona_railgun\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
@@ -863,9 +863,9 @@ pub static mut bg_itemlist: [gitem_t; 37] = [
             world_model: [
                 b"models/powerups/ammo/bfgam.md3\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
             ],
             icon: b"icons/icona_bfg\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             pickup_name: b"Bfg Ammo\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -886,9 +886,9 @@ pub static mut bg_itemlist: [gitem_t; 37] = [
             world_model: [
                 b"models/powerups/holdable/teleporter.md3\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
             ],
             icon: b"icons/teleporter\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             pickup_name: b"Personal Teleporter\x00" as *const u8 as *const libc::c_char
@@ -912,8 +912,8 @@ pub static mut bg_itemlist: [gitem_t; 37] = [
                     as *mut libc::c_char,
                 b"models/powerups/holdable/medkit_sphere.md3\x00" as *const u8
                     as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
             ],
             icon: b"icons/medkit\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             pickup_name: b"Medkit\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -936,8 +936,8 @@ pub static mut bg_itemlist: [gitem_t; 37] = [
                     as *mut libc::c_char,
                 b"models/powerups/instant/quad_ring.md3\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
             ],
             icon: b"icons/quad\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             pickup_name: b"Quad Damage\x00" as *const u8 as *const libc::c_char
@@ -961,8 +961,8 @@ pub static mut bg_itemlist: [gitem_t; 37] = [
                     as *mut libc::c_char,
                 b"models/powerups/instant/enviro_ring.md3\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
             ],
             icon: b"icons/envirosuit\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             pickup_name: b"Battle Suit\x00" as *const u8 as *const libc::c_char
@@ -986,8 +986,8 @@ pub static mut bg_itemlist: [gitem_t; 37] = [
                     as *mut libc::c_char,
                 b"models/powerups/instant/haste_ring.md3\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
             ],
             icon: b"icons/haste\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             pickup_name: b"Speed\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -1009,8 +1009,8 @@ pub static mut bg_itemlist: [gitem_t; 37] = [
                     as *mut libc::c_char,
                 b"models/powerups/instant/invis_ring.md3\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
             ],
             icon: b"icons/invis\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             pickup_name: b"Invisibility\x00" as *const u8 as *const libc::c_char
@@ -1033,8 +1033,8 @@ pub static mut bg_itemlist: [gitem_t; 37] = [
                     as *mut libc::c_char,
                 b"models/powerups/instant/regen_ring.md3\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
             ],
             icon: b"icons/regen\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             pickup_name: b"Regeneration\x00" as *const u8 as *const libc::c_char
@@ -1058,8 +1058,8 @@ pub static mut bg_itemlist: [gitem_t; 37] = [
                     as *mut libc::c_char,
                 b"models/powerups/instant/flight_ring.md3\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
             ],
             icon: b"icons/flight\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             pickup_name: b"Flight\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -1076,13 +1076,13 @@ pub static mut bg_itemlist: [gitem_t; 37] = [
         let mut init = gitem_s {
             classname: b"team_CTF_redflag\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
-            pickup_sound: 0 as *const libc::c_char as *mut libc::c_char,
+            pickup_sound: std::ptr::null_mut(),
             world_model: [
                 b"models/flags/r_flag.md3\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
             ],
             icon: b"icons/iconf_red1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             pickup_name: b"Red Flag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -1098,13 +1098,13 @@ pub static mut bg_itemlist: [gitem_t; 37] = [
         let mut init = gitem_s {
             classname: b"team_CTF_blueflag\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
-            pickup_sound: 0 as *const libc::c_char as *mut libc::c_char,
+            pickup_sound: std::ptr::null_mut(),
             world_model: [
                 b"models/flags/b_flag.md3\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
-                0 as *const libc::c_char as *mut libc::c_char,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
             ],
             icon: b"icons/iconf_blu1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             pickup_name: b"Blue Flag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -1118,16 +1118,16 @@ pub static mut bg_itemlist: [gitem_t; 37] = [
     },
     {
         let mut init = gitem_s {
-            classname: 0 as *const libc::c_char as *mut libc::c_char,
-            pickup_sound: 0 as *const libc::c_char as *mut libc::c_char,
-            world_model: [0 as *const libc::c_char as *mut libc::c_char; 4],
-            icon: 0 as *const libc::c_char as *mut libc::c_char,
-            pickup_name: 0 as *const libc::c_char as *mut libc::c_char,
+            classname: std::ptr::null_mut(),
+            pickup_sound: std::ptr::null_mut(),
+            world_model: [std::ptr::null_mut(); 4],
+            icon: std::ptr::null_mut(),
+            pickup_name: std::ptr::null_mut(),
             quantity: 0,
             giType: IT_BAD,
             giTag: 0,
-            precaches: 0 as *const libc::c_char as *mut libc::c_char,
-            sounds: 0 as *const libc::c_char as *mut libc::c_char,
+            precaches: std::ptr::null_mut(),
+            sounds: std::ptr::null_mut(),
         };
         init
     },

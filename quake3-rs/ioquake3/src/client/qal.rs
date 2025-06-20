@@ -352,7 +352,7 @@ pub static mut qalcCaptureStop: LPALCCAPTURESTOP = None;
 
 pub static mut qalcCaptureSamples: LPALCCAPTURESAMPLES = None;
 
-static mut OpenALLib: *mut libc::c_void = 0 as *const libc::c_void as *mut libc::c_void;
+static mut OpenALLib: *mut libc::c_void = std::ptr::null_mut();
 
 static mut alinit_fail: qboolean = qfalse;
 /*

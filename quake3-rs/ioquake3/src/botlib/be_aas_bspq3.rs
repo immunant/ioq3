@@ -136,10 +136,10 @@ pub struct bsp_epair_s {
 pub static mut bspworld: bsp_t = bsp_t {
     loaded: 0,
     entdatasize: 0,
-    dentdata: 0 as *const libc::c_char as *mut libc::c_char,
+    dentdata: std::ptr::null_mut(),
     numentities: 0,
     entities: [bsp_entity_t {
-        epairs: 0 as *const bsp_epair_t as *mut bsp_epair_t,
+        epairs: std::ptr::null_mut(),
     }; 2048],
 };
 // BSP_DEBUG

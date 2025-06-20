@@ -469,8 +469,7 @@ pub struct bot_debugpoly_s {
     pub points: [vec3_t; 128],
 }
 
-static mut debugpolygons: *mut bot_debugpoly_t =
-    0 as *const bot_debugpoly_t as *mut bot_debugpoly_t;
+static mut debugpolygons: *mut bot_debugpoly_t = std::ptr::null_mut();
 #[no_mangle]
 
 pub static mut bot_maxdebugpolys: i32 = 0;
@@ -542,10 +541,10 @@ pub unsafe extern "C" fn BotDrawDebugPolygons(
     mut drawPoly: Option<unsafe extern "C" fn(_: i32, _: i32, _: *mut f32) -> ()>,
     mut _value: i32,
 ) {
-    static mut bot_debug: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
-    static mut bot_groundonly: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
-    static mut bot_reachability: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
-    static mut bot_highlightarea: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+    static mut bot_debug: *mut cvar_t = std::ptr::null_mut();
+    static mut bot_groundonly: *mut cvar_t = std::ptr::null_mut();
+    static mut bot_reachability: *mut cvar_t = std::ptr::null_mut();
+    static mut bot_highlightarea: *mut cvar_t = std::ptr::null_mut();
     let mut poly: *mut bot_debugpoly_t = 0 as *mut bot_debugpoly_t;
     let mut i: i32 = 0;
     let mut parm0: i32 = 0;

@@ -852,7 +852,7 @@ pub static mut voiceCommands: [voiceCommand_t; 15] = {
         },
         {
             let mut init = voiceCommand_s {
-                cmd: 0 as *const libc::c_char as *mut libc::c_char,
+                cmd: std::ptr::null_mut(),
                 func: Some(
                     BotVoiceChat_Dummy
                         as unsafe extern "C" fn(_: *mut bot_state_t, _: i32, _: i32) -> (),

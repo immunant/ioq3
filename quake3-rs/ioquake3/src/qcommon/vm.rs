@@ -124,10 +124,10 @@ and one exported function: Perform
 */
 #[no_mangle]
 
-pub static mut currentVM: *mut vm_t = 0 as *const vm_t as *mut vm_t;
+pub static mut currentVM: *mut vm_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut lastVM: *mut vm_t = 0 as *const vm_t as *mut vm_t;
+pub static mut lastVM: *mut vm_t = std::ptr::null_mut();
 #[no_mangle]
 
 pub static mut vm_debugLevel: i32 = 0;
@@ -140,27 +140,27 @@ pub static mut vmTable: [vm_t; 3] = [vm_t {
     programStack: 0,
     systemCall: None,
     name: [0; 64],
-    searchPath: 0 as *const libc::c_void as *mut libc::c_void,
-    dllHandle: 0 as *const libc::c_void as *mut libc::c_void,
+    searchPath: std::ptr::null_mut(),
+    dllHandle: std::ptr::null_mut(),
     entryPoint: None,
     destroy: None,
     currentlyInterpreting: qfalse,
     compiled: qfalse,
-    codeBase: 0 as *const byte as *mut byte,
+    codeBase: std::ptr::null_mut(),
     entryOfs: 0,
     codeLength: 0,
-    instructionPointers: 0 as *const intptr_t as *mut intptr_t,
+    instructionPointers: std::ptr::null_mut(),
     instructionCount: 0,
-    dataBase: 0 as *const byte as *mut byte,
+    dataBase: std::ptr::null_mut(),
     dataMask: 0,
     dataAlloc: 0,
     stackBottom: 0,
     numSymbols: 0,
-    symbols: 0 as *const vmSymbol_s as *mut vmSymbol_s,
+    symbols: std::ptr::null_mut(),
     callLevel: 0,
     breakFunction: 0,
     breakCount: 0,
-    jumpTableTargets: 0 as *const byte as *mut byte,
+    jumpTableTargets: std::ptr::null_mut(),
     numJumpTableTargets: 0,
 }; 3];
 // 64bit!
@@ -258,7 +258,7 @@ pub unsafe extern "C" fn VM_ValueToFunctionSymbol(
 ) -> *mut vmSymbol_t {
     let mut sym: *mut vmSymbol_t = 0 as *mut vmSymbol_t;
     static mut nullSym: vmSymbol_t = vmSymbol_t {
-        next: 0 as *const vmSymbol_s as *mut vmSymbol_s,
+        next: std::ptr::null_mut(),
         symValue: 0,
         profileCount: 0,
         symName: [0; 1],
@@ -1326,7 +1326,7 @@ Insert calls to this while debugging the vm compiler
 
 pub unsafe extern "C" fn VM_LogSyscalls(mut args: *mut i32) {
     static mut callnum: i32 = 0;
-    static mut f: *mut FILE = 0 as *const FILE as *mut FILE;
+    static mut f: *mut FILE = std::ptr::null_mut();
     if f.is_null() {
         f = crate::stdlib::fopen(
             b"syscalls.log\x00" as *const u8 as *const libc::c_char,

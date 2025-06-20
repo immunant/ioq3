@@ -69,13 +69,13 @@ static mut paintbuffer: [portable_samplepair_t; 4096] =
 static mut snd_vol: i32 = 0;
 #[no_mangle]
 
-pub static mut snd_p: *mut i32 = 0 as *const i32 as *mut i32;
+pub static mut snd_p: *mut i32 = std::ptr::null_mut();
 #[no_mangle]
 
 pub static mut snd_linear_count: i32 = 0;
 #[no_mangle]
 
-pub static mut snd_out: *mut i16 = 0 as *const i16 as *mut i16;
+pub static mut snd_out: *mut i16 = std::ptr::null_mut();
 // if configured not to use asm
 #[no_mangle]
 

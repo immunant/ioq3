@@ -83,9 +83,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 //list with library variables
 #[no_mangle]
 
-pub static mut libvarlist: *mut crate::src::botlib::l_libvar::libvar_t = 0
-    as *const crate::src::botlib::l_libvar::libvar_t
-    as *mut crate::src::botlib::l_libvar::libvar_t;
+pub static mut libvarlist: *mut crate::src::botlib::l_libvar::libvar_t = std::ptr::null_mut();
 //===========================================================================
 //
 // Parameter:				-

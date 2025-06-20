@@ -319,8 +319,8 @@ pub static mut cg: cg_t = cg_t {
     intermissionStarted: qfalse,
     latestSnapshotNum: 0,
     latestSnapshotTime: 0,
-    snap: 0 as *const snapshot_t as *mut snapshot_t,
-    nextSnap: 0 as *const snapshot_t as *mut snapshot_t,
+    snap: std::ptr::null_mut(),
+    nextSnap: std::ptr::null_mut(),
     activeSnapshots: [snapshot_t {
         snapFlags: 0,
         ping: 0,
@@ -584,7 +584,7 @@ pub static mut cg: cg_t = cg_t {
                 pitchAngle: 0.,
                 pitching: qfalse,
                 animationNumber: 0,
-                animation: 0 as *const animation_t as *mut animation_t,
+                animation: std::ptr::null_mut(),
                 animationTime: 0,
             },
             torso: lerpFrame_t {
@@ -598,7 +598,7 @@ pub static mut cg: cg_t = cg_t {
                 pitchAngle: 0.,
                 pitching: qfalse,
                 animationNumber: 0,
-                animation: 0 as *const animation_t as *mut animation_t,
+                animation: std::ptr::null_mut(),
                 animationTime: 0,
             },
             flag: lerpFrame_t {
@@ -612,7 +612,7 @@ pub static mut cg: cg_t = cg_t {
                 pitchAngle: 0.,
                 pitching: qfalse,
                 animationNumber: 0,
-                animation: 0 as *const animation_t as *mut animation_t,
+                animation: std::ptr::null_mut(),
                 animationTime: 0,
             },
             painTime: 0,
@@ -906,7 +906,7 @@ pub static mut cgs: cgs_t = cgs_t {
     eventHandling: qfalse,
     mouseCaptured: qfalse,
     sizingHud: qfalse,
-    capturedItem: 0 as *const libc::c_void as *mut libc::c_void,
+    capturedItem: std::ptr::null_mut(),
     activeCursor: 0,
     currentOrder: 0,
     orderPending: qfalse,
@@ -1210,7 +1210,7 @@ pub static mut cg_entities: [centity_t; 1024] = [centity_t {
             pitchAngle: 0.,
             pitching: qfalse,
             animationNumber: 0,
-            animation: 0 as *const animation_t as *mut animation_t,
+            animation: std::ptr::null_mut(),
             animationTime: 0,
         },
         torso: lerpFrame_t {
@@ -1224,7 +1224,7 @@ pub static mut cg_entities: [centity_t; 1024] = [centity_t {
             pitchAngle: 0.,
             pitching: qfalse,
             animationNumber: 0,
-            animation: 0 as *const animation_t as *mut animation_t,
+            animation: std::ptr::null_mut(),
             animationTime: 0,
         },
         flag: lerpFrame_t {
@@ -1238,7 +1238,7 @@ pub static mut cg_entities: [centity_t; 1024] = [centity_t {
             pitchAngle: 0.,
             pitching: qfalse,
             animationNumber: 0,
-            animation: 0 as *const animation_t as *mut animation_t,
+            animation: std::ptr::null_mut(),
             animationTime: 0,
         },
         painTime: 0,
@@ -1263,7 +1263,7 @@ pub static mut cg_entities: [centity_t; 1024] = [centity_t {
 
 pub static mut cg_weapons: [weaponInfo_t; 16] = [weaponInfo_t {
     registered: qfalse,
-    item: 0 as *const gitem_t as *mut gitem_t,
+    item: std::ptr::null_mut(),
     handsModel: 0,
     weaponModel: 0,
     barrelModel: 0,

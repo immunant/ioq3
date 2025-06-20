@@ -13239,9 +13239,9 @@ pub unsafe extern "C" fn Sys_ErrorDialog(mut error: *const libc::c_char) {
 
 static mut execBuffer: [libc::c_char; 1024] = [0; 1024];
 
-static mut execBufferPointer: *mut libc::c_char = 0 as *const libc::c_char as *mut libc::c_char;
+static mut execBufferPointer: *mut libc::c_char = std::ptr::null_mut();
 
-static mut execArgv: [*mut libc::c_char; 16] = [0 as *const libc::c_char as *mut libc::c_char; 16];
+static mut execArgv: [*mut libc::c_char; 16] = [std::ptr::null_mut(); 16];
 
 static mut execArgc: i32 = 0;
 /*

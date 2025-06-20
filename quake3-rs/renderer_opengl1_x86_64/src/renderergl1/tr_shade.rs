@@ -655,7 +655,7 @@ pub static mut tess: shaderCommands_t = shaderCommands_t {
         texcoords: [[[0.; 2]; 1000]; 2],
     },
     constantColor255: [[0; 4]; 1000],
-    shader: 0 as *const shader_t as *mut shader_t,
+    shader: std::ptr::null_mut(),
     shaderTime: 0.,
     fogNum: 0,
     dlightBits: 0,
@@ -663,7 +663,7 @@ pub static mut tess: shaderCommands_t = shaderCommands_t {
     numVertexes: 0,
     numPasses: 0,
     currentStageIteratorFunc: None,
-    xstages: 0 as *const *mut shaderStage_t as *mut *mut shaderStage_t,
+    xstages: std::ptr::null_mut(),
 };
 
 static mut setArraysOnce: qboolean = qfalse;

@@ -285,7 +285,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // takes a playerstate and a usercmd as input and returns a modifed playerstate
 #[no_mangle]
 
-pub static mut pm: *mut pmove_t = 0 as *const pmove_t as *mut pmove_t;
+pub static mut pm: *mut pmove_t = std::ptr::null_mut();
 #[no_mangle]
 
 pub static mut pml: pml_t = pml_t {

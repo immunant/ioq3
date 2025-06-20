@@ -505,14 +505,14 @@ pub struct pushed_t {
 #[no_mangle]
 
 pub static mut pushed: [pushed_t; 1024] = [pushed_t {
-    ent: 0 as *const gentity_t as *mut gentity_t,
+    ent: std::ptr::null_mut(),
     origin: [0.; 3],
     angles: [0.; 3],
     deltayaw: 0.,
 }; 1024];
 #[no_mangle]
 
-pub static mut pushed_p: *mut pushed_t = 0 as *const pushed_t as *mut pushed_t;
+pub static mut pushed_p: *mut pushed_t = std::ptr::null_mut();
 /*
 ============
 G_TestEntityPosition

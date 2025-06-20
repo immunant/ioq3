@@ -146,8 +146,8 @@ pub unsafe extern "C" fn SV_ClipHandleForEntity(mut ent: *const sharedEntity_t) 
 pub static mut sv_worldSectors: [worldSector_t; 64] = [worldSector_t {
     axis: 0,
     dist: 0.,
-    children: [0 as *const worldSector_s as *mut worldSector_s; 2],
-    entities: 0 as *const svEntity_t as *mut svEntity_t,
+    children: [std::ptr::null_mut(); 2],
+    entities: std::ptr::null_mut(),
 }; 64];
 #[no_mangle]
 

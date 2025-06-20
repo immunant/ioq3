@@ -1032,7 +1032,7 @@ static mut cvarTable: [cvarTable_t; 49] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: 0 as *const vmCvar_t as *mut vmCvar_t,
+                vmCvar: std::ptr::null_mut(),
                 cvarName: b"g_localTeamPref\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,

@@ -76,19 +76,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 pub static mut snd_inited: qboolean = qfalse;
 #[no_mangle]
 
-pub static mut s_sdlBits: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut s_sdlBits: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut s_sdlSpeed: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut s_sdlSpeed: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut s_sdlChannels: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut s_sdlChannels: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut s_sdlDevSamps: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut s_sdlDevSamps: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut s_sdlMixSamps: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut s_sdlMixSamps: *mut cvar_t = std::ptr::null_mut();
 /* The audio callback. All the magic happens here. */
 
 static mut dmapos: i32 = 0 as i32;
@@ -99,7 +99,7 @@ static mut sdlPlaybackDevice: SDL_AudioDeviceID = 0;
 
 static mut sdlCaptureDevice: SDL_AudioDeviceID = 0;
 
-static mut s_sdlCapture: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+static mut s_sdlCapture: *mut cvar_t = std::ptr::null_mut();
 
 static mut sdlMasterGain: f32 = 1.0f32;
 /*

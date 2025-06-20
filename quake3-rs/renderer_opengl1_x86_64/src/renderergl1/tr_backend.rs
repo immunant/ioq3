@@ -379,7 +379,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 #[no_mangle]
 
-pub static mut backEndData: *mut backEndData_t = 0 as *const backEndData_t as *mut backEndData_t;
+pub static mut backEndData: *mut backEndData_t = std::ptr::null_mut();
 #[no_mangle]
 
 pub static mut backEnd: backEndState_t = backEndState_t {
@@ -400,13 +400,13 @@ pub static mut backEnd: backEndState_t = backEndState_t {
         floatTime: 0.,
         text: [[0; 32]; 8],
         num_entities: 0,
-        entities: 0 as *const trRefEntity_t as *mut trRefEntity_t,
+        entities: std::ptr::null_mut(),
         num_dlights: 0,
-        dlights: 0 as *const dlight_s as *mut dlight_s,
+        dlights: std::ptr::null_mut(),
         numPolys: 0,
-        polys: 0 as *const srfPoly_s as *mut srfPoly_s,
+        polys: std::ptr::null_mut(),
         numDrawSurfs: 0,
-        drawSurfs: 0 as *const drawSurf_s as *mut drawSurf_s,
+        drawSurfs: std::ptr::null_mut(),
     },
     viewParms: viewParms_t {
         or: orientationr_t {
@@ -472,7 +472,7 @@ pub static mut backEnd: backEndState_t = backEndState_t {
         msec: 0,
     },
     isHyperspace: qfalse,
-    currentEntity: 0 as *const trRefEntity_t as *mut trRefEntity_t,
+    currentEntity: std::ptr::null_mut(),
     skyRenderedThisView: qfalse,
     projection2D: qfalse,
     color2D: [0; 4],

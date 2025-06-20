@@ -162,8 +162,8 @@ static mut afd: aviFileData_t = aviFileData_t {
     numAudioFrames: 0,
     chunkStack: [0; 16],
     chunkStackTop: 0,
-    cBuffer: 0 as *const byte as *mut byte,
-    eBuffer: 0 as *const byte as *mut byte,
+    cBuffer: std::ptr::null_mut(),
+    eBuffer: std::ptr::null_mut(),
 };
 
 static mut buffer: [byte; 2048] = [0; 2048];

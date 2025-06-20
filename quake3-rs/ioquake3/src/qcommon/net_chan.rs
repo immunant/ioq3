@@ -100,13 +100,13 @@ pub struct loopback_t {
 }
 #[no_mangle]
 
-pub static mut showpackets: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut showpackets: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut showdrop: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut showdrop: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut qport: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut qport: *mut cvar_t = std::ptr::null_mut();
 
 static mut netsrcString: [*mut libc::c_char; 2] = [
     b"client\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -602,7 +602,7 @@ pub unsafe extern "C" fn NET_SendLoopPacket(
 }
 #[no_mangle]
 
-pub static mut packetQueue: *mut packetQueue_t = 0 as *const packetQueue_t as *mut packetQueue_t;
+pub static mut packetQueue: *mut packetQueue_t = std::ptr::null_mut();
 
 unsafe extern "C" fn NET_QueuePacket(
     mut length: i32,

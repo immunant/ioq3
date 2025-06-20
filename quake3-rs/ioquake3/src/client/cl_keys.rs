@@ -527,7 +527,7 @@ pub static mut anykeydown: i32 = 0;
 pub static mut keys: [qkey_t; 366] = [qkey_t {
     down: qfalse,
     repeats: 0,
-    binding: 0 as *const libc::c_char as *mut libc::c_char,
+    binding: std::ptr::null_mut(),
 }; 366];
 // names not in this list can either be lowercase ascii, or '0xnn' hex sequences
 #[no_mangle]
@@ -2246,7 +2246,7 @@ pub static mut keynames: [keyname_t; 244] = [
     },
     {
         let mut init = keyname_t {
-            name: 0 as *const libc::c_char as *mut libc::c_char,
+            name: std::ptr::null_mut(),
             keynum: 0 as i32,
         };
         init

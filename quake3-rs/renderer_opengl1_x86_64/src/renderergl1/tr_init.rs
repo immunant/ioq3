@@ -435,313 +435,313 @@ pub static mut glState: glstate_t = glstate_t {
 };
 #[no_mangle]
 
-pub static mut com_altivec: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut com_altivec: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_flareSize: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_flareSize: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_flareFade: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_flareFade: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_flareCoeff: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_flareCoeff: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_railWidth: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_railWidth: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_railCoreWidth: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_railCoreWidth: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_railSegmentLength: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_railSegmentLength: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_ignoreFastPath: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_ignoreFastPath: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_verbose: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_verbose: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_ignore: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_ignore: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_displayRefresh: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_displayRefresh: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_detailTextures: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_detailTextures: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_znear: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_znear: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_zproj: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_zproj: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_stereoSeparation: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_stereoSeparation: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_skipBackEnd: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_skipBackEnd: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_stereoEnabled: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_stereoEnabled: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_anaglyphMode: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_anaglyphMode: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_greyscale: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_greyscale: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_ignorehwgamma: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_ignorehwgamma: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_measureOverdraw: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_measureOverdraw: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_inGameVideo: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_inGameVideo: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_fastsky: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_fastsky: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_drawSun: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_drawSun: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_dynamiclight: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_dynamiclight: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_dlightBacks: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_dlightBacks: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_lodbias: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_lodbias: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_lodscale: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_lodscale: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_norefresh: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_norefresh: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_drawentities: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_drawentities: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_drawworld: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_drawworld: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_speeds: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_speeds: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_fullbright: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_fullbright: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_novis: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_novis: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_nocull: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_nocull: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_facePlaneCull: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_facePlaneCull: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_showcluster: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_showcluster: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_nocurves: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_nocurves: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_allowExtensions: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_allowExtensions: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_ext_compressed_textures: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_ext_compressed_textures: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_ext_multitexture: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_ext_multitexture: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_ext_compiled_vertex_array: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_ext_compiled_vertex_array: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_ext_texture_env_add: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_ext_texture_env_add: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_ext_texture_filter_anisotropic: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_ext_texture_filter_anisotropic: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_ext_max_anisotropy: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_ext_max_anisotropy: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_ignoreGLErrors: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_ignoreGLErrors: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_logFile: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_logFile: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_stencilbits: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_stencilbits: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_depthbits: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_depthbits: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_colorbits: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_colorbits: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_primitives: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_primitives: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_texturebits: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_texturebits: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_ext_multisample: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_ext_multisample: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_drawBuffer: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_drawBuffer: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_lightmap: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_lightmap: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_vertexLight: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_vertexLight: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_uiFullScreen: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_uiFullScreen: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_shadows: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_shadows: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_flares: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_flares: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_mode: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_mode: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_nobind: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_nobind: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_singleShader: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_singleShader: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_roundImagesDown: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_roundImagesDown: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_colorMipLevels: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_colorMipLevels: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_picmip: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_picmip: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_showtris: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_showtris: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_showsky: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_showsky: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_shownormals: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_shownormals: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_finish: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_finish: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_clear: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_clear: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_swapInterval: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_swapInterval: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_textureMode: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_textureMode: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_offsetFactor: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_offsetFactor: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_offsetUnits: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_offsetUnits: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_gamma: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_gamma: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_intensity: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_intensity: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_lockpvs: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_lockpvs: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_noportals: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_noportals: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_portalOnly: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_portalOnly: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_subdivisions: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_subdivisions: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_lodCurveError: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_lodCurveError: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_fullscreen: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_fullscreen: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_noborder: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_noborder: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_customwidth: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_customwidth: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_customheight: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_customheight: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_customPixelAspect: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_customPixelAspect: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_overBrightBits: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_overBrightBits: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_mapOverBrightBits: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_mapOverBrightBits: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_debugSurface: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_debugSurface: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_simpleMipMaps: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_simpleMipMaps: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_showImages: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_showImages: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_ambientScale: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_ambientScale: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_directedScale: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_directedScale: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_debugLight: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_debugLight: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_debugSort: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_debugSort: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_printShaders: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_printShaders: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_saveFontData: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_saveFontData: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_marksOnTriangleMeshes: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_marksOnTriangleMeshes: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_aviMotionJpegQuality: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_aviMotionJpegQuality: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_screenshotJpegQuality: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_screenshotJpegQuality: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_maxpolys: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_maxpolys: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
 pub static mut max_polys: i32 = 0;
 #[no_mangle]
 
-pub static mut r_maxpolyverts: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_maxpolyverts: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
 pub static mut max_polyverts: i32 = 0;

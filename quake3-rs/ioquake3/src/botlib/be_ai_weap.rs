@@ -209,10 +209,9 @@ static mut projectileinfo_struct: structdef_t = unsafe {
     }
 };
 
-static mut botweaponstates: [*mut bot_weaponstate_t; 65] =
-    [0 as *const bot_weaponstate_t as *mut bot_weaponstate_t; 65];
+static mut botweaponstates: [*mut bot_weaponstate_t; 65] = [std::ptr::null_mut(); 65];
 
-static mut weaponconfig: *mut weaponconfig_t = 0 as *const weaponconfig_t as *mut weaponconfig_t;
+static mut weaponconfig: *mut weaponconfig_t = std::ptr::null_mut();
 //========================================================================
 //
 // Parameter:				-

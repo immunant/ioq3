@@ -551,23 +551,23 @@ pub const RSERR_UNKNOWN: rserr_t = 3;
 pub const RSERR_OK: rserr_t = 0;
 #[no_mangle]
 
-pub static mut SDL_window: *mut SDL_Window = 0 as *const SDL_Window as *mut SDL_Window;
+pub static mut SDL_window: *mut SDL_Window = std::ptr::null_mut();
 
-static mut SDL_glContext: SDL_GLContext = 0 as *const libc::c_void as *mut libc::c_void;
+static mut SDL_glContext: SDL_GLContext = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_allowSoftwareGL: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_allowSoftwareGL: *mut cvar_t = std::ptr::null_mut();
 // Don't abort out if a hardware visual can't be obtained
 #[no_mangle]
 
-pub static mut r_allowResize: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_allowResize: *mut cvar_t = std::ptr::null_mut();
 // make window resizable
 #[no_mangle]
 
-pub static mut r_centerWindow: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_centerWindow: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut r_sdlDriver: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut r_sdlDriver: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
 pub static mut qglMajorVersion: i32 = 0;

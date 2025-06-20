@@ -496,13 +496,12 @@ pub static mut botai_waypoints: [bot_waypoint_t; 128] = [bot_waypoint_t {
         flags: 0,
         iteminfo: 0,
     },
-    next: 0 as *const bot_waypoint_s as *mut bot_waypoint_s,
-    prev: 0 as *const bot_waypoint_s as *mut bot_waypoint_s,
+    next: std::ptr::null_mut(),
+    prev: std::ptr::null_mut(),
 }; 128];
 #[no_mangle]
 
-pub static mut botai_freewaypoints: *mut bot_waypoint_t =
-    0 as *const bot_waypoint_t as *mut bot_waypoint_t;
+pub static mut botai_freewaypoints: *mut bot_waypoint_t = std::ptr::null_mut();
 //NOTE: not using a cvars which can be updated because the game should be reloaded anyway
 #[no_mangle]
 

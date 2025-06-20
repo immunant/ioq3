@@ -72,34 +72,34 @@ pub union C2RustUnnamed_111 {
 pub static mut cm: clipMap_t = clipMap_t {
     name: [0; 64],
     numShaders: 0,
-    shaders: 0 as *const dshader_t as *mut dshader_t,
+    shaders: std::ptr::null_mut(),
     numBrushSides: 0,
-    brushsides: 0 as *const cbrushside_t as *mut cbrushside_t,
+    brushsides: std::ptr::null_mut(),
     numPlanes: 0,
-    planes: 0 as *const cplane_t as *mut cplane_t,
+    planes: std::ptr::null_mut(),
     numNodes: 0,
-    nodes: 0 as *const cNode_t as *mut cNode_t,
+    nodes: std::ptr::null_mut(),
     numLeafs: 0,
-    leafs: 0 as *const cLeaf_t as *mut cLeaf_t,
+    leafs: std::ptr::null_mut(),
     numLeafBrushes: 0,
-    leafbrushes: 0 as *const i32 as *mut i32,
+    leafbrushes: std::ptr::null_mut(),
     numLeafSurfaces: 0,
-    leafsurfaces: 0 as *const i32 as *mut i32,
+    leafsurfaces: std::ptr::null_mut(),
     numSubModels: 0,
-    cmodels: 0 as *const cmodel_t as *mut cmodel_t,
+    cmodels: std::ptr::null_mut(),
     numBrushes: 0,
-    brushes: 0 as *const cbrush_t as *mut cbrush_t,
+    brushes: std::ptr::null_mut(),
     numClusters: 0,
     clusterBytes: 0,
-    visibility: 0 as *const byte as *mut byte,
+    visibility: std::ptr::null_mut(),
     vised: qfalse,
     numEntityChars: 0,
-    entityString: 0 as *const libc::c_char as *mut libc::c_char,
+    entityString: std::ptr::null_mut(),
     numAreas: 0,
-    areas: 0 as *const cArea_t as *mut cArea_t,
-    areaPortals: 0 as *const i32 as *mut i32,
+    areas: std::ptr::null_mut(),
+    areaPortals: std::ptr::null_mut(),
     numSurfaces: 0,
-    surfaces: 0 as *const *mut cPatch_t as *mut *mut cPatch_t,
+    surfaces: std::ptr::null_mut(),
     floodvalid: 0,
     checkcount: 0,
 };
@@ -117,16 +117,16 @@ pub static mut c_brush_traces: i32 = 0;
 pub static mut c_patch_traces: i32 = 0;
 #[no_mangle]
 
-pub static mut cmod_base: *mut byte = 0 as *const byte as *mut byte;
+pub static mut cmod_base: *mut byte = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cm_noAreas: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cm_noAreas: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cm_noCurves: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cm_noCurves: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut cm_playerCurveClip: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut cm_playerCurveClip: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
 pub static mut box_model: cmodel_t = cmodel_t {
@@ -143,10 +143,10 @@ pub static mut box_model: cmodel_t = cmodel_t {
 };
 #[no_mangle]
 
-pub static mut box_planes: *mut cplane_t = 0 as *const cplane_t as *mut cplane_t;
+pub static mut box_planes: *mut cplane_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut box_brush: *mut cbrush_t = 0 as *const cbrush_t as *mut cbrush_t;
+pub static mut box_brush: *mut cbrush_t = std::ptr::null_mut();
 /*
 ===============================================================================
 

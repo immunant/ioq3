@@ -454,8 +454,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #[no_mangle]
 
 pub static mut botstates: [*mut crate::src::game::ai_main::bot_state_t; 64] =
-    [0 as *const crate::src::game::ai_main::bot_state_t
-        as *mut crate::src::game::ai_main::bot_state_t; 64];
+    [std::ptr::null_mut(); 64];
 //number of bots
 #[no_mangle]
 

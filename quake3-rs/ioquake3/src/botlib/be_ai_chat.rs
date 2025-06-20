@@ -292,43 +292,35 @@ pub struct bot_ichatdata_t {
 }
 #[no_mangle]
 
-pub static mut ichatdata: [*mut bot_ichatdata_t; 64] =
-    [0 as *const bot_ichatdata_t as *mut bot_ichatdata_t; 64];
+pub static mut ichatdata: [*mut bot_ichatdata_t; 64] = [std::ptr::null_mut(); 64];
 #[no_mangle]
 
-pub static mut botchatstates: [*mut bot_chatstate_t; 65] =
-    [0 as *const bot_chatstate_t as *mut bot_chatstate_t; 65];
+pub static mut botchatstates: [*mut bot_chatstate_t; 65] = [std::ptr::null_mut(); 65];
 //console message heap
 #[no_mangle]
 
-pub static mut consolemessageheap: *mut crate::src::botlib::be_ai_chat::bot_consolemessage_t = 0
-    as *const crate::src::botlib::be_ai_chat::bot_consolemessage_t
-    as *mut crate::src::botlib::be_ai_chat::bot_consolemessage_t;
+pub static mut consolemessageheap: *mut crate::src::botlib::be_ai_chat::bot_consolemessage_t =
+    std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut freeconsolemessages: *mut crate::src::botlib::be_ai_chat::bot_consolemessage_t = 0
-    as *const crate::src::botlib::be_ai_chat::bot_consolemessage_t
-    as *mut crate::src::botlib::be_ai_chat::bot_consolemessage_t;
+pub static mut freeconsolemessages: *mut crate::src::botlib::be_ai_chat::bot_consolemessage_t =
+    std::ptr::null_mut();
 //list with match strings
 #[no_mangle]
 
-pub static mut matchtemplates: *mut bot_matchtemplate_t =
-    0 as *const bot_matchtemplate_t as *mut bot_matchtemplate_t;
+pub static mut matchtemplates: *mut bot_matchtemplate_t = std::ptr::null_mut();
 //list with synonyms
 #[no_mangle]
 
-pub static mut synonyms: *mut bot_synonymlist_t =
-    0 as *const bot_synonymlist_t as *mut bot_synonymlist_t;
+pub static mut synonyms: *mut bot_synonymlist_t = std::ptr::null_mut();
 //list with random strings
 #[no_mangle]
 
-pub static mut randomstrings: *mut bot_randomlist_t =
-    0 as *const bot_randomlist_t as *mut bot_randomlist_t;
+pub static mut randomstrings: *mut bot_randomlist_t = std::ptr::null_mut();
 //reply chats
 #[no_mangle]
 
-pub static mut replychats: *mut bot_replychat_t =
-    0 as *const bot_replychat_t as *mut bot_replychat_t;
+pub static mut replychats: *mut bot_replychat_t = std::ptr::null_mut();
 //========================================================================
 //
 // Parameter:				-

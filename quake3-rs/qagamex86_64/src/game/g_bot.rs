@@ -197,14 +197,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 static mut g_numBots: i32 = 0;
 
-static mut g_botInfos: [*mut libc::c_char; 1024] =
-    [0 as *const libc::c_char as *mut libc::c_char; 1024];
+static mut g_botInfos: [*mut libc::c_char; 1024] = [std::ptr::null_mut(); 1024];
 #[no_mangle]
 
 pub static mut g_numArenas: i32 = 0;
 
-static mut g_arenaInfos: [*mut libc::c_char; 1024] =
-    [0 as *const libc::c_char as *mut libc::c_char; 1024];
+static mut g_arenaInfos: [*mut libc::c_char; 1024] = [std::ptr::null_mut(); 1024];
 
 static mut botSpawnQueue: [botSpawnQueue_t; 16] = [botSpawnQueue_t {
     clientNum: 0,

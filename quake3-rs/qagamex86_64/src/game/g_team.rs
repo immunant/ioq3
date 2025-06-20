@@ -484,7 +484,7 @@ pub static mut teamgame: teamgame_t = teamgame_t {
 };
 #[no_mangle]
 
-pub static mut neutralObelisk: *mut gentity_t = 0 as *const gentity_t as *mut gentity_t;
+pub static mut neutralObelisk: *mut gentity_t = std::ptr::null_mut();
 #[no_mangle]
 
 pub unsafe extern "C" fn Team_InitGame() {

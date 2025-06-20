@@ -120,15 +120,15 @@ x86_64:
 
 */
 
-static mut buf: *mut byte = 0 as *const byte as *mut byte;
+static mut buf: *mut byte = std::ptr::null_mut();
 
-static mut jused: *mut byte = 0 as *const byte as *mut byte;
+static mut jused: *mut byte = std::ptr::null_mut();
 
 static mut jusedSize: i32 = 0 as i32;
 
 static mut compiledOfs: i32 = 0 as i32;
 
-static mut code: *mut byte = 0 as *const byte as *mut byte;
+static mut code: *mut byte = std::ptr::null_mut();
 
 static mut pc: i32 = 0 as i32;
 
@@ -448,7 +448,7 @@ pub static mut vm_syscallNum: i32 = 0;
 pub static mut vm_programStack: i32 = 0;
 #[no_mangle]
 
-pub static mut vm_opStackBase: *mut i32 = 0 as *const i32 as *mut i32;
+pub static mut vm_opStackBase: *mut i32 = std::ptr::null_mut();
 #[no_mangle]
 
 pub static mut vm_opStackOfs: uint8_t = 0;

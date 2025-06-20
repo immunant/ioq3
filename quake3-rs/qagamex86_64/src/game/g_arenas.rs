@@ -289,13 +289,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 //
 #[no_mangle]
 
-pub static mut podium1: *mut gentity_t = 0 as *const gentity_t as *mut gentity_t;
+pub static mut podium1: *mut gentity_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut podium2: *mut gentity_t = 0 as *const gentity_t as *mut gentity_t;
+pub static mut podium2: *mut gentity_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut podium3: *mut gentity_t = 0 as *const gentity_t as *mut gentity_t;
+pub static mut podium3: *mut gentity_t = std::ptr::null_mut();
 /*
 ==================
 UpdateTournamentInfo

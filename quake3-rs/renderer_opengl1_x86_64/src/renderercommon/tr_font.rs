@@ -63,7 +63,7 @@ static mut registeredFont: [fontInfo_t; 6] = [fontInfo_t {
 
 static mut fdOffset: i32 = 0;
 
-static mut fdFile: *mut byte = 0 as *const byte as *mut byte;
+static mut fdFile: *mut byte = std::ptr::null_mut();
 #[no_mangle]
 
 pub unsafe extern "C" fn readInt() -> i32 {

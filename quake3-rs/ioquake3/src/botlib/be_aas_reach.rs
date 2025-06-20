@@ -279,18 +279,15 @@ pub static mut calcgrapplereach: i32 = 0;
 //temporary reachabilities
 #[no_mangle]
 
-pub static mut reachabilityheap: *mut aas_lreachability_t =
-    0 as *const aas_lreachability_t as *mut aas_lreachability_t;
+pub static mut reachabilityheap: *mut aas_lreachability_t = std::ptr::null_mut();
 //heap with reachabilities
 #[no_mangle]
 
-pub static mut nextreachability: *mut aas_lreachability_t =
-    0 as *const aas_lreachability_t as *mut aas_lreachability_t;
+pub static mut nextreachability: *mut aas_lreachability_t = std::ptr::null_mut();
 //next free reachability from the heap
 #[no_mangle]
 
-pub static mut areareachability: *mut *mut aas_lreachability_t =
-    0 as *const *mut aas_lreachability_t as *mut *mut aas_lreachability_t;
+pub static mut areareachability: *mut *mut aas_lreachability_t = std::ptr::null_mut();
 //reachability links for every area
 #[no_mangle]
 

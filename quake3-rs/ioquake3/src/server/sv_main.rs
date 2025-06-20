@@ -181,20 +181,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 #[no_mangle]
 
-pub static mut sv_voip: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_voip: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut sv_voipProtocol: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_voipProtocol: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
 pub static mut svs: serverStatic_t = serverStatic_t {
     initialized: qfalse,
     time: 0,
     snapFlagServerBit: 0,
-    clients: 0 as *const client_t as *mut client_t,
+    clients: std::ptr::null_mut(),
     numSnapshotEntities: 0,
     nextSnapshotEntities: 0,
-    snapshotEntities: 0 as *const entityState_t as *mut entityState_t,
+    snapshotEntities: std::ptr::null_mut(),
     nextHeartbeatTime: 0,
     challenges: [challenge_t {
         adr: netadr_t {
@@ -241,10 +241,10 @@ pub static mut sv: server_t = server_t {
     snapshotCounter: 0,
     timeResidual: 0,
     nextFrameTime: 0,
-    configstrings: [0 as *const libc::c_char as *mut libc::c_char; 1024],
+    configstrings: [std::ptr::null_mut(); 1024],
     svEntities: [svEntity_t {
-        worldSector: 0 as *const worldSector_s as *mut worldSector_s,
-        nextEntityInWorldSector: 0 as *const svEntity_s as *mut svEntity_s,
+        worldSector: std::ptr::null_mut(),
+        nextEntityInWorldSector: std::ptr::null_mut(),
         baseline: entityState_t {
             number: 0,
             eType: 0,
@@ -294,11 +294,11 @@ pub static mut sv: server_t = server_t {
         areanum2: 0,
         snapshotCounter: 0,
     }; 1024],
-    entityParsePoint: 0 as *const libc::c_char as *mut libc::c_char,
-    gentities: 0 as *const sharedEntity_t as *mut sharedEntity_t,
+    entityParsePoint: std::ptr::null_mut(),
+    gentities: std::ptr::null_mut(),
     gentitySize: 0,
     num_entities: 0,
-    gameClients: 0 as *const playerState_t as *mut playerState_t,
+    gameClients: std::ptr::null_mut(),
     gameClientSize: 0,
     restartTime: 0,
     time: 0,
@@ -306,104 +306,104 @@ pub static mut sv: server_t = server_t {
 // local server
 #[no_mangle]
 
-pub static mut gvm: *mut vm_t = 0 as *const vm_t as *mut vm_t;
+pub static mut gvm: *mut vm_t = std::ptr::null_mut();
 // game virtual machine
 #[no_mangle]
 
-pub static mut sv_fps: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_fps: *mut cvar_t = std::ptr::null_mut();
 // time rate for running non-clients
 #[no_mangle]
 
-pub static mut sv_timeout: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_timeout: *mut cvar_t = std::ptr::null_mut();
 // seconds without any message
 #[no_mangle]
 
-pub static mut sv_zombietime: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_zombietime: *mut cvar_t = std::ptr::null_mut();
 // seconds to sink messages after disconnect
 #[no_mangle]
 
-pub static mut sv_rconPassword: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_rconPassword: *mut cvar_t = std::ptr::null_mut();
 // password for remote server commands
 #[no_mangle]
 
-pub static mut sv_privatePassword: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_privatePassword: *mut cvar_t = std::ptr::null_mut();
 // password for the privateClient slots
 #[no_mangle]
 
-pub static mut sv_allowDownload: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_allowDownload: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut sv_maxclients: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_maxclients: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut sv_privateClients: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_privateClients: *mut cvar_t = std::ptr::null_mut();
 // number of clients reserved for password
 #[no_mangle]
 
-pub static mut sv_hostname: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_hostname: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut sv_master: [*mut cvar_t; 5] = [0 as *const cvar_t as *mut cvar_t; 5];
+pub static mut sv_master: [*mut cvar_t; 5] = [std::ptr::null_mut(); 5];
 // master server ip address
 #[no_mangle]
 
-pub static mut sv_reconnectlimit: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_reconnectlimit: *mut cvar_t = std::ptr::null_mut();
 // minimum seconds between connect messages
 #[no_mangle]
 
-pub static mut sv_showloss: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_showloss: *mut cvar_t = std::ptr::null_mut();
 // report when usercmds are lost
 #[no_mangle]
 
-pub static mut sv_padPackets: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_padPackets: *mut cvar_t = std::ptr::null_mut();
 // add nop bytes to messages
 #[no_mangle]
 
-pub static mut sv_killserver: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_killserver: *mut cvar_t = std::ptr::null_mut();
 // menu system can set to 1 to shut server down
 #[no_mangle]
 
-pub static mut sv_mapname: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_mapname: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut sv_mapChecksum: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_mapChecksum: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut sv_serverid: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_serverid: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut sv_minRate: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_minRate: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut sv_maxRate: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_maxRate: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut sv_dlRate: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_dlRate: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut sv_minPing: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_minPing: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut sv_maxPing: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_maxPing: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut sv_gametype: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_gametype: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut sv_pure: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_pure: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut sv_floodProtect: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_floodProtect: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut sv_lanForceRate: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_lanForceRate: *mut cvar_t = std::ptr::null_mut();
 // dedicated 1 (LAN) server forces local client rates to 99999 (bug #491)
 #[no_mangle]
 
-pub static mut sv_strictAuth: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_strictAuth: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
-pub static mut sv_banFile: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_banFile: *mut cvar_t = std::ptr::null_mut();
 #[no_mangle]
 
 pub static mut serverBans: [serverBan_t; 1024] = [serverBan_t {
@@ -754,12 +754,11 @@ static mut buckets: [leakyBucket_t; 16384] = [leakyBucket_t {
     lastTime: 0,
     burst: 0,
     hash: 0,
-    prev: 0 as *const leakyBucket_t as *mut leakyBucket_t,
-    next: 0 as *const leakyBucket_t as *mut leakyBucket_t,
+    prev: std::ptr::null_mut(),
+    next: std::ptr::null_mut(),
 }; 16384];
 
-static mut bucketHashes: [*mut leakyBucket_t; 1024] =
-    [0 as *const leakyBucket_t as *mut leakyBucket_t; 1024];
+static mut bucketHashes: [*mut leakyBucket_t; 1024] = [std::ptr::null_mut(); 1024];
 #[no_mangle]
 
 pub static mut outboundLeakyBucket: leakyBucket_t = leakyBucket_t {
@@ -768,8 +767,8 @@ pub static mut outboundLeakyBucket: leakyBucket_t = leakyBucket_t {
     lastTime: 0,
     burst: 0,
     hash: 0,
-    prev: 0 as *const leakyBucket_t as *mut leakyBucket_t,
-    next: 0 as *const leakyBucket_t as *mut leakyBucket_t,
+    prev: std::ptr::null_mut(),
+    next: std::ptr::null_mut(),
 };
 /*
 ================
@@ -1295,8 +1294,8 @@ unsafe extern "C" fn SVC_RemoteCommand(mut from: netadr_t, mut _msg: *mut msg_t)
             lastTime: 0,
             burst: 0,
             hash: 0,
-            prev: 0 as *const leakyBucket_t as *mut leakyBucket_t,
-            next: 0 as *const leakyBucket_t as *mut leakyBucket_t,
+            prev: std::ptr::null_mut(),
+            next: std::ptr::null_mut(),
         };
         // Make DoS via rcon impractical
         if SVC_RateLimit(&mut bucket, 10 as i32, 1000 as i32) as u64 != 0 {
