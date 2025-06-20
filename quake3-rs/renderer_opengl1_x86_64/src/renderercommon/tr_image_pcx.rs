@@ -126,8 +126,8 @@ pub unsafe extern "C" fn R_LoadPCX(
     mut height: *mut i32,
 ) {
     let mut raw: C2RustUnnamed_88 = C2RustUnnamed_88 {
-        b: std::ptr::null_mut()}
-    ;
+        b: std::ptr::null_mut(),
+    };
     let mut end: *mut byte = std::ptr::null_mut();
     let mut pcx: *mut pcx_t = std::ptr::null_mut();
     let mut len: i32 = 0;

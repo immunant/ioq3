@@ -4192,8 +4192,9 @@ Called directly from cgame
 pub unsafe extern "C" fn RE_LoadWorldMap(mut name: *const libc::c_char) {
     let mut i: i32 = 0;
     let mut header: *mut dheader_t = std::ptr::null_mut();
-    let mut buffer: C2RustUnnamed_102 = C2RustUnnamed_102 { b: std::ptr::null_mut()}
-    ;
+    let mut buffer: C2RustUnnamed_102 = C2RustUnnamed_102 {
+        b: std::ptr::null_mut(),
+    };
     let mut startMarker: *mut byte = std::ptr::null_mut();
     if tr.worldMapLoaded as u64 != 0 {
         ri.Error.expect("non-null function pointer")(

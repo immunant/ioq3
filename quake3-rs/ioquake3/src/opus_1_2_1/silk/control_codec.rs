@@ -328,8 +328,7 @@ unsafe extern "C" fn silk_setup_resamplers(
             )
         } else {
             let mut x_buf_API_fs_Hz: *mut opus_int16 = std::ptr::null_mut();
-            let mut temp_resampler_state: *mut silk_resampler_state_struct =
-                std::ptr::null_mut();
+            let mut temp_resampler_state: *mut silk_resampler_state_struct = std::ptr::null_mut();
             let mut x_bufFIX: *mut opus_int16 = std::ptr::null_mut();
             let mut new_buf_samples: opus_int32 = 0;
             let mut api_buf_samples: opus_int32 = 0;

@@ -634,10 +634,8 @@ pub unsafe extern "C" fn PS_CreatePunctuationTable(
 ) {
     let mut i: i32 = 0;
     let mut p: *mut crate::src::botlib::l_script::punctuation_t = std::ptr::null_mut();
-    let mut lastp: *mut crate::src::botlib::l_script::punctuation_t =
-        std::ptr::null_mut();
-    let mut newp: *mut crate::src::botlib::l_script::punctuation_t =
-        std::ptr::null_mut();
+    let mut lastp: *mut crate::src::botlib::l_script::punctuation_t = std::ptr::null_mut();
+    let mut newp: *mut crate::src::botlib::l_script::punctuation_t = std::ptr::null_mut();
     //get memory for the table
     if (*script).punctuationtable.is_null() {
         (*script).punctuationtable =
@@ -1525,8 +1523,7 @@ pub unsafe extern "C" fn PS_ReadPunctuation(
 ) -> i32 {
     let mut len: i32 = 0; //end for
     let mut p: *mut libc::c_char = std::ptr::null_mut();
-    let mut punc: *mut crate::src::botlib::l_script::punctuation_t =
-        std::ptr::null_mut();
+    let mut punc: *mut crate::src::botlib::l_script::punctuation_t = std::ptr::null_mut();
     punc = *(*script)
         .punctuationtable
         .offset(*(*script).script_p as u32 as isize);
@@ -2393,8 +2390,7 @@ pub unsafe extern "C" fn LoadScriptFile(
     let mut pathname: [libc::c_char; 64] = [0; 64];
     let mut length: i32 = 0;
     let mut buffer: *mut libc::c_void = std::ptr::null_mut();
-    let mut script: *mut crate::src::botlib::l_script::script_t =
-        std::ptr::null_mut();
+    let mut script: *mut crate::src::botlib::l_script::script_t = std::ptr::null_mut();
     if crate::stdlib::strlen(basefolder.as_mut_ptr()) != 0 {
         Com_sprintf(
             pathname.as_mut_ptr(),
@@ -2449,9 +2445,7 @@ pub unsafe extern "C" fn LoadScriptFile(
     (*script).line = 1 as i32;
     (*script).lastline = 1 as i32;
     //
-    SetScriptPunctuations(
-        script,
-        std::ptr::null_mut(),);
+    SetScriptPunctuations(script, std::ptr::null_mut());
     //
     crate::src::botlib::be_interface::botimport
         .FS_Read
@@ -2477,8 +2471,7 @@ pub unsafe extern "C" fn LoadScriptMemory(
     mut name: *mut libc::c_char,
 ) -> *mut crate::src::botlib::l_script::script_t {
     let mut buffer: *mut libc::c_void = std::ptr::null_mut();
-    let mut script: *mut crate::src::botlib::l_script::script_t =
-        std::ptr::null_mut();
+    let mut script: *mut crate::src::botlib::l_script::script_t = std::ptr::null_mut();
     buffer = crate::src::botlib::l_memory::GetClearedMemory(
         (::std::mem::size_of::<crate::src::botlib::l_script::script_t>() as usize)
             .wrapping_add(length as usize)
@@ -2511,9 +2504,7 @@ pub unsafe extern "C" fn LoadScriptMemory(
     (*script).line = 1 as i32;
     (*script).lastline = 1 as i32;
     //
-    SetScriptPunctuations(
-        script,
-        std::ptr::null_mut(),);
+    SetScriptPunctuations(script, std::ptr::null_mut());
     //
     crate::stdlib::memcpy(
         (*script).buffer as *mut libc::c_void,

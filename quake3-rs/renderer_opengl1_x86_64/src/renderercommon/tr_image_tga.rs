@@ -161,8 +161,9 @@ pub unsafe extern "C" fn R_LoadTGA(
     let mut column: i32 = 0;
     let mut buf_p: *mut byte = std::ptr::null_mut();
     let mut end: *mut byte = std::ptr::null_mut();
-    let mut buffer: C2RustUnnamed_93 = C2RustUnnamed_93 { b: std::ptr::null_mut()}
-    ;
+    let mut buffer: C2RustUnnamed_93 = C2RustUnnamed_93 {
+        b: std::ptr::null_mut(),
+    };
     let mut targa_header: TargaHeader = TargaHeader {
         id_length: 0,
         colormap_type: 0,

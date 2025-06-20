@@ -6672,8 +6672,7 @@ ZEXTERN int ZEXPORT inflateInit2 OF((z_streamp strm,
 
 pub unsafe extern "C" fn inflateCopy(mut dest: z_streamp, mut source: z_streamp) -> i32 {
     let mut state: *mut crate::src::zlib::inflate::inflate_state = std::ptr::null_mut();
-    let mut copy: *mut crate::src::zlib::inflate::inflate_state =
-        std::ptr::null_mut();
+    let mut copy: *mut crate::src::zlib::inflate::inflate_state = std::ptr::null_mut();
     let mut window: *mut u8 = std::ptr::null_mut();
     let mut wsize: u32 = 0;
     /* check input */

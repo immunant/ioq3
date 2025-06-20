@@ -805,8 +805,8 @@ pub unsafe extern "C" fn CM_LoadMap(
     mut checksum: *mut i32,
 ) {
     let mut buf: C2RustUnnamed_111 = C2RustUnnamed_111 {
-        i: std::ptr::null_mut()}
-    ;
+        i: std::ptr::null_mut(),
+    };
     let mut i: i32 = 0;
     let mut header: dheader_t = dheader_t {
         ident: 0,

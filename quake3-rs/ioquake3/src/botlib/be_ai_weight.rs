@@ -317,12 +317,9 @@ pub unsafe extern "C" fn ReadFuzzySeperators_r(
         linescrossed: 0,
         next: std::ptr::null_mut(),
     };
-    let mut fs: *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t =
-        std::ptr::null_mut();
-    let mut lastfs: *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t =
-        std::ptr::null_mut();
-    let mut firstfs: *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t =
-        std::ptr::null_mut();
+    let mut fs: *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t = std::ptr::null_mut();
+    let mut lastfs: *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t = std::ptr::null_mut();
+    let mut firstfs: *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t = std::ptr::null_mut();
     founddefault = qfalse as i32;
     firstfs = std::ptr::null_mut();
     lastfs = std::ptr::null_mut();
@@ -560,10 +557,8 @@ pub unsafe extern "C" fn ReadWeightConfig(
         next: std::ptr::null_mut(),
     };
     let mut source: *mut source_t = std::ptr::null_mut();
-    let mut fs: *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t =
-        std::ptr::null_mut();
-    let mut config: *mut crate::src::botlib::be_ai_weight::weightconfig_t =
-        std::ptr::null_mut();
+    let mut fs: *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t = std::ptr::null_mut();
+    let mut config: *mut crate::src::botlib::be_ai_weight::weightconfig_t = std::ptr::null_mut();
     //DEBUG
     if crate::src::botlib::l_libvar::LibVarGetValue(
         b"bot_reloadcharacters\x00" as *const u8 as *const libc::c_char,

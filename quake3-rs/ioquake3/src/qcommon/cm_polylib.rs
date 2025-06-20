@@ -657,10 +657,8 @@ pub unsafe extern "C" fn ClipWindingEpsilon(
     let mut p1: *mut vec_t = std::ptr::null_mut();
     let mut p2: *mut vec_t = std::ptr::null_mut();
     let mut mid: vec3_t = [0.; 3];
-    let mut f: *mut crate::src::qcommon::cm_polylib::winding_t =
-        std::ptr::null_mut();
-    let mut b: *mut crate::src::qcommon::cm_polylib::winding_t =
-        std::ptr::null_mut();
+    let mut f: *mut crate::src::qcommon::cm_polylib::winding_t = std::ptr::null_mut();
+    let mut b: *mut crate::src::qcommon::cm_polylib::winding_t = std::ptr::null_mut();
     let mut maxpts: i32 = 0;
     counts[2 as i32 as usize] = 0 as i32;
     counts[1 as i32 as usize] = counts[2 as i32 as usize];
@@ -891,8 +889,7 @@ pub unsafe extern "C" fn ChopWindingInPlace(
     let mut p1: *mut vec_t = std::ptr::null_mut();
     let mut p2: *mut vec_t = std::ptr::null_mut();
     let mut mid: vec3_t = [0.; 3];
-    let mut f: *mut crate::src::qcommon::cm_polylib::winding_t =
-        std::ptr::null_mut();
+    let mut f: *mut crate::src::qcommon::cm_polylib::winding_t = std::ptr::null_mut();
     let mut maxpts: i32 = 0;
     in_0 = *inout;
     counts[2 as i32 as usize] = 0 as i32;
@@ -1018,8 +1015,7 @@ pub unsafe extern "C" fn ChopWinding(
     mut dist: vec_t,
 ) -> *mut crate::src::qcommon::cm_polylib::winding_t {
     let mut f: *mut crate::src::qcommon::cm_polylib::winding_t = std::ptr::null_mut();
-    let mut b: *mut crate::src::qcommon::cm_polylib::winding_t =
-        std::ptr::null_mut();
+    let mut b: *mut crate::src::qcommon::cm_polylib::winding_t = std::ptr::null_mut();
     ClipWindingEpsilon(in_0, normal, dist, 0.1f32, &mut f, &mut b);
     FreeWinding(in_0);
     if !b.is_null() {

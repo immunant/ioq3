@@ -366,11 +366,12 @@ pub unsafe extern "C" fn Huff_transmit(
             i -= 1
         }
     } else {
-        send((*huff).loc[ch as usize],
+        send(
+            (*huff).loc[ch as usize],
             std::ptr::null_mut(),
             fout,
-            maxoffset)
-        ;
+            maxoffset,
+        );
     };
 }
 #[no_mangle]
@@ -383,11 +384,12 @@ pub unsafe extern "C" fn Huff_offsetTransmit(
     mut maxoffset: i32,
 ) {
     bloc = *offset;
-    send((*huff).loc[ch as usize],
+    send(
+        (*huff).loc[ch as usize],
         std::ptr::null_mut(),
         fout,
-        maxoffset)
-    ;
+        maxoffset,
+    );
     *offset = bloc;
 }
 #[no_mangle]

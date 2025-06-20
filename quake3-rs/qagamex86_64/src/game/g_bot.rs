@@ -523,8 +523,7 @@ pub unsafe extern "C" fn G_SelectRandomBotInfo(mut team: i32) -> i32 {
     let mut bestCount: i32 = 0;
     let mut value: *mut libc::c_char = std::ptr::null_mut();
     // don't add duplicate bots to the server if there are less bots than bot types
-    if team != -(1 as i32)
-        && G_CountBotPlayersByName(std::ptr::null(), -(1 as i32)) < g_numBots {
+    if team != -(1 as i32) && G_CountBotPlayersByName(std::ptr::null(), -(1 as i32)) < g_numBots {
         team = -(1 as i32)
     }
     num = 0 as i32;

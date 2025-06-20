@@ -145,8 +145,7 @@ pub unsafe extern "C" fn RE_RegisterFont(
     }
     len = crate::src::renderergl1::tr_main::ri
         .FS_ReadFile
-        .expect("non-null function pointer")(
-        name.as_mut_ptr(), std::ptr::null_mut())
+        .expect("non-null function pointer")(name.as_mut_ptr(), std::ptr::null_mut())
         as i32;
     if len as usize == ::std::mem::size_of::<fontInfo_t>() as usize {
         crate::src::renderergl1::tr_main::ri

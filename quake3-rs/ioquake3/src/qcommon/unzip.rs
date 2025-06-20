@@ -1367,8 +1367,7 @@ pub unsafe extern "C" fn unzOpenCurrentFile3(
     let mut err: i32 = 0 as i32; /* offset of the local extra field */
     let mut iSizeVar: uInt = 0; /* size of the local extra field */
     let mut s: *mut unz_s = std::ptr::null_mut();
-    let mut pfile_in_zip_read_info: *mut file_in_zip_read_info_s =
-        std::ptr::null_mut();
+    let mut pfile_in_zip_read_info: *mut file_in_zip_read_info_s = std::ptr::null_mut();
     let mut offset_local_extrafield: uLong = 0;
     let mut size_local_extrafield: uInt = 0;
     if !password.is_null() {
@@ -1492,12 +1491,13 @@ pub unsafe extern "C" fn unzOpenCurrentFilePassword(
     mut file: crate::src::qcommon::unzip::unzFile,
     mut password: *const libc::c_char,
 ) -> i32 {
-    return unzOpenCurrentFile3(file,
+    return unzOpenCurrentFile3(
+        file,
         std::ptr::null_mut(),
         std::ptr::null_mut(),
         0 as i32,
-        password)
-    ;
+        password,
+    );
 }
 #[no_mangle]
 
@@ -1529,8 +1529,7 @@ pub unsafe extern "C" fn unzReadCurrentFile(
     let mut err: i32 = 0 as i32;
     let mut iRead: uInt = 0 as i32 as uInt;
     let mut s: *mut unz_s = std::ptr::null_mut();
-    let mut pfile_in_zip_read_info: *mut file_in_zip_read_info_s =
-        std::ptr::null_mut();
+    let mut pfile_in_zip_read_info: *mut file_in_zip_read_info_s = std::ptr::null_mut();
     if file.is_null() {
         return -(102 as i32);
     }
@@ -1724,8 +1723,7 @@ pub unsafe extern "C" fn unzReadCurrentFile(
 
 pub unsafe extern "C" fn unztell(mut file: crate::src::qcommon::unzip::unzFile) -> off_t {
     let mut s: *mut unz_s = std::ptr::null_mut();
-    let mut pfile_in_zip_read_info: *mut file_in_zip_read_info_s =
-        std::ptr::null_mut();
+    let mut pfile_in_zip_read_info: *mut file_in_zip_read_info_s = std::ptr::null_mut();
     if file.is_null() {
         return -(102 as i32) as off_t;
     }
@@ -1743,8 +1741,7 @@ pub unsafe extern "C" fn unztell(mut file: crate::src::qcommon::unzip::unzFile) 
 
 pub unsafe extern "C" fn unzeof(mut file: crate::src::qcommon::unzip::unzFile) -> i32 {
     let mut s: *mut unz_s = std::ptr::null_mut();
-    let mut pfile_in_zip_read_info: *mut file_in_zip_read_info_s =
-        std::ptr::null_mut();
+    let mut pfile_in_zip_read_info: *mut file_in_zip_read_info_s = std::ptr::null_mut();
     if file.is_null() {
         return -(102 as i32);
     }
@@ -1779,8 +1776,7 @@ pub unsafe extern "C" fn unzGetLocalExtrafield(
     mut len: u32,
 ) -> i32 {
     let mut s: *mut unz_s = std::ptr::null_mut();
-    let mut pfile_in_zip_read_info: *mut file_in_zip_read_info_s =
-        std::ptr::null_mut();
+    let mut pfile_in_zip_read_info: *mut file_in_zip_read_info_s = std::ptr::null_mut();
     let mut read_now: uInt = 0;
     let mut size_to_read: uLong = 0;
     if file.is_null() {
@@ -1847,8 +1843,7 @@ pub unsafe extern "C" fn unzGetLocalExtrafield(
 pub unsafe extern "C" fn unzCloseCurrentFile(mut file: crate::src::qcommon::unzip::unzFile) -> i32 {
     let mut err: i32 = 0 as i32;
     let mut s: *mut unz_s = std::ptr::null_mut();
-    let mut pfile_in_zip_read_info: *mut file_in_zip_read_info_s =
-        std::ptr::null_mut();
+    let mut pfile_in_zip_read_info: *mut file_in_zip_read_info_s = std::ptr::null_mut();
     if file.is_null() {
         return -(102 as i32);
     }

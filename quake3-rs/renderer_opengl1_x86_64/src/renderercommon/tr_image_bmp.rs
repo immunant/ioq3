@@ -131,8 +131,9 @@ pub unsafe extern "C" fn R_LoadBMP(
     let mut column: i32 = 0;
     let mut buf_p: *mut byte = std::ptr::null_mut();
     let mut end: *mut byte = std::ptr::null_mut();
-    let mut buffer: C2RustUnnamed_82 = C2RustUnnamed_82 { b: std::ptr::null_mut()}
-    ;
+    let mut buffer: C2RustUnnamed_82 = C2RustUnnamed_82 {
+        b: std::ptr::null_mut(),
+    };
     let mut length: i32 = 0;
     let mut bmpHeader: BMPHeader_t = BMPHeader_t {
         id: [0; 2],

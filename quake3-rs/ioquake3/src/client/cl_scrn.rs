@@ -1457,8 +1457,8 @@ pub unsafe extern "C" fn SCR_UpdateScreen() {
         } else {
             re.EndFrame.expect("non-null function pointer")(
                 std::ptr::null_mut(),
-                std::ptr::null_mut())
-            ;
+                std::ptr::null_mut(),
+            );
         }
     }
     recursive = 0 as i32;

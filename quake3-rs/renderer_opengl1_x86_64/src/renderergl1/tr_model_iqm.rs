@@ -837,8 +837,9 @@ pub unsafe extern "C" fn R_LoadIQM(
     let mut vertexArrayFormat: [i32; 7] = [0; 7];
     let mut allocateInfluences: i32 = 0;
     let mut blendIndexes: *mut byte = std::ptr::null_mut();
-    let mut blendWeights: C2RustUnnamed_128 = C2RustUnnamed_128 { b: std::ptr::null_mut()}
-    ;
+    let mut blendWeights: C2RustUnnamed_128 = C2RustUnnamed_128 {
+        b: std::ptr::null_mut(),
+    };
     if (filesize as usize) < ::std::mem::size_of::<iqmHeader_t>() as usize {
         return qfalse;
     }

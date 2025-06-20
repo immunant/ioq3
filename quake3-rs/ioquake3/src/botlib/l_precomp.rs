@@ -1696,10 +1696,8 @@ pub unsafe extern "C" fn PC_Directive_undef(
         linescrossed: 0,
         next: std::ptr::null_mut(),
     };
-    let mut define: *mut crate::src::botlib::l_precomp::define_t =
-        std::ptr::null_mut();
-    let mut lastdefine: *mut crate::src::botlib::l_precomp::define_t =
-        std::ptr::null_mut();
+    let mut define: *mut crate::src::botlib::l_precomp::define_t = std::ptr::null_mut();
+    let mut lastdefine: *mut crate::src::botlib::l_precomp::define_t = std::ptr::null_mut();
     let mut hash: i32 = 0;
     if (*source).skip > 0 as i32 {
         return qtrue as i32;
@@ -1777,8 +1775,7 @@ pub unsafe extern "C" fn PC_Directive_define(
     };
     let mut t: *mut token_t = std::ptr::null_mut();
     let mut last: *mut token_t = std::ptr::null_mut();
-    let mut define: *mut crate::src::botlib::l_precomp::define_t =
-        std::ptr::null_mut();
+    let mut define: *mut crate::src::botlib::l_precomp::define_t = std::ptr::null_mut();
     if (*source).skip > 0 as i32 {
         return qtrue as i32;
     }
@@ -2024,8 +2021,7 @@ pub unsafe extern "C" fn PC_DefineFromString(
     let mut t: *mut token_t = std::ptr::null_mut();
     let mut res: i32 = 0;
     let mut i: i32 = 0;
-    let mut def: *mut crate::src::botlib::l_precomp::define_t =
-        std::ptr::null_mut();
+    let mut def: *mut crate::src::botlib::l_precomp::define_t = std::ptr::null_mut();
     PC_InitTokenHeap();
     script = LoadScriptMemory(
         string,
@@ -2248,8 +2244,7 @@ pub unsafe extern "C" fn PC_AddGlobalDefinesToSource(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
 ) {
     let mut define: *mut crate::src::botlib::l_precomp::define_t = std::ptr::null_mut();
-    let mut newdefine: *mut crate::src::botlib::l_precomp::define_t =
-        std::ptr::null_mut();
+    let mut newdefine: *mut crate::src::botlib::l_precomp::define_t = std::ptr::null_mut();
     define = globaldefines;
     while !define.is_null() {
         newdefine = PC_CopyDefine(source, define);
@@ -2285,8 +2280,7 @@ pub unsafe extern "C" fn PC_Directive_if_def(
         linescrossed: 0,
         next: std::ptr::null_mut(),
     }; //end if
-    let mut d: *mut crate::src::botlib::l_precomp::define_t =
-        std::ptr::null_mut(); //end if
+    let mut d: *mut crate::src::botlib::l_precomp::define_t = std::ptr::null_mut(); //end if
     let mut skip: i32 = 0;
     if PC_ReadLine(source, &mut token) == 0 {
         SourceError(
@@ -3072,8 +3066,7 @@ pub unsafe extern "C" fn PC_Evaluate(
     let mut lasttoken: *mut token_t = std::ptr::null_mut();
     let mut t: *mut token_t = std::ptr::null_mut();
     let mut nexttoken: *mut token_t = std::ptr::null_mut();
-    let mut define: *mut crate::src::botlib::l_precomp::define_t =
-        std::ptr::null_mut();
+    let mut define: *mut crate::src::botlib::l_precomp::define_t = std::ptr::null_mut();
     let mut defined: i32 = qfalse as i32;
     if !intvalue.is_null() {
         *intvalue = 0 as i32 as isize
@@ -3211,8 +3204,7 @@ pub unsafe extern "C" fn PC_DollarEvaluate(
     let mut lasttoken: *mut token_t = std::ptr::null_mut();
     let mut t: *mut token_t = std::ptr::null_mut();
     let mut nexttoken: *mut token_t = std::ptr::null_mut();
-    let mut define: *mut crate::src::botlib::l_precomp::define_t =
-        std::ptr::null_mut();
+    let mut define: *mut crate::src::botlib::l_precomp::define_t = std::ptr::null_mut();
     if !intvalue.is_null() {
         *intvalue = 0 as i32 as isize
     }
@@ -4768,10 +4760,8 @@ pub unsafe extern "C" fn LoadSourceMemory(
 pub unsafe extern "C" fn FreeSource(mut source: *mut crate::src::botlib::l_precomp::source_t) {
     let mut script: *mut script_t = std::ptr::null_mut();
     let mut token: *mut token_t = std::ptr::null_mut();
-    let mut define: *mut crate::src::botlib::l_precomp::define_t =
-        std::ptr::null_mut();
-    let mut indent: *mut crate::src::botlib::l_precomp::indent_t =
-        std::ptr::null_mut();
+    let mut define: *mut crate::src::botlib::l_precomp::define_t = std::ptr::null_mut();
+    let mut indent: *mut crate::src::botlib::l_precomp::indent_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     //PC_PrintDefineHashTable(source->definehash);
     //free all the scripts

@@ -1218,8 +1218,7 @@ pub unsafe extern "C" fn AAS_FreeAllClusterAreaCache() {
     crate::src::botlib::l_memory::FreeMemory(
         crate::src::botlib::be_aas_main::aasworld.clusterareacache as *mut libc::c_void,
     );
-    crate::src::botlib::be_aas_main::aasworld.clusterareacache =
-        std::ptr::null_mut();
+    crate::src::botlib::be_aas_main::aasworld.clusterareacache = std::ptr::null_mut();
 }
 //end of the function AAS_FreeAllClusterAreaCache
 //===========================================================================
@@ -2059,8 +2058,7 @@ pub unsafe extern "C" fn AAS_FreeRoutingCaches() {
             crate::src::botlib::be_aas_main::aasworld.reversedreachability as *mut libc::c_void,
         );
     }
-    crate::src::botlib::be_aas_main::aasworld.reversedreachability =
-        std::ptr::null_mut();
+    crate::src::botlib::be_aas_main::aasworld.reversedreachability = std::ptr::null_mut();
     // free routing algorithm memory
     if !crate::src::botlib::be_aas_main::aasworld
         .areaupdate

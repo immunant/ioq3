@@ -116,8 +116,7 @@ unsafe extern "C" fn S_CodecGetSound(
     mut info: *mut crate::src::client::snd_codec::snd_info_t,
 ) -> *mut libc::c_void {
     let mut codec: *mut crate::src::client::snd_codec::snd_codec_t = std::ptr::null_mut();
-    let mut orgCodec: *mut crate::src::client::snd_codec::snd_codec_t =
-        std::ptr::null_mut();
+    let mut orgCodec: *mut crate::src::client::snd_codec::snd_codec_t = std::ptr::null_mut();
     let mut orgNameFailed: qboolean = qfalse;
     let mut localName: [libc::c_char; 64] = [0; 64];
     let mut ext: *const libc::c_char = std::ptr::null();
@@ -264,9 +263,8 @@ S_CodecOpenStream
 pub unsafe extern "C" fn S_CodecOpenStream(
     mut filename: *const libc::c_char,
 ) -> *mut crate::src::client::snd_codec::snd_stream_t {
-    return S_CodecGetSound(
-        filename, std::ptr::null_mut(),
-        ) as *mut crate::src::client::snd_codec::snd_stream_t;
+    return S_CodecGetSound(filename, std::ptr::null_mut())
+        as *mut crate::src::client::snd_codec::snd_stream_t;
 }
 #[no_mangle]
 

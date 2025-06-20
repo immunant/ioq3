@@ -297,8 +297,8 @@ pub unsafe extern "C" fn R_RegisterMD3(
     mut mod_0: *mut model_t,
 ) -> qhandle_t {
     let mut buf: C2RustUnnamed_120 = C2RustUnnamed_120 {
-        u: std::ptr::null_mut()}
-    ;
+        u: std::ptr::null_mut(),
+    };
     let mut lod: i32 = 0;
     let mut ident: i32 = 0;
     let mut loaded: qboolean = qfalse;
@@ -390,8 +390,8 @@ pub unsafe extern "C" fn R_RegisterMDR(
     mut mod_0: *mut model_t,
 ) -> qhandle_t {
     let mut buf: C2RustUnnamed_121 = C2RustUnnamed_121 {
-        u: std::ptr::null_mut()}
-    ;
+        u: std::ptr::null_mut(),
+    };
     let mut ident: i32 = 0;
     let mut loaded: qboolean = qfalse;
     let mut filesize: i32 = 0;
@@ -436,8 +436,8 @@ pub unsafe extern "C" fn R_RegisterIQM(
     mut mod_0: *mut model_t,
 ) -> qhandle_t {
     let mut buf: C2RustUnnamed_122 = C2RustUnnamed_122 {
-        u: std::ptr::null_mut()}
-    ;
+        u: std::ptr::null_mut(),
+    };
     let mut loaded: qboolean = qfalse;
     let mut filesize: i32 = 0;
     filesize = ri.FS_ReadFile.expect("non-null function pointer")(

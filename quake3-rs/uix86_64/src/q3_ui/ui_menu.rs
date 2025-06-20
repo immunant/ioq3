@@ -654,8 +654,7 @@ pub unsafe extern "C" fn UI_MainMenu() {
             key.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 17]>() as usize as i32,
         );
-        if trap_VerifyCDKey(key.as_mut_ptr(), std::ptr::null()) as u32 == qfalse as i32 as u32
-        {
+        if trap_VerifyCDKey(key.as_mut_ptr(), std::ptr::null()) as u32 == qfalse as i32 as u32 {
             UI_CDKeyMenu();
             return;
         }

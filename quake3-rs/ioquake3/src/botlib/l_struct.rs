@@ -433,8 +433,7 @@ pub unsafe extern "C" fn ReadStructure(
         linescrossed: 0,
         next: std::ptr::null_mut(),
     }; //end while
-    let mut fd: *mut crate::src::botlib::l_struct::fielddef_t =
-        std::ptr::null_mut();
+    let mut fd: *mut crate::src::botlib::l_struct::fielddef_t = std::ptr::null_mut();
     let mut p: *mut libc::c_void = std::ptr::null_mut();
     let mut num: i32 = 0;
     if PC_ExpectTokenString(
@@ -672,8 +671,7 @@ pub unsafe extern "C" fn WriteStructWithIndent(
     let mut i: i32 = 0; //end for
     let mut num: i32 = 0; //end else
     let mut p: *mut libc::c_void = std::ptr::null_mut(); //end if
-    let mut fd: *mut crate::src::botlib::l_struct::fielddef_t =
-        std::ptr::null_mut();
+    let mut fd: *mut crate::src::botlib::l_struct::fielddef_t = std::ptr::null_mut();
     if WriteIndent(fp, indent) == 0 {
         return qfalse as i32;
     }

@@ -456,8 +456,7 @@ pub unsafe extern "C" fn FreeConsoleMessage(
 
 pub unsafe extern "C" fn BotRemoveConsoleMessage(mut chatstate: i32, mut handle: i32) {
     let mut m: *mut crate::src::botlib::be_ai_chat::bot_consolemessage_t = std::ptr::null_mut();
-    let mut nextm: *mut crate::src::botlib::be_ai_chat::bot_consolemessage_t =
-        std::ptr::null_mut();
+    let mut nextm: *mut crate::src::botlib::be_ai_chat::bot_consolemessage_t = std::ptr::null_mut();
     let mut cs: *mut bot_chatstate_t = std::ptr::null_mut();
     cs = BotChatStateFromHandle(chatstate);
     if cs.is_null() {

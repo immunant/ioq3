@@ -442,8 +442,9 @@ pub unsafe extern "C" fn R_LoadJPG(
     let mut dindex: u32 = 0;
     let mut out: *mut byte = std::ptr::null_mut();
     let mut len: i32 = 0;
-    let mut fbuffer: C2RustUnnamed_86 = C2RustUnnamed_86 { b: std::ptr::null_mut()}
-    ;
+    let mut fbuffer: C2RustUnnamed_86 = C2RustUnnamed_86 {
+        b: std::ptr::null_mut(),
+    };
     let mut buf: *mut byte = std::ptr::null_mut();
     /* In this example we want to open the input file before doing anything else,
      * so that the setjmp() error recovery below can assume the file is open.

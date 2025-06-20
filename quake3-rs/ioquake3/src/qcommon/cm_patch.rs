@@ -1744,8 +1744,7 @@ unsafe extern "C" fn CM_PatchCollideFromGrid(
     let mut p2: *mut f32 = std::ptr::null_mut();
     let mut p3: *mut f32 = std::ptr::null_mut();
     let mut gridPlanes: [[[i32; 2]; 129]; 129] = [[[0; 2]; 129]; 129];
-    let mut facet: *mut crate::src::qcommon::cm_patch::facet_t =
-        std::ptr::null_mut();
+    let mut facet: *mut crate::src::qcommon::cm_patch::facet_t = std::ptr::null_mut();
     let mut borders: [i32; 4] = [0; 4];
     let mut noAdjust: [i32; 4] = [0; 4];
     numPlanes = 0 as i32;
@@ -2109,8 +2108,7 @@ pub unsafe extern "C" fn CM_TracePointThroughPatchCollide(
     let mut intersection: [f32; 2048] = [0.; 2048];
     let mut intersect: f32 = 0.;
     let mut planes_0: *const crate::src::qcommon::cm_patch::patchPlane_t = std::ptr::null();
-    let mut facet: *const crate::src::qcommon::cm_patch::facet_t =
-        std::ptr::null();
+    let mut facet: *const crate::src::qcommon::cm_patch::facet_t = std::ptr::null();
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut k: i32 = 0;
@@ -2311,8 +2309,7 @@ pub unsafe extern "C" fn CM_TraceThroughPatchCollide(
     let mut leaveFrac: f32 = 0.;
     let mut t: f32 = 0.;
     let mut planes_0: *mut crate::src::qcommon::cm_patch::patchPlane_t = std::ptr::null_mut();
-    let mut facet: *mut crate::src::qcommon::cm_patch::facet_t =
-        std::ptr::null_mut();
+    let mut facet: *mut crate::src::qcommon::cm_patch::facet_t = std::ptr::null_mut();
     let mut plane: [f32; 4] = [
         0 as i32 as f32,
         0 as i32 as f32,
@@ -2615,8 +2612,7 @@ pub unsafe extern "C" fn CM_PositionTestInPatchCollide(
     let mut offset: f32 = 0.;
     let mut t: f32 = 0.;
     let mut planes_0: *mut crate::src::qcommon::cm_patch::patchPlane_t = std::ptr::null_mut();
-    let mut facet: *mut crate::src::qcommon::cm_patch::facet_t =
-        std::ptr::null_mut();
+    let mut facet: *mut crate::src::qcommon::cm_patch::facet_t = std::ptr::null_mut();
     let mut plane: [f32; 4] = [0.; 4];
     let mut startp: vec3_t = [0.; 3];
     if (*tw).isPoint as u64 != 0 {

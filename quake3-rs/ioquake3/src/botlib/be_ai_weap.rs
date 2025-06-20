@@ -947,7 +947,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"name\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut())).name as *mut [libc::c_char; 80] as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut())).name as *mut [libc::c_char; 80] as size_t
+                    as i32,
                 type_0: 4 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -971,7 +972,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"model\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut())).model as *mut [libc::c_char; 80] as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut())).model as *mut [libc::c_char; 80] as size_t
+                    as i32,
                 type_0: 4 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -1007,7 +1009,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"projectile\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut())).projectile as *mut [libc::c_char; 80] as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut())).projectile as *mut [libc::c_char; 80]
+                    as size_t as i32,
                 type_0: 4 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -1215,7 +1218,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"name\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut())).name as *mut [libc::c_char; 80] as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut())).name as *mut [libc::c_char; 80] as size_t
+                    as i32,
                 type_0: 4 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -1227,7 +1231,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"model\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut())).model as *mut [libc::c_char; 80] as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut())).model as *mut [libc::c_char; 80] as size_t
+                    as i32,
                 type_0: 4 as i32,
                 maxarray: 0,
                 floatmin: 0.,

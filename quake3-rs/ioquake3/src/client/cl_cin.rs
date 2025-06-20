@@ -920,14 +920,18 @@ unsafe extern "C" fn decodeCodeBook(mut input: *mut byte, mut roq_flags: u16) {
     let mut baptr: *mut byte = std::ptr::null_mut();
     let mut bcptr: *mut byte = std::ptr::null_mut();
     let mut bdptr: *mut byte = std::ptr::null_mut();
-    let mut iaptr: C2RustUnnamed_14 = C2RustUnnamed_14 { i: std::ptr::null_mut()}
-    ;
-    let mut ibptr: C2RustUnnamed_14 = C2RustUnnamed_14 { i: std::ptr::null_mut()}
-    ;
-    let mut icptr: C2RustUnnamed_14 = C2RustUnnamed_14 { i: std::ptr::null_mut()}
-    ;
-    let mut idptr: C2RustUnnamed_14 = C2RustUnnamed_14 { i: std::ptr::null_mut()}
-    ;
+    let mut iaptr: C2RustUnnamed_14 = C2RustUnnamed_14 {
+        i: std::ptr::null_mut(),
+    };
+    let mut ibptr: C2RustUnnamed_14 = C2RustUnnamed_14 {
+        i: std::ptr::null_mut(),
+    };
+    let mut icptr: C2RustUnnamed_14 = C2RustUnnamed_14 {
+        i: std::ptr::null_mut(),
+    };
+    let mut idptr: C2RustUnnamed_14 = C2RustUnnamed_14 {
+        i: std::ptr::null_mut(),
+    };
     if roq_flags == 0 {
         four = 256 as i32 as isize;
         two = four

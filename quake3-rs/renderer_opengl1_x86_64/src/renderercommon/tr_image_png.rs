@@ -94,8 +94,9 @@ pub union C2RustUnnamed_90 {
 
 unsafe extern "C" fn ReadBufferedFile(mut name: *const libc::c_char) -> *mut BufferedFile {
     let mut BF: *mut BufferedFile = std::ptr::null_mut();
-    let mut buffer: C2RustUnnamed_90 = C2RustUnnamed_90 { b: std::ptr::null_mut()}
-    ;
+    let mut buffer: C2RustUnnamed_90 = C2RustUnnamed_90 {
+        b: std::ptr::null_mut(),
+    };
     /*
      *  input verification
      */
