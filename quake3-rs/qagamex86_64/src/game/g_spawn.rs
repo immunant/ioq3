@@ -1423,7 +1423,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"classname\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(std::ptr::null_mut::<gentity_s>())).classname as *mut *mut libc::c_char as size_t,
+                ofs: &mut (*(std::ptr::null_mut::<gentity_s>())).classname as *mut *mut libc::c_char
+                    as size_t,
                 type_0: F_STRING,
             };
             init
@@ -1439,7 +1440,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"model\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(std::ptr::null_mut::<gentity_s>())).model as *mut *mut libc::c_char as size_t,
+                ofs: &mut (*(std::ptr::null_mut::<gentity_s>())).model as *mut *mut libc::c_char
+                    as size_t,
                 type_0: F_STRING,
             };
             init
@@ -1447,7 +1449,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"model2\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(std::ptr::null_mut::<gentity_s>())).model2 as *mut *mut libc::c_char as size_t,
+                ofs: &mut (*(std::ptr::null_mut::<gentity_s>())).model2 as *mut *mut libc::c_char
+                    as size_t,
                 type_0: F_STRING,
             };
             init
@@ -1471,7 +1474,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"target\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(std::ptr::null_mut::<gentity_s>())).target as *mut *mut libc::c_char as size_t,
+                ofs: &mut (*(std::ptr::null_mut::<gentity_s>())).target as *mut *mut libc::c_char
+                    as size_t,
                 type_0: F_STRING,
             };
             init
@@ -1479,7 +1483,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"targetname\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(std::ptr::null_mut::<gentity_s>())).targetname as *mut *mut libc::c_char as size_t,
+                ofs: &mut (*(std::ptr::null_mut::<gentity_s>())).targetname
+                    as *mut *mut libc::c_char as size_t,
                 type_0: F_STRING,
             };
             init
@@ -1487,7 +1492,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"message\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(std::ptr::null_mut::<gentity_s>())).message as *mut *mut libc::c_char as size_t,
+                ofs: &mut (*(std::ptr::null_mut::<gentity_s>())).message as *mut *mut libc::c_char
+                    as size_t,
                 type_0: F_STRING,
             };
             init
@@ -1495,7 +1501,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"team\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(std::ptr::null_mut::<gentity_s>())).team as *mut *mut libc::c_char as size_t,
+                ofs: &mut (*(std::ptr::null_mut::<gentity_s>())).team as *mut *mut libc::c_char
+                    as size_t,
                 type_0: F_STRING,
             };
             init
@@ -1560,8 +1567,8 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = field_t {
                 name: b"targetShaderName\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                ofs: &mut (*(std::ptr::null_mut::<gentity_s>())).targetShaderName as *mut *mut libc::c_char
-                    as size_t,
+                ofs: &mut (*(std::ptr::null_mut::<gentity_s>())).targetShaderName
+                    as *mut *mut libc::c_char as size_t,
                 type_0: F_STRING,
             };
             init
@@ -1570,8 +1577,8 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = field_t {
                 name: b"targetShaderNewName\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                ofs: &mut (*(std::ptr::null_mut::<gentity_s>())).targetShaderNewName as *mut *mut libc::c_char
-                    as size_t,
+                ofs: &mut (*(std::ptr::null_mut::<gentity_s>())).targetShaderNewName
+                    as *mut *mut libc::c_char as size_t,
                 type_0: F_STRING,
             };
             init

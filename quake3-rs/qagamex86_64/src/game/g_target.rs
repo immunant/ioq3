@@ -304,7 +304,8 @@ pub unsafe extern "C" fn Use_Target_Give(
     loop {
         t = G_Find(
             t as *mut gentity_s,
-            &mut (*(std::ptr::null_mut::<gentity_s>())).targetname as *mut *mut libc::c_char as size_t as i32,
+            &mut (*(std::ptr::null_mut::<gentity_s>())).targetname as *mut *mut libc::c_char
+                as size_t as i32,
             (*ent).target,
         ) as *mut gentity_s;
         if t.is_null() {
@@ -750,7 +751,8 @@ pub unsafe extern "C" fn target_laser_start(mut self_0: *mut gentity_t) {
     if !(*self_0).target.is_null() {
         ent = G_Find(
             std::ptr::null_mut() as *mut gentity_s,
-            &mut (*(std::ptr::null_mut::<gentity_s>())).targetname as *mut *mut libc::c_char as size_t as i32,
+            &mut (*(std::ptr::null_mut::<gentity_s>())).targetname as *mut *mut libc::c_char
+                as size_t as i32,
             (*self_0).target,
         ) as *mut gentity_s;
         if ent.is_null() {

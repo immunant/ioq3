@@ -1,5 +1,3 @@
-use ::libc;
-
 pub use crate::stddef_h::size_t;
 
 pub use crate::jmorecfg_h::boolean;

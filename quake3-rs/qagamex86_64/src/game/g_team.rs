@@ -911,7 +911,8 @@ pub unsafe extern "C" fn Team_FragBonuses(
     loop {
         flag = G_Find(
             flag as *mut gentity_s,
-            &mut (*(std::ptr::null_mut::<gentity_s>())).classname as *mut *mut libc::c_char as size_t as i32,
+            &mut (*(std::ptr::null_mut::<gentity_s>())).classname as *mut *mut libc::c_char
+                as size_t as i32,
             c,
         ) as *mut gentity_s;
         if flag.is_null() {
@@ -1076,7 +1077,8 @@ pub unsafe extern "C" fn Team_ResetFlag(mut team: i32) -> *mut gentity_t {
     loop {
         ent = G_Find(
             ent as *mut gentity_s,
-            &mut (*(std::ptr::null_mut::<gentity_s>())).classname as *mut *mut libc::c_char as size_t as i32,
+            &mut (*(std::ptr::null_mut::<gentity_s>())).classname as *mut *mut libc::c_char
+                as size_t as i32,
             c,
         ) as *mut gentity_s;
         if ent.is_null() {
@@ -1555,7 +1557,8 @@ pub unsafe extern "C" fn SelectRandomTeamSpawnPoint(
     loop {
         spot = G_Find(
             spot as *mut gentity_s,
-            &mut (*(std::ptr::null_mut::<gentity_s>())).classname as *mut *mut libc::c_char as size_t as i32,
+            &mut (*(std::ptr::null_mut::<gentity_s>())).classname as *mut *mut libc::c_char
+                as size_t as i32,
             classname,
         ) as *mut gentity_s;
         if spot.is_null() {
@@ -1574,7 +1577,8 @@ pub unsafe extern "C" fn SelectRandomTeamSpawnPoint(
         // no spots that won't telefrag
         return G_Find(
             std::ptr::null_mut() as *mut gentity_s,
-            &mut (*(std::ptr::null_mut::<gentity_s>())).classname as *mut *mut libc::c_char as size_t as i32,
+            &mut (*(std::ptr::null_mut::<gentity_s>())).classname as *mut *mut libc::c_char
+                as size_t as i32,
             classname,
         ) as *mut gentity_s;
     }

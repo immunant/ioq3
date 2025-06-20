@@ -935,7 +935,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"number\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).number as *mut i32 as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).number as *mut i32 as size_t
+                    as i32,
                 type_0: 2 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -947,8 +948,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"name\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).name as *mut [libc::c_char; 80] as size_t
-                    as i32,
+                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).name
+                    as *mut [libc::c_char; 80] as size_t as i32,
                 type_0: 4 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -960,7 +961,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"level\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).level as *mut i32 as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).level as *mut i32 as size_t
+                    as i32,
                 type_0: 2 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -972,8 +974,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"model\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).model as *mut [libc::c_char; 80] as size_t
-                    as i32,
+                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).model
+                    as *mut [libc::c_char; 80] as size_t as i32,
                 type_0: 4 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -985,7 +987,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"weaponindex\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).weaponindex as *mut i32 as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).weaponindex as *mut i32
+                    as size_t as i32,
                 type_0: 2 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -997,7 +1000,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"flags\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).flags as *mut i32 as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).flags as *mut i32 as size_t
+                    as i32,
                 type_0: 2 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -1009,8 +1013,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"projectile\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).projectile as *mut [libc::c_char; 80]
-                    as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).projectile
+                    as *mut [libc::c_char; 80] as size_t as i32,
                 type_0: 4 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -1023,7 +1027,8 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = fielddef_s {
                 name: b"numprojectiles\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).numprojectiles as *mut i32 as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).numprojectiles as *mut i32
+                    as size_t as i32,
                 type_0: 2 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -1035,7 +1040,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"hspread\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).hspread as *mut f32 as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).hspread as *mut f32 as size_t
+                    as i32,
                 type_0: 3 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -1047,7 +1053,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"vspread\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).vspread as *mut f32 as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).vspread as *mut f32 as size_t
+                    as i32,
                 type_0: 3 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -1059,7 +1066,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"speed\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).speed as *mut f32 as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).speed as *mut f32 as size_t
+                    as i32,
                 type_0: 3 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -1071,7 +1079,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"acceleration\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).acceleration as *mut f32 as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).acceleration as *mut f32
+                    as size_t as i32,
                 type_0: 3 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -1083,7 +1092,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"recoil\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).recoil as *mut vec3_t as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).recoil as *mut vec3_t
+                    as size_t as i32,
                 type_0: 3 as i32 | 0x100 as i32,
                 maxarray: 3 as i32,
                 floatmin: 0.,
@@ -1095,7 +1105,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"offset\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).offset as *mut vec3_t as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).offset as *mut vec3_t
+                    as size_t as i32,
                 type_0: 3 as i32 | 0x100 as i32,
                 maxarray: 3 as i32,
                 floatmin: 0.,
@@ -1107,7 +1118,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"angleoffset\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).angleoffset as *mut vec3_t as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).angleoffset as *mut vec3_t
+                    as size_t as i32,
                 type_0: 3 as i32 | 0x100 as i32,
                 maxarray: 3 as i32,
                 floatmin: 0.,
@@ -1120,7 +1132,8 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = fielddef_s {
                 name: b"extrazvelocity\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).extrazvelocity as *mut f32 as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).extrazvelocity as *mut f32
+                    as size_t as i32,
                 type_0: 3 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -1132,7 +1145,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"ammoamount\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).ammoamount as *mut i32 as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).ammoamount as *mut i32
+                    as size_t as i32,
                 type_0: 2 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -1144,7 +1158,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"ammoindex\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).ammoindex as *mut i32 as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).ammoindex as *mut i32
+                    as size_t as i32,
                 type_0: 2 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -1156,7 +1171,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"activate\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).activate as *mut f32 as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).activate as *mut f32
+                    as size_t as i32,
                 type_0: 3 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -1168,7 +1184,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"reload\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).reload as *mut f32 as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).reload as *mut f32 as size_t
+                    as i32,
                 type_0: 3 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -1180,7 +1197,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"spinup\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).spinup as *mut f32 as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).spinup as *mut f32 as size_t
+                    as i32,
                 type_0: 3 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -1192,7 +1210,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"spindown\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).spindown as *mut f32 as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut::<weaponinfo_s>())).spindown as *mut f32
+                    as size_t as i32,
                 type_0: 3 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -1218,8 +1237,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"name\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut::<projectileinfo_s>())).name as *mut [libc::c_char; 80] as size_t
-                    as i32,
+                offset: &mut (*(std::ptr::null_mut::<projectileinfo_s>())).name
+                    as *mut [libc::c_char; 80] as size_t as i32,
                 type_0: 4 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -1231,8 +1250,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"model\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut::<projectileinfo_s>())).model as *mut [libc::c_char; 80] as size_t
-                    as i32,
+                offset: &mut (*(std::ptr::null_mut::<projectileinfo_s>())).model
+                    as *mut [libc::c_char; 80] as size_t as i32,
                 type_0: 4 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -1244,7 +1263,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"flags\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut::<projectileinfo_s>())).flags as *mut i32 as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut::<projectileinfo_s>())).flags as *mut i32
+                    as size_t as i32,
                 type_0: 2 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -1256,7 +1276,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"gravity\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut::<projectileinfo_s>())).gravity as *mut f32 as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut::<projectileinfo_s>())).gravity as *mut f32
+                    as size_t as i32,
                 type_0: 3 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -1268,7 +1289,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"damage\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut::<projectileinfo_s>())).damage as *mut i32 as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut::<projectileinfo_s>())).damage as *mut i32
+                    as size_t as i32,
                 type_0: 2 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -1280,7 +1302,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"radius\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut::<projectileinfo_s>())).radius as *mut f32 as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut::<projectileinfo_s>())).radius as *mut f32
+                    as size_t as i32,
                 type_0: 3 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -1292,7 +1315,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"visdamage\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut::<projectileinfo_s>())).visdamage as *mut i32 as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut::<projectileinfo_s>())).visdamage as *mut i32
+                    as size_t as i32,
                 type_0: 2 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -1304,7 +1328,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"damagetype\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut::<projectileinfo_s>())).damagetype as *mut i32 as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut::<projectileinfo_s>())).damagetype as *mut i32
+                    as size_t as i32,
                 type_0: 2 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -1316,7 +1341,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"healthinc\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut::<projectileinfo_s>())).healthinc as *mut i32 as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut::<projectileinfo_s>())).healthinc as *mut i32
+                    as size_t as i32,
                 type_0: 2 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -1328,7 +1354,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"push\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut::<projectileinfo_s>())).push as *mut f32 as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut::<projectileinfo_s>())).push as *mut f32
+                    as size_t as i32,
                 type_0: 3 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -1340,7 +1367,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"detonation\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut::<projectileinfo_s>())).detonation as *mut f32 as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut::<projectileinfo_s>())).detonation as *mut f32
+                    as size_t as i32,
                 type_0: 3 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -1352,7 +1380,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"bounce\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut::<projectileinfo_s>())).bounce as *mut f32 as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut::<projectileinfo_s>())).bounce as *mut f32
+                    as size_t as i32,
                 type_0: 3 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -1364,7 +1393,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"bouncefric\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut::<projectileinfo_s>())).bouncefric as *mut f32 as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut::<projectileinfo_s>())).bouncefric as *mut f32
+                    as size_t as i32,
                 type_0: 3 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -1376,7 +1406,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"bouncestop\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(std::ptr::null_mut::<projectileinfo_s>())).bouncestop as *mut f32 as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut::<projectileinfo_s>())).bouncestop as *mut f32
+                    as size_t as i32,
                 type_0: 3 as i32,
                 maxarray: 0,
                 floatmin: 0.,

@@ -575,7 +575,8 @@ pub unsafe extern "C" fn SelectNearestDeathmatchSpawnPoint(mut from: *mut vec_t)
     loop {
         spot = G_Find(
             spot as *mut gentity_s,
-            &mut (*(std::ptr::null_mut::<gentity_s>())).classname as *mut *mut libc::c_char as size_t as i32,
+            &mut (*(std::ptr::null_mut::<gentity_s>())).classname as *mut *mut libc::c_char
+                as size_t as i32,
             b"info_player_deathmatch\x00" as *const u8 as *const libc::c_char,
         ) as *mut gentity_s;
         if spot.is_null() {
@@ -609,7 +610,8 @@ pub unsafe extern "C" fn SelectRandomDeathmatchSpawnPoint(mut isbot: qboolean) -
     {
         spot = G_Find(
             spot as *mut gentity_s,
-            &mut (*(std::ptr::null_mut::<gentity_s>())).classname as *mut *mut libc::c_char as size_t as i32,
+            &mut (*(std::ptr::null_mut::<gentity_s>())).classname as *mut *mut libc::c_char
+                as size_t as i32,
             b"info_player_deathmatch\x00" as *const u8 as *const libc::c_char,
         ) as *mut gentity_s;
         if !(!spot.is_null() && count < 128 as i32) {
@@ -630,7 +632,8 @@ pub unsafe extern "C" fn SelectRandomDeathmatchSpawnPoint(mut isbot: qboolean) -
         // no spots that won't telefrag
         return G_Find(
             std::ptr::null_mut() as *mut gentity_s,
-            &mut (*(std::ptr::null_mut::<gentity_s>())).classname as *mut *mut libc::c_char as size_t as i32,
+            &mut (*(std::ptr::null_mut::<gentity_s>())).classname as *mut *mut libc::c_char
+                as size_t as i32,
             b"info_player_deathmatch\x00" as *const u8 as *const libc::c_char,
         ) as *mut gentity_s;
     }
@@ -668,7 +671,8 @@ pub unsafe extern "C" fn SelectRandomFurthestSpawnPoint(
     {
         spot = G_Find(
             spot as *mut gentity_s,
-            &mut (*(std::ptr::null_mut::<gentity_s>())).classname as *mut *mut libc::c_char as size_t as i32,
+            &mut (*(std::ptr::null_mut::<gentity_s>())).classname as *mut *mut libc::c_char
+                as size_t as i32,
             b"info_player_deathmatch\x00" as *const u8 as *const libc::c_char,
         ) as *mut gentity_s;
         if spot.is_null() {
@@ -718,7 +722,8 @@ pub unsafe extern "C" fn SelectRandomFurthestSpawnPoint(
     if numSpots == 0 {
         spot = G_Find(
             std::ptr::null_mut() as *mut gentity_s,
-            &mut (*(std::ptr::null_mut::<gentity_s>())).classname as *mut *mut libc::c_char as size_t as i32,
+            &mut (*(std::ptr::null_mut::<gentity_s>())).classname as *mut *mut libc::c_char
+                as size_t as i32,
             b"info_player_deathmatch\x00" as *const u8 as *const libc::c_char,
         ) as *mut gentity_s;
         if spot.is_null() {
@@ -811,7 +816,8 @@ pub unsafe extern "C" fn SelectInitialSpawnPoint(
     loop {
         spot = G_Find(
             spot as *mut gentity_s,
-            &mut (*(std::ptr::null_mut::<gentity_s>())).classname as *mut *mut libc::c_char as size_t as i32,
+            &mut (*(std::ptr::null_mut::<gentity_s>())).classname as *mut *mut libc::c_char
+                as size_t as i32,
             b"info_player_deathmatch\x00" as *const u8 as *const libc::c_char,
         ) as *mut gentity_s;
         if spot.is_null() {

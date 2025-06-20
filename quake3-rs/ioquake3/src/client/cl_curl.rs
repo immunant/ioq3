@@ -1036,7 +1036,11 @@ pub unsafe extern "C" fn CL_cURL_BeginDownload(
                 ) -> i32,
         ),
     );
-    qcurl_easy_setopt_warn(clc.downloadCURL, CURLOPT_PROGRESSDATA, std::ptr::null_mut::<libc::c_void>());
+    qcurl_easy_setopt_warn(
+        clc.downloadCURL,
+        CURLOPT_PROGRESSDATA,
+        std::ptr::null_mut::<libc::c_void>(),
+    );
     qcurl_easy_setopt_warn(clc.downloadCURL, CURLOPT_FAILONERROR, 1 as i32);
     qcurl_easy_setopt_warn(clc.downloadCURL, CURLOPT_FOLLOWLOCATION, 1 as i32);
     qcurl_easy_setopt_warn(clc.downloadCURL, CURLOPT_MAXREDIRS, 5 as i32);
