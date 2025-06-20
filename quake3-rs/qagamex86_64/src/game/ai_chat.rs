@@ -2065,7 +2065,7 @@ pub unsafe extern "C" fn BotChatTest(mut bs: *mut bot_state_t) {
             bs as *mut bot_state_s,
             b"death_lava\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             name.as_mut_ptr(),
-            std::ptr::null_mut(),
+            std::ptr::null_mut::<libc::c_char>(),
         );
         trap_BotEnterChat((*bs).cs, 0 as i32, 0 as i32);
         i += 1
@@ -2080,7 +2080,7 @@ pub unsafe extern "C" fn BotChatTest(mut bs: *mut bot_state_t) {
             bs as *mut bot_state_s,
             b"death_cratered\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             name.as_mut_ptr(),
-            std::ptr::null_mut(),
+            std::ptr::null_mut::<libc::c_char>(),
         );
         trap_BotEnterChat((*bs).cs, 0 as i32, 0 as i32);
         i += 1
@@ -2095,7 +2095,7 @@ pub unsafe extern "C" fn BotChatTest(mut bs: *mut bot_state_t) {
             bs as *mut bot_state_s,
             b"death_suicide\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             name.as_mut_ptr(),
-            std::ptr::null_mut(),
+            std::ptr::null_mut::<libc::c_char>(),
         );
         trap_BotEnterChat((*bs).cs, 0 as i32, 0 as i32);
         i += 1
@@ -2110,7 +2110,7 @@ pub unsafe extern "C" fn BotChatTest(mut bs: *mut bot_state_t) {
             bs as *mut bot_state_s,
             b"death_telefrag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             name.as_mut_ptr(),
-            std::ptr::null_mut(),
+            std::ptr::null_mut::<libc::c_char>(),
         );
         trap_BotEnterChat((*bs).cs, 0 as i32, 0 as i32);
         i += 1
@@ -2126,7 +2126,7 @@ pub unsafe extern "C" fn BotChatTest(mut bs: *mut bot_state_t) {
             b"death_gauntlet\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             name.as_mut_ptr(),
             BotWeaponNameForMeansOfDeath((*bs).botdeathtype),
-            std::ptr::null_mut(),
+            std::ptr::null_mut::<libc::c_char>(),
         );
         trap_BotEnterChat((*bs).cs, 0 as i32, 0 as i32);
         i += 1
@@ -2142,7 +2142,7 @@ pub unsafe extern "C" fn BotChatTest(mut bs: *mut bot_state_t) {
             b"death_rail\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             name.as_mut_ptr(),
             BotWeaponNameForMeansOfDeath((*bs).botdeathtype),
-            std::ptr::null_mut(),
+            std::ptr::null_mut::<libc::c_char>(),
         );
         trap_BotEnterChat((*bs).cs, 0 as i32, 0 as i32);
         i += 1
@@ -2158,7 +2158,7 @@ pub unsafe extern "C" fn BotChatTest(mut bs: *mut bot_state_t) {
             b"death_bfg\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             name.as_mut_ptr(),
             BotWeaponNameForMeansOfDeath((*bs).botdeathtype),
-            std::ptr::null_mut(),
+            std::ptr::null_mut::<libc::c_char>(),
         );
         trap_BotEnterChat((*bs).cs, 0 as i32, 0 as i32);
         i += 1
@@ -2174,7 +2174,7 @@ pub unsafe extern "C" fn BotChatTest(mut bs: *mut bot_state_t) {
             b"death_insult\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             name.as_mut_ptr(),
             BotWeaponNameForMeansOfDeath((*bs).botdeathtype),
-            std::ptr::null_mut(),
+            std::ptr::null_mut::<libc::c_char>(),
         );
         trap_BotEnterChat((*bs).cs, 0 as i32, 0 as i32);
         i += 1
@@ -2190,7 +2190,7 @@ pub unsafe extern "C" fn BotChatTest(mut bs: *mut bot_state_t) {
             b"death_praise\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             name.as_mut_ptr(),
             BotWeaponNameForMeansOfDeath((*bs).botdeathtype),
-            std::ptr::null_mut(),
+            std::ptr::null_mut::<libc::c_char>(),
         );
         trap_BotEnterChat((*bs).cs, 0 as i32, 0 as i32);
         i += 1
@@ -2209,7 +2209,7 @@ pub unsafe extern "C" fn BotChatTest(mut bs: *mut bot_state_t) {
             bs as *mut bot_state_s,
             b"kill_gauntlet\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             name.as_mut_ptr(),
-            std::ptr::null_mut(),
+            std::ptr::null_mut::<libc::c_char>(),
         );
         trap_BotEnterChat((*bs).cs, 0 as i32, 0 as i32);
         i += 1
@@ -2224,7 +2224,7 @@ pub unsafe extern "C" fn BotChatTest(mut bs: *mut bot_state_t) {
             bs as *mut bot_state_s,
             b"kill_rail\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             name.as_mut_ptr(),
-            std::ptr::null_mut(),
+            std::ptr::null_mut::<libc::c_char>(),
         );
         trap_BotEnterChat((*bs).cs, 0 as i32, 0 as i32);
         i += 1
@@ -2239,7 +2239,7 @@ pub unsafe extern "C" fn BotChatTest(mut bs: *mut bot_state_t) {
             bs as *mut bot_state_s,
             b"kill_telefrag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             name.as_mut_ptr(),
-            std::ptr::null_mut(),
+            std::ptr::null_mut::<libc::c_char>(),
         );
         trap_BotEnterChat((*bs).cs, 0 as i32, 0 as i32);
         i += 1
@@ -2254,7 +2254,7 @@ pub unsafe extern "C" fn BotChatTest(mut bs: *mut bot_state_t) {
             bs as *mut bot_state_s,
             b"kill_insult\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             name.as_mut_ptr(),
-            std::ptr::null_mut(),
+            std::ptr::null_mut::<libc::c_char>(),
         );
         trap_BotEnterChat((*bs).cs, 0 as i32, 0 as i32);
         i += 1
@@ -2269,7 +2269,7 @@ pub unsafe extern "C" fn BotChatTest(mut bs: *mut bot_state_t) {
             bs as *mut bot_state_s,
             b"kill_praise\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             name.as_mut_ptr(),
-            std::ptr::null_mut(),
+            std::ptr::null_mut::<libc::c_char>(),
         );
         trap_BotEnterChat((*bs).cs, 0 as i32, 0 as i32);
         i += 1
@@ -2284,7 +2284,7 @@ pub unsafe extern "C" fn BotChatTest(mut bs: *mut bot_state_t) {
             bs as *mut bot_state_s,
             b"enemy_suicide\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             name.as_mut_ptr(),
-            std::ptr::null_mut(),
+            std::ptr::null_mut::<libc::c_char>(),
         );
         trap_BotEnterChat((*bs).cs, 0 as i32, 0 as i32);
         i += 1
@@ -2307,7 +2307,7 @@ pub unsafe extern "C" fn BotChatTest(mut bs: *mut bot_state_t) {
             b"hit_talking\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             name.as_mut_ptr(),
             weap,
-            std::ptr::null_mut(),
+            std::ptr::null_mut::<libc::c_char>(),
         );
         trap_BotEnterChat((*bs).cs, 0 as i32, 0 as i32);
         i += 1
@@ -2323,7 +2323,7 @@ pub unsafe extern "C" fn BotChatTest(mut bs: *mut bot_state_t) {
             b"hit_nodeath\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             name.as_mut_ptr(),
             weap,
-            std::ptr::null_mut(),
+            std::ptr::null_mut::<libc::c_char>(),
         );
         trap_BotEnterChat((*bs).cs, 0 as i32, 0 as i32);
         i += 1
@@ -2339,7 +2339,7 @@ pub unsafe extern "C" fn BotChatTest(mut bs: *mut bot_state_t) {
             b"hit_nokill\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             name.as_mut_ptr(),
             weap,
-            std::ptr::null_mut(),
+            std::ptr::null_mut::<libc::c_char>(),
         );
         trap_BotEnterChat((*bs).cs, 0 as i32, 0 as i32);
         i += 1
@@ -2371,7 +2371,7 @@ pub unsafe extern "C" fn BotChatTest(mut bs: *mut bot_state_t) {
             b"[invalid var]\x00" as *const u8 as *const libc::c_char,
             BotMapTitle(),
             BotRandomWeaponName(),
-            std::ptr::null_mut(),
+            std::ptr::null_mut::<libc::c_char>(),
         );
         trap_BotEnterChat((*bs).cs, 0 as i32, 0 as i32);
         i += 1
@@ -2391,7 +2391,7 @@ pub unsafe extern "C" fn BotChatTest(mut bs: *mut bot_state_t) {
             b"[invalid var]\x00" as *const u8 as *const libc::c_char,
             BotMapTitle(),
             BotRandomWeaponName(),
-            std::ptr::null_mut(),
+            std::ptr::null_mut::<libc::c_char>(),
         );
         trap_BotEnterChat((*bs).cs, 0 as i32, 0 as i32);
         i += 1

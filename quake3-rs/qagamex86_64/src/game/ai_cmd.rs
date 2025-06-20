@@ -2175,14 +2175,14 @@ pub unsafe extern "C" fn BotMatch_WhatAreYouDoing(
             BotAI_BotInitialChat(
                 bs as *mut bot_state_s,
                 b"returningflag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                std::ptr::null_mut(),
+                std::ptr::null_mut::<libc::c_char>(),
             );
         }
         _ => {
             BotAI_BotInitialChat(
                 bs as *mut bot_state_s,
                 b"roaming\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                std::ptr::null_mut(),
+                std::ptr::null_mut::<libc::c_char>(),
             );
         }
     }
