@@ -257,11 +257,11 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
     let mut found_upper: i32 = 0;
     let mut found_lower: i32 = 0;
     let mut ret: i32 = 0 as i32;
-    let mut x_frame: *mut f32 = 0 as *mut f32;
-    let mut res_pitch_frame: *mut f32 = 0 as *mut f32;
+    let mut x_frame: *mut f32 = std::ptr::null_mut();
+    let mut res_pitch_frame: *mut f32 = std::ptr::null_mut();
     let mut res_pitch: [f32; 672] = [0.; 672];
     let mut sRangeEnc_copy: ec_enc = ec_enc {
-        buf: 0 as *mut u8,
+        buf: std::ptr::null_mut(),
         storage: 0,
         end_offs: 0,
         end_window: 0,
@@ -275,7 +275,7 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
         error: 0,
     };
     let mut sRangeEnc_copy2: ec_enc = ec_enc {
-        buf: 0 as *mut u8,
+        buf: std::ptr::null_mut(),
         storage: 0,
         end_offs: 0,
         end_window: 0,

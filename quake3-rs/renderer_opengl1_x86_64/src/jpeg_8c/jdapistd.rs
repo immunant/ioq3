@@ -356,7 +356,7 @@ unsafe extern "C" fn output_pass_setup(mut cinfo: j_decompress_ptr) -> boolean {
             )
             .expect("non-null function pointer")(
                 cinfo,
-                0 as *mut libc::c_void as JSAMPARRAY,
+                std::ptr::null_mut() as JSAMPARRAY,
                 &mut (*cinfo).output_scanline,
                 0 as i32 as JDIMENSION,
             );

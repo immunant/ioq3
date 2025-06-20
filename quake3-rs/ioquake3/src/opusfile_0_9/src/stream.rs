@@ -37,7 +37,7 @@ unsafe extern "C" fn op_fread(
     mut _ptr: *mut u8,
     mut _buf_size: i32,
 ) -> i32 {
-    let mut stream: *mut FILE = 0 as *mut FILE;
+    let mut stream: *mut FILE = std::ptr::null_mut();
     let mut ret: size_t = 0;
     /*Check for empty read.*/
     if _buf_size <= 0 as i32 {
@@ -101,7 +101,7 @@ pub unsafe extern "C" fn op_fopen(
     mut _path: *const libc::c_char,
     mut _mode: *const libc::c_char,
 ) -> *mut libc::c_void {
-    let mut fp: *mut FILE = 0 as *mut FILE;
+    let mut fp: *mut FILE = std::ptr::null_mut();
     fp = crate::stdlib::fopen(_path, _mode);
     if !fp.is_null() {
         *_cb = OP_FILE_CALLBACKS
@@ -115,7 +115,7 @@ pub unsafe extern "C" fn op_fdopen(
     mut _fd: i32,
     mut _mode: *const libc::c_char,
 ) -> *mut libc::c_void {
-    let mut fp: *mut FILE = 0 as *mut FILE;
+    let mut fp: *mut FILE = std::ptr::null_mut();
     fp = crate::stdlib::fdopen(_fd, _mode);
     if !fp.is_null() {
         *_cb = OP_FILE_CALLBACKS
@@ -130,7 +130,7 @@ pub unsafe extern "C" fn op_freopen(
     mut _mode: *const libc::c_char,
     mut _stream: *mut libc::c_void,
 ) -> *mut libc::c_void {
-    let mut fp: *mut FILE = 0 as *mut FILE;
+    let mut fp: *mut FILE = std::ptr::null_mut();
     fp = crate::stdlib::freopen(_path, _mode, _stream as *mut FILE);
     if !fp.is_null() {
         *_cb = OP_FILE_CALLBACKS
@@ -143,7 +143,7 @@ unsafe extern "C" fn op_mem_read(
     mut _ptr: *mut u8,
     mut _buf_size: i32,
 ) -> i32 {
-    let mut stream: *mut OpusMemStream = 0 as *mut OpusMemStream;
+    let mut stream: *mut OpusMemStream = std::ptr::null_mut();
     let mut size: ptrdiff_t = 0;
     let mut pos: ptrdiff_t = 0;
     stream = _stream as *mut OpusMemStream;
@@ -178,7 +178,7 @@ unsafe extern "C" fn op_mem_seek(
     mut _offset: i64,
     mut _whence: i32,
 ) -> i32 {
-    let mut stream: *mut OpusMemStream = 0 as *mut OpusMemStream;
+    let mut stream: *mut OpusMemStream = std::ptr::null_mut();
     let mut pos: ptrdiff_t = 0;
     stream = _stream as *mut OpusMemStream;
     pos = (*stream).pos;
@@ -219,7 +219,7 @@ unsafe extern "C" fn op_mem_seek(
 }
 
 unsafe extern "C" fn op_mem_tell(mut _stream: *mut libc::c_void) -> i64 {
-    let mut stream: *mut OpusMemStream = 0 as *mut OpusMemStream;
+    let mut stream: *mut OpusMemStream = std::ptr::null_mut();
     stream = _stream as *mut OpusMemStream;
     return (*stream).pos as i64;
 }
@@ -996,9 +996,9 @@ pub unsafe extern "C" fn op_mem_stream_create(
     mut _data: *const u8,
     mut _size: size_t,
 ) -> *mut libc::c_void {
-    let mut stream: *mut OpusMemStream = 0 as *mut OpusMemStream;
+    let mut stream: *mut OpusMemStream = std::ptr::null_mut();
     if _size > !(0 as i32 as size_t) >> 1 as i32 {
-        return 0 as *mut libc::c_void;
+        return std::ptr::null_mut();
     }
     stream = crate::stdlib::malloc(::std::mem::size_of::<OpusMemStream>() as usize)
         as *mut OpusMemStream;

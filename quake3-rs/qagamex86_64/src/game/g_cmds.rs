@@ -17,7 +17,7 @@ pub mod stdlib_float_h {
     #[inline]
 
     pub unsafe extern "C" fn atof(mut __nptr: *const libc::c_char) -> f64 {
-        return libc::strtod(__nptr, 0 as *mut libc::c_void as *mut *mut libc::c_char);
+        return libc::strtod(__nptr, std::ptr::null_mut() as *mut *mut libc::c_char);
     }
 }
 
@@ -27,7 +27,7 @@ pub mod stdlib_h {
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return libc::strtol(
             __nptr,
-            0 as *mut libc::c_void as *mut *mut libc::c_char,
+            std::ptr::null_mut() as *mut *mut libc::c_char,
             10 as i32,
         ) as i32;
     }
@@ -281,7 +281,7 @@ pub unsafe extern "C" fn DeathmatchScoreboardMessage(mut ent: *mut gentity_t) {
     let mut stringlength: i32 = 0;
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut cl: *mut gclient_t = 0 as *mut gclient_t;
+    let mut cl: *mut gclient_t = std::ptr::null_mut();
     let mut numSorted: i32 = 0;
     let mut scoreFlags: i32 = 0;
     let mut accuracy: i32 = 0;
@@ -488,7 +488,7 @@ pub unsafe extern "C" fn ClientNumberFromString(
     mut checkNums: qboolean,
     mut checkNames: qboolean,
 ) -> i32 {
-    let mut cl: *mut gclient_t = 0 as *mut gclient_t;
+    let mut cl: *mut gclient_t = std::ptr::null_mut();
     let mut idnum: i32 = 0;
     let mut cleanName: [libc::c_char; 1024] = [0; 1024];
     if checkNums as u64 != 0 {
@@ -543,11 +543,11 @@ Give items to a client
 #[no_mangle]
 
 pub unsafe extern "C" fn Cmd_Give_f(mut ent: *mut gentity_t) {
-    let mut name: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut it: *mut gitem_t = 0 as *mut gitem_t;
+    let mut name: *mut libc::c_char = std::ptr::null_mut();
+    let mut it: *mut gitem_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut give_all: qboolean = qfalse;
-    let mut it_ent: *mut gentity_t = 0 as *mut gentity_t;
+    let mut it_ent: *mut gentity_t = std::ptr::null_mut();
     let mut trace: trace_t = trace_t {
         allsolid: qfalse,
         startsolid: qfalse,
@@ -677,7 +677,7 @@ argv(0) god
 #[no_mangle]
 
 pub unsafe extern "C" fn Cmd_God_f(mut ent: *mut gentity_t) {
-    let mut msg: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut msg: *mut libc::c_char = std::ptr::null_mut();
     if CheatsOk(ent) as u64 == 0 {
         return;
     }
@@ -707,7 +707,7 @@ argv(0) notarget
 #[no_mangle]
 
 pub unsafe extern "C" fn Cmd_Notarget_f(mut ent: *mut gentity_t) {
-    let mut msg: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut msg: *mut libc::c_char = std::ptr::null_mut();
     if CheatsOk(ent) as u64 == 0 {
         return;
     }
@@ -735,7 +735,7 @@ argv(0) noclip
 #[no_mangle]
 
 pub unsafe extern "C" fn Cmd_Noclip_f(mut ent: *mut gentity_t) {
-    let mut msg: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut msg: *mut libc::c_char = std::ptr::null_mut();
     if CheatsOk(ent) as u64 == 0 {
         return;
     }
@@ -914,7 +914,7 @@ SetTeam
 pub unsafe extern "C" fn SetTeam(mut ent: *mut gentity_t, mut s: *const libc::c_char) {
     let mut team: i32 = 0;
     let mut oldTeam: i32 = 0;
-    let mut client: *mut gclient_t = 0 as *mut gclient_t;
+    let mut client: *mut gclient_t = std::ptr::null_mut();
     let mut clientNum: i32 = 0;
     let mut specState: spectatorState_t = SPECTATOR_NOT;
     let mut specClient: i32 = 0;
@@ -1326,7 +1326,7 @@ pub unsafe extern "C" fn G_Say(
     mut chatText: *const libc::c_char,
 ) {
     let mut j: i32 = 0;
-    let mut other: *mut gentity_t = 0 as *mut gentity_t;
+    let mut other: *mut gentity_t = std::ptr::null_mut();
     let mut color: i32 = 0;
     let mut name: [libc::c_char; 64] = [0; 64];
     // don't let text be too long for malicious reasons
@@ -1481,7 +1481,7 @@ Cmd_Say_f
 */
 
 unsafe extern "C" fn Cmd_Say_f(mut ent: *mut gentity_t, mut mode: i32, mut arg0: qboolean) {
-    let mut p: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut p: *mut libc::c_char = std::ptr::null_mut();
     if trap_Argc() < 2 as i32 && arg0 as u64 == 0 {
         return;
     }
@@ -1491,7 +1491,7 @@ unsafe extern "C" fn Cmd_Say_f(mut ent: *mut gentity_t, mut mode: i32, mut arg0:
         p = ConcatArgs(1 as i32)
     }
     SanitizeChatText(p);
-    G_Say(ent, 0 as *mut gentity_t, mode, p);
+    G_Say(ent, std::ptr::null_mut(), mode, p);
 }
 /*
 ==================
@@ -1501,8 +1501,8 @@ Cmd_Tell_f
 
 unsafe extern "C" fn Cmd_Tell_f(mut ent: *mut gentity_t) {
     let mut targetNum: i32 = 0;
-    let mut target: *mut gentity_t = 0 as *mut gentity_t;
-    let mut p: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut target: *mut gentity_t = std::ptr::null_mut();
+    let mut p: *mut libc::c_char = std::ptr::null_mut();
     let mut arg: [libc::c_char; 1024] = [0; 1024];
     if trap_Argc() < 3 as i32 {
         trap_SendServerCommand(
@@ -1557,7 +1557,7 @@ static mut numgc_orders: i32 = 0;
 
 pub unsafe extern "C" fn Cmd_GameCommand_f(mut ent: *mut gentity_t) {
     let mut targetNum: i32 = 0;
-    let mut target: *mut gentity_t = 0 as *mut gentity_t;
+    let mut target: *mut gentity_t = std::ptr::null_mut();
     let mut order: i32 = 0;
     let mut arg: [libc::c_char; 1024] = [0; 1024];
     if trap_Argc() != 3 as i32 {
@@ -1649,7 +1649,7 @@ Cmd_CallVote_f
 #[no_mangle]
 
 pub unsafe extern "C" fn Cmd_CallVote_f(mut ent: *mut gentity_t) {
-    let mut c: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut c: *mut libc::c_char = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut arg1: [libc::c_char; 1024] = [0; 1024];
     let mut arg2: [libc::c_char; 1024] = [0; 1024];
@@ -2096,7 +2096,7 @@ Cmd_CallTeamVote_f
 #[no_mangle]
 
 pub unsafe extern "C" fn Cmd_CallTeamVote_f(mut ent: *mut gentity_t) {
-    let mut c: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut c: *mut libc::c_char = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut team: i32 = 0;
     let mut cs_offset: i32 = 0;
@@ -2745,7 +2745,7 @@ ClientCommand
 #[no_mangle]
 
 pub unsafe extern "C" fn ClientCommand(mut clientNum: i32) {
-    let mut ent: *mut gentity_t = 0 as *mut gentity_t;
+    let mut ent: *mut gentity_t = std::ptr::null_mut();
     let mut cmd: [libc::c_char; 1024] = [0; 1024];
     ent = g_entities.as_mut_ptr().offset(clientNum as isize);
     if (*ent).client.is_null()

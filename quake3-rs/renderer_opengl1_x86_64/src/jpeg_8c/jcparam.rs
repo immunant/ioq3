@@ -220,7 +220,7 @@ pub unsafe extern "C" fn jpeg_add_quant_table(
  * are limited to 1..255 for JPEG baseline compatibility.
  */
 {
-    let mut qtblptr: *mut *mut JQUANT_TBL = 0 as *mut *mut JQUANT_TBL;
+    let mut qtblptr: *mut *mut JQUANT_TBL = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut temp: isize = 0;
     /* Safety check to ensure start_compress not called yet. */
@@ -1094,7 +1094,7 @@ pub unsafe extern "C" fn jpeg_set_defaults(mut cinfo: j_compress_ptr) {
         i += 1
     }
     /* Default is no multiple-scan output */
-    (*cinfo).scan_info = 0 as *const jpeg_scan_info;
+    (*cinfo).scan_info = std::ptr::null();
     (*cinfo).num_scans = 0 as i32;
     /* Expect normal source image, not raw downsampled data */
     (*cinfo).raw_data_in = 0 as i32;
@@ -1183,7 +1183,7 @@ pub unsafe extern "C" fn jpeg_set_colorspace(
     mut cinfo: j_compress_ptr,
     mut colorspace: J_COLOR_SPACE,
 ) {
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
     let mut ci: i32 = 0;
     /* Safety check to ensure start_compress not called yet. */
     if (*cinfo).global_state != 100 as i32 {
@@ -1462,7 +1462,7 @@ unsafe extern "C" fn fill_dc_scans(
 pub unsafe extern "C" fn jpeg_simple_progression(mut cinfo: j_compress_ptr) {
     let mut ncomps: i32 = (*cinfo).num_components;
     let mut nscans: i32 = 0;
-    let mut scanptr: *mut jpeg_scan_info = 0 as *mut jpeg_scan_info;
+    let mut scanptr: *mut jpeg_scan_info = std::ptr::null_mut();
     /* Safety check to ensure start_compress not called yet. */
     if (*cinfo).global_state != 100 as i32 {
         (*(*cinfo).err).msg_code = JERR_BAD_STATE as i32;

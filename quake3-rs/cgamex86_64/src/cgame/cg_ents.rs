@@ -363,7 +363,7 @@ Also called by event processing code
 pub unsafe extern "C" fn CG_SetEntitySoundPosition(mut cent: *mut centity_t) {
     if (*cent).currentState.solid == 0xffffff as i32 {
         let mut origin: vec3_t = [0.; 3];
-        let mut v: *mut f32 = 0 as *mut f32;
+        let mut v: *mut f32 = std::ptr::null_mut();
         v = cgs.inlineModelMidpoints[(*cent).currentState.modelindex as usize].as_mut_ptr();
         origin[0 as i32 as usize] =
             (*cent).lerpOrigin[0 as i32 as usize] + *v.offset(0 as i32 as isize);
@@ -455,7 +455,7 @@ unsafe extern "C" fn CG_General(mut cent: *mut centity_t) {
         radius: 0.,
         rotation: 0.,
     };
-    let mut s1: *mut entityState_t = 0 as *mut entityState_t;
+    let mut s1: *mut entityState_t = std::ptr::null_mut();
     s1 = &mut (*cent).currentState;
     // if set to invisible, skip
     if (*s1).modelindex == 0 {
@@ -508,7 +508,7 @@ unsafe extern "C" fn CG_Speaker(mut cent: *mut centity_t) {
         return;
     }
     trap_S_StartSound(
-        0 as *mut vec_t,
+        std::ptr::null_mut(),
         (*cent).currentState.number,
         CHAN_ITEM as i32,
         cgs.gameSounds[(*cent).currentState.eventParm as usize],
@@ -550,12 +550,12 @@ unsafe extern "C" fn CG_Item(mut cent: *mut centity_t) {
         radius: 0.,
         rotation: 0.,
     };
-    let mut es: *mut entityState_t = 0 as *mut entityState_t;
-    let mut item: *mut gitem_t = 0 as *mut gitem_t;
+    let mut es: *mut entityState_t = std::ptr::null_mut();
+    let mut item: *mut gitem_t = std::ptr::null_mut();
     let mut msec: i32 = 0;
     let mut frac: f32 = 0.;
     let mut scale: f32 = 0.;
-    let mut wi: *mut weaponInfo_t = 0 as *mut weaponInfo_t;
+    let mut wi: *mut weaponInfo_t = std::ptr::null_mut();
     es = &mut (*cent).currentState;
     if (*es).modelindex >= bg_numItems {
         CG_Error(
@@ -610,7 +610,7 @@ unsafe extern "C" fn CG_Item(mut cent: *mut centity_t) {
         (*cent).lerpAngles[2 as i32 as usize] = cg.autoAngles[2 as i32 as usize];
         AxisCopy(cg.autoAxis.as_mut_ptr(), ent.axis.as_mut_ptr());
     }
-    wi = 0 as *mut weaponInfo_t;
+    wi = std::ptr::null_mut();
     // the weapons have their origin where they attatch to player
     // models, so we need to offset them or they will rotate
     // eccentricly
@@ -841,8 +841,8 @@ unsafe extern "C" fn CG_Missile(mut cent: *mut centity_t) {
         radius: 0.,
         rotation: 0.,
     };
-    let mut s1: *mut entityState_t = 0 as *mut entityState_t;
-    let mut weapon: *const weaponInfo_t = 0 as *const weaponInfo_t;
+    let mut s1: *mut entityState_t = std::ptr::null_mut();
+    let mut weapon: *const weaponInfo_t = std::ptr::null();
     //	int	col;
     s1 = &mut (*cent).currentState;
     if (*s1).weapon >= WP_NUM_WEAPONS as i32 {
@@ -977,8 +977,8 @@ unsafe extern "C" fn CG_Grapple(mut cent: *mut centity_t) {
         radius: 0.,
         rotation: 0.,
     };
-    let mut s1: *mut entityState_t = 0 as *mut entityState_t;
-    let mut weapon: *const weaponInfo_t = 0 as *const weaponInfo_t;
+    let mut s1: *mut entityState_t = std::ptr::null_mut();
+    let mut weapon: *const weaponInfo_t = std::ptr::null();
     s1 = &mut (*cent).currentState;
     if (*s1).weapon >= WP_NUM_WEAPONS as i32 {
         (*s1).weapon = 0 as i32
@@ -1046,7 +1046,7 @@ unsafe extern "C" fn CG_Mover(mut cent: *mut centity_t) {
         radius: 0.,
         rotation: 0.,
     };
-    let mut s1: *mut entityState_t = 0 as *mut entityState_t;
+    let mut s1: *mut entityState_t = std::ptr::null_mut();
     s1 = &mut (*cent).currentState;
     // create the render entity
     crate::stdlib::memset(
@@ -1114,7 +1114,7 @@ pub unsafe extern "C" fn CG_Beam(mut cent: *mut centity_t) {
         radius: 0.,
         rotation: 0.,
     };
-    let mut s1: *mut entityState_t = 0 as *mut entityState_t;
+    let mut s1: *mut entityState_t = std::ptr::null_mut();
     s1 = &mut (*cent).currentState;
     // create the render entity
     crate::stdlib::memset(
@@ -1163,7 +1163,7 @@ unsafe extern "C" fn CG_Portal(mut cent: *mut centity_t) {
         radius: 0.,
         rotation: 0.,
     };
-    let mut s1: *mut entityState_t = 0 as *mut entityState_t;
+    let mut s1: *mut entityState_t = std::ptr::null_mut();
     s1 = &mut (*cent).currentState;
     // create the render entity
     crate::stdlib::memset(
@@ -1281,7 +1281,7 @@ pub unsafe extern "C" fn CG_AdjustPositionForMover(
     mut angles_in: *mut vec_t,
     mut angles_out: *mut vec_t,
 ) {
-    let mut cent: *mut centity_t = 0 as *mut centity_t;
+    let mut cent: *mut centity_t = std::ptr::null_mut();
     let mut oldOrigin: vec3_t = [0.; 3];
     let mut origin: vec3_t = [0.; 3];
     let mut deltaOrigin: vec3_t = [0.; 3];
@@ -1823,8 +1823,8 @@ CG_AddPacketEntities
 
 pub unsafe extern "C" fn CG_AddPacketEntities() {
     let mut num: i32 = 0;
-    let mut cent: *mut centity_t = 0 as *mut centity_t;
-    let mut ps: *mut playerState_t = 0 as *mut playerState_t;
+    let mut cent: *mut centity_t = std::ptr::null_mut();
+    let mut ps: *mut playerState_t = std::ptr::null_mut();
     // set cg.frameInterpolation
     if !cg.nextSnap.is_null() {
         let mut delta: i32 = 0;

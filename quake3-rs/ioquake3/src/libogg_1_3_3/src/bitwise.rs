@@ -116,7 +116,7 @@ pub unsafe extern "C" fn oggpack_write(
     let mut current_block: u64;
     if !(bits < 0 as i32 || bits > 32 as i32) {
         if (*b).endbyte >= (*b).storage - 4 as i32 as isize {
-            let mut ret: *mut libc::c_void = 0 as *mut libc::c_void;
+            let mut ret: *mut libc::c_void = std::ptr::null_mut();
             if (*b).ptr.is_null() {
                 return;
             }
@@ -185,7 +185,7 @@ pub unsafe extern "C" fn oggpackB_write(
     let mut current_block: u64;
     if !(bits < 0 as i32 || bits > 32 as i32) {
         if (*b).endbyte >= (*b).storage - 4 as i32 as isize {
-            let mut ret: *mut libc::c_void = 0 as *mut libc::c_void;
+            let mut ret: *mut libc::c_void = std::ptr::null_mut();
             if (*b).ptr.is_null() {
                 return;
             }
@@ -273,7 +273,7 @@ unsafe extern "C" fn oggpack_writecopy_helper(
     bits -= bytes * 8 as i32 as isize;
     /* expand storage up-front */
     if (*b).endbyte + pbytes >= (*b).storage {
-        let mut ret: *mut libc::c_void = 0 as *mut libc::c_void;
+        let mut ret: *mut libc::c_void = std::ptr::null_mut();
         if (*b).ptr.is_null() {
             current_block = 1692384543052803397;
         } else if (*b).storage > (*b).endbyte + pbytes + 256 as i32 as isize {
@@ -523,7 +523,7 @@ pub unsafe extern "C" fn oggpackB_look1(mut b: *mut oggpack_buffer) -> isize {
 pub unsafe extern "C" fn oggpack_adv(mut b: *mut oggpack_buffer, mut bits: i32) {
     bits += (*b).endbit;
     if (*b).endbyte > (*b).storage - (bits + 7 as i32 >> 3 as i32) as isize {
-        (*b).ptr = 0 as *mut u8;
+        (*b).ptr = std::ptr::null_mut();
         (*b).endbyte = (*b).storage;
         (*b).endbit = 1 as i32;
         return;
@@ -609,7 +609,7 @@ pub unsafe extern "C" fn oggpack_read(mut b: *mut oggpack_buffer, mut bits: i32)
             }
         }
     }
-    (*b).ptr = 0 as *mut u8;
+    (*b).ptr = std::ptr::null_mut();
     (*b).endbyte = (*b).storage;
     (*b).endbit = 1 as i32;
     return -(1 as isize);
@@ -670,7 +670,7 @@ pub unsafe extern "C" fn oggpackB_read(mut b: *mut oggpack_buffer, mut bits: i32
             }
         }
     }
-    (*b).ptr = 0 as *mut u8;
+    (*b).ptr = std::ptr::null_mut();
     (*b).endbyte = (*b).storage;
     (*b).endbit = 1 as i32;
     return -(1 as isize);
@@ -680,7 +680,7 @@ pub unsafe extern "C" fn oggpackB_read(mut b: *mut oggpack_buffer, mut bits: i32
 pub unsafe extern "C" fn oggpack_read1(mut b: *mut oggpack_buffer) -> isize {
     let mut ret: isize = 0;
     if (*b).endbyte >= (*b).storage {
-        (*b).ptr = 0 as *mut u8;
+        (*b).ptr = std::ptr::null_mut();
         (*b).endbyte = (*b).storage;
         (*b).endbit = 1 as i32;
         return -(1 as isize);
@@ -700,7 +700,7 @@ pub unsafe extern "C" fn oggpack_read1(mut b: *mut oggpack_buffer) -> isize {
 pub unsafe extern "C" fn oggpackB_read1(mut b: *mut oggpack_buffer) -> isize {
     let mut ret: isize = 0;
     if (*b).endbyte >= (*b).storage {
-        (*b).ptr = 0 as *mut u8;
+        (*b).ptr = std::ptr::null_mut();
         (*b).endbyte = (*b).storage;
         (*b).endbit = 1 as i32;
         return -(1 as isize);

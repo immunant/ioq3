@@ -272,7 +272,7 @@ pub unsafe extern "C" fn Use_Target_Give(
     mut _other: *mut gentity_t,
     mut activator: *mut gentity_t,
 ) {
-    let mut t: *mut gentity_t = 0 as *mut gentity_t;
+    let mut t: *mut gentity_t = std::ptr::null_mut();
     let mut trace: trace_t = trace_t {
         allsolid: qfalse,
         startsolid: qfalse,
@@ -300,11 +300,11 @@ pub unsafe extern "C" fn Use_Target_Give(
         0 as i32,
         ::std::mem::size_of::<trace_t>() as usize,
     );
-    t = 0 as *mut gentity_t;
+    t = std::ptr::null_mut();
     loop {
         t = G_Find(
             t as *mut gentity_s,
-            &mut (*(0 as *mut gentity_t)).targetname as *mut *mut libc::c_char as size_t as i32,
+            &mut (*(std::ptr::null_mut())).targetname as *mut *mut libc::c_char as size_t as i32,
             (*ent).target,
         ) as *mut gentity_s;
         if t.is_null() {
@@ -560,7 +560,7 @@ pub unsafe extern "C" fn Use_Target_Speaker(
 
 pub unsafe extern "C" fn SP_target_speaker(mut ent: *mut gentity_t) {
     let mut buffer: [libc::c_char; 64] = [0; 64];
-    let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut s: *mut libc::c_char = std::ptr::null_mut();
     G_SpawnFloat(
         b"wait\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
@@ -689,8 +689,8 @@ pub unsafe extern "C" fn target_laser_think(mut self_0: *mut gentity_t) {
     trap_Trace(
         &mut tr as *mut _ as *mut trace_t,
         (*self_0).s.origin.as_mut_ptr() as *const vec_t,
-        0 as *const vec_t,
-        0 as *const vec_t,
+        std::ptr::null(),
+        std::ptr::null(),
         end.as_mut_ptr() as *const vec_t,
         (*self_0).s.number,
         1 as i32 | 0x2000000 as i32 | 0x4000000 as i32,
@@ -745,12 +745,12 @@ pub unsafe extern "C" fn target_laser_use(
 #[no_mangle]
 
 pub unsafe extern "C" fn target_laser_start(mut self_0: *mut gentity_t) {
-    let mut ent: *mut gentity_t = 0 as *mut gentity_t;
+    let mut ent: *mut gentity_t = std::ptr::null_mut();
     (*self_0).s.eType = ET_BEAM as i32;
     if !(*self_0).target.is_null() {
         ent = G_Find(
-            0 as *mut gentity_t as *mut gentity_s,
-            &mut (*(0 as *mut gentity_t)).targetname as *mut *mut libc::c_char as size_t as i32,
+            std::ptr::null_mut() as *mut gentity_s,
+            &mut (*(std::ptr::null_mut())).targetname as *mut *mut libc::c_char as size_t as i32,
             (*self_0).target,
         ) as *mut gentity_s;
         if ent.is_null() {
@@ -797,7 +797,7 @@ pub unsafe extern "C" fn target_teleporter_use(
     mut _other: *mut gentity_t,
     mut activator: *mut gentity_t,
 ) {
-    let mut dest: *mut gentity_t = 0 as *mut gentity_t;
+    let mut dest: *mut gentity_t = std::ptr::null_mut();
     if (*activator).client.is_null() {
         return;
     }
@@ -858,7 +858,7 @@ pub unsafe extern "C" fn target_relay_use(
         return;
     }
     if (*self_0).spawnflags & 4 as i32 != 0 {
-        let mut ent: *mut gentity_t = 0 as *mut gentity_t;
+        let mut ent: *mut gentity_t = std::ptr::null_mut();
         ent = G_PickTarget((*self_0).target) as *mut gentity_s;
         if !ent.is_null() && (*ent).use_0.is_some() {
             (*ent).use_0.expect("non-null function pointer")(ent, self_0, activator);
@@ -888,10 +888,10 @@ pub unsafe extern "C" fn target_kill_use(
 ) {
     G_Damage(
         activator as *mut gentity_s,
-        0 as *mut gentity_t as *mut gentity_s,
-        0 as *mut gentity_t as *mut gentity_s,
-        0 as *mut vec_t,
-        0 as *mut vec_t,
+        std::ptr::null_mut() as *mut gentity_s,
+        std::ptr::null_mut() as *mut gentity_s,
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
         100000 as i32,
         0x8 as i32,
         MOD_TELEFRAG as i32,
@@ -921,7 +921,7 @@ unsafe extern "C" fn target_location_linkup(mut ent: *mut gentity_t) {
         return;
     }
     level.locationLinked = qtrue;
-    level.locationHead = 0 as *mut gentity_t;
+    level.locationHead = std::ptr::null_mut();
     trap_SetConfigstring(
         32 as i32 + 256 as i32 + 256 as i32 + 64 as i32,
         b"unknown\x00" as *const u8 as *const libc::c_char,

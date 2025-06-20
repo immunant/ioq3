@@ -605,10 +605,10 @@ pub unsafe extern "C" fn Con_Dump_f() {
     let mut l: i32 = 0;
     let mut x: i32 = 0;
     let mut i: i32 = 0;
-    let mut line: *mut i16 = 0 as *mut i16;
+    let mut line: *mut i16 = std::ptr::null_mut();
     let mut f: fileHandle_t = 0;
     let mut bufferlen: i32 = 0;
-    let mut buffer: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut buffer: *mut libc::c_char = std::ptr::null_mut();
     let mut filename: [libc::c_char; 64] = [0; 64];
     if Cmd_Argc() != 2 as i32 {
         Com_Printf(b"usage: condump <filename>\n\x00" as *const u8 as *const libc::c_char);
@@ -1079,7 +1079,7 @@ Draws the last few lines of output transparently over the game top
 pub unsafe extern "C" fn Con_DrawNotify() {
     let mut x: i32 = 0;
     let mut v: i32 = 0;
-    let mut text: *mut i16 = 0 as *mut i16;
+    let mut text: *mut i16 = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut time: i32 = 0;
     let mut skip: i32 = 0;
@@ -1133,7 +1133,7 @@ pub unsafe extern "C" fn Con_DrawNotify() {
         }
         i += 1
     }
-    re.SetColor.expect("non-null function pointer")(0 as *const f32);
+    re.SetColor.expect("non-null function pointer")(std::ptr::null());
     if Key_GetCatcher() & (0x2 as i32 | 0x8 as i32) != 0 {
         return;
     }
@@ -1182,7 +1182,7 @@ pub unsafe extern "C" fn Con_DrawSolidConsole(mut frac: f32) {
     let mut x: i32 = 0;
     let mut y: i32 = 0;
     let mut rows: i32 = 0;
-    let mut text: *mut i16 = 0 as *mut i16;
+    let mut text: *mut i16 = std::ptr::null_mut();
     let mut row: i32 = 0;
     let mut lines: i32 = 0;
     //	qhandle_t		conShader;
@@ -1199,9 +1199,9 @@ pub unsafe extern "C" fn Con_DrawSolidConsole(mut frac: f32) {
     con.xadjust = 0 as i32 as f32;
     SCR_AdjustFrom640(
         &mut con.xadjust,
-        0 as *mut f32,
-        0 as *mut f32,
-        0 as *mut f32,
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
     );
     // draw the background
     y = (frac * 480 as i32 as f32) as i32;
@@ -1310,7 +1310,7 @@ pub unsafe extern "C" fn Con_DrawSolidConsole(mut frac: f32) {
     }
     // draw the input prompt, user text, and cursor if desired
     Con_DrawInput();
-    re.SetColor.expect("non-null function pointer")(0 as *const f32);
+    re.SetColor.expect("non-null function pointer")(std::ptr::null());
 }
 /*
 ==================

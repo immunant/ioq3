@@ -66,7 +66,7 @@ static mut s_options: optionsmenu_t = optionsmenu_t {
     banner: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -88,7 +88,7 @@ static mut s_options: optionsmenu_t = optionsmenu_t {
     framel: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -114,7 +114,7 @@ static mut s_options: optionsmenu_t = optionsmenu_t {
     framer: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -140,7 +140,7 @@ static mut s_options: optionsmenu_t = optionsmenu_t {
     graphics: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -162,7 +162,7 @@ static mut s_options: optionsmenu_t = optionsmenu_t {
     display: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -184,7 +184,7 @@ static mut s_options: optionsmenu_t = optionsmenu_t {
     sound: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -206,7 +206,7 @@ static mut s_options: optionsmenu_t = optionsmenu_t {
     network: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -228,7 +228,7 @@ static mut s_options: optionsmenu_t = optionsmenu_t {
     back: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,

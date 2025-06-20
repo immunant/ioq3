@@ -98,7 +98,7 @@ unsafe extern "C" fn CL_Netchan_Encode(mut msg: *mut msg_t) {
     let mut sbit: i32 = 0;
     let mut soob: i32 = 0;
     let mut key: byte = 0;
-    let mut string: *mut byte = 0 as *mut byte;
+    let mut string: *mut byte = std::ptr::null_mut();
     if (*msg).cursize <= 12 as i32 {
         return;
     }
@@ -154,7 +154,7 @@ unsafe extern "C" fn CL_Netchan_Decode(mut msg: *mut msg_t) {
     let mut i: isize = 0;
     let mut index: isize = 0;
     let mut key: byte = 0;
-    let mut string: *mut byte = 0 as *mut byte;
+    let mut string: *mut byte = std::ptr::null_mut();
     let mut srdc: i32 = 0;
     let mut sbit: i32 = 0;
     let mut soob: i32 = 0;

@@ -122,7 +122,7 @@ static mut s_main: mainmenu_t = mainmenu_t {
     singleplayer: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -144,7 +144,7 @@ static mut s_main: mainmenu_t = mainmenu_t {
     multiplayer: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -166,7 +166,7 @@ static mut s_main: mainmenu_t = mainmenu_t {
     setup: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -188,7 +188,7 @@ static mut s_main: mainmenu_t = mainmenu_t {
     demos: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -210,7 +210,7 @@ static mut s_main: mainmenu_t = mainmenu_t {
     cinematics: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -232,7 +232,7 @@ static mut s_main: mainmenu_t = mainmenu_t {
     teamArena: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -254,7 +254,7 @@ static mut s_main: mainmenu_t = mainmenu_t {
     mods: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -276,7 +276,7 @@ static mut s_main: mainmenu_t = mainmenu_t {
     exit: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -554,8 +554,8 @@ UI_TeamArenaExists
 unsafe extern "C" fn UI_TeamArenaExists() -> qboolean {
     let mut numdirs: i32 = 0;
     let mut dirlist: [libc::c_char; 2048] = [0; 2048];
-    let mut dirptr: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut descptr: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut dirptr: *mut libc::c_char = std::ptr::null_mut();
+    let mut descptr: *mut libc::c_char = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut dirlen: i32 = 0;
     numdirs = trap_FS_GetFileList(
@@ -654,8 +654,7 @@ pub unsafe extern "C" fn UI_MainMenu() {
             key.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 17]>() as usize as i32,
         );
-        if trap_VerifyCDKey(key.as_mut_ptr(), 0 as *const libc::c_char) as u32
-            == qfalse as i32 as u32
+        if trap_VerifyCDKey(key.as_mut_ptr(), std::ptr::null()) as u32 == qfalse as i32 as u32
         {
             UI_CDKeyMenu();
             return;

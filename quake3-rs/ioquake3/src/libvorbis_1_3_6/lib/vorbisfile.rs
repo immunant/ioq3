@@ -408,9 +408,9 @@ unsafe extern "C" fn _get_prev_page_serial(
     mut granpos: *mut ogg_int64_t,
 ) -> ogg_int64_t {
     let mut og: ogg_page = ogg_page {
-        header: 0 as *mut u8,
+        header: std::ptr::null_mut(),
         header_len: 0,
-        body: 0 as *mut u8,
+        body: std::ptr::null_mut(),
         body_len: 0,
     };
     let mut end: ogg_int64_t = begin;
@@ -473,13 +473,13 @@ unsafe extern "C" fn _fetch_headers(
 ) -> i32 {
     let mut current_block: u64;
     let mut og: ogg_page = ogg_page {
-        header: 0 as *mut u8,
+        header: std::ptr::null_mut(),
         header_len: 0,
-        body: 0 as *mut u8,
+        body: std::ptr::null_mut(),
         body_len: 0,
     };
     let mut op: ogg_packet = ogg_packet {
-        packet: 0 as *mut u8,
+        packet: std::ptr::null_mut(),
         bytes: 0,
         b_o_s: 0,
         e_o_s: 0,
@@ -516,7 +516,7 @@ unsafe extern "C" fn _fetch_headers(
                 if !(*serialno_list).is_null() {
                     libc::free(*serialno_list as *mut libc::c_void);
                 }
-                *serialno_list = 0 as *mut isize;
+                *serialno_list = std::ptr::null_mut();
                 *serialno_n = 0 as i32;
                 ret = -(133 as i32);
                 current_block = 5963935241184096755;
@@ -675,9 +675,9 @@ unsafe extern "C" fn _initial_pcmoffset(
     mut vi: *mut vorbis_info,
 ) -> ogg_int64_t {
     let mut og: ogg_page = ogg_page {
-        header: 0 as *mut u8,
+        header: std::ptr::null_mut(),
         header_len: 0,
-        body: 0 as *mut u8,
+        body: std::ptr::null_mut(),
         body_len: 0,
     }; /* should not be possible unless the file is truncated/mangled */
     let mut accumulated: ogg_int64_t = 0 as i32 as ogg_int64_t;
@@ -686,7 +686,7 @@ unsafe extern "C" fn _initial_pcmoffset(
     let mut serialno: i32 = (*vf).os.serialno as i32;
     loop {
         let mut op: ogg_packet = ogg_packet {
-            packet: 0 as *mut u8,
+            packet: std::ptr::null_mut(),
             bytes: 0,
             b_o_s: 0,
             e_o_s: 0,
@@ -766,9 +766,9 @@ unsafe extern "C" fn _bisect_forward_serialno(
     let mut next: ogg_int64_t = end;
     let mut searchgran: ogg_int64_t = -(1 as i32) as ogg_int64_t;
     let mut og: ogg_page = ogg_page {
-        header: 0 as *mut u8,
+        header: std::ptr::null_mut(),
         header_len: 0,
-        body: 0 as *mut u8,
+        body: std::ptr::null_mut(),
         body_len: 0,
     };
     let mut ret: ogg_int64_t = 0;
@@ -843,7 +843,7 @@ unsafe extern "C" fn _bisect_forward_serialno(
         /* last page is not in the starting stream's serial number list,
         so we have multiple links.  Find where the stream that begins
         our bisection ends. */
-        let mut next_serialno_list: *mut isize = 0 as *mut isize;
+        let mut next_serialno_list: *mut isize = std::ptr::null_mut();
         let mut next_serialnos: i32 = 0 as i32;
         let mut vi: vorbis_info = vorbis_info {
             version: 0,
@@ -853,13 +853,13 @@ unsafe extern "C" fn _bisect_forward_serialno(
             bitrate_nominal: 0,
             bitrate_lower: 0,
             bitrate_window: 0,
-            codec_setup: 0 as *mut libc::c_void,
+            codec_setup: std::ptr::null_mut(),
         };
         let mut vc: vorbis_comment = vorbis_comment {
-            user_comments: 0 as *mut *mut libc::c_char,
-            comment_lengths: 0 as *mut i32,
+            user_comments: std::ptr::null_mut(),
+            comment_lengths: std::ptr::null_mut(),
             comments: 0,
-            vendor: 0 as *mut libc::c_char,
+            vendor: std::ptr::null_mut(),
         };
         let mut testserial: i32 = serialno + 1 as i32;
         /* the below guards against garbage seperating the last and
@@ -914,7 +914,7 @@ unsafe extern "C" fn _bisect_forward_serialno(
             &mut vc,
             &mut next_serialno_list,
             &mut next_serialnos,
-            0 as *mut ogg_page,
+            std::ptr::null_mut(),
         ) as ogg_int64_t;
         if ret != 0 {
             return ret as i32;
@@ -1106,9 +1106,9 @@ unsafe extern "C" fn _fetch_and_process_packet(
     mut spanp: i32,
 ) -> i32 {
     let mut og: ogg_page = ogg_page {
-        header: 0 as *mut u8,
+        header: std::ptr::null_mut(),
         header_len: 0,
-        body: 0 as *mut u8,
+        body: std::ptr::null_mut(),
         body_len: 0,
     };
     loop
@@ -1126,7 +1126,7 @@ unsafe extern "C" fn _fetch_and_process_packet(
             let mut hs: i32 = vorbis_synthesis_halfrate_p((*vf).vi as *mut vorbis_info); /* hole in the data. */
             loop {
                 let mut op: ogg_packet = ogg_packet {
-                    packet: 0 as *mut u8,
+                    packet: std::ptr::null_mut(),
                     bytes: 0,
                     b_o_s: 0,
                     e_o_s: 0,
@@ -1139,7 +1139,7 @@ unsafe extern "C" fn _fetch_and_process_packet(
                     op_ptr as *mut ogg_packet,
                 );
                 let mut granulepos: ogg_int64_t = 0;
-                op_in = 0 as *mut ogg_packet;
+                op_in = std::ptr::null_mut();
                 if result == -(1 as i32) {
                     return -(3 as i32);
                 }
@@ -1163,7 +1163,7 @@ unsafe extern "C" fn _fetch_and_process_packet(
                     /* suck in the synthesis data and track bitrate */
                     let mut oldsamples: i32 = vorbis_synthesis_pcmout(
                         &mut (*vf).vd as *mut _ as *mut vorbis_dsp_state,
-                        0 as *mut *mut *mut f32,
+                        std::ptr::null_mut(),
                     );
                     /* for proper use of libvorbis within libvorbisfile,
                     oldsamples will always be zero. */
@@ -1176,7 +1176,7 @@ unsafe extern "C" fn _fetch_and_process_packet(
                     );
                     (*vf).samptrack += (vorbis_synthesis_pcmout(
                         &mut (*vf).vd as *mut _ as *mut vorbis_dsp_state,
-                        0 as *mut *mut *mut f32,
+                        std::ptr::null_mut(),
                     ) << hs) as f64;
                     (*vf).bittrack += ((*op_ptr).bytes * 8 as i32 as isize) as f64;
                     /* update the pcm offset. */
@@ -1211,7 +1211,7 @@ unsafe extern "C" fn _fetch_and_process_packet(
                         }
                         samples = vorbis_synthesis_pcmout(
                             &mut (*vf).vd as *mut _ as *mut vorbis_dsp_state,
-                            0 as *mut *mut *mut f32,
+                            std::ptr::null_mut(),
                         ) << hs;
                         granulepos -= samples as isize;
                         i = 0 as i32;
@@ -1318,8 +1318,8 @@ unsafe extern "C" fn _fetch_and_process_packet(
                         vf,
                         (*vf).vi,
                         (*vf).vc,
-                        0 as *mut *mut isize,
-                        0 as *mut i32,
+                        std::ptr::null_mut(),
+                        std::ptr::null_mut(),
                         &mut og,
                     );
                     if ret_1 != 0 {
@@ -1365,7 +1365,7 @@ unsafe extern "C" fn _ov_open1(
     } else {
         -(1 as i32)
     };
-    let mut serialno_list: *mut isize = 0 as *mut isize;
+    let mut serialno_list: *mut isize = std::ptr::null_mut();
     let mut serialno_list_size: i32 = 0 as i32;
     let mut ret: i32 = 0;
     crate::stdlib::memset(
@@ -1419,10 +1419,10 @@ unsafe extern "C" fn _ov_open1(
         (*vf).vc,
         &mut serialno_list,
         &mut serialno_list_size,
-        0 as *mut ogg_page,
+        std::ptr::null_mut(),
     );
     if ret < 0 as i32 {
-        (*vf).datasource = 0 as *mut libc::c_void;
+        (*vf).datasource = std::ptr::null_mut();
         ov_clear(vf);
     } else {
         /* serial number list for first link needs to be held somewhere
@@ -1468,7 +1468,7 @@ unsafe extern "C" fn _ov_open2(
     if (*vf).seekable != 0 {
         let mut ret: i32 = _open_seekable2(vf);
         if ret != 0 {
-            (*vf).datasource = 0 as *mut libc::c_void;
+            (*vf).datasource = std::ptr::null_mut();
             ov_clear(vf);
         }
         return ret;
@@ -1619,7 +1619,7 @@ pub unsafe extern "C" fn ov_fopen(
     if f.is_null() {
         return -(1 as i32);
     }
-    ret = ov_open(f, vf, 0 as *const libc::c_char, 0 as i32 as isize);
+    ret = ov_open(f, vf, std::ptr::null(), 0 as i32 as isize);
     if ret != 0 {
         crate::stdlib::fclose(f);
     }
@@ -1989,12 +1989,12 @@ pub unsafe extern "C" fn ov_raw_seek(
     mut pos: ogg_int64_t,
 ) -> i32 {
     let mut work_os: ogg_stream_state = ogg_stream_state {
-        body_data: 0 as *mut u8,
+        body_data: std::ptr::null_mut(),
         body_storage: 0,
         body_fill: 0,
         body_returned: 0,
-        lacing_vals: 0 as *mut i32,
-        granule_vals: 0 as *mut ogg_int64_t,
+        lacing_vals: std::ptr::null_mut(),
+        granule_vals: std::ptr::null_mut(),
         lacing_storage: 0,
         lacing_fill: 0,
         lacing_packet: 0,
@@ -2063,13 +2063,13 @@ pub unsafe extern "C" fn ov_raw_seek(
            correct.
         */
         let mut og: ogg_page = ogg_page {
-            header: 0 as *mut u8,
+            header: std::ptr::null_mut(),
             header_len: 0,
-            body: 0 as *mut u8,
+            body: std::ptr::null_mut(),
             body_len: 0,
         }; /* get the memory ready */
         let mut op: ogg_packet = ogg_packet {
-            packet: 0 as *mut u8,
+            packet: std::ptr::null_mut(),
             bytes: 0,
             b_o_s: 0,
             e_o_s: 0,
@@ -2108,13 +2108,13 @@ pub unsafe extern "C" fn ov_raw_seek(
                         if thisblock < 0 as i32 {
                             ogg_stream_packetout(
                                 &mut (*vf).os as *mut _ as *mut ogg_stream_state,
-                                0 as *mut ogg_packet as *mut ogg_packet,
+                                std::ptr::null_mut() as *mut ogg_packet,
                             );
                             thisblock = 0 as i32
                         } else if lastflag != 0 && firstflag == 0 {
                             ogg_stream_packetout(
                                 &mut (*vf).os as *mut _ as *mut ogg_stream_state,
-                                0 as *mut ogg_packet as *mut ogg_packet,
+                                std::ptr::null_mut() as *mut ogg_packet,
                             );
                         } else if lastblock != 0 {
                             accblock += lastblock + thisblock >> 2 as i32
@@ -2145,7 +2145,7 @@ pub unsafe extern "C" fn ov_raw_seek(
                     } else {
                         ogg_stream_packetout(
                             &mut (*vf).os as *mut _ as *mut ogg_stream_state,
-                            0 as *mut ogg_packet as *mut ogg_packet,
+                            std::ptr::null_mut() as *mut ogg_packet,
                         );
                     }
                 }
@@ -2287,9 +2287,9 @@ pub unsafe extern "C" fn ov_pcm_seek_page(
     let mut best: ogg_int64_t = -(1 as i32) as ogg_int64_t;
     let mut got_page: i32 = 0 as i32;
     let mut og: ogg_page = ogg_page {
-        header: 0 as *mut u8,
+        header: std::ptr::null_mut(),
         header_len: 0,
-        body: 0 as *mut u8,
+        body: std::ptr::null_mut(),
         body_len: 0,
     };
     /* if we have only one page, there will be no bisection.  Grab the page here */
@@ -2478,13 +2478,13 @@ pub unsafe extern "C" fn ov_pcm_seek_page(
                         /* Bisection found our page. seek to it, update pcm offset. Easier case than
                         raw_seek, don't keep packets preceding granulepos. */
                         let mut og_0: ogg_page = ogg_page {
-                            header: 0 as *mut u8,
+                            header: std::ptr::null_mut(),
                             header_len: 0,
-                            body: 0 as *mut u8,
+                            body: std::ptr::null_mut(),
                             body_len: 0,
                         };
                         let mut op: ogg_packet = ogg_packet {
-                            packet: 0 as *mut u8,
+                            packet: std::ptr::null_mut(),
                             bytes: 0,
                             b_o_s: 0,
                             e_o_s: 0,
@@ -2576,7 +2576,7 @@ pub unsafe extern "C" fn ov_pcm_seek_page(
                             } else {
                                 result = ogg_stream_packetout(
                                     &mut (*vf).os as *mut _ as *mut ogg_stream_state,
-                                    0 as *mut ogg_packet as *mut ogg_packet,
+                                    std::ptr::null_mut() as *mut ogg_packet,
                                 ) as ogg_int64_t
                             }
                         }
@@ -2618,7 +2618,7 @@ pub unsafe extern "C" fn ov_pcm_seek(
     position we want; don't decode them */
     {
         let mut op: ogg_packet = ogg_packet {
-            packet: 0 as *mut u8,
+            packet: std::ptr::null_mut(),
             bytes: 0,
             b_o_s: 0,
             e_o_s: 0,
@@ -2626,9 +2626,9 @@ pub unsafe extern "C" fn ov_pcm_seek(
             packetno: 0,
         };
         let mut og: ogg_page = ogg_page {
-            header: 0 as *mut u8,
+            header: std::ptr::null_mut(),
             header_len: 0,
-            body: 0 as *mut u8,
+            body: std::ptr::null_mut(),
             body_len: 0,
         };
         let mut ret_0: i32 = ogg_stream_packetpeek(
@@ -2643,7 +2643,7 @@ pub unsafe extern "C" fn ov_pcm_seek(
             if thisblock < 0 as i32 {
                 ogg_stream_packetout(
                     &mut (*vf).os as *mut _ as *mut ogg_stream_state,
-                    0 as *mut ogg_packet as *mut ogg_packet,
+                    std::ptr::null_mut() as *mut ogg_packet,
                 );
             /* non audio packet */
             } else {
@@ -2660,7 +2660,7 @@ pub unsafe extern "C" fn ov_pcm_seek(
                 /* remove the packet from packet queue and track its granulepos */
                 ogg_stream_packetout(
                     &mut (*vf).os as *mut _ as *mut ogg_stream_state,
-                    0 as *mut ogg_packet as *mut ogg_packet,
+                    std::ptr::null_mut() as *mut ogg_packet,
                 ); /* set up a vb with
                    only tracking, no
                    pcm_decode */
@@ -2749,7 +2749,7 @@ pub unsafe extern "C" fn ov_pcm_seek(
         let mut target: ogg_int64_t = pos - (*vf).pcm_offset >> hs;
         let mut samples: isize = vorbis_synthesis_pcmout(
             &mut (*vf).vd as *mut _ as *mut vorbis_dsp_state,
-            0 as *mut *mut *mut f32,
+            std::ptr::null_mut(),
         ) as isize;
         if samples > target {
             samples = target
@@ -2760,7 +2760,7 @@ pub unsafe extern "C" fn ov_pcm_seek(
         );
         (*vf).pcm_offset += samples << hs;
         if samples < target {
-            if _fetch_and_process_packet(vf, 0 as *mut ogg_packet, 1 as i32, 1 as i32) <= 0 as i32 {
+            if _fetch_and_process_packet(vf, std::ptr::null_mut(), 1 as i32, 1 as i32) <= 0 as i32 {
                 (*vf).pcm_offset = ov_pcm_total(vf, -(1 as i32))
             }
         }
@@ -2929,7 +2929,7 @@ pub unsafe extern "C" fn ov_info(
                 return (*vf).vi;
             }
         } else if link >= (*vf).links {
-            return 0 as *mut vorbis_info;
+            return std::ptr::null_mut();
         } else {
             return (*vf).vi.offset(link as isize);
         }
@@ -2952,7 +2952,7 @@ pub unsafe extern "C" fn ov_comment(
                 return (*vf).vc;
             }
         } else if link >= (*vf).links {
-            return 0 as *mut vorbis_comment;
+            return std::ptr::null_mut();
         } else {
             return (*vf).vc.offset(link as isize);
         }
@@ -3023,7 +3023,7 @@ pub unsafe extern "C" fn ov_read_filter(
     let mut j: i32 = 0;
     let mut host_endian: i32 = host_is_big_endian();
     let mut hs: i32 = 0;
-    let mut pcm: *mut *mut f32 = 0 as *mut *mut f32;
+    let mut pcm: *mut *mut f32 = std::ptr::null_mut();
     let mut samples: isize = 0;
     if (*vf).ready_state < 2 as i32 {
         return -(131 as i32) as isize;
@@ -3038,7 +3038,7 @@ pub unsafe extern "C" fn ov_read_filter(
             }
         }
         /* suck in another packet */
-        let mut ret: i32 = _fetch_and_process_packet(vf, 0 as *mut ogg_packet, 1 as i32, 1 as i32);
+        let mut ret: i32 = _fetch_and_process_packet(vf, std::ptr::null_mut(), 1 as i32, 1 as i32);
         if ret == -(2 as i32) {
             return 0 as i32 as isize;
         }
@@ -3222,7 +3222,7 @@ pub unsafe extern "C" fn ov_read(
         sgned,
         bitstream,
         None,
-        0 as *mut libc::c_void,
+        std::ptr::null_mut(),
     );
 }
 /* input values: pcm_channels) a float vector per channel of output
@@ -3249,7 +3249,7 @@ pub unsafe extern "C" fn ov_read_float(
     }
     loop {
         if (*vf).ready_state == 4 as i32 {
-            let mut pcm: *mut *mut f32 = 0 as *mut *mut f32;
+            let mut pcm: *mut *mut f32 = std::ptr::null_mut();
             let mut samples: isize =
                 vorbis_synthesis_pcmout(&mut (*vf).vd as *mut _ as *mut vorbis_dsp_state, &mut pcm)
                     as isize;
@@ -3273,7 +3273,7 @@ pub unsafe extern "C" fn ov_read_float(
             }
         }
         /* suck in another packet */
-        let mut ret: i32 = _fetch_and_process_packet(vf, 0 as *mut ogg_packet, 1 as i32, 1 as i32);
+        let mut ret: i32 = _fetch_and_process_packet(vf, std::ptr::null_mut(), 1 as i32, 1 as i32);
         if ret == -(2 as i32) {
             return 0 as i32 as isize;
         }
@@ -3334,7 +3334,7 @@ unsafe extern "C" fn _ov_initset(
 ) -> i32 {
     while !((*vf).ready_state == 4 as i32) {
         /* suck in another packet */
-        let mut ret: i32 = _fetch_and_process_packet(vf, 0 as *mut ogg_packet, 1 as i32, 0 as i32);
+        let mut ret: i32 = _fetch_and_process_packet(vf, std::ptr::null_mut(), 1 as i32, 0 as i32);
         if ret < 0 as i32 && ret != -(3 as i32) {
             return ret;
         }
@@ -3351,12 +3351,12 @@ unsafe extern "C" fn _ov_initprime(
     let mut vd: *mut vorbis_dsp_state = &mut (*vf).vd;
     loop {
         if (*vf).ready_state == 4 as i32 {
-            if vorbis_synthesis_pcmout(vd as *mut vorbis_dsp_state, 0 as *mut *mut *mut f32) != 0 {
+            if vorbis_synthesis_pcmout(vd as *mut vorbis_dsp_state, std::ptr::null_mut()) != 0 {
                 break;
             }
         }
         /* suck in another packet */
-        let mut ret: i32 = _fetch_and_process_packet(vf, 0 as *mut ogg_packet, 1 as i32, 0 as i32);
+        let mut ret: i32 = _fetch_and_process_packet(vf, std::ptr::null_mut(), 1 as i32, 0 as i32);
         if ret < 0 as i32 && ret != -(3 as i32) {
             return ret;
         }
@@ -3376,7 +3376,7 @@ unsafe extern "C" fn _ov_getlap(
 ) {
     let mut lapcount: i32 = 0 as i32;
     let mut i: i32 = 0;
-    let mut pcm: *mut *mut f32 = 0 as *mut *mut f32;
+    let mut pcm: *mut *mut f32 = std::ptr::null_mut();
     /* try first to decode the lapping data */
     while lapcount < lapsize {
         let mut samples: i32 = vorbis_synthesis_pcmout(vd as *mut vorbis_dsp_state, &mut pcm);
@@ -3398,7 +3398,7 @@ unsafe extern "C" fn _ov_getlap(
         } else {
             /* suck in another packet */
             let mut ret: i32 =
-                _fetch_and_process_packet(vf, 0 as *mut ogg_packet, 1 as i32, 0 as i32); /* do *not* span */
+                _fetch_and_process_packet(vf, std::ptr::null_mut(), 1 as i32, 0 as i32); /* do *not* span */
             if ret == -(2 as i32) {
                 break;
             }
@@ -3448,12 +3448,12 @@ pub unsafe extern "C" fn ov_crosslap(
     mut vf1: *mut crate::src::libvorbis_1_3_6::lib::vorbisfile::OggVorbis_File,
     mut vf2: *mut crate::src::libvorbis_1_3_6::lib::vorbisfile::OggVorbis_File,
 ) -> i32 {
-    let mut vi1: *mut vorbis_info = 0 as *mut vorbis_info; /* degenerate case */
-    let mut vi2: *mut vorbis_info = 0 as *mut vorbis_info;
-    let mut lappcm: *mut *mut f32 = 0 as *mut *mut f32;
-    let mut pcm: *mut *mut f32 = 0 as *mut *mut f32;
-    let mut w1: *const f32 = 0 as *const f32;
-    let mut w2: *const f32 = 0 as *const f32;
+    let mut vi1: *mut vorbis_info = std::ptr::null_mut(); /* degenerate case */
+    let mut vi2: *mut vorbis_info = std::ptr::null_mut();
+    let mut lappcm: *mut *mut f32 = std::ptr::null_mut();
+    let mut pcm: *mut *mut f32 = std::ptr::null_mut();
+    let mut w1: *const f32 = std::ptr::null();
+    let mut w2: *const f32 = std::ptr::null();
     let mut n1: i32 = 0;
     let mut n2: i32 = 0;
     let mut i: i32 = 0;
@@ -3537,11 +3537,11 @@ unsafe extern "C" fn _ov_64_seek_lap(
         ) -> i32,
     >,
 ) -> i32 {
-    let mut vi: *mut vorbis_info = 0 as *mut vorbis_info;
-    let mut lappcm: *mut *mut f32 = 0 as *mut *mut f32;
-    let mut pcm: *mut *mut f32 = 0 as *mut *mut f32;
-    let mut w1: *const f32 = 0 as *const f32;
-    let mut w2: *const f32 = 0 as *const f32;
+    let mut vi: *mut vorbis_info = std::ptr::null_mut();
+    let mut lappcm: *mut *mut f32 = std::ptr::null_mut();
+    let mut pcm: *mut *mut f32 = std::ptr::null_mut();
+    let mut w1: *const f32 = std::ptr::null();
+    let mut w2: *const f32 = std::ptr::null();
     let mut n1: i32 = 0;
     let mut n2: i32 = 0;
     let mut ch1: i32 = 0;
@@ -3666,11 +3666,11 @@ unsafe extern "C" fn _ov_d_seek_lap(
         ) -> i32,
     >,
 ) -> i32 {
-    let mut vi: *mut vorbis_info = 0 as *mut vorbis_info;
-    let mut lappcm: *mut *mut f32 = 0 as *mut *mut f32;
-    let mut pcm: *mut *mut f32 = 0 as *mut *mut f32;
-    let mut w1: *const f32 = 0 as *const f32;
-    let mut w2: *const f32 = 0 as *const f32;
+    let mut vi: *mut vorbis_info = std::ptr::null_mut();
+    let mut lappcm: *mut *mut f32 = std::ptr::null_mut();
+    let mut pcm: *mut *mut f32 = std::ptr::null_mut();
+    let mut w1: *const f32 = std::ptr::null();
+    let mut w2: *const f32 = std::ptr::null();
     let mut n1: i32 = 0;
     let mut n2: i32 = 0;
     let mut ch1: i32 = 0;

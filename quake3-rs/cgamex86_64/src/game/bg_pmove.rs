@@ -486,7 +486,7 @@ Handles both ground friction and water friction
 
 unsafe extern "C" fn PM_Friction() {
     let mut vec: vec3_t = [0.; 3];
-    let mut vel: *mut f32 = 0 as *mut f32;
+    let mut vel: *mut f32 = std::ptr::null_mut();
     let mut speed: f32 = 0.;
     let mut newspeed: f32 = 0.;
     let mut control: f32 = 0.;

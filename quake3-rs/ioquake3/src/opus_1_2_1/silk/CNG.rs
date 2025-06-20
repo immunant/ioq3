@@ -592,7 +592,7 @@ pub unsafe extern "C" fn silk_CNG(
     }
     /* Add CNG when packet is lost or during DTX */
     if (*psDec).lossCnt != 0 {
-        let mut CNG_sig_Q14: *mut opus_int32 = 0 as *mut opus_int32;
+        let mut CNG_sig_Q14: *mut opus_int32 = std::ptr::null_mut();
         let mut fresh0 = ::std::vec::from_elem(
             0,
             (::std::mem::size_of::<opus_int32>() as usize)

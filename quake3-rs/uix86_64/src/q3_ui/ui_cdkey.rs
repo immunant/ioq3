@@ -77,7 +77,7 @@ static mut cdkeyMenuInfo: cdkeyMenuInfo_t = cdkeyMenuInfo_t {
     banner: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -99,7 +99,7 @@ static mut cdkeyMenuInfo: cdkeyMenuInfo_t = cdkeyMenuInfo_t {
     frame: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -125,7 +125,7 @@ static mut cdkeyMenuInfo: cdkeyMenuInfo_t = cdkeyMenuInfo_t {
     cdkey: menufield_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -151,7 +151,7 @@ static mut cdkeyMenuInfo: cdkeyMenuInfo_t = cdkeyMenuInfo_t {
     accept: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -177,7 +177,7 @@ static mut cdkeyMenuInfo: cdkeyMenuInfo_t = cdkeyMenuInfo_t {
     back: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -260,11 +260,11 @@ UI_CDKeyMenu_DrawKey
 */
 
 unsafe extern "C" fn UI_CDKeyMenu_DrawKey(mut self_0: *mut libc::c_void) {
-    let mut f: *mut menufield_s = 0 as *mut menufield_s;
+    let mut f: *mut menufield_s = std::ptr::null_mut();
     let mut focus: qboolean = qfalse;
     let mut style: i32 = 0;
     let mut c: libc::c_char = 0;
-    let mut color: *mut f32 = 0 as *mut f32;
+    let mut color: *mut f32 = std::ptr::null_mut();
     let mut x: i32 = 0;
     let mut y: i32 = 0;
     let mut val: i32 = 0;
@@ -426,7 +426,7 @@ unsafe extern "C" fn UI_CDKeyMenu_Init() {
     );
     if trap_VerifyCDKey(
         cdkeyMenuInfo.cdkey.field.buffer.as_mut_ptr(),
-        0 as *const libc::c_char,
+        std::ptr::null(),
     ) as u32
         == qfalse as i32 as u32
     {

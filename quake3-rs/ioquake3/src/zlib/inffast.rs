@@ -95,20 +95,20 @@ pub use crate::zlib_h::z_streamp;
 pub unsafe extern "C" fn inflate_fast(mut strm: z_streamp, mut start: u32)
 /* inflate()'s starting value for strm->avail_out */
 {
-    let mut state: *mut inflate_state = 0 as *mut inflate_state; /* local strm->next_in */
-    let mut in_0: *mut u8 = 0 as *mut u8; /* while in < last, enough input available */
-    let mut last: *mut u8 = 0 as *mut u8; /* local strm->next_out */
-    let mut out: *mut u8 = 0 as *mut u8; /* inflate()'s initial strm->next_out */
-    let mut beg: *mut u8 = 0 as *mut u8; /* while out < end, enough space available */
-    let mut end: *mut u8 = 0 as *mut u8; /* window size or zero if not using window */
+    let mut state: *mut inflate_state = std::ptr::null_mut(); /* local strm->next_in */
+    let mut in_0: *mut u8 = std::ptr::null_mut(); /* while in < last, enough input available */
+    let mut last: *mut u8 = std::ptr::null_mut(); /* local strm->next_out */
+    let mut out: *mut u8 = std::ptr::null_mut(); /* inflate()'s initial strm->next_out */
+    let mut beg: *mut u8 = std::ptr::null_mut(); /* while out < end, enough space available */
+    let mut end: *mut u8 = std::ptr::null_mut(); /* window size or zero if not using window */
     let mut wsize: u32 = 0; /* valid bytes in the window */
     let mut whave: u32 = 0; /* window write index */
     let mut write: u32 = 0; /* allocated sliding window, if wsize != 0 */
-    let mut window: *mut u8 = 0 as *mut u8; /* local strm->hold */
+    let mut window: *mut u8 = std::ptr::null_mut(); /* local strm->hold */
     let mut hold: usize = 0; /* local strm->bits */
     let mut bits: u32 = 0; /* local strm->lencode */
-    let mut lcode: *const code = 0 as *const code; /* local strm->distcode */
-    let mut dcode: *const code = 0 as *const code; /* mask for first level of length codes */
+    let mut lcode: *const code = std::ptr::null(); /* local strm->distcode */
+    let mut dcode: *const code = std::ptr::null(); /* mask for first level of length codes */
     let mut lmask: u32 = 0; /* mask for first level of distance codes */
     let mut dmask: u32 = 0; /* retrieved table entry */
     let mut this: code = code {
@@ -120,7 +120,7 @@ pub unsafe extern "C" fn inflate_fast(mut strm: z_streamp, mut start: u32)
     let mut op: u32 = 0; /* match length, unused bytes */
     let mut len: u32 = 0; /* match distance */
     let mut dist: u32 = 0; /* where to copy match from */
-    let mut from: *mut u8 = 0 as *mut u8;
+    let mut from: *mut u8 = std::ptr::null_mut();
     /* copy state to local variables */
     state = (*strm).state as *mut inflate_state;
     in_0 = (*strm).next_in.offset(-(1 as i32 as isize));

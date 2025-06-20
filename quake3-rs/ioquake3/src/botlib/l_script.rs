@@ -633,12 +633,11 @@ pub unsafe extern "C" fn PS_CreatePunctuationTable(
     mut punctuations: *mut crate::src::botlib::l_script::punctuation_t,
 ) {
     let mut i: i32 = 0;
-    let mut p: *mut crate::src::botlib::l_script::punctuation_t =
-        0 as *mut crate::src::botlib::l_script::punctuation_t;
+    let mut p: *mut crate::src::botlib::l_script::punctuation_t = std::ptr::null_mut();
     let mut lastp: *mut crate::src::botlib::l_script::punctuation_t =
-        0 as *mut crate::src::botlib::l_script::punctuation_t;
+        std::ptr::null_mut();
     let mut newp: *mut crate::src::botlib::l_script::punctuation_t =
-        0 as *mut crate::src::botlib::l_script::punctuation_t;
+        std::ptr::null_mut();
     //get memory for the table
     if (*script).punctuationtable.is_null() {
         (*script).punctuationtable =
@@ -658,7 +657,7 @@ pub unsafe extern "C" fn PS_CreatePunctuationTable(
     while !(*punctuations.offset(i as isize)).p.is_null() {
         newp = &mut *punctuations.offset(i as isize)
             as *mut crate::src::botlib::l_script::punctuation_t;
-        lastp = 0 as *mut crate::src::botlib::l_script::punctuation_t;
+        lastp = std::ptr::null_mut();
         //end if
         p = *(*script)
             .punctuationtable
@@ -683,7 +682,7 @@ pub unsafe extern "C" fn PS_CreatePunctuationTable(
             }
         }
         if p.is_null() {
-            (*newp).next = 0 as *mut crate::src::botlib::l_script::punctuation_s;
+            (*newp).next = std::ptr::null_mut();
             if !lastp.is_null() {
                 (*lastp).next = newp
             } else {
@@ -1036,7 +1035,7 @@ pub unsafe extern "C" fn PS_ReadString(
 ) -> i32 {
     let mut len: i32 = 0;
     let mut tmpline: i32 = 0;
-    let mut tmpscript_p: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut tmpscript_p: *mut libc::c_char = std::ptr::null_mut();
     if quote == '\"' as i32 {
         (*token).type_0 = 1 as i32
     } else {
@@ -1525,9 +1524,9 @@ pub unsafe extern "C" fn PS_ReadPunctuation(
     mut token: *mut crate::src::botlib::l_script::token_t,
 ) -> i32 {
     let mut len: i32 = 0; //end for
-    let mut p: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut p: *mut libc::c_char = std::ptr::null_mut();
     let mut punc: *mut crate::src::botlib::l_script::punctuation_t =
-        0 as *mut crate::src::botlib::l_script::punctuation_t;
+        std::ptr::null_mut();
     punc = *(*script)
         .punctuationtable
         .offset(*(*script).script_p as u32 as isize);
@@ -1718,11 +1717,11 @@ pub unsafe extern "C" fn PS_ExpectTokenString(
         subtype: 0,
         intvalue: 0,
         floatvalue: 0.,
-        whitespace_p: 0 as *mut libc::c_char,
-        endwhitespace_p: 0 as *mut libc::c_char,
+        whitespace_p: std::ptr::null_mut(),
+        endwhitespace_p: std::ptr::null_mut(),
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut crate::src::botlib::l_script::token_s,
+        next: std::ptr::null_mut(),
     }; //end if
     if PS_ReadToken(script, &mut token) == 0 {
         ScriptError(
@@ -1945,11 +1944,11 @@ pub unsafe extern "C" fn PS_CheckTokenString(
         subtype: 0,
         intvalue: 0,
         floatvalue: 0.,
-        whitespace_p: 0 as *mut libc::c_char,
-        endwhitespace_p: 0 as *mut libc::c_char,
+        whitespace_p: std::ptr::null_mut(),
+        endwhitespace_p: std::ptr::null_mut(),
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut crate::src::botlib::l_script::token_s,
+        next: std::ptr::null_mut(),
     };
     if PS_ReadToken(script, &mut tok) == 0 {
         return 0 as i32;
@@ -1984,11 +1983,11 @@ pub unsafe extern "C" fn PS_CheckTokenType(
         subtype: 0,
         intvalue: 0,
         floatvalue: 0.,
-        whitespace_p: 0 as *mut libc::c_char,
-        endwhitespace_p: 0 as *mut libc::c_char,
+        whitespace_p: std::ptr::null_mut(),
+        endwhitespace_p: std::ptr::null_mut(),
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut crate::src::botlib::l_script::token_s,
+        next: std::ptr::null_mut(),
     };
     if PS_ReadToken(script, &mut tok) == 0 {
         return 0 as i32;
@@ -2026,11 +2025,11 @@ pub unsafe extern "C" fn PS_SkipUntilString(
         subtype: 0,
         intvalue: 0,
         floatvalue: 0.,
-        whitespace_p: 0 as *mut libc::c_char,
-        endwhitespace_p: 0 as *mut libc::c_char,
+        whitespace_p: std::ptr::null_mut(),
+        endwhitespace_p: std::ptr::null_mut(),
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut crate::src::botlib::l_script::token_s,
+        next: std::ptr::null_mut(),
     }; //end while
     while PS_ReadToken(script, &mut token) != 0 {
         if libc::strcmp(token.string.as_mut_ptr(), string) == 0 {
@@ -2169,11 +2168,11 @@ pub unsafe extern "C" fn ReadSignedFloat(
         subtype: 0,
         intvalue: 0,
         floatvalue: 0.,
-        whitespace_p: 0 as *mut libc::c_char,
-        endwhitespace_p: 0 as *mut libc::c_char,
+        whitespace_p: std::ptr::null_mut(),
+        endwhitespace_p: std::ptr::null_mut(),
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut crate::src::botlib::l_script::token_s,
+        next: std::ptr::null_mut(),
     };
     let mut sign: f32 = 1.0f64 as f32;
     PS_ExpectAnyToken(script, &mut token);
@@ -2221,11 +2220,11 @@ pub unsafe extern "C" fn ReadSignedInt(
         subtype: 0,
         intvalue: 0,
         floatvalue: 0.,
-        whitespace_p: 0 as *mut libc::c_char,
-        endwhitespace_p: 0 as *mut libc::c_char,
+        whitespace_p: std::ptr::null_mut(),
+        endwhitespace_p: std::ptr::null_mut(),
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut crate::src::botlib::l_script::token_s,
+        next: std::ptr::null_mut(),
     };
     let mut sign: isize = 1 as i32 as isize;
     PS_ExpectAnyToken(script, &mut token);
@@ -2302,9 +2301,9 @@ pub unsafe extern "C" fn ResetScript(mut script: *mut crate::src::botlib::l_scri
     //pointer in script buffer before reading token
     (*script).lastscript_p = (*script).buffer;
     //begin of white space
-    (*script).whitespace_p = 0 as *mut libc::c_char;
+    (*script).whitespace_p = std::ptr::null_mut();
     //end of white space
-    (*script).endwhitespace_p = 0 as *mut libc::c_char;
+    (*script).endwhitespace_p = std::ptr::null_mut();
     //set if there's a token available in script->token
     (*script).tokenavailable = 0 as i32;
     //
@@ -2393,9 +2392,9 @@ pub unsafe extern "C" fn LoadScriptFile(
     let mut fp: fileHandle_t = 0;
     let mut pathname: [libc::c_char; 64] = [0; 64];
     let mut length: i32 = 0;
-    let mut buffer: *mut libc::c_void = 0 as *mut libc::c_void;
+    let mut buffer: *mut libc::c_void = std::ptr::null_mut();
     let mut script: *mut crate::src::botlib::l_script::script_t =
-        0 as *mut crate::src::botlib::l_script::script_t;
+        std::ptr::null_mut();
     if crate::stdlib::strlen(basefolder.as_mut_ptr()) != 0 {
         Com_sprintf(
             pathname.as_mut_ptr(),
@@ -2416,7 +2415,7 @@ pub unsafe extern "C" fn LoadScriptFile(
         .FS_FOpenFile
         .expect("non-null function pointer")(pathname.as_mut_ptr(), &mut fp, FS_READ);
     if fp == 0 {
-        return 0 as *mut crate::src::botlib::l_script::script_t;
+        return std::ptr::null_mut();
     }
     buffer = crate::src::botlib::l_memory::GetClearedMemory(
         (::std::mem::size_of::<crate::src::botlib::l_script::script_t>() as usize)
@@ -2452,8 +2451,7 @@ pub unsafe extern "C" fn LoadScriptFile(
     //
     SetScriptPunctuations(
         script,
-        0 as *mut crate::src::botlib::l_script::punctuation_t,
-    );
+        std::ptr::null_mut(),);
     //
     crate::src::botlib::be_interface::botimport
         .FS_Read
@@ -2478,9 +2476,9 @@ pub unsafe extern "C" fn LoadScriptMemory(
     mut length: i32,
     mut name: *mut libc::c_char,
 ) -> *mut crate::src::botlib::l_script::script_t {
-    let mut buffer: *mut libc::c_void = 0 as *mut libc::c_void;
+    let mut buffer: *mut libc::c_void = std::ptr::null_mut();
     let mut script: *mut crate::src::botlib::l_script::script_t =
-        0 as *mut crate::src::botlib::l_script::script_t;
+        std::ptr::null_mut();
     buffer = crate::src::botlib::l_memory::GetClearedMemory(
         (::std::mem::size_of::<crate::src::botlib::l_script::script_t>() as usize)
             .wrapping_add(length as usize)
@@ -2515,8 +2513,7 @@ pub unsafe extern "C" fn LoadScriptMemory(
     //
     SetScriptPunctuations(
         script,
-        0 as *mut crate::src::botlib::l_script::punctuation_t,
-    );
+        std::ptr::null_mut(),);
     //
     crate::stdlib::memcpy(
         (*script).buffer as *mut libc::c_void,

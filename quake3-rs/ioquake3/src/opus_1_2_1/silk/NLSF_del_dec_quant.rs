@@ -301,7 +301,7 @@ pub unsafe extern "C" fn silk_NLSF_del_dec_quant(
     let mut RD_Q25: [opus_int32; 8] = [0; 8];
     let mut RD_min_Q25: [opus_int32; 4] = [0; 4];
     let mut RD_max_Q25: [opus_int32; 4] = [0; 4];
-    let mut rates_Q5: *const u8 = 0 as *const u8;
+    let mut rates_Q5: *const u8 = std::ptr::null();
     let mut out0_Q10_table: [i32; 20] = [0; 20];
     let mut out1_Q10_table: [i32; 20] = [0; 20];
     i = -(10 as i32);

@@ -199,8 +199,8 @@ unsafe extern "C" fn op_tags_ensure_capacity(
     mut _tags: *mut OpusTags,
     mut _ncomments: size_t,
 ) -> i32 {
-    let mut user_comments: *mut *mut libc::c_char = 0 as *mut *mut libc::c_char;
-    let mut comment_lengths: *mut i32 = 0 as *mut i32;
+    let mut user_comments: *mut *mut libc::c_char = std::ptr::null_mut();
+    let mut comment_lengths: *mut i32 = std::ptr::null_mut();
     let mut cur_ncomments: i32 = 0;
     let mut size: size_t = 0;
     if (_ncomments >= 2147483647 as i32 as size_t) as i32 as isize != 0 {
@@ -242,7 +242,7 @@ unsafe extern "C" fn op_tags_ensure_capacity(
     }
     if (*_tags).user_comments.is_null() {
         let ref mut fresh1 = *user_comments.offset(cur_ncomments as isize);
-        *fresh1 = 0 as *mut libc::c_char
+        *fresh1 = std::ptr::null_mut()
     }
     let ref mut fresh2 = *user_comments.offset(_ncomments as isize);
     *fresh2 = *user_comments.offset(cur_ncomments as isize);
@@ -256,11 +256,11 @@ unsafe extern "C" fn op_strdup_with_len(
     mut _len: size_t,
 ) -> *mut libc::c_char {
     let mut size: size_t = 0;
-    let mut ret: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut ret: *mut libc::c_char = std::ptr::null_mut();
     size = (::std::mem::size_of::<libc::c_char>() as usize)
         .wrapping_mul(_len.wrapping_add(1 as i32 as usize));
     if (size < _len) as i32 as isize != 0 {
-        return 0 as *mut libc::c_char;
+        return std::ptr::null_mut();
     }
     ret = crate::stdlib::malloc(size) as *mut libc::c_char;
     if !ret.is_null() as i32 as isize != 0 {
@@ -367,7 +367,7 @@ unsafe extern "C" fn opus_tags_parse_impl(
             /*Needed by opus_tags_clear() if we fail before parsing the (optional)
             binary metadata.*/
             let ref mut fresh4 = *(*_tags).user_comments.offset((ci + 1 as i32) as isize);
-            *fresh4 = 0 as *mut libc::c_char
+            *fresh4 = std::ptr::null_mut()
         }
         _data = _data.offset(count as isize);
         len = (len as usize).wrapping_sub(count as usize) as size_t;
@@ -402,10 +402,10 @@ pub unsafe extern "C" fn opus_tags_parse(
 ) -> i32 {
     if !_tags.is_null() {
         let mut tags: OpusTags = OpusTags {
-            user_comments: 0 as *mut *mut libc::c_char,
-            comment_lengths: 0 as *mut i32,
+            user_comments: std::ptr::null_mut(),
+            comment_lengths: std::ptr::null_mut(),
             comments: 0,
-            vendor: 0 as *mut libc::c_char,
+            vendor: std::ptr::null_mut(),
         };
         let mut ret: i32 = 0;
         opus_tags_init(&mut tags);
@@ -417,7 +417,7 @@ pub unsafe extern "C" fn opus_tags_parse(
         }
         return ret;
     } else {
-        return opus_tags_parse_impl(0 as *mut OpusTags, _data, _len);
+        return opus_tags_parse_impl(std::ptr::null_mut(), _data, _len);
     };
 }
 /*The actual implementation of opus_tags_copy().
@@ -429,7 +429,7 @@ unsafe extern "C" fn opus_tags_copy_impl(
     mut _dst: *mut OpusTags,
     mut _src: *const OpusTags,
 ) -> i32 {
-    let mut vendor: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut vendor: *mut libc::c_char = std::ptr::null_mut();
     let mut ncomments: i32 = 0;
     let mut ret: i32 = 0;
     let mut ci: i32 = 0;
@@ -479,10 +479,10 @@ unsafe extern "C" fn opus_tags_copy_impl(
 
 pub unsafe extern "C" fn opus_tags_copy(mut _dst: *mut OpusTags, mut _src: *const OpusTags) -> i32 {
     let mut dst: OpusTags = OpusTags {
-        user_comments: 0 as *mut *mut libc::c_char,
-        comment_lengths: 0 as *mut i32,
+        user_comments: std::ptr::null_mut(),
+        comment_lengths: std::ptr::null_mut(),
         comments: 0,
-        vendor: 0 as *mut libc::c_char,
+        vendor: std::ptr::null_mut(),
     };
     let mut ret: i32 = 0;
     opus_tags_init(&mut dst);
@@ -501,7 +501,7 @@ pub unsafe extern "C" fn opus_tags_add(
     mut _tag: *const libc::c_char,
     mut _value: *const libc::c_char,
 ) -> i32 {
-    let mut comment: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut comment: *mut libc::c_char = std::ptr::null_mut();
     let mut tag_len: size_t = 0;
     let mut value_len: size_t = 0;
     let mut ncomments: i32 = 0;
@@ -559,7 +559,7 @@ pub unsafe extern "C" fn opus_tags_add_comment(
     mut _tags: *mut OpusTags,
     mut _comment: *const libc::c_char,
 ) -> i32 {
-    let mut comment: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut comment: *mut libc::c_char = std::ptr::null_mut();
     let mut comment_len: i32 = 0;
     let mut ncomments: i32 = 0;
     let mut ret: i32 = 0;
@@ -586,7 +586,7 @@ pub unsafe extern "C" fn opus_tags_set_binary_suffix(
     mut _data: *const u8,
     mut _len: i32,
 ) -> i32 {
-    let mut binary_suffix_data: *mut u8 = 0 as *mut u8;
+    let mut binary_suffix_data: *mut u8 = std::ptr::null_mut();
     let mut ncomments: i32 = 0;
     let mut ret: i32 = 0;
     if _len < 0 as i32
@@ -652,14 +652,14 @@ pub unsafe extern "C" fn opus_tags_query(
     mut _tag: *const libc::c_char,
     mut _count: i32,
 ) -> *const libc::c_char {
-    let mut user_comments: *mut *mut libc::c_char = 0 as *mut *mut libc::c_char;
+    let mut user_comments: *mut *mut libc::c_char = std::ptr::null_mut();
     let mut tag_len: size_t = 0;
     let mut found: i32 = 0;
     let mut ncomments: i32 = 0;
     let mut ci: i32 = 0;
     tag_len = crate::stdlib::strlen(_tag);
     if (tag_len > 2147483647 as i32 as size_t) as i32 as isize != 0 {
-        return 0 as *const libc::c_char;
+        return std::ptr::null();
     }
     ncomments = (*_tags).comments;
     user_comments = (*_tags).user_comments;
@@ -679,7 +679,7 @@ pub unsafe extern "C" fn opus_tags_query(
         ci += 1
     }
     /*Didn't find anything.*/
-    return 0 as *const libc::c_char;
+    return std::ptr::null();
 }
 #[no_mangle]
 
@@ -687,7 +687,7 @@ pub unsafe extern "C" fn opus_tags_query_count(
     mut _tags: *const OpusTags,
     mut _tag: *const libc::c_char,
 ) -> i32 {
-    let mut user_comments: *mut *mut libc::c_char = 0 as *mut *mut libc::c_char;
+    let mut user_comments: *mut *mut libc::c_char = std::ptr::null_mut();
     let mut tag_len: size_t = 0;
     let mut found: i32 = 0;
     let mut ncomments: i32 = 0;
@@ -726,7 +726,7 @@ pub unsafe extern "C" fn opus_tags_get_binary_suffix(
     return if len > 0 as i32 {
         *(*_tags).user_comments.offset(ncomments as isize) as *const u8
     } else {
-        0 as *const u8
+        std::ptr::null()
     };
 }
 
@@ -736,7 +736,7 @@ unsafe extern "C" fn opus_tags_get_gain(
     mut _tag_name: *const libc::c_char,
     mut _tag_len: size_t,
 ) -> i32 {
-    let mut comments: *mut *mut libc::c_char = 0 as *mut *mut libc::c_char;
+    let mut comments: *mut *mut libc::c_char = std::ptr::null_mut();
     let mut ncomments: i32 = 0;
     let mut ci: i32 = 0;
     comments = (*_tags).user_comments;
@@ -745,7 +745,7 @@ unsafe extern "C" fn opus_tags_get_gain(
     ci = 0 as i32;
     while ci < ncomments {
         if opus_tagncompare(_tag_name, _tag_len as i32, *comments.offset(ci as isize)) == 0 as i32 {
-            let mut p: *mut libc::c_char = 0 as *mut libc::c_char;
+            let mut p: *mut libc::c_char = std::ptr::null_mut();
             let mut gain_q8: opus_int32 = 0;
             let mut negative: i32 = 0;
             p = (*comments.offset(ci as isize))
@@ -1026,9 +1026,9 @@ unsafe extern "C" fn opus_picture_tag_parse_impl(
 ) -> i32 {
     let mut picture_type: opus_int32 = 0;
     let mut mime_type_length: opus_uint32 = 0;
-    let mut mime_type: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut mime_type: *mut libc::c_char = std::ptr::null_mut();
     let mut description_length: opus_uint32 = 0;
-    let mut description: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut description: *mut libc::c_char = std::ptr::null_mut();
     let mut width: opus_uint32 = 0;
     let mut height: opus_uint32 = 0;
     let mut depth: opus_uint32 = 0;
@@ -1328,17 +1328,17 @@ pub unsafe extern "C" fn opus_picture_tag_parse(
 ) -> i32 {
     let mut pic: OpusPictureTag = OpusPictureTag {
         type_0: 0,
-        mime_type: 0 as *mut libc::c_char,
-        description: 0 as *mut libc::c_char,
+        mime_type: std::ptr::null_mut(),
+        description: std::ptr::null_mut(),
         width: 0,
         height: 0,
         depth: 0,
         colors: 0,
         data_length: 0,
-        data: 0 as *mut u8,
+        data: std::ptr::null_mut(),
         format: 0,
     };
-    let mut buf: *mut u8 = 0 as *mut u8;
+    let mut buf: *mut u8 = std::ptr::null_mut();
     let mut base64_sz: size_t = 0;
     let mut buf_sz: size_t = 0;
     let mut tag_length: size_t = 0;

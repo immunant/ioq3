@@ -33,7 +33,7 @@ pub mod stdlib_float_h {
     #[inline]
 
     pub unsafe extern "C" fn atof(mut __nptr: *const libc::c_char) -> f64 {
-        return libc::strtod(__nptr, 0 as *mut libc::c_void as *mut *mut libc::c_char);
+        return libc::strtod(__nptr, std::ptr::null_mut() as *mut *mut libc::c_char);
     }
 }
 
@@ -43,7 +43,7 @@ pub mod stdlib_h {
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return libc::strtol(
             __nptr,
-            0 as *mut libc::c_void as *mut *mut libc::c_char,
+            std::ptr::null_mut() as *mut *mut libc::c_char,
             10 as i32,
         ) as i32;
     }
@@ -377,7 +377,7 @@ pub unsafe extern "C" fn CG_ClearParticles() {
         ::std::mem::size_of::<[cparticle_t; 1024]>() as usize,
     );
     free_particles = &mut *particles.as_mut_ptr().offset(0 as i32 as isize) as *mut cparticle_t;
-    active_particles = 0 as *mut cparticle_t;
+    active_particles = std::ptr::null_mut();
     i = 0 as i32;
     while i < cl_numparticles {
         particles[i as usize].next =
@@ -385,7 +385,7 @@ pub unsafe extern "C" fn CG_ClearParticles() {
         particles[i as usize].type_0 = 0 as i32;
         i += 1
     }
-    particles[(cl_numparticles - 1 as i32) as usize].next = 0 as *mut particle_s;
+    particles[(cl_numparticles - 1 as i32) as usize].next = std::ptr::null_mut();
     oldtime = cg.time as f32;
     // Ridah, init the shaderAnims
     i = 0 as i32;
@@ -684,7 +684,7 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
             rotate_ang[2 as i32 as usize] += (*p).roll as f32;
             AngleVectors(
                 rotate_ang.as_mut_ptr() as *const vec_t,
-                0 as *mut vec_t,
+                std::ptr::null_mut(),
                 rr.as_mut_ptr(),
                 ru.as_mut_ptr(),
             );
@@ -867,7 +867,7 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
                 (temp[2 as i32 as usize] as f64 + (*p).accumroll as f64 * 0.1f64) as vec_t;
             AngleVectors(
                 temp.as_mut_ptr() as *const vec_t,
-                0 as *mut vec_t,
+                std::ptr::null_mut(),
                 rright2.as_mut_ptr(),
                 rup2.as_mut_ptr(),
             );
@@ -1054,7 +1054,7 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
             rotate_ang_0[2 as i32 as usize] += (*p).roll as f32;
             AngleVectors(
                 rotate_ang_0.as_mut_ptr() as *const vec_t,
-                0 as *mut vec_t,
+                std::ptr::null_mut(),
                 rr_0.as_mut_ptr(),
                 ru_0.as_mut_ptr(),
             );
@@ -1307,7 +1307,7 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
             rotate_ang_1[2 as i32 as usize] += (*p).roll as f32;
             AngleVectors(
                 rotate_ang_1.as_mut_ptr() as *const vec_t,
-                0 as *mut vec_t,
+                std::ptr::null_mut(),
                 rr_1.as_mut_ptr(),
                 ru_1.as_mut_ptr(),
             );
@@ -1451,14 +1451,14 @@ CG_AddParticles
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_AddParticles() {
-    let mut p: *mut cparticle_t = 0 as *mut cparticle_t;
-    let mut next: *mut cparticle_t = 0 as *mut cparticle_t;
+    let mut p: *mut cparticle_t = std::ptr::null_mut();
+    let mut next: *mut cparticle_t = std::ptr::null_mut();
     let mut alpha: f32 = 0.;
     let mut time: f32 = 0.;
     let mut time2: f32 = 0.;
     let mut org: vec3_t = [0.; 3];
-    let mut active: *mut cparticle_t = 0 as *mut cparticle_t;
-    let mut tail: *mut cparticle_t = 0 as *mut cparticle_t;
+    let mut active: *mut cparticle_t = std::ptr::null_mut();
+    let mut tail: *mut cparticle_t = std::ptr::null_mut();
     let mut rotate_ang: vec3_t = [0.; 3];
     if initparticles as u64 == 0 {
         CG_ClearParticles();
@@ -1486,8 +1486,8 @@ pub unsafe extern "C" fn CG_AddParticles() {
         rup.as_mut_ptr(),
     );
     oldtime = cg.time as f32;
-    active = 0 as *mut cparticle_t;
-    tail = 0 as *mut cparticle_t;
+    active = std::ptr::null_mut();
+    tail = std::ptr::null_mut();
     let mut current_block_54: u64;
     p = active_particles;
     while !p.is_null() {
@@ -1569,7 +1569,7 @@ pub unsafe extern "C" fn CG_AddParticles() {
                                         (*p).color = 0 as i32;
                                         (*p).alpha = 0 as i32 as f32
                                     } else {
-                                        (*p).next = 0 as *mut particle_s;
+                                        (*p).next = std::ptr::null_mut();
                                         if tail.is_null() {
                                             tail = p;
                                             active = tail
@@ -1611,7 +1611,7 @@ CG_AddParticles
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_ParticleSnowFlurry(mut pshader: qhandle_t, mut cent: *mut centity_t) {
-    let mut p: *mut cparticle_t = 0 as *mut cparticle_t;
+    let mut p: *mut cparticle_t = std::ptr::null_mut();
     let mut turb: qboolean = qtrue;
     if pshader == 0 {
         CG_Printf(
@@ -1685,7 +1685,7 @@ pub unsafe extern "C" fn CG_ParticleSnow(
     mut range: f32,
     mut snum: i32,
 ) {
-    let mut p: *mut cparticle_t = 0 as *mut cparticle_t;
+    let mut p: *mut cparticle_t = std::ptr::null_mut();
     if pshader == 0 {
         CG_Printf(b"CG_ParticleSnow pshader == ZERO!\n\x00" as *const u8 as *const libc::c_char);
     }
@@ -1754,7 +1754,7 @@ pub unsafe extern "C" fn CG_ParticleBubble(
     mut range: f32,
     mut snum: i32,
 ) {
-    let mut p: *mut cparticle_t = 0 as *mut cparticle_t;
+    let mut p: *mut cparticle_t = std::ptr::null_mut();
     let mut randsize: f32 = 0.;
     if pshader == 0 {
         CG_Printf(b"CG_ParticleSnow pshader == ZERO!\n\x00" as *const u8 as *const libc::c_char);
@@ -1826,7 +1826,7 @@ pub unsafe extern "C" fn CG_ParticleBubble(
 pub unsafe extern "C" fn CG_ParticleSmoke(mut pshader: qhandle_t, mut cent: *mut centity_t) {
     // using cent->density = enttime
     //		 cent->frame = startfade
-    let mut p: *mut cparticle_t = 0 as *mut cparticle_t;
+    let mut p: *mut cparticle_t = std::ptr::null_mut();
     if pshader == 0 {
         CG_Printf(b"CG_ParticleSmoke == ZERO!\n\x00" as *const u8 as *const libc::c_char);
     }
@@ -1877,7 +1877,7 @@ pub unsafe extern "C" fn CG_ParticleBulletDebris(
     mut vel: *mut vec_t,
     mut duration: i32,
 ) {
-    let mut p: *mut cparticle_t = 0 as *mut cparticle_t;
+    let mut p: *mut cparticle_t = std::ptr::null_mut();
     if free_particles.is_null() {
         return;
     }
@@ -1924,7 +1924,7 @@ pub unsafe extern "C" fn CG_ParticleExplosion(
     mut sizeStart: i32,
     mut sizeEnd: i32,
 ) {
-    let mut p: *mut cparticle_t = 0 as *mut cparticle_t;
+    let mut p: *mut cparticle_t = std::ptr::null_mut();
     let mut anim: i32 = 0;
     if animStr < 10 as i32 as *mut libc::c_char {
         CG_Error(
@@ -1991,8 +1991,8 @@ pub unsafe extern "C" fn CG_AddParticleShrapnel(mut _le: *mut localEntity_t) {}
 
 pub unsafe extern "C" fn CG_NewParticleArea(mut num: i32) -> i32 {
     // const char *str;
-    let mut str: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut token: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut str: *mut libc::c_char = std::ptr::null_mut();
+    let mut token: *mut libc::c_char = std::ptr::null_mut();
     let mut type_0: i32 = 0;
     let mut origin: vec3_t = [0.; 3];
     let mut origin2: vec3_t = [0.; 3];
@@ -2071,8 +2071,8 @@ pub unsafe extern "C" fn CG_NewParticleArea(mut num: i32) -> i32 {
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_SnowLink(mut cent: *mut centity_t, mut particleOn: qboolean) {
-    let mut p: *mut cparticle_t = 0 as *mut cparticle_t;
-    let mut next: *mut cparticle_t = 0 as *mut cparticle_t;
+    let mut p: *mut cparticle_t = std::ptr::null_mut();
+    let mut next: *mut cparticle_t = std::ptr::null_mut();
     let mut id: i32 = 0;
     id = (*cent).currentState.frame;
     p = active_particles;
@@ -2096,7 +2096,7 @@ pub unsafe extern "C" fn CG_ParticleImpactSmokePuff(
     mut pshader: qhandle_t,
     mut origin: *mut vec_t,
 ) {
-    let mut p: *mut cparticle_t = 0 as *mut cparticle_t;
+    let mut p: *mut cparticle_t = std::ptr::null_mut();
     if pshader == 0 {
         CG_Printf(
             b"CG_ParticleImpactSmokePuff pshader == ZERO!\n\x00" as *const u8
@@ -2145,7 +2145,7 @@ pub unsafe extern "C" fn CG_Particle_Bleed(
     mut fleshEntityNum: i32,
     mut duration: i32,
 ) {
-    let mut p: *mut cparticle_t = 0 as *mut cparticle_t;
+    let mut p: *mut cparticle_t = std::ptr::null_mut();
     if pshader == 0 {
         CG_Printf(b"CG_Particle_Bleed pshader == ZERO!\n\x00" as *const u8 as *const libc::c_char);
     }
@@ -2189,7 +2189,7 @@ pub unsafe extern "C" fn CG_Particle_Bleed(
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_Particle_OilParticle(mut pshader: qhandle_t, mut cent: *mut centity_t) {
-    let mut p: *mut cparticle_t = 0 as *mut cparticle_t;
+    let mut p: *mut cparticle_t = std::ptr::null_mut();
     let mut time: i32 = 0;
     let mut time2: i32 = 0;
     let mut ratio: f32 = 0.;
@@ -2239,7 +2239,7 @@ pub unsafe extern "C" fn CG_Particle_OilParticle(mut pshader: qhandle_t, mut cen
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_Particle_OilSlick(mut pshader: qhandle_t, mut cent: *mut centity_t) {
-    let mut p: *mut cparticle_t = 0 as *mut cparticle_t;
+    let mut p: *mut cparticle_t = std::ptr::null_mut();
     if pshader == 0 {
         CG_Printf(b"CG_Particle_OilSlick == ZERO!\n\x00" as *const u8 as *const libc::c_char);
     }
@@ -2297,8 +2297,8 @@ pub unsafe extern "C" fn CG_Particle_OilSlick(mut pshader: qhandle_t, mut cent: 
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_OilSlickRemove(mut _cent: *mut centity_t) {
-    let mut p: *mut cparticle_t = 0 as *mut cparticle_t;
-    let mut next: *mut cparticle_t = 0 as *mut cparticle_t;
+    let mut p: *mut cparticle_t = std::ptr::null_mut();
+    let mut next: *mut cparticle_t = std::ptr::null_mut();
     let mut id: i32 = 0;
     id = 1.0f32 as i32;
     if id == 0 {
@@ -2356,7 +2356,7 @@ pub unsafe extern "C" fn ValidBloodPool(mut start: *mut vec_t) -> qboolean {
     vectoangles(normal.as_mut_ptr() as *const vec_t, angles.as_mut_ptr());
     AngleVectors(
         angles.as_mut_ptr() as *const vec_t,
-        0 as *mut vec_t,
+        std::ptr::null_mut(),
         right.as_mut_ptr(),
         up.as_mut_ptr(),
     );
@@ -2394,8 +2394,8 @@ pub unsafe extern "C" fn ValidBloodPool(mut start: *mut vec_t) -> qboolean {
             CG_Trace(
                 &mut trace as *mut _ as *mut trace_t,
                 this_pos.as_mut_ptr() as *const vec_t,
-                0 as *const vec_t,
-                0 as *const vec_t,
+                std::ptr::null(),
+                std::ptr::null(),
                 end_pos.as_mut_ptr() as *const vec_t,
                 -(1 as i32),
                 1 as i32,
@@ -2420,7 +2420,7 @@ pub unsafe extern "C" fn CG_BloodPool(
     mut pshader: qhandle_t,
     mut tr: *mut trace_t,
 ) {
-    let mut p: *mut cparticle_t = 0 as *mut cparticle_t;
+    let mut p: *mut cparticle_t = std::ptr::null_mut();
     let mut legit: qboolean = qfalse;
     let mut start: vec3_t = [0.; 3];
     let mut rndSize: f32 = 0.;
@@ -2482,7 +2482,7 @@ pub unsafe extern "C" fn CG_ParticleBloodCloud(
     let mut angles: vec3_t = [0.; 3];
     let mut forward: vec3_t = [0.; 3];
     let mut point: vec3_t = [0.; 3];
-    let mut p: *mut cparticle_t = 0 as *mut cparticle_t;
+    let mut p: *mut cparticle_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     dist = 0 as i32 as f32;
     length = VectorLength(dir as *const vec_t);
@@ -2490,8 +2490,8 @@ pub unsafe extern "C" fn CG_ParticleBloodCloud(
     AngleVectors(
         angles.as_mut_ptr() as *const vec_t,
         forward.as_mut_ptr(),
-        0 as *mut vec_t,
-        0 as *mut vec_t,
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
     );
     crittersize = 32 as i32 as f32;
     if length != 0. {
@@ -2559,7 +2559,7 @@ pub unsafe extern "C" fn CG_ParticleSparks(
     mut y: f32,
     mut speed: f32,
 ) {
-    let mut p: *mut cparticle_t = 0 as *mut cparticle_t;
+    let mut p: *mut cparticle_t = std::ptr::null_mut();
     if free_particles.is_null() {
         return;
     }
@@ -2630,7 +2630,7 @@ pub unsafe extern "C" fn CG_ParticleDust(
     let mut angles: vec3_t = [0.; 3];
     let mut forward: vec3_t = [0.; 3];
     let mut point: vec3_t = [0.; 3];
-    let mut p: *mut cparticle_t = 0 as *mut cparticle_t;
+    let mut p: *mut cparticle_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     dist = 0 as i32 as f32;
     *dir.offset(0 as i32 as isize) = -*dir.offset(0 as i32 as isize);
@@ -2641,8 +2641,8 @@ pub unsafe extern "C" fn CG_ParticleDust(
     AngleVectors(
         angles.as_mut_ptr() as *const vec_t,
         forward.as_mut_ptr(),
-        0 as *mut vec_t,
-        0 as *mut vec_t,
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
     );
     crittersize = 32 as i32 as f32;
     if length != 0. {
@@ -2736,7 +2736,7 @@ pub unsafe extern "C" fn CG_ParticleMisc(
     mut duration: i32,
     mut _alpha: f32,
 ) {
-    let mut p: *mut cparticle_t = 0 as *mut cparticle_t;
+    let mut p: *mut cparticle_t = std::ptr::null_mut();
     if pshader == 0 {
         CG_Printf(
             b"CG_ParticleImpactSmokePuff pshader == ZERO!\n\x00" as *const u8

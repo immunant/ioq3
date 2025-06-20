@@ -93,7 +93,7 @@ pub unsafe extern "C" fn RE_RegisterFont(
     mut pointSize: i32,
     mut font: *mut fontInfo_t,
 ) {
-    let mut faceData: *mut libc::c_void = 0 as *mut libc::c_void;
+    let mut faceData: *mut libc::c_void = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut len: i32 = 0;
     let mut name: [libc::c_char; 1024] = [0; 1024];
@@ -146,8 +146,8 @@ pub unsafe extern "C" fn RE_RegisterFont(
     len = crate::src::renderergl1::tr_main::ri
         .FS_ReadFile
         .expect("non-null function pointer")(
-        name.as_mut_ptr(), 0 as *mut *mut libc::c_void
-    ) as i32;
+        name.as_mut_ptr(), std::ptr::null_mut())
+        as i32;
     if len as usize == ::std::mem::size_of::<fontInfo_t>() as usize {
         crate::src::renderergl1::tr_main::ri
             .FS_ReadFile

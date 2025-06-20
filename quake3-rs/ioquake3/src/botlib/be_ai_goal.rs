@@ -239,13 +239,13 @@ pub const GT_FFA: C2RustUnnamed_3 = 0;
 #[no_mangle]
 
 pub static mut iteminfo_fields: [fielddef_t; 9] = [fielddef_t {
-    name: 0 as *mut libc::c_char,
+    name: std::ptr::null_mut(),
     offset: 0,
     type_0: 0,
     maxarray: 0,
     floatmin: 0.,
     floatmax: 0.,
-    substruct: 0 as *mut structdef_s,
+    substruct: std::ptr::null_mut(),
 }; 9];
 #[no_mangle]
 
@@ -313,7 +313,7 @@ pub unsafe extern "C" fn BotGoalStateFromHandle(mut handle: i32) -> *mut bot_goa
                 as *mut libc::c_char,
             handle,
         ); //end if
-        return 0 as *mut bot_goalstate_t;
+        return std::ptr::null_mut();
     } //end if
     if botgoalstates[handle as usize].is_null() {
         crate::src::botlib::be_interface::botimport
@@ -323,7 +323,7 @@ pub unsafe extern "C" fn BotGoalStateFromHandle(mut handle: i32) -> *mut bot_goa
             b"invalid goal state %d\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             handle,
         );
-        return 0 as *mut bot_goalstate_t;
+        return std::ptr::null_mut();
     }
     return botgoalstates[handle as usize];
 }
@@ -342,9 +342,9 @@ pub unsafe extern "C" fn BotInterbreedGoalFuzzyLogic(
     mut parent2: i32,
     mut child: i32,
 ) {
-    let mut p1: *mut bot_goalstate_t = 0 as *mut bot_goalstate_t;
-    let mut p2: *mut bot_goalstate_t = 0 as *mut bot_goalstate_t;
-    let mut c: *mut bot_goalstate_t = 0 as *mut bot_goalstate_t;
+    let mut p1: *mut bot_goalstate_t = std::ptr::null_mut();
+    let mut p2: *mut bot_goalstate_t = std::ptr::null_mut();
+    let mut c: *mut bot_goalstate_t = std::ptr::null_mut();
     p1 = BotGoalStateFromHandle(parent1);
     p2 = BotGoalStateFromHandle(parent2);
     c = BotGoalStateFromHandle(child);
@@ -387,7 +387,7 @@ pub unsafe extern "C" fn BotSaveGoalFuzzyLogic(
 #[no_mangle]
 
 pub unsafe extern "C" fn BotMutateGoalFuzzyLogic(mut goalstate: i32, mut _range: f32) {
-    let mut gs: *mut bot_goalstate_t = 0 as *mut bot_goalstate_t;
+    let mut gs: *mut bot_goalstate_t = std::ptr::null_mut();
     gs = BotGoalStateFromHandle(goalstate);
     if gs.is_null() {
         return;
@@ -411,16 +411,16 @@ pub unsafe extern "C" fn LoadItemConfig(mut filename: *mut libc::c_char) -> *mut
         subtype: 0,
         intvalue: 0,
         floatvalue: 0.,
-        whitespace_p: 0 as *mut libc::c_char,
-        endwhitespace_p: 0 as *mut libc::c_char,
+        whitespace_p: std::ptr::null_mut(),
+        endwhitespace_p: std::ptr::null_mut(),
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut token_s,
+        next: std::ptr::null_mut(),
     };
     let mut path: [libc::c_char; 64] = [0; 64];
-    let mut source: *mut source_t = 0 as *mut source_t;
-    let mut ic: *mut itemconfig_t = 0 as *mut itemconfig_t;
-    let mut ii: *mut iteminfo_t = 0 as *mut iteminfo_t;
+    let mut source: *mut source_t = std::ptr::null_mut();
+    let mut ic: *mut itemconfig_t = std::ptr::null_mut();
+    let mut ii: *mut iteminfo_t = std::ptr::null_mut();
     max_iteminfo = LibVarValue(
         b"max_iteminfo\x00" as *const u8 as *const libc::c_char,
         b"256\x00" as *const u8 as *const libc::c_char,
@@ -454,7 +454,7 @@ pub unsafe extern "C" fn LoadItemConfig(mut filename: *mut libc::c_char) -> *mut
             b"counldn\'t load %s\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             path.as_mut_ptr(),
         );
-        return 0 as *mut itemconfig_t;
+        return std::ptr::null_mut();
     }
     //initialize item config
     ic = crate::src::botlib::l_memory::GetClearedHunkMemory(
@@ -487,7 +487,7 @@ pub unsafe extern "C" fn LoadItemConfig(mut filename: *mut libc::c_char) -> *mut
                 ); //end if
                 crate::src::botlib::l_memory::FreeMemory(ic as *mut libc::c_void); //end if
                 FreeSource(source as *mut source_s); //end if
-                return 0 as *mut itemconfig_t;
+                return std::ptr::null_mut();
             } //end if
             ii = &mut *(*ic).iteminfo.offset((*ic).numiteminfo as isize) as *mut iteminfo_t;
             crate::stdlib::memset(
@@ -504,7 +504,7 @@ pub unsafe extern "C" fn LoadItemConfig(mut filename: *mut libc::c_char) -> *mut
             {
                 crate::src::botlib::l_memory::FreeMemory(ic as *mut libc::c_void);
                 FreeSource(source as *mut source_s);
-                return 0 as *mut itemconfig_t;
+                return std::ptr::null_mut();
             }
             StripDoubleQuotes(token.string.as_mut_ptr());
             Q_strncpyz(
@@ -520,7 +520,7 @@ pub unsafe extern "C" fn LoadItemConfig(mut filename: *mut libc::c_char) -> *mut
             {
                 crate::src::botlib::l_memory::FreeMemory(ic as *mut libc::c_void);
                 FreeSource(source as *mut source_s);
-                return 0 as *mut itemconfig_t;
+                return std::ptr::null_mut();
             }
             (*ii).number = (*ic).numiteminfo;
             (*ic).numiteminfo += 1
@@ -533,7 +533,7 @@ pub unsafe extern "C" fn LoadItemConfig(mut filename: *mut libc::c_char) -> *mut
             );
             crate::src::botlib::l_memory::FreeMemory(ic as *mut libc::c_void);
             FreeSource(source as *mut source_s);
-            return 0 as *mut itemconfig_t;
+            return std::ptr::null_mut();
         }
         //end else
     }
@@ -570,7 +570,7 @@ pub unsafe extern "C" fn ItemWeightIndex(
     mut iwc: *mut weightconfig_t,
     mut ic: *mut itemconfig_t,
 ) -> *mut i32 {
-    let mut index: *mut i32 = 0 as *mut i32;
+    let mut index: *mut i32 = std::ptr::null_mut();
     let mut i: i32 = 0;
     //initialize item weight index
     index = crate::src::botlib::l_memory::GetClearedMemory(
@@ -624,7 +624,7 @@ pub unsafe extern "C" fn InitLevelItemHeap() {
         i += 1
     }
     let ref mut fresh1 = (*levelitemheap.offset((max_levelitems - 1 as i32) as isize)).next;
-    *fresh1 = 0 as *mut levelitem_s;
+    *fresh1 = std::ptr::null_mut();
     //
     freelevelitems = levelitemheap;
 }
@@ -638,7 +638,7 @@ pub unsafe extern "C" fn InitLevelItemHeap() {
 #[no_mangle]
 
 pub unsafe extern "C" fn AllocLevelItem() -> *mut levelitem_t {
-    let mut li: *mut levelitem_t = 0 as *mut levelitem_t; //end if
+    let mut li: *mut levelitem_t = std::ptr::null_mut(); //end if
     li = freelevelitems;
     if li.is_null() {
         crate::src::botlib::be_interface::botimport
@@ -647,7 +647,7 @@ pub unsafe extern "C" fn AllocLevelItem() -> *mut levelitem_t {
             4 as i32,
             b"out of level items\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         );
-        return 0 as *mut levelitem_t;
+        return std::ptr::null_mut();
     }
     //
     freelevelitems = (*freelevelitems).next;
@@ -684,7 +684,7 @@ pub unsafe extern "C" fn AddLevelItemToList(mut li: *mut levelitem_t) {
     if !levelitems.is_null() {
         (*levelitems).prev = li
     }
-    (*li).prev = 0 as *mut levelitem_s;
+    (*li).prev = std::ptr::null_mut();
     (*li).next = levelitems;
     levelitems = li;
 }
@@ -717,24 +717,24 @@ pub unsafe extern "C" fn RemoveLevelItemFromList(mut li: *mut levelitem_t) {
 #[no_mangle]
 
 pub unsafe extern "C" fn BotFreeInfoEntities() {
-    let mut ml: *mut maplocation_t = 0 as *mut maplocation_t; //end for
-    let mut nextml: *mut maplocation_t = 0 as *mut maplocation_t; //end for
-    let mut cs: *mut campspot_t = 0 as *mut campspot_t;
-    let mut nextcs: *mut campspot_t = 0 as *mut campspot_t;
+    let mut ml: *mut maplocation_t = std::ptr::null_mut(); //end for
+    let mut nextml: *mut maplocation_t = std::ptr::null_mut(); //end for
+    let mut cs: *mut campspot_t = std::ptr::null_mut();
+    let mut nextcs: *mut campspot_t = std::ptr::null_mut();
     ml = maplocations;
     while !ml.is_null() {
         nextml = (*ml).next;
         crate::src::botlib::l_memory::FreeMemory(ml as *mut libc::c_void);
         ml = nextml
     }
-    maplocations = 0 as *mut maplocation_t;
+    maplocations = std::ptr::null_mut();
     cs = campspots;
     while !cs.is_null() {
         nextcs = (*cs).next;
         crate::src::botlib::l_memory::FreeMemory(cs as *mut libc::c_void);
         cs = nextcs
     }
-    campspots = 0 as *mut campspot_t;
+    campspots = std::ptr::null_mut();
 }
 //end of the function BotFreeInfoEntities
 //===========================================================================
@@ -747,8 +747,8 @@ pub unsafe extern "C" fn BotFreeInfoEntities() {
 
 pub unsafe extern "C" fn BotInitInfoEntities() {
     let mut classname: [libc::c_char; 128] = [0; 128];
-    let mut ml: *mut maplocation_t = 0 as *mut maplocation_t;
-    let mut cs: *mut campspot_t = 0 as *mut campspot_t;
+    let mut ml: *mut maplocation_t = std::ptr::null_mut();
+    let mut cs: *mut campspot_t = std::ptr::null_mut();
     let mut ent: i32 = 0;
     let mut numlocations: i32 = 0;
     let mut numcampspots: i32 = 0;
@@ -893,8 +893,8 @@ pub unsafe extern "C" fn BotInitLevelItems() {
     let mut end: vec3_t = [0.; 3];
     let mut ent: i32 = 0;
     let mut goalareanum: i32 = 0;
-    let mut ic: *mut itemconfig_t = 0 as *mut itemconfig_t;
-    let mut li: *mut levelitem_t = 0 as *mut levelitem_t;
+    let mut ic: *mut itemconfig_t = std::ptr::null_mut();
+    let mut li: *mut levelitem_t = std::ptr::null_mut();
     let mut trace: bsp_trace_t = bsp_trace_t {
         allsolid: qfalse,
         startsolid: qfalse,
@@ -921,7 +921,7 @@ pub unsafe extern "C" fn BotInitLevelItems() {
     BotInitInfoEntities();
     //initialize the level item heap
     InitLevelItemHeap();
-    levelitems = 0 as *mut levelitem_t;
+    levelitems = std::ptr::null_mut();
     numlevelitems = 0 as i32;
     //
     ic = itemconfig;
@@ -1201,7 +1201,7 @@ pub unsafe extern "C" fn BotInitLevelItems() {
 #[no_mangle]
 
 pub unsafe extern "C" fn BotGoalName(mut number: i32, mut name: *mut libc::c_char, mut size: i32) {
-    let mut li: *mut levelitem_t = 0 as *mut levelitem_t;
+    let mut li: *mut levelitem_t = std::ptr::null_mut();
     if itemconfig.is_null() {
         return;
     }
@@ -1234,7 +1234,7 @@ pub unsafe extern "C" fn BotGoalName(mut number: i32, mut name: *mut libc::c_cha
 #[no_mangle]
 
 pub unsafe extern "C" fn BotResetAvoidGoals(mut goalstate: i32) {
-    let mut gs: *mut bot_goalstate_t = 0 as *mut bot_goalstate_t;
+    let mut gs: *mut bot_goalstate_t = std::ptr::null_mut();
     gs = BotGoalStateFromHandle(goalstate);
     if gs.is_null() {
         return;
@@ -1262,7 +1262,7 @@ pub unsafe extern "C" fn BotResetAvoidGoals(mut goalstate: i32) {
 
 pub unsafe extern "C" fn BotDumpAvoidGoals(mut goalstate: i32) {
     let mut i: i32 = 0;
-    let mut gs: *mut bot_goalstate_t = 0 as *mut bot_goalstate_t;
+    let mut gs: *mut bot_goalstate_t = std::ptr::null_mut();
     let mut name: [libc::c_char; 32] = [0; 32];
     gs = BotGoalStateFromHandle(goalstate);
     if gs.is_null() {
@@ -1339,7 +1339,7 @@ pub unsafe extern "C" fn BotAddToAvoidGoals(
 
 pub unsafe extern "C" fn BotRemoveFromAvoidGoals(mut goalstate: i32, mut number: i32) {
     let mut i: i32 = 0;
-    let mut gs: *mut bot_goalstate_t = 0 as *mut bot_goalstate_t;
+    let mut gs: *mut bot_goalstate_t = std::ptr::null_mut();
     gs = BotGoalStateFromHandle(goalstate);
     if gs.is_null() {
         return;
@@ -1370,7 +1370,7 @@ pub unsafe extern "C" fn BotRemoveFromAvoidGoals(mut goalstate: i32, mut number:
 
 pub unsafe extern "C" fn BotAvoidGoalTime(mut goalstate: i32, mut number: i32) -> f32 {
     let mut i: i32 = 0;
-    let mut gs: *mut bot_goalstate_t = 0 as *mut bot_goalstate_t;
+    let mut gs: *mut bot_goalstate_t = std::ptr::null_mut();
     gs = BotGoalStateFromHandle(goalstate);
     if gs.is_null() {
         return 0 as i32 as f32;
@@ -1403,8 +1403,8 @@ pub unsafe extern "C" fn BotSetAvoidGoalTime(
     mut number: i32,
     mut avoidtime: f32,
 ) {
-    let mut gs: *mut bot_goalstate_t = 0 as *mut bot_goalstate_t; //end if
-    let mut li: *mut levelitem_t = 0 as *mut levelitem_t;
+    let mut gs: *mut bot_goalstate_t = std::ptr::null_mut(); //end if
+    let mut li: *mut levelitem_t = std::ptr::null_mut();
     gs = BotGoalStateFromHandle(goalstate);
     if gs.is_null() {
         return;
@@ -1452,7 +1452,7 @@ pub unsafe extern "C" fn BotGetLevelItemGoal(
     mut name: *mut libc::c_char,
     mut goal: *mut crate::src::botlib::be_ai_goal::bot_goal_t,
 ) -> i32 {
-    let mut li: *mut levelitem_t = 0 as *mut levelitem_t; //end for
+    let mut li: *mut levelitem_t = std::ptr::null_mut(); //end for
     if itemconfig.is_null() {
         return -(1 as i32);
     }
@@ -1556,7 +1556,7 @@ pub unsafe extern "C" fn BotGetMapLocationGoal(
     mut name: *mut libc::c_char,
     mut goal: *mut crate::src::botlib::be_ai_goal::bot_goal_t,
 ) -> i32 {
-    let mut ml: *mut maplocation_t = 0 as *mut maplocation_t; //end for
+    let mut ml: *mut maplocation_t = std::ptr::null_mut(); //end for
     let mut mins: vec3_t = [
         -(8 as i32) as vec_t,
         -(8 as i32) as vec_t,
@@ -1602,7 +1602,7 @@ pub unsafe extern "C" fn BotGetNextCampSpotGoal(
     mut goal: *mut crate::src::botlib::be_ai_goal::bot_goal_t,
 ) -> i32 {
     let mut i: i32 = 0; //end for
-    let mut cs: *mut campspot_t = 0 as *mut campspot_t;
+    let mut cs: *mut campspot_t = std::ptr::null_mut();
     let mut mins: vec3_t = [
         -(8 as i32) as vec_t,
         -(8 as i32) as vec_t,
@@ -1650,7 +1650,7 @@ pub unsafe extern "C" fn BotGetNextCampSpotGoal(
 pub unsafe extern "C" fn BotFindEntityForLevelItem(mut li: *mut levelitem_t) {
     let mut ent: i32 = 0;
     let mut modelindex: i32 = 0;
-    let mut ic: *mut itemconfig_t = 0 as *mut itemconfig_t;
+    let mut ic: *mut itemconfig_t = std::ptr::null_mut();
     let mut entinfo: aas_entityinfo_t = aas_entityinfo_t {
         valid: 0,
         type_0: 0,
@@ -1727,8 +1727,8 @@ pub unsafe extern "C" fn BotUpdateEntityItems() {
     let mut i: i32 = 0;
     let mut modelindex: i32 = 0;
     let mut dir: vec3_t = [0.; 3];
-    let mut li: *mut levelitem_t = 0 as *mut levelitem_t;
-    let mut nextli: *mut levelitem_t = 0 as *mut levelitem_t;
+    let mut li: *mut levelitem_t = std::ptr::null_mut();
+    let mut nextli: *mut levelitem_t = std::ptr::null_mut();
     let mut entinfo: aas_entityinfo_t = aas_entityinfo_t {
         valid: 0,
         type_0: 0,
@@ -1754,7 +1754,7 @@ pub unsafe extern "C" fn BotUpdateEntityItems() {
         legsAnim: 0,
         torsoAnim: 0,
     };
-    let mut ic: *mut itemconfig_t = 0 as *mut itemconfig_t;
+    let mut ic: *mut itemconfig_t = std::ptr::null_mut();
     //timeout current entity items if necessary
     li = levelitems; //end for
     while !li.is_null() {
@@ -1810,7 +1810,7 @@ pub unsafe extern "C" fn BotUpdateEntityItems() {
                             {
                                 RemoveLevelItemFromList(li); //end if
                                 FreeLevelItem(li);
-                                li = 0 as *mut levelitem_t;
+                                li = std::ptr::null_mut();
                                 break;
                             } else {
                                 //remove this level item
@@ -2017,7 +2017,7 @@ pub unsafe extern "C" fn BotUpdateEntityItems() {
 
 pub unsafe extern "C" fn BotDumpGoalStack(mut goalstate: i32) {
     let mut i: i32 = 0;
-    let mut gs: *mut bot_goalstate_t = 0 as *mut bot_goalstate_t;
+    let mut gs: *mut bot_goalstate_t = std::ptr::null_mut();
     let mut name: [libc::c_char; 32] = [0; 32];
     gs = BotGoalStateFromHandle(goalstate);
     if gs.is_null() {
@@ -2053,7 +2053,7 @@ pub unsafe extern "C" fn BotPushGoal(
     mut goalstate: i32,
     mut goal: *mut crate::src::botlib::be_ai_goal::bot_goal_t,
 ) {
-    let mut gs: *mut bot_goalstate_t = 0 as *mut bot_goalstate_t; //end if
+    let mut gs: *mut bot_goalstate_t = std::ptr::null_mut(); //end if
     gs = BotGoalStateFromHandle(goalstate);
     if gs.is_null() {
         return;
@@ -2090,7 +2090,7 @@ pub unsafe extern "C" fn BotPushGoal(
 #[no_mangle]
 
 pub unsafe extern "C" fn BotPopGoal(mut goalstate: i32) {
-    let mut gs: *mut bot_goalstate_t = 0 as *mut bot_goalstate_t;
+    let mut gs: *mut bot_goalstate_t = std::ptr::null_mut();
     gs = BotGoalStateFromHandle(goalstate);
     if gs.is_null() {
         return;
@@ -2110,7 +2110,7 @@ pub unsafe extern "C" fn BotPopGoal(mut goalstate: i32) {
 #[no_mangle]
 
 pub unsafe extern "C" fn BotEmptyGoalStack(mut goalstate: i32) {
-    let mut gs: *mut bot_goalstate_t = 0 as *mut bot_goalstate_t;
+    let mut gs: *mut bot_goalstate_t = std::ptr::null_mut();
     gs = BotGoalStateFromHandle(goalstate);
     if gs.is_null() {
         return;
@@ -2131,7 +2131,7 @@ pub unsafe extern "C" fn BotGetTopGoal(
     mut goalstate: i32,
     mut goal: *mut crate::src::botlib::be_ai_goal::bot_goal_t,
 ) -> i32 {
-    let mut gs: *mut bot_goalstate_t = 0 as *mut bot_goalstate_t;
+    let mut gs: *mut bot_goalstate_t = std::ptr::null_mut();
     gs = BotGoalStateFromHandle(goalstate);
     if gs.is_null() {
         return qfalse as i32;
@@ -2164,7 +2164,7 @@ pub unsafe extern "C" fn BotGetSecondGoal(
     mut goalstate: i32,
     mut goal: *mut crate::src::botlib::be_ai_goal::bot_goal_t,
 ) -> i32 {
-    let mut gs: *mut bot_goalstate_t = 0 as *mut bot_goalstate_t;
+    let mut gs: *mut bot_goalstate_t = std::ptr::null_mut();
     gs = BotGoalStateFromHandle(goalstate);
     if gs.is_null() {
         return qfalse as i32;
@@ -2206,10 +2206,10 @@ pub unsafe extern "C" fn BotChooseLTGItem(
     let mut weight: f32 = 0.;
     let mut bestweight: f32 = 0.;
     let mut avoidtime: f32 = 0.;
-    let mut iteminfo: *mut iteminfo_t = 0 as *mut iteminfo_t;
-    let mut ic: *mut itemconfig_t = 0 as *mut itemconfig_t;
-    let mut li: *mut levelitem_t = 0 as *mut levelitem_t;
-    let mut bestitem: *mut levelitem_t = 0 as *mut levelitem_t;
+    let mut iteminfo: *mut iteminfo_t = std::ptr::null_mut();
+    let mut ic: *mut itemconfig_t = std::ptr::null_mut();
+    let mut li: *mut levelitem_t = std::ptr::null_mut();
+    let mut bestitem: *mut levelitem_t = std::ptr::null_mut();
     let mut goal: crate::src::botlib::be_ai_goal::bot_goal_t =
         crate::src::botlib::be_ai_goal::bot_goal_t {
             origin: [0.; 3],
@@ -2221,7 +2221,7 @@ pub unsafe extern "C" fn BotChooseLTGItem(
             flags: 0,
             iteminfo: 0,
         };
-    let mut gs: *mut bot_goalstate_t = 0 as *mut bot_goalstate_t;
+    let mut gs: *mut bot_goalstate_t = std::ptr::null_mut();
     gs = BotGoalStateFromHandle(goalstate);
     if gs.is_null() {
         return qfalse as i32;
@@ -2250,7 +2250,7 @@ pub unsafe extern "C" fn BotChooseLTGItem(
     }
     //best weight and item so far
     bestweight = 0 as i32 as f32;
-    bestitem = 0 as *mut levelitem_t;
+    bestitem = std::ptr::null_mut();
     crate::stdlib::memset(
         &mut goal as *mut crate::src::botlib::be_ai_goal::bot_goal_t as *mut libc::c_void,
         0 as i32,
@@ -2439,10 +2439,10 @@ pub unsafe extern "C" fn BotChooseNBGItem(
     let mut weight: f32 = 0.;
     let mut bestweight: f32 = 0.;
     let mut avoidtime: f32 = 0.;
-    let mut iteminfo: *mut iteminfo_t = 0 as *mut iteminfo_t;
-    let mut ic: *mut itemconfig_t = 0 as *mut itemconfig_t;
-    let mut li: *mut levelitem_t = 0 as *mut levelitem_t;
-    let mut bestitem: *mut levelitem_t = 0 as *mut levelitem_t;
+    let mut iteminfo: *mut iteminfo_t = std::ptr::null_mut();
+    let mut ic: *mut itemconfig_t = std::ptr::null_mut();
+    let mut li: *mut levelitem_t = std::ptr::null_mut();
+    let mut bestitem: *mut levelitem_t = std::ptr::null_mut();
     let mut goal: crate::src::botlib::be_ai_goal::bot_goal_t =
         crate::src::botlib::be_ai_goal::bot_goal_t {
             origin: [0.; 3],
@@ -2454,7 +2454,7 @@ pub unsafe extern "C" fn BotChooseNBGItem(
             flags: 0,
             iteminfo: 0,
         };
-    let mut gs: *mut bot_goalstate_t = 0 as *mut bot_goalstate_t;
+    let mut gs: *mut bot_goalstate_t = std::ptr::null_mut();
     gs = BotGoalStateFromHandle(goalstate);
     if gs.is_null() {
         return qfalse as i32;
@@ -2494,7 +2494,7 @@ pub unsafe extern "C" fn BotChooseNBGItem(
     }
     //best weight and item so far
     bestweight = 0 as i32 as f32;
-    bestitem = 0 as *mut levelitem_t;
+    bestitem = std::ptr::null_mut();
     crate::stdlib::memset(
         &mut goal as *mut crate::src::botlib::be_ai_goal::bot_goal_t as *mut libc::c_void,
         0 as i32,
@@ -2783,8 +2783,8 @@ pub unsafe extern "C" fn BotItemGoalInVisButNotVisible(
     //
     trace = crate::src::botlib::be_aas_bspq3::AAS_Trace(
         eye,
-        0 as *mut vec_t,
-        0 as *mut vec_t,
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
         middle.as_mut_ptr(),
         viewer,
         1 as i32,
@@ -2823,7 +2823,7 @@ pub unsafe extern "C" fn BotItemGoalInVisButNotVisible(
 #[no_mangle]
 
 pub unsafe extern "C" fn BotResetGoalState(mut goalstate: i32) {
-    let mut gs: *mut bot_goalstate_t = 0 as *mut bot_goalstate_t;
+    let mut gs: *mut bot_goalstate_t = std::ptr::null_mut();
     gs = BotGoalStateFromHandle(goalstate);
     if gs.is_null() {
         return;
@@ -2852,7 +2852,7 @@ pub unsafe extern "C" fn BotLoadItemWeights(
     mut goalstate: i32,
     mut filename: *mut libc::c_char,
 ) -> i32 {
-    let mut gs: *mut bot_goalstate_t = 0 as *mut bot_goalstate_t;
+    let mut gs: *mut bot_goalstate_t = std::ptr::null_mut();
     gs = BotGoalStateFromHandle(goalstate);
     if gs.is_null() {
         return 9 as i32;
@@ -2889,7 +2889,7 @@ pub unsafe extern "C" fn BotLoadItemWeights(
 #[no_mangle]
 
 pub unsafe extern "C" fn BotFreeItemWeights(mut goalstate: i32) {
-    let mut gs: *mut bot_goalstate_t = 0 as *mut bot_goalstate_t;
+    let mut gs: *mut bot_goalstate_t = std::ptr::null_mut();
     gs = BotGoalStateFromHandle(goalstate);
     if gs.is_null() {
         return;
@@ -2962,7 +2962,7 @@ pub unsafe extern "C" fn BotFreeGoalState(mut handle: i32) {
     }
     BotFreeItemWeights(handle);
     crate::src::botlib::l_memory::FreeMemory(botgoalstates[handle as usize] as *mut libc::c_void);
-    botgoalstates[handle as usize] = 0 as *mut bot_goalstate_t;
+    botgoalstates[handle as usize] = std::ptr::null_mut();
 }
 //setup the goal AI
 //end of the function BotFreeGoalState
@@ -2975,7 +2975,7 @@ pub unsafe extern "C" fn BotFreeGoalState(mut handle: i32) {
 #[no_mangle]
 
 pub unsafe extern "C" fn BotSetupGoalAI() -> i32 {
-    let mut filename: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut filename: *mut libc::c_char = std::ptr::null_mut();
     //check if teamplay is on
     g_gametype = LibVarValue(
         b"g_gametype\x00" as *const u8 as *const libc::c_char,
@@ -3021,13 +3021,13 @@ pub unsafe extern "C" fn BotShutdownGoalAI() {
     if !itemconfig.is_null() {
         crate::src::botlib::l_memory::FreeMemory(itemconfig as *mut libc::c_void);
     }
-    itemconfig = 0 as *mut itemconfig_t;
+    itemconfig = std::ptr::null_mut();
     if !levelitemheap.is_null() {
         crate::src::botlib::l_memory::FreeMemory(levelitemheap as *mut libc::c_void);
     }
-    levelitemheap = 0 as *mut levelitem_t;
-    freelevelitems = 0 as *mut levelitem_t;
-    levelitems = 0 as *mut levelitem_t;
+    levelitemheap = std::ptr::null_mut();
+    freelevelitems = std::ptr::null_mut();
+    levelitems = std::ptr::null_mut();
     numlevelitems = 0 as i32;
     BotFreeInfoEntities();
     i = 1 as i32;
@@ -3045,110 +3045,110 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"name\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut iteminfo_t)).name as *mut [libc::c_char; 80] as size_t
+                offset: &mut (*(std::ptr::null_mut())).name as *mut [libc::c_char; 80] as size_t
                     as i32,
                 type_0: 4 as i32,
                 maxarray: 0,
                 floatmin: 0.,
                 floatmax: 0.,
-                substruct: 0 as *mut structdef_s,
+                substruct: std::ptr::null_mut(),
             };
             init
         },
         {
             let mut init = fielddef_s {
                 name: b"model\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut iteminfo_t)).model as *mut [libc::c_char; 80] as size_t
+                offset: &mut (*(std::ptr::null_mut())).model as *mut [libc::c_char; 80] as size_t
                     as i32,
                 type_0: 4 as i32,
                 maxarray: 0,
                 floatmin: 0.,
                 floatmax: 0.,
-                substruct: 0 as *mut structdef_s,
+                substruct: std::ptr::null_mut(),
             };
             init
         },
         {
             let mut init = fielddef_s {
                 name: b"modelindex\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut iteminfo_t)).modelindex as *mut i32 as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut())).modelindex as *mut i32 as size_t as i32,
                 type_0: 2 as i32,
                 maxarray: 0,
                 floatmin: 0.,
                 floatmax: 0.,
-                substruct: 0 as *mut structdef_s,
+                substruct: std::ptr::null_mut(),
             };
             init
         },
         {
             let mut init = fielddef_s {
                 name: b"type\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut iteminfo_t)).type_0 as *mut i32 as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut())).type_0 as *mut i32 as size_t as i32,
                 type_0: 2 as i32,
                 maxarray: 0,
                 floatmin: 0.,
                 floatmax: 0.,
-                substruct: 0 as *mut structdef_s,
+                substruct: std::ptr::null_mut(),
             };
             init
         },
         {
             let mut init = fielddef_s {
                 name: b"index\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut iteminfo_t)).index as *mut i32 as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut())).index as *mut i32 as size_t as i32,
                 type_0: 2 as i32,
                 maxarray: 0,
                 floatmin: 0.,
                 floatmax: 0.,
-                substruct: 0 as *mut structdef_s,
+                substruct: std::ptr::null_mut(),
             };
             init
         },
         {
             let mut init = fielddef_s {
                 name: b"respawntime\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut iteminfo_t)).respawntime as *mut f32 as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut())).respawntime as *mut f32 as size_t as i32,
                 type_0: 3 as i32,
                 maxarray: 0,
                 floatmin: 0.,
                 floatmax: 0.,
-                substruct: 0 as *mut structdef_s,
+                substruct: std::ptr::null_mut(),
             };
             init
         },
         {
             let mut init = fielddef_s {
                 name: b"mins\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut iteminfo_t)).mins as *mut vec3_t as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut())).mins as *mut vec3_t as size_t as i32,
                 type_0: 3 as i32 | 0x100 as i32,
                 maxarray: 3 as i32,
                 floatmin: 0.,
                 floatmax: 0.,
-                substruct: 0 as *mut structdef_s,
+                substruct: std::ptr::null_mut(),
             };
             init
         },
         {
             let mut init = fielddef_s {
                 name: b"maxs\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut iteminfo_t)).maxs as *mut vec3_t as size_t as i32,
+                offset: &mut (*(std::ptr::null_mut())).maxs as *mut vec3_t as size_t as i32,
                 type_0: 3 as i32 | 0x100 as i32,
                 maxarray: 3 as i32,
                 floatmin: 0.,
                 floatmax: 0.,
-                substruct: 0 as *mut structdef_s,
+                substruct: std::ptr::null_mut(),
             };
             init
         },
         {
             let mut init = fielddef_s {
-                name: 0 as *mut libc::c_char,
+                name: std::ptr::null_mut(),
                 offset: 0 as i32,
                 type_0: 0 as i32,
                 maxarray: 0,
                 floatmin: 0.,
                 floatmax: 0.,
-                substruct: 0 as *mut structdef_s,
+                substruct: std::ptr::null_mut(),
             };
             init
         },

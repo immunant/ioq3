@@ -296,14 +296,16 @@ pub unsafe extern "C" fn R_RegisterMD3(
     mut name: *const libc::c_char,
     mut mod_0: *mut model_t,
 ) -> qhandle_t {
-    let mut buf: C2RustUnnamed_120 = C2RustUnnamed_120 { u: 0 as *mut u32 };
+    let mut buf: C2RustUnnamed_120 = C2RustUnnamed_120 {
+        u: std::ptr::null_mut()}
+    ;
     let mut lod: i32 = 0;
     let mut ident: i32 = 0;
     let mut loaded: qboolean = qfalse;
     let mut numLoaded: i32 = 0;
     let mut filename: [libc::c_char; 64] = [0; 64];
     let mut namebuf: [libc::c_char; 84] = [0; 84];
-    let mut fext: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut fext: *mut libc::c_char = std::ptr::null_mut();
     let mut defex: [libc::c_char; 4] =
         *::std::mem::transmute::<&[u8; 4], &mut [libc::c_char; 4]>(b"md3\x00");
     numLoaded = 0 as i32;
@@ -387,7 +389,9 @@ pub unsafe extern "C" fn R_RegisterMDR(
     mut name: *const libc::c_char,
     mut mod_0: *mut model_t,
 ) -> qhandle_t {
-    let mut buf: C2RustUnnamed_121 = C2RustUnnamed_121 { u: 0 as *mut u32 };
+    let mut buf: C2RustUnnamed_121 = C2RustUnnamed_121 {
+        u: std::ptr::null_mut()}
+    ;
     let mut ident: i32 = 0;
     let mut loaded: qboolean = qfalse;
     let mut filesize: i32 = 0;
@@ -431,7 +435,9 @@ pub unsafe extern "C" fn R_RegisterIQM(
     mut name: *const libc::c_char,
     mut mod_0: *mut model_t,
 ) -> qhandle_t {
-    let mut buf: C2RustUnnamed_122 = C2RustUnnamed_122 { u: 0 as *mut u32 };
+    let mut buf: C2RustUnnamed_122 = C2RustUnnamed_122 {
+        u: std::ptr::null_mut()}
+    ;
     let mut loaded: qboolean = qfalse;
     let mut filesize: i32 = 0;
     filesize = ri.FS_ReadFile.expect("non-null function pointer")(
@@ -516,7 +522,7 @@ static mut numModelLoaders: i32 = 0;
 #[no_mangle]
 
 pub unsafe extern "C" fn R_GetModelByHandle(mut index: qhandle_t) -> *mut model_t {
-    let mut mod_0: *mut model_t = 0 as *mut model_t;
+    let mut mod_0: *mut model_t = std::ptr::null_mut();
     // out of range gets the defualt model
     if index < 1 as i32 || index >= tr.numModels {
         return tr.models[0 as i32 as usize];
@@ -531,9 +537,9 @@ pub unsafe extern "C" fn R_GetModelByHandle(mut index: qhandle_t) -> *mut model_
 #[no_mangle]
 
 pub unsafe extern "C" fn R_AllocModel() -> *mut model_t {
-    let mut mod_0: *mut model_t = 0 as *mut model_t;
+    let mut mod_0: *mut model_t = std::ptr::null_mut();
     if tr.numModels == 1024 as i32 {
-        return 0 as *mut model_t;
+        return std::ptr::null_mut();
     }
     mod_0 = ri.Hunk_Alloc.expect("non-null function pointer")(
         ::std::mem::size_of::<model_t>() as usize as i32,
@@ -559,13 +565,13 @@ asked for again.
 #[no_mangle]
 
 pub unsafe extern "C" fn RE_RegisterModel(mut name: *const libc::c_char) -> qhandle_t {
-    let mut mod_0: *mut model_t = 0 as *mut model_t;
+    let mut mod_0: *mut model_t = std::ptr::null_mut();
     let mut hModel: qhandle_t = 0;
     let mut orgNameFailed: qboolean = qfalse;
     let mut orgLoader: i32 = -(1 as i32);
     let mut i: i32 = 0;
     let mut localName: [libc::c_char; 64] = [0; 64];
-    let mut ext: *const libc::c_char = 0 as *const libc::c_char;
+    let mut ext: *const libc::c_char = std::ptr::null();
     let mut altName: [libc::c_char; 64] = [0; 64];
     if name.is_null() || *name.offset(0 as i32 as isize) == 0 {
         ri.Printf.expect("non-null function pointer")(
@@ -721,14 +727,14 @@ unsafe extern "C" fn R_LoadMD3(
 ) -> qboolean {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut pinmodel: *mut md3Header_t = 0 as *mut md3Header_t;
-    let mut frame: *mut md3Frame_t = 0 as *mut md3Frame_t;
-    let mut surf: *mut md3Surface_t = 0 as *mut md3Surface_t;
-    let mut shader: *mut md3Shader_t = 0 as *mut md3Shader_t;
-    let mut tri: *mut md3Triangle_t = 0 as *mut md3Triangle_t;
-    let mut st: *mut md3St_t = 0 as *mut md3St_t;
-    let mut xyz: *mut md3XyzNormal_t = 0 as *mut md3XyzNormal_t;
-    let mut tag: *mut md3Tag_t = 0 as *mut md3Tag_t;
+    let mut pinmodel: *mut md3Header_t = std::ptr::null_mut();
+    let mut frame: *mut md3Frame_t = std::ptr::null_mut();
+    let mut surf: *mut md3Surface_t = std::ptr::null_mut();
+    let mut shader: *mut md3Shader_t = std::ptr::null_mut();
+    let mut tri: *mut md3Triangle_t = std::ptr::null_mut();
+    let mut st: *mut md3St_t = std::ptr::null_mut();
+    let mut xyz: *mut md3XyzNormal_t = std::ptr::null_mut();
+    let mut tag: *mut md3Tag_t = std::ptr::null_mut();
     let mut version: i32 = 0;
     let mut size: i32 = 0;
     pinmodel = buffer as *mut md3Header_t;
@@ -867,7 +873,7 @@ unsafe extern "C" fn R_LoadMD3(
         shader = (surf as *mut byte).offset((*surf).ofsShaders as isize) as *mut md3Shader_t;
         j = 0 as i32;
         while j < (*surf).numShaders {
-            let mut sh: *mut shader_t = 0 as *mut shader_t;
+            let mut sh: *mut shader_t = std::ptr::null_mut();
             sh = R_FindShader((*shader).name.as_mut_ptr(), -(1 as i32), qtrue) as *mut shader_s;
             if (*sh).defaultShader as u64 != 0 {
                 (*shader).shaderIndex = 0 as i32
@@ -929,23 +935,23 @@ unsafe extern "C" fn R_LoadMDR(
     let mut j: i32 = 0;
     let mut k: i32 = 0;
     let mut l: i32 = 0;
-    let mut pinmodel: *mut mdrHeader_t = 0 as *mut mdrHeader_t;
-    let mut mdr: *mut mdrHeader_t = 0 as *mut mdrHeader_t;
-    let mut frame: *mut mdrFrame_t = 0 as *mut mdrFrame_t;
-    let mut lod: *mut mdrLOD_t = 0 as *mut mdrLOD_t;
-    let mut curlod: *mut mdrLOD_t = 0 as *mut mdrLOD_t;
-    let mut surf: *mut mdrSurface_t = 0 as *mut mdrSurface_t;
-    let mut cursurf: *mut mdrSurface_t = 0 as *mut mdrSurface_t;
-    let mut tri: *mut mdrTriangle_t = 0 as *mut mdrTriangle_t;
-    let mut curtri: *mut mdrTriangle_t = 0 as *mut mdrTriangle_t;
-    let mut v: *mut mdrVertex_t = 0 as *mut mdrVertex_t;
-    let mut curv: *mut mdrVertex_t = 0 as *mut mdrVertex_t;
-    let mut weight: *mut mdrWeight_t = 0 as *mut mdrWeight_t;
-    let mut curweight: *mut mdrWeight_t = 0 as *mut mdrWeight_t;
-    let mut tag: *mut mdrTag_t = 0 as *mut mdrTag_t;
-    let mut curtag: *mut mdrTag_t = 0 as *mut mdrTag_t;
+    let mut pinmodel: *mut mdrHeader_t = std::ptr::null_mut();
+    let mut mdr: *mut mdrHeader_t = std::ptr::null_mut();
+    let mut frame: *mut mdrFrame_t = std::ptr::null_mut();
+    let mut lod: *mut mdrLOD_t = std::ptr::null_mut();
+    let mut curlod: *mut mdrLOD_t = std::ptr::null_mut();
+    let mut surf: *mut mdrSurface_t = std::ptr::null_mut();
+    let mut cursurf: *mut mdrSurface_t = std::ptr::null_mut();
+    let mut tri: *mut mdrTriangle_t = std::ptr::null_mut();
+    let mut curtri: *mut mdrTriangle_t = std::ptr::null_mut();
+    let mut v: *mut mdrVertex_t = std::ptr::null_mut();
+    let mut curv: *mut mdrVertex_t = std::ptr::null_mut();
+    let mut weight: *mut mdrWeight_t = std::ptr::null_mut();
+    let mut curweight: *mut mdrWeight_t = std::ptr::null_mut();
+    let mut tag: *mut mdrTag_t = std::ptr::null_mut();
+    let mut curtag: *mut mdrTag_t = std::ptr::null_mut();
     let mut size: i32 = 0;
-    let mut sh: *mut shader_t = 0 as *mut shader_t;
+    let mut sh: *mut shader_t = std::ptr::null_mut();
     pinmodel = buffer as *mut mdrHeader_t;
     (*pinmodel).version = (*pinmodel).version;
     if (*pinmodel).version != 2 as i32 {
@@ -1036,7 +1042,7 @@ unsafe extern "C" fn R_LoadMDR(
     frame = mdr.offset(1 as i32 as isize) as *mut mdrFrame_t;
     (*mdr).ofsFrames = (frame as *mut byte).offset_from(mdr as *mut byte) as isize as i32;
     if (*pinmodel).ofsFrames < 0 as i32 {
-        let mut cframe: *mut mdrCompFrame_t = 0 as *mut mdrCompFrame_t;
+        let mut cframe: *mut mdrCompFrame_t = std::ptr::null_mut();
         // compressed model...
         cframe = (pinmodel as *mut byte).offset(-((*pinmodel).ofsFrames as isize))
             as *mut mdrCompFrame_t; // No name supplied in the compressed version.
@@ -1090,7 +1096,7 @@ unsafe extern "C" fn R_LoadMDR(
             i += 1
         }
     } else {
-        let mut curframe: *mut mdrFrame_t = 0 as *mut mdrFrame_t;
+        let mut curframe: *mut mdrFrame_t = std::ptr::null_mut();
         // uncompressed model...
         //
         curframe =
@@ -1492,7 +1498,7 @@ R_ModelInit
 #[no_mangle]
 
 pub unsafe extern "C" fn R_ModelInit() {
-    let mut mod_0: *mut model_t = 0 as *mut model_t;
+    let mut mod_0: *mut model_t = std::ptr::null_mut();
     // leave a space for NULL model
     tr.numModels = 0 as i32;
     mod_0 = R_AllocModel();
@@ -1508,7 +1514,7 @@ R_Modellist_f
 pub unsafe extern "C" fn R_Modellist_f() {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut mod_0: *mut model_t = 0 as *mut model_t;
+    let mut mod_0: *mut model_t = std::ptr::null_mut();
     let mut total: i32 = 0;
     let mut lods: i32 = 0;
     total = 0 as i32;
@@ -1554,7 +1560,7 @@ unsafe extern "C" fn R_GetTag(
     mut frame: i32,
     mut tagName: *const libc::c_char,
 ) -> *mut md3Tag_t {
-    let mut tag: *mut md3Tag_t = 0 as *mut md3Tag_t;
+    let mut tag: *mut md3Tag_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     if frame >= (*mod_0).numFrames {
         // it is possible to have a bad frame while changing models, so don't error
@@ -1571,7 +1577,7 @@ unsafe extern "C" fn R_GetTag(
         i += 1;
         tag = tag.offset(1)
     }
-    return 0 as *mut md3Tag_t;
+    return std::ptr::null_mut();
 }
 #[no_mangle]
 
@@ -1585,8 +1591,8 @@ pub unsafe extern "C" fn R_GetAnimTag(
     let mut j: i32 = 0;
     let mut k: i32 = 0;
     let mut frameSize: i32 = 0;
-    let mut frame: *mut mdrFrame_t = 0 as *mut mdrFrame_t;
-    let mut tag: *mut mdrTag_t = 0 as *mut mdrTag_t;
+    let mut frame: *mut mdrFrame_t = std::ptr::null_mut();
+    let mut tag: *mut mdrTag_t = std::ptr::null_mut();
     if framenum >= (*mod_0).numFrames {
         // it is possible to have a bad frame while changing models, so don't error
         framenum = (*mod_0).numFrames - 1 as i32
@@ -1602,7 +1608,7 @@ pub unsafe extern "C" fn R_GetAnimTag(
             );
             // uncompressed model...
             //
-            frameSize = &mut *(*(0 as *mut mdrFrame_t))
+            frameSize = &mut *(*(std::ptr::null_mut()))
                 .bones
                 .as_mut_ptr()
                 .offset((*mod_0).numBones as isize) as *mut mdrBone_t
@@ -1643,7 +1649,7 @@ pub unsafe extern "C" fn R_GetAnimTag(
         i += 1;
         tag = tag.offset(1)
     }
-    return 0 as *mut md3Tag_t;
+    return std::ptr::null_mut();
 }
 /*
 ================
@@ -1660,8 +1666,8 @@ pub unsafe extern "C" fn R_LerpTag(
     mut frac: f32,
     mut tagName: *const libc::c_char,
 ) -> i32 {
-    let mut start: *mut md3Tag_t = 0 as *mut md3Tag_t;
-    let mut end: *mut md3Tag_t = 0 as *mut md3Tag_t;
+    let mut start: *mut md3Tag_t = std::ptr::null_mut();
+    let mut end: *mut md3Tag_t = std::ptr::null_mut();
     let mut start_space: md3Tag_t = md3Tag_t {
         name: [0; 64],
         origin: [0.; 3],
@@ -1675,7 +1681,7 @@ pub unsafe extern "C" fn R_LerpTag(
     let mut i: i32 = 0;
     let mut frontLerp: f32 = 0.;
     let mut backLerp: f32 = 0.;
-    let mut model: *mut model_t = 0 as *mut model_t;
+    let mut model: *mut model_t = std::ptr::null_mut();
     model = R_GetModelByHandle(handle);
     if (*model).md3[0 as i32 as usize].is_null() {
         if (*model).type_0 as u32 == MOD_MDR as i32 as u32 {
@@ -1701,7 +1707,7 @@ pub unsafe extern "C" fn R_LerpTag(
                 tagName,
             );
         } else {
-            end = 0 as *mut md3Tag_t;
+            end = std::ptr::null_mut();
             start = end
         }
     } else {
@@ -1950,7 +1956,7 @@ pub unsafe extern "C" fn R_ModelBounds(
     mut mins: *mut vec_t,
     mut maxs: *mut vec_t,
 ) {
-    let mut model: *mut model_t = 0 as *mut model_t;
+    let mut model: *mut model_t = std::ptr::null_mut();
     model = R_GetModelByHandle(handle);
     if (*model).type_0 as u32 == MOD_BRUSH as i32 as u32 {
         *mins.offset(0 as i32 as isize) =
@@ -1968,8 +1974,8 @@ pub unsafe extern "C" fn R_ModelBounds(
         return;
     } else {
         if (*model).type_0 as u32 == MOD_MESH as i32 as u32 {
-            let mut header: *mut md3Header_t = 0 as *mut md3Header_t;
-            let mut frame: *mut md3Frame_t = 0 as *mut md3Frame_t;
+            let mut header: *mut md3Header_t = std::ptr::null_mut();
+            let mut frame: *mut md3Frame_t = std::ptr::null_mut();
             header = (*model).md3[0 as i32 as usize];
             frame = (header as *mut byte).offset((*header).ofsFrames as isize) as *mut md3Frame_t;
             *mins.offset(0 as i32 as isize) = (*frame).bounds[0 as i32 as usize][0 as i32 as usize];
@@ -1981,8 +1987,8 @@ pub unsafe extern "C" fn R_ModelBounds(
             return;
         } else {
             if (*model).type_0 as u32 == MOD_MDR as i32 as u32 {
-                let mut header_0: *mut mdrHeader_t = 0 as *mut mdrHeader_t;
-                let mut frame_0: *mut mdrFrame_t = 0 as *mut mdrFrame_t;
+                let mut header_0: *mut mdrHeader_t = std::ptr::null_mut();
+                let mut frame_0: *mut mdrFrame_t = std::ptr::null_mut();
                 header_0 = (*model).modelData as *mut mdrHeader_t;
                 frame_0 = (header_0 as *mut byte).offset((*header_0).ofsFrames as isize)
                     as *mut mdrFrame_t;
@@ -2001,7 +2007,7 @@ pub unsafe extern "C" fn R_ModelBounds(
                 return;
             } else {
                 if (*model).type_0 as u32 == MOD_IQM as i32 as u32 {
-                    let mut iqmData: *mut iqmData_t = 0 as *mut iqmData_t;
+                    let mut iqmData: *mut iqmData_t = std::ptr::null_mut();
                     iqmData = (*model).modelData as *mut iqmData_t;
                     if !(*iqmData).bounds.is_null() {
                         *mins.offset(0 as i32 as isize) =

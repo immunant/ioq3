@@ -422,7 +422,7 @@ R_IssueRenderCommands
 #[no_mangle]
 
 pub unsafe extern "C" fn R_IssueRenderCommands(mut runPerformanceCounters: qboolean) {
-    let mut cmdList: *mut renderCommandList_t = 0 as *mut renderCommandList_t;
+    let mut cmdList: *mut renderCommandList_t = std::ptr::null_mut();
     cmdList = &mut (*backEndData).commands;
     // add an end-of-list command
     *((*cmdList)
@@ -521,7 +521,7 @@ pub unsafe extern "C" fn R_GetCommandBufferReserved(
     mut bytes: i32,
     mut reservedBytes: i32,
 ) -> *mut libc::c_void {
-    let mut cmdList: *mut renderCommandList_t = 0 as *mut renderCommandList_t;
+    let mut cmdList: *mut renderCommandList_t = std::ptr::null_mut();
     cmdList = &mut (*backEndData).commands;
     bytes = ((bytes as usize)
         .wrapping_add(::std::mem::size_of::<*mut libc::c_void>() as usize)
@@ -544,7 +544,7 @@ pub unsafe extern "C" fn R_GetCommandBufferReserved(
             );
         }
         // if we run out of room, just start dropping commands
-        return 0 as *mut libc::c_void;
+        return std::ptr::null_mut();
     }
     (*cmdList).used += bytes;
     return (*cmdList)
@@ -581,7 +581,7 @@ R_AddDrawSurfCmd
 #[no_mangle]
 
 pub unsafe extern "C" fn R_AddDrawSurfCmd(mut drawSurfs: *mut drawSurf_t, mut numDrawSurfs: i32) {
-    let mut cmd: *mut drawSurfsCommand_t = 0 as *mut drawSurfsCommand_t;
+    let mut cmd: *mut drawSurfsCommand_t = std::ptr::null_mut();
     cmd = R_GetCommandBuffer(::std::mem::size_of::<drawSurfsCommand_t>() as usize as i32)
         as *mut drawSurfsCommand_t;
     if cmd.is_null() {
@@ -603,7 +603,7 @@ Passing NULL will set the color to white
 #[no_mangle]
 
 pub unsafe extern "C" fn RE_SetColor(mut rgba: *const f32) {
-    let mut cmd: *mut setColorCommand_t = 0 as *mut setColorCommand_t;
+    let mut cmd: *mut setColorCommand_t = std::ptr::null_mut();
     if tr.registered as u64 == 0 {
         return;
     }
@@ -645,7 +645,7 @@ pub unsafe extern "C" fn RE_StretchPic(
     mut t2: f32,
     mut hShader: qhandle_t,
 ) {
-    let mut cmd: *mut stretchPicCommand_t = 0 as *mut stretchPicCommand_t;
+    let mut cmd: *mut stretchPicCommand_t = std::ptr::null_mut();
     if tr.registered as u64 == 0 {
         return;
     }
@@ -719,8 +719,8 @@ for each RE_EndFrame
 #[no_mangle]
 
 pub unsafe extern "C" fn RE_BeginFrame(mut stereoFrame: stereoFrame_t) {
-    let mut cmd: *mut drawBufferCommand_t = 0 as *mut drawBufferCommand_t;
-    let mut colcmd: *mut colorMaskCommand_t = 0 as *mut colorMaskCommand_t;
+    let mut cmd: *mut drawBufferCommand_t = std::ptr::null_mut();
+    let mut colcmd: *mut colorMaskCommand_t = std::ptr::null_mut();
     if tr.registered as u64 == 0 {
         return;
     }
@@ -859,7 +859,7 @@ pub unsafe extern "C" fn RE_BeginFrame(mut stereoFrame: stereoFrame_t) {
                     return;
                 }
             } else if stereoFrame as u32 == STEREO_RIGHT as i32 as u32 {
-                let mut cldcmd: *mut clearDepthCommand_t = 0 as *mut clearDepthCommand_t;
+                let mut cldcmd: *mut clearDepthCommand_t = std::ptr::null_mut();
                 cldcmd = R_GetCommandBuffer(
                     ::std::mem::size_of::<clearDepthCommand_t>() as usize as i32
                 ) as *mut clearDepthCommand_t;
@@ -936,7 +936,7 @@ Returns the number of msec spent in the back end
 #[no_mangle]
 
 pub unsafe extern "C" fn RE_EndFrame(mut frontEndMsec: *mut i32, mut backEndMsec: *mut i32) {
-    let mut cmd: *mut swapBuffersCommand_t = 0 as *mut swapBuffersCommand_t;
+    let mut cmd: *mut swapBuffersCommand_t = std::ptr::null_mut();
     if tr.registered as u64 == 0 {
         return;
     }
@@ -1400,7 +1400,7 @@ pub unsafe extern "C" fn RE_TakeVideoFrame(
     mut encodeBuffer: *mut byte,
     mut motionJpeg: qboolean,
 ) {
-    let mut cmd: *mut videoFrameCommand_t = 0 as *mut videoFrameCommand_t;
+    let mut cmd: *mut videoFrameCommand_t = std::ptr::null_mut();
     if tr.registered as u64 == 0 {
         return;
     }

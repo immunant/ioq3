@@ -503,7 +503,7 @@ LAN_ResetPings
 unsafe extern "C" fn LAN_ResetPings(mut source: i32) {
     let mut count: i32 = 0;
     let mut i: i32 = 0;
-    let mut servers: *mut serverInfo_t = 0 as *mut serverInfo_t;
+    let mut servers: *mut serverInfo_t = std::ptr::null_mut();
     count = 0 as i32;
     match source {
         0 => {
@@ -543,7 +543,7 @@ unsafe extern "C" fn LAN_AddServer(
     mut address: *const libc::c_char,
 ) -> i32 {
     let mut max: i32 = 0;
-    let mut count: *mut i32 = 0 as *mut i32;
+    let mut count: *mut i32 = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut adr: netadr_t = netadr_t {
         type_0: NA_BAD,
@@ -552,9 +552,9 @@ unsafe extern "C" fn LAN_AddServer(
         port: 0,
         scope_id: 0,
     };
-    let mut servers: *mut serverInfo_t = 0 as *mut serverInfo_t;
+    let mut servers: *mut serverInfo_t = std::ptr::null_mut();
     max = 128 as i32;
-    count = 0 as *mut i32;
+    count = std::ptr::null_mut();
     match source {
         0 => {
             count = &mut cls.numlocalservers;
@@ -610,10 +610,10 @@ LAN_RemoveServer
 */
 
 unsafe extern "C" fn LAN_RemoveServer(mut source: i32, mut addr: *const libc::c_char) {
-    let mut count: *mut i32 = 0 as *mut i32;
+    let mut count: *mut i32 = std::ptr::null_mut();
     let mut i: i32 = 0;
-    let mut servers: *mut serverInfo_t = 0 as *mut serverInfo_t;
-    count = 0 as *mut i32;
+    let mut servers: *mut serverInfo_t = std::ptr::null_mut();
+    count = std::ptr::null_mut();
     match source {
         0 => {
             count = &mut cls.numlocalservers;
@@ -742,7 +742,7 @@ unsafe extern "C" fn LAN_GetServerInfo(
     mut buflen: i32,
 ) {
     let mut info: [libc::c_char; 1024] = [0; 1024];
-    let mut server: *mut serverInfo_t = 0 as *mut serverInfo_t;
+    let mut server: *mut serverInfo_t = std::ptr::null_mut();
     info[0 as i32 as usize] = '\u{0}' as i32 as libc::c_char;
     match source {
         0 => {
@@ -878,7 +878,7 @@ LAN_GetServerPing
 */
 
 unsafe extern "C" fn LAN_GetServerPing(mut source: i32, mut n: i32) -> i32 {
-    let mut server: *mut serverInfo_t = 0 as *mut serverInfo_t;
+    let mut server: *mut serverInfo_t = std::ptr::null_mut();
     match source {
         0 => {
             if n >= 0 as i32 && n < 128 as i32 {
@@ -931,7 +931,7 @@ unsafe extern "C" fn LAN_GetServerPtr(mut source: i32, mut n: i32) -> *mut serve
         }
         _ => {}
     }
-    return 0 as *mut serverInfo_t;
+    return std::ptr::null_mut();
 }
 /*
 ====================
@@ -947,8 +947,8 @@ unsafe extern "C" fn LAN_CompareServers(
     mut s2: i32,
 ) -> i32 {
     let mut res: i32 = 0;
-    let mut server1: *mut serverInfo_t = 0 as *mut serverInfo_t;
-    let mut server2: *mut serverInfo_t = 0 as *mut serverInfo_t;
+    let mut server1: *mut serverInfo_t = std::ptr::null_mut();
+    let mut server2: *mut serverInfo_t = std::ptr::null_mut();
     let mut clients1: i32 = 0;
     let mut clients2: i32 = 0;
     server1 = LAN_GetServerPtr(source, s1);
@@ -1068,7 +1068,7 @@ LAN_MarkServerVisible
 unsafe extern "C" fn LAN_MarkServerVisible(mut source: i32, mut n: i32, mut visible: qboolean) {
     if n == -(1 as i32) {
         let mut count: i32 = 128 as i32;
-        let mut server: *mut serverInfo_t = 0 as *mut serverInfo_t;
+        let mut server: *mut serverInfo_t = std::ptr::null_mut();
         match source {
             0 => {
                 server = &mut *cls.localServers.as_mut_ptr().offset(0 as i32 as isize)
@@ -1180,7 +1180,7 @@ CL_GetClipboardData
 */
 
 unsafe extern "C" fn CL_GetClipboardData(mut buf: *mut libc::c_char, mut buflen: i32) {
-    let mut cbd: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut cbd: *mut libc::c_char = std::ptr::null_mut();
     cbd = Sys_GetClipboardData();
     if cbd.is_null() {
         *buf = 0 as i32 as libc::c_char;
@@ -1213,7 +1213,7 @@ unsafe extern "C" fn Key_GetBindingBuf(
     mut buf: *mut libc::c_char,
     mut buflen: i32,
 ) {
-    let mut value: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut value: *mut libc::c_char = std::ptr::null_mut();
     value = crate::src::client::cl_keys::Key_GetBinding(keynum);
     if !value.is_null() {
         Q_strncpyz(buf, value, buflen);
@@ -1228,7 +1228,7 @@ CLUI_GetCDKey
 */
 
 unsafe extern "C" fn CLUI_GetCDKey(mut buf: *mut libc::c_char, mut _buflen: i32) {
-    let mut gamedir: *const libc::c_char = 0 as *const libc::c_char;
+    let mut gamedir: *const libc::c_char = std::ptr::null();
     gamedir = Cvar_VariableString(b"fs_game\x00" as *const u8 as *const libc::c_char);
     if UI_usesUniqueCDKey() as u32 != 0 && *gamedir.offset(0 as i32 as isize) as i32 != 0 as i32 {
         crate::stdlib::memcpy(
@@ -1254,7 +1254,7 @@ CLUI_SetCDKey
 */
 
 unsafe extern "C" fn CLUI_SetCDKey(mut buf: *mut libc::c_char) {
-    let mut gamedir: *const libc::c_char = 0 as *const libc::c_char;
+    let mut gamedir: *const libc::c_char = std::ptr::null();
     gamedir = Cvar_VariableString(b"fs_game\x00" as *const u8 as *const libc::c_char);
     if UI_usesUniqueCDKey() as u32 != 0 && *gamedir.offset(0 as i32 as isize) as i32 != 0 as i32 {
         crate::stdlib::memcpy(
@@ -1390,7 +1390,7 @@ pub unsafe extern "C" fn CL_UISystemCalls(mut args: *mut intptr_t) -> intptr_t {
         }
         8 => {
             Cvar_Register(
-                0 as *mut vmCvar_t as *mut vmCvar_t,
+                std::ptr::null_mut() as *mut vmCvar_t,
                 VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const libc::c_char,
                 VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const libc::c_char,
                 *args.offset(3 as i32 as isize) as i32,
@@ -1966,7 +1966,7 @@ pub unsafe extern "C" fn CL_ShutdownUI() {
     }
     VM_Call(uivm, UI_SHUTDOWN as i32);
     VM_Free(uivm);
-    uivm = 0 as *mut vm_t;
+    uivm = std::ptr::null_mut();
 }
 /*
 ===========================================================================
@@ -2211,7 +2211,7 @@ pub unsafe extern "C" fn CL_InitUI() {
     } else if v != 6 as i32 {
         // Free uivm now, so UI_SHUTDOWN doesn't get called later.
         VM_Free(uivm);
-        uivm = 0 as *mut vm_t;
+        uivm = std::ptr::null_mut();
         Com_Error(
             ERR_DROP as i32,
             b"User Interface is version %d, expected %d\x00" as *const u8 as *const libc::c_char,

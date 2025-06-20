@@ -332,8 +332,8 @@ pub unsafe extern "C" fn silk_NLSF_decode(
     let mut ec_ix: [opus_int16; 16] = [0; 16];
     let mut res_Q10: [opus_int16; 16] = [0; 16];
     let mut NLSF_Q15_tmp: opus_int32 = 0;
-    let mut pCB_element: *const u8 = 0 as *const u8;
-    let mut pCB_Wght_Q9: *const opus_int16 = 0 as *const opus_int16;
+    let mut pCB_element: *const u8 = std::ptr::null();
+    let mut pCB_Wght_Q9: *const opus_int16 = std::ptr::null();
     /* Unpack entropy table indices and predictor for current CB1 index */
     crate::src::opus_1_2_1::silk::NLSF_unpack::silk_NLSF_unpack(
         ec_ix.as_mut_ptr(),

@@ -94,7 +94,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #[no_mangle]
 
 pub unsafe extern "C" fn Log_Open(mut filename: *mut libc::c_char) {
-    let mut ospath: *mut libc::c_char = 0 as *mut libc::c_char; //end if
+    let mut ospath: *mut libc::c_char = std::ptr::null_mut(); //end if
     if crate::src::botlib::l_libvar::LibVarValue(
         b"log\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
@@ -167,7 +167,7 @@ pub unsafe extern "C" fn Log_Close() {
         );
         return;
     }
-    logfile.fp = 0 as *mut FILE;
+    logfile.fp = std::ptr::null_mut();
     botimport.Print.expect("non-null function pointer")(
         1 as i32,
         b"Closed log %s\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,

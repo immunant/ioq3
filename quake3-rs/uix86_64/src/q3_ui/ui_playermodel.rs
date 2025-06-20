@@ -422,7 +422,7 @@ static mut s_playermodel: playermodel_t = playermodel_t {
     pics: [menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -448,7 +448,7 @@ static mut s_playermodel: playermodel_t = playermodel_t {
     picbuttons: [menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -474,7 +474,7 @@ static mut s_playermodel: playermodel_t = playermodel_t {
     framel: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -500,7 +500,7 @@ static mut s_playermodel: playermodel_t = playermodel_t {
     framer: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -526,7 +526,7 @@ static mut s_playermodel: playermodel_t = playermodel_t {
     ports: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -552,7 +552,7 @@ static mut s_playermodel: playermodel_t = playermodel_t {
     banner: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -574,7 +574,7 @@ static mut s_playermodel: playermodel_t = playermodel_t {
     back: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -600,7 +600,7 @@ static mut s_playermodel: playermodel_t = playermodel_t {
     player: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -626,7 +626,7 @@ static mut s_playermodel: playermodel_t = playermodel_t {
     arrows: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -652,7 +652,7 @@ static mut s_playermodel: playermodel_t = playermodel_t {
     left: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -678,7 +678,7 @@ static mut s_playermodel: playermodel_t = playermodel_t {
     right: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -704,7 +704,7 @@ static mut s_playermodel: playermodel_t = playermodel_t {
     modelname: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -726,7 +726,7 @@ static mut s_playermodel: playermodel_t = playermodel_t {
     skinname: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -748,7 +748,7 @@ static mut s_playermodel: playermodel_t = playermodel_t {
     playername: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -866,7 +866,7 @@ unsafe extern "C" fn PlayerModel_UpdateGrid() {
             s_playermodel.picbuttons[i as usize].generic.flags &= !(0x4000 as i32 as u32)
         } else {
             // dead slot
-            s_playermodel.pics[i as usize].generic.name = 0 as *const libc::c_char;
+            s_playermodel.pics[i as usize].generic.name = std::ptr::null();
             s_playermodel.picbuttons[i as usize].generic.flags |= 0x4000 as i32 as u32
         }
         s_playermodel.pics[i as usize].generic.flags &= !(0x40 as i32 as u32);
@@ -993,7 +993,7 @@ PlayerModel_MenuKey
 */
 
 unsafe extern "C" fn PlayerModel_MenuKey(mut key: i32) -> sfxHandle_t {
-    let mut m: *mut menucommon_s = 0 as *mut menucommon_s;
+    let mut m: *mut menucommon_s = std::ptr::null_mut();
     let mut picnum: i32 = 0;
     match key {
         163 | 134 => {
@@ -1068,8 +1068,8 @@ PlayerModel_PicEvent
 unsafe extern "C" fn PlayerModel_PicEvent(mut ptr: *mut libc::c_void, mut event: i32) {
     let mut modelnum: i32 = 0;
     let mut maxlen: i32 = 0;
-    let mut buffptr: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut pdest: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut buffptr: *mut libc::c_char = std::ptr::null_mut();
+    let mut pdest: *mut libc::c_char = std::ptr::null_mut();
     let mut i: i32 = 0;
     if event != 3 as i32 {
         return;
@@ -1137,7 +1137,7 @@ PlayerModel_DrawPlayer
 */
 
 unsafe extern "C" fn PlayerModel_DrawPlayer(mut self_0: *mut libc::c_void) {
-    let mut b: *mut menubitmap_s = 0 as *mut menubitmap_s;
+    let mut b: *mut menubitmap_s = std::ptr::null_mut();
     b = self_0 as *mut menubitmap_s;
     if trap_MemoryRemaining() <= 5 as i32 * 1024 as i32 * 1024 as i32 {
         UI_DrawProportionalString(
@@ -1170,8 +1170,8 @@ unsafe extern "C" fn PlayerModel_BuildList() {
     let mut dirlist: [libc::c_char; 2048] = [0; 2048];
     let mut filelist: [libc::c_char; 2048] = [0; 2048];
     let mut skinname: [libc::c_char; 64] = [0; 64];
-    let mut dirptr: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut fileptr: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut dirptr: *mut libc::c_char = std::ptr::null_mut();
+    let mut fileptr: *mut libc::c_char = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut dirlen: i32 = 0;
@@ -1271,8 +1271,8 @@ unsafe extern "C" fn PlayerModel_SetMenuItems() {
     let mut i: i32 = 0;
     let mut maxlen: i32 = 0;
     let mut modelskin: [libc::c_char; 64] = [0; 64];
-    let mut buffptr: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut pdest: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut buffptr: *mut libc::c_char = std::ptr::null_mut();
+    let mut pdest: *mut libc::c_char = std::ptr::null_mut();
     // name
     trap_Cvar_VariableStringBuffer(
         b"name\x00" as *const u8 as *const libc::c_char,

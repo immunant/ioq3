@@ -125,18 +125,20 @@ pub unsafe extern "C" fn R_LoadPCX(
     mut width: *mut i32,
     mut height: *mut i32,
 ) {
-    let mut raw: C2RustUnnamed_88 = C2RustUnnamed_88 { b: 0 as *mut byte };
-    let mut end: *mut byte = 0 as *mut byte;
-    let mut pcx: *mut pcx_t = 0 as *mut pcx_t;
+    let mut raw: C2RustUnnamed_88 = C2RustUnnamed_88 {
+        b: std::ptr::null_mut()}
+    ;
+    let mut end: *mut byte = std::ptr::null_mut();
+    let mut pcx: *mut pcx_t = std::ptr::null_mut();
     let mut len: i32 = 0;
     let mut dataByte: u8 = 0 as i32 as u8;
     let mut runLength: u8 = 0 as i32 as u8;
-    let mut out: *mut byte = 0 as *mut byte;
-    let mut pix: *mut byte = 0 as *mut byte;
+    let mut out: *mut byte = std::ptr::null_mut();
+    let mut pix: *mut byte = std::ptr::null_mut();
     let mut w: u16 = 0;
     let mut h: u16 = 0;
-    let mut pic8: *mut byte = 0 as *mut byte;
-    let mut palette: *mut byte = 0 as *mut byte;
+    let mut pic8: *mut byte = std::ptr::null_mut();
+    let mut palette: *mut byte = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut size: u32 = 0 as i32 as u32;
     if !width.is_null() {
@@ -145,7 +147,7 @@ pub unsafe extern "C" fn R_LoadPCX(
     if !height.is_null() {
         *height = 0 as i32
     }
-    *pic = 0 as *mut byte;
+    *pic = std::ptr::null_mut();
     //
     // load the file
     //

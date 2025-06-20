@@ -232,8 +232,8 @@ unsafe extern "C" fn SV_EmitPacketEntities(
     mut to: *mut clientSnapshot_t,
     mut msg: *mut msg_t,
 ) {
-    let mut oldent: *mut entityState_t = 0 as *mut entityState_t;
-    let mut newent: *mut entityState_t = 0 as *mut entityState_t;
+    let mut oldent: *mut entityState_t = std::ptr::null_mut();
+    let mut newent: *mut entityState_t = std::ptr::null_mut();
     let mut oldindex: i32 = 0;
     let mut newindex: i32 = 0;
     let mut oldnum: i32 = 0;
@@ -245,8 +245,8 @@ unsafe extern "C" fn SV_EmitPacketEntities(
     } else {
         from_num_entities = (*from).num_entities
     }
-    newent = 0 as *mut entityState_t;
-    oldent = 0 as *mut entityState_t;
+    newent = std::ptr::null_mut();
+    oldent = std::ptr::null_mut();
     newindex = 0 as i32;
     oldindex = 0 as i32;
     while newindex < (*to).num_entities || oldindex < from_num_entities {
@@ -298,7 +298,7 @@ unsafe extern "C" fn SV_EmitPacketEntities(
             MSG_WriteDeltaEntity(
                 msg as *mut msg_t,
                 oldent as *mut entityState_s,
-                0 as *mut entityState_s as *mut entityState_s,
+                std::ptr::null_mut() as *mut entityState_s,
                 qtrue,
             );
             oldindex += 1
@@ -318,8 +318,8 @@ SV_WriteSnapshotToClient
 */
 
 unsafe extern "C" fn SV_WriteSnapshotToClient(mut client: *mut client_t, mut msg: *mut msg_t) {
-    let mut frame: *mut clientSnapshot_t = 0 as *mut clientSnapshot_t;
-    let mut oldframe: *mut clientSnapshot_t = 0 as *mut clientSnapshot_t;
+    let mut frame: *mut clientSnapshot_t = std::ptr::null_mut();
+    let mut oldframe: *mut clientSnapshot_t = std::ptr::null_mut();
     let mut lastframe: i32 = 0;
     let mut i: i32 = 0;
     let mut snapFlags: i32 = 0;
@@ -332,7 +332,7 @@ unsafe extern "C" fn SV_WriteSnapshotToClient(mut client: *mut client_t, mut msg
     // try to use a previous frame as the source for delta compressing the snapshot
     if (*client).deltaMessage <= 0 as i32 || (*client).state as u32 != CS_ACTIVE as i32 as u32 {
         // client is asking for a retransmit
-        oldframe = 0 as *mut clientSnapshot_t;
+        oldframe = std::ptr::null_mut();
         lastframe = 0 as i32
     } else if (*client).netchan.outgoingSequence - (*client).deltaMessage >= 32 as i32 - 3 as i32 {
         // client hasn't gotten a good message through in a long time
@@ -340,7 +340,7 @@ unsafe extern "C" fn SV_WriteSnapshotToClient(mut client: *mut client_t, mut msg
             b"%s: Delta request from out of date packet.\n\x00" as *const u8 as *const libc::c_char,
             (*client).name.as_mut_ptr(),
         );
-        oldframe = 0 as *mut clientSnapshot_t;
+        oldframe = std::ptr::null_mut();
         lastframe = 0 as i32
     } else {
         // we have a valid snapshot to delta from
@@ -357,7 +357,7 @@ unsafe extern "C" fn SV_WriteSnapshotToClient(mut client: *mut client_t, mut msg
                     as *const libc::c_char,
                 (*client).name.as_mut_ptr(),
             );
-            oldframe = 0 as *mut clientSnapshot_t;
+            oldframe = std::ptr::null_mut();
             lastframe = 0 as i32
         }
     }
@@ -405,7 +405,7 @@ unsafe extern "C" fn SV_WriteSnapshotToClient(mut client: *mut client_t, mut msg
     } else {
         MSG_WriteDeltaPlayerstate(
             msg as *mut msg_t,
-            0 as *mut playerState_s as *mut playerState_s,
+            std::ptr::null_mut() as *mut playerState_s,
             &mut (*frame).ps as *mut _ as *mut playerState_s,
         );
     }
@@ -457,8 +457,8 @@ unsafe extern "C" fn SV_QsortEntityNumbers(
     mut a: *const libc::c_void,
     mut b: *const libc::c_void,
 ) -> i32 {
-    let mut ea: *mut i32 = 0 as *mut i32;
-    let mut eb: *mut i32 = 0 as *mut i32;
+    let mut ea: *mut i32 = std::ptr::null_mut();
+    let mut eb: *mut i32 = std::ptr::null_mut();
     ea = a as *mut i32;
     eb = b as *mut i32;
     if *ea == *eb {
@@ -509,14 +509,14 @@ unsafe extern "C" fn SV_AddEntitiesVisibleFromPoint(
 ) {
     let mut e: i32 = 0;
     let mut i: i32 = 0;
-    let mut ent: *mut sharedEntity_t = 0 as *mut sharedEntity_t;
-    let mut svEnt: *mut svEntity_t = 0 as *mut svEntity_t;
+    let mut ent: *mut sharedEntity_t = std::ptr::null_mut();
+    let mut svEnt: *mut svEntity_t = std::ptr::null_mut();
     let mut l: i32 = 0;
     let mut clientarea: i32 = 0;
     let mut clientcluster: i32 = 0;
     let mut leafnum: i32 = 0;
-    let mut clientpvs: *mut byte = 0 as *mut byte;
-    let mut bitvector: *mut byte = 0 as *mut byte;
+    let mut clientpvs: *mut byte = std::ptr::null_mut();
+    let mut bitvector: *mut byte = std::ptr::null_mut();
     // during an error shutdown message we may need to transmit
     // the shutdown message after the server has shutdown, so
     // specfically check for it
@@ -788,18 +788,18 @@ For viewing through other player's eyes, clent can be something other than clien
 
 unsafe extern "C" fn SV_BuildClientSnapshot(mut client: *mut client_t) {
     let mut org: vec3_t = [0.; 3];
-    let mut frame: *mut clientSnapshot_t = 0 as *mut clientSnapshot_t;
+    let mut frame: *mut clientSnapshot_t = std::ptr::null_mut();
     let mut entityNumbers: snapshotEntityNumbers_t = snapshotEntityNumbers_t {
         numSnapshotEntities: 0,
         snapshotEntities: [0; 256],
     };
     let mut i: i32 = 0;
-    let mut ent: *mut sharedEntity_t = 0 as *mut sharedEntity_t;
-    let mut state: *mut entityState_t = 0 as *mut entityState_t;
-    let mut svEnt: *mut svEntity_t = 0 as *mut svEntity_t;
-    let mut clent: *mut sharedEntity_t = 0 as *mut sharedEntity_t;
+    let mut ent: *mut sharedEntity_t = std::ptr::null_mut();
+    let mut state: *mut entityState_t = std::ptr::null_mut();
+    let mut svEnt: *mut svEntity_t = std::ptr::null_mut();
+    let mut clent: *mut sharedEntity_t = std::ptr::null_mut();
     let mut clientNum: i32 = 0;
-    let mut ps: *mut playerState_t = 0 as *mut playerState_t;
+    let mut ps: *mut playerState_t = std::ptr::null_mut();
     // bump the counter used to prevent double adding
     sv.snapshotCounter += 1;
     // this is the frame we are creating
@@ -898,7 +898,7 @@ Check to see if there is any VoIP queued for a client, and send if there is.
 unsafe extern "C" fn SV_WriteVoipToClient(mut cl: *mut client_t, mut msg: *mut msg_t) {
     let mut totalbytes: i32 = 0 as i32;
     let mut i: i32 = 0;
-    let mut packet: *mut voipServerPacket_t = 0 as *mut voipServerPacket_t;
+    let mut packet: *mut voipServerPacket_t = std::ptr::null_mut();
     if (*cl).queuedVoipPackets != 0 {
         // Write as many VoIP packets as we reasonably can...
         i = 0 as i32;
@@ -972,7 +972,7 @@ pub unsafe extern "C" fn SV_SendClientSnapshot(mut client: *mut client_t) {
         allowoverflow: qfalse,
         overflowed: qfalse,
         oob: qfalse,
-        data: 0 as *mut byte,
+        data: std::ptr::null_mut(),
         maxsize: 0,
         cursize: 0,
         readcount: 0,
@@ -1161,7 +1161,7 @@ SV_SendClientMessages
 
 pub unsafe extern "C" fn SV_SendClientMessages() {
     let mut i: i32 = 0;
-    let mut c: *mut client_t = 0 as *mut client_t;
+    let mut c: *mut client_t = std::ptr::null_mut();
     let mut current_block_6: u64;
     // send a message to each connected client
     i = 0 as i32; // not connected

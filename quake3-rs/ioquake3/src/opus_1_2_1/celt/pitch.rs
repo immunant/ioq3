@@ -369,7 +369,7 @@ pub unsafe extern "C" fn pitch_downsample(
     crate::src::opus_1_2_1::celt::celt_lpc::_celt_autocorr(
         x_lp,
         ac.as_mut_ptr(),
-        0 as *const opus_val16,
+        std::ptr::null(),
         0 as i32,
         4 as i32,
         len >> 1 as i32,
@@ -466,9 +466,9 @@ pub unsafe extern "C" fn pitch_search(
     let mut j: i32 = 0;
     let mut lag: i32 = 0;
     let mut best_pitch: [i32; 2] = [0 as i32, 0 as i32];
-    let mut x_lp4: *mut opus_val16 = 0 as *mut opus_val16;
-    let mut y_lp4: *mut opus_val16 = 0 as *mut opus_val16;
-    let mut xcorr: *mut opus_val32 = 0 as *mut opus_val32;
+    let mut x_lp4: *mut opus_val16 = std::ptr::null_mut();
+    let mut y_lp4: *mut opus_val16 = std::ptr::null_mut();
+    let mut xcorr: *mut opus_val32 = std::ptr::null_mut();
     let mut offset: i32 = 0;
     lag = len + max_pitch;
     let mut fresh21 = ::std::vec::from_elem(
@@ -634,7 +634,7 @@ pub unsafe extern "C" fn remove_doubling(
     let mut best_yy: opus_val32 = 0.;
     let mut offset: i32 = 0;
     let mut minperiod0: i32 = 0;
-    let mut yy_lookup: *mut opus_val32 = 0 as *mut opus_val32;
+    let mut yy_lookup: *mut opus_val32 = std::ptr::null_mut();
     minperiod0 = minperiod;
     maxperiod /= 2 as i32;
     minperiod /= 2 as i32;

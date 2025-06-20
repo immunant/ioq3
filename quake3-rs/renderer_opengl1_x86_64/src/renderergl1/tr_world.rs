@@ -321,7 +321,7 @@ unsafe extern "C" fn R_CullSurface(
     mut surface: *mut surfaceType_t,
     mut shader: *mut shader_t,
 ) -> qboolean {
-    let mut sface: *mut srfSurfaceFace_t = 0 as *mut srfSurfaceFace_t;
+    let mut sface: *mut srfSurfaceFace_t = std::ptr::null_mut();
     let mut d: f32 = 0.;
     if (*r_nocull).integer != 0 {
         return qfalse;
@@ -362,7 +362,7 @@ unsafe extern "C" fn R_CullSurface(
 unsafe extern "C" fn R_DlightFace(mut face: *mut srfSurfaceFace_t, mut dlightBits: i32) -> i32 {
     let mut d: f32 = 0.;
     let mut i: i32 = 0;
-    let mut dl: *mut dlight_t = 0 as *mut dlight_t;
+    let mut dl: *mut dlight_t = std::ptr::null_mut();
     i = 0 as i32;
     while i < tr.refdef.num_dlights {
         if !(dlightBits & (1 as i32) << i == 0) {
@@ -387,7 +387,7 @@ unsafe extern "C" fn R_DlightFace(mut face: *mut srfSurfaceFace_t, mut dlightBit
 
 unsafe extern "C" fn R_DlightGrid(mut grid: *mut srfGridMesh_t, mut dlightBits: i32) -> i32 {
     let mut i: i32 = 0;
-    let mut dl: *mut dlight_t = 0 as *mut dlight_t;
+    let mut dl: *mut dlight_t = std::ptr::null_mut();
     i = 0 as i32;
     while i < tr.refdef.num_dlights {
         if !(dlightBits & (1 as i32) << i == 0) {
@@ -492,9 +492,9 @@ R_AddBrushModelSurfaces
 #[no_mangle]
 
 pub unsafe extern "C" fn R_AddBrushModelSurfaces(mut ent: *mut trRefEntity_t) {
-    let mut bmodel: *mut bmodel_t = 0 as *mut bmodel_t;
+    let mut bmodel: *mut bmodel_t = std::ptr::null_mut();
     let mut clip: i32 = 0;
-    let mut pModel: *mut model_t = 0 as *mut model_t;
+    let mut pModel: *mut model_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     pModel = R_GetModelByHandle((*ent).e.hModel) as *mut model_s;
     bmodel = (*pModel).bmodel;
@@ -621,7 +621,7 @@ unsafe extern "C" fn R_RecursiveWorldNode(
             let mut i: i32 = 0;
             i = 0 as i32;
             while i < tr.refdef.num_dlights {
-                let mut dl: *mut dlight_t = 0 as *mut dlight_t;
+                let mut dl: *mut dlight_t = std::ptr::null_mut();
                 let mut dist: f32 = 0.;
                 if dlightBits & ((1 as i32) << i) as u32 != 0 {
                     dl = &mut *tr.refdef.dlights.offset(i as isize) as *mut dlight_s;
@@ -654,8 +654,8 @@ unsafe extern "C" fn R_RecursiveWorldNode(
     }
     // leaf node, so add mark surfaces
     let mut c: i32 = 0;
-    let mut surf: *mut msurface_t = 0 as *mut msurface_t;
-    let mut mark: *mut *mut msurface_t = 0 as *mut *mut msurface_t;
+    let mut surf: *mut msurface_t = std::ptr::null_mut();
+    let mut mark: *mut *mut msurface_t = std::ptr::null_mut();
     tr.pc.c_leafs += 1;
     // add to z buffer bounds
     if (*node).mins[0 as i32 as usize]
@@ -717,9 +717,9 @@ R_PointInLeaf
 */
 
 unsafe extern "C" fn R_PointInLeaf(mut p: *const vec_t) -> *mut mnode_t {
-    let mut node: *mut mnode_t = 0 as *mut mnode_t;
+    let mut node: *mut mnode_t = std::ptr::null_mut();
     let mut d: f32 = 0.;
-    let mut plane: *mut cplane_t = 0 as *mut cplane_t;
+    let mut plane: *mut cplane_t = std::ptr::null_mut();
     if tr.world.is_null() {
         ri.Error.expect("non-null function pointer")(
             ERR_DROP as i32,
@@ -763,8 +763,8 @@ R_inPVS
 #[no_mangle]
 
 pub unsafe extern "C" fn R_inPVS(mut p1: *const vec_t, mut p2: *const vec_t) -> qboolean {
-    let mut leaf: *mut mnode_t = 0 as *mut mnode_t; // why not R_ClusterPVS ??
-    let mut vis: *mut byte = 0 as *mut byte;
+    let mut leaf: *mut mnode_t = std::ptr::null_mut(); // why not R_ClusterPVS ??
+    let mut vis: *mut byte = std::ptr::null_mut();
     leaf = R_PointInLeaf(p1);
     vis = ri.CM_ClusterPVS.expect("non-null function pointer")((*leaf).cluster);
     leaf = R_PointInLeaf(p2);
@@ -786,9 +786,9 @@ cluster
 */
 
 unsafe extern "C" fn R_MarkLeaves() {
-    let mut vis: *const byte = 0 as *const byte;
-    let mut leaf: *mut mnode_t = 0 as *mut mnode_t;
-    let mut parent: *mut mnode_t = 0 as *mut mnode_t;
+    let mut vis: *const byte = std::ptr::null();
+    let mut leaf: *mut mnode_t = std::ptr::null_mut();
+    let mut parent: *mut mnode_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut cluster: i32 = 0;
     // lockpvs lets designers walk around to determine the

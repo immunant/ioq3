@@ -2209,7 +2209,7 @@ pub unsafe extern "C" fn crc32(mut crc: usize, mut buf: *const u8, mut len: u32)
 
 unsafe extern "C" fn crc32_little(mut crc: usize, mut buf: *const u8, mut len: u32) -> usize {
     let mut c: u4 = 0;
-    let mut buf4: *const u4 = 0 as *const u4;
+    let mut buf4: *const u4 = std::ptr::null();
     c = crc as u4;
     c = !c;
     while len != 0 && buf as ptrdiff_t & 3 as i32 as isize != 0 {
@@ -2311,7 +2311,7 @@ unsafe extern "C" fn crc32_little(mut crc: usize, mut buf: *const u8, mut len: u
 
 unsafe extern "C" fn crc32_big(mut crc: usize, mut buf: *const u8, mut len: u32) -> usize {
     let mut c: u4 = 0;
-    let mut buf4: *const u4 = 0 as *const u4;
+    let mut buf4: *const u4 = std::ptr::null();
     c = (crc as u4 >> 24 as i32)
         .wrapping_add(crc as u4 >> 8 as i32 & 0xff00 as i32 as u32)
         .wrapping_add((crc as u4 & 0xff00 as i32 as u32) << 8 as i32)

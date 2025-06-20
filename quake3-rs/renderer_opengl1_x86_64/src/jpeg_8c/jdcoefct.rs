@@ -161,10 +161,10 @@ unsafe extern "C" fn decompress_onepass(
     let mut yindex: i32 = 0;
     let mut yoffset: i32 = 0;
     let mut useful_width: i32 = 0;
-    let mut output_ptr: JSAMPARRAY = 0 as *mut JSAMPROW;
+    let mut output_ptr: JSAMPARRAY = std::ptr::null_mut();
     let mut start_col: JDIMENSION = 0;
     let mut output_col: JDIMENSION = 0;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
     let mut inverse_DCT: inverse_DCT_method_ptr = None;
     /* Loop to process as much as one whole iMCU row */
     yoffset = (*coef).MCU_vert_offset;
@@ -289,9 +289,9 @@ unsafe extern "C" fn consume_data(mut cinfo: j_decompress_ptr) -> i32 {
     let mut yindex: i32 = 0;
     let mut yoffset: i32 = 0;
     let mut start_col: JDIMENSION = 0;
-    let mut buffer: [JBLOCKARRAY; 4] = [0 as *mut JBLOCKROW; 4];
-    let mut buffer_ptr: JBLOCKROW = 0 as *mut JBLOCK;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
+    let mut buffer: [JBLOCKARRAY; 4] = [std::ptr::null_mut(); 4];
+    let mut buffer_ptr: JBLOCKROW = std::ptr::null_mut();
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
     /* Align the virtual buffers for the components used in this scan. */
     ci = 0 as i32;
     while ci < (*cinfo).comps_in_scan {
@@ -398,11 +398,11 @@ unsafe extern "C" fn decompress_data(
     let mut ci: i32 = 0;
     let mut block_row: i32 = 0;
     let mut block_rows: i32 = 0;
-    let mut buffer: JBLOCKARRAY = 0 as *mut JBLOCKROW;
-    let mut buffer_ptr: JBLOCKROW = 0 as *mut JBLOCK;
-    let mut output_ptr: JSAMPARRAY = 0 as *mut JSAMPROW;
+    let mut buffer: JBLOCKARRAY = std::ptr::null_mut();
+    let mut buffer_ptr: JBLOCKROW = std::ptr::null_mut();
+    let mut output_ptr: JSAMPARRAY = std::ptr::null_mut();
     let mut output_col: JDIMENSION = 0;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
     let mut inverse_DCT: inverse_DCT_method_ptr = None;
     /* Force some input to be done if we are getting ahead of the input. */
     while (*cinfo).input_scan_number < (*cinfo).output_scan_number
@@ -503,10 +503,10 @@ unsafe extern "C" fn smoothing_ok(mut cinfo: j_decompress_ptr) -> boolean {
     let mut smoothing_useful: boolean = 0 as i32;
     let mut ci: i32 = 0;
     let mut coefi: i32 = 0;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
-    let mut qtable: *mut JQUANT_TBL = 0 as *mut JQUANT_TBL;
-    let mut coef_bits: *mut i32 = 0 as *mut i32;
-    let mut coef_bits_latch: *mut i32 = 0 as *mut i32;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
+    let mut qtable: *mut JQUANT_TBL = std::ptr::null_mut();
+    let mut coef_bits: *mut i32 = std::ptr::null_mut();
+    let mut coef_bits_latch: *mut i32 = std::ptr::null_mut();
     if (*cinfo).progressive_mode == 0 || (*cinfo).coef_bits.is_null() {
         return 0 as i32;
     }
@@ -580,19 +580,19 @@ unsafe extern "C" fn decompress_smooth_data(
     let mut block_row: i32 = 0;
     let mut block_rows: i32 = 0;
     let mut access_rows: i32 = 0;
-    let mut buffer: JBLOCKARRAY = 0 as *mut JBLOCKROW;
-    let mut buffer_ptr: JBLOCKROW = 0 as *mut JBLOCK;
-    let mut prev_block_row: JBLOCKROW = 0 as *mut JBLOCK;
-    let mut next_block_row: JBLOCKROW = 0 as *mut JBLOCK;
-    let mut output_ptr: JSAMPARRAY = 0 as *mut JSAMPROW;
+    let mut buffer: JBLOCKARRAY = std::ptr::null_mut();
+    let mut buffer_ptr: JBLOCKROW = std::ptr::null_mut();
+    let mut prev_block_row: JBLOCKROW = std::ptr::null_mut();
+    let mut next_block_row: JBLOCKROW = std::ptr::null_mut();
+    let mut output_ptr: JSAMPARRAY = std::ptr::null_mut();
     let mut output_col: JDIMENSION = 0;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
     let mut inverse_DCT: inverse_DCT_method_ptr = None;
     let mut first_row: boolean = 0;
     let mut last_row: boolean = 0;
     let mut workspace: JBLOCK = [0; 64];
-    let mut coef_bits: *mut i32 = 0 as *mut i32;
-    let mut quanttbl: *mut JQUANT_TBL = 0 as *mut JQUANT_TBL;
+    let mut coef_bits: *mut i32 = std::ptr::null_mut();
+    let mut quanttbl: *mut JQUANT_TBL = std::ptr::null_mut();
     let mut Q00: INT32 = 0;
     let mut Q01: INT32 = 0;
     let mut Q02: INT32 = 0;
@@ -893,7 +893,7 @@ pub unsafe extern "C" fn jinit_d_coef_controller(
     mut cinfo: j_decompress_ptr,
     mut need_full_buffer: boolean,
 ) {
-    let mut coef: my_coef_ptr = 0 as *mut my_coef_controller;
+    let mut coef: my_coef_ptr = std::ptr::null_mut();
     coef = Some(
         (*(*cinfo).mem)
             .alloc_small
@@ -909,7 +909,7 @@ pub unsafe extern "C" fn jinit_d_coef_controller(
         Some(start_input_pass as unsafe extern "C" fn(_: j_decompress_ptr) -> ());
     (*coef).pub_0.start_output_pass =
         Some(start_output_pass as unsafe extern "C" fn(_: j_decompress_ptr) -> ());
-    (*coef).coef_bits_latch = 0 as *mut i32;
+    (*coef).coef_bits_latch = std::ptr::null_mut();
     /* Create the coefficient buffer. */
     if need_full_buffer != 0 {
         /* Allocate a full-image virtual array for each component, */
@@ -917,7 +917,7 @@ pub unsafe extern "C" fn jinit_d_coef_controller(
         /* Note we ask for a pre-zeroed array. */
         let mut ci: i32 = 0;
         let mut access_rows: i32 = 0;
-        let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
+        let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
         ci = 0 as i32;
         compptr = (*cinfo).comp_info;
         while ci < (*cinfo).num_components {
@@ -956,7 +956,7 @@ pub unsafe extern "C" fn jinit_d_coef_controller(
         (*coef).pub_0.coef_arrays = (*coef).whole_image.as_mut_ptr()
     } else {
         /* We only need a single-MCU buffer. */
-        let mut buffer: JBLOCKROW = 0 as *mut JBLOCK;
+        let mut buffer: JBLOCKROW = std::ptr::null_mut();
         let mut i: i32 = 0;
         buffer = Some(
             (*(*cinfo).mem)
@@ -978,6 +978,6 @@ pub unsafe extern "C" fn jinit_d_coef_controller(
         (*coef).pub_0.decompress_data = Some(
             decompress_onepass as unsafe extern "C" fn(_: j_decompress_ptr, _: JSAMPIMAGE) -> i32,
         );
-        (*coef).pub_0.coef_arrays = 0 as *mut jvirt_barray_ptr
+        (*coef).pub_0.coef_arrays = std::ptr::null_mut()
     };
 }

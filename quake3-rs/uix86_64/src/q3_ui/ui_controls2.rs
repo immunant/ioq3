@@ -495,7 +495,7 @@ static mut s_controls: controls_t = controls_t {
     banner: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -517,7 +517,7 @@ static mut s_controls: controls_t = controls_t {
     framel: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -543,7 +543,7 @@ static mut s_controls: controls_t = controls_t {
     framer: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -569,7 +569,7 @@ static mut s_controls: controls_t = controls_t {
     player: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -595,7 +595,7 @@ static mut s_controls: controls_t = controls_t {
     movement: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -617,7 +617,7 @@ static mut s_controls: controls_t = controls_t {
     looking: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -639,7 +639,7 @@ static mut s_controls: controls_t = controls_t {
     weapons: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -661,7 +661,7 @@ static mut s_controls: controls_t = controls_t {
     misc: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -683,7 +683,7 @@ static mut s_controls: controls_t = controls_t {
     walkforward: menuaction_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -702,7 +702,7 @@ static mut s_controls: controls_t = controls_t {
     backpedal: menuaction_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -721,7 +721,7 @@ static mut s_controls: controls_t = controls_t {
     stepleft: menuaction_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -740,7 +740,7 @@ static mut s_controls: controls_t = controls_t {
     stepright: menuaction_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -759,7 +759,7 @@ static mut s_controls: controls_t = controls_t {
     moveup: menuaction_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -778,7 +778,7 @@ static mut s_controls: controls_t = controls_t {
     movedown: menuaction_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -797,7 +797,7 @@ static mut s_controls: controls_t = controls_t {
     turnleft: menuaction_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -816,7 +816,7 @@ static mut s_controls: controls_t = controls_t {
     turnright: menuaction_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -835,7 +835,7 @@ static mut s_controls: controls_t = controls_t {
     sidestep: menuaction_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -854,7 +854,7 @@ static mut s_controls: controls_t = controls_t {
     run: menuaction_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -873,7 +873,7 @@ static mut s_controls: controls_t = controls_t {
     machinegun: menuaction_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -892,7 +892,7 @@ static mut s_controls: controls_t = controls_t {
     chainsaw: menuaction_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -911,7 +911,7 @@ static mut s_controls: controls_t = controls_t {
     shotgun: menuaction_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -930,7 +930,7 @@ static mut s_controls: controls_t = controls_t {
     grenadelauncher: menuaction_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -949,7 +949,7 @@ static mut s_controls: controls_t = controls_t {
     rocketlauncher: menuaction_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -968,7 +968,7 @@ static mut s_controls: controls_t = controls_t {
     lightning: menuaction_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -987,7 +987,7 @@ static mut s_controls: controls_t = controls_t {
     railgun: menuaction_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1006,7 +1006,7 @@ static mut s_controls: controls_t = controls_t {
     plasma: menuaction_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1025,7 +1025,7 @@ static mut s_controls: controls_t = controls_t {
     bfg: menuaction_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1044,7 +1044,7 @@ static mut s_controls: controls_t = controls_t {
     attack: menuaction_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1063,7 +1063,7 @@ static mut s_controls: controls_t = controls_t {
     prevweapon: menuaction_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1082,7 +1082,7 @@ static mut s_controls: controls_t = controls_t {
     nextweapon: menuaction_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1101,7 +1101,7 @@ static mut s_controls: controls_t = controls_t {
     lookup: menuaction_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1120,7 +1120,7 @@ static mut s_controls: controls_t = controls_t {
     lookdown: menuaction_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1139,7 +1139,7 @@ static mut s_controls: controls_t = controls_t {
     mouselook: menuaction_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1158,7 +1158,7 @@ static mut s_controls: controls_t = controls_t {
     freelook: menuradiobutton_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1178,7 +1178,7 @@ static mut s_controls: controls_t = controls_t {
     centerview: menuaction_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1197,7 +1197,7 @@ static mut s_controls: controls_t = controls_t {
     zoomview: menuaction_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1216,7 +1216,7 @@ static mut s_controls: controls_t = controls_t {
     gesture: menuaction_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1235,7 +1235,7 @@ static mut s_controls: controls_t = controls_t {
     invertmouse: menuradiobutton_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1255,7 +1255,7 @@ static mut s_controls: controls_t = controls_t {
     sensitivity: menuslider_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1278,7 +1278,7 @@ static mut s_controls: controls_t = controls_t {
     smoothmouse: menuradiobutton_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1298,7 +1298,7 @@ static mut s_controls: controls_t = controls_t {
     alwaysrun: menuradiobutton_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1318,7 +1318,7 @@ static mut s_controls: controls_t = controls_t {
     showscores: menuaction_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1337,7 +1337,7 @@ static mut s_controls: controls_t = controls_t {
     autoswitch: menuradiobutton_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1357,7 +1357,7 @@ static mut s_controls: controls_t = controls_t {
     useitem: menuaction_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1450,7 +1450,7 @@ static mut s_controls: controls_t = controls_t {
     chat: menuaction_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1469,7 +1469,7 @@ static mut s_controls: controls_t = controls_t {
     chat2: menuaction_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1488,7 +1488,7 @@ static mut s_controls: controls_t = controls_t {
     chat3: menuaction_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1507,7 +1507,7 @@ static mut s_controls: controls_t = controls_t {
     chat4: menuaction_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1526,7 +1526,7 @@ static mut s_controls: controls_t = controls_t {
     togglemenu: menuaction_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1545,7 +1545,7 @@ static mut s_controls: controls_t = controls_t {
     joyenable: menuradiobutton_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1565,7 +1565,7 @@ static mut s_controls: controls_t = controls_t {
     joythreshold: menuslider_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1597,7 +1597,7 @@ static mut s_controls: controls_t = controls_t {
     back: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1623,7 +1623,7 @@ static mut s_controls: controls_t = controls_t {
     name: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -2219,7 +2219,7 @@ Controls_InitCvars
 */
 
 unsafe extern "C" fn Controls_InitCvars() {
-    let mut cvarptr: *mut configcvar_t = 0 as *mut configcvar_t;
+    let mut cvarptr: *mut configcvar_t = std::ptr::null_mut();
     cvarptr = g_configcvars.as_mut_ptr();
     while !(*cvarptr).name.is_null() {
         // get current value
@@ -2239,7 +2239,7 @@ Controls_GetCvarDefault
 */
 
 unsafe extern "C" fn Controls_GetCvarDefault(mut name: *mut libc::c_char) -> f32 {
-    let mut cvarptr: *mut configcvar_t = 0 as *mut configcvar_t;
+    let mut cvarptr: *mut configcvar_t = std::ptr::null_mut();
     cvarptr = g_configcvars.as_mut_ptr();
     loop {
         if (*cvarptr).name.is_null() {
@@ -2259,7 +2259,7 @@ Controls_GetCvarValue
 */
 
 unsafe extern "C" fn Controls_GetCvarValue(mut name: *mut libc::c_char) -> f32 {
-    let mut cvarptr: *mut configcvar_t = 0 as *mut configcvar_t;
+    let mut cvarptr: *mut configcvar_t = std::ptr::null_mut();
     cvarptr = g_configcvars.as_mut_ptr();
     loop {
         if (*cvarptr).name.is_null() {
@@ -2351,8 +2351,8 @@ unsafe extern "C" fn Controls_Update() {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut y: i32 = 0;
-    let mut controls: *mut *mut menucommon_s = 0 as *mut *mut menucommon_s;
-    let mut control: *mut menucommon_s = 0 as *mut menucommon_s;
+    let mut controls: *mut *mut menucommon_s = std::ptr::null_mut();
+    let mut control: *mut menucommon_s = std::ptr::null_mut();
     // disable all controls in all groups
     i = 0 as i32;
     while i < 4 as i32 {
@@ -2459,7 +2459,7 @@ Controls_DrawKeyBinding
 */
 
 unsafe extern "C" fn Controls_DrawKeyBinding(mut self_0: *mut libc::c_void) {
-    let mut a: *mut menuaction_s = 0 as *mut menuaction_s;
+    let mut a: *mut menuaction_s = std::ptr::null_mut();
     let mut x: i32 = 0;
     let mut y: i32 = 0;
     let mut b1: i32 = 0;
@@ -2606,7 +2606,7 @@ Controls_DrawPlayer
 */
 
 unsafe extern "C" fn Controls_DrawPlayer(mut self_0: *mut libc::c_void) {
-    let mut b: *mut menubitmap_s = 0 as *mut menubitmap_s;
+    let mut b: *mut menubitmap_s = std::ptr::null_mut();
     let mut buf: [libc::c_char; 64] = [0; 64];
     trap_Cvar_VariableStringBuffer(
         b"model\x00" as *const u8 as *const libc::c_char,
@@ -2671,7 +2671,7 @@ Controls_GetConfig
 
 unsafe extern "C" fn Controls_GetConfig() {
     let mut twokeys: [i32; 2] = [0; 2];
-    let mut bindptr: *mut bind_t = 0 as *mut bind_t;
+    let mut bindptr: *mut bind_t = std::ptr::null_mut();
     // put the bindings into a local store
     bindptr = g_bindings.as_mut_ptr();
     // iterate each command, get its numeric binding
@@ -2741,7 +2741,7 @@ Controls_SetConfig
 */
 
 unsafe extern "C" fn Controls_SetConfig() {
-    let mut bindptr: *mut bind_t = 0 as *mut bind_t;
+    let mut bindptr: *mut bind_t = std::ptr::null_mut();
     // set the bindings from the local store
     bindptr = g_bindings.as_mut_ptr();
     // iterate each command, get its numeric binding
@@ -2809,7 +2809,7 @@ Controls_SetDefaults
 */
 
 unsafe extern "C" fn Controls_SetDefaults() {
-    let mut bindptr: *mut bind_t = 0 as *mut bind_t;
+    let mut bindptr: *mut bind_t = std::ptr::null_mut();
     // set the bindings from the local store
     bindptr = g_bindings.as_mut_ptr();
     // iterate each command, set its default binding
@@ -2854,7 +2854,7 @@ unsafe extern "C" fn Controls_MenuKey(mut key: i32) -> sfxHandle_t {
     let mut id: i32 = 0;
     let mut _i: i32 = 0;
     let mut found: qboolean = qfalse;
-    let mut bindptr: *mut bind_t = 0 as *mut bind_t;
+    let mut bindptr: *mut bind_t = std::ptr::null_mut();
     found = qfalse;
     if s_controls.waitingforkey as u64 == 0 {
         match key {
@@ -3131,7 +3131,7 @@ Controls_InitWeapons
 */
 
 unsafe extern "C" fn Controls_InitWeapons() {
-    let mut item: *mut gitem_t = 0 as *mut gitem_t;
+    let mut item: *mut gitem_t = std::ptr::null_mut();
     item = bg_itemlist.as_mut_ptr().offset(1 as i32 as isize);
     while !(*item).classname.is_null() {
         if !((*item).giType as u32 != IT_WEAPON as i32 as u32) {
@@ -3876,7 +3876,7 @@ unsafe extern "C" fn run_static_initializers() {
         &mut s_controls.turnleft as *mut menuaction_s as *mut menucommon_s,
         &mut s_controls.turnright as *mut menuaction_s as *mut menucommon_s,
         &mut s_controls.sidestep as *mut menuaction_s as *mut menucommon_s,
-        0 as *mut menucommon_s,
+        std::ptr::null_mut(),
     ];
     g_weapons_controls = [
         &mut s_controls.attack as *mut menuaction_s as *mut menucommon_s,
@@ -3892,7 +3892,7 @@ unsafe extern "C" fn run_static_initializers() {
         &mut s_controls.railgun as *mut menuaction_s as *mut menucommon_s,
         &mut s_controls.plasma as *mut menuaction_s as *mut menucommon_s,
         &mut s_controls.bfg as *mut menuaction_s as *mut menucommon_s,
-        0 as *mut menucommon_s,
+        std::ptr::null_mut(),
     ];
     g_looking_controls = [
         &mut s_controls.sensitivity as *mut menuslider_s as *mut menucommon_s,
@@ -3906,7 +3906,7 @@ unsafe extern "C" fn run_static_initializers() {
         &mut s_controls.zoomview as *mut menuaction_s as *mut menucommon_s,
         &mut s_controls.joyenable as *mut menuradiobutton_s as *mut menucommon_s,
         &mut s_controls.joythreshold as *mut menuslider_s as *mut menucommon_s,
-        0 as *mut menucommon_s,
+        std::ptr::null_mut(),
     ];
     g_misc_controls = [
         &mut s_controls.showscores as *mut menuaction_s as *mut menucommon_s,
@@ -3917,7 +3917,7 @@ unsafe extern "C" fn run_static_initializers() {
         &mut s_controls.chat3 as *mut menuaction_s as *mut menucommon_s,
         &mut s_controls.chat4 as *mut menuaction_s as *mut menucommon_s,
         &mut s_controls.togglemenu as *mut menuaction_s as *mut menucommon_s,
-        0 as *mut menucommon_s,
+        std::ptr::null_mut(),
     ]
 }
 #[used]

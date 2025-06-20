@@ -181,10 +181,10 @@ pub unsafe extern "C" fn jpeg_idct_ifast(
     let mut z11: DCTELEM = 0;
     let mut z12: DCTELEM = 0;
     let mut z13: DCTELEM = 0;
-    let mut inptr: JCOEFPTR = 0 as *mut JCOEF;
-    let mut quantptr: *mut IFAST_MULT_TYPE = 0 as *mut IFAST_MULT_TYPE;
-    let mut wsptr: *mut i32 = 0 as *mut i32;
-    let mut outptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut inptr: JCOEFPTR = std::ptr::null_mut();
+    let mut quantptr: *mut IFAST_MULT_TYPE = std::ptr::null_mut();
+    let mut wsptr: *mut i32 = std::ptr::null_mut();
+    let mut outptr: JSAMPROW = std::ptr::null_mut();
     let mut range_limit: *mut JSAMPLE = (*cinfo).sample_range_limit.offset(128 as i32 as isize);
     let mut ctr: i32 = 0;
     let mut workspace: [i32; 64] = [0; 64];

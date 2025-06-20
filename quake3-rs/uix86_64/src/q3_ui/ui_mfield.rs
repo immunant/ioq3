@@ -677,7 +677,7 @@ pub unsafe extern "C" fn MenuField_Draw(mut f: *mut menufield_s) {
     let mut w: i32 = 0;
     let mut style: i32 = 0;
     let mut focus: qboolean = qfalse;
-    let mut color: *mut f32 = 0 as *mut f32;
+    let mut color: *mut f32 = std::ptr::null_mut();
     x = (*f).generic.x;
     y = (*f).generic.y;
     if (*f).generic.flags & 0x2 as i32 as u32 != 0 {

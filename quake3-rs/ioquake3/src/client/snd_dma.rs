@@ -471,7 +471,7 @@ S_Base_SoundList
 
 pub unsafe extern "C" fn S_Base_SoundList() {
     let mut i: i32 = 0;
-    let mut sfx: *mut sfx_t = 0 as *mut sfx_t;
+    let mut sfx: *mut sfx_t = std::ptr::null_mut();
     let mut size: i32 = 0;
     let mut total: i32 = 0;
     let mut type_0: [[libc::c_char; 16]; 4] = [[0; 16]; 4];
@@ -525,7 +525,7 @@ pub unsafe extern "C" fn S_Base_SoundList() {
 #[no_mangle]
 
 pub unsafe extern "C" fn S_ChannelFree(mut v: *mut channel_t) {
-    (*v).thesfx = 0 as *mut sfx_t;
+    (*v).thesfx = std::ptr::null_mut();
     let ref mut fresh0 = *(v as *mut *mut channel_t);
     *fresh0 = freelist;
     freelist = v;
@@ -533,9 +533,9 @@ pub unsafe extern "C" fn S_ChannelFree(mut v: *mut channel_t) {
 #[no_mangle]
 
 pub unsafe extern "C" fn S_ChannelMalloc() -> *mut channel_t {
-    let mut v: *mut channel_t = 0 as *mut channel_t;
+    let mut v: *mut channel_t = std::ptr::null_mut();
     if freelist.is_null() {
-        return 0 as *mut channel_t;
+        return std::ptr::null_mut();
     }
     v = freelist;
     freelist = *(freelist as *mut *mut channel_t);
@@ -545,8 +545,8 @@ pub unsafe extern "C" fn S_ChannelMalloc() -> *mut channel_t {
 #[no_mangle]
 
 pub unsafe extern "C" fn S_ChannelSetup() {
-    let mut p: *mut channel_t = 0 as *mut channel_t;
-    let mut q: *mut channel_t = 0 as *mut channel_t;
+    let mut p: *mut channel_t = std::ptr::null_mut();
+    let mut q: *mut channel_t = std::ptr::null_mut();
     // clear all the sounds so they don't
     crate::stdlib::memset(
         s_channels.as_mut_ptr() as *mut libc::c_void,
@@ -564,7 +564,7 @@ pub unsafe extern "C" fn S_ChannelSetup() {
         *fresh1 = q.offset(-(1 as i32 as isize))
     }
     let ref mut fresh2 = *(q as *mut *mut channel_t);
-    *fresh2 = 0 as *mut channel_t;
+    *fresh2 = std::ptr::null_mut();
     freelist = p.offset(96 as i32 as isize).offset(-(1 as i32 as isize));
     Com_DPrintf(b"Channel memory manager started\n\x00" as *const u8 as *const libc::c_char);
 }
@@ -625,7 +625,7 @@ Will allocate a new sfx if it isn't found
 unsafe extern "C" fn S_FindName(mut name: *const libc::c_char) -> *mut sfx_t {
     let mut i: i32 = 0;
     let mut hash: i32 = 0;
-    let mut sfx: *mut sfx_t = 0 as *mut sfx_t;
+    let mut sfx: *mut sfx_t = std::ptr::null_mut();
     if name.is_null() {
         Com_Error(
             ERR_FATAL as i32,
@@ -634,14 +634,14 @@ unsafe extern "C" fn S_FindName(mut name: *const libc::c_char) -> *mut sfx_t {
     }
     if *name.offset(0 as i32 as isize) == 0 {
         Com_Printf(b"^3WARNING: Sound name is empty\n\x00" as *const u8 as *const libc::c_char);
-        return 0 as *mut sfx_t;
+        return std::ptr::null_mut();
     }
     if crate::stdlib::strlen(name) >= 64 as i32 as usize {
         Com_Printf(
             b"^3WARNING: Sound name is too long: %s\n\x00" as *const u8 as *const libc::c_char,
             name,
         );
-        return 0 as *mut sfx_t;
+        return std::ptr::null_mut();
     }
     if *name.offset(0 as i32 as isize) as i32 == '*' as i32 {
         Com_Printf(
@@ -649,7 +649,7 @@ unsafe extern "C" fn S_FindName(mut name: *const libc::c_char) -> *mut sfx_t {
                 as *const libc::c_char,
             name,
         );
-        return 0 as *mut sfx_t;
+        return std::ptr::null_mut();
     }
     hash = S_HashSFXName(name) as i32;
     sfx = sfxHash[hash as usize];
@@ -699,7 +699,7 @@ pub unsafe extern "C" fn S_DefaultSound(mut sfx: *mut sfx_t) {
     let mut i: i32 = 0;
     (*sfx).soundLength = 512 as i32;
     (*sfx).soundData = SND_malloc() as *mut sndBuffer_s;
-    (*(*sfx).soundData).next = 0 as *mut sndBuffer_s;
+    (*(*sfx).soundData).next = std::ptr::null_mut();
     i = 0 as i32;
     while i < (*sfx).soundLength {
         (*(*sfx).soundData).sndChunk[i as usize] = i as i16;
@@ -734,7 +734,7 @@ pub unsafe extern "C" fn S_Base_RegisterSound(
     mut name: *const libc::c_char,
     mut compressed: qboolean,
 ) -> sfxHandle_t {
-    let mut sfx: *mut sfx_t = 0 as *mut sfx_t;
+    let mut sfx: *mut sfx_t = std::ptr::null_mut();
     compressed = qfalse;
     if s_soundStarted == 0 {
         return 0 as i32;
@@ -940,8 +940,8 @@ unsafe extern "C" fn S_Base_StartSoundEx(
     mut sfxHandle: sfxHandle_t,
     mut localSound: qboolean,
 ) {
-    let mut ch: *mut channel_t = 0 as *mut channel_t;
-    let mut sfx: *mut sfx_t = 0 as *mut sfx_t;
+    let mut ch: *mut channel_t = std::ptr::null_mut();
+    let mut sfx: *mut sfx_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut oldest: i32 = 0;
     let mut chosen: i32 = 0;
@@ -1117,7 +1117,7 @@ pub unsafe extern "C" fn S_Base_StartLocalSound(mut sfxHandle: sfxHandle_t, mut 
         return;
     }
     S_Base_StartSoundEx(
-        0 as *mut vec_t,
+        std::ptr::null_mut(),
         listener_number,
         channelNum,
         sfxHandle,
@@ -1241,7 +1241,7 @@ pub unsafe extern "C" fn S_Base_AddLoopingSound(
     mut velocity: *const vec_t,
     mut sfxHandle: sfxHandle_t,
 ) {
-    let mut sfx: *mut sfx_t = 0 as *mut sfx_t;
+    let mut sfx: *mut sfx_t = std::ptr::null_mut();
     if s_soundStarted == 0 || s_soundMuted as u32 != 0 {
         return;
     }
@@ -1330,7 +1330,7 @@ pub unsafe extern "C" fn S_Base_AddRealLoopingSound(
     mut velocity: *const vec_t,
     mut sfxHandle: sfxHandle_t,
 ) {
-    let mut sfx: *mut sfx_t = 0 as *mut sfx_t;
+    let mut sfx: *mut sfx_t = std::ptr::null_mut();
     if s_soundStarted == 0 || s_soundMuted as u32 != 0 {
         return;
     }
@@ -1386,9 +1386,9 @@ pub unsafe extern "C" fn S_AddLoopSounds() {
     let mut right_total: i32 = 0;
     let mut left: i32 = 0;
     let mut right: i32 = 0;
-    let mut ch: *mut channel_t = 0 as *mut channel_t;
-    let mut loop_0: *mut loopSound_t = 0 as *mut loopSound_t;
-    let mut loop2: *mut loopSound_t = 0 as *mut loopSound_t;
+    let mut ch: *mut channel_t = std::ptr::null_mut();
+    let mut loop_0: *mut loopSound_t = std::ptr::null_mut();
+    let mut loop2: *mut loopSound_t = std::ptr::null_mut();
     static mut loopFrame: i32 = 0;
     numLoopChannels = 0 as i32;
     time = Com_Milliseconds();
@@ -1532,7 +1532,7 @@ pub unsafe extern "C" fn S_Base_RawSamples(
     let mut scale: f32 = 0.;
     let mut intVolumeLeft: i32 = 0;
     let mut intVolumeRight: i32 = 0;
-    let mut rawsamples: *mut portable_samplepair_t = 0 as *mut portable_samplepair_t;
+    let mut rawsamples: *mut portable_samplepair_t = std::ptr::null_mut();
     if s_soundStarted == 0 || s_soundMuted as u32 != 0 {
         return;
     }
@@ -1701,7 +1701,7 @@ pub unsafe extern "C" fn S_Base_Respatialize(
     mut _inwater: i32,
 ) {
     let mut i: i32 = 0;
-    let mut ch: *mut channel_t = 0 as *mut channel_t;
+    let mut ch: *mut channel_t = std::ptr::null_mut();
     let mut origin: vec3_t = [0.; 3];
     if s_soundStarted == 0 || s_soundMuted as u32 != 0 {
         return;
@@ -1774,7 +1774,7 @@ Returns qtrue if any new sounds were started since the last mix
 #[no_mangle]
 
 pub unsafe extern "C" fn S_ScanChannelStarts() -> qboolean {
-    let mut ch: *mut channel_t = 0 as *mut channel_t;
+    let mut ch: *mut channel_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut newSamples: qboolean = qfalse;
     newSamples = qfalse;
@@ -1810,7 +1810,7 @@ Called once each time through the main loop
 pub unsafe extern "C" fn S_Base_Update() {
     let mut i: i32 = 0;
     let mut total: i32 = 0;
-    let mut ch: *mut channel_t = 0 as *mut channel_t;
+    let mut ch: *mut channel_t = std::ptr::null_mut();
     if s_soundStarted == 0 || s_soundMuted as u32 != 0 {
         //		Com_DPrintf ("not started or muted\n");
         return;
@@ -1985,7 +1985,7 @@ pub unsafe extern "C" fn S_Base_StopBackgroundTrack() {
         return;
     }
     S_CodecCloseStream(s_backgroundStream as *mut snd_stream_s);
-    s_backgroundStream = 0 as *mut snd_stream_t;
+    s_backgroundStream = std::ptr::null_mut();
     s_rawend[0 as i32 as usize] = 0 as i32;
 }
 /*
@@ -1999,7 +1999,7 @@ unsafe extern "C" fn S_OpenBackgroundStream(mut filename: *const libc::c_char) {
     // if restarting the same back ground track
     if !s_backgroundStream.is_null() {
         S_CodecCloseStream(s_backgroundStream as *mut snd_stream_s);
-        s_backgroundStream = 0 as *mut snd_stream_t
+        s_backgroundStream = std::ptr::null_mut()
     }
     // Open stream
     s_backgroundStream = S_CodecOpenStream(filename) as *mut snd_stream_s;
@@ -2200,9 +2200,9 @@ pub unsafe extern "C" fn S_FreeOldestSound() {
     let mut i: i32 = 0;
     let mut oldest: i32 = 0;
     let mut used: i32 = 0;
-    let mut sfx: *mut sfx_t = 0 as *mut sfx_t;
-    let mut buffer: *mut sndBuffer = 0 as *mut sndBuffer;
-    let mut nbuffer: *mut sndBuffer = 0 as *mut sndBuffer;
+    let mut sfx: *mut sfx_t = std::ptr::null_mut();
+    let mut buffer: *mut sndBuffer = std::ptr::null_mut();
+    let mut nbuffer: *mut sndBuffer = std::ptr::null_mut();
     oldest = Com_Milliseconds();
     used = 0 as i32;
     i = 1 as i32;
@@ -2226,7 +2226,7 @@ pub unsafe extern "C" fn S_FreeOldestSound() {
         buffer = nbuffer
     }
     (*sfx).inMemory = qfalse;
-    (*sfx).soundData = 0 as *mut sndBuffer;
+    (*sfx).soundData = std::ptr::null_mut();
 }
 // =======================================================================
 // Shutdown sound engine

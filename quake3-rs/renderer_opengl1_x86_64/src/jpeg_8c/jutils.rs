@@ -154,8 +154,8 @@ pub unsafe extern "C" fn jcopy_sample_rows(
  * The source and destination arrays must be at least as wide as num_cols.
  */
 {
-    let mut inptr: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut outptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut inptr: JSAMPROW = std::ptr::null_mut();
+    let mut outptr: JSAMPROW = std::ptr::null_mut();
     let mut count: size_t =
         (num_cols as usize).wrapping_mul(::std::mem::size_of::<JSAMPLE>() as usize);
     let mut row: i32 = 0;

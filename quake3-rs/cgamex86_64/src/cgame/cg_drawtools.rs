@@ -178,7 +178,7 @@ pub unsafe extern "C" fn CG_FillRect(
         0 as i32 as f32,
         cgs.media.whiteShader,
     );
-    trap_R_SetColor(0 as *const f32);
+    trap_R_SetColor(std::ptr::null());
 }
 /*
 ================
@@ -275,7 +275,7 @@ pub unsafe extern "C" fn CG_DrawRect(
     trap_R_SetColor(color);
     CG_DrawTopBottom(x, y, width, height, size);
     CG_DrawSides(x, y + size, width, height - size * 2 as i32 as f32, size);
-    trap_R_SetColor(0 as *const f32);
+    trap_R_SetColor(std::ptr::null());
 }
 /*
 ================
@@ -381,7 +381,7 @@ pub unsafe extern "C" fn CG_DrawStringExt(
     mut maxChars: i32,
 ) {
     let mut color: vec4_t = [0.; 4]; // do them all!
-    let mut s: *const libc::c_char = 0 as *const libc::c_char;
+    let mut s: *const libc::c_char = std::ptr::null();
     let mut xx: i32 = 0;
     let mut cnt: i32 = 0;
     if maxChars <= 0 as i32 {
@@ -440,7 +440,7 @@ pub unsafe extern "C" fn CG_DrawStringExt(
             s = s.offset(1)
         }
     }
-    trap_R_SetColor(0 as *const f32);
+    trap_R_SetColor(std::ptr::null());
 }
 #[no_mangle]
 
@@ -644,11 +644,11 @@ pub unsafe extern "C" fn CG_FadeColor(mut startMsec: i32, mut totalMsec: i32) ->
     static mut color: vec4_t = [0.; 4];
     let mut t: i32 = 0;
     if startMsec == 0 as i32 {
-        return 0 as *mut f32;
+        return std::ptr::null_mut();
     }
     t = cg.time - startMsec;
     if t >= totalMsec {
-        return 0 as *mut f32;
+        return std::ptr::null_mut();
     }
     // fade out
     if totalMsec - t < 200 as i32 {
@@ -925,7 +925,7 @@ unsafe extern "C" fn UI_DrawBannerString2(
     mut str: *const libc::c_char,
     mut color: *mut vec_t,
 ) {
-    let mut s: *const libc::c_char = 0 as *const libc::c_char;
+    let mut s: *const libc::c_char = std::ptr::null();
     let mut ch: u8 = 0;
     let mut ax: f32 = 0.;
     let mut ay: f32 = 0.;
@@ -967,7 +967,7 @@ unsafe extern "C" fn UI_DrawBannerString2(
         }
         s = s.offset(1)
     }
-    trap_R_SetColor(0 as *const f32);
+    trap_R_SetColor(std::ptr::null());
 }
 #[no_mangle]
 
@@ -978,7 +978,7 @@ pub unsafe extern "C" fn UI_DrawBannerString(
     mut style: i32,
     mut color: *mut vec_t,
 ) {
-    let mut s: *const libc::c_char = 0 as *const libc::c_char;
+    let mut s: *const libc::c_char = std::ptr::null();
     let mut ch: i32 = 0;
     let mut width: i32 = 0;
     let mut drawcolor: vec4_t = [0.; 4];
@@ -1012,7 +1012,7 @@ pub unsafe extern "C" fn UI_DrawBannerString(
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_ProportionalStringWidth(mut str: *const libc::c_char) -> i32 {
-    let mut s: *const libc::c_char = 0 as *const libc::c_char;
+    let mut s: *const libc::c_char = std::ptr::null();
     let mut ch: i32 = 0;
     let mut charWidth: i32 = 0;
     let mut width: i32 = 0;
@@ -1039,7 +1039,7 @@ unsafe extern "C" fn UI_DrawProportionalString2(
     mut sizeScale: f32,
     mut charset: qhandle_t,
 ) {
-    let mut s: *const libc::c_char = 0 as *const libc::c_char;
+    let mut s: *const libc::c_char = std::ptr::null();
     let mut ch: u8 = 0;
     let mut ax: f32 = 0.;
     let mut ay: f32 = 0.;
@@ -1082,7 +1082,7 @@ unsafe extern "C" fn UI_DrawProportionalString2(
         ax += aw + 3 as i32 as f32 * cgs.screenXScale * sizeScale;
         s = s.offset(1)
     }
-    trap_R_SetColor(0 as *const f32);
+    trap_R_SetColor(std::ptr::null());
 }
 /*
 =================

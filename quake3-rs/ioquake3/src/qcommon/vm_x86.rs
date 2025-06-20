@@ -457,14 +457,14 @@ pub static mut vm_opStackOfs: uint8_t = 0;
 pub static mut vm_arg: intptr_t = 0;
 
 unsafe extern "C" fn DoSyscall() {
-    let mut savedVM: *mut vm_t = 0 as *mut vm_t;
+    let mut savedVM: *mut vm_t = std::ptr::null_mut();
     // save currentVM so as to allow for recursive VM entry
     savedVM = currentVM;
     // modify VM stack pointer for recursive VM entry
     (*currentVM).programStack = vm_programStack - 4 as i32;
     if vm_syscallNum < 0 as i32 {
-        let mut data: *mut i32 = 0 as *mut i32;
-        let mut ret: *mut i32 = 0 as *mut i32;
+        let mut data: *mut i32 = std::ptr::null_mut();
+        let mut ret: *mut i32 = std::ptr::null_mut();
         let mut index: i32 = 0;
         let mut args: [intptr_t; 16] = [0; 16];
         data = (*savedVM)
@@ -1739,7 +1739,7 @@ pub unsafe extern "C" fn VM_Compile(mut vm: *mut vm_t, mut header: *mut vmHeader
     // copy to an exact sized buffer with the appropriate permission bits
     (*vm).codeLength = compiledOfs;
     (*vm).codeBase = crate::stdlib::mmap(
-        0 as *mut libc::c_void,
+        std::ptr::null_mut(),
         compiledOfs as size_t,
         0x2 as i32,
         0x1 as i32 | 0x20 as i32,
@@ -1874,11 +1874,11 @@ This function is called directly by the generated code
 
 pub unsafe extern "C" fn VM_CallCompiled(mut vm: *mut vm_t, mut args: *mut i32) -> i32 {
     let mut stack: [byte; 1039] = [0; 1039];
-    let mut entryPoint: *mut libc::c_void = 0 as *mut libc::c_void;
+    let mut entryPoint: *mut libc::c_void = std::ptr::null_mut();
     let mut programStack: i32 = 0;
     let mut stackOnEntry: i32 = 0;
-    let mut image: *mut byte = 0 as *mut byte;
-    let mut opStack: *mut i32 = 0 as *mut i32;
+    let mut image: *mut byte = std::ptr::null_mut();
+    let mut opStack: *mut i32 = std::ptr::null_mut();
     let mut opStackOfs: i32 = 0;
     let mut arg: i32 = 0;
     currentVM = vm;

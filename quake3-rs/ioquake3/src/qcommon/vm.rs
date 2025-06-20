@@ -221,7 +221,7 @@ pub unsafe extern "C" fn VM_ValueToSymbol(
     mut vm: *mut vm_t,
     mut value: i32,
 ) -> *const libc::c_char {
-    let mut sym: *mut vmSymbol_t = 0 as *mut vmSymbol_t;
+    let mut sym: *mut vmSymbol_t = std::ptr::null_mut();
     static mut text: [libc::c_char; 1024] = [0; 1024];
     sym = (*vm).symbols;
     if sym.is_null() {
@@ -256,7 +256,7 @@ pub unsafe extern "C" fn VM_ValueToFunctionSymbol(
     mut vm: *mut vm_t,
     mut value: i32,
 ) -> *mut vmSymbol_t {
-    let mut sym: *mut vmSymbol_t = 0 as *mut vmSymbol_t;
+    let mut sym: *mut vmSymbol_t = std::ptr::null_mut();
     static mut nullSym: vmSymbol_t = vmSymbol_t {
         next: std::ptr::null_mut(),
         symValue: 0,
@@ -283,7 +283,7 @@ pub unsafe extern "C" fn VM_SymbolToValue(
     mut vm: *mut vm_t,
     mut symbol: *const libc::c_char,
 ) -> i32 {
-    let mut sym: *mut vmSymbol_t = 0 as *mut vmSymbol_t;
+    let mut sym: *mut vmSymbol_t = std::ptr::null_mut();
     sym = (*vm).symbols;
     while !sym.is_null() {
         if libc::strcmp(symbol, (*sym).symName.as_mut_ptr()) == 0 {
@@ -339,14 +339,14 @@ VM_LoadSymbols
 
 pub unsafe extern "C" fn VM_LoadSymbols(mut vm: *mut vm_t) {
     let mut mapfile: C2RustUnnamed_136 = C2RustUnnamed_136 {
-        c: 0 as *mut libc::c_char,
+        c: std::ptr::null_mut(),
     };
-    let mut text_p: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut token: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut text_p: *mut libc::c_char = std::ptr::null_mut();
+    let mut token: *mut libc::c_char = std::ptr::null_mut();
     let mut name: [libc::c_char; 64] = [0; 64];
     let mut symbols: [libc::c_char; 64] = [0; 64];
-    let mut prev: *mut *mut vmSymbol_t = 0 as *mut *mut vmSymbol_t;
-    let mut sym: *mut vmSymbol_t = 0 as *mut vmSymbol_t;
+    let mut prev: *mut *mut vmSymbol_t = std::ptr::null_mut();
+    let mut sym: *mut vmSymbol_t = std::ptr::null_mut();
     let mut count: i32 = 0;
     let mut value: i32 = 0;
     let mut chars: i32 = 0;
@@ -416,7 +416,7 @@ pub unsafe extern "C" fn VM_LoadSymbols(mut vm: *mut vm_t) {
                     ) as *mut vmSymbol_t;
                     *prev = sym;
                     prev = &mut (*sym).next;
-                    (*sym).next = 0 as *mut vmSymbol_s;
+                    (*sym).next = std::ptr::null_mut();
                     // convert value from an instruction number to a code offset
                     if value >= 0 as i32 && value < numInstructions {
                         value = *(*vm).instructionPointers.offset(value as isize) as i32
@@ -512,7 +512,7 @@ pub unsafe extern "C" fn VM_LoadQVM(
     let mut i: i32 = 0;
     let mut filename: [libc::c_char; 64] = [0; 64];
     let mut header: C2RustUnnamed_137 = C2RustUnnamed_137 {
-        h: 0 as *mut vmHeader_t,
+        h: std::ptr::null_mut(),
     };
     // load the image
     Com_sprintf(
@@ -538,7 +538,7 @@ pub unsafe extern "C" fn VM_LoadQVM(
             b"^3Warning: Couldn\'t open VM file %s\n\x00" as *const u8 as *const libc::c_char,
             filename.as_mut_ptr(),
         );
-        return 0 as *mut vmHeader_t;
+        return std::ptr::null_mut();
     }
     // show where the qvm was loaded from
     FS_Which(filename.as_mut_ptr(), (*vm).searchPath);
@@ -565,7 +565,7 @@ pub unsafe extern "C" fn VM_LoadQVM(
                 b"^3Warning: %s has bad header\n\x00" as *const u8 as *const libc::c_char,
                 filename.as_mut_ptr(),
             );
-            return 0 as *mut vmHeader_t;
+            return std::ptr::null_mut();
         }
     } else if (*header.h).vmMagic == 0x12721444 as i32 {
         // byte swap the header
@@ -591,7 +591,7 @@ pub unsafe extern "C" fn VM_LoadQVM(
                 b"^3Warning: %s has bad header\n\x00" as *const u8 as *const libc::c_char,
                 filename.as_mut_ptr(),
             );
-            return 0 as *mut vmHeader_t;
+            return std::ptr::null_mut();
         }
     } else {
         VM_Free(vm);
@@ -601,7 +601,7 @@ pub unsafe extern "C" fn VM_LoadQVM(
                 as *const u8 as *const libc::c_char,
             filename.as_mut_ptr(),
         );
-        return 0 as *mut vmHeader_t;
+        return std::ptr::null_mut();
     }
     // round up to next power of 2 so all data operations can
     // be mask protected
@@ -627,7 +627,7 @@ pub unsafe extern "C" fn VM_LoadQVM(
                     as *const u8 as *const libc::c_char,
                 filename.as_mut_ptr(),
             );
-            return 0 as *mut vmHeader_t;
+            return std::ptr::null_mut();
         }
         crate::stdlib::memset(
             (*vm).dataBase as *mut libc::c_void,
@@ -667,7 +667,7 @@ pub unsafe extern "C" fn VM_LoadQVM(
                         as *const u8 as *const libc::c_char,
                     filename.as_mut_ptr(),
                 );
-                return 0 as *mut vmHeader_t;
+                return std::ptr::null_mut();
             }
             crate::stdlib::memset(
                 (*vm).jumpTableTargets as *mut libc::c_void,
@@ -707,7 +707,7 @@ even if the client is pure, so take "unpure" as argument.
 #[no_mangle]
 
 pub unsafe extern "C" fn VM_Restart(mut vm: *mut vm_t, mut unpure: qboolean) -> *mut vm_t {
-    let mut header: *mut vmHeader_t = 0 as *mut vmHeader_t;
+    let mut header: *mut vmHeader_t = std::ptr::null_mut();
     // DLL's can't be restarted in place
     if !(*vm).dllHandle.is_null() {
         let mut name: [libc::c_char; 64] = [0; 64];
@@ -750,13 +750,13 @@ pub unsafe extern "C" fn VM_Create(
     mut systemCalls: Option<unsafe extern "C" fn(_: *mut intptr_t) -> intptr_t>,
     mut interpret: vmInterpret_t,
 ) -> *mut vm_t {
-    let mut vm: *mut vm_t = 0 as *mut vm_t;
-    let mut header: *mut vmHeader_t = 0 as *mut vmHeader_t;
+    let mut vm: *mut vm_t = std::ptr::null_mut();
+    let mut header: *mut vmHeader_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut remaining: i32 = 0;
     let mut retval: i32 = 0;
     let mut filename: [libc::c_char; 4096] = [0; 4096];
-    let mut startSearch: *mut libc::c_void = 0 as *mut libc::c_void;
+    let mut startSearch: *mut libc::c_void = std::ptr::null_mut();
     if module.is_null() || *module.offset(0 as i32 as isize) == 0 || systemCalls.is_none() {
         Com_Error(
             ERR_FATAL as i32,
@@ -836,7 +836,7 @@ pub unsafe extern "C" fn VM_Create(
         }
     }
     if retval < 0 as i32 {
-        return 0 as *mut vm_t;
+        return std::ptr::null_mut();
     }
     (*vm).systemCall = systemCalls;
     // allocate space for the jump targets, which will be filled in by the compile/prep functions
@@ -913,8 +913,8 @@ pub unsafe extern "C" fn VM_Free(mut vm: *mut vm_t) {
         0 as i32,
         ::std::mem::size_of::<vm_t>() as usize,
     );
-    currentVM = 0 as *mut vm_t;
-    lastVM = 0 as *mut vm_t;
+    currentVM = std::ptr::null_mut();
+    lastVM = std::ptr::null_mut();
 }
 #[no_mangle]
 
@@ -940,11 +940,11 @@ pub unsafe extern "C" fn VM_Forced_Unload_Done() {
 
 pub unsafe extern "C" fn VM_ArgPtr(mut intValue: intptr_t) -> *mut libc::c_void {
     if intValue == 0 {
-        return 0 as *mut libc::c_void;
+        return std::ptr::null_mut();
     }
     // currentVM is missing on reconnect
     if currentVM.is_null() {
-        return 0 as *mut libc::c_void;
+        return std::ptr::null_mut();
     }
     if (*currentVM).entryPoint.is_some() {
         return (*currentVM).dataBase.offset(intValue as isize) as *mut libc::c_void;
@@ -962,11 +962,11 @@ pub unsafe extern "C" fn VM_ExplicitArgPtr(
     mut intValue: intptr_t,
 ) -> *mut libc::c_void {
     if intValue == 0 {
-        return 0 as *mut libc::c_void;
+        return std::ptr::null_mut();
     }
     // currentVM is missing on reconnect here as well?
     if currentVM.is_null() {
-        return 0 as *mut libc::c_void;
+        return std::ptr::null_mut();
     }
     //
     if (*vm).entryPoint.is_some() {
@@ -1113,7 +1113,7 @@ locals from sp
 #[no_mangle]
 
 pub unsafe extern "C" fn VM_Call(mut vm: *mut vm_t, mut callnum: i32, mut args: ...) -> intptr_t {
-    let mut oldVM: *mut vm_t = 0 as *mut vm_t;
+    let mut oldVM: *mut vm_t = std::ptr::null_mut();
     let mut r: intptr_t = 0;
     let mut i: i32 = 0;
     if vm.is_null() || (*vm).name[0 as i32 as usize] == 0 {
@@ -1193,8 +1193,8 @@ pub unsafe extern "C" fn VM_Call(mut vm: *mut vm_t, mut callnum: i32, mut args: 
 //=================================================================
 
 unsafe extern "C" fn VM_ProfileSort(mut a: *const libc::c_void, mut b: *const libc::c_void) -> i32 {
-    let mut sa: *mut vmSymbol_t = 0 as *mut vmSymbol_t;
-    let mut sb: *mut vmSymbol_t = 0 as *mut vmSymbol_t;
+    let mut sa: *mut vmSymbol_t = std::ptr::null_mut();
+    let mut sb: *mut vmSymbol_t = std::ptr::null_mut();
     sa = *(a as *mut *mut vmSymbol_t);
     sb = *(b as *mut *mut vmSymbol_t);
     if (*sa).profileCount < (*sb).profileCount {
@@ -1214,9 +1214,9 @@ VM_VmProfile_f
 #[no_mangle]
 
 pub unsafe extern "C" fn VM_VmProfile_f() {
-    let mut vm: *mut vm_t = 0 as *mut vm_t;
-    let mut sorted: *mut *mut vmSymbol_t = 0 as *mut *mut vmSymbol_t;
-    let mut sym: *mut vmSymbol_t = 0 as *mut vmSymbol_t;
+    let mut vm: *mut vm_t = std::ptr::null_mut();
+    let mut sorted: *mut *mut vmSymbol_t = std::ptr::null_mut();
+    let mut sym: *mut vmSymbol_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut total: f64 = 0.;
     if lastVM.is_null() {
@@ -1278,7 +1278,7 @@ VM_VmInfo_f
 #[no_mangle]
 
 pub unsafe extern "C" fn VM_VmInfo_f() {
-    let mut vm: *mut vm_t = 0 as *mut vm_t;
+    let mut vm: *mut vm_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     Com_Printf(b"Registered virtual machines:\n\x00" as *const u8 as *const libc::c_char);
     i = 0 as i32;

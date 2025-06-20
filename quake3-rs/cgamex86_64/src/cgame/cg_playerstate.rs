@@ -308,8 +308,8 @@ pub unsafe extern "C" fn CG_DamageFeedback(mut yawByte: i32, mut pitchByte: i32,
         AngleVectors(
             angles.as_mut_ptr() as *const vec_t,
             dir.as_mut_ptr(),
-            0 as *mut vec_t,
-            0 as *mut vec_t,
+            std::ptr::null_mut(),
+            std::ptr::null_mut(),
         );
         dir[0 as i32 as usize] = vec3_origin[0 as i32 as usize] - dir[0 as i32 as usize];
         dir[1 as i32 as usize] = vec3_origin[1 as i32 as usize] - dir[1 as i32 as usize];
@@ -389,7 +389,7 @@ pub unsafe extern "C" fn CG_CheckPlayerstateEvents(
 ) {
     let mut i: i32 = 0; // cg_entities[ ps->clientNum ];
     let mut event: i32 = 0;
-    let mut cent: *mut centity_t = 0 as *mut centity_t;
+    let mut cent: *mut centity_t = std::ptr::null_mut();
     if (*ps).externalEvent != 0 && (*ps).externalEvent != (*ops).externalEvent {
         cent = &mut *cg_entities.as_mut_ptr().offset((*ps).clientNum as isize) as *mut centity_t;
         (*cent).currentState.event = (*ps).externalEvent;
@@ -426,7 +426,7 @@ CG_CheckChangedPredictableEvents
 pub unsafe extern "C" fn CG_CheckChangedPredictableEvents(mut ps: *mut playerState_t) {
     let mut i: i32 = 0;
     let mut event: i32 = 0;
-    let mut cent: *mut centity_t = 0 as *mut centity_t;
+    let mut cent: *mut centity_t = std::ptr::null_mut();
     cent = &mut cg.predictedPlayerEntity;
     i = (*ps).eventSequence - 2 as i32;
     while i < (*ps).eventSequence {

@@ -6,7 +6,7 @@ pub mod stdlib_h {
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return libc::strtol(
             __nptr,
-            0 as *mut libc::c_void as *mut *mut libc::c_char,
+            std::ptr::null_mut() as *mut *mut libc::c_char,
             10 as i32,
         ) as i32;
     }
@@ -101,10 +101,10 @@ UI_Alloc
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_Alloc(mut size: i32) -> *mut libc::c_void {
-    let mut p: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut p: *mut libc::c_char = std::ptr::null_mut();
     if allocPoint + size > 128 as i32 * 1024 as i32 {
         outOfMemory = qtrue as i32;
-        return 0 as *mut libc::c_void;
+        return std::ptr::null_mut();
     }
     p = &mut *memoryPool.as_mut_ptr().offset(allocPoint as isize) as *mut libc::c_char;
     allocPoint += size + 31 as i32 & !(31 as i32);
@@ -133,7 +133,7 @@ pub unsafe extern "C" fn UI_ParseInfos(
     mut max: i32,
     mut infos: *mut *mut libc::c_char,
 ) -> i32 {
-    let mut token: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut token: *mut libc::c_char = std::ptr::null_mut();
     let mut count: i32 = 0;
     let mut key: [libc::c_char; 1024] = [0; 1024];
     let mut info: [libc::c_char; 1024] = [0; 1024];
@@ -250,12 +250,12 @@ unsafe extern "C" fn UI_LoadArenas() {
     };
     let mut filename: [libc::c_char; 128] = [0; 128];
     let mut dirlist: [libc::c_char; 4096] = [0; 4096];
-    let mut dirptr: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut dirptr: *mut libc::c_char = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut n: i32 = 0;
     let mut dirlen: i32 = 0;
-    let mut type_0: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut tag: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut type_0: *mut libc::c_char = std::ptr::null_mut();
+    let mut tag: *mut libc::c_char = std::ptr::null_mut();
     let mut singlePlayerNum: i32 = 0;
     let mut specialNum: i32 = 0;
     let mut otherNum: i32 = 0;
@@ -430,14 +430,14 @@ UI_GetArenaInfoByNumber
 
 pub unsafe extern "C" fn UI_GetArenaInfoByNumber(mut num: i32) -> *const libc::c_char {
     let mut n: i32 = 0;
-    let mut value: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut value: *mut libc::c_char = std::ptr::null_mut();
     if num < 0 as i32 || num >= ui_numArenas {
         trap_Print(va(
             b"^1Invalid arena number: %i\n\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             num,
         ));
-        return 0 as *const libc::c_char;
+        return std::ptr::null();
     }
     n = 0 as i32;
     while n < ui_numArenas {
@@ -450,7 +450,7 @@ pub unsafe extern "C" fn UI_GetArenaInfoByNumber(mut num: i32) -> *const libc::c
         }
         n += 1
     }
-    return 0 as *const libc::c_char;
+    return std::ptr::null();
 }
 /*
 ===============
@@ -475,7 +475,7 @@ pub unsafe extern "C" fn UI_GetArenaInfoByMap(mut map: *const libc::c_char) -> *
         }
         n += 1
     }
-    return 0 as *const libc::c_char;
+    return std::ptr::null();
 }
 /*
 ===============
@@ -502,7 +502,7 @@ pub unsafe extern "C" fn UI_GetSpecialArenaInfo(
         }
         n += 1
     }
-    return 0 as *const libc::c_char;
+    return std::ptr::null();
 }
 /*
 ===============
@@ -565,7 +565,7 @@ unsafe extern "C" fn UI_LoadBots() {
     let mut numdirs: i32 = 0;
     let mut filename: [libc::c_char; 128] = [0; 128];
     let mut dirlist: [libc::c_char; 1024] = [0; 1024];
-    let mut dirptr: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut dirptr: *mut libc::c_char = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut dirlen: i32 = 0;
     ui_numBots = 0 as i32;
@@ -621,7 +621,7 @@ pub unsafe extern "C" fn UI_GetBotInfoByNumber(mut num: i32) -> *mut libc::c_cha
                 as *mut libc::c_char,
             num,
         ));
-        return 0 as *mut libc::c_char;
+        return std::ptr::null_mut();
     }
     return ui_botInfos[num as usize];
 }
@@ -634,7 +634,7 @@ UI_GetBotInfoByName
 
 pub unsafe extern "C" fn UI_GetBotInfoByName(mut name: *const libc::c_char) -> *mut libc::c_char {
     let mut n: i32 = 0;
-    let mut value: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut value: *mut libc::c_char = std::ptr::null_mut();
     n = 0 as i32;
     while n < ui_numBots {
         value = Info_ValueForKey(
@@ -646,7 +646,7 @@ pub unsafe extern "C" fn UI_GetBotInfoByName(mut name: *const libc::c_char) -> *
         }
         n += 1
     }
-    return 0 as *mut libc::c_char;
+    return std::ptr::null_mut();
 }
 //
 // single player game info
@@ -846,7 +846,7 @@ pub unsafe extern "C" fn UI_TierCompleted(mut levelWon: i32) -> i32 {
     let mut tier: i32 = 0;
     let mut score: i32 = 0;
     let mut skill: i32 = 0;
-    let mut info: *const libc::c_char = 0 as *const libc::c_char;
+    let mut info: *const libc::c_char = std::ptr::null();
     tier = levelWon / 4 as i32;
     level = tier * 4 as i32;
     if tier == UI_GetNumSPTiers() {
@@ -968,7 +968,7 @@ pub unsafe extern "C" fn UI_GetCurrentGame() -> i32 {
     let mut level: i32 = 0;
     let mut rank: i32 = 0 as i32;
     let mut skill: i32 = 0;
-    let mut info: *const libc::c_char = 0 as *const libc::c_char;
+    let mut info: *const libc::c_char = std::ptr::null();
     info = UI_GetSpecialArenaInfo(b"training\x00" as *const u8 as *const libc::c_char);
     if !info.is_null() {
         level = atoi(Info_ValueForKey(

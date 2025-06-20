@@ -546,10 +546,10 @@ pub unsafe extern "C" fn compute_allocation(
     let mut skip_rsv: i32 = 0;
     let mut intensity_rsv: i32 = 0;
     let mut dual_stereo_rsv: i32 = 0;
-    let mut bits1: *mut i32 = 0 as *mut i32;
-    let mut bits2: *mut i32 = 0 as *mut i32;
-    let mut thresh: *mut i32 = 0 as *mut i32;
-    let mut trim_offset: *mut i32 = 0 as *mut i32;
+    let mut bits1: *mut i32 = std::ptr::null_mut();
+    let mut bits2: *mut i32 = std::ptr::null_mut();
+    let mut thresh: *mut i32 = std::ptr::null_mut();
+    let mut trim_offset: *mut i32 = std::ptr::null_mut();
     total = if total > 0 as i32 { total } else { 0 as i32 };
     len = (*m).nbEBands;
     skip_start = start;

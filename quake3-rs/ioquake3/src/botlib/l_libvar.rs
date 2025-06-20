@@ -127,8 +127,7 @@ pub unsafe extern "C" fn LibVarStringValue(mut string: *const libc::c_char) -> f
 pub unsafe extern "C" fn LibVarAlloc(
     mut var_name: *const libc::c_char,
 ) -> *mut crate::src::botlib::l_libvar::libvar_t {
-    let mut v: *mut crate::src::botlib::l_libvar::libvar_t =
-        0 as *mut crate::src::botlib::l_libvar::libvar_t;
+    let mut v: *mut crate::src::botlib::l_libvar::libvar_t = std::ptr::null_mut();
     v = crate::src::botlib::l_memory::GetMemory(::std::mem::size_of::<
         crate::src::botlib::l_libvar::libvar_t,
     >() as usize) as *mut crate::src::botlib::l_libvar::libvar_t;
@@ -173,15 +172,14 @@ pub unsafe extern "C" fn LibVarDeAlloc(mut v: *mut crate::src::botlib::l_libvar:
 #[no_mangle]
 
 pub unsafe extern "C" fn LibVarDeAllocAll() {
-    let mut v: *mut crate::src::botlib::l_libvar::libvar_t =
-        0 as *mut crate::src::botlib::l_libvar::libvar_t; //end for
+    let mut v: *mut crate::src::botlib::l_libvar::libvar_t = std::ptr::null_mut(); //end for
     v = libvarlist;
     while !v.is_null() {
         libvarlist = (*libvarlist).next;
         LibVarDeAlloc(v);
         v = libvarlist
     }
-    libvarlist = 0 as *mut crate::src::botlib::l_libvar::libvar_t;
+    libvarlist = std::ptr::null_mut();
 }
 //gets the library variable with the given name
 //end of the function LibVarDeAllocAll
@@ -196,8 +194,7 @@ pub unsafe extern "C" fn LibVarDeAllocAll() {
 pub unsafe extern "C" fn LibVarGet(
     mut var_name: *const libc::c_char,
 ) -> *mut crate::src::botlib::l_libvar::libvar_t {
-    let mut v: *mut crate::src::botlib::l_libvar::libvar_t =
-        0 as *mut crate::src::botlib::l_libvar::libvar_t; //end for
+    let mut v: *mut crate::src::botlib::l_libvar::libvar_t = std::ptr::null_mut(); //end for
     v = libvarlist;
     while !v.is_null() {
         if Q_stricmp((*v).name, var_name) == 0 {
@@ -206,7 +203,7 @@ pub unsafe extern "C" fn LibVarGet(
         v = (*v).next
         //end if
     }
-    return 0 as *mut crate::src::botlib::l_libvar::libvar_t;
+    return std::ptr::null_mut();
 }
 //gets the string of the library variable with the given name
 //end of the function LibVarGet
@@ -219,8 +216,7 @@ pub unsafe extern "C" fn LibVarGet(
 #[no_mangle]
 
 pub unsafe extern "C" fn LibVarGetString(mut var_name: *const libc::c_char) -> *mut libc::c_char {
-    let mut v: *mut crate::src::botlib::l_libvar::libvar_t =
-        0 as *mut crate::src::botlib::l_libvar::libvar_t; //end if
+    let mut v: *mut crate::src::botlib::l_libvar::libvar_t = std::ptr::null_mut(); //end if
     v = LibVarGet(var_name);
     if !v.is_null() {
         return (*v).string;
@@ -240,8 +236,7 @@ pub unsafe extern "C" fn LibVarGetString(mut var_name: *const libc::c_char) -> *
 #[no_mangle]
 
 pub unsafe extern "C" fn LibVarGetValue(mut var_name: *const libc::c_char) -> f32 {
-    let mut v: *mut crate::src::botlib::l_libvar::libvar_t =
-        0 as *mut crate::src::botlib::l_libvar::libvar_t; //end if
+    let mut v: *mut crate::src::botlib::l_libvar::libvar_t = std::ptr::null_mut(); //end if
     v = LibVarGet(var_name);
     if !v.is_null() {
         return (*v).value;
@@ -264,8 +259,7 @@ pub unsafe extern "C" fn LibVar(
     mut var_name: *const libc::c_char,
     mut value: *const libc::c_char,
 ) -> *mut crate::src::botlib::l_libvar::libvar_t {
-    let mut v: *mut crate::src::botlib::l_libvar::libvar_t =
-        0 as *mut crate::src::botlib::l_libvar::libvar_t;
+    let mut v: *mut crate::src::botlib::l_libvar::libvar_t = std::ptr::null_mut();
     v = LibVarGet(var_name);
     if !v.is_null() {
         return v;
@@ -298,8 +292,7 @@ pub unsafe extern "C" fn LibVarString(
     mut var_name: *const libc::c_char,
     mut value: *const libc::c_char,
 ) -> *mut libc::c_char {
-    let mut v: *mut crate::src::botlib::l_libvar::libvar_t =
-        0 as *mut crate::src::botlib::l_libvar::libvar_t;
+    let mut v: *mut crate::src::botlib::l_libvar::libvar_t = std::ptr::null_mut();
     v = LibVar(var_name, value);
     return (*v).string;
 }
@@ -317,8 +310,7 @@ pub unsafe extern "C" fn LibVarValue(
     mut var_name: *const libc::c_char,
     mut value: *const libc::c_char,
 ) -> f32 {
-    let mut v: *mut crate::src::botlib::l_libvar::libvar_t =
-        0 as *mut crate::src::botlib::l_libvar::libvar_t;
+    let mut v: *mut crate::src::botlib::l_libvar::libvar_t = std::ptr::null_mut();
     v = LibVar(var_name, value);
     return (*v).value;
 }
@@ -336,8 +328,7 @@ pub unsafe extern "C" fn LibVarSet(
     mut var_name: *const libc::c_char,
     mut value: *const libc::c_char,
 ) {
-    let mut v: *mut crate::src::botlib::l_libvar::libvar_t =
-        0 as *mut crate::src::botlib::l_libvar::libvar_t; //end else
+    let mut v: *mut crate::src::botlib::l_libvar::libvar_t = std::ptr::null_mut(); //end else
     v = LibVarGet(var_name); //end if
     if !v.is_null() {
         crate::src::botlib::l_memory::FreeMemory((*v).string as *mut libc::c_void);
@@ -365,8 +356,7 @@ pub unsafe extern "C" fn LibVarSet(
 #[no_mangle]
 
 pub unsafe extern "C" fn LibVarChanged(mut var_name: *const libc::c_char) -> qboolean {
-    let mut v: *mut crate::src::botlib::l_libvar::libvar_t =
-        0 as *mut crate::src::botlib::l_libvar::libvar_t; //end if
+    let mut v: *mut crate::src::botlib::l_libvar::libvar_t = std::ptr::null_mut(); //end if
     v = LibVarGet(var_name);
     if !v.is_null() {
         return (*v).modified;
@@ -386,8 +376,7 @@ pub unsafe extern "C" fn LibVarChanged(mut var_name: *const libc::c_char) -> qbo
 #[no_mangle]
 
 pub unsafe extern "C" fn LibVarSetNotModified(mut var_name: *const libc::c_char) {
-    let mut v: *mut crate::src::botlib::l_libvar::libvar_t =
-        0 as *mut crate::src::botlib::l_libvar::libvar_t;
+    let mut v: *mut crate::src::botlib::l_libvar::libvar_t = std::ptr::null_mut();
     v = LibVarGet(var_name);
     if !v.is_null() {
         (*v).modified = qfalse

@@ -127,7 +127,7 @@ pub unsafe extern "C" fn _make_words(
             if length < 32 as i32 as isize && entry >> length != 0 {
                 /* error condition; the lengths must specify an overpopulated tree */
                 free(r as *mut libc::c_void);
-                return 0 as *mut ogg_uint32_t;
+                return std::ptr::null_mut();
             }
             let fresh0 = count;
             count = count + 1;
@@ -177,7 +177,7 @@ pub unsafe extern "C" fn _make_words(
         while i < 33 as i32 as isize {
             if marker[i as usize] as usize & 0xffffffff as usize >> 32 as i32 as isize - i != 0 {
                 free(r as *mut libc::c_void);
-                return 0 as *mut ogg_uint32_t;
+                return std::ptr::null_mut();
             }
             i += 1
         }
@@ -364,7 +364,7 @@ pub unsafe extern "C" fn _book_unquantize(
         }
         return r;
     }
-    return 0 as *mut f32;
+    return std::ptr::null_mut();
 }
 #[no_mangle]
 
@@ -462,7 +462,7 @@ pub unsafe extern "C" fn vorbis_book_init_decode(
     let mut j: i32 = 0;
     let mut n: i32 = 0 as i32;
     let mut tabn: i32 = 0;
-    let mut sortindex: *mut i32 = 0 as *mut i32;
+    let mut sortindex: *mut i32 = std::ptr::null_mut();
     crate::stdlib::memset(
         c as *mut libc::c_void,
         0 as i32,

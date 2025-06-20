@@ -288,7 +288,7 @@ unsafe extern "C" fn expand_right_edge(
     mut input_cols: JDIMENSION,
     mut output_cols: JDIMENSION,
 ) {
-    let mut ptr: JSAMPROW = 0 as *mut JSAMPLE; /* don't need GETJSAMPLE() here */
+    let mut ptr: JSAMPROW = std::ptr::null_mut(); /* don't need GETJSAMPLE() here */
     let mut pixval: JSAMPLE = 0;
     let mut count: i32 = 0;
     let mut row: i32 = 0;
@@ -324,9 +324,9 @@ unsafe extern "C" fn sep_downsample(
 ) {
     let mut downsample: my_downsample_ptr = (*cinfo).downsample as my_downsample_ptr;
     let mut ci: i32 = 0;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
-    let mut in_ptr: JSAMPARRAY = 0 as *mut JSAMPROW;
-    let mut out_ptr: JSAMPARRAY = 0 as *mut JSAMPROW;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
+    let mut in_ptr: JSAMPARRAY = std::ptr::null_mut();
+    let mut out_ptr: JSAMPARRAY = std::ptr::null_mut();
     ci = 0 as i32;
     compptr = (*cinfo).comp_info;
     while ci < (*cinfo).num_components {
@@ -371,8 +371,8 @@ unsafe extern "C" fn int_downsample(
     let mut output_cols: JDIMENSION = (*compptr)
         .width_in_blocks
         .wrapping_mul((*compptr).DCT_h_scaled_size as u32);
-    let mut inptr: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut outptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut inptr: JSAMPROW = std::ptr::null_mut();
+    let mut outptr: JSAMPROW = std::ptr::null_mut();
     let mut outvalue: INT32 = 0;
     h_expand = (*downsample).h_expand[(*compptr).component_index as usize] as i32;
     v_expand = (*downsample).v_expand[(*compptr).component_index as usize] as i32;
@@ -472,8 +472,8 @@ unsafe extern "C" fn h2v1_downsample(
     let mut output_cols: JDIMENSION = (*compptr)
         .width_in_blocks
         .wrapping_mul((*compptr).DCT_h_scaled_size as u32);
-    let mut inptr: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut outptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut inptr: JSAMPROW = std::ptr::null_mut();
+    let mut outptr: JSAMPROW = std::ptr::null_mut();
     let mut bias: i32 = 0;
     /* Expand input data enough to let all the output samples be generated
      * by the standard loop.  Special-casing padded output would be more
@@ -521,9 +521,9 @@ unsafe extern "C" fn h2v2_downsample(
     let mut output_cols: JDIMENSION = (*compptr)
         .width_in_blocks
         .wrapping_mul((*compptr).DCT_h_scaled_size as u32);
-    let mut inptr0: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut inptr1: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut outptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut inptr0: JSAMPROW = std::ptr::null_mut();
+    let mut inptr1: JSAMPROW = std::ptr::null_mut();
+    let mut outptr: JSAMPROW = std::ptr::null_mut();
     let mut bias: i32 = 0;
     /* Expand input data enough to let all the output samples be generated
      * by the standard loop.  Special-casing padded output would be more
@@ -579,11 +579,11 @@ unsafe extern "C" fn h2v2_smooth_downsample(
     let mut output_cols: JDIMENSION = (*compptr)
         .width_in_blocks
         .wrapping_mul((*compptr).DCT_h_scaled_size as u32);
-    let mut inptr0: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut inptr1: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut above_ptr: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut below_ptr: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut outptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut inptr0: JSAMPROW = std::ptr::null_mut();
+    let mut inptr1: JSAMPROW = std::ptr::null_mut();
+    let mut above_ptr: JSAMPROW = std::ptr::null_mut();
+    let mut below_ptr: JSAMPROW = std::ptr::null_mut();
+    let mut outptr: JSAMPROW = std::ptr::null_mut();
     let mut membersum: INT32 = 0;
     let mut neighsum: INT32 = 0;
     let mut memberscale: INT32 = 0;
@@ -722,10 +722,10 @@ unsafe extern "C" fn fullsize_smooth_downsample(
     let mut output_cols: JDIMENSION = (*compptr)
         .width_in_blocks
         .wrapping_mul((*compptr).DCT_h_scaled_size as u32);
-    let mut inptr: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut above_ptr: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut below_ptr: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut outptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut inptr: JSAMPROW = std::ptr::null_mut();
+    let mut above_ptr: JSAMPROW = std::ptr::null_mut();
+    let mut below_ptr: JSAMPROW = std::ptr::null_mut();
+    let mut outptr: JSAMPROW = std::ptr::null_mut();
     let mut membersum: INT32 = 0;
     let mut neighsum: INT32 = 0;
     let mut memberscale: INT32 = 0;
@@ -806,9 +806,9 @@ unsafe extern "C" fn fullsize_smooth_downsample(
 #[no_mangle]
 
 pub unsafe extern "C" fn jinit_downsampler(mut cinfo: j_compress_ptr) {
-    let mut downsample: my_downsample_ptr = 0 as *mut my_downsampler;
+    let mut downsample: my_downsample_ptr = std::ptr::null_mut();
     let mut ci: i32 = 0;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
     let mut smoothok: boolean = 1 as i32;
     let mut h_in_group: i32 = 0;
     let mut v_in_group: i32 = 0;

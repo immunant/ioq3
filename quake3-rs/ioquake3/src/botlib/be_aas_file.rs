@@ -6,7 +6,7 @@ pub mod stdlib_h {
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return libc::strtol(
             __nptr,
-            0 as *mut libc::c_void as *mut *mut libc::c_char,
+            std::ptr::null_mut() as *mut *mut libc::c_char,
             10 as i32,
         ) as i32;
     }
@@ -620,28 +620,28 @@ pub unsafe extern "C" fn AAS_DumpAASData() {
             crate::src::botlib::be_aas_main::aasworld.bboxes as *mut libc::c_void,
         );
     }
-    crate::src::botlib::be_aas_main::aasworld.bboxes = 0 as *mut aas_bbox_t;
+    crate::src::botlib::be_aas_main::aasworld.bboxes = std::ptr::null_mut();
     crate::src::botlib::be_aas_main::aasworld.numvertexes = 0 as i32;
     if !crate::src::botlib::be_aas_main::aasworld.vertexes.is_null() {
         crate::src::botlib::l_memory::FreeMemory(
             crate::src::botlib::be_aas_main::aasworld.vertexes as *mut libc::c_void,
         );
     }
-    crate::src::botlib::be_aas_main::aasworld.vertexes = 0 as *mut aas_vertex_t;
+    crate::src::botlib::be_aas_main::aasworld.vertexes = std::ptr::null_mut();
     crate::src::botlib::be_aas_main::aasworld.numplanes = 0 as i32;
     if !crate::src::botlib::be_aas_main::aasworld.planes.is_null() {
         crate::src::botlib::l_memory::FreeMemory(
             crate::src::botlib::be_aas_main::aasworld.planes as *mut libc::c_void,
         );
     }
-    crate::src::botlib::be_aas_main::aasworld.planes = 0 as *mut aas_plane_t;
+    crate::src::botlib::be_aas_main::aasworld.planes = std::ptr::null_mut();
     crate::src::botlib::be_aas_main::aasworld.numedges = 0 as i32;
     if !crate::src::botlib::be_aas_main::aasworld.edges.is_null() {
         crate::src::botlib::l_memory::FreeMemory(
             crate::src::botlib::be_aas_main::aasworld.edges as *mut libc::c_void,
         );
     }
-    crate::src::botlib::be_aas_main::aasworld.edges = 0 as *mut aas_edge_t;
+    crate::src::botlib::be_aas_main::aasworld.edges = std::ptr::null_mut();
     crate::src::botlib::be_aas_main::aasworld.edgeindexsize = 0 as i32;
     if !crate::src::botlib::be_aas_main::aasworld
         .edgeindex
@@ -651,14 +651,14 @@ pub unsafe extern "C" fn AAS_DumpAASData() {
             crate::src::botlib::be_aas_main::aasworld.edgeindex as *mut libc::c_void,
         );
     }
-    crate::src::botlib::be_aas_main::aasworld.edgeindex = 0 as *mut aas_edgeindex_t;
+    crate::src::botlib::be_aas_main::aasworld.edgeindex = std::ptr::null_mut();
     crate::src::botlib::be_aas_main::aasworld.numfaces = 0 as i32;
     if !crate::src::botlib::be_aas_main::aasworld.faces.is_null() {
         crate::src::botlib::l_memory::FreeMemory(
             crate::src::botlib::be_aas_main::aasworld.faces as *mut libc::c_void,
         );
     }
-    crate::src::botlib::be_aas_main::aasworld.faces = 0 as *mut aas_face_t;
+    crate::src::botlib::be_aas_main::aasworld.faces = std::ptr::null_mut();
     crate::src::botlib::be_aas_main::aasworld.faceindexsize = 0 as i32;
     if !crate::src::botlib::be_aas_main::aasworld
         .faceindex
@@ -668,14 +668,14 @@ pub unsafe extern "C" fn AAS_DumpAASData() {
             crate::src::botlib::be_aas_main::aasworld.faceindex as *mut libc::c_void,
         );
     }
-    crate::src::botlib::be_aas_main::aasworld.faceindex = 0 as *mut aas_faceindex_t;
+    crate::src::botlib::be_aas_main::aasworld.faceindex = std::ptr::null_mut();
     crate::src::botlib::be_aas_main::aasworld.numareas = 0 as i32;
     if !crate::src::botlib::be_aas_main::aasworld.areas.is_null() {
         crate::src::botlib::l_memory::FreeMemory(
             crate::src::botlib::be_aas_main::aasworld.areas as *mut libc::c_void,
         );
     }
-    crate::src::botlib::be_aas_main::aasworld.areas = 0 as *mut aas_area_t;
+    crate::src::botlib::be_aas_main::aasworld.areas = std::ptr::null_mut();
     crate::src::botlib::be_aas_main::aasworld.numareasettings = 0 as i32;
     if !crate::src::botlib::be_aas_main::aasworld
         .areasettings
@@ -685,7 +685,7 @@ pub unsafe extern "C" fn AAS_DumpAASData() {
             crate::src::botlib::be_aas_main::aasworld.areasettings as *mut libc::c_void,
         );
     }
-    crate::src::botlib::be_aas_main::aasworld.areasettings = 0 as *mut aas_areasettings_t;
+    crate::src::botlib::be_aas_main::aasworld.areasettings = std::ptr::null_mut();
     crate::src::botlib::be_aas_main::aasworld.reachabilitysize = 0 as i32;
     if !crate::src::botlib::be_aas_main::aasworld
         .reachability
@@ -695,21 +695,21 @@ pub unsafe extern "C" fn AAS_DumpAASData() {
             crate::src::botlib::be_aas_main::aasworld.reachability as *mut libc::c_void,
         );
     }
-    crate::src::botlib::be_aas_main::aasworld.reachability = 0 as *mut aas_reachability_t;
+    crate::src::botlib::be_aas_main::aasworld.reachability = std::ptr::null_mut();
     crate::src::botlib::be_aas_main::aasworld.numnodes = 0 as i32;
     if !crate::src::botlib::be_aas_main::aasworld.nodes.is_null() {
         crate::src::botlib::l_memory::FreeMemory(
             crate::src::botlib::be_aas_main::aasworld.nodes as *mut libc::c_void,
         );
     }
-    crate::src::botlib::be_aas_main::aasworld.nodes = 0 as *mut aas_node_t;
+    crate::src::botlib::be_aas_main::aasworld.nodes = std::ptr::null_mut();
     crate::src::botlib::be_aas_main::aasworld.numportals = 0 as i32;
     if !crate::src::botlib::be_aas_main::aasworld.portals.is_null() {
         crate::src::botlib::l_memory::FreeMemory(
             crate::src::botlib::be_aas_main::aasworld.portals as *mut libc::c_void,
         );
     }
-    crate::src::botlib::be_aas_main::aasworld.portals = 0 as *mut aas_portal_t;
+    crate::src::botlib::be_aas_main::aasworld.portals = std::ptr::null_mut();
     crate::src::botlib::be_aas_main::aasworld.numportals = 0 as i32;
     if !crate::src::botlib::be_aas_main::aasworld
         .portalindex
@@ -719,14 +719,14 @@ pub unsafe extern "C" fn AAS_DumpAASData() {
             crate::src::botlib::be_aas_main::aasworld.portalindex as *mut libc::c_void,
         );
     }
-    crate::src::botlib::be_aas_main::aasworld.portalindex = 0 as *mut aas_portalindex_t;
+    crate::src::botlib::be_aas_main::aasworld.portalindex = std::ptr::null_mut();
     crate::src::botlib::be_aas_main::aasworld.portalindexsize = 0 as i32;
     if !crate::src::botlib::be_aas_main::aasworld.clusters.is_null() {
         crate::src::botlib::l_memory::FreeMemory(
             crate::src::botlib::be_aas_main::aasworld.clusters as *mut libc::c_void,
         );
     }
-    crate::src::botlib::be_aas_main::aasworld.clusters = 0 as *mut aas_cluster_t;
+    crate::src::botlib::be_aas_main::aasworld.clusters = std::ptr::null_mut();
     crate::src::botlib::be_aas_main::aasworld.numclusters = 0 as i32;
     //
     crate::src::botlib::be_aas_main::aasworld.loaded = qfalse as i32;
@@ -757,7 +757,7 @@ pub unsafe extern "C" fn AAS_LoadAASLump(
     mut lastoffset: *mut i32,
     mut size: i32,
 ) -> *mut libc::c_char {
-    let mut buf: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut buf: *mut libc::c_char = std::ptr::null_mut();
     //
     if length == 0 {
         //end if
@@ -787,7 +787,7 @@ pub unsafe extern "C" fn AAS_LoadAASLump(
             crate::src::botlib::be_interface::botimport
                 .FS_FCloseFile
                 .expect("non-null function pointer")(fp);
-            return 0 as *mut libc::c_char;
+            return std::ptr::null_mut();
         }
         //end if
     }
@@ -1211,7 +1211,7 @@ pub unsafe extern "C" fn AAS_WriteAASLump(
     mut data: *mut libc::c_void,
     mut length: i32,
 ) -> i32 {
-    let mut lump: *mut aas_lump_t = 0 as *mut aas_lump_t; //LittleLong(ftell(fp));
+    let mut lump: *mut aas_lump_t = std::ptr::null_mut(); //LittleLong(ftell(fp));
     lump = &mut *(*h).lumps.as_mut_ptr().offset(lumpnum as isize) as *mut aas_lump_t; //end if
     (*lump).fileofs = AAS_WriteAASLump_offset;
     (*lump).filelen = length;

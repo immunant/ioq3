@@ -4,7 +4,7 @@ pub mod stdlib_float_h {
     #[inline]
 
     pub unsafe extern "C" fn atof(mut __nptr: *const libc::c_char) -> f64 {
-        return libc::strtod(__nptr, 0 as *mut libc::c_void as *mut *mut libc::c_char);
+        return libc::strtod(__nptr, std::ptr::null_mut() as *mut *mut libc::c_char);
     }
 }
 
@@ -14,7 +14,7 @@ pub mod stdlib_h {
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return libc::strtol(
             __nptr,
-            0 as *mut libc::c_void as *mut *mut libc::c_char,
+            std::ptr::null_mut() as *mut *mut libc::c_char,
             10 as i32,
         ) as i32;
     }
@@ -204,7 +204,7 @@ Cvar_FindVar
 */
 
 unsafe extern "C" fn Cvar_FindVar(mut var_name: *const libc::c_char) -> *mut cvar_t {
-    let mut var: *mut cvar_t = 0 as *mut cvar_t;
+    let mut var: *mut cvar_t = std::ptr::null_mut();
     let mut hash: isize = 0;
     hash = generateHashValue(var_name);
     var = hashTable[hash as usize];
@@ -214,7 +214,7 @@ unsafe extern "C" fn Cvar_FindVar(mut var_name: *const libc::c_char) -> *mut cva
         }
         var = (*var).hashNext
     }
-    return 0 as *mut cvar_t;
+    return std::ptr::null_mut();
 }
 // expands value to a string and calls Cvar_Set/Cvar_SetSafe
 /*
@@ -225,7 +225,7 @@ Cvar_VariableValue
 #[no_mangle]
 
 pub unsafe extern "C" fn Cvar_VariableValue(mut var_name: *const libc::c_char) -> f32 {
-    let mut var: *mut cvar_t = 0 as *mut cvar_t;
+    let mut var: *mut cvar_t = std::ptr::null_mut();
     var = Cvar_FindVar(var_name);
     if var.is_null() {
         return 0 as i32 as f32;
@@ -240,7 +240,7 @@ Cvar_VariableIntegerValue
 #[no_mangle]
 
 pub unsafe extern "C" fn Cvar_VariableIntegerValue(mut var_name: *const libc::c_char) -> i32 {
-    let mut var: *mut cvar_t = 0 as *mut cvar_t;
+    let mut var: *mut cvar_t = std::ptr::null_mut();
     var = Cvar_FindVar(var_name);
     if var.is_null() {
         return 0 as i32;
@@ -258,7 +258,7 @@ Cvar_VariableString
 pub unsafe extern "C" fn Cvar_VariableString(
     mut var_name: *const libc::c_char,
 ) -> *mut libc::c_char {
-    let mut var: *mut cvar_t = 0 as *mut cvar_t;
+    let mut var: *mut cvar_t = std::ptr::null_mut();
     var = Cvar_FindVar(var_name);
     if var.is_null() {
         return b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
@@ -277,7 +277,7 @@ pub unsafe extern "C" fn Cvar_VariableStringBuffer(
     mut buffer: *mut libc::c_char,
     mut bufsize: i32,
 ) {
-    let mut var: *mut cvar_t = 0 as *mut cvar_t;
+    let mut var: *mut cvar_t = std::ptr::null_mut();
     var = Cvar_FindVar(var_name);
     if var.is_null() {
         *buffer = 0 as i32 as libc::c_char
@@ -294,7 +294,7 @@ Cvar_Flags
 #[no_mangle]
 
 pub unsafe extern "C" fn Cvar_Flags(mut var_name: *const libc::c_char) -> i32 {
-    let mut var: *mut cvar_t = 0 as *mut cvar_t;
+    let mut var: *mut cvar_t = std::ptr::null_mut();
     var = Cvar_FindVar(var_name);
     if var.is_null() {
         return 0x80000000 as u32 as i32;
@@ -315,7 +315,7 @@ Cvar_CommandCompletion
 pub unsafe extern "C" fn Cvar_CommandCompletion(
     mut callback: Option<unsafe extern "C" fn(_: *const libc::c_char) -> ()>,
 ) {
-    let mut cvar: *mut cvar_t = 0 as *mut cvar_t;
+    let mut cvar: *mut cvar_t = std::ptr::null_mut();
     cvar = cvar_vars;
     while !cvar.is_null() {
         if !(*cvar).name.is_null() {
@@ -493,7 +493,7 @@ pub unsafe extern "C" fn Cvar_Get(
     mut var_value: *const libc::c_char,
     mut flags: i32,
 ) -> *mut cvar_t {
-    let mut var: *mut cvar_t = 0 as *mut cvar_t;
+    let mut var: *mut cvar_t = std::ptr::null_mut();
     let mut hash: isize = 0;
     let mut index: i32 = 0;
     if var_name.is_null() || var_value.is_null() {
@@ -565,9 +565,9 @@ pub unsafe extern "C" fn Cvar_Get(
         }
         // if we have a latched string, take that value now
         if !(*var).latchedString.is_null() {
-            let mut s: *mut libc::c_char = 0 as *mut libc::c_char; // otherwise cvar_set2 would free it
+            let mut s: *mut libc::c_char = std::ptr::null_mut(); // otherwise cvar_set2 would free it
             s = (*var).latchedString;
-            (*var).latchedString = 0 as *mut libc::c_char;
+            (*var).latchedString = std::ptr::null_mut();
             Cvar_Set2(var_name, s, qtrue);
             Z_Free(s as *mut libc::c_void);
         }
@@ -595,7 +595,7 @@ pub unsafe extern "C" fn Cvar_Get(
                     as *const libc::c_char,
             );
         }
-        return 0 as *mut cvar_t;
+        return std::ptr::null_mut();
     }
     var = &mut *cvar_indexes.as_mut_ptr().offset(index as isize) as *mut cvar_t;
     if index >= cvar_numIndexes {
@@ -609,13 +609,13 @@ pub unsafe extern "C" fn Cvar_Get(
     (*var).integer = atoi((*var).string);
     (*var).resetString = CopyString(var_value);
     (*var).validate = qfalse;
-    (*var).description = 0 as *mut libc::c_char;
+    (*var).description = std::ptr::null_mut();
     // link the variable in
     (*var).next = cvar_vars;
     if !cvar_vars.is_null() {
         (*cvar_vars).prev = var
     }
-    (*var).prev = 0 as *mut cvar_t;
+    (*var).prev = std::ptr::null_mut();
     cvar_vars = var;
     (*var).flags = flags;
     // note what types of cvars have been modified (userinfo, archive, serverinfo, systeminfo)
@@ -626,7 +626,7 @@ pub unsafe extern "C" fn Cvar_Get(
     if !hashTable[hash as usize].is_null() {
         (*hashTable[hash as usize]).hashPrev = var
     }
-    (*var).hashPrev = 0 as *mut cvar_t;
+    (*var).hashPrev = std::ptr::null_mut();
     hashTable[hash as usize] = var;
     return var;
 }
@@ -682,7 +682,7 @@ pub unsafe extern "C" fn Cvar_Set2(
     mut value: *const libc::c_char,
     mut force: qboolean,
 ) -> *mut cvar_t {
-    let mut var: *mut cvar_t = 0 as *mut cvar_t;
+    let mut var: *mut cvar_t = std::ptr::null_mut();
     //	Com_DPrintf( "Cvar_Set2: %s %s\n", var_name, value );
     if Cvar_ValidateString(var_name) as u64 == 0 {
         Com_Printf(
@@ -695,7 +695,7 @@ pub unsafe extern "C" fn Cvar_Set2(
     var = Cvar_FindVar(var_name);
     if var.is_null() {
         if value.is_null() {
-            return 0 as *mut cvar_t;
+            return std::ptr::null_mut();
         }
         // create it
         if force as u64 == 0 {
@@ -711,7 +711,7 @@ pub unsafe extern "C" fn Cvar_Set2(
     if (*var).flags & 0x20 as i32 != 0 && !(*var).latchedString.is_null() {
         if libc::strcmp(value, (*var).string) == 0 {
             Z_Free((*var).latchedString as *mut libc::c_void);
-            (*var).latchedString = 0 as *mut libc::c_char;
+            (*var).latchedString = std::ptr::null_mut();
             return var;
         }
         if libc::strcmp(value, (*var).latchedString) == 0 {
@@ -764,7 +764,7 @@ pub unsafe extern "C" fn Cvar_Set2(
         }
     } else if !(*var).latchedString.is_null() {
         Z_Free((*var).latchedString as *mut libc::c_void);
-        (*var).latchedString = 0 as *mut libc::c_char
+        (*var).latchedString = std::ptr::null_mut()
     }
     if libc::strcmp(value, (*var).string) == 0 {
         return var;
@@ -899,7 +899,7 @@ Cvar_Reset
 #[no_mangle]
 
 pub unsafe extern "C" fn Cvar_Reset(mut var_name: *const libc::c_char) {
-    Cvar_Set2(var_name, 0 as *const libc::c_char, qfalse);
+    Cvar_Set2(var_name, std::ptr::null(), qfalse);
 }
 /*
 ============
@@ -909,7 +909,7 @@ Cvar_ForceReset
 #[no_mangle]
 
 pub unsafe extern "C" fn Cvar_ForceReset(mut var_name: *const libc::c_char) {
-    Cvar_Set2(var_name, 0 as *const libc::c_char, qtrue);
+    Cvar_Set2(var_name, std::ptr::null(), qtrue);
 }
 /*
 ============
@@ -921,7 +921,7 @@ Any testing variables will be reset to the safe values
 #[no_mangle]
 
 pub unsafe extern "C" fn Cvar_SetCheatState() {
-    let mut var: *mut cvar_t = 0 as *mut cvar_t;
+    let mut var: *mut cvar_t = std::ptr::null_mut();
     // set all default vars to the safe value
     var = cvar_vars;
     while !var.is_null() {
@@ -930,7 +930,7 @@ pub unsafe extern "C" fn Cvar_SetCheatState() {
             // because of a different var->latchedString
             if !(*var).latchedString.is_null() {
                 Z_Free((*var).latchedString as *mut libc::c_void);
-                (*var).latchedString = 0 as *mut libc::c_char
+                (*var).latchedString = std::ptr::null_mut()
             }
             if libc::strcmp((*var).resetString, (*var).string) != 0 {
                 Cvar_Set((*var).name, (*var).resetString);
@@ -950,7 +950,7 @@ Handles variable inspection and changing from the console
 #[no_mangle]
 
 pub unsafe extern "C" fn Cvar_Command() -> qboolean {
-    let mut v: *mut cvar_t = 0 as *mut cvar_t;
+    let mut v: *mut cvar_t = std::ptr::null_mut();
     // check variables
     v = Cvar_FindVar(Cmd_Argv(0 as i32));
     if v.is_null() {
@@ -976,8 +976,8 @@ Prints the contents of a cvar
 #[no_mangle]
 
 pub unsafe extern "C" fn Cvar_Print_f() {
-    let mut name: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut cv: *mut cvar_t = 0 as *mut cvar_t;
+    let mut name: *mut libc::c_char = std::ptr::null_mut();
+    let mut cv: *mut cvar_t = std::ptr::null_mut();
     if Cmd_Argc() != 2 as i32 {
         Com_Printf(b"usage: print <variable>\n\x00" as *const u8 as *const libc::c_char);
         return;
@@ -1006,7 +1006,7 @@ given values
 pub unsafe extern "C" fn Cvar_Toggle_f() {
     let mut i: i32 = 0;
     let mut c: i32 = Cmd_Argc();
-    let mut curval: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut curval: *mut libc::c_char = std::ptr::null_mut();
     if c < 2 as i32 {
         Com_Printf(
             b"usage: toggle <variable> [value1, value2, ...]\n\x00" as *const u8
@@ -1055,8 +1055,8 @@ weren't declared in C code.
 
 pub unsafe extern "C" fn Cvar_Set_f() {
     let mut c: i32 = 0;
-    let mut cmd: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut v: *mut cvar_t = 0 as *mut cvar_t;
+    let mut cmd: *mut libc::c_char = std::ptr::null_mut();
+    let mut v: *mut cvar_t = std::ptr::null_mut();
     c = Cmd_Argc();
     cmd = Cmd_Argv(0 as i32);
     if c < 2 as i32 {
@@ -1124,7 +1124,7 @@ with the archive flag set to qtrue.
 #[no_mangle]
 
 pub unsafe extern "C" fn Cvar_WriteVariables(mut f: fileHandle_t) {
-    let mut var: *mut cvar_t = 0 as *mut cvar_t;
+    let mut var: *mut cvar_t = std::ptr::null_mut();
     let mut buffer: [libc::c_char; 1024] = [0; 1024];
     let mut current_block_5: u64;
     var = cvar_vars;
@@ -1203,13 +1203,13 @@ Cvar_List_f
 #[no_mangle]
 
 pub unsafe extern "C" fn Cvar_List_f() {
-    let mut var: *mut cvar_t = 0 as *mut cvar_t;
+    let mut var: *mut cvar_t = std::ptr::null_mut();
     let mut i: i32 = 0;
-    let mut match_0: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut match_0: *mut libc::c_char = std::ptr::null_mut();
     if Cmd_Argc() > 1 as i32 {
         match_0 = Cmd_Argv(1 as i32)
     } else {
-        match_0 = 0 as *mut libc::c_char
+        match_0 = std::ptr::null_mut()
     }
     i = 0 as i32;
     var = cvar_vars;
@@ -1288,14 +1288,14 @@ Cvar_ListModified_f
 #[no_mangle]
 
 pub unsafe extern "C" fn Cvar_ListModified_f() {
-    let mut var: *mut cvar_t = 0 as *mut cvar_t;
+    let mut var: *mut cvar_t = std::ptr::null_mut();
     let mut totalModified: i32 = 0;
-    let mut value: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut match_0: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut value: *mut libc::c_char = std::ptr::null_mut();
+    let mut match_0: *mut libc::c_char = std::ptr::null_mut();
     if Cmd_Argc() > 1 as i32 {
         match_0 = Cmd_Argv(1 as i32)
     } else {
-        match_0 = 0 as *mut libc::c_char
+        match_0 = std::ptr::null_mut()
     }
     totalModified = 0 as i32;
     var = cvar_vars;
@@ -1431,7 +1431,7 @@ Unsets a userdefined cvar
 #[no_mangle]
 
 pub unsafe extern "C" fn Cvar_Unset_f() {
-    let mut cv: *mut cvar_t = 0 as *mut cvar_t;
+    let mut cv: *mut cvar_t = std::ptr::null_mut();
     if Cmd_Argc() != 2 as i32 {
         Com_Printf(
             b"Usage: %s <varname>\n\x00" as *const u8 as *const libc::c_char,
@@ -1465,7 +1465,7 @@ and variables added via the VMs if requested.
 #[no_mangle]
 
 pub unsafe extern "C" fn Cvar_Restart(mut unsetVM: qboolean) {
-    let mut curvar: *mut cvar_t = 0 as *mut cvar_t;
+    let mut curvar: *mut cvar_t = std::ptr::null_mut();
     curvar = cvar_vars;
     while !curvar.is_null() {
         if (*curvar).flags & 0x80 as i32 != 0
@@ -1503,7 +1503,7 @@ Cvar_InfoString
 
 pub unsafe extern "C" fn Cvar_InfoString(mut bit: i32) -> *mut libc::c_char {
     static mut info: [libc::c_char; 1024] = [0; 1024];
-    let mut var: *mut cvar_t = 0 as *mut cvar_t;
+    let mut var: *mut cvar_t = std::ptr::null_mut();
     info[0 as i32 as usize] = 0 as i32 as libc::c_char;
     var = cvar_vars;
     while !var.is_null() {
@@ -1525,7 +1525,7 @@ Cvar_InfoString_Big
 
 pub unsafe extern "C" fn Cvar_InfoString_Big(mut bit: i32) -> *mut libc::c_char {
     static mut info: [libc::c_char; 8192] = [0; 8192];
-    let mut var: *mut cvar_t = 0 as *mut cvar_t;
+    let mut var: *mut cvar_t = std::ptr::null_mut();
     info[0 as i32 as usize] = 0 as i32 as libc::c_char;
     var = cvar_vars;
     while !var.is_null() {
@@ -1611,7 +1611,7 @@ pub unsafe extern "C" fn Cvar_Register(
     mut defaultValue: *const libc::c_char,
     mut flags: i32,
 ) {
-    let mut cv: *mut cvar_t = 0 as *mut cvar_t;
+    let mut cv: *mut cvar_t = std::ptr::null_mut();
     // There is code in Cvar_Get to prevent CVAR_ROM cvars being changed by the
     // user. In other words CVAR_ARCHIVE and CVAR_ROM are mutually exclusive
     // flags. Unfortunately some historical game code (including single player
@@ -1700,7 +1700,7 @@ updates an interpreted modules' version of a cvar
 #[no_mangle]
 
 pub unsafe extern "C" fn Cvar_Update(mut vmCvar: *mut vmCvar_t) {
-    let mut cv: *mut cvar_t = 0 as *mut cvar_t;
+    let mut cv: *mut cvar_t = std::ptr::null_mut();
     if (*vmCvar).handle as u32 >= cvar_numIndexes as u32 {
         Com_Error(
             ERR_DROP as i32,

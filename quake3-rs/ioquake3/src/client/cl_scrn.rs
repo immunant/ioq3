@@ -267,7 +267,7 @@ pub unsafe extern "C" fn SCR_FillRect(
         0 as i32 as f32,
         cls.whiteShader,
     );
-    re.SetColor.expect("non-null function pointer")(0 as *const f32);
+    re.SetColor.expect("non-null function pointer")(std::ptr::null());
 }
 /*
 ================
@@ -399,7 +399,7 @@ pub unsafe extern "C" fn SCR_DrawStringExt(
     mut noColorEscape: qboolean,
 ) {
     let mut color: vec4_t = [0.; 4];
-    let mut s: *const libc::c_char = 0 as *const libc::c_char;
+    let mut s: *const libc::c_char = std::ptr::null();
     let mut xx: i32 = 0;
     // draw the drop shadow
     color[2 as i32 as usize] = 0 as i32 as vec_t;
@@ -444,7 +444,7 @@ pub unsafe extern "C" fn SCR_DrawStringExt(
         xx = (xx as f32 + size) as i32;
         s = s.offset(1)
     }
-    re.SetColor.expect("non-null function pointer")(0 as *const f32);
+    re.SetColor.expect("non-null function pointer")(std::ptr::null());
 }
 #[no_mangle]
 
@@ -503,7 +503,7 @@ pub unsafe extern "C" fn SCR_DrawSmallStringExt(
     mut noColorEscape: qboolean,
 ) {
     let mut color: vec4_t = [0.; 4];
-    let mut s: *const libc::c_char = 0 as *const libc::c_char;
+    let mut s: *const libc::c_char = std::ptr::null();
     let mut xx: i32 = 0;
     // draw the colored text
     s = string;
@@ -531,7 +531,7 @@ pub unsafe extern "C" fn SCR_DrawSmallStringExt(
         xx += 8 as i32;
         s = s.offset(1)
     }
-    re.SetColor.expect("non-null function pointer")(0 as *const f32);
+    re.SetColor.expect("non-null function pointer")(std::ptr::null());
 }
 /*
 ** SCR_Strlen -- skips color escape codes
@@ -1061,7 +1061,7 @@ pub unsafe extern "C" fn SCR_DrawDebugGraph() {
         0 as i32 as f32,
         cls.whiteShader,
     );
-    re.SetColor.expect("non-null function pointer")(0 as *const f32);
+    re.SetColor.expect("non-null function pointer")(std::ptr::null());
     a = 0 as i32;
     while a < w {
         i = (::std::mem::size_of::<[f32; 1024]>() as usize)
@@ -1169,7 +1169,7 @@ pub unsafe extern "C" fn SCR_DrawScreenField(mut stereoFrame: stereoFrame_t) {
                 0 as i32 as f32,
                 cls.whiteShader,
             );
-            re.SetColor.expect("non-null function pointer")(0 as *const f32);
+            re.SetColor.expect("non-null function pointer")(std::ptr::null());
         }
     }
     // if the menu is going to cover the entire screen, we
@@ -1455,7 +1455,10 @@ pub unsafe extern "C" fn SCR_UpdateScreen() {
         if (*com_speeds).integer != 0 {
             re.EndFrame.expect("non-null function pointer")(&mut time_frontend, &mut time_backend);
         } else {
-            re.EndFrame.expect("non-null function pointer")(0 as *mut i32, 0 as *mut i32);
+            re.EndFrame.expect("non-null function pointer")(
+                std::ptr::null_mut(),
+                std::ptr::null_mut())
+            ;
         }
     }
     recursive = 0 as i32;

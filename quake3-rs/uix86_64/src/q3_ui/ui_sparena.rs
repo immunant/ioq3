@@ -6,7 +6,7 @@ pub mod stdlib_h {
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return libc::strtol(
             __nptr,
-            0 as *mut libc::c_void as *mut *mut libc::c_char,
+            std::ptr::null_mut() as *mut *mut libc::c_char,
             10 as i32,
         ) as i32;
     }
@@ -173,10 +173,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_SPArena_Start(mut arenaInfo: *const libc::c_char) {
-    let mut map: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut map: *mut libc::c_char = std::ptr::null_mut();
     let mut level: i32 = 0;
     let mut n: i32 = 0;
-    let mut txt: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut txt: *mut libc::c_char = std::ptr::null_mut();
     n = crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
         b"sv_maxclients\x00" as *const u8 as *const libc::c_char,
     ) as i32;

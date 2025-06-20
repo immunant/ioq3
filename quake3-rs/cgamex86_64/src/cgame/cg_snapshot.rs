@@ -203,8 +203,8 @@ All other times will use CG_TransitionSnapshot instead.
 
 pub unsafe extern "C" fn CG_SetInitialSnapshot(mut snap: *mut snapshot_t) {
     let mut i: i32 = 0;
-    let mut cent: *mut centity_t = 0 as *mut centity_t;
-    let mut state: *mut entityState_t = 0 as *mut entityState_t;
+    let mut cent: *mut centity_t = std::ptr::null_mut();
+    let mut state: *mut entityState_t = std::ptr::null_mut();
     cg.snap = snap;
     BG_PlayerStateToEntityState(
         &mut (*snap).ps as *mut _ as *mut playerState_s,
@@ -247,8 +247,8 @@ The transition point from snap to nextSnap has passed
 */
 
 unsafe extern "C" fn CG_TransitionSnapshot() {
-    let mut cent: *mut centity_t = 0 as *mut centity_t;
-    let mut oldFrame: *mut snapshot_t = 0 as *mut snapshot_t;
+    let mut cent: *mut centity_t = std::ptr::null_mut();
+    let mut oldFrame: *mut snapshot_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     if cg.snap.is_null() {
         CG_Error(b"CG_TransitionSnapshot: NULL cg.snap\x00" as *const u8 as *const libc::c_char);
@@ -294,11 +294,11 @@ unsafe extern "C" fn CG_TransitionSnapshot() {
         (*cent).snapShotTime = (*cg.snap).serverTime;
         i += 1
     }
-    cg.nextSnap = 0 as *mut snapshot_t;
+    cg.nextSnap = std::ptr::null_mut();
     // check for playerstate transition events
     if !oldFrame.is_null() {
-        let mut ops: *mut playerState_t = 0 as *mut playerState_t;
-        let mut ps: *mut playerState_t = 0 as *mut playerState_t;
+        let mut ops: *mut playerState_t = std::ptr::null_mut();
+        let mut ps: *mut playerState_t = std::ptr::null_mut();
         ops = &mut (*oldFrame).ps;
         ps = &mut (*cg.snap).ps;
         // teleporting checks are irrespective of prediction
@@ -327,8 +327,8 @@ A new snapshot has just been read in from the client system.
 
 unsafe extern "C" fn CG_SetNextSnap(mut snap: *mut snapshot_t) {
     let mut num: i32 = 0;
-    let mut es: *mut entityState_t = 0 as *mut entityState_t;
-    let mut cent: *mut centity_t = 0 as *mut centity_t;
+    let mut es: *mut entityState_t = std::ptr::null_mut();
+    let mut cent: *mut centity_t = std::ptr::null_mut();
     cg.nextSnap = snap;
     BG_PlayerStateToEntityState(
         &mut (*snap).ps as *mut _ as *mut playerState_s,
@@ -392,7 +392,7 @@ valid snapshot.
 
 unsafe extern "C" fn CG_ReadNextSnapshot() -> *mut snapshot_t {
     let mut r: qboolean = qfalse;
-    let mut dest: *mut snapshot_t = 0 as *mut snapshot_t;
+    let mut dest: *mut snapshot_t = std::ptr::null_mut();
     if cg.latestSnapshotNum > cgs.processedSnapshotNum + 1000 as i32 {
         CG_Printf(
             b"WARNING: CG_ReadNextSnapshot: way out of range, %i > %i\n\x00" as *const u8
@@ -421,7 +421,7 @@ unsafe extern "C" fn CG_ReadNextSnapshot() -> *mut snapshot_t {
             CG_AddLagometerSnapshotInfo(dest as *mut snapshot_t);
             return dest;
         }
-        CG_AddLagometerSnapshotInfo(0 as *mut snapshot_t as *mut snapshot_t);
+        CG_AddLagometerSnapshotInfo(std::ptr::null_mut() as *mut snapshot_t);
     }
     // try to read the snapshot from the client system
     // FIXME: why would trap_GetSnapshot return a snapshot with the same server time
@@ -432,7 +432,7 @@ unsafe extern "C" fn CG_ReadNextSnapshot() -> *mut snapshot_t {
     // buffer in the client system.
     // record as a dropped packet
     // nothing left to read
-    return 0 as *mut snapshot_t;
+    return std::ptr::null_mut();
 }
 /*
 ===========================================================================
@@ -695,7 +695,7 @@ of an interpolating one)
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_ProcessSnapshots() {
-    let mut snap: *mut snapshot_t = 0 as *mut snapshot_t;
+    let mut snap: *mut snapshot_t = std::ptr::null_mut();
     let mut n: i32 = 0;
     // see what the latest snapshot the client system has is
     trap_GetCurrentSnapshotNumber(&mut n, &mut cg.latestSnapshotTime);

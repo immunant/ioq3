@@ -1156,7 +1156,7 @@ pub unsafe extern "C" fn BG_FindItemForPowerup(mut pw: powerup_t) -> *mut gitem_
         }
         i += 1
     }
-    return 0 as *mut gitem_t;
+    return std::ptr::null_mut();
 }
 /*
 ==============
@@ -1190,7 +1190,7 @@ BG_FindItemForWeapon
 #[no_mangle]
 
 pub unsafe extern "C" fn BG_FindItemForWeapon(mut weapon: weapon_t) -> *mut gitem_t {
-    let mut it: *mut gitem_t = 0 as *mut gitem_t;
+    let mut it: *mut gitem_t = std::ptr::null_mut();
     it = bg_itemlist.as_mut_ptr().offset(1 as i32 as isize);
     while !(*it).classname.is_null() {
         if (*it).giType as u32 == IT_WEAPON as i32 as u32 && (*it).giTag as u32 == weapon as u32 {
@@ -1214,7 +1214,7 @@ BG_FindItem
 #[no_mangle]
 
 pub unsafe extern "C" fn BG_FindItem(mut pickupName: *const libc::c_char) -> *mut gitem_t {
-    let mut it: *mut gitem_t = 0 as *mut gitem_t;
+    let mut it: *mut gitem_t = std::ptr::null_mut();
     it = bg_itemlist.as_mut_ptr().offset(1 as i32 as isize);
     while !(*it).classname.is_null() {
         if Q_stricmp((*it).pickup_name, pickupName) == 0 {
@@ -1222,7 +1222,7 @@ pub unsafe extern "C" fn BG_FindItem(mut pickupName: *const libc::c_char) -> *mu
         }
         it = it.offset(1)
     }
-    return 0 as *mut gitem_t;
+    return std::ptr::null_mut();
 }
 /*
 ============
@@ -1268,7 +1268,7 @@ pub unsafe extern "C" fn BG_CanItemBeGrabbed(
     mut ent: *const entityState_t,
     mut ps: *const playerState_t,
 ) -> qboolean {
-    let mut item: *mut gitem_t = 0 as *mut gitem_t; // weapons are always picked up
+    let mut item: *mut gitem_t = std::ptr::null_mut(); // weapons are always picked up
     if (*ent).modelindex < 1 as i32 || (*ent).modelindex >= bg_numItems {
         Com_Error(
             ERR_DROP as i32,

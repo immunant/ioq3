@@ -66,7 +66,7 @@ pub unsafe extern "C" fn silk_InitEncoder(
     mut encStatus: *mut silk_EncControlStruct,
 ) -> i32
 /* O    Encoder Status                                  */ {
-    let mut psEnc: *mut silk_encoder = 0 as *mut silk_encoder;
+    let mut psEnc: *mut silk_encoder = std::ptr::null_mut();
     let mut n: i32 = 0;
     let mut ret: i32 = 0 as i32;
     psEnc = encState as *mut silk_encoder;
@@ -132,7 +132,7 @@ unsafe extern "C" fn silk_QueryEncoder(
 ) -> i32
 /* O    Encoder Status                                  */ {
     let mut ret: i32 = 0 as i32;
-    let mut state_Fxx: *mut silk_encoder_state_FLP = 0 as *mut silk_encoder_state_FLP;
+    let mut state_Fxx: *mut silk_encoder_state_FLP = std::ptr::null_mut();
     let mut psEnc: *mut silk_encoder = encState as *mut silk_encoder;
     state_Fxx = (*psEnc).state_Fxx.as_mut_ptr();
     (*encStatus).nChannelsAPI = (*psEnc).nChannelsAPI;
@@ -201,7 +201,7 @@ pub unsafe extern "C" fn silk_Encode(
     let mut LBRR_symbol: opus_int32 = 0;
     let mut sum: opus_int32 = 0;
     let mut psEnc: *mut silk_encoder = encState as *mut silk_encoder;
-    let mut buf: *mut opus_int16 = 0 as *mut opus_int16;
+    let mut buf: *mut opus_int16 = std::ptr::null_mut();
     let mut transition: i32 = 0;
     let mut curr_block: i32 = 0;
     let mut tot_blocks: i32 = 0;

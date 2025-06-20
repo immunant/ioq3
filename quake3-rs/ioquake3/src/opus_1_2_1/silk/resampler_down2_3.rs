@@ -79,8 +79,8 @@ pub unsafe extern "C" fn silk_resampler_down2_3(
     let mut nSamplesIn: opus_int32 = 0;
     let mut counter: opus_int32 = 0;
     let mut res_Q6: opus_int32 = 0;
-    let mut buf: *mut opus_int32 = 0 as *mut opus_int32;
-    let mut buf_ptr: *mut opus_int32 = 0 as *mut opus_int32;
+    let mut buf: *mut opus_int32 = std::ptr::null_mut();
+    let mut buf_ptr: *mut opus_int32 = std::ptr::null_mut();
     let mut fresh0 = ::std::vec::from_elem(
         0,
         (::std::mem::size_of::<opus_int32>() as usize)

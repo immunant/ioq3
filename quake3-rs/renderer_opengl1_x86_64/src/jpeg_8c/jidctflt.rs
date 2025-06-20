@@ -139,10 +139,10 @@ pub unsafe extern "C" fn jpeg_idct_float(
     let mut z11: f32 = 0.;
     let mut z12: f32 = 0.;
     let mut z13: f32 = 0.;
-    let mut inptr: JCOEFPTR = 0 as *mut JCOEF;
-    let mut quantptr: *mut FLOAT_MULT_TYPE = 0 as *mut FLOAT_MULT_TYPE;
-    let mut wsptr: *mut f32 = 0 as *mut f32;
-    let mut outptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut inptr: JCOEFPTR = std::ptr::null_mut();
+    let mut quantptr: *mut FLOAT_MULT_TYPE = std::ptr::null_mut();
+    let mut wsptr: *mut f32 = std::ptr::null_mut();
+    let mut outptr: JSAMPROW = std::ptr::null_mut();
     let mut range_limit: *mut JSAMPLE = (*cinfo).sample_range_limit;
     let mut ctr: i32 = 0;
     let mut workspace: [f32; 64] = [0.; 64];

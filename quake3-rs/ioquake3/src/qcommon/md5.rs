@@ -593,7 +593,7 @@ unsafe extern "C" fn MD5Update(mut ctx: *mut MD5Context, mut buf: *const u8, mut
 
 unsafe extern "C" fn MD5Final(mut ctx: *mut MD5Context, mut digest: *mut u8) {
     let mut count: u32 = 0;
-    let mut p: *mut u8 = 0 as *mut u8;
+    let mut p: *mut u8 = std::ptr::null_mut();
     /* Compute number of bytes mod 64 */
     count = (*ctx).bits[0 as i32 as usize] >> 3 as i32 & 0x3f as i32 as u32;
     /* Set the first char of padding to 0x80.  This is safe since there is

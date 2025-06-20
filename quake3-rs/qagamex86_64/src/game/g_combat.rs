@@ -619,7 +619,7 @@ pub unsafe extern "C" fn ScorePlum(
     mut origin: *mut vec_t,
     mut score: i32,
 ) {
-    let mut plum: *mut gentity_t = 0 as *mut gentity_t;
+    let mut plum: *mut gentity_t = std::ptr::null_mut();
     plum = G_TempEntity(origin, EV_SCOREPLUM as i32) as *mut gentity_s;
     // only send this temp entity to a single client
     (*plum).r.svFlags |= 0x100 as i32;
@@ -665,11 +665,11 @@ Toss the weapon and powerups for the killed player
 #[no_mangle]
 
 pub unsafe extern "C" fn TossClientItems(mut self_0: *mut gentity_t) {
-    let mut item: *mut gitem_t = 0 as *mut gitem_t;
+    let mut item: *mut gitem_t = std::ptr::null_mut();
     let mut weapon: i32 = 0;
     let mut angle: f32 = 0.;
     let mut i: i32 = 0;
-    let mut drop_0: *mut gentity_t = 0 as *mut gentity_t;
+    let mut drop_0: *mut gentity_t = std::ptr::null_mut();
     // drop the weapon if not a gauntlet or machinegun
     weapon = (*self_0).s.weapon;
     // make a special check to see if they are changing to a new
@@ -764,7 +764,7 @@ GibEntity
 #[no_mangle]
 
 pub unsafe extern "C" fn GibEntity(mut self_0: *mut gentity_t, mut killer: i32) {
-    let mut ent: *mut gentity_t = 0 as *mut gentity_t;
+    let mut ent: *mut gentity_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     //if this entity still has kamikaze
     if (*self_0).s.eFlags & 0x200 as i32 != 0 {
@@ -855,9 +855,9 @@ pub unsafe extern "C" fn CheckAlmostCapture(
     mut self_0: *mut gentity_t,
     mut attacker: *mut gentity_t,
 ) {
-    let mut ent: *mut gentity_t = 0 as *mut gentity_t;
+    let mut ent: *mut gentity_t = std::ptr::null_mut();
     let mut dir: vec3_t = [0.; 3];
-    let mut classname: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut classname: *mut libc::c_char = std::ptr::null_mut();
     // if this player was carrying a flag
     if (*(*self_0).client).ps.powerups[PW_REDFLAG as i32 as usize] != 0
         || (*(*self_0).client).ps.powerups[PW_BLUEFLAG as i32 as usize] != 0
@@ -879,11 +879,11 @@ pub unsafe extern "C" fn CheckAlmostCapture(
             classname =
                 b"team_CTF_blueflag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char
         }
-        ent = 0 as *mut gentity_t;
+        ent = std::ptr::null_mut();
         loop {
             ent = G_Find(
                 ent as *mut gentity_s,
-                &mut (*(0 as *mut gentity_t)).classname as *mut *mut libc::c_char as size_t as i32,
+                &mut (*(std::ptr::null_mut())).classname as *mut *mut libc::c_char as size_t as i32,
                 classname,
             ) as *mut gentity_s;
             if !(!ent.is_null() && (*ent).flags & 0x1000 as i32 != 0) {
@@ -920,9 +920,9 @@ pub unsafe extern "C" fn CheckAlmostScored(
     mut self_0: *mut gentity_t,
     mut attacker: *mut gentity_t,
 ) {
-    let mut ent: *mut gentity_t = 0 as *mut gentity_t;
+    let mut ent: *mut gentity_t = std::ptr::null_mut();
     let mut dir: vec3_t = [0.; 3];
-    let mut classname: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut classname: *mut libc::c_char = std::ptr::null_mut();
     // if the player was carrying cubes
     if (*(*self_0).client).ps.generic1 != 0 {
         if (*(*self_0).client).sess.sessionTeam as u32 == TEAM_BLUE as i32 as u32 {
@@ -933,8 +933,8 @@ pub unsafe extern "C" fn CheckAlmostScored(
                 b"team_blueobelisk\x00" as *const u8 as *const libc::c_char as *mut libc::c_char
         }
         ent = G_Find(
-            0 as *mut gentity_t as *mut gentity_s,
-            &mut (*(0 as *mut gentity_t)).classname as *mut *mut libc::c_char as size_t as i32,
+            std::ptr::null_mut() as *mut gentity_s,
+            &mut (*(std::ptr::null_mut())).classname as *mut *mut libc::c_char as size_t as i32,
             classname,
         ) as *mut gentity_s;
         // if we found the destination obelisk
@@ -993,13 +993,13 @@ pub unsafe extern "C" fn player_die(
     mut _damage: i32,
     mut meansOfDeath: i32,
 ) {
-    let mut ent: *mut gentity_t = 0 as *mut gentity_t;
+    let mut ent: *mut gentity_t = std::ptr::null_mut();
     let mut anim: i32 = 0;
     let mut contents: i32 = 0;
     let mut killer: i32 = 0;
     let mut i: i32 = 0;
-    let mut killerName: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut obit: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut killerName: *mut libc::c_char = std::ptr::null_mut();
+    let mut obit: *mut libc::c_char = std::ptr::null_mut();
     if (*(*self_0).client).ps.pm_type == PM_DEAD as i32 {
         return;
     }
@@ -1132,7 +1132,7 @@ pub unsafe extern "C" fn player_die(
     // or they would get stale scoreboards
     i = 0 as i32; // can still be gibbed
     while i < level.maxclients {
-        let mut client: *mut gclient_t = 0 as *mut gclient_t;
+        let mut client: *mut gclient_t = std::ptr::null_mut();
         client = &mut *level.clients.offset(i as isize) as *mut gclient_s;
         if !((*client).pers.connected as u32 != CON_CONNECTED as i32 as u32) {
             if !((*client).sess.sessionTeam as u32 != TEAM_SPECTATOR as i32 as u32) {
@@ -1222,7 +1222,7 @@ pub unsafe extern "C" fn CheckArmor(
     mut damage: i32,
     mut dflags: i32,
 ) -> i32 {
-    let mut client: *mut gclient_t = 0 as *mut gclient_t;
+    let mut client: *mut gclient_t = std::ptr::null_mut();
     let mut save: i32 = 0;
     let mut count: i32 = 0;
     if damage == 0 {
@@ -1351,7 +1351,7 @@ pub unsafe extern "C" fn G_Damage(
     mut dflags: i32,
     mut mod_0: i32,
 ) {
-    let mut client: *mut gclient_t = 0 as *mut gclient_t;
+    let mut client: *mut gclient_t = std::ptr::null_mut();
     let mut take: i32 = 0;
     let mut asave: i32 = 0;
     let mut knockback: i32 = 0;
@@ -1972,7 +1972,7 @@ pub unsafe extern "C" fn G_RadiusDamage(
 ) -> qboolean {
     let mut points: f32 = 0.;
     let mut dist: f32 = 0.;
-    let mut ent: *mut gentity_t = 0 as *mut gentity_t;
+    let mut ent: *mut gentity_t = std::ptr::null_mut();
     let mut entityList: [i32; 1024] = [0; 1024];
     let mut numListedEntities: i32 = 0;
     let mut mins: vec3_t = [0.; 3];
@@ -2037,7 +2037,7 @@ pub unsafe extern "C" fn G_RadiusDamage(
                         dir[2 as i32 as usize] += 24 as i32 as f32;
                         G_Damage(
                             ent,
-                            0 as *mut gentity_t,
+                            std::ptr::null_mut(),
                             attacker,
                             dir.as_mut_ptr(),
                             origin,

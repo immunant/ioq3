@@ -93,13 +93,14 @@ pub union C2RustUnnamed_90 {
  */
 
 unsafe extern "C" fn ReadBufferedFile(mut name: *const libc::c_char) -> *mut BufferedFile {
-    let mut BF: *mut BufferedFile = 0 as *mut BufferedFile;
-    let mut buffer: C2RustUnnamed_90 = C2RustUnnamed_90 { b: 0 as *mut byte };
+    let mut BF: *mut BufferedFile = std::ptr::null_mut();
+    let mut buffer: C2RustUnnamed_90 = C2RustUnnamed_90 { b: std::ptr::null_mut()}
+    ;
     /*
      *  input verification
      */
     if name.is_null() {
-        return 0 as *mut BufferedFile;
+        return std::ptr::null_mut();
     }
     /*
      *  Allocate control struct.
@@ -110,14 +111,14 @@ unsafe extern "C" fn ReadBufferedFile(mut name: *const libc::c_char) -> *mut Buf
         ::std::mem::size_of::<BufferedFile>() as usize as i32
     ) as *mut BufferedFile;
     if BF.is_null() {
-        return 0 as *mut BufferedFile;
+        return std::ptr::null_mut();
     }
     /*
      *  Initialize the structs components.
      */
     (*BF).Length = 0 as i32;
-    (*BF).Buffer = 0 as *mut byte;
-    (*BF).Ptr = 0 as *mut byte;
+    (*BF).Buffer = std::ptr::null_mut();
+    (*BF).Ptr = std::ptr::null_mut();
     (*BF).BytesLeft = 0 as i32;
     /*
      *  Read the file.
@@ -135,7 +136,7 @@ unsafe extern "C" fn ReadBufferedFile(mut name: *const libc::c_char) -> *mut Buf
         crate::src::renderergl1::tr_main::ri
             .Free
             .expect("non-null function pointer")(BF as *mut libc::c_void);
-        return 0 as *mut BufferedFile;
+        return std::ptr::null_mut();
     }
     /*
      *  Set the pointers and counters.
@@ -168,18 +169,18 @@ unsafe extern "C" fn BufferedFileRead(
     mut BF: *mut BufferedFile,
     mut Length: u32,
 ) -> *mut libc::c_void {
-    let mut RetVal: *mut libc::c_void = 0 as *mut libc::c_void;
+    let mut RetVal: *mut libc::c_void = std::ptr::null_mut();
     /*
      *  input verification
      */
     if !(!BF.is_null() && Length != 0) {
-        return 0 as *mut libc::c_void;
+        return std::ptr::null_mut();
     }
     /*
      *  not enough bytes left
      */
     if Length > (*BF).BytesLeft as u32 {
-        return 0 as *mut libc::c_void;
+        return std::ptr::null_mut();
     }
     /*
      *  the pointer to the requested data
@@ -258,7 +259,7 @@ unsafe extern "C" fn BufferedFileSkip(mut BF: *mut BufferedFile, mut Offset: u32
  */
 
 unsafe extern "C" fn FindChunk(mut BF: *mut BufferedFile, mut ChunkType: uint32_t) -> qboolean {
-    let mut CH: *mut PNG_ChunkHeader = 0 as *mut PNG_ChunkHeader;
+    let mut CH: *mut PNG_ChunkHeader = std::ptr::null_mut();
     let mut Length: uint32_t = 0;
     let mut Type: uint32_t = 0;
     /*
@@ -312,19 +313,19 @@ unsafe extern "C" fn DecompressIDATs(
     mut BF: *mut BufferedFile,
     mut Buffer: *mut *mut uint8_t,
 ) -> uint32_t {
-    let mut DecompressedData: *mut uint8_t = 0 as *mut uint8_t;
+    let mut DecompressedData: *mut uint8_t = std::ptr::null_mut();
     let mut DecompressedDataLength: uint32_t = 0;
-    let mut CompressedData: *mut uint8_t = 0 as *mut uint8_t;
-    let mut CompressedDataPtr: *mut uint8_t = 0 as *mut uint8_t;
+    let mut CompressedData: *mut uint8_t = std::ptr::null_mut();
+    let mut CompressedDataPtr: *mut uint8_t = std::ptr::null_mut();
     let mut CompressedDataLength: uint32_t = 0;
-    let mut CH: *mut PNG_ChunkHeader = 0 as *mut PNG_ChunkHeader;
+    let mut CH: *mut PNG_ChunkHeader = std::ptr::null_mut();
     let mut Length: uint32_t = 0;
     let mut Type: uint32_t = 0;
     let mut BytesToRewind: i32 = 0;
     let mut puffResult: int32_t = 0;
-    let mut puffDest: *mut uint8_t = 0 as *mut uint8_t;
+    let mut puffDest: *mut uint8_t = std::ptr::null_mut();
     let mut puffDestLen: uint32_t = 0;
-    let mut puffSrc: *mut uint8_t = 0 as *mut uint8_t;
+    let mut puffSrc: *mut uint8_t = std::ptr::null_mut();
     let mut puffSrcLen: uint32_t = 0;
     /*
      *  input verification
@@ -335,9 +336,9 @@ unsafe extern "C" fn DecompressIDATs(
     /*
      *  some zeroing
      */
-    DecompressedData = 0 as *mut uint8_t;
+    DecompressedData = std::ptr::null_mut();
     *Buffer = DecompressedData;
-    CompressedData = 0 as *mut uint8_t;
+    CompressedData = std::ptr::null_mut();
     CompressedDataLength = 0 as i32 as uint32_t;
     BytesToRewind = 0 as i32;
     /*
@@ -449,7 +450,7 @@ unsafe extern "C" fn DecompressIDATs(
             BufferedFileRewind(BF, 8 as i32 as u32);
             break;
         } else if Length != 0 {
-            let mut OrigCompressedData: *mut uint8_t = 0 as *mut uint8_t;
+            let mut OrigCompressedData: *mut uint8_t = std::ptr::null_mut();
             OrigCompressedData = BufferedFileRead(BF, Length) as *mut uint8_t;
             if OrigCompressedData.is_null() {
                 crate::src::renderergl1::tr_main::ri
@@ -481,7 +482,7 @@ unsafe extern "C" fn DecompressIDATs(
     /*
      *  Let puff() calculate the decompressed data length.
      */
-    puffDest = 0 as *mut uint8_t;
+    puffDest = std::ptr::null_mut();
     puffDestLen = 0 as i32 as uint32_t;
     /*
      *  The zlib header and checkvalue don't belong to the compressed data.
@@ -587,11 +588,11 @@ unsafe extern "C" fn UnfilterImage(
     mut BytesPerScanline: uint32_t,
     mut BytesPerPixel: uint32_t,
 ) -> qboolean {
-    let mut DecompPtr: *mut uint8_t = 0 as *mut uint8_t;
+    let mut DecompPtr: *mut uint8_t = std::ptr::null_mut();
     let mut FilterType: uint8_t = 0;
-    let mut PixelLeft: *mut uint8_t = 0 as *mut uint8_t;
-    let mut PixelUp: *mut uint8_t = 0 as *mut uint8_t;
-    let mut PixelUpLeft: *mut uint8_t = 0 as *mut uint8_t;
+    let mut PixelLeft: *mut uint8_t = std::ptr::null_mut();
+    let mut PixelUp: *mut uint8_t = std::ptr::null_mut();
+    let mut PixelUpLeft: *mut uint8_t = std::ptr::null_mut();
     let mut w: uint32_t = 0;
     let mut h: uint32_t = 0;
     let mut p: uint32_t = 0;
@@ -929,8 +930,8 @@ unsafe extern "C" fn DecodeImageNonInterlaced(
     let mut w: uint32_t = 0;
     let mut h: uint32_t = 0;
     let mut p: uint32_t = 0;
-    let mut OutPtr: *mut byte = 0 as *mut byte;
-    let mut DecompPtr: *mut uint8_t = 0 as *mut uint8_t;
+    let mut OutPtr: *mut byte = std::ptr::null_mut();
+    let mut DecompPtr: *mut uint8_t = std::ptr::null_mut();
     /*
      *  input verification
      */
@@ -1133,8 +1134,8 @@ unsafe extern "C" fn DecodeImageInterlaced(
     let mut h: uint32_t = 0;
     let mut p: uint32_t = 0;
     let mut a: uint32_t = 0;
-    let mut OutPtr: *mut byte = 0 as *mut byte;
-    let mut DecompPtr: *mut uint8_t = 0 as *mut uint8_t;
+    let mut OutPtr: *mut byte = std::ptr::null_mut();
+    let mut DecompPtr: *mut uint8_t = std::ptr::null_mut();
     let mut TargetLength: uint32_t = 0;
     /*
      *  input verification
@@ -1519,18 +1520,18 @@ pub unsafe extern "C" fn R_LoadPNG(
     mut width: *mut i32,
     mut height: *mut i32,
 ) {
-    let mut ThePNG: *mut BufferedFile = 0 as *mut BufferedFile;
-    let mut OutBuffer: *mut byte = 0 as *mut byte;
-    let mut Signature: *mut uint8_t = 0 as *mut uint8_t;
-    let mut CH: *mut PNG_ChunkHeader = 0 as *mut PNG_ChunkHeader;
+    let mut ThePNG: *mut BufferedFile = std::ptr::null_mut();
+    let mut OutBuffer: *mut byte = std::ptr::null_mut();
+    let mut Signature: *mut uint8_t = std::ptr::null_mut();
+    let mut CH: *mut PNG_ChunkHeader = std::ptr::null_mut();
     let mut ChunkHeaderLength: uint32_t = 0;
     let mut ChunkHeaderType: uint32_t = 0;
-    let mut IHDR: *mut PNG_Chunk_IHDR = 0 as *mut PNG_Chunk_IHDR;
+    let mut IHDR: *mut PNG_Chunk_IHDR = std::ptr::null_mut();
     let mut IHDR_Width: uint32_t = 0;
     let mut IHDR_Height: uint32_t = 0;
-    let mut CRC: *mut PNG_ChunkCRC = 0 as *mut PNG_ChunkCRC;
-    let mut InPal: *mut uint8_t = 0 as *mut uint8_t;
-    let mut DecompressedData: *mut uint8_t = 0 as *mut uint8_t;
+    let mut CRC: *mut PNG_ChunkCRC = std::ptr::null_mut();
+    let mut InPal: *mut uint8_t = std::ptr::null_mut();
+    let mut DecompressedData: *mut uint8_t = std::ptr::null_mut();
     let mut DecompressedDataLength: uint32_t = 0;
     let mut i: uint32_t = 0;
     /*
@@ -1558,7 +1559,7 @@ pub unsafe extern "C" fn R_LoadPNG(
     /*
      *  Zero out return values.
      */
-    *pic = 0 as *mut byte;
+    *pic = std::ptr::null_mut();
     if !width.is_null() {
         *width = 0 as i32
     }
@@ -1806,7 +1807,7 @@ pub unsafe extern "C" fn R_LoadPNG(
     ) as u64
         != 0
     {
-        let mut Trans: *mut uint8_t = 0 as *mut uint8_t;
+        let mut Trans: *mut uint8_t = std::ptr::null_mut();
         /*
          *  Read the chunk-header.
          */

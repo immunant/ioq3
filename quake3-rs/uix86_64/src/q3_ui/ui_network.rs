@@ -48,7 +48,7 @@ static mut rate_items: [*const libc::c_char; 6] = [
     b"56K\x00" as *const u8 as *const libc::c_char,
     b"ISDN\x00" as *const u8 as *const libc::c_char,
     b"LAN/Cable/xDSL\x00" as *const u8 as *const libc::c_char,
-    0 as *const libc::c_char,
+    std::ptr::null(),
 ];
 
 static mut networkOptionsInfo: networkOptionsInfo_t = networkOptionsInfo_t {
@@ -66,7 +66,7 @@ static mut networkOptionsInfo: networkOptionsInfo_t = networkOptionsInfo_t {
     banner: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -88,7 +88,7 @@ static mut networkOptionsInfo: networkOptionsInfo_t = networkOptionsInfo_t {
     framel: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -114,7 +114,7 @@ static mut networkOptionsInfo: networkOptionsInfo_t = networkOptionsInfo_t {
     framer: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -140,7 +140,7 @@ static mut networkOptionsInfo: networkOptionsInfo_t = networkOptionsInfo_t {
     graphics: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -162,7 +162,7 @@ static mut networkOptionsInfo: networkOptionsInfo_t = networkOptionsInfo_t {
     display: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -184,7 +184,7 @@ static mut networkOptionsInfo: networkOptionsInfo_t = networkOptionsInfo_t {
     sound: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -206,7 +206,7 @@ static mut networkOptionsInfo: networkOptionsInfo_t = networkOptionsInfo_t {
     network: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -228,7 +228,7 @@ static mut networkOptionsInfo: networkOptionsInfo_t = networkOptionsInfo_t {
     rate: menulist_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -256,7 +256,7 @@ static mut networkOptionsInfo: networkOptionsInfo_t = networkOptionsInfo_t {
     back: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,

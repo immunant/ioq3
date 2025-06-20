@@ -906,24 +906,28 @@ unsafe extern "C" fn decodeCodeBook(mut input: *mut byte, mut roq_flags: u16) {
     let mut j: isize = 0;
     let mut two: isize = 0;
     let mut four: isize = 0;
-    let mut aptr: *mut u16 = 0 as *mut u16;
-    let mut bptr: *mut u16 = 0 as *mut u16;
-    let mut cptr: *mut u16 = 0 as *mut u16;
-    let mut dptr: *mut u16 = 0 as *mut u16;
+    let mut aptr: *mut u16 = std::ptr::null_mut();
+    let mut bptr: *mut u16 = std::ptr::null_mut();
+    let mut cptr: *mut u16 = std::ptr::null_mut();
+    let mut dptr: *mut u16 = std::ptr::null_mut();
     let mut y0: isize = 0;
     let mut y1: isize = 0;
     let mut y2: isize = 0;
     let mut y3: isize = 0;
     let mut cr: isize = 0;
     let mut cb: isize = 0;
-    let mut bbptr: *mut byte = 0 as *mut byte;
-    let mut baptr: *mut byte = 0 as *mut byte;
-    let mut bcptr: *mut byte = 0 as *mut byte;
-    let mut bdptr: *mut byte = 0 as *mut byte;
-    let mut iaptr: C2RustUnnamed_14 = C2RustUnnamed_14 { i: 0 as *mut u32 };
-    let mut ibptr: C2RustUnnamed_14 = C2RustUnnamed_14 { i: 0 as *mut u32 };
-    let mut icptr: C2RustUnnamed_14 = C2RustUnnamed_14 { i: 0 as *mut u32 };
-    let mut idptr: C2RustUnnamed_14 = C2RustUnnamed_14 { i: 0 as *mut u32 };
+    let mut bbptr: *mut byte = std::ptr::null_mut();
+    let mut baptr: *mut byte = std::ptr::null_mut();
+    let mut bcptr: *mut byte = std::ptr::null_mut();
+    let mut bdptr: *mut byte = std::ptr::null_mut();
+    let mut iaptr: C2RustUnnamed_14 = C2RustUnnamed_14 { i: std::ptr::null_mut()}
+    ;
+    let mut ibptr: C2RustUnnamed_14 = C2RustUnnamed_14 { i: std::ptr::null_mut()}
+    ;
+    let mut icptr: C2RustUnnamed_14 = C2RustUnnamed_14 { i: std::ptr::null_mut()}
+    ;
+    let mut idptr: C2RustUnnamed_14 = C2RustUnnamed_14 { i: std::ptr::null_mut()}
+    ;
     if roq_flags == 0 {
         four = 256 as i32 as isize;
         two = four
@@ -2099,7 +2103,7 @@ unsafe extern "C" fn recurseQuad(
     mut xOff: isize,
     mut yOff: isize,
 ) {
-    let mut scroff: *mut byte = 0 as *mut byte;
+    let mut scroff: *mut byte = std::ptr::null_mut();
     let mut bigx: isize = 0;
     let mut bigy: isize = 0;
     let mut lowx: isize = 0;
@@ -2160,7 +2164,7 @@ unsafe extern "C" fn setupQuad(mut xOff: isize, mut yOff: isize) {
     let mut i: isize = 0; // eoq
     let mut x: isize = 0;
     let mut y: isize = 0;
-    let mut temp: *mut byte = 0 as *mut byte;
+    let mut temp: *mut byte = std::ptr::null_mut();
     if xOff == cin.oldXOff
         && yOff == cin.oldYOff
         && cinTable[currentHandle as usize].ysize as isize == cin.oldysize
@@ -2188,7 +2192,7 @@ unsafe extern "C" fn setupQuad(mut xOff: isize, mut yOff: isize) {
         }
         y += 16 as i32 as isize
     }
-    temp = 0 as *mut byte;
+    temp = std::ptr::null_mut();
     i = numQuadCels - 64 as i32 as isize;
     while i < numQuadCels {
         cin.qStatus[0 as i32 as usize][i as usize] = temp;
@@ -2378,7 +2382,7 @@ unsafe extern "C" fn RoQReset() {
 ******************************************************************************/
 
 unsafe extern "C" fn RoQInterrupt() {
-    let mut framedata: *mut byte = 0 as *mut byte;
+    let mut framedata: *mut byte = std::ptr::null_mut();
     let mut sbuf: [i16; 32768] = [0; 32768];
     let mut ssize: i32 = 0;
     if currentHandle < 0 as i32 {
@@ -2633,7 +2637,7 @@ unsafe extern "C" fn RoQ_init() {
 ******************************************************************************/
 
 unsafe extern "C" fn RoQShutdown() {
-    let mut s: *const libc::c_char = 0 as *const libc::c_char;
+    let mut s: *const libc::c_char = std::ptr::null();
     if cinTable[currentHandle as usize].buf.is_null() {
         return;
     }
@@ -2948,11 +2952,11 @@ Resample cinematic to 256x256 and store in buf2
 pub unsafe extern "C" fn CIN_ResampleCinematic(mut handle: i32, mut buf2: *mut i32) {
     let mut ix: i32 = 0;
     let mut iy: i32 = 0;
-    let mut buf3: *mut i32 = 0 as *mut i32;
+    let mut buf3: *mut i32 = std::ptr::null_mut();
     let mut xm: i32 = 0;
     let mut ym: i32 = 0;
     let mut ll: i32 = 0;
-    let mut buf: *mut byte = 0 as *mut byte;
+    let mut buf: *mut byte = std::ptr::null_mut();
     buf = cinTable[handle as usize].buf;
     xm = cinTable[handle as usize].CIN_WIDTH / 256 as i32;
     ym = cinTable[handle as usize].CIN_HEIGHT / 256 as i32;
@@ -2962,8 +2966,8 @@ pub unsafe extern "C" fn CIN_ResampleCinematic(mut handle: i32, mut buf2: *mut i
     }
     buf3 = buf as *mut i32;
     if xm == 2 as i32 && ym == 2 as i32 {
-        let mut bc2: *mut byte = 0 as *mut byte;
-        let mut bc3: *mut byte = 0 as *mut byte;
+        let mut bc2: *mut byte = std::ptr::null_mut();
+        let mut bc3: *mut byte = std::ptr::null_mut();
         let mut ic: i32 = 0;
         let mut iiy: i32 = 0;
         bc2 = buf2 as *mut byte;
@@ -2988,8 +2992,8 @@ pub unsafe extern "C" fn CIN_ResampleCinematic(mut handle: i32, mut buf2: *mut i
             iy += 1
         }
     } else if xm == 2 as i32 && ym == 1 as i32 {
-        let mut bc2_0: *mut byte = 0 as *mut byte;
-        let mut bc3_0: *mut byte = 0 as *mut byte;
+        let mut bc2_0: *mut byte = std::ptr::null_mut();
+        let mut bc3_0: *mut byte = std::ptr::null_mut();
         let mut ic_0: i32 = 0;
         let mut iiy_0: i32 = 0;
         bc2_0 = buf2 as *mut byte;
@@ -3036,7 +3040,7 @@ pub unsafe extern "C" fn CIN_DrawCinematic(mut handle: i32) {
     let mut y: f32 = 0.;
     let mut w: f32 = 0.;
     let mut h: f32 = 0.;
-    let mut buf: *mut byte = 0 as *mut byte;
+    let mut buf: *mut byte = std::ptr::null_mut();
     if handle < 0 as i32
         || handle >= 16 as i32
         || cinTable[handle as usize].status as u32 == FMV_EOF as i32 as u32
@@ -3056,7 +3060,7 @@ pub unsafe extern "C" fn CIN_DrawCinematic(mut handle: i32) {
         && (cinTable[handle as usize].CIN_WIDTH as isize != cinTable[handle as usize].drawX
             || cinTable[handle as usize].CIN_HEIGHT as isize != cinTable[handle as usize].drawY)
     {
-        let mut buf2: *mut i32 = 0 as *mut i32;
+        let mut buf2: *mut i32 = std::ptr::null_mut();
         buf2 = Hunk_AllocateTempMemory(256 as i32 * 256 as i32 * 4 as i32) as *mut i32;
         CIN_ResampleCinematic(handle, buf2);
         re.DrawStretchRaw.expect("non-null function pointer")(
@@ -3090,8 +3094,8 @@ pub unsafe extern "C" fn CIN_DrawCinematic(mut handle: i32) {
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_PlayCinematic_f() {
-    let mut arg: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut arg: *mut libc::c_char = std::ptr::null_mut();
+    let mut s: *mut libc::c_char = std::ptr::null_mut();
     let mut bits: i32 = 1 as i32;
     Com_DPrintf(b"CL_PlayCinematic_f\n\x00" as *const u8 as *const libc::c_char);
     if clc.state as u32 == CA_CINEMATIC as i32 as u32 {
@@ -3364,7 +3368,7 @@ pub unsafe extern "C" fn CIN_UploadCinematic(mut handle: i32) {
             && (cinTable[handle as usize].CIN_WIDTH as isize != cinTable[handle as usize].drawX
                 || cinTable[handle as usize].CIN_HEIGHT as isize != cinTable[handle as usize].drawY)
         {
-            let mut buf2: *mut i32 = 0 as *mut i32;
+            let mut buf2: *mut i32 = std::ptr::null_mut();
             buf2 = Hunk_AllocateTempMemory(256 as i32 * 256 as i32 * 4 as i32) as *mut i32;
             CIN_ResampleCinematic(handle, buf2);
             re.UploadCinematic.expect("non-null function pointer")(

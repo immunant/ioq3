@@ -263,7 +263,7 @@ pub unsafe extern "C" fn celt_fir_c(
 ) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut rnum: *mut opus_val16 = 0 as *mut opus_val16;
+    let mut rnum: *mut opus_val16 = std::ptr::null_mut();
     let mut fresh19 = ::std::vec::from_elem(
         0,
         (::std::mem::size_of::<opus_val16>() as usize).wrapping_mul(ord as usize) as usize,
@@ -317,8 +317,8 @@ pub unsafe extern "C" fn celt_iir(
 ) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut rden: *mut opus_val16 = 0 as *mut opus_val16;
-    let mut y: *mut opus_val16 = 0 as *mut opus_val16;
+    let mut rden: *mut opus_val16 = std::ptr::null_mut();
+    let mut y: *mut opus_val16 = std::ptr::null_mut();
     let mut fresh20 = ::std::vec::from_elem(
         0,
         (::std::mem::size_of::<opus_val16>() as usize).wrapping_mul(ord as usize) as usize,
@@ -408,8 +408,8 @@ pub unsafe extern "C" fn _celt_autocorr(
     let mut k: i32 = 0;
     let mut fastN: i32 = n - lag;
     let mut shift: i32 = 0;
-    let mut xptr: *const opus_val16 = 0 as *const opus_val16;
-    let mut xx: *mut opus_val16 = 0 as *mut opus_val16;
+    let mut xptr: *const opus_val16 = std::ptr::null();
+    let mut xx: *mut opus_val16 = std::ptr::null_mut();
     let mut fresh22 = ::std::vec::from_elem(
         0,
         (::std::mem::size_of::<opus_val16>() as usize).wrapping_mul(n as usize) as usize,

@@ -396,9 +396,9 @@ efficient collision detection
 
 pub unsafe extern "C" fn CG_BuildSolidList() {
     let mut i: i32 = 0;
-    let mut cent: *mut centity_t = 0 as *mut centity_t;
-    let mut snap: *mut snapshot_t = 0 as *mut snapshot_t;
-    let mut ent: *mut entityState_t = 0 as *mut entityState_t;
+    let mut cent: *mut centity_t = std::ptr::null_mut();
+    let mut snap: *mut snapshot_t = std::ptr::null_mut();
+    let mut ent: *mut entityState_t = std::ptr::null_mut();
     cg_numSolidEntities = 0 as i32;
     cg_numTriggerEntities = 0 as i32;
     if !cg.nextSnap.is_null()
@@ -465,13 +465,13 @@ unsafe extern "C" fn CG_ClipMoveToEntities(
         contents: 0,
         entityNum: 0,
     };
-    let mut ent: *mut entityState_t = 0 as *mut entityState_t;
+    let mut ent: *mut entityState_t = std::ptr::null_mut();
     let mut cmodel: clipHandle_t = 0;
     let mut bmins: vec3_t = [0.; 3];
     let mut bmaxs: vec3_t = [0.; 3];
     let mut origin: vec3_t = [0.; 3];
     let mut angles: vec3_t = [0.; 3];
-    let mut cent: *mut centity_t = 0 as *mut centity_t;
+    let mut cent: *mut centity_t = std::ptr::null_mut();
     i = 0 as i32;
     while i < cg_numSolidEntities {
         cent = cg_solidEntities[i as usize];
@@ -593,8 +593,8 @@ CG_PointContents
 
 pub unsafe extern "C" fn CG_PointContents(mut point: *const vec_t, mut passEntityNum: i32) -> i32 {
     let mut i: i32 = 0;
-    let mut ent: *mut entityState_t = 0 as *mut entityState_t;
-    let mut cent: *mut centity_t = 0 as *mut centity_t;
+    let mut ent: *mut entityState_t = std::ptr::null_mut();
+    let mut cent: *mut centity_t = std::ptr::null_mut();
     let mut cmodel: clipHandle_t = 0;
     let mut contents: i32 = 0;
     contents = trap_CM_PointContents(point, 0 as i32);
@@ -632,9 +632,9 @@ cg.snap->player_state and cg.nextFrame->player_state
 unsafe extern "C" fn CG_InterpolatePlayerState(mut grabAngles: qboolean) {
     let mut f: f32 = 0.;
     let mut i: i32 = 0;
-    let mut out: *mut playerState_t = 0 as *mut playerState_t;
-    let mut prev: *mut snapshot_t = 0 as *mut snapshot_t;
-    let mut next: *mut snapshot_t = 0 as *mut snapshot_t;
+    let mut out: *mut playerState_t = std::ptr::null_mut();
+    let mut prev: *mut snapshot_t = std::ptr::null_mut();
+    let mut next: *mut snapshot_t = std::ptr::null_mut();
     out = &mut cg.predictedPlayerState;
     prev = cg.snap;
     next = cg.nextSnap;
@@ -695,7 +695,7 @@ CG_TouchItem
 */
 
 unsafe extern "C" fn CG_TouchItem(mut cent: *mut centity_t) {
-    let mut item: *mut gitem_t = 0 as *mut gitem_t;
+    let mut item: *mut gitem_t = std::ptr::null_mut();
     if cg_predictItems.integer == 0 {
         return;
     }
@@ -785,9 +785,9 @@ unsafe extern "C" fn CG_TouchTriggerPrediction() {
         contents: 0,
         entityNum: 0,
     };
-    let mut ent: *mut entityState_t = 0 as *mut entityState_t;
+    let mut ent: *mut entityState_t = std::ptr::null_mut();
     let mut cmodel: clipHandle_t = 0;
-    let mut cent: *mut centity_t = 0 as *mut centity_t;
+    let mut cent: *mut centity_t = std::ptr::null_mut();
     let mut spectator: qboolean = qfalse;
     // dead clients don't activate triggers
     if cg.predictedPlayerState.stats[STAT_HEALTH as i32 as usize] <= 0 as i32 {

@@ -62,13 +62,13 @@ static mut quality_items: [*const libc::c_char; 4] = [
     b"Low\x00" as *const u8 as *const libc::c_char,
     b"Medium\x00" as *const u8 as *const libc::c_char,
     b"High\x00" as *const u8 as *const libc::c_char,
-    0 as *const libc::c_char,
+    std::ptr::null(),
 ];
 
 static mut soundSystem_items: [*const libc::c_char; 3] = [
     b"SDL\x00" as *const u8 as *const libc::c_char,
     b"OpenAL\x00" as *const u8 as *const libc::c_char,
-    0 as *const libc::c_char,
+    std::ptr::null(),
 ];
 
 static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
@@ -86,7 +86,7 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
     banner: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -108,7 +108,7 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
     framel: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -134,7 +134,7 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
     framer: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -160,7 +160,7 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
     graphics: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -182,7 +182,7 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
     display: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -204,7 +204,7 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
     sound: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -226,7 +226,7 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
     network: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -248,7 +248,7 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
     sfxvolume: menuslider_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -271,7 +271,7 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
     musicvolume: menuslider_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -294,7 +294,7 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
     soundSystem: menulist_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -322,7 +322,7 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
     quality: menulist_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -350,7 +350,7 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
     back: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -376,7 +376,7 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
     apply: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,

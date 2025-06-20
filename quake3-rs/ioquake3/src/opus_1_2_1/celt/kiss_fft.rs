@@ -77,8 +77,7 @@ unsafe extern "C" fn kf_bfly2(
     mut _m: i32,
     mut N: i32,
 ) {
-    let mut Fout2: *mut crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx =
-        0 as *mut crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx;
+    let mut Fout2: *mut crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut tw: opus_val16 = 0.;
     tw = 0.7071067812f32;
@@ -157,11 +156,11 @@ unsafe extern "C" fn kf_bfly4(
         let mut scratch: [crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx; 6] =
             [crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx { r: 0., i: 0. }; 6];
         let mut tw1: *const crate::src::opus_1_2_1::celt::kiss_fft::kiss_twiddle_cpx =
-            0 as *const crate::src::opus_1_2_1::celt::kiss_fft::kiss_twiddle_cpx;
+            std::ptr::null();
         let mut tw2: *const crate::src::opus_1_2_1::celt::kiss_fft::kiss_twiddle_cpx =
-            0 as *const crate::src::opus_1_2_1::celt::kiss_fft::kiss_twiddle_cpx;
+            std::ptr::null();
         let mut tw3: *const crate::src::opus_1_2_1::celt::kiss_fft::kiss_twiddle_cpx =
-            0 as *const crate::src::opus_1_2_1::celt::kiss_fft::kiss_twiddle_cpx;
+            std::ptr::null();
         let m2: i32 = 2 as i32 * m;
         let m3: i32 = 3 as i32 * m;
         let mut Fout_beg: *mut crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx = Fout;
@@ -232,10 +231,9 @@ unsafe extern "C" fn kf_bfly3(
     let mut i: i32 = 0;
     let mut k: size_t = 0;
     let m2: size_t = (2 as i32 * m) as size_t;
-    let mut tw1: *const crate::src::opus_1_2_1::celt::kiss_fft::kiss_twiddle_cpx =
-        0 as *const crate::src::opus_1_2_1::celt::kiss_fft::kiss_twiddle_cpx;
+    let mut tw1: *const crate::src::opus_1_2_1::celt::kiss_fft::kiss_twiddle_cpx = std::ptr::null();
     let mut tw2: *const crate::src::opus_1_2_1::celt::kiss_fft::kiss_twiddle_cpx =
-        0 as *const crate::src::opus_1_2_1::celt::kiss_fft::kiss_twiddle_cpx;
+        std::ptr::null();
     let mut scratch: [crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx; 5] =
         [crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx { r: 0., i: 0. }; 5];
     let mut epi3: crate::src::opus_1_2_1::celt::kiss_fft::kiss_twiddle_cpx =
@@ -302,22 +300,20 @@ unsafe extern "C" fn kf_bfly5(
     mut N: i32,
     mut mm: i32,
 ) {
-    let mut Fout0: *mut crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx =
-        0 as *mut crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx;
+    let mut Fout0: *mut crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx = std::ptr::null_mut();
     let mut Fout1: *mut crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx =
-        0 as *mut crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx;
+        std::ptr::null_mut();
     let mut Fout2: *mut crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx =
-        0 as *mut crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx;
+        std::ptr::null_mut();
     let mut Fout3: *mut crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx =
-        0 as *mut crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx;
+        std::ptr::null_mut();
     let mut Fout4: *mut crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx =
-        0 as *mut crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx;
+        std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut u: i32 = 0;
     let mut scratch: [crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx; 13] =
         [crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx { r: 0., i: 0. }; 13];
-    let mut tw: *const crate::src::opus_1_2_1::celt::kiss_fft::kiss_twiddle_cpx =
-        0 as *const crate::src::opus_1_2_1::celt::kiss_fft::kiss_twiddle_cpx;
+    let mut tw: *const crate::src::opus_1_2_1::celt::kiss_fft::kiss_twiddle_cpx = std::ptr::null();
     let mut ya: crate::src::opus_1_2_1::celt::kiss_fft::kiss_twiddle_cpx =
         crate::src::opus_1_2_1::celt::kiss_fft::kiss_twiddle_cpx { r: 0., i: 0. };
     let mut yb: crate::src::opus_1_2_1::celt::kiss_fft::kiss_twiddle_cpx =

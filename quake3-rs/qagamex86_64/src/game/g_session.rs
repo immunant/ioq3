@@ -6,7 +6,7 @@ pub mod stdlib_h {
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return libc::strtol(
             __nptr,
-            0 as *mut libc::c_void as *mut *mut libc::c_char,
+            std::ptr::null_mut() as *mut *mut libc::c_char,
             10 as i32,
         ) as i32;
     }
@@ -149,8 +149,8 @@ Called on game shutdown
 #[no_mangle]
 
 pub unsafe extern "C" fn G_WriteClientSessionData(mut client: *mut gclient_t) {
-    let mut s: *const libc::c_char = 0 as *const libc::c_char;
-    let mut var: *const libc::c_char = 0 as *const libc::c_char;
+    let mut s: *const libc::c_char = std::ptr::null();
+    let mut var: *const libc::c_char = std::ptr::null();
     s = va(
         b"%i %i %i %i %i %i %i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         (*client).sess.sessionTeam as u32,
@@ -178,7 +178,7 @@ Called on a reconnect
 
 pub unsafe extern "C" fn G_ReadSessionData(mut client: *mut gclient_t) {
     let mut s: [libc::c_char; 1024] = [0; 1024];
-    let mut var: *const libc::c_char = 0 as *const libc::c_char;
+    let mut var: *const libc::c_char = std::ptr::null();
     let mut teamLeader: i32 = 0;
     let mut spectatorState: i32 = 0;
     let mut sessionTeam: i32 = 0;
@@ -219,8 +219,8 @@ pub unsafe extern "C" fn G_InitSessionData(
     mut client: *mut gclient_t,
     mut userinfo: *mut libc::c_char,
 ) {
-    let mut sess: *mut clientSession_t = 0 as *mut clientSession_t;
-    let mut value: *const libc::c_char = 0 as *const libc::c_char;
+    let mut sess: *mut clientSession_t = std::ptr::null_mut();
+    let mut value: *const libc::c_char = std::ptr::null();
     sess = &mut (*client).sess;
     // check for team preference, mainly for bots
     value = Info_ValueForKey(

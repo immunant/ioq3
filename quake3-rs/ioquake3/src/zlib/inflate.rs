@@ -124,8 +124,7 @@ pub use crate::zlib_h::z_streamp;
 #[no_mangle]
 
 pub unsafe extern "C" fn inflateReset(mut strm: z_streamp) -> i32 {
-    let mut state: *mut crate::src::zlib::inflate::inflate_state =
-        0 as *mut crate::src::zlib::inflate::inflate_state; /* to support ill-conceived Java test suite */
+    let mut state: *mut crate::src::zlib::inflate::inflate_state = std::ptr::null_mut(); /* to support ill-conceived Java test suite */
     if strm.is_null() || (*strm).state.is_null() {
         return -(2 as i32);
     } /* in case we return an error */
@@ -133,7 +132,7 @@ pub unsafe extern "C" fn inflateReset(mut strm: z_streamp) -> i32 {
     (*state).total = 0 as i32 as usize;
     (*strm).total_out = (*state).total;
     (*strm).total_in = (*strm).total_out;
-    (*strm).msg = 0 as *mut libc::c_char;
+    (*strm).msg = std::ptr::null_mut();
     (*strm).adler = 1 as i32 as uLong;
     (*state).mode = crate::src::zlib::inflate::HEAD;
     (*state).last = 0 as i32;
@@ -153,8 +152,7 @@ pub unsafe extern "C" fn inflateReset(mut strm: z_streamp) -> i32 {
 #[no_mangle]
 
 pub unsafe extern "C" fn inflatePrime(mut strm: z_streamp, mut bits: i32, mut value: i32) -> i32 {
-    let mut state: *mut crate::src::zlib::inflate::inflate_state =
-        0 as *mut crate::src::zlib::inflate::inflate_state;
+    let mut state: *mut crate::src::zlib::inflate::inflate_state = std::ptr::null_mut();
     if strm.is_null() || (*strm).state.is_null() {
         return -(2 as i32);
     }
@@ -177,8 +175,7 @@ pub unsafe extern "C" fn inflateInit2_(
     mut version: *const libc::c_char,
     mut stream_size: i32,
 ) -> i32 {
-    let mut state: *mut crate::src::zlib::inflate::inflate_state =
-        0 as *mut crate::src::zlib::inflate::inflate_state;
+    let mut state: *mut crate::src::zlib::inflate::inflate_state = std::ptr::null_mut();
     if version.is_null()
         || *version.offset(0 as i32 as isize) as i32
             != (*::std::mem::transmute::<&[u8; 6], &[libc::c_char; 6]>(b"1.2.3\x00"))
@@ -190,7 +187,7 @@ pub unsafe extern "C" fn inflateInit2_(
     if strm.is_null() {
         return -(2 as i32);
     }
-    (*strm).msg = 0 as *mut libc::c_char;
+    (*strm).msg = std::ptr::null_mut();
     if (*strm).zalloc.is_none() {
         (*strm).zalloc = Some(
             crate::src::zlib::zutil::zcalloc
@@ -224,11 +221,11 @@ pub unsafe extern "C" fn inflateInit2_(
             (*strm).opaque,
             state as voidpf,
         );
-        (*strm).state = 0 as *mut internal_state;
+        (*strm).state = std::ptr::null_mut();
         return -(2 as i32);
     }
     (*state).wbits = windowBits as u32;
-    (*state).window = 0 as *mut u8;
+    (*state).window = std::ptr::null_mut();
     return inflateReset(strm);
 }
 #[no_mangle]
@@ -4720,8 +4717,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
 */
 
 unsafe extern "C" fn updatewindow(mut strm: z_streamp, mut out: u32) -> i32 {
-    let mut state: *mut crate::src::zlib::inflate::inflate_state =
-        0 as *mut crate::src::zlib::inflate::inflate_state;
+    let mut state: *mut crate::src::zlib::inflate::inflate_state = std::ptr::null_mut();
     let mut copy: u32 = 0;
     let mut dist: u32 = 0;
     state = (*strm).state as *mut crate::src::zlib::inflate::inflate_state;
@@ -4883,10 +4879,9 @@ not enough available input to do that, then return from inflate(). */
 
 pub unsafe extern "C" fn inflate(mut strm: z_streamp, mut flush: i32) -> i32 {
     let mut current_block: u64; /* next input */
-    let mut state: *mut crate::src::zlib::inflate::inflate_state =
-        0 as *mut crate::src::zlib::inflate::inflate_state; /* next output */
-    let mut next: *mut u8 = 0 as *mut u8; /* available input and output */
-    let mut put: *mut u8 = 0 as *mut u8; /* bit buffer */
+    let mut state: *mut crate::src::zlib::inflate::inflate_state = std::ptr::null_mut(); /* next output */
+    let mut next: *mut u8 = std::ptr::null_mut(); /* available input and output */
+    let mut put: *mut u8 = std::ptr::null_mut(); /* bit buffer */
     let mut have: u32 = 0; /* bits in bit buffer */
     let mut left: u32 = 0; /* save starting available input and output */
     let mut hold: usize = 0; /* number of stored or match bytes to copy */
@@ -4894,7 +4889,7 @@ pub unsafe extern "C" fn inflate(mut strm: z_streamp, mut flush: i32) -> i32 {
     let mut in_0: u32 = 0; /* current decoding table entry */
     let mut out: u32 = 0; /* parent table entry */
     let mut copy: u32 = 0; /* length to copy for repeats, bits to drop */
-    let mut from: *mut u8 = 0 as *mut u8; /* return code */
+    let mut from: *mut u8 = std::ptr::null_mut(); /* return code */
     let mut this: code = code {
         op: 0,
         bits: 0,
@@ -4999,7 +4994,7 @@ pub unsafe extern "C" fn inflate(mut strm: z_streamp, mut flush: i32) -> i32 {
                         } else {
                             (*state).dmax = (1 as u32) << len;
                             (*state).check =
-                                adler32(0 as isize as uLong, 0 as *const Bytef, 0 as i32 as uInt);
+                                adler32(0 as isize as uLong, std::ptr::null(), 0 as i32 as uInt);
                             (*strm).adler = (*state).check;
                             (*state).mode = if hold & 0x200 as i32 as usize != 0 {
                                 crate::src::zlib::inflate::DICTID as i32
@@ -5281,7 +5276,7 @@ pub unsafe extern "C" fn inflate(mut strm: z_streamp, mut flush: i32) -> i32 {
                     (*state).bits = bits;
                     return 2 as i32;
                 }
-                (*state).check = adler32(0 as isize as uLong, 0 as *const Bytef, 0 as i32 as uInt);
+                (*state).check = adler32(0 as isize as uLong, std::ptr::null(), 0 as i32 as uInt);
                 (*strm).adler = (*state).check;
                 (*state).mode = crate::src::zlib::inflate::TYPE;
                 current_block = 10674880093440332853;
@@ -5834,8 +5829,7 @@ pub unsafe extern "C" fn inflate(mut strm: z_streamp, mut flush: i32) -> i32 {
 #[no_mangle]
 
 pub unsafe extern "C" fn inflateEnd(mut strm: z_streamp) -> i32 {
-    let mut state: *mut crate::src::zlib::inflate::inflate_state =
-        0 as *mut crate::src::zlib::inflate::inflate_state;
+    let mut state: *mut crate::src::zlib::inflate::inflate_state = std::ptr::null_mut();
     if strm.is_null() || (*strm).state.is_null() || (*strm).zfree.is_none() {
         return -(2 as i32);
     }
@@ -5850,7 +5844,7 @@ pub unsafe extern "C" fn inflateEnd(mut strm: z_streamp) -> i32 {
         (*strm).opaque,
         (*strm).state as voidpf,
     );
-    (*strm).state = 0 as *mut internal_state;
+    (*strm).state = std::ptr::null_mut();
     return 0 as i32;
 }
 #[no_mangle]
@@ -5860,8 +5854,7 @@ pub unsafe extern "C" fn inflateSetDictionary(
     mut dictionary: *const Bytef,
     mut dictLength: uInt,
 ) -> i32 {
-    let mut state: *mut crate::src::zlib::inflate::inflate_state =
-        0 as *mut crate::src::zlib::inflate::inflate_state;
+    let mut state: *mut crate::src::zlib::inflate::inflate_state = std::ptr::null_mut();
     let mut id: usize = 0;
     /* check state */
     if strm.is_null() || (*strm).state.is_null() {
@@ -5875,7 +5868,7 @@ pub unsafe extern "C" fn inflateSetDictionary(
     }
     /* check for correct dictionary id */
     if (*state).mode as u32 == crate::src::zlib::inflate::DICT as i32 as u32 {
-        id = adler32(0 as isize as uLong, 0 as *const Bytef, 0 as i32 as uInt);
+        id = adler32(0 as isize as uLong, std::ptr::null(), 0 as i32 as uInt);
         id = adler32(id, dictionary, dictLength);
         if id != (*state).check {
             return -(3 as i32);
@@ -5912,8 +5905,7 @@ pub unsafe extern "C" fn inflateSetDictionary(
 #[no_mangle]
 
 pub unsafe extern "C" fn inflateGetHeader(mut strm: z_streamp, mut head: gz_headerp) -> i32 {
-    let mut state: *mut crate::src::zlib::inflate::inflate_state =
-        0 as *mut crate::src::zlib::inflate::inflate_state;
+    let mut state: *mut crate::src::zlib::inflate::inflate_state = std::ptr::null_mut();
     /* check state */
     if strm.is_null() || (*strm).state.is_null() {
         return -(2 as i32);
@@ -5970,8 +5962,7 @@ pub unsafe extern "C" fn inflateSync(mut strm: z_streamp) -> i32 {
     let mut in_0: usize = 0;
     let mut out: usize = 0;
     let mut buf: [u8; 4] = [0; 4];
-    let mut state: *mut crate::src::zlib::inflate::inflate_state =
-        0 as *mut crate::src::zlib::inflate::inflate_state;
+    let mut state: *mut crate::src::zlib::inflate::inflate_state = std::ptr::null_mut();
     /* check parameters */
     if strm.is_null() || (*strm).state.is_null() {
         return -(2 as i32);
@@ -6470,8 +6461,7 @@ end of file, -1 for error). */
 #[no_mangle]
 
 pub unsafe extern "C" fn inflateSyncPoint(mut strm: z_streamp) -> i32 {
-    let mut state: *mut crate::src::zlib::inflate::inflate_state =
-        0 as *mut crate::src::zlib::inflate::inflate_state;
+    let mut state: *mut crate::src::zlib::inflate::inflate_state = std::ptr::null_mut();
     if strm.is_null() || (*strm).state.is_null() {
         return -(2 as i32);
     }
@@ -6681,11 +6671,10 @@ ZEXTERN int ZEXPORT inflateInit2 OF((z_streamp strm,
 #[no_mangle]
 
 pub unsafe extern "C" fn inflateCopy(mut dest: z_streamp, mut source: z_streamp) -> i32 {
-    let mut state: *mut crate::src::zlib::inflate::inflate_state =
-        0 as *mut crate::src::zlib::inflate::inflate_state;
+    let mut state: *mut crate::src::zlib::inflate::inflate_state = std::ptr::null_mut();
     let mut copy: *mut crate::src::zlib::inflate::inflate_state =
-        0 as *mut crate::src::zlib::inflate::inflate_state;
-    let mut window: *mut u8 = 0 as *mut u8;
+        std::ptr::null_mut();
+    let mut window: *mut u8 = std::ptr::null_mut();
     let mut wsize: u32 = 0;
     /* check input */
     if dest.is_null()
@@ -6707,7 +6696,7 @@ pub unsafe extern "C" fn inflateCopy(mut dest: z_streamp, mut source: z_streamp)
     if copy.is_null() {
         return -(4 as i32);
     }
-    window = 0 as *mut u8;
+    window = std::ptr::null_mut();
     if !(*state).window.is_null() {
         window = Some((*source).zalloc.expect("non-null function pointer"))
             .expect("non-null function pointer")(

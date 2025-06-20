@@ -113,7 +113,7 @@ unsafe extern "C" fn SV_Netchan_Encode(
     let mut i: isize = 0;
     let mut index: isize = 0;
     let mut key: byte = 0;
-    let mut string: *mut byte = 0 as *mut byte;
+    let mut string: *mut byte = std::ptr::null_mut();
     let mut srdc: i32 = 0;
     let mut sbit: i32 = 0;
     let mut soob: qboolean = qfalse;
@@ -178,7 +178,7 @@ unsafe extern "C" fn SV_Netchan_Decode(mut client: *mut client_t, mut msg: *mut 
     let mut sbit: i32 = 0;
     let mut soob: qboolean = qfalse;
     let mut key: byte = 0;
-    let mut string: *mut byte = 0 as *mut byte;
+    let mut string: *mut byte = std::ptr::null_mut();
     srdc = (*msg).readcount;
     sbit = (*msg).bit;
     soob = (*msg).oob;
@@ -222,15 +222,15 @@ SV_Netchan_FreeQueue
 #[no_mangle]
 
 pub unsafe extern "C" fn SV_Netchan_FreeQueue(mut client: *mut client_t) {
-    let mut netbuf: *mut netchan_buffer_t = 0 as *mut netchan_buffer_t;
-    let mut next: *mut netchan_buffer_t = 0 as *mut netchan_buffer_t;
+    let mut netbuf: *mut netchan_buffer_t = std::ptr::null_mut();
+    let mut next: *mut netchan_buffer_t = std::ptr::null_mut();
     netbuf = (*client).netchan_start_queue;
     while !netbuf.is_null() {
         next = (*netbuf).next;
         Z_Free(netbuf as *mut libc::c_void);
         netbuf = next
     }
-    (*client).netchan_start_queue = 0 as *mut netchan_buffer_t;
+    (*client).netchan_start_queue = std::ptr::null_mut();
     (*client).netchan_end_queue = &mut (*client).netchan_start_queue;
 }
 /*
@@ -241,7 +241,7 @@ SV_Netchan_TransmitNextInQueue
 #[no_mangle]
 
 pub unsafe extern "C" fn SV_Netchan_TransmitNextInQueue(mut client: *mut client_t) {
-    let mut netbuf: *mut netchan_buffer_t = 0 as *mut netchan_buffer_t;
+    let mut netbuf: *mut netchan_buffer_t = std::ptr::null_mut();
     Com_DPrintf(
         b"#462 Netchan_TransmitNextFragment: popping a queued message for transmit\n\x00"
             as *const u8 as *const libc::c_char,
@@ -316,7 +316,7 @@ then buffer them and make sure they get sent in correct order
 pub unsafe extern "C" fn SV_Netchan_Transmit(mut client: *mut client_t, mut msg: *mut msg_t) {
     MSG_WriteByte(msg as *mut msg_t, svc_EOF as i32);
     if (*client).netchan.unsentFragments as u32 != 0 || !(*client).netchan_start_queue.is_null() {
-        let mut netbuf: *mut netchan_buffer_t = 0 as *mut netchan_buffer_t;
+        let mut netbuf: *mut netchan_buffer_t = std::ptr::null_mut();
         Com_DPrintf(
             b"#462 SV_Netchan_Transmit: unsent fragments, stacked\n\x00" as *const u8
                 as *const libc::c_char,
@@ -337,7 +337,7 @@ pub unsafe extern "C" fn SV_Netchan_Transmit(mut client: *mut client_t, mut msg:
                 ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
             );
         }
-        (*netbuf).next = 0 as *mut netchan_buffer_s;
+        (*netbuf).next = std::ptr::null_mut();
         // insert it in the queue, the message will be encoded and sent later
         *(*client).netchan_end_queue = netbuf;
         (*client).netchan_end_queue = &mut (**(*client).netchan_end_queue).next

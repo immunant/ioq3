@@ -316,7 +316,7 @@ static mut skillMenuInfo: skillMenuInfo_t = skillMenuInfo_t {
     art_frame: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -342,7 +342,7 @@ static mut skillMenuInfo: skillMenuInfo_t = skillMenuInfo_t {
     art_banner: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -364,7 +364,7 @@ static mut skillMenuInfo: skillMenuInfo_t = skillMenuInfo_t {
     item_baby: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -386,7 +386,7 @@ static mut skillMenuInfo: skillMenuInfo_t = skillMenuInfo_t {
     item_easy: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -408,7 +408,7 @@ static mut skillMenuInfo: skillMenuInfo_t = skillMenuInfo_t {
     item_medium: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -430,7 +430,7 @@ static mut skillMenuInfo: skillMenuInfo_t = skillMenuInfo_t {
     item_hard: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -452,7 +452,7 @@ static mut skillMenuInfo: skillMenuInfo_t = skillMenuInfo_t {
     item_nightmare: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -474,7 +474,7 @@ static mut skillMenuInfo: skillMenuInfo_t = skillMenuInfo_t {
     art_skillPic: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -500,7 +500,7 @@ static mut skillMenuInfo: skillMenuInfo_t = skillMenuInfo_t {
     item_back: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -526,7 +526,7 @@ static mut skillMenuInfo: skillMenuInfo_t = skillMenuInfo_t {
     item_fight: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -549,7 +549,7 @@ static mut skillMenuInfo: skillMenuInfo_t = skillMenuInfo_t {
         height: 0,
         focuscolor: std::ptr::null_mut(),
     },
-    arenaInfo: 0 as *const libc::c_char,
+    arenaInfo: std::ptr::null(),
     skillpics: [0; 5],
     nightmareSound: 0,
     silenceSound: 0,

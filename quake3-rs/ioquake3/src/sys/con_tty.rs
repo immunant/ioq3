@@ -313,7 +313,7 @@ pub unsafe extern "C" fn Hist_Prev() -> *mut field_t {
     let mut hist_prev: i32 = 0;
     hist_prev = hist_current + 1 as i32;
     if hist_prev >= hist_count {
-        return 0 as *mut field_t;
+        return std::ptr::null_mut();
     }
     hist_current += 1;
     return &mut *ttyEditLines.as_mut_ptr().offset(hist_current as isize) as *mut field_t;
@@ -330,7 +330,7 @@ pub unsafe extern "C" fn Hist_Next() -> *mut field_t {
         hist_current -= 1
     }
     if hist_current == -(1 as i32) {
-        return 0 as *mut field_t;
+        return std::ptr::null_mut();
     }
     return &mut *ttyEditLines.as_mut_ptr().offset(hist_current as isize) as *mut field_t;
 }
@@ -431,7 +431,7 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
     static mut text: [libc::c_char; 256] = [0; 256];
     let mut avail: i32 = 0;
     let mut key: libc::c_char = 0;
-    let mut history: *mut field_t = 0 as *mut field_t;
+    let mut history: *mut field_t = std::ptr::null_mut();
     if ttycon_on as u64 != 0 {
         avail = crate::stdlib::read(
             0 as i32,
@@ -448,7 +448,7 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
                     TTY_con.buffer[TTY_con.cursor as usize] = '\u{0}' as i32 as libc::c_char;
                     CON_Back();
                 }
-                return 0 as *mut libc::c_char;
+                return std::ptr::null_mut();
             }
             // check if this is a control char
             if key as i32 != 0 && (key as i32) < ' ' as i32 {
@@ -512,7 +512,7 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
                     CON_Hide();
                     Field_AutoComplete(&mut TTY_con as *mut _ as *mut field_t);
                     CON_Show();
-                    return 0 as *mut libc::c_char;
+                    return std::ptr::null_mut();
                 }
                 avail = crate::stdlib::read(
                     0 as i32,
@@ -537,7 +537,7 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
                                         CON_Show();
                                     }
                                     libc::tcflush(0 as i32, 0 as i32);
-                                    return 0 as *mut libc::c_char;
+                                    return std::ptr::null_mut();
                                 }
                                 66 => {
                                     history = Hist_Next();
@@ -549,10 +549,10 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
                                     }
                                     CON_Show();
                                     libc::tcflush(0 as i32, 0 as i32);
-                                    return 0 as *mut libc::c_char;
+                                    return std::ptr::null_mut();
                                 }
-                                67 => return 0 as *mut libc::c_char,
-                                68 => return 0 as *mut libc::c_char,
+                                67 => return std::ptr::null_mut(),
+                                68 => return std::ptr::null_mut(),
                                 _ => {}
                             }
                         }
@@ -565,13 +565,13 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
                     TTY_erase,
                 );
                 libc::tcflush(0 as i32, 0 as i32);
-                return 0 as *mut libc::c_char;
+                return std::ptr::null_mut();
             }
             if TTY_con.cursor as usize
                 >= (::std::mem::size_of::<[libc::c_char; 256]>() as usize)
                     .wrapping_sub(1 as i32 as usize)
             {
-                return 0 as *mut libc::c_char;
+                return std::ptr::null_mut();
             }
             // push regular character
             TTY_con.buffer[TTY_con.cursor as usize] = key; // next char will always be '\0'
@@ -583,7 +583,7 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
                 1 as i32 as size_t,
             );
         } // stdin
-        return 0 as *mut libc::c_char;
+        return std::ptr::null_mut();
     } else {
         if stdin_active as u64 != 0 {
             let mut len: i32 = 0;
@@ -621,8 +621,8 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
             if select(
                 0 as i32 + 1 as i32,
                 &mut fdset,
-                0 as *mut fd_set,
-                0 as *mut fd_set,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
                 &mut timeout,
             ) == -(1 as i32)
                 || !(fdset.__fds_bits[(0 as i32
@@ -634,7 +634,7 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
                         as __fd_mask
                     != 0 as i32 as isize)
             {
-                return 0 as *mut libc::c_char;
+                return std::ptr::null_mut();
             }
             len = crate::stdlib::read(
                 0 as i32,
@@ -644,16 +644,16 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
             if len == 0 as i32 {
                 // eof!
                 stdin_active = qfalse; // rip off the /n and terminate
-                return 0 as *mut libc::c_char;
+                return std::ptr::null_mut();
             }
             if len < 1 as i32 {
-                return 0 as *mut libc::c_char;
+                return std::ptr::null_mut();
             }
             text[(len - 1 as i32) as usize] = 0 as i32 as libc::c_char;
             return text.as_mut_ptr();
         }
     }
-    return 0 as *mut libc::c_char;
+    return std::ptr::null_mut();
 }
 /*
 ===========================================================================

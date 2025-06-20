@@ -6,7 +6,7 @@ pub mod stdlib_h {
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return libc::strtol(
             __nptr,
-            0 as *mut libc::c_void as *mut *mut libc::c_char,
+            std::ptr::null_mut() as *mut *mut libc::c_char,
             10 as i32,
         ) as i32;
     }
@@ -271,9 +271,9 @@ pub unsafe extern "C" fn SV_GetChallenge(mut from: netadr_t) {
     let mut oldestTime: i32 = 0;
     let mut oldestClientTime: i32 = 0;
     let mut clientChallenge: i32 = 0;
-    let mut challenge: *mut challenge_t = 0 as *mut challenge_t;
+    let mut challenge: *mut challenge_t = std::ptr::null_mut();
     let mut wasfound: qboolean = qfalse;
-    let mut gameName: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut gameName: *mut libc::c_char = std::ptr::null_mut();
     let mut gameMismatch: qboolean = qfalse;
     // ignore if we are in single player
     if Cvar_VariableValue(b"g_gametype\x00" as *const u8 as *const libc::c_char)
@@ -411,7 +411,7 @@ pub unsafe extern "C" fn SV_GetChallenge(mut from: netadr_t) {
             // haven't heard anything from the authorize server, go ahead and
             // let them in, assuming the id server is down
             // otherwise send their ip to the authorize server
-            let mut game: *const libc::c_char = 0 as *const libc::c_char;
+            let mut game: *const libc::c_char = std::ptr::null();
             Com_DPrintf(
                 b"sending getIpAuthorize for %s\n\x00" as *const u8 as *const libc::c_char,
                 NET_AdrToString(from as netadr_t),
@@ -461,9 +461,9 @@ challengeResponse to it
 pub unsafe extern "C" fn SV_AuthorizeIpPacket(mut from: netadr_t) {
     let mut challenge: i32 = 0;
     let mut i: i32 = 0;
-    let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut r: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut challengeptr: *mut challenge_t = 0 as *mut challenge_t;
+    let mut s: *mut libc::c_char = std::ptr::null_mut();
+    let mut r: *mut libc::c_char = std::ptr::null_mut();
+    let mut challengeptr: *mut challenge_t = std::ptr::null_mut();
     if NET_CompareBaseAdr(from as netadr_t, svs.authorizeAddress as netadr_t) as u64 == 0 {
         Com_Printf(
             b"SV_AuthorizeIpPacket: not from authorize server\n\x00" as *const u8
@@ -571,7 +571,7 @@ Check whether a certain address is banned
 
 unsafe extern "C" fn SV_IsBanned(mut from: *mut netadr_t, mut isexception: qboolean) -> qboolean {
     let mut index: i32 = 0;
-    let mut curban: *mut serverBan_t = 0 as *mut serverBan_t;
+    let mut curban: *mut serverBan_t = std::ptr::null_mut();
     if isexception as u64 == 0 {
         // If this is a query for a ban, first check whether the client is excepted
         if SV_IsBanned(from, qtrue) as u64 != 0 {
@@ -609,8 +609,8 @@ pub unsafe extern "C" fn SV_DirectConnect(mut from: netadr_t) {
     let mut current_block: u64;
     let mut userinfo: [libc::c_char; 1024] = [0; 1024];
     let mut i: i32 = 0;
-    let mut cl: *mut client_t = 0 as *mut client_t;
-    let mut newcl: *mut client_t = 0 as *mut client_t;
+    let mut cl: *mut client_t = std::ptr::null_mut();
+    let mut newcl: *mut client_t = std::ptr::null_mut();
     let mut temp: client_t = client_t {
         state: CS_FREE,
         userinfo: [0; 1024],
@@ -633,7 +633,7 @@ pub unsafe extern "C" fn SV_DirectConnect(mut from: netadr_t) {
         lastMessageNum: 0,
         lastClientCommand: 0,
         lastClientCommandString: [0; 1024],
-        gentity: 0 as *mut sharedEntity_t,
+        gentity: std::ptr::null_mut(),
         name: [0; 32],
         downloadName: [0; 64],
         download: 0,
@@ -642,7 +642,7 @@ pub unsafe extern "C" fn SV_DirectConnect(mut from: netadr_t) {
         downloadClientBlock: 0,
         downloadCurrentBlock: 0,
         downloadXmitBlock: 0,
-        downloadBlocks: [0 as *mut u8; 48],
+        downloadBlocks: [std::ptr::null_mut(); 48],
         downloadBlockSize: [0; 48],
         downloadEOF: qfalse,
         downloadSendTime: 0,
@@ -739,28 +739,28 @@ pub unsafe extern "C" fn SV_DirectConnect(mut from: netadr_t) {
             lastSentSize: 0,
             compat: qfalse,
         },
-        netchan_start_queue: 0 as *mut netchan_buffer_t,
-        netchan_end_queue: 0 as *mut *mut netchan_buffer_t,
+        netchan_start_queue: std::ptr::null_mut(),
+        netchan_end_queue: std::ptr::null_mut(),
         hasVoip: qfalse,
         muteAllVoip: qfalse,
         ignoreVoipFromClient: [qfalse; 64],
-        voipPacket: [0 as *mut voipServerPacket_t; 64],
+        voipPacket: [std::ptr::null_mut(); 64],
         queuedVoipPackets: 0,
         queuedVoipIndex: 0,
         oldServerTime: 0,
         csUpdated: [qfalse; 1024],
         compat: qfalse,
     };
-    let mut ent: *mut sharedEntity_t = 0 as *mut sharedEntity_t;
+    let mut ent: *mut sharedEntity_t = std::ptr::null_mut();
     let mut clientNum: i32 = 0;
     let mut version: i32 = 0;
     let mut qport: i32 = 0;
     let mut challenge: i32 = 0;
-    let mut password: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut password: *mut libc::c_char = std::ptr::null_mut();
     let mut startIndex: i32 = 0;
     let mut denied: intptr_t = 0;
     let mut count: i32 = 0;
-    let mut ip: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut ip: *mut libc::c_char = std::ptr::null_mut();
     let mut compat: qboolean = qfalse;
     Com_DPrintf(b"SVC_DirectConnect ()\n\x00" as *const u8 as *const libc::c_char);
     // Check whether this client is banned.
@@ -854,7 +854,7 @@ pub unsafe extern "C" fn SV_DirectConnect(mut from: netadr_t) {
     // see if the challenge is valid (LAN clients don't need to challenge)
     if NET_IsLocalAddress(from as netadr_t) as u64 == 0 {
         let mut ping: i32 = 0;
-        let mut challengeptr: *mut challenge_t = 0 as *mut challenge_t;
+        let mut challengeptr: *mut challenge_t = std::ptr::null_mut();
         i = 0 as i32;
         while i < 2048 as i32 {
             if NET_CompareAdr(from as netadr_t, svs.challenges[i as usize].adr as netadr_t) as u64
@@ -976,7 +976,7 @@ pub unsafe extern "C" fn SV_DirectConnect(mut from: netadr_t) {
                 // skip past the reserved slots
                 startIndex = (*sv_privateClients).integer
             }
-            newcl = 0 as *mut client_t;
+            newcl = std::ptr::null_mut();
             i = startIndex;
             while i < (*sv_maxclients).integer {
                 cl = &mut *svs.clients.offset(i as isize) as *mut client_t;
@@ -1163,7 +1163,7 @@ or crashing -- SV_FinalMessage() will handle that
 
 pub unsafe extern "C" fn SV_DropClient(mut drop_0: *mut client_t, mut reason: *const libc::c_char) {
     let mut i: i32 = 0;
-    let mut challenge: *mut challenge_t = 0 as *mut challenge_t;
+    let mut challenge: *mut challenge_t = std::ptr::null_mut();
     let isBot: qboolean =
         ((*drop_0).netchan.remoteAddress.type_0 as u32 == NA_BOT as i32 as u32) as i32 as qboolean;
     if (*drop_0).state as u32 == CS_ZOMBIE as i32 as u32 {
@@ -1197,7 +1197,7 @@ pub unsafe extern "C" fn SV_DropClient(mut drop_0: *mut client_t, mut reason: *c
     SV_FreeClient(drop_0);
     // tell everyone why they got dropped
     SV_SendServerCommand(
-        0 as *mut client_t as *mut client_s,
+        std::ptr::null_mut() as *mut client_s,
         b"print \"%s^7 %s\n\"\x00" as *const u8 as *const libc::c_char,
         (*drop_0).name.as_mut_ptr(),
         reason,
@@ -1261,7 +1261,7 @@ the wrong gamestate.
 
 unsafe extern "C" fn SV_SendClientGameState(mut client: *mut client_t) {
     let mut start: i32 = 0;
-    let mut base: *mut entityState_t = 0 as *mut entityState_t;
+    let mut base: *mut entityState_t = std::ptr::null_mut();
     let mut nullstate: entityState_t = entityState_t {
         number: 0,
         eType: 0,
@@ -1308,7 +1308,7 @@ unsafe extern "C" fn SV_SendClientGameState(mut client: *mut client_t) {
         allowoverflow: qfalse,
         overflowed: qfalse,
         oob: qfalse,
-        data: 0 as *mut byte,
+        data: std::ptr::null_mut(),
         maxsize: 0,
         cursize: 0,
         readcount: 0,
@@ -1401,7 +1401,7 @@ SV_ClientEnterWorld
 
 pub unsafe extern "C" fn SV_ClientEnterWorld(mut client: *mut client_t, mut cmd: *mut usercmd_t) {
     let mut clientNum: i32 = 0;
-    let mut ent: *mut sharedEntity_t = 0 as *mut sharedEntity_t;
+    let mut ent: *mut sharedEntity_t = std::ptr::null_mut();
     Com_DPrintf(
         b"Going from CS_PRIMED to CS_ACTIVE for %s\n\x00" as *const u8 as *const libc::c_char,
         (*client).name.as_mut_ptr(),
@@ -1487,7 +1487,7 @@ unsafe extern "C" fn SV_CloseDownload(mut cl: *mut client_t) {
     while i < 48 as i32 {
         if !(*cl).downloadBlocks[i as usize].is_null() {
             Z_Free((*cl).downloadBlocks[i as usize] as *mut libc::c_void);
-            (*cl).downloadBlocks[i as usize] = 0 as *mut u8
+            (*cl).downloadBlocks[i as usize] = std::ptr::null_mut()
         }
         i += 1
     }
@@ -1605,7 +1605,7 @@ pub unsafe extern "C" fn SV_WriteDownloadToClient(
     let mut unreferenced: i32 = 1 as i32;
     let mut errorMessage: [libc::c_char; 1024] = [0; 1024];
     let mut pakbuf: [libc::c_char; 64] = [0; 64];
-    let mut pakptr: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut pakptr: *mut libc::c_char = std::ptr::null_mut();
     let mut numRefPaks: i32 = 0;
     if *(*cl).downloadName.as_mut_ptr() == 0 {
         return 0 as i32;
@@ -1867,7 +1867,7 @@ pub unsafe extern "C" fn SV_SendQueuedMessages() -> i32 {
     let mut i: i32 = 0;
     let mut retval: i32 = -(1 as i32);
     let mut nextFragT: i32 = 0;
-    let mut cl: *mut client_t = 0 as *mut client_t;
+    let mut cl: *mut client_t = std::ptr::null_mut();
     i = 0 as i32;
     while i < (*sv_maxclients).integer {
         cl = &mut *svs.clients.offset(i as isize) as *mut client_t;
@@ -1897,12 +1897,12 @@ pub unsafe extern "C" fn SV_SendDownloadMessages() -> i32 {
     let mut i: i32 = 0;
     let mut numDLs: i32 = 0 as i32;
     let mut retval: i32 = 0;
-    let mut cl: *mut client_t = 0 as *mut client_t;
+    let mut cl: *mut client_t = std::ptr::null_mut();
     let mut msg: msg_t = msg_t {
         allowoverflow: qfalse,
         overflowed: qfalse,
         oob: qfalse,
-        data: 0 as *mut byte,
+        data: std::ptr::null_mut(),
         maxsize: 0,
         cursize: 0,
         readcount: 0,
@@ -1965,8 +1965,8 @@ unsafe extern "C" fn SV_VerifyPaks_f(mut cl: *mut client_t) {
     let mut nCurArg: i32 = 0;
     let mut nClientChkSum: [i32; 1024] = [0; 1024];
     let mut nServerChkSum: [i32; 1024] = [0; 1024];
-    let mut pPaks: *const libc::c_char = 0 as *const libc::c_char;
-    let mut pArg: *const libc::c_char = 0 as *const libc::c_char;
+    let mut pPaks: *const libc::c_char = std::ptr::null();
+    let mut pArg: *const libc::c_char = std::ptr::null();
     let mut bGood: qboolean = qtrue;
     // if we are pure, we "expect" the client to load certain things from
     // certain pk3 files, namely we want the client to have loaded the
@@ -2148,8 +2148,8 @@ into a more C friendly form.
 #[no_mangle]
 
 pub unsafe extern "C" fn SV_UserinfoChanged(mut cl: *mut client_t) {
-    let mut val: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut ip: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut val: *mut libc::c_char = std::ptr::null_mut();
+    let mut ip: *mut libc::c_char = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut len: i32 = 0;
     // name for C code
@@ -2406,7 +2406,7 @@ pub unsafe extern "C" fn SV_ExecuteClientCommand(
     mut s: *const libc::c_char,
     mut clientOK: qboolean,
 ) {
-    let mut u: *mut ucmd_t = 0 as *mut ucmd_t;
+    let mut u: *mut ucmd_t = std::ptr::null_mut();
     let mut bProcessed: qboolean = qfalse;
     Cmd_TokenizeString(s);
     // see if it is a server level command
@@ -2450,7 +2450,7 @@ SV_ClientCommand
 
 unsafe extern "C" fn SV_ClientCommand(mut cl: *mut client_t, mut msg: *mut msg_t) -> qboolean {
     let mut seq: i32 = 0;
-    let mut s: *const libc::c_char = 0 as *const libc::c_char;
+    let mut s: *const libc::c_char = std::ptr::null();
     let mut clientOk: qboolean = qtrue;
     seq = MSG_ReadLong(msg as *mut msg_t);
     s = MSG_ReadString(msg as *mut msg_t);
@@ -2563,8 +2563,8 @@ unsafe extern "C" fn SV_UserMove(mut cl: *mut client_t, mut msg: *mut msg_t, mut
         rightmove: 0,
         upmove: 0,
     }; 32];
-    let mut cmd: *mut usercmd_t = 0 as *mut usercmd_t;
-    let mut oldcmd: *mut usercmd_t = 0 as *mut usercmd_t;
+    let mut cmd: *mut usercmd_t = std::ptr::null_mut();
+    let mut oldcmd: *mut usercmd_t = std::ptr::null_mut();
     if delta as u64 != 0 {
         (*cl).deltaMessage = (*cl).messageAcknowledge
     } else {
@@ -2701,8 +2701,8 @@ unsafe extern "C" fn SV_UserVoip(
     let mut recips: [uint8_t; 8] = [0; 8];
     let mut flags: i32 = 0;
     let mut encoded: [byte; 4000] = [0; 4000];
-    let mut client: *mut client_t = 0 as *mut client_t;
-    let mut packet: *mut voipServerPacket_t = 0 as *mut voipServerPacket_t;
+    let mut client: *mut client_t = std::ptr::null_mut();
+    let mut packet: *mut voipServerPacket_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     sender = cl.offset_from(svs.clients) as isize as i32;
     generation = MSG_ReadByte(msg as *mut msg_t);

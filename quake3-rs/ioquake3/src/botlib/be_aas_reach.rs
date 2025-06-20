@@ -47,7 +47,7 @@ pub mod stdlib_h {
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return libc::strtol(
             __nptr,
-            0 as *mut libc::c_void as *mut *mut libc::c_char,
+            std::ptr::null_mut() as *mut *mut libc::c_char,
             10 as i32,
         ) as i32;
     }
@@ -306,11 +306,11 @@ pub unsafe extern "C" fn AAS_FaceArea(mut face: *mut aas_face_t) -> f32 {
     let mut edgenum: i32 = 0;
     let mut side: i32 = 0;
     let mut total: f32 = 0.;
-    let mut v: *mut vec_t = 0 as *mut vec_t;
+    let mut v: *mut vec_t = std::ptr::null_mut();
     let mut d1: vec3_t = [0.; 3];
     let mut d2: vec3_t = [0.; 3];
     let mut cross: vec3_t = [0.; 3];
-    let mut edge: *mut aas_edge_t = 0 as *mut aas_edge_t;
+    let mut edge: *mut aas_edge_t = std::ptr::null_mut();
     edgenum = *crate::src::botlib::be_aas_main::aasworld
         .edgeindex
         .offset((*face).firstedge as isize);
@@ -388,10 +388,10 @@ pub unsafe extern "C" fn AAS_AreaVolume(mut areanum: i32) -> f32 {
     let mut a: vec_t = 0.;
     let mut volume: vec_t = 0.;
     let mut corner: vec3_t = [0.; 3];
-    let mut plane: *mut aas_plane_t = 0 as *mut aas_plane_t;
-    let mut edge: *mut aas_edge_t = 0 as *mut aas_edge_t;
-    let mut face: *mut aas_face_t = 0 as *mut aas_face_t;
-    let mut area: *mut aas_area_t = 0 as *mut aas_area_t;
+    let mut plane: *mut aas_plane_t = std::ptr::null_mut();
+    let mut edge: *mut aas_edge_t = std::ptr::null_mut();
+    let mut face: *mut aas_face_t = std::ptr::null_mut();
+    let mut area: *mut aas_area_t = std::ptr::null_mut();
     area = &mut *crate::src::botlib::be_aas_main::aasworld
         .areas
         .offset(areanum as isize) as *mut aas_area_t;
@@ -454,7 +454,7 @@ pub unsafe extern "C" fn AAS_AreaVolume(mut areanum: i32) -> f32 {
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_BestReachableLinkArea(mut areas: *mut aas_link_t) -> i32 {
-    let mut link: *mut aas_link_t = 0 as *mut aas_link_t; //end for
+    let mut link: *mut aas_link_t = std::ptr::null_mut(); //end for
     link = areas;
     while !link.is_null() {
         if AAS_AreaGrounded((*link).areanum) != 0 || AAS_AreaSwim((*link).areanum) != 0 {
@@ -706,8 +706,8 @@ pub unsafe extern "C" fn AAS_BestReachableFromJumpPadArea(
         time: 0.,
         frames: 0,
     };
-    let mut areas: *mut aas_link_t = 0 as *mut aas_link_t;
-    let mut link: *mut aas_link_t = 0 as *mut aas_link_t;
+    let mut areas: *mut aas_link_t = std::ptr::null_mut();
+    let mut link: *mut aas_link_t = std::ptr::null_mut();
     let mut classname: [libc::c_char; 128] = [0; 128];
     bot_visualizejumppads = crate::src::botlib::l_libvar::LibVarValue(
         b"bot_visualizejumppads\x00" as *const u8 as *const libc::c_char,
@@ -850,7 +850,7 @@ pub unsafe extern "C" fn AAS_BestReachableArea(
     let mut j: i32 = 0;
     let mut k: i32 = 0;
     let mut l: i32 = 0;
-    let mut areas: *mut aas_link_t = 0 as *mut aas_link_t;
+    let mut areas: *mut aas_link_t = std::ptr::null_mut();
     let mut absmins: vec3_t = [0.; 3];
     let mut absmaxs: vec3_t = [0.; 3];
     //vec3_t bbmins, bbmaxs;
@@ -1004,7 +1004,7 @@ pub unsafe extern "C" fn AAS_SetupReachabilityHeap() {
         i += 1
     }
     let ref mut fresh2 = (*reachabilityheap.offset((65536 as i32 - 1 as i32) as isize)).next;
-    *fresh2 = 0 as *mut aas_lreachability_s;
+    *fresh2 = std::ptr::null_mut();
     nextreachability = reachabilityheap;
     numlreachabilities = 0 as i32;
 }
@@ -1032,9 +1032,9 @@ pub unsafe extern "C" fn AAS_ShutDownReachabilityHeap() {
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_AllocReachability() -> *mut aas_lreachability_t {
-    let mut r: *mut aas_lreachability_t = 0 as *mut aas_lreachability_t;
+    let mut r: *mut aas_lreachability_t = std::ptr::null_mut();
     if nextreachability.is_null() {
-        return 0 as *mut aas_lreachability_t;
+        return std::ptr::null_mut();
     }
     //make sure the error message only shows up once
     if (*nextreachability).next.is_null() {
@@ -1106,8 +1106,8 @@ pub unsafe extern "C" fn AAS_AreaReachability(mut areanum: i32) -> i32 {
 pub unsafe extern "C" fn AAS_AreaGroundFaceArea(mut areanum: i32) -> f32 {
     let mut i: i32 = 0; //end for
     let mut total: f32 = 0.;
-    let mut area: *mut aas_area_t = 0 as *mut aas_area_t;
-    let mut face: *mut aas_face_t = 0 as *mut aas_face_t;
+    let mut area: *mut aas_area_t = std::ptr::null_mut();
+    let mut face: *mut aas_face_t = std::ptr::null_mut();
     total = 0 as i32 as f32;
     area = &mut *crate::src::botlib::be_aas_main::aasworld
         .areas
@@ -1141,8 +1141,8 @@ pub unsafe extern "C" fn AAS_AreaGroundFaceArea(mut areanum: i32) -> f32 {
 pub unsafe extern "C" fn AAS_FaceCenter(mut facenum: i32, mut center: *mut vec_t) {
     let mut i: i32 = 0; //end for
     let mut scale: f32 = 0.;
-    let mut face: *mut aas_face_t = 0 as *mut aas_face_t;
-    let mut edge: *mut aas_edge_t = 0 as *mut aas_edge_t;
+    let mut face: *mut aas_face_t = std::ptr::null_mut();
+    let mut edge: *mut aas_edge_t = std::ptr::null_mut();
     face = &mut *crate::src::botlib::be_aas_main::aasworld
         .faces
         .offset(facenum as isize) as *mut aas_face_t;
@@ -1530,7 +1530,7 @@ pub unsafe extern "C" fn AAS_BarrierJumpTravelTime() -> u16 {
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_ReachabilityExists(mut area1num: i32, mut area2num: i32) -> qboolean {
-    let mut r: *mut aas_lreachability_t = 0 as *mut aas_lreachability_t; //end for
+    let mut r: *mut aas_lreachability_t = std::ptr::null_mut(); //end for
     r = *areareachability.offset(area1num as isize);
     while !r.is_null() {
         if (*r).areanum == area2num {
@@ -1604,11 +1604,11 @@ pub unsafe extern "C" fn AAS_Reachability_Swim(mut area1num: i32, mut area2num: 
     let mut face1num: i32 = 0;
     let mut face2num: i32 = 0;
     let mut side1: i32 = 0;
-    let mut area1: *mut aas_area_t = 0 as *mut aas_area_t;
-    let mut area2: *mut aas_area_t = 0 as *mut aas_area_t;
-    let mut lreach: *mut aas_lreachability_t = 0 as *mut aas_lreachability_t;
-    let mut face1: *mut aas_face_t = 0 as *mut aas_face_t;
-    let mut plane: *mut aas_plane_t = 0 as *mut aas_plane_t;
+    let mut area1: *mut aas_area_t = std::ptr::null_mut();
+    let mut area2: *mut aas_area_t = std::ptr::null_mut();
+    let mut lreach: *mut aas_lreachability_t = std::ptr::null_mut();
+    let mut face1: *mut aas_face_t = std::ptr::null_mut();
+    let mut plane: *mut aas_plane_t = std::ptr::null_mut();
     let mut start: vec3_t = [0.; 3];
     if AAS_AreaSwim(area1num) == 0 || AAS_AreaSwim(area2num) == 0 {
         return qfalse as i32;
@@ -1744,12 +1744,12 @@ pub unsafe extern "C" fn AAS_Reachability_EqualFloorHeight(
     let mut invgravity: vec3_t = [0.; 3];
     let mut gravitydirection: vec3_t = [0 as i32 as vec_t, 0 as i32 as vec_t, -(1 as i32) as vec_t];
     let mut edgevec: vec3_t = [0.; 3];
-    let mut area1: *mut aas_area_t = 0 as *mut aas_area_t;
-    let mut area2: *mut aas_area_t = 0 as *mut aas_area_t;
-    let mut face1: *mut aas_face_t = 0 as *mut aas_face_t;
-    let mut face2: *mut aas_face_t = 0 as *mut aas_face_t;
-    let mut edge: *mut aas_edge_t = 0 as *mut aas_edge_t;
-    let mut plane2: *mut aas_plane_t = 0 as *mut aas_plane_t;
+    let mut area1: *mut aas_area_t = std::ptr::null_mut();
+    let mut area2: *mut aas_area_t = std::ptr::null_mut();
+    let mut face1: *mut aas_face_t = std::ptr::null_mut();
+    let mut face2: *mut aas_face_t = std::ptr::null_mut();
+    let mut edge: *mut aas_edge_t = std::ptr::null_mut();
+    let mut plane2: *mut aas_plane_t = std::ptr::null_mut();
     let mut lr: aas_lreachability_t = aas_lreachability_t {
         areanum: 0,
         facenum: 0,
@@ -1758,9 +1758,9 @@ pub unsafe extern "C" fn AAS_Reachability_EqualFloorHeight(
         end: [0.; 3],
         traveltype: 0,
         traveltime: 0,
-        next: 0 as *mut aas_lreachability_s,
+        next: std::ptr::null_mut(),
     };
-    let mut lreach: *mut aas_lreachability_t = 0 as *mut aas_lreachability_t;
+    let mut lreach: *mut aas_lreachability_t = std::ptr::null_mut();
     if AAS_AreaGrounded(area1num) == 0 || AAS_AreaGrounded(area2num) == 0 {
         return qfalse as i32;
     }
@@ -2131,14 +2131,14 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
     let mut water_bestnormal: vec3_t = [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t];
     let mut invgravity: vec3_t = [0 as i32 as vec_t, 0 as i32 as vec_t, 1 as i32 as vec_t];
     let mut testpoint: vec3_t = [0.; 3];
-    let mut plane: *mut aas_plane_t = 0 as *mut aas_plane_t;
-    let mut area1: *mut aas_area_t = 0 as *mut aas_area_t;
-    let mut area2: *mut aas_area_t = 0 as *mut aas_area_t;
-    let mut groundface1: *mut aas_face_t = 0 as *mut aas_face_t;
-    let mut groundface2: *mut aas_face_t = 0 as *mut aas_face_t;
-    let mut edge1: *mut aas_edge_t = 0 as *mut aas_edge_t;
-    let mut edge2: *mut aas_edge_t = 0 as *mut aas_edge_t;
-    let mut lreach: *mut aas_lreachability_t = 0 as *mut aas_lreachability_t;
+    let mut plane: *mut aas_plane_t = std::ptr::null_mut();
+    let mut area1: *mut aas_area_t = std::ptr::null_mut();
+    let mut area2: *mut aas_area_t = std::ptr::null_mut();
+    let mut groundface1: *mut aas_face_t = std::ptr::null_mut();
+    let mut groundface2: *mut aas_face_t = std::ptr::null_mut();
+    let mut edge1: *mut aas_edge_t = std::ptr::null_mut();
+    let mut edge2: *mut aas_edge_t = std::ptr::null_mut();
+    let mut lreach: *mut aas_lreachability_t = std::ptr::null_mut();
     let mut trace: aas_trace_t = aas_trace_t {
         startsolid: qfalse,
         fraction: 0.,
@@ -3046,7 +3046,7 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
                             start.as_mut_ptr(),
                             end.as_mut_ptr(),
                             areas.as_mut_ptr(),
-                            0 as *mut vec3_t,
+                            std::ptr::null_mut(),
                             (::std::mem::size_of::<[i32; 10]>() as usize)
                                 .wrapping_div(::std::mem::size_of::<i32>() as usize)
                                 as i32,
@@ -3812,10 +3812,10 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(mut area1num: i32, mut area2num: 
     let mut height: f32 = 0.;
     let mut bestdist: f32 = 0.;
     let mut speed: f32 = 0.;
-    let mut v1: *mut vec_t = 0 as *mut vec_t;
-    let mut v2: *mut vec_t = 0 as *mut vec_t;
-    let mut v3: *mut vec_t = 0 as *mut vec_t;
-    let mut v4: *mut vec_t = 0 as *mut vec_t;
+    let mut v1: *mut vec_t = std::ptr::null_mut();
+    let mut v2: *mut vec_t = std::ptr::null_mut();
+    let mut v3: *mut vec_t = std::ptr::null_mut();
+    let mut v4: *mut vec_t = std::ptr::null_mut();
     let mut beststart: vec3_t = [0 as i32 as vec_t, 0., 0.];
     let mut beststart2: vec3_t = [0 as i32 as vec_t, 0., 0.];
     let mut bestend: vec3_t = [0 as i32 as vec_t, 0., 0.];
@@ -3827,15 +3827,15 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(mut area1num: i32, mut area2num: 
     let mut cmdmove: vec3_t = [0.; 3];
     let mut up: vec3_t = [0 as i32 as vec_t, 0 as i32 as vec_t, 1 as i32 as vec_t];
     let mut sidewards: vec3_t = [0.; 3];
-    let mut area1: *mut aas_area_t = 0 as *mut aas_area_t;
-    let mut area2: *mut aas_area_t = 0 as *mut aas_area_t;
-    let mut face1: *mut aas_face_t = 0 as *mut aas_face_t;
-    let mut face2: *mut aas_face_t = 0 as *mut aas_face_t;
-    let mut edge1: *mut aas_edge_t = 0 as *mut aas_edge_t;
-    let mut edge2: *mut aas_edge_t = 0 as *mut aas_edge_t;
-    let mut plane1: *mut aas_plane_t = 0 as *mut aas_plane_t;
-    let mut plane2: *mut aas_plane_t = 0 as *mut aas_plane_t;
-    let mut plane: *mut aas_plane_t = 0 as *mut aas_plane_t;
+    let mut area1: *mut aas_area_t = std::ptr::null_mut();
+    let mut area2: *mut aas_area_t = std::ptr::null_mut();
+    let mut face1: *mut aas_face_t = std::ptr::null_mut();
+    let mut face2: *mut aas_face_t = std::ptr::null_mut();
+    let mut edge1: *mut aas_edge_t = std::ptr::null_mut();
+    let mut edge2: *mut aas_edge_t = std::ptr::null_mut();
+    let mut plane1: *mut aas_plane_t = std::ptr::null_mut();
+    let mut plane2: *mut aas_plane_t = std::ptr::null_mut();
+    let mut plane: *mut aas_plane_t = std::ptr::null_mut();
     let mut trace: aas_trace_t = aas_trace_t {
         startsolid: qfalse,
         fraction: 0.,
@@ -3864,7 +3864,7 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(mut area1num: i32, mut area2num: 
         time: 0.,
         frames: 0,
     };
-    let mut lreach: *mut aas_lreachability_t = 0 as *mut aas_lreachability_t;
+    let mut lreach: *mut aas_lreachability_t = std::ptr::null_mut();
     if AAS_AreaGrounded(area1num) == 0 || AAS_AreaGrounded(area2num) == 0 {
         return qfalse as i32;
     }
@@ -4250,7 +4250,7 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(mut area1num: i32, mut area2num: 
                 move_0.endpos.as_mut_ptr(),
                 teststart.as_mut_ptr(),
                 areas.as_mut_ptr(),
-                0 as *mut vec3_t,
+                std::ptr::null_mut(),
                 (::std::mem::size_of::<[i32; 10]>() as usize)
                     .wrapping_div(::std::mem::size_of::<i32>() as usize) as i32,
             );
@@ -4378,17 +4378,17 @@ pub unsafe extern "C" fn AAS_Reachability_Ladder(mut area1num: i32, mut area2num
     let mut end: vec3_t = [0.; 3];
     let mut sharededgevec: vec3_t = [0.; 3];
     let mut dir: vec3_t = [0.; 3];
-    let mut area1: *mut aas_area_t = 0 as *mut aas_area_t;
-    let mut area2: *mut aas_area_t = 0 as *mut aas_area_t;
-    let mut face1: *mut aas_face_t = 0 as *mut aas_face_t;
-    let mut face2: *mut aas_face_t = 0 as *mut aas_face_t;
-    let mut ladderface1: *mut aas_face_t = 0 as *mut aas_face_t;
-    let mut ladderface2: *mut aas_face_t = 0 as *mut aas_face_t;
-    let mut plane1: *mut aas_plane_t = 0 as *mut aas_plane_t;
-    let mut plane2: *mut aas_plane_t = 0 as *mut aas_plane_t;
-    let mut sharededge: *mut aas_edge_t = 0 as *mut aas_edge_t;
-    let mut edge1: *mut aas_edge_t = 0 as *mut aas_edge_t;
-    let mut lreach: *mut aas_lreachability_t = 0 as *mut aas_lreachability_t;
+    let mut area1: *mut aas_area_t = std::ptr::null_mut();
+    let mut area2: *mut aas_area_t = std::ptr::null_mut();
+    let mut face1: *mut aas_face_t = std::ptr::null_mut();
+    let mut face2: *mut aas_face_t = std::ptr::null_mut();
+    let mut ladderface1: *mut aas_face_t = std::ptr::null_mut();
+    let mut ladderface2: *mut aas_face_t = std::ptr::null_mut();
+    let mut plane1: *mut aas_plane_t = std::ptr::null_mut();
+    let mut plane2: *mut aas_plane_t = std::ptr::null_mut();
+    let mut sharededge: *mut aas_edge_t = std::ptr::null_mut();
+    let mut edge1: *mut aas_edge_t = std::ptr::null_mut();
+    let mut lreach: *mut aas_lreachability_t = std::ptr::null_mut();
     let mut trace: aas_trace_t = aas_trace_t {
         startsolid: qfalse,
         fraction: 0.,
@@ -4986,7 +4986,7 @@ pub unsafe extern "C" fn AAS_Reachability_Teleport() {
     let mut mid: vec3_t = [0.; 3];
     let mut velocity: vec3_t = [0.; 3];
     let mut cmdmove: vec3_t = [0.; 3];
-    let mut lreach: *mut aas_lreachability_t = 0 as *mut aas_lreachability_t;
+    let mut lreach: *mut aas_lreachability_t = std::ptr::null_mut();
     let mut move_0: aas_clientmove_t = aas_clientmove_t {
         endpos: [0.; 3],
         endarea: 0,
@@ -5015,8 +5015,8 @@ pub unsafe extern "C" fn AAS_Reachability_Teleport() {
         area: 0,
         planenum: 0,
     };
-    let mut areas: *mut aas_link_t = 0 as *mut aas_link_t;
-    let mut link: *mut aas_link_t = 0 as *mut aas_link_t;
+    let mut areas: *mut aas_link_t = std::ptr::null_mut();
+    let mut link: *mut aas_link_t = std::ptr::null_mut();
     let mut current_block_61: u64;
     ent = crate::src::botlib::be_aas_bspq3::AAS_NextBSPEntity(0 as i32);
     while ent != 0 {
@@ -5282,8 +5282,8 @@ pub unsafe extern "C" fn AAS_Reachability_Teleport() {
                                     AngleVectors(
                                         angles.as_mut_ptr() as *const vec_t,
                                         velocity.as_mut_ptr(),
-                                        0 as *mut vec_t,
-                                        0 as *mut vec_t,
+                                        std::ptr::null_mut(),
+                                        std::ptr::null_mut(),
                                     );
                                     velocity[0 as i32 as usize] =
                                         velocity[0 as i32 as usize] * 400 as i32 as f32;
@@ -5486,7 +5486,7 @@ pub unsafe extern "C" fn AAS_Reachability_Elevator() {
     let mut yvals: [vec_t; 8] = [0.; 8];
     let mut xvals_top: [vec_t; 8] = [0.; 8];
     let mut yvals_top: [vec_t; 8] = [0.; 8];
-    let mut lreach: *mut aas_lreachability_t = 0 as *mut aas_lreachability_t;
+    let mut lreach: *mut aas_lreachability_t = std::ptr::null_mut();
     let mut trace: aas_trace_t = aas_trace_t {
         startsolid: qfalse,
         fraction: 0.,
@@ -5964,10 +5964,10 @@ pub unsafe extern "C" fn AAS_FindFaceReachabilities(
     let mut facenum: i32 = 0;
     let mut edgenum: i32 = 0;
     let mut bestfacenum: i32 = 0;
-    let mut v1: *mut f32 = 0 as *mut f32;
-    let mut v2: *mut f32 = 0 as *mut f32;
-    let mut v3: *mut f32 = 0 as *mut f32;
-    let mut v4: *mut f32 = 0 as *mut f32;
+    let mut v1: *mut f32 = std::ptr::null_mut();
+    let mut v2: *mut f32 = std::ptr::null_mut();
+    let mut v3: *mut f32 = std::ptr::null_mut();
+    let mut v4: *mut f32 = std::ptr::null_mut();
     let mut bestdist: f32 = 0.;
     let mut speed: f32 = 0.;
     let mut hordist: f32 = 0.;
@@ -5979,17 +5979,17 @@ pub unsafe extern "C" fn AAS_FindFaceReachabilities(
     let mut tmp: vec3_t = [0.; 3];
     let mut hordir: vec3_t = [0.; 3];
     let mut testpoint: vec3_t = [0.; 3];
-    let mut lreach: *mut aas_lreachability_t = 0 as *mut aas_lreachability_t;
-    let mut lreachabilities: *mut aas_lreachability_t = 0 as *mut aas_lreachability_t;
-    let mut area: *mut aas_area_t = 0 as *mut aas_area_t;
-    let mut face: *mut aas_face_t = 0 as *mut aas_face_t;
-    let mut edge: *mut aas_edge_t = 0 as *mut aas_edge_t;
-    let mut faceplane: *mut aas_plane_t = 0 as *mut aas_plane_t;
-    let mut bestfaceplane: *mut aas_plane_t = 0 as *mut aas_plane_t;
+    let mut lreach: *mut aas_lreachability_t = std::ptr::null_mut();
+    let mut lreachabilities: *mut aas_lreachability_t = std::ptr::null_mut();
+    let mut area: *mut aas_area_t = std::ptr::null_mut();
+    let mut face: *mut aas_face_t = std::ptr::null_mut();
+    let mut edge: *mut aas_edge_t = std::ptr::null_mut();
+    let mut faceplane: *mut aas_plane_t = std::ptr::null_mut();
+    let mut bestfaceplane: *mut aas_plane_t = std::ptr::null_mut();
     //
-    lreachabilities = 0 as *mut aas_lreachability_t;
+    lreachabilities = std::ptr::null_mut();
     bestfacenum = 0 as i32;
-    bestfaceplane = 0 as *mut aas_plane_t;
+    bestfaceplane = std::ptr::null_mut();
     let mut current_block_61: u64;
     //
     i = 1 as i32; //end for
@@ -6276,13 +6276,13 @@ pub unsafe extern "C" fn AAS_Reachability_FuncBobbing() {
         dist: 0.,
         type_0: 0,
     };
-    let mut startreach: *mut aas_lreachability_t = 0 as *mut aas_lreachability_t;
-    let mut endreach: *mut aas_lreachability_t = 0 as *mut aas_lreachability_t;
-    let mut nextstartreach: *mut aas_lreachability_t = 0 as *mut aas_lreachability_t;
-    let mut nextendreach: *mut aas_lreachability_t = 0 as *mut aas_lreachability_t;
-    let mut lreach: *mut aas_lreachability_t = 0 as *mut aas_lreachability_t;
-    let mut firststartreach: *mut aas_lreachability_t = 0 as *mut aas_lreachability_t;
-    let mut firstendreach: *mut aas_lreachability_t = 0 as *mut aas_lreachability_t;
+    let mut startreach: *mut aas_lreachability_t = std::ptr::null_mut();
+    let mut endreach: *mut aas_lreachability_t = std::ptr::null_mut();
+    let mut nextstartreach: *mut aas_lreachability_t = std::ptr::null_mut();
+    let mut nextendreach: *mut aas_lreachability_t = std::ptr::null_mut();
+    let mut lreach: *mut aas_lreachability_t = std::ptr::null_mut();
+    let mut firststartreach: *mut aas_lreachability_t = std::ptr::null_mut();
+    let mut firstendreach: *mut aas_lreachability_t = std::ptr::null_mut();
     ent = crate::src::botlib::be_aas_bspq3::AAS_NextBSPEntity(0 as i32);
     while ent != 0 {
         if !(crate::src::botlib::be_aas_bspq3::AAS_ValueForBSPEpairKey(
@@ -6346,7 +6346,7 @@ pub unsafe extern "C" fn AAS_Reachability_FuncBobbing() {
                             angles.as_mut_ptr(),
                             mins.as_mut_ptr(),
                             maxs.as_mut_ptr(),
-                            0 as *mut vec_t,
+                            std::ptr::null_mut(),
                         );
                         //
                         mins[0 as i32 as usize] =
@@ -6849,9 +6849,9 @@ pub unsafe extern "C" fn AAS_Reachability_JumpPad() {
     let mut speed: f32 = 0.;
     let mut zvel: f32 = 0.;
     //float hordist;
-    let mut face2: *mut aas_face_t = 0 as *mut aas_face_t;
-    let mut area2: *mut aas_area_t = 0 as *mut aas_area_t;
-    let mut lreach: *mut aas_lreachability_t = 0 as *mut aas_lreachability_t;
+    let mut face2: *mut aas_face_t = std::ptr::null_mut();
+    let mut area2: *mut aas_area_t = std::ptr::null_mut();
+    let mut lreach: *mut aas_lreachability_t = std::ptr::null_mut();
     let mut areastart: vec3_t = [0.; 3];
     let mut facecenter: vec3_t = [0.; 3];
     let mut dir: vec3_t = [0.; 3];
@@ -6880,8 +6880,8 @@ pub unsafe extern "C" fn AAS_Reachability_JumpPad() {
         frames: 0,
     };
     //aas_trace_t trace;
-    let mut areas: *mut aas_link_t = 0 as *mut aas_link_t;
-    let mut link: *mut aas_link_t = 0 as *mut aas_link_t;
+    let mut areas: *mut aas_link_t = std::ptr::null_mut();
+    let mut link: *mut aas_link_t = std::ptr::null_mut();
     //char target[MAX_EPAIRKEY], targetname[MAX_EPAIRKEY], model[MAX_EPAIRKEY];
     let mut classname: [libc::c_char; 128] = [0; 128];
     bot_visualizejumppads = crate::src::botlib::l_libvar::LibVarValue(
@@ -7496,17 +7496,17 @@ pub unsafe extern "C" fn AAS_Reachability_Grapple(mut area1num: i32, mut area2nu
         area: 0,
         planenum: 0,
     };
-    let mut face2: *mut aas_face_t = 0 as *mut aas_face_t;
-    let mut area1: *mut aas_area_t = 0 as *mut aas_area_t;
-    let mut area2: *mut aas_area_t = 0 as *mut aas_area_t;
-    let mut lreach: *mut aas_lreachability_t = 0 as *mut aas_lreachability_t;
+    let mut face2: *mut aas_face_t = std::ptr::null_mut();
+    let mut area1: *mut aas_area_t = std::ptr::null_mut();
+    let mut area2: *mut aas_area_t = std::ptr::null_mut();
+    let mut lreach: *mut aas_lreachability_t = std::ptr::null_mut();
     let mut areastart: vec3_t = [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t];
     let mut facecenter: vec3_t = [0.; 3];
     let mut start: vec3_t = [0.; 3];
     let mut end: vec3_t = [0.; 3];
     let mut dir: vec3_t = [0.; 3];
     let mut down: vec3_t = [0 as i32 as vec_t, 0 as i32 as vec_t, -(1 as i32) as vec_t];
-    let mut v: *mut vec_t = 0 as *mut vec_t;
+    let mut v: *mut vec_t = std::ptr::null_mut();
     //only grapple when on the ground or swimming
     if AAS_AreaGrounded(area1num) == 0 && AAS_AreaSwim(area1num) == 0 {
         return qfalse as i32;
@@ -7697,8 +7697,8 @@ pub unsafe extern "C" fn AAS_Reachability_Grapple(mut area1num: i32, mut area2nu
                                     //
                                     bsptrace = crate::src::botlib::be_aas_bspq3::AAS_Trace(
                                         start.as_mut_ptr(),
-                                        0 as *mut vec_t,
-                                        0 as *mut vec_t,
+                                        std::ptr::null_mut(),
+                                        std::ptr::null_mut(),
                                         end.as_mut_ptr(),
                                         0 as i32,
                                         1 as i32,
@@ -7795,9 +7795,7 @@ pub unsafe extern "C" fn AAS_Reachability_Grapple(mut area1num: i32, mut area2nu
                                                                     crate::src::botlib::be_aas_sample::AAS_TraceAreas(areastart.as_mut_ptr(),
                                                                                    bsptrace.endpos.as_mut_ptr(),
                                                                                    areas.as_mut_ptr(),
-                                                                                   0
-                                                                                       as
-                                                                                       *mut vec3_t,
+                                                                                   std :: ptr :: null_mut ( ) ,
                                                                                    20
                                                                                        as
                                                                                        i32); //end for
@@ -8115,10 +8113,10 @@ pub unsafe extern "C" fn AAS_Reachability_WeaponJump(mut area1num: i32, mut area
     let mut speed: f32 = 0.;
     let mut zvel: f32 = 0.;
     //float hordist;
-    let mut face2: *mut aas_face_t = 0 as *mut aas_face_t; // teststart;
-    let mut area1: *mut aas_area_t = 0 as *mut aas_area_t;
-    let mut area2: *mut aas_area_t = 0 as *mut aas_area_t;
-    let mut lreach: *mut aas_lreachability_t = 0 as *mut aas_lreachability_t;
+    let mut face2: *mut aas_face_t = std::ptr::null_mut(); // teststart;
+    let mut area1: *mut aas_area_t = std::ptr::null_mut();
+    let mut area2: *mut aas_area_t = std::ptr::null_mut();
+    let mut lreach: *mut aas_lreachability_t = std::ptr::null_mut();
     let mut areastart: vec3_t = [0.; 3];
     let mut facecenter: vec3_t = [0.; 3];
     let mut start: vec3_t = [0.; 3];
@@ -8392,20 +8390,20 @@ pub unsafe extern "C" fn AAS_Reachability_WalkOffLedge(mut areanum: i32) {
     let mut gap: i32 = 0;
     let mut reachareanum: i32 = 0;
     let mut side: i32 = 0;
-    let mut area: *mut aas_area_t = 0 as *mut aas_area_t;
-    let mut area2: *mut aas_area_t = 0 as *mut aas_area_t;
-    let mut face1: *mut aas_face_t = 0 as *mut aas_face_t;
-    let mut face2: *mut aas_face_t = 0 as *mut aas_face_t;
-    let mut face3: *mut aas_face_t = 0 as *mut aas_face_t;
-    let mut edge: *mut aas_edge_t = 0 as *mut aas_edge_t;
-    let mut plane: *mut aas_plane_t = 0 as *mut aas_plane_t;
-    let mut v1: *mut vec_t = 0 as *mut vec_t;
-    let mut v2: *mut vec_t = 0 as *mut vec_t;
+    let mut area: *mut aas_area_t = std::ptr::null_mut();
+    let mut area2: *mut aas_area_t = std::ptr::null_mut();
+    let mut face1: *mut aas_face_t = std::ptr::null_mut();
+    let mut face2: *mut aas_face_t = std::ptr::null_mut();
+    let mut face3: *mut aas_face_t = std::ptr::null_mut();
+    let mut edge: *mut aas_edge_t = std::ptr::null_mut();
+    let mut plane: *mut aas_plane_t = std::ptr::null_mut();
+    let mut v1: *mut vec_t = std::ptr::null_mut();
+    let mut v2: *mut vec_t = std::ptr::null_mut();
     let mut sharededgevec: vec3_t = [0.; 3];
     let mut mid: vec3_t = [0.; 3];
     let mut dir: vec3_t = [0.; 3];
     let mut testend: vec3_t = [0.; 3];
-    let mut lreach: *mut aas_lreachability_t = 0 as *mut aas_lreachability_t;
+    let mut lreach: *mut aas_lreachability_t = std::ptr::null_mut();
     let mut trace: aas_trace_t = aas_trace_t {
         startsolid: qfalse,
         fraction: 0.,
@@ -8644,7 +8642,7 @@ pub unsafe extern "C" fn AAS_Reachability_WalkOffLedge(mut areanum: i32) {
                                                 mid.as_mut_ptr(),
                                                 testend.as_mut_ptr(),
                                                 areas.as_mut_ptr(),
-                                                0 as *mut vec3_t,
+                                                std::ptr::null_mut(),
                                                 (::std::mem::size_of::<[i32; 10]>() as usize)
                                                     .wrapping_div(
                                                         ::std::mem::size_of::<i32>() as usize
@@ -8765,9 +8763,9 @@ pub unsafe extern "C" fn AAS_Reachability_WalkOffLedge(mut areanum: i32) {
 
 pub unsafe extern "C" fn AAS_StoreReachability() {
     let mut i: i32 = 0; //end for
-    let mut areasettings: *mut aas_areasettings_t = 0 as *mut aas_areasettings_t;
-    let mut lreach: *mut aas_lreachability_t = 0 as *mut aas_lreachability_t;
-    let mut reach: *mut aas_reachability_t = 0 as *mut aas_reachability_t;
+    let mut areasettings: *mut aas_areasettings_t = std::ptr::null_mut();
+    let mut lreach: *mut aas_lreachability_t = std::ptr::null_mut();
+    let mut reach: *mut aas_reachability_t = std::ptr::null_mut();
     if !crate::src::botlib::be_aas_main::aasworld
         .reachability
         .is_null()

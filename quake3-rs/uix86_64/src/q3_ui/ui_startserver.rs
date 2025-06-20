@@ -7,7 +7,7 @@ pub mod stdlib_h {
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return libc::strtol(
             __nptr,
-            0 as *mut libc::c_void as *mut *mut libc::c_char,
+            std::ptr::null_mut() as *mut *mut libc::c_char,
             10 as i32,
         ) as i32;
     }
@@ -191,7 +191,7 @@ static mut s_startserver: startserver_t = startserver_t {
     banner: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -213,7 +213,7 @@ static mut s_startserver: startserver_t = startserver_t {
     framel: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -239,7 +239,7 @@ static mut s_startserver: startserver_t = startserver_t {
     framer: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -265,7 +265,7 @@ static mut s_startserver: startserver_t = startserver_t {
     gametype: menulist_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -293,7 +293,7 @@ static mut s_startserver: startserver_t = startserver_t {
     mappics: [menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -319,7 +319,7 @@ static mut s_startserver: startserver_t = startserver_t {
     mapbuttons: [menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -345,7 +345,7 @@ static mut s_startserver: startserver_t = startserver_t {
     arrows: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -371,7 +371,7 @@ static mut s_startserver: startserver_t = startserver_t {
     prevpage: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -397,7 +397,7 @@ static mut s_startserver: startserver_t = startserver_t {
     nextpage: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -423,7 +423,7 @@ static mut s_startserver: startserver_t = startserver_t {
     back: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -449,7 +449,7 @@ static mut s_startserver: startserver_t = startserver_t {
     next: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -475,7 +475,7 @@ static mut s_startserver: startserver_t = startserver_t {
     mapname: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -497,7 +497,7 @@ static mut s_startserver: startserver_t = startserver_t {
     item_null: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -533,7 +533,7 @@ static mut gametype_items: [*const libc::c_char; 5] = [
     b"Team Deathmatch\x00" as *const u8 as *const libc::c_char,
     b"Tournament\x00" as *const u8 as *const libc::c_char,
     b"Capture the Flag\x00" as *const u8 as *const libc::c_char,
-    0 as *const libc::c_char,
+    std::ptr::null(),
 ];
 
 static mut gametype_remap: [i32; 4] = [
@@ -552,8 +552,8 @@ GametypeBits
 
 unsafe extern "C" fn GametypeBits(mut string: *mut libc::c_char) -> i32 {
     let mut bits: i32 = 0;
-    let mut p: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut token: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut p: *mut libc::c_char = std::ptr::null_mut();
+    let mut token: *mut libc::c_char = std::ptr::null_mut();
     bits = 0 as i32;
     p = string;
     loop {
@@ -588,7 +588,7 @@ unsafe extern "C" fn StartServer_Update() {
     let mut i: i32 = 0;
     let mut top: i32 = 0;
     static mut picname: [[libc::c_char; 64]; 4] = [[0; 64]; 4];
-    let mut info: *const libc::c_char = 0 as *const libc::c_char;
+    let mut info: *const libc::c_char = std::ptr::null();
     let mut mapname: [libc::c_char; 16] = [0; 16];
     top = s_startserver.page * 4 as i32;
     i = 0 as i32;
@@ -619,7 +619,7 @@ unsafe extern "C" fn StartServer_Update() {
     }
     while i < 4 as i32 {
         s_startserver.mappics[i as usize].generic.flags &= !(0x40 as i32 as u32);
-        s_startserver.mappics[i as usize].generic.name = 0 as *const libc::c_char;
+        s_startserver.mappics[i as usize].generic.name = std::ptr::null();
         s_startserver.mappics[i as usize].shader = 0 as i32;
         // disable
         s_startserver.mapbuttons[i as usize].generic.flags &= !(0x100 as i32 as u32);
@@ -677,7 +677,7 @@ unsafe extern "C" fn StartServer_GametypeEvent(mut _ptr: *mut libc::c_void, mut 
     let mut count: i32 = 0;
     let mut gamebits: i32 = 0;
     let mut matchbits: i32 = 0;
-    let mut info: *const libc::c_char = 0 as *const libc::c_char;
+    let mut info: *const libc::c_char = std::ptr::null();
     if event != 3 as i32 {
         return;
     }
@@ -748,13 +748,13 @@ StartServer_LevelshotDraw
 */
 
 unsafe extern "C" fn StartServer_LevelshotDraw(mut self_0: *mut libc::c_void) {
-    let mut b: *mut menubitmap_s = 0 as *mut menubitmap_s;
+    let mut b: *mut menubitmap_s = std::ptr::null_mut();
     let mut x: i32 = 0;
     let mut y: i32 = 0;
     let mut w: i32 = 0;
     let mut h: i32 = 0;
     let mut n: i32 = 0;
-    let mut info: *const libc::c_char = 0 as *const libc::c_char;
+    let mut info: *const libc::c_char = std::ptr::null();
     let mut mapname: [libc::c_char; 16] = [0; 16];
     b = self_0 as *mut menubitmap_s;
     if (*b).generic.name.is_null() {
@@ -1023,7 +1023,7 @@ unsafe extern "C" fn StartServer_MenuInit() {
         &mut s_startserver.menu as *mut _ as *mut _tag_menuframework,
         &mut s_startserver.item_null as *mut menubitmap_s as *mut libc::c_void,
     );
-    StartServer_GametypeEvent(0 as *mut libc::c_void, 3 as i32);
+    StartServer_GametypeEvent(std::ptr::null_mut(), 3 as i32);
 }
 /*
 =================
@@ -1034,7 +1034,7 @@ StartServer_Cache
 
 pub unsafe extern "C" fn StartServer_Cache() {
     let mut i: i32 = 0;
-    let mut info: *const libc::c_char = 0 as *const libc::c_char;
+    let mut info: *const libc::c_char = std::ptr::null();
     let mut precache: qboolean = qfalse;
     let mut picname: [libc::c_char; 64] = [0; 64];
     let mut mapname: [libc::c_char; 16] = [0; 16];
@@ -1101,7 +1101,7 @@ static mut s_serveroptions: serveroptions_t = serveroptions_t {
     banner: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1123,7 +1123,7 @@ static mut s_serveroptions: serveroptions_t = serveroptions_t {
     mappic: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1149,7 +1149,7 @@ static mut s_serveroptions: serveroptions_t = serveroptions_t {
     picframe: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1175,7 +1175,7 @@ static mut s_serveroptions: serveroptions_t = serveroptions_t {
     dedicated: menulist_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1203,7 +1203,7 @@ static mut s_serveroptions: serveroptions_t = serveroptions_t {
     timelimit: menufield_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1229,7 +1229,7 @@ static mut s_serveroptions: serveroptions_t = serveroptions_t {
     fraglimit: menufield_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1255,7 +1255,7 @@ static mut s_serveroptions: serveroptions_t = serveroptions_t {
     flaglimit: menufield_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1281,7 +1281,7 @@ static mut s_serveroptions: serveroptions_t = serveroptions_t {
     friendlyfire: menuradiobutton_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1301,7 +1301,7 @@ static mut s_serveroptions: serveroptions_t = serveroptions_t {
     hostname: menufield_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1327,7 +1327,7 @@ static mut s_serveroptions: serveroptions_t = serveroptions_t {
     pure_0: menuradiobutton_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1347,7 +1347,7 @@ static mut s_serveroptions: serveroptions_t = serveroptions_t {
     botSkill: menulist_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1375,7 +1375,7 @@ static mut s_serveroptions: serveroptions_t = serveroptions_t {
     player0: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1397,7 +1397,7 @@ static mut s_serveroptions: serveroptions_t = serveroptions_t {
     playerType: [menulist_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1425,7 +1425,7 @@ static mut s_serveroptions: serveroptions_t = serveroptions_t {
     playerName: [menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1447,7 +1447,7 @@ static mut s_serveroptions: serveroptions_t = serveroptions_t {
     playerTeam: [menulist_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1475,7 +1475,7 @@ static mut s_serveroptions: serveroptions_t = serveroptions_t {
     go: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1501,7 +1501,7 @@ static mut s_serveroptions: serveroptions_t = serveroptions_t {
     next: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1527,7 +1527,7 @@ static mut s_serveroptions: serveroptions_t = serveroptions_t {
     back: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1560,7 +1560,7 @@ static mut s_serveroptions: serveroptions_t = serveroptions_t {
     punkbuster: menulist_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1591,20 +1591,20 @@ static mut dedicated_list: [*const libc::c_char; 4] = [
     b"No\x00" as *const u8 as *const libc::c_char,
     b"LAN\x00" as *const u8 as *const libc::c_char,
     b"Internet\x00" as *const u8 as *const libc::c_char,
-    0 as *const libc::c_char,
+    std::ptr::null(),
 ];
 
 static mut playerType_list: [*const libc::c_char; 4] = [
     b"Open\x00" as *const u8 as *const libc::c_char,
     b"Bot\x00" as *const u8 as *const libc::c_char,
     b"----\x00" as *const u8 as *const libc::c_char,
-    0 as *const libc::c_char,
+    std::ptr::null(),
 ];
 
 static mut playerTeam_list: [*const libc::c_char; 3] = [
     b"Blue\x00" as *const u8 as *const libc::c_char,
     b"Red\x00" as *const u8 as *const libc::c_char,
-    0 as *const libc::c_char,
+    std::ptr::null(),
 ];
 
 static mut botSkill_list: [*const libc::c_char; 6] = [
@@ -1613,7 +1613,7 @@ static mut botSkill_list: [*const libc::c_char; 6] = [
     b"Hurt Me Plenty\x00" as *const u8 as *const libc::c_char,
     b"Hardcore\x00" as *const u8 as *const libc::c_char,
     b"Nightmare!\x00" as *const u8 as *const libc::c_char,
-    0 as *const libc::c_char,
+    std::ptr::null(),
 ];
 /*
 =================
@@ -1660,7 +1660,7 @@ unsafe extern "C" fn ServerOptions_Start() {
     let mut skill: i32 = 0;
     let mut n: i32 = 0;
     let mut buf: [libc::c_char; 64] = [0; 64];
-    let mut info: *const libc::c_char = 0 as *const libc::c_char;
+    let mut info: *const libc::c_char = std::ptr::null();
     timelimit = atoi(s_serveroptions.timelimit.field.buffer.as_mut_ptr());
     fraglimit = atoi(s_serveroptions.fraglimit.field.buffer.as_mut_ptr());
     flaglimit = atoi(s_serveroptions.flaglimit.field.buffer.as_mut_ptr());
@@ -2017,7 +2017,7 @@ ServerOptions_LevelshotDraw
 */
 
 unsafe extern "C" fn ServerOptions_LevelshotDraw(mut self_0: *mut libc::c_void) {
-    let mut b: *mut menubitmap_s = 0 as *mut menubitmap_s;
+    let mut b: *mut menubitmap_s = std::ptr::null_mut();
     let mut x: i32 = 0;
     let mut y: i32 = 0;
     // strange place for this, but it works
@@ -2062,10 +2062,10 @@ unsafe extern "C" fn ServerOptions_LevelshotDraw(mut self_0: *mut libc::c_void) 
 unsafe extern "C" fn ServerOptions_InitBotNames() {
     let mut count: i32 = 0;
     let mut n: i32 = 0;
-    let mut arenaInfo: *const libc::c_char = 0 as *const libc::c_char;
-    let mut botInfo: *const libc::c_char = 0 as *const libc::c_char;
-    let mut p: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut bot: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut arenaInfo: *const libc::c_char = std::ptr::null();
+    let mut botInfo: *const libc::c_char = std::ptr::null();
+    let mut p: *mut libc::c_char = std::ptr::null_mut();
+    let mut bot: *mut libc::c_char = std::ptr::null_mut();
     let mut bots: [libc::c_char; 1024] = [0; 1024];
     if s_serveroptions.gametype >= GT_TEAM as i32 {
         Q_strncpyz(
@@ -2189,7 +2189,7 @@ ServerOptions_SetMenuItems
 unsafe extern "C" fn ServerOptions_SetMenuItems() {
     static mut picname: [libc::c_char; 64] = [0; 64];
     let mut mapname: [libc::c_char; 16] = [0; 16];
-    let mut info: *const libc::c_char = 0 as *const libc::c_char;
+    let mut info: *const libc::c_char = std::ptr::null();
     match s_serveroptions.gametype {
         1 => {
             Com_sprintf(
@@ -2353,8 +2353,8 @@ PlayerName_Draw
 */
 
 unsafe extern "C" fn PlayerName_Draw(mut item: *mut libc::c_void) {
-    let mut s: *mut menutext_s = 0 as *mut menutext_s;
-    let mut color: *mut f32 = 0 as *mut f32;
+    let mut s: *mut menutext_s = std::ptr::null_mut();
+    let mut color: *mut f32 = std::ptr::null_mut();
     let mut x: i32 = 0;
     let mut y: i32 = 0;
     let mut style: i32 = 0;
@@ -2778,7 +2778,7 @@ static mut botSelectInfo: botSelectInfo_t = botSelectInfo_t {
     banner: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -2800,7 +2800,7 @@ static mut botSelectInfo: botSelectInfo_t = botSelectInfo_t {
     pics: [menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -2826,7 +2826,7 @@ static mut botSelectInfo: botSelectInfo_t = botSelectInfo_t {
     picbuttons: [menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -2852,7 +2852,7 @@ static mut botSelectInfo: botSelectInfo_t = botSelectInfo_t {
     picnames: [menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -2874,7 +2874,7 @@ static mut botSelectInfo: botSelectInfo_t = botSelectInfo_t {
     arrows: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -2900,7 +2900,7 @@ static mut botSelectInfo: botSelectInfo_t = botSelectInfo_t {
     left: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -2926,7 +2926,7 @@ static mut botSelectInfo: botSelectInfo_t = botSelectInfo_t {
     right: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -2952,7 +2952,7 @@ static mut botSelectInfo: botSelectInfo_t = botSelectInfo_t {
     go: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -2978,7 +2978,7 @@ static mut botSelectInfo: botSelectInfo_t = botSelectInfo_t {
     back: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -3021,10 +3021,10 @@ unsafe extern "C" fn UI_BotSelectMenu_SortCompare(
 ) -> i32 {
     let mut num1: i32 = 0;
     let mut num2: i32 = 0;
-    let mut info1: *const libc::c_char = 0 as *const libc::c_char;
-    let mut info2: *const libc::c_char = 0 as *const libc::c_char;
-    let mut name1: *const libc::c_char = 0 as *const libc::c_char;
-    let mut name2: *const libc::c_char = 0 as *const libc::c_char;
+    let mut info1: *const libc::c_char = std::ptr::null();
+    let mut info2: *const libc::c_char = std::ptr::null();
+    let mut name1: *const libc::c_char = std::ptr::null();
+    let mut name2: *const libc::c_char = std::ptr::null();
     num1 = *(arg1 as *mut i32);
     num2 = *(arg2 as *mut i32);
     info1 = UI_GetBotInfoByNumber(num1);
@@ -3075,7 +3075,7 @@ unsafe extern "C" fn ServerPlayerIcon(
     mut iconName: *mut libc::c_char,
     mut iconNameMaxSize: i32,
 ) {
-    let mut skin: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut skin: *mut libc::c_char = std::ptr::null_mut();
     let mut model: [libc::c_char; 64] = [0; 64];
     Q_strncpyz(
         model.as_mut_ptr(),
@@ -3115,7 +3115,7 @@ UI_BotSelectMenu_UpdateGrid
 */
 
 unsafe extern "C" fn UI_BotSelectMenu_UpdateGrid() {
-    let mut info: *const libc::c_char = 0 as *const libc::c_char;
+    let mut info: *const libc::c_char = std::ptr::null();
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     j = botSelectInfo.modelpage * (4 as i32 * 4 as i32);
@@ -3144,7 +3144,7 @@ unsafe extern "C" fn UI_BotSelectMenu_UpdateGrid() {
             botSelectInfo.picbuttons[i as usize].generic.flags &= !(0x4000 as i32 as u32)
         } else {
             // dead slot
-            botSelectInfo.pics[i as usize].generic.name = 0 as *const libc::c_char;
+            botSelectInfo.pics[i as usize].generic.name = std::ptr::null();
             botSelectInfo.picbuttons[i as usize].generic.flags |= 0x4000 as i32 as u32;
             botSelectInfo.botnames[i as usize][0 as i32 as usize] = 0 as i32 as libc::c_char
         }
@@ -3182,8 +3182,8 @@ UI_BotSelectMenu_Default
 */
 
 unsafe extern "C" fn UI_BotSelectMenu_Default(mut bot: *mut libc::c_char) {
-    let mut botInfo: *const libc::c_char = 0 as *const libc::c_char;
-    let mut test: *const libc::c_char = 0 as *const libc::c_char;
+    let mut botInfo: *const libc::c_char = std::ptr::null();
+    let mut test: *const libc::c_char = std::ptr::null();
     let mut n: i32 = 0;
     let mut i: i32 = 0;
     n = 0 as i32;

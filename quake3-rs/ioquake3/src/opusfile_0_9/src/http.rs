@@ -56,11 +56,11 @@ unsafe extern "C" fn op_string_range_dup(
     mut _end: *const libc::c_char,
 ) -> *mut libc::c_char {
     let mut len: size_t = 0;
-    let mut ret: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut ret: *mut libc::c_char = std::ptr::null_mut();
     len = _end.offset_from(_start) as isize as size_t;
     /*This is to help avoid overflow elsewhere, later.*/
     if (len >= 2147483647 as i32 as usize) as i32 as isize != 0 {
-        return 0 as *mut libc::c_char;
+        return std::ptr::null_mut();
     }
     ret = crate::stdlib::malloc(
         (::std::mem::size_of::<libc::c_char>() as usize)
@@ -176,9 +176,9 @@ This code is not meant to be fast: strspn() with large sets is likely to be
 It is meant to be RFC 1738-compliant (as updated by RFC 3986).*/
 
 unsafe extern "C" fn op_parse_file_url(mut _src: *const libc::c_char) -> *const libc::c_char {
-    let mut scheme_end: *const libc::c_char = 0 as *const libc::c_char;
-    let mut path: *const libc::c_char = 0 as *const libc::c_char;
-    let mut path_end: *const libc::c_char = 0 as *const libc::c_char;
+    let mut scheme_end: *const libc::c_char = std::ptr::null();
+    let mut path: *const libc::c_char = std::ptr::null();
+    let mut path_end: *const libc::c_char = std::ptr::null();
     scheme_end = _src.offset(crate::stdlib::strspn(
         _src,
         b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-.\x00" as *const u8
@@ -193,18 +193,18 @@ unsafe extern "C" fn op_parse_file_url(mut _src: *const libc::c_char) -> *const 
         ) != 0 as i32
     {
         /*Unsupported protocol.*/
-        return 0 as *const libc::c_char;
+        return std::ptr::null();
     }
     /*Make sure all escape sequences are valid to simplify unescaping later.*/
     if (op_validate_url_escapes(scheme_end.offset(1 as i32 as isize)) < 0 as i32) as i32 as isize
         != 0
     {
-        return 0 as *const libc::c_char;
+        return std::ptr::null();
     }
     if *scheme_end.offset(1 as i32 as isize) as i32 == '/' as i32
         && *scheme_end.offset(2 as i32 as isize) as i32 == '/' as i32
     {
-        let mut host: *const libc::c_char = 0 as *const libc::c_char;
+        let mut host: *const libc::c_char = std::ptr::null();
         /*file: URLs can have a host!
         Yeah, I was surprised, too, but that's what RFC 1738 says.
         It also says, "The file URL scheme is unusual in that it does not specify
@@ -216,7 +216,7 @@ unsafe extern "C" fn op_parse_file_url(mut _src: *const libc::c_char) -> *const 
         if (*host as i32 == '/' as i32) as i32 as isize != 0 {
             path = host
         } else {
-            let mut host_end: *const libc::c_char = 0 as *const libc::c_char;
+            let mut host_end: *const libc::c_char = std::ptr::null();
             let mut host_buf: [libc::c_char; 28] = [0; 28];
             /*RFC 1738 says localhost "is interpreted as `the machine from which the
             URL is being interpreted,'" so let's check for it.*/
@@ -228,11 +228,11 @@ unsafe extern "C" fn op_parse_file_url(mut _src: *const libc::c_char) -> *const 
             /*No <port> allowed.
             This also rejects IP-Literals.*/
             if *host_end as i32 != '/' as i32 {
-                return 0 as *const libc::c_char;
+                return std::ptr::null();
             }
             /*An escaped "localhost" can take at most 27 characters.*/
             if (host_end.offset_from(host) as isize > 27 as i32 as isize) as i32 as isize != 0 {
-                return 0 as *const libc::c_char;
+                return std::ptr::null();
             }
             crate::stdlib::memcpy(
                 host_buf.as_mut_ptr() as *mut libc::c_void,
@@ -250,7 +250,7 @@ unsafe extern "C" fn op_parse_file_url(mut _src: *const libc::c_char) -> *const 
             ) != 0 as i32) as i32 as isize
                 != 0
             {
-                return 0 as *const libc::c_char;
+                return std::ptr::null();
             }
             path = host_end
         }
@@ -269,19 +269,19 @@ unsafe extern "C" fn op_parse_file_url(mut _src: *const libc::c_char) -> *const 
      RFC 3986 <query> component for other schemes, but not the file: scheme,
      so I'm going to just reject it.*/
     if *path_end as i32 != '\u{0}' as i32 {
-        return 0 as *const libc::c_char;
+        return std::ptr::null();
     }
     return path;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn opus_server_info_init(mut _info: *mut OpusServerInfo) {
-    (*_info).name = 0 as *mut libc::c_char;
-    (*_info).description = 0 as *mut libc::c_char;
-    (*_info).genre = 0 as *mut libc::c_char;
-    (*_info).url = 0 as *mut libc::c_char;
-    (*_info).server = 0 as *mut libc::c_char;
-    (*_info).content_type = 0 as *mut libc::c_char;
+    (*_info).name = std::ptr::null_mut();
+    (*_info).description = std::ptr::null_mut();
+    (*_info).genre = std::ptr::null_mut();
+    (*_info).url = std::ptr::null_mut();
+    (*_info).server = std::ptr::null_mut();
+    (*_info).content_type = std::ptr::null_mut();
     (*_info).bitrate_kbps = -(1 as i32);
     (*_info).is_public = -(1 as i32);
     (*_info).is_ssl = 0 as i32;
@@ -310,15 +310,15 @@ unsafe extern "C" fn op_url_stream_create_impl(
     mut _proxy_pass: *const libc::c_char,
     mut _info: *mut OpusServerInfo,
 ) -> *mut libc::c_void {
-    let mut path: *const libc::c_char = 0 as *const libc::c_char;
+    let mut path: *const libc::c_char = std::ptr::null();
     /*Check to see if this is a valid file: URL.*/
     path = op_parse_file_url(_url);
     if !path.is_null() {
-        let mut unescaped_path: *mut libc::c_char = 0 as *mut libc::c_char;
-        let mut ret: *mut libc::c_void = 0 as *mut libc::c_void;
+        let mut unescaped_path: *mut libc::c_char = std::ptr::null_mut();
+        let mut ret: *mut libc::c_void = std::ptr::null_mut();
         unescaped_path = op_string_dup(path);
         if unescaped_path.is_null() as i32 as isize != 0 {
-            return 0 as *mut libc::c_void;
+            return std::ptr::null_mut();
         }
         ret = op_fopen(
             _cb as *mut OpusFileCallbacks,
@@ -328,7 +328,7 @@ unsafe extern "C" fn op_url_stream_create_impl(
         libc::free(unescaped_path as *mut libc::c_void);
         return ret;
     }
-    return 0 as *mut libc::c_void;
+    return std::ptr::null_mut();
 }
 /*The actual implementation of op_url_stream_vcreate().
 We have to do a careful dance here to avoid potential memory leaks if
@@ -353,24 +353,24 @@ unsafe extern "C" fn op_url_stream_vcreate_impl(
     mut _ap: ::std::ffi::VaList,
 ) -> *mut libc::c_void {
     let mut skip_certificate_check: i32 = 0;
-    let mut proxy_host: *const libc::c_char = 0 as *const libc::c_char;
+    let mut proxy_host: *const libc::c_char = std::ptr::null();
     let mut proxy_port: opus_int32 = 0;
-    let mut proxy_user: *const libc::c_char = 0 as *const libc::c_char;
-    let mut proxy_pass: *const libc::c_char = 0 as *const libc::c_char;
-    let mut pinfo: *mut OpusServerInfo = 0 as *mut OpusServerInfo;
+    let mut proxy_user: *const libc::c_char = std::ptr::null();
+    let mut proxy_pass: *const libc::c_char = std::ptr::null();
+    let mut pinfo: *mut OpusServerInfo = std::ptr::null_mut();
     skip_certificate_check = 0 as i32;
-    proxy_host = 0 as *const libc::c_char;
+    proxy_host = std::ptr::null();
     proxy_port = 8080 as i32;
-    proxy_user = 0 as *const libc::c_char;
-    proxy_pass = 0 as *const libc::c_char;
-    pinfo = 0 as *mut OpusServerInfo;
-    *_pinfo = 0 as *mut OpusServerInfo;
+    proxy_user = std::ptr::null();
+    proxy_pass = std::ptr::null();
+    pinfo = std::ptr::null_mut();
+    *_pinfo = std::ptr::null_mut();
     loop {
         let mut request: ptrdiff_t = 0;
         request = _ap
             .as_va_list()
             .arg::<*mut libc::c_char>()
-            .offset_from(0 as *mut libc::c_void as *mut libc::c_char) as isize;
+            .offset_from(std::ptr::null_mut() as *mut libc::c_char) as isize;
         /*If we hit NULL, we're done processing options.*/
         if request == 0 {
             break;
@@ -381,7 +381,7 @@ unsafe extern "C" fn op_url_stream_vcreate_impl(
             6592 => {
                 proxy_port = _ap.as_va_list().arg::<opus_int32>();
                 if proxy_port < 0 as i32 || proxy_port > 65535 as i32 {
-                    return 0 as *mut libc::c_void;
+                    return std::ptr::null_mut();
                 }
             }
             6656 => proxy_user = _ap.as_va_list().arg::<*const libc::c_char>(),
@@ -389,14 +389,14 @@ unsafe extern "C" fn op_url_stream_vcreate_impl(
             6784 => pinfo = _ap.as_va_list().arg::<*mut OpusServerInfo>(),
             _ => {
                 /*Some unknown option.*/
-                return 0 as *mut libc::c_void;
+                return std::ptr::null_mut();
             }
         }
     }
     /*If the caller has requested server information, proxy it to a local copy to
     simplify error handling.*/
     if !pinfo.is_null() {
-        let mut ret: *mut libc::c_void = 0 as *mut libc::c_void;
+        let mut ret: *mut libc::c_void = std::ptr::null_mut();
         opus_server_info_init(_info);
         ret = op_url_stream_create_impl(
             _cb,
@@ -423,7 +423,7 @@ unsafe extern "C" fn op_url_stream_vcreate_impl(
         proxy_port as u32,
         proxy_user,
         proxy_pass,
-        0 as *mut OpusServerInfo,
+        std::ptr::null_mut(),
     );
 }
 #[no_mangle]
@@ -434,18 +434,18 @@ pub unsafe extern "C" fn op_url_stream_vcreate(
     mut _ap: ::std::ffi::VaList,
 ) -> *mut libc::c_void {
     let mut info: OpusServerInfo = OpusServerInfo {
-        name: 0 as *mut libc::c_char,
-        description: 0 as *mut libc::c_char,
-        genre: 0 as *mut libc::c_char,
-        url: 0 as *mut libc::c_char,
-        server: 0 as *mut libc::c_char,
-        content_type: 0 as *mut libc::c_char,
+        name: std::ptr::null_mut(),
+        description: std::ptr::null_mut(),
+        genre: std::ptr::null_mut(),
+        url: std::ptr::null_mut(),
+        server: std::ptr::null_mut(),
+        content_type: std::ptr::null_mut(),
         bitrate_kbps: 0,
         is_public: 0,
         is_ssl: 0,
     };
-    let mut pinfo: *mut OpusServerInfo = 0 as *mut OpusServerInfo;
-    let mut ret: *mut libc::c_void = 0 as *mut libc::c_void;
+    let mut pinfo: *mut OpusServerInfo = std::ptr::null_mut();
+    let mut ret: *mut libc::c_void = std::ptr::null_mut();
     ret = op_url_stream_vcreate_impl(_cb, _url, &mut info, &mut pinfo, _ap.as_va_list());
     if !pinfo.is_null() {
         *pinfo = info
@@ -460,7 +460,7 @@ pub unsafe extern "C" fn op_url_stream_create(
     mut args: ...
 ) -> *mut libc::c_void {
     let mut ap: ::std::ffi::VaListImpl;
-    let mut ret: *mut libc::c_void = 0 as *mut libc::c_void;
+    let mut ret: *mut libc::c_void = std::ptr::null_mut();
     ap = args.clone();
     ret = op_url_stream_vcreate(_cb, _url, ap.as_va_list());
     return ret;
@@ -479,31 +479,31 @@ pub unsafe extern "C" fn op_vopen_url(
         tell: None,
         close: None,
     };
-    let mut of: *mut OggOpusFile = 0 as *mut OggOpusFile;
+    let mut of: *mut OggOpusFile = std::ptr::null_mut();
     let mut info: OpusServerInfo = OpusServerInfo {
-        name: 0 as *mut libc::c_char,
-        description: 0 as *mut libc::c_char,
-        genre: 0 as *mut libc::c_char,
-        url: 0 as *mut libc::c_char,
-        server: 0 as *mut libc::c_char,
-        content_type: 0 as *mut libc::c_char,
+        name: std::ptr::null_mut(),
+        description: std::ptr::null_mut(),
+        genre: std::ptr::null_mut(),
+        url: std::ptr::null_mut(),
+        server: std::ptr::null_mut(),
+        content_type: std::ptr::null_mut(),
         bitrate_kbps: 0,
         is_public: 0,
         is_ssl: 0,
     };
-    let mut pinfo: *mut OpusServerInfo = 0 as *mut OpusServerInfo;
-    let mut source: *mut libc::c_void = 0 as *mut libc::c_void;
+    let mut pinfo: *mut OpusServerInfo = std::ptr::null_mut();
+    let mut source: *mut libc::c_void = std::ptr::null_mut();
     source = op_url_stream_vcreate_impl(&mut cb, _url, &mut info, &mut pinfo, _ap.as_va_list());
     if source.is_null() as i32 as isize != 0 {
         if !_error.is_null() {
             *_error = -(129 as i32)
         }
-        return 0 as *mut OggOpusFile;
+        return std::ptr::null_mut();
     }
     of = op_open_callbacks(
         source,
         &mut cb as *mut _ as *const OpusFileCallbacks,
-        0 as *const u8,
+        std::ptr::null(),
         0 as i32 as size_t,
         _error,
     ) as *mut OggOpusFile;
@@ -526,7 +526,7 @@ pub unsafe extern "C" fn op_open_url(
     mut _error: *mut i32,
     mut args: ...
 ) -> *mut OggOpusFile {
-    let mut ret: *mut OggOpusFile = 0 as *mut OggOpusFile;
+    let mut ret: *mut OggOpusFile = std::ptr::null_mut();
     let mut ap: ::std::ffi::VaListImpl;
     ap = args.clone();
     ret = op_vopen_url(_url, _error, ap.as_va_list());
@@ -545,31 +545,31 @@ pub unsafe extern "C" fn op_vtest_url(
         tell: None,
         close: None,
     };
-    let mut of: *mut OggOpusFile = 0 as *mut OggOpusFile;
+    let mut of: *mut OggOpusFile = std::ptr::null_mut();
     let mut info: OpusServerInfo = OpusServerInfo {
-        name: 0 as *mut libc::c_char,
-        description: 0 as *mut libc::c_char,
-        genre: 0 as *mut libc::c_char,
-        url: 0 as *mut libc::c_char,
-        server: 0 as *mut libc::c_char,
-        content_type: 0 as *mut libc::c_char,
+        name: std::ptr::null_mut(),
+        description: std::ptr::null_mut(),
+        genre: std::ptr::null_mut(),
+        url: std::ptr::null_mut(),
+        server: std::ptr::null_mut(),
+        content_type: std::ptr::null_mut(),
         bitrate_kbps: 0,
         is_public: 0,
         is_ssl: 0,
     };
-    let mut pinfo: *mut OpusServerInfo = 0 as *mut OpusServerInfo;
-    let mut source: *mut libc::c_void = 0 as *mut libc::c_void;
+    let mut pinfo: *mut OpusServerInfo = std::ptr::null_mut();
+    let mut source: *mut libc::c_void = std::ptr::null_mut();
     source = op_url_stream_vcreate_impl(&mut cb, _url, &mut info, &mut pinfo, _ap.as_va_list());
     if source.is_null() as i32 as isize != 0 {
         if !_error.is_null() {
             *_error = -(129 as i32)
         }
-        return 0 as *mut OggOpusFile;
+        return std::ptr::null_mut();
     }
     of = op_test_callbacks(
         source,
         &mut cb as *mut _ as *const OpusFileCallbacks,
-        0 as *const u8,
+        std::ptr::null(),
         0 as i32 as size_t,
         _error,
     ) as *mut OggOpusFile;
@@ -592,7 +592,7 @@ pub unsafe extern "C" fn op_test_url(
     mut _error: *mut i32,
     mut args: ...
 ) -> *mut OggOpusFile {
-    let mut ret: *mut OggOpusFile = 0 as *mut OggOpusFile;
+    let mut ret: *mut OggOpusFile = std::ptr::null_mut();
     let mut ap: ::std::ffi::VaListImpl;
     ap = args.clone();
     ret = op_vtest_url(_url, _error, ap.as_va_list());

@@ -224,7 +224,7 @@ pub unsafe extern "C" fn jpeg_CreateCompress(
 ) {
     let mut i: i32 = 0;
     /* Guard against version mismatches between library and caller. */
-    (*cinfo).mem = 0 as *mut jpeg_memory_mgr; /* so jpeg_destroy knows mem mgr not called */
+    (*cinfo).mem = std::ptr::null_mut(); /* so jpeg_destroy knows mem mgr not called */
     if version != 80 as i32 {
         (*(*cinfo).err).msg_code = JERR_BAD_LIB_VERSION as i32;
         (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = 80 as i32;
@@ -267,26 +267,26 @@ pub unsafe extern "C" fn jpeg_CreateCompress(
     /* Initialize a memory manager instance for this object */
     jinit_memory_mgr(cinfo as j_common_ptr as *mut jpeg_common_struct);
     /* Zero out pointers to permanent structures. */
-    (*cinfo).progress = 0 as *mut jpeg_progress_mgr;
-    (*cinfo).dest = 0 as *mut jpeg_destination_mgr;
-    (*cinfo).comp_info = 0 as *mut jpeg_component_info;
+    (*cinfo).progress = std::ptr::null_mut();
+    (*cinfo).dest = std::ptr::null_mut();
+    (*cinfo).comp_info = std::ptr::null_mut();
     i = 0 as i32;
     while i < 4 as i32 {
-        (*cinfo).quant_tbl_ptrs[i as usize] = 0 as *mut JQUANT_TBL;
+        (*cinfo).quant_tbl_ptrs[i as usize] = std::ptr::null_mut();
         (*cinfo).q_scale_factor[i as usize] = 100 as i32;
         i += 1
     }
     i = 0 as i32;
     while i < 4 as i32 {
-        (*cinfo).dc_huff_tbl_ptrs[i as usize] = 0 as *mut JHUFF_TBL;
-        (*cinfo).ac_huff_tbl_ptrs[i as usize] = 0 as *mut JHUFF_TBL;
+        (*cinfo).dc_huff_tbl_ptrs[i as usize] = std::ptr::null_mut();
+        (*cinfo).ac_huff_tbl_ptrs[i as usize] = std::ptr::null_mut();
         i += 1
     }
     /* Must do it here for emit_dqt in case jpeg_write_tables is used */
     (*cinfo).block_size = 8 as i32; /* in case application forgets */
     (*cinfo).natural_order = jpeg_natural_order.as_ptr();
     (*cinfo).lim_Se = 64 as i32 - 1 as i32;
-    (*cinfo).script_space = 0 as *mut jpeg_scan_info;
+    (*cinfo).script_space = std::ptr::null_mut();
     (*cinfo).input_gamma = 1.0f64;
     /* OK, I'm ready */
     (*cinfo).global_state = 100 as i32;
@@ -325,8 +325,8 @@ pub unsafe extern "C" fn jpeg_abort_compress(mut cinfo: j_compress_ptr) {
 
 pub unsafe extern "C" fn jpeg_suppress_tables(mut cinfo: j_compress_ptr, mut suppress: boolean) {
     let mut i: i32 = 0;
-    let mut qtbl: *mut JQUANT_TBL = 0 as *mut JQUANT_TBL;
-    let mut htbl: *mut JHUFF_TBL = 0 as *mut JHUFF_TBL;
+    let mut qtbl: *mut JQUANT_TBL = std::ptr::null_mut();
+    let mut htbl: *mut JHUFF_TBL = std::ptr::null_mut();
     i = 0 as i32;
     while i < 4 as i32 {
         qtbl = (*cinfo).quant_tbl_ptrs[i as usize];
@@ -414,7 +414,7 @@ pub unsafe extern "C" fn jpeg_finish_compress(mut cinfo: j_compress_ptr) {
                     .expect("non-null function pointer"),
             )
             .expect("non-null function pointer")(
-                cinfo, 0 as *mut libc::c_void as JSAMPIMAGE
+                cinfo, std::ptr::null_mut() as JSAMPIMAGE
             ) == 0
             {
                 (*(*cinfo).err).msg_code = JERR_CANT_SUSPEND as i32;

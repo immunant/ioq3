@@ -6,7 +6,7 @@ pub mod stdlib_h {
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return libc::strtol(
             __nptr,
-            0 as *mut libc::c_void as *mut *mut libc::c_char,
+            std::ptr::null_mut() as *mut *mut libc::c_char,
             10 as i32,
         ) as i32;
     }
@@ -185,7 +185,7 @@ pub unsafe extern "C" fn Netchan_TransmitNextFragment(mut chan: *mut netchan_t) 
         allowoverflow: qfalse,
         overflowed: qfalse,
         oob: qfalse,
-        data: 0 as *mut byte,
+        data: std::ptr::null_mut(),
         maxsize: 0,
         cursize: 0,
         readcount: 0,
@@ -281,7 +281,7 @@ pub unsafe extern "C" fn Netchan_Transmit(
         allowoverflow: qfalse,
         overflowed: qfalse,
         oob: qfalse,
-        data: 0 as *mut byte,
+        data: std::ptr::null_mut(),
         maxsize: 0,
         cursize: 0,
         readcount: 0,
@@ -554,7 +554,7 @@ pub unsafe extern "C" fn NET_GetLoopPacket(
     mut net_message: *mut msg_t,
 ) -> qboolean {
     let mut i: i32 = 0;
-    let mut loop_0: *mut loopback_t = 0 as *mut loopback_t;
+    let mut loop_0: *mut loopback_t = std::ptr::null_mut();
     loop_0 = &mut *loopbacks.as_mut_ptr().offset(sock as isize) as *mut loopback_t;
     if (*loop_0).send - (*loop_0).get > 16 as i32 {
         (*loop_0).get = (*loop_0).send - 16 as i32
@@ -587,7 +587,7 @@ pub unsafe extern "C" fn NET_SendLoopPacket(
     mut _to: netadr_t,
 ) {
     let mut i: i32 = 0;
-    let mut loop_0: *mut loopback_t = 0 as *mut loopback_t;
+    let mut loop_0: *mut loopback_t = std::ptr::null_mut();
     loop_0 = &mut *loopbacks
         .as_mut_ptr()
         .offset((sock as u32 ^ 1 as i32 as u32) as isize) as *mut loopback_t;
@@ -610,7 +610,7 @@ unsafe extern "C" fn NET_QueuePacket(
     mut to: netadr_t,
     mut offset: i32,
 ) {
-    let mut new: *mut packetQueue_t = 0 as *mut packetQueue_t;
+    let mut new: *mut packetQueue_t = std::ptr::null_mut();
     let mut next: *mut packetQueue_t = packetQueue;
     if offset > 999 as i32 {
         offset = 999 as i32
@@ -621,7 +621,7 @@ unsafe extern "C" fn NET_QueuePacket(
     (*new).length = length;
     (*new).to = to;
     (*new).release = Sys_Milliseconds() + (offset as f32 / (*com_timescale).value) as i32;
-    (*new).next = 0 as *mut packetQueue_s;
+    (*new).next = std::ptr::null_mut();
     if packetQueue.is_null() {
         packetQueue = new;
         return;
@@ -637,7 +637,7 @@ unsafe extern "C" fn NET_QueuePacket(
 #[no_mangle]
 
 pub unsafe extern "C" fn NET_FlushPacketQueue() {
-    let mut last: *mut packetQueue_t = 0 as *mut packetQueue_t;
+    let mut last: *mut packetQueue_t = std::ptr::null_mut();
     let mut now: i32 = 0;
     while !packetQueue.is_null() {
         now = Sys_Milliseconds();
@@ -746,7 +746,7 @@ pub unsafe extern "C" fn NET_OutOfBandData(
         allowoverflow: qfalse,
         overflowed: qfalse,
         oob: qfalse,
-        data: 0 as *mut byte,
+        data: std::ptr::null_mut(),
         maxsize: 0,
         cursize: 0,
         readcount: 0,
@@ -784,8 +784,8 @@ pub unsafe extern "C" fn NET_StringToAdr(
     mut family: netadrtype_t,
 ) -> i32 {
     let mut base: [libc::c_char; 1024] = [0; 1024];
-    let mut search: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut port: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut search: *mut libc::c_char = std::ptr::null_mut();
+    let mut port: *mut libc::c_char = std::ptr::null_mut();
     if libc::strcmp(s, b"localhost\x00" as *const u8 as *const libc::c_char) == 0 {
         crate::stdlib::memset(
             a as *mut libc::c_void,

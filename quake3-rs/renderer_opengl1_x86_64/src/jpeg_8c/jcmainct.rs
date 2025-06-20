@@ -345,9 +345,9 @@ pub unsafe extern "C" fn jinit_c_main_controller(
     mut cinfo: j_compress_ptr,
     mut need_full_buffer: boolean,
 ) {
-    let mut main_ptr: my_main_ptr = 0 as *mut my_main_controller;
+    let mut main_ptr: my_main_ptr = std::ptr::null_mut();
     let mut ci: i32 = 0;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
     main_ptr = Some(
         (*(*cinfo).mem)
             .alloc_small

@@ -7,7 +7,7 @@ pub mod stdlib_h {
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return libc::strtol(
             __nptr,
-            0 as *mut libc::c_void as *mut *mut libc::c_char,
+            std::ptr::null_mut() as *mut *mut libc::c_char,
             10 as i32,
         ) as i32;
     }
@@ -1709,8 +1709,8 @@ All but the last will have the teamchain field set to the next one
 #[no_mangle]
 
 pub unsafe extern "C" fn G_FindTeams() {
-    let mut e: *mut gentity_t = 0 as *mut gentity_t;
-    let mut e2: *mut gentity_t = 0 as *mut gentity_t;
+    let mut e: *mut gentity_t = std::ptr::null_mut();
+    let mut e2: *mut gentity_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut c: i32 = 0;
@@ -1741,7 +1741,7 @@ pub unsafe extern "C" fn G_FindTeams() {
                                         // make sure that targets only point at the master
                                         if !(*e2).targetname.is_null() {
                                             (*e).targetname = (*e2).targetname;
-                                            (*e2).targetname = 0 as *mut libc::c_char
+                                            (*e2).targetname = std::ptr::null_mut()
                                         }
                                     }
                                 }
@@ -1774,7 +1774,7 @@ G_RegisterCvars
 
 pub unsafe extern "C" fn G_RegisterCvars() {
     let mut i: i32 = 0;
-    let mut cv: *mut cvarTable_t = 0 as *mut cvarTable_t;
+    let mut cv: *mut cvarTable_t = std::ptr::null_mut();
     let mut remapped: qboolean = qfalse;
     i = 0 as i32;
     cv = gameCvarTable.as_mut_ptr();
@@ -1821,7 +1821,7 @@ G_UpdateCvars
 
 pub unsafe extern "C" fn G_UpdateCvars() {
     let mut i: i32 = 0;
-    let mut cv: *mut cvarTable_t = 0 as *mut cvarTable_t;
+    let mut cv: *mut cvarTable_t = std::ptr::null_mut();
     let mut remapped: qboolean = qfalse;
     i = 0 as i32;
     cv = gameCvarTable.as_mut_ptr();
@@ -2222,8 +2222,8 @@ spectator in the game and restart
 
 pub unsafe extern "C" fn AddTournamentPlayer() {
     let mut i: i32 = 0;
-    let mut client: *mut gclient_t = 0 as *mut gclient_t;
-    let mut nextInLine: *mut gclient_t = 0 as *mut gclient_t;
+    let mut client: *mut gclient_t = std::ptr::null_mut();
+    let mut nextInLine: *mut gclient_t = std::ptr::null_mut();
     if level.numPlayingClients >= 2 as i32 {
         return;
     }
@@ -2231,7 +2231,7 @@ pub unsafe extern "C" fn AddTournamentPlayer() {
     if level.intermissiontime != 0 {
         return;
     }
-    nextInLine = 0 as *mut gclient_t;
+    nextInLine = std::ptr::null_mut();
     i = 0 as i32;
     while i < level.maxclients {
         client = &mut *level.clients.offset(i as isize) as *mut gclient_s;
@@ -2275,7 +2275,7 @@ Add client to end of tournament queue
 
 pub unsafe extern "C" fn AddTournamentQueue(mut client: *mut gclient_t) {
     let mut index: i32 = 0;
-    let mut curclient: *mut gclient_t = 0 as *mut gclient_t;
+    let mut curclient: *mut gclient_t = std::ptr::null_mut();
     index = 0 as i32;
     while index < level.maxclients {
         curclient = &mut *level.clients.offset(index as isize) as *mut gclient_s;
@@ -2374,8 +2374,8 @@ SortRanks
 #[no_mangle]
 
 pub unsafe extern "C" fn SortRanks(mut a: *const libc::c_void, mut b: *const libc::c_void) -> i32 {
-    let mut ca: *mut gclient_t = 0 as *mut gclient_t;
-    let mut cb: *mut gclient_t = 0 as *mut gclient_t;
+    let mut ca: *mut gclient_t = std::ptr::null_mut();
+    let mut cb: *mut gclient_t = std::ptr::null_mut();
     ca = &mut *level.clients.offset(*(a as *mut i32) as isize) as *mut gclient_s;
     cb = &mut *level.clients.offset(*(b as *mut i32) as isize) as *mut gclient_s;
     // sort special clients last
@@ -2443,7 +2443,7 @@ pub unsafe extern "C" fn CalculateRanks() {
     let mut rank: i32 = 0;
     let mut score: i32 = 0;
     let mut newScore: i32 = 0;
-    let mut cl: *mut gclient_t = 0 as *mut gclient_t;
+    let mut cl: *mut gclient_t = std::ptr::null_mut();
     level.follow1 = -(1 as i32);
     level.follow2 = -(1 as i32);
     level.numConnectedClients = 0 as i32;
@@ -2732,13 +2732,13 @@ This is also used for spectator spawns
 #[no_mangle]
 
 pub unsafe extern "C" fn FindIntermissionPoint() {
-    let mut ent: *mut gentity_t = 0 as *mut gentity_t;
-    let mut target: *mut gentity_t = 0 as *mut gentity_t;
+    let mut ent: *mut gentity_t = std::ptr::null_mut();
+    let mut target: *mut gentity_t = std::ptr::null_mut();
     let mut dir: vec3_t = [0.; 3];
     // find the intermission spot
     ent = G_Find(
-        0 as *mut gentity_t as *mut gentity_s,
-        &mut (*(0 as *mut gentity_t)).classname as *mut *mut libc::c_char as size_t as i32,
+        std::ptr::null_mut() as *mut gentity_s,
+        &mut (*(std::ptr::null_mut())).classname as *mut *mut libc::c_char as size_t as i32,
         b"info_player_intermission\x00" as *const u8 as *const libc::c_char,
     ) as *mut gentity_s;
     if ent.is_null() {
@@ -2784,7 +2784,7 @@ BeginIntermission
 
 pub unsafe extern "C" fn BeginIntermission() {
     let mut i: i32 = 0;
-    let mut client: *mut gentity_t = 0 as *mut gentity_t;
+    let mut client: *mut gentity_t = std::ptr::null_mut();
     if level.intermissiontime != 0 {
         return;
         // already active
@@ -2828,7 +2828,7 @@ or moved to a new level based on the "nextmap" cvar
 
 pub unsafe extern "C" fn ExitLevel() {
     let mut i: i32 = 0;
-    let mut cl: *mut gclient_t = 0 as *mut gclient_t;
+    let mut cl: *mut gclient_t = std::ptr::null_mut();
     let mut nextmap: [libc::c_char; 1024] = [0; 1024];
     let mut d1: [libc::c_char; 1024] = [0; 1024];
     //bot interbreeding
@@ -2843,7 +2843,7 @@ pub unsafe extern "C" fn ExitLevel() {
                 b"map_restart 0\n\x00" as *const u8 as *const libc::c_char,
             );
             level.restarted = qtrue;
-            level.changemap = 0 as *mut libc::c_char;
+            level.changemap = std::ptr::null_mut();
             level.intermissiontime = 0 as i32
         }
         return;
@@ -2878,7 +2878,7 @@ pub unsafe extern "C" fn ExitLevel() {
             b"vstr nextmap\n\x00" as *const u8 as *const libc::c_char,
         );
     }
-    level.changemap = 0 as *mut libc::c_char;
+    level.changemap = std::ptr::null_mut();
     level.intermissiontime = 0 as i32;
     // reset all the scores so we don't enter the intermission again
     level.teamScores[TEAM_RED as i32 as usize] = 0 as i32;
@@ -2966,7 +2966,7 @@ Append information about this game to the log file
 pub unsafe extern "C" fn LogExit(mut string: *const libc::c_char) {
     let mut i: i32 = 0;
     let mut numSorted: i32 = 0;
-    let mut cl: *mut gclient_t = 0 as *mut gclient_t;
+    let mut cl: *mut gclient_t = std::ptr::null_mut();
     G_LogPrintf(
         b"Exit: %s\n\x00" as *const u8 as *const libc::c_char,
         string,
@@ -3030,7 +3030,7 @@ pub unsafe extern "C" fn CheckIntermissionExit() {
     let mut notReady: i32 = 0;
     let mut playerCount: i32 = 0;
     let mut i: i32 = 0;
-    let mut cl: *mut gclient_t = 0 as *mut gclient_t;
+    let mut cl: *mut gclient_t = std::ptr::null_mut();
     let mut readyMask: i32 = 0;
     if g_gametype.integer == GT_SINGLE_PLAYER as i32 {
         return;
@@ -3139,7 +3139,7 @@ can see the last frag.
 
 pub unsafe extern "C" fn CheckExitRules() {
     let mut i: i32 = 0;
-    let mut cl: *mut gclient_t = 0 as *mut gclient_t;
+    let mut cl: *mut gclient_t = std::ptr::null_mut();
     // if at the intermission, wait for all non-bots to
     // signal ready, then go to next level
     if level.intermissiontime != 0 {
@@ -3936,7 +3936,7 @@ Advances the non-player objects in the world
 
 pub unsafe extern "C" fn G_RunFrame(mut levelTime: i32) {
     let mut i: i32 = 0;
-    let mut ent: *mut gentity_t = 0 as *mut gentity_t;
+    let mut ent: *mut gentity_t = std::ptr::null_mut();
     // if we are waiting for the level to restart, do nothing
     if level.restarted as u64 != 0 {
         return;

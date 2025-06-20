@@ -7,7 +7,7 @@ pub mod stdlib_h {
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return libc::strtol(
             __nptr,
-            0 as *mut libc::c_void as *mut *mut libc::c_char,
+            std::ptr::null_mut() as *mut *mut libc::c_char,
             10 as i32,
         ) as i32;
     }
@@ -438,7 +438,7 @@ static mut master_items: [*const libc::c_char; 9] = [
     b"Master4\x00" as *const u8 as *const libc::c_char,
     b"Master5\x00" as *const u8 as *const libc::c_char,
     b"Favorites\x00" as *const u8 as *const libc::c_char,
-    0 as *const libc::c_char,
+    std::ptr::null(),
 ];
 
 static mut servertype_items: [*const libc::c_char; 6] = [
@@ -447,7 +447,7 @@ static mut servertype_items: [*const libc::c_char; 6] = [
     b"Team Deathmatch\x00" as *const u8 as *const libc::c_char,
     b"Tournament\x00" as *const u8 as *const libc::c_char,
     b"Capture the Flag\x00" as *const u8 as *const libc::c_char,
-    0 as *const libc::c_char,
+    std::ptr::null(),
 ];
 
 static mut sortkey_items: [*const libc::c_char; 6] = [
@@ -456,7 +456,7 @@ static mut sortkey_items: [*const libc::c_char; 6] = [
     b"Open Player Spots\x00" as *const u8 as *const libc::c_char,
     b"Game Type\x00" as *const u8 as *const libc::c_char,
     b"Ping Time\x00" as *const u8 as *const libc::c_char,
-    0 as *const libc::c_char,
+    std::ptr::null(),
 ];
 
 static mut gamenames: [*mut libc::c_char; 14] = [
@@ -493,7 +493,7 @@ static mut quake3worldMessage: [libc::c_char; 59] = [
 pub static mut punkbuster_items: [*const libc::c_char; 3] = [
     b"Disabled\x00" as *const u8 as *const libc::c_char,
     b"Enabled\x00" as *const u8 as *const libc::c_char,
-    0 as *const libc::c_char,
+    std::ptr::null(),
 ];
 #[no_mangle]
 
@@ -502,7 +502,7 @@ pub static mut punkbuster_msg: [*const libc::c_char; 5] = [
     b"disabled the next time\x00" as *const u8 as *const libc::c_char,
     b"Quake III Arena\x00" as *const u8 as *const libc::c_char,
     b"is started.\x00" as *const u8 as *const libc::c_char,
-    0 as *const libc::c_char,
+    std::ptr::null(),
 ];
 
 static mut g_arenaservers: arenaservers_t = arenaservers_t {
@@ -520,7 +520,7 @@ static mut g_arenaservers: arenaservers_t = arenaservers_t {
     banner: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -542,7 +542,7 @@ static mut g_arenaservers: arenaservers_t = arenaservers_t {
     master: menulist_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -570,7 +570,7 @@ static mut g_arenaservers: arenaservers_t = arenaservers_t {
     gametype: menulist_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -598,7 +598,7 @@ static mut g_arenaservers: arenaservers_t = arenaservers_t {
     sortkey: menulist_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -626,7 +626,7 @@ static mut g_arenaservers: arenaservers_t = arenaservers_t {
     showfull: menuradiobutton_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -646,7 +646,7 @@ static mut g_arenaservers: arenaservers_t = arenaservers_t {
     showempty: menuradiobutton_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -666,7 +666,7 @@ static mut g_arenaservers: arenaservers_t = arenaservers_t {
     list: menulist_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -694,7 +694,7 @@ static mut g_arenaservers: arenaservers_t = arenaservers_t {
     mappic: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -720,7 +720,7 @@ static mut g_arenaservers: arenaservers_t = arenaservers_t {
     arrows: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -746,7 +746,7 @@ static mut g_arenaservers: arenaservers_t = arenaservers_t {
     up: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -772,7 +772,7 @@ static mut g_arenaservers: arenaservers_t = arenaservers_t {
     down: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -798,7 +798,7 @@ static mut g_arenaservers: arenaservers_t = arenaservers_t {
     status: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -820,7 +820,7 @@ static mut g_arenaservers: arenaservers_t = arenaservers_t {
     statusbar: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -842,7 +842,7 @@ static mut g_arenaservers: arenaservers_t = arenaservers_t {
     remove: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -868,7 +868,7 @@ static mut g_arenaservers: arenaservers_t = arenaservers_t {
     back: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -894,7 +894,7 @@ static mut g_arenaservers: arenaservers_t = arenaservers_t {
     refresh: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -920,7 +920,7 @@ static mut g_arenaservers: arenaservers_t = arenaservers_t {
     specify: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -946,7 +946,7 @@ static mut g_arenaservers: arenaservers_t = arenaservers_t {
     create: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -972,7 +972,7 @@ static mut g_arenaservers: arenaservers_t = arenaservers_t {
     go: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1017,7 +1017,7 @@ static mut g_arenaservers: arenaservers_t = arenaservers_t {
     punkbuster: menulist_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1045,7 +1045,7 @@ static mut g_arenaservers: arenaservers_t = arenaservers_t {
     pblogo: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1156,8 +1156,8 @@ unsafe extern "C" fn ArenaServers_Compare(
 ) -> i32 {
     let mut f1: f32 = 0.;
     let mut f2: f32 = 0.;
-    let mut t1: *mut servernode_t = 0 as *mut servernode_t;
-    let mut t2: *mut servernode_t = 0 as *mut servernode_t;
+    let mut t1: *mut servernode_t = std::ptr::null_mut();
+    let mut t2: *mut servernode_t = std::ptr::null_mut();
     t1 = arg1 as *mut servernode_t;
     t2 = arg2 as *mut servernode_t;
     match g_sortkey {
@@ -1225,7 +1225,7 @@ ArenaServers_Go
 */
 
 unsafe extern "C" fn ArenaServers_Go() {
-    let mut servernode: *mut servernode_t = 0 as *mut servernode_t;
+    let mut servernode: *mut servernode_t = std::ptr::null_mut();
     servernode = g_arenaservers.table[g_arenaservers.list.curvalue as usize].servernode;
     if !servernode.is_null() {
         trap_Cmd_ExecuteText(
@@ -1245,9 +1245,9 @@ ArenaServers_UpdatePicture
 
 unsafe extern "C" fn ArenaServers_UpdatePicture() {
     static mut picname: [libc::c_char; 64] = [0; 64];
-    let mut servernodeptr: *mut servernode_t = 0 as *mut servernode_t;
+    let mut servernodeptr: *mut servernode_t = std::ptr::null_mut();
     if g_arenaservers.list.numitems == 0 {
-        g_arenaservers.mappic.generic.name = 0 as *const libc::c_char
+        g_arenaservers.mappic.generic.name = std::ptr::null()
     } else {
         servernodeptr = g_arenaservers.table[g_arenaservers.list.curvalue as usize].servernode;
         Com_sprintf(
@@ -1271,10 +1271,10 @@ unsafe extern "C" fn ArenaServers_UpdateMenu() {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut count: i32 = 0;
-    let mut buff: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut servernodeptr: *mut servernode_t = 0 as *mut servernode_t;
-    let mut tableptr: *mut table_t = 0 as *mut table_t;
-    let mut pingColor: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut buff: *mut libc::c_char = std::ptr::null_mut();
+    let mut servernodeptr: *mut servernode_t = std::ptr::null_mut();
+    let mut tableptr: *mut table_t = std::ptr::null_mut();
+    let mut pingColor: *mut libc::c_char = std::ptr::null_mut();
     if g_arenaservers.numqueriedservers > 0 as i32 {
         // servers found
         if g_arenaservers.refreshservers as u32 != 0
@@ -1484,8 +1484,8 @@ ArenaServers_Remove
 
 unsafe extern "C" fn ArenaServers_Remove() {
     let mut i: i32 = 0;
-    let mut servernodeptr: *mut servernode_t = 0 as *mut servernode_t;
-    let mut tableptr: *mut table_t = 0 as *mut table_t;
+    let mut servernodeptr: *mut servernode_t = std::ptr::null_mut();
+    let mut tableptr: *mut table_t = std::ptr::null_mut();
     if g_arenaservers.list.numitems == 0 {
         return;
     }
@@ -1585,8 +1585,8 @@ unsafe extern "C" fn ArenaServers_Insert(
     mut info: *mut libc::c_char,
     mut pingtime: i32,
 ) {
-    let mut servernodeptr: *mut servernode_t = 0 as *mut servernode_t;
-    let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut servernodeptr: *mut servernode_t = std::ptr::null_mut();
+    let mut s: *mut libc::c_char = std::ptr::null_mut();
     let mut i: i32 = 0;
     if pingtime >= ArenaServers_MaxPing() && g_servertype != 7 as i32 {
         // slow global or local servers do not get entered
@@ -2806,7 +2806,7 @@ unsafe extern "C" fn ArenaServers_MenuInit() {
     g_servertype = ArenaServers_SetType(g_servertype);
     g_arenaservers.master.curvalue = g_servertype;
     trap_Cvar_Register(
-        0 as *mut vmCvar_t as *mut vmCvar_t,
+        std::ptr::null_mut() as *mut vmCvar_t,
         b"debug_protocol\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
         0 as i32,

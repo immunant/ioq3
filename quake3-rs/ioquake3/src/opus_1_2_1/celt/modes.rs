@@ -7559,6 +7559,6 @@ pub unsafe extern "C" fn opus_custom_mode_create(
     if !error.is_null() {
         *error = -(1 as i32)
     }
-    return 0 as *mut crate::src::opus_1_2_1::celt::modes::OpusCustomMode;
+    return std::ptr::null_mut();
     /* !CUSTOM_MODES */
 }

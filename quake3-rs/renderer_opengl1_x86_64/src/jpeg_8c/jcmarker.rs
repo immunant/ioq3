@@ -431,7 +431,7 @@ unsafe extern "C" fn emit_dqt(mut cinfo: j_compress_ptr, mut index: i32) -> i32
 unsafe extern "C" fn emit_dht(mut cinfo: j_compress_ptr, mut index: i32, mut is_ac: boolean)
 /* Emit a DHT marker */
 {
-    let mut htbl: *mut JHUFF_TBL = 0 as *mut JHUFF_TBL;
+    let mut htbl: *mut JHUFF_TBL = std::ptr::null_mut();
     let mut length: i32 = 0;
     let mut i: i32 = 0;
     if is_ac != 0 {
@@ -484,7 +484,7 @@ unsafe extern "C" fn emit_dac(mut cinfo: j_compress_ptr)
     let mut ac_in_use: [libc::c_char; 16] = [0; 16];
     let mut length: i32 = 0;
     let mut i: i32 = 0;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
     i = 0 as i32;
     while i < 16 as i32 {
         ac_in_use[i as usize] = 0 as i32 as libc::c_char;
@@ -545,7 +545,7 @@ unsafe extern "C" fn emit_sof(mut cinfo: j_compress_ptr, mut code: JPEG_MARKER)
 /* Emit a SOF marker */
 {
     let mut ci: i32 = 0; /* length */
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
     emit_marker(cinfo, code);
     emit_2bytes(
         cinfo,
@@ -588,7 +588,7 @@ unsafe extern "C" fn emit_sos(mut cinfo: j_compress_ptr)
     let mut i: i32 = 0; /* length */
     let mut td: i32 = 0;
     let mut ta: i32 = 0;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
     emit_marker(cinfo, M_SOS);
     emit_2bytes(
         cinfo,
@@ -790,7 +790,7 @@ unsafe extern "C" fn write_frame_header(mut cinfo: j_compress_ptr) {
     let mut ci: i32 = 0;
     let mut prec: i32 = 0;
     let mut is_baseline: boolean = 0;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
     /* Emit DQT for each quantization table.
      * Note that emit_dqt() suppresses any duplicate tables.
      */
@@ -865,7 +865,7 @@ unsafe extern "C" fn write_frame_header(mut cinfo: j_compress_ptr) {
 unsafe extern "C" fn write_scan_header(mut cinfo: j_compress_ptr) {
     let mut marker: my_marker_ptr = (*cinfo).marker as my_marker_ptr;
     let mut i: i32 = 0;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
     if (*cinfo).arith_code != 0 {
         /* Emit arith conditioning info.  We may have some duplication
          * if the file has multiple scans, but it's so small it's hardly
@@ -943,7 +943,7 @@ unsafe extern "C" fn write_tables_only(mut cinfo: j_compress_ptr) {
 #[no_mangle]
 
 pub unsafe extern "C" fn jinit_marker_writer(mut cinfo: j_compress_ptr) {
-    let mut marker: my_marker_ptr = 0 as *mut my_marker_writer;
+    let mut marker: my_marker_ptr = std::ptr::null_mut();
     /* Create the subobject */
     marker = Some(
         (*(*cinfo).mem)

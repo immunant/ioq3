@@ -6,7 +6,7 @@ pub mod stdlib_h {
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return libc::strtol(
             __nptr,
-            0 as *mut libc::c_void as *mut *mut libc::c_char,
+            std::ptr::null_mut() as *mut *mut libc::c_char,
             10 as i32,
         ) as i32;
     }
@@ -2908,7 +2908,7 @@ CG_RegisterCvars
 
 pub unsafe extern "C" fn CG_RegisterCvars() {
     let mut i: i32 = 0;
-    let mut cv: *mut cvarTable_t = 0 as *mut cvarTable_t;
+    let mut cv: *mut cvarTable_t = std::ptr::null_mut();
     let mut var: [libc::c_char; 1024] = [0; 1024];
     i = 0 as i32;
     cv = cvarTable.as_mut_ptr();
@@ -2931,25 +2931,25 @@ pub unsafe extern "C" fn CG_RegisterCvars() {
     cgs.localServer = atoi(var.as_mut_ptr()) as qboolean;
     forceModelModificationCount = cg_forceModel.modificationCount;
     trap_Cvar_Register(
-        0 as *mut vmCvar_t as *mut vmCvar_t,
+        std::ptr::null_mut() as *mut vmCvar_t,
         b"model\x00" as *const u8 as *const libc::c_char,
         b"sarge\x00" as *const u8 as *const libc::c_char,
         0x2 as i32 | 0x1 as i32,
     );
     trap_Cvar_Register(
-        0 as *mut vmCvar_t as *mut vmCvar_t,
+        std::ptr::null_mut() as *mut vmCvar_t,
         b"headmodel\x00" as *const u8 as *const libc::c_char,
         b"sarge\x00" as *const u8 as *const libc::c_char,
         0x2 as i32 | 0x1 as i32,
     );
     trap_Cvar_Register(
-        0 as *mut vmCvar_t as *mut vmCvar_t,
+        std::ptr::null_mut() as *mut vmCvar_t,
         b"team_model\x00" as *const u8 as *const libc::c_char,
         b"sarge\x00" as *const u8 as *const libc::c_char,
         0x2 as i32 | 0x1 as i32,
     );
     trap_Cvar_Register(
-        0 as *mut vmCvar_t as *mut vmCvar_t,
+        std::ptr::null_mut() as *mut vmCvar_t,
         b"team_headmodel\x00" as *const u8 as *const libc::c_char,
         b"sarge\x00" as *const u8 as *const libc::c_char,
         0x2 as i32 | 0x1 as i32,
@@ -2965,7 +2965,7 @@ unsafe extern "C" fn CG_ForceModelChange() {
     let mut i: i32 = 0;
     i = 0 as i32;
     while i < 64 as i32 {
-        let mut clientInfo: *const libc::c_char = 0 as *const libc::c_char;
+        let mut clientInfo: *const libc::c_char = std::ptr::null();
         clientInfo = CG_ConfigString(32 as i32 + 256 as i32 + 256 as i32 + i);
         if !(*clientInfo.offset(0 as i32 as isize) == 0) {
             CG_NewClientInfo(i);
@@ -2982,7 +2982,7 @@ CG_UpdateCvars
 
 pub unsafe extern "C" fn CG_UpdateCvars() {
     let mut i: i32 = 0;
-    let mut cv: *mut cvarTable_t = 0 as *mut cvarTable_t;
+    let mut cv: *mut cvarTable_t = std::ptr::null_mut();
     i = 0 as i32;
     cv = cvarTable.as_mut_ptr();
     while i < cvarTableSize {
@@ -3266,10 +3266,10 @@ The server says this item is used on this level
 */
 
 unsafe extern "C" fn CG_RegisterItemSounds(mut itemNum: i32) {
-    let mut item: *mut gitem_t = 0 as *mut gitem_t;
+    let mut item: *mut gitem_t = std::ptr::null_mut();
     let mut data: [libc::c_char; 64] = [0; 64];
-    let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut start: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut s: *mut libc::c_char = std::ptr::null_mut();
+    let mut start: *mut libc::c_char = std::ptr::null_mut();
     let mut len: i32 = 0;
     item = &mut *bg_itemlist.as_mut_ptr().offset(itemNum as isize) as *mut gitem_t;
     if !(*item).pickup_sound.is_null() {
@@ -3324,7 +3324,7 @@ unsafe extern "C" fn CG_RegisterSounds() {
     let mut i: i32 = 0;
     let mut items: [libc::c_char; 257] = [0; 257];
     let mut name: [libc::c_char; 64] = [0; 64];
-    let mut soundName: *const libc::c_char = 0 as *const libc::c_char;
+    let mut soundName: *const libc::c_char = std::ptr::null();
     // voice commands
     cgs.media.oneMinuteSound = trap_S_RegisterSound(
         b"sound/feedback/1_minute.wav\x00" as *const u8 as *const libc::c_char,
@@ -3971,7 +3971,7 @@ unsafe extern "C" fn CG_RegisterGraphics() {
     // register all the server specified models
     i = 1 as i32;
     while i < 256 as i32 {
-        let mut modelName: *const libc::c_char = 0 as *const libc::c_char;
+        let mut modelName: *const libc::c_char = std::ptr::null();
         modelName = CG_ConfigString(32 as i32 + i);
         if *modelName.offset(0 as i32 as isize) == 0 {
             break;
@@ -4038,7 +4038,7 @@ unsafe extern "C" fn CG_RegisterClients() {
     CG_NewClientInfo(cg.clientNum);
     i = 0 as i32;
     while i < 64 as i32 {
-        let mut clientInfo: *const libc::c_char = 0 as *const libc::c_char;
+        let mut clientInfo: *const libc::c_char = std::ptr::null();
         if !(cg.clientNum == i) {
             clientInfo = CG_ConfigString(32 as i32 + 256 as i32 + 256 as i32 + i);
             if !(*clientInfo.offset(0 as i32 as isize) == 0) {
@@ -4081,7 +4081,7 @@ CG_StartMusic
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_StartMusic() {
-    let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut s: *mut libc::c_char = std::ptr::null_mut();
     let mut parm1: [libc::c_char; 64] = [0; 64];
     let mut parm2: [libc::c_char; 64] = [0; 64];
     // start the background music
@@ -4113,7 +4113,7 @@ pub unsafe extern "C" fn CG_Init(
     mut serverCommandSequence: i32,
     mut clientNum: i32,
 ) {
-    let mut s: *const libc::c_char = 0 as *const libc::c_char;
+    let mut s: *const libc::c_char = std::ptr::null();
     // clear everything
     crate::stdlib::memset(
         &mut cgs as *mut cgs_t as *mut libc::c_void,

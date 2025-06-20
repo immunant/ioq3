@@ -369,7 +369,7 @@ unsafe extern "C" fn silk_PLC_update(
     let mut temp_LTP_Gain_Q14: opus_int32 = 0;
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut psPLC: *mut silk_PLC_struct = 0 as *mut silk_PLC_struct;
+    let mut psPLC: *mut silk_PLC_struct = std::ptr::null_mut();
     psPLC = &mut (*psDec).sPLC;
     /* Update parameters used in case of packet loss */
     (*psDec).prevSignalType = (*psDec).indices.signalType as i32;
@@ -495,8 +495,8 @@ unsafe extern "C" fn silk_PLC_energy(
 ) {
     let mut i: i32 = 0;
     let mut k: i32 = 0;
-    let mut exc_buf: *mut opus_int16 = 0 as *mut opus_int16;
-    let mut exc_buf_ptr: *mut opus_int16 = 0 as *mut opus_int16;
+    let mut exc_buf: *mut opus_int16 = std::ptr::null_mut();
+    let mut exc_buf_ptr: *mut opus_int16 = std::ptr::null_mut();
     let mut fresh0 = ::std::vec::from_elem(
         0,
         (::std::mem::size_of::<opus_int16>() as usize)
@@ -571,16 +571,16 @@ unsafe extern "C" fn silk_PLC_conceal(
     let mut inv_gain_Q30: opus_int32 = 0;
     let mut energy1: opus_int32 = 0;
     let mut energy2: opus_int32 = 0;
-    let mut rand_ptr: *mut opus_int32 = 0 as *mut opus_int32;
-    let mut pred_lag_ptr: *mut opus_int32 = 0 as *mut opus_int32;
+    let mut rand_ptr: *mut opus_int32 = std::ptr::null_mut();
+    let mut pred_lag_ptr: *mut opus_int32 = std::ptr::null_mut();
     let mut LPC_pred_Q10: opus_int32 = 0;
     let mut LTP_pred_Q12: opus_int32 = 0;
     let mut rand_scale_Q14: opus_int16 = 0;
-    let mut B_Q14: *mut opus_int16 = 0 as *mut opus_int16;
-    let mut sLPC_Q14_ptr: *mut opus_int32 = 0 as *mut opus_int32;
+    let mut B_Q14: *mut opus_int16 = std::ptr::null_mut();
+    let mut sLPC_Q14_ptr: *mut opus_int32 = std::ptr::null_mut();
     let mut A_Q12: [opus_int16; 16] = [0; 16];
-    let mut sLTP: *mut opus_int16 = 0 as *mut opus_int16;
-    let mut sLTP_Q14: *mut opus_int32 = 0 as *mut opus_int32;
+    let mut sLTP: *mut opus_int16 = std::ptr::null_mut();
+    let mut sLTP_Q14: *mut opus_int32 = std::ptr::null_mut();
     let mut psPLC: *mut silk_PLC_struct = &mut (*psDec).sPLC;
     let mut prevGain_Q10: [opus_int32; 2] = [0; 2];
     let mut fresh1 = ::std::vec::from_elem(
@@ -1246,7 +1246,7 @@ pub unsafe extern "C" fn silk_PLC_glue_frames(
     let mut i: i32 = 0;
     let mut energy_shift: i32 = 0;
     let mut energy: opus_int32 = 0;
-    let mut psPLC: *mut silk_PLC_struct = 0 as *mut silk_PLC_struct;
+    let mut psPLC: *mut silk_PLC_struct = std::ptr::null_mut();
     psPLC = &mut (*psDec).sPLC;
     if (*psDec).lossCnt != 0 {
         /* Calculate energy in concealed residual */

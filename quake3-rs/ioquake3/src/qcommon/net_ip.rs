@@ -335,7 +335,7 @@ unsafe extern "C" fn SearchAddrInfo(
         }
         hints = (*hints).ai_next
     }
-    return 0 as *mut addrinfo;
+    return std::ptr::null_mut();
 }
 /*
 =============
@@ -355,13 +355,13 @@ unsafe extern "C" fn Sys_StringToSockaddr(
         ai_socktype: 0,
         ai_protocol: 0,
         ai_addrlen: 0,
-        ai_addr: 0 as *mut sockaddr,
-        ai_canonname: 0 as *mut libc::c_char,
-        ai_next: 0 as *mut addrinfo,
+        ai_addr: std::ptr::null_mut(),
+        ai_canonname: std::ptr::null_mut(),
+        ai_next: std::ptr::null_mut(),
     };
-    let mut res: *mut addrinfo = 0 as *mut addrinfo;
-    let mut search: *mut addrinfo = 0 as *mut addrinfo;
-    let mut hintsp: *mut addrinfo = 0 as *mut addrinfo;
+    let mut res: *mut addrinfo = std::ptr::null_mut();
+    let mut search: *mut addrinfo = std::ptr::null_mut();
+    let mut hintsp: *mut addrinfo = std::ptr::null_mut();
     let mut retval: i32 = 0;
     crate::stdlib::memset(
         sadr as *mut libc::c_void,
@@ -378,7 +378,7 @@ unsafe extern "C" fn Sys_StringToSockaddr(
     (*hintsp).ai_socktype = SOCK_DGRAM as i32;
     retval = getaddrinfo(
         s,
-        0 as *const libc::c_char,
+        std::ptr::null(),
         hintsp as *const addrinfo,
         &mut res as *mut _ as *mut *mut addrinfo,
     );
@@ -453,7 +453,7 @@ unsafe extern "C" fn Sys_SockaddrToString(
         inputlen,
         dest,
         destlen as socklen_t,
-        0 as *mut libc::c_char,
+        std::ptr::null_mut(),
         0 as i32 as socklen_t,
         1 as i32,
     ) != 0
@@ -513,8 +513,8 @@ pub unsafe extern "C" fn NET_CompareBaseAdrMask(
     mut netmask: i32,
 ) -> qboolean {
     let mut cmpmask: byte = 0;
-    let mut addra: *mut byte = 0 as *mut byte;
-    let mut addrb: *mut byte = 0 as *mut byte;
+    let mut addra: *mut byte = std::ptr::null_mut();
+    let mut addrb: *mut byte = std::ptr::null_mut();
     let mut curbyte: i32 = 0;
     if a.type_0 as u32 != b.type_0 as u32 {
         return qfalse;
@@ -976,9 +976,9 @@ pub unsafe extern "C" fn Sys_IsLANAddress(mut adr: netadr_t) -> qboolean {
     let mut run: i32 = 0;
     let mut addrsize: i32 = 0;
     let mut differed: qboolean = qfalse;
-    let mut compareadr: *mut byte = 0 as *mut byte;
-    let mut comparemask: *mut byte = 0 as *mut byte;
-    let mut compareip: *mut byte = 0 as *mut byte;
+    let mut compareadr: *mut byte = std::ptr::null_mut();
+    let mut comparemask: *mut byte = std::ptr::null_mut();
+    let mut compareip: *mut byte = std::ptr::null_mut();
     if adr.type_0 as u32 == NA_LOOPBACK as i32 as u32 {
         return qtrue;
     }
@@ -1459,7 +1459,7 @@ pub unsafe extern "C" fn NET_JoinMulticast6() {
         multicast6_socket = NET_IP6Socket(
             (*net_mcast6addr).string,
             __bswap_16(boundto.sin6_port) as i32,
-            0 as *mut sockaddr_in6,
+            std::ptr::null_mut(),
             &mut err,
         );
         if multicast6_socket == -(1 as i32) {
@@ -1540,7 +1540,7 @@ pub unsafe extern "C" fn NET_OpenSocks(mut port: i32) {
         sin_addr: in_addr { s_addr: 0 },
         sin_zero: [0; 8],
     };
-    let mut h: *mut hostent = 0 as *mut hostent;
+    let mut h: *mut hostent = std::ptr::null_mut();
     let mut len: i32 = 0;
     let mut rfc1929: qboolean = qfalse;
     let mut buf: [u8; 64] = [0; 64];
@@ -1832,8 +1832,8 @@ unsafe extern "C" fn NET_AddLocalAddress(
 }
 
 unsafe extern "C" fn NET_GetLocalAddress() {
-    let mut ifap: *mut ifaddrs = 0 as *mut ifaddrs;
-    let mut search: *mut ifaddrs = 0 as *mut ifaddrs;
+    let mut ifap: *mut ifaddrs = std::ptr::null_mut();
+    let mut search: *mut ifaddrs = std::ptr::null_mut();
     numIP = 0 as i32;
     if getifaddrs(&mut ifap) != 0 {
         Com_Printf(
@@ -2158,7 +2158,7 @@ pub unsafe extern "C" fn NET_Event(mut fdr: *mut fd_set) {
         allowoverflow: qfalse,
         overflowed: qfalse,
         oob: qfalse,
-        data: 0 as *mut byte,
+        data: std::ptr::null_mut(),
         maxsize: 0,
         cursize: 0,
         readcount: 0,
@@ -2252,8 +2252,8 @@ pub unsafe extern "C" fn NET_Sleep(mut msec: i32) {
     retval = select(
         highestfd + 1 as i32,
         &mut fdr,
-        0 as *mut fd_set,
-        0 as *mut fd_set,
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
         &mut timeout,
     );
     if retval == -(1 as i32) {

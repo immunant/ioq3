@@ -497,9 +497,9 @@ pub unsafe extern "C" fn AAS_AgainstLadder(mut origin: *mut vec_t) -> i32 {
     let mut facenum: i32 = 0;
     let mut side: i32 = 0;
     let mut org: vec3_t = [0.; 3];
-    let mut plane: *mut aas_plane_t = 0 as *mut aas_plane_t;
-    let mut face: *mut aas_face_t = 0 as *mut aas_face_t;
-    let mut area: *mut aas_area_t = 0 as *mut aas_area_t;
+    let mut plane: *mut aas_plane_t = std::ptr::null_mut();
+    let mut face: *mut aas_face_t = std::ptr::null_mut();
+    let mut area: *mut aas_area_t = std::ptr::null_mut();
     org[0 as i32 as usize] = *origin.offset(0 as i32 as isize);
     org[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
     org[2 as i32 as usize] = *origin.offset(2 as i32 as isize);
@@ -617,7 +617,7 @@ pub unsafe extern "C" fn AAS_OnGround(
     };
     let mut end: vec3_t = [0.; 3];
     let mut up: vec3_t = [0 as i32 as vec_t, 0 as i32 as vec_t, 1 as i32 as vec_t];
-    let mut plane: *mut aas_plane_t = 0 as *mut aas_plane_t;
+    let mut plane: *mut aas_plane_t = std::ptr::null_mut();
     end[0 as i32 as usize] = *origin.offset(0 as i32 as isize);
     end[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
     end[2 as i32 as usize] = *origin.offset(2 as i32 as isize);
@@ -710,8 +710,8 @@ pub unsafe extern "C" fn AAS_SetMovedir(mut angles: *mut vec_t, mut movedir: *mu
         AngleVectors(
             angles as *const vec_t,
             movedir,
-            0 as *mut vec_t,
-            0 as *mut vec_t,
+            std::ptr::null_mut(),
+            std::ptr::null_mut(),
         );
     };
     //end else
@@ -859,7 +859,7 @@ pub unsafe extern "C" fn AAS_WeaponJumpZVelocity(
         viewangles.as_mut_ptr() as *const vec_t,
         forward.as_mut_ptr(),
         right.as_mut_ptr(),
-        0 as *mut vec_t,
+        std::ptr::null_mut(),
     );
     start[0 as i32 as usize] += forward[0 as i32 as usize] * rocketoffset[0 as i32 as usize]
         + right[0 as i32 as usize] * rocketoffset[1 as i32 as usize];
@@ -878,8 +878,8 @@ pub unsafe extern "C" fn AAS_WeaponJumpZVelocity(
     //trace a line to get the impact point
     bsptrace = crate::src::botlib::be_aas_bspq3::AAS_Trace(
         start.as_mut_ptr(),
-        0 as *mut vec_t,
-        0 as *mut vec_t,
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
         end.as_mut_ptr(),
         1 as i32,
         1 as i32,
@@ -1233,8 +1233,8 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
     let mut old_frame_test_vel: vec3_t = [0.; 3];
     let mut left_test_vel: vec3_t = [0.; 3];
     let mut up: vec3_t = [0 as i32 as vec_t, 0 as i32 as vec_t, 1 as i32 as vec_t];
-    let mut plane: *mut aas_plane_t = 0 as *mut aas_plane_t;
-    let mut plane2: *mut aas_plane_t = 0 as *mut aas_plane_t;
+    let mut plane: *mut aas_plane_t = std::ptr::null_mut();
+    let mut plane2: *mut aas_plane_t = std::ptr::null_mut();
     let mut trace: aas_trace_t = aas_trace_t {
         startsolid: qfalse,
         fraction: 0.,

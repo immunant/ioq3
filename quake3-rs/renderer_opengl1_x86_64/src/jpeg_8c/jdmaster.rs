@@ -283,7 +283,7 @@ pub unsafe extern "C" fn jpeg_calc_output_dimensions(mut cinfo: j_decompress_ptr
  */
 {
     let mut ci: i32 = 0;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
     /* Prevent application from calling me at wrong times */
     if (*cinfo).global_state != 202 as i32 {
         (*(*cinfo).err).msg_code = JERR_BAD_STATE as i32;
@@ -433,7 +433,7 @@ pub unsafe extern "C" fn jpeg_calc_output_dimensions(mut cinfo: j_decompress_ptr
 unsafe extern "C" fn prepare_range_limit_table(mut cinfo: j_decompress_ptr)
 /* Allocate and fill in the sample_range_limit table */
 {
-    let mut table: *mut JSAMPLE = 0 as *mut JSAMPLE; /* allow negative subscripts of simple table */
+    let mut table: *mut JSAMPLE = std::ptr::null_mut(); /* allow negative subscripts of simple table */
     let mut i: i32 = 0;
     table = Some(
         (*(*cinfo).mem)
@@ -516,8 +516,8 @@ unsafe extern "C" fn master_selection(mut cinfo: j_decompress_ptr) {
     (*master).pass_number = 0 as i32;
     (*master).using_merged_upsample = use_merged_upsample(cinfo);
     /* Color quantizer selection */
-    (*master).quantizer_1pass = 0 as *mut jpeg_color_quantizer;
-    (*master).quantizer_2pass = 0 as *mut jpeg_color_quantizer;
+    (*master).quantizer_1pass = std::ptr::null_mut();
+    (*master).quantizer_2pass = std::ptr::null_mut();
     /* No mode changes if not using buffered-image mode. */
     if (*cinfo).quantize_colors == 0 || (*cinfo).buffered_image == 0 {
         (*cinfo).enable_1pass_quant = 0 as i32;
@@ -831,7 +831,7 @@ pub unsafe extern "C" fn jpeg_new_colormap(mut cinfo: j_decompress_ptr) {
 #[no_mangle]
 
 pub unsafe extern "C" fn jinit_master_decompress(mut cinfo: j_decompress_ptr) {
-    let mut master: my_master_ptr = 0 as *mut my_decomp_master;
+    let mut master: my_master_ptr = std::ptr::null_mut();
     master = Some(
         (*(*cinfo).mem)
             .alloc_small

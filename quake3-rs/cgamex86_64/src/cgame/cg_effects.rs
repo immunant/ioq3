@@ -193,8 +193,8 @@ pub unsafe extern "C" fn CG_BubbleTrail(
     vec[1 as i32 as usize] = vec[1 as i32 as usize] * spacing;
     vec[2 as i32 as usize] = vec[2 as i32 as usize] * spacing;
     while (i as f32) < len {
-        let mut le: *mut localEntity_t = 0 as *mut localEntity_t;
-        let mut re: *mut refEntity_t = 0 as *mut refEntity_t;
+        let mut le: *mut localEntity_t = std::ptr::null_mut();
+        let mut re: *mut refEntity_t = std::ptr::null_mut();
         le = CG_AllocLocalEntity() as *mut localEntity_s;
         (*le).leFlags = LEF_PUFF_DONT_SCALE as i32;
         (*le).leType = LE_MOVE_SCALE_FADE;
@@ -259,8 +259,8 @@ pub unsafe extern "C" fn CG_SmokePuff(
     mut hShader: qhandle_t,
 ) -> *mut localEntity_t {
     static mut seed: i32 = 0x92 as i32;
-    let mut le: *mut localEntity_t = 0 as *mut localEntity_t;
-    let mut re: *mut refEntity_t = 0 as *mut refEntity_t;
+    let mut le: *mut localEntity_t = std::ptr::null_mut();
+    let mut re: *mut refEntity_t = std::ptr::null_mut();
     //	int fadeInTime = startTime + duration / 2;
     le = CG_AllocLocalEntity() as *mut localEntity_s;
     (*le).leFlags = leFlags;
@@ -324,8 +324,8 @@ Player teleporting in or out
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_SpawnEffect(mut org: *mut vec_t) {
-    let mut le: *mut localEntity_t = 0 as *mut localEntity_t;
-    let mut re: *mut refEntity_t = 0 as *mut refEntity_t;
+    let mut le: *mut localEntity_t = std::ptr::null_mut();
+    let mut re: *mut refEntity_t = std::ptr::null_mut();
     le = CG_AllocLocalEntity() as *mut localEntity_s;
     (*le).leFlags = 0 as i32;
     (*le).leType = LE_FADE_RGB;
@@ -355,8 +355,8 @@ CG_ScorePlum
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_ScorePlum(mut client: i32, mut org: *mut vec_t, mut score: i32) {
-    let mut le: *mut localEntity_t = 0 as *mut localEntity_t;
-    let mut re: *mut refEntity_t = 0 as *mut refEntity_t;
+    let mut le: *mut localEntity_t = std::ptr::null_mut();
+    let mut re: *mut refEntity_t = std::ptr::null_mut();
     let mut angles: vec3_t = [0.; 3];
     static mut lastPos: vec3_t = [0.; 3];
     // only visualize for the client that scored
@@ -410,7 +410,7 @@ pub unsafe extern "C" fn CG_MakeExplosion(
     mut isSprite: qboolean,
 ) -> *mut localEntity_t {
     let mut ang: f32 = 0.;
-    let mut ex: *mut localEntity_t = 0 as *mut localEntity_t;
+    let mut ex: *mut localEntity_t = std::ptr::null_mut();
     let mut offset: i32 = 0;
     let mut tmpVec: vec3_t = [0.; 3];
     let mut newOrigin: vec3_t = [0.; 3];
@@ -482,7 +482,7 @@ This is the spurt of blood when a character gets hit
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_Bleed(mut origin: *mut vec_t, mut entityNum: i32) {
-    let mut ex: *mut localEntity_t = 0 as *mut localEntity_t;
+    let mut ex: *mut localEntity_t = std::ptr::null_mut();
     if cg_blood.integer == 0 {
         return;
     }
@@ -514,8 +514,8 @@ pub unsafe extern "C" fn CG_LaunchGib(
     mut velocity: *mut vec_t,
     mut hModel: qhandle_t,
 ) {
-    let mut le: *mut localEntity_t = 0 as *mut localEntity_t;
-    let mut re: *mut refEntity_t = 0 as *mut refEntity_t;
+    let mut le: *mut localEntity_t = std::ptr::null_mut();
+    let mut re: *mut refEntity_t = std::ptr::null_mut();
     le = CG_AllocLocalEntity() as *mut localEntity_s;
     re = &mut (*le).refEntity;
     (*le).leType = LE_FRAGMENT;
@@ -741,8 +741,8 @@ pub unsafe extern "C" fn CG_LaunchExplode(
     mut velocity: *mut vec_t,
     mut hModel: qhandle_t,
 ) {
-    let mut le: *mut localEntity_t = 0 as *mut localEntity_t;
-    let mut re: *mut refEntity_t = 0 as *mut refEntity_t;
+    let mut le: *mut localEntity_t = std::ptr::null_mut();
+    let mut re: *mut refEntity_t = std::ptr::null_mut();
     le = CG_AllocLocalEntity() as *mut localEntity_s;
     re = &mut (*le).refEntity;
     (*le).leType = LE_FRAGMENT;

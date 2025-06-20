@@ -374,8 +374,8 @@ unsafe extern "C" fn jpeg_make_d_derived_tbl(
     mut tblno: i32,
     mut pdtbl: *mut *mut d_derived_tbl,
 ) {
-    let mut htbl: *mut JHUFF_TBL = 0 as *mut JHUFF_TBL;
-    let mut dtbl: *mut d_derived_tbl = 0 as *mut d_derived_tbl;
+    let mut htbl: *mut JHUFF_TBL = std::ptr::null_mut();
+    let mut dtbl: *mut d_derived_tbl = std::ptr::null_mut();
     let mut p: i32 = 0;
     let mut i: i32 = 0;
     let mut l: i32 = 0;
@@ -854,22 +854,22 @@ unsafe extern "C" fn decode_mcu_DC_first(
     let mut r: i32 = 0;
     let mut blkn: i32 = 0;
     let mut ci: i32 = 0;
-    let mut block: JBLOCKROW = 0 as *mut JBLOCK;
+    let mut block: JBLOCKROW = std::ptr::null_mut();
     let mut get_buffer: bit_buf_type = 0;
     let mut bits_left: i32 = 0;
     let mut br_state: bitread_working_state = bitread_working_state {
-        next_input_byte: 0 as *const JOCTET,
+        next_input_byte: std::ptr::null(),
         bytes_in_buffer: 0,
         get_buffer: 0,
         bits_left: 0,
-        cinfo: 0 as *mut jpeg_decompress_struct,
+        cinfo: std::ptr::null_mut(),
     };
     let mut state: savable_state = savable_state {
         EOBRUN: 0,
         last_dc_val: [0; 4],
     };
-    let mut tbl: *mut d_derived_tbl = 0 as *mut d_derived_tbl;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
+    let mut tbl: *mut d_derived_tbl = std::ptr::null_mut();
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
     /* Process restart marker if needed; may have to suspend */
     if (*cinfo).restart_interval != 0 {
         if (*entropy).restarts_to_go == 0 as i32 as u32 {
@@ -992,18 +992,18 @@ unsafe extern "C" fn decode_mcu_AC_first(
     let mut EOBRUN: u32 = 0;
     let mut Se: i32 = 0;
     let mut Al: i32 = 0;
-    let mut natural_order: *const i32 = 0 as *const i32;
-    let mut block: JBLOCKROW = 0 as *mut JBLOCK;
+    let mut natural_order: *const i32 = std::ptr::null();
+    let mut block: JBLOCKROW = std::ptr::null_mut();
     let mut get_buffer: bit_buf_type = 0;
     let mut bits_left: i32 = 0;
     let mut br_state: bitread_working_state = bitread_working_state {
-        next_input_byte: 0 as *const JOCTET,
+        next_input_byte: std::ptr::null(),
         bytes_in_buffer: 0,
         get_buffer: 0,
         bits_left: 0,
-        cinfo: 0 as *mut jpeg_decompress_struct,
+        cinfo: std::ptr::null_mut(),
     };
-    let mut tbl: *mut d_derived_tbl = 0 as *mut d_derived_tbl;
+    let mut tbl: *mut d_derived_tbl = std::ptr::null_mut();
     /* Process restart marker if needed; may have to suspend */
     if (*cinfo).restart_interval != 0 {
         if (*entropy).restarts_to_go == 0 as i32 as u32 {
@@ -1154,15 +1154,15 @@ unsafe extern "C" fn decode_mcu_DC_refine(
     let mut entropy: huff_entropy_ptr = (*cinfo).entropy as huff_entropy_ptr; /* 1 in the bit position being coded */
     let mut p1: i32 = (1 as i32) << (*cinfo).Al;
     let mut blkn: i32 = 0;
-    let mut block: JBLOCKROW = 0 as *mut JBLOCK;
+    let mut block: JBLOCKROW = std::ptr::null_mut();
     let mut get_buffer: bit_buf_type = 0;
     let mut bits_left: i32 = 0;
     let mut br_state: bitread_working_state = bitread_working_state {
-        next_input_byte: 0 as *const JOCTET,
+        next_input_byte: std::ptr::null(),
         bytes_in_buffer: 0,
         get_buffer: 0,
         bits_left: 0,
-        cinfo: 0 as *mut jpeg_decompress_struct,
+        cinfo: std::ptr::null_mut(),
     };
     /* Process restart marker if needed; may have to suspend */
     if (*cinfo).restart_interval != 0 {
@@ -1226,19 +1226,19 @@ unsafe extern "C" fn decode_mcu_AC_refine(
     let mut Se: i32 = 0;
     let mut p1: i32 = 0;
     let mut m1: i32 = 0;
-    let mut natural_order: *const i32 = 0 as *const i32;
-    let mut block: JBLOCKROW = 0 as *mut JBLOCK;
-    let mut thiscoef: JCOEFPTR = 0 as *mut JCOEF;
+    let mut natural_order: *const i32 = std::ptr::null();
+    let mut block: JBLOCKROW = std::ptr::null_mut();
+    let mut thiscoef: JCOEFPTR = std::ptr::null_mut();
     let mut get_buffer: bit_buf_type = 0;
     let mut bits_left: i32 = 0;
     let mut br_state: bitread_working_state = bitread_working_state {
-        next_input_byte: 0 as *const JOCTET,
+        next_input_byte: std::ptr::null(),
         bytes_in_buffer: 0,
         get_buffer: 0,
         bits_left: 0,
-        cinfo: 0 as *mut jpeg_decompress_struct,
+        cinfo: std::ptr::null_mut(),
     };
-    let mut tbl: *mut d_derived_tbl = 0 as *mut d_derived_tbl;
+    let mut tbl: *mut d_derived_tbl = std::ptr::null_mut();
     let mut num_newnz: i32 = 0;
     let mut newnz_pos: [i32; 64] = [0; 64];
     /* Process restart marker if needed; may have to suspend */
@@ -1543,17 +1543,17 @@ unsafe extern "C" fn decode_mcu_sub(
     mut MCU_data: *mut JBLOCKROW,
 ) -> boolean {
     let mut entropy: huff_entropy_ptr = (*cinfo).entropy as huff_entropy_ptr;
-    let mut natural_order: *const i32 = 0 as *const i32;
+    let mut natural_order: *const i32 = std::ptr::null();
     let mut Se: i32 = 0;
     let mut blkn: i32 = 0;
     let mut get_buffer: bit_buf_type = 0;
     let mut bits_left: i32 = 0;
     let mut br_state: bitread_working_state = bitread_working_state {
-        next_input_byte: 0 as *const JOCTET,
+        next_input_byte: std::ptr::null(),
         bytes_in_buffer: 0,
         get_buffer: 0,
         bits_left: 0,
-        cinfo: 0 as *mut jpeg_decompress_struct,
+        cinfo: std::ptr::null_mut(),
     };
     let mut state: savable_state = savable_state {
         EOBRUN: 0,
@@ -1585,7 +1585,7 @@ unsafe extern "C" fn decode_mcu_sub(
         while blkn < (*cinfo).blocks_in_MCU {
             let mut current_block_136: u64;
             let mut block: JBLOCKROW = *MCU_data.offset(blkn as isize);
-            let mut htbl: *mut d_derived_tbl = 0 as *mut d_derived_tbl;
+            let mut htbl: *mut d_derived_tbl = std::ptr::null_mut();
             let mut s: i32 = 0;
             let mut k: i32 = 0;
             let mut r: i32 = 0;
@@ -1873,11 +1873,11 @@ unsafe extern "C" fn decode_mcu(
     let mut get_buffer: bit_buf_type = 0;
     let mut bits_left: i32 = 0;
     let mut br_state: bitread_working_state = bitread_working_state {
-        next_input_byte: 0 as *const JOCTET,
+        next_input_byte: std::ptr::null(),
         bytes_in_buffer: 0,
         get_buffer: 0,
         bits_left: 0,
-        cinfo: 0 as *mut jpeg_decompress_struct,
+        cinfo: std::ptr::null_mut(),
     };
     let mut state: savable_state = savable_state {
         EOBRUN: 0,
@@ -1907,7 +1907,7 @@ unsafe extern "C" fn decode_mcu(
         while blkn < (*cinfo).blocks_in_MCU {
             let mut current_block_134: u64;
             let mut block: JBLOCKROW = *MCU_data.offset(blkn as isize);
-            let mut htbl: *mut d_derived_tbl = 0 as *mut d_derived_tbl;
+            let mut htbl: *mut d_derived_tbl = std::ptr::null_mut();
             let mut s: i32 = 0;
             let mut k: i32 = 0;
             let mut r: i32 = 0;
@@ -2193,7 +2193,7 @@ unsafe extern "C" fn start_pass_huff_decoder(mut cinfo: j_decompress_ptr) {
     let mut blkn: i32 = 0;
     let mut tbl: i32 = 0;
     let mut i: i32 = 0;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
     if (*cinfo).progressive_mode != 0 {
         /* Validate progressive scan parameters */
         if (*cinfo).Ss == 0 as i32 {
@@ -2537,7 +2537,7 @@ unsafe extern "C" fn start_pass_huff_decoder(mut cinfo: j_decompress_ptr) {
 #[no_mangle]
 
 pub unsafe extern "C" fn jinit_huff_decoder(mut cinfo: j_decompress_ptr) {
-    let mut entropy: huff_entropy_ptr = 0 as *mut huff_entropy_decoder;
+    let mut entropy: huff_entropy_ptr = std::ptr::null_mut();
     let mut i: i32 = 0;
     entropy = Some(
         (*(*cinfo).mem)
@@ -2554,7 +2554,7 @@ pub unsafe extern "C" fn jinit_huff_decoder(mut cinfo: j_decompress_ptr) {
         Some(start_pass_huff_decoder as unsafe extern "C" fn(_: j_decompress_ptr) -> ());
     if (*cinfo).progressive_mode != 0 {
         /* Create progression status table */
-        let mut coef_bit_ptr: *mut i32 = 0 as *mut i32;
+        let mut coef_bit_ptr: *mut i32 = std::ptr::null_mut();
         let mut ci: i32 = 0;
         (*cinfo).coef_bits = Some(
             (*(*cinfo).mem)
@@ -2584,14 +2584,14 @@ pub unsafe extern "C" fn jinit_huff_decoder(mut cinfo: j_decompress_ptr) {
         /* Mark derived tables unallocated */
         i = 0 as i32;
         while i < 4 as i32 {
-            (*entropy).derived_tbls[i as usize] = 0 as *mut d_derived_tbl;
+            (*entropy).derived_tbls[i as usize] = std::ptr::null_mut();
             i += 1
         }
     } else {
         /* Mark tables unallocated */
         i = 0 as i32;
         while i < 4 as i32 {
-            (*entropy).ac_derived_tbls[i as usize] = 0 as *mut d_derived_tbl;
+            (*entropy).ac_derived_tbls[i as usize] = std::ptr::null_mut();
             (*entropy).dc_derived_tbls[i as usize] = (*entropy).ac_derived_tbls[i as usize];
             i += 1
         }

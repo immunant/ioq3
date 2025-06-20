@@ -345,8 +345,8 @@ pub unsafe extern "C" fn silk_decode_pulses(
     let mut RateLevelIndex: i32 = 0;
     let mut sum_pulses: [i32; 20] = [0; 20];
     let mut nLshifts: [i32; 20] = [0; 20];
-    let mut pulses_ptr: *mut opus_int16 = 0 as *mut opus_int16;
-    let mut cdf_ptr: *const u8 = 0 as *const u8;
+    let mut pulses_ptr: *mut opus_int16 = std::ptr::null_mut();
+    let mut cdf_ptr: *const u8 = std::ptr::null();
     /* ********************/
     /* Decode rate level */
     /* ********************/

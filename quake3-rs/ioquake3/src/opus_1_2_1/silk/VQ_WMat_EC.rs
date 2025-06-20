@@ -194,7 +194,7 @@ pub unsafe extern "C" fn silk_VQ_WMat_EC_c(
 {
     let mut k: i32 = 0;
     let mut gain_tmp_Q7: i32 = 0;
-    let mut cb_row_Q7: *const i8 = 0 as *const i8;
+    let mut cb_row_Q7: *const i8 = std::ptr::null();
     let mut neg_xX_Q24: [opus_int32; 5] = [0; 5];
     let mut sum1_Q15: opus_int32 = 0;
     let mut sum2_Q24: opus_int32 = 0;

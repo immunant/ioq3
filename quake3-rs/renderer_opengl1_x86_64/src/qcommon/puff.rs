@@ -177,7 +177,7 @@ unsafe extern "C" fn decode(mut s: *mut state, mut h: *mut huffman) -> int32_t {
     let mut index: int32_t = 0; /* index of first code of length len in symbol table */
     let mut bitbuf: int32_t = 0; /* bits from stream */
     let mut left: int32_t = 0; /* bits left in next or left to process */
-    let mut next: *mut int16_t = 0 as *mut int16_t; /* next number of codes */
+    let mut next: *mut int16_t = std::ptr::null_mut(); /* next number of codes */
     bitbuf = (*s).bitbuf;
     left = (*s).bitcnt;
     index = 0 as i32;
@@ -961,10 +961,10 @@ pub unsafe extern "C" fn puff(
 ) -> int32_t
 /* amount of input available */ {
     let mut s: state = state {
-        out: 0 as *mut uint8_t,
+        out: std::ptr::null_mut(),
         outlen: 0,
         outcnt: 0,
-        in_0: 0 as *mut uint8_t,
+        in_0: std::ptr::null_mut(),
         inlen: 0,
         incnt: 0,
         bitbuf: 0,

@@ -162,12 +162,12 @@ pub unsafe extern "C" fn silk_Decode(
     let mut ret: i32 = 0 as i32;
     let mut nSamplesOutDec: opus_int32 = 0;
     let mut LBRR_symbol: opus_int32 = 0;
-    let mut samplesOut1_tmp: [*mut opus_int16; 2] = [0 as *mut opus_int16; 2];
-    let mut samplesOut1_tmp_storage1: *mut opus_int16 = 0 as *mut opus_int16;
-    let mut samplesOut1_tmp_storage2: *mut opus_int16 = 0 as *mut opus_int16;
-    let mut samplesOut2_tmp: *mut opus_int16 = 0 as *mut opus_int16;
+    let mut samplesOut1_tmp: [*mut opus_int16; 2] = [std::ptr::null_mut(); 2];
+    let mut samplesOut1_tmp_storage1: *mut opus_int16 = std::ptr::null_mut();
+    let mut samplesOut1_tmp_storage2: *mut opus_int16 = std::ptr::null_mut();
+    let mut samplesOut2_tmp: *mut opus_int16 = std::ptr::null_mut();
     let mut MS_pred_Q13: [opus_int32; 2] = [0 as i32, 0];
-    let mut resample_out_ptr: *mut opus_int16 = 0 as *mut opus_int16;
+    let mut resample_out_ptr: *mut opus_int16 = std::ptr::null_mut();
     let mut psDec: *mut silk_decoder = decState as *mut silk_decoder;
     let mut channel_state: *mut silk_decoder_state = (*psDec).channel_state.as_mut_ptr();
     let mut has_side: i32 = 0;

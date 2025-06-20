@@ -186,11 +186,11 @@ pub unsafe extern "C" fn silk_quant_LTP_gains(
     let mut k: i32 = 0;
     let mut cbk_size: i32 = 0;
     let mut temp_idx: [i8; 4] = [0; 4];
-    let mut cl_ptr_Q5: *const u8 = 0 as *const u8;
-    let mut cbk_ptr_Q7: *const i8 = 0 as *const i8;
-    let mut cbk_gain_ptr_Q7: *const u8 = 0 as *const u8;
-    let mut XX_Q17_ptr: *const opus_int32 = 0 as *const opus_int32;
-    let mut xX_Q17_ptr: *const opus_int32 = 0 as *const opus_int32;
+    let mut cl_ptr_Q5: *const u8 = std::ptr::null();
+    let mut cbk_ptr_Q7: *const i8 = std::ptr::null();
+    let mut cbk_gain_ptr_Q7: *const u8 = std::ptr::null();
+    let mut XX_Q17_ptr: *const opus_int32 = std::ptr::null();
+    let mut xX_Q17_ptr: *const opus_int32 = std::ptr::null();
     let mut res_nrg_Q15_subfr: opus_int32 = 0;
     let mut res_nrg_Q15: opus_int32 = 0;
     let mut rate_dist_Q7_subfr: opus_int32 = 0;

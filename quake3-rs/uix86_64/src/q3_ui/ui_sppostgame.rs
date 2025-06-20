@@ -6,7 +6,7 @@ pub mod stdlib_h {
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return libc::strtol(
             __nptr,
-            0 as *mut libc::c_void as *mut *mut libc::c_char,
+            std::ptr::null_mut() as *mut *mut libc::c_char,
             10 as i32,
         ) as i32;
     }
@@ -386,7 +386,7 @@ static mut postgameMenuInfo: postgameMenuInfo_t = postgameMenuInfo_t {
     item_again: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -412,7 +412,7 @@ static mut postgameMenuInfo: postgameMenuInfo_t = postgameMenuInfo_t {
     item_next: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -438,7 +438,7 @@ static mut postgameMenuInfo: postgameMenuInfo_t = postgameMenuInfo_t {
     item_menu: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -539,7 +539,7 @@ unsafe extern "C" fn UI_SPPostgameMenu_NextEvent(mut _ptr: *mut libc::c_void, mu
     let mut levelSet: i32 = 0;
     let mut level: i32 = 0;
     let mut currentLevel: i32 = 0;
-    let mut arenaInfo: *const libc::c_char = 0 as *const libc::c_char;
+    let mut arenaInfo: *const libc::c_char = std::ptr::null();
     if event != 3 as i32 {
         return;
     }
@@ -1181,7 +1181,7 @@ pub unsafe extern "C" fn UI_SPPostgameMenu_f() {
     let mut n: i32 = 0;
     let mut oldFrags: i32 = 0;
     let mut newFrags: i32 = 0;
-    let mut arena: *const libc::c_char = 0 as *const libc::c_char;
+    let mut arena: *const libc::c_char = std::ptr::null();
     let mut awardValues: [i32; 6] = [0; 6];
     let mut map: [libc::c_char; 64] = [0; 64];
     let mut info: [libc::c_char; 1024] = [0; 1024];

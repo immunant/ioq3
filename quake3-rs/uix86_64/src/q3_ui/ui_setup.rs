@@ -65,7 +65,7 @@ static mut setupMenuInfo: setupMenuInfo_t = setupMenuInfo_t {
     banner: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -87,7 +87,7 @@ static mut setupMenuInfo: setupMenuInfo_t = setupMenuInfo_t {
     framel: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -113,7 +113,7 @@ static mut setupMenuInfo: setupMenuInfo_t = setupMenuInfo_t {
     framer: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -139,7 +139,7 @@ static mut setupMenuInfo: setupMenuInfo_t = setupMenuInfo_t {
     setupplayer: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -161,7 +161,7 @@ static mut setupMenuInfo: setupMenuInfo_t = setupMenuInfo_t {
     setupcontrols: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -183,7 +183,7 @@ static mut setupMenuInfo: setupMenuInfo_t = setupMenuInfo_t {
     setupsystem: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -205,7 +205,7 @@ static mut setupMenuInfo: setupMenuInfo_t = setupMenuInfo_t {
     game: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -227,7 +227,7 @@ static mut setupMenuInfo: setupMenuInfo_t = setupMenuInfo_t {
     cdkey: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -249,7 +249,7 @@ static mut setupMenuInfo: setupMenuInfo_t = setupMenuInfo_t {
     defaults: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -271,7 +271,7 @@ static mut setupMenuInfo: setupMenuInfo_t = setupMenuInfo_t {
     back: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,

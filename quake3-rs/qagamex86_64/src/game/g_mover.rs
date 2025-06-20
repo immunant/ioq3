@@ -568,7 +568,7 @@ pub unsafe extern "C" fn G_TestEntityPosition(mut ent: *mut gentity_t) -> *mut g
     if tr.startsolid as u64 != 0 {
         return &mut *g_entities.as_mut_ptr().offset(tr.entityNum as isize) as *mut gentity_t;
     }
-    return 0 as *mut gentity_t;
+    return std::ptr::null_mut();
 }
 /*
 ================
@@ -651,7 +651,7 @@ pub unsafe extern "C" fn G_TryPushingEntity(
     let mut org: vec3_t = [0.; 3];
     let mut org2: vec3_t = [0.; 3];
     let mut move2: vec3_t = [0.; 3];
-    let mut block: *mut gentity_t = 0 as *mut gentity_t;
+    let mut block: *mut gentity_t = std::ptr::null_mut();
     // EF_MOVER_STOP will just stop when contacting another entity
     // instead of pushing it, but entities can still ride on top of it
     if (*pusher).s.eFlags & 0x400 as i32 != 0 && (*check).s.groundEntityNum != (*pusher).s.number {
@@ -834,8 +834,8 @@ pub unsafe extern "C" fn G_CheckProxMinePosition(mut check: *mut gentity_t) -> q
     trap_Trace(
         &mut tr as *mut _ as *mut trace_t,
         start.as_mut_ptr() as *const vec_t,
-        0 as *const vec_t,
-        0 as *const vec_t,
+        std::ptr::null(),
+        std::ptr::null(),
         end.as_mut_ptr() as *const vec_t,
         (*check).s.number,
         1 as i32,
@@ -935,15 +935,15 @@ pub unsafe extern "C" fn G_MoverPush(
 ) -> qboolean {
     let mut i: i32 = 0;
     let mut e: i32 = 0;
-    let mut check: *mut gentity_t = 0 as *mut gentity_t;
+    let mut check: *mut gentity_t = std::ptr::null_mut();
     let mut mins: vec3_t = [0.; 3];
     let mut maxs: vec3_t = [0.; 3];
-    let mut p: *mut pushed_t = 0 as *mut pushed_t;
+    let mut p: *mut pushed_t = std::ptr::null_mut();
     let mut entityList: [i32; 1024] = [0; 1024];
     let mut listedEntities: i32 = 0;
     let mut totalMins: vec3_t = [0.; 3];
     let mut totalMaxs: vec3_t = [0.; 3];
-    *obstacle = 0 as *mut gentity_t;
+    *obstacle = std::ptr::null_mut();
     // mins/maxs are the bounds at the destination
     // totalMins / totalMaxs are the bounds for the entire move
     if (*pusher).r.currentAngles[0 as i32 as usize] != 0.
@@ -1062,8 +1062,8 @@ pub unsafe extern "C" fn G_MoverPush(
                                 check as *mut gentity_s,
                                 pusher as *mut gentity_s,
                                 pusher as *mut gentity_s,
-                                0 as *mut vec_t,
-                                0 as *mut vec_t,
+                                std::ptr::null_mut(),
+                                std::ptr::null_mut(),
                                 99999 as i32,
                                 0 as i32,
                                 MOD_CRUSH as i32,
@@ -1121,11 +1121,11 @@ G_MoverTeam
 pub unsafe extern "C" fn G_MoverTeam(mut ent: *mut gentity_t) {
     let mut move_0: vec3_t = [0.; 3];
     let mut amove: vec3_t = [0.; 3];
-    let mut part: *mut gentity_t = 0 as *mut gentity_t;
-    let mut obstacle: *mut gentity_t = 0 as *mut gentity_t;
+    let mut part: *mut gentity_t = std::ptr::null_mut();
+    let mut obstacle: *mut gentity_t = std::ptr::null_mut();
     let mut origin: vec3_t = [0.; 3];
     let mut angles: vec3_t = [0.; 3];
-    obstacle = 0 as *mut gentity_t;
+    obstacle = std::ptr::null_mut();
     // make sure all team slaves can move before committing
     // any moves or calling any think functions
     // if the move is blocked, all moved objects will be backed out
@@ -1316,7 +1316,7 @@ pub unsafe extern "C" fn MatchTeam(
     mut moverState: i32,
     mut time: i32,
 ) {
-    let mut slave: *mut gentity_t = 0 as *mut gentity_t;
+    let mut slave: *mut gentity_t = std::ptr::null_mut();
     slave = teamLeader;
     while !slave.is_null() {
         SetMoverState(slave, moverState as moverState_t, time);
@@ -1488,7 +1488,7 @@ pub unsafe extern "C" fn InitMover(mut ent: *mut gentity_t) {
     let mut color: vec3_t = [0.; 3];
     let mut lightSet: qboolean = qfalse;
     let mut colorSet: qboolean = qfalse;
-    let mut sound: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut sound: *mut libc::c_char = std::ptr::null_mut();
     // if the "model2" key is set, use a separate model
     // for drawing, but clip against the brushes
     if !(*ent).model2.is_null() {
@@ -1607,8 +1607,8 @@ pub unsafe extern "C" fn Blocked_Door(mut ent: *mut gentity_t, mut other: *mut g
             other as *mut gentity_s,
             ent as *mut gentity_s,
             ent as *mut gentity_s,
-            0 as *mut vec_t,
-            0 as *mut vec_t,
+            std::ptr::null_mut(),
+            std::ptr::null_mut(),
             (*ent).damage,
             0 as i32,
             MOD_CRUSH as i32,
@@ -1695,7 +1695,7 @@ a trigger that encloses all of them
 #[no_mangle]
 
 pub unsafe extern "C" fn Think_SpawnNewDoorTrigger(mut ent: *mut gentity_t) {
-    let mut other: *mut gentity_t = 0 as *mut gentity_t;
+    let mut other: *mut gentity_t = std::ptr::null_mut();
     let mut mins: vec3_t = [0.; 3];
     let mut maxs: vec3_t = [0.; 3];
     let mut i: i32 = 0;
@@ -1947,7 +1947,7 @@ not just sit on top of it.
 #[no_mangle]
 
 pub unsafe extern "C" fn SpawnPlatTrigger(mut ent: *mut gentity_t) {
-    let mut trigger: *mut gentity_t = 0 as *mut gentity_t;
+    let mut trigger: *mut gentity_t = std::ptr::null_mut();
     let mut tmin: vec3_t = [0.; 3];
     let mut tmax: vec3_t = [0.; 3];
     // the middle trigger will be a thin trigger just
@@ -2202,7 +2202,7 @@ Reached_Train
 #[no_mangle]
 
 pub unsafe extern "C" fn Reached_Train(mut ent: *mut gentity_t) {
-    let mut next: *mut gentity_t = 0 as *mut gentity_t;
+    let mut next: *mut gentity_t = std::ptr::null_mut();
     let mut speed: f32 = 0.;
     let mut move_0: vec3_t = [0.; 3];
     let mut length: f32 = 0.;
@@ -2215,7 +2215,7 @@ pub unsafe extern "C" fn Reached_Train(mut ent: *mut gentity_t) {
     // fire all other targets
     G_UseTargets(
         next as *mut gentity_s,
-        0 as *mut gentity_t as *mut gentity_s,
+        std::ptr::null_mut() as *mut gentity_s,
     );
     // set the new trajectory
     (*ent).nextTrain = (*next).nextTrain;
@@ -2278,12 +2278,12 @@ Link all the corners together
 #[no_mangle]
 
 pub unsafe extern "C" fn Think_SetupTrainTargets(mut ent: *mut gentity_t) {
-    let mut path: *mut gentity_t = 0 as *mut gentity_t;
-    let mut next: *mut gentity_t = 0 as *mut gentity_t;
-    let mut start: *mut gentity_t = 0 as *mut gentity_t;
+    let mut path: *mut gentity_t = std::ptr::null_mut();
+    let mut next: *mut gentity_t = std::ptr::null_mut();
+    let mut start: *mut gentity_t = std::ptr::null_mut();
     (*ent).nextTrain = G_Find(
-        0 as *mut gentity_t as *mut gentity_s,
-        &mut (*(0 as *mut gentity_t)).targetname as *mut *mut libc::c_char as size_t as i32,
+        std::ptr::null_mut() as *mut gentity_s,
+        &mut (*(std::ptr::null_mut())).targetname as *mut *mut libc::c_char as size_t as i32,
         (*ent).target,
     ) as *mut gentity_s;
     if (*ent).nextTrain.is_null() {
@@ -2293,7 +2293,7 @@ pub unsafe extern "C" fn Think_SetupTrainTargets(mut ent: *mut gentity_t) {
         );
         return;
     }
-    start = 0 as *mut gentity_t;
+    start = std::ptr::null_mut();
     path = (*ent).nextTrain;
     while path != start {
         if start.is_null() {
@@ -2309,11 +2309,12 @@ pub unsafe extern "C" fn Think_SetupTrainTargets(mut ent: *mut gentity_t) {
         // find a path_corner among the targets
         // there may also be other targets that get fired when the corner
         // is reached
-        next = 0 as *mut gentity_t;
+        next = std::ptr::null_mut();
         loop {
             next = G_Find(
                 next as *mut gentity_s,
-                &mut (*(0 as *mut gentity_t)).targetname as *mut *mut libc::c_char as size_t as i32,
+                &mut (*(std::ptr::null_mut())).targetname as *mut *mut libc::c_char as size_t
+                    as i32,
                 (*path).target,
             ) as *mut gentity_s;
             if next.is_null() {

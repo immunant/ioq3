@@ -566,8 +566,8 @@ pub unsafe extern "C" fn CheckGauntletAttack(mut ent: *mut gentity_t) -> qboolea
         entityNum: 0,
     };
     let mut end: vec3_t = [0.; 3];
-    let mut tent: *mut gentity_t = 0 as *mut gentity_t;
-    let mut traceEnt: *mut gentity_t = 0 as *mut gentity_t;
+    let mut tent: *mut gentity_t = std::ptr::null_mut();
+    let mut traceEnt: *mut gentity_t = std::ptr::null_mut();
     let mut damage: i32 = 0;
     // set aiming directions
     AngleVectors(
@@ -592,8 +592,8 @@ pub unsafe extern "C" fn CheckGauntletAttack(mut ent: *mut gentity_t) -> qboolea
     trap_Trace(
         &mut tr as *mut _ as *mut trace_t,
         muzzle.as_mut_ptr() as *const vec_t,
-        0 as *const vec_t,
-        0 as *const vec_t,
+        std::ptr::null(),
+        std::ptr::null(),
         end.as_mut_ptr() as *const vec_t,
         (*ent).s.number,
         1 as i32 | 0x2000000 as i32 | 0x4000000 as i32,
@@ -693,8 +693,8 @@ pub unsafe extern "C" fn Bullet_Fire(
     let mut end: vec3_t = [0.; 3];
     let mut r: f32 = 0.;
     let mut u: f32 = 0.;
-    let mut tent: *mut gentity_t = 0 as *mut gentity_t;
-    let mut traceEnt: *mut gentity_t = 0 as *mut gentity_t;
+    let mut tent: *mut gentity_t = std::ptr::null_mut();
+    let mut traceEnt: *mut gentity_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut passent: i32 = 0;
     damage = (damage as f32 * s_quadFactor) as i32;
@@ -729,8 +729,8 @@ pub unsafe extern "C" fn Bullet_Fire(
         trap_Trace(
             &mut tr as *mut _ as *mut trace_t,
             muzzle.as_mut_ptr() as *const vec_t,
-            0 as *const vec_t,
-            0 as *const vec_t,
+            std::ptr::null(),
+            std::ptr::null(),
             end.as_mut_ptr() as *const vec_t,
             passent,
             1 as i32 | 0x2000000 as i32 | 0x4000000 as i32,
@@ -779,7 +779,7 @@ BFG
 #[no_mangle]
 
 pub unsafe extern "C" fn BFG_Fire(mut ent: *mut gentity_t) {
-    let mut m: *mut gentity_t = 0 as *mut gentity_t;
+    let mut m: *mut gentity_t = std::ptr::null_mut();
     m = fire_bfg(
         ent as *mut gentity_s,
         muzzle.as_mut_ptr(),
@@ -815,7 +815,7 @@ pub unsafe extern "C" fn ShotgunPellet(
     let mut damage: i32 = 0;
     let mut i: i32 = 0;
     let mut passent: i32 = 0;
-    let mut traceEnt: *mut gentity_t = 0 as *mut gentity_t;
+    let mut traceEnt: *mut gentity_t = std::ptr::null_mut();
     let mut tr_start: vec3_t = [0.; 3];
     let mut tr_end: vec3_t = [0.; 3];
     let mut hitClient: qboolean = qfalse;
@@ -831,8 +831,8 @@ pub unsafe extern "C" fn ShotgunPellet(
         trap_Trace(
             &mut tr as *mut _ as *mut trace_t,
             tr_start.as_mut_ptr() as *const vec_t,
-            0 as *const vec_t,
-            0 as *const vec_t,
+            std::ptr::null(),
+            std::ptr::null(),
             tr_end.as_mut_ptr() as *const vec_t,
             passent,
             1 as i32 | 0x2000000 as i32 | 0x4000000 as i32,
@@ -916,7 +916,7 @@ pub unsafe extern "C" fn ShotgunPattern(
 #[no_mangle]
 
 pub unsafe extern "C" fn weapon_supershotgun_fire(mut ent: *mut gentity_t) {
-    let mut tent: *mut gentity_t = 0 as *mut gentity_t;
+    let mut tent: *mut gentity_t = std::ptr::null_mut();
     // send shotgun blast
     tent = G_TempEntity(muzzle.as_mut_ptr(), EV_SHOTGUN as i32) as *mut gentity_s; // seed for spread pattern
     (*tent).s.origin2[0 as i32 as usize] = forward[0 as i32 as usize] * 4096 as i32 as f32;
@@ -944,7 +944,7 @@ GRENADE LAUNCHER
 #[no_mangle]
 
 pub unsafe extern "C" fn weapon_grenadelauncher_fire(mut ent: *mut gentity_t) {
-    let mut m: *mut gentity_t = 0 as *mut gentity_t;
+    let mut m: *mut gentity_t = std::ptr::null_mut();
     // extra vertical velocity
     forward[2 as i32 as usize] += 0.2f32;
     VectorNormalize(forward.as_mut_ptr());
@@ -967,7 +967,7 @@ ROCKET
 #[no_mangle]
 
 pub unsafe extern "C" fn Weapon_RocketLauncher_Fire(mut ent: *mut gentity_t) {
-    let mut m: *mut gentity_t = 0 as *mut gentity_t;
+    let mut m: *mut gentity_t = std::ptr::null_mut();
     m = fire_rocket(
         ent as *mut gentity_s,
         muzzle.as_mut_ptr(),
@@ -987,7 +987,7 @@ PLASMA GUN
 #[no_mangle]
 
 pub unsafe extern "C" fn Weapon_Plasmagun_Fire(mut ent: *mut gentity_t) {
-    let mut m: *mut gentity_t = 0 as *mut gentity_t;
+    let mut m: *mut gentity_t = std::ptr::null_mut();
     m = fire_plasma(
         ent as *mut gentity_s,
         muzzle.as_mut_ptr(),
@@ -1017,14 +1017,14 @@ pub unsafe extern "C" fn weapon_railgun_fire(mut ent: *mut gentity_t) {
         contents: 0,
         entityNum: 0,
     };
-    let mut tent: *mut gentity_t = 0 as *mut gentity_t;
-    let mut traceEnt: *mut gentity_t = 0 as *mut gentity_t;
+    let mut tent: *mut gentity_t = std::ptr::null_mut();
+    let mut traceEnt: *mut gentity_t = std::ptr::null_mut();
     let mut damage: i32 = 0;
     let mut i: i32 = 0;
     let mut hits: i32 = 0;
     let mut unlinked: i32 = 0;
     let mut passent: i32 = 0;
-    let mut unlinkedEntities: [*mut gentity_t; 4] = [0 as *mut gentity_t; 4];
+    let mut unlinkedEntities: [*mut gentity_t; 4] = [std::ptr::null_mut(); 4];
     damage = (100 as i32 as f32 * s_quadFactor) as i32;
     end[0 as i32 as usize] =
         muzzle[0 as i32 as usize] + forward[0 as i32 as usize] * 8192 as i32 as f32;
@@ -1040,8 +1040,8 @@ pub unsafe extern "C" fn weapon_railgun_fire(mut ent: *mut gentity_t) {
         trap_Trace(
             &mut trace as *mut _ as *mut trace_t,
             muzzle.as_mut_ptr() as *const vec_t,
-            0 as *const vec_t,
-            0 as *const vec_t,
+            std::ptr::null(),
+            std::ptr::null(),
             end.as_mut_ptr() as *const vec_t,
             passent,
             1 as i32 | 0x2000000 as i32 | 0x4000000 as i32,
@@ -1158,7 +1158,7 @@ pub unsafe extern "C" fn Weapon_GrapplingHook_Fire(mut ent: *mut gentity_t) {
 #[no_mangle]
 
 pub unsafe extern "C" fn Weapon_HookFree(mut ent: *mut gentity_t) {
-    (*(*(*ent).parent).client).hook = 0 as *mut gentity_t;
+    (*(*(*ent).parent).client).hook = std::ptr::null_mut();
     (*(*(*ent).parent).client).ps.pm_flags &= !(2048 as i32);
     G_FreeEntity(ent as *mut gentity_s);
 }
@@ -1220,8 +1220,8 @@ pub unsafe extern "C" fn Weapon_LightningFire(mut ent: *mut gentity_t) {
         entityNum: 0,
     };
     let mut end: vec3_t = [0.; 3];
-    let mut traceEnt: *mut gentity_t = 0 as *mut gentity_t;
-    let mut tent: *mut gentity_t = 0 as *mut gentity_t;
+    let mut traceEnt: *mut gentity_t = std::ptr::null_mut();
+    let mut tent: *mut gentity_t = std::ptr::null_mut();
     let mut damage: i32 = 0;
     let mut i: i32 = 0;
     let mut passent: i32 = 0;
@@ -1238,8 +1238,8 @@ pub unsafe extern "C" fn Weapon_LightningFire(mut ent: *mut gentity_t) {
         trap_Trace(
             &mut tr as *mut _ as *mut trace_t,
             muzzle.as_mut_ptr() as *const vec_t,
-            0 as *const vec_t,
-            0 as *const vec_t,
+            std::ptr::null(),
+            std::ptr::null(),
             end.as_mut_ptr() as *const vec_t,
             passent,
             1 as i32 | 0x2000000 as i32 | 0x4000000 as i32,

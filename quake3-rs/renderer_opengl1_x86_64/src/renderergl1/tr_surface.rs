@@ -877,11 +877,11 @@ RB_SurfaceTriangles
 
 unsafe extern "C" fn RB_SurfaceTriangles(mut srf: *mut srfTriangles_t) {
     let mut i: i32 = 0;
-    let mut dv: *mut drawVert_t = 0 as *mut drawVert_t;
-    let mut xyz: *mut f32 = 0 as *mut f32;
-    let mut normal: *mut f32 = 0 as *mut f32;
-    let mut texCoords: *mut f32 = 0 as *mut f32;
-    let mut color: *mut byte = 0 as *mut byte;
+    let mut dv: *mut drawVert_t = std::ptr::null_mut();
+    let mut xyz: *mut f32 = std::ptr::null_mut();
+    let mut normal: *mut f32 = std::ptr::null_mut();
+    let mut texCoords: *mut f32 = std::ptr::null_mut();
+    let mut color: *mut byte = std::ptr::null_mut();
     let mut dlightBits: i32 = 0;
     let mut needsNormal: qboolean = qfalse;
     dlightBits = (*srf).dlightBits;
@@ -944,7 +944,7 @@ RB_SurfaceBeam
 */
 
 unsafe extern "C" fn RB_SurfaceBeam() {
-    let mut e: *mut refEntity_t = 0 as *mut refEntity_t;
+    let mut e: *mut refEntity_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut perpvec: vec3_t = [0.; 3];
     let mut direction: vec3_t = [0.; 3];
@@ -1238,7 +1238,7 @@ unsafe extern "C" fn DoRailDiscs(
 */
 
 unsafe extern "C" fn RB_SurfaceRailRings() {
-    let mut e: *mut refEntity_t = 0 as *mut refEntity_t;
+    let mut e: *mut refEntity_t = std::ptr::null_mut();
     let mut numSegs: i32 = 0;
     let mut len: i32 = 0;
     let mut vec: vec3_t = [0.; 3];
@@ -1283,7 +1283,7 @@ unsafe extern "C" fn RB_SurfaceRailRings() {
 */
 
 unsafe extern "C" fn RB_SurfaceRailCore() {
-    let mut e: *mut refEntity_t = 0 as *mut refEntity_t;
+    let mut e: *mut refEntity_t = std::ptr::null_mut();
     let mut len: i32 = 0;
     let mut right: vec3_t = [0.; 3];
     let mut vec: vec3_t = [0.; 3];
@@ -1333,7 +1333,7 @@ unsafe extern "C" fn RB_SurfaceRailCore() {
 */
 
 unsafe extern "C" fn RB_SurfaceLightningBolt() {
-    let mut e: *mut refEntity_t = 0 as *mut refEntity_t;
+    let mut e: *mut refEntity_t = std::ptr::null_mut();
     let mut len: i32 = 0;
     let mut right: vec3_t = [0.; 3];
     let mut vec: vec3_t = [0.; 3];
@@ -1849,12 +1849,12 @@ pub unsafe extern "C" fn VectorArrayNormalize(mut normals: *mut vec4_t, mut coun
 */
 
 unsafe extern "C" fn LerpMeshVertexes_scalar(mut surf: *mut md3Surface_t, mut backlerp: f32) {
-    let mut oldXyz: *mut i16 = 0 as *mut i16;
-    let mut newXyz: *mut i16 = 0 as *mut i16;
-    let mut oldNormals: *mut i16 = 0 as *mut i16;
-    let mut newNormals: *mut i16 = 0 as *mut i16;
-    let mut outXyz: *mut f32 = 0 as *mut f32;
-    let mut outNormal: *mut f32 = 0 as *mut f32;
+    let mut oldXyz: *mut i16 = std::ptr::null_mut();
+    let mut newXyz: *mut i16 = std::ptr::null_mut();
+    let mut oldNormals: *mut i16 = std::ptr::null_mut();
+    let mut newNormals: *mut i16 = std::ptr::null_mut();
+    let mut outXyz: *mut f32 = std::ptr::null_mut();
+    let mut outNormal: *mut f32 = std::ptr::null_mut();
     let mut oldXyzScale: f32 = 0.;
     let mut newXyzScale: f32 = 0.;
     let mut oldNormalScale: f32 = 0.;
@@ -1993,8 +1993,8 @@ RB_SurfaceMesh
 unsafe extern "C" fn RB_SurfaceMesh(mut surface: *mut md3Surface_t) {
     let mut j: i32 = 0;
     let mut backlerp: f32 = 0.;
-    let mut triangles: *mut i32 = 0 as *mut i32;
-    let mut texCoords: *mut f32 = 0 as *mut f32;
+    let mut triangles: *mut i32 = std::ptr::null_mut();
+    let mut texCoords: *mut f32 = std::ptr::null_mut();
     let mut indexes: i32 = 0;
     let mut Bob: i32 = 0;
     let mut Doug: i32 = 0;
@@ -2041,10 +2041,10 @@ RB_SurfaceFace
 
 unsafe extern "C" fn RB_SurfaceFace(mut surf: *mut srfSurfaceFace_t) {
     let mut i: i32 = 0;
-    let mut indices: *mut u32 = 0 as *mut u32;
-    let mut tessIndexes: *mut glIndex_t = 0 as *mut glIndex_t;
-    let mut v: *mut f32 = 0 as *mut f32;
-    let mut normal: *mut f32 = 0 as *mut f32;
+    let mut indices: *mut u32 = std::ptr::null_mut();
+    let mut tessIndexes: *mut glIndex_t = std::ptr::null_mut();
+    let mut v: *mut f32 = std::ptr::null_mut();
+    let mut normal: *mut f32 = std::ptr::null_mut();
     let mut ndx: i32 = 0;
     let mut Bob: i32 = 0;
     let mut numPoints: i32 = 0;
@@ -2156,11 +2156,11 @@ Just copy the grid of points and triangulate
 unsafe extern "C" fn RB_SurfaceGrid(mut cv: *mut srfGridMesh_t) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut xyz: *mut f32 = 0 as *mut f32;
-    let mut texCoords: *mut f32 = 0 as *mut f32;
-    let mut normal: *mut f32 = 0 as *mut f32;
-    let mut color: *mut u8 = 0 as *mut u8;
-    let mut dv: *mut drawVert_t = 0 as *mut drawVert_t;
+    let mut xyz: *mut f32 = std::ptr::null_mut();
+    let mut texCoords: *mut f32 = std::ptr::null_mut();
+    let mut normal: *mut f32 = std::ptr::null_mut();
+    let mut color: *mut u8 = std::ptr::null_mut();
+    let mut dv: *mut drawVert_t = std::ptr::null_mut();
     let mut rows: i32 = 0;
     let mut irows: i32 = 0;
     let mut vrows: i32 = 0;
@@ -2172,7 +2172,7 @@ unsafe extern "C" fn RB_SurfaceGrid(mut cv: *mut srfGridMesh_t) {
     let mut lodHeight: i32 = 0;
     let mut numVertexes: i32 = 0;
     let mut dlightBits: i32 = 0;
-    let mut vDlightBits: *mut i32 = 0 as *mut i32;
+    let mut vDlightBits: *mut i32 = std::ptr::null_mut();
     let mut needsNormal: qboolean = qfalse;
     dlightBits = (*cv).dlightBits;
     tess.dlightBits |= dlightBits;

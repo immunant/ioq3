@@ -309,7 +309,7 @@ unsafe extern "C" fn empty_output_buffer(mut cinfo: j_compress_ptr) -> boolean {
 
 unsafe extern "C" fn empty_mem_output_buffer(mut cinfo: j_compress_ptr) -> boolean {
     let mut nextsize: size_t = 0;
-    let mut nextbuffer: *mut JOCTET = 0 as *mut JOCTET;
+    let mut nextbuffer: *mut JOCTET = std::ptr::null_mut();
     let mut dest: my_mem_dest_ptr = (*cinfo).dest as my_mem_dest_ptr;
     /* Try to allocate new buffer with double size */
     nextsize = (*dest).bufsize.wrapping_mul(2 as i32 as usize);
@@ -397,7 +397,7 @@ unsafe extern "C" fn term_mem_destination(mut cinfo: j_compress_ptr) {
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_stdio_dest(mut cinfo: j_compress_ptr, mut outfile: *mut FILE) {
-    let mut dest: my_dest_ptr = 0 as *mut my_destination_mgr;
+    let mut dest: my_dest_ptr = std::ptr::null_mut();
     /* The destination object is made permanent so that multiple JPEG images
      * can be written to the same file without re-executing jpeg_stdio_dest.
      * This makes it dangerous to use this manager and a different destination
@@ -444,7 +444,7 @@ pub unsafe extern "C" fn jpeg_mem_dest(
     mut outbuffer: *mut *mut u8,
     mut outsize: *mut usize,
 ) {
-    let mut dest: my_mem_dest_ptr = 0 as *mut my_mem_destination_mgr;
+    let mut dest: my_mem_dest_ptr = std::ptr::null_mut();
     if outbuffer.is_null() || outsize.is_null() {
         /* sanity check */
         (*(*cinfo).err).msg_code = JERR_BUFFER_SIZE as i32;
@@ -480,7 +480,7 @@ pub unsafe extern "C" fn jpeg_mem_dest(
         Some(term_mem_destination as unsafe extern "C" fn(_: j_compress_ptr) -> ());
     (*dest).outbuffer = outbuffer;
     (*dest).outsize = outsize;
-    (*dest).newbuffer = 0 as *mut u8;
+    (*dest).newbuffer = std::ptr::null_mut();
     if (*outbuffer).is_null() || *outsize == 0 as i32 as usize {
         /* Allocate initial buffer */
         *outbuffer = malloc(4096 as i32 as usize) as *mut u8;

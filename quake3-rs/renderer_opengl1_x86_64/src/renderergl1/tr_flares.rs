@@ -214,7 +214,7 @@ pub mod stdlib_float_h {
     #[inline]
 
     pub unsafe extern "C" fn atof(mut __nptr: *const libc::c_char) -> f64 {
-        return libc::strtod(__nptr, 0 as *mut libc::c_void as *mut *mut libc::c_char);
+        return libc::strtod(__nptr, std::ptr::null_mut() as *mut *mut libc::c_char);
     }
 }
 
@@ -575,8 +575,8 @@ pub unsafe extern "C" fn R_ClearFlares() {
         0 as i32,
         ::std::mem::size_of::<[flare_t; 256]>() as usize,
     );
-    r_activeFlares = 0 as *mut flare_t;
-    r_inactiveFlares = 0 as *mut flare_t;
+    r_activeFlares = std::ptr::null_mut();
+    r_inactiveFlares = std::ptr::null_mut();
     i = 0 as i32;
     while i < 256 as i32 {
         r_flareStructs[i as usize].next = r_inactiveFlares;
@@ -602,7 +602,7 @@ pub unsafe extern "C" fn RB_AddFlare(
     mut normal: *mut vec_t,
 ) {
     let mut i: i32 = 0;
-    let mut f: *mut flare_t = 0 as *mut flare_t;
+    let mut f: *mut flare_t = std::ptr::null_mut();
     let mut local: vec3_t = [0.; 3];
     let mut d: f32 = 1 as i32 as f32;
     let mut eye: vec4_t = [0.; 4];
@@ -719,11 +719,11 @@ RB_AddDlightFlares
 #[no_mangle]
 
 pub unsafe extern "C" fn RB_AddDlightFlares() {
-    let mut l: *mut dlight_t = 0 as *mut dlight_t;
+    let mut l: *mut dlight_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut k: i32 = 0;
-    let mut fog: *mut fog_t = 0 as *mut fog_t;
+    let mut fog: *mut fog_t = std::ptr::null_mut();
     if (*r_flares).integer == 0 {
         return;
     }
@@ -763,7 +763,7 @@ pub unsafe extern "C" fn RB_AddDlightFlares() {
             j,
             (*l).origin.as_mut_ptr(),
             (*l).color.as_mut_ptr(),
-            0 as *mut vec_t,
+            std::ptr::null_mut(),
         );
         i += 1;
         l = l.offset(1)
@@ -1342,8 +1342,8 @@ extend past the portal edge will be overwritten.
 #[no_mangle]
 
 pub unsafe extern "C" fn RB_RenderFlares() {
-    let mut f: *mut flare_t = 0 as *mut flare_t;
-    let mut prev: *mut *mut flare_t = 0 as *mut *mut flare_t;
+    let mut f: *mut flare_t = std::ptr::null_mut();
+    let mut prev: *mut *mut flare_t = std::ptr::null_mut();
     let mut draw: qboolean = qfalse;
     if (*r_flares).integer == 0 {
         return;

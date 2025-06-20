@@ -312,7 +312,7 @@ static mut s_confirm: confirmMenu_t = confirmMenu_t {
     no: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -334,7 +334,7 @@ static mut s_confirm: confirmMenu_t = confirmMenu_t {
     yes: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -354,7 +354,7 @@ static mut s_confirm: confirmMenu_t = confirmMenu_t {
         color: std::ptr::null_mut(),
     },
     slashX: 0,
-    question: 0 as *const libc::c_char,
+    question: std::ptr::null(),
     draw: None,
     action: None,
     style: 0,

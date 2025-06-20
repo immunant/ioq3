@@ -224,7 +224,7 @@ pub unsafe extern "C" fn celt_decoder_get_size(mut channels: i32) -> i32 {
         crate::src::opus_1_2_1::celt::modes::opus_custom_mode_create(
             48000 as i32,
             960 as i32,
-            0 as *mut i32,
+            std::ptr::null_mut(),
         ) as *mut OpusCustomMode;
     return opus_custom_decoder_get_size(mode, channels);
 }
@@ -263,7 +263,7 @@ pub unsafe extern "C" fn celt_decoder_init(
         crate::src::opus_1_2_1::celt::modes::opus_custom_mode_create(
             48000 as i32,
             960 as i32,
-            0 as *mut i32,
+            std::ptr::null_mut(),
         ) as *mut OpusCustomMode,
         channels,
     );
@@ -339,8 +339,8 @@ unsafe extern "C" fn deemphasis_stereo_simple(
     coef0: opus_val16,
     mut mem: *mut celt_sig,
 ) {
-    let mut x0: *mut celt_sig = 0 as *mut celt_sig;
-    let mut x1: *mut celt_sig = 0 as *mut celt_sig;
+    let mut x0: *mut celt_sig = std::ptr::null_mut();
+    let mut x1: *mut celt_sig = std::ptr::null_mut();
     let mut m0: celt_sig = 0.;
     let mut m1: celt_sig = 0.;
     let mut j: i32 = 0;
@@ -379,7 +379,7 @@ unsafe extern "C" fn deemphasis(
     let mut Nd: i32 = 0;
     let mut apply_downsampling: i32 = 0 as i32;
     let mut coef0: opus_val16 = 0.;
-    let mut scratch: *mut celt_sig = 0 as *mut celt_sig;
+    let mut scratch: *mut celt_sig = std::ptr::null_mut();
     /* Short version for common case. */
     if downsample == 1 as i32 && C == 2 as i32 && accum == 0 {
         deemphasis_stereo_simple(in_0, pcm, N, *coef.offset(0 as i32 as isize), mem);
@@ -395,8 +395,8 @@ unsafe extern "C" fn deemphasis(
     c = 0 as i32;
     loop {
         let mut j: i32 = 0;
-        let mut x: *mut celt_sig = 0 as *mut celt_sig;
-        let mut y: *mut opus_val16 = 0 as *mut opus_val16;
+        let mut x: *mut celt_sig = std::ptr::null_mut();
+        let mut y: *mut opus_val16 = std::ptr::null_mut();
         let mut m: celt_sig = *mem.offset(c as isize);
         x = *in_0.offset(c as isize);
         y = pcm.offset(c as isize);
@@ -462,7 +462,7 @@ unsafe extern "C" fn celt_synthesis(
     let mut shift: i32 = 0;
     let mut nbEBands: i32 = 0;
     let mut overlap: i32 = 0;
-    let mut freq: *mut celt_sig = 0 as *mut celt_sig;
+    let mut freq: *mut celt_sig = std::ptr::null_mut();
     overlap = (*mode).overlap;
     nbEBands = (*mode).nbEBands;
     N = (*mode).shortMdctSize << LM;
@@ -483,7 +483,7 @@ unsafe extern "C" fn celt_synthesis(
     }
     if CC == 2 as i32 && C == 1 as i32 {
         /* Copying a mono streams to two channels */
-        let mut freq2: *mut celt_sig = 0 as *mut celt_sig;
+        let mut freq2: *mut celt_sig = std::ptr::null_mut();
         crate::src::opus_1_2_1::celt::bands::denormalise_bands(
             mode as *const OpusCustomMode,
             X,
@@ -534,7 +534,7 @@ unsafe extern "C" fn celt_synthesis(
         }
     } else if CC == 1 as i32 && C == 2 as i32 {
         /* Downmixing a stereo stream to mono */
-        let mut freq2_0: *mut celt_sig = 0 as *mut celt_sig;
+        let mut freq2_0: *mut celt_sig = std::ptr::null_mut();
         freq2_0 = (*out_syn.offset(0 as i32 as isize)).offset((overlap / 2 as i32) as isize);
         crate::src::opus_1_2_1::celt::bands::denormalise_bands(
             mode as *const OpusCustomMode,
@@ -697,7 +697,7 @@ unsafe extern "C" fn celt_plc_pitch_search(
     mut arch: i32,
 ) -> i32 {
     let mut pitch_index: i32 = 0;
-    let mut lp_pitch_buf: *mut opus_val16 = 0 as *mut opus_val16;
+    let mut lp_pitch_buf: *mut opus_val16 = std::ptr::null_mut();
     let mut fresh2 = ::std::vec::from_elem(
         0,
         (::std::mem::size_of::<opus_val16>() as usize)
@@ -727,20 +727,20 @@ unsafe extern "C" fn celt_decode_lost(mut st: *mut OpusCustomDecoder, mut N: i32
     let mut c: i32 = 0;
     let mut i: i32 = 0;
     let C: i32 = (*st).channels;
-    let mut decode_mem: [*mut celt_sig; 2] = [0 as *mut celt_sig; 2];
-    let mut out_syn: [*mut celt_sig; 2] = [0 as *mut celt_sig; 2];
-    let mut lpc: *mut opus_val16 = 0 as *mut opus_val16;
-    let mut oldBandE: *mut opus_val16 = 0 as *mut opus_val16;
-    let mut oldLogE: *mut opus_val16 = 0 as *mut opus_val16;
-    let mut oldLogE2: *mut opus_val16 = 0 as *mut opus_val16;
-    let mut backgroundLogE: *mut opus_val16 = 0 as *mut opus_val16;
-    let mut mode: *const OpusCustomMode = 0 as *const OpusCustomMode;
+    let mut decode_mem: [*mut celt_sig; 2] = [std::ptr::null_mut(); 2];
+    let mut out_syn: [*mut celt_sig; 2] = [std::ptr::null_mut(); 2];
+    let mut lpc: *mut opus_val16 = std::ptr::null_mut();
+    let mut oldBandE: *mut opus_val16 = std::ptr::null_mut();
+    let mut oldLogE: *mut opus_val16 = std::ptr::null_mut();
+    let mut oldLogE2: *mut opus_val16 = std::ptr::null_mut();
+    let mut backgroundLogE: *mut opus_val16 = std::ptr::null_mut();
+    let mut mode: *const OpusCustomMode = std::ptr::null();
     let mut nbEBands: i32 = 0;
     let mut overlap: i32 = 0;
     let mut start: i32 = 0;
     let mut loss_count: i32 = 0;
     let mut noise_based: i32 = 0;
-    let mut eBands: *const opus_int16 = 0 as *const opus_int16;
+    let mut eBands: *const opus_int16 = std::ptr::null();
     mode = (*st).mode;
     nbEBands = (*mode).nbEBands;
     overlap = (*mode).overlap;
@@ -772,7 +772,7 @@ unsafe extern "C" fn celt_decode_lost(mut st: *mut OpusCustomDecoder, mut N: i32
     noise_based = (loss_count >= 5 as i32 || start != 0 as i32 || (*st).skip_plc != 0) as i32;
     if noise_based != 0 {
         /* Noise-based PLC/CNG */
-        let mut X: *mut celt_norm = 0 as *mut celt_norm; /* *< Interleaved normalised MDCTs */
+        let mut X: *mut celt_norm = std::ptr::null_mut(); /* *< Interleaved normalised MDCTs */
         let mut seed: opus_uint32 = 0;
         let mut end: i32 = 0;
         let mut effEnd: i32 = 0;
@@ -886,12 +886,12 @@ unsafe extern "C" fn celt_decode_lost(mut st: *mut OpusCustomDecoder, mut N: i32
         );
     } else {
         /* Pitch-based PLC */
-        let mut window: *const opus_val16 = 0 as *const opus_val16;
-        let mut exc: *mut opus_val16 = 0 as *mut opus_val16;
+        let mut window: *const opus_val16 = std::ptr::null();
+        let mut exc: *mut opus_val16 = std::ptr::null_mut();
         let mut fade: opus_val16 = 1.0f32;
         let mut pitch_index: i32 = 0;
-        let mut etmp: *mut opus_val32 = 0 as *mut opus_val32;
-        let mut _exc: *mut opus_val16 = 0 as *mut opus_val16;
+        let mut etmp: *mut opus_val32 = std::ptr::null_mut();
+        let mut _exc: *mut opus_val16 = std::ptr::null_mut();
         if loss_count == 0 as i32 {
             pitch_index = celt_plc_pitch_search(decode_mem.as_mut_ptr(), C, (*st).arch);
             (*st).last_pitch_index = pitch_index
@@ -917,7 +917,7 @@ unsafe extern "C" fn celt_decode_lost(mut st: *mut OpusCustomDecoder, mut N: i32
             let mut decay_0: opus_val16 = 0.;
             let mut attenuation: opus_val16 = 0.;
             let mut S1: opus_val32 = 0 as i32 as opus_val32;
-            let mut buf: *mut celt_sig = 0 as *mut celt_sig;
+            let mut buf: *mut celt_sig = std::ptr::null_mut();
             let mut extrapolation_offset: i32 = 0;
             let mut extrapolation_len: i32 = 0;
             let mut exc_length: i32 = 0;
@@ -1110,7 +1110,7 @@ unsafe extern "C" fn celt_decode_lost(mut st: *mut OpusCustomDecoder, mut N: i32
                 -(*st).postfilter_gain,
                 (*st).postfilter_tapset,
                 (*st).postfilter_tapset,
-                0 as *const opus_val16,
+                std::ptr::null(),
                 0 as i32,
                 (*st).arch,
             );
@@ -1191,7 +1191,7 @@ pub unsafe extern "C" fn celt_decode_with_ec(
     let mut spread_decision: i32 = 0;
     let mut bits: opus_int32 = 0;
     let mut _dec: ec_dec = ec_dec {
-        buf: 0 as *mut u8,
+        buf: std::ptr::null_mut(),
         storage: 0,
         end_offs: 0,
         end_window: 0,
@@ -1204,21 +1204,21 @@ pub unsafe extern "C" fn celt_decode_with_ec(
         rem: 0,
         error: 0,
     };
-    let mut X: *mut celt_norm = 0 as *mut celt_norm;
-    let mut fine_quant: *mut i32 = 0 as *mut i32;
-    let mut pulses: *mut i32 = 0 as *mut i32;
-    let mut cap: *mut i32 = 0 as *mut i32;
-    let mut offsets: *mut i32 = 0 as *mut i32;
-    let mut fine_priority: *mut i32 = 0 as *mut i32;
-    let mut tf_res: *mut i32 = 0 as *mut i32;
-    let mut collapse_masks: *mut u8 = 0 as *mut u8;
-    let mut decode_mem: [*mut celt_sig; 2] = [0 as *mut celt_sig; 2];
-    let mut out_syn: [*mut celt_sig; 2] = [0 as *mut celt_sig; 2];
-    let mut lpc: *mut opus_val16 = 0 as *mut opus_val16;
-    let mut oldBandE: *mut opus_val16 = 0 as *mut opus_val16;
-    let mut oldLogE: *mut opus_val16 = 0 as *mut opus_val16;
-    let mut oldLogE2: *mut opus_val16 = 0 as *mut opus_val16;
-    let mut backgroundLogE: *mut opus_val16 = 0 as *mut opus_val16;
+    let mut X: *mut celt_norm = std::ptr::null_mut();
+    let mut fine_quant: *mut i32 = std::ptr::null_mut();
+    let mut pulses: *mut i32 = std::ptr::null_mut();
+    let mut cap: *mut i32 = std::ptr::null_mut();
+    let mut offsets: *mut i32 = std::ptr::null_mut();
+    let mut fine_priority: *mut i32 = std::ptr::null_mut();
+    let mut tf_res: *mut i32 = std::ptr::null_mut();
+    let mut collapse_masks: *mut u8 = std::ptr::null_mut();
+    let mut decode_mem: [*mut celt_sig; 2] = [std::ptr::null_mut(); 2];
+    let mut out_syn: [*mut celt_sig; 2] = [std::ptr::null_mut(); 2];
+    let mut lpc: *mut opus_val16 = std::ptr::null_mut();
+    let mut oldBandE: *mut opus_val16 = std::ptr::null_mut();
+    let mut oldLogE: *mut opus_val16 = std::ptr::null_mut();
+    let mut oldLogE2: *mut opus_val16 = std::ptr::null_mut();
+    let mut backgroundLogE: *mut opus_val16 = std::ptr::null_mut();
     let mut shortBlocks: i32 = 0;
     let mut isTransient: i32 = 0;
     let mut intra_ener: i32 = 0;
@@ -1243,10 +1243,10 @@ pub unsafe extern "C" fn celt_decode_with_ec(
     let mut anti_collapse_on: i32 = 0 as i32;
     let mut silence: i32 = 0;
     let mut C: i32 = (*st).stream_channels;
-    let mut mode: *const OpusCustomMode = 0 as *const OpusCustomMode;
+    let mut mode: *const OpusCustomMode = std::ptr::null();
     let mut nbEBands: i32 = 0;
     let mut overlap: i32 = 0;
-    let mut eBands: *const opus_int16 = 0 as *const opus_int16;
+    let mut eBands: *const opus_int16 = std::ptr::null();
     mode = (*st).mode;
     nbEBands = (*mode).nbEBands;
     overlap = (*mode).overlap;
@@ -1600,10 +1600,10 @@ pub unsafe extern "C" fn celt_decode_with_ec(
         if C == 2 as i32 {
             X.offset(N as isize)
         } else {
-            0 as *mut celt_norm
+            std::ptr::null_mut()
         },
         collapse_masks,
-        0 as *const celt_ener,
+        std::ptr::null(),
         pulses,
         shortBlocks,
         spread_decision,
@@ -1909,10 +1909,10 @@ pub unsafe extern "C" fn opus_custom_decoder_ctl(
         }
         4028 => {
             let mut i: i32 = 0;
-            let mut lpc: *mut opus_val16 = 0 as *mut opus_val16;
-            let mut oldBandE: *mut opus_val16 = 0 as *mut opus_val16;
-            let mut oldLogE: *mut opus_val16 = 0 as *mut opus_val16;
-            let mut oldLogE2: *mut opus_val16 = 0 as *mut opus_val16;
+            let mut lpc: *mut opus_val16 = std::ptr::null_mut();
+            let mut oldBandE: *mut opus_val16 = std::ptr::null_mut();
+            let mut oldLogE: *mut opus_val16 = std::ptr::null_mut();
+            let mut oldLogE2: *mut opus_val16 = std::ptr::null_mut();
             lpc = (*st)
                 ._decode_mem
                 .as_mut_ptr()

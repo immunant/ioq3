@@ -6,7 +6,7 @@ pub mod stdlib_h {
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return libc::strtol(
             __nptr,
-            0 as *mut libc::c_void as *mut *mut libc::c_char,
+            std::ptr::null_mut() as *mut *mut libc::c_char,
             10 as i32,
         ) as i32;
     }
@@ -159,7 +159,7 @@ static mut levelMenuInfo: levelMenuInfo_t = levelMenuInfo_t {
     item_banner: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -181,7 +181,7 @@ static mut levelMenuInfo: levelMenuInfo_t = levelMenuInfo_t {
     item_leftarrow: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -207,7 +207,7 @@ static mut levelMenuInfo: levelMenuInfo_t = levelMenuInfo_t {
     item_maps: [menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -233,7 +233,7 @@ static mut levelMenuInfo: levelMenuInfo_t = levelMenuInfo_t {
     item_rightarrow: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -259,7 +259,7 @@ static mut levelMenuInfo: levelMenuInfo_t = levelMenuInfo_t {
     item_player: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -285,7 +285,7 @@ static mut levelMenuInfo: levelMenuInfo_t = levelMenuInfo_t {
     item_awards: [menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -311,7 +311,7 @@ static mut levelMenuInfo: levelMenuInfo_t = levelMenuInfo_t {
     item_back: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -337,7 +337,7 @@ static mut levelMenuInfo: levelMenuInfo_t = levelMenuInfo_t {
     item_reset: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -363,7 +363,7 @@ static mut levelMenuInfo: levelMenuInfo_t = levelMenuInfo_t {
     item_custom: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -389,7 +389,7 @@ static mut levelMenuInfo: levelMenuInfo_t = levelMenuInfo_t {
     item_next: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -415,7 +415,7 @@ static mut levelMenuInfo: levelMenuInfo_t = levelMenuInfo_t {
     item_null: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -439,7 +439,7 @@ static mut levelMenuInfo: levelMenuInfo_t = levelMenuInfo_t {
         focuscolor: std::ptr::null_mut(),
     },
     reinit: qfalse,
-    selectedArenaInfo: 0 as *const libc::c_char,
+    selectedArenaInfo: std::ptr::null(),
     numMaps: 0,
     levelPicNames: [[0; 64]; 4],
     levelNames: [[0; 16]; 4],
@@ -483,7 +483,7 @@ unsafe extern "C" fn PlayerIcon(
     mut iconName: *mut libc::c_char,
     mut iconNameMaxSize: i32,
 ) {
-    let mut skin: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut skin: *mut libc::c_char = std::ptr::null_mut();
     let mut model: [libc::c_char; 64] = [0; 64];
     Q_strncpyz(
         model.as_mut_ptr(),
@@ -538,9 +538,9 @@ UI_SPLevelMenu_SetBots
 */
 
 unsafe extern "C" fn UI_SPLevelMenu_SetBots() {
-    let mut p: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut bot: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut botInfo: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut p: *mut libc::c_char = std::ptr::null_mut();
+    let mut bot: *mut libc::c_char = std::ptr::null_mut();
+    let mut botInfo: *mut libc::c_char = std::ptr::null_mut();
     let mut bots: [libc::c_char; 1024] = [0; 1024];
     levelMenuInfo.numBots = 0 as i32;
     if selectedArenaSet > currentSet {
@@ -657,7 +657,7 @@ unsafe extern "C" fn UI_SPLevelMenu_SetMenuArena(
 unsafe extern "C" fn UI_SPLevelMenu_SetMenuItems() {
     let mut n: i32 = 0;
     let mut level: i32 = 0;
-    let mut arenaInfo: *const libc::c_char = 0 as *const libc::c_char;
+    let mut arenaInfo: *const libc::c_char = std::ptr::null();
     if selectedArenaSet > currentSet {
         selectedArena = -(1 as i32)
     } else if selectedArena == -(1 as i32) {
@@ -1151,7 +1151,7 @@ unsafe extern "C" fn UI_SPLevelMenu_MenuDraw() {
                 (130 as i32 - 14 as i32) as f32,
                 levelMenuInfo.levelSelectedPic,
             );
-            trap_R_SetColor(0 as *const f32);
+            trap_R_SetColor(std::ptr::null());
         } else if Menu_ItemAtCursor(&mut levelMenuInfo.menu as *mut _ as *mut _tag_menuframework)
             == &mut *levelMenuInfo.item_maps.as_mut_ptr().offset(n as isize) as *mut menubitmap_s
                 as *mut libc::c_void
@@ -1164,7 +1164,7 @@ unsafe extern "C" fn UI_SPLevelMenu_MenuDraw() {
                 (256 as i32 - 27 as i32) as f32,
                 levelMenuInfo.levelFocusPic,
             );
-            trap_R_SetColor(0 as *const f32);
+            trap_R_SetColor(std::ptr::null());
         }
         n += 1
     }
@@ -1619,7 +1619,7 @@ UI_SPLevelMenu
 pub unsafe extern "C" fn UI_SPLevelMenu() {
     let mut level: i32 = 0;
     let mut trainingLevel: i32 = 0;
-    let mut arenaInfo: *const libc::c_char = 0 as *const libc::c_char;
+    let mut arenaInfo: *const libc::c_char = std::ptr::null();
     trainingTier = -(1 as i32);
     arenaInfo = UI_GetSpecialArenaInfo(b"training\x00" as *const u8 as *const libc::c_char);
     if !arenaInfo.is_null() {

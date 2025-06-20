@@ -559,7 +559,7 @@ unsafe extern "C" fn PrintMsg(
 ) {
     let mut msg: [libc::c_char; 1024] = [0; 1024];
     let mut argptr: ::std::ffi::VaListImpl;
-    let mut p: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut p: *mut libc::c_char = std::ptr::null_mut();
     argptr = args.clone();
     if crate::stdlib::vsnprintf(
         msg.as_mut_ptr(),
@@ -603,7 +603,7 @@ AddTeamScore
 #[no_mangle]
 
 pub unsafe extern "C" fn AddTeamScore(mut origin: *mut vec_t, mut team: i32, mut score: i32) {
-    let mut te: *mut gentity_t = 0 as *mut gentity_t;
+    let mut te: *mut gentity_t = std::ptr::null_mut();
     te = G_TempEntity(origin, EV_GLOBAL_TEAM_SOUND as i32) as *mut gentity_s;
     (*te).r.svFlags |= 0x20 as i32;
     if team == TEAM_RED as i32 {
@@ -741,7 +741,7 @@ Team_ForceGesture
 
 pub unsafe extern "C" fn Team_ForceGesture(mut team: i32) {
     let mut i: i32 = 0;
-    let mut ent: *mut gentity_t = 0 as *mut gentity_t;
+    let mut ent: *mut gentity_t = std::ptr::null_mut();
     i = 0 as i32;
     while i < 64 as i32 {
         ent = &mut *g_entities.as_mut_ptr().offset(i as isize) as *mut gentity_t;
@@ -773,14 +773,14 @@ pub unsafe extern "C" fn Team_FragBonuses(
     mut attacker: *mut gentity_t,
 ) {
     let mut i: i32 = 0;
-    let mut ent: *mut gentity_t = 0 as *mut gentity_t;
+    let mut ent: *mut gentity_t = std::ptr::null_mut();
     let mut flag_pw: i32 = 0;
     let mut enemy_flag_pw: i32 = 0;
     let mut otherteam: i32 = 0;
     let mut tokens: i32 = 0;
-    let mut flag: *mut gentity_t = 0 as *mut gentity_t;
-    let mut carrier: *mut gentity_t = 0 as *mut gentity_t;
-    let mut c: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut flag: *mut gentity_t = std::ptr::null_mut();
+    let mut carrier: *mut gentity_t = std::ptr::null_mut();
+    let mut c: *mut libc::c_char = std::ptr::null_mut();
     let mut v1: vec3_t = [0.; 3];
     let mut v2: vec3_t = [0.; 3];
     let mut team: i32 = 0;
@@ -816,7 +816,7 @@ pub unsafe extern "C" fn Team_FragBonuses(
         );
         (*(*attacker).client).pers.teamState.fragcarrier += 1;
         PrintMsg(
-            0 as *mut gentity_t,
+            std::ptr::null_mut(),
             b"%s^7 fragged %s\'s flag carrier!\n\x00" as *const u8 as *const libc::c_char,
             (*(*attacker).client).pers.netname.as_mut_ptr(),
             TeamName(team),
@@ -845,7 +845,7 @@ pub unsafe extern "C" fn Team_FragBonuses(
         );
         (*(*attacker).client).pers.teamState.fragcarrier += 1;
         PrintMsg(
-            0 as *mut gentity_t,
+            std::ptr::null_mut(),
             b"%s^7 fragged %s\'s skull carrier!\n\x00" as *const u8 as *const libc::c_char,
             (*(*attacker).client).pers.netname.as_mut_ptr(),
             TeamName(team),
@@ -904,14 +904,14 @@ pub unsafe extern "C" fn Team_FragBonuses(
         if (*carrier).inuse as u32 != 0 && (*(*carrier).client).ps.powerups[flag_pw as usize] != 0 {
             break;
         }
-        carrier = 0 as *mut gentity_t;
+        carrier = std::ptr::null_mut();
         i += 1
     }
-    flag = 0 as *mut gentity_t;
+    flag = std::ptr::null_mut();
     loop {
         flag = G_Find(
             flag as *mut gentity_s,
-            &mut (*(0 as *mut gentity_t)).classname as *mut *mut libc::c_char as size_t as i32,
+            &mut (*(std::ptr::null_mut())).classname as *mut *mut libc::c_char as size_t as i32,
             c,
         ) as *mut gentity_s;
         if flag.is_null() {
@@ -1061,22 +1061,22 @@ pub unsafe extern "C" fn Team_CheckHurtCarrier(
 #[no_mangle]
 
 pub unsafe extern "C" fn Team_ResetFlag(mut team: i32) -> *mut gentity_t {
-    let mut c: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut ent: *mut gentity_t = 0 as *mut gentity_t;
-    let mut rent: *mut gentity_t = 0 as *mut gentity_t;
+    let mut c: *mut libc::c_char = std::ptr::null_mut();
+    let mut ent: *mut gentity_t = std::ptr::null_mut();
+    let mut rent: *mut gentity_t = std::ptr::null_mut();
     match team {
         1 => c = b"team_CTF_redflag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         2 => c = b"team_CTF_blueflag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         0 => {
             c = b"team_CTF_neutralflag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char
         }
-        _ => return 0 as *mut gentity_t,
+        _ => return std::ptr::null_mut(),
     }
-    ent = 0 as *mut gentity_t;
+    ent = std::ptr::null_mut();
     loop {
         ent = G_Find(
             ent as *mut gentity_s,
-            &mut (*(0 as *mut gentity_t)).classname as *mut *mut libc::c_char as size_t as i32,
+            &mut (*(std::ptr::null_mut())).classname as *mut *mut libc::c_char as size_t as i32,
             c,
         ) as *mut gentity_s;
         if ent.is_null() {
@@ -1103,7 +1103,7 @@ pub unsafe extern "C" fn Team_ResetFlags() {
 #[no_mangle]
 
 pub unsafe extern "C" fn Team_ReturnFlagSound(mut ent: *mut gentity_t, mut team: i32) {
-    let mut te: *mut gentity_t = 0 as *mut gentity_t;
+    let mut te: *mut gentity_t = std::ptr::null_mut();
     if ent.is_null() {
         G_Printf(
             b"Warning:  NULL passed to Team_ReturnFlagSound\n\x00" as *const u8
@@ -1125,7 +1125,7 @@ pub unsafe extern "C" fn Team_ReturnFlagSound(mut ent: *mut gentity_t, mut team:
 #[no_mangle]
 
 pub unsafe extern "C" fn Team_TakeFlagSound(mut ent: *mut gentity_t, mut team: i32) {
-    let mut te: *mut gentity_t = 0 as *mut gentity_t;
+    let mut te: *mut gentity_t = std::ptr::null_mut();
     if ent.is_null() {
         G_Printf(
             b"Warning:  NULL passed to Team_TakeFlagSound\n\x00" as *const u8
@@ -1169,7 +1169,7 @@ pub unsafe extern "C" fn Team_TakeFlagSound(mut ent: *mut gentity_t, mut team: i
 #[no_mangle]
 
 pub unsafe extern "C" fn Team_CaptureFlagSound(mut ent: *mut gentity_t, mut team: i32) {
-    let mut te: *mut gentity_t = 0 as *mut gentity_t;
+    let mut te: *mut gentity_t = std::ptr::null_mut();
     if ent.is_null() {
         G_Printf(
             b"Warning:  NULL passed to Team_CaptureFlagSound\n\x00" as *const u8
@@ -1194,12 +1194,12 @@ pub unsafe extern "C" fn Team_ReturnFlag(mut team: i32) {
     Team_ReturnFlagSound(Team_ResetFlag(team), team);
     if team == TEAM_FREE as i32 {
         PrintMsg(
-            0 as *mut gentity_t,
+            std::ptr::null_mut(),
             b"The flag has returned!\n\x00" as *const u8 as *const libc::c_char,
         );
     } else {
         PrintMsg(
-            0 as *mut gentity_t,
+            std::ptr::null_mut(),
             b"The %s flag has returned!\n\x00" as *const u8 as *const libc::c_char,
             TeamName(team),
         );
@@ -1252,7 +1252,7 @@ pub unsafe extern "C" fn Team_TouchOurFlag(
     mut team: i32,
 ) -> i32 {
     let mut i: i32 = 0;
-    let mut player: *mut gentity_t = 0 as *mut gentity_t;
+    let mut player: *mut gentity_t = std::ptr::null_mut();
     let mut cl: *mut gclient_t = (*other).client;
     let mut enemy_flag: i32 = 0;
     if (*cl).sess.sessionTeam as u32 == TEAM_RED as i32 as u32 {
@@ -1263,7 +1263,7 @@ pub unsafe extern "C" fn Team_TouchOurFlag(
     if (*ent).flags & 0x1000 as i32 != 0 {
         // hey, it's not home.  return it by teleporting it back
         PrintMsg(
-            0 as *mut gentity_t,
+            std::ptr::null_mut(),
             b"%s^7 returned the %s flag!\n\x00" as *const u8 as *const libc::c_char,
             (*cl).pers.netname.as_mut_ptr(),
             TeamName(team),
@@ -1285,7 +1285,7 @@ pub unsafe extern "C" fn Team_TouchOurFlag(
         return 0 as i32;
     } // We don't have the flag
     PrintMsg(
-        0 as *mut gentity_t,
+        std::ptr::null_mut(),
         b"%s^7 captured the %s flag!\n\x00" as *const u8 as *const libc::c_char,
         (*cl).pers.netname.as_mut_ptr(),
         TeamName(OtherTeam(team)),
@@ -1386,7 +1386,7 @@ pub unsafe extern "C" fn Team_TouchEnemyFlag(
 ) -> i32 {
     let mut cl: *mut gclient_t = (*other).client; // flags never expire
     PrintMsg(
-        0 as *mut gentity_t,
+        std::ptr::null_mut(),
         b"%s^7 got the %s flag!\n\x00" as *const u8 as *const libc::c_char,
         (*(*other).client).pers.netname.as_mut_ptr(),
         TeamName(team),
@@ -1443,12 +1443,12 @@ Report a location for the player. Uses placed nearby target_location entities
 #[no_mangle]
 
 pub unsafe extern "C" fn Team_GetLocation(mut ent: *mut gentity_t) -> *mut gentity_t {
-    let mut eloc: *mut gentity_t = 0 as *mut gentity_t;
-    let mut best: *mut gentity_t = 0 as *mut gentity_t;
+    let mut eloc: *mut gentity_t = std::ptr::null_mut();
+    let mut best: *mut gentity_t = std::ptr::null_mut();
     let mut bestlen: f32 = 0.;
     let mut len: f32 = 0.;
     let mut origin: vec3_t = [0.; 3];
-    best = 0 as *mut gentity_t;
+    best = std::ptr::null_mut();
     bestlen = (3 as i32 as f64 * 8192.0f64 * 8192.0f64) as f32;
     origin[0 as i32 as usize] = (*ent).r.currentOrigin[0 as i32 as usize];
     origin[1 as i32 as usize] = (*ent).r.currentOrigin[1 as i32 as usize];
@@ -1490,7 +1490,7 @@ pub unsafe extern "C" fn Team_GetLocationMsg(
     mut loc: *mut libc::c_char,
     mut loclen: i32,
 ) -> qboolean {
-    let mut best: *mut gentity_t = 0 as *mut gentity_t;
+    let mut best: *mut gentity_t = std::ptr::null_mut();
     best = Team_GetLocation(ent);
     if best.is_null() {
         return qfalse;
@@ -1526,11 +1526,11 @@ pub unsafe extern "C" fn SelectRandomTeamSpawnPoint(
     mut teamstate: i32,
     mut team: team_t,
 ) -> *mut gentity_t {
-    let mut spot: *mut gentity_t = 0 as *mut gentity_t;
+    let mut spot: *mut gentity_t = std::ptr::null_mut();
     let mut count: i32 = 0;
     let mut selection: i32 = 0;
-    let mut spots: [*mut gentity_t; 32] = [0 as *mut gentity_t; 32];
-    let mut classname: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut spots: [*mut gentity_t; 32] = [std::ptr::null_mut(); 32];
+    let mut classname: *mut libc::c_char = std::ptr::null_mut();
     if teamstate == TEAM_BEGIN as i32 {
         if team as u32 == TEAM_RED as i32 as u32 {
             classname =
@@ -1539,7 +1539,7 @@ pub unsafe extern "C" fn SelectRandomTeamSpawnPoint(
             classname =
                 b"team_CTF_blueplayer\x00" as *const u8 as *const libc::c_char as *mut libc::c_char
         } else {
-            return 0 as *mut gentity_t;
+            return std::ptr::null_mut();
         }
     } else if team as u32 == TEAM_RED as i32 as u32 {
         classname =
@@ -1548,14 +1548,14 @@ pub unsafe extern "C" fn SelectRandomTeamSpawnPoint(
         classname =
             b"team_CTF_bluespawn\x00" as *const u8 as *const libc::c_char as *mut libc::c_char
     } else {
-        return 0 as *mut gentity_t;
+        return std::ptr::null_mut();
     }
     count = 0 as i32;
-    spot = 0 as *mut gentity_t;
+    spot = std::ptr::null_mut();
     loop {
         spot = G_Find(
             spot as *mut gentity_s,
-            &mut (*(0 as *mut gentity_t)).classname as *mut *mut libc::c_char as size_t as i32,
+            &mut (*(std::ptr::null_mut())).classname as *mut *mut libc::c_char as size_t as i32,
             classname,
         ) as *mut gentity_s;
         if spot.is_null() {
@@ -1573,8 +1573,8 @@ pub unsafe extern "C" fn SelectRandomTeamSpawnPoint(
     if count == 0 {
         // no spots that won't telefrag
         return G_Find(
-            0 as *mut gentity_t as *mut gentity_s,
-            &mut (*(0 as *mut gentity_t)).classname as *mut *mut libc::c_char as size_t as i32,
+            std::ptr::null_mut() as *mut gentity_s,
+            &mut (*(std::ptr::null_mut())).classname as *mut *mut libc::c_char as size_t as i32,
             classname,
         ) as *mut gentity_s;
     }
@@ -1596,7 +1596,7 @@ pub unsafe extern "C" fn SelectCTFSpawnPoint(
     mut angles: *mut vec_t,
     mut isbot: qboolean,
 ) -> *mut gentity_t {
-    let mut spot: *mut gentity_t = 0 as *mut gentity_t;
+    let mut spot: *mut gentity_t = std::ptr::null_mut();
     spot = SelectRandomTeamSpawnPoint(teamstate, team);
     if spot.is_null() {
         return SelectSpawnPoint(vec3_origin.as_mut_ptr(), origin, angles, isbot) as *mut gentity_s;
@@ -1633,7 +1633,7 @@ pub unsafe extern "C" fn TeamplayInfoMessage(mut ent: *mut gentity_t) {
     let mut stringlength: i32 = 0;
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut player: *mut gentity_t = 0 as *mut gentity_t;
+    let mut player: *mut gentity_t = std::ptr::null_mut();
     let mut cnt: i32 = 0;
     let mut h: i32 = 0;
     let mut a: i32 = 0;
@@ -1778,8 +1778,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 pub unsafe extern "C" fn CheckTeamStatus() {
     let mut i: i32 = 0;
-    let mut loc: *mut gentity_t = 0 as *mut gentity_t;
-    let mut ent: *mut gentity_t = 0 as *mut gentity_t;
+    let mut loc: *mut gentity_t = std::ptr::null_mut();
+    let mut ent: *mut gentity_t = std::ptr::null_mut();
     if level.time - level.lastTeamLocationTime > 1000 as i32 {
         level.lastTeamLocationTime = level.time;
         i = 0 as i32;

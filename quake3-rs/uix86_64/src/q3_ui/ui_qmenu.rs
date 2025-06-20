@@ -428,7 +428,7 @@ unsafe extern "C" fn Text_Draw(mut t: *mut menutext_s) {
     let mut x: i32 = 0;
     let mut y: i32 = 0;
     let mut buff: [libc::c_char; 512] = [0; 512];
-    let mut color: *mut f32 = 0 as *mut f32;
+    let mut color: *mut f32 = std::ptr::null_mut();
     x = (*t).generic.x;
     y = (*t).generic.y;
     buff[0 as i32 as usize] = '\u{0}' as i32 as libc::c_char;
@@ -466,7 +466,7 @@ BText_Draw
 unsafe extern "C" fn BText_Draw(mut t: *mut menutext_s) {
     let mut x: i32 = 0;
     let mut y: i32 = 0;
-    let mut color: *mut f32 = 0 as *mut f32;
+    let mut color: *mut f32 = std::ptr::null_mut();
     x = (*t).generic.x;
     y = (*t).generic.y;
     if (*t).generic.flags & 0x2000 as i32 as u32 != 0 {
@@ -513,7 +513,7 @@ PText_Draw
 unsafe extern "C" fn PText_Draw(mut t: *mut menutext_s) {
     let mut x: i32 = 0;
     let mut y: i32 = 0;
-    let mut color: *mut f32 = 0 as *mut f32;
+    let mut color: *mut f32 = std::ptr::null_mut();
     let mut style: i32 = 0;
     x = (*t).generic.x;
     y = (*t).generic.y;
@@ -579,7 +579,7 @@ pub unsafe extern "C" fn Bitmap_Draw(mut b: *mut menubitmap_s) {
     let mut w: f32 = 0.;
     let mut h: f32 = 0.;
     let mut tempcolor: vec4_t = [0.; 4];
-    let mut color: *mut f32 = 0 as *mut f32;
+    let mut color: *mut f32 = std::ptr::null_mut();
     x = (*b).generic.x as f32;
     y = (*b).generic.y as f32;
     w = (*b).width as f32;
@@ -603,7 +603,7 @@ pub unsafe extern "C" fn Bitmap_Draw(mut b: *mut menubitmap_s) {
         if (*b).shader != 0 {
             trap_R_SetColor(colorMdGrey.as_mut_ptr());
             UI_DrawHandlePic(x, y, w, h, (*b).shader);
-            trap_R_SetColor(0 as *const f32);
+            trap_R_SetColor(std::ptr::null());
         }
     } else {
         if (*b).shader != 0 {
@@ -625,7 +625,7 @@ pub unsafe extern "C" fn Bitmap_Draw(mut b: *mut menubitmap_s) {
                 (0.5f64 + 0.5f64 * crate::stdlib::sin((uis.realtime / 75 as i32) as f64)) as f32;
             trap_R_SetColor(color);
             UI_DrawHandlePic(x, y, w, h, (*b).focusshader);
-            trap_R_SetColor(0 as *const f32);
+            trap_R_SetColor(std::ptr::null());
         } else if (*b).generic.flags & 0x40 as i32 as u32 != 0
             || (*b).generic.flags & 0x80 as i32 as u32 != 0
                 && Menu_ItemAtCursor((*b).generic.parent) == b as *mut libc::c_void
@@ -633,7 +633,7 @@ pub unsafe extern "C" fn Bitmap_Draw(mut b: *mut menubitmap_s) {
             if !(*b).focuscolor.is_null() {
                 trap_R_SetColor((*b).focuscolor);
                 UI_DrawHandlePic(x, y, w, h, (*b).focusshader);
-                trap_R_SetColor(0 as *const f32);
+                trap_R_SetColor(std::ptr::null());
             } else {
                 UI_DrawHandlePic(x, y, w, h, (*b).focusshader);
             }
@@ -672,7 +672,7 @@ unsafe extern "C" fn Action_Draw(mut a: *mut menuaction_s) {
     let mut x: i32 = 0;
     let mut y: i32 = 0;
     let mut style: i32 = 0;
-    let mut color: *mut f32 = 0 as *mut f32;
+    let mut color: *mut f32 = std::ptr::null_mut();
     style = 0 as i32;
     color = menu_text_color.as_mut_ptr();
     if (*a).generic.flags & 0x2000 as i32 as u32 != 0 {
@@ -766,7 +766,7 @@ RadioButton_Draw
 unsafe extern "C" fn RadioButton_Draw(mut rb: *mut menuradiobutton_s) {
     let mut x: i32 = 0;
     let mut y: i32 = 0;
-    let mut color: *mut f32 = 0 as *mut f32;
+    let mut color: *mut f32 = std::ptr::null_mut();
     let mut style: i32 = 0;
     let mut focus: qboolean = qfalse;
     x = (*rb).generic.x;
@@ -924,7 +924,7 @@ unsafe extern "C" fn Slider_Draw(mut s: *mut menuslider_s) {
     let mut x: i32 = 0;
     let mut y: i32 = 0;
     let mut style: i32 = 0;
-    let mut color: *mut f32 = 0 as *mut f32;
+    let mut color: *mut f32 = std::ptr::null_mut();
     let mut button: i32 = 0;
     let mut focus: qboolean = qfalse;
     x = (*s).generic.x;
@@ -957,7 +957,7 @@ unsafe extern "C" fn Slider_Draw(mut s: *mut menuslider_s) {
         16 as i32 as f32,
         sliderBar,
     );
-    UI_SetColor(0 as *const f32);
+    UI_SetColor(std::ptr::null());
     // clamp thumb
     if (*s).maxvalue > (*s).minvalue {
         (*s).range = ((*s).curvalue - (*s).minvalue) / ((*s).maxvalue - (*s).minvalue);
@@ -995,7 +995,7 @@ SpinControl_Init
 unsafe extern "C" fn SpinControl_Init(mut s: *mut menulist_s) {
     let mut len: i32 = 0;
     let mut l: i32 = 0;
-    let mut str: *const libc::c_char = 0 as *const libc::c_char;
+    let mut str: *const libc::c_char = std::ptr::null();
     if !(*s).generic.name.is_null() {
         len = crate::stdlib::strlen((*s).generic.name).wrapping_mul(8 as i32 as usize) as i32
     } else {
@@ -1057,7 +1057,7 @@ SpinControl_Draw
 */
 
 unsafe extern "C" fn SpinControl_Draw(mut s: *mut menulist_s) {
-    let mut color: *mut f32 = 0 as *mut f32;
+    let mut color: *mut f32 = std::ptr::null_mut();
     let mut x: i32 = 0;
     let mut y: i32 = 0;
     let mut style: i32 = 0;
@@ -1463,7 +1463,7 @@ pub unsafe extern "C" fn ScrollList_Draw(mut l: *mut menulist_s) {
     let mut i: i32 = 0;
     let mut base: i32 = 0;
     let mut column: i32 = 0;
-    let mut color: *mut f32 = 0 as *mut f32;
+    let mut color: *mut f32 = std::ptr::null_mut();
     let mut hasfocus: qboolean = qfalse;
     let mut style: i32 = 0;
     hasfocus = ((*(*l).generic.parent).cursor == (*l).generic.menuPosition) as i32 as qboolean;
@@ -1518,7 +1518,7 @@ Menu_AddItem
 #[no_mangle]
 
 pub unsafe extern "C" fn Menu_AddItem(mut menu: *mut menuframework_s, mut item: *mut libc::c_void) {
-    let mut itemptr: *mut menucommon_s = 0 as *mut menucommon_s;
+    let mut itemptr: *mut menucommon_s = std::ptr::null_mut();
     if (*menu).nitems >= 64 as i32 {
         trap_Error(b"Menu_AddItem: excessive items\x00" as *const u8 as *const libc::c_char);
     }
@@ -1654,7 +1654,7 @@ pub unsafe extern "C" fn Menu_SetCursorToItem(
 #[no_mangle]
 
 pub unsafe extern "C" fn Menu_AdjustCursor(mut m: *mut menuframework_s, mut dir: i32) {
-    let mut item: *mut menucommon_s = 0 as *mut menucommon_s;
+    let mut item: *mut menucommon_s = std::ptr::null_mut();
     let mut wrapped: qboolean = qfalse;
     loop {
         while (*m).cursor >= 0 as i32 && (*m).cursor < (*m).nitems {
@@ -1709,7 +1709,7 @@ Menu_Draw
 
 pub unsafe extern "C" fn Menu_Draw(mut menu: *mut menuframework_s) {
     let mut i: i32 = 0;
-    let mut itemptr: *mut menucommon_s = 0 as *mut menucommon_s;
+    let mut itemptr: *mut menucommon_s = std::ptr::null_mut();
     // draw menu
     i = 0 as i32;
     while i < (*menu).nitems {
@@ -1778,7 +1778,7 @@ Menu_ItemAtCursor
 
 pub unsafe extern "C" fn Menu_ItemAtCursor(mut m: *mut menuframework_s) -> *mut libc::c_void {
     if (*m).cursor < 0 as i32 || (*m).cursor >= (*m).nitems {
-        return 0 as *mut libc::c_void;
+        return std::ptr::null_mut();
     }
     return (*m).items[(*m).cursor as usize];
 }
@@ -1810,7 +1810,7 @@ Menu_DefaultKey
 
 pub unsafe extern "C" fn Menu_DefaultKey(mut m: *mut menuframework_s, mut key: i32) -> sfxHandle_t {
     let mut sound: sfxHandle_t = 0 as i32;
-    let mut item: *mut menucommon_s = 0 as *mut menucommon_s;
+    let mut item: *mut menucommon_s = std::ptr::null_mut();
     let mut cursor_prev: i32 = 0;
     // menu system keys
     match key {

@@ -6,7 +6,7 @@ pub mod stdlib_h {
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return libc::strtol(
             __nptr,
-            0 as *mut libc::c_void as *mut *mut libc::c_char,
+            std::ptr::null_mut() as *mut *mut libc::c_char,
             10 as i32,
         ) as i32;
     }
@@ -8446,8 +8446,8 @@ Sys_GetClipboardData
 #[no_mangle]
 
 pub unsafe extern "C" fn Sys_GetClipboardData() -> *mut libc::c_char {
-    let mut data: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut cliptext: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut data: *mut libc::c_char = std::ptr::null_mut();
+    let mut cliptext: *mut libc::c_char = std::ptr::null_mut();
     cliptext = crate::stdlib::SDL_GetClipboardText();
     if !cliptext.is_null() {
         if *cliptext.offset(0 as i32 as isize) as i32 != '\u{0}' as i32 {
@@ -8479,7 +8479,7 @@ unsafe extern "C" fn Sys_PIDFileName(mut gamedir: *const libc::c_char) -> *mut l
             b"ioq3.pid\x00" as *const u8 as *const libc::c_char,
         );
     }
-    return 0 as *mut libc::c_char;
+    return std::ptr::null_mut();
 }
 /*
 =================
@@ -8504,7 +8504,7 @@ Return qtrue if there is an existing stale PID file
 
 unsafe extern "C" fn Sys_WritePIDFile(mut gamedir: *const libc::c_char) -> qboolean {
     let mut pidFile: *mut libc::c_char = Sys_PIDFileName(gamedir);
-    let mut f: *mut FILE = 0 as *mut FILE;
+    let mut f: *mut FILE = std::ptr::null_mut();
     let mut stale: qboolean = qfalse;
     if pidFile.is_null() {
         return qfalse;
@@ -8914,14 +8914,14 @@ pub unsafe extern "C" fn Sys_LoadDll(
     mut name: *const libc::c_char,
     mut useSystemLib: qboolean,
 ) -> *mut libc::c_void {
-    let mut dllhandle: *mut libc::c_void = 0 as *mut libc::c_void;
+    let mut dllhandle: *mut libc::c_void = std::ptr::null_mut();
     if Sys_DllExtension(name) as u64 == 0 {
         Com_Printf(
             b"Refusing to attempt to load library \"%s\": Extension not allowed.\n\x00" as *const u8
                 as *const libc::c_char,
             name,
         );
-        return 0 as *mut libc::c_void;
+        return std::ptr::null_mut();
     }
     if useSystemLib as u64 != 0 {
         Com_Printf(
@@ -8931,7 +8931,7 @@ pub unsafe extern "C" fn Sys_LoadDll(
         dllhandle = crate::stdlib::SDL_LoadObject(name)
     }
     if dllhandle.is_null() {
-        let mut topDir: *const libc::c_char = 0 as *const libc::c_char;
+        let mut topDir: *const libc::c_char = std::ptr::null();
         let mut libPath: [libc::c_char; 4096] = [0; 4096];
         let mut len: i32 = 0;
         topDir = Sys_BinaryPath();
@@ -9017,7 +9017,7 @@ pub unsafe extern "C" fn Sys_LoadGameDll(
     mut entryPoint: *mut Option<unsafe extern "C" fn(_: i32, _: ...) -> intptr_t>,
     mut systemcalls: Option<unsafe extern "C" fn(_: intptr_t, _: ...) -> intptr_t>,
 ) -> *mut libc::c_void {
-    let mut libHandle: *mut libc::c_void = 0 as *mut libc::c_void;
+    let mut libHandle: *mut libc::c_void = std::ptr::null_mut();
     let mut dllEntry: Option<
         unsafe extern "C" fn(
             _: Option<unsafe extern "C" fn(_: intptr_t, _: ...) -> intptr_t>,
@@ -9029,7 +9029,7 @@ pub unsafe extern "C" fn Sys_LoadGameDll(
                 as *const libc::c_char,
             name,
         );
-        return 0 as *mut libc::c_void;
+        return std::ptr::null_mut();
     }
     Com_Printf(
         b"Loading DLL file: %s\n\x00" as *const u8 as *const libc::c_char,
@@ -9042,7 +9042,7 @@ pub unsafe extern "C" fn Sys_LoadGameDll(
             name,
             crate::stdlib::SDL_GetError(),
         );
-        return 0 as *mut libc::c_void;
+        return std::ptr::null_mut();
     }
     dllEntry = ::std::mem::transmute::<
         *mut libc::c_void,
@@ -9070,7 +9070,7 @@ pub unsafe extern "C" fn Sys_LoadGameDll(
             crate::stdlib::SDL_GetError(),
         );
         crate::stdlib::SDL_UnloadObject(libHandle);
-        return 0 as *mut libc::c_void;
+        return std::ptr::null_mut();
     }
     Com_Printf(
         b"Sys_LoadGameDll(%s) found vmMain function at %p\n\x00" as *const u8
@@ -10243,7 +10243,7 @@ pub(crate) unsafe fn main_0(mut argc: i32, mut argv: *mut *mut libc::c_char) -> 
     i = 1 as i32;
     while i < argc {
         let containsSpaces: qboolean = (libc::strchr(*argv.offset(i as isize), ' ' as i32)
-            != 0 as *mut libc::c_void as *mut libc::c_char)
+            != std::ptr::null_mut() as *mut libc::c_char)
             as i32 as qboolean;
         if containsSpaces as u64 != 0 {
             Q_strcat(

@@ -572,7 +572,7 @@ unsafe extern "C" fn initial_setup(mut cinfo: j_compress_ptr, mut transcode_only
 {
     let mut ci: i32 = 0;
     let mut ssize: i32 = 0;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
     let mut samplesperrow: isize = 0;
     let mut jd_samplesperrow: JDIMENSION = 0;
     if transcode_only != 0 {
@@ -784,7 +784,7 @@ unsafe extern "C" fn validate_script(mut cinfo: j_compress_ptr)
  * determine whether it uses progressive JPEG, and set cinfo->progressive_mode.
  */
 {
-    let mut scanptr: *const jpeg_scan_info = 0 as *const jpeg_scan_info;
+    let mut scanptr: *const jpeg_scan_info = std::ptr::null();
     let mut scanno: i32 = 0;
     let mut ncomps: i32 = 0;
     let mut ci: i32 = 0;
@@ -795,7 +795,7 @@ unsafe extern "C" fn validate_script(mut cinfo: j_compress_ptr)
     let mut Ah: i32 = 0;
     let mut Al: i32 = 0;
     let mut component_sent: [boolean; 10] = [0; 10];
-    let mut last_bitpos_ptr: *mut i32 = 0 as *mut i32;
+    let mut last_bitpos_ptr: *mut i32 = std::ptr::null_mut();
     let mut last_bitpos: [[i32; 64]; 10] = [[0; 64]; 10];
     /* -1 until that coefficient has been seen; then last Al for it */
     if (*cinfo).num_scans <= 0 as i32 {
@@ -1058,7 +1058,7 @@ unsafe extern "C" fn reduce_script(mut cinfo: j_compress_ptr)
  * assume that script has been validated before.
  */
 {
-    let mut scanptr: *mut jpeg_scan_info = 0 as *mut jpeg_scan_info;
+    let mut scanptr: *mut jpeg_scan_info = std::ptr::null_mut();
     let mut idxout: i32 = 0;
     let mut idxin: i32 = 0;
     /* Circumvent const declaration for this function */
@@ -1146,7 +1146,7 @@ unsafe extern "C" fn per_scan_setup(mut cinfo: j_compress_ptr)
     let mut ci: i32 = 0;
     let mut mcublks: i32 = 0;
     let mut tmp: i32 = 0;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
     if (*cinfo).comps_in_scan == 1 as i32 {
         /* Noninterleaved (single-component) scan */
         compptr = (*cinfo).cur_comp_info[0 as i32 as usize];
@@ -1497,7 +1497,7 @@ pub unsafe extern "C" fn jinit_c_master_control(
     mut cinfo: j_compress_ptr,
     mut transcode_only: boolean,
 ) {
-    let mut master: my_master_ptr = 0 as *mut my_comp_master;
+    let mut master: my_master_ptr = std::ptr::null_mut();
     master = Some(
         (*(*cinfo).mem)
             .alloc_small

@@ -21,7 +21,7 @@ pub mod stdlib_float_h {
     #[inline]
 
     pub unsafe extern "C" fn atof(mut __nptr: *const libc::c_char) -> f64 {
-        return libc::strtod(__nptr, 0 as *mut libc::c_void as *mut *mut libc::c_char);
+        return libc::strtod(__nptr, std::ptr::null_mut() as *mut *mut libc::c_char);
     }
 }
 
@@ -227,7 +227,7 @@ pub unsafe extern "C" fn BotGetMessageTeamGoal(
     mut goalname: *mut libc::c_char,
     mut goal: *mut bot_goal_t,
 ) -> i32 {
-    let mut cp: *mut bot_waypoint_t = 0 as *mut bot_waypoint_t;
+    let mut cp: *mut bot_waypoint_t = std::ptr::null_mut();
     if BotGetItemTeamGoal(goalname, goal) != 0 {
         return qtrue as i32;
     }
@@ -431,9 +431,9 @@ pub unsafe extern "C" fn BotGetPatrolWaypoints(
 ) -> i32 {
     let mut keyarea: [libc::c_char; 256] = [0; 256];
     let mut patrolflags: i32 = 0;
-    let mut wp: *mut bot_waypoint_t = 0 as *mut bot_waypoint_t;
-    let mut newwp: *mut bot_waypoint_t = 0 as *mut bot_waypoint_t;
-    let mut newpatrolpoints: *mut bot_waypoint_t = 0 as *mut bot_waypoint_t;
+    let mut wp: *mut bot_waypoint_t = std::ptr::null_mut();
+    let mut newwp: *mut bot_waypoint_t = std::ptr::null_mut();
+    let mut newpatrolpoints: *mut bot_waypoint_t = std::ptr::null_mut();
     let mut keyareamatch: bot_match_t = bot_match_t {
         string: [0; 256],
         type_0: 0,
@@ -453,7 +453,7 @@ pub unsafe extern "C" fn BotGetPatrolWaypoints(
         flags: 0,
         iteminfo: 0,
     };
-    newpatrolpoints = 0 as *mut bot_waypoint_t;
+    newpatrolpoints = std::ptr::null_mut();
     patrolflags = 0 as i32;
     //
     trap_BotMatchVariable(
@@ -476,7 +476,7 @@ pub unsafe extern "C" fn BotGetPatrolWaypoints(
                 b"what do you say?\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             );
             crate::src::game::ai_dmq3::BotFreeWaypoints(newpatrolpoints as *mut bot_waypoint_s);
-            (*bs).patrolpoints = 0 as *mut bot_waypoint_t;
+            (*bs).patrolpoints = std::ptr::null_mut();
             return qfalse as i32;
         }
         trap_BotMatchVariable(
@@ -489,7 +489,7 @@ pub unsafe extern "C" fn BotGetPatrolWaypoints(
             //BotAI_BotInitialChat(bs, "cannotfind", keyarea, NULL);
             //trap_BotEnterChat(bs->cs, 0, CHAT_TEAM);
             crate::src::game::ai_dmq3::BotFreeWaypoints(newpatrolpoints as *mut bot_waypoint_s);
-            (*bs).patrolpoints = 0 as *mut bot_waypoint_t;
+            (*bs).patrolpoints = std::ptr::null_mut();
             return qfalse as i32;
         }
         //create a new waypoint
@@ -502,14 +502,14 @@ pub unsafe extern "C" fn BotGetPatrolWaypoints(
             break;
         }
         //add the waypoint to the patrol points
-        (*newwp).next = 0 as *mut bot_waypoint_s;
+        (*newwp).next = std::ptr::null_mut();
         wp = newpatrolpoints;
         while !wp.is_null() && !(*wp).next.is_null() {
             wp = (*wp).next
         }
         if wp.is_null() {
             newpatrolpoints = newwp;
-            (*newwp).prev = 0 as *mut bot_waypoint_s
+            (*newwp).prev = std::ptr::null_mut()
         } else {
             (*wp).next = newwp;
             (*newwp).prev = wp
@@ -541,7 +541,7 @@ pub unsafe extern "C" fn BotGetPatrolWaypoints(
                 as *mut libc::c_char,
         );
         crate::src::game::ai_dmq3::BotFreeWaypoints(newpatrolpoints as *mut bot_waypoint_s);
-        newpatrolpoints = 0 as *mut bot_waypoint_t;
+        newpatrolpoints = std::ptr::null_mut();
         return qfalse as i32;
     }
     //
@@ -845,14 +845,14 @@ pub unsafe extern "C" fn BotMatch_HelpAccompany(
                 bs as *mut bot_state_s,
                 b"whois\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 teammate.as_mut_ptr(),
-                0 as *mut libc::c_void,
+                std::ptr::null_mut(),
             );
         } else {
             BotAI_BotInitialChat(
                 bs as *mut bot_state_s,
                 b"whois\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 netname.as_mut_ptr(),
-                0 as *mut libc::c_void,
+                std::ptr::null_mut(),
             );
         }
         client = crate::src::game::ai_dmq3::ClientFromName(netname.as_mut_ptr());
@@ -910,14 +910,14 @@ pub unsafe extern "C" fn BotMatch_HelpAccompany(
                 bs as *mut bot_state_s,
                 b"whereis\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 teammate.as_mut_ptr(),
-                0 as *mut libc::c_void,
+                std::ptr::null_mut(),
             );
         } else {
             BotAI_BotInitialChat(
                 bs as *mut bot_state_s,
                 b"whereareyou\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 netname.as_mut_ptr(),
-                0 as *mut libc::c_void,
+                std::ptr::null_mut(),
             );
         }
         client = crate::src::game::ai_dmq3::ClientFromName(netname.as_mut_ptr());
@@ -1147,7 +1147,7 @@ pub unsafe extern "C" fn BotMatch_Camp(mut bs: *mut bot_state_t, mut match_0: *m
             bs as *mut bot_state_s,
             b"whois\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             netname.as_mut_ptr(),
-            0 as *mut libc::c_void,
+            std::ptr::null_mut(),
         );
         trap_BotEnterChat((*bs).cs, (*bs).client, 1 as i32);
         return;
@@ -1208,7 +1208,7 @@ pub unsafe extern "C" fn BotMatch_Camp(mut bs: *mut bot_state_t, mut match_0: *m
                 bs as *mut bot_state_s,
                 b"whereareyou\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 netname.as_mut_ptr(),
-                0 as *mut libc::c_void,
+                std::ptr::null_mut(),
             );
             client = crate::src::game::ai_dmq3::ClientFromName(netname.as_mut_ptr());
             trap_BotEnterChat((*bs).cs, client, 2 as i32);
@@ -1513,7 +1513,7 @@ pub unsafe extern "C" fn BotMatch_TaskPreference(
         bs as *mut bot_state_s,
         b"keepinmind\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         teammatename.as_mut_ptr(),
-        0 as *mut libc::c_void,
+        std::ptr::null_mut(),
     );
     trap_BotEnterChat((*bs).cs, teammate, 2 as i32);
     crate::src::game::ai_team::BotVoiceChatOnly(
@@ -1615,7 +1615,7 @@ pub unsafe extern "C" fn BotMatch_JoinSubteam(
         bs as *mut bot_state_s,
         b"joinedteam\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         teammate.as_mut_ptr(),
-        0 as *mut libc::c_void,
+        std::ptr::null_mut(),
     );
     client = crate::src::game::ai_dmq3::ClientFromName(netname.as_mut_ptr());
     trap_BotEnterChat((*bs).cs, client, 2 as i32);
@@ -1646,7 +1646,7 @@ pub unsafe extern "C" fn BotMatch_LeaveSubteam(
             bs as *mut bot_state_s,
             b"leftteam\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             (*bs).subteam.as_mut_ptr(),
-            0 as *mut libc::c_void,
+            std::ptr::null_mut(),
         ); //end if
         trap_BotMatchVariable(
             match_0 as *mut libc::c_void,
@@ -1686,13 +1686,13 @@ pub unsafe extern "C" fn BotMatch_WhichTeam(
             bs as *mut bot_state_s,
             b"inteam\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             (*bs).subteam.as_mut_ptr(),
-            0 as *mut libc::c_void,
+            std::ptr::null_mut(),
         );
     } else {
         BotAI_BotInitialChat(
             bs as *mut bot_state_s,
             b"noteam\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            0 as *mut libc::c_void,
+            std::ptr::null_mut(),
         );
     }
     trap_BotEnterChat((*bs).cs, (*bs).client, 1 as i32);
@@ -1713,7 +1713,7 @@ pub unsafe extern "C" fn BotMatch_CheckPoint(
     let mut buf: [libc::c_char; 256] = [0; 256];
     let mut netname: [libc::c_char; 256] = [0; 256];
     let mut position: vec3_t = [0.; 3];
-    let mut cp: *mut bot_waypoint_t = 0 as *mut bot_waypoint_t;
+    let mut cp: *mut bot_waypoint_t = std::ptr::null_mut();
     if crate::src::game::ai_dmq3::TeamPlayIsOn() == 0 {
         return;
     }
@@ -1750,7 +1750,7 @@ pub unsafe extern "C" fn BotMatch_CheckPoint(
             BotAI_BotInitialChat(
                 bs as *mut bot_state_s,
                 b"checkpoint_invalid\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                0 as *mut libc::c_void,
+                std::ptr::null_mut(),
             );
             trap_BotEnterChat((*bs).cs, client, 2 as i32);
         }
@@ -1806,7 +1806,7 @@ pub unsafe extern "C" fn BotMatch_CheckPoint(
             b"checkpoint_confirm\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             (*cp).name.as_mut_ptr(),
             buf.as_mut_ptr(),
-            0 as *mut libc::c_void,
+            std::ptr::null_mut(),
         );
         trap_BotEnterChat((*bs).cs, client, 2 as i32);
     };
@@ -1885,7 +1885,7 @@ pub unsafe extern "C" fn BotMatch_Dismiss(mut bs: *mut bot_state_t, mut match_0:
     BotAI_BotInitialChat(
         bs as *mut bot_state_s,
         b"dismissed\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-        0 as *mut libc::c_void,
+        std::ptr::null_mut(),
     );
     trap_BotEnterChat((*bs).cs, client, 2 as i32);
 }
@@ -2088,7 +2088,7 @@ pub unsafe extern "C" fn BotMatch_WhatAreYouDoing(
                 bs as *mut bot_state_s,
                 b"helping\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 netname.as_mut_ptr(),
-                0 as *mut libc::c_void,
+                std::ptr::null_mut(),
             );
         }
         2 => {
@@ -2101,7 +2101,7 @@ pub unsafe extern "C" fn BotMatch_WhatAreYouDoing(
                 bs as *mut bot_state_s,
                 b"accompanying\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 netname.as_mut_ptr(),
-                0 as *mut libc::c_void,
+                std::ptr::null_mut(),
             );
         }
         3 => {
@@ -2114,7 +2114,7 @@ pub unsafe extern "C" fn BotMatch_WhatAreYouDoing(
                 bs as *mut bot_state_s,
                 b"defending\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 goalname.as_mut_ptr(),
-                0 as *mut libc::c_void,
+                std::ptr::null_mut(),
             );
         }
         10 => {
@@ -2127,7 +2127,7 @@ pub unsafe extern "C" fn BotMatch_WhatAreYouDoing(
                 bs as *mut bot_state_s,
                 b"gettingitem\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 goalname.as_mut_ptr(),
-                0 as *mut libc::c_void,
+                std::ptr::null_mut(),
             );
         }
         11 => {
@@ -2140,49 +2140,49 @@ pub unsafe extern "C" fn BotMatch_WhatAreYouDoing(
                 bs as *mut bot_state_s,
                 b"killing\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 netname.as_mut_ptr(),
-                0 as *mut libc::c_void,
+                std::ptr::null_mut(),
             );
         }
         7 | 8 => {
             BotAI_BotInitialChat(
                 bs as *mut bot_state_s,
                 b"camping\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                0 as *mut libc::c_void,
+                std::ptr::null_mut(),
             );
         }
         9 => {
             BotAI_BotInitialChat(
                 bs as *mut bot_state_s,
                 b"patrolling\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                0 as *mut libc::c_void,
+                std::ptr::null_mut(),
             );
         }
         4 => {
             BotAI_BotInitialChat(
                 bs as *mut bot_state_s,
                 b"capturingflag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                0 as *mut libc::c_void,
+                std::ptr::null_mut(),
             );
         }
         5 => {
             BotAI_BotInitialChat(
                 bs as *mut bot_state_s,
                 b"rushingbase\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                0 as *mut libc::c_void,
+                std::ptr::null_mut(),
             );
         }
         6 => {
             BotAI_BotInitialChat(
                 bs as *mut bot_state_s,
                 b"returningflag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                0 as *mut libc::c_void,
+                std::ptr::null_mut(),
             );
         }
         _ => {
             BotAI_BotInitialChat(
                 bs as *mut bot_state_s,
                 b"roaming\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                0 as *mut libc::c_void,
+                std::ptr::null_mut(),
             );
         }
     }
@@ -2293,8 +2293,8 @@ pub unsafe extern "C" fn BotNearestVisibleItem(
                 BotAI_Trace(
                     &mut trace as *mut _ as *mut bsp_trace_s,
                     (*bs).eye.as_mut_ptr(),
-                    0 as *mut vec_t,
-                    0 as *mut vec_t,
+                    std::ptr::null_mut(),
+                    std::ptr::null_mut(),
                     tmpgoal.origin.as_mut_ptr(),
                     (*bs).client,
                     1 as i32 | 0x10000 as i32,
@@ -2362,7 +2362,7 @@ pub unsafe extern "C" fn BotMatch_WhereAreYou(
         b"Heavy Armor\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         b"Red Flag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         b"Blue Flag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-        0 as *mut libc::c_char,
+        std::ptr::null_mut(),
     ];
     //
     if crate::src::game::ai_dmq3::TeamPlayIsOn() == 0 {
@@ -2429,7 +2429,7 @@ pub unsafe extern "C" fn BotMatch_WhereAreYou(
                     b"teamlocation\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     nearbyitems[bestitem as usize],
                     b"red\x00" as *const u8 as *const libc::c_char,
-                    0 as *mut libc::c_void,
+                    std::ptr::null_mut(),
                 );
             } else if (bluett as f64) < (redtt + bluett) as f64 * 0.4f64 {
                 BotAI_BotInitialChat(
@@ -2437,14 +2437,14 @@ pub unsafe extern "C" fn BotMatch_WhereAreYou(
                     b"teamlocation\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     nearbyitems[bestitem as usize],
                     b"blue\x00" as *const u8 as *const libc::c_char,
-                    0 as *mut libc::c_void,
+                    std::ptr::null_mut(),
                 );
             } else {
                 BotAI_BotInitialChat(
                     bs as *mut bot_state_s,
                     b"location\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     nearbyitems[bestitem as usize],
-                    0 as *mut libc::c_void,
+                    std::ptr::null_mut(),
                 );
             }
         } else {
@@ -2452,7 +2452,7 @@ pub unsafe extern "C" fn BotMatch_WhereAreYou(
                 bs as *mut bot_state_s,
                 b"location\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 nearbyitems[bestitem as usize],
-                0 as *mut libc::c_void,
+                std::ptr::null_mut(),
             );
         }
         trap_BotMatchVariable(
@@ -2549,7 +2549,7 @@ pub unsafe extern "C" fn BotMatch_LeadTheWay(
             bs as *mut bot_state_s,
             b"whois\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             netname.as_mut_ptr(),
-            0 as *mut libc::c_void,
+            std::ptr::null_mut(),
         );
         trap_BotEnterChat((*bs).cs, (*bs).client, 1 as i32);
         return;
@@ -2581,14 +2581,14 @@ pub unsafe extern "C" fn BotMatch_LeadTheWay(
                 bs as *mut bot_state_s,
                 b"whereis\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 teammate.as_mut_ptr(),
-                0 as *mut libc::c_void,
+                std::ptr::null_mut(),
             );
         } else {
             BotAI_BotInitialChat(
                 bs as *mut bot_state_s,
                 b"whereareyou\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 netname.as_mut_ptr(),
-                0 as *mut libc::c_void,
+                std::ptr::null_mut(),
             );
         }
         trap_BotEnterChat((*bs).cs, (*bs).client, 1 as i32);
@@ -2631,7 +2631,7 @@ pub unsafe extern "C" fn BotMatch_Kill(mut bs: *mut bot_state_t, mut match_0: *m
             bs as *mut bot_state_s,
             b"whois\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             enemy.as_mut_ptr(),
-            0 as *mut libc::c_void,
+            std::ptr::null_mut(),
         );
         trap_BotMatchVariable(
             match_0 as *mut libc::c_void,

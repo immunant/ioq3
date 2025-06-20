@@ -222,8 +222,8 @@ unsafe extern "C" fn alloc_funny_pointers(mut cinfo: j_decompress_ptr)
     let mut ci: i32 = 0;
     let mut rgroup: i32 = 0;
     let mut M: i32 = (*cinfo).min_DCT_v_scaled_size;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
-    let mut xbuf: JSAMPARRAY = 0 as *mut JSAMPROW;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
+    let mut xbuf: JSAMPARRAY = std::ptr::null_mut();
     /* Get top-level space for component array pointers.
      * We alloc both arrays with one call to save a few cycles.
      */
@@ -283,10 +283,10 @@ unsafe extern "C" fn make_funny_pointers(mut cinfo: j_decompress_ptr)
     let mut i: i32 = 0;
     let mut rgroup: i32 = 0;
     let mut M: i32 = (*cinfo).min_DCT_v_scaled_size;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
-    let mut buf: JSAMPARRAY = 0 as *mut JSAMPROW;
-    let mut xbuf0: JSAMPARRAY = 0 as *mut JSAMPROW;
-    let mut xbuf1: JSAMPARRAY = 0 as *mut JSAMPROW;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
+    let mut buf: JSAMPARRAY = std::ptr::null_mut();
+    let mut xbuf0: JSAMPARRAY = std::ptr::null_mut();
+    let mut xbuf1: JSAMPARRAY = std::ptr::null_mut();
     ci = 0 as i32;
     compptr = (*cinfo).comp_info;
     while ci < (*cinfo).num_components {
@@ -339,9 +339,9 @@ unsafe extern "C" fn set_wraparound_pointers(mut cinfo: j_decompress_ptr)
     let mut i: i32 = 0;
     let mut rgroup: i32 = 0;
     let mut M: i32 = (*cinfo).min_DCT_v_scaled_size;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
-    let mut xbuf0: JSAMPARRAY = 0 as *mut JSAMPROW;
-    let mut xbuf1: JSAMPARRAY = 0 as *mut JSAMPROW;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
+    let mut xbuf0: JSAMPARRAY = std::ptr::null_mut();
+    let mut xbuf1: JSAMPARRAY = std::ptr::null_mut();
     ci = 0 as i32;
     compptr = (*cinfo).comp_info;
     while ci < (*cinfo).num_components {
@@ -378,8 +378,8 @@ unsafe extern "C" fn set_bottom_pointers(mut cinfo: j_decompress_ptr)
     let mut rgroup: i32 = 0;
     let mut iMCUheight: i32 = 0;
     let mut rows_left: i32 = 0;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
-    let mut xbuf: JSAMPARRAY = 0 as *mut JSAMPROW;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
+    let mut xbuf: JSAMPARRAY = std::ptr::null_mut();
     ci = 0 as i32;
     compptr = (*cinfo).comp_info;
     while ci < (*cinfo).num_components {
@@ -677,8 +677,8 @@ unsafe extern "C" fn process_data_crank_post(
     )
     .expect("non-null function pointer")(
         cinfo,
-        0 as *mut libc::c_void as JSAMPIMAGE,
-        0 as *mut libc::c_void as *mut JDIMENSION,
+        std::ptr::null_mut() as JSAMPIMAGE,
+        std::ptr::null_mut() as *mut JDIMENSION,
         0 as i32 as JDIMENSION,
         output_buf,
         out_row_ctr,
@@ -714,11 +714,11 @@ pub unsafe extern "C" fn jinit_d_main_controller(
     mut cinfo: j_decompress_ptr,
     mut need_full_buffer: boolean,
 ) {
-    let mut main_ptr: my_main_ptr = 0 as *mut my_main_controller;
+    let mut main_ptr: my_main_ptr = std::ptr::null_mut();
     let mut ci: i32 = 0;
     let mut rgroup: i32 = 0;
     let mut ngroups: i32 = 0;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
     main_ptr = Some(
         (*(*cinfo).mem)
             .alloc_small

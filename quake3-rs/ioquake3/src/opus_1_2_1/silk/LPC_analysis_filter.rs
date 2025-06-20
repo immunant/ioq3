@@ -142,7 +142,7 @@ pub unsafe extern "C" fn silk_LPC_analysis_filter(
     let mut ix: i32 = 0;
     let mut out32_Q12: opus_int32 = 0;
     let mut out32: opus_int32 = 0;
-    let mut in_ptr: *const opus_int16 = 0 as *const opus_int16;
+    let mut in_ptr: *const opus_int16 = std::ptr::null();
     ix = d;
     while ix < len {
         in_ptr = &*in_0.offset((ix - 1 as i32) as isize) as *const opus_int16;

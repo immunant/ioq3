@@ -151,8 +151,8 @@ pub unsafe extern "C" fn AAS_OptimizeEdge(
 ) -> i32 {
     let mut i: i32 = 0; //end if
     let mut optedgenum: i32 = 0;
-    let mut edge: *mut aas_edge_t = 0 as *mut aas_edge_t;
-    let mut optedge: *mut aas_edge_t = 0 as *mut aas_edge_t;
+    let mut edge: *mut aas_edge_t = std::ptr::null_mut();
+    let mut optedge: *mut aas_edge_t = std::ptr::null_mut();
     edge = &mut *crate::src::botlib::be_aas_main::aasworld
         .edges
         .offset((libc::abs as unsafe extern "C" fn(_: i32) -> i32)(edgenum) as isize)
@@ -255,8 +255,8 @@ pub unsafe extern "C" fn AAS_OptimizeFace(
     let mut edgenum: i32 = 0;
     let mut optedgenum: i32 = 0;
     let mut optfacenum: i32 = 0;
-    let mut face: *mut aas_face_t = 0 as *mut aas_face_t;
-    let mut optface: *mut aas_face_t = 0 as *mut aas_face_t;
+    let mut face: *mut aas_face_t = std::ptr::null_mut();
+    let mut optface: *mut aas_face_t = std::ptr::null_mut();
     face = &mut *crate::src::botlib::be_aas_main::aasworld
         .faces
         .offset((libc::abs as unsafe extern "C" fn(_: i32) -> i32)(facenum) as isize)
@@ -324,8 +324,8 @@ pub unsafe extern "C" fn AAS_OptimizeArea(mut optimized: *mut optimized_t, mut a
     let mut i: i32 = 0;
     let mut facenum: i32 = 0;
     let mut optfacenum: i32 = 0;
-    let mut area: *mut aas_area_t = 0 as *mut aas_area_t;
-    let mut optarea: *mut aas_area_t = 0 as *mut aas_area_t;
+    let mut area: *mut aas_area_t = std::ptr::null_mut();
+    let mut optarea: *mut aas_area_t = std::ptr::null_mut();
     area = &mut *crate::src::botlib::be_aas_main::aasworld
         .areas
         .offset(areanum as isize) as *mut aas_area_t;
@@ -550,20 +550,20 @@ pub unsafe extern "C" fn AAS_Optimize() {
     let mut sign: i32 = 0;
     let mut optimized: optimized_t = optimized_t {
         numvertexes: 0,
-        vertexes: 0 as *mut aas_vertex_t,
+        vertexes: std::ptr::null_mut(),
         numedges: 0,
-        edges: 0 as *mut aas_edge_t,
+        edges: std::ptr::null_mut(),
         edgeindexsize: 0,
-        edgeindex: 0 as *mut aas_edgeindex_t,
+        edgeindex: std::ptr::null_mut(),
         numfaces: 0,
-        faces: 0 as *mut aas_face_t,
+        faces: std::ptr::null_mut(),
         faceindexsize: 0,
-        faceindex: 0 as *mut aas_faceindex_t,
+        faceindex: std::ptr::null_mut(),
         numareas: 0,
-        areas: 0 as *mut aas_area_t,
-        vertexoptimizeindex: 0 as *mut i32,
-        edgeoptimizeindex: 0 as *mut i32,
-        faceoptimizeindex: 0 as *mut i32,
+        areas: std::ptr::null_mut(),
+        vertexoptimizeindex: std::ptr::null_mut(),
+        edgeoptimizeindex: std::ptr::null_mut(),
+        faceoptimizeindex: std::ptr::null_mut(),
     };
     AAS_OptimizeAlloc(&mut optimized);
     i = 1 as i32;

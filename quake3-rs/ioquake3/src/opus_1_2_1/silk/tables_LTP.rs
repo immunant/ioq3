@@ -580,7 +580,7 @@ static mut silk_LTP_gain_vq_2: [[i8; 5]; 32] = [
 // Initialized in run_static_initializers
 #[no_mangle]
 
-pub static mut silk_LTP_vq_ptrs_Q7: [*const i8; 3] = [0 as *const i8; 3];
+pub static mut silk_LTP_vq_ptrs_Q7: [*const i8; 3] = [std::ptr::null(); 3];
 /* Maximum frequency-dependent response of the pitch taps above,
 computed as max(abs(freqz(taps))) */
 
@@ -651,7 +651,7 @@ static mut silk_LTP_gain_vq_2_gain: [u8; 32] = [
 // Initialized in run_static_initializers
 #[no_mangle]
 
-pub static mut silk_LTP_vq_gain_ptrs_Q7: [*const u8; 3] = [0 as *const u8; 3];
+pub static mut silk_LTP_vq_gain_ptrs_Q7: [*const u8; 3] = [std::ptr::null(); 3];
 #[no_mangle]
 
 pub static mut silk_LTP_vq_sizes: [i8; 3] = [8 as i32 as i8, 16 as i32 as i8, 32 as i32 as i8];

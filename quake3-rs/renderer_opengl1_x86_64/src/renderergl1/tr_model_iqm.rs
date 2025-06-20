@@ -674,7 +674,7 @@ unsafe extern "C" fn JointToMatrix(
 unsafe extern "C" fn Matrix34Invert(mut inMat: *mut f32, mut outMat: *mut f32) {
     let mut trans: vec3_t = [0.; 3];
     let mut invSqrLen: f32 = 0.;
-    let mut v: *mut f32 = 0 as *mut f32;
+    let mut v: *mut f32 = std::ptr::null_mut();
     *outMat.offset(0 as i32 as isize) = *inMat.offset(0 as i32 as isize);
     *outMat.offset(1 as i32 as isize) = *inMat.offset(4 as i32 as isize);
     *outMat.offset(2 as i32 as isize) = *inMat.offset(8 as i32 as isize);
@@ -745,15 +745,15 @@ pub unsafe extern "C" fn R_LoadIQM(
     mut filesize: i32,
     mut mod_name: *const libc::c_char,
 ) -> qboolean {
-    let mut header: *mut iqmHeader_t = 0 as *mut iqmHeader_t;
-    let mut vertexarray: *mut iqmVertexArray_t = 0 as *mut iqmVertexArray_t;
-    let mut triangle: *mut iqmTriangle_t = 0 as *mut iqmTriangle_t;
-    let mut mesh: *mut iqmMesh_t = 0 as *mut iqmMesh_t;
-    let mut joint: *mut iqmJoint_t = 0 as *mut iqmJoint_t;
-    let mut pose: *mut iqmPose_t = 0 as *mut iqmPose_t;
-    let mut bounds: *mut iqmBounds_t = 0 as *mut iqmBounds_t;
-    let mut framedata: *mut u16 = 0 as *mut u16;
-    let mut str: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut header: *mut iqmHeader_t = std::ptr::null_mut();
+    let mut vertexarray: *mut iqmVertexArray_t = std::ptr::null_mut();
+    let mut triangle: *mut iqmTriangle_t = std::ptr::null_mut();
+    let mut mesh: *mut iqmMesh_t = std::ptr::null_mut();
+    let mut joint: *mut iqmJoint_t = std::ptr::null_mut();
+    let mut pose: *mut iqmPose_t = std::ptr::null_mut();
+    let mut bounds: *mut iqmBounds_t = std::ptr::null_mut();
+    let mut framedata: *mut u16 = std::ptr::null_mut();
+    let mut str: *mut libc::c_char = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut k: i32 = 0;
@@ -826,18 +826,19 @@ pub unsafe extern "C" fn R_LoadIQM(
         0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
         0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
     ];
-    let mut mat: *mut f32 = 0 as *mut f32;
-    let mut matInv: *mut f32 = 0 as *mut f32;
+    let mut mat: *mut f32 = std::ptr::null_mut();
+    let mut matInv: *mut f32 = std::ptr::null_mut();
     let mut size: size_t = 0;
     let mut joint_names: size_t = 0;
-    let mut dataPtr: *mut byte = 0 as *mut byte;
-    let mut iqmData: *mut iqmData_t = 0 as *mut iqmData_t;
-    let mut surface: *mut srfIQModel_t = 0 as *mut srfIQModel_t;
+    let mut dataPtr: *mut byte = std::ptr::null_mut();
+    let mut iqmData: *mut iqmData_t = std::ptr::null_mut();
+    let mut surface: *mut srfIQModel_t = std::ptr::null_mut();
     let mut meshName: [libc::c_char; 64] = [0; 64];
     let mut vertexArrayFormat: [i32; 7] = [0; 7];
     let mut allocateInfluences: i32 = 0;
-    let mut blendIndexes: *mut byte = 0 as *mut byte;
-    let mut blendWeights: C2RustUnnamed_128 = C2RustUnnamed_128 { b: 0 as *mut byte };
+    let mut blendIndexes: *mut byte = std::ptr::null_mut();
+    let mut blendWeights: C2RustUnnamed_128 = C2RustUnnamed_128 { b: std::ptr::null_mut()}
+    ;
     if (filesize as usize) < ::std::mem::size_of::<iqmHeader_t>() as usize {
         return qfalse;
     }
@@ -913,8 +914,8 @@ pub unsafe extern "C" fn R_LoadIQM(
         vertexArrayFormat[i as usize] = -(1 as i32);
         i += 1
     }
-    blendIndexes = 0 as *mut byte;
-    blendWeights.b = 0 as *mut byte;
+    blendIndexes = std::ptr::null_mut();
+    blendWeights.b = std::ptr::null_mut();
     allocateInfluences = 0 as i32;
     if (*header).num_meshes != 0 {
         // check and swap vertex arrays
@@ -933,7 +934,7 @@ pub unsafe extern "C" fn R_LoadIQM(
         i = 0 as i32;
         while (i as u32) < (*header).num_vertexarrays {
             let mut n: i32 = 0;
-            let mut intPtr: *mut i32 = 0 as *mut i32;
+            let mut intPtr: *mut i32 = std::ptr::null_mut();
             if (*vertexarray).size <= 0 as i32 as u32 || (*vertexarray).size > 4 as i32 as u32 {
                 return qfalse;
             }
@@ -2098,8 +2099,8 @@ R_CullIQM
 
 unsafe extern "C" fn R_CullIQM(mut data: *mut iqmData_t, mut ent: *mut trRefEntity_t) -> i32 {
     let mut bounds: [vec3_t; 2] = [[0.; 3]; 2];
-    let mut oldBounds: *mut vec_t = 0 as *mut vec_t;
-    let mut newBounds: *mut vec_t = 0 as *mut vec_t;
+    let mut oldBounds: *mut vec_t = std::ptr::null_mut();
+    let mut newBounds: *mut vec_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     if (*data).bounds.is_null() {
         tr.pc.c_box_cull_md3_clip += 1;
@@ -2157,8 +2158,8 @@ pub unsafe extern "C" fn R_ComputeIQMFogNum(
 ) -> i32 {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut fog: *mut fog_t = 0 as *mut fog_t;
-    let mut bounds: *const vec_t = 0 as *const vec_t;
+    let mut fog: *mut fog_t = std::ptr::null_mut();
+    let mut bounds: *const vec_t = std::ptr::null();
     let defaultBounds: [vec_t; 6] = [
         -(8 as i32) as vec_t,
         -(8 as i32) as vec_t,
@@ -2226,15 +2227,15 @@ Add all surfaces of this model
 #[no_mangle]
 
 pub unsafe extern "C" fn R_AddIQMSurfaces(mut ent: *mut trRefEntity_t) {
-    let mut data: *mut iqmData_t = 0 as *mut iqmData_t;
-    let mut surface: *mut srfIQModel_t = 0 as *mut srfIQModel_t;
+    let mut data: *mut iqmData_t = std::ptr::null_mut();
+    let mut surface: *mut srfIQModel_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut personalModel: qboolean = qfalse;
     let mut cull: i32 = 0;
     let mut fogNum: i32 = 0;
-    let mut shader: *mut shader_t = 0 as *mut shader_t;
-    let mut skin: *mut skin_t = 0 as *mut skin_t;
+    let mut shader: *mut shader_t = std::ptr::null_mut();
+    let mut skin: *mut skin_t = std::ptr::null_mut();
     data = (*tr.currentModel).modelData as *mut iqmData_t;
     surface = (*data).surfaces;
     // don't add third_person objects if not in a portal
@@ -2358,8 +2359,8 @@ unsafe extern "C" fn ComputePoseMats(
     mut backlerp: f32,
     mut mat: *mut f32,
 ) {
-    let mut mat1: *mut f32 = 0 as *mut f32;
-    let mut mat2: *mut f32 = 0 as *mut f32;
+    let mut mat1: *mut f32 = std::ptr::null_mut();
+    let mut mat2: *mut f32 = std::ptr::null_mut();
     let mut joint: *mut i32 = (*data).jointParents;
     let mut i: i32 = 0;
     if oldframe == frame {
@@ -2427,7 +2428,7 @@ unsafe extern "C" fn ComputeJointMats(
     mut backlerp: f32,
     mut mat: *mut f32,
 ) {
-    let mut mat1: *mut f32 = 0 as *mut f32;
+    let mut mat1: *mut f32 = std::ptr::null_mut();
     let mut i: i32 = 0;
     if (*data).num_poses == 0 as i32 {
         crate::stdlib::memcpy(
@@ -2472,14 +2473,14 @@ pub unsafe extern "C" fn RB_IQMSurfaceAnim(mut surface: *mut surfaceType_t) {
     let mut influenceVtxMat: [f32; 12000] = [0.; 12000];
     let mut influenceNrmMat: [f32; 9000] = [0.; 9000];
     let mut i: i32 = 0;
-    let mut xyz: *mut f32 = 0 as *mut f32;
-    let mut normal: *mut f32 = 0 as *mut f32;
-    let mut texCoords: *mut f32 = 0 as *mut f32;
-    let mut color: *mut byte = 0 as *mut byte;
-    let mut outXYZ: *mut vec4_t = 0 as *mut vec4_t;
-    let mut outNormal: *mut vec4_t = 0 as *mut vec4_t;
-    let mut outTexCoord: *mut [vec2_t; 2] = 0 as *mut [vec2_t; 2];
-    let mut outColor: *mut color4ub_t = 0 as *mut color4ub_t;
+    let mut xyz: *mut f32 = std::ptr::null_mut();
+    let mut normal: *mut f32 = std::ptr::null_mut();
+    let mut texCoords: *mut f32 = std::ptr::null_mut();
+    let mut color: *mut byte = std::ptr::null_mut();
+    let mut outXYZ: *mut vec4_t = std::ptr::null_mut();
+    let mut outNormal: *mut vec4_t = std::ptr::null_mut();
+    let mut outTexCoord: *mut [vec2_t; 2] = std::ptr::null_mut();
+    let mut outColor: *mut color4ub_t = std::ptr::null_mut();
     let mut frame: i32 = if (*data).num_frames != 0 {
         ((*backEnd.currentEntity).e.frame) % (*data).num_frames
     } else {
@@ -2491,8 +2492,8 @@ pub unsafe extern "C" fn RB_IQMSurfaceAnim(mut surface: *mut surfaceType_t) {
         0 as i32
     };
     let mut backlerp: f32 = (*backEnd.currentEntity).e.backlerp;
-    let mut tri: *mut i32 = 0 as *mut i32;
-    let mut ptr: *mut glIndex_t = 0 as *mut glIndex_t;
+    let mut tri: *mut i32 = std::ptr::null_mut();
+    let mut ptr: *mut glIndex_t = std::ptr::null_mut();
     let mut base: glIndex_t = 0;
     if tess.numVertexes + (*surf).num_vertexes >= 1000 as i32
         || tess.numIndexes + (*surf).num_triangles * 3 as i32 >= 6 as i32 * 1000 as i32
@@ -2513,7 +2514,7 @@ pub unsafe extern "C" fn RB_IQMSurfaceAnim(mut surface: *mut surfaceType_t) {
             .colors
             .offset(((*surf).first_vertex * 4 as i32) as isize) as *mut byte
     } else {
-        color = 0 as *mut byte
+        color = std::ptr::null_mut()
     }
     outXYZ = &mut *tess.xyz.as_mut_ptr().offset(tess.numVertexes as isize) as *mut vec4_t;
     outNormal = &mut *tess.normal.as_mut_ptr().offset(tess.numVertexes as isize) as *mut vec4_t;

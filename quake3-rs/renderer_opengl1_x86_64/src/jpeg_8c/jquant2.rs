@@ -291,8 +291,8 @@ unsafe extern "C" fn prescan_quantize(
     mut num_rows: i32,
 ) {
     let mut cquantize: my_cquantize_ptr = (*cinfo).cquantize as my_cquantize_ptr;
-    let mut ptr: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut histp: histptr = 0 as *mut histcell;
+    let mut ptr: JSAMPROW = std::ptr::null_mut();
+    let mut histp: histptr = std::ptr::null_mut();
     let mut histogram: hist3d = (*cquantize).histogram;
     let mut row: i32 = 0;
     let mut col: JDIMENSION = 0;
@@ -324,7 +324,7 @@ unsafe extern "C" fn prescan_quantize(
 unsafe extern "C" fn find_biggest_color_pop(mut boxlist: boxptr, mut numboxes: i32) -> boxptr
 /* Find the splittable box with the largest color population */
 /* Returns NULL if no splittable boxes remain */ {
-    let mut boxp: boxptr = 0 as *mut box_0;
+    let mut boxp: boxptr = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut maxc: isize = 0 as i32 as isize;
     let mut which: boxptr = 0 as boxptr;
@@ -344,7 +344,7 @@ unsafe extern "C" fn find_biggest_color_pop(mut boxlist: boxptr, mut numboxes: i
 unsafe extern "C" fn find_biggest_volume(mut boxlist: boxptr, mut numboxes: i32) -> boxptr
 /* Find the splittable box with the largest (scaled) volume */
 /* Returns NULL if no splittable boxes remain */ {
-    let mut boxp: boxptr = 0 as *mut box_0;
+    let mut boxp: boxptr = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut maxv: INT32 = 0 as i32 as INT32;
     let mut which: boxptr = 0 as boxptr;
@@ -367,7 +367,7 @@ unsafe extern "C" fn update_box(mut cinfo: j_decompress_ptr, mut boxp: boxptr)
 {
     let mut cquantize: my_cquantize_ptr = (*cinfo).cquantize as my_cquantize_ptr;
     let mut histogram: hist3d = (*cquantize).histogram;
-    let mut histp: histptr = 0 as *mut histcell;
+    let mut histp: histptr = std::ptr::null_mut();
     let mut c0: i32 = 0;
     let mut c1: i32 = 0;
     let mut c2: i32 = 0;
@@ -584,8 +584,8 @@ unsafe extern "C" fn median_cut(
     let mut c1: i32 = 0;
     let mut c2: i32 = 0;
     let mut cmax: i32 = 0;
-    let mut b1: boxptr = 0 as *mut box_0;
-    let mut b2: boxptr = 0 as *mut box_0;
+    let mut b1: boxptr = std::ptr::null_mut();
+    let mut b2: boxptr = std::ptr::null_mut();
     while numboxes < desired_colors {
         /* Select box to split.
          * Current algorithm: by population for first half, then by volume.
@@ -664,7 +664,7 @@ unsafe extern "C" fn compute_color(mut cinfo: j_decompress_ptr, mut boxp: boxptr
     /* Note it is important to get the rounding correct! */
     let mut cquantize: my_cquantize_ptr = (*cinfo).cquantize as my_cquantize_ptr;
     let mut histogram: hist3d = (*cquantize).histogram;
-    let mut histp: histptr = 0 as *mut histcell;
+    let mut histp: histptr = std::ptr::null_mut();
     let mut c0: i32 = 0;
     let mut c1: i32 = 0;
     let mut c2: i32 = 0;
@@ -729,7 +729,7 @@ unsafe extern "C" fn compute_color(mut cinfo: j_decompress_ptr, mut boxp: boxptr
 unsafe extern "C" fn select_colors(mut cinfo: j_decompress_ptr, mut desired_colors: i32)
 /* Master routine for color selection */
 {
-    let mut boxlist: boxptr = 0 as *mut box_0;
+    let mut boxlist: boxptr = std::ptr::null_mut();
     let mut numboxes: i32 = 0;
     let mut i: i32 = 0;
     /* Allocate workspace for box list */
@@ -943,8 +943,8 @@ unsafe extern "C" fn find_best_colors(
     let mut ic2: i32 = 0; /* initial distance values */
     let mut i: i32 = 0; /* current distance in inner loop */
     let mut icolor: i32 = 0; /* distance increments */
-    let mut bptr: *mut INT32 = 0 as *mut INT32; /* initial values for increments */
-    let mut cptr: *mut JSAMPLE = 0 as *mut JSAMPLE;
+    let mut bptr: *mut INT32 = std::ptr::null_mut(); /* initial values for increments */
+    let mut cptr: *mut JSAMPLE = std::ptr::null_mut();
     let mut dist0: INT32 = 0;
     let mut dist1: INT32 = 0;
     let mut dist2: INT32 = 0;
@@ -1064,8 +1064,8 @@ unsafe extern "C" fn fill_inverse_cmap(
     let mut ic0: i32 = 0;
     let mut ic1: i32 = 0;
     let mut ic2: i32 = 0;
-    let mut cptr: *mut JSAMPLE = 0 as *mut JSAMPLE;
-    let mut cachep: histptr = 0 as *mut histcell;
+    let mut cptr: *mut JSAMPLE = std::ptr::null_mut();
+    let mut cachep: histptr = std::ptr::null_mut();
     /* This array lists the candidate colormap indexes. */
     let mut colorlist: [JSAMPLE; 256] = [0; 256]; /* number of candidate colors */
     let mut numcolors: i32 = 0;
@@ -1139,9 +1139,9 @@ unsafe extern "C" fn pass2_no_dither(
 {
     let mut cquantize: my_cquantize_ptr = (*cinfo).cquantize as my_cquantize_ptr;
     let mut histogram: hist3d = (*cquantize).histogram;
-    let mut inptr: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut outptr: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut cachep: histptr = 0 as *mut histcell;
+    let mut inptr: JSAMPROW = std::ptr::null_mut();
+    let mut outptr: JSAMPROW = std::ptr::null_mut();
+    let mut cachep: histptr = std::ptr::null_mut();
     let mut c0: i32 = 0;
     let mut c1: i32 = 0;
     let mut c2: i32 = 0;
@@ -1201,10 +1201,10 @@ unsafe extern "C" fn pass2_fs_dither(
     let mut bpreverr0: LOCFSERROR = 0;
     let mut bpreverr1: LOCFSERROR = 0;
     let mut bpreverr2: LOCFSERROR = 0;
-    let mut errorptr: FSERRPTR = 0 as *mut FSERROR;
-    let mut inptr: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut outptr: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut cachep: histptr = 0 as *mut histcell;
+    let mut errorptr: FSERRPTR = std::ptr::null_mut();
+    let mut inptr: JSAMPROW = std::ptr::null_mut();
+    let mut outptr: JSAMPROW = std::ptr::null_mut();
+    let mut cachep: histptr = std::ptr::null_mut();
     let mut dir: i32 = 0;
     let mut dir3: i32 = 0;
     let mut row: i32 = 0;
@@ -1382,7 +1382,7 @@ unsafe extern "C" fn init_error_limit(mut cinfo: j_decompress_ptr)
 /* Allocate and fill in the error_limiter table */
 {
     let mut cquantize: my_cquantize_ptr = (*cinfo).cquantize as my_cquantize_ptr; /* so can index -MAXJSAMPLE .. +MAXJSAMPLE */
-    let mut table: *mut i32 = 0 as *mut i32;
+    let mut table: *mut i32 = std::ptr::null_mut();
     let mut in_0: i32 = 0;
     let mut out: i32 = 0;
     table = Some(
@@ -1570,7 +1570,7 @@ unsafe extern "C" fn new_color_map_2_quant(mut cinfo: j_decompress_ptr) {
 #[no_mangle]
 
 pub unsafe extern "C" fn jinit_2pass_quantizer(mut cinfo: j_decompress_ptr) {
-    let mut cquantize: my_cquantize_ptr = 0 as *mut my_cquantizer; /* flag optional arrays not allocated */
+    let mut cquantize: my_cquantize_ptr = std::ptr::null_mut(); /* flag optional arrays not allocated */
     let mut i: i32 = 0;
     cquantize = Some(
         (*(*cinfo).mem)
@@ -1588,7 +1588,7 @@ pub unsafe extern "C" fn jinit_2pass_quantizer(mut cinfo: j_decompress_ptr) {
     (*cquantize).pub_0.new_color_map =
         Some(new_color_map_2_quant as unsafe extern "C" fn(_: j_decompress_ptr) -> ());
     (*cquantize).fserrors = 0 as FSERRPTR;
-    (*cquantize).error_limiter = 0 as *mut i32;
+    (*cquantize).error_limiter = std::ptr::null_mut();
     /* Make sure jdmaster didn't give me a case I can't handle */
     if (*cinfo).out_color_components != 3 as i32 {
         (*(*cinfo).err).msg_code = JERR_NOTIMPL as i32;

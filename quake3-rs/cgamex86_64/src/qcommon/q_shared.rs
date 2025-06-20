@@ -883,7 +883,7 @@ pub mod stdlib_float_h {
     #[inline]
 
     pub unsafe extern "C" fn atof(mut __nptr: *const libc::c_char) -> f64 {
-        return libc::strtod(__nptr, 0 as *mut libc::c_void as *mut *mut libc::c_char);
+        return libc::strtod(__nptr, std::ptr::null_mut() as *mut *mut libc::c_char);
     }
 }
 pub use crate::internal::__builtin_va_list;
@@ -950,7 +950,7 @@ pub unsafe extern "C" fn Com_Clamp(mut min: f32, mut max: f32, mut value: f32) -
 }
 #[no_mangle]
 pub unsafe extern "C" fn COM_SkipPath(mut pathname: *mut libc::c_char) -> *mut libc::c_char {
-    let mut last: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut last: *mut libc::c_char = std::ptr::null_mut();
     last = pathname;
     while *pathname != 0 {
         if *pathname as i32 == '/' as i32 {
@@ -963,7 +963,7 @@ pub unsafe extern "C" fn COM_SkipPath(mut pathname: *mut libc::c_char) -> *mut l
 #[no_mangle]
 pub unsafe extern "C" fn COM_GetExtension(mut name: *const libc::c_char) -> *const libc::c_char {
     let mut dot: *const libc::c_char = libc::strrchr(name, '.' as i32);
-    let mut slash: *const libc::c_char = 0 as *const libc::c_char;
+    let mut slash: *const libc::c_char = std::ptr::null();
     if !dot.is_null() && {
         slash = libc::strrchr(name, '/' as i32);
         (slash.is_null()) || slash < dot
@@ -980,7 +980,7 @@ pub unsafe extern "C" fn COM_StripExtension(
     mut destsize: i32,
 ) {
     let mut dot: *const libc::c_char = libc::strrchr(in_0, '.' as i32);
-    let mut slash: *const libc::c_char = 0 as *const libc::c_char;
+    let mut slash: *const libc::c_char = std::ptr::null();
     if !dot.is_null() && {
         slash = libc::strrchr(in_0, '/' as i32);
         (slash.is_null()) || slash < dot
@@ -1021,7 +1021,7 @@ pub unsafe extern "C" fn COM_DefaultExtension(
     mut extension: *const libc::c_char,
 ) {
     let mut dot: *const libc::c_char = libc::strrchr(path, '.' as i32);
-    let mut slash: *const libc::c_char = 0 as *const libc::c_char;
+    let mut slash: *const libc::c_char = std::ptr::null();
     if !dot.is_null() && {
         slash = libc::strrchr(path, '/' as i32);
         (slash.is_null()) || slash < dot
@@ -1197,7 +1197,7 @@ unsafe extern "C" fn SkipWhitespace(
             break;
         }
         if c == 0 {
-            return 0 as *mut libc::c_char;
+            return std::ptr::null_mut();
         }
         if c == '\n' as i32 {
             com_lines += 1;
@@ -1209,8 +1209,8 @@ unsafe extern "C" fn SkipWhitespace(
 }
 #[no_mangle]
 pub unsafe extern "C" fn COM_Compress(mut data_p: *mut libc::c_char) -> i32 {
-    let mut in_0: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut out: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut in_0: *mut libc::c_char = std::ptr::null_mut();
+    let mut out: *mut libc::c_char = std::ptr::null_mut();
     let mut c: i32 = 0;
     let mut newline: crate::src::qcommon::q_shared::qboolean =
         crate::src::qcommon::q_shared::qfalse;
@@ -1306,21 +1306,21 @@ pub unsafe extern "C" fn COM_ParseExt(
     let mut len: i32 = 0;
     let mut hasNewLines: crate::src::qcommon::q_shared::qboolean =
         crate::src::qcommon::q_shared::qfalse;
-    let mut data: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut data: *mut libc::c_char = std::ptr::null_mut();
     data = *data_p;
     len = 0 as i32;
     com_token[0 as i32 as usize] = 0 as i32 as libc::c_char;
     com_tokenline = 0 as i32;
     // make sure incoming data is valid
     if data.is_null() {
-        *data_p = 0 as *mut libc::c_char;
+        *data_p = std::ptr::null_mut();
         return com_token.as_mut_ptr();
     }
     loop {
         // skip whitespace
         data = SkipWhitespace(data, &mut hasNewLines);
         if data.is_null() {
-            *data_p = 0 as *mut libc::c_char;
+            *data_p = std::ptr::null_mut();
             return com_token.as_mut_ptr();
         }
         if hasNewLines as u32 != 0 && allowLineBreaks as u64 == 0 {
@@ -1399,7 +1399,7 @@ pub unsafe extern "C" fn COM_MatchToken(
     mut buf_p: *mut *mut libc::c_char,
     mut match_0: *mut libc::c_char,
 ) {
-    let mut token: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut token: *mut libc::c_char = std::ptr::null_mut();
     token = COM_Parse(buf_p);
     if libc::strcmp(token, match_0) != 0 {
         Com_Error(
@@ -1415,7 +1415,7 @@ pub unsafe extern "C" fn SkipBracedSection(
     mut program: *mut *mut libc::c_char,
     mut depth: i32,
 ) -> crate::src::qcommon::q_shared::qboolean {
-    let mut token: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut token: *mut libc::c_char = std::ptr::null_mut();
     loop {
         token = COM_ParseExt(program, crate::src::qcommon::q_shared::qtrue);
         if *token.offset(1 as i32 as isize) as i32 == 0 as i32 {
@@ -1433,7 +1433,7 @@ pub unsafe extern "C" fn SkipBracedSection(
 }
 #[no_mangle]
 pub unsafe extern "C" fn SkipRestOfLine(mut data: *mut *mut libc::c_char) {
-    let mut p: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut p: *mut libc::c_char = std::ptr::null_mut();
     let mut c: i32 = 0;
     p = *data;
     if *p == 0 {
@@ -1460,7 +1460,7 @@ pub unsafe extern "C" fn Parse1DMatrix(
     mut x: i32,
     mut m: *mut f32,
 ) {
-    let mut token: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut token: *mut libc::c_char = std::ptr::null_mut();
     let mut i: i32 = 0;
     COM_MatchToken(
         buf_p,
@@ -1604,7 +1604,7 @@ pub unsafe extern "C" fn Q_isalpha(mut c: i32) -> i32 {
 pub unsafe extern "C" fn Q_isanumber(
     mut s: *const libc::c_char,
 ) -> crate::src::qcommon::q_shared::qboolean {
-    let mut p: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut p: *mut libc::c_char = std::ptr::null_mut();
     if *s as i32 == '\u{0}' as i32 {
         return crate::src::qcommon::q_shared::qfalse;
     }
@@ -1736,7 +1736,7 @@ pub unsafe extern "C" fn Q_stricmp(
 }
 #[no_mangle]
 pub unsafe extern "C" fn Q_strlwr(mut s1: *mut libc::c_char) -> *mut libc::c_char {
-    let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut s: *mut libc::c_char = std::ptr::null_mut();
     s = s1;
     while *s != 0 {
         *s = ({
@@ -1763,7 +1763,7 @@ pub unsafe extern "C" fn Q_strlwr(mut s1: *mut libc::c_char) -> *mut libc::c_cha
 }
 #[no_mangle]
 pub unsafe extern "C" fn Q_strupr(mut s1: *mut libc::c_char) -> *mut libc::c_char {
-    let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut s: *mut libc::c_char = std::ptr::null_mut();
     s = s1;
     while *s != 0 {
         *s = ({
@@ -1826,7 +1826,7 @@ pub unsafe extern "C" fn Q_stristr(
                 s = s.offset(1);
                 sc = *fresh14;
                 if sc as i32 == 0 as i32 {
-                    return 0 as *const libc::c_char;
+                    return std::ptr::null();
                 }
                 if sc as i32 >= 'a' as i32 && sc as i32 <= 'z' as i32 {
                     sc = (sc as i32 - ('a' as i32 - 'A' as i32)) as libc::c_char
@@ -1846,7 +1846,7 @@ pub unsafe extern "C" fn Q_stristr(
 #[no_mangle]
 pub unsafe extern "C" fn Q_PrintStrlen(mut string: *const libc::c_char) -> i32 {
     let mut len: i32 = 0;
-    let mut p: *const libc::c_char = 0 as *const libc::c_char;
+    let mut p: *const libc::c_char = std::ptr::null();
     if string.is_null() {
         return 0 as i32;
     }
@@ -1864,8 +1864,8 @@ pub unsafe extern "C" fn Q_PrintStrlen(mut string: *const libc::c_char) -> i32 {
 }
 #[no_mangle]
 pub unsafe extern "C" fn Q_CleanStr(mut string: *mut libc::c_char) -> *mut libc::c_char {
-    let mut d: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut d: *mut libc::c_char = std::ptr::null_mut();
+    let mut s: *mut libc::c_char = std::ptr::null_mut();
     let mut c: i32 = 0;
     s = string;
     d = string;
@@ -1927,7 +1927,7 @@ pub unsafe extern "C" fn va(mut format: *mut libc::c_char, mut args: ...) -> *mu
     let mut argptr: ::std::ffi::VaListImpl; // in case va is called by nested functions
     static mut string: [[libc::c_char; 32000]; 2] = [[0; 32000]; 2];
     static mut index: i32 = 0 as i32;
-    let mut buf: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut buf: *mut libc::c_char = std::ptr::null_mut();
     buf = string[(index & 1 as i32) as usize].as_mut_ptr();
     index += 1;
     argptr = args.clone();
@@ -1972,7 +1972,7 @@ pub unsafe extern "C" fn Info_ValueForKey(
     static mut value: [[libc::c_char; 8192]; 2] = [[0; 8192]; 2];
     // work without stomping on each other
     static mut valueindex: i32 = 0 as i32;
-    let mut o: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut o: *mut libc::c_char = std::ptr::null_mut();
     if s.is_null() || key.is_null() {
         return b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     }
@@ -2025,8 +2025,8 @@ pub unsafe extern "C" fn Info_NextPair(
     mut key: *mut libc::c_char,
     mut value: *mut libc::c_char,
 ) {
-    let mut o: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut s: *const libc::c_char = 0 as *const libc::c_char;
+    let mut o: *mut libc::c_char = std::ptr::null_mut();
+    let mut s: *const libc::c_char = std::ptr::null();
     s = *head;
     if *s as i32 == '\\' as i32 {
         s = s.offset(1)
@@ -2061,10 +2061,10 @@ pub unsafe extern "C" fn Info_NextPair(
 }
 #[no_mangle]
 pub unsafe extern "C" fn Info_RemoveKey(mut s: *mut libc::c_char, mut key: *const libc::c_char) {
-    let mut start: *mut libc::c_char = 0 as *mut libc::c_char; // remove this part
+    let mut start: *mut libc::c_char = std::ptr::null_mut(); // remove this part
     let mut pkey: [libc::c_char; 1024] = [0; 1024];
     let mut value: [libc::c_char; 1024] = [0; 1024];
-    let mut o: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut o: *mut libc::c_char = std::ptr::null_mut();
     if crate::stdlib::strlen(s) >= 1024 as i32 as usize {
         Com_Error(
             crate::src::qcommon::q_shared::ERR_DROP as i32,
@@ -2122,10 +2122,10 @@ pub unsafe extern "C" fn Info_RemoveKey_Big(
     mut s: *mut libc::c_char,
     mut key: *const libc::c_char,
 ) {
-    let mut start: *mut libc::c_char = 0 as *mut libc::c_char; // remove this part
+    let mut start: *mut libc::c_char = std::ptr::null_mut(); // remove this part
     let mut pkey: [libc::c_char; 8192] = [0; 8192];
     let mut value: [libc::c_char; 8192] = [0; 8192];
-    let mut o: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut o: *mut libc::c_char = std::ptr::null_mut();
     if crate::stdlib::strlen(s) >= 8192 as i32 as usize {
         Com_Error(
             crate::src::qcommon::q_shared::ERR_DROP as i32,

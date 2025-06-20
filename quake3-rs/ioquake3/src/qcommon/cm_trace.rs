@@ -484,10 +484,10 @@ CM_TestBoxInBrush
 
 pub unsafe extern "C" fn CM_TestBoxInBrush(mut tw: *mut traceWork_t, mut brush: *mut cbrush_t) {
     let mut i: i32 = 0;
-    let mut plane: *mut cplane_t = 0 as *mut cplane_t;
+    let mut plane: *mut cplane_t = std::ptr::null_mut();
     let mut dist: f32 = 0.;
     let mut d1: f32 = 0.;
-    let mut side: *mut cbrushside_t = 0 as *mut cbrushside_t;
+    let mut side: *mut cbrushside_t = std::ptr::null_mut();
     let mut t: f32 = 0.;
     let mut startp: vec3_t = [0.; 3];
     if (*brush).numsides == 0 {
@@ -589,8 +589,8 @@ CM_TestInLeaf
 pub unsafe extern "C" fn CM_TestInLeaf(mut tw: *mut traceWork_t, mut leaf: *mut cLeaf_t) {
     let mut k: i32 = 0;
     let mut brushnum: i32 = 0;
-    let mut b: *mut cbrush_t = 0 as *mut cbrush_t;
-    let mut patch: *mut cPatch_t = 0 as *mut cPatch_t;
+    let mut b: *mut cbrush_t = std::ptr::null_mut();
+    let mut patch: *mut cPatch_t = std::ptr::null_mut();
     // test box position against all brushes in the leaf
     k = 0 as i32;
     while k < (*leaf).numLeafBrushes {
@@ -774,7 +774,7 @@ pub unsafe extern "C" fn CM_TestBoundingBoxInCapsule(
     let mut offset: vec3_t = [0.; 3];
     let mut size: [vec3_t; 2] = [[0.; 3]; 2];
     let mut h: clipHandle_t = 0;
-    let mut cmod: *mut cmodel_t = 0 as *mut cmodel_t;
+    let mut cmod: *mut cmodel_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     // mins maxs of the capsule
     crate::src::qcommon::cm_load::CM_ModelBounds(model, mins.as_mut_ptr(), maxs.as_mut_ptr());
@@ -821,7 +821,7 @@ pub unsafe extern "C" fn CM_PositionTest(mut tw: *mut traceWork_t) {
         count: 0,
         maxcount: 0,
         overflowed: qfalse,
-        list: 0 as *mut i32,
+        list: std::ptr::null_mut(),
         bounds: [[0.; 3]; 2],
         lastLeaf: 0,
         storeLeafs: None,
@@ -902,8 +902,8 @@ CM_TraceThroughBrush
 
 pub unsafe extern "C" fn CM_TraceThroughBrush(mut tw: *mut traceWork_t, mut brush: *mut cbrush_t) {
     let mut i: i32 = 0;
-    let mut plane: *mut cplane_t = 0 as *mut cplane_t;
-    let mut clipplane: *mut cplane_t = 0 as *mut cplane_t;
+    let mut plane: *mut cplane_t = std::ptr::null_mut();
+    let mut clipplane: *mut cplane_t = std::ptr::null_mut();
     let mut dist: f32 = 0.;
     let mut enterFrac: f32 = 0.;
     let mut leaveFrac: f32 = 0.;
@@ -912,21 +912,21 @@ pub unsafe extern "C" fn CM_TraceThroughBrush(mut tw: *mut traceWork_t, mut brus
     let mut getout: qboolean = qfalse;
     let mut startout: qboolean = qfalse;
     let mut f: f32 = 0.;
-    let mut side: *mut cbrushside_t = 0 as *mut cbrushside_t;
-    let mut leadside: *mut cbrushside_t = 0 as *mut cbrushside_t;
+    let mut side: *mut cbrushside_t = std::ptr::null_mut();
+    let mut leadside: *mut cbrushside_t = std::ptr::null_mut();
     let mut t: f32 = 0.;
     let mut startp: vec3_t = [0.; 3];
     let mut endp: vec3_t = [0.; 3];
     enterFrac = -1.0f64 as f32;
     leaveFrac = 1.0f64 as f32;
-    clipplane = 0 as *mut cplane_t;
+    clipplane = std::ptr::null_mut();
     if (*brush).numsides == 0 {
         return;
     }
     c_brush_traces += 1;
     getout = qfalse;
     startout = qfalse;
-    leadside = 0 as *mut cbrushside_t;
+    leadside = std::ptr::null_mut();
     if (*tw).sphere.use_0 as u64 != 0 {
         //
         // compare the trace against all planes of the brush
@@ -1119,8 +1119,8 @@ CM_TraceThroughLeaf
 pub unsafe extern "C" fn CM_TraceThroughLeaf(mut tw: *mut traceWork_t, mut leaf: *mut cLeaf_t) {
     let mut k: i32 = 0;
     let mut brushnum: i32 = 0;
-    let mut b: *mut cbrush_t = 0 as *mut cbrush_t;
-    let mut patch: *mut cPatch_t = 0 as *mut cPatch_t;
+    let mut b: *mut cbrush_t = std::ptr::null_mut();
+    let mut patch: *mut cPatch_t = std::ptr::null_mut();
     // trace line against all brushes in the leaf
     k = 0 as i32;
     while k < (*leaf).numLeafBrushes {
@@ -1621,7 +1621,7 @@ pub unsafe extern "C" fn CM_TraceBoundingBoxThroughCapsule(
     let mut offset: vec3_t = [0.; 3];
     let mut size: [vec3_t; 2] = [[0.; 3]; 2];
     let mut h: clipHandle_t = 0;
-    let mut cmod: *mut cmodel_t = 0 as *mut cmodel_t;
+    let mut cmod: *mut cmodel_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     // mins maxs of the capsule
     crate::src::qcommon::cm_load::CM_ModelBounds(model, mins.as_mut_ptr(), maxs.as_mut_ptr());
@@ -1680,8 +1680,8 @@ pub unsafe extern "C" fn CM_TraceThroughTree(
     mut p1: *mut vec_t,
     mut p2: *mut vec_t,
 ) {
-    let mut node: *mut cNode_t = 0 as *mut cNode_t;
-    let mut plane: *mut cplane_t = 0 as *mut cplane_t;
+    let mut node: *mut cNode_t = std::ptr::null_mut();
+    let mut plane: *mut cplane_t = std::ptr::null_mut();
     let mut t1: f32 = 0.;
     let mut t2: f32 = 0.;
     let mut offset: f32 = 0.;
@@ -1853,7 +1853,7 @@ pub unsafe extern "C" fn CM_Trace(
         },
     }; // for statistics, may be zeroed
     let mut offset: vec3_t = [0.; 3];
-    let mut cmod: *mut cmodel_t = 0 as *mut cmodel_t;
+    let mut cmod: *mut cmodel_t = std::ptr::null_mut();
     cmod = CM_ClipHandleToModel(model) as *mut cmodel_s;
     cm.checkcount += 1;
     c_traces += 1;
@@ -2116,7 +2116,7 @@ pub unsafe extern "C" fn CM_BoxTrace(
         vec3_origin.as_mut_ptr() as *const vec_t,
         brushmask,
         capsule,
-        0 as *mut sphere_t,
+        std::ptr::null_mut(),
     );
 }
 /*

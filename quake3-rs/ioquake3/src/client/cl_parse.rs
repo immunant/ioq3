@@ -6,7 +6,7 @@ pub mod stdlib_h {
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return libc::strtol(
             __nptr,
-            0 as *mut libc::c_void as *mut *mut libc::c_char,
+            std::ptr::null_mut() as *mut *mut libc::c_char,
             10 as i32,
         ) as i32;
     }
@@ -486,7 +486,7 @@ pub unsafe extern "C" fn CL_DeltaEntity(
     mut old: *mut entityState_t,
     mut unchanged: qboolean,
 ) {
-    let mut state: *mut entityState_t = 0 as *mut entityState_t;
+    let mut state: *mut entityState_t = std::ptr::null_mut();
     // save the parsed entity state into the big circular buffer so
     // it can be used as the source for a later delta
     state = &mut *cl
@@ -525,14 +525,14 @@ pub unsafe extern "C" fn CL_ParsePacketEntities(
     mut newframe: *mut clSnapshot_t,
 ) {
     let mut newnum: i32 = 0;
-    let mut oldstate: *mut entityState_t = 0 as *mut entityState_t;
+    let mut oldstate: *mut entityState_t = std::ptr::null_mut();
     let mut oldindex: i32 = 0;
     let mut oldnum: i32 = 0;
     (*newframe).parseEntitiesNum = cl.parseEntitiesNum;
     (*newframe).numEntities = 0 as i32;
     // delta from the entities present in oldframe
     oldindex = 0 as i32;
-    oldstate = 0 as *mut entityState_t;
+    oldstate = std::ptr::null_mut();
     if oldframe.is_null() {
         oldnum = 99999 as i32
     } else if oldindex >= (*oldframe).numEntities {
@@ -653,7 +653,7 @@ for any reason, no changes to the state will be made at all.
 
 pub unsafe extern "C" fn CL_ParseSnapshot(mut msg: *mut msg_t) {
     let mut len: i32 = 0;
-    let mut old: *mut clSnapshot_t = 0 as *mut clSnapshot_t;
+    let mut old: *mut clSnapshot_t = std::ptr::null_mut();
     let mut newSnap: clSnapshot_t = clSnapshot_t {
         valid: qfalse,
         snapFlags: 0,
@@ -749,7 +749,7 @@ pub unsafe extern "C" fn CL_ParseSnapshot(mut msg: *mut msg_t) {
     // message
     if newSnap.deltaNum <= 0 as i32 {
         newSnap.valid = qtrue;
-        old = 0 as *mut clSnapshot_t;
+        old = std::ptr::null_mut();
         clc.demowaiting = qfalse
     // uncompressed frame
     // we can start recording now
@@ -809,7 +809,7 @@ pub unsafe extern "C" fn CL_ParseSnapshot(mut msg: *mut msg_t) {
     } else {
         MSG_ReadDeltaPlayerstate(
             msg as *mut msg_t,
-            0 as *mut playerState_s as *mut playerState_s,
+            std::ptr::null_mut() as *mut playerState_s,
             &mut newSnap.ps as *mut _ as *mut playerState_s,
         );
     }
@@ -881,9 +881,9 @@ gamestate, and possibly during gameplay.
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_SystemInfoChanged() {
-    let mut systemInfo: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut s: *const libc::c_char = 0 as *const libc::c_char;
-    let mut t: *const libc::c_char = 0 as *const libc::c_char;
+    let mut systemInfo: *mut libc::c_char = std::ptr::null_mut();
+    let mut s: *const libc::c_char = std::ptr::null();
+    let mut t: *const libc::c_char = std::ptr::null();
     let mut key: [libc::c_char; 8192] = [0; 8192];
     let mut value: [libc::c_char; 8192] = [0; 8192];
     let mut gameSet: qboolean = qfalse;
@@ -1021,7 +1021,7 @@ CL_ParseServerInfo
 */
 
 unsafe extern "C" fn CL_ParseServerInfo() {
-    let mut serverInfo: *const libc::c_char = 0 as *const libc::c_char;
+    let mut serverInfo: *const libc::c_char = std::ptr::null();
     serverInfo = cl
         .gameState
         .stringData
@@ -1049,7 +1049,7 @@ CL_ParseGamestate
 
 pub unsafe extern "C" fn CL_ParseGamestate(mut msg: *mut msg_t) {
     let mut i: i32 = 0;
-    let mut es: *mut entityState_t = 0 as *mut entityState_t;
+    let mut es: *mut entityState_t = std::ptr::null_mut();
     let mut newnum: i32 = 0;
     let mut nullstate: entityState_t = entityState_t {
         number: 0,
@@ -1094,7 +1094,7 @@ pub unsafe extern "C" fn CL_ParseGamestate(mut msg: *mut msg_t) {
         generic1: 0,
     };
     let mut cmd: i32 = 0;
-    let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut s: *mut libc::c_char = std::ptr::null_mut();
     let mut oldGame: [libc::c_char; 64] = [0; 64];
     Con_Close();
     clc.connectPacketCount = 0 as i32;
@@ -1527,7 +1527,7 @@ unsafe extern "C" fn CL_ParseVoip(mut msg: *mut msg_t, mut ignoreData: qboolean)
         while i < seqdiff {
             numSamples = crate::src::opus_1_2_1::src::opus_decoder::opus_decode(
                 clc.opusDecoder[sender as usize],
-                0 as *const u8,
+                std::ptr::null(),
                 0 as i32,
                 decoded.as_mut_ptr().offset(written as isize),
                 20 as i32 * 48 as i32 * 3 as i32,
@@ -1587,7 +1587,7 @@ when it transitions a snapshot
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_ParseCommandString(mut msg: *mut msg_t) {
-    let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut s: *mut libc::c_char = std::ptr::null_mut();
     let mut seq: i32 = 0;
     let mut index: i32 = 0;
     seq = MSG_ReadLong(msg as *mut msg_t);

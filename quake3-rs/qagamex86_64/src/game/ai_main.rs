@@ -201,7 +201,7 @@ pub mod stdlib_h {
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return libc::strtol(
             __nptr,
-            0 as *mut libc::c_void as *mut *mut libc::c_char,
+            std::ptr::null_mut() as *mut *mut libc::c_char,
             10 as i32,
         ) as i32;
     }
@@ -709,7 +709,7 @@ pub unsafe extern "C" fn BotAI_GetClientState(
     mut clientNum: i32,
     mut state: *mut playerState_t,
 ) -> i32 {
-    let mut ent: *mut gentity_t = 0 as *mut gentity_t;
+    let mut ent: *mut gentity_t = std::ptr::null_mut();
     ent = &mut *g_entities.as_mut_ptr().offset(clientNum as isize) as *mut gentity_t;
     if (*ent).inuse as u64 == 0 {
         return qfalse as i32;
@@ -735,7 +735,7 @@ pub unsafe extern "C" fn BotAI_GetEntityState(
     mut entityNum: i32,
     mut state: *mut entityState_t,
 ) -> i32 {
-    let mut ent: *mut gentity_t = 0 as *mut gentity_t;
+    let mut ent: *mut gentity_t = std::ptr::null_mut();
     ent = &mut *g_entities.as_mut_ptr().offset(entityNum as isize) as *mut gentity_t;
     crate::stdlib::memset(
         state as *mut libc::c_void,
@@ -798,8 +798,8 @@ pub unsafe extern "C" fn BotAI_BotInitialChat(
     let mut i: i32 = 0;
     let mut mcontext: i32 = 0;
     let mut ap: ::std::ffi::VaListImpl;
-    let mut p: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut vars: [*mut libc::c_char; 8] = [0 as *mut libc::c_char; 8];
+    let mut p: *mut libc::c_char = std::ptr::null_mut();
+    let mut vars: [*mut libc::c_char; 8] = [std::ptr::null_mut(); 8];
     crate::stdlib::memset(
         vars.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
@@ -905,7 +905,7 @@ BotReportStatus
 pub unsafe extern "C" fn BotReportStatus(mut bs: *mut crate::src::game::ai_main::bot_state_t) {
     let mut goalname: [libc::c_char; 256] = [0; 256];
     let mut netname: [libc::c_char; 256] = [0; 256];
-    let mut leader: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut leader: *mut libc::c_char = std::ptr::null_mut();
     let mut flagstatus: [libc::c_char; 32] = [0; 32];
     //
     crate::src::game::ai_dmq3::ClientName(
@@ -1195,9 +1195,9 @@ pub unsafe extern "C" fn BotSetInfoConfigString(
     let mut goalname: [libc::c_char; 256] = [0; 256];
     let mut netname: [libc::c_char; 256] = [0; 256];
     let mut action: [libc::c_char; 256] = [0; 256];
-    let mut leader: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut leader: *mut libc::c_char = std::ptr::null_mut();
     let mut carrying: [libc::c_char; 32] = [0; 32];
-    let mut cs: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut cs: *mut libc::c_char = std::ptr::null_mut();
     let mut goal: bot_goal_t = bot_goal_t {
         origin: [0.; 3],
         areanum: 0,
@@ -1880,7 +1880,7 @@ pub unsafe extern "C" fn BotInputToUserCommand(
         angles.as_mut_ptr() as *const vec_t,
         forward.as_mut_ptr(),
         right.as_mut_ptr(),
-        0 as *mut vec_t,
+        std::ptr::null_mut(),
     );
     //bot input speed is in the range [0, 400]
     (*bi).speed = (*bi).speed * 127 as i32 as f32 / 400 as i32 as f32;
@@ -2037,10 +2037,9 @@ BotAI
 #[no_mangle]
 
 pub unsafe extern "C" fn BotAI(mut client: i32, mut thinktime: f32) -> i32 {
-    let mut bs: *mut crate::src::game::ai_main::bot_state_t =
-        0 as *mut crate::src::game::ai_main::bot_state_t;
+    let mut bs: *mut crate::src::game::ai_main::bot_state_t = std::ptr::null_mut();
     let mut buf: [libc::c_char; 1024] = [0; 1024];
-    let mut args: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut args: *mut libc::c_char = std::ptr::null_mut();
     let mut j: i32 = 0;
     trap_EA_ResetInput(client);
     //
@@ -2223,8 +2222,8 @@ BotWriteSessionData
 #[no_mangle]
 
 pub unsafe extern "C" fn BotWriteSessionData(mut bs: *mut crate::src::game::ai_main::bot_state_t) {
-    let mut s: *const libc::c_char = 0 as *const libc::c_char;
-    let mut var: *const libc::c_char = 0 as *const libc::c_char;
+    let mut s: *const libc::c_char = std::ptr::null();
+    let mut var: *const libc::c_char = std::ptr::null();
     s = va(
         b"%i %i %i %i %i %i %i %i %f %f %f %f %f %f %f %f %f %f\x00" as *const u8
             as *const libc::c_char as *mut libc::c_char,
@@ -2262,7 +2261,7 @@ BotReadSessionData
 
 pub unsafe extern "C" fn BotReadSessionData(mut bs: *mut crate::src::game::ai_main::bot_state_t) {
     let mut s: [libc::c_char; 1024] = [0; 1024];
-    let mut var: *const libc::c_char = 0 as *const libc::c_char;
+    let mut var: *const libc::c_char = std::ptr::null();
     var = va(
         b"botsession%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         (*bs).client,
@@ -2347,8 +2346,7 @@ pub unsafe extern "C" fn BotAISetupClient(
     let mut filename: [libc::c_char; 144] = [0; 144];
     let mut name: [libc::c_char; 144] = [0; 144];
     let mut gender: [libc::c_char; 144] = [0; 144];
-    let mut bs: *mut crate::src::game::ai_main::bot_state_t =
-        0 as *mut crate::src::game::ai_main::bot_state_t;
+    let mut bs: *mut crate::src::game::ai_main::bot_state_t = std::ptr::null_mut();
     let mut errnum: i32 = 0;
     if botstates[client as usize].is_null() {
         botstates[client as usize] =
@@ -2499,8 +2497,7 @@ BotAIShutdownClient
 #[no_mangle]
 
 pub unsafe extern "C" fn BotAIShutdownClient(mut client: i32, mut restart: qboolean) -> i32 {
-    let mut bs: *mut crate::src::game::ai_main::bot_state_t =
-        0 as *mut crate::src::game::ai_main::bot_state_t;
+    let mut bs: *mut crate::src::game::ai_main::bot_state_t = std::ptr::null_mut();
     bs = botstates[client as usize];
     if bs.is_null() || (*bs).inuse == 0 {
         //BotAI_Print(PRT_ERROR, "BotAIShutdownClient: client %d already shutdown\n", client);
@@ -2735,7 +2732,7 @@ BotAIStartFrame
 
 pub unsafe extern "C" fn BotAIStartFrame(mut time: i32) -> i32 {
     let mut i: i32 = 0;
-    let mut ent: *mut gentity_t = 0 as *mut gentity_t;
+    let mut ent: *mut gentity_t = std::ptr::null_mut();
     let mut state: bot_entitystate_t = bot_entitystate_t {
         type_0: 0,
         flags: 0,
@@ -2855,17 +2852,17 @@ pub unsafe extern "C" fn BotAIStartFrame(mut time: i32) -> i32 {
         while i < (1 as i32) << 10 as i32 {
             ent = &mut *g_entities.as_mut_ptr().offset(i as isize) as *mut gentity_t;
             if (*ent).inuse as u64 == 0 {
-                trap_BotLibUpdateEntity(i, 0 as *mut libc::c_void);
+                trap_BotLibUpdateEntity(i, std::ptr::null_mut());
             } else if (*ent).r.linked as u64 == 0 {
-                trap_BotLibUpdateEntity(i, 0 as *mut libc::c_void);
+                trap_BotLibUpdateEntity(i, std::ptr::null_mut());
             } else if (*ent).r.svFlags & 0x1 as i32 != 0 {
-                trap_BotLibUpdateEntity(i, 0 as *mut libc::c_void);
+                trap_BotLibUpdateEntity(i, std::ptr::null_mut());
             } else if (*ent).s.eType == ET_MISSILE as i32
                 && (*ent).s.weapon != WP_GRAPPLING_HOOK as i32
             {
-                trap_BotLibUpdateEntity(i, 0 as *mut libc::c_void);
+                trap_BotLibUpdateEntity(i, std::ptr::null_mut());
             } else if (*ent).s.eType > ET_EVENTS as i32 {
-                trap_BotLibUpdateEntity(i, 0 as *mut libc::c_void);
+                trap_BotLibUpdateEntity(i, std::ptr::null_mut());
             } else {
                 // do not update missiles
                 // do not update event only entities

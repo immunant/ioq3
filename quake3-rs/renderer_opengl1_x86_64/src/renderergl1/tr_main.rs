@@ -355,7 +355,7 @@ pub static mut tr: trGlobals_t = trGlobals_t {
     frameSceneNum: 0,
     worldMapLoaded: qfalse,
     world: std::ptr::null_mut(),
-    externalVisData: 0 as *const byte,
+    externalVisData: std::ptr::null(),
     defaultImage: std::ptr::null_mut(),
     scratchImage: [std::ptr::null_mut(); 32],
     fogImage: std::ptr::null_mut(),
@@ -602,7 +602,7 @@ pub unsafe extern "C" fn R_CullLocalBox(mut bounds: *mut vec3_t) -> i32 {
     let mut transformed: [vec3_t; 8] = [[0.; 3]; 8];
     let mut dists: [f32; 8] = [0.; 8];
     let mut v: vec3_t = [0.; 3];
-    let mut frust: *mut cplane_t = 0 as *mut cplane_t;
+    let mut frust: *mut cplane_t = std::ptr::null_mut();
     let mut anyBack: i32 = 0;
     let mut front: i32 = 0;
     let mut back: i32 = 0;
@@ -695,7 +695,7 @@ pub unsafe extern "C" fn R_CullLocalPointAndRadius(mut pt: *mut vec_t, mut radiu
 pub unsafe extern "C" fn R_CullPointAndRadius(mut pt: *mut vec_t, mut radius: f32) -> i32 {
     let mut i: i32 = 0;
     let mut dist: f32 = 0.;
-    let mut frust: *mut cplane_t = 0 as *mut cplane_t;
+    let mut frust: *mut cplane_t = std::ptr::null_mut();
     let mut mightBeClipped: qboolean = qfalse;
     if (*r_nocull).integer != 0 {
         return 1 as i32;
@@ -1511,11 +1511,11 @@ pub unsafe extern "C" fn R_PlaneForSurface(
     mut surfType: *mut surfaceType_t,
     mut plane: *mut cplane_t,
 ) {
-    let mut tri: *mut srfTriangles_t = 0 as *mut srfTriangles_t;
-    let mut poly: *mut srfPoly_t = 0 as *mut srfPoly_t;
-    let mut v1: *mut drawVert_t = 0 as *mut drawVert_t;
-    let mut v2: *mut drawVert_t = 0 as *mut drawVert_t;
-    let mut v3: *mut drawVert_t = 0 as *mut drawVert_t;
+    let mut tri: *mut srfTriangles_t = std::ptr::null_mut();
+    let mut poly: *mut srfPoly_t = std::ptr::null_mut();
+    let mut v1: *mut drawVert_t = std::ptr::null_mut();
+    let mut v2: *mut drawVert_t = std::ptr::null_mut();
+    let mut v3: *mut drawVert_t = std::ptr::null_mut();
     let mut plane4: vec4_t = [0.; 4];
     if surfType.is_null() {
         crate::stdlib::memset(
@@ -1614,7 +1614,7 @@ pub unsafe extern "C" fn R_GetPortalOrientations(
         signbits: 0,
         pad: [0; 2],
     };
-    let mut e: *mut trRefEntity_t = 0 as *mut trRefEntity_t;
+    let mut e: *mut trRefEntity_t = std::ptr::null_mut();
     let mut d: f32 = 0.;
     let mut transformed: vec3_t = [0.; 3];
     // create plane axis for the portal we are seeing
@@ -1840,7 +1840,7 @@ unsafe extern "C" fn IsMirror(mut drawSurf: *const drawSurf_t, mut entityNum: i3
         signbits: 0,
         pad: [0; 2],
     };
-    let mut e: *mut trRefEntity_t = 0 as *mut trRefEntity_t;
+    let mut e: *mut trRefEntity_t = std::ptr::null_mut();
     let mut d: f32 = 0.;
     // create plane axis for the portal we are seeing
     R_PlaneForSurface((*drawSurf).surface, &mut originalPlane);
@@ -1903,7 +1903,7 @@ unsafe extern "C" fn SurfIsOffscreen(
     let mut shortest: f32 = 100000000 as i32 as f32;
     let mut entityNum: i32 = 0;
     let mut numTriangles: i32 = 0;
-    let mut shader: *mut shader_t = 0 as *mut shader_t;
+    let mut shader: *mut shader_t = std::ptr::null_mut();
     let mut fogNum: i32 = 0;
     let mut dlighted: i32 = 0;
     let mut clip: vec4_t = [0.; 4];
@@ -2186,7 +2186,7 @@ See if a sprite is inside a fog volume
 pub unsafe extern "C" fn R_SpriteFogNum(mut ent: *mut trRefEntity_t) -> i32 {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut fog: *mut fog_t = 0 as *mut fog_t;
+    let mut fog: *mut fog_t = std::ptr::null_mut();
     if tr.refdef.rdflags & 0x1 as i32 != 0 {
         return 0 as i32;
     }
@@ -2250,8 +2250,8 @@ unsafe extern "C" fn R_Radix(
     ];
     let mut index: [i32; 256] = [0; 256];
     let mut i: i32 = 0;
-    let mut sortKey: *mut u8 = 0 as *mut u8;
-    let mut end: *mut u8 = 0 as *mut u8;
+    let mut sortKey: *mut u8 = std::ptr::null_mut();
+    let mut end: *mut u8 = std::ptr::null_mut();
     sortKey = (&mut (*source.offset(0 as i32 as isize)).sort as *mut u32 as *mut u8)
         .offset(byte as isize);
     end = sortKey.offset(
@@ -2354,7 +2354,7 @@ R_SortDrawSurfs
 #[no_mangle]
 
 pub unsafe extern "C" fn R_SortDrawSurfs(mut drawSurfs: *mut drawSurf_t, mut numDrawSurfs: i32) {
-    let mut shader: *mut shader_t = 0 as *mut shader_t;
+    let mut shader: *mut shader_t = std::ptr::null_mut();
     let mut fogNum: i32 = 0;
     let mut entityNum: i32 = 0;
     let mut dlighted: i32 = 0;
@@ -2411,8 +2411,8 @@ R_AddEntitySurfaces
 #[no_mangle]
 
 pub unsafe extern "C" fn R_AddEntitySurfaces() {
-    let mut ent: *mut trRefEntity_t = 0 as *mut trRefEntity_t;
-    let mut shader: *mut shader_t = 0 as *mut shader_t;
+    let mut ent: *mut trRefEntity_t = std::ptr::null_mut();
+    let mut shader: *mut shader_t = std::ptr::null_mut();
     if (*r_drawentities).integer == 0 {
         return;
     }

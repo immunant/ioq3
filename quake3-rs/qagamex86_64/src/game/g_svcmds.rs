@@ -6,7 +6,7 @@ pub mod stdlib_h {
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return libc::strtol(
             __nptr,
-            0 as *mut libc::c_void as *mut *mut libc::c_char,
+            std::ptr::null_mut() as *mut *mut libc::c_char,
             10 as i32,
         ) as i32;
     }
@@ -665,7 +665,7 @@ pub unsafe extern "C" fn G_FilterPacket(mut from: *mut libc::c_char) -> qboolean
     let mut i: i32 = 0;
     let mut in_0: u32 = 0;
     let mut m: [byte; 4] = [0 as i32 as byte, 0, 0, 0];
-    let mut p: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut p: *mut libc::c_char = std::ptr::null_mut();
     i = 0 as i32;
     p = from;
     while *p as i32 != 0 && i < 4 as i32 {
@@ -725,8 +725,8 @@ G_ProcessIPBans
 #[no_mangle]
 
 pub unsafe extern "C" fn G_ProcessIPBans() {
-    let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut t: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut s: *mut libc::c_char = std::ptr::null_mut();
+    let mut t: *mut libc::c_char = std::ptr::null_mut();
     let mut str: [libc::c_char; 256] = [0; 256];
     Q_strncpyz(
         str.as_mut_ptr(),
@@ -822,7 +822,7 @@ Svcmd_EntityList_f
 
 pub unsafe extern "C" fn Svcmd_EntityList_f() {
     let mut e: i32 = 0;
-    let mut check: *mut gentity_t = 0 as *mut gentity_t;
+    let mut check: *mut gentity_t = std::ptr::null_mut();
     check = g_entities.as_mut_ptr();
     e = 0 as i32;
     while e < level.num_entities {
@@ -887,7 +887,7 @@ pub unsafe extern "C" fn Svcmd_EntityList_f() {
 #[no_mangle]
 
 pub unsafe extern "C" fn ClientForString(mut s: *const libc::c_char) -> *mut gclient_t {
-    let mut cl: *mut gclient_t = 0 as *mut gclient_t;
+    let mut cl: *mut gclient_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut idnum: i32 = 0;
     // numeric values are just slot numbers
@@ -900,7 +900,7 @@ pub unsafe extern "C" fn ClientForString(mut s: *const libc::c_char) -> *mut gcl
                 b"Bad client slot: %i\n\x00" as *const u8 as *const libc::c_char,
                 idnum,
             );
-            return 0 as *mut gclient_t;
+            return std::ptr::null_mut();
         }
         cl = &mut *level.clients.offset(idnum as isize) as *mut gclient_s;
         if (*cl).pers.connected as u32 == CON_DISCONNECTED as i32 as u32 {
@@ -908,7 +908,7 @@ pub unsafe extern "C" fn ClientForString(mut s: *const libc::c_char) -> *mut gcl
                 b"Client %i is not connected\n\x00" as *const u8 as *const libc::c_char,
                 idnum,
             );
-            return 0 as *mut gclient_t;
+            return std::ptr::null_mut();
         }
         return cl;
     }
@@ -927,7 +927,7 @@ pub unsafe extern "C" fn ClientForString(mut s: *const libc::c_char) -> *mut gcl
         b"User %s is not on the server\n\x00" as *const u8 as *const libc::c_char,
         s,
     );
-    return 0 as *mut gclient_t;
+    return std::ptr::null_mut();
 }
 /*
 ===================
@@ -939,7 +939,7 @@ forceteam <player> <team>
 #[no_mangle]
 
 pub unsafe extern "C" fn Svcmd_ForceTeam_f() {
-    let mut cl: *mut gclient_t = 0 as *mut gclient_t;
+    let mut cl: *mut gclient_t = std::ptr::null_mut();
     let mut str: [libc::c_char; 1024] = [0; 1024];
     if trap_Argc() < 3 as i32 {
         G_Printf(b"Usage: forceteam <player> <team>\n\x00" as *const u8 as *const libc::c_char);

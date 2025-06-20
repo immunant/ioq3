@@ -310,7 +310,7 @@ pub unsafe extern "C" fn celt_encoder_get_size(mut channels: i32) -> i32 {
     let mut mode: *mut OpusCustomMode = crate::src::opus_1_2_1::celt::modes::opus_custom_mode_create(
         48000 as i32,
         960 as i32,
-        0 as *mut i32,
+        std::ptr::null_mut(),
     ) as *mut OpusCustomMode; /* opus_val16 oldBandE[channels*mode->nbEBands]; */
     /* opus_val16 oldLogE[channels*mode->nbEBands]; */
     /* opus_val16 oldLogE2[channels*mode->nbEBands]; */
@@ -391,7 +391,7 @@ pub unsafe extern "C" fn celt_encoder_init(
         crate::src::opus_1_2_1::celt::modes::opus_custom_mode_create(
             48000 as i32,
             960 as i32,
-            0 as *mut i32,
+            std::ptr::null_mut(),
         ) as *mut OpusCustomMode,
         channels,
         arch,
@@ -414,7 +414,7 @@ unsafe extern "C" fn transient_analysis(
     mut weak_transient: *mut i32,
 ) -> i32 {
     let mut i: i32 = 0;
-    let mut tmp: *mut opus_val16 = 0 as *mut opus_val16;
+    let mut tmp: *mut opus_val16 = std::ptr::null_mut();
     let mut mem0: opus_val32 = 0.;
     let mut mem1: opus_val32 = 0.;
     let mut is_transient: i32 = 0 as i32;
@@ -1005,13 +1005,13 @@ unsafe extern "C" fn tf_analysis(
     mut tf_chan: i32,
 ) -> i32 {
     let mut i: i32 = 0;
-    let mut metric: *mut i32 = 0 as *mut i32;
+    let mut metric: *mut i32 = std::ptr::null_mut();
     let mut cost0: i32 = 0;
     let mut cost1: i32 = 0;
-    let mut path0: *mut i32 = 0 as *mut i32;
-    let mut path1: *mut i32 = 0 as *mut i32;
-    let mut tmp: *mut celt_norm = 0 as *mut celt_norm;
-    let mut tmp_1: *mut celt_norm = 0 as *mut celt_norm;
+    let mut path0: *mut i32 = std::ptr::null_mut();
+    let mut path1: *mut i32 = std::ptr::null_mut();
+    let mut tmp: *mut celt_norm = std::ptr::null_mut();
+    let mut tmp_1: *mut celt_norm = std::ptr::null_mut();
     let mut sel: i32 = 0;
     let mut selcost: [i32; 2] = [0; 2];
     let mut tf_select: i32 = 0 as i32;
@@ -1610,8 +1610,8 @@ unsafe extern "C" fn dynalloc_analysis(
     let mut c: i32 = 0;
     let mut tot_boost: opus_int32 = 0 as i32;
     let mut maxDepth: opus_val16 = 0.;
-    let mut follower: *mut opus_val16 = 0 as *mut opus_val16;
-    let mut noise_floor: *mut opus_val16 = 0 as *mut opus_val16;
+    let mut follower: *mut opus_val16 = std::ptr::null_mut();
+    let mut noise_floor: *mut opus_val16 = std::ptr::null_mut();
     let mut fresh7 = ::std::vec::from_elem(
         0,
         (::std::mem::size_of::<opus_val16>() as usize).wrapping_mul((C * nbEBands) as usize)
@@ -1667,7 +1667,7 @@ unsafe extern "C" fn dynalloc_analysis(
         loop {
             let mut offset: opus_val16 = 0.;
             let mut tmp: opus_val16 = 0.;
-            let mut f: *mut opus_val16 = 0 as *mut opus_val16;
+            let mut f: *mut opus_val16 = std::ptr::null_mut();
             f = &mut *follower.offset((c * nbEBands) as isize) as *mut opus_val16;
             *f.offset(0 as i32 as isize) = *bandLogE2.offset((c * nbEBands) as isize);
             i = 1 as i32;
@@ -1909,9 +1909,9 @@ unsafe extern "C" fn run_prefilter(
     mut nbAvailableBytes: i32,
 ) -> i32 {
     let mut c: i32 = 0;
-    let mut _pre: *mut celt_sig = 0 as *mut celt_sig;
-    let mut pre: [*mut celt_sig; 2] = [0 as *mut celt_sig; 2];
-    let mut mode: *const OpusCustomMode = 0 as *const OpusCustomMode;
+    let mut _pre: *mut celt_sig = std::ptr::null_mut();
+    let mut pre: [*mut celt_sig; 2] = [std::ptr::null_mut(); 2];
+    let mut mode: *const OpusCustomMode = std::ptr::null();
     let mut pitch_index: i32 = 0;
     let mut gain1: opus_val16 = 0.;
     let mut pf_threshold: opus_val16 = 0.;
@@ -1962,7 +1962,7 @@ unsafe extern "C" fn run_prefilter(
         }
     }
     if enabled != 0 {
-        let mut pitch_buf: *mut opus_val16 = 0 as *mut opus_val16;
+        let mut pitch_buf: *mut opus_val16 = std::ptr::null_mut();
         let mut fresh11 = ::std::vec::from_elem(
             0,
             (::std::mem::size_of::<opus_val16>() as usize)
@@ -2096,7 +2096,7 @@ unsafe extern "C" fn run_prefilter(
                 -(*st).prefilter_gain,
                 (*st).prefilter_tapset,
                 (*st).prefilter_tapset,
-                0 as *const opus_val16,
+                std::ptr::null(),
                 0 as i32,
                 (*st).arch,
             );
@@ -2224,7 +2224,7 @@ unsafe extern "C" fn compute_vbr(
     let mut coded_bands: i32 = 0;
     let mut tf_calibration: opus_val16 = 0.;
     let mut nbEBands: i32 = 0;
-    let mut eBands: *const opus_int16 = 0 as *const opus_int16;
+    let mut eBands: *const opus_int16 = std::ptr::null();
     nbEBands = (*mode).nbEBands;
     eBands = (*mode).eBands;
     coded_bands = if lastCodedBands != 0 {
@@ -2374,7 +2374,7 @@ pub unsafe extern "C" fn celt_encode_with_ec(
     let mut N: i32 = 0;
     let mut bits: opus_int32 = 0;
     let mut _enc: ec_enc = ec_enc {
-        buf: 0 as *mut u8,
+        buf: std::ptr::null_mut(),
         storage: 0,
         end_offs: 0,
         end_window: 0,
@@ -2387,25 +2387,25 @@ pub unsafe extern "C" fn celt_encode_with_ec(
         rem: 0,
         error: 0,
     };
-    let mut in_0: *mut celt_sig = 0 as *mut celt_sig;
-    let mut freq: *mut celt_sig = 0 as *mut celt_sig;
-    let mut X: *mut celt_norm = 0 as *mut celt_norm;
-    let mut bandE: *mut celt_ener = 0 as *mut celt_ener;
-    let mut bandLogE: *mut opus_val16 = 0 as *mut opus_val16;
-    let mut bandLogE2: *mut opus_val16 = 0 as *mut opus_val16;
-    let mut fine_quant: *mut i32 = 0 as *mut i32;
-    let mut error: *mut opus_val16 = 0 as *mut opus_val16;
-    let mut pulses: *mut i32 = 0 as *mut i32;
-    let mut cap: *mut i32 = 0 as *mut i32;
-    let mut offsets: *mut i32 = 0 as *mut i32;
-    let mut fine_priority: *mut i32 = 0 as *mut i32;
-    let mut tf_res: *mut i32 = 0 as *mut i32;
-    let mut collapse_masks: *mut u8 = 0 as *mut u8;
-    let mut prefilter_mem: *mut celt_sig = 0 as *mut celt_sig;
-    let mut oldBandE: *mut opus_val16 = 0 as *mut opus_val16;
-    let mut oldLogE: *mut opus_val16 = 0 as *mut opus_val16;
-    let mut oldLogE2: *mut opus_val16 = 0 as *mut opus_val16;
-    let mut energyError: *mut opus_val16 = 0 as *mut opus_val16;
+    let mut in_0: *mut celt_sig = std::ptr::null_mut();
+    let mut freq: *mut celt_sig = std::ptr::null_mut();
+    let mut X: *mut celt_norm = std::ptr::null_mut();
+    let mut bandE: *mut celt_ener = std::ptr::null_mut();
+    let mut bandLogE: *mut opus_val16 = std::ptr::null_mut();
+    let mut bandLogE2: *mut opus_val16 = std::ptr::null_mut();
+    let mut fine_quant: *mut i32 = std::ptr::null_mut();
+    let mut error: *mut opus_val16 = std::ptr::null_mut();
+    let mut pulses: *mut i32 = std::ptr::null_mut();
+    let mut cap: *mut i32 = std::ptr::null_mut();
+    let mut offsets: *mut i32 = std::ptr::null_mut();
+    let mut fine_priority: *mut i32 = std::ptr::null_mut();
+    let mut tf_res: *mut i32 = std::ptr::null_mut();
+    let mut collapse_masks: *mut u8 = std::ptr::null_mut();
+    let mut prefilter_mem: *mut celt_sig = std::ptr::null_mut();
+    let mut oldBandE: *mut opus_val16 = std::ptr::null_mut();
+    let mut oldLogE: *mut opus_val16 = std::ptr::null_mut();
+    let mut oldLogE2: *mut opus_val16 = std::ptr::null_mut();
+    let mut energyError: *mut opus_val16 = std::ptr::null_mut();
     let mut shortBlocks: i32 = 0 as i32;
     let mut isTransient: i32 = 0 as i32;
     let CC: i32 = (*st).channels;
@@ -2442,10 +2442,10 @@ pub unsafe extern "C" fn celt_encode_with_ec(
     let mut tot_boost: opus_int32 = 0;
     let mut sample_max: opus_val32 = 0.;
     let mut maxDepth: opus_val16 = 0.;
-    let mut mode: *const OpusCustomMode = 0 as *const OpusCustomMode;
+    let mut mode: *const OpusCustomMode = std::ptr::null();
     let mut nbEBands: i32 = 0;
     let mut overlap: i32 = 0;
-    let mut eBands: *const opus_int16 = 0 as *const opus_int16;
+    let mut eBands: *const opus_int16 = std::ptr::null();
     let mut secondMdct: i32 = 0;
     let mut signalBandwidth: i32 = 0;
     let mut transient_got_disabled: i32 = 0 as i32;
@@ -2455,7 +2455,7 @@ pub unsafe extern "C" fn celt_encode_with_ec(
     let mut equiv_rate: opus_int32 = 0;
     let mut hybrid: i32 = 0;
     let mut weak_transient: i32 = 0 as i32;
-    let mut surround_dynalloc: *mut opus_val16 = 0 as *mut opus_val16;
+    let mut surround_dynalloc: *mut opus_val16 = std::ptr::null_mut();
     mode = (*st).mode;
     nbEBands = (*mode).nbEBands;
     overlap = (*mode).overlap;
@@ -3557,7 +3557,7 @@ pub unsafe extern "C" fn celt_encode_with_ec(
                 pitch_change,
                 maxDepth,
                 (*st).lfe,
-                ((*st).energy_mask != 0 as *mut libc::c_void as *mut opus_val16) as i32,
+                ((*st).energy_mask != std::ptr::null_mut() as *mut opus_val16) as i32,
                 surround_masking,
                 temporal_vbr,
             )
@@ -3789,7 +3789,7 @@ pub unsafe extern "C" fn celt_encode_with_ec(
         if C == 2 as i32 {
             X.offset(N as isize)
         } else {
-            0 as *mut celt_norm
+            std::ptr::null_mut()
         },
         collapse_masks,
         bandE,
@@ -4075,9 +4075,9 @@ pub unsafe extern "C" fn opus_custom_encoder_ctl(
         }
         4028 => {
             let mut i: i32 = 0;
-            let mut oldBandE: *mut opus_val16 = 0 as *mut opus_val16;
-            let mut oldLogE: *mut opus_val16 = 0 as *mut opus_val16;
-            let mut oldLogE2: *mut opus_val16 = 0 as *mut opus_val16;
+            let mut oldBandE: *mut opus_val16 = std::ptr::null_mut();
+            let mut oldLogE: *mut opus_val16 = std::ptr::null_mut();
+            let mut oldLogE2: *mut opus_val16 = std::ptr::null_mut();
             oldBandE = (*st)
                 .in_mem
                 .as_mut_ptr()

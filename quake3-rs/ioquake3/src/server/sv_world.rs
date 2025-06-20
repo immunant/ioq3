@@ -162,8 +162,8 @@ SV_SectorList_f
 pub unsafe extern "C" fn SV_SectorList_f() {
     let mut i: i32 = 0;
     let mut c: i32 = 0;
-    let mut sec: *mut worldSector_t = 0 as *mut worldSector_t;
-    let mut ent: *mut svEntity_t = 0 as *mut svEntity_t;
+    let mut sec: *mut worldSector_t = std::ptr::null_mut();
+    let mut ent: *mut svEntity_t = std::ptr::null_mut();
     i = 0 as i32;
     while i < 64 as i32 {
         sec = &mut *sv_worldSectors.as_mut_ptr().offset(i as isize) as *mut worldSector_t;
@@ -194,7 +194,7 @@ unsafe extern "C" fn SV_CreateworldSector(
     mut mins: *mut vec_t,
     mut maxs: *mut vec_t,
 ) -> *mut worldSector_t {
-    let mut anode: *mut worldSector_t = 0 as *mut worldSector_t;
+    let mut anode: *mut worldSector_t = std::ptr::null_mut();
     let mut size: vec3_t = [0.; 3];
     let mut mins1: vec3_t = [0.; 3];
     let mut maxs1: vec3_t = [0.; 3];
@@ -206,7 +206,7 @@ unsafe extern "C" fn SV_CreateworldSector(
     sv_numworldSectors += 1;
     if depth == 4 as i32 {
         (*anode).axis = -(1 as i32);
-        (*anode).children[1 as i32 as usize] = 0 as *mut worldSector_s;
+        (*anode).children[1 as i32 as usize] = std::ptr::null_mut();
         (*anode).children[0 as i32 as usize] = (*anode).children[1 as i32 as usize];
         return anode;
     }
@@ -273,9 +273,9 @@ SV_UnlinkEntity
 #[no_mangle]
 
 pub unsafe extern "C" fn SV_UnlinkEntity(mut gEnt: *mut sharedEntity_t) {
-    let mut ent: *mut svEntity_t = 0 as *mut svEntity_t;
-    let mut scan: *mut svEntity_t = 0 as *mut svEntity_t;
-    let mut ws: *mut worldSector_t = 0 as *mut worldSector_t;
+    let mut ent: *mut svEntity_t = std::ptr::null_mut();
+    let mut scan: *mut svEntity_t = std::ptr::null_mut();
+    let mut ws: *mut worldSector_t = std::ptr::null_mut();
     ent = SV_SvEntityForGentity(gEnt as *mut sharedEntity_t) as *mut svEntity_s;
     (*gEnt).r.linked = qfalse;
     ws = (*ent).worldSector;
@@ -283,7 +283,7 @@ pub unsafe extern "C" fn SV_UnlinkEntity(mut gEnt: *mut sharedEntity_t) {
         return;
         // not linked in anywhere
     }
-    (*ent).worldSector = 0 as *mut worldSector_s;
+    (*ent).worldSector = std::ptr::null_mut();
     if (*ws).entities == ent {
         (*ws).entities = (*ent).nextEntityInWorldSector;
         return;
@@ -304,7 +304,7 @@ pub unsafe extern "C" fn SV_UnlinkEntity(mut gEnt: *mut sharedEntity_t) {
 #[no_mangle]
 
 pub unsafe extern "C" fn SV_LinkEntity(mut gEnt: *mut sharedEntity_t) {
-    let mut node: *mut worldSector_t = 0 as *mut worldSector_t;
+    let mut node: *mut worldSector_t = std::ptr::null_mut();
     let mut leafs: [i32; 128] = [0; 128];
     let mut cluster: i32 = 0;
     let mut num_leafs: i32 = 0;
@@ -313,9 +313,9 @@ pub unsafe extern "C" fn SV_LinkEntity(mut gEnt: *mut sharedEntity_t) {
     let mut k: i32 = 0;
     let mut area: i32 = 0;
     let mut lastLeaf: i32 = 0;
-    let mut origin: *mut f32 = 0 as *mut f32;
-    let mut angles: *mut f32 = 0 as *mut f32;
-    let mut ent: *mut svEntity_t = 0 as *mut svEntity_t;
+    let mut origin: *mut f32 = std::ptr::null_mut();
+    let mut angles: *mut f32 = std::ptr::null_mut();
+    let mut ent: *mut svEntity_t = std::ptr::null_mut();
     ent = SV_SvEntityForGentity(gEnt as *mut sharedEntity_t) as *mut svEntity_s;
     if !(*ent).worldSector.is_null() {
         SV_UnlinkEntity(gEnt);
@@ -491,9 +491,9 @@ SV_AreaEntities_r
 */
 
 unsafe extern "C" fn SV_AreaEntities_r(mut node: *mut worldSector_t, mut ap: *mut areaParms_t) {
-    let mut check: *mut svEntity_t = 0 as *mut svEntity_t;
-    let mut next: *mut svEntity_t = 0 as *mut svEntity_t;
-    let mut gcheck: *mut sharedEntity_t = 0 as *mut sharedEntity_t;
+    let mut check: *mut svEntity_t = std::ptr::null_mut();
+    let mut next: *mut svEntity_t = std::ptr::null_mut();
+    let mut gcheck: *mut sharedEntity_t = std::ptr::null_mut();
     check = (*node).entities;
     while !check.is_null() {
         next = (*check).nextEntityInWorldSector;
@@ -541,9 +541,9 @@ pub unsafe extern "C" fn SV_AreaEntities(
     mut maxcount: i32,
 ) -> i32 {
     let mut ap: areaParms_t = areaParms_t {
-        mins: 0 as *const f32,
-        maxs: 0 as *const f32,
-        list: 0 as *mut i32,
+        mins: std::ptr::null(),
+        maxs: std::ptr::null(),
+        list: std::ptr::null_mut(),
         count: 0,
         maxcount: 0,
     };
@@ -579,10 +579,10 @@ pub unsafe extern "C" fn SV_ClipToEntity(
     mut contentmask: i32,
     mut capsule: i32,
 ) {
-    let mut touch: *mut sharedEntity_t = 0 as *mut sharedEntity_t;
+    let mut touch: *mut sharedEntity_t = std::ptr::null_mut();
     let mut clipHandle: clipHandle_t = 0;
-    let mut origin: *mut f32 = 0 as *mut f32;
-    let mut angles: *mut f32 = 0 as *mut f32;
+    let mut origin: *mut f32 = std::ptr::null_mut();
+    let mut angles: *mut f32 = std::ptr::null_mut();
     touch = SV_GentityNum(entityNum) as *mut sharedEntity_t;
     crate::stdlib::memset(
         trace as *mut libc::c_void,
@@ -630,7 +630,7 @@ unsafe extern "C" fn SV_ClipMoveToEntities(mut clip: *mut moveclip_t) {
     let mut i: i32 = 0;
     let mut num: i32 = 0;
     let mut touchlist: [i32; 1024] = [0; 1024];
-    let mut touch: *mut sharedEntity_t = 0 as *mut sharedEntity_t;
+    let mut touch: *mut sharedEntity_t = std::ptr::null_mut();
     let mut passOwnerNum: i32 = 0;
     let mut trace: trace_t = trace_t {
         allsolid: qfalse,
@@ -649,8 +649,8 @@ unsafe extern "C" fn SV_ClipMoveToEntities(mut clip: *mut moveclip_t) {
         entityNum: 0,
     };
     let mut clipHandle: clipHandle_t = 0;
-    let mut origin: *mut f32 = 0 as *mut f32;
-    let mut angles: *mut f32 = 0 as *mut f32;
+    let mut origin: *mut f32 = std::ptr::null_mut();
+    let mut angles: *mut f32 = std::ptr::null_mut();
     num = SV_AreaEntities(
         (*clip).boxmins.as_mut_ptr() as *const vec_t,
         (*clip).boxmaxs.as_mut_ptr() as *const vec_t,
@@ -765,9 +765,9 @@ pub unsafe extern "C" fn SV_Trace(
     let mut clip: moveclip_t = moveclip_t {
         boxmins: [0.; 3],
         boxmaxs: [0.; 3],
-        mins: 0 as *const f32,
-        maxs: 0 as *const f32,
-        start: 0 as *const f32,
+        mins: std::ptr::null(),
+        maxs: std::ptr::null(),
+        start: std::ptr::null(),
         end: [0.; 3],
         trace: trace_t {
             allsolid: qfalse,
@@ -1027,13 +1027,13 @@ SV_PointContents
 
 pub unsafe extern "C" fn SV_PointContents(mut p: *const vec_t, mut passEntityNum: i32) -> i32 {
     let mut touch: [i32; 1024] = [0; 1024];
-    let mut hit: *mut sharedEntity_t = 0 as *mut sharedEntity_t;
+    let mut hit: *mut sharedEntity_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut num: i32 = 0;
     let mut contents: i32 = 0;
     let mut c2: i32 = 0;
     let mut clipHandle: clipHandle_t = 0;
-    let mut angles: *mut f32 = 0 as *mut f32;
+    let mut angles: *mut f32 = std::ptr::null_mut();
     // get base contents from world
     contents = crate::src::qcommon::cm_test::CM_PointContents(p, 0 as i32);
     // or in contents from all the other entities

@@ -462,7 +462,7 @@ what's happening fairly clear */
 unsafe extern "C" fn _os_body_expand(mut os: *mut ogg_stream_state, mut needed: isize) -> i32 {
     if (*os).body_storage - needed <= (*os).body_fill {
         let mut body_storage: isize = 0;
-        let mut ret: *mut libc::c_void = 0 as *mut libc::c_void;
+        let mut ret: *mut libc::c_void = std::ptr::null_mut();
         if (*os).body_storage > 9223372036854775807 as isize - needed {
             ogg_stream_clear(os);
             return -(1 as i32);
@@ -488,7 +488,7 @@ unsafe extern "C" fn _os_body_expand(mut os: *mut ogg_stream_state, mut needed: 
 unsafe extern "C" fn _os_lacing_expand(mut os: *mut ogg_stream_state, mut needed: isize) -> i32 {
     if (*os).lacing_storage - needed <= (*os).lacing_fill {
         let mut lacing_storage: isize = 0;
-        let mut ret: *mut libc::c_void = 0 as *mut libc::c_void;
+        let mut ret: *mut libc::c_void = std::ptr::null_mut();
         if (*os).lacing_storage > 9223372036854775807 as isize - needed {
             ogg_stream_clear(os);
             return -(1 as i32);
@@ -655,7 +655,7 @@ pub unsafe extern "C" fn ogg_stream_packetin(
     mut op: *mut ogg_packet,
 ) -> i32 {
     let mut iov: ogg_iovec_t = ogg_iovec_t {
-        iov_base: 0 as *mut libc::c_void,
+        iov_base: std::ptr::null_mut(),
         iov_len: 0,
     };
     iov.iov_base = (*op).packet as *mut libc::c_void;
@@ -983,7 +983,7 @@ pub unsafe extern "C" fn ogg_sync_buffer(
     mut size: isize,
 ) -> *mut libc::c_char {
     if ogg_sync_check(oy) != 0 {
-        return 0 as *mut libc::c_char;
+        return std::ptr::null_mut();
     }
     /* first, clear out any space that has been previously returned */
     if (*oy).returned != 0 {
@@ -1000,7 +1000,7 @@ pub unsafe extern "C" fn ogg_sync_buffer(
     if size > ((*oy).storage - (*oy).fill) as isize {
         /* We need to extend the internal buffer */
         let mut newsize: isize = size + (*oy).fill as isize + 4096 as i32 as isize; /* an extra page to be nice */
-        let mut ret: *mut libc::c_void = 0 as *mut libc::c_void;
+        let mut ret: *mut libc::c_void = std::ptr::null_mut();
         if !(*oy).data.is_null() {
             ret = crate::stdlib::realloc((*oy).data as *mut libc::c_void, newsize as usize)
         } else {
@@ -1008,7 +1008,7 @@ pub unsafe extern "C" fn ogg_sync_buffer(
         }
         if ret.is_null() {
             ogg_sync_clear(oy);
-            return 0 as *mut libc::c_char;
+            return std::ptr::null_mut();
         }
         (*oy).data = ret as *mut u8;
         (*oy).storage = newsize as i32
@@ -1045,7 +1045,7 @@ pub unsafe extern "C" fn ogg_sync_pageseek(
 ) -> isize {
     let mut current_block: u64; /* not enough for a header */
     let mut page: *mut u8 = (*oy).data.offset((*oy).returned as isize);
-    let mut next: *mut u8 = 0 as *mut u8;
+    let mut next: *mut u8 = std::ptr::null_mut();
     let mut bytes: isize = ((*oy).fill - (*oy).returned) as isize;
     if ogg_sync_check(oy) != 0 {
         return 0 as i32 as isize;
@@ -1090,9 +1090,9 @@ pub unsafe extern "C" fn ogg_sync_pageseek(
             /* Grab the checksum bytes, set the header field to zero */
             let mut chksum: [libc::c_char; 4] = [0; 4];
             let mut log: ogg_page = ogg_page {
-                header: 0 as *mut u8,
+                header: std::ptr::null_mut(),
                 header_len: 0,
-                body: 0 as *mut u8,
+                body: std::ptr::null_mut(),
                 body_len: 0,
             };
             crate::stdlib::memcpy(

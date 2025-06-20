@@ -66,7 +66,7 @@ static mut s_specifyserver: specifyserver_t = specifyserver_t {
     banner: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -88,7 +88,7 @@ static mut s_specifyserver: specifyserver_t = specifyserver_t {
     framel: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -114,7 +114,7 @@ static mut s_specifyserver: specifyserver_t = specifyserver_t {
     framer: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -140,7 +140,7 @@ static mut s_specifyserver: specifyserver_t = specifyserver_t {
     domain: menufield_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -166,7 +166,7 @@ static mut s_specifyserver: specifyserver_t = specifyserver_t {
     port: menufield_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -192,7 +192,7 @@ static mut s_specifyserver: specifyserver_t = specifyserver_t {
     go: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -218,7 +218,7 @@ static mut s_specifyserver: specifyserver_t = specifyserver_t {
     back: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,

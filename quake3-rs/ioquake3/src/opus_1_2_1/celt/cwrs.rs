@@ -1446,7 +1446,7 @@ static mut CELT_PVQ_U_DATA: [opus_uint32; 1272] = [
 ];
 // Initialized in run_static_initializers
 
-static mut CELT_PVQ_U_ROW: [*const opus_uint32; 15] = [0 as *const opus_uint32; 15];
+static mut CELT_PVQ_U_ROW: [*const opus_uint32; 15] = [std::ptr::null(); 15];
 
 unsafe extern "C" fn icwrs(mut _n: i32, mut _y: *const i32) -> opus_uint32 {
     let mut i: opus_uint32 = 0;
@@ -1528,7 +1528,7 @@ unsafe extern "C" fn cwrsi(
         let mut q: opus_uint32 = 0;
         /*Lots of pulses case:*/
         if _k >= _n {
-            let mut row: *const opus_uint32 = 0 as *const opus_uint32;
+            let mut row: *const opus_uint32 = std::ptr::null();
             row = CELT_PVQ_U_ROW[_n as usize];
             /*Are the pulses in this dimension negative?*/
             p = *row.offset((_k + 1 as i32) as isize);

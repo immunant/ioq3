@@ -471,7 +471,7 @@ pub unsafe extern "C" fn silk_VAD_GetSA_Q8_c(
     let mut sumSquared: opus_int32 = 0;
     let mut smooth_coef_Q16: opus_int32 = 0;
     let mut HPstateTmp: opus_int16 = 0;
-    let mut X: *mut opus_int16 = 0 as *mut opus_int16;
+    let mut X: *mut opus_int16 = std::ptr::null_mut();
     let mut Xnrg: [opus_int32; 4] = [0; 4];
     let mut NrgToNoiseRatio_Q8: [opus_int32; 4] = [0; 4];
     let mut speech_nrg: opus_int32 = 0;

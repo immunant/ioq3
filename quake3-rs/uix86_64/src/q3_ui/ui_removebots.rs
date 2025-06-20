@@ -6,7 +6,7 @@ pub mod stdlib_h {
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return libc::strtol(
             __nptr,
-            0 as *mut libc::c_void as *mut *mut libc::c_char,
+            std::ptr::null_mut() as *mut *mut libc::c_char,
             10 as i32,
         ) as i32;
     }
@@ -78,7 +78,7 @@ static mut removeBotsMenuInfo: removeBotsMenuInfo_t = removeBotsMenuInfo_t {
     banner: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -100,7 +100,7 @@ static mut removeBotsMenuInfo: removeBotsMenuInfo_t = removeBotsMenuInfo_t {
     background: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -126,7 +126,7 @@ static mut removeBotsMenuInfo: removeBotsMenuInfo_t = removeBotsMenuInfo_t {
     arrows: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -152,7 +152,7 @@ static mut removeBotsMenuInfo: removeBotsMenuInfo_t = removeBotsMenuInfo_t {
     up: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -178,7 +178,7 @@ static mut removeBotsMenuInfo: removeBotsMenuInfo_t = removeBotsMenuInfo_t {
     down: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -204,7 +204,7 @@ static mut removeBotsMenuInfo: removeBotsMenuInfo_t = removeBotsMenuInfo_t {
     bots: [menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -226,7 +226,7 @@ static mut removeBotsMenuInfo: removeBotsMenuInfo_t = removeBotsMenuInfo_t {
     delete: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -252,7 +252,7 @@ static mut removeBotsMenuInfo: removeBotsMenuInfo_t = removeBotsMenuInfo_t {
     back: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,

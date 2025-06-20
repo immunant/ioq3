@@ -6,7 +6,7 @@ pub mod stdlib_h {
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return libc::strtol(
             __nptr,
-            0 as *mut libc::c_void as *mut *mut libc::c_char,
+            std::ptr::null_mut() as *mut *mut libc::c_char,
             10 as i32,
         ) as i32;
     }
@@ -208,7 +208,7 @@ CG_LoadingItem
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_LoadingItem(mut itemNum: i32) {
-    let mut item: *mut gitem_t = 0 as *mut gitem_t;
+    let mut item: *mut gitem_t = std::ptr::null_mut();
     item = &mut *bg_itemlist.as_mut_ptr().offset(itemNum as isize) as *mut gitem_t;
     if !(*item).icon.is_null() && loadingItemIconCount < 26 as i32 {
         let fresh0 = loadingItemIconCount;
@@ -225,8 +225,8 @@ CG_LoadingClient
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_LoadingClient(mut clientNum: i32) {
-    let mut info: *const libc::c_char = 0 as *const libc::c_char;
-    let mut skin: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut info: *const libc::c_char = std::ptr::null();
+    let mut skin: *mut libc::c_char = std::ptr::null_mut();
     let mut personality: [libc::c_char; 64] = [0; 64];
     let mut model: [libc::c_char; 64] = [0; 64];
     let mut iconName: [libc::c_char; 64] = [0; 64];
@@ -550,9 +550,9 @@ Draw all the status / pacifier stuff during level loading
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_DrawInformation() {
-    let mut s: *const libc::c_char = 0 as *const libc::c_char;
-    let mut info: *const libc::c_char = 0 as *const libc::c_char;
-    let mut sysInfo: *const libc::c_char = 0 as *const libc::c_char;
+    let mut s: *const libc::c_char = std::ptr::null();
+    let mut info: *const libc::c_char = std::ptr::null();
+    let mut sysInfo: *const libc::c_char = std::ptr::null();
     let mut y: i32 = 0;
     let mut value: i32 = 0;
     let mut levelshot: qhandle_t = 0;
@@ -570,7 +570,7 @@ pub unsafe extern "C" fn CG_DrawInformation() {
             b"menu/art/unknownmap\x00" as *const u8 as *const libc::c_char,
         )
     }
-    trap_R_SetColor(0 as *const f32);
+    trap_R_SetColor(std::ptr::null());
     CG_DrawPic(
         0 as i32 as f32,
         0 as i32 as f32,

@@ -262,7 +262,7 @@ pub use crate::src::qcommon::q_shared::TR_STATIONARY;
 pub unsafe extern "C" fn Pickup_Powerup(mut ent: *mut gentity_t, mut other: *mut gentity_t) -> i32 {
     let mut quantity: i32 = 0;
     let mut i: i32 = 0;
-    let mut client: *mut gclient_t = 0 as *mut gclient_t;
+    let mut client: *mut gclient_t = std::ptr::null_mut();
     if (*(*other).client).ps.powerups[(*(*ent).item).giTag as usize] == 0 {
         // round timing to seconds to make multiple powerup timers
         // count in sync
@@ -320,8 +320,8 @@ pub unsafe extern "C" fn Pickup_Powerup(mut ent: *mut gentity_t, mut other: *mut
                             AngleVectors(
                                 (*client).ps.viewangles.as_mut_ptr() as *const vec_t,
                                 forward.as_mut_ptr(),
-                                0 as *mut vec_t,
-                                0 as *mut vec_t,
+                                std::ptr::null_mut(),
+                                std::ptr::null_mut(),
                             );
                             if !(((delta[0 as i32 as usize] * forward[0 as i32 as usize]
                                 + delta[1 as i32 as usize] * forward[1 as i32 as usize]
@@ -333,8 +333,8 @@ pub unsafe extern "C" fn Pickup_Powerup(mut ent: *mut gentity_t, mut other: *mut
                                 trap_Trace(
                                     &mut tr as *mut _ as *mut trace_t,
                                     (*client).ps.origin.as_mut_ptr() as *const vec_t,
-                                    0 as *const vec_t,
-                                    0 as *const vec_t,
+                                    std::ptr::null(),
+                                    std::ptr::null(),
                                     (*ent).s.pos.trBase.as_mut_ptr() as *const vec_t,
                                     ((1 as i32) << 10 as i32) - 1 as i32,
                                     1 as i32,
@@ -482,7 +482,7 @@ pub unsafe extern "C" fn RespawnItem(mut ent: *mut gentity_t) {
     }
     // randomly select from teamed entities
     if !(*ent).team.is_null() {
-        let mut master: *mut gentity_t = 0 as *mut gentity_t;
+        let mut master: *mut gentity_t = std::ptr::null_mut();
         let mut count: i32 = 0;
         let mut choice: i32 = 0;
         if (*ent).teammaster.is_null() {
@@ -512,7 +512,7 @@ pub unsafe extern "C" fn RespawnItem(mut ent: *mut gentity_t) {
     trap_LinkEntity(ent as *mut gentity_s);
     if (*(*ent).item).giType as u32 == IT_POWERUP as i32 as u32 {
         // play powerup spawn sound to all clients
-        let mut te: *mut gentity_t = 0 as *mut gentity_t;
+        let mut te: *mut gentity_t = std::ptr::null_mut();
         // if the powerup respawn sound should Not be global
         if (*ent).speed != 0. {
             te = G_TempEntity((*ent).s.pos.trBase.as_mut_ptr(), EV_GENERAL_SOUND as i32)
@@ -531,7 +531,7 @@ pub unsafe extern "C" fn RespawnItem(mut ent: *mut gentity_t) {
         && (*(*ent).item).giTag == HI_KAMIKAZE as i32
     {
         // play powerup spawn sound to all clients
-        let mut te_0: *mut gentity_t = 0 as *mut gentity_t;
+        let mut te_0: *mut gentity_t = std::ptr::null_mut();
         // if the powerup respawn sound should Not be global
         if (*ent).speed != 0. {
             te_0 = G_TempEntity((*ent).s.pos.trBase.as_mut_ptr(), EV_GENERAL_SOUND as i32)
@@ -628,7 +628,7 @@ pub unsafe extern "C" fn Touch_Item(
     {
         // if we want the global sound to play
         if (*ent).speed == 0. {
-            let mut te: *mut gentity_t = 0 as *mut gentity_t;
+            let mut te: *mut gentity_t = std::ptr::null_mut();
             te = G_TempEntity(
                 (*ent).s.pos.trBase.as_mut_ptr(),
                 EV_GLOBAL_ITEM_PICKUP as i32,
@@ -636,7 +636,7 @@ pub unsafe extern "C" fn Touch_Item(
             (*te).s.eventParm = (*ent).s.modelindex;
             (*te).r.svFlags |= 0x20 as i32
         } else {
-            let mut te_0: *mut gentity_t = 0 as *mut gentity_t;
+            let mut te_0: *mut gentity_t = std::ptr::null_mut();
             te_0 = G_TempEntity(
                 (*ent).s.pos.trBase.as_mut_ptr(),
                 EV_GLOBAL_ITEM_PICKUP as i32,
@@ -709,7 +709,7 @@ pub unsafe extern "C" fn LaunchItem(
     mut origin: *mut vec_t,
     mut velocity: *mut vec_t,
 ) -> *mut gentity_t {
-    let mut dropped: *mut gentity_t = 0 as *mut gentity_t; // store item number in modelindex
+    let mut dropped: *mut gentity_t = std::ptr::null_mut(); // store item number in modelindex
     dropped = G_Spawn() as *mut gentity_s; // This is non-zero is it's a dropped item
     (*dropped).s.eType = ET_ITEM as i32; // auto-remove after 30 seconds
     (*dropped).s.modelindex = item.offset_from(bg_itemlist.as_mut_ptr()) as isize as i32;
@@ -774,8 +774,8 @@ pub unsafe extern "C" fn Drop_Item(
     AngleVectors(
         angles.as_mut_ptr() as *const vec_t,
         velocity.as_mut_ptr(),
-        0 as *mut vec_t,
-        0 as *mut vec_t,
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
     );
     velocity[0 as i32 as usize] = velocity[0 as i32 as usize] * 150 as i32 as f32;
     velocity[1 as i32 as usize] = velocity[1 as i32 as usize] * 150 as i32 as f32;
@@ -921,7 +921,7 @@ pub unsafe extern "C" fn G_CheckTeamItems() {
     // Set up team stuff
     crate::src::game::g_team::Team_InitGame();
     if g_gametype.integer == GT_CTF as i32 {
-        let mut item: *mut gitem_t = 0 as *mut gitem_t;
+        let mut item: *mut gitem_t = std::ptr::null_mut();
         // check for the two flags
         item = BG_FindItem(b"Red Flag\x00" as *const u8 as *const libc::c_char) as *mut gitem_s;
         if item.is_null()

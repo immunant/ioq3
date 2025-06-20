@@ -135,7 +135,7 @@ unsafe extern "C" fn floor0_unpack(
         }
     }
     floor0_free_info(info as *mut libc::c_void);
-    return 0 as *mut libc::c_void;
+    return std::ptr::null_mut();
 }
 /* initialize Bark scale and normalization lookups.  We could do this
 with static tables, but Vorbis allows a number of possible
@@ -287,7 +287,7 @@ unsafe extern "C" fn floor0_inverse1(
             }
         }
     }
-    return 0 as *mut libc::c_void;
+    return std::ptr::null_mut();
 }
 
 unsafe extern "C" fn floor0_inverse2(

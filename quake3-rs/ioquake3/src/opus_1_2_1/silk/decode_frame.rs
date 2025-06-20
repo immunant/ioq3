@@ -322,7 +322,7 @@ pub unsafe extern "C" fn silk_decode_frame(
     mut arch: i32,
 ) -> i32
 /* I    Run-time architecture                       */ {
-    let mut psDecCtrl: *mut silk_decoder_control = 0 as *mut silk_decoder_control;
+    let mut psDecCtrl: *mut silk_decoder_control = std::ptr::null_mut();
     let mut L: i32 = 0;
     let mut mv_len: i32 = 0;
     let mut ret: i32 = 0 as i32;
@@ -338,7 +338,7 @@ pub unsafe extern "C" fn silk_decode_frame(
     if lostFlag == 0 as i32
         || lostFlag == 2 as i32 && (*psDec).LBRR_flags[(*psDec).nFramesDecoded as usize] == 1 as i32
     {
-        let mut pulses: *mut opus_int16 = 0 as *mut opus_int16;
+        let mut pulses: *mut opus_int16 = std::ptr::null_mut();
         let mut fresh1 = ::std::vec::from_elem(
             0,
             (::std::mem::size_of::<opus_int16>() as usize)

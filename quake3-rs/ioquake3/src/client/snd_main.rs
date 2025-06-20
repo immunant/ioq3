@@ -960,7 +960,7 @@ pub unsafe extern "C" fn S_Music_f() {
     if c == 2 as i32 {
         si.StartBackgroundTrack.expect("non-null function pointer")(
             Cmd_Argv(1 as i32),
-            0 as *const libc::c_char,
+            std::ptr::null(),
         );
     } else if c == 3 as i32 {
         si.StartBackgroundTrack.expect("non-null function pointer")(
@@ -996,7 +996,7 @@ S_Init
 #[no_mangle]
 
 pub unsafe extern "C" fn S_Init() {
-    let mut cv: *mut cvar_t = 0 as *mut cvar_t;
+    let mut cv: *mut cvar_t = std::ptr::null_mut();
     let mut started: qboolean = qfalse;
     Com_Printf(b"------ Initializing Sound ------\n\x00" as *const u8 as *const libc::c_char);
     s_volume = Cvar_Get(

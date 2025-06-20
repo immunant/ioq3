@@ -362,7 +362,7 @@ GPA
 */
 
 unsafe extern "C" fn GPA(mut str: *mut libc::c_char) -> *mut libc::c_void {
-    let mut rv: *mut libc::c_void = 0 as *mut libc::c_void;
+    let mut rv: *mut libc::c_void = std::ptr::null_mut();
     rv = crate::stdlib::SDL_LoadFunction(OpenALLib, str);
     if rv.is_null() {
         Com_Printf(
@@ -370,7 +370,7 @@ unsafe extern "C" fn GPA(mut str: *mut libc::c_char) -> *mut libc::c_void {
             str,
         );
         alinit_fail = qtrue;
-        return 0 as *mut libc::c_void;
+        return std::ptr::null_mut();
     } else {
         crate::src::qcommon::common::Com_DPrintf(
             b" Loaded symbol %s (%p)\n\x00" as *const u8 as *const libc::c_char,
@@ -741,7 +741,7 @@ QAL_Shutdown
 pub unsafe extern "C" fn QAL_Shutdown() {
     if !OpenALLib.is_null() {
         crate::stdlib::SDL_UnloadObject(OpenALLib);
-        OpenALLib = 0 as *mut libc::c_void
+        OpenALLib = std::ptr::null_mut()
     }
     qalEnable = None;
     qalDisable = None;

@@ -333,7 +333,7 @@ pub unsafe extern "C" fn silk_decode_parameters(
     let mut Ix: i32 = 0;
     let mut pNLSF_Q15: [opus_int16; 16] = [0; 16];
     let mut pNLSF0_Q15: [opus_int16; 16] = [0; 16];
-    let mut cbk_ptr_Q7: *const i8 = 0 as *const i8;
+    let mut cbk_ptr_Q7: *const i8 = std::ptr::null();
     /* Dequant Gains */
     crate::src::opus_1_2_1::silk::gain_quant::silk_gains_dequant(
         (*psDecCtrl).Gains_Q16.as_mut_ptr(),

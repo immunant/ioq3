@@ -50,7 +50,7 @@ pub unsafe extern "C" fn silk_decode_pitch(
     let mut min_lag: i32 = 0;
     let mut max_lag: i32 = 0;
     let mut cbk_size: i32 = 0;
-    let mut Lag_CB_ptr: *const i8 = 0 as *const i8;
+    let mut Lag_CB_ptr: *const i8 = std::ptr::null();
     if Fs_kHz == 8 as i32 {
         if nb_subfr == 4 as i32 {
             Lag_CB_ptr = &*(*crate::src::opus_1_2_1::silk::pitch_est_tables::silk_CB_lags_stage2

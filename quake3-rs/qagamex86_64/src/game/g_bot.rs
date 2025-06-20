@@ -4,7 +4,7 @@ pub mod stdlib_float_h {
     #[inline]
 
     pub unsafe extern "C" fn atof(mut __nptr: *const libc::c_char) -> f64 {
-        return libc::strtod(__nptr, 0 as *mut libc::c_void as *mut *mut libc::c_char);
+        return libc::strtod(__nptr, std::ptr::null_mut() as *mut *mut libc::c_char);
     }
 }
 
@@ -14,7 +14,7 @@ pub mod stdlib_h {
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return libc::strtol(
             __nptr,
-            0 as *mut libc::c_void as *mut *mut libc::c_char,
+            std::ptr::null_mut() as *mut *mut libc::c_char,
             10 as i32,
         ) as i32;
     }
@@ -240,7 +240,7 @@ pub unsafe extern "C" fn G_ParseInfos(
     mut max: i32,
     mut infos: *mut *mut libc::c_char,
 ) -> i32 {
-    let mut token: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut token: *mut libc::c_char = std::ptr::null_mut();
     let mut count: i32 = 0;
     let mut key: [libc::c_char; 1024] = [0; 1024];
     let mut info: [libc::c_char; 1024] = [0; 1024];
@@ -357,7 +357,7 @@ unsafe extern "C" fn G_LoadArenas() {
     };
     let mut filename: [libc::c_char; 128] = [0; 128];
     let mut dirlist: [libc::c_char; 1024] = [0; 1024];
-    let mut dirptr: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut dirptr: *mut libc::c_char = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut n: i32 = 0;
     let mut dirlen: i32 = 0;
@@ -435,7 +435,7 @@ pub unsafe extern "C" fn G_GetArenaInfoByMap(mut map: *const libc::c_char) -> *c
         }
         n += 1
     }
-    return 0 as *const libc::c_char;
+    return std::ptr::null();
 }
 /*
 =================
@@ -445,7 +445,7 @@ PlayerIntroSound
 
 unsafe extern "C" fn PlayerIntroSound(mut modelAndSkin: *const libc::c_char) {
     let mut model: [libc::c_char; 64] = [0; 64];
-    let mut skin: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut skin: *mut libc::c_char = std::ptr::null_mut();
     Q_strncpyz(
         model.as_mut_ptr(),
         modelAndSkin,
@@ -488,7 +488,7 @@ pub unsafe extern "C" fn G_CountBotPlayersByName(
 ) -> i32 {
     let mut i: i32 = 0;
     let mut num: i32 = 0;
-    let mut cl: *mut gclient_t = 0 as *mut gclient_t;
+    let mut cl: *mut gclient_t = std::ptr::null_mut();
     num = 0 as i32;
     i = 0 as i32;
     while i < g_maxclients.integer {
@@ -521,11 +521,10 @@ pub unsafe extern "C" fn G_SelectRandomBotInfo(mut team: i32) -> i32 {
     let mut num: i32 = 0;
     let mut count: i32 = 0;
     let mut bestCount: i32 = 0;
-    let mut value: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut value: *mut libc::c_char = std::ptr::null_mut();
     // don't add duplicate bots to the server if there are less bots than bot types
     if team != -(1 as i32)
-        && G_CountBotPlayersByName(0 as *const libc::c_char, -(1 as i32)) < g_numBots
-    {
+        && G_CountBotPlayersByName(std::ptr::null(), -(1 as i32)) < g_numBots {
         team = -(1 as i32)
     }
     num = 0 as i32;
@@ -573,7 +572,7 @@ G_AddRandomBot
 #[no_mangle]
 
 pub unsafe extern "C" fn G_AddRandomBot(mut team: i32) {
-    let mut teamstr: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut teamstr: *mut libc::c_char = std::ptr::null_mut();
     let mut skill: f32 = 0.;
     skill = trap_Cvar_VariableValue(b"g_spSkill\x00" as *const u8 as *const libc::c_char);
     if team == TEAM_RED as i32 {
@@ -603,7 +602,7 @@ G_RemoveRandomBot
 
 pub unsafe extern "C" fn G_RemoveRandomBot(mut team: i32) -> i32 {
     let mut i: i32 = 0;
-    let mut cl: *mut gclient_t = 0 as *mut gclient_t;
+    let mut cl: *mut gclient_t = std::ptr::null_mut();
     i = 0 as i32;
     while i < g_maxclients.integer {
         cl = level.clients.offset(i as isize);
@@ -636,7 +635,7 @@ G_CountHumanPlayers
 pub unsafe extern "C" fn G_CountHumanPlayers(mut team: i32) -> i32 {
     let mut i: i32 = 0;
     let mut num: i32 = 0;
-    let mut cl: *mut gclient_t = 0 as *mut gclient_t;
+    let mut cl: *mut gclient_t = std::ptr::null_mut();
     num = 0 as i32;
     i = 0 as i32;
     while i < g_maxclients.integer {
@@ -664,7 +663,7 @@ Check connected and connecting (delay join) bots.
 pub unsafe extern "C" fn G_CountBotPlayers(mut team: i32) -> i32 {
     let mut i: i32 = 0;
     let mut num: i32 = 0;
-    let mut cl: *mut gclient_t = 0 as *mut gclient_t;
+    let mut cl: *mut gclient_t = std::ptr::null_mut();
     num = 0 as i32;
     i = 0 as i32;
     while i < g_maxclients.integer {
@@ -890,12 +889,12 @@ unsafe extern "C" fn G_AddBot(
     let mut clientNum: i32 = 0;
     let mut teamNum: i32 = 0;
     let mut botinfoNum: i32 = 0;
-    let mut botinfo: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut key: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut botname: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut model: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut headmodel: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut botinfo: *mut libc::c_char = std::ptr::null_mut();
+    let mut key: *mut libc::c_char = std::ptr::null_mut();
+    let mut s: *mut libc::c_char = std::ptr::null_mut();
+    let mut botname: *mut libc::c_char = std::ptr::null_mut();
+    let mut model: *mut libc::c_char = std::ptr::null_mut();
+    let mut headmodel: *mut libc::c_char = std::ptr::null_mut();
     let mut userinfo: [libc::c_char; 1024] = [0; 1024];
     // have the server allocate a client slot
     clientNum = trap_BotAllocateClient();
@@ -1266,14 +1265,14 @@ G_SpawnBots
 */
 
 unsafe extern "C" fn G_SpawnBots(mut botList: *mut libc::c_char, mut baseDelay: i32) {
-    let mut bot: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut p: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut bot: *mut libc::c_char = std::ptr::null_mut();
+    let mut p: *mut libc::c_char = std::ptr::null_mut();
     let mut skill: f32 = 0.;
     let mut delay: i32 = 0;
     let mut bots: [libc::c_char; 1024] = [0; 1024];
-    podium1 = 0 as *mut gentity_t;
-    podium2 = 0 as *mut gentity_t;
-    podium3 = 0 as *mut gentity_t;
+    podium1 = std::ptr::null_mut();
+    podium2 = std::ptr::null_mut();
+    podium3 = std::ptr::null_mut();
     skill = trap_Cvar_VariableValue(b"g_spSkill\x00" as *const u8 as *const libc::c_char);
     if skill < 1 as i32 as f32 {
         trap_Cvar_Set(
@@ -1384,7 +1383,7 @@ unsafe extern "C" fn G_LoadBots() {
     let mut numdirs: i32 = 0;
     let mut filename: [libc::c_char; 128] = [0; 128];
     let mut dirlist: [libc::c_char; 1024] = [0; 1024];
-    let mut dirptr: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut dirptr: *mut libc::c_char = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut dirlen: i32 = 0;
     if trap_Cvar_VariableIntegerValue(b"bot_enable\x00" as *const u8 as *const libc::c_char) == 0 {
@@ -1443,7 +1442,7 @@ pub unsafe extern "C" fn G_GetBotInfoByNumber(mut num: i32) -> *mut libc::c_char
                 as *mut libc::c_char,
             num,
         ));
-        return 0 as *mut libc::c_char;
+        return std::ptr::null_mut();
     }
     return g_botInfos[num as usize];
 }
@@ -1456,7 +1455,7 @@ G_GetBotInfoByName
 
 pub unsafe extern "C" fn G_GetBotInfoByName(mut name: *const libc::c_char) -> *mut libc::c_char {
     let mut n: i32 = 0;
-    let mut value: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut value: *mut libc::c_char = std::ptr::null_mut();
     n = 0 as i32;
     while n < g_numBots {
         value = Info_ValueForKey(
@@ -1468,7 +1467,7 @@ pub unsafe extern "C" fn G_GetBotInfoByName(mut name: *const libc::c_char) -> *m
         }
         n += 1
     }
-    return 0 as *mut libc::c_char;
+    return std::ptr::null_mut();
 }
 /*
 ===============
@@ -1480,8 +1479,8 @@ G_InitBots
 pub unsafe extern "C" fn G_InitBots(mut restart: qboolean) {
     let mut fragLimit: i32 = 0;
     let mut timeLimit: i32 = 0;
-    let mut arenainfo: *const libc::c_char = 0 as *const libc::c_char;
-    let mut strValue: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut arenainfo: *const libc::c_char = std::ptr::null();
+    let mut strValue: *mut libc::c_char = std::ptr::null_mut();
     let mut basedelay: i32 = 0;
     let mut map: [libc::c_char; 64] = [0; 64];
     let mut serverinfo: [libc::c_char; 1024] = [0; 1024];

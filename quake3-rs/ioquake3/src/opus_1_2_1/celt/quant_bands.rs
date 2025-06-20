@@ -734,10 +734,10 @@ pub unsafe extern "C" fn quant_coarse_energy(
 ) {
     let mut intra: i32 = 0;
     let mut max_decay: opus_val16 = 0.;
-    let mut oldEBands_intra: *mut opus_val16 = 0 as *mut opus_val16;
-    let mut error_intra: *mut opus_val16 = 0 as *mut opus_val16;
+    let mut oldEBands_intra: *mut opus_val16 = std::ptr::null_mut();
+    let mut error_intra: *mut opus_val16 = std::ptr::null_mut();
     let mut enc_start_state: ec_enc = ec_enc {
-        buf: 0 as *mut u8,
+        buf: std::ptr::null_mut(),
         storage: 0,
         end_offs: 0,
         end_window: 0,
@@ -819,9 +819,9 @@ pub unsafe extern "C" fn quant_coarse_energy(
         )
     }
     if intra == 0 {
-        let mut intra_buf: *mut u8 = 0 as *mut u8;
+        let mut intra_buf: *mut u8 = std::ptr::null_mut();
         let mut enc_intra_state: ec_enc = ec_enc {
-            buf: 0 as *mut u8,
+            buf: std::ptr::null_mut(),
             storage: 0,
             end_offs: 0,
             end_window: 0,
@@ -839,7 +839,7 @@ pub unsafe extern "C" fn quant_coarse_energy(
         let mut nintra_bytes: opus_uint32 = 0;
         let mut save_bytes: opus_uint32 = 0;
         let mut badness2: i32 = 0;
-        let mut intra_bits: *mut u8 = 0 as *mut u8;
+        let mut intra_bits: *mut u8 = std::ptr::null_mut();
         tell_intra = ec_tell_frac(enc as *mut ec_ctx) as opus_int32;
         enc_intra_state = *enc;
         nstart_bytes = ec_range_bytes(&mut enc_start_state);

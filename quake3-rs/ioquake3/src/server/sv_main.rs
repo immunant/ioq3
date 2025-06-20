@@ -548,7 +548,7 @@ pub unsafe extern "C" fn SV_SendServerCommand(
 ) {
     let mut argptr: ::std::ffi::VaListImpl;
     let mut message: [byte; 16384] = [0; 16384];
-    let mut client: *mut client_t = 0 as *mut client_t;
+    let mut client: *mut client_t = std::ptr::null_mut();
     let mut j: i32 = 0;
     argptr = args.clone();
     crate::stdlib::vsnprintf(
@@ -777,7 +777,7 @@ SVC_HashForAddress
 */
 
 unsafe extern "C" fn SVC_HashForAddress(mut address: netadr_t) -> isize {
-    let mut ip: *mut byte = 0 as *mut byte;
+    let mut ip: *mut byte = std::ptr::null_mut();
     let mut size: size_t = 0 as i32 as size_t;
     let mut i: i32 = 0;
     let mut hash: isize = 0 as i32 as isize;
@@ -814,7 +814,7 @@ unsafe extern "C" fn SVC_BucketForAddress(
     mut burst: i32,
     mut period: i32,
 ) -> *mut leakyBucket_t {
-    let mut bucket: *mut leakyBucket_t = 0 as *mut leakyBucket_t;
+    let mut bucket: *mut leakyBucket_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut hash: isize = SVC_HashForAddress(address);
     let mut now: i32 = Sys_Milliseconds();
@@ -893,14 +893,14 @@ unsafe extern "C" fn SVC_BucketForAddress(
             if !bucketHashes[hash as usize].is_null() {
                 (*bucketHashes[hash as usize]).prev = bucket
             }
-            (*bucket).prev = 0 as *mut leakyBucket_t;
+            (*bucket).prev = std::ptr::null_mut();
             bucketHashes[hash as usize] = bucket;
             return bucket;
         }
         i += 1
     }
     // Couldn't allocate a bucket for this address
-    return 0 as *mut leakyBucket_t;
+    return std::ptr::null_mut();
 }
 /*
 ================
@@ -964,8 +964,8 @@ unsafe extern "C" fn SVC_Status(mut from: netadr_t) {
     let mut player: [libc::c_char; 1024] = [0; 1024];
     let mut status: [libc::c_char; 16384] = [0; 16384];
     let mut i: i32 = 0;
-    let mut cl: *mut client_t = 0 as *mut client_t;
-    let mut ps: *mut playerState_t = 0 as *mut playerState_t;
+    let mut cl: *mut client_t = std::ptr::null_mut();
+    let mut ps: *mut playerState_t = std::ptr::null_mut();
     let mut statusLength: i32 = 0;
     let mut playerLength: i32 = 0;
     let mut infostring: [libc::c_char; 1024] = [0; 1024];
@@ -1058,7 +1058,7 @@ pub unsafe extern "C" fn SVC_Info(mut from: netadr_t) {
     let mut i: i32 = 0;
     let mut count: i32 = 0;
     let mut humans: i32 = 0;
-    let mut gamedir: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut gamedir: *mut libc::c_char = std::ptr::null_mut();
     let mut infostring: [libc::c_char; 1024] = [0; 1024];
     // ignore if we are in single player
     if Cvar_VariableValue(b"g_gametype\x00" as *const u8 as *const libc::c_char)
@@ -1275,7 +1275,7 @@ unsafe extern "C" fn SVC_RemoteCommand(mut from: netadr_t, mut _msg: *mut msg_t)
     // TTimo - scaled down to accumulate, but not overflow anything network wise, print wise etc.
     // (OOB messages are the bottleneck here)
     let mut sv_outputbuf: [libc::c_char; 1008] = [0; 1008];
-    let mut cmd_aux: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut cmd_aux: *mut libc::c_char = std::ptr::null_mut();
     // Prevent using rcon as an amplifier and make dictionary attacks impractical
     if SVC_RateLimitAddress(from, 10 as i32, 1000 as i32) as u64 != 0 {
         Com_DPrintf(
@@ -1371,8 +1371,8 @@ connectionless packets.
 */
 
 unsafe extern "C" fn SV_ConnectionlessPacket(mut from: netadr_t, mut msg: *mut msg_t) {
-    let mut s: *mut libc::c_char = 0 as *mut libc::c_char; // skip the -1 marker
-    let mut c: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut s: *mut libc::c_char = std::ptr::null_mut(); // skip the -1 marker
+    let mut c: *mut libc::c_char = std::ptr::null_mut();
     MSG_BeginReadingOOB(msg as *mut msg_t);
     MSG_ReadLong(msg as *mut msg_t);
     if Q_strncmp(
@@ -1421,7 +1421,7 @@ SV_PacketEvent
 
 pub unsafe extern "C" fn SV_PacketEvent(mut from: netadr_t, mut msg: *mut msg_t) {
     let mut i: i32 = 0;
-    let mut cl: *mut client_t = 0 as *mut client_t;
+    let mut cl: *mut client_t = std::ptr::null_mut();
     let mut qport: i32 = 0;
     // check for connectionless packet (0xffffffff) first
     if (*msg).cursize >= 4 as i32 && *((*msg).data as *mut i32) == -(1 as i32) {
@@ -1484,11 +1484,11 @@ Updates the cl->ping variables
 unsafe extern "C" fn SV_CalcPings() {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut cl: *mut client_t = 0 as *mut client_t;
+    let mut cl: *mut client_t = std::ptr::null_mut();
     let mut total: i32 = 0;
     let mut count: i32 = 0;
     let mut delta: i32 = 0;
-    let mut ps: *mut playerState_t = 0 as *mut playerState_t;
+    let mut ps: *mut playerState_t = std::ptr::null_mut();
     i = 0 as i32;
     while i < (*sv_maxclients).integer {
         cl = &mut *svs.clients.offset(i as isize) as *mut client_t;
@@ -1542,7 +1542,7 @@ if necessary
 
 unsafe extern "C" fn SV_CheckTimeouts() {
     let mut i: i32 = 0;
-    let mut cl: *mut client_t = 0 as *mut client_t;
+    let mut cl: *mut client_t = std::ptr::null_mut();
     let mut droppoint: i32 = 0;
     let mut zombiepoint: i32 = 0;
     droppoint = svs.time - 1000 as i32 * (*sv_timeout).integer;
@@ -1591,7 +1591,7 @@ SV_CheckPaused
 
 unsafe extern "C" fn SV_CheckPaused() -> qboolean {
     let mut count: i32 = 0;
-    let mut cl: *mut client_t = 0 as *mut client_t;
+    let mut cl: *mut client_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     if (*cl_paused).integer == 0 {
         return qfalse;

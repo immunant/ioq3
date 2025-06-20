@@ -520,9 +520,9 @@ unsafe extern "C" fn R_ChopPolyBehindPlane(
     let mut dot: f32 = 0.;
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut p1: *mut f32 = 0 as *mut f32;
-    let mut p2: *mut f32 = 0 as *mut f32;
-    let mut clip: *mut f32 = 0 as *mut f32;
+    let mut p1: *mut f32 = std::ptr::null_mut();
+    let mut p2: *mut f32 = std::ptr::null_mut();
+    let mut clip: *mut f32 = std::ptr::null_mut();
     let mut d: f32 = 0.;
     // don't clip if it might overflow
     if numInPoints >= 64 as i32 - 2 as i32 {
@@ -625,8 +625,8 @@ pub unsafe extern "C" fn R_BoxSurfaces_r(
 ) {
     let mut s: i32 = 0;
     let mut c: i32 = 0;
-    let mut surf: *mut msurface_t = 0 as *mut msurface_t;
-    let mut mark: *mut *mut msurface_t = 0 as *mut *mut msurface_t;
+    let mut surf: *mut msurface_t = std::ptr::null_mut();
+    let mut mark: *mut *mut msurface_t = std::ptr::null_mut();
     // do the tail recursion in a loop
     while (*node).contents == -(1 as i32) {
         s = BoxOnPlaneSide(mins, maxs, (*node).plane as *mut cplane_s);
@@ -729,7 +729,7 @@ pub unsafe extern "C" fn R_AddMarkFragments(
 ) {
     let mut pingPong: i32 = 0;
     let mut i: i32 = 0;
-    let mut mf: *mut markFragment_t = 0 as *mut markFragment_t;
+    let mut mf: *mut markFragment_t = std::ptr::null_mut();
     // chop the surface by all the bounding planes of the to be projected polygon
     pingPong = 0 as i32;
     i = 0 as i32;
@@ -1185,7 +1185,7 @@ pub unsafe extern "C" fn R_MarkFragments(
     let mut k: i32 = 0;
     let mut m: i32 = 0;
     let mut n: i32 = 0;
-    let mut surfaces: [*mut surfaceType_t; 64] = [0 as *mut surfaceType_t; 64];
+    let mut surfaces: [*mut surfaceType_t; 64] = [std::ptr::null_mut(); 64];
     let mut mins: vec3_t = [0.; 3];
     let mut maxs: vec3_t = [0.; 3];
     let mut returnedFragments: i32 = 0;
@@ -1194,14 +1194,14 @@ pub unsafe extern "C" fn R_MarkFragments(
     let mut dists: [f32; 66] = [0.; 66];
     let mut clipPoints: [[vec3_t; 64]; 2] = [[[0.; 3]; 64]; 2];
     let mut numClipPoints: i32 = 0;
-    let mut v: *mut f32 = 0 as *mut f32;
-    let mut cv: *mut srfGridMesh_t = 0 as *mut srfGridMesh_t;
-    let mut dv: *mut drawVert_t = 0 as *mut drawVert_t;
+    let mut v: *mut f32 = std::ptr::null_mut();
+    let mut cv: *mut srfGridMesh_t = std::ptr::null_mut();
+    let mut dv: *mut drawVert_t = std::ptr::null_mut();
     let mut normal: vec3_t = [0.; 3];
     let mut projectionDir: vec3_t = [0.; 3];
     let mut v1: vec3_t = [0.; 3];
     let mut v2: vec3_t = [0.; 3];
-    let mut indexes: *mut i32 = 0 as *mut i32;
+    let mut indexes: *mut i32 = std::ptr::null_mut();
     if numPoints <= 0 as i32 {
         return 0 as i32;
     }

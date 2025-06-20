@@ -124,9 +124,9 @@ pub unsafe extern "C" fn silk_find_LTP_FLP(
 /* I    number of subframes                         */
 {
     let mut k: i32 = 0;
-    let mut xX_ptr: *mut f32 = 0 as *mut f32;
-    let mut XX_ptr: *mut f32 = 0 as *mut f32;
-    let mut lag_ptr: *const f32 = 0 as *const f32;
+    let mut xX_ptr: *mut f32 = std::ptr::null_mut();
+    let mut XX_ptr: *mut f32 = std::ptr::null_mut();
+    let mut lag_ptr: *const f32 = std::ptr::null();
     let mut xx: f32 = 0.;
     let mut temp: f32 = 0.;
     xX_ptr = xX;

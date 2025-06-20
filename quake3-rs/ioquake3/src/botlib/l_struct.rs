@@ -109,7 +109,7 @@ pub unsafe extern "C" fn FindField(
         }
         i += 1
     }
-    return 0 as *mut crate::src::botlib::l_struct::fielddef_t;
+    return std::ptr::null_mut();
 }
 //end of the function FindField
 //===========================================================================
@@ -131,11 +131,11 @@ pub unsafe extern "C" fn ReadNumber(
         subtype: 0,
         intvalue: 0,
         floatvalue: 0.,
-        whitespace_p: 0 as *mut libc::c_char,
-        endwhitespace_p: 0 as *mut libc::c_char,
+        whitespace_p: std::ptr::null_mut(),
+        endwhitespace_p: std::ptr::null_mut(),
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut token_s,
+        next: std::ptr::null_mut(),
     };
     let mut negative: i32 = qfalse as i32;
     let mut intval: isize = 0;
@@ -331,11 +331,11 @@ pub unsafe extern "C" fn ReadChar(
         subtype: 0,
         intvalue: 0,
         floatvalue: 0.,
-        whitespace_p: 0 as *mut libc::c_char,
-        endwhitespace_p: 0 as *mut libc::c_char,
+        whitespace_p: std::ptr::null_mut(),
+        endwhitespace_p: std::ptr::null_mut(),
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut token_s,
+        next: std::ptr::null_mut(),
     };
     if PC_ExpectAnyToken(
         source as *mut source_s,
@@ -377,11 +377,11 @@ pub unsafe extern "C" fn ReadString(
         subtype: 0,
         intvalue: 0,
         floatvalue: 0.,
-        whitespace_p: 0 as *mut libc::c_char,
-        endwhitespace_p: 0 as *mut libc::c_char,
+        whitespace_p: std::ptr::null_mut(),
+        endwhitespace_p: std::ptr::null_mut(),
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut token_s,
+        next: std::ptr::null_mut(),
     };
     if PC_ExpectTokenType(
         source as *mut source_s,
@@ -427,15 +427,15 @@ pub unsafe extern "C" fn ReadStructure(
         subtype: 0,
         intvalue: 0,
         floatvalue: 0.,
-        whitespace_p: 0 as *mut libc::c_char,
-        endwhitespace_p: 0 as *mut libc::c_char,
+        whitespace_p: std::ptr::null_mut(),
+        endwhitespace_p: std::ptr::null_mut(),
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut token_s,
+        next: std::ptr::null_mut(),
     }; //end while
     let mut fd: *mut crate::src::botlib::l_struct::fielddef_t =
-        0 as *mut crate::src::botlib::l_struct::fielddef_t;
-    let mut p: *mut libc::c_void = 0 as *mut libc::c_void;
+        std::ptr::null_mut();
+    let mut p: *mut libc::c_void = std::ptr::null_mut();
     let mut num: i32 = 0;
     if PC_ExpectTokenString(
         source as *mut source_s,
@@ -671,9 +671,9 @@ pub unsafe extern "C" fn WriteStructWithIndent(
 ) -> i32 {
     let mut i: i32 = 0; //end for
     let mut num: i32 = 0; //end else
-    let mut p: *mut libc::c_void = 0 as *mut libc::c_void; //end if
+    let mut p: *mut libc::c_void = std::ptr::null_mut(); //end if
     let mut fd: *mut crate::src::botlib::l_struct::fielddef_t =
-        0 as *mut crate::src::botlib::l_struct::fielddef_t;
+        std::ptr::null_mut();
     if WriteIndent(fp, indent) == 0 {
         return qfalse as i32;
     }

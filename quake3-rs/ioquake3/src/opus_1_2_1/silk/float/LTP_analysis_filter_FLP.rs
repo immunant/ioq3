@@ -131,10 +131,10 @@ pub unsafe extern "C" fn silk_LTP_analysis_filter_FLP(
 )
 /* I    Preceding samples for each subframe         */
 {
-    let mut x_ptr: *const f32 = 0 as *const f32;
-    let mut x_lag_ptr: *const f32 = 0 as *const f32;
+    let mut x_ptr: *const f32 = std::ptr::null();
+    let mut x_lag_ptr: *const f32 = std::ptr::null();
     let mut Btmp: [f32; 5] = [0.; 5];
-    let mut LTP_res_ptr: *mut f32 = 0 as *mut f32;
+    let mut LTP_res_ptr: *mut f32 = std::ptr::null_mut();
     let mut inv_gain: f32 = 0.;
     let mut k: i32 = 0;
     let mut i: i32 = 0;

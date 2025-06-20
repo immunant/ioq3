@@ -271,7 +271,7 @@ unsafe extern "C" fn sep_upsample(
 ) {
     let mut upsample: my_upsample_ptr = (*cinfo).upsample as my_upsample_ptr;
     let mut ci: i32 = 0;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
     let mut num_rows: JDIMENSION = 0;
     /* Fill the conversion buffer, if it's empty */
     if (*upsample).next_row_out >= (*cinfo).max_v_samp_factor {
@@ -387,11 +387,11 @@ unsafe extern "C" fn int_upsample(
 ) {
     let mut upsample: my_upsample_ptr = (*cinfo).upsample as my_upsample_ptr;
     let mut output_data: JSAMPARRAY = *output_data_ptr;
-    let mut inptr: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut outptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut inptr: JSAMPROW = std::ptr::null_mut();
+    let mut outptr: JSAMPROW = std::ptr::null_mut();
     let mut invalue: JSAMPLE = 0;
     let mut h: i32 = 0;
-    let mut outend: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut outend: JSAMPROW = std::ptr::null_mut();
     let mut h_expand: i32 = 0;
     let mut v_expand: i32 = 0;
     let mut inrow: i32 = 0;
@@ -444,10 +444,10 @@ unsafe extern "C" fn h2v1_upsample(
     mut output_data_ptr: *mut JSAMPARRAY,
 ) {
     let mut output_data: JSAMPARRAY = *output_data_ptr; /* don't need GETJSAMPLE() here */
-    let mut inptr: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut outptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut inptr: JSAMPROW = std::ptr::null_mut();
+    let mut outptr: JSAMPROW = std::ptr::null_mut();
     let mut invalue: JSAMPLE = 0;
-    let mut outend: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut outend: JSAMPROW = std::ptr::null_mut();
     let mut outrow: i32 = 0;
     outrow = 0 as i32;
     while outrow < (*cinfo).max_v_samp_factor {
@@ -480,10 +480,10 @@ unsafe extern "C" fn h2v2_upsample(
     mut output_data_ptr: *mut JSAMPARRAY,
 ) {
     let mut output_data: JSAMPARRAY = *output_data_ptr; /* don't need GETJSAMPLE() here */
-    let mut inptr: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut outptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut inptr: JSAMPROW = std::ptr::null_mut();
+    let mut outptr: JSAMPROW = std::ptr::null_mut();
     let mut invalue: JSAMPLE = 0;
-    let mut outend: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut outend: JSAMPROW = std::ptr::null_mut();
     let mut inrow: i32 = 0;
     let mut outrow: i32 = 0;
     outrow = 0 as i32;
@@ -521,9 +521,9 @@ unsafe extern "C" fn h2v2_upsample(
 #[no_mangle]
 
 pub unsafe extern "C" fn jinit_upsampler(mut cinfo: j_decompress_ptr) {
-    let mut upsample: my_upsample_ptr = 0 as *mut my_upsampler; /* until we find out differently */
+    let mut upsample: my_upsample_ptr = std::ptr::null_mut(); /* until we find out differently */
     let mut ci: i32 = 0;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
     let mut need_buffer: boolean = 0;
     let mut h_in_group: i32 = 0;
     let mut v_in_group: i32 = 0;

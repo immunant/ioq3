@@ -306,7 +306,7 @@ static mut s_configs: configs_t = configs_t {
     banner: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -328,7 +328,7 @@ static mut s_configs: configs_t = configs_t {
     framel: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -354,7 +354,7 @@ static mut s_configs: configs_t = configs_t {
     framer: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -380,7 +380,7 @@ static mut s_configs: configs_t = configs_t {
     list: menulist_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -408,7 +408,7 @@ static mut s_configs: configs_t = configs_t {
     arrows: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -434,7 +434,7 @@ static mut s_configs: configs_t = configs_t {
     left: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -460,7 +460,7 @@ static mut s_configs: configs_t = configs_t {
     right: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -486,7 +486,7 @@ static mut s_configs: configs_t = configs_t {
     back: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -512,7 +512,7 @@ static mut s_configs: configs_t = configs_t {
     go: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -589,7 +589,7 @@ LoadConfig_MenuInit
 unsafe extern "C" fn LoadConfig_MenuInit() {
     let mut i: i32 = 0;
     let mut len: i32 = 0;
-    let mut configname: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut configname: *mut libc::c_char = std::ptr::null_mut();
     UI_LoadConfig_Cache();
     crate::stdlib::memset(
         &mut s_configs as *mut configs_t as *mut libc::c_void,

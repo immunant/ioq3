@@ -242,8 +242,7 @@ pub unsafe extern "C" fn PC_PushIndent(
     mut type_0: i32,
     mut skip: i32,
 ) {
-    let mut indent: *mut crate::src::botlib::l_precomp::indent_t =
-        0 as *mut crate::src::botlib::l_precomp::indent_t;
+    let mut indent: *mut crate::src::botlib::l_precomp::indent_t = std::ptr::null_mut();
     indent = crate::src::botlib::l_memory::GetMemory(::std::mem::size_of::<
         crate::src::botlib::l_precomp::indent_t,
     >() as usize) as *mut crate::src::botlib::l_precomp::indent_t;
@@ -268,8 +267,7 @@ pub unsafe extern "C" fn PC_PopIndent(
     mut type_0: *mut i32,
     mut skip: *mut i32,
 ) {
-    let mut indent: *mut crate::src::botlib::l_precomp::indent_t =
-        0 as *mut crate::src::botlib::l_precomp::indent_t;
+    let mut indent: *mut crate::src::botlib::l_precomp::indent_t = std::ptr::null_mut();
     *type_0 = 0 as i32;
     *skip = 0 as i32;
     indent = (*source).indentstack;
@@ -299,7 +297,7 @@ pub unsafe extern "C" fn PC_PushScript(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
     mut script: *mut script_t,
 ) {
-    let mut s: *mut script_t = 0 as *mut script_t; //end for
+    let mut s: *mut script_t = std::ptr::null_mut(); //end for
     s = (*source).scriptstack;
     while !s.is_null() {
         if Q_stricmp((*s).filename.as_mut_ptr(), (*script).filename.as_mut_ptr()) == 0 {
@@ -351,7 +349,7 @@ pub unsafe extern "C" fn PC_InitTokenHeap() {
 #[no_mangle]
 
 pub unsafe extern "C" fn PC_CopyToken(mut token: *mut token_t) -> *mut token_t {
-    let mut t: *mut token_t = 0 as *mut token_t;
+    let mut t: *mut token_t = std::ptr::null_mut();
     //	t = (token_t *) malloc(sizeof(token_t));
     t = crate::src::botlib::l_memory::GetMemory(::std::mem::size_of::<token_t>() as usize)
         as *mut token_t;
@@ -368,7 +366,7 @@ pub unsafe extern "C" fn PC_CopyToken(mut token: *mut token_t) -> *mut token_t {
         token as *const libc::c_void,
         ::std::mem::size_of::<token_t>() as usize,
     );
-    (*t).next = 0 as *mut token_s;
+    (*t).next = std::ptr::null_mut();
     numtokens += 1;
     return t;
 }
@@ -401,8 +399,8 @@ pub unsafe extern "C" fn PC_ReadSourceToken(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
     mut token: *mut token_t,
 ) -> i32 {
-    let mut t: *mut token_t = 0 as *mut token_t;
-    let mut script: *mut script_t = 0 as *mut script_t;
+    let mut t: *mut token_t = std::ptr::null_mut();
+    let mut script: *mut script_t = std::ptr::null_mut();
     let mut type_0: i32 = 0;
     let mut skip: i32 = 0;
     //if there's no token already available
@@ -465,7 +463,7 @@ pub unsafe extern "C" fn PC_UnreadSourceToken(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
     mut token: *mut token_t,
 ) -> i32 {
-    let mut t: *mut token_t = 0 as *mut token_t;
+    let mut t: *mut token_t = std::ptr::null_mut();
     t = PC_CopyToken(token);
     (*t).next = (*source).tokens;
     (*source).tokens = t;
@@ -492,14 +490,14 @@ pub unsafe extern "C" fn PC_ReadDefineParms(
         subtype: 0,
         intvalue: 0,
         floatvalue: 0.,
-        whitespace_p: 0 as *mut libc::c_char,
-        endwhitespace_p: 0 as *mut libc::c_char,
+        whitespace_p: std::ptr::null_mut(),
+        endwhitespace_p: std::ptr::null_mut(),
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut token_s,
+        next: std::ptr::null_mut(),
     }; //end if
-    let mut t: *mut token_t = 0 as *mut token_t;
-    let mut last: *mut token_t = 0 as *mut token_t;
+    let mut t: *mut token_t = std::ptr::null_mut();
+    let mut last: *mut token_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut done: i32 = 0;
     let mut lastcomma: i32 = 0;
@@ -527,7 +525,7 @@ pub unsafe extern "C" fn PC_ReadDefineParms(
     i = 0 as i32;
     while i < (*define).numparms {
         let ref mut fresh0 = *parms.offset(i as isize);
-        *fresh0 = 0 as *mut token_t;
+        *fresh0 = std::ptr::null_mut();
         i += 1
     }
     //if no leading "("
@@ -568,9 +566,9 @@ pub unsafe extern "C" fn PC_ReadDefineParms(
             return qfalse as i32;
         }
         let ref mut fresh1 = *parms.offset(numparms as isize);
-        *fresh1 = 0 as *mut token_t;
+        *fresh1 = std::ptr::null_mut();
         lastcomma = 1 as i32;
-        last = 0 as *mut token_t;
+        last = std::ptr::null_mut();
         //end if
         while done == 0 {
             if PC_ReadSourceToken(source, &mut token) == 0 {
@@ -636,7 +634,7 @@ pub unsafe extern "C" fn PC_ReadDefineParms(
                 if numparms < (*define).numparms {
                     //
                     t = PC_CopyToken(&mut token);
-                    (*t).next = 0 as *mut token_s;
+                    (*t).next = std::ptr::null_mut();
                     if !last.is_null() {
                         (*last).next = t
                     } else {
@@ -664,10 +662,10 @@ pub unsafe extern "C" fn PC_StringizeTokens(
     mut tokens: *mut token_t,
     mut token: *mut token_t,
 ) -> i32 {
-    let mut t: *mut token_t = 0 as *mut token_t; //end for
+    let mut t: *mut token_t = std::ptr::null_mut(); //end for
     (*token).type_0 = 1 as i32;
-    (*token).whitespace_p = 0 as *mut libc::c_char;
-    (*token).endwhitespace_p = 0 as *mut libc::c_char;
+    (*token).whitespace_p = std::ptr::null_mut();
+    (*token).endwhitespace_p = std::ptr::null_mut();
     (*token).string[0 as i32 as usize] = '\u{0}' as i32 as libc::c_char;
     libc::strcat(
         (*token).string.as_mut_ptr(),
@@ -754,8 +752,7 @@ pub unsafe extern "C" fn PC_PrintDefineHashTable(
     mut definehash: *mut *mut crate::src::botlib::l_precomp::define_t,
 ) {
     let mut i: i32 = 0; //end for
-    let mut d: *mut crate::src::botlib::l_precomp::define_t =
-        0 as *mut crate::src::botlib::l_precomp::define_t;
+    let mut d: *mut crate::src::botlib::l_precomp::define_t = std::ptr::null_mut();
     i = 0 as i32;
     while i < 1024 as i32 {
         crate::src::botlib::l_log::Log_Write(
@@ -833,8 +830,7 @@ pub unsafe extern "C" fn PC_FindHashedDefine(
     mut definehash: *mut *mut crate::src::botlib::l_precomp::define_t,
     mut name: *mut libc::c_char,
 ) -> *mut crate::src::botlib::l_precomp::define_t {
-    let mut d: *mut crate::src::botlib::l_precomp::define_t =
-        0 as *mut crate::src::botlib::l_precomp::define_t; //end for
+    let mut d: *mut crate::src::botlib::l_precomp::define_t = std::ptr::null_mut(); //end for
     let mut hash: i32 = 0;
     hash = PC_NameHash(name);
     d = *definehash.offset(hash as isize);
@@ -844,7 +840,7 @@ pub unsafe extern "C" fn PC_FindHashedDefine(
         }
         d = (*d).hashnext
     }
-    return 0 as *mut crate::src::botlib::l_precomp::define_t;
+    return std::ptr::null_mut();
 }
 //end of the function PC_FindHashedDefine
 //DEFINEHASHING
@@ -860,8 +856,7 @@ pub unsafe extern "C" fn PC_FindDefine(
     mut defines: *mut crate::src::botlib::l_precomp::define_t,
     mut name: *mut libc::c_char,
 ) -> *mut crate::src::botlib::l_precomp::define_t {
-    let mut d: *mut crate::src::botlib::l_precomp::define_t =
-        0 as *mut crate::src::botlib::l_precomp::define_t; //end for
+    let mut d: *mut crate::src::botlib::l_precomp::define_t = std::ptr::null_mut(); //end for
     d = defines;
     while !d.is_null() {
         if libc::strcmp((*d).name, name) == 0 {
@@ -869,7 +864,7 @@ pub unsafe extern "C" fn PC_FindDefine(
         }
         d = (*d).next
     }
-    return 0 as *mut crate::src::botlib::l_precomp::define_t;
+    return std::ptr::null_mut();
 }
 //end of the function PC_FindDefine
 //============================================================================
@@ -885,7 +880,7 @@ pub unsafe extern "C" fn PC_FindDefineParm(
     mut define: *mut crate::src::botlib::l_precomp::define_t,
     mut name: *mut libc::c_char,
 ) -> i32 {
-    let mut p: *mut token_t = 0 as *mut token_t; //end for
+    let mut p: *mut token_t = std::ptr::null_mut(); //end for
     let mut i: i32 = 0;
     i = 0 as i32;
     p = (*define).parms;
@@ -908,8 +903,8 @@ pub unsafe extern "C" fn PC_FindDefineParm(
 #[no_mangle]
 
 pub unsafe extern "C" fn PC_FreeDefine(mut define: *mut crate::src::botlib::l_precomp::define_t) {
-    let mut t: *mut token_t = 0 as *mut token_t;
-    let mut next: *mut token_t = 0 as *mut token_t;
+    let mut t: *mut token_t = std::ptr::null_mut();
+    let mut next: *mut token_t = std::ptr::null_mut();
     //free the define parameters
     t = (*define).parms; //end for
     while !t.is_null() {
@@ -942,8 +937,7 @@ pub unsafe extern "C" fn PC_AddBuiltinDefines(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
 ) {
     let mut i: i32 = 0;
-    let mut define: *mut crate::src::botlib::l_precomp::define_t =
-        0 as *mut crate::src::botlib::l_precomp::define_t;
+    let mut define: *mut crate::src::botlib::l_precomp::define_t = std::ptr::null_mut();
     let mut builtin_0: [builtin; 5] = [
         {
             let mut init = builtin {
@@ -975,7 +969,7 @@ pub unsafe extern "C" fn PC_AddBuiltinDefines(
         },
         {
             let mut init = builtin {
-                string: 0 as *mut libc::c_char,
+                string: std::ptr::null_mut(),
                 builtin: 0 as i32,
             };
             init
@@ -1020,9 +1014,9 @@ pub unsafe extern "C" fn PC_ExpandBuiltinDefine(
     mut firsttoken: *mut *mut token_t,
     mut lasttoken: *mut *mut token_t,
 ) -> i32 {
-    let mut token: *mut token_t = 0 as *mut token_t; //end switch
+    let mut token: *mut token_t = std::ptr::null_mut(); //end switch
     let mut t: time_t = 0;
-    let mut curtime: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut curtime: *mut libc::c_char = std::ptr::null_mut();
     token = PC_CopyToken(deftoken);
     match (*define).builtin {
         1 => {
@@ -1051,7 +1045,7 @@ pub unsafe extern "C" fn PC_ExpandBuiltinDefine(
             *lasttoken = token
         }
         3 => {
-            t = libc::time(0 as *mut libc::c_long) as time_t;
+            t = libc::time(std::ptr::null_mut()) as time_t;
             curtime = crate::stdlib::ctime(&mut t);
             libc::strcpy(
                 (*token).string.as_mut_ptr(),
@@ -1078,7 +1072,7 @@ pub unsafe extern "C" fn PC_ExpandBuiltinDefine(
             *lasttoken = token
         }
         4 => {
-            t = libc::time(0 as *mut libc::c_long) as time_t;
+            t = libc::time(std::ptr::null_mut()) as time_t;
             curtime = crate::stdlib::ctime(&mut t);
             libc::strcpy(
                 (*token).string.as_mut_ptr(),
@@ -1100,8 +1094,8 @@ pub unsafe extern "C" fn PC_ExpandBuiltinDefine(
             *lasttoken = token
         }
         5 | _ => {
-            *firsttoken = 0 as *mut token_t;
-            *lasttoken = 0 as *mut token_t
+            *firsttoken = std::ptr::null_mut();
+            *lasttoken = std::ptr::null_mut()
         }
     }
     return qtrue as i32;
@@ -1123,154 +1117,154 @@ pub unsafe extern "C" fn PC_ExpandDefine(
     mut lasttoken: *mut *mut token_t,
 ) -> i32 {
     let mut parms: [*mut token_t; 128] = [
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
-        0 as *mut token_t,
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
     ];
-    let mut dt: *mut token_t = 0 as *mut token_t;
-    let mut pt: *mut token_t = 0 as *mut token_t;
-    let mut t: *mut token_t = 0 as *mut token_t;
-    let mut t1: *mut token_t = 0 as *mut token_t;
-    let mut t2: *mut token_t = 0 as *mut token_t;
-    let mut first: *mut token_t = 0 as *mut token_t;
-    let mut last: *mut token_t = 0 as *mut token_t;
-    let mut nextpt: *mut token_t = 0 as *mut token_t;
+    let mut dt: *mut token_t = std::ptr::null_mut();
+    let mut pt: *mut token_t = std::ptr::null_mut();
+    let mut t: *mut token_t = std::ptr::null_mut();
+    let mut t1: *mut token_t = std::ptr::null_mut();
+    let mut t2: *mut token_t = std::ptr::null_mut();
+    let mut first: *mut token_t = std::ptr::null_mut();
+    let mut last: *mut token_t = std::ptr::null_mut();
+    let mut nextpt: *mut token_t = std::ptr::null_mut();
     let mut token: token_t = token_t {
         string: [0; 1024],
         type_0: 0,
         subtype: 0,
         intvalue: 0,
         floatvalue: 0.,
-        whitespace_p: 0 as *mut libc::c_char,
-        endwhitespace_p: 0 as *mut libc::c_char,
+        whitespace_p: std::ptr::null_mut(),
+        endwhitespace_p: std::ptr::null_mut(),
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut token_s,
+        next: std::ptr::null_mut(),
     };
     let mut parmnum: i32 = 0;
     let mut i: i32 = 0;
@@ -1286,8 +1280,8 @@ pub unsafe extern "C" fn PC_ExpandDefine(
           //DEBUG_EVAL
     }
     //empty list at first
-    first = 0 as *mut token_t;
-    last = 0 as *mut token_t;
+    first = std::ptr::null_mut();
+    last = std::ptr::null_mut();
     let mut current_block_41: u64;
     //create a list with tokens of the expanded define
     dt = (*define).tokens; //end for
@@ -1304,7 +1298,7 @@ pub unsafe extern "C" fn PC_ExpandDefine(
             while !pt.is_null() {
                 t = PC_CopyToken(pt);
                 //add the token to the list
-                (*t).next = 0 as *mut token_s;
+                (*t).next = std::ptr::null_mut();
                 if !last.is_null() {
                     (*last).next = t
                 } else {
@@ -1358,7 +1352,7 @@ pub unsafe extern "C" fn PC_ExpandDefine(
                 1917311967535052937 => {}
                 _ => {
                     //add the token to the list
-                    (*t).next = 0 as *mut token_s;
+                    (*t).next = std::ptr::null_mut();
                     if !last.is_null() {
                         (*last).next = t
                     } else {
@@ -1438,8 +1432,8 @@ pub unsafe extern "C" fn PC_ExpandDefineIntoSource(
     mut deftoken: *mut token_t,
     mut define: *mut crate::src::botlib::l_precomp::define_t,
 ) -> i32 {
-    let mut firsttoken: *mut token_t = 0 as *mut token_t; //end if
-    let mut lasttoken: *mut token_t = 0 as *mut token_t;
+    let mut firsttoken: *mut token_t = std::ptr::null_mut(); //end if
+    let mut lasttoken: *mut token_t = std::ptr::null_mut();
     if PC_ExpandDefine(source, deftoken, define, &mut firsttoken, &mut lasttoken) == 0 {
         return qfalse as i32;
     }
@@ -1460,7 +1454,7 @@ pub unsafe extern "C" fn PC_ExpandDefineIntoSource(
 #[no_mangle]
 
 pub unsafe extern "C" fn PC_ConvertPath(mut path: *mut libc::c_char) {
-    let mut ptr: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut ptr: *mut libc::c_char = std::ptr::null_mut();
     //remove double path seperators
     ptr = path; //end while
     while *ptr != 0 {
@@ -1500,18 +1494,18 @@ pub unsafe extern "C" fn PC_ConvertPath(mut path: *mut libc::c_char) {
 pub unsafe extern "C" fn PC_Directive_include(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
 ) -> i32 {
-    let mut script: *mut script_t = 0 as *mut script_t;
+    let mut script: *mut script_t = std::ptr::null_mut();
     let mut token: token_t = token_t {
         string: [0; 1024],
         type_0: 0,
         subtype: 0,
         intvalue: 0,
         floatvalue: 0.,
-        whitespace_p: 0 as *mut libc::c_char,
-        endwhitespace_p: 0 as *mut libc::c_char,
+        whitespace_p: std::ptr::null_mut(),
+        endwhitespace_p: std::ptr::null_mut(),
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut token_s,
+        next: std::ptr::null_mut(),
     };
     let mut path: [libc::c_char; 64] = [0; 64];
     //QUAKE
@@ -1674,8 +1668,8 @@ pub unsafe extern "C" fn PC_WhiteSpaceBeforeToken(mut token: *mut token_t) -> i3
 #[no_mangle]
 
 pub unsafe extern "C" fn PC_ClearTokenWhiteSpace(mut token: *mut token_t) {
-    (*token).whitespace_p = 0 as *mut libc::c_char;
-    (*token).endwhitespace_p = 0 as *mut libc::c_char;
+    (*token).whitespace_p = std::ptr::null_mut();
+    (*token).endwhitespace_p = std::ptr::null_mut();
     (*token).linescrossed = 0 as i32;
 }
 //end of the function PC_ClearTokenWhiteSpace
@@ -1696,16 +1690,16 @@ pub unsafe extern "C" fn PC_Directive_undef(
         subtype: 0,
         intvalue: 0,
         floatvalue: 0.,
-        whitespace_p: 0 as *mut libc::c_char,
-        endwhitespace_p: 0 as *mut libc::c_char,
+        whitespace_p: std::ptr::null_mut(),
+        endwhitespace_p: std::ptr::null_mut(),
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut token_s,
+        next: std::ptr::null_mut(),
     };
     let mut define: *mut crate::src::botlib::l_precomp::define_t =
-        0 as *mut crate::src::botlib::l_precomp::define_t;
+        std::ptr::null_mut();
     let mut lastdefine: *mut crate::src::botlib::l_precomp::define_t =
-        0 as *mut crate::src::botlib::l_precomp::define_t;
+        std::ptr::null_mut();
     let mut hash: i32 = 0;
     if (*source).skip > 0 as i32 {
         return qtrue as i32;
@@ -1728,7 +1722,7 @@ pub unsafe extern "C" fn PC_Directive_undef(
         return qfalse as i32;
     } //end else
     hash = PC_NameHash(token.string.as_mut_ptr()); //end if
-    lastdefine = 0 as *mut crate::src::botlib::l_precomp::define_t;
+    lastdefine = std::ptr::null_mut();
     define = *(*source).definehash.offset(hash as isize);
     while !define.is_null() {
         if libc::strcmp((*define).name, token.string.as_mut_ptr()) == 0 {
@@ -1775,16 +1769,16 @@ pub unsafe extern "C" fn PC_Directive_define(
         subtype: 0,
         intvalue: 0,
         floatvalue: 0.,
-        whitespace_p: 0 as *mut libc::c_char,
-        endwhitespace_p: 0 as *mut libc::c_char,
+        whitespace_p: std::ptr::null_mut(),
+        endwhitespace_p: std::ptr::null_mut(),
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut token_s,
+        next: std::ptr::null_mut(),
     };
-    let mut t: *mut token_t = 0 as *mut token_t;
-    let mut last: *mut token_t = 0 as *mut token_t;
+    let mut t: *mut token_t = std::ptr::null_mut();
+    let mut last: *mut token_t = std::ptr::null_mut();
     let mut define: *mut crate::src::botlib::l_precomp::define_t =
-        0 as *mut crate::src::botlib::l_precomp::define_t;
+        std::ptr::null_mut();
     if (*source).skip > 0 as i32 {
         return qtrue as i32;
     }
@@ -1860,7 +1854,7 @@ pub unsafe extern "C" fn PC_Directive_define(
     {
         //end if
         //read the define parameters
-        last = 0 as *mut token_t; //end if
+        last = std::ptr::null_mut(); //end if
         if PC_CheckTokenString(
             source,
             b")\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -1897,7 +1891,7 @@ pub unsafe extern "C" fn PC_Directive_define(
                 //add the define parm
                 t = PC_CopyToken(&mut token);
                 PC_ClearTokenWhiteSpace(t);
-                (*t).next = 0 as *mut token_s;
+                (*t).next = std::ptr::null_mut();
                 if !last.is_null() {
                     (*last).next = t
                 } else {
@@ -1943,7 +1937,7 @@ pub unsafe extern "C" fn PC_Directive_define(
         }
     }
     //read the defined stuff
-    last = 0 as *mut token_t; //end if
+    last = std::ptr::null_mut(); //end if
     loop {
         t = PC_CopyToken(&mut token);
         if (*t).type_0 == 4 as i32 && libc::strcmp((*t).string.as_mut_ptr(), (*define).name) == 0 {
@@ -1954,7 +1948,7 @@ pub unsafe extern "C" fn PC_Directive_define(
             );
         } else {
             PC_ClearTokenWhiteSpace(t);
-            (*t).next = 0 as *mut token_s;
+            (*t).next = std::ptr::null_mut();
             if !last.is_null() {
                 (*last).next = t
             } else {
@@ -2002,17 +1996,17 @@ pub unsafe extern "C" fn PC_Directive_define(
 pub unsafe extern "C" fn PC_DefineFromString(
     mut string: *mut libc::c_char,
 ) -> *mut crate::src::botlib::l_precomp::define_t {
-    let mut script: *mut script_t = 0 as *mut script_t;
+    let mut script: *mut script_t = std::ptr::null_mut();
     let mut src: crate::src::botlib::l_precomp::source_t =
         crate::src::botlib::l_precomp::source_t {
             filename: [0; 1024],
             includepath: [0; 1024],
-            punctuations: 0 as *mut punctuation_t,
-            scriptstack: 0 as *mut script_t,
-            tokens: 0 as *mut token_t,
-            defines: 0 as *mut crate::src::botlib::l_precomp::define_t,
-            definehash: 0 as *mut *mut crate::src::botlib::l_precomp::define_t,
-            indentstack: 0 as *mut crate::src::botlib::l_precomp::indent_t,
+            punctuations: std::ptr::null_mut(),
+            scriptstack: std::ptr::null_mut(),
+            tokens: std::ptr::null_mut(),
+            defines: std::ptr::null_mut(),
+            definehash: std::ptr::null_mut(),
+            indentstack: std::ptr::null_mut(),
             skip: 0,
             token: token_t {
                 string: [0; 1024],
@@ -2020,18 +2014,18 @@ pub unsafe extern "C" fn PC_DefineFromString(
                 subtype: 0,
                 intvalue: 0,
                 floatvalue: 0.,
-                whitespace_p: 0 as *mut libc::c_char,
-                endwhitespace_p: 0 as *mut libc::c_char,
+                whitespace_p: std::ptr::null_mut(),
+                endwhitespace_p: std::ptr::null_mut(),
                 line: 0,
                 linescrossed: 0,
-                next: 0 as *mut token_s,
+                next: std::ptr::null_mut(),
             },
         };
-    let mut t: *mut token_t = 0 as *mut token_t;
+    let mut t: *mut token_t = std::ptr::null_mut();
     let mut res: i32 = 0;
     let mut i: i32 = 0;
     let mut def: *mut crate::src::botlib::l_precomp::define_t =
-        0 as *mut crate::src::botlib::l_precomp::define_t;
+        std::ptr::null_mut();
     PC_InitTokenHeap();
     script = LoadScriptMemory(
         string,
@@ -2064,7 +2058,7 @@ pub unsafe extern "C" fn PC_DefineFromString(
         PC_FreeToken(t);
         t = src.tokens
     }
-    def = 0 as *mut crate::src::botlib::l_precomp::define_t;
+    def = std::ptr::null_mut();
     i = 0 as i32;
     while i < 1024 as i32 {
         if !(*src.definehash.offset(i as isize)).is_null() {
@@ -2090,7 +2084,7 @@ pub unsafe extern "C" fn PC_DefineFromString(
         PC_FreeDefine(def);
     }
     //
-    return 0 as *mut crate::src::botlib::l_precomp::define_t;
+    return std::ptr::null_mut();
 }
 //add a define to the source
 //end of the function PC_DefineFromString
@@ -2106,8 +2100,7 @@ pub unsafe extern "C" fn PC_AddDefine(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
     mut string: *mut libc::c_char,
 ) -> i32 {
-    let mut define: *mut crate::src::botlib::l_precomp::define_t =
-        0 as *mut crate::src::botlib::l_precomp::define_t;
+    let mut define: *mut crate::src::botlib::l_precomp::define_t = std::ptr::null_mut();
     define = PC_DefineFromString(string);
     if define.is_null() {
         return qfalse as i32;
@@ -2129,8 +2122,7 @@ pub unsafe extern "C" fn PC_AddDefine(
 #[no_mangle]
 
 pub unsafe extern "C" fn PC_AddGlobalDefine(mut string: *mut libc::c_char) -> i32 {
-    let mut define: *mut crate::src::botlib::l_precomp::define_t =
-        0 as *mut crate::src::botlib::l_precomp::define_t;
+    let mut define: *mut crate::src::botlib::l_precomp::define_t = std::ptr::null_mut();
     define = PC_DefineFromString(string);
     if define.is_null() {
         return qfalse as i32;
@@ -2151,8 +2143,7 @@ pub unsafe extern "C" fn PC_AddGlobalDefine(mut string: *mut libc::c_char) -> i3
 #[no_mangle]
 
 pub unsafe extern "C" fn PC_RemoveGlobalDefine(mut name: *mut libc::c_char) -> i32 {
-    let mut define: *mut crate::src::botlib::l_precomp::define_t =
-        0 as *mut crate::src::botlib::l_precomp::define_t; //end if
+    let mut define: *mut crate::src::botlib::l_precomp::define_t = std::ptr::null_mut(); //end if
     define = PC_FindDefine(globaldefines, name);
     if !define.is_null() {
         PC_FreeDefine(define);
@@ -2172,8 +2163,7 @@ pub unsafe extern "C" fn PC_RemoveGlobalDefine(mut name: *mut libc::c_char) -> i
 #[no_mangle]
 
 pub unsafe extern "C" fn PC_RemoveAllGlobalDefines() {
-    let mut define: *mut crate::src::botlib::l_precomp::define_t =
-        0 as *mut crate::src::botlib::l_precomp::define_t;
+    let mut define: *mut crate::src::botlib::l_precomp::define_t = std::ptr::null_mut();
     define = globaldefines;
     while !define.is_null() {
         globaldefines = (*globaldefines).next;
@@ -2195,11 +2185,10 @@ pub unsafe extern "C" fn PC_CopyDefine(
     mut _source: *mut crate::src::botlib::l_precomp::source_t,
     mut define: *mut crate::src::botlib::l_precomp::define_t,
 ) -> *mut crate::src::botlib::l_precomp::define_t {
-    let mut newdefine: *mut crate::src::botlib::l_precomp::define_t =
-        0 as *mut crate::src::botlib::l_precomp::define_t;
-    let mut token: *mut token_t = 0 as *mut token_t;
-    let mut newtoken: *mut token_t = 0 as *mut token_t;
-    let mut lasttoken: *mut token_t = 0 as *mut token_t;
+    let mut newdefine: *mut crate::src::botlib::l_precomp::define_t = std::ptr::null_mut();
+    let mut token: *mut token_t = std::ptr::null_mut();
+    let mut newtoken: *mut token_t = std::ptr::null_mut();
+    let mut lasttoken: *mut token_t = std::ptr::null_mut();
     newdefine = crate::src::botlib::l_memory::GetMemory(::std::mem::size_of::<
         crate::src::botlib::l_precomp::define_t,
     >() as usize) as *mut crate::src::botlib::l_precomp::define_t;
@@ -2212,15 +2201,15 @@ pub unsafe extern "C" fn PC_CopyDefine(
     (*newdefine).builtin = (*define).builtin;
     (*newdefine).numparms = (*define).numparms;
     //the define is not linked
-    (*newdefine).next = 0 as *mut crate::src::botlib::l_precomp::define_s;
-    (*newdefine).hashnext = 0 as *mut crate::src::botlib::l_precomp::define_s;
+    (*newdefine).next = std::ptr::null_mut();
+    (*newdefine).hashnext = std::ptr::null_mut();
     //copy the define tokens
-    (*newdefine).tokens = 0 as *mut token_t; //end for
-    lasttoken = 0 as *mut token_t;
+    (*newdefine).tokens = std::ptr::null_mut(); //end for
+    lasttoken = std::ptr::null_mut();
     token = (*define).tokens;
     while !token.is_null() {
         newtoken = PC_CopyToken(token);
-        (*newtoken).next = 0 as *mut token_s;
+        (*newtoken).next = std::ptr::null_mut();
         if !lasttoken.is_null() {
             (*lasttoken).next = newtoken
         } else {
@@ -2230,12 +2219,12 @@ pub unsafe extern "C" fn PC_CopyDefine(
         token = (*token).next
     }
     //copy the define parameters
-    (*newdefine).parms = 0 as *mut token_t; //end for
-    lasttoken = 0 as *mut token_t;
+    (*newdefine).parms = std::ptr::null_mut(); //end for
+    lasttoken = std::ptr::null_mut();
     token = (*define).parms;
     while !token.is_null() {
         newtoken = PC_CopyToken(token);
-        (*newtoken).next = 0 as *mut token_s;
+        (*newtoken).next = std::ptr::null_mut();
         if !lasttoken.is_null() {
             (*lasttoken).next = newtoken
         } else {
@@ -2258,10 +2247,9 @@ pub unsafe extern "C" fn PC_CopyDefine(
 pub unsafe extern "C" fn PC_AddGlobalDefinesToSource(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
 ) {
-    let mut define: *mut crate::src::botlib::l_precomp::define_t =
-        0 as *mut crate::src::botlib::l_precomp::define_t;
+    let mut define: *mut crate::src::botlib::l_precomp::define_t = std::ptr::null_mut();
     let mut newdefine: *mut crate::src::botlib::l_precomp::define_t =
-        0 as *mut crate::src::botlib::l_precomp::define_t;
+        std::ptr::null_mut();
     define = globaldefines;
     while !define.is_null() {
         newdefine = PC_CopyDefine(source, define);
@@ -2291,14 +2279,14 @@ pub unsafe extern "C" fn PC_Directive_if_def(
         subtype: 0,
         intvalue: 0,
         floatvalue: 0.,
-        whitespace_p: 0 as *mut libc::c_char,
-        endwhitespace_p: 0 as *mut libc::c_char,
+        whitespace_p: std::ptr::null_mut(),
+        endwhitespace_p: std::ptr::null_mut(),
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut token_s,
+        next: std::ptr::null_mut(),
     }; //end if
     let mut d: *mut crate::src::botlib::l_precomp::define_t =
-        0 as *mut crate::src::botlib::l_precomp::define_t; //end if
+        std::ptr::null_mut(); //end if
     let mut skip: i32 = 0;
     if PC_ReadLine(source, &mut token) == 0 {
         SourceError(
@@ -2320,7 +2308,7 @@ pub unsafe extern "C" fn PC_Directive_if_def(
     d = PC_FindHashedDefine((*source).definehash, token.string.as_mut_ptr());
     //DEFINEHASHING
     skip = ((type_0 == 0x8 as i32) as i32
-        == (d == 0 as *mut libc::c_void as *mut crate::src::botlib::l_precomp::define_t) as i32)
+        == (d == std::ptr::null_mut() as *mut crate::src::botlib::l_precomp::define_t) as i32)
         as i32;
     PC_PushIndent(source, type_0, skip);
     return qtrue as i32;
@@ -2449,15 +2437,15 @@ pub unsafe extern "C" fn PC_EvaluateTokens(
     mut floatvalue: *mut f32,
     mut integer: i32,
 ) -> i32 {
-    let mut o: *mut operator_t = 0 as *mut operator_t;
-    let mut firstoperator: *mut operator_t = 0 as *mut operator_t;
-    let mut lastoperator: *mut operator_t = 0 as *mut operator_t;
-    let mut v: *mut value_t = 0 as *mut value_t;
-    let mut firstvalue: *mut value_t = 0 as *mut value_t;
-    let mut lastvalue: *mut value_t = 0 as *mut value_t;
-    let mut v1: *mut value_t = 0 as *mut value_t;
-    let mut v2: *mut value_t = 0 as *mut value_t;
-    let mut t: *mut token_t = 0 as *mut token_t;
+    let mut o: *mut operator_t = std::ptr::null_mut();
+    let mut firstoperator: *mut operator_t = std::ptr::null_mut();
+    let mut lastoperator: *mut operator_t = std::ptr::null_mut();
+    let mut v: *mut value_t = std::ptr::null_mut();
+    let mut firstvalue: *mut value_t = std::ptr::null_mut();
+    let mut lastvalue: *mut value_t = std::ptr::null_mut();
+    let mut v1: *mut value_t = std::ptr::null_mut();
+    let mut v2: *mut value_t = std::ptr::null_mut();
+    let mut t: *mut token_t = std::ptr::null_mut();
     let mut brace: i32 = 0 as i32;
     let mut parentheses: i32 = 0 as i32;
     let mut error: i32 = 0 as i32;
@@ -2471,21 +2459,21 @@ pub unsafe extern "C" fn PC_EvaluateTokens(
         operator: 0,
         priority: 0,
         parentheses: 0,
-        prev: 0 as *mut operator_s,
-        next: 0 as *mut operator_s,
+        prev: std::ptr::null_mut(),
+        next: std::ptr::null_mut(),
     }; 64]; //end for
     let mut numoperators: i32 = 0 as i32; //end switch
     let mut value_heap: [value_t; 64] = [value_t {
         intvalue: 0,
         floatvalue: 0.,
         parentheses: 0,
-        prev: 0 as *mut value_s,
-        next: 0 as *mut value_s,
+        prev: std::ptr::null_mut(),
+        next: std::ptr::null_mut(),
     }; 64]; //end if
     let mut numvalues: i32 = 0 as i32; //end if
-    lastoperator = 0 as *mut operator_t; //end if
+    lastoperator = std::ptr::null_mut(); //end if
     firstoperator = lastoperator; //end if
-    lastvalue = 0 as *mut value_t;
+    lastvalue = std::ptr::null_mut();
     firstvalue = lastvalue;
     if !intvalue.is_null() {
         *intvalue = 0 as i32 as isize
@@ -2559,7 +2547,7 @@ pub unsafe extern "C" fn PC_EvaluateTokens(
                             (*v).floatvalue = 0 as i32 as f32
                         }
                         (*v).parentheses = parentheses;
-                        (*v).next = 0 as *mut value_s;
+                        (*v).next = std::ptr::null_mut();
                         (*v).prev = lastvalue;
                         if !lastvalue.is_null() {
                             (*lastvalue).next = v
@@ -2630,7 +2618,7 @@ pub unsafe extern "C" fn PC_EvaluateTokens(
                         (*v).floatvalue = (*t).floatvalue
                     }
                     (*v).parentheses = parentheses;
-                    (*v).next = 0 as *mut value_s;
+                    (*v).next = std::ptr::null_mut();
                     (*v).prev = lastvalue;
                     if !lastvalue.is_null() {
                         (*lastvalue).next = v
@@ -2779,7 +2767,7 @@ pub unsafe extern "C" fn PC_EvaluateTokens(
                                     (*o).operator = (*t).subtype;
                                     (*o).priority = PC_OperatorPriority((*t).subtype);
                                     (*o).parentheses = parentheses;
-                                    (*o).next = 0 as *mut operator_s;
+                                    (*o).next = std::ptr::null_mut();
                                     (*o).prev = lastoperator;
                                     if !lastoperator.is_null() {
                                         (*lastoperator).next = o
@@ -3074,18 +3062,18 @@ pub unsafe extern "C" fn PC_Evaluate(
         subtype: 0,
         intvalue: 0,
         floatvalue: 0.,
-        whitespace_p: 0 as *mut libc::c_char,
-        endwhitespace_p: 0 as *mut libc::c_char,
+        whitespace_p: std::ptr::null_mut(),
+        endwhitespace_p: std::ptr::null_mut(),
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut token_s,
+        next: std::ptr::null_mut(),
     };
-    let mut firsttoken: *mut token_t = 0 as *mut token_t;
-    let mut lasttoken: *mut token_t = 0 as *mut token_t;
-    let mut t: *mut token_t = 0 as *mut token_t;
-    let mut nexttoken: *mut token_t = 0 as *mut token_t;
+    let mut firsttoken: *mut token_t = std::ptr::null_mut();
+    let mut lasttoken: *mut token_t = std::ptr::null_mut();
+    let mut t: *mut token_t = std::ptr::null_mut();
+    let mut nexttoken: *mut token_t = std::ptr::null_mut();
     let mut define: *mut crate::src::botlib::l_precomp::define_t =
-        0 as *mut crate::src::botlib::l_precomp::define_t;
+        std::ptr::null_mut();
     let mut defined: i32 = qfalse as i32;
     if !intvalue.is_null() {
         *intvalue = 0 as i32 as isize
@@ -3102,15 +3090,15 @@ pub unsafe extern "C" fn PC_Evaluate(
         ); //end if
         return qfalse as i32;
     }
-    firsttoken = 0 as *mut token_t;
-    lasttoken = 0 as *mut token_t;
+    firsttoken = std::ptr::null_mut();
+    lasttoken = std::ptr::null_mut();
     loop {
         //if the token is a name
         if token.type_0 == 4 as i32 {
             if defined != 0 {
                 defined = qfalse as i32; //end if
                 t = PC_CopyToken(&mut token); //end if
-                (*t).next = 0 as *mut token_s;
+                (*t).next = std::ptr::null_mut();
                 if !lasttoken.is_null() {
                     (*lasttoken).next = t
                 } else {
@@ -3124,7 +3112,7 @@ pub unsafe extern "C" fn PC_Evaluate(
             {
                 defined = qtrue as i32;
                 t = PC_CopyToken(&mut token);
-                (*t).next = 0 as *mut token_s;
+                (*t).next = std::ptr::null_mut();
                 if !lasttoken.is_null() {
                     (*lasttoken).next = t
                 } else {
@@ -3152,7 +3140,7 @@ pub unsafe extern "C" fn PC_Evaluate(
         } else if token.type_0 == 3 as i32 || token.type_0 == 5 as i32 {
             //if the token is a number or a punctuation
             t = PC_CopyToken(&mut token); //end else
-            (*t).next = 0 as *mut token_s;
+            (*t).next = std::ptr::null_mut();
             if !lasttoken.is_null() {
                 (*lasttoken).next = t
             } else {
@@ -3213,18 +3201,18 @@ pub unsafe extern "C" fn PC_DollarEvaluate(
         subtype: 0,
         intvalue: 0,
         floatvalue: 0.,
-        whitespace_p: 0 as *mut libc::c_char,
-        endwhitespace_p: 0 as *mut libc::c_char,
+        whitespace_p: std::ptr::null_mut(),
+        endwhitespace_p: std::ptr::null_mut(),
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut token_s,
+        next: std::ptr::null_mut(),
     };
-    let mut firsttoken: *mut token_t = 0 as *mut token_t;
-    let mut lasttoken: *mut token_t = 0 as *mut token_t;
-    let mut t: *mut token_t = 0 as *mut token_t;
-    let mut nexttoken: *mut token_t = 0 as *mut token_t;
+    let mut firsttoken: *mut token_t = std::ptr::null_mut();
+    let mut lasttoken: *mut token_t = std::ptr::null_mut();
+    let mut t: *mut token_t = std::ptr::null_mut();
+    let mut nexttoken: *mut token_t = std::ptr::null_mut();
     let mut define: *mut crate::src::botlib::l_precomp::define_t =
-        0 as *mut crate::src::botlib::l_precomp::define_t;
+        std::ptr::null_mut();
     if !intvalue.is_null() {
         *intvalue = 0 as i32 as isize
     }
@@ -3248,8 +3236,8 @@ pub unsafe extern "C" fn PC_DollarEvaluate(
         return qfalse as i32;
     }
     indent = 1 as i32;
-    firsttoken = 0 as *mut token_t;
-    lasttoken = 0 as *mut token_t;
+    firsttoken = std::ptr::null_mut();
+    lasttoken = std::ptr::null_mut();
     loop
     //if the token is a name
     {
@@ -3257,7 +3245,7 @@ pub unsafe extern "C" fn PC_DollarEvaluate(
             if defined != 0 {
                 defined = qfalse as i32; //end if
                 t = PC_CopyToken(&mut token); //end if
-                (*t).next = 0 as *mut token_s;
+                (*t).next = std::ptr::null_mut();
                 if !lasttoken.is_null() {
                     (*lasttoken).next = t
                 } else {
@@ -3271,7 +3259,7 @@ pub unsafe extern "C" fn PC_DollarEvaluate(
             {
                 defined = qtrue as i32;
                 t = PC_CopyToken(&mut token);
-                (*t).next = 0 as *mut token_s;
+                (*t).next = std::ptr::null_mut();
                 if !lasttoken.is_null() {
                     (*lasttoken).next = t
                 } else {
@@ -3307,7 +3295,7 @@ pub unsafe extern "C" fn PC_DollarEvaluate(
                 break;
             }
             t = PC_CopyToken(&mut token);
-            (*t).next = 0 as *mut token_s;
+            (*t).next = std::ptr::null_mut();
             if !lasttoken.is_null() {
                 (*lasttoken).next = t
             } else {
@@ -3368,7 +3356,7 @@ pub unsafe extern "C" fn PC_Directive_elif(
         );
         return qfalse as i32;
     }
-    if PC_Evaluate(source, &mut value, 0 as *mut f32, qtrue as i32) == 0 {
+    if PC_Evaluate(source, &mut value, std::ptr::null_mut(), qtrue as i32) == 0 {
         return qfalse as i32;
     }
     skip = (value == 0 as i32 as isize) as i32;
@@ -3389,7 +3377,7 @@ pub unsafe extern "C" fn PC_Directive_if(
 ) -> i32 {
     let mut value: isize = 0;
     let mut skip: i32 = 0;
-    if PC_Evaluate(source, &mut value, 0 as *mut f32, qtrue as i32) == 0 {
+    if PC_Evaluate(source, &mut value, std::ptr::null_mut(), qtrue as i32) == 0 {
         return qfalse as i32;
     }
     skip = (value == 0 as i32 as isize) as i32;
@@ -3433,11 +3421,11 @@ pub unsafe extern "C" fn PC_Directive_error(
         subtype: 0,
         intvalue: 0,
         floatvalue: 0.,
-        whitespace_p: 0 as *mut libc::c_char,
-        endwhitespace_p: 0 as *mut libc::c_char,
+        whitespace_p: std::ptr::null_mut(),
+        endwhitespace_p: std::ptr::null_mut(),
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut token_s,
+        next: std::ptr::null_mut(),
     };
     libc::strcpy(
         token.string.as_mut_ptr(),
@@ -3469,11 +3457,11 @@ pub unsafe extern "C" fn PC_Directive_pragma(
         subtype: 0,
         intvalue: 0,
         floatvalue: 0.,
-        whitespace_p: 0 as *mut libc::c_char,
-        endwhitespace_p: 0 as *mut libc::c_char,
+        whitespace_p: std::ptr::null_mut(),
+        endwhitespace_p: std::ptr::null_mut(),
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut token_s,
+        next: std::ptr::null_mut(),
     };
     SourceWarning(
         source,
@@ -3499,11 +3487,11 @@ pub unsafe extern "C" fn UnreadSignToken(mut source: *mut crate::src::botlib::l_
         subtype: 0,
         intvalue: 0,
         floatvalue: 0.,
-        whitespace_p: 0 as *mut libc::c_char,
-        endwhitespace_p: 0 as *mut libc::c_char,
+        whitespace_p: std::ptr::null_mut(),
+        endwhitespace_p: std::ptr::null_mut(),
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut token_s,
+        next: std::ptr::null_mut(),
     };
     token.line = (*(*source).scriptstack).line;
     token.whitespace_p = (*(*source).scriptstack).script_p;
@@ -3536,13 +3524,13 @@ pub unsafe extern "C" fn PC_Directive_eval(
         subtype: 0,
         intvalue: 0,
         floatvalue: 0.,
-        whitespace_p: 0 as *mut libc::c_char,
-        endwhitespace_p: 0 as *mut libc::c_char,
+        whitespace_p: std::ptr::null_mut(),
+        endwhitespace_p: std::ptr::null_mut(),
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut token_s,
+        next: std::ptr::null_mut(),
     };
-    if PC_Evaluate(source, &mut value, 0 as *mut f32, qtrue as i32) == 0 {
+    if PC_Evaluate(source, &mut value, std::ptr::null_mut(), qtrue as i32) == 0 {
         return qfalse as i32;
     }
     //
@@ -3582,13 +3570,13 @@ pub unsafe extern "C" fn PC_Directive_evalfloat(
         subtype: 0,
         intvalue: 0,
         floatvalue: 0.,
-        whitespace_p: 0 as *mut libc::c_char,
-        endwhitespace_p: 0 as *mut libc::c_char,
+        whitespace_p: std::ptr::null_mut(),
+        endwhitespace_p: std::ptr::null_mut(),
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut token_s,
+        next: std::ptr::null_mut(),
     };
-    if PC_Evaluate(source, 0 as *mut isize, &mut value, qfalse as i32) == 0 {
+    if PC_Evaluate(source, std::ptr::null_mut(), &mut value, qfalse as i32) == 0 {
         return qfalse as i32;
     }
     token.line = (*(*source).scriptstack).line;
@@ -3827,11 +3815,11 @@ pub unsafe extern "C" fn PC_ReadDirective(
         subtype: 0,
         intvalue: 0,
         floatvalue: 0.,
-        whitespace_p: 0 as *mut libc::c_char,
-        endwhitespace_p: 0 as *mut libc::c_char,
+        whitespace_p: std::ptr::null_mut(),
+        endwhitespace_p: std::ptr::null_mut(),
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut token_s,
+        next: std::ptr::null_mut(),
     };
     let mut i: i32 = 0;
     //read the directive name
@@ -3894,13 +3882,13 @@ pub unsafe extern "C" fn PC_DollarDirective_evalint(
         subtype: 0,
         intvalue: 0,
         floatvalue: 0.,
-        whitespace_p: 0 as *mut libc::c_char,
-        endwhitespace_p: 0 as *mut libc::c_char,
+        whitespace_p: std::ptr::null_mut(),
+        endwhitespace_p: std::ptr::null_mut(),
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut token_s,
+        next: std::ptr::null_mut(),
     };
-    if PC_DollarEvaluate(source, &mut value, 0 as *mut f32, qtrue as i32) == 0 {
+    if PC_DollarEvaluate(source, &mut value, std::ptr::null_mut(), qtrue as i32) == 0 {
         return qfalse as i32;
     }
     //
@@ -3943,13 +3931,13 @@ pub unsafe extern "C" fn PC_DollarDirective_evalfloat(
         subtype: 0,
         intvalue: 0,
         floatvalue: 0.,
-        whitespace_p: 0 as *mut libc::c_char,
-        endwhitespace_p: 0 as *mut libc::c_char,
+        whitespace_p: std::ptr::null_mut(),
+        endwhitespace_p: std::ptr::null_mut(),
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut token_s,
+        next: std::ptr::null_mut(),
     };
-    if PC_DollarEvaluate(source, 0 as *mut isize, &mut value, qfalse as i32) == 0 {
+    if PC_DollarEvaluate(source, std::ptr::null_mut(), &mut value, qfalse as i32) == 0 {
         return qfalse as i32;
     }
     token.line = (*(*source).scriptstack).line;
@@ -4095,11 +4083,11 @@ pub unsafe extern "C" fn PC_ReadDollarDirective(
         subtype: 0,
         intvalue: 0,
         floatvalue: 0.,
-        whitespace_p: 0 as *mut libc::c_char,
-        endwhitespace_p: 0 as *mut libc::c_char,
+        whitespace_p: std::ptr::null_mut(),
+        endwhitespace_p: std::ptr::null_mut(),
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut token_s,
+        next: std::ptr::null_mut(),
     };
     let mut i: i32 = 0;
     //read the directive name
@@ -4159,8 +4147,7 @@ pub unsafe extern "C" fn PC_ReadToken(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
     mut token: *mut token_t,
 ) -> i32 {
-    let mut define: *mut crate::src::botlib::l_precomp::define_t =
-        0 as *mut crate::src::botlib::l_precomp::define_t;
+    let mut define: *mut crate::src::botlib::l_precomp::define_t = std::ptr::null_mut();
     loop {
         if PC_ReadSourceToken(source, token) == 0 {
             return qfalse as i32;
@@ -4192,11 +4179,11 @@ pub unsafe extern "C" fn PC_ReadToken(
                     subtype: 0,
                     intvalue: 0,
                     floatvalue: 0.,
-                    whitespace_p: 0 as *mut libc::c_char,
-                    endwhitespace_p: 0 as *mut libc::c_char,
+                    whitespace_p: std::ptr::null_mut(),
+                    endwhitespace_p: std::ptr::null_mut(),
                     line: 0,
                     linescrossed: 0,
-                    next: 0 as *mut token_s,
+                    next: std::ptr::null_mut(),
                 }; //end if
                 if PC_ReadToken(source, &mut newtoken) != 0 {
                     if newtoken.type_0 == 1 as i32 {
@@ -4280,11 +4267,11 @@ pub unsafe extern "C" fn PC_ExpectTokenString(
         subtype: 0,
         intvalue: 0,
         floatvalue: 0.,
-        whitespace_p: 0 as *mut libc::c_char,
-        endwhitespace_p: 0 as *mut libc::c_char,
+        whitespace_p: std::ptr::null_mut(),
+        endwhitespace_p: std::ptr::null_mut(),
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut token_s,
+        next: std::ptr::null_mut(),
     }; //end if
     if PC_ReadToken(source, &mut token) == 0 {
         SourceError(
@@ -4497,11 +4484,11 @@ pub unsafe extern "C" fn PC_CheckTokenString(
         subtype: 0,
         intvalue: 0,
         floatvalue: 0.,
-        whitespace_p: 0 as *mut libc::c_char,
-        endwhitespace_p: 0 as *mut libc::c_char,
+        whitespace_p: std::ptr::null_mut(),
+        endwhitespace_p: std::ptr::null_mut(),
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut token_s,
+        next: std::ptr::null_mut(),
     };
     if PC_ReadToken(source, &mut tok) == 0 {
         return qfalse as i32;
@@ -4536,11 +4523,11 @@ pub unsafe extern "C" fn PC_CheckTokenType(
         subtype: 0,
         intvalue: 0,
         floatvalue: 0.,
-        whitespace_p: 0 as *mut libc::c_char,
-        endwhitespace_p: 0 as *mut libc::c_char,
+        whitespace_p: std::ptr::null_mut(),
+        endwhitespace_p: std::ptr::null_mut(),
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut token_s,
+        next: std::ptr::null_mut(),
     };
     if PC_ReadToken(source, &mut tok) == 0 {
         return qfalse as i32;
@@ -4578,11 +4565,11 @@ pub unsafe extern "C" fn PC_SkipUntilString(
         subtype: 0,
         intvalue: 0,
         floatvalue: 0.,
-        whitespace_p: 0 as *mut libc::c_char,
-        endwhitespace_p: 0 as *mut libc::c_char,
+        whitespace_p: std::ptr::null_mut(),
+        endwhitespace_p: std::ptr::null_mut(),
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut token_s,
+        next: std::ptr::null_mut(),
     }; //end while
     while PC_ReadToken(source, &mut token) != 0 {
         if libc::strcmp(token.string.as_mut_ptr(), string) == 0 {
@@ -4685,15 +4672,14 @@ pub unsafe extern "C" fn PC_SetPunctuations(
 pub unsafe extern "C" fn LoadSourceFile(
     mut filename: *const libc::c_char,
 ) -> *mut crate::src::botlib::l_precomp::source_t {
-    let mut source: *mut crate::src::botlib::l_precomp::source_t =
-        0 as *mut crate::src::botlib::l_precomp::source_t;
-    let mut script: *mut script_t = 0 as *mut script_t;
+    let mut source: *mut crate::src::botlib::l_precomp::source_t = std::ptr::null_mut();
+    let mut script: *mut script_t = std::ptr::null_mut();
     PC_InitTokenHeap();
     script = LoadScriptFile(filename) as *mut script_s;
     if script.is_null() {
-        return 0 as *mut crate::src::botlib::l_precomp::source_t;
+        return std::ptr::null_mut();
     }
-    (*script).next = 0 as *mut script_s;
+    (*script).next = std::ptr::null_mut();
     source = crate::src::botlib::l_memory::GetMemory(::std::mem::size_of::<
         crate::src::botlib::l_precomp::source_t,
     >() as usize) as *mut crate::src::botlib::l_precomp::source_t;
@@ -4708,9 +4694,9 @@ pub unsafe extern "C" fn LoadSourceFile(
         ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     (*source).scriptstack = script;
-    (*source).tokens = 0 as *mut token_t;
-    (*source).defines = 0 as *mut crate::src::botlib::l_precomp::define_t;
-    (*source).indentstack = 0 as *mut crate::src::botlib::l_precomp::indent_t;
+    (*source).tokens = std::ptr::null_mut();
+    (*source).defines = std::ptr::null_mut();
+    (*source).indentstack = std::ptr::null_mut();
     (*source).skip = 0 as i32;
     (*source).definehash =
         crate::src::botlib::l_memory::GetClearedMemory((1024 as i32 as usize).wrapping_mul(
@@ -4735,15 +4721,14 @@ pub unsafe extern "C" fn LoadSourceMemory(
     mut length: i32,
     mut name: *mut libc::c_char,
 ) -> *mut crate::src::botlib::l_precomp::source_t {
-    let mut source: *mut crate::src::botlib::l_precomp::source_t =
-        0 as *mut crate::src::botlib::l_precomp::source_t;
-    let mut script: *mut script_t = 0 as *mut script_t;
+    let mut source: *mut crate::src::botlib::l_precomp::source_t = std::ptr::null_mut();
+    let mut script: *mut script_t = std::ptr::null_mut();
     PC_InitTokenHeap();
     script = LoadScriptMemory(ptr, length, name) as *mut script_s;
     if script.is_null() {
-        return 0 as *mut crate::src::botlib::l_precomp::source_t;
+        return std::ptr::null_mut();
     }
-    (*script).next = 0 as *mut script_s;
+    (*script).next = std::ptr::null_mut();
     source = crate::src::botlib::l_memory::GetMemory(::std::mem::size_of::<
         crate::src::botlib::l_precomp::source_t,
     >() as usize) as *mut crate::src::botlib::l_precomp::source_t;
@@ -4758,9 +4743,9 @@ pub unsafe extern "C" fn LoadSourceMemory(
         ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
     (*source).scriptstack = script;
-    (*source).tokens = 0 as *mut token_t;
-    (*source).defines = 0 as *mut crate::src::botlib::l_precomp::define_t;
-    (*source).indentstack = 0 as *mut crate::src::botlib::l_precomp::indent_t;
+    (*source).tokens = std::ptr::null_mut();
+    (*source).defines = std::ptr::null_mut();
+    (*source).indentstack = std::ptr::null_mut();
     (*source).skip = 0 as i32;
     (*source).definehash =
         crate::src::botlib::l_memory::GetClearedMemory((1024 as i32 as usize).wrapping_mul(
@@ -4781,12 +4766,12 @@ pub unsafe extern "C" fn LoadSourceMemory(
 #[no_mangle]
 
 pub unsafe extern "C" fn FreeSource(mut source: *mut crate::src::botlib::l_precomp::source_t) {
-    let mut script: *mut script_t = 0 as *mut script_t;
-    let mut token: *mut token_t = 0 as *mut token_t;
+    let mut script: *mut script_t = std::ptr::null_mut();
+    let mut token: *mut token_t = std::ptr::null_mut();
     let mut define: *mut crate::src::botlib::l_precomp::define_t =
-        0 as *mut crate::src::botlib::l_precomp::define_t;
+        std::ptr::null_mut();
     let mut indent: *mut crate::src::botlib::l_precomp::indent_t =
-        0 as *mut crate::src::botlib::l_precomp::indent_t;
+        std::ptr::null_mut();
     let mut i: i32 = 0;
     //PC_PrintDefineHashTable(source->definehash);
     //free all the scripts
@@ -4837,8 +4822,7 @@ pub static mut sourceFiles: [*mut crate::src::botlib::l_precomp::source_t; 64] =
 #[no_mangle]
 
 pub unsafe extern "C" fn PC_LoadSourceHandle(mut filename: *const libc::c_char) -> i32 {
-    let mut source: *mut crate::src::botlib::l_precomp::source_t =
-        0 as *mut crate::src::botlib::l_precomp::source_t; //end for
+    let mut source: *mut crate::src::botlib::l_precomp::source_t = std::ptr::null_mut(); //end for
     let mut i: i32 = 0;
     i = 1 as i32;
     while i < 64 as i32 {
@@ -4875,7 +4859,7 @@ pub unsafe extern "C" fn PC_FreeSourceHandle(mut handle: i32) -> i32 {
         return qfalse as i32;
     }
     FreeSource(sourceFiles[handle as usize]);
-    sourceFiles[handle as usize] = 0 as *mut crate::src::botlib::l_precomp::source_t;
+    sourceFiles[handle as usize] = std::ptr::null_mut();
     return qtrue as i32;
 }
 //end of the function PC_FreeSourceHandle
@@ -4894,11 +4878,11 @@ pub unsafe extern "C" fn PC_ReadTokenHandle(mut handle: i32, mut pc_token: *mut 
         subtype: 0,
         intvalue: 0,
         floatvalue: 0.,
-        whitespace_p: 0 as *mut libc::c_char,
-        endwhitespace_p: 0 as *mut libc::c_char,
+        whitespace_p: std::ptr::null_mut(),
+        endwhitespace_p: std::ptr::null_mut(),
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut token_s,
+        next: std::ptr::null_mut(),
     };
     let mut ret: i32 = 0;
     if handle < 1 as i32 || handle >= 64 as i32 {

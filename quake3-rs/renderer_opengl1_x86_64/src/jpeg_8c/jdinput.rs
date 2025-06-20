@@ -229,7 +229,7 @@ pub unsafe extern "C" fn jpeg_core_output_dimensions(mut cinfo: j_decompress_ptr
  */
 {
     let mut ci: i32 = 0;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
     /* Compute actual output image dimensions and DCT scaling choices. */
     if (*cinfo).scale_num.wrapping_mul((*cinfo).block_size as u32) <= (*cinfo).scale_denom {
         /* Provide 1/block_size scaling */
@@ -467,7 +467,7 @@ unsafe extern "C" fn initial_setup(mut cinfo: j_decompress_ptr)
 /* Called once, when first SOS marker is reached */
 {
     let mut ci: i32 = 0;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
     /* Make sure image isn't bigger than I can handle */
     if (*cinfo).image_height as isize > 65500 as isize
         || (*cinfo).image_width as isize > 65500 as isize
@@ -678,7 +678,7 @@ unsafe extern "C" fn initial_setup(mut cinfo: j_decompress_ptr)
         /* Mark component needed, until color conversion says otherwise */
         (*compptr).component_needed = 1 as i32;
         /* Mark no quantization table yet saved for component */
-        (*compptr).quant_table = 0 as *mut JQUANT_TBL;
+        (*compptr).quant_table = std::ptr::null_mut();
         ci += 1;
         compptr = compptr.offset(1)
     }
@@ -702,7 +702,7 @@ unsafe extern "C" fn per_scan_setup(mut cinfo: j_decompress_ptr)
     let mut ci: i32 = 0;
     let mut mcublks: i32 = 0;
     let mut tmp: i32 = 0;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
     if (*cinfo).comps_in_scan == 1 as i32 {
         /* Noninterleaved (single-component) scan */
         compptr = (*cinfo).cur_comp_info[0 as i32 as usize];
@@ -823,8 +823,8 @@ unsafe extern "C" fn per_scan_setup(mut cinfo: j_decompress_ptr)
 unsafe extern "C" fn latch_quant_tables(mut cinfo: j_decompress_ptr) {
     let mut ci: i32 = 0;
     let mut qtblno: i32 = 0;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
-    let mut qtbl: *mut JQUANT_TBL = 0 as *mut JQUANT_TBL;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
+    let mut qtbl: *mut JQUANT_TBL = std::ptr::null_mut();
     ci = 0 as i32;
     while ci < (*cinfo).comps_in_scan {
         compptr = (*cinfo).cur_comp_info[ci as usize];
@@ -1031,7 +1031,7 @@ unsafe extern "C" fn reset_input_controller(mut cinfo: j_decompress_ptr) {
     )
     .expect("non-null function pointer")(cinfo);
     /* Reset progression state -- would be cleaner if entropy decoder did this */
-    (*cinfo).coef_bits = 0 as *mut [i32; 64];
+    (*cinfo).coef_bits = std::ptr::null_mut();
 }
 /* It is useful to allow each component to have a separate IDCT method. */
 /* Upsampling (note that upsampler must also call color converter) */
@@ -1059,7 +1059,7 @@ unsafe extern "C" fn reset_input_controller(mut cinfo: j_decompress_ptr) {
 #[no_mangle]
 
 pub unsafe extern "C" fn jinit_input_controller(mut cinfo: j_decompress_ptr) {
-    let mut inputctl: my_inputctl_ptr = 0 as *mut my_input_controller;
+    let mut inputctl: my_inputctl_ptr = std::ptr::null_mut();
     /* Create subobject in permanent pool */
     inputctl = Some(
         (*(*cinfo).mem)

@@ -4,7 +4,7 @@ pub mod stdlib_float_h {
     #[inline]
 
     pub unsafe extern "C" fn atof(mut __nptr: *const libc::c_char) -> f64 {
-        return libc::strtod(__nptr, 0 as *mut libc::c_void as *mut *mut libc::c_char);
+        return libc::strtod(__nptr, std::ptr::null_mut() as *mut *mut libc::c_char);
     }
 }
 
@@ -14,7 +14,7 @@ pub mod stdlib_h {
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return libc::strtol(
             __nptr,
-            0 as *mut libc::c_void as *mut *mut libc::c_char,
+            std::ptr::null_mut() as *mut *mut libc::c_char,
             10 as i32,
         ) as i32;
     }
@@ -313,7 +313,7 @@ pub unsafe extern "C" fn G_SpawnFloat(
     mut defaultString: *const libc::c_char,
     mut out: *mut f32,
 ) -> qboolean {
-    let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut s: *mut libc::c_char = std::ptr::null_mut();
     let mut present: qboolean = qfalse;
     present = G_SpawnString(key, defaultString, &mut s);
     *out = atof(s) as f32;
@@ -326,7 +326,7 @@ pub unsafe extern "C" fn G_SpawnInt(
     mut defaultString: *const libc::c_char,
     mut out: *mut i32,
 ) -> qboolean {
-    let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut s: *mut libc::c_char = std::ptr::null_mut();
     let mut present: qboolean = qfalse;
     present = G_SpawnString(key, defaultString, &mut s);
     *out = atoi(s);
@@ -339,7 +339,7 @@ pub unsafe extern "C" fn G_SpawnVector(
     mut defaultString: *const libc::c_char,
     mut out: *mut f32,
 ) -> qboolean {
-    let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut s: *mut libc::c_char = std::ptr::null_mut();
     let mut present: qboolean = qfalse;
     present = G_SpawnString(key, defaultString, &mut s);
     libc::sscanf(
@@ -355,7 +355,7 @@ pub unsafe extern "C" fn G_SpawnVector(
 #[no_mangle]
 
 pub static mut fields: [field_t; 20] = [field_t {
-    name: 0 as *mut libc::c_char,
+    name: std::ptr::null_mut(),
     ofs: 0,
     type_0: F_INT,
 }; 20];
@@ -755,8 +755,8 @@ returning qfalse if not found
 #[no_mangle]
 
 pub unsafe extern "C" fn G_CallSpawn(mut ent: *mut gentity_t) -> qboolean {
-    let mut s: *mut spawn_t = 0 as *mut spawn_t;
-    let mut item: *mut gitem_t = 0 as *mut gitem_t;
+    let mut s: *mut spawn_t = std::ptr::null_mut();
+    let mut item: *mut gitem_t = std::ptr::null_mut();
     if (*ent).classname.is_null() {
         G_Printf(b"G_CallSpawn: NULL classname\n\x00" as *const u8 as *const libc::c_char);
         return qfalse;
@@ -797,8 +797,8 @@ so message texts can be multi-line
 #[no_mangle]
 
 pub unsafe extern "C" fn G_NewString(mut string: *const libc::c_char) -> *mut libc::c_char {
-    let mut newb: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut new_p: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut newb: *mut libc::c_char = std::ptr::null_mut();
+    let mut new_p: *mut libc::c_char = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut l: i32 = 0;
     l = crate::stdlib::strlen(string).wrapping_add(1 as i32 as usize) as i32;
@@ -842,8 +842,8 @@ pub unsafe extern "C" fn G_ParseField(
     mut value: *const libc::c_char,
     mut ent: *mut gentity_t,
 ) {
-    let mut f: *mut field_t = 0 as *mut field_t;
-    let mut b: *mut byte = 0 as *mut byte;
+    let mut f: *mut field_t = std::ptr::null_mut();
+    let mut b: *mut byte = std::ptr::null_mut();
     let mut v: f32 = 0.;
     let mut vec: vec3_t = [0.; 3];
     f = fields.as_mut_ptr();
@@ -900,10 +900,10 @@ level.spawnVars[], then call the class specific spawn function
 
 pub unsafe extern "C" fn G_SpawnGEntityFromSpawnVars() {
     let mut i: i32 = 0;
-    let mut ent: *mut gentity_t = 0 as *mut gentity_t;
-    let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut value: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut gametypeName: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut ent: *mut gentity_t = std::ptr::null_mut();
+    let mut s: *mut libc::c_char = std::ptr::null_mut();
+    let mut value: *mut libc::c_char = std::ptr::null_mut();
+    let mut gametypeName: *mut libc::c_char = std::ptr::null_mut();
     static mut gametypeNames: [*mut libc::c_char; 8] = [
         b"ffa\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         b"tournament\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -986,7 +986,7 @@ pub unsafe extern "C" fn G_SpawnGEntityFromSpawnVars() {
     }
     if G_SpawnString(
         b"gametype\x00" as *const u8 as *const libc::c_char,
-        0 as *const libc::c_char,
+        std::ptr::null(),
         &mut value,
     ) as u64
         != 0
@@ -1025,7 +1025,7 @@ G_AddSpawnVarToken
 
 pub unsafe extern "C" fn G_AddSpawnVarToken(mut string: *const libc::c_char) -> *mut libc::c_char {
     let mut l: i32 = 0;
-    let mut dest: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut dest: *mut libc::c_char = std::ptr::null_mut();
     l = crate::stdlib::strlen(string) as i32;
     if level.numSpawnVarChars + l + 1 as i32 > 4096 as i32 {
         G_Error(
@@ -1134,7 +1134,7 @@ Every map should have exactly one worldspawn.
 #[no_mangle]
 
 pub unsafe extern "C" fn SP_worldspawn() {
-    let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut s: *mut libc::c_char = std::ptr::null_mut();
     G_SpawnString(
         b"classname\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
@@ -1423,7 +1423,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"classname\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut gentity_t)).classname as *mut *mut libc::c_char as size_t,
+                ofs: &mut (*(std::ptr::null_mut())).classname as *mut *mut libc::c_char as size_t,
                 type_0: F_STRING,
             };
             init
@@ -1431,7 +1431,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"origin\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut gentity_t)).s.origin as *mut vec3_t as size_t,
+                ofs: &mut (*(std::ptr::null_mut())).s.origin as *mut vec3_t as size_t,
                 type_0: F_VECTOR,
             };
             init
@@ -1439,7 +1439,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"model\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut gentity_t)).model as *mut *mut libc::c_char as size_t,
+                ofs: &mut (*(std::ptr::null_mut())).model as *mut *mut libc::c_char as size_t,
                 type_0: F_STRING,
             };
             init
@@ -1447,7 +1447,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"model2\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut gentity_t)).model2 as *mut *mut libc::c_char as size_t,
+                ofs: &mut (*(std::ptr::null_mut())).model2 as *mut *mut libc::c_char as size_t,
                 type_0: F_STRING,
             };
             init
@@ -1455,7 +1455,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"spawnflags\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut gentity_t)).spawnflags as *mut i32 as size_t,
+                ofs: &mut (*(std::ptr::null_mut())).spawnflags as *mut i32 as size_t,
                 type_0: F_INT,
             };
             init
@@ -1463,7 +1463,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"speed\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut gentity_t)).speed as *mut f32 as size_t,
+                ofs: &mut (*(std::ptr::null_mut())).speed as *mut f32 as size_t,
                 type_0: F_FLOAT,
             };
             init
@@ -1471,7 +1471,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"target\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut gentity_t)).target as *mut *mut libc::c_char as size_t,
+                ofs: &mut (*(std::ptr::null_mut())).target as *mut *mut libc::c_char as size_t,
                 type_0: F_STRING,
             };
             init
@@ -1479,7 +1479,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"targetname\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut gentity_t)).targetname as *mut *mut libc::c_char as size_t,
+                ofs: &mut (*(std::ptr::null_mut())).targetname as *mut *mut libc::c_char as size_t,
                 type_0: F_STRING,
             };
             init
@@ -1487,7 +1487,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"message\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut gentity_t)).message as *mut *mut libc::c_char as size_t,
+                ofs: &mut (*(std::ptr::null_mut())).message as *mut *mut libc::c_char as size_t,
                 type_0: F_STRING,
             };
             init
@@ -1495,7 +1495,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"team\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut gentity_t)).team as *mut *mut libc::c_char as size_t,
+                ofs: &mut (*(std::ptr::null_mut())).team as *mut *mut libc::c_char as size_t,
                 type_0: F_STRING,
             };
             init
@@ -1503,7 +1503,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"wait\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut gentity_t)).wait as *mut f32 as size_t,
+                ofs: &mut (*(std::ptr::null_mut())).wait as *mut f32 as size_t,
                 type_0: F_FLOAT,
             };
             init
@@ -1511,7 +1511,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"random\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut gentity_t)).random as *mut f32 as size_t,
+                ofs: &mut (*(std::ptr::null_mut())).random as *mut f32 as size_t,
                 type_0: F_FLOAT,
             };
             init
@@ -1519,7 +1519,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"count\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut gentity_t)).count as *mut i32 as size_t,
+                ofs: &mut (*(std::ptr::null_mut())).count as *mut i32 as size_t,
                 type_0: F_INT,
             };
             init
@@ -1527,7 +1527,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"health\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut gentity_t)).health as *mut i32 as size_t,
+                ofs: &mut (*(std::ptr::null_mut())).health as *mut i32 as size_t,
                 type_0: F_INT,
             };
             init
@@ -1535,7 +1535,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"dmg\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut gentity_t)).damage as *mut i32 as size_t,
+                ofs: &mut (*(std::ptr::null_mut())).damage as *mut i32 as size_t,
                 type_0: F_INT,
             };
             init
@@ -1543,7 +1543,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"angles\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut gentity_t)).s.angles as *mut vec3_t as size_t,
+                ofs: &mut (*(std::ptr::null_mut())).s.angles as *mut vec3_t as size_t,
                 type_0: F_VECTOR,
             };
             init
@@ -1551,7 +1551,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"angle\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut gentity_t)).s.angles as *mut vec3_t as size_t,
+                ofs: &mut (*(std::ptr::null_mut())).s.angles as *mut vec3_t as size_t,
                 type_0: F_ANGLEHACK,
             };
             init
@@ -1560,7 +1560,7 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = field_t {
                 name: b"targetShaderName\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut gentity_t)).targetShaderName as *mut *mut libc::c_char
+                ofs: &mut (*(std::ptr::null_mut())).targetShaderName as *mut *mut libc::c_char
                     as size_t,
                 type_0: F_STRING,
             };
@@ -1570,7 +1570,7 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = field_t {
                 name: b"targetShaderNewName\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut gentity_t)).targetShaderNewName as *mut *mut libc::c_char
+                ofs: &mut (*(std::ptr::null_mut())).targetShaderNewName as *mut *mut libc::c_char
                     as size_t,
                 type_0: F_STRING,
             };
@@ -1578,7 +1578,7 @@ unsafe extern "C" fn run_static_initializers() {
         },
         {
             let mut init = field_t {
-                name: 0 as *mut libc::c_char,
+                name: std::ptr::null_mut(),
                 ofs: 0,
                 type_0: F_INT,
             };

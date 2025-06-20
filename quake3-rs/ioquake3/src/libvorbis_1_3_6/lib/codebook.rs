@@ -903,7 +903,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
     vorbis_staticbook_destroy(
         s as *mut crate::src::libvorbis_1_3_6::lib::codebook::static_codebook,
     );
-    return 0 as *mut crate::src::libvorbis_1_3_6::lib::codebook::static_codebook;
+    return std::ptr::null_mut();
 }
 /* returns the number of bits ************************************************/
 #[no_mangle]
@@ -1091,7 +1091,7 @@ pub unsafe extern "C" fn vorbis_book_decodev_add(
         let mut i: i32 = 0;
         let mut j: i32 = 0;
         let mut entry: i32 = 0;
-        let mut t: *mut f32 = 0 as *mut f32;
+        let mut t: *mut f32 = std::ptr::null_mut();
         i = 0 as i32;
         while i < n {
             entry = decode_packed_entry_number(book, b) as i32;
@@ -1128,7 +1128,7 @@ pub unsafe extern "C" fn vorbis_book_decodev_set(
         let mut i: i32 = 0;
         let mut j: i32 = 0;
         let mut entry: i32 = 0;
-        let mut t: *mut f32 = 0 as *mut f32;
+        let mut t: *mut f32 = std::ptr::null_mut();
         i = 0 as i32;
         while i < n {
             entry = decode_packed_entry_number(book, b) as i32;

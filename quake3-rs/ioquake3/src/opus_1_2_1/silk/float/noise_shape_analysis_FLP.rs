@@ -289,8 +289,8 @@ pub unsafe extern "C" fn silk_noise_shape_analysis_FLP(
     let mut x_windowed: [f32; 240] = [0.; 240];
     let mut auto_corr: [f32; 25] = [0.; 25];
     let mut rc: [f32; 25] = [0.; 25];
-    let mut x_ptr: *const f32 = 0 as *const f32;
-    let mut pitch_res_ptr: *const f32 = 0 as *const f32;
+    let mut x_ptr: *const f32 = std::ptr::null();
+    let mut pitch_res_ptr: *const f32 = std::ptr::null();
     /* Point to start of first LPC analysis block */
     x_ptr = x.offset(-((*psEnc).sCmn.la_shape as isize));
     /* ***************/

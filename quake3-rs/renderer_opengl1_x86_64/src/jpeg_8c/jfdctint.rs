@@ -65,8 +65,8 @@ pub unsafe extern "C" fn jpeg_fdct_islow(
     let mut tmp12: INT32 = 0;
     let mut tmp13: INT32 = 0;
     let mut z1: INT32 = 0;
-    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
-    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut dataptr: *mut DCTELEM = std::ptr::null_mut();
+    let mut elemptr: JSAMPROW = std::ptr::null_mut();
     let mut ctr: i32 = 0;
     /* Pass 1: process rows. */
     /* Note results are scaled up by sqrt(8) compared to a true DCT; */
@@ -254,8 +254,8 @@ pub unsafe extern "C" fn jpeg_fdct_7x7(
     let mut z1: INT32 = 0;
     let mut z2: INT32 = 0;
     let mut z3: INT32 = 0;
-    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
-    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut dataptr: *mut DCTELEM = std::ptr::null_mut();
+    let mut elemptr: JSAMPROW = std::ptr::null_mut();
     let mut ctr: i32 = 0;
     /* Pre-zero output coefficient block. */
     crate::stdlib::memset(
@@ -453,8 +453,8 @@ pub unsafe extern "C" fn jpeg_fdct_6x6(
     let mut tmp10: INT32 = 0;
     let mut tmp11: INT32 = 0;
     let mut tmp12: INT32 = 0;
-    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
-    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut dataptr: *mut DCTELEM = std::ptr::null_mut();
+    let mut elemptr: JSAMPROW = std::ptr::null_mut();
     let mut ctr: i32 = 0;
     /* Pre-zero output coefficient block. */
     crate::stdlib::memset(
@@ -588,8 +588,8 @@ pub unsafe extern "C" fn jpeg_fdct_5x5(
     let mut tmp2: INT32 = 0;
     let mut tmp10: INT32 = 0;
     let mut tmp11: INT32 = 0;
-    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
-    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut dataptr: *mut DCTELEM = std::ptr::null_mut();
+    let mut elemptr: JSAMPROW = std::ptr::null_mut();
     let mut ctr: i32 = 0;
     /* Pre-zero output coefficient block. */
     crate::stdlib::memset(
@@ -724,8 +724,8 @@ pub unsafe extern "C" fn jpeg_fdct_4x4(
     let mut tmp1: INT32 = 0;
     let mut tmp10: INT32 = 0;
     let mut tmp11: INT32 = 0;
-    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
-    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut dataptr: *mut DCTELEM = std::ptr::null_mut();
+    let mut elemptr: JSAMPROW = std::ptr::null_mut();
     let mut ctr: i32 = 0;
     /* Pre-zero output coefficient block. */
     crate::stdlib::memset(
@@ -815,8 +815,8 @@ pub unsafe extern "C" fn jpeg_fdct_3x3(
     let mut tmp0: INT32 = 0;
     let mut tmp1: INT32 = 0;
     let mut tmp2: INT32 = 0;
-    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
-    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut dataptr: *mut DCTELEM = std::ptr::null_mut();
+    let mut elemptr: JSAMPROW = std::ptr::null_mut();
     let mut ctr: i32 = 0;
     /* Pre-zero output coefficient block. */
     crate::stdlib::memset(
@@ -907,7 +907,7 @@ pub unsafe extern "C" fn jpeg_fdct_2x2(
     let mut tmp1: INT32 = 0;
     let mut tmp2: INT32 = 0;
     let mut tmp3: INT32 = 0;
-    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut elemptr: JSAMPROW = std::ptr::null_mut();
     /* Pre-zero output coefficient block. */
     crate::stdlib::memset(
         data as *mut libc::c_void,
@@ -986,9 +986,9 @@ pub unsafe extern "C" fn jpeg_fdct_9x9(
     let mut z1: INT32 = 0;
     let mut z2: INT32 = 0;
     let mut workspace: [DCTELEM; 8] = [0; 8];
-    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
-    let mut wsptr: *mut DCTELEM = 0 as *mut DCTELEM;
-    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut dataptr: *mut DCTELEM = std::ptr::null_mut();
+    let mut wsptr: *mut DCTELEM = std::ptr::null_mut();
+    let mut elemptr: JSAMPROW = std::ptr::null_mut();
     let mut ctr: i32 = 0;
     /* Pass 1: process rows. */
     /* Note results are scaled up by sqrt(8) compared to a true DCT; */
@@ -1189,9 +1189,9 @@ pub unsafe extern "C" fn jpeg_fdct_10x10(
     let mut tmp13: INT32 = 0;
     let mut tmp14: INT32 = 0;
     let mut workspace: [DCTELEM; 16] = [0; 16];
-    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
-    let mut wsptr: *mut DCTELEM = 0 as *mut DCTELEM;
-    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut dataptr: *mut DCTELEM = std::ptr::null_mut();
+    let mut wsptr: *mut DCTELEM = std::ptr::null_mut();
+    let mut elemptr: JSAMPROW = std::ptr::null_mut();
     let mut ctr: i32 = 0;
     /* Pass 1: process rows. */
     /* Note results are scaled up by sqrt(8) compared to a true DCT; */
@@ -1417,9 +1417,9 @@ pub unsafe extern "C" fn jpeg_fdct_11x11(
     let mut z2: INT32 = 0;
     let mut z3: INT32 = 0;
     let mut workspace: [DCTELEM; 24] = [0; 24];
-    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
-    let mut wsptr: *mut DCTELEM = 0 as *mut DCTELEM;
-    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut dataptr: *mut DCTELEM = std::ptr::null_mut();
+    let mut wsptr: *mut DCTELEM = std::ptr::null_mut();
+    let mut elemptr: JSAMPROW = std::ptr::null_mut();
     let mut ctr: i32 = 0;
     /* Pass 1: process rows. */
     /* Note results are scaled up by sqrt(8) compared to a true DCT; */
@@ -1704,9 +1704,9 @@ pub unsafe extern "C" fn jpeg_fdct_12x12(
     let mut tmp14: INT32 = 0;
     let mut tmp15: INT32 = 0;
     let mut workspace: [DCTELEM; 32] = [0; 32];
-    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
-    let mut wsptr: *mut DCTELEM = 0 as *mut DCTELEM;
-    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut dataptr: *mut DCTELEM = std::ptr::null_mut();
+    let mut wsptr: *mut DCTELEM = std::ptr::null_mut();
+    let mut elemptr: JSAMPROW = std::ptr::null_mut();
     let mut ctr: i32 = 0;
     /* Pass 1: process rows. */
     /* Note results are scaled up by sqrt(8) compared to a true DCT. */
@@ -1949,9 +1949,9 @@ pub unsafe extern "C" fn jpeg_fdct_13x13(
     let mut z1: INT32 = 0;
     let mut z2: INT32 = 0;
     let mut workspace: [DCTELEM; 40] = [0; 40];
-    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
-    let mut wsptr: *mut DCTELEM = 0 as *mut DCTELEM;
-    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut dataptr: *mut DCTELEM = std::ptr::null_mut();
+    let mut wsptr: *mut DCTELEM = std::ptr::null_mut();
+    let mut elemptr: JSAMPROW = std::ptr::null_mut();
     let mut ctr: i32 = 0;
     /* Pass 1: process rows. */
     /* Note results are scaled up by sqrt(8) compared to a true DCT. */
@@ -2250,9 +2250,9 @@ pub unsafe extern "C" fn jpeg_fdct_14x14(
     let mut tmp15: INT32 = 0;
     let mut tmp16: INT32 = 0;
     let mut workspace: [DCTELEM; 48] = [0; 48];
-    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
-    let mut wsptr: *mut DCTELEM = 0 as *mut DCTELEM;
-    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut dataptr: *mut DCTELEM = std::ptr::null_mut();
+    let mut wsptr: *mut DCTELEM = std::ptr::null_mut();
+    let mut elemptr: JSAMPROW = std::ptr::null_mut();
     let mut ctr: i32 = 0;
     /* Pass 1: process rows. */
     /* Note results are scaled up by sqrt(8) compared to a true DCT. */
@@ -2529,9 +2529,9 @@ pub unsafe extern "C" fn jpeg_fdct_15x15(
     let mut z2: INT32 = 0;
     let mut z3: INT32 = 0;
     let mut workspace: [DCTELEM; 56] = [0; 56];
-    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
-    let mut wsptr: *mut DCTELEM = 0 as *mut DCTELEM;
-    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut dataptr: *mut DCTELEM = std::ptr::null_mut();
+    let mut wsptr: *mut DCTELEM = std::ptr::null_mut();
+    let mut elemptr: JSAMPROW = std::ptr::null_mut();
     let mut ctr: i32 = 0;
     /* Pass 1: process rows. */
     /* Note results are scaled up by sqrt(8) compared to a true DCT. */
@@ -2814,9 +2814,9 @@ pub unsafe extern "C" fn jpeg_fdct_16x16(
     let mut tmp16: INT32 = 0;
     let mut tmp17: INT32 = 0;
     let mut workspace: [DCTELEM; 64] = [0; 64];
-    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
-    let mut wsptr: *mut DCTELEM = 0 as *mut DCTELEM;
-    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut dataptr: *mut DCTELEM = std::ptr::null_mut();
+    let mut wsptr: *mut DCTELEM = std::ptr::null_mut();
+    let mut elemptr: JSAMPROW = std::ptr::null_mut();
     let mut ctr: i32 = 0;
     /* Pass 1: process rows. */
     /* Note results are scaled up by sqrt(8) compared to a true DCT; */
@@ -3137,8 +3137,8 @@ pub unsafe extern "C" fn jpeg_fdct_16x8(
     let mut tmp16: INT32 = 0;
     let mut tmp17: INT32 = 0;
     let mut z1: INT32 = 0;
-    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
-    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut dataptr: *mut DCTELEM = std::ptr::null_mut();
+    let mut elemptr: JSAMPROW = std::ptr::null_mut();
     let mut ctr: i32 = 0;
     /* Pass 1: process rows. */
     /* Note results are scaled up by sqrt(8) compared to a true DCT; */
@@ -3415,8 +3415,8 @@ pub unsafe extern "C" fn jpeg_fdct_14x7(
     let mut z1: INT32 = 0;
     let mut z2: INT32 = 0;
     let mut z3: INT32 = 0;
-    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
-    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut dataptr: *mut DCTELEM = std::ptr::null_mut();
+    let mut elemptr: JSAMPROW = std::ptr::null_mut();
     let mut ctr: i32 = 0;
     /* Zero bottom row of output coefficient block. */
     crate::stdlib::memset(
@@ -3651,8 +3651,8 @@ pub unsafe extern "C" fn jpeg_fdct_12x6(
     let mut tmp13: INT32 = 0;
     let mut tmp14: INT32 = 0;
     let mut tmp15: INT32 = 0;
-    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
-    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut dataptr: *mut DCTELEM = std::ptr::null_mut();
+    let mut elemptr: JSAMPROW = std::ptr::null_mut();
     let mut ctr: i32 = 0;
     /* Zero 2 bottom rows of output coefficient block. */
     crate::stdlib::memset(
@@ -3851,8 +3851,8 @@ pub unsafe extern "C" fn jpeg_fdct_10x5(
     let mut tmp12: INT32 = 0;
     let mut tmp13: INT32 = 0;
     let mut tmp14: INT32 = 0;
-    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
-    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut dataptr: *mut DCTELEM = std::ptr::null_mut();
+    let mut elemptr: JSAMPROW = std::ptr::null_mut();
     let mut ctr: i32 = 0;
     /* Zero 3 bottom rows of output coefficient block. */
     crate::stdlib::memset(
@@ -4028,8 +4028,8 @@ pub unsafe extern "C" fn jpeg_fdct_8x4(
     let mut tmp12: INT32 = 0;
     let mut tmp13: INT32 = 0;
     let mut z1: INT32 = 0;
-    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
-    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut dataptr: *mut DCTELEM = std::ptr::null_mut();
+    let mut elemptr: JSAMPROW = std::ptr::null_mut();
     let mut ctr: i32 = 0;
     /* Zero 4 bottom rows of output coefficient block. */
     crate::stdlib::memset(
@@ -4176,8 +4176,8 @@ pub unsafe extern "C" fn jpeg_fdct_6x3(
     let mut tmp10: INT32 = 0;
     let mut tmp11: INT32 = 0;
     let mut tmp12: INT32 = 0;
-    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
-    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut dataptr: *mut DCTELEM = std::ptr::null_mut();
+    let mut elemptr: JSAMPROW = std::ptr::null_mut();
     let mut ctr: i32 = 0;
     /* Pre-zero output coefficient block. */
     crate::stdlib::memset(
@@ -4288,8 +4288,8 @@ pub unsafe extern "C" fn jpeg_fdct_4x2(
     let mut tmp1: INT32 = 0;
     let mut tmp10: INT32 = 0;
     let mut tmp11: INT32 = 0;
-    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
-    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut dataptr: *mut DCTELEM = std::ptr::null_mut();
+    let mut elemptr: JSAMPROW = std::ptr::null_mut();
     let mut ctr: i32 = 0;
     /* Pre-zero output coefficient block. */
     crate::stdlib::memset(
@@ -4367,7 +4367,7 @@ pub unsafe extern "C" fn jpeg_fdct_2x1(
 ) {
     let mut tmp0: INT32 = 0;
     let mut tmp1: INT32 = 0;
-    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut elemptr: JSAMPROW = std::ptr::null_mut();
     /* Pre-zero output coefficient block. */
     crate::stdlib::memset(
         data as *mut libc::c_void,
@@ -4417,9 +4417,9 @@ pub unsafe extern "C" fn jpeg_fdct_8x16(
     let mut tmp17: INT32 = 0;
     let mut z1: INT32 = 0;
     let mut workspace: [DCTELEM; 64] = [0; 64];
-    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
-    let mut wsptr: *mut DCTELEM = 0 as *mut DCTELEM;
-    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut dataptr: *mut DCTELEM = std::ptr::null_mut();
+    let mut wsptr: *mut DCTELEM = std::ptr::null_mut();
+    let mut elemptr: JSAMPROW = std::ptr::null_mut();
     let mut ctr: i32 = 0;
     /* Pass 1: process rows. */
     /* Note results are scaled up by sqrt(8) compared to a true DCT; */
@@ -4688,9 +4688,9 @@ pub unsafe extern "C" fn jpeg_fdct_7x14(
     let mut z2: INT32 = 0;
     let mut z3: INT32 = 0;
     let mut workspace: [DCTELEM; 48] = [0; 48];
-    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
-    let mut wsptr: *mut DCTELEM = 0 as *mut DCTELEM;
-    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut dataptr: *mut DCTELEM = std::ptr::null_mut();
+    let mut wsptr: *mut DCTELEM = std::ptr::null_mut();
+    let mut elemptr: JSAMPROW = std::ptr::null_mut();
     let mut ctr: i32 = 0;
     /* Pre-zero output coefficient block. */
     crate::stdlib::memset(
@@ -4940,9 +4940,9 @@ pub unsafe extern "C" fn jpeg_fdct_6x12(
     let mut tmp14: INT32 = 0;
     let mut tmp15: INT32 = 0;
     let mut workspace: [DCTELEM; 32] = [0; 32];
-    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
-    let mut wsptr: *mut DCTELEM = 0 as *mut DCTELEM;
-    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut dataptr: *mut DCTELEM = std::ptr::null_mut();
+    let mut wsptr: *mut DCTELEM = std::ptr::null_mut();
+    let mut elemptr: JSAMPROW = std::ptr::null_mut();
     let mut ctr: i32 = 0;
     /* Pre-zero output coefficient block. */
     crate::stdlib::memset(
@@ -5148,9 +5148,9 @@ pub unsafe extern "C" fn jpeg_fdct_5x10(
     let mut tmp13: INT32 = 0;
     let mut tmp14: INT32 = 0;
     let mut workspace: [DCTELEM; 16] = [0; 16];
-    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
-    let mut wsptr: *mut DCTELEM = 0 as *mut DCTELEM;
-    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut dataptr: *mut DCTELEM = std::ptr::null_mut();
+    let mut wsptr: *mut DCTELEM = std::ptr::null_mut();
+    let mut elemptr: JSAMPROW = std::ptr::null_mut();
     let mut ctr: i32 = 0;
     /* Pre-zero output coefficient block. */
     crate::stdlib::memset(
@@ -5341,8 +5341,8 @@ pub unsafe extern "C" fn jpeg_fdct_4x8(
     let mut tmp12: INT32 = 0;
     let mut tmp13: INT32 = 0;
     let mut z1: INT32 = 0;
-    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
-    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut dataptr: *mut DCTELEM = std::ptr::null_mut();
+    let mut elemptr: JSAMPROW = std::ptr::null_mut();
     let mut ctr: i32 = 0;
     /* Pre-zero output coefficient block. */
     crate::stdlib::memset(
@@ -5486,8 +5486,8 @@ pub unsafe extern "C" fn jpeg_fdct_3x6(
     let mut tmp10: INT32 = 0;
     let mut tmp11: INT32 = 0;
     let mut tmp12: INT32 = 0;
-    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
-    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut dataptr: *mut DCTELEM = std::ptr::null_mut();
+    let mut elemptr: JSAMPROW = std::ptr::null_mut();
     let mut ctr: i32 = 0;
     /* Pre-zero output coefficient block. */
     crate::stdlib::memset(
@@ -5609,8 +5609,8 @@ pub unsafe extern "C" fn jpeg_fdct_2x4(
     let mut tmp1: INT32 = 0;
     let mut tmp10: INT32 = 0;
     let mut tmp11: INT32 = 0;
-    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
-    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut dataptr: *mut DCTELEM = std::ptr::null_mut();
+    let mut elemptr: JSAMPROW = std::ptr::null_mut();
     let mut ctr: i32 = 0;
     /* Pre-zero output coefficient block. */
     crate::stdlib::memset(

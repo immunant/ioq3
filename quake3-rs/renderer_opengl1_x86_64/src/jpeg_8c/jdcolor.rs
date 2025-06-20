@@ -320,10 +320,10 @@ unsafe extern "C" fn ycc_rgb_convert(
     let mut y: i32 = 0;
     let mut cb: i32 = 0;
     let mut cr: i32 = 0;
-    let mut outptr: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut inptr0: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut inptr1: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut inptr2: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut outptr: JSAMPROW = std::ptr::null_mut();
+    let mut inptr0: JSAMPROW = std::ptr::null_mut();
+    let mut inptr1: JSAMPROW = std::ptr::null_mut();
+    let mut inptr2: JSAMPROW = std::ptr::null_mut();
     let mut col: JDIMENSION = 0;
     let mut num_cols: JDIMENSION = (*cinfo).output_width;
     /* copy these pointers into registers if possible */
@@ -376,8 +376,8 @@ unsafe extern "C" fn null_convert(
     mut output_buf: JSAMPARRAY,
     mut num_rows: i32,
 ) {
-    let mut inptr: JSAMPROW = 0 as *mut JSAMPLE; /* needn't bother with GETJSAMPLE() here */
-    let mut outptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut inptr: JSAMPROW = std::ptr::null_mut(); /* needn't bother with GETJSAMPLE() here */
+    let mut outptr: JSAMPROW = std::ptr::null_mut();
     let mut count: JDIMENSION = 0;
     let mut num_components: i32 = (*cinfo).num_components;
     let mut num_cols: JDIMENSION = (*cinfo).output_width;
@@ -440,8 +440,8 @@ unsafe extern "C" fn gray_rgb_convert(
     mut output_buf: JSAMPARRAY,
     mut num_rows: i32,
 ) {
-    let mut inptr: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut outptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut inptr: JSAMPROW = std::ptr::null_mut();
+    let mut outptr: JSAMPROW = std::ptr::null_mut();
     let mut col: JDIMENSION = 0;
     let mut num_cols: JDIMENSION = (*cinfo).output_width;
     loop {
@@ -486,11 +486,11 @@ unsafe extern "C" fn ycck_cmyk_convert(
     let mut y: i32 = 0;
     let mut cb: i32 = 0;
     let mut cr: i32 = 0;
-    let mut outptr: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut inptr0: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut inptr1: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut inptr2: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut inptr3: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut outptr: JSAMPROW = std::ptr::null_mut();
+    let mut inptr0: JSAMPROW = std::ptr::null_mut();
+    let mut inptr1: JSAMPROW = std::ptr::null_mut();
+    let mut inptr2: JSAMPROW = std::ptr::null_mut();
+    let mut inptr3: JSAMPROW = std::ptr::null_mut();
     let mut col: JDIMENSION = 0;
     let mut num_cols: JDIMENSION = (*cinfo).output_width;
     /* copy these pointers into registers if possible */
@@ -547,7 +547,7 @@ unsafe extern "C" fn start_pass_dcolor(mut _cinfo: j_decompress_ptr) {
 #[no_mangle]
 
 pub unsafe extern "C" fn jinit_color_deconverter(mut cinfo: j_decompress_ptr) {
-    let mut cconvert: my_cconvert_ptr = 0 as *mut my_color_deconverter;
+    let mut cconvert: my_cconvert_ptr = std::ptr::null_mut();
     let mut ci: i32 = 0;
     cconvert = Some(
         (*(*cinfo).mem)

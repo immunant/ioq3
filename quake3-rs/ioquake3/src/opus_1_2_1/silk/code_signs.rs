@@ -59,8 +59,8 @@ pub unsafe extern "C" fn silk_encode_signs(
     let mut j: i32 = 0;
     let mut p: i32 = 0;
     let mut icdf: [u8; 2] = [0; 2];
-    let mut q_ptr: *const i8 = 0 as *const i8;
-    let mut icdf_ptr: *const u8 = 0 as *const u8;
+    let mut q_ptr: *const i8 = std::ptr::null();
+    let mut icdf_ptr: *const u8 = std::ptr::null();
     icdf[1 as i32 as usize] = 0 as i32 as u8;
     q_ptr = pulses;
     i = 7 as i32 as opus_int16 as opus_int32
@@ -188,8 +188,8 @@ pub unsafe extern "C" fn silk_decode_signs(
     let mut j: i32 = 0;
     let mut p: i32 = 0;
     let mut icdf: [u8; 2] = [0; 2];
-    let mut q_ptr: *mut opus_int16 = 0 as *mut opus_int16;
-    let mut icdf_ptr: *const u8 = 0 as *const u8;
+    let mut q_ptr: *mut opus_int16 = std::ptr::null_mut();
+    let mut icdf_ptr: *const u8 = std::ptr::null();
     icdf[1 as i32 as usize] = 0 as i32 as u8;
     q_ptr = pulses;
     i = 7 as i32 as opus_int16 as opus_int32

@@ -284,7 +284,7 @@ pub unsafe extern "C" fn silk_NLSF2A(
         2 as i32 as u8,
         7 as i32 as u8,
     ];
-    let mut ordering: *const u8 = 0 as *const u8;
+    let mut ordering: *const u8 = std::ptr::null();
     let mut k: i32 = 0;
     let mut i: i32 = 0;
     let mut dd: i32 = 0;

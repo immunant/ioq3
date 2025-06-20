@@ -4765,9 +4765,9 @@ pub unsafe extern "C" fn encodeWavelet(mut sfx: *mut sfx_t, mut packets: *mut i1
     let mut i: i32 = 0;
     let mut samples: i32 = 0;
     let mut size: i32 = 0;
-    let mut newchunk: *mut sndBuffer = 0 as *mut sndBuffer;
-    let mut chunk: *mut sndBuffer = 0 as *mut sndBuffer;
-    let mut out: *mut byte = 0 as *mut byte;
+    let mut newchunk: *mut sndBuffer = std::ptr::null_mut();
+    let mut chunk: *mut sndBuffer = std::ptr::null_mut();
+    let mut out: *mut byte = std::ptr::null_mut();
     if madeTable as u64 == 0 {
         i = 0 as i32;
         while i < 256 as i32 {
@@ -4776,7 +4776,7 @@ pub unsafe extern "C" fn encodeWavelet(mut sfx: *mut sfx_t, mut packets: *mut i1
         }
         madeTable = qtrue
     }
-    chunk = 0 as *mut sndBuffer;
+    chunk = std::ptr::null_mut();
     samples = (*sfx).soundLength;
     while samples > 0 as i32 {
         size = samples;
@@ -8919,7 +8919,7 @@ pub unsafe extern "C" fn decodeWavelet(mut chunk: *mut sndBuffer, mut to: *mut i
         0.,
     ];
     let mut i: i32 = 0;
-    let mut out: *mut byte = 0 as *mut byte;
+    let mut out: *mut byte = std::ptr::null_mut();
     let mut size: i32 = (*chunk).size;
     out = (*chunk).sndChunk.as_mut_ptr() as *mut byte;
     i = 0 as i32;
@@ -9006,9 +9006,9 @@ pub unsafe extern "C" fn encodeMuLaw(mut sfx: *mut sfx_t, mut packets: *mut i16)
     let mut size: i32 = 0;
     let mut grade: i32 = 0;
     let mut poop: i32 = 0;
-    let mut newchunk: *mut sndBuffer = 0 as *mut sndBuffer;
-    let mut chunk: *mut sndBuffer = 0 as *mut sndBuffer;
-    let mut out: *mut byte = 0 as *mut byte;
+    let mut newchunk: *mut sndBuffer = std::ptr::null_mut();
+    let mut chunk: *mut sndBuffer = std::ptr::null_mut();
+    let mut out: *mut byte = std::ptr::null_mut();
     if madeTable as u64 == 0 {
         i = 0 as i32;
         while i < 256 as i32 {
@@ -9017,7 +9017,7 @@ pub unsafe extern "C" fn encodeMuLaw(mut sfx: *mut sfx_t, mut packets: *mut i16)
         }
         madeTable = qtrue
     }
-    chunk = 0 as *mut sndBuffer;
+    chunk = std::ptr::null_mut();
     samples = (*sfx).soundLength;
     grade = 0 as i32;
     while samples > 0 as i32 {
@@ -9054,7 +9054,7 @@ pub unsafe extern "C" fn encodeMuLaw(mut sfx: *mut sfx_t, mut packets: *mut i16)
 
 pub unsafe extern "C" fn decodeMuLaw(mut chunk: *mut sndBuffer, mut to: *mut i16) {
     let mut i: i32 = 0;
-    let mut out: *mut byte = 0 as *mut byte;
+    let mut out: *mut byte = std::ptr::null_mut();
     let mut size: i32 = (*chunk).size;
     out = (*chunk).sndChunk.as_mut_ptr() as *mut byte;
     i = 0 as i32;

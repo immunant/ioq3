@@ -156,12 +156,13 @@ pub unsafe extern "C" fn R_LoadTGA(
     let mut columns: u32 = 0;
     let mut rows: u32 = 0;
     let mut numPixels: u32 = 0;
-    let mut pixbuf: *mut byte = 0 as *mut byte;
+    let mut pixbuf: *mut byte = std::ptr::null_mut();
     let mut row: i32 = 0;
     let mut column: i32 = 0;
-    let mut buf_p: *mut byte = 0 as *mut byte;
-    let mut end: *mut byte = 0 as *mut byte;
-    let mut buffer: C2RustUnnamed_93 = C2RustUnnamed_93 { b: 0 as *mut byte };
+    let mut buf_p: *mut byte = std::ptr::null_mut();
+    let mut end: *mut byte = std::ptr::null_mut();
+    let mut buffer: C2RustUnnamed_93 = C2RustUnnamed_93 { b: std::ptr::null_mut()}
+    ;
     let mut targa_header: TargaHeader = TargaHeader {
         id_length: 0,
         colormap_type: 0,
@@ -176,9 +177,9 @@ pub unsafe extern "C" fn R_LoadTGA(
         pixel_size: 0,
         attributes: 0,
     };
-    let mut targa_rgba: *mut byte = 0 as *mut byte;
+    let mut targa_rgba: *mut byte = std::ptr::null_mut();
     let mut length: i32 = 0;
-    *pic = 0 as *mut byte;
+    *pic = std::ptr::null_mut();
     if !width.is_null() {
         *width = 0 as i32
     }

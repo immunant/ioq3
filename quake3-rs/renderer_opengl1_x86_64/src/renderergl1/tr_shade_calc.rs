@@ -544,7 +544,7 @@ unsafe extern "C" fn TableForFunc(mut func: genFunc_t) -> *mut f32 {
 */
 
 unsafe extern "C" fn EvalWaveForm(mut wf: *const waveForm_t) -> f32 {
-    let mut table: *mut f32 = 0 as *mut f32;
+    let mut table: *mut f32 = std::ptr::null_mut();
     table = TableForFunc((*wf).func);
     return (*wf).base
         + *table.offset(
@@ -616,7 +616,7 @@ pub unsafe extern "C" fn RB_CalcDeformVertexes(mut ds: *mut deformStage_t) {
     let mut scale: f32 = 0.;
     let mut xyz: *mut f32 = tess.xyz.as_mut_ptr() as *mut f32;
     let mut normal: *mut f32 = tess.normal.as_mut_ptr() as *mut f32;
-    let mut table: *mut f32 = 0 as *mut f32;
+    let mut table: *mut f32 = std::ptr::null_mut();
     if (*ds).deformationWave.frequency == 0 as i32 as f32 {
         scale = EvalWaveForm(&mut (*ds).deformationWave);
         i = 0 as i32;
@@ -747,8 +747,8 @@ A deformation that can move an entire surface along a wave path
 
 pub unsafe extern "C" fn RB_CalcMoveVertexes(mut ds: *mut deformStage_t) {
     let mut i: i32 = 0;
-    let mut xyz: *mut f32 = 0 as *mut f32;
-    let mut table: *mut f32 = 0 as *mut f32;
+    let mut xyz: *mut f32 = std::ptr::null_mut();
+    let mut table: *mut f32 = std::ptr::null_mut();
     let mut scale: f32 = 0.;
     let mut offset: vec3_t = [0.; 3];
     table = TableForFunc((*ds).deformationWave.func);
@@ -912,7 +912,7 @@ quads, rebuild them as forward facing sprites
 unsafe extern "C" fn AutospriteDeform() {
     let mut i: i32 = 0;
     let mut oldVerts: i32 = 0;
-    let mut xyz: *mut f32 = 0 as *mut f32;
+    let mut xyz: *mut f32 = std::ptr::null_mut();
     let mut mid: vec3_t = [0.; 3];
     let mut delta: vec3_t = [0.; 3];
     let mut radius: f32 = 0.;
@@ -1041,7 +1041,7 @@ unsafe extern "C" fn Autosprite2Deform() {
     let mut j: i32 = 0;
     let mut k: i32 = 0;
     let mut indexes: i32 = 0;
-    let mut xyz: *mut f32 = 0 as *mut f32;
+    let mut xyz: *mut f32 = std::ptr::null_mut();
     let mut forward: vec3_t = [0.; 3];
     if tess.numVertexes & 3 as i32 != 0 {
         ri.Printf.expect("non-null function pointer")(
@@ -1080,8 +1080,8 @@ unsafe extern "C" fn Autosprite2Deform() {
         let mut mid: [vec3_t; 2] = [[0.; 3]; 2];
         let mut major: vec3_t = [0.; 3];
         let mut minor: vec3_t = [0.; 3];
-        let mut v1: *mut f32 = 0 as *mut f32;
-        let mut v2: *mut f32 = 0 as *mut f32;
+        let mut v1: *mut f32 = std::ptr::null_mut();
+        let mut v2: *mut f32 = std::ptr::null_mut();
         // find the midpoint
         xyz = tess.xyz[i as usize].as_mut_ptr();
         // identify the two shortest edges
@@ -1209,7 +1209,7 @@ RB_DeformTessGeometry
 
 pub unsafe extern "C" fn RB_DeformTessGeometry() {
     let mut i: i32 = 0;
-    let mut ds: *mut deformStage_t = 0 as *mut deformStage_t;
+    let mut ds: *mut deformStage_t = std::ptr::null_mut();
     i = 0 as i32;
     while i < (*tess.shader).numDeforms {
         ds = &mut *(*tess.shader).deforms.as_mut_ptr().offset(i as isize) as *mut deformStage_t;
@@ -2505,12 +2505,12 @@ doesn't fit our shader data.
 
 pub unsafe extern "C" fn RB_CalcFogTexCoords(mut st: *mut f32) {
     let mut i: i32 = 0;
-    let mut v: *mut f32 = 0 as *mut f32;
+    let mut v: *mut f32 = std::ptr::null_mut();
     let mut s: f32 = 0.;
     let mut t: f32 = 0.;
     let mut eyeT: f32 = 0.;
     let mut eyeOutside: qboolean = qfalse;
-    let mut fog: *mut fog_t = 0 as *mut fog_t;
+    let mut fog: *mut fog_t = std::ptr::null_mut();
     let mut local: vec3_t = [0.; 3];
     let mut fogDistanceVector: vec4_t = [0.; 4];
     let mut fogDepthVector: vec4_t = [
@@ -2626,8 +2626,8 @@ pub unsafe extern "C" fn RB_CalcFogTexCoords(mut st: *mut f32) {
 
 pub unsafe extern "C" fn RB_CalcEnvironmentTexCoords(mut st: *mut f32) {
     let mut i: i32 = 0;
-    let mut v: *mut f32 = 0 as *mut f32;
-    let mut normal: *mut f32 = 0 as *mut f32;
+    let mut v: *mut f32 = std::ptr::null_mut();
+    let mut normal: *mut f32 = std::ptr::null_mut();
     let mut viewer: vec3_t = [0.; 3];
     let mut reflected: vec3_t = [0.; 3];
     let mut d: f32 = 0.;
@@ -2816,8 +2816,8 @@ pub static mut lightOrigin: vec3_t = [
 
 pub unsafe extern "C" fn RB_CalcSpecularAlpha(mut alphas: *mut u8) {
     let mut i: i32 = 0;
-    let mut v: *mut f32 = 0 as *mut f32;
-    let mut normal: *mut f32 = 0 as *mut f32;
+    let mut v: *mut f32 = std::ptr::null_mut();
+    let mut normal: *mut f32 = std::ptr::null_mut();
     let mut viewer: vec3_t = [0.; 3];
     let mut reflected: vec3_t = [0.; 3];
     let mut l: f32 = 0.;
@@ -2891,10 +2891,10 @@ pub unsafe extern "C" fn RB_CalcSpecularAlpha(mut alphas: *mut u8) {
 unsafe extern "C" fn RB_CalcDiffuseColor_scalar(mut colors: *mut u8) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut v: *mut f32 = 0 as *mut f32;
-    let mut normal: *mut f32 = 0 as *mut f32;
+    let mut v: *mut f32 = std::ptr::null_mut();
+    let mut normal: *mut f32 = std::ptr::null_mut();
     let mut incoming: f32 = 0.;
-    let mut ent: *mut trRefEntity_t = 0 as *mut trRefEntity_t;
+    let mut ent: *mut trRefEntity_t = std::ptr::null_mut();
     let mut ambientLightInt: i32 = 0;
     let mut ambientLight: vec3_t = [0.; 3];
     let mut lightDir: vec3_t = [0.; 3];

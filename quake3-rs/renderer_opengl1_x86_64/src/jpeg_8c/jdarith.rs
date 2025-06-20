@@ -367,7 +367,7 @@ unsafe extern "C" fn arith_decode(mut cinfo: j_decompress_ptr, mut st: *mut u8) 
 unsafe extern "C" fn process_restart(mut cinfo: j_decompress_ptr) {
     let mut entropy: arith_entropy_ptr = (*cinfo).entropy as arith_entropy_ptr;
     let mut ci: i32 = 0;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
     /* Advance past the RSTn marker */
     if Some(
         (*(*cinfo).marker)
@@ -437,8 +437,8 @@ unsafe extern "C" fn decode_mcu_DC_first(
     mut MCU_data: *mut JBLOCKROW,
 ) -> boolean {
     let mut entropy: arith_entropy_ptr = (*cinfo).entropy as arith_entropy_ptr;
-    let mut block: JBLOCKROW = 0 as *mut JBLOCK;
-    let mut st: *mut u8 = 0 as *mut u8;
+    let mut block: JBLOCKROW = std::ptr::null_mut();
+    let mut st: *mut u8 = std::ptr::null_mut();
     let mut blkn: i32 = 0;
     let mut ci: i32 = 0;
     let mut tbl: i32 = 0;
@@ -541,14 +541,14 @@ unsafe extern "C" fn decode_mcu_AC_first(
     mut MCU_data: *mut JBLOCKROW,
 ) -> boolean {
     let mut entropy: arith_entropy_ptr = (*cinfo).entropy as arith_entropy_ptr;
-    let mut block: JBLOCKROW = 0 as *mut JBLOCK;
-    let mut st: *mut u8 = 0 as *mut u8;
+    let mut block: JBLOCKROW = std::ptr::null_mut();
+    let mut st: *mut u8 = std::ptr::null_mut();
     let mut tbl: i32 = 0;
     let mut sign: i32 = 0;
     let mut k: i32 = 0;
     let mut v: i32 = 0;
     let mut m: i32 = 0;
-    let mut natural_order: *const i32 = 0 as *const i32;
+    let mut natural_order: *const i32 = std::ptr::null();
     /* Process restart marker if needed */
     if (*cinfo).restart_interval != 0 {
         if (*entropy).restarts_to_go == 0 as i32 as u32 {
@@ -654,7 +654,7 @@ unsafe extern "C" fn decode_mcu_DC_refine(
     mut MCU_data: *mut JBLOCKROW,
 ) -> boolean {
     let mut entropy: arith_entropy_ptr = (*cinfo).entropy as arith_entropy_ptr;
-    let mut st: *mut u8 = 0 as *mut u8;
+    let mut st: *mut u8 = std::ptr::null_mut();
     let mut p1: i32 = 0;
     let mut blkn: i32 = 0;
     /* Process restart marker if needed */
@@ -688,15 +688,15 @@ unsafe extern "C" fn decode_mcu_AC_refine(
     mut MCU_data: *mut JBLOCKROW,
 ) -> boolean {
     let mut entropy: arith_entropy_ptr = (*cinfo).entropy as arith_entropy_ptr;
-    let mut block: JBLOCKROW = 0 as *mut JBLOCK;
-    let mut thiscoef: JCOEFPTR = 0 as *mut JCOEF;
-    let mut st: *mut u8 = 0 as *mut u8;
+    let mut block: JBLOCKROW = std::ptr::null_mut();
+    let mut thiscoef: JCOEFPTR = std::ptr::null_mut();
+    let mut st: *mut u8 = std::ptr::null_mut();
     let mut tbl: i32 = 0;
     let mut k: i32 = 0;
     let mut kex: i32 = 0;
     let mut p1: i32 = 0;
     let mut m1: i32 = 0;
-    let mut natural_order: *const i32 = 0 as *const i32;
+    let mut natural_order: *const i32 = std::ptr::null();
     /* Process restart marker if needed */
     if (*cinfo).restart_interval != 0 {
         if (*entropy).restarts_to_go == 0 as i32 as u32 {
@@ -782,9 +782,9 @@ unsafe extern "C" fn decode_mcu(
     mut MCU_data: *mut JBLOCKROW,
 ) -> boolean {
     let mut entropy: arith_entropy_ptr = (*cinfo).entropy as arith_entropy_ptr;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
-    let mut block: JBLOCKROW = 0 as *mut JBLOCK;
-    let mut st: *mut u8 = 0 as *mut u8;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
+    let mut block: JBLOCKROW = std::ptr::null_mut();
+    let mut st: *mut u8 = std::ptr::null_mut();
     let mut blkn: i32 = 0;
     let mut ci: i32 = 0;
     let mut tbl: i32 = 0;
@@ -792,7 +792,7 @@ unsafe extern "C" fn decode_mcu(
     let mut k: i32 = 0;
     let mut v: i32 = 0;
     let mut m: i32 = 0;
-    let mut natural_order: *const i32 = 0 as *const i32;
+    let mut natural_order: *const i32 = std::ptr::null();
     /* Process restart marker if needed */
     if (*cinfo).restart_interval != 0 {
         if (*entropy).restarts_to_go == 0 as i32 as u32 {
@@ -970,7 +970,7 @@ unsafe extern "C" fn start_pass(mut cinfo: j_decompress_ptr) {
     let mut entropy: arith_entropy_ptr = (*cinfo).entropy as arith_entropy_ptr;
     let mut ci: i32 = 0;
     let mut tbl: i32 = 0;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
     if (*cinfo).progressive_mode != 0 {
         /* Validate progressive scan parameters */
         if (*cinfo).Ss == 0 as i32 {
@@ -1230,7 +1230,7 @@ unsafe extern "C" fn start_pass(mut cinfo: j_decompress_ptr) {
 #[no_mangle]
 
 pub unsafe extern "C" fn jinit_arith_decoder(mut cinfo: j_decompress_ptr) {
-    let mut entropy: arith_entropy_ptr = 0 as *mut arith_entropy_decoder;
+    let mut entropy: arith_entropy_ptr = std::ptr::null_mut();
     let mut i: i32 = 0;
     entropy = Some(
         (*(*cinfo).mem)
@@ -1248,15 +1248,15 @@ pub unsafe extern "C" fn jinit_arith_decoder(mut cinfo: j_decompress_ptr) {
     /* Mark tables unallocated */
     i = 0 as i32;
     while i < 16 as i32 {
-        (*entropy).dc_stats[i as usize] = 0 as *mut u8;
-        (*entropy).ac_stats[i as usize] = 0 as *mut u8;
+        (*entropy).dc_stats[i as usize] = std::ptr::null_mut();
+        (*entropy).ac_stats[i as usize] = std::ptr::null_mut();
         i += 1
     }
     /* Initialize index for fixed probability estimation */
     (*entropy).fixed_bin[0 as i32 as usize] = 113 as i32 as u8;
     if (*cinfo).progressive_mode != 0 {
         /* Create progression status table */
-        let mut coef_bit_ptr: *mut i32 = 0 as *mut i32;
+        let mut coef_bit_ptr: *mut i32 = std::ptr::null_mut();
         let mut ci: i32 = 0;
         (*cinfo).coef_bits = Some(
             (*(*cinfo).mem)

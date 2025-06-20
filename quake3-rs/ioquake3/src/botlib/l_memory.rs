@@ -73,15 +73,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 pub unsafe extern "C" fn GetMemory(mut size: usize) -> *mut libc::c_void
 //MEMDEBUG
 {
-    let mut ptr: *mut libc::c_void = 0 as *mut libc::c_void;
-    let mut memid: *mut usize = 0 as *mut usize;
+    let mut ptr: *mut libc::c_void = std::ptr::null_mut();
+    let mut memid: *mut usize = std::ptr::null_mut();
     ptr = crate::src::botlib::be_interface::botimport
         .GetMemory
         .expect("non-null function pointer")(
         size.wrapping_add(::std::mem::size_of::<usize>() as usize) as i32,
     );
     if ptr.is_null() {
-        return 0 as *mut libc::c_void;
+        return std::ptr::null_mut();
     }
     memid = ptr as *mut usize;
     *memid = 0x12345678 as isize as usize;
@@ -101,7 +101,7 @@ pub unsafe extern "C" fn GetMemory(mut size: usize) -> *mut libc::c_void
 pub unsafe extern "C" fn GetClearedMemory(mut size: usize) -> *mut libc::c_void
 //MEMDEBUG
 {
-    let mut ptr: *mut libc::c_void = 0 as *mut libc::c_void;
+    let mut ptr: *mut libc::c_void = std::ptr::null_mut();
     ptr = GetMemory(size);
     //MEMDEBUG
     crate::stdlib::memset(ptr, 0 as i32, size);
@@ -121,15 +121,15 @@ pub unsafe extern "C" fn GetClearedMemory(mut size: usize) -> *mut libc::c_void
 pub unsafe extern "C" fn GetHunkMemory(mut size: usize) -> *mut libc::c_void
 //MEMDEBUG
 {
-    let mut ptr: *mut libc::c_void = 0 as *mut libc::c_void;
-    let mut memid: *mut usize = 0 as *mut usize;
+    let mut ptr: *mut libc::c_void = std::ptr::null_mut();
+    let mut memid: *mut usize = std::ptr::null_mut();
     ptr = crate::src::botlib::be_interface::botimport
         .HunkAlloc
         .expect("non-null function pointer")(
         size.wrapping_add(::std::mem::size_of::<usize>() as usize) as i32,
     );
     if ptr.is_null() {
-        return 0 as *mut libc::c_void;
+        return std::ptr::null_mut();
     }
     memid = ptr as *mut usize;
     *memid = 0x87654321 as isize as usize;
@@ -149,7 +149,7 @@ pub unsafe extern "C" fn GetHunkMemory(mut size: usize) -> *mut libc::c_void
 pub unsafe extern "C" fn GetClearedHunkMemory(mut size: usize) -> *mut libc::c_void
 //MEMDEBUG
 {
-    let mut ptr: *mut libc::c_void = 0 as *mut libc::c_void;
+    let mut ptr: *mut libc::c_void = std::ptr::null_mut();
     ptr = GetHunkMemory(size);
     //MEMDEBUG
     crate::stdlib::memset(ptr, 0 as i32, size);
@@ -166,7 +166,7 @@ pub unsafe extern "C" fn GetClearedHunkMemory(mut size: usize) -> *mut libc::c_v
 #[no_mangle]
 
 pub unsafe extern "C" fn FreeMemory(mut ptr: *mut libc::c_void) {
-    let mut memid: *mut usize = 0 as *mut usize;
+    let mut memid: *mut usize = std::ptr::null_mut();
     memid = (ptr as *mut libc::c_char).offset(-(::std::mem::size_of::<usize>() as usize as isize))
         as *mut usize;
     if *memid == 0x12345678 as isize as usize {

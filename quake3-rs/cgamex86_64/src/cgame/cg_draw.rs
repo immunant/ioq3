@@ -4,7 +4,7 @@ pub mod stdlib_float_h {
     #[inline]
 
     pub unsafe extern "C" fn atof(mut __nptr: *const libc::c_char) -> f64 {
-        return libc::strtod(__nptr, 0 as *mut libc::c_void as *mut *mut libc::c_char);
+        return libc::strtod(__nptr, std::ptr::null_mut() as *mut *mut libc::c_char);
     }
 }
 
@@ -319,7 +319,7 @@ Draws large numbers for status bar and powerups
 
 unsafe extern "C" fn CG_DrawField(mut x: i32, mut y: i32, mut width: i32, mut value: i32) {
     let mut num: [libc::c_char; 16] = [0; 16];
-    let mut ptr: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut ptr: *mut libc::c_char = std::ptr::null_mut();
     let mut l: i32 = 0;
     let mut frame: i32 = 0;
     if width < 1 as i32 {
@@ -505,7 +505,7 @@ pub unsafe extern "C" fn CG_DrawHead(
     mut headAngles: *mut vec_t,
 ) {
     let mut cm: clipHandle_t = 0;
-    let mut ci: *mut clientInfo_t = 0 as *mut clientInfo_t;
+    let mut ci: *mut clientInfo_t = std::ptr::null_mut();
     let mut len: f32 = 0.;
     let mut origin: vec3_t = [0.; 3];
     let mut mins: vec3_t = [0.; 3];
@@ -609,7 +609,7 @@ pub unsafe extern "C" fn CG_DrawFlagModel(
             angles.as_mut_ptr(),
         );
     } else if cg_drawIcons.integer != 0 {
-        let mut item: *mut gitem_t = 0 as *mut gitem_t;
+        let mut item: *mut gitem_t = std::ptr::null_mut();
         if team == TEAM_RED as i32 {
             item = BG_FindItemForPowerup(PW_REDFLAG) as *mut gitem_s
         } else if team == TEAM_BLUE as i32 {
@@ -772,7 +772,7 @@ pub unsafe extern "C" fn CG_DrawTeamBackground(
         h as f32,
         cgs.media.teamStatusBar,
     );
-    trap_R_SetColor(0 as *const f32);
+    trap_R_SetColor(std::ptr::null());
 }
 /*
 ================
@@ -783,8 +783,8 @@ CG_DrawStatusBar
 
 unsafe extern "C" fn CG_DrawStatusBar() {
     let mut color: i32 = 0; // health > 100
-    let mut cent: *mut centity_t = 0 as *mut centity_t;
-    let mut ps: *mut playerState_t = 0 as *mut playerState_t;
+    let mut cent: *mut centity_t = std::ptr::null_mut();
+    let mut ps: *mut playerState_t = std::ptr::null_mut();
     let mut value: i32 = 0;
     let mut hcolor: vec4_t = [0.; 4];
     let mut angles: vec3_t = [0.; 3];
@@ -890,7 +890,7 @@ unsafe extern "C" fn CG_DrawStatusBar() {
             }
             trap_R_SetColor(colors[color as usize].as_mut_ptr());
             CG_DrawField(0 as i32, 432 as i32, 3 as i32, value);
-            trap_R_SetColor(0 as *const f32);
+            trap_R_SetColor(std::ptr::null());
             // if we didn't draw a 3D icon, draw a 2D icon for ammo
             if cg_draw3dIcons.integer == 0 && cg_drawIcons.integer != 0 {
                 let mut icon: qhandle_t = 0;
@@ -935,7 +935,7 @@ unsafe extern "C" fn CG_DrawStatusBar() {
     if value > 0 as i32 {
         trap_R_SetColor(colors[0 as i32 as usize].as_mut_ptr());
         CG_DrawField(370 as i32, 432 as i32, 3 as i32, value);
-        trap_R_SetColor(0 as *const f32);
+        trap_R_SetColor(std::ptr::null());
         // if we didn't draw a 3D icon, draw a 2D icon for armor
         if cg_draw3dIcons.integer == 0 && cg_drawIcons.integer != 0 {
             CG_DrawPic(
@@ -966,8 +966,8 @@ unsafe extern "C" fn CG_DrawAttacker(mut y: f32) -> f32 {
     let mut t: i32 = 0;
     let mut size: f32 = 0.;
     let mut angles: vec3_t = [0.; 3];
-    let mut info: *const libc::c_char = 0 as *const libc::c_char;
-    let mut name: *const libc::c_char = 0 as *const libc::c_char;
+    let mut info: *const libc::c_char = std::ptr::null();
+    let mut name: *const libc::c_char = std::ptr::null();
     let mut clientNum: i32 = 0;
     if cg.predictedPlayerState.stats[STAT_HEALTH as i32 as usize] <= 0 as i32 {
         return y;
@@ -1018,7 +1018,7 @@ CG_DrawSnapshot
 */
 
 unsafe extern "C" fn CG_DrawSnapshot(mut y: f32) -> f32 {
-    let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut s: *mut libc::c_char = std::ptr::null_mut();
     let mut w: i32 = 0;
     s = va(
         b"time:%i snap:%i cmd:%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -1032,7 +1032,7 @@ unsafe extern "C" fn CG_DrawSnapshot(mut y: f32) -> f32 {
 }
 
 unsafe extern "C" fn CG_DrawFPS(mut y: f32) -> f32 {
-    let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut s: *mut libc::c_char = std::ptr::null_mut();
     let mut w: i32 = 0;
     static mut previousTimes: [i32; 4] = [0; 4];
     static mut index: i32 = 0;
@@ -1077,7 +1077,7 @@ CG_DrawTimer
 */
 
 unsafe extern "C" fn CG_DrawTimer(mut y: f32) -> f32 {
-    let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut s: *mut libc::c_char = std::ptr::null_mut();
     let mut w: i32 = 0;
     let mut mins: i32 = 0;
     let mut seconds: i32 = 0;
@@ -1117,14 +1117,14 @@ unsafe extern "C" fn CG_DrawTeamOverlay(
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut len: i32 = 0;
-    let mut p: *const libc::c_char = 0 as *const libc::c_char;
+    let mut p: *const libc::c_char = std::ptr::null();
     let mut hcolor: vec4_t = [0.; 4];
     let mut pwidth: i32 = 0;
     let mut lwidth: i32 = 0;
     let mut plyrs: i32 = 0;
     let mut st: [libc::c_char; 16] = [0; 16];
-    let mut ci: *mut clientInfo_t = 0 as *mut clientInfo_t;
-    let mut item: *mut gitem_t = 0 as *mut gitem_t;
+    let mut ci: *mut clientInfo_t = std::ptr::null_mut();
+    let mut item: *mut gitem_t = std::ptr::null_mut();
     let mut ret_y: i32 = 0;
     let mut count: i32 = 0;
     if cg_drawTeamOverlay.integer == 0 {
@@ -1209,7 +1209,7 @@ unsafe extern "C" fn CG_DrawTeamOverlay(
     }
     trap_R_SetColor(hcolor.as_mut_ptr());
     CG_DrawPic(x as f32, y, w as f32, h as f32, cgs.media.teamStatusBar);
-    trap_R_SetColor(0 as *const f32);
+    trap_R_SetColor(std::ptr::null());
     i = 0 as i32;
     while i < count {
         ci = cgs
@@ -1378,7 +1378,7 @@ Draw the small two score display
 */
 
 unsafe extern "C" fn CG_DrawScores(mut y: f32) -> f32 {
-    let mut s: *const libc::c_char = 0 as *const libc::c_char;
+    let mut s: *const libc::c_char = std::ptr::null();
     let mut s1: i32 = 0;
     let mut s2: i32 = 0;
     let mut score: i32 = 0;
@@ -1387,7 +1387,7 @@ unsafe extern "C" fn CG_DrawScores(mut y: f32) -> f32 {
     let mut v: i32 = 0;
     let mut color: vec4_t = [0.; 4];
     let mut y1: f32 = 0.;
-    let mut item: *mut gitem_t = 0 as *mut gitem_t;
+    let mut item: *mut gitem_t = std::ptr::null_mut();
     s1 = cgs.scores1;
     s2 = cgs.scores2;
     y -= (16 as i32 + 8 as i32) as f32;
@@ -1614,9 +1614,9 @@ unsafe extern "C" fn CG_DrawPowerups(mut y: f32) -> f32 {
     let mut j: i32 = 0;
     let mut k: i32 = 0;
     let mut active: i32 = 0;
-    let mut ps: *mut playerState_t = 0 as *mut playerState_t;
+    let mut ps: *mut playerState_t = std::ptr::null_mut();
     let mut t: i32 = 0;
-    let mut item: *mut gitem_t = 0 as *mut gitem_t;
+    let mut item: *mut gitem_t = std::ptr::null_mut();
     let mut x: i32 = 0;
     let mut color: i32 = 0;
     let mut size: f32 = 0.;
@@ -1674,7 +1674,7 @@ unsafe extern "C" fn CG_DrawPowerups(mut y: f32) -> f32 {
             CG_DrawField(x, y as i32, 2 as i32, sortedTime[i as usize] / 1000 as i32);
             t = (*ps).powerups[sorted[i as usize] as usize];
             if t - cg.time >= 5 as i32 * 1000 as i32 {
-                trap_R_SetColor(0 as *const f32);
+                trap_R_SetColor(std::ptr::null());
             } else {
                 let mut modulate: vec4_t = [0.; 4];
                 f = (t - cg.time) as f32 / 1000 as i32 as f32;
@@ -1702,7 +1702,7 @@ unsafe extern "C" fn CG_DrawPowerups(mut y: f32) -> f32 {
         }
         i += 1
     }
-    trap_R_SetColor(0 as *const f32);
+    trap_R_SetColor(std::ptr::null());
     return y;
 }
 // MISSIONPACK
@@ -1731,7 +1731,7 @@ CG_DrawPickupItem
 
 unsafe extern "C" fn CG_DrawPickupItem(mut y: i32) -> i32 {
     let mut value: i32 = 0;
-    let mut fadeColor: *mut f32 = 0 as *mut f32;
+    let mut fadeColor: *mut f32 = std::ptr::null_mut();
     if (*cg.snap).ps.stats[STAT_HEALTH as i32 as usize] <= 0 as i32 {
         return y;
     }
@@ -1755,7 +1755,7 @@ unsafe extern "C" fn CG_DrawPickupItem(mut y: i32) -> i32 {
                 (*bg_itemlist.as_mut_ptr().offset(value as isize)).pickup_name,
                 *fadeColor.offset(0 as i32 as isize),
             );
-            trap_R_SetColor(0 as *const f32);
+            trap_R_SetColor(std::ptr::null());
         }
     }
     return y;
@@ -1829,7 +1829,7 @@ unsafe extern "C" fn CG_DrawTeamInfo() {
             h as f32,
             cgs.media.teamStatusBar,
         );
-        trap_R_SetColor(0 as *const f32);
+        trap_R_SetColor(std::ptr::null());
         hcolor[2 as i32 as usize] = 1.0f32;
         hcolor[1 as i32 as usize] = hcolor[2 as i32 as usize];
         hcolor[0 as i32 as usize] = hcolor[1 as i32 as usize];
@@ -1881,7 +1881,7 @@ CG_DrawReward
 */
 
 unsafe extern "C" fn CG_DrawReward() {
-    let mut color: *mut f32 = 0 as *mut f32;
+    let mut color: *mut f32 = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut count: i32 = 0;
     let mut x: f32 = 0.;
@@ -1968,7 +1968,7 @@ unsafe extern "C" fn CG_DrawReward() {
             i += 1
         }
     }
-    trap_R_SetColor(0 as *const f32);
+    trap_R_SetColor(std::ptr::null());
 }
 #[no_mangle]
 
@@ -2042,7 +2042,7 @@ unsafe extern "C" fn CG_DrawDisconnect() {
         rightmove: 0,
         upmove: 0,
     };
-    let mut s: *const libc::c_char = 0 as *const libc::c_char;
+    let mut s: *const libc::c_char = std::ptr::null();
     let mut w: i32 = 0;
     // draw the phone jack if we are completely past our buffers
     cmdNum = trap_GetCurrentCmdNumber() - 64 as i32 + 1 as i32;
@@ -2098,7 +2098,7 @@ unsafe extern "C" fn CG_DrawLagometer() {
     //
     x = 640 as i32 - 48 as i32;
     y = 480 as i32 - 48 as i32;
-    trap_R_SetColor(0 as *const f32);
+    trap_R_SetColor(std::ptr::null());
     CG_DrawPic(
         x as f32,
         y as f32,
@@ -2224,7 +2224,7 @@ unsafe extern "C" fn CG_DrawLagometer() {
         }
         a += 1
     }
-    trap_R_SetColor(0 as *const f32);
+    trap_R_SetColor(std::ptr::null());
     if cg_nopredict.integer != 0 || cg_synchronousClients.integer != 0 {
         CG_DrawBigString(
             x,
@@ -2257,7 +2257,7 @@ pub unsafe extern "C" fn CG_CenterPrint(
     mut y: i32,
     mut charWidth: i32,
 ) {
-    let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut s: *mut libc::c_char = std::ptr::null_mut();
     Q_strncpyz(
         cg.centerPrint.as_mut_ptr(),
         str,
@@ -2283,12 +2283,12 @@ CG_DrawCenterString
 */
 
 unsafe extern "C" fn CG_DrawCenterString() {
-    let mut start: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut start: *mut libc::c_char = std::ptr::null_mut();
     let mut l: i32 = 0;
     let mut x: i32 = 0;
     let mut y: i32 = 0;
     let mut w: i32 = 0;
-    let mut color: *mut f32 = 0 as *mut f32;
+    let mut color: *mut f32 = std::ptr::null_mut();
     if cg.centerPrintTime == 0 {
         return;
     }
@@ -2335,7 +2335,7 @@ unsafe extern "C" fn CG_DrawCenterString() {
         }
         start = start.offset(1)
     }
-    trap_R_SetColor(0 as *const f32);
+    trap_R_SetColor(std::ptr::null());
 }
 /*
 ================================================================================
@@ -2373,7 +2373,7 @@ unsafe extern "C" fn CG_DrawCrosshair() {
         CG_ColorForHealth(hcolor.as_mut_ptr());
         trap_R_SetColor(hcolor.as_mut_ptr());
     } else {
-        trap_R_SetColor(0 as *const f32);
+        trap_R_SetColor(std::ptr::null());
     }
     h = cg_crosshairSize.value;
     w = h;
@@ -2403,7 +2403,7 @@ unsafe extern "C" fn CG_DrawCrosshair() {
         1 as i32 as f32,
         hShader,
     );
-    trap_R_SetColor(0 as *const f32);
+    trap_R_SetColor(std::ptr::null());
 }
 /*
 =================
@@ -2511,8 +2511,8 @@ unsafe extern "C" fn CG_DrawCrosshair3D() {
     CG_Trace(
         &mut trace as *mut _ as *mut trace_t,
         cg.refdef.vieworg.as_mut_ptr() as *const vec_t,
-        0 as *const vec_t,
-        0 as *const vec_t,
+        std::ptr::null(),
+        std::ptr::null(),
         endpos.as_mut_ptr() as *const vec_t,
         0 as i32,
         1 as i32 | 0x2000000 as i32 | 0x4000000 as i32,
@@ -2601,8 +2601,8 @@ CG_DrawCrosshairNames
 */
 
 unsafe extern "C" fn CG_DrawCrosshairNames() {
-    let mut color: *mut f32 = 0 as *mut f32;
-    let mut name: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut color: *mut f32 = std::ptr::null_mut();
+    let mut name: *mut libc::c_char = std::ptr::null_mut();
     let mut w: f32 = 0.;
     if cg_drawCrosshair.integer == 0 {
         return;
@@ -2618,7 +2618,7 @@ unsafe extern "C" fn CG_DrawCrosshairNames() {
     // draw the name of the player being looked at
     color = CG_FadeColor(cg.crosshairClientTime, 1000 as i32);
     if color.is_null() {
-        trap_R_SetColor(0 as *const f32);
+        trap_R_SetColor(std::ptr::null());
         return;
     }
     name = cgs.clientinfo[cg.crosshairClientNum as usize]
@@ -2631,7 +2631,7 @@ unsafe extern "C" fn CG_DrawCrosshairNames() {
         name,
         *color.offset(3 as i32 as isize) * 0.5f32,
     );
-    trap_R_SetColor(0 as *const f32);
+    trap_R_SetColor(std::ptr::null());
 }
 //==============================================================================
 /*
@@ -2670,7 +2670,7 @@ CG_DrawVote
 */
 
 unsafe extern "C" fn CG_DrawVote() {
-    let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut s: *mut libc::c_char = std::ptr::null_mut();
     let mut sec: i32 = 0;
     if cgs.voteTime == 0 {
         return;
@@ -2700,7 +2700,7 @@ CG_DrawTeamVote
 */
 
 unsafe extern "C" fn CG_DrawTeamVote() {
-    let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut s: *mut libc::c_char = std::ptr::null_mut();
     let mut sec: i32 = 0;
     let mut cs_offset: i32 = 0;
     if cgs.clientinfo[cg.clientNum as usize].team as u32 == TEAM_RED as i32 as u32 {
@@ -2760,7 +2760,7 @@ CG_DrawFollow
 unsafe extern "C" fn CG_DrawFollow() -> qboolean {
     let mut x: f32 = 0.;
     let mut color: vec4_t = [0.; 4];
-    let mut name: *const libc::c_char = 0 as *const libc::c_char;
+    let mut name: *const libc::c_char = std::ptr::null();
     if (*cg.snap).ps.pm_flags & 4096 as i32 == 0 {
         return qfalse;
     }
@@ -2798,7 +2798,7 @@ CG_DrawAmmoWarning
 */
 
 unsafe extern "C" fn CG_DrawAmmoWarning() {
-    let mut s: *const libc::c_char = 0 as *const libc::c_char;
+    let mut s: *const libc::c_char = std::ptr::null();
     let mut w: i32 = 0;
     if cg_drawAmmoWarning.integer == 0 as i32 {
         return;
@@ -2825,9 +2825,9 @@ unsafe extern "C" fn CG_DrawWarmup() {
     let mut sec: i32 = 0;
     let mut i: i32 = 0;
     let mut cw: i32 = 0;
-    let mut ci1: *mut clientInfo_t = 0 as *mut clientInfo_t;
-    let mut ci2: *mut clientInfo_t = 0 as *mut clientInfo_t;
-    let mut s: *const libc::c_char = 0 as *const libc::c_char;
+    let mut ci1: *mut clientInfo_t = std::ptr::null_mut();
+    let mut ci2: *mut clientInfo_t = std::ptr::null_mut();
+    let mut s: *const libc::c_char = std::ptr::null();
     sec = cg.warmup;
     if sec == 0 {
         return;
@@ -2841,8 +2841,8 @@ unsafe extern "C" fn CG_DrawWarmup() {
     }
     if cgs.gametype as u32 == GT_TOURNAMENT as i32 as u32 {
         // find the two active players
-        ci1 = 0 as *mut clientInfo_t;
-        ci2 = 0 as *mut clientInfo_t;
+        ci1 = std::ptr::null_mut();
+        ci2 = std::ptr::null_mut();
         i = 0 as i32;
         while i < cgs.maxclients {
             if cgs.clientinfo[i as usize].infoValid as u32 != 0

@@ -376,7 +376,7 @@ unsafe extern "C" fn term_source(mut _cinfo: j_decompress_ptr) {
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_stdio_src(mut cinfo: j_decompress_ptr, mut infile: *mut FILE) {
-    let mut src: my_src_ptr = 0 as *mut my_source_mgr;
+    let mut src: my_src_ptr = std::ptr::null_mut();
     /* The source object and input buffer are made permanent so that a series
      * of JPEG images can be read from the same file by calling jpeg_stdio_src
      * only before the first one.  (If we discarded the buffer at the end of
@@ -420,7 +420,7 @@ pub unsafe extern "C" fn jpeg_stdio_src(mut cinfo: j_decompress_ptr, mut infile:
     (*src).pub_0.term_source = Some(term_source as unsafe extern "C" fn(_: j_decompress_ptr) -> ());
     (*src).infile = infile;
     (*src).pub_0.bytes_in_buffer = 0 as i32 as size_t;
-    (*src).pub_0.next_input_byte = 0 as *const JOCTET;
+    (*src).pub_0.next_input_byte = std::ptr::null();
     /* until buffer loaded */
 }
 /*
@@ -434,7 +434,7 @@ pub unsafe extern "C" fn jpeg_mem_src(
     mut inbuffer: *mut u8,
     mut insize: usize,
 ) {
-    let mut src: *mut jpeg_source_mgr = 0 as *mut jpeg_source_mgr;
+    let mut src: *mut jpeg_source_mgr = std::ptr::null_mut();
     if inbuffer.is_null() || insize == 0 as i32 as usize {
         /* Treat empty input as fatal error */
         (*(*cinfo).err).msg_code = JERR_INPUT_EMPTY as i32;

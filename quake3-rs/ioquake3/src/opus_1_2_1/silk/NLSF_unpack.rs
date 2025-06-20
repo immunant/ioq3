@@ -281,7 +281,7 @@ pub unsafe extern "C" fn silk_NLSF_unpack(
 {
     let mut i: i32 = 0;
     let mut entry: u8 = 0;
-    let mut ec_sel_ptr: *const u8 = 0 as *const u8;
+    let mut ec_sel_ptr: *const u8 = std::ptr::null();
     ec_sel_ptr = &*(*psNLSF_CB)
         .ec_sel
         .offset((CB1_index * (*psNLSF_CB).order as i32 / 2 as i32) as isize)

@@ -75,10 +75,10 @@ pub unsafe extern "C" fn clt_mdct_forward_c(
     let mut N: i32 = 0;
     let mut N2: i32 = 0;
     let mut N4: i32 = 0;
-    let mut f: *mut f32 = 0 as *mut f32;
-    let mut f2: *mut kiss_fft_cpx = 0 as *mut kiss_fft_cpx;
+    let mut f: *mut f32 = std::ptr::null_mut();
+    let mut f2: *mut kiss_fft_cpx = std::ptr::null_mut();
     let mut st: *const kiss_fft_state = (*l).kfft[shift as usize];
-    let mut trig: *const f32 = 0 as *const f32;
+    let mut trig: *const f32 = std::ptr::null();
     let mut scale: opus_val16 = 0.;
     scale = (*st).scale;
     N = (*l).n;
@@ -268,7 +268,7 @@ pub unsafe extern "C" fn clt_mdct_backward_c(
     let mut N: i32 = 0;
     let mut N2: i32 = 0;
     let mut N4: i32 = 0;
-    let mut trig: *const f32 = 0 as *const f32;
+    let mut trig: *const f32 = std::ptr::null();
     N = (*l).n;
     trig = (*l).trig;
     i = 0 as i32;

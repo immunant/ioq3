@@ -382,9 +382,9 @@ unsafe extern "C" fn alloc_small(
 ) -> *mut libc::c_void
 /* Allocate a "small" object */ {
     let mut mem: my_mem_ptr = (*cinfo).mem as my_mem_ptr;
-    let mut hdr_ptr: small_pool_ptr = 0 as *mut small_pool_struct;
-    let mut prev_hdr_ptr: small_pool_ptr = 0 as *mut small_pool_struct;
-    let mut data_ptr: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut hdr_ptr: small_pool_ptr = std::ptr::null_mut();
+    let mut prev_hdr_ptr: small_pool_ptr = std::ptr::null_mut();
+    let mut data_ptr: *mut libc::c_char = std::ptr::null_mut();
     let mut odd_bytes: size_t = 0;
     let mut min_request: size_t = 0;
     let mut slop: size_t = 0;
@@ -496,7 +496,7 @@ unsafe extern "C" fn alloc_large(
 ) -> *mut libc::c_void
 /* Allocate a "large" object */ {
     let mut mem: my_mem_ptr = (*cinfo).mem as my_mem_ptr;
-    let mut hdr_ptr: large_pool_ptr = 0 as *mut large_pool_struct;
+    let mut hdr_ptr: large_pool_ptr = std::ptr::null_mut();
     let mut odd_bytes: size_t = 0;
     /* Check for unsatisfiable request (do now to ensure no overflow below) */
     if sizeofobject
@@ -565,8 +565,8 @@ unsafe extern "C" fn alloc_sarray(
 ) -> JSAMPARRAY
 /* Allocate a 2-D sample array */ {
     let mut mem: my_mem_ptr = (*cinfo).mem as my_mem_ptr;
-    let mut result: JSAMPARRAY = 0 as *mut JSAMPROW;
-    let mut workspace: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut result: JSAMPARRAY = std::ptr::null_mut();
+    let mut workspace: JSAMPROW = std::ptr::null_mut();
     let mut rowsperchunk: JDIMENSION = 0;
     let mut currow: JDIMENSION = 0;
     let mut i: JDIMENSION = 0;
@@ -639,8 +639,8 @@ unsafe extern "C" fn alloc_barray(
 ) -> JBLOCKARRAY
 /* Allocate a 2-D coefficient-block array */ {
     let mut mem: my_mem_ptr = (*cinfo).mem as my_mem_ptr;
-    let mut result: JBLOCKARRAY = 0 as *mut JBLOCKROW;
-    let mut workspace: JBLOCKROW = 0 as *mut JBLOCK;
+    let mut result: JBLOCKARRAY = std::ptr::null_mut();
+    let mut workspace: JBLOCKROW = std::ptr::null_mut();
     let mut rowsperchunk: JDIMENSION = 0;
     let mut currow: JDIMENSION = 0;
     let mut i: JDIMENSION = 0;
@@ -745,7 +745,7 @@ unsafe extern "C" fn request_virt_sarray(
 ) -> jvirt_sarray_ptr
 /* Request a virtual 2-D sample array */ {
     let mut mem: my_mem_ptr = (*cinfo).mem as my_mem_ptr;
-    let mut result: jvirt_sarray_ptr = 0 as *mut jvirt_sarray_control;
+    let mut result: jvirt_sarray_ptr = std::ptr::null_mut();
     /* Only IMAGE-lifetime virtual arrays are currently supported */
     if pool_id != 1 as i32 {
         (*(*cinfo).err).msg_code = JERR_BAD_POOL_ID as i32; /* safety check */
@@ -784,7 +784,7 @@ unsafe extern "C" fn request_virt_barray(
 ) -> jvirt_barray_ptr
 /* Request a virtual 2-D coefficient-block array */ {
     let mut mem: my_mem_ptr = (*cinfo).mem as my_mem_ptr;
-    let mut result: jvirt_barray_ptr = 0 as *mut jvirt_barray_control;
+    let mut result: jvirt_barray_ptr = std::ptr::null_mut();
     /* Only IMAGE-lifetime virtual arrays are currently supported */
     if pool_id != 1 as i32 {
         (*(*cinfo).err).msg_code = JERR_BAD_POOL_ID as i32; /* safety check */
@@ -822,8 +822,8 @@ unsafe extern "C" fn realize_virt_arrays(mut cinfo: j_common_ptr)
     let mut avail_mem: isize = 0;
     let mut minheights: isize = 0;
     let mut max_minheights: isize = 0;
-    let mut sptr: jvirt_sarray_ptr = 0 as *mut jvirt_sarray_control;
-    let mut bptr: jvirt_barray_ptr = 0 as *mut jvirt_barray_control;
+    let mut sptr: jvirt_sarray_ptr = std::ptr::null_mut();
+    let mut bptr: jvirt_barray_ptr = std::ptr::null_mut();
     /* Compute the minimum space needed (maxaccess rows in each buffer)
      * and the maximum space needed (full image height in each buffer).
      * These may be of use to the system-dependent jpeg_mem_available routine.
@@ -1349,8 +1349,8 @@ unsafe extern "C" fn access_virt_barray(
 
 unsafe extern "C" fn free_pool(mut cinfo: j_common_ptr, mut pool_id: i32) {
     let mut mem: my_mem_ptr = (*cinfo).mem as my_mem_ptr; /* safety check */
-    let mut shdr_ptr: small_pool_ptr = 0 as *mut small_pool_struct;
-    let mut lhdr_ptr: large_pool_ptr = 0 as *mut large_pool_struct;
+    let mut shdr_ptr: small_pool_ptr = std::ptr::null_mut();
+    let mut lhdr_ptr: large_pool_ptr = std::ptr::null_mut();
     let mut space_freed: size_t = 0;
     if pool_id < 0 as i32 || pool_id >= 2 as i32 {
         (*(*cinfo).err).msg_code = JERR_BAD_POOL_ID as i32;
@@ -1364,8 +1364,8 @@ unsafe extern "C" fn free_pool(mut cinfo: j_common_ptr, mut pool_id: i32) {
     }
     /* If freeing IMAGE pool, close any virtual arrays first */
     if pool_id == 1 as i32 {
-        let mut sptr: jvirt_sarray_ptr = 0 as *mut jvirt_sarray_control;
-        let mut bptr: jvirt_barray_ptr = 0 as *mut jvirt_barray_control;
+        let mut sptr: jvirt_sarray_ptr = std::ptr::null_mut();
+        let mut bptr: jvirt_barray_ptr = std::ptr::null_mut();
         sptr = (*mem).virt_sarray_list;
         while !sptr.is_null() {
             if (*sptr).b_s_open != 0 {
@@ -1460,7 +1460,7 @@ unsafe extern "C" fn self_destruct(mut cinfo: j_common_ptr) {
         (*cinfo).mem as *mut libc::c_void,
         ::std::mem::size_of::<my_memory_mgr>() as usize,
     ); /* ensures I will be called only once */
-    (*cinfo).mem = 0 as *mut jpeg_memory_mgr;
+    (*cinfo).mem = std::ptr::null_mut();
     jpeg_mem_term(cinfo as *mut jpeg_common_struct);
     /* system-dependent cleanup */
 }
@@ -1471,11 +1471,11 @@ unsafe extern "C" fn self_destruct(mut cinfo: j_common_ptr) {
 #[no_mangle]
 
 pub unsafe extern "C" fn jinit_memory_mgr(mut cinfo: j_common_ptr) {
-    let mut mem: my_mem_ptr = 0 as *mut my_memory_mgr; /* for safety if init fails */
+    let mut mem: my_mem_ptr = std::ptr::null_mut(); /* for safety if init fails */
     let mut max_to_use: isize = 0;
     let mut pool: i32 = 0;
     let mut test_mac: size_t = 0;
-    (*cinfo).mem = 0 as *mut jpeg_memory_mgr;
+    (*cinfo).mem = std::ptr::null_mut();
     /* Check for configuration errors.
      * SIZEOF(ALIGN_TYPE) should be a power of 2; otherwise, it probably
      * doesn't reflect any real hardware alignment requirement.
@@ -1624,7 +1624,7 @@ pub unsafe extern "C" fn jinit_memory_mgr(mut cinfo: j_common_ptr) {
      * If your system doesn't support getenv(), define NO_GETENV to disable
      * this feature.
      */
-    let mut memenv: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut memenv: *mut libc::c_char = std::ptr::null_mut();
     memenv = libc::getenv(b"JPEGMEM\x00" as *const u8 as *const libc::c_char);
     if !memenv.is_null() {
         let mut ch: libc::c_char = 'x' as i32 as libc::c_char;

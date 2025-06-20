@@ -4,7 +4,7 @@ pub mod stdlib_float_h {
     #[inline]
 
     pub unsafe extern "C" fn atof(mut __nptr: *const libc::c_char) -> f64 {
-        return libc::strtod(__nptr, 0 as *mut libc::c_void as *mut *mut libc::c_char);
+        return libc::strtod(__nptr, std::ptr::null_mut() as *mut *mut libc::c_char);
     }
 }
 
@@ -14,7 +14,7 @@ pub mod stdlib_h {
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return libc::strtol(
             __nptr,
-            0 as *mut libc::c_void as *mut *mut libc::c_char,
+            std::ptr::null_mut() as *mut *mut libc::c_char,
             10 as i32,
         ) as i32;
     }
@@ -196,7 +196,7 @@ UI_PlayerInfo_SetWeapon
 */
 
 unsafe extern "C" fn UI_PlayerInfo_SetWeapon(mut pi: *mut playerInfo_t, mut weaponNum: weapon_t) {
-    let mut item: *mut gitem_t = 0 as *mut gitem_t;
+    let mut item: *mut gitem_t = std::ptr::null_mut();
     let mut path: [libc::c_char; 64] = [0; 64];
     (*pi).currentWeapon = weaponNum;
     loop {
@@ -545,7 +545,7 @@ unsafe extern "C" fn UI_SetLerpFrameAnimation(
     mut lf: *mut lerpFrame_t,
     mut newAnimation: i32,
 ) {
-    let mut anim: *mut animation_t = 0 as *mut animation_t;
+    let mut anim: *mut animation_t = std::ptr::null_mut();
     (*lf).animationNumber = newAnimation;
     newAnimation &= !(128 as i32);
     if newAnimation < 0 as i32 || newAnimation >= MAX_ANIMATIONS as i32 {
@@ -572,7 +572,7 @@ unsafe extern "C" fn UI_RunLerpFrame(
 ) {
     let mut f: i32 = 0;
     let mut numFrames: i32 = 0;
-    let mut anim: *mut animation_t = 0 as *mut animation_t;
+    let mut anim: *mut animation_t = std::ptr::null_mut();
     // see if the animation sequence is switching
     if newAnimation != (*lf).animationNumber || (*lf).animation.is_null() {
         UI_SetLerpFrameAnimation(ci, lf, newAnimation);
@@ -758,8 +758,8 @@ unsafe extern "C" fn UI_MovedirAdjustment(mut pi: *mut playerInfo_t) -> f32 {
     AngleVectors(
         relativeAngles.as_mut_ptr() as *const vec_t,
         moveVector.as_mut_ptr(),
-        0 as *mut vec_t,
-        0 as *mut vec_t,
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
     );
     if (Q_fabs(moveVector[0 as i32 as usize]) as f64) < 0.01f64 {
         moveVector[0 as i32 as usize] = 0.0f64 as vec_t
@@ -1516,16 +1516,16 @@ unsafe extern "C" fn UI_ParseAnimationFile(
     mut filename: *const libc::c_char,
     mut pi: *mut playerInfo_t,
 ) -> qboolean {
-    let mut text_p: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut prev: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut text_p: *mut libc::c_char = std::ptr::null_mut();
+    let mut prev: *mut libc::c_char = std::ptr::null_mut();
     let mut len: i32 = 0;
     let mut i: i32 = 0;
-    let mut token: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut token: *mut libc::c_char = std::ptr::null_mut();
     let mut fps: f32 = 0.;
     let mut skip: i32 = 0;
     let mut text: [libc::c_char; 20000] = [0; 20000];
     let mut f: fileHandle_t = 0;
-    let mut animations: *mut animation_t = 0 as *mut animation_t;
+    let mut animations: *mut animation_t = std::ptr::null_mut();
     animations = (*pi).animations.as_mut_ptr();
     crate::stdlib::memset(
         animations as *mut libc::c_void,
@@ -1685,7 +1685,7 @@ pub unsafe extern "C" fn UI_RegisterClientModelname(
     let mut modelName: [libc::c_char; 64] = [0; 64];
     let mut skinName: [libc::c_char; 64] = [0; 64];
     let mut filename: [libc::c_char; 64] = [0; 64];
-    let mut slash: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut slash: *mut libc::c_char = std::ptr::null_mut();
     (*pi).torsoModel = 0 as i32;
     (*pi).headModel = 0 as i32;
     if *modelSkinName.offset(0 as i32 as isize) == 0 {

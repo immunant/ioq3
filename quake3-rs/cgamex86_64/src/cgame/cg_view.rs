@@ -4,7 +4,7 @@ pub mod stdlib_float_h {
     #[inline]
 
     pub unsafe extern "C" fn atof(mut __nptr: *const libc::c_char) -> f64 {
-        return libc::strtod(__nptr, 0 as *mut libc::c_void as *mut *mut libc::c_char);
+        return libc::strtod(__nptr, std::ptr::null_mut() as *mut *mut libc::c_char);
     }
 }
 
@@ -505,8 +505,8 @@ unsafe extern "C" fn CG_OffsetThirdPersonView() {
     AngleVectors(
         focusAngles.as_mut_ptr() as *const vec_t,
         forward.as_mut_ptr(),
-        0 as *mut vec_t,
-        0 as *mut vec_t,
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
     );
     focusPoint[0 as i32 as usize] =
         cg.refdef.vieworg[0 as i32 as usize] + forward[0 as i32 as usize] * 512 as i32 as f32;
@@ -621,8 +621,8 @@ CG_OffsetFirstPersonView
 */
 
 unsafe extern "C" fn CG_OffsetFirstPersonView() {
-    let mut origin: *mut f32 = 0 as *mut f32;
-    let mut angles: *mut f32 = 0 as *mut f32;
+    let mut origin: *mut f32 = std::ptr::null_mut();
+    let mut angles: *mut f32 = std::ptr::null_mut();
     let mut bob: f32 = 0.;
     let mut ratio: f32 = 0.;
     let mut delta: f32 = 0.;
@@ -917,7 +917,7 @@ Sets cg.refdef view values
 */
 
 unsafe extern "C" fn CG_CalcViewValues() -> i32 {
-    let mut ps: *mut playerState_t = 0 as *mut playerState_t;
+    let mut ps: *mut playerState_t = std::ptr::null_mut();
     crate::stdlib::memset(
         &mut cg.refdef as *mut refdef_t as *mut libc::c_void,
         0 as i32,
@@ -1029,7 +1029,7 @@ unsafe extern "C" fn CG_PowerupTimerSounds() {
             if !(t - cg.time >= 5 as i32 * 1000 as i32) {
                 if (t - cg.time) / 1000 as i32 != (t - cg.oldTime) / 1000 as i32 {
                     trap_S_StartSound(
-                        0 as *mut vec_t,
+                        std::ptr::null_mut(),
                         (*cg.snap).ps.clientNum,
                         CHAN_ITEM as i32,
                         cgs.media.wearOffSound,

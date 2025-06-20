@@ -524,7 +524,7 @@ unsafe extern "C" fn AddSkyPolygon(mut nump: i32, mut vecs: *mut vec_t) {
     let mut t: f32 = 0.;
     let mut dv: f32 = 0.;
     let mut axis: i32 = 0;
-    let mut vp: *mut f32 = 0 as *mut f32;
+    let mut vp: *mut f32 = std::ptr::null_mut();
     // s = [0]/[2], t = [1]/[2]
     static mut vec_to_st: [[i32; 3]; 6] = [
         [-(2 as i32), 3 as i32, 1 as i32],
@@ -617,8 +617,8 @@ ClipSkyPolygon
 */
 
 unsafe extern "C" fn ClipSkyPolygon(mut nump: i32, mut vecs: *mut vec_t, mut stage: i32) {
-    let mut norm: *mut f32 = 0 as *mut f32;
-    let mut v: *mut f32 = 0 as *mut f32;
+    let mut norm: *mut f32 = std::ptr::null_mut();
+    let mut v: *mut f32 = std::ptr::null_mut();
     let mut front: qboolean = qfalse;
     let mut back: qboolean = qfalse;
     let mut d: f32 = 0.;
@@ -1139,7 +1139,7 @@ unsafe extern "C" fn FillCloudBox(mut _shader: *const shader_t, mut stage: i32) 
                             (s - 8 as i32 / 2 as i32) as f32 / (8 as i32 / 2 as i32) as f32,
                             (t - 8 as i32 / 2 as i32) as f32 / (8 as i32 / 2 as i32) as f32,
                             i,
-                            0 as *mut f32,
+                            std::ptr::null_mut(),
                             s_skyPoints[t as usize][s as usize].as_mut_ptr(),
                         );
                         s_skyTexCoords[t as usize][s as usize][0 as i32 as usize] =
@@ -1169,7 +1169,7 @@ unsafe extern "C" fn FillCloudBox(mut _shader: *const shader_t, mut stage: i32) 
 
 pub unsafe extern "C" fn R_BuildCloudData(mut input: *mut shaderCommands_t) {
     let mut i: i32 = 0; // FIXME: not correct?
-    let mut shader: *mut shader_t = 0 as *mut shader_t;
+    let mut shader: *mut shader_t = std::ptr::null_mut();
     shader = (*input).shader;
     sky_min = (1.0f64 / 256.0f32 as f64) as f32;
     sky_max = (255.0f64 / 256.0f32 as f64) as f32;
@@ -1217,7 +1217,7 @@ pub unsafe extern "C" fn R_InitSkyTexCoords(mut heightCloud: f32) {
                     (s - 8 as i32 / 2 as i32) as f32 / (8 as i32 / 2 as i32) as f32,
                     (t - 8 as i32 / 2 as i32) as f32 / (8 as i32 / 2 as i32) as f32,
                     i,
-                    0 as *mut f32,
+                    std::ptr::null_mut(),
                     skyVec.as_mut_ptr(),
                 );
                 // compute parametric value 'p' that intersects with cloud layer

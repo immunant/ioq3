@@ -675,7 +675,7 @@ unsafe extern "C" fn largest_input_value(
 
 unsafe extern "C" fn create_colormap(mut cinfo: j_decompress_ptr) {
     let mut cquantize: my_cquantize_ptr = (*cinfo).cquantize as my_cquantize_ptr; /* Created colormap */
-    let mut colormap: JSAMPARRAY = 0 as *mut JSAMPROW; /* Number of distinct output colors */
+    let mut colormap: JSAMPARRAY = std::ptr::null_mut(); /* Number of distinct output colors */
     let mut total_colors: i32 = 0;
     let mut i: i32 = 0;
     let mut j: i32 = 0;
@@ -767,7 +767,7 @@ unsafe extern "C" fn create_colormap(mut cinfo: j_decompress_ptr) {
 
 unsafe extern "C" fn create_colorindex(mut cinfo: j_decompress_ptr) {
     let mut cquantize: my_cquantize_ptr = (*cinfo).cquantize as my_cquantize_ptr;
-    let mut indexptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut indexptr: JSAMPROW = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut k: i32 = 0;
@@ -847,7 +847,7 @@ unsafe extern "C" fn make_odither_array(
     mut cinfo: j_decompress_ptr,
     mut ncolors: i32,
 ) -> ODITHER_MATRIX_PTR {
-    let mut odither: ODITHER_MATRIX_PTR = 0 as *mut [i32; 16];
+    let mut odither: ODITHER_MATRIX_PTR = std::ptr::null_mut();
     let mut j: i32 = 0;
     let mut k: i32 = 0;
     let mut num: INT32 = 0;
@@ -899,7 +899,7 @@ unsafe extern "C" fn make_odither_array(
 
 unsafe extern "C" fn create_odither_tables(mut cinfo: j_decompress_ptr) {
     let mut cquantize: my_cquantize_ptr = (*cinfo).cquantize as my_cquantize_ptr; /* # of distinct values for this color */
-    let mut odither: ODITHER_MATRIX_PTR = 0 as *mut [i32; 16]; /* search for matching prior component */
+    let mut odither: ODITHER_MATRIX_PTR = std::ptr::null_mut(); /* search for matching prior component */
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut nci: i32 = 0;
@@ -940,8 +940,8 @@ unsafe extern "C" fn color_quantize(
     let mut colorindex: JSAMPARRAY = (*cquantize).colorindex;
     let mut pixcode: i32 = 0;
     let mut ci: i32 = 0;
-    let mut ptrin: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut ptrout: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut ptrin: JSAMPROW = std::ptr::null_mut();
+    let mut ptrout: JSAMPROW = std::ptr::null_mut();
     let mut row: i32 = 0;
     let mut col: JDIMENSION = 0;
     let mut width: JDIMENSION = (*cinfo).output_width;
@@ -980,8 +980,8 @@ unsafe extern "C" fn color_quantize3(
 {
     let mut cquantize: my_cquantize_ptr = (*cinfo).cquantize as my_cquantize_ptr;
     let mut pixcode: i32 = 0;
-    let mut ptrin: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut ptrout: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut ptrin: JSAMPROW = std::ptr::null_mut();
+    let mut ptrout: JSAMPROW = std::ptr::null_mut();
     let mut colorindex0: JSAMPROW = *(*cquantize).colorindex.offset(0 as i32 as isize);
     let mut colorindex1: JSAMPROW = *(*cquantize).colorindex.offset(1 as i32 as isize);
     let mut colorindex2: JSAMPROW = *(*cquantize).colorindex.offset(2 as i32 as isize);
@@ -1021,10 +1021,10 @@ unsafe extern "C" fn quantize_ord_dither(
 /* General case, with ordered dithering */
 {
     let mut cquantize: my_cquantize_ptr = (*cinfo).cquantize as my_cquantize_ptr; /* points to active row of dither matrix */
-    let mut input_ptr: JSAMPROW = 0 as *mut JSAMPLE; /* current indexes into dither matrix */
-    let mut output_ptr: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut colorindex_ci: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut dither: *mut i32 = 0 as *mut i32;
+    let mut input_ptr: JSAMPROW = std::ptr::null_mut(); /* current indexes into dither matrix */
+    let mut output_ptr: JSAMPROW = std::ptr::null_mut();
+    let mut colorindex_ci: JSAMPROW = std::ptr::null_mut();
+    let mut dither: *mut i32 = std::ptr::null_mut();
     let mut row_index: i32 = 0;
     let mut col_index: i32 = 0;
     let mut nc: i32 = (*cinfo).out_color_components;
@@ -1084,14 +1084,14 @@ unsafe extern "C" fn quantize3_ord_dither(
 {
     let mut cquantize: my_cquantize_ptr = (*cinfo).cquantize as my_cquantize_ptr; /* points to active row of dither matrix */
     let mut pixcode: i32 = 0; /* current indexes into dither matrix */
-    let mut input_ptr: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut output_ptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut input_ptr: JSAMPROW = std::ptr::null_mut();
+    let mut output_ptr: JSAMPROW = std::ptr::null_mut();
     let mut colorindex0: JSAMPROW = *(*cquantize).colorindex.offset(0 as i32 as isize);
     let mut colorindex1: JSAMPROW = *(*cquantize).colorindex.offset(1 as i32 as isize);
     let mut colorindex2: JSAMPROW = *(*cquantize).colorindex.offset(2 as i32 as isize);
-    let mut dither0: *mut i32 = 0 as *mut i32;
-    let mut dither1: *mut i32 = 0 as *mut i32;
-    let mut dither2: *mut i32 = 0 as *mut i32;
+    let mut dither0: *mut i32 = std::ptr::null_mut();
+    let mut dither1: *mut i32 = std::ptr::null_mut();
+    let mut dither2: *mut i32 = std::ptr::null_mut();
     let mut row_index: i32 = 0;
     let mut col_index: i32 = 0;
     let mut row: i32 = 0;
@@ -1152,11 +1152,11 @@ unsafe extern "C" fn quantize_fs_dither(
     let mut bpreverr: LOCFSERROR = 0; /* error for below/next col */
     let mut bnexterr: LOCFSERROR = 0; /* => fserrors[] at column before current */
     let mut delta: LOCFSERROR = 0; /* 1 for left-to-right, -1 for right-to-left */
-    let mut errorptr: FSERRPTR = 0 as *mut FSERROR; /* dir * nc */
-    let mut input_ptr: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut output_ptr: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut colorindex_ci: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut colormap_ci: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut errorptr: FSERRPTR = std::ptr::null_mut(); /* dir * nc */
+    let mut input_ptr: JSAMPROW = std::ptr::null_mut();
+    let mut output_ptr: JSAMPROW = std::ptr::null_mut();
+    let mut colorindex_ci: JSAMPROW = std::ptr::null_mut();
+    let mut colormap_ci: JSAMPROW = std::ptr::null_mut();
     let mut pixcode: i32 = 0;
     let mut nc: i32 = (*cinfo).out_color_components;
     let mut dir: i32 = 0;
@@ -1428,7 +1428,7 @@ unsafe extern "C" fn new_color_map_1_quant(mut cinfo: j_decompress_ptr) {
 #[no_mangle]
 
 pub unsafe extern "C" fn jinit_1pass_quantizer(mut cinfo: j_decompress_ptr) {
-    let mut cquantize: my_cquantize_ptr = 0 as *mut my_cquantizer; /* Flag FS workspace not allocated */
+    let mut cquantize: my_cquantize_ptr = std::ptr::null_mut(); /* Flag FS workspace not allocated */
     cquantize = Some(
         (*(*cinfo).mem)
             .alloc_small

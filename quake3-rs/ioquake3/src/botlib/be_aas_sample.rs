@@ -226,7 +226,7 @@ pub unsafe extern "C" fn AAS_InitAASLinkHeap() {
         .linkheap
         .offset(0 as i32 as isize))
     .prev_ent; //end for
-    *fresh0 = 0 as *mut aas_link_s;
+    *fresh0 = std::ptr::null_mut();
     let ref mut fresh1 = (*crate::src::botlib::be_aas_main::aasworld
         .linkheap
         .offset(0 as i32 as isize))
@@ -263,7 +263,7 @@ pub unsafe extern "C" fn AAS_InitAASLinkHeap() {
         .linkheap
         .offset((max_aaslinks - 1 as i32) as isize))
     .next_ent;
-    *fresh5 = 0 as *mut aas_link_s;
+    *fresh5 = std::ptr::null_mut();
     //pointer to the first free link
     crate::src::botlib::be_aas_main::aasworld.freelinks =
         &mut *crate::src::botlib::be_aas_main::aasworld
@@ -287,7 +287,7 @@ pub unsafe extern "C" fn AAS_FreeAASLinkHeap() {
             crate::src::botlib::be_aas_main::aasworld.linkheap as *mut libc::c_void,
         );
     }
-    crate::src::botlib::be_aas_main::aasworld.linkheap = 0 as *mut aas_link_t;
+    crate::src::botlib::be_aas_main::aasworld.linkheap = std::ptr::null_mut();
     crate::src::botlib::be_aas_main::aasworld.linkheapsize = 0 as i32;
 }
 //end of the function AAS_FreeAASLinkHeap
@@ -300,7 +300,7 @@ pub unsafe extern "C" fn AAS_FreeAASLinkHeap() {
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_AllocAASLink() -> *mut aas_link_t {
-    let mut link: *mut aas_link_t = 0 as *mut aas_link_t; //end if
+    let mut link: *mut aas_link_t = std::ptr::null_mut(); //end if
     link = crate::src::botlib::be_aas_main::aasworld.freelinks; //end if
     if link.is_null() {
         if crate::src::botlib::be_interface::botDeveloper != 0 {
@@ -312,7 +312,7 @@ pub unsafe extern "C" fn AAS_AllocAASLink() -> *mut aas_link_t {
                     as *mut libc::c_char,
             );
         }
-        return 0 as *mut aas_link_t;
+        return std::ptr::null_mut();
     }
     if !crate::src::botlib::be_aas_main::aasworld
         .freelinks
@@ -325,7 +325,7 @@ pub unsafe extern "C" fn AAS_AllocAASLink() -> *mut aas_link_t {
         .freelinks
         .is_null()
     {
-        (*crate::src::botlib::be_aas_main::aasworld.freelinks).prev_ent = 0 as *mut aas_link_s
+        (*crate::src::botlib::be_aas_main::aasworld.freelinks).prev_ent = std::ptr::null_mut()
     }
     numaaslinks -= 1;
     return link;
@@ -346,10 +346,10 @@ pub unsafe extern "C" fn AAS_DeAllocAASLink(mut link: *mut aas_link_t) {
     {
         (*crate::src::botlib::be_aas_main::aasworld.freelinks).prev_ent = link
     }
-    (*link).prev_ent = 0 as *mut aas_link_s;
+    (*link).prev_ent = std::ptr::null_mut();
     (*link).next_ent = crate::src::botlib::be_aas_main::aasworld.freelinks;
-    (*link).prev_area = 0 as *mut aas_link_s;
-    (*link).next_area = 0 as *mut aas_link_s;
+    (*link).prev_area = std::ptr::null_mut();
+    (*link).next_area = std::ptr::null_mut();
     crate::src::botlib::be_aas_main::aasworld.freelinks = link;
     numaaslinks += 1;
 }
@@ -398,7 +398,7 @@ pub unsafe extern "C" fn AAS_FreeAASLinkedEntities() {
             crate::src::botlib::be_aas_main::aasworld.arealinkedentities as *mut libc::c_void,
         );
     }
-    crate::src::botlib::be_aas_main::aasworld.arealinkedentities = 0 as *mut *mut aas_link_t;
+    crate::src::botlib::be_aas_main::aasworld.arealinkedentities = std::ptr::null_mut();
 }
 //end of the function AAS_InitAASLinkedEntities
 //===========================================================================
@@ -413,8 +413,8 @@ pub unsafe extern "C" fn AAS_FreeAASLinkedEntities() {
 pub unsafe extern "C" fn AAS_PointAreaNum(mut point: *mut vec_t) -> i32 {
     let mut nodenum: i32 = 0; //end if
     let mut dist: vec_t = 0.;
-    let mut node: *mut aas_node_t = 0 as *mut aas_node_t;
-    let mut plane: *mut aas_plane_t = 0 as *mut aas_plane_t;
+    let mut node: *mut aas_node_t = std::ptr::null_mut();
+    let mut plane: *mut aas_plane_t = std::ptr::null_mut();
     if crate::src::botlib::be_aas_main::aasworld.loaded == 0 {
         crate::src::botlib::be_interface::botimport
             .Print
@@ -684,7 +684,7 @@ pub unsafe extern "C" fn AAS_AreaEntityCollision(
     let mut collision: i32 = 0; //make compiler happy
     let mut boxmins: vec3_t = [0.; 3];
     let mut boxmaxs: vec3_t = [0.; 3];
-    let mut link: *mut aas_link_t = 0 as *mut aas_link_t;
+    let mut link: *mut aas_link_t = std::ptr::null_mut();
     let mut bsptrace: bsp_trace_t = bsp_trace_t {
         allsolid: qfalse,
         startsolid: qfalse,
@@ -785,9 +785,9 @@ pub unsafe extern "C" fn AAS_TraceClientBBox(
         planenum: 0,
         nodenum: 0,
     }; 127];
-    let mut tstack_p: *mut aas_tracestack_t = 0 as *mut aas_tracestack_t;
-    let mut aasnode: *mut aas_node_t = 0 as *mut aas_node_t;
-    let mut plane: *mut aas_plane_t = 0 as *mut aas_plane_t;
+    let mut tstack_p: *mut aas_tracestack_t = std::ptr::null_mut();
+    let mut aasnode: *mut aas_node_t = std::ptr::null_mut();
+    let mut plane: *mut aas_plane_t = std::ptr::null_mut();
     let mut trace: aas_trace_t = aas_trace_t {
         startsolid: qfalse,
         fraction: 0.,
@@ -1213,9 +1213,9 @@ pub unsafe extern "C" fn AAS_TraceAreas(
         planenum: 0,
         nodenum: 0,
     }; 127];
-    let mut tstack_p: *mut aas_tracestack_t = 0 as *mut aas_tracestack_t;
-    let mut aasnode: *mut aas_node_t = 0 as *mut aas_node_t;
-    let mut plane: *mut aas_plane_t = 0 as *mut aas_plane_t;
+    let mut tstack_p: *mut aas_tracestack_t = std::ptr::null_mut();
+    let mut aasnode: *mut aas_node_t = std::ptr::null_mut();
+    let mut plane: *mut aas_plane_t = std::ptr::null_mut();
     numareas = 0 as i32;
     *areas.offset(0 as i32 as isize) = 0 as i32;
     if crate::src::botlib::be_aas_main::aasworld.loaded == 0 {
@@ -1453,7 +1453,7 @@ pub unsafe extern "C" fn AAS_InsideFace(
     let mut edgevec: vec3_t = [0.; 3];
     let mut pointvec: vec3_t = [0.; 3];
     let mut sepnormal: vec3_t = [0.; 3];
-    let mut edge: *mut aas_edge_t = 0 as *mut aas_edge_t;
+    let mut edge: *mut aas_edge_t = std::ptr::null_mut();
     //AAS_SAMPLE_DEBUG
     if crate::src::botlib::be_aas_main::aasworld.loaded == 0 {
         return qfalse;
@@ -1544,14 +1544,14 @@ pub unsafe extern "C" fn AAS_PointInsideFace(
     let mut i: i32 = 0;
     let mut firstvertex: i32 = 0;
     let mut edgenum: i32 = 0;
-    let mut v1: *mut vec_t = 0 as *mut vec_t;
-    let mut v2: *mut vec_t = 0 as *mut vec_t;
+    let mut v1: *mut vec_t = std::ptr::null_mut();
+    let mut v2: *mut vec_t = std::ptr::null_mut();
     let mut edgevec: vec3_t = [0.; 3];
     let mut pointvec: vec3_t = [0.; 3];
     let mut sepnormal: vec3_t = [0.; 3];
-    let mut edge: *mut aas_edge_t = 0 as *mut aas_edge_t;
-    let mut plane: *mut aas_plane_t = 0 as *mut aas_plane_t;
-    let mut face: *mut aas_face_t = 0 as *mut aas_face_t;
+    let mut edge: *mut aas_edge_t = std::ptr::null_mut();
+    let mut plane: *mut aas_plane_t = std::ptr::null_mut();
+    let mut face: *mut aas_face_t = std::ptr::null_mut();
     if crate::src::botlib::be_aas_main::aasworld.loaded == 0 {
         return qfalse;
     }
@@ -1628,10 +1628,10 @@ pub unsafe extern "C" fn AAS_AreaGroundFace(
     let mut facenum: i32 = 0;
     let mut up: vec3_t = [0 as i32 as vec_t, 0 as i32 as vec_t, 1 as i32 as vec_t];
     let mut normal: vec3_t = [0.; 3];
-    let mut area: *mut aas_area_t = 0 as *mut aas_area_t;
-    let mut face: *mut aas_face_t = 0 as *mut aas_face_t;
+    let mut area: *mut aas_area_t = std::ptr::null_mut();
+    let mut face: *mut aas_face_t = std::ptr::null_mut();
     if crate::src::botlib::be_aas_main::aasworld.loaded == 0 {
-        return 0 as *mut aas_face_t;
+        return std::ptr::null_mut();
     }
     area = &mut *crate::src::botlib::be_aas_main::aasworld
         .areas
@@ -1670,7 +1670,7 @@ pub unsafe extern "C" fn AAS_AreaGroundFace(
         }
         i += 1
     }
-    return 0 as *mut aas_face_t;
+    return std::ptr::null_mut();
 }
 //returns the area the point is in
 //returns the area the point is in
@@ -1693,7 +1693,7 @@ pub unsafe extern "C" fn AAS_FacePlane(
     mut normal: *mut vec_t,
     mut dist: *mut f32,
 ) {
-    let mut plane: *mut aas_plane_t = 0 as *mut aas_plane_t;
+    let mut plane: *mut aas_plane_t = std::ptr::null_mut();
     plane = &mut *crate::src::botlib::be_aas_main::aasworld.planes.offset(
         (*crate::src::botlib::be_aas_main::aasworld
             .faces
@@ -1718,15 +1718,15 @@ pub unsafe extern "C" fn AAS_FacePlane(
 pub unsafe extern "C" fn AAS_TraceEndFace(mut trace: *mut aas_trace_t) -> *mut aas_face_t {
     let mut i: i32 = 0;
     let mut facenum: i32 = 0;
-    let mut area: *mut aas_area_t = 0 as *mut aas_area_t;
-    let mut face: *mut aas_face_t = 0 as *mut aas_face_t;
-    let mut firstface: *mut aas_face_t = 0 as *mut aas_face_t;
+    let mut area: *mut aas_area_t = std::ptr::null_mut();
+    let mut face: *mut aas_face_t = std::ptr::null_mut();
+    let mut firstface: *mut aas_face_t = std::ptr::null_mut();
     if crate::src::botlib::be_aas_main::aasworld.loaded == 0 {
-        return 0 as *mut aas_face_t;
+        return std::ptr::null_mut();
     }
     //if started in solid no face was hit
     if (*trace).startsolid as u64 != 0 {
-        return 0 as *mut aas_face_t;
+        return std::ptr::null_mut();
     }
     //trace->lastarea is the last area the trace was in
     area = &mut *crate::src::botlib::be_aas_main::aasworld
@@ -1859,8 +1859,8 @@ pub unsafe extern "C" fn AAS_BoxOnPlaneSide2(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_UnlinkFromAreas(mut areas: *mut aas_link_t) {
-    let mut link: *mut aas_link_t = 0 as *mut aas_link_t;
-    let mut nextlink: *mut aas_link_t = 0 as *mut aas_link_t;
+    let mut link: *mut aas_link_t = std::ptr::null_mut();
+    let mut nextlink: *mut aas_link_t = std::ptr::null_mut();
     link = areas;
     while !link.is_null() {
         //next area the entity is linked in
@@ -1893,11 +1893,11 @@ pub unsafe extern "C" fn AAS_AASLinkEntity(
     let mut side: i32 = 0; //end if
     let mut nodenum: i32 = 0;
     let mut linkstack: [aas_linkstack_t; 128] = [aas_linkstack_t { nodenum: 0 }; 128];
-    let mut lstack_p: *mut aas_linkstack_t = 0 as *mut aas_linkstack_t;
-    let mut aasnode: *mut aas_node_t = 0 as *mut aas_node_t;
-    let mut plane: *mut aas_plane_t = 0 as *mut aas_plane_t;
-    let mut link: *mut aas_link_t = 0 as *mut aas_link_t;
-    let mut areas: *mut aas_link_t = 0 as *mut aas_link_t;
+    let mut lstack_p: *mut aas_linkstack_t = std::ptr::null_mut();
+    let mut aasnode: *mut aas_node_t = std::ptr::null_mut();
+    let mut plane: *mut aas_plane_t = std::ptr::null_mut();
+    let mut link: *mut aas_link_t = std::ptr::null_mut();
+    let mut areas: *mut aas_link_t = std::ptr::null_mut();
     if crate::src::botlib::be_aas_main::aasworld.loaded == 0 {
         crate::src::botlib::be_interface::botimport
             .Print
@@ -1906,9 +1906,9 @@ pub unsafe extern "C" fn AAS_AASLinkEntity(
             b"AAS_LinkEntity: aas not loaded\n\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
         );
-        return 0 as *mut aas_link_t;
+        return std::ptr::null_mut();
     }
-    areas = 0 as *mut aas_link_t;
+    areas = std::ptr::null_mut();
     //
     lstack_p = linkstack.as_mut_ptr();
     //we start with the whole line on the stack
@@ -1951,14 +1951,14 @@ pub unsafe extern "C" fn AAS_AASLinkEntity(
             (*link).entnum = entnum;
             (*link).areanum = -nodenum;
             //put the link into the double linked area list of the entity
-            (*link).prev_area = 0 as *mut aas_link_s;
+            (*link).prev_area = std::ptr::null_mut();
             (*link).next_area = areas;
             if !areas.is_null() {
                 (*areas).prev_area = link
             }
             areas = link;
             //put the link into the double linked entity list of the area
-            (*link).prev_ent = 0 as *mut aas_link_s;
+            (*link).prev_ent = std::ptr::null_mut();
             (*link).next_ent = *crate::src::botlib::be_aas_main::aasworld
                 .arealinkedentities
                 .offset(-nodenum as isize);
@@ -2077,8 +2077,8 @@ pub unsafe extern "C" fn AAS_BBoxAreas(
     mut areas: *mut i32,
     mut maxareas: i32,
 ) -> i32 {
-    let mut linkedareas: *mut aas_link_t = 0 as *mut aas_link_t; //end for
-    let mut link: *mut aas_link_t = 0 as *mut aas_link_t;
+    let mut linkedareas: *mut aas_link_t = std::ptr::null_mut(); //end for
+    let mut link: *mut aas_link_t = std::ptr::null_mut();
     let mut num: i32 = 0;
     linkedareas = AAS_AASLinkEntity(absmins, absmaxs, -(1 as i32));
     num = 0 as i32;
@@ -2122,7 +2122,7 @@ pub unsafe extern "C" fn AAS_BBoxAreas(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_AreaInfo(mut areanum: i32, mut info: *mut aas_areainfo_t) -> i32 {
-    let mut settings: *mut aas_areasettings_t = 0 as *mut aas_areasettings_t; //end if
+    let mut settings: *mut aas_areasettings_t = std::ptr::null_mut(); //end if
     if info.is_null() {
         return 0 as i32;
     }
@@ -2251,7 +2251,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 pub unsafe extern "C" fn AAS_PlaneFromNum(mut planenum: i32) -> *mut aas_plane_t {
     if crate::src::botlib::be_aas_main::aasworld.loaded == 0 {
-        return 0 as *mut aas_plane_t;
+        return std::ptr::null_mut();
     }
     return &mut *crate::src::botlib::be_aas_main::aasworld
         .planes

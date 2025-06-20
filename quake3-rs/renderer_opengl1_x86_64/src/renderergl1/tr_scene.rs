@@ -331,8 +331,8 @@ Adds all the scene's polys into this view's drawsurf list
 
 pub unsafe extern "C" fn R_AddPolygonSurfaces() {
     let mut i: i32 = 0;
-    let mut sh: *mut shader_t = 0 as *mut shader_t;
-    let mut poly: *mut srfPoly_t = 0 as *mut srfPoly_t;
+    let mut sh: *mut shader_t = std::ptr::null_mut();
+    let mut poly: *mut srfPoly_t = std::ptr::null_mut();
     tr.currentEntityNum = ((1 as i32) << 10 as i32) - 1 as i32;
     tr.shiftedEntityNum = tr.currentEntityNum << 7 as i32;
     i = 0 as i32;
@@ -363,11 +363,11 @@ pub unsafe extern "C" fn RE_AddPolyToScene(
     mut verts: *const polyVert_t,
     mut numPolys: i32,
 ) {
-    let mut poly: *mut srfPoly_t = 0 as *mut srfPoly_t;
+    let mut poly: *mut srfPoly_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut fogIndex: i32 = 0;
-    let mut fog: *mut fog_t = 0 as *mut fog_t;
+    let mut fog: *mut fog_t = std::ptr::null_mut();
     let mut bounds: [vec3_t; 2] = [[0.; 3]; 2];
     if tr.registered as u64 == 0 {
         return;
@@ -538,7 +538,7 @@ pub unsafe extern "C" fn RE_AddDynamicLightToScene(
     mut b: f32,
     mut additive: i32,
 ) {
-    let mut dl: *mut dlight_t = 0 as *mut dlight_t;
+    let mut dl: *mut dlight_t = std::ptr::null_mut();
     if tr.registered as u64 == 0 {
         return;
     }

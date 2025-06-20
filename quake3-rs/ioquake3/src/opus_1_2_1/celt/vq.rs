@@ -131,7 +131,7 @@ unsafe extern "C" fn exp_rotation1(
 ) {
     let mut i: i32 = 0;
     let mut ms: opus_val16 = 0.;
-    let mut Xptr: *mut celt_norm = 0 as *mut celt_norm;
+    let mut Xptr: *mut celt_norm = std::ptr::null_mut();
     Xptr = X;
     ms = -s;
     i = 0 as i32;
@@ -279,8 +279,8 @@ pub unsafe extern "C" fn op_pvq_search_c(
     mut N: i32,
     mut _arch: i32,
 ) -> opus_val16 {
-    let mut y: *mut celt_norm = 0 as *mut celt_norm;
-    let mut signx: *mut i32 = 0 as *mut i32;
+    let mut y: *mut celt_norm = std::ptr::null_mut();
+    let mut signx: *mut i32 = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut pulsesLeft: i32 = 0;
@@ -455,7 +455,7 @@ pub unsafe extern "C" fn alg_quant(
     mut resynth: i32,
     mut arch: i32,
 ) -> u32 {
-    let mut iy: *mut i32 = 0 as *mut i32;
+    let mut iy: *mut i32 = std::ptr::null_mut();
     let mut yy: opus_val16 = 0.;
     let mut collapse_mask: u32 = 0;
     /* Covers vectorization by up to 4. */
@@ -489,7 +489,7 @@ pub unsafe extern "C" fn alg_unquant(
 ) -> u32 {
     let mut Ryy: opus_val32 = 0.;
     let mut collapse_mask: u32 = 0;
-    let mut iy: *mut i32 = 0 as *mut i32;
+    let mut iy: *mut i32 = std::ptr::null_mut();
     let mut fresh8 = ::std::vec::from_elem(
         0,
         (::std::mem::size_of::<i32>() as usize).wrapping_mul(N as usize) as usize,
@@ -513,7 +513,7 @@ pub unsafe extern "C" fn renormalise_vector(
     let mut E: opus_val32 = 0.;
     let mut g: opus_val16 = 0.;
     let mut t: opus_val32 = 0.;
-    let mut xptr: *mut celt_norm = 0 as *mut celt_norm;
+    let mut xptr: *mut celt_norm = std::ptr::null_mut();
     E = 1e-15f32 + celt_inner_prod_c(X, X, N);
     t = E;
     g = 1.0f32 / crate::stdlib::sqrt(t as f64) as f32 * gain;

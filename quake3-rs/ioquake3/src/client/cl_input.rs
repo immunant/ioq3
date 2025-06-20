@@ -6,7 +6,7 @@ pub mod stdlib_h {
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return libc::strtol(
             __nptr,
-            0 as *mut libc::c_void as *mut *mut libc::c_char,
+            std::ptr::null_mut() as *mut *mut libc::c_char,
             10 as i32,
         ) as i32;
     }
@@ -399,7 +399,7 @@ pub unsafe extern "C" fn IN_MLookUp() {
 
 pub unsafe extern "C" fn IN_KeyDown(mut b: *mut kbutton_t) {
     let mut k: i32 = 0;
-    let mut c: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut c: *mut libc::c_char = std::ptr::null_mut();
     c = Cmd_Argv(1 as i32);
     if *c.offset(0 as i32 as isize) != 0 {
         k = atoi(c)
@@ -433,7 +433,7 @@ pub unsafe extern "C" fn IN_KeyDown(mut b: *mut kbutton_t) {
 
 pub unsafe extern "C" fn IN_KeyUp(mut b: *mut kbutton_t) {
     let mut k: i32 = 0;
-    let mut c: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut c: *mut libc::c_char = std::ptr::null_mut();
     let mut uptime: u32 = 0;
     c = Cmd_Argv(1 as i32);
     if *c.offset(0 as i32 as isize) != 0 {
@@ -1307,7 +1307,7 @@ pub unsafe extern "C" fn CL_WritePacket() {
         allowoverflow: qfalse,
         overflowed: qfalse,
         oob: qfalse,
-        data: 0 as *mut byte,
+        data: std::ptr::null_mut(),
         maxsize: 0,
         cursize: 0,
         readcount: 0,
@@ -1316,8 +1316,8 @@ pub unsafe extern "C" fn CL_WritePacket() {
     let mut data: [byte; 16384] = [0; 16384];
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut cmd: *mut usercmd_t = 0 as *mut usercmd_t;
-    let mut oldcmd: *mut usercmd_t = 0 as *mut usercmd_t;
+    let mut cmd: *mut usercmd_t = std::ptr::null_mut();
+    let mut oldcmd: *mut usercmd_t = std::ptr::null_mut();
     let mut nullcmd: usercmd_t = usercmd_t {
         serverTime: 0,
         angles: [0; 3],
@@ -1426,7 +1426,7 @@ pub unsafe extern "C" fn CL_WritePacket() {
                     allowoverflow: qfalse,
                     overflowed: qfalse,
                     oob: qfalse,
-                    data: 0 as *mut byte,
+                    data: std::ptr::null_mut(),
                     maxsize: 0,
                     cursize: 0,
                     readcount: 0,

@@ -45,7 +45,7 @@ unsafe extern "C" fn silk_LPC_analysis_filter16_FLP(
 {
     let mut ix: i32 = 0;
     let mut LPC_pred: f32 = 0.;
-    let mut s_ptr: *const f32 = 0 as *const f32;
+    let mut s_ptr: *const f32 = std::ptr::null();
     ix = 16 as i32;
     while ix < length {
         s_ptr = &*s.offset((ix - 1 as i32) as isize) as *const f32;
@@ -84,7 +84,7 @@ unsafe extern "C" fn silk_LPC_analysis_filter12_FLP(
 {
     let mut ix: i32 = 0;
     let mut LPC_pred: f32 = 0.;
-    let mut s_ptr: *const f32 = 0 as *const f32;
+    let mut s_ptr: *const f32 = std::ptr::null();
     ix = 12 as i32;
     while ix < length {
         s_ptr = &*s.offset((ix - 1 as i32) as isize) as *const f32;
@@ -119,7 +119,7 @@ unsafe extern "C" fn silk_LPC_analysis_filter10_FLP(
 {
     let mut ix: i32 = 0;
     let mut LPC_pred: f32 = 0.;
-    let mut s_ptr: *const f32 = 0 as *const f32;
+    let mut s_ptr: *const f32 = std::ptr::null();
     ix = 10 as i32;
     while ix < length {
         s_ptr = &*s.offset((ix - 1 as i32) as isize) as *const f32;
@@ -152,7 +152,7 @@ unsafe extern "C" fn silk_LPC_analysis_filter8_FLP(
 {
     let mut ix: i32 = 0;
     let mut LPC_pred: f32 = 0.;
-    let mut s_ptr: *const f32 = 0 as *const f32;
+    let mut s_ptr: *const f32 = std::ptr::null();
     ix = 8 as i32;
     while ix < length {
         s_ptr = &*s.offset((ix - 1 as i32) as isize) as *const f32;
@@ -183,7 +183,7 @@ unsafe extern "C" fn silk_LPC_analysis_filter6_FLP(
 {
     let mut ix: i32 = 0;
     let mut LPC_pred: f32 = 0.;
-    let mut s_ptr: *const f32 = 0 as *const f32;
+    let mut s_ptr: *const f32 = std::ptr::null();
     ix = 6 as i32;
     while ix < length {
         s_ptr = &*s.offset((ix - 1 as i32) as isize) as *const f32;

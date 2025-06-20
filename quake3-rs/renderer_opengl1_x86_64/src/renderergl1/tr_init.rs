@@ -1024,7 +1024,7 @@ pub unsafe extern "C" fn R_GetModeInfo(
     mut windowAspect: *mut f32,
     mut mode: i32,
 ) -> qboolean {
-    let mut vm: *mut vidmode_t = 0 as *mut vidmode_t;
+    let mut vm: *mut vidmode_t = std::ptr::null_mut();
     let mut pixelAspect: f32 = 0.;
     if mode < -(1 as i32) {
         return qfalse;
@@ -1113,8 +1113,8 @@ pub unsafe extern "C" fn RB_ReadPixels(
     mut offset: *mut size_t,
     mut padlen: *mut i32,
 ) -> *mut byte {
-    let mut buffer: *mut byte = 0 as *mut byte;
-    let mut bufstart: *mut byte = 0 as *mut byte;
+    let mut buffer: *mut byte = std::ptr::null_mut();
+    let mut bufstart: *mut byte = std::ptr::null_mut();
     let mut padwidth: i32 = 0;
     let mut linelen: i32 = 0;
     let mut packAlign: GLint = 0;
@@ -1161,12 +1161,12 @@ pub unsafe extern "C" fn RB_TakeScreenshot(
     mut height: i32,
     mut fileName: *mut libc::c_char,
 ) {
-    let mut allbuf: *mut byte = 0 as *mut byte; // uncompressed type
-    let mut buffer: *mut byte = 0 as *mut byte; // pixel size
-    let mut srcptr: *mut byte = 0 as *mut byte;
-    let mut destptr: *mut byte = 0 as *mut byte;
-    let mut endline: *mut byte = 0 as *mut byte;
-    let mut endmem: *mut byte = 0 as *mut byte;
+    let mut allbuf: *mut byte = std::ptr::null_mut(); // uncompressed type
+    let mut buffer: *mut byte = std::ptr::null_mut(); // pixel size
+    let mut srcptr: *mut byte = std::ptr::null_mut();
+    let mut destptr: *mut byte = std::ptr::null_mut();
+    let mut endline: *mut byte = std::ptr::null_mut();
+    let mut endmem: *mut byte = std::ptr::null_mut();
     let mut temp: byte = 0;
     let mut linelen: i32 = 0;
     let mut padlen: i32 = 0;
@@ -1230,7 +1230,7 @@ pub unsafe extern "C" fn RB_TakeScreenshotJPEG(
     mut height: i32,
     mut fileName: *mut libc::c_char,
 ) {
-    let mut buffer: *mut byte = 0 as *mut byte;
+    let mut buffer: *mut byte = std::ptr::null_mut();
     let mut offset: size_t = 0 as i32 as size_t;
     let mut memcount: size_t = 0;
     let mut padlen: i32 = 0;
@@ -1260,7 +1260,7 @@ RB_TakeScreenshotCmd
 pub unsafe extern "C" fn RB_TakeScreenshotCmd(
     mut data: *const libc::c_void,
 ) -> *const libc::c_void {
-    let mut cmd: *const screenshotCommand_t = 0 as *const screenshotCommand_t;
+    let mut cmd: *const screenshotCommand_t = std::ptr::null();
     cmd = data as *const screenshotCommand_t;
     if (*cmd).jpeg as u64 != 0 {
         RB_TakeScreenshotJPEG(
@@ -1297,7 +1297,7 @@ pub unsafe extern "C" fn R_TakeScreenshot(
     mut jpeg: qboolean,
 ) {
     static mut fileName: [libc::c_char; 4096] = [0; 4096]; // bad things if two screenshots per frame?
-    let mut cmd: *mut screenshotCommand_t = 0 as *mut screenshotCommand_t;
+    let mut cmd: *mut screenshotCommand_t = std::ptr::null_mut();
     cmd = R_GetCommandBuffer(::std::mem::size_of::<screenshotCommand_t>() as usize as i32)
         as *mut screenshotCommand_t;
     if cmd.is_null() {
@@ -1408,11 +1408,11 @@ the menu system, sampled down from full screen distorted images
 
 pub unsafe extern "C" fn R_LevelShot() {
     let mut checkname: [libc::c_char; 4096] = [0; 4096]; // uncompressed type
-    let mut buffer: *mut byte = 0 as *mut byte; // pixel size
-    let mut source: *mut byte = 0 as *mut byte;
-    let mut allsource: *mut byte = 0 as *mut byte;
-    let mut src: *mut byte = 0 as *mut byte;
-    let mut dst: *mut byte = 0 as *mut byte;
+    let mut buffer: *mut byte = std::ptr::null_mut(); // pixel size
+    let mut source: *mut byte = std::ptr::null_mut();
+    let mut allsource: *mut byte = std::ptr::null_mut();
+    let mut src: *mut byte = std::ptr::null_mut();
+    let mut dst: *mut byte = std::ptr::null_mut();
     let mut offset: size_t = 0 as i32 as size_t;
     let mut padlen: i32 = 0;
     let mut x: i32 = 0;
@@ -1679,8 +1679,8 @@ RB_TakeVideoFrameCmd
 pub unsafe extern "C" fn RB_TakeVideoFrameCmd(
     mut data: *const libc::c_void,
 ) -> *const libc::c_void {
-    let mut cmd: *const videoFrameCommand_t = 0 as *const videoFrameCommand_t;
-    let mut cBuf: *mut byte = 0 as *mut byte;
+    let mut cmd: *const videoFrameCommand_t = std::ptr::null();
+    let mut cBuf: *mut byte = std::ptr::null_mut();
     let mut memcount: size_t = 0;
     let mut linelen: size_t = 0;
     let mut padwidth: i32 = 0;
@@ -1734,10 +1734,10 @@ pub unsafe extern "C" fn RB_TakeVideoFrameCmd(
             memcount as i32,
         );
     } else {
-        let mut lineend: *mut byte = 0 as *mut byte;
-        let mut memend: *mut byte = 0 as *mut byte;
-        let mut srcptr: *mut byte = 0 as *mut byte;
-        let mut destptr: *mut byte = 0 as *mut byte;
+        let mut lineend: *mut byte = std::ptr::null_mut();
+        let mut memend: *mut byte = std::ptr::null_mut();
+        let mut srcptr: *mut byte = std::ptr::null_mut();
+        let mut destptr: *mut byte = std::ptr::null_mut();
         srcptr = cBuf;
         destptr = (*cmd).encodeBuffer;
         memend = srcptr.offset(memcount as isize);
@@ -1828,7 +1828,7 @@ Workaround for ri.Printf's 1024 characters buffer limit.
 
 pub unsafe extern "C" fn R_PrintLongString(mut string: *const libc::c_char) {
     let mut buffer: [libc::c_char; 1024] = [0; 1024];
-    let mut p: *const libc::c_char = 0 as *const libc::c_char;
+    let mut p: *const libc::c_char = std::ptr::null();
     let mut size: i32 = crate::stdlib::strlen(string) as i32;
     p = string;
     while size > 0 as i32 {
@@ -2671,7 +2671,7 @@ R_Init
 pub unsafe extern "C" fn R_Init() {
     let mut err: i32 = 0;
     let mut i: i32 = 0;
-    let mut ptr: *mut byte = 0 as *mut byte;
+    let mut ptr: *mut byte = std::ptr::null_mut();
     ri.Printf.expect("non-null function pointer")(
         PRINT_ALL as i32,
         b"----- R_Init -----\n\x00" as *const u8 as *const libc::c_char,
@@ -3248,7 +3248,7 @@ pub unsafe extern "C" fn GetRefAPI(
             8 as i32,
             apiVersion,
         );
-        return 0 as *mut refexport_t;
+        return std::ptr::null_mut();
     }
     // the RE_ functions are Renderer Entry points
     re.Shutdown = Some(RE_Shutdown as unsafe extern "C" fn(_: qboolean) -> ());

@@ -378,10 +378,9 @@ pub static mut c_totalPatchSurfaces: i32 = 0;
 pub static mut c_totalPatchEdges: i32 = 0;
 
 static mut debugPatchCollide: *const crate::src::qcommon::cm_patch::patchCollide_t =
-    0 as *const crate::src::qcommon::cm_patch::patchCollide_t;
+    std::ptr::null();
 
-static mut debugFacet: *const crate::src::qcommon::cm_patch::facet_t =
-    0 as *const crate::src::qcommon::cm_patch::facet_t;
+static mut debugFacet: *const crate::src::qcommon::cm_patch::facet_t = std::ptr::null();
 
 static mut debugBlock: qboolean = qfalse;
 
@@ -394,8 +393,8 @@ CM_ClearLevelPatches
 #[no_mangle]
 
 pub unsafe extern "C" fn CM_ClearLevelPatches() {
-    debugPatchCollide = 0 as *const crate::src::qcommon::cm_patch::patchCollide_t;
-    debugFacet = 0 as *const crate::src::qcommon::cm_patch::facet_t;
+    debugPatchCollide = std::ptr::null();
+    debugFacet = std::ptr::null();
 }
 /*
 =================
@@ -1054,7 +1053,7 @@ CM_PointOnPlaneSide
 */
 
 unsafe extern "C" fn CM_PointOnPlaneSide(mut p: *mut f32, mut planeNum: i32) -> i32 {
-    let mut plane: *mut f32 = 0 as *mut f32;
+    let mut plane: *mut f32 = std::ptr::null_mut();
     let mut d: f32 = 0.;
     if planeNum == -(1 as i32) {
         return 2 as i32;
@@ -1110,8 +1109,8 @@ unsafe extern "C" fn CM_EdgePlaneNum(
     mut j: i32,
     mut k: i32,
 ) -> i32 {
-    let mut p1: *mut f32 = 0 as *mut f32;
-    let mut p2: *mut f32 = 0 as *mut f32;
+    let mut p1: *mut f32 = std::ptr::null_mut();
+    let mut p2: *mut f32 = std::ptr::null_mut();
     let mut up: vec3_t = [0.; 3];
     let mut p: i32 = 0;
     match k {
@@ -1234,7 +1233,7 @@ unsafe extern "C" fn CM_SetBorderInward(
 ) {
     let mut k: i32 = 0;
     let mut l: i32 = 0;
-    let mut points: [*mut f32; 4] = [0 as *mut f32; 4];
+    let mut points: [*mut f32; 4] = [std::ptr::null_mut(); 4];
     let mut numPoints: i32 = 0;
     match which {
         -1 => {
@@ -1346,7 +1345,7 @@ unsafe extern "C" fn CM_ValidateFacet(
 ) -> qboolean {
     let mut plane: [f32; 4] = [0.; 4];
     let mut j: i32 = 0;
-    let mut w: *mut winding_t = 0 as *mut winding_t;
+    let mut w: *mut winding_t = std::ptr::null_mut();
     let mut bounds: [vec3_t; 2] = [[0.; 3]; 2];
     if (*facet).surfacePlane == -(1 as i32) {
         return qfalse;
@@ -1432,8 +1431,8 @@ pub unsafe extern "C" fn CM_AddFacetBevels(mut facet: *mut crate::src::qcommon::
     let mut plane: [f32; 4] = [0.; 4];
     let mut d: f32 = 0.;
     let mut newplane: [f32; 4] = [0.; 4];
-    let mut w: *mut winding_t = 0 as *mut winding_t;
-    let mut w2: *mut winding_t = 0 as *mut winding_t;
+    let mut w: *mut winding_t = std::ptr::null_mut();
+    let mut w2: *mut winding_t = std::ptr::null_mut();
     let mut mins: vec3_t = [0.; 3];
     let mut maxs: vec3_t = [0.; 3];
     let mut vec: vec3_t = [0.; 3];
@@ -1741,12 +1740,12 @@ unsafe extern "C" fn CM_PatchCollideFromGrid(
 ) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut p1: *mut f32 = 0 as *mut f32;
-    let mut p2: *mut f32 = 0 as *mut f32;
-    let mut p3: *mut f32 = 0 as *mut f32;
+    let mut p1: *mut f32 = std::ptr::null_mut();
+    let mut p2: *mut f32 = std::ptr::null_mut();
+    let mut p3: *mut f32 = std::ptr::null_mut();
     let mut gridPlanes: [[[i32; 2]; 129]; 129] = [[[0; 2]; 129]; 129];
     let mut facet: *mut crate::src::qcommon::cm_patch::facet_t =
-        0 as *mut crate::src::qcommon::cm_patch::facet_t;
+        std::ptr::null_mut();
     let mut borders: [i32; 4] = [0; 4];
     let mut noAdjust: [i32; 4] = [0; 4];
     numPlanes = 0 as i32;
@@ -1989,8 +1988,7 @@ pub unsafe extern "C" fn CM_GeneratePatchCollide(
     mut height: i32,
     mut points: *mut vec3_t,
 ) -> *mut crate::src::qcommon::cm_patch::patchCollide_s {
-    let mut pf: *mut crate::src::qcommon::cm_patch::patchCollide_t =
-        0 as *mut crate::src::qcommon::cm_patch::patchCollide_t;
+    let mut pf: *mut crate::src::qcommon::cm_patch::patchCollide_t = std::ptr::null_mut();
     let mut grid: crate::src::qcommon::cm_patch::cGrid_t = crate::src::qcommon::cm_patch::cGrid_t {
         width: 0,
         height: 0,
@@ -2110,10 +2108,9 @@ pub unsafe extern "C" fn CM_TracePointThroughPatchCollide(
     let mut frontFacing: [qboolean; 2048] = [qfalse; 2048];
     let mut intersection: [f32; 2048] = [0.; 2048];
     let mut intersect: f32 = 0.;
-    let mut planes_0: *const crate::src::qcommon::cm_patch::patchPlane_t =
-        0 as *const crate::src::qcommon::cm_patch::patchPlane_t;
+    let mut planes_0: *const crate::src::qcommon::cm_patch::patchPlane_t = std::ptr::null();
     let mut facet: *const crate::src::qcommon::cm_patch::facet_t =
-        0 as *const crate::src::qcommon::cm_patch::facet_t;
+        std::ptr::null();
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut k: i32 = 0;
@@ -2313,10 +2310,9 @@ pub unsafe extern "C" fn CM_TraceThroughPatchCollide(
     let mut enterFrac: f32 = 0.;
     let mut leaveFrac: f32 = 0.;
     let mut t: f32 = 0.;
-    let mut planes_0: *mut crate::src::qcommon::cm_patch::patchPlane_t =
-        0 as *mut crate::src::qcommon::cm_patch::patchPlane_t;
+    let mut planes_0: *mut crate::src::qcommon::cm_patch::patchPlane_t = std::ptr::null_mut();
     let mut facet: *mut crate::src::qcommon::cm_patch::facet_t =
-        0 as *mut crate::src::qcommon::cm_patch::facet_t;
+        std::ptr::null_mut();
     let mut plane: [f32; 4] = [
         0 as i32 as f32,
         0 as i32 as f32,
@@ -2618,10 +2614,9 @@ pub unsafe extern "C" fn CM_PositionTestInPatchCollide(
     let mut j: i32 = 0;
     let mut offset: f32 = 0.;
     let mut t: f32 = 0.;
-    let mut planes_0: *mut crate::src::qcommon::cm_patch::patchPlane_t =
-        0 as *mut crate::src::qcommon::cm_patch::patchPlane_t;
+    let mut planes_0: *mut crate::src::qcommon::cm_patch::patchPlane_t = std::ptr::null_mut();
     let mut facet: *mut crate::src::qcommon::cm_patch::facet_t =
-        0 as *mut crate::src::qcommon::cm_patch::facet_t;
+        std::ptr::null_mut();
     let mut plane: [f32; 4] = [0.; 4];
     let mut startp: vec3_t = [0.; 3];
     if (*tw).isPoint as u64 != 0 {
@@ -2784,11 +2779,9 @@ pub unsafe extern "C" fn CM_DrawDebugSurface(
 ) {
     static mut cv: *mut cvar_t = std::ptr::null_mut();
     static mut cv2: *mut cvar_t = std::ptr::null_mut();
-    let mut pc: *const crate::src::qcommon::cm_patch::patchCollide_t =
-        0 as *const crate::src::qcommon::cm_patch::patchCollide_t;
-    let mut facet: *mut crate::src::qcommon::cm_patch::facet_t =
-        0 as *mut crate::src::qcommon::cm_patch::facet_t;
-    let mut w: *mut winding_t = 0 as *mut winding_t;
+    let mut pc: *const crate::src::qcommon::cm_patch::patchCollide_t = std::ptr::null();
+    let mut facet: *mut crate::src::qcommon::cm_patch::facet_t = std::ptr::null_mut();
+    let mut w: *mut winding_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut k: i32 = 0;

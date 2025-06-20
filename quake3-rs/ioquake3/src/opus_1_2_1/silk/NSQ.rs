@@ -520,15 +520,15 @@ pub unsafe extern "C" fn silk_NSQ_c(
     let mut lag: i32 = 0;
     let mut start_idx: i32 = 0;
     let mut LSF_interpolation_flag: i32 = 0;
-    let mut A_Q12: *const opus_int16 = 0 as *const opus_int16;
-    let mut B_Q14: *const opus_int16 = 0 as *const opus_int16;
-    let mut AR_shp_Q13: *const opus_int16 = 0 as *const opus_int16;
-    let mut pxq: *mut opus_int16 = 0 as *mut opus_int16;
-    let mut sLTP_Q15: *mut opus_int32 = 0 as *mut opus_int32;
-    let mut sLTP: *mut opus_int16 = 0 as *mut opus_int16;
+    let mut A_Q12: *const opus_int16 = std::ptr::null();
+    let mut B_Q14: *const opus_int16 = std::ptr::null();
+    let mut AR_shp_Q13: *const opus_int16 = std::ptr::null();
+    let mut pxq: *mut opus_int16 = std::ptr::null_mut();
+    let mut sLTP_Q15: *mut opus_int32 = std::ptr::null_mut();
+    let mut sLTP: *mut opus_int16 = std::ptr::null_mut();
     let mut HarmShapeFIRPacked_Q14: opus_int32 = 0;
     let mut offset_Q10: i32 = 0;
-    let mut x_sc_Q10: *mut opus_int32 = 0 as *mut opus_int32;
+    let mut x_sc_Q10: *mut opus_int32 = std::ptr::null_mut();
     (*NSQ).rand_seed = (*psIndices).Seed as opus_int32;
     /* Set unvoiced lag to the previous one, overwrite later for voiced */
     lag = (*NSQ).lagPrev;
@@ -720,9 +720,9 @@ unsafe extern "C" fn silk_noise_shape_quantizer(
     let mut tmp1: opus_int32 = 0;
     let mut tmp2: opus_int32 = 0;
     let mut sLF_AR_shp_Q14: opus_int32 = 0;
-    let mut psLPC_Q14: *mut opus_int32 = 0 as *mut opus_int32;
-    let mut shp_lag_ptr: *mut opus_int32 = 0 as *mut opus_int32;
-    let mut pred_lag_ptr: *mut opus_int32 = 0 as *mut opus_int32;
+    let mut psLPC_Q14: *mut opus_int32 = std::ptr::null_mut();
+    let mut shp_lag_ptr: *mut opus_int32 = std::ptr::null_mut();
+    let mut pred_lag_ptr: *mut opus_int32 = std::ptr::null_mut();
     shp_lag_ptr = &mut *(*NSQ)
         .sLTP_shp_Q14
         .as_mut_ptr()

@@ -400,7 +400,7 @@ static mut s_playersettings: playersettings_t = playersettings_t {
     banner: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -422,7 +422,7 @@ static mut s_playersettings: playersettings_t = playersettings_t {
     framel: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -448,7 +448,7 @@ static mut s_playersettings: playersettings_t = playersettings_t {
     framer: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -474,7 +474,7 @@ static mut s_playersettings: playersettings_t = playersettings_t {
     player: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -500,7 +500,7 @@ static mut s_playersettings: playersettings_t = playersettings_t {
     name: menufield_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -526,7 +526,7 @@ static mut s_playersettings: playersettings_t = playersettings_t {
     handicap: menulist_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -554,7 +554,7 @@ static mut s_playersettings: playersettings_t = playersettings_t {
     effects: menulist_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -582,7 +582,7 @@ static mut s_playersettings: playersettings_t = playersettings_t {
     back: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -608,7 +608,7 @@ static mut s_playersettings: playersettings_t = playersettings_t {
     model: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -634,7 +634,7 @@ static mut s_playersettings: playersettings_t = playersettings_t {
     item_null: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -765,7 +765,7 @@ static mut handicap_items: [*const libc::c_char; 21] = [
     b"15\x00" as *const u8 as *const libc::c_char,
     b"10\x00" as *const u8 as *const libc::c_char,
     b"5\x00" as *const u8 as *const libc::c_char,
-    0 as *const libc::c_char,
+    std::ptr::null(),
 ];
 /*
 =================
@@ -774,12 +774,12 @@ PlayerSettings_DrawName
 */
 
 unsafe extern "C" fn PlayerSettings_DrawName(mut self_0: *mut libc::c_void) {
-    let mut f: *mut menufield_s = 0 as *mut menufield_s;
+    let mut f: *mut menufield_s = std::ptr::null_mut();
     let mut focus: qboolean = qfalse;
     let mut style: i32 = 0;
-    let mut txt: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut txt: *mut libc::c_char = std::ptr::null_mut();
     let mut c: libc::c_char = 0;
-    let mut color: *mut f32 = 0 as *mut f32;
+    let mut color: *mut f32 = std::ptr::null_mut();
     let mut n: i32 = 0;
     let mut basex: i32 = 0;
     let mut x: i32 = 0;
@@ -865,10 +865,10 @@ PlayerSettings_DrawHandicap
 */
 
 unsafe extern "C" fn PlayerSettings_DrawHandicap(mut self_0: *mut libc::c_void) {
-    let mut item: *mut menulist_s = 0 as *mut menulist_s;
+    let mut item: *mut menulist_s = std::ptr::null_mut();
     let mut focus: qboolean = qfalse;
     let mut style: i32 = 0;
-    let mut color: *mut f32 = 0 as *mut f32;
+    let mut color: *mut f32 = std::ptr::null_mut();
     item = self_0 as *mut menulist_s;
     focus = ((*(*item).generic.parent).cursor == (*item).generic.menuPosition) as i32 as qboolean;
     style = 0 as i32 | 0x10 as i32;
@@ -899,10 +899,10 @@ PlayerSettings_DrawEffects
 */
 
 unsafe extern "C" fn PlayerSettings_DrawEffects(mut self_0: *mut libc::c_void) {
-    let mut item: *mut menulist_s = 0 as *mut menulist_s;
+    let mut item: *mut menulist_s = std::ptr::null_mut();
     let mut focus: qboolean = qfalse;
     let mut style: i32 = 0;
-    let mut color: *mut f32 = 0 as *mut f32;
+    let mut color: *mut f32 = std::ptr::null_mut();
     item = self_0 as *mut menulist_s;
     focus = ((*(*item).generic.parent).cursor == (*item).generic.menuPosition) as i32 as qboolean;
     style = 0 as i32 | 0x10 as i32;
@@ -940,7 +940,7 @@ PlayerSettings_DrawPlayer
 */
 
 unsafe extern "C" fn PlayerSettings_DrawPlayer(mut self_0: *mut libc::c_void) {
-    let mut b: *mut menubitmap_s = 0 as *mut menubitmap_s;
+    let mut b: *mut menubitmap_s = std::ptr::null_mut();
     let mut viewangles: vec3_t = [0.; 3];
     let mut buf: [libc::c_char; 64] = [0; 64];
     trap_Cvar_VariableStringBuffer(

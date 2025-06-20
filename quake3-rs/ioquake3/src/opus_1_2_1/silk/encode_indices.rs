@@ -364,7 +364,7 @@ pub unsafe extern "C" fn silk_encode_indices(
     let mut delta_lagIndex: i32 = 0;
     let mut ec_ix: [opus_int16; 16] = [0; 16];
     let mut pred_Q8: [u8; 16] = [0; 16];
-    let mut psIndices: *const SideInfoIndices = 0 as *const SideInfoIndices;
+    let mut psIndices: *const SideInfoIndices = std::ptr::null();
     if encode_LBRR != 0 {
         psIndices = &mut *(*psEncC)
             .indices_LBRR

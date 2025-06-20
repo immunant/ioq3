@@ -985,8 +985,8 @@ pub unsafe extern "C" fn RB_RenderDrawSurfList(
     mut drawSurfs: *mut drawSurf_t,
     mut numDrawSurfs: i32,
 ) {
-    let mut shader: *mut shader_t = 0 as *mut shader_t;
-    let mut oldShader: *mut shader_t = 0 as *mut shader_t;
+    let mut shader: *mut shader_t = std::ptr::null_mut();
+    let mut oldShader: *mut shader_t = std::ptr::null_mut();
     let mut fogNum: i32 = 0;
     let mut oldFogNum: i32 = 0;
     let mut entityNum: i32 = 0;
@@ -998,7 +998,7 @@ pub unsafe extern "C" fn RB_RenderDrawSurfList(
     let mut isCrosshair: qboolean = qfalse;
     let mut wasCrosshair: qboolean = qfalse;
     let mut i: i32 = 0;
-    let mut drawSurf: *mut drawSurf_t = 0 as *mut drawSurf_t;
+    let mut drawSurf: *mut drawSurf_t = std::ptr::null_mut();
     let mut oldSort: i32 = 0;
     let mut originalTime: f64 = 0.;
     // save original time for entity shader offsets
@@ -1008,7 +1008,7 @@ pub unsafe extern "C" fn RB_RenderDrawSurfList(
     // draw everything
     oldEntityNum = -(1 as i32);
     backEnd.currentEntity = &mut tr.worldEntity;
-    oldShader = 0 as *mut shader_t;
+    oldShader = std::ptr::null_mut();
     oldFogNum = -(1 as i32);
     oldDepthRange = qfalse;
     wasCrosshair = qfalse;
@@ -1425,7 +1425,7 @@ RB_SetColor
 #[no_mangle]
 
 pub unsafe extern "C" fn RB_SetColor(mut data: *const libc::c_void) -> *const libc::c_void {
-    let mut cmd: *const setColorCommand_t = 0 as *const setColorCommand_t;
+    let mut cmd: *const setColorCommand_t = std::ptr::null();
     cmd = data as *const setColorCommand_t;
     backEnd.color2D[0 as i32 as usize] =
         ((*cmd).color[0 as i32 as usize] * 255 as i32 as f32) as byte;
@@ -1445,8 +1445,8 @@ RB_StretchPic
 #[no_mangle]
 
 pub unsafe extern "C" fn RB_StretchPic(mut data: *const libc::c_void) -> *const libc::c_void {
-    let mut cmd: *const stretchPicCommand_t = 0 as *const stretchPicCommand_t;
-    let mut shader: *mut shader_t = 0 as *mut shader_t;
+    let mut cmd: *const stretchPicCommand_t = std::ptr::null();
+    let mut shader: *mut shader_t = std::ptr::null_mut();
     let mut numVerts: i32 = 0;
     let mut numIndexes: i32 = 0;
     cmd = data as *const stretchPicCommand_t;
@@ -1523,7 +1523,7 @@ RB_DrawSurfs
 #[no_mangle]
 
 pub unsafe extern "C" fn RB_DrawSurfs(mut data: *const libc::c_void) -> *const libc::c_void {
-    let mut cmd: *const drawSurfsCommand_t = 0 as *const drawSurfsCommand_t;
+    let mut cmd: *const drawSurfsCommand_t = std::ptr::null();
     // finish any 2D drawing if needed
     if tess.numIndexes != 0 {
         RB_EndSurface();
@@ -1543,7 +1543,7 @@ RB_DrawBuffer
 #[no_mangle]
 
 pub unsafe extern "C" fn RB_DrawBuffer(mut data: *const libc::c_void) -> *const libc::c_void {
-    let mut cmd: *const drawBufferCommand_t = 0 as *const drawBufferCommand_t;
+    let mut cmd: *const drawBufferCommand_t = std::ptr::null();
     cmd = data as *const drawBufferCommand_t;
     qglDrawBuffer.expect("non-null function pointer")((*cmd).buffer as GLenum);
     // clear screen for debugging
@@ -1572,7 +1572,7 @@ Also called by RE_EndRegistration
 
 pub unsafe extern "C" fn RB_ShowImages() {
     let mut i: i32 = 0;
-    let mut image: *mut image_t = 0 as *mut image_t;
+    let mut image: *mut image_t = std::ptr::null_mut();
     let mut x: f32 = 0.;
     let mut y: f32 = 0.;
     let mut w: f32 = 0.;
@@ -1665,7 +1665,7 @@ RB_SwapBuffers
 #[no_mangle]
 
 pub unsafe extern "C" fn RB_SwapBuffers(mut data: *const libc::c_void) -> *const libc::c_void {
-    let mut cmd: *const swapBuffersCommand_t = 0 as *const swapBuffersCommand_t;
+    let mut cmd: *const swapBuffersCommand_t = std::ptr::null();
     // finish any 2D drawing if needed
     if tess.numIndexes != 0 {
         RB_EndSurface();
@@ -1680,7 +1680,7 @@ pub unsafe extern "C" fn RB_SwapBuffers(mut data: *const libc::c_void) -> *const
     if (*r_measureOverdraw).integer != 0 {
         let mut i: i32 = 0;
         let mut sum: isize = 0 as i32 as isize;
-        let mut stencilReadback: *mut u8 = 0 as *mut u8;
+        let mut stencilReadback: *mut u8 = std::ptr::null_mut();
         stencilReadback = ri
             .Hunk_AllocateTempMemory
             .expect("non-null function pointer")(

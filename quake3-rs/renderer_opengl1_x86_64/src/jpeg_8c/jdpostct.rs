@@ -431,7 +431,7 @@ unsafe extern "C" fn post_process_prepass(
         .expect("non-null function pointer")(
             cinfo,
             (*post).buffer.offset(old_next_row as isize),
-            0 as *mut libc::c_void as JSAMPARRAY,
+            std::ptr::null_mut() as JSAMPARRAY,
             num_rows as i32,
         );
         *out_row_ctr = (*out_row_ctr as u32).wrapping_add(num_rows) as JDIMENSION
@@ -535,7 +535,7 @@ pub unsafe extern "C" fn jinit_d_post_controller(
     mut cinfo: j_decompress_ptr,
     mut need_full_buffer: boolean,
 ) {
-    let mut post: my_post_ptr = 0 as *mut my_post_controller; /* flag for no virtual arrays */
+    let mut post: my_post_ptr = std::ptr::null_mut(); /* flag for no virtual arrays */
     post = Some(
         (*(*cinfo).mem)
             .alloc_small

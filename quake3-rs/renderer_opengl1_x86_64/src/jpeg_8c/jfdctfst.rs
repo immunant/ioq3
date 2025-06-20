@@ -102,8 +102,8 @@ pub unsafe extern "C" fn jpeg_fdct_ifast(
     let mut z5: DCTELEM = 0;
     let mut z11: DCTELEM = 0;
     let mut z13: DCTELEM = 0;
-    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
-    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut dataptr: *mut DCTELEM = std::ptr::null_mut();
+    let mut elemptr: JSAMPROW = std::ptr::null_mut();
     let mut ctr: i32 = 0;
     /* Pass 1: process rows. */
     dataptr = data;

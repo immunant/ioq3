@@ -41,7 +41,7 @@ pub unsafe extern "C" fn silk_corrVector_FLP(
 /* O    X'*t correlation vector [order]             */
 {
     let mut lag: i32 = 0; /* Points to first sample of column 0 of X: X[:,0] */
-    let mut ptr1: *const f32 = 0 as *const f32;
+    let mut ptr1: *const f32 = std::ptr::null();
     ptr1 = &*x.offset((Order - 1 as i32) as isize) as *const f32;
     lag = 0 as i32;
     while lag < Order {
@@ -211,8 +211,8 @@ pub unsafe extern "C" fn silk_corrMatrix_FLP(
     let mut j: i32 = 0; /* First sample of column 0 of X */
     let mut lag: i32 = 0; /* X[:,0]'*X[:,0] */
     let mut energy: f64 = 0.;
-    let mut ptr1: *const f32 = 0 as *const f32;
-    let mut ptr2: *const f32 = 0 as *const f32;
+    let mut ptr1: *const f32 = std::ptr::null();
+    let mut ptr2: *const f32 = std::ptr::null();
     ptr1 = &*x.offset((Order - 1 as i32) as isize) as *const f32;
     energy = crate::src::opus_1_2_1::silk::float::energy_FLP::silk_energy_FLP(ptr1, L);
     *XX.offset((0 as i32 * Order + 0 as i32) as isize) = energy as f32;

@@ -316,8 +316,8 @@ R_CullModel
 
 unsafe extern "C" fn R_CullModel(mut header: *mut md3Header_t, mut ent: *mut trRefEntity_t) -> i32 {
     let mut bounds: [vec3_t; 2] = [[0.; 3]; 2];
-    let mut oldFrame: *mut md3Frame_t = 0 as *mut md3Frame_t;
-    let mut newFrame: *mut md3Frame_t = 0 as *mut md3Frame_t;
+    let mut oldFrame: *mut md3Frame_t = std::ptr::null_mut();
+    let mut newFrame: *mut md3Frame_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     // compute frame pointers
     newFrame = ((header as *mut byte).offset((*header).ofsFrames as isize) as *mut md3Frame_t)
@@ -424,9 +424,9 @@ pub unsafe extern "C" fn R_ComputeLOD(mut ent: *mut trRefEntity_t) -> i32 {
     let mut flod: f32 = 0.;
     let mut lodscale: f32 = 0.;
     let mut projectedRadius: f32 = 0.;
-    let mut frame: *mut md3Frame_t = 0 as *mut md3Frame_t;
-    let mut mdr: *mut mdrHeader_t = 0 as *mut mdrHeader_t;
-    let mut mdrframe: *mut mdrFrame_t = 0 as *mut mdrFrame_t;
+    let mut frame: *mut md3Frame_t = std::ptr::null_mut();
+    let mut mdr: *mut mdrHeader_t = std::ptr::null_mut();
+    let mut mdrframe: *mut mdrFrame_t = std::ptr::null_mut();
     let mut lod: i32 = 0;
     if (*tr.currentModel).numLods < 2 as i32 {
         // model has only 1 LOD level, skip computations and bias
@@ -437,7 +437,7 @@ pub unsafe extern "C" fn R_ComputeLOD(mut ent: *mut trRefEntity_t) -> i32 {
         if (*tr.currentModel).type_0 as u32 == MOD_MDR as i32 as u32 {
             let mut frameSize: i32 = 0;
             mdr = (*tr.currentModel).modelData as *mut mdrHeader_t;
-            frameSize = &mut *(*(0 as *mut mdrFrame_t))
+            frameSize = &mut *(*(std::ptr::null_mut()))
                 .bones
                 .as_mut_ptr()
                 .offset((*mdr).numBones as isize) as *mut mdrBone_t
@@ -502,8 +502,8 @@ pub unsafe extern "C" fn R_ComputeFogNum(
 ) -> i32 {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut fog: *mut fog_t = 0 as *mut fog_t;
-    let mut md3Frame: *mut md3Frame_t = 0 as *mut md3Frame_t;
+    let mut fog: *mut fog_t = std::ptr::null_mut();
+    let mut md3Frame: *mut md3Frame_t = std::ptr::null_mut();
     let mut localOrigin: vec3_t = [0.; 3];
     if tr.refdef.rdflags & 0x1 as i32 != 0 {
         return 0 as i32;
@@ -863,10 +863,10 @@ R_AddMD3Surfaces
 
 pub unsafe extern "C" fn R_AddMD3Surfaces(mut ent: *mut trRefEntity_t) {
     let mut i: i32 = 0;
-    let mut header: *mut md3Header_t = 0 as *mut md3Header_t;
-    let mut surface: *mut md3Surface_t = 0 as *mut md3Surface_t;
-    let mut md3Shader: *mut md3Shader_t = 0 as *mut md3Shader_t;
-    let mut shader: *mut shader_t = 0 as *mut shader_t;
+    let mut header: *mut md3Header_t = std::ptr::null_mut();
+    let mut surface: *mut md3Surface_t = std::ptr::null_mut();
+    let mut md3Shader: *mut md3Shader_t = std::ptr::null_mut();
+    let mut shader: *mut shader_t = std::ptr::null_mut();
     let mut cull: i32 = 0;
     let mut lod: i32 = 0;
     let mut fogNum: i32 = 0;
@@ -935,7 +935,7 @@ pub unsafe extern "C" fn R_AddMD3Surfaces(mut ent: *mut trRefEntity_t) {
         if (*ent).e.customShader != 0 {
             shader = R_GetShaderByHandle((*ent).e.customShader) as *mut shader_s
         } else if (*ent).e.customSkin > 0 as i32 && (*ent).e.customSkin < tr.numSkins {
-            let mut skin: *mut skin_t = 0 as *mut skin_t;
+            let mut skin: *mut skin_t = std::ptr::null_mut();
             let mut j: i32 = 0;
             skin = R_GetSkinByHandle((*ent).e.customSkin) as *mut skin_s;
             // match the surface name to something in the skin file

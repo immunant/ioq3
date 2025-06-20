@@ -302,13 +302,13 @@ pub unsafe extern "C" fn R_LoadJPG(
      */
     let mut cinfo: jpeg_decompress_struct = {
         let mut init = jpeg_decompress_struct {
-            err: 0 as *mut jpeg_error_mgr,
-            mem: 0 as *mut jpeg_memory_mgr,
-            progress: 0 as *mut jpeg_progress_mgr,
-            client_data: 0 as *mut libc::c_void,
+            err: std::ptr::null_mut(),
+            mem: std::ptr::null_mut(),
+            progress: std::ptr::null_mut(),
+            client_data: std::ptr::null_mut(),
             is_decompressor: 0,
             global_state: 0,
-            src: 0 as *mut jpeg_source_mgr,
+            src: std::ptr::null_mut(),
             image_width: 0,
             image_height: 0,
             num_components: 0,
@@ -335,18 +335,18 @@ pub unsafe extern "C" fn R_LoadJPG(
             output_components: 0,
             rec_outbuf_height: 0,
             actual_number_of_colors: 0,
-            colormap: 0 as *mut JSAMPROW,
+            colormap: std::ptr::null_mut(),
             output_scanline: 0,
             input_scan_number: 0,
             input_iMCU_row: 0,
             output_scan_number: 0,
             output_iMCU_row: 0,
-            coef_bits: 0 as *mut [i32; 64],
-            quant_tbl_ptrs: [0 as *mut JQUANT_TBL; 4],
-            dc_huff_tbl_ptrs: [0 as *mut JHUFF_TBL; 4],
-            ac_huff_tbl_ptrs: [0 as *mut JHUFF_TBL; 4],
+            coef_bits: std::ptr::null_mut(),
+            quant_tbl_ptrs: [std::ptr::null_mut(); 4],
+            dc_huff_tbl_ptrs: [std::ptr::null_mut(); 4],
+            ac_huff_tbl_ptrs: [std::ptr::null_mut(); 4],
             data_precision: 0,
-            comp_info: 0 as *mut jpeg_component_info,
+            comp_info: std::ptr::null_mut(),
             is_baseline: 0,
             progressive_mode: 0,
             arith_code: 0,
@@ -363,15 +363,15 @@ pub unsafe extern "C" fn R_LoadJPG(
             saw_Adobe_marker: 0,
             Adobe_transform: 0,
             CCIR601_sampling: 0,
-            marker_list: 0 as *mut jpeg_marker_struct,
+            marker_list: std::ptr::null_mut(),
             max_h_samp_factor: 0,
             max_v_samp_factor: 0,
             min_DCT_h_scaled_size: 0,
             min_DCT_v_scaled_size: 0,
             total_iMCU_rows: 0,
-            sample_range_limit: 0 as *mut JSAMPLE,
+            sample_range_limit: std::ptr::null_mut(),
             comps_in_scan: 0,
-            cur_comp_info: [0 as *mut jpeg_component_info; 4],
+            cur_comp_info: [std::ptr::null_mut(); 4],
             MCUs_per_row: 0,
             MCU_rows_in_scan: 0,
             blocks_in_MCU: 0,
@@ -381,20 +381,20 @@ pub unsafe extern "C" fn R_LoadJPG(
             Ah: 0,
             Al: 0,
             block_size: 0,
-            natural_order: 0 as *const i32,
+            natural_order: std::ptr::null(),
             lim_Se: 0,
             unread_marker: 0,
-            master: 0 as *mut jpeg_decomp_master,
-            main: 0 as *mut jpeg_d_main_controller,
-            coef: 0 as *mut jpeg_d_coef_controller,
-            post: 0 as *mut jpeg_d_post_controller,
-            inputctl: 0 as *mut jpeg_input_controller,
-            marker: 0 as *mut jpeg_marker_reader,
-            entropy: 0 as *mut jpeg_entropy_decoder,
-            idct: 0 as *mut jpeg_inverse_dct,
-            upsample: 0 as *mut jpeg_upsampler,
-            cconvert: 0 as *mut jpeg_color_deconverter,
-            cquantize: 0 as *mut jpeg_color_quantizer,
+            master: std::ptr::null_mut(),
+            main: std::ptr::null_mut(),
+            coef: std::ptr::null_mut(),
+            post: std::ptr::null_mut(),
+            inputctl: std::ptr::null_mut(),
+            marker: std::ptr::null_mut(),
+            entropy: std::ptr::null_mut(),
+            idct: std::ptr::null_mut(),
+            upsample: std::ptr::null_mut(),
+            cconvert: std::ptr::null_mut(),
+            cquantize: std::ptr::null_mut(),
         };
         init
     };
@@ -421,9 +421,9 @@ pub unsafe extern "C" fn R_LoadJPG(
             msg_parm: C2RustUnnamed_0 { i: [0; 8] },
             trace_level: 0,
             num_warnings: 0,
-            jpeg_message_table: 0 as *const *const libc::c_char,
+            jpeg_message_table: std::ptr::null(),
             last_jpeg_message: 0,
-            addon_message_table: 0 as *const *const libc::c_char,
+            addon_message_table: std::ptr::null(),
             first_addon_message: 0,
             last_addon_message: 0,
         },
@@ -434,16 +434,17 @@ pub unsafe extern "C" fn R_LoadJPG(
         }; 1],
     };
     /* More stuff */
-    let mut buffer: JSAMPARRAY = 0 as *mut JSAMPROW; /* Output row buffer */
+    let mut buffer: JSAMPARRAY = std::ptr::null_mut(); /* Output row buffer */
     let mut row_stride: u32 = 0; /* physical row width in output buffer */
     let mut pixelcount: u32 = 0;
     let mut memcount: u32 = 0;
     let mut sindex: u32 = 0;
     let mut dindex: u32 = 0;
-    let mut out: *mut byte = 0 as *mut byte;
+    let mut out: *mut byte = std::ptr::null_mut();
     let mut len: i32 = 0;
-    let mut fbuffer: C2RustUnnamed_86 = C2RustUnnamed_86 { b: 0 as *mut byte };
-    let mut buf: *mut byte = 0 as *mut byte;
+    let mut fbuffer: C2RustUnnamed_86 = C2RustUnnamed_86 { b: std::ptr::null_mut()}
+    ;
+    let mut buf: *mut byte = std::ptr::null_mut();
     /* In this example we want to open the input file before doing anything else,
      * so that the setjmp() error recovery below can assume the file is open.
      * VERY IMPORTANT: use "b" option to fopen() if you are on a machine that
@@ -687,7 +688,7 @@ unsafe extern "C" fn term_destination(mut _cinfo: j_compress_ptr) {}
  */
 
 unsafe extern "C" fn jpegDest(mut cinfo: j_compress_ptr, mut outfile: *mut byte, mut size: i32) {
-    let mut dest: my_dest_ptr = 0 as *mut my_destination_mgr;
+    let mut dest: my_dest_ptr = std::ptr::null_mut();
     /* The destination object is made permanent so that multiple JPEG images
      * can be written to the same file without re-executing jpeg_stdio_dest.
      * This makes it dangerous to use this manager and a different destination
@@ -737,13 +738,13 @@ pub unsafe extern "C" fn RE_SaveJPGToBuffer(
     mut padding: i32,
 ) -> size_t {
     let mut cinfo: jpeg_compress_struct = jpeg_compress_struct {
-        err: 0 as *mut jpeg_error_mgr,
-        mem: 0 as *mut jpeg_memory_mgr,
-        progress: 0 as *mut jpeg_progress_mgr,
-        client_data: 0 as *mut libc::c_void,
+        err: std::ptr::null_mut(),
+        mem: std::ptr::null_mut(),
+        progress: std::ptr::null_mut(),
+        client_data: std::ptr::null_mut(),
         is_decompressor: 0,
         global_state: 0,
-        dest: 0 as *mut jpeg_destination_mgr,
+        dest: std::ptr::null_mut(),
         image_width: 0,
         image_height: 0,
         input_components: 0,
@@ -756,16 +757,16 @@ pub unsafe extern "C" fn RE_SaveJPGToBuffer(
         data_precision: 0,
         num_components: 0,
         jpeg_color_space: JCS_UNKNOWN,
-        comp_info: 0 as *mut jpeg_component_info,
-        quant_tbl_ptrs: [0 as *mut JQUANT_TBL; 4],
+        comp_info: std::ptr::null_mut(),
+        quant_tbl_ptrs: [std::ptr::null_mut(); 4],
         q_scale_factor: [0; 4],
-        dc_huff_tbl_ptrs: [0 as *mut JHUFF_TBL; 4],
-        ac_huff_tbl_ptrs: [0 as *mut JHUFF_TBL; 4],
+        dc_huff_tbl_ptrs: [std::ptr::null_mut(); 4],
+        ac_huff_tbl_ptrs: [std::ptr::null_mut(); 4],
         arith_dc_L: [0; 16],
         arith_dc_U: [0; 16],
         arith_ac_K: [0; 16],
         num_scans: 0,
-        scan_info: 0 as *const jpeg_scan_info,
+        scan_info: std::ptr::null(),
         raw_data_in: 0,
         arith_code: 0,
         optimize_coding: 0,
@@ -790,7 +791,7 @@ pub unsafe extern "C" fn RE_SaveJPGToBuffer(
         min_DCT_v_scaled_size: 0,
         total_iMCU_rows: 0,
         comps_in_scan: 0,
-        cur_comp_info: [0 as *mut jpeg_component_info; 4],
+        cur_comp_info: [std::ptr::null_mut(); 4],
         MCUs_per_row: 0,
         MCU_rows_in_scan: 0,
         blocks_in_MCU: 0,
@@ -800,18 +801,18 @@ pub unsafe extern "C" fn RE_SaveJPGToBuffer(
         Ah: 0,
         Al: 0,
         block_size: 0,
-        natural_order: 0 as *const i32,
+        natural_order: std::ptr::null(),
         lim_Se: 0,
-        master: 0 as *mut jpeg_comp_master,
-        main: 0 as *mut jpeg_c_main_controller,
-        prep: 0 as *mut jpeg_c_prep_controller,
-        coef: 0 as *mut jpeg_c_coef_controller,
-        marker: 0 as *mut jpeg_marker_writer,
-        cconvert: 0 as *mut jpeg_color_converter,
-        downsample: 0 as *mut jpeg_downsampler,
-        fdct: 0 as *mut jpeg_forward_dct,
-        entropy: 0 as *mut jpeg_entropy_encoder,
-        script_space: 0 as *mut jpeg_scan_info,
+        master: std::ptr::null_mut(),
+        main: std::ptr::null_mut(),
+        prep: std::ptr::null_mut(),
+        coef: std::ptr::null_mut(),
+        marker: std::ptr::null_mut(),
+        cconvert: std::ptr::null_mut(),
+        downsample: std::ptr::null_mut(),
+        fdct: std::ptr::null_mut(),
+        entropy: std::ptr::null_mut(),
+        script_space: std::ptr::null_mut(),
         script_space_size: 0,
     }; /* pointer to JSAMPLE row[s] */
     let mut jerr: q_jpeg_error_mgr_t = q_jpeg_error_mgr_t {
@@ -825,9 +826,9 @@ pub unsafe extern "C" fn RE_SaveJPGToBuffer(
             msg_parm: C2RustUnnamed_0 { i: [0; 8] },
             trace_level: 0,
             num_warnings: 0,
-            jpeg_message_table: 0 as *const *const libc::c_char,
+            jpeg_message_table: std::ptr::null(),
             last_jpeg_message: 0,
-            addon_message_table: 0 as *const *const libc::c_char,
+            addon_message_table: std::ptr::null(),
             first_addon_message: 0,
             last_addon_message: 0,
         },
@@ -837,8 +838,8 @@ pub unsafe extern "C" fn RE_SaveJPGToBuffer(
             __saved_mask: __sigset_t { __val: [0; 16] },
         }; 1],
     }; /* physical row width in image buffer */
-    let mut row_pointer: [JSAMPROW; 1] = [0 as *mut JSAMPLE; 1];
-    let mut dest: my_dest_ptr = 0 as *mut my_destination_mgr;
+    let mut row_pointer: [JSAMPROW; 1] = [std::ptr::null_mut(); 1];
+    let mut dest: my_dest_ptr = std::ptr::null_mut();
     let mut row_stride: i32 = 0;
     let mut outcount: size_t = 0;
     /* Step 1: allocate and initialize JPEG compression object */
@@ -929,7 +930,7 @@ pub unsafe extern "C" fn RE_SaveJPG(
     mut image_buffer: *mut byte,
     mut padding: i32,
 ) {
-    let mut out: *mut byte = 0 as *mut byte;
+    let mut out: *mut byte = std::ptr::null_mut();
     let mut bufSize: size_t = 0;
     bufSize = (image_width * image_height * 3 as i32) as size_t;
     out = crate::src::renderergl1::tr_main::ri

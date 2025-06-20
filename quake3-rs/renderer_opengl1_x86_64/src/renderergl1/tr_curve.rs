@@ -257,7 +257,7 @@ unsafe extern "C" fn MakeMeshNormals(
     let mut delta: vec3_t = [0.; 3];
     let mut x: i32 = 0;
     let mut y: i32 = 0;
-    let mut dv: *mut drawVert_t = 0 as *mut drawVert_t;
+    let mut dv: *mut drawVert_t = std::ptr::null_mut();
     let mut around: [vec3_t; 8] = [[0.; 3]; 8];
     let mut temp: vec3_t = [0.; 3];
     let mut good: [qboolean; 8] = [qfalse; 8];
@@ -568,9 +568,9 @@ pub unsafe extern "C" fn R_CreateSurfaceGridMesh(
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut size: i32 = 0;
-    let mut vert: *mut drawVert_t = 0 as *mut drawVert_t;
+    let mut vert: *mut drawVert_t = std::ptr::null_mut();
     let mut tmpVec: vec3_t = [0.; 3];
-    let mut grid: *mut srfGridMesh_t = 0 as *mut srfGridMesh_t;
+    let mut grid: *mut srfGridMesh_t = std::ptr::null_mut();
     // copy the results out to a grid
     size = ((width * height - 1 as i32) as usize)
         .wrapping_mul(::std::mem::size_of::<drawVert_t>() as usize)
@@ -959,7 +959,7 @@ pub unsafe extern "C" fn R_GridInsertColumn(
     oldwidth = 0 as i32;
     width = (*grid).width + 1 as i32;
     if width > 65 as i32 {
-        return 0 as *mut srfGridMesh_t;
+        return std::ptr::null_mut();
     }
     height = (*grid).height;
     i = 0 as i32;
@@ -1436,7 +1436,7 @@ pub unsafe extern "C" fn R_GridInsertRow(
     width = (*grid).width;
     height = (*grid).height + 1 as i32;
     if height > 65 as i32 {
-        return 0 as *mut srfGridMesh_t;
+        return std::ptr::null_mut();
     }
     i = 0 as i32;
     while i < height {

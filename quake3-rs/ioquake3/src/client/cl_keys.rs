@@ -19,7 +19,7 @@ pub mod stdlib_h {
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return libc::strtol(
             __nptr,
-            0 as *mut libc::c_void as *mut *mut libc::c_char,
+            std::ptr::null_mut() as *mut *mut libc::c_char,
             10 as i32,
         ) as i32;
     }
@@ -2392,7 +2392,7 @@ Field_Paste
 #[no_mangle]
 
 pub unsafe extern "C" fn Field_Paste(mut edit: *mut field_t) {
-    let mut cbd: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut cbd: *mut libc::c_char = std::ptr::null_mut();
     let mut pasteLen: i32 = 0;
     let mut i: i32 = 0;
     cbd = Sys_GetClipboardData();
@@ -2855,7 +2855,7 @@ to be configured even if they don't have defined names.
 #[no_mangle]
 
 pub unsafe extern "C" fn Key_StringToKeynum(mut str: *mut libc::c_char) -> i32 {
-    let mut kn: *mut keyname_t = 0 as *mut keyname_t;
+    let mut kn: *mut keyname_t = std::ptr::null_mut();
     let mut n: i32 = 0;
     if str.is_null() || *str.offset(0 as i32 as isize) == 0 {
         return -(1 as i32);
@@ -2907,7 +2907,7 @@ given keynum.
 #[no_mangle]
 
 pub unsafe extern "C" fn Key_KeynumToString(mut keynum: i32) -> *mut libc::c_char {
-    let mut kn: *mut keyname_t = 0 as *mut keyname_t;
+    let mut kn: *mut keyname_t = std::ptr::null_mut();
     static mut tinystr: [libc::c_char; 5] = [0; 5];
     let mut i: i32 = 0;
     let mut j: i32 = 0;
@@ -3216,7 +3216,7 @@ Key_CompleteBind
 */
 
 unsafe extern "C" fn Key_CompleteBind(mut args: *mut libc::c_char, mut argNum: i32) {
-    let mut p: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut p: *mut libc::c_char = std::ptr::null_mut();
     if argNum == 2 as i32 {
         // Skip "bind "
         p = Com_SkipTokens(
@@ -3309,7 +3309,7 @@ Execute the commands in the bind string
 pub unsafe extern "C" fn CL_ParseBinding(mut key: i32, mut down: qboolean, mut time: u32) {
     let mut buf: [libc::c_char; 1024] = [0; 1024];
     let mut p: *mut libc::c_char = buf.as_mut_ptr();
-    let mut end: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut end: *mut libc::c_char = std::ptr::null_mut();
     let mut allCommands: qboolean = qfalse;
     let mut allowUpCmds: qboolean = qfalse;
     if clc.state as u32 == CA_DISCONNECTED as i32 as u32 && Key_GetCatcher() == 0 as i32 {
@@ -3967,8 +3967,8 @@ Load the console history from cl_consoleHistory
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_LoadConsoleHistory() {
-    let mut token: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut text_p: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut token: *mut libc::c_char = std::ptr::null_mut();
+    let mut text_p: *mut libc::c_char = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut numChars: i32 = 0;
     let mut numLines: i32 = 0 as i32;

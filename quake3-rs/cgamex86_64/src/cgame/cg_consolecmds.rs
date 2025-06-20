@@ -6,7 +6,7 @@ pub mod stdlib_h {
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return libc::strtol(
             __nptr,
-            0 as *mut libc::c_void as *mut *mut libc::c_char,
+            std::ptr::null_mut() as *mut *mut libc::c_char,
             10i32,
         ) as i32;
     }
@@ -454,7 +454,7 @@ Cmd_Argc() / Cmd_Argv()
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_ConsoleCommand() -> qboolean {
-    let mut cmd: *const libc::c_char = 0 as *const libc::c_char;
+    let mut cmd: *const libc::c_char = std::ptr::null();
     let mut i: i32 = 0;
     cmd = CG_Argv(0i32);
     i = 0i32;

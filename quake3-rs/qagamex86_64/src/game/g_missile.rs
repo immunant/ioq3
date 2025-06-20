@@ -583,7 +583,7 @@ G_MissileImpact
 #[no_mangle]
 
 pub unsafe extern "C" fn G_MissileImpact(mut ent: *mut gentity_t, mut trace: *mut trace_t) {
-    let mut other: *mut gentity_t = 0 as *mut gentity_t;
+    let mut other: *mut gentity_t = std::ptr::null_mut();
     let mut hitClient: qboolean = qfalse;
     other = &mut *g_entities.as_mut_ptr().offset((*trace).entityNum as isize) as *mut gentity_t;
     // check for bounce
@@ -634,7 +634,7 @@ pub unsafe extern "C" fn G_MissileImpact(mut ent: *mut gentity_t, mut trace: *mu
         b"hook\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
-        let mut nent: *mut gentity_t = 0 as *mut gentity_t;
+        let mut nent: *mut gentity_t = std::ptr::null_mut();
         let mut v: vec3_t = [0.; 3];
         nent = G_Spawn() as *mut gentity_s;
         if (*other).takedamage as u32 != 0 && !(*other).client.is_null() {
@@ -665,7 +665,7 @@ pub unsafe extern "C" fn G_MissileImpact(mut ent: *mut gentity_t, mut trace: *mu
                 EV_MISSILE_MISS as i32,
                 DirToByte((*trace).plane.normal.as_mut_ptr()),
             );
-            (*ent).enemy = 0 as *mut gentity_t
+            (*ent).enemy = std::ptr::null_mut()
         }
         SnapVectorTowards(v.as_mut_ptr(), (*ent).s.pos.trBase.as_mut_ptr());
         (*nent).freeAfterEvent = qtrue;
@@ -811,7 +811,7 @@ pub unsafe extern "C" fn G_RunMissile(mut ent: *mut gentity_t) {
                 && !(*(*ent).parent).client.is_null()
                 && (*(*(*ent).parent).client).hook == ent
             {
-                (*(*(*ent).parent).client).hook = 0 as *mut gentity_t
+                (*(*(*ent).parent).client).hook = std::ptr::null_mut()
             }
             G_FreeEntity(ent as *mut gentity_s);
             return;
@@ -839,7 +839,7 @@ pub unsafe extern "C" fn fire_plasma(
     mut start: *mut vec_t,
     mut dir: *mut vec_t,
 ) -> *mut gentity_t {
-    let mut bolt: *mut gentity_t = 0 as *mut gentity_t; // move a bit on the very first frame
+    let mut bolt: *mut gentity_t = std::ptr::null_mut(); // move a bit on the very first frame
     VectorNormalize(dir);
     bolt = G_Spawn() as *mut gentity_s;
     (*bolt).classname = b"plasma\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
@@ -856,7 +856,7 @@ pub unsafe extern "C" fn fire_plasma(
     (*bolt).methodOfDeath = MOD_PLASMA as i32;
     (*bolt).splashMethodOfDeath = MOD_PLASMA_SPLASH as i32;
     (*bolt).clipmask = 1 as i32 | 0x2000000 as i32 | 0x4000000 as i32;
-    (*bolt).target_ent = 0 as *mut gentity_t;
+    (*bolt).target_ent = std::ptr::null_mut();
     (*bolt).s.pos.trType = TR_LINEAR;
     (*bolt).s.pos.trTime = level.time - 50 as i32;
     (*bolt).s.pos.trBase[0 as i32 as usize] = *start.offset(0 as i32 as isize);
@@ -890,7 +890,7 @@ pub unsafe extern "C" fn fire_grenade(
     mut start: *mut vec_t,
     mut dir: *mut vec_t,
 ) -> *mut gentity_t {
-    let mut bolt: *mut gentity_t = 0 as *mut gentity_t; // move a bit on the very first frame
+    let mut bolt: *mut gentity_t = std::ptr::null_mut(); // move a bit on the very first frame
     VectorNormalize(dir);
     bolt = G_Spawn() as *mut gentity_s;
     (*bolt).classname = b"grenade\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
@@ -908,7 +908,7 @@ pub unsafe extern "C" fn fire_grenade(
     (*bolt).methodOfDeath = MOD_GRENADE as i32;
     (*bolt).splashMethodOfDeath = MOD_GRENADE_SPLASH as i32;
     (*bolt).clipmask = 1 as i32 | 0x2000000 as i32 | 0x4000000 as i32;
-    (*bolt).target_ent = 0 as *mut gentity_t;
+    (*bolt).target_ent = std::ptr::null_mut();
     (*bolt).s.pos.trType = TR_GRAVITY;
     (*bolt).s.pos.trTime = level.time - 50 as i32;
     (*bolt).s.pos.trBase[0 as i32 as usize] = *start.offset(0 as i32 as isize);
@@ -942,7 +942,7 @@ pub unsafe extern "C" fn fire_bfg(
     mut start: *mut vec_t,
     mut dir: *mut vec_t,
 ) -> *mut gentity_t {
-    let mut bolt: *mut gentity_t = 0 as *mut gentity_t; // move a bit on the very first frame
+    let mut bolt: *mut gentity_t = std::ptr::null_mut(); // move a bit on the very first frame
     VectorNormalize(dir);
     bolt = G_Spawn() as *mut gentity_s;
     (*bolt).classname = b"bfg\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
@@ -959,7 +959,7 @@ pub unsafe extern "C" fn fire_bfg(
     (*bolt).methodOfDeath = MOD_BFG as i32;
     (*bolt).splashMethodOfDeath = MOD_BFG_SPLASH as i32;
     (*bolt).clipmask = 1 as i32 | 0x2000000 as i32 | 0x4000000 as i32;
-    (*bolt).target_ent = 0 as *mut gentity_t;
+    (*bolt).target_ent = std::ptr::null_mut();
     (*bolt).s.pos.trType = TR_LINEAR;
     (*bolt).s.pos.trTime = level.time - 50 as i32;
     (*bolt).s.pos.trBase[0 as i32 as usize] = *start.offset(0 as i32 as isize);
@@ -993,7 +993,7 @@ pub unsafe extern "C" fn fire_rocket(
     mut start: *mut vec_t,
     mut dir: *mut vec_t,
 ) -> *mut gentity_t {
-    let mut bolt: *mut gentity_t = 0 as *mut gentity_t; // move a bit on the very first frame
+    let mut bolt: *mut gentity_t = std::ptr::null_mut(); // move a bit on the very first frame
     VectorNormalize(dir);
     bolt = G_Spawn() as *mut gentity_s;
     (*bolt).classname = b"rocket\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
@@ -1010,7 +1010,7 @@ pub unsafe extern "C" fn fire_rocket(
     (*bolt).methodOfDeath = MOD_ROCKET as i32;
     (*bolt).splashMethodOfDeath = MOD_ROCKET_SPLASH as i32;
     (*bolt).clipmask = 1 as i32 | 0x2000000 as i32 | 0x4000000 as i32;
-    (*bolt).target_ent = 0 as *mut gentity_t;
+    (*bolt).target_ent = std::ptr::null_mut();
     (*bolt).s.pos.trType = TR_LINEAR;
     (*bolt).s.pos.trTime = level.time - 50 as i32;
     (*bolt).s.pos.trBase[0 as i32 as usize] = *start.offset(0 as i32 as isize);
@@ -1228,7 +1228,7 @@ pub unsafe extern "C" fn fire_grapple(
     mut start: *mut vec_t,
     mut dir: *mut vec_t,
 ) -> *mut gentity_t {
-    let mut hook: *mut gentity_t = 0 as *mut gentity_t; // move a bit on the very first frame
+    let mut hook: *mut gentity_t = std::ptr::null_mut(); // move a bit on the very first frame
     VectorNormalize(dir); // use to match beam in client
     hook = G_Spawn() as *mut gentity_s;
     (*hook).classname = b"hook\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
@@ -1241,7 +1241,7 @@ pub unsafe extern "C" fn fire_grapple(
     (*hook).methodOfDeath = MOD_GRAPPLE as i32;
     (*hook).clipmask = 1 as i32 | 0x2000000 as i32 | 0x4000000 as i32;
     (*hook).parent = self_0;
-    (*hook).target_ent = 0 as *mut gentity_t;
+    (*hook).target_ent = std::ptr::null_mut();
     (*hook).s.pos.trType = TR_LINEAR;
     (*hook).s.pos.trTime = level.time - 50 as i32;
     (*hook).s.otherEntityNum = (*self_0).s.number;

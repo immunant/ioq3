@@ -6,7 +6,7 @@ pub mod stdlib_h {
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return libc::strtol(
             __nptr,
-            0 as *mut libc::c_void as *mut *mut libc::c_char,
+            std::ptr::null_mut() as *mut *mut libc::c_char,
             10 as i32,
         ) as i32;
     }
@@ -271,8 +271,8 @@ and whenever the server updates any serverinfo flagged cvars
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_ParseServerinfo() {
-    let mut info: *const libc::c_char = 0 as *const libc::c_char;
-    let mut mapname: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut info: *const libc::c_char = std::ptr::null();
+    let mut mapname: *mut libc::c_char = std::ptr::null_mut();
     info = CG_ConfigString(0 as i32);
     cgs.gametype = atoi(Info_ValueForKey(
         info,
@@ -342,7 +342,7 @@ CG_ParseWarmup
 */
 
 unsafe extern "C" fn CG_ParseWarmup() {
-    let mut info: *const libc::c_char = 0 as *const libc::c_char;
+    let mut info: *const libc::c_char = std::ptr::null();
     let mut warmup: i32 = 0;
     info = CG_ConfigString(5 as i32);
     warmup = atoi(info);
@@ -364,7 +364,7 @@ Called on load to set the initial values from configure strings
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_SetConfigValues() {
-    let mut s: *const libc::c_char = 0 as *const libc::c_char;
+    let mut s: *const libc::c_char = std::ptr::null();
     cgs.scores1 = atoi(CG_ConfigString(6 as i32));
     cgs.scores2 = atoi(CG_ConfigString(7 as i32));
     cgs.levelStartTime = atoi(CG_ConfigString(21 as i32));
@@ -386,9 +386,9 @@ pub unsafe extern "C" fn CG_ShaderStateChanged() {
     let mut originalShader: [libc::c_char; 64] = [0; 64];
     let mut newShader: [libc::c_char; 64] = [0; 64];
     let mut timeOffset: [libc::c_char; 16] = [0; 16];
-    let mut o: *const libc::c_char = 0 as *const libc::c_char;
-    let mut n: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut t: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut o: *const libc::c_char = std::ptr::null();
+    let mut n: *mut libc::c_char = std::ptr::null_mut();
+    let mut t: *mut libc::c_char = std::ptr::null_mut();
     o = CG_ConfigString(24 as i32);
     while !o.is_null() && *o as i32 != 0 {
         n = libc::strstr(o, b"=\x00" as *const u8 as *const libc::c_char);
@@ -438,7 +438,7 @@ CG_ConfigStringModified
 */
 
 unsafe extern "C" fn CG_ConfigStringModified() {
-    let mut str: *const libc::c_char = 0 as *const libc::c_char;
+    let mut str: *const libc::c_char = std::ptr::null();
     let mut num: i32 = 0;
     num = atoi(CG_Argv(1 as i32));
     // get the gamestate from the client system, which will have the
@@ -524,8 +524,8 @@ CG_AddToTeamChat
 
 unsafe extern "C" fn CG_AddToTeamChat(mut str: *const libc::c_char) {
     let mut len: i32 = 0;
-    let mut p: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut ls: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut p: *mut libc::c_char = std::ptr::null_mut();
+    let mut ls: *mut libc::c_char = std::ptr::null_mut();
     let mut lastcolor: i32 = 0;
     let mut chatHeight: i32 = 0;
     if cg_teamChatHeight.integer < 8 as i32 {
@@ -543,7 +543,7 @@ unsafe extern "C" fn CG_AddToTeamChat(mut str: *const libc::c_char) {
     p = cgs.teamChatMsgs[(cgs.teamChatPos % chatHeight) as usize].as_mut_ptr();
     *p = 0 as i32 as libc::c_char;
     lastcolor = '7' as i32;
-    ls = 0 as *mut libc::c_char;
+    ls = std::ptr::null_mut();
     while *str != 0 {
         if len > 80 as i32 - 1 as i32 {
             if !ls.is_null() {
@@ -563,7 +563,7 @@ unsafe extern "C" fn CG_AddToTeamChat(mut str: *const libc::c_char) {
             p = p.offset(1);
             *fresh1 = lastcolor as libc::c_char;
             len = 0 as i32;
-            ls = 0 as *mut libc::c_char
+            ls = std::ptr::null_mut()
         }
         if Q_IsColorString(str) as u64 != 0 {
             let fresh2 = str;
@@ -674,7 +674,7 @@ Cmd_Argc() / Cmd_Argv()
 */
 
 unsafe extern "C" fn CG_ServerCommand() {
-    let mut cmd: *const libc::c_char = 0 as *const libc::c_char;
+    let mut cmd: *const libc::c_char = std::ptr::null();
     let mut text: [libc::c_char; 150] = [0; 150];
     cmd = CG_Argv(0 as i32);
     if *cmd.offset(0 as i32 as isize) == 0 {

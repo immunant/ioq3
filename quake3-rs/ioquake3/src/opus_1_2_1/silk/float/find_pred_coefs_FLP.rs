@@ -139,8 +139,8 @@ pub unsafe extern "C" fn silk_find_pred_coefs_FLP(
     let mut xXLTP: [f32; 20] = [0.; 20];
     let mut invGains: [f32; 4] = [0.; 4];
     let mut NLSF_Q15: [opus_int16; 16] = [0; 16];
-    let mut x_ptr: *const f32 = 0 as *const f32;
-    let mut x_pre_ptr: *mut f32 = 0 as *mut f32;
+    let mut x_ptr: *const f32 = std::ptr::null();
+    let mut x_pre_ptr: *mut f32 = std::ptr::null_mut();
     let mut LPC_in_pre: [f32; 384] = [0.; 384];
     let mut minInvGain: f32 = 0.;
     /* Weighting for weighted least squares */

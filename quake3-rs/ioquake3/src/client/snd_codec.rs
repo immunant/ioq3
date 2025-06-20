@@ -115,15 +115,14 @@ unsafe extern "C" fn S_CodecGetSound(
     mut filename: *const libc::c_char,
     mut info: *mut crate::src::client::snd_codec::snd_info_t,
 ) -> *mut libc::c_void {
-    let mut codec: *mut crate::src::client::snd_codec::snd_codec_t =
-        0 as *mut crate::src::client::snd_codec::snd_codec_t;
+    let mut codec: *mut crate::src::client::snd_codec::snd_codec_t = std::ptr::null_mut();
     let mut orgCodec: *mut crate::src::client::snd_codec::snd_codec_t =
-        0 as *mut crate::src::client::snd_codec::snd_codec_t;
+        std::ptr::null_mut();
     let mut orgNameFailed: qboolean = qfalse;
     let mut localName: [libc::c_char; 64] = [0; 64];
-    let mut ext: *const libc::c_char = 0 as *const libc::c_char;
+    let mut ext: *const libc::c_char = std::ptr::null();
     let mut altName: [libc::c_char; 64] = [0; 64];
-    let mut rtn: *mut libc::c_void = 0 as *mut libc::c_void;
+    let mut rtn: *mut libc::c_void = std::ptr::null_mut();
     Q_strncpyz(localName.as_mut_ptr(), filename, 64 as i32);
     ext = COM_GetExtension(localName.as_mut_ptr());
     if *ext != 0 {
@@ -202,7 +201,7 @@ unsafe extern "C" fn S_CodecGetSound(
         },
         filename,
     );
-    return 0 as *mut libc::c_void;
+    return std::ptr::null_mut();
 }
 // Codec management
 /*
@@ -213,7 +212,7 @@ S_CodecInit
 #[no_mangle]
 
 pub unsafe extern "C" fn S_CodecInit() {
-    codecs = 0 as *mut crate::src::client::snd_codec::snd_codec_t;
+    codecs = std::ptr::null_mut();
     S_CodecRegister(&mut opus_codec);
     S_CodecRegister(&mut ogg_codec);
     // Register wav codec last so that it is always tried first when a file extension was not found
@@ -227,7 +226,7 @@ S_CodecShutdown
 #[no_mangle]
 
 pub unsafe extern "C" fn S_CodecShutdown() {
-    codecs = 0 as *mut crate::src::client::snd_codec::snd_codec_t;
+    codecs = std::ptr::null_mut();
 }
 /*
 =================
@@ -266,9 +265,8 @@ pub unsafe extern "C" fn S_CodecOpenStream(
     mut filename: *const libc::c_char,
 ) -> *mut crate::src::client::snd_codec::snd_stream_t {
     return S_CodecGetSound(
-        filename,
-        0 as *mut crate::src::client::snd_codec::snd_info_t,
-    ) as *mut crate::src::client::snd_codec::snd_stream_t;
+        filename, std::ptr::null_mut(),
+        ) as *mut crate::src::client::snd_codec::snd_stream_t;
 }
 #[no_mangle]
 
@@ -300,8 +298,7 @@ pub unsafe extern "C" fn S_CodecUtilOpen(
     mut filename: *const libc::c_char,
     mut codec: *mut crate::src::client::snd_codec::snd_codec_t,
 ) -> *mut crate::src::client::snd_codec::snd_stream_t {
-    let mut stream: *mut crate::src::client::snd_codec::snd_stream_t =
-        0 as *mut crate::src::client::snd_codec::snd_stream_t;
+    let mut stream: *mut crate::src::client::snd_codec::snd_stream_t = std::ptr::null_mut();
     let mut hnd: fileHandle_t = 0;
     let mut length: i32 = 0;
     // Try to open the file
@@ -311,7 +308,7 @@ pub unsafe extern "C" fn S_CodecUtilOpen(
             b"Can\'t read sound file %s\n\x00" as *const u8 as *const libc::c_char,
             filename,
         );
-        return 0 as *mut crate::src::client::snd_codec::snd_stream_t;
+        return std::ptr::null_mut();
     }
     // Allocate a stream
     stream = crate::src::qcommon::common::Z_Malloc(::std::mem::size_of::<
@@ -319,7 +316,7 @@ pub unsafe extern "C" fn S_CodecUtilOpen(
     >() as usize as i32) as *mut crate::src::client::snd_codec::snd_stream_t;
     if stream.is_null() {
         crate::src::qcommon::files::FS_FCloseFile(hnd);
-        return 0 as *mut crate::src::client::snd_codec::snd_stream_t;
+        return std::ptr::null_mut();
     }
     // Copy over, return
     (*stream).codec = codec;
@@ -339,5 +336,5 @@ pub unsafe extern "C" fn S_CodecUtilClose(
 ) {
     crate::src::qcommon::files::FS_FCloseFile((**stream).file);
     crate::src::qcommon::common::Z_Free(*stream as *mut libc::c_void);
-    *stream = 0 as *mut crate::src::client::snd_codec::snd_stream_t;
+    *stream = std::ptr::null_mut();
 }

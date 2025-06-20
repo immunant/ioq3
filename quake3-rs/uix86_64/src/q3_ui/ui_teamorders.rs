@@ -6,7 +6,7 @@ pub mod stdlib_h {
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return libc::strtol(
             __nptr,
-            0 as *mut libc::c_void as *mut *mut libc::c_char,
+            std::ptr::null_mut() as *mut *mut libc::c_char,
             10 as i32,
         ) as i32;
     }
@@ -372,7 +372,7 @@ static mut teamOrdersMenuInfo: teamOrdersMenuInfo_t = teamOrdersMenuInfo_t {
     banner: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -394,7 +394,7 @@ static mut teamOrdersMenuInfo: teamOrdersMenuInfo_t = teamOrdersMenuInfo_t {
     frame: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -420,7 +420,7 @@ static mut teamOrdersMenuInfo: teamOrdersMenuInfo_t = teamOrdersMenuInfo_t {
     list: menulist_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -448,7 +448,7 @@ static mut teamOrdersMenuInfo: teamOrdersMenuInfo_t = teamOrdersMenuInfo_t {
     back: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -486,7 +486,7 @@ static mut ctfOrders: [*const libc::c_char; 8] = [
     b"Camp Here\x00" as *const u8 as *const libc::c_char,
     b"Report\x00" as *const u8 as *const libc::c_char,
     b"I Relinquish Command\x00" as *const u8 as *const libc::c_char,
-    0 as *const libc::c_char,
+    std::ptr::null(),
 ];
 
 static mut ctfMessages: [*const libc::c_char; 8] = [
@@ -497,7 +497,7 @@ static mut ctfMessages: [*const libc::c_char; 8] = [
     b"%s camp here\x00" as *const u8 as *const libc::c_char,
     b"%s report\x00" as *const u8 as *const libc::c_char,
     b"i stop being the leader\x00" as *const u8 as *const libc::c_char,
-    0 as *const libc::c_char,
+    std::ptr::null(),
 ];
 
 static mut teamOrders: [*const libc::c_char; 7] = [
@@ -507,7 +507,7 @@ static mut teamOrders: [*const libc::c_char; 7] = [
     b"Camp Here\x00" as *const u8 as *const libc::c_char,
     b"Report\x00" as *const u8 as *const libc::c_char,
     b"I Relinquish Command\x00" as *const u8 as *const libc::c_char,
-    0 as *const libc::c_char,
+    std::ptr::null(),
 ];
 
 static mut teamMessages: [*const libc::c_char; 7] = [
@@ -517,7 +517,7 @@ static mut teamMessages: [*const libc::c_char; 7] = [
     b"%s camp here\x00" as *const u8 as *const libc::c_char,
     b"%s report\x00" as *const u8 as *const libc::c_char,
     b"i stop being the leader\x00" as *const u8 as *const libc::c_char,
-    0 as *const libc::c_char,
+    std::ptr::null(),
 ];
 /*
 ===============
@@ -567,7 +567,7 @@ UI_TeamOrdersMenu_Key
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_TeamOrdersMenu_Key(mut key: i32) -> sfxHandle_t {
-    let mut l: *mut menulist_s = 0 as *mut menulist_s;
+    let mut l: *mut menulist_s = std::ptr::null_mut();
     let mut x: i32 = 0;
     let mut y: i32 = 0;
     let mut index: i32 = 0;
@@ -629,11 +629,11 @@ UI_TeamOrdersMenu_ListDraw
 */
 
 unsafe extern "C" fn UI_TeamOrdersMenu_ListDraw(mut self_0: *mut libc::c_void) {
-    let mut l: *mut menulist_s = 0 as *mut menulist_s; //l->generic.x;
+    let mut l: *mut menulist_s = std::ptr::null_mut(); //l->generic.x;
     let mut x: i32 = 0;
     let mut y: i32 = 0;
     let mut i: i32 = 0;
-    let mut color: *mut f32 = 0 as *mut f32;
+    let mut color: *mut f32 = std::ptr::null_mut();
     let mut hasfocus: qboolean = qfalse;
     let mut style: i32 = 0;
     l = self_0 as *mut menulist_s;

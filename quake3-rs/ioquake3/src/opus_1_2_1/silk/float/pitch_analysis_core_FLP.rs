@@ -247,8 +247,8 @@ pub unsafe extern "C" fn silk_pitch_analysis_core_FLP(
     let mut C: [[f32; 149]; 4] = [[0.; 149]; 4];
     let mut xcorr: [opus_val32; 65] = [0.; 65];
     let mut CC: [f32; 11] = [0.; 11];
-    let mut target_ptr: *const f32 = 0 as *const f32;
-    let mut basis_ptr: *const f32 = 0 as *const f32;
+    let mut target_ptr: *const f32 = std::ptr::null();
+    let mut basis_ptr: *const f32 = std::ptr::null();
     let mut cross_corr: f64 = 0.;
     let mut normalizer: f64 = 0.;
     let mut energy: f64 = 0.;
@@ -288,7 +288,7 @@ pub unsafe extern "C" fn silk_pitch_analysis_core_FLP(
     let mut max_lag_8kHz: i32 = 0;
     let mut max_lag_4kHz: i32 = 0;
     let mut nb_cbk_search: i32 = 0;
-    let mut Lag_CB_ptr: *const i8 = 0 as *const i8;
+    let mut Lag_CB_ptr: *const i8 = std::ptr::null();
     /* Check for valid sampling frequency */
     /* Check for valid complexity setting */
     /* Set up frame lengths max / min lag for the sampling frequency */
@@ -880,7 +880,7 @@ unsafe extern "C" fn silk_P_Ana_calc_corr_st3(
 )
 /* I Run-time architecture                                          */
 {
-    let mut target_ptr: *const f32 = 0 as *const f32; /* Pointer to middle of frame */
+    let mut target_ptr: *const f32 = std::ptr::null(); /* Pointer to middle of frame */
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut k: i32 = 0;
@@ -893,8 +893,8 @@ unsafe extern "C" fn silk_P_Ana_calc_corr_st3(
     let mut cbk_size: i32 = 0;
     let mut scratch_mem: [f32; 22] = [0.; 22];
     let mut xcorr: [opus_val32; 22] = [0.; 22];
-    let mut Lag_range_ptr: *const i8 = 0 as *const i8;
-    let mut Lag_CB_ptr: *const i8 = 0 as *const i8;
+    let mut Lag_range_ptr: *const i8 = std::ptr::null();
+    let mut Lag_CB_ptr: *const i8 = std::ptr::null();
     if nb_subfr == 4 as i32 {
         Lag_range_ptr =
             &*(*(*crate::src::opus_1_2_1::silk::pitch_est_tables::silk_Lag_range_stage3
@@ -984,8 +984,8 @@ unsafe extern "C" fn silk_P_Ana_calc_energy_st3(
 )
 /* I Complexity setting                                             */
 {
-    let mut target_ptr: *const f32 = 0 as *const f32;
-    let mut basis_ptr: *const f32 = 0 as *const f32;
+    let mut target_ptr: *const f32 = std::ptr::null();
+    let mut basis_ptr: *const f32 = std::ptr::null();
     let mut energy: f64 = 0.;
     let mut k: i32 = 0;
     let mut i: i32 = 0;
@@ -997,8 +997,8 @@ unsafe extern "C" fn silk_P_Ana_calc_energy_st3(
     let mut cbk_size: i32 = 0;
     let mut lag_diff: i32 = 0;
     let mut scratch_mem: [f32; 22] = [0.; 22];
-    let mut Lag_range_ptr: *const i8 = 0 as *const i8;
-    let mut Lag_CB_ptr: *const i8 = 0 as *const i8;
+    let mut Lag_range_ptr: *const i8 = std::ptr::null();
+    let mut Lag_CB_ptr: *const i8 = std::ptr::null();
     if nb_subfr == 4 as i32 {
         Lag_range_ptr =
             &*(*(*crate::src::opus_1_2_1::silk::pitch_est_tables::silk_Lag_range_stage3

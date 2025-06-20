@@ -601,20 +601,20 @@ pub unsafe extern "C" fn silk_NSQ_del_dec_c(
     let mut last_smple_idx: i32 = 0;
     let mut smpl_buf_idx: i32 = 0;
     let mut decisionDelay: i32 = 0;
-    let mut A_Q12: *const opus_int16 = 0 as *const opus_int16;
-    let mut B_Q14: *const opus_int16 = 0 as *const opus_int16;
-    let mut AR_shp_Q13: *const opus_int16 = 0 as *const opus_int16;
-    let mut pxq: *mut opus_int16 = 0 as *mut opus_int16;
-    let mut sLTP_Q15: *mut opus_int32 = 0 as *mut opus_int32;
-    let mut sLTP: *mut opus_int16 = 0 as *mut opus_int16;
+    let mut A_Q12: *const opus_int16 = std::ptr::null();
+    let mut B_Q14: *const opus_int16 = std::ptr::null();
+    let mut AR_shp_Q13: *const opus_int16 = std::ptr::null();
+    let mut pxq: *mut opus_int16 = std::ptr::null_mut();
+    let mut sLTP_Q15: *mut opus_int32 = std::ptr::null_mut();
+    let mut sLTP: *mut opus_int16 = std::ptr::null_mut();
     let mut HarmShapeFIRPacked_Q14: opus_int32 = 0;
     let mut offset_Q10: i32 = 0;
     let mut RDmin_Q10: opus_int32 = 0;
     let mut Gain_Q10: opus_int32 = 0;
-    let mut x_sc_Q10: *mut opus_int32 = 0 as *mut opus_int32;
-    let mut delayedGain_Q10: *mut opus_int32 = 0 as *mut opus_int32;
-    let mut psDelDec: *mut NSQ_del_dec_struct = 0 as *mut NSQ_del_dec_struct;
-    let mut psDD: *mut NSQ_del_dec_struct = 0 as *mut NSQ_del_dec_struct;
+    let mut x_sc_Q10: *mut opus_int32 = std::ptr::null_mut();
+    let mut delayedGain_Q10: *mut opus_int32 = std::ptr::null_mut();
+    let mut psDelDec: *mut NSQ_del_dec_struct = std::ptr::null_mut();
+    let mut psDD: *mut NSQ_del_dec_struct = std::ptr::null_mut();
     /* Set unvoiced lag to the previous one, overwrite later for voiced */
     lag = (*NSQ).lagPrev;
     /* Initialize delayed decision states */
@@ -1089,12 +1089,12 @@ unsafe extern "C" fn silk_noise_shape_quantizer_del_dec(
     let mut tmp1: opus_int32 = 0;
     let mut tmp2: opus_int32 = 0;
     let mut sLF_AR_shp_Q14: opus_int32 = 0;
-    let mut pred_lag_ptr: *mut opus_int32 = 0 as *mut opus_int32;
-    let mut shp_lag_ptr: *mut opus_int32 = 0 as *mut opus_int32;
-    let mut psLPC_Q14: *mut opus_int32 = 0 as *mut opus_int32;
-    let mut psSampleState: *mut NSQ_sample_pair = 0 as *mut NSQ_sample_pair;
-    let mut psDD: *mut NSQ_del_dec_struct = 0 as *mut NSQ_del_dec_struct;
-    let mut psSS: *mut NSQ_sample_struct = 0 as *mut NSQ_sample_struct;
+    let mut pred_lag_ptr: *mut opus_int32 = std::ptr::null_mut();
+    let mut shp_lag_ptr: *mut opus_int32 = std::ptr::null_mut();
+    let mut psLPC_Q14: *mut opus_int32 = std::ptr::null_mut();
+    let mut psSampleState: *mut NSQ_sample_pair = std::ptr::null_mut();
+    let mut psDD: *mut NSQ_del_dec_struct = std::ptr::null_mut();
+    let mut psSS: *mut NSQ_sample_struct = std::ptr::null_mut();
     let mut fresh7 = ::std::vec::from_elem(
         0,
         (::std::mem::size_of::<NSQ_sample_pair>() as usize)
@@ -1590,7 +1590,7 @@ unsafe extern "C" fn silk_nsq_del_dec_scale_states(
     let mut gain_adj_Q16: opus_int32 = 0;
     let mut inv_gain_Q31: opus_int32 = 0;
     let mut inv_gain_Q26: opus_int32 = 0;
-    let mut psDD: *mut NSQ_del_dec_struct = 0 as *mut NSQ_del_dec_struct;
+    let mut psDD: *mut NSQ_del_dec_struct = std::ptr::null_mut();
     lag = *pitchL.offset(subfr as isize);
     inv_gain_Q31 = silk_INVERSE32_varQ(
         if *Gains_Q16.offset(subfr as isize) > 1 as i32 {

@@ -7,7 +7,7 @@ pub mod stdlib_h {
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return libc::strtol(
             __nptr,
-            0 as *mut libc::c_void as *mut *mut libc::c_char,
+            std::ptr::null_mut() as *mut *mut libc::c_char,
             10 as i32,
         ) as i32;
     }
@@ -17,7 +17,7 @@ pub mod stdlib_float_h {
     #[inline]
 
     pub unsafe extern "C" fn atof(mut __nptr: *const libc::c_char) -> f64 {
-        return libc::strtod(__nptr, 0 as *mut libc::c_void as *mut *mut libc::c_char);
+        return libc::strtod(__nptr, std::ptr::null_mut() as *mut *mut libc::c_char);
     }
 }
 
@@ -1260,7 +1260,7 @@ unsafe extern "C" fn CL_UpdateMumble() {
     AngleVectors(
         cl.snap.ps.viewangles.as_mut_ptr() as *const vec_t,
         forward.as_mut_ptr(),
-        0 as *mut vec_t,
+        std::ptr::null_mut(),
         up.as_mut_ptr(),
     );
     pos[0 as i32 as usize] = cl.snap.ps.origin[0 as i32 as usize] * scale;
@@ -1346,7 +1346,7 @@ unsafe extern "C" fn CL_UpdateVoipGain(mut idstr: *const libc::c_char, mut gain:
 
 pub unsafe extern "C" fn CL_Voip_f() {
     let mut cmd: *const libc::c_char = Cmd_Argv(1 as i32);
-    let mut reason: *const libc::c_char = 0 as *const libc::c_char;
+    let mut reason: *const libc::c_char = std::ptr::null();
     if clc.state as u32 != CA_ACTIVE as i32 as u32 {
         reason = b"Not connected to a server\x00" as *const u8 as *const libc::c_char
     } else if clc.voipCodecInitialized as u64 == 0 {
@@ -1436,7 +1436,7 @@ so this is only called when the key is first pressed
 
 pub unsafe extern "C" fn CL_VoipParseTargets() {
     let mut target: *const libc::c_char = (*cl_voipSendTarget).string;
-    let mut end: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut end: *mut libc::c_char = std::ptr::null_mut();
     let mut val: i32 = 0;
     crate::stdlib::memset(
         clc.voipTargets.as_mut_ptr() as *mut libc::c_void,
@@ -1900,7 +1900,7 @@ pub unsafe extern "C" fn CL_Record_f() {
         allowoverflow: qfalse,
         overflowed: qfalse,
         oob: qfalse,
-        data: 0 as *mut byte,
+        data: std::ptr::null_mut(),
         maxsize: 0,
         cursize: 0,
         readcount: 0,
@@ -1908,7 +1908,7 @@ pub unsafe extern "C" fn CL_Record_f() {
     };
     let mut i: i32 = 0;
     let mut len: i32 = 0;
-    let mut ent: *mut entityState_t = 0 as *mut entityState_t;
+    let mut ent: *mut entityState_t = std::ptr::null_mut();
     let mut nullstate: entityState_t = entityState_t {
         number: 0,
         eType: 0,
@@ -1951,7 +1951,7 @@ pub unsafe extern "C" fn CL_Record_f() {
         torsoAnim: 0,
         generic1: 0,
     };
-    let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut s: *mut libc::c_char = std::ptr::null_mut();
     if Cmd_Argc() > 2 as i32 {
         Com_Printf(b"record <demoname>\n\x00" as *const u8 as *const libc::c_char);
         return;
@@ -2256,7 +2256,7 @@ pub unsafe extern "C" fn CL_ReadDemoMessage() {
         allowoverflow: qfalse,
         overflowed: qfalse,
         oob: qfalse,
-        data: 0 as *mut byte,
+        data: std::ptr::null_mut(),
         maxsize: 0,
         cursize: 0,
         readcount: 0,
@@ -2438,7 +2438,7 @@ demo <demoname>
 pub unsafe extern "C" fn CL_PlayDemo_f() {
     let mut name: [libc::c_char; 4096] = [0; 4096];
     let mut arg: [libc::c_char; 4096] = [0; 4096];
-    let mut ext_test: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut ext_test: *mut libc::c_char = std::ptr::null_mut();
     let mut protocol: i32 = 0;
     let mut i: i32 = 0;
     let mut retry: [libc::c_char; 4096] = [0; 4096];
@@ -2917,7 +2917,7 @@ pub unsafe extern "C" fn CL_Disconnect(mut showMainMenu: qboolean) {
         SCR_UpdateScreen();
         CL_CloseAVI();
     }
-    CL_UpdateGUID(0 as *const libc::c_char, 0 as i32);
+    CL_UpdateGUID(std::ptr::null(), 0 as i32);
     if noGameRestart == 0 {
         CL_OldGame();
     } else {
@@ -2936,7 +2936,7 @@ so when they are typed in at the console, they will need to be forwarded.
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_ForwardCommandToServer(mut string: *const libc::c_char) {
-    let mut cmd: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut cmd: *mut libc::c_char = std::ptr::null_mut();
     cmd = Cmd_Argv(0 as i32);
     // ignore key up commands
     if *cmd.offset(0 as i32 as isize) as i32 == '-' as i32 {
@@ -3068,7 +3068,7 @@ pub unsafe extern "C" fn CL_RequestAuthorization() {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut l: i32 = 0;
-    let mut fs: *mut cvar_t = 0 as *mut cvar_t;
+    let mut fs: *mut cvar_t = std::ptr::null_mut();
     if cls.authorizeServer.port == 0 {
         Com_Printf(
             b"Resolving %s\n\x00" as *const u8 as *const libc::c_char,
@@ -3208,7 +3208,7 @@ CL_Connect_f
 
 pub unsafe extern "C" fn CL_Connect_f() {
     let mut server: [libc::c_char; 4096] = [0; 4096];
-    let mut serverString: *const libc::c_char = 0 as *const libc::c_char;
+    let mut serverString: *const libc::c_char = std::ptr::null();
     let mut argc: i32 = Cmd_Argc();
     let mut family: netadrtype_t = NA_UNSPEC;
     if argc != 2 as i32 && argc != 3 as i32 {
@@ -3306,7 +3306,7 @@ pub unsafe extern "C" fn CL_Connect_f() {
     if (*cl_guidServerUniq).integer != 0 {
         CL_UpdateGUID(serverString, crate::stdlib::strlen(serverString) as i32);
     } else {
-        CL_UpdateGUID(0 as *const libc::c_char, 0 as i32);
+        CL_UpdateGUID(std::ptr::null(), 0 as i32);
     }
     // if we aren't playing on a lan, we need to authenticate
     // with the cd key
@@ -3355,12 +3355,12 @@ CL_CompletePlayerName
 unsafe extern "C" fn CL_CompletePlayerName(mut _args: *mut libc::c_char, mut argNum: i32) {
     if argNum == 2 as i32 {
         let mut names: [[libc::c_char; 32]; 64] = [[0; 32]; 64];
-        let mut namesPtr: [*const libc::c_char; 64] = [0 as *const libc::c_char; 64];
+        let mut namesPtr: [*const libc::c_char; 64] = [std::ptr::null(); 64];
         let mut i: i32 = 0;
         let mut clientCount: i32 = 0;
         let mut nameCount: i32 = 0;
-        let mut info: *const libc::c_char = 0 as *const libc::c_char;
-        let mut name: *const libc::c_char = 0 as *const libc::c_char;
+        let mut info: *const libc::c_char = std::ptr::null();
+        let mut name: *const libc::c_char = std::ptr::null();
         //configstring
         info = cl
             .gameState
@@ -3808,9 +3808,9 @@ A download completed or failed
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_NextDownload() {
-    let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut remoteName: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut localName: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut s: *mut libc::c_char = std::ptr::null_mut();
+    let mut remoteName: *mut libc::c_char = std::ptr::null_mut();
+    let mut localName: *mut libc::c_char = std::ptr::null_mut();
     let mut useCURL: qboolean = qfalse;
     // A download has finished, check whether this matches a referenced checksum
     if *clc.downloadName.as_mut_ptr() != 0 {
@@ -4103,8 +4103,8 @@ CL_MotdPacket
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_MotdPacket(mut from: netadr_t) {
-    let mut challenge: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut info: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut challenge: *mut libc::c_char = std::ptr::null_mut();
+    let mut info: *mut libc::c_char = std::ptr::null_mut();
     // if not from our server, ignore it
     if NET_CompareAdr(from as netadr_t, cls.updateServer as netadr_t) as u64 == 0 {
         return;
@@ -4176,8 +4176,8 @@ pub unsafe extern "C" fn CL_ServersResponsePacket(
         scope_id: 0,
     }; 256];
     let mut numservers: i32 = 0;
-    let mut buffptr: *mut byte = 0 as *mut byte;
-    let mut buffend: *mut byte = 0 as *mut byte;
+    let mut buffptr: *mut byte = std::ptr::null_mut();
+    let mut buffend: *mut byte = std::ptr::null_mut();
     Com_Printf(
         b"CL_ServersResponsePacket from %s\n\x00" as *const u8 as *const libc::c_char,
         NET_AdrToStringwPort(*from as netadr_t),
@@ -4318,8 +4318,8 @@ Responses to broadcasts, etc
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_ConnectionlessPacket(mut from: netadr_t, mut msg: *mut msg_t) {
-    let mut s: *mut libc::c_char = 0 as *mut libc::c_char; // skip the -1
-    let mut c: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut s: *mut libc::c_char = std::ptr::null_mut(); // skip the -1
+    let mut c: *mut libc::c_char = std::ptr::null_mut();
     let mut challenge: i32 = 0 as i32;
     MSG_BeginReadingOOB(msg as *mut msg_t);
     MSG_ReadLong(msg as *mut msg_t);
@@ -4337,7 +4337,7 @@ pub unsafe extern "C" fn CL_ConnectionlessPacket(mut from: netadr_t, mut msg: *m
         b"challengeResponse\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
-        let mut strver: *mut libc::c_char = 0 as *mut libc::c_char;
+        let mut strver: *mut libc::c_char = std::ptr::null_mut();
         let mut ver: i32 = 0;
         if clc.state as u32 != CA_CONNECTING as i32 as u32 {
             Com_DPrintf(
@@ -4750,8 +4750,8 @@ pub unsafe extern "C" fn CL_Frame(mut msec: i32) {
                 tm_yday: 0,
                 tm_isdst: 0,
             };
-            let mut nowString: *mut libc::c_char = 0 as *mut libc::c_char;
-            let mut p: *mut libc::c_char = 0 as *mut libc::c_char;
+            let mut nowString: *mut libc::c_char = std::ptr::null_mut();
+            let mut p: *mut libc::c_char = std::ptr::null_mut();
             let mut mapName: [libc::c_char; 64] = [0; 64];
             let mut serverName: [libc::c_char; 4096] = [0; 4096];
             Com_RealTime(&mut now as *mut _ as *mut qtime_s);
@@ -4893,7 +4893,7 @@ pub unsafe extern "C" fn CL_ShutdownRef() {
     );
     if !rendererLib.is_null() {
         crate::stdlib::SDL_UnloadObject(rendererLib);
-        rendererLib = 0 as *mut libc::c_void
+        rendererLib = std::ptr::null_mut()
     };
 }
 /*
@@ -5024,7 +5024,7 @@ pub unsafe extern "C" fn CL_InitRef() {
         Sys_GLimpInit: None,
         Sys_LowPhysicalMemory: None,
     };
-    let mut ret: *mut refexport_t = 0 as *mut refexport_t;
+    let mut ret: *mut refexport_t = std::ptr::null_mut();
     let mut GetRefAPI: GetRefAPI_t = None;
     let mut dllName: [libc::c_char; 4096] = [0; 4096];
     Com_Printf(b"----- Initializing Renderer ----\n\x00" as *const u8 as *const libc::c_char);
@@ -5196,7 +5196,7 @@ pub unsafe extern "C" fn CL_InitRef() {
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_SetModel_f() {
-    let mut arg: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut arg: *mut libc::c_char = std::ptr::null_mut();
     let mut name: [libc::c_char; 256] = [0; 256];
     arg = Cmd_Argv(1 as i32);
     if *arg.offset(0 as i32 as isize) != 0 {
@@ -5345,14 +5345,14 @@ unsafe extern "C" fn CL_GenerateQKey() {
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_Sayto_f() {
-    let mut rawname: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut rawname: *mut libc::c_char = std::ptr::null_mut();
     let mut name: [libc::c_char; 32] = [0; 32];
     let mut cleanName: [libc::c_char; 32] = [0; 32];
-    let mut info: *const libc::c_char = 0 as *const libc::c_char;
+    let mut info: *const libc::c_char = std::ptr::null();
     let mut count: i32 = 0;
     let mut i: i32 = 0;
     let mut clientNum: i32 = 0;
-    let mut p: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut p: *mut libc::c_char = std::ptr::null_mut();
     if Cmd_Argc() < 3 as i32 {
         Com_Printf(b"sayto <player name> <text>\n\x00" as *const u8 as *const libc::c_char);
         return;
@@ -6057,7 +6057,7 @@ pub unsafe extern "C" fn CL_Init() {
         b"\x00" as *const u8 as *const libc::c_char,
         0x2 as i32 | 0x40 as i32,
     ) as *mut cvar_s;
-    CL_UpdateGUID(0 as *const libc::c_char, 0 as i32);
+    CL_UpdateGUID(std::ptr::null(), 0 as i32);
     Com_Printf(
         b"----- Client Initialization Complete -----\n\x00" as *const u8 as *const libc::c_char,
     );
@@ -6263,9 +6263,9 @@ pub unsafe extern "C" fn CL_ServerInfoPacket(mut from: netadr_t, mut msg: *mut m
     let mut i: i32 = 0;
     let mut type_0: i32 = 0;
     let mut info: [libc::c_char; 1024] = [0; 1024];
-    let mut infoString: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut infoString: *mut libc::c_char = std::ptr::null_mut();
     let mut prot: i32 = 0;
-    let mut gamename: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut gamename: *mut libc::c_char = std::ptr::null_mut();
     let mut gameMismatch: qboolean = qfalse;
     infoString = MSG_ReadString(msg as *mut msg_t);
     // if this isn't the correct gamename, ignore it
@@ -6633,7 +6633,7 @@ pub unsafe extern "C" fn CL_ServerStatus(
         port: 0,
         scope_id: 0,
     };
-    let mut serverStatus: *mut serverStatus_t = 0 as *mut serverStatus_t;
+    let mut serverStatus: *mut serverStatus_t = std::ptr::null_mut();
     // if no server address then reset all server status requests
     if serverAddress.is_null() {
         i = 0 as i32;
@@ -6708,15 +6708,15 @@ CL_ServerStatusResponse
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_ServerStatusResponse(mut from: netadr_t, mut msg: *mut msg_t) {
-    let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut s: *mut libc::c_char = std::ptr::null_mut();
     let mut info: [libc::c_char; 1024] = [0; 1024];
     let mut i: i32 = 0;
     let mut l: i32 = 0;
     let mut score: i32 = 0;
     let mut ping: i32 = 0;
     let mut len: i32 = 0;
-    let mut serverStatus: *mut serverStatus_t = 0 as *mut serverStatus_t;
-    serverStatus = 0 as *mut serverStatus_t;
+    let mut serverStatus: *mut serverStatus_t = std::ptr::null_mut();
+    serverStatus = std::ptr::null_mut();
     i = 0 as i32;
     while i < 16 as i32 {
         if NET_CompareAdr(
@@ -6853,7 +6853,7 @@ CL_LocalServers_f
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_LocalServers_f() {
-    let mut message: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut message: *mut libc::c_char = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut to: netadr_t = netadr_t {
@@ -6942,7 +6942,7 @@ pub unsafe extern "C" fn CL_GlobalServers_f() {
     let mut i: i32 = 0;
     let mut masterNum: i32 = 0;
     let mut command: [libc::c_char; 1024] = [0; 1024];
-    let mut masteraddress: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut masteraddress: *mut libc::c_char = std::ptr::null_mut();
     count = Cmd_Argc();
     if count < 3 as i32
         || {
@@ -7102,7 +7102,7 @@ pub unsafe extern "C" fn CL_GetPing(
     mut buflen: i32,
     mut pingtime: *mut i32,
 ) {
-    let mut str: *const libc::c_char = 0 as *const libc::c_char;
+    let mut str: *const libc::c_char = std::ptr::null();
     let mut time: i32 = 0;
     let mut maxPing: i32 = 0;
     if n < 0 as i32 || n >= 32 as i32 || cl_pinglist[n as usize].adr.port == 0 {
@@ -7173,7 +7173,7 @@ CL_GetPingQueueCount
 pub unsafe extern "C" fn CL_GetPingQueueCount() -> i32 {
     let mut i: i32 = 0;
     let mut count: i32 = 0;
-    let mut pingptr: *mut ping_t = 0 as *mut ping_t;
+    let mut pingptr: *mut ping_t = std::ptr::null_mut();
     count = 0 as i32;
     pingptr = cl_pinglist.as_mut_ptr();
     i = 0 as i32;
@@ -7194,8 +7194,8 @@ CL_GetFreePing
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_GetFreePing() -> *mut ping_t {
-    let mut pingptr: *mut ping_t = 0 as *mut ping_t;
-    let mut best: *mut ping_t = 0 as *mut ping_t;
+    let mut pingptr: *mut ping_t = std::ptr::null_mut();
+    let mut best: *mut ping_t = std::ptr::null_mut();
     let mut oldest: i32 = 0;
     let mut i: i32 = 0;
     let mut time: i32 = 0;
@@ -7264,8 +7264,8 @@ pub unsafe extern "C" fn CL_Ping_f() {
         port: 0,
         scope_id: 0,
     };
-    let mut pingptr: *mut ping_t = 0 as *mut ping_t;
-    let mut server: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut pingptr: *mut ping_t = std::ptr::null_mut();
+    let mut server: *mut libc::c_char = std::ptr::null_mut();
     let mut argc: i32 = 0;
     let mut family: netadrtype_t = NA_UNSPEC;
     argc = Cmd_Argc();
@@ -7312,7 +7312,7 @@ pub unsafe extern "C" fn CL_Ping_f() {
     );
     (*pingptr).start = Sys_Milliseconds();
     (*pingptr).time = 0 as i32;
-    CL_SetServerInfoByAddress((*pingptr).adr, 0 as *const libc::c_char, 0 as i32);
+    CL_SetServerInfoByAddress((*pingptr).adr, std::ptr::null(), 0 as i32);
     NET_OutOfBandPrint(
         NS_CLIENT,
         to as netadr_t,
@@ -7339,7 +7339,7 @@ pub unsafe extern "C" fn CL_UpdateVisiblePings_f(mut source: i32) -> qboolean {
     cls.pingUpdateSource = source;
     slots = CL_GetPingQueueCount();
     if slots < 32 as i32 {
-        let mut server: *mut serverInfo_t = 0 as *mut serverInfo_t;
+        let mut server: *mut serverInfo_t = std::ptr::null_mut();
         match source {
             0 => {
                 server = &mut *cls.localServers.as_mut_ptr().offset(0 as i32 as isize)
@@ -7460,9 +7460,9 @@ pub unsafe extern "C" fn CL_ServerStatus_f() {
         port: 0,
         scope_id: 0,
     };
-    let mut toptr: *mut netadr_t = 0 as *mut netadr_t;
-    let mut server: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut serverStatus: *mut serverStatus_t = 0 as *mut serverStatus_t;
+    let mut toptr: *mut netadr_t = std::ptr::null_mut();
+    let mut server: *mut libc::c_char = std::ptr::null_mut();
+    let mut serverStatus: *mut serverStatus_t = std::ptr::null_mut();
     let mut argc: i32 = 0;
     let mut family: netadrtype_t = NA_UNSPEC;
     argc = Cmd_Argc();

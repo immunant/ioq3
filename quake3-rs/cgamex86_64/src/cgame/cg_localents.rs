@@ -349,7 +349,7 @@ Will always succeed, even if it requires freeing an old active entity
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_AllocLocalEntity() -> *mut localEntity_t {
-    let mut le: *mut localEntity_t = 0 as *mut localEntity_t;
+    let mut le: *mut localEntity_t = std::ptr::null_mut();
     if cg_freeLocalEntities.is_null() {
         // no free entities, so free the one at the end of the chain
         // remove the oldest active entity
@@ -393,7 +393,7 @@ pub unsafe extern "C" fn CG_BloodTrail(mut le: *mut localEntity_t) {
     let mut t2: i32 = 0;
     let mut step: i32 = 0;
     let mut newOrigin: vec3_t = [0.; 3];
-    let mut blood: *mut localEntity_t = 0 as *mut localEntity_t;
+    let mut blood: *mut localEntity_t = std::ptr::null_mut();
     step = 150 as i32;
     t = step * ((cg.time - cg.frametime + step) / step);
     t2 = step * (cg.time / step);
@@ -618,8 +618,8 @@ pub unsafe extern "C" fn CG_AddFragment(mut le: *mut localEntity_t) {
     CG_Trace(
         &mut trace as *mut _ as *mut trace_t,
         (*le).refEntity.origin.as_mut_ptr() as *const vec_t,
-        0 as *const vec_t,
-        0 as *const vec_t,
+        std::ptr::null(),
+        std::ptr::null(),
         newOrigin.as_mut_ptr() as *const vec_t,
         -(1 as i32),
         1 as i32,
@@ -682,7 +682,7 @@ CG_AddFadeRGB
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_AddFadeRGB(mut le: *mut localEntity_t) {
-    let mut re: *mut refEntity_t = 0 as *mut refEntity_t;
+    let mut re: *mut refEntity_t = std::ptr::null_mut();
     let mut c: f32 = 0.;
     re = &mut (*le).refEntity;
     c = ((*le).endTime - cg.time) as f32 * (*le).lifeRate;
@@ -700,7 +700,7 @@ CG_AddMoveScaleFade
 */
 
 unsafe extern "C" fn CG_AddMoveScaleFade(mut le: *mut localEntity_t) {
-    let mut re: *mut refEntity_t = 0 as *mut refEntity_t;
+    let mut re: *mut refEntity_t = std::ptr::null_mut();
     let mut c: f32 = 0.;
     let mut delta: vec3_t = [0.; 3];
     let mut len: f32 = 0.;
@@ -750,7 +750,7 @@ There are often many of these, so it needs to be simple.
 */
 
 unsafe extern "C" fn CG_AddScaleFade(mut le: *mut localEntity_t) {
-    let mut re: *mut refEntity_t = 0 as *mut refEntity_t;
+    let mut re: *mut refEntity_t = std::ptr::null_mut();
     let mut c: f32 = 0.;
     let mut delta: vec3_t = [0.; 3];
     let mut len: f32 = 0.;
@@ -787,7 +787,7 @@ There are often 100+ of these, so it needs to be simple.
 */
 
 unsafe extern "C" fn CG_AddFallScaleFade(mut le: *mut localEntity_t) {
-    let mut re: *mut refEntity_t = 0 as *mut refEntity_t;
+    let mut re: *mut refEntity_t = std::ptr::null_mut();
     let mut c: f32 = 0.;
     let mut delta: vec3_t = [0.; 3];
     let mut len: f32 = 0.;
@@ -822,7 +822,7 @@ CG_AddExplosion
 */
 
 unsafe extern "C" fn CG_AddExplosion(mut ex: *mut localEntity_t) {
-    let mut ent: *mut refEntity_t = 0 as *mut refEntity_t;
+    let mut ent: *mut refEntity_t = std::ptr::null_mut();
     ent = &mut (*ex).refEntity;
     // add the entity
     trap_R_AddRefEntityToScene(ent as *const refEntity_t);
@@ -910,7 +910,7 @@ unsafe extern "C" fn CG_AddSpriteExplosion(mut le: *mut localEntity_t) {
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_AddScorePlum(mut le: *mut localEntity_t) {
-    let mut re: *mut refEntity_t = 0 as *mut refEntity_t;
+    let mut re: *mut refEntity_t = std::ptr::null_mut();
     let mut origin: vec3_t = [0.; 3];
     let mut delta: vec3_t = [0.; 3];
     let mut dir: vec3_t = [0.; 3];
@@ -1268,8 +1268,8 @@ CG_AddLocalEntities
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_AddLocalEntities() {
-    let mut le: *mut localEntity_t = 0 as *mut localEntity_t;
-    let mut next: *mut localEntity_t = 0 as *mut localEntity_t;
+    let mut le: *mut localEntity_t = std::ptr::null_mut();
+    let mut next: *mut localEntity_t = std::ptr::null_mut();
     // walk the list backwards, so any new local entities generated
     // (trails, marks, etc) will be present this frame
     le = cg_activeLocalEntities.prev;

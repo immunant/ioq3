@@ -50,7 +50,7 @@ unsafe extern "C" fn silk_resampler_private_IIR_FIR_INTERPOL(
 ) -> *mut opus_int16 {
     let mut index_Q16: opus_int32 = 0;
     let mut res_Q15: opus_int32 = 0;
-    let mut buf_ptr: *mut opus_int16 = 0 as *mut opus_int16;
+    let mut buf_ptr: *mut opus_int16 = std::ptr::null_mut();
     let mut table_index: opus_int32 = 0;
     /* Interpolate upsampled signal and store in output array */
     index_Q16 = 0 as i32;
@@ -161,7 +161,7 @@ pub unsafe extern "C" fn silk_resampler_private_IIR_FIR(
     let mut nSamplesIn: opus_int32 = 0;
     let mut max_index_Q16: opus_int32 = 0;
     let mut index_increment_Q16: opus_int32 = 0;
-    let mut buf: *mut opus_int16 = 0 as *mut opus_int16;
+    let mut buf: *mut opus_int16 = std::ptr::null_mut();
     let mut fresh1 = ::std::vec::from_elem(
         0,
         (::std::mem::size_of::<opus_int16>() as usize)

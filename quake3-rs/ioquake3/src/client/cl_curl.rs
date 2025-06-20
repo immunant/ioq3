@@ -622,7 +622,7 @@ GPA
 */
 
 unsafe extern "C" fn GPA(mut str: *mut libc::c_char) -> *mut libc::c_void {
-    let mut rv: *mut libc::c_void = 0 as *mut libc::c_void;
+    let mut rv: *mut libc::c_void = std::ptr::null_mut();
     rv = crate::stdlib::SDL_LoadFunction(cURLLib, str);
     if rv.is_null() {
         Com_Printf(
@@ -630,7 +630,7 @@ unsafe extern "C" fn GPA(mut str: *mut libc::c_char) -> *mut libc::c_void {
             str,
         );
         clc.cURLEnabled = qfalse;
-        return 0 as *mut libc::c_void;
+        return std::ptr::null_mut();
     } else {
         Com_DPrintf(
             b"Loaded symbol %s (0x%p)\n\x00" as *const u8 as *const libc::c_char,
@@ -798,7 +798,7 @@ pub unsafe extern "C" fn CL_cURL_Shutdown() {
     CL_cURL_Cleanup();
     if !cURLLib.is_null() {
         crate::stdlib::SDL_UnloadObject(cURLLib);
-        cURLLib = 0 as *mut libc::c_void
+        cURLLib = std::ptr::null_mut()
     }
     qcurl_easy_init = None;
     qcurl_easy_setopt = None;
@@ -844,11 +844,11 @@ pub unsafe extern "C" fn CL_cURL_Cleanup() {
                 qcurl_multi_strerror.expect("non-null function pointer")(result),
             );
         }
-        clc.downloadCURLM = 0 as *mut libc::c_void;
-        clc.downloadCURL = 0 as *mut libc::c_void
+        clc.downloadCURLM = std::ptr::null_mut();
+        clc.downloadCURL = std::ptr::null_mut()
     } else if !clc.downloadCURL.is_null() {
         qcurl_easy_cleanup.expect("non-null function pointer")(clc.downloadCURL);
-        clc.downloadCURL = 0 as *mut libc::c_void
+        clc.downloadCURL = std::ptr::null_mut()
     };
 }
 
@@ -1038,9 +1038,7 @@ pub unsafe extern "C" fn CL_cURL_BeginDownload(
     );
     qcurl_easy_setopt_warn(
         clc.downloadCURL,
-        CURLOPT_PROGRESSDATA,
-        0 as *mut libc::c_void,
-    );
+        CURLOPT_PROGRESSDATA, std::ptr::null_mut(),);
     qcurl_easy_setopt_warn(clc.downloadCURL, CURLOPT_FAILONERROR, 1 as i32);
     qcurl_easy_setopt_warn(clc.downloadCURL, CURLOPT_FOLLOWLOCATION, 1 as i32);
     qcurl_easy_setopt_warn(clc.downloadCURL, CURLOPT_MAXREDIRS, 5 as i32);
@@ -1056,7 +1054,7 @@ pub unsafe extern "C" fn CL_cURL_BeginDownload(
     clc.downloadCURLM = qcurl_multi_init.expect("non-null function pointer")();
     if clc.downloadCURLM.is_null() {
         qcurl_easy_cleanup.expect("non-null function pointer")(clc.downloadCURL);
-        clc.downloadCURL = 0 as *mut libc::c_void;
+        clc.downloadCURL = std::ptr::null_mut();
         Com_Error(
             ERR_DROP as i32,
             b"CL_cURL_BeginDownload: qcurl_multi_init() failed\x00" as *const u8
@@ -1069,7 +1067,7 @@ pub unsafe extern "C" fn CL_cURL_BeginDownload(
     );
     if result as i32 != CURLM_OK as i32 {
         qcurl_easy_cleanup.expect("non-null function pointer")(clc.downloadCURL);
-        clc.downloadCURL = 0 as *mut libc::c_void;
+        clc.downloadCURL = std::ptr::null_mut();
         Com_Error(
             ERR_DROP as i32,
             b"CL_cURL_BeginDownload: qcurl_multi_add_handle() failed: %s\x00" as *const u8
@@ -1110,7 +1108,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 pub unsafe extern "C" fn CL_cURL_PerformDownload() {
     let mut res: CURLMcode = CURLM_OK;
-    let mut msg: *mut CURLMsg = 0 as *mut CURLMsg;
+    let mut msg: *mut CURLMsg = std::ptr::null_mut();
     let mut c: i32 = 0;
     let mut i: i32 = 0 as i32;
     res = qcurl_multi_perform.expect("non-null function pointer")(clc.downloadCURLM, &mut c);

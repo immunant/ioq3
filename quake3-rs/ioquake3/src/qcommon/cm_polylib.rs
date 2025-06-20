@@ -123,8 +123,7 @@ AllocWinding
 pub unsafe extern "C" fn AllocWinding(
     mut points: i32,
 ) -> *mut crate::src::qcommon::cm_polylib::winding_t {
-    let mut w: *mut crate::src::qcommon::cm_polylib::winding_t =
-        0 as *mut crate::src::qcommon::cm_polylib::winding_t;
+    let mut w: *mut crate::src::qcommon::cm_polylib::winding_t = std::ptr::null_mut();
     let mut s: i32 = 0;
     c_winding_allocs += 1;
     c_winding_points += points;
@@ -394,8 +393,7 @@ pub unsafe extern "C" fn BaseWindingForPlane(
     let mut org: vec3_t = [0.; 3];
     let mut vright: vec3_t = [0.; 3];
     let mut vup: vec3_t = [0.; 3];
-    let mut w: *mut crate::src::qcommon::cm_polylib::winding_t =
-        0 as *mut crate::src::qcommon::cm_polylib::winding_t;
+    let mut w: *mut crate::src::qcommon::cm_polylib::winding_t = std::ptr::null_mut();
     // find the major axis
     max = -(65535 as i32) as vec_t;
     x = -(1 as i32);
@@ -519,8 +517,7 @@ pub unsafe extern "C" fn CopyWinding(
     mut w: *mut crate::src::qcommon::cm_polylib::winding_t,
 ) -> *mut crate::src::qcommon::cm_polylib::winding_t {
     let mut size: intptr_t = 0;
-    let mut c: *mut crate::src::qcommon::cm_polylib::winding_t =
-        0 as *mut crate::src::qcommon::cm_polylib::winding_t;
+    let mut c: *mut crate::src::qcommon::cm_polylib::winding_t = std::ptr::null_mut();
     c = AllocWinding((*w).numpoints);
     size = &mut *(*w).p.as_mut_ptr().offset((*w).numpoints as isize) as *mut vec3_t as intptr_t
         - w as intptr_t;
@@ -542,8 +539,7 @@ pub unsafe extern "C" fn ReverseWinding(
     mut w: *mut crate::src::qcommon::cm_polylib::winding_t,
 ) -> *mut crate::src::qcommon::cm_polylib::winding_t {
     let mut i: i32 = 0;
-    let mut c: *mut crate::src::qcommon::cm_polylib::winding_t =
-        0 as *mut crate::src::qcommon::cm_polylib::winding_t;
+    let mut c: *mut crate::src::qcommon::cm_polylib::winding_t = std::ptr::null_mut();
     c = AllocWinding((*w).numpoints);
     i = 0 as i32;
     while i < (*w).numpoints {
@@ -658,13 +654,13 @@ pub unsafe extern "C" fn ClipWindingEpsilon(
     static mut dot: vec_t = 0.;
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut p1: *mut vec_t = 0 as *mut vec_t;
-    let mut p2: *mut vec_t = 0 as *mut vec_t;
+    let mut p1: *mut vec_t = std::ptr::null_mut();
+    let mut p2: *mut vec_t = std::ptr::null_mut();
     let mut mid: vec3_t = [0.; 3];
     let mut f: *mut crate::src::qcommon::cm_polylib::winding_t =
-        0 as *mut crate::src::qcommon::cm_polylib::winding_t;
+        std::ptr::null_mut();
     let mut b: *mut crate::src::qcommon::cm_polylib::winding_t =
-        0 as *mut crate::src::qcommon::cm_polylib::winding_t;
+        std::ptr::null_mut();
     let mut maxpts: i32 = 0;
     counts[2 as i32 as usize] = 0 as i32;
     counts[1 as i32 as usize] = counts[2 as i32 as usize];
@@ -692,7 +688,7 @@ pub unsafe extern "C" fn ClipWindingEpsilon(
     }
     sides[i as usize] = sides[0 as i32 as usize];
     dists[i as usize] = dists[0 as i32 as usize];
-    *back = 0 as *mut crate::src::qcommon::cm_polylib::winding_t;
+    *back = std::ptr::null_mut();
     *front = *back;
     if counts[0 as i32 as usize] == 0 {
         *back = CopyWinding(in_0);
@@ -812,8 +808,7 @@ pub unsafe extern "C" fn ChopWindingInPlace(
     mut dist: vec_t,
     mut epsilon: vec_t,
 ) {
-    let mut in_0: *mut crate::src::qcommon::cm_polylib::winding_t =
-        0 as *mut crate::src::qcommon::cm_polylib::winding_t; // VC 4.2 optimizer bug if not static
+    let mut in_0: *mut crate::src::qcommon::cm_polylib::winding_t = std::ptr::null_mut(); // VC 4.2 optimizer bug if not static
     let mut dists: [vec_t; 68] = [
         0 as i32 as vec_t,
         0.,
@@ -893,11 +888,11 @@ pub unsafe extern "C" fn ChopWindingInPlace(
     static mut dot: vec_t = 0.;
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut p1: *mut vec_t = 0 as *mut vec_t;
-    let mut p2: *mut vec_t = 0 as *mut vec_t;
+    let mut p1: *mut vec_t = std::ptr::null_mut();
+    let mut p2: *mut vec_t = std::ptr::null_mut();
     let mut mid: vec3_t = [0.; 3];
     let mut f: *mut crate::src::qcommon::cm_polylib::winding_t =
-        0 as *mut crate::src::qcommon::cm_polylib::winding_t;
+        std::ptr::null_mut();
     let mut maxpts: i32 = 0;
     in_0 = *inout;
     counts[2 as i32 as usize] = 0 as i32;
@@ -928,7 +923,7 @@ pub unsafe extern "C" fn ChopWindingInPlace(
     dists[i as usize] = dists[0 as i32 as usize];
     if counts[0 as i32 as usize] == 0 {
         FreeWinding(in_0);
-        *inout = 0 as *mut crate::src::qcommon::cm_polylib::winding_t;
+        *inout = std::ptr::null_mut();
         return;
     }
     if counts[1 as i32 as usize] == 0 {
@@ -1022,10 +1017,9 @@ pub unsafe extern "C" fn ChopWinding(
     mut normal: *mut vec_t,
     mut dist: vec_t,
 ) -> *mut crate::src::qcommon::cm_polylib::winding_t {
-    let mut f: *mut crate::src::qcommon::cm_polylib::winding_t =
-        0 as *mut crate::src::qcommon::cm_polylib::winding_t;
+    let mut f: *mut crate::src::qcommon::cm_polylib::winding_t = std::ptr::null_mut();
     let mut b: *mut crate::src::qcommon::cm_polylib::winding_t =
-        0 as *mut crate::src::qcommon::cm_polylib::winding_t;
+        std::ptr::null_mut();
     ClipWindingEpsilon(in_0, normal, dist, 0.1f32, &mut f, &mut b);
     FreeWinding(in_0);
     if !b.is_null() {
@@ -1044,8 +1038,8 @@ CheckWinding
 pub unsafe extern "C" fn CheckWinding(mut w: *mut crate::src::qcommon::cm_polylib::winding_t) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut p1: *mut vec_t = 0 as *mut vec_t;
-    let mut p2: *mut vec_t = 0 as *mut vec_t;
+    let mut p1: *mut vec_t = std::ptr::null_mut();
+    let mut p2: *mut vec_t = std::ptr::null_mut();
     let mut d: vec_t = 0.;
     let mut edgedist: vec_t = 0.;
     let mut dir: vec3_t = [0.; 3];
@@ -1236,8 +1230,8 @@ pub unsafe extern "C" fn AddWindingToConvexHull(
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut k: i32 = 0;
-    let mut p: *mut f32 = 0 as *mut f32;
-    let mut copy: *mut f32 = 0 as *mut f32;
+    let mut p: *mut f32 = std::ptr::null_mut();
+    let mut copy: *mut f32 = std::ptr::null_mut();
     let mut dir: vec3_t = [0.; 3];
     let mut d: f32 = 0.;
     let mut numHullPoints: i32 = 0;

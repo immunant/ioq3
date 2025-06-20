@@ -403,9 +403,9 @@ pub unsafe extern "C" fn RB_ShadowTessEnd() {
         let mut d1: vec3_t = [0.; 3];
         let mut d2: vec3_t = [0.; 3];
         let mut normal: vec3_t = [0.; 3];
-        let mut v1: *mut f32 = 0 as *mut f32;
-        let mut v2: *mut f32 = 0 as *mut f32;
-        let mut v3: *mut f32 = 0 as *mut f32;
+        let mut v1: *mut f32 = std::ptr::null_mut();
+        let mut v2: *mut f32 = std::ptr::null_mut();
+        let mut v3: *mut f32 = std::ptr::null_mut();
         let mut d: f32 = 0.;
         i1 = tess.indexes[(i * 3 as i32 + 0 as i32) as usize] as i32;
         i2 = tess.indexes[(i * 3 as i32 + 1 as i32) as usize] as i32;
@@ -909,7 +909,7 @@ RB_ProjectionShadowDeform
 #[no_mangle]
 
 pub unsafe extern "C" fn RB_ProjectionShadowDeform() {
-    let mut xyz: *mut f32 = 0 as *mut f32;
+    let mut xyz: *mut f32 = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut h: f32 = 0.;
     let mut ground: vec3_t = [0.; 3];

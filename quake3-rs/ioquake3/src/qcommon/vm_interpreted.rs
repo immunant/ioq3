@@ -172,9 +172,9 @@ pub unsafe extern "C" fn VM_PrepareInterpreter(mut vm: *mut vm_t, mut header: *m
     let mut op: i32 = 0; // we're now int aligned
     let mut byte_pc: i32 = 0;
     let mut int_pc: i32 = 0;
-    let mut code: *mut byte = 0 as *mut byte;
+    let mut code: *mut byte = std::ptr::null_mut();
     let mut instruction: i32 = 0;
-    let mut codeBase: *mut i32 = 0 as *mut i32;
+    let mut codeBase: *mut i32 = std::ptr::null_mut();
     (*vm).codeBase = Hunk_Alloc((*vm).codeLength * 4 as i32, h_high) as *mut byte;
     //	memcpy( vm->codeBase, (byte *)header + header->codeOffset, vm->codeLength );
     // we don't need to translate the instructions, but we still need
@@ -325,13 +325,13 @@ locals from sp
 pub unsafe extern "C" fn VM_CallInterpreted(mut vm: *mut vm_t, mut args: *mut i32) -> i32 {
     let mut current_block: u64;
     let mut stack: [byte; 1039] = [0; 1039];
-    let mut opStack: *mut i32 = 0 as *mut i32;
+    let mut opStack: *mut i32 = std::ptr::null_mut();
     let mut opStackOfs: uint8_t = 0;
     let mut programCounter: i32 = 0;
     let mut programStack: i32 = 0;
     let mut stackOnEntry: i32 = 0;
-    let mut image: *mut byte = 0 as *mut byte;
-    let mut codeImage: *mut i32 = 0 as *mut i32;
+    let mut image: *mut byte = std::ptr::null_mut();
+    let mut codeImage: *mut i32 = std::ptr::null_mut();
     let mut v1: i32 = 0;
     let mut dataMask: i32 = 0;
     let mut arg: i32 = 0;

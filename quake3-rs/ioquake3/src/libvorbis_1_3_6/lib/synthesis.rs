@@ -66,27 +66,27 @@ pub unsafe extern "C" fn vorbis_synthesis(
     let mut vd: *mut vorbis_dsp_state = if !vb.is_null() {
         (*vb).vd
     } else {
-        0 as *mut vorbis_dsp_state
+        std::ptr::null_mut()
     };
     let mut b: *mut private_state = if !vd.is_null() {
         (*vd).backend_state
     } else {
-        0 as *mut libc::c_void
+        std::ptr::null_mut()
     } as *mut private_state;
     let mut vi: *mut vorbis_info = if !vd.is_null() {
         (*vd).vi
     } else {
-        0 as *mut vorbis_info
+        std::ptr::null_mut()
     };
     let mut ci: *mut codec_setup_info = if !vi.is_null() {
         (*vi).codec_setup
     } else {
-        0 as *mut libc::c_void
+        std::ptr::null_mut()
     } as *mut codec_setup_info;
     let mut opb: *mut oggpack_buffer = if !vb.is_null() {
         &mut (*vb).opb
     } else {
-        0 as *mut oggpack_buffer
+        std::ptr::null_mut()
     };
     let mut type_0: i32 = 0;
     let mut mode: i32 = 0;
@@ -202,7 +202,7 @@ pub unsafe extern "C" fn vorbis_synthesis_trackonly(
     (*vb).eofflag = (*op).e_o_s as i32;
     /* no pcm */
     (*vb).pcmend = 0 as i32;
-    (*vb).pcm = 0 as *mut *mut f32;
+    (*vb).pcm = std::ptr::null_mut();
     return 0 as i32;
 }
 #[no_mangle]
@@ -215,8 +215,8 @@ pub unsafe extern "C" fn vorbis_packet_blocksize(
     let mut opb: oggpack_buffer = oggpack_buffer {
         endbyte: 0,
         endbit: 0,
-        buffer: 0 as *mut u8,
-        ptr: 0 as *mut u8,
+        buffer: std::ptr::null_mut(),
+        ptr: std::ptr::null_mut(),
         storage: 0,
     };
     let mut mode: i32 = 0;

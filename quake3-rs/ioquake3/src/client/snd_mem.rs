@@ -58,7 +58,7 @@ pub unsafe extern "C" fn SND_free(mut v: *mut sndBuffer) {
 #[no_mangle]
 
 pub unsafe extern "C" fn SND_malloc() -> *mut sndBuffer {
-    let mut v: *mut sndBuffer = 0 as *mut sndBuffer;
+    let mut v: *mut sndBuffer = std::ptr::null_mut();
     while freelist.is_null() {
         S_FreeOldestSound();
     }
@@ -67,15 +67,15 @@ pub unsafe extern "C" fn SND_malloc() -> *mut sndBuffer {
         (totalInUse as usize).wrapping_add(::std::mem::size_of::<sndBuffer>() as usize) as i32;
     v = freelist;
     freelist = *(freelist as *mut *mut sndBuffer);
-    (*v).next = 0 as *mut sndBuffer_s;
+    (*v).next = std::ptr::null_mut();
     return v;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn SND_setup() {
-    let mut p: *mut sndBuffer = 0 as *mut sndBuffer;
-    let mut q: *mut sndBuffer = 0 as *mut sndBuffer;
-    let mut cv: *mut cvar_t = 0 as *mut cvar_t;
+    let mut p: *mut sndBuffer = std::ptr::null_mut();
+    let mut q: *mut sndBuffer = std::ptr::null_mut();
+    let mut cv: *mut cvar_t = std::ptr::null_mut();
     let mut scs: i32 = 0;
     cv = crate::src::qcommon::cvar::Cvar_Get(
         b"com_soundMegs\x00" as *const u8 as *const libc::c_char,
@@ -92,7 +92,7 @@ pub unsafe extern "C" fn SND_setup() {
             .wrapping_mul(::std::mem::size_of::<i16>() as usize)
             .wrapping_mul(4 as i32 as usize),
     ) as *mut i16; //Hunk_Alloc(SND_CHUNK_SIZE * sizeof(short) * 4);
-    sfxScratchPointer = 0 as *mut sfx_t;
+    sfxScratchPointer = std::ptr::null_mut();
     inUse = (scs as usize).wrapping_mul(::std::mem::size_of::<sndBuffer>() as usize) as i32;
     p = buffer;
     q = p.offset(scs as isize);
@@ -105,7 +105,7 @@ pub unsafe extern "C" fn SND_setup() {
         *fresh1 = q.offset(-(1 as i32 as isize))
     }
     let ref mut fresh2 = *(q as *mut *mut sndBuffer);
-    *fresh2 = 0 as *mut sndBuffer;
+    *fresh2 = std::ptr::null_mut();
     freelist = p.offset(scs as isize).offset(-(1 as i32 as isize));
     Com_Printf(b"Sound memory manager started\n\x00" as *const u8 as *const libc::c_char);
 }
@@ -141,7 +141,7 @@ unsafe extern "C" fn ResampleSfx(
     let mut samplefrac: i32 = 0;
     let mut fracstep: i32 = 0;
     let mut part: i32 = 0;
-    let mut chunk: *mut sndBuffer = 0 as *mut sndBuffer;
+    let mut chunk: *mut sndBuffer = std::ptr::null_mut();
     stepscale = inrate as f32 / dma.speed as f32;
     outcount = (samples as f32 / stepscale) as i32;
     srcsample = 0 as i32;
@@ -163,7 +163,7 @@ unsafe extern "C" fn ResampleSfx(
             }
             part = i * channels + j & 1024 as i32 - 1 as i32;
             if part == 0 as i32 {
-                let mut newchunk: *mut sndBuffer = 0 as *mut sndBuffer;
+                let mut newchunk: *mut sndBuffer = std::ptr::null_mut();
                 newchunk = SND_malloc();
                 if chunk.is_null() {
                     (*sfx).soundData = newchunk
@@ -297,8 +297,8 @@ of a forced fallback of a player specific sound
 #[no_mangle]
 
 pub unsafe extern "C" fn S_LoadSound(mut sfx: *mut sfx_t) -> qboolean {
-    let mut data: *mut byte = 0 as *mut byte;
-    let mut samples: *mut i16 = 0 as *mut i16;
+    let mut data: *mut byte = std::ptr::null_mut();
+    let mut samples: *mut i16 = std::ptr::null_mut();
     let mut info: snd_info_t = snd_info_t {
         rate: 0,
         width: 0,
@@ -341,7 +341,7 @@ pub unsafe extern "C" fn S_LoadSound(mut sfx: *mut sfx_t) -> qboolean {
     // sound in as needed
     if info.channels == 1 as i32 && (*sfx).soundCompressed as u32 == qtrue as i32 as u32 {
         (*sfx).soundCompressionMethod = 1 as i32;
-        (*sfx).soundData = 0 as *mut sndBuffer;
+        (*sfx).soundData = std::ptr::null_mut();
         (*sfx).soundLength = ResampleSfxRaw(
             samples,
             info.channels,
@@ -353,7 +353,7 @@ pub unsafe extern "C" fn S_LoadSound(mut sfx: *mut sfx_t) -> qboolean {
         S_AdpcmEncodeSound(sfx as *mut sfx_s, samples);
     } else {
         (*sfx).soundCompressionMethod = 0 as i32;
-        (*sfx).soundData = 0 as *mut sndBuffer;
+        (*sfx).soundData = std::ptr::null_mut();
         (*sfx).soundLength = ResampleSfx(
             sfx,
             info.channels,

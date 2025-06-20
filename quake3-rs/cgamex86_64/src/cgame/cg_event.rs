@@ -442,8 +442,8 @@ Also called by scoreboard drawing
 
 pub unsafe extern "C" fn CG_PlaceString(mut rank: i32) -> *const libc::c_char {
     static mut str: [libc::c_char; 64] = [0; 64];
-    let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut t: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut s: *mut libc::c_char = std::ptr::null_mut();
+    let mut t: *mut libc::c_char = std::ptr::null_mut();
     if rank & 0x4000 as i32 != 0 {
         rank &= !(0x4000 as i32);
         t = b"Tied for \x00" as *const u8 as *const libc::c_char as *mut libc::c_char
@@ -505,14 +505,14 @@ unsafe extern "C" fn CG_Obituary(mut ent: *mut entityState_t) {
     let mut mod_0: i32 = 0;
     let mut target: i32 = 0;
     let mut attacker: i32 = 0;
-    let mut message: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut message2: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut targetInfo: *const libc::c_char = 0 as *const libc::c_char;
-    let mut attackerInfo: *const libc::c_char = 0 as *const libc::c_char;
+    let mut message: *mut libc::c_char = std::ptr::null_mut();
+    let mut message2: *mut libc::c_char = std::ptr::null_mut();
+    let mut targetInfo: *const libc::c_char = std::ptr::null();
+    let mut attackerInfo: *const libc::c_char = std::ptr::null();
     let mut targetName: [libc::c_char; 32] = [0; 32];
     let mut attackerName: [libc::c_char; 32] = [0; 32];
     let mut gender: gender_t = GENDER_MALE;
-    let mut ci: *mut clientInfo_t = 0 as *mut clientInfo_t;
+    let mut ci: *mut clientInfo_t = std::ptr::null_mut();
     target = (*ent).otherEntityNum;
     attacker = (*ent).otherEntityNum2;
     mod_0 = (*ent).eventParm;
@@ -522,7 +522,7 @@ unsafe extern "C" fn CG_Obituary(mut ent: *mut entityState_t) {
     ci = &mut *cgs.clientinfo.as_mut_ptr().offset(target as isize) as *mut clientInfo_t;
     if attacker < 0 as i32 || attacker >= 64 as i32 {
         attacker = ((1 as i32) << 10 as i32) - 2 as i32;
-        attackerInfo = 0 as *const libc::c_char
+        attackerInfo = std::ptr::null()
     } else {
         attackerInfo = CG_ConfigString(32 as i32 + 256 as i32 + 256 as i32 + attacker)
     }
@@ -564,7 +564,7 @@ unsafe extern "C" fn CG_Obituary(mut ent: *mut entityState_t) {
             message = b"was in the wrong place\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char
         }
-        _ => message = 0 as *mut libc::c_char,
+        _ => message = std::ptr::null_mut(),
     }
     if attacker == target {
         gender = (*ci).gender;
@@ -633,7 +633,7 @@ unsafe extern "C" fn CG_Obituary(mut ent: *mut entityState_t) {
     }
     // check for kill messages from the current clientNum
     if attacker == (*cg.snap).ps.clientNum {
-        let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
+        let mut s: *mut libc::c_char = std::ptr::null_mut();
         if (cgs.gametype as u32) < GT_TEAM as i32 as u32 {
             s = va(
                 b"You fragged %s\n%s place with %i\x00" as *const u8 as *const libc::c_char
@@ -779,11 +779,11 @@ CG_UseItem
 */
 
 unsafe extern "C" fn CG_UseItem(mut cent: *mut centity_t) {
-    let mut ci: *mut clientInfo_t = 0 as *mut clientInfo_t;
+    let mut ci: *mut clientInfo_t = std::ptr::null_mut();
     let mut itemNum: i32 = 0;
     let mut clientNum: i32 = 0;
-    let mut item: *mut gitem_t = 0 as *mut gitem_t;
-    let mut es: *mut entityState_t = 0 as *mut entityState_t;
+    let mut item: *mut gitem_t = std::ptr::null_mut();
+    let mut es: *mut entityState_t = std::ptr::null_mut();
     es = &mut (*cent).currentState;
     itemNum = ((*es).event & !(0x100 as i32 | 0x200 as i32)) - EV_USE_ITEM0 as i32;
     if itemNum < 0 as i32 || itemNum > HI_NUM_HOLDABLE as i32 {
@@ -819,7 +819,7 @@ unsafe extern "C" fn CG_UseItem(mut cent: *mut centity_t) {
                 (*ci).medkitUsageTime = cg.time
             }
             trap_S_StartSound(
-                0 as *mut vec_t,
+                std::ptr::null_mut(),
                 (*es).number,
                 CHAN_BODY as i32,
                 cgs.media.medkitSound,
@@ -827,7 +827,7 @@ unsafe extern "C" fn CG_UseItem(mut cent: *mut centity_t) {
         }
         0 | _ => {
             trap_S_StartSound(
-                0 as *mut vec_t,
+                std::ptr::null_mut(),
                 (*es).number,
                 CHAN_BODY as i32,
                 cgs.media.useNothingSound,
@@ -920,7 +920,7 @@ Also called by playerstate transition
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_PainEvent(mut cent: *mut centity_t, mut health: i32) {
-    let mut snd: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut snd: *mut libc::c_char = std::ptr::null_mut();
     // don't do more than two pain sounds a second
     if cg.time - (*cent).pe.painTime < 500 as i32 {
         return;
@@ -938,7 +938,7 @@ pub unsafe extern "C" fn CG_PainEvent(mut cent: *mut centity_t, mut health: i32)
     if CG_WaterLevel(cent) == 3 as i32 {
         if libc::rand() & 1 as i32 != 0 {
             trap_S_StartSound(
-                0 as *mut vec_t,
+                std::ptr::null_mut(),
                 (*cent).currentState.number,
                 CHAN_VOICE as i32,
                 CG_CustomSound(
@@ -948,7 +948,7 @@ pub unsafe extern "C" fn CG_PainEvent(mut cent: *mut centity_t, mut health: i32)
             );
         } else {
             trap_S_StartSound(
-                0 as *mut vec_t,
+                std::ptr::null_mut(),
                 (*cent).currentState.number,
                 CHAN_VOICE as i32,
                 CG_CustomSound(
@@ -959,7 +959,7 @@ pub unsafe extern "C" fn CG_PainEvent(mut cent: *mut centity_t, mut health: i32)
         }
     } else {
         trap_S_StartSound(
-            0 as *mut vec_t,
+            std::ptr::null_mut(),
             (*cent).currentState.number,
             CHAN_VOICE as i32,
             CG_CustomSound((*cent).currentState.number, snd),
@@ -980,12 +980,12 @@ also called by CG_CheckPlayerstateEvents
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_EntityEvent(mut cent: *mut centity_t, mut position: *mut vec_t) {
-    let mut es: *mut entityState_t = 0 as *mut entityState_t;
+    let mut es: *mut entityState_t = std::ptr::null_mut();
     let mut event: i32 = 0;
     let mut dir: vec3_t = [0.; 3];
-    let mut s: *const libc::c_char = 0 as *const libc::c_char;
+    let mut s: *const libc::c_char = std::ptr::null();
     let mut clientNum: i32 = 0;
-    let mut ci: *mut clientInfo_t = 0 as *mut clientInfo_t;
+    let mut ci: *mut clientInfo_t = std::ptr::null_mut();
     es = &mut (*cent).currentState;
     event = (*es).event & !(0x100 as i32 | 0x200 as i32);
     if cg_debugEvents.integer != 0 {
@@ -1016,7 +1016,7 @@ pub unsafe extern "C" fn CG_EntityEvent(mut cent: *mut centity_t, mut position: 
             }
             if cg_footsteps.integer != 0 {
                 trap_S_StartSound(
-                    0 as *mut vec_t,
+                    std::ptr::null_mut(),
                     (*es).number,
                     CHAN_BODY as i32,
                     cgs.media.footsteps[(*ci).footsteps as usize]
@@ -1030,7 +1030,7 @@ pub unsafe extern "C" fn CG_EntityEvent(mut cent: *mut centity_t, mut position: 
             }
             if cg_footsteps.integer != 0 {
                 trap_S_StartSound(
-                    0 as *mut vec_t,
+                    std::ptr::null_mut(),
                     (*es).number,
                     CHAN_BODY as i32,
                     cgs.media.footsteps[FOOTSTEP_METAL as i32 as usize]
@@ -1044,7 +1044,7 @@ pub unsafe extern "C" fn CG_EntityEvent(mut cent: *mut centity_t, mut position: 
             }
             if cg_footsteps.integer != 0 {
                 trap_S_StartSound(
-                    0 as *mut vec_t,
+                    std::ptr::null_mut(),
                     (*es).number,
                     CHAN_BODY as i32,
                     cgs.media.footsteps[FOOTSTEP_SPLASH as i32 as usize]
@@ -1058,7 +1058,7 @@ pub unsafe extern "C" fn CG_EntityEvent(mut cent: *mut centity_t, mut position: 
             }
             if cg_footsteps.integer != 0 {
                 trap_S_StartSound(
-                    0 as *mut vec_t,
+                    std::ptr::null_mut(),
                     (*es).number,
                     CHAN_BODY as i32,
                     cgs.media.footsteps[FOOTSTEP_SPLASH as i32 as usize]
@@ -1072,7 +1072,7 @@ pub unsafe extern "C" fn CG_EntityEvent(mut cent: *mut centity_t, mut position: 
             }
             if cg_footsteps.integer != 0 {
                 trap_S_StartSound(
-                    0 as *mut vec_t,
+                    std::ptr::null_mut(),
                     (*es).number,
                     CHAN_BODY as i32,
                     cgs.media.footsteps[FOOTSTEP_SPLASH as i32 as usize]
@@ -1085,7 +1085,7 @@ pub unsafe extern "C" fn CG_EntityEvent(mut cent: *mut centity_t, mut position: 
                 CG_Printf(b"EV_FALL_SHORT\n\x00" as *const u8 as *const libc::c_char);
             }
             trap_S_StartSound(
-                0 as *mut vec_t,
+                std::ptr::null_mut(),
                 (*es).number,
                 CHAN_AUTO as i32,
                 cgs.media.landSound,
@@ -1102,7 +1102,7 @@ pub unsafe extern "C" fn CG_EntityEvent(mut cent: *mut centity_t, mut position: 
             }
             // use normal pain sound
             trap_S_StartSound(
-                0 as *mut vec_t,
+                std::ptr::null_mut(),
                 (*es).number,
                 CHAN_VOICE as i32,
                 CG_CustomSound(
@@ -1121,7 +1121,7 @@ pub unsafe extern "C" fn CG_EntityEvent(mut cent: *mut centity_t, mut position: 
                 CG_Printf(b"EV_FALL_FAR\n\x00" as *const u8 as *const libc::c_char);
             }
             trap_S_StartSound(
-                0 as *mut vec_t,
+                std::ptr::null_mut(),
                 (*es).number,
                 CHAN_AUTO as i32,
                 CG_CustomSound(
@@ -1197,7 +1197,7 @@ pub unsafe extern "C" fn CG_EntityEvent(mut cent: *mut centity_t, mut position: 
                 cgs.media.jumpPadSound,
             ); // player predicted
             trap_S_StartSound(
-                0 as *mut vec_t,
+                std::ptr::null_mut(),
                 (*es).number,
                 CHAN_VOICE as i32,
                 CG_CustomSound(
@@ -1211,7 +1211,7 @@ pub unsafe extern "C" fn CG_EntityEvent(mut cent: *mut centity_t, mut position: 
                 CG_Printf(b"EV_JUMP\n\x00" as *const u8 as *const libc::c_char);
             }
             trap_S_StartSound(
-                0 as *mut vec_t,
+                std::ptr::null_mut(),
                 (*es).number,
                 CHAN_VOICE as i32,
                 CG_CustomSound(
@@ -1225,7 +1225,7 @@ pub unsafe extern "C" fn CG_EntityEvent(mut cent: *mut centity_t, mut position: 
                 CG_Printf(b"EV_TAUNT\n\x00" as *const u8 as *const libc::c_char);
             }
             trap_S_StartSound(
-                0 as *mut vec_t,
+                std::ptr::null_mut(),
                 (*es).number,
                 CHAN_VOICE as i32,
                 CG_CustomSound(
@@ -1239,7 +1239,7 @@ pub unsafe extern "C" fn CG_EntityEvent(mut cent: *mut centity_t, mut position: 
                 CG_Printf(b"EV_WATER_TOUCH\n\x00" as *const u8 as *const libc::c_char);
             }
             trap_S_StartSound(
-                0 as *mut vec_t,
+                std::ptr::null_mut(),
                 (*es).number,
                 CHAN_AUTO as i32,
                 cgs.media.watrInSound,
@@ -1250,7 +1250,7 @@ pub unsafe extern "C" fn CG_EntityEvent(mut cent: *mut centity_t, mut position: 
                 CG_Printf(b"EV_WATER_LEAVE\n\x00" as *const u8 as *const libc::c_char);
             }
             trap_S_StartSound(
-                0 as *mut vec_t,
+                std::ptr::null_mut(),
                 (*es).number,
                 CHAN_AUTO as i32,
                 cgs.media.watrOutSound,
@@ -1261,7 +1261,7 @@ pub unsafe extern "C" fn CG_EntityEvent(mut cent: *mut centity_t, mut position: 
                 CG_Printf(b"EV_WATER_UNDER\n\x00" as *const u8 as *const libc::c_char);
             }
             trap_S_StartSound(
-                0 as *mut vec_t,
+                std::ptr::null_mut(),
                 (*es).number,
                 CHAN_AUTO as i32,
                 cgs.media.watrUnSound,
@@ -1272,7 +1272,7 @@ pub unsafe extern "C" fn CG_EntityEvent(mut cent: *mut centity_t, mut position: 
                 CG_Printf(b"EV_WATER_CLEAR\n\x00" as *const u8 as *const libc::c_char);
             }
             trap_S_StartSound(
-                0 as *mut vec_t,
+                std::ptr::null_mut(),
                 (*es).number,
                 CHAN_AUTO as i32,
                 CG_CustomSound(
@@ -1285,7 +1285,7 @@ pub unsafe extern "C" fn CG_EntityEvent(mut cent: *mut centity_t, mut position: 
             if cg_debugEvents.integer != 0 {
                 CG_Printf(b"EV_ITEM_PICKUP\n\x00" as *const u8 as *const libc::c_char);
             }
-            let mut item: *mut gitem_t = 0 as *mut gitem_t;
+            let mut item: *mut gitem_t = std::ptr::null_mut();
             let mut index: i32 = 0;
             index = (*es).eventParm;
             if !(index < 1 as i32 || index >= bg_numItems) {
@@ -1296,14 +1296,14 @@ pub unsafe extern "C" fn CG_EntityEvent(mut cent: *mut centity_t, mut position: 
                     || (*item).giType as u32 == IT_TEAM as i32 as u32
                 {
                     trap_S_StartSound(
-                        0 as *mut vec_t,
+                        std::ptr::null_mut(),
                         (*es).number,
                         CHAN_AUTO as i32,
                         cgs.media.n_healthSound,
                     );
                 } else if !((*item).giType as u32 == IT_PERSISTANT_POWERUP as i32 as u32) {
                     trap_S_StartSound(
-                        0 as *mut vec_t,
+                        std::ptr::null_mut(),
                         (*es).number,
                         CHAN_AUTO as i32,
                         trap_S_RegisterSound((*item).pickup_sound, qfalse),
@@ -1319,7 +1319,7 @@ pub unsafe extern "C" fn CG_EntityEvent(mut cent: *mut centity_t, mut position: 
             if cg_debugEvents.integer != 0 {
                 CG_Printf(b"EV_GLOBAL_ITEM_PICKUP\n\x00" as *const u8 as *const libc::c_char);
             }
-            let mut item_0: *mut gitem_t = 0 as *mut gitem_t;
+            let mut item_0: *mut gitem_t = std::ptr::null_mut();
             let mut index_0: i32 = 0;
             index_0 = (*es).eventParm;
             if !(index_0 < 1 as i32 || index_0 >= bg_numItems) {
@@ -1327,7 +1327,7 @@ pub unsafe extern "C" fn CG_EntityEvent(mut cent: *mut centity_t, mut position: 
                 // powerup pickups are global
                 if !(*item_0).pickup_sound.is_null() {
                     trap_S_StartSound(
-                        0 as *mut vec_t,
+                        std::ptr::null_mut(),
                         (*cg.snap).ps.clientNum,
                         CHAN_AUTO as i32,
                         trap_S_RegisterSound((*item_0).pickup_sound, qfalse),
@@ -1356,7 +1356,7 @@ pub unsafe extern "C" fn CG_EntityEvent(mut cent: *mut centity_t, mut position: 
                 CG_Printf(b"EV_CHANGE_WEAPON\n\x00" as *const u8 as *const libc::c_char);
             }
             trap_S_StartSound(
-                0 as *mut vec_t,
+                std::ptr::null_mut(),
                 (*es).number,
                 CHAN_AUTO as i32,
                 cgs.media.selectSound,
@@ -1474,7 +1474,7 @@ pub unsafe extern "C" fn CG_EntityEvent(mut cent: *mut centity_t, mut position: 
                 // scale up from this
             }
             trap_S_StartSound(
-                0 as *mut vec_t,
+                std::ptr::null_mut(),
                 (*es).number,
                 CHAN_AUTO as i32,
                 cgs.media.teleInSound,
@@ -1486,7 +1486,7 @@ pub unsafe extern "C" fn CG_EntityEvent(mut cent: *mut centity_t, mut position: 
                 CG_Printf(b"EV_PLAYER_TELEPORT_OUT\n\x00" as *const u8 as *const libc::c_char);
             }
             trap_S_StartSound(
-                0 as *mut vec_t,
+                std::ptr::null_mut(),
                 (*es).number,
                 CHAN_AUTO as i32,
                 cgs.media.teleOutSound,
@@ -1498,7 +1498,7 @@ pub unsafe extern "C" fn CG_EntityEvent(mut cent: *mut centity_t, mut position: 
                 CG_Printf(b"EV_ITEM_POP\n\x00" as *const u8 as *const libc::c_char);
             }
             trap_S_StartSound(
-                0 as *mut vec_t,
+                std::ptr::null_mut(),
                 (*es).number,
                 CHAN_AUTO as i32,
                 cgs.media.respawnSound,
@@ -1510,7 +1510,7 @@ pub unsafe extern "C" fn CG_EntityEvent(mut cent: *mut centity_t, mut position: 
             }
             (*cent).miscTime = cg.time;
             trap_S_StartSound(
-                0 as *mut vec_t,
+                std::ptr::null_mut(),
                 (*es).number,
                 CHAN_AUTO as i32,
                 cgs.media.respawnSound,
@@ -1522,14 +1522,14 @@ pub unsafe extern "C" fn CG_EntityEvent(mut cent: *mut centity_t, mut position: 
             }
             if libc::rand() & 1 as i32 != 0 {
                 trap_S_StartSound(
-                    0 as *mut vec_t,
+                    std::ptr::null_mut(),
                     (*es).number,
                     CHAN_AUTO as i32,
                     cgs.media.hgrenb1aSound,
                 );
             } else {
                 trap_S_StartSound(
-                    0 as *mut vec_t,
+                    std::ptr::null_mut(),
                     (*es).number,
                     CHAN_AUTO as i32,
                     cgs.media.hgrenb2aSound,
@@ -1667,7 +1667,7 @@ pub unsafe extern "C" fn CG_EntityEvent(mut cent: *mut centity_t, mut position: 
             }
             if cgs.gameSounds[(*es).eventParm as usize] != 0 {
                 trap_S_StartSound(
-                    0 as *mut vec_t,
+                    std::ptr::null_mut(),
                     (*es).number,
                     CHAN_VOICE as i32,
                     cgs.gameSounds[(*es).eventParm as usize],
@@ -1675,7 +1675,7 @@ pub unsafe extern "C" fn CG_EntityEvent(mut cent: *mut centity_t, mut position: 
             } else {
                 s = CG_ConfigString(32 as i32 + 256 as i32 + (*es).eventParm);
                 trap_S_StartSound(
-                    0 as *mut vec_t,
+                    std::ptr::null_mut(),
                     (*es).number,
                     CHAN_VOICE as i32,
                     CG_CustomSound((*es).number, s),
@@ -1689,7 +1689,7 @@ pub unsafe extern "C" fn CG_EntityEvent(mut cent: *mut centity_t, mut position: 
             }
             if cgs.gameSounds[(*es).eventParm as usize] != 0 {
                 trap_S_StartSound(
-                    0 as *mut vec_t,
+                    std::ptr::null_mut(),
                     (*cg.snap).ps.clientNum,
                     CHAN_AUTO as i32,
                     cgs.gameSounds[(*es).eventParm as usize],
@@ -1697,7 +1697,7 @@ pub unsafe extern "C" fn CG_EntityEvent(mut cent: *mut centity_t, mut position: 
             } else {
                 s = CG_ConfigString(32 as i32 + 256 as i32 + (*es).eventParm);
                 trap_S_StartSound(
-                    0 as *mut vec_t,
+                    std::ptr::null_mut(),
                     (*cg.snap).ps.clientNum,
                     CHAN_AUTO as i32,
                     CG_CustomSound((*es).number, s),
@@ -1810,7 +1810,7 @@ pub unsafe extern "C" fn CG_EntityEvent(mut cent: *mut centity_t, mut position: 
             }
             if CG_WaterLevel(cent) == 3 as i32 {
                 trap_S_StartSound(
-                    0 as *mut vec_t,
+                    std::ptr::null_mut(),
                     (*es).number,
                     CHAN_VOICE as i32,
                     CG_CustomSound(
@@ -1820,7 +1820,7 @@ pub unsafe extern "C" fn CG_EntityEvent(mut cent: *mut centity_t, mut position: 
                 );
             } else {
                 trap_S_StartSound(
-                    0 as *mut vec_t,
+                    std::ptr::null_mut(),
                     (*es).number,
                     CHAN_VOICE as i32,
                     CG_CustomSound(
@@ -1852,7 +1852,7 @@ pub unsafe extern "C" fn CG_EntityEvent(mut cent: *mut centity_t, mut position: 
                 cg.powerupTime = cg.time
             }
             trap_S_StartSound(
-                0 as *mut vec_t,
+                std::ptr::null_mut(),
                 (*es).number,
                 CHAN_ITEM as i32,
                 cgs.media.quadSound,
@@ -1867,7 +1867,7 @@ pub unsafe extern "C" fn CG_EntityEvent(mut cent: *mut centity_t, mut position: 
                 cg.powerupTime = cg.time
             }
             trap_S_StartSound(
-                0 as *mut vec_t,
+                std::ptr::null_mut(),
                 (*es).number,
                 CHAN_ITEM as i32,
                 cgs.media.protectSound,
@@ -1882,7 +1882,7 @@ pub unsafe extern "C" fn CG_EntityEvent(mut cent: *mut centity_t, mut position: 
                 cg.powerupTime = cg.time
             }
             trap_S_StartSound(
-                0 as *mut vec_t,
+                std::ptr::null_mut(),
                 (*es).number,
                 CHAN_ITEM as i32,
                 cgs.media.regenSound,
@@ -1897,7 +1897,7 @@ pub unsafe extern "C" fn CG_EntityEvent(mut cent: *mut centity_t, mut position: 
             // not be played when someone is gibbed while just carrying the kamikaze
             if (*es).eFlags & 0x200 as i32 == 0 {
                 trap_S_StartSound(
-                    0 as *mut vec_t,
+                    std::ptr::null_mut(),
                     (*es).number,
                     CHAN_BODY as i32,
                     cgs.media.gibSound,

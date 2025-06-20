@@ -594,9 +594,9 @@ pub unsafe extern "C" fn AAS_ShowFace(mut facenum: i32) {
     let mut i: i32 = 0;
     let mut color: i32 = 0;
     let mut edgenum: i32 = 0;
-    let mut edge: *mut aas_edge_t = 0 as *mut aas_edge_t;
-    let mut face: *mut aas_face_t = 0 as *mut aas_face_t;
-    let mut plane: *mut aas_plane_t = 0 as *mut aas_plane_t;
+    let mut edge: *mut aas_edge_t = std::ptr::null_mut();
+    let mut face: *mut aas_face_t = std::ptr::null_mut();
+    let mut plane: *mut aas_plane_t = std::ptr::null_mut();
     let mut start: vec3_t = [0.; 3];
     let mut end: vec3_t = [0.; 3];
     color = 4 as i32;
@@ -701,8 +701,8 @@ pub unsafe extern "C" fn AAS_ShowFacePolygon(mut facenum: i32, mut color: i32, m
     let mut edgenum: i32 = 0;
     let mut numpoints: i32 = 0;
     let mut points: [vec3_t; 128] = [[0.; 3]; 128];
-    let mut edge: *mut aas_edge_t = 0 as *mut aas_edge_t;
-    let mut face: *mut aas_face_t = 0 as *mut aas_face_t;
+    let mut edge: *mut aas_edge_t = std::ptr::null_mut();
+    let mut face: *mut aas_face_t = std::ptr::null_mut();
     //check if face number is in range
     if facenum >= crate::src::botlib::be_aas_main::aasworld.numfaces {
         crate::src::botlib::be_interface::botimport
@@ -801,9 +801,9 @@ pub unsafe extern "C" fn AAS_ShowArea(mut areanum: i32, mut groundfacesonly: i32
     let mut line: i32 = 0;
     let mut facenum: i32 = 0;
     let mut edgenum: i32 = 0;
-    let mut area: *mut aas_area_t = 0 as *mut aas_area_t;
-    let mut face: *mut aas_face_t = 0 as *mut aas_face_t;
-    let mut edge: *mut aas_edge_t = 0 as *mut aas_edge_t;
+    let mut area: *mut aas_area_t = std::ptr::null_mut();
+    let mut face: *mut aas_face_t = std::ptr::null_mut();
+    let mut edge: *mut aas_edge_t = std::ptr::null_mut();
     //
     numareaedges = 0 as i32;
     //
@@ -985,8 +985,8 @@ pub unsafe extern "C" fn AAS_ShowAreaPolygons(
 ) {
     let mut i: i32 = 0;
     let mut facenum: i32 = 0;
-    let mut area: *mut aas_area_t = 0 as *mut aas_area_t;
-    let mut face: *mut aas_face_t = 0 as *mut aas_face_t;
+    let mut area: *mut aas_area_t = std::ptr::null_mut();
+    let mut face: *mut aas_face_t = std::ptr::null_mut();
     //
     if areanum < 0 as i32 || areanum >= crate::src::botlib::be_aas_main::aasworld.numareas {
         crate::src::botlib::be_interface::botimport
@@ -1338,7 +1338,7 @@ pub unsafe extern "C" fn AAS_ShowReachability(mut reach: *mut aas_reachability_t
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_ShowReachableAreas(mut areanum: i32) {
-    let mut settings: *mut aas_areasettings_t = 0 as *mut aas_areasettings_t; //end if
+    let mut settings: *mut aas_areasettings_t = std::ptr::null_mut(); //end if
     static mut reach: aas_reachability_t = aas_reachability_t {
         areanum: 0,
         facenum: 0,
@@ -1395,10 +1395,10 @@ pub unsafe extern "C" fn AAS_FloodAreas_r(mut areanum: i32, mut cluster: i32, mu
     let mut nextareanum: i32 = 0;
     let mut i: i32 = 0;
     let mut facenum: i32 = 0;
-    let mut area: *mut aas_area_t = 0 as *mut aas_area_t;
-    let mut face: *mut aas_face_t = 0 as *mut aas_face_t;
-    let mut settings: *mut aas_areasettings_t = 0 as *mut aas_areasettings_t;
-    let mut reach: *mut aas_reachability_t = 0 as *mut aas_reachability_t;
+    let mut area: *mut aas_area_t = std::ptr::null_mut();
+    let mut face: *mut aas_face_t = std::ptr::null_mut();
+    let mut settings: *mut aas_areasettings_t = std::ptr::null_mut();
+    let mut reach: *mut aas_reachability_t = std::ptr::null_mut();
     AAS_ShowAreaPolygons(areanum, 1 as i32, qtrue as i32);
     //pointer to the convex area
     area = &mut *crate::src::botlib::be_aas_main::aasworld
@@ -1481,7 +1481,7 @@ pub unsafe extern "C" fn AAS_FloodAreas_r(mut areanum: i32, mut cluster: i32, mu
 pub unsafe extern "C" fn AAS_FloodAreas(mut origin: *mut vec_t) {
     let mut areanum: i32 = 0;
     let mut cluster: i32 = 0;
-    let mut done: *mut i32 = 0 as *mut i32;
+    let mut done: *mut i32 = std::ptr::null_mut();
     done = crate::src::botlib::l_memory::GetClearedMemory(
         (crate::src::botlib::be_aas_main::aasworld.numareas as usize)
             .wrapping_mul(::std::mem::size_of::<i32>() as usize),

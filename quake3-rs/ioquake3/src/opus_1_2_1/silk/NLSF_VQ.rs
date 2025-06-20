@@ -270,8 +270,8 @@ pub unsafe extern "C" fn silk_NLSF_VQ(
     let mut diffw_Q24: opus_int32 = 0;
     let mut sum_error_Q24: opus_int32 = 0;
     let mut pred_Q24: opus_int32 = 0;
-    let mut w_Q9_ptr: *const opus_int16 = 0 as *const opus_int16;
-    let mut cb_Q8_ptr: *const u8 = 0 as *const u8;
+    let mut w_Q9_ptr: *const opus_int16 = std::ptr::null();
+    let mut cb_Q8_ptr: *const u8 = std::ptr::null();
     /* Loop over codebook */
     cb_Q8_ptr = pCB_Q8;
     w_Q9_ptr = pWght_Q9;

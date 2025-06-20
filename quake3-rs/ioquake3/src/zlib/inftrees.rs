@@ -70,10 +70,9 @@ pub unsafe extern "C" fn inflate_table(
         bits: 0,
         val: 0,
     }; /* next available space in table */
-    let mut next: *mut crate::src::zlib::inftrees::code =
-        0 as *mut crate::src::zlib::inftrees::code; /* base value table to use */
-    let mut base: *const u16 = 0 as *const u16; /* extra bits table to use */
-    let mut extra: *const u16 = 0 as *const u16; /* use base and extra for symbol > end */
+    let mut next: *mut crate::src::zlib::inftrees::code = std::ptr::null_mut(); /* base value table to use */
+    let mut base: *const u16 = std::ptr::null(); /* extra bits table to use */
+    let mut extra: *const u16 = std::ptr::null(); /* use base and extra for symbol > end */
     let mut end: i32 = 0; /* number of codes of each length */
     let mut count: [u16; 16] = [0; 16]; /* offsets in table for each length */
     let mut offs: [u16; 16] = [0; 16];

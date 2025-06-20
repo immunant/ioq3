@@ -67,7 +67,7 @@ unsafe extern "C" fn UI_CreditMenu_Draw_ioq3() {
         b"Zachary J. Slater\x00" as *const u8 as *const libc::c_char,
         b"Tony J. White\x00" as *const u8 as *const libc::c_char,
         b"...and many, many others!\x00" as *const u8 as *const libc::c_char,
-        0 as *const libc::c_char,
+        std::ptr::null(),
     ];
     // Center text vertically on the screen
     y = ((480 as i32 as f64

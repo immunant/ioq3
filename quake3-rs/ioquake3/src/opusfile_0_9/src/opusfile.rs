@@ -172,7 +172,7 @@ pub unsafe extern "C" fn op_test(
     mut _initial_bytes: size_t,
 ) -> i32 {
     let mut oy: ogg_sync_state = ogg_sync_state {
-        data: 0 as *mut u8,
+        data: std::ptr::null_mut(),
         storage: 0,
         fill: 0,
         returned: 0,
@@ -180,7 +180,7 @@ pub unsafe extern "C" fn op_test(
         headerbytes: 0,
         bodybytes: 0,
     };
-    let mut data: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut data: *mut libc::c_char = std::ptr::null_mut();
     let mut err: i32 = 0;
     /*The first page of a normal Opus file will be at most 57 bytes (27 Ogg
      page header bytes + 1 lacing value + 21 Opus header bytes + 8 channel
@@ -212,12 +212,12 @@ pub unsafe extern "C" fn op_test(
     );
     if !data.is_null() {
         let mut os: ogg_stream_state = ogg_stream_state {
-            body_data: 0 as *mut u8,
+            body_data: std::ptr::null_mut(),
             body_storage: 0,
             body_fill: 0,
             body_returned: 0,
-            lacing_vals: 0 as *mut i32,
-            granule_vals: 0 as *mut ogg_int64_t,
+            lacing_vals: std::ptr::null_mut(),
+            granule_vals: std::ptr::null_mut(),
             lacing_storage: 0,
             lacing_fill: 0,
             lacing_packet: 0,
@@ -232,9 +232,9 @@ pub unsafe extern "C" fn op_test(
             granulepos: 0,
         };
         let mut og: ogg_page = ogg_page {
-            header: 0 as *mut u8,
+            header: std::ptr::null_mut(),
             header_len: 0,
-            body: 0 as *mut u8,
+            body: std::ptr::null_mut(),
             body_len: 0,
         };
         let mut ret: i32 = 0;
@@ -251,7 +251,7 @@ pub unsafe extern "C" fn op_test(
         err = -(1 as i32);
         loop {
             let mut op: ogg_packet = ogg_packet {
-                packet: 0 as *mut u8,
+                packet: std::ptr::null_mut(),
                 bytes: 0,
                 b_o_s: 0,
                 e_o_s: 0,
@@ -326,7 +326,7 @@ Return: A positive number of bytes read on success, 0 on end-of-file, or a
          negative value on failure.*/
 
 unsafe extern "C" fn op_get_data(mut _of: *mut OggOpusFile, mut _nbytes: i32) -> i32 {
-    let mut buffer: *mut u8 = 0 as *mut u8;
+    let mut buffer: *mut u8 = std::ptr::null_mut();
     let mut nbytes: i32 = 0;
     buffer = ogg_sync_buffer(
         &mut (*_of).oy as *mut _ as *mut ogg_sync_state,
@@ -447,7 +447,7 @@ unsafe extern "C" fn op_add_serialno(
     mut _nserialnos: *mut i32,
     mut _cserialnos: *mut i32,
 ) -> i32 {
-    let mut serialnos: *mut ogg_uint32_t = 0 as *mut ogg_uint32_t;
+    let mut serialnos: *mut ogg_uint32_t = std::ptr::null_mut();
     let mut nserialnos: i32 = 0;
     let mut cserialnos: i32 = 0;
     let mut s: ogg_uint32_t = 0;
@@ -550,9 +550,9 @@ unsafe extern "C" fn op_get_prev_page_serial(
         gp: 0,
     };
     let mut og: ogg_page = ogg_page {
-        header: 0 as *mut u8,
+        header: std::ptr::null_mut(),
         header_len: 0,
-        body: 0 as *mut u8,
+        body: std::ptr::null_mut(),
         body_len: 0,
     };
     let mut begin: i64 = 0;
@@ -672,9 +672,9 @@ unsafe extern "C" fn op_get_last_page(
     mut _nserialnos: i32,
 ) -> i64 {
     let mut og: ogg_page = ogg_page {
-        header: 0 as *mut u8,
+        header: std::ptr::null_mut(),
         header_len: 0,
-        body: 0 as *mut u8,
+        body: std::ptr::null_mut(),
         body_len: 0,
     };
     let mut gp: ogg_int64_t = 0;
@@ -776,7 +776,7 @@ unsafe extern "C" fn op_fetch_headers_impl(
     mut _og: *mut ogg_page,
 ) -> i32 {
     let mut op: ogg_packet = ogg_packet {
-        packet: 0 as *mut u8,
+        packet: std::ptr::null_mut(),
         bytes: 0,
         b_o_s: 0,
         e_o_s: 0,
@@ -975,9 +975,9 @@ unsafe extern "C" fn op_fetch_headers(
     mut _og: *mut ogg_page,
 ) -> i32 {
     let mut og: ogg_page = ogg_page {
-        header: 0 as *mut u8,
+        header: std::ptr::null_mut(),
         header_len: 0,
-        body: 0 as *mut u8,
+        body: std::ptr::null_mut(),
         body_len: 0,
     };
     let mut ret: i32 = 0;
@@ -1347,9 +1347,9 @@ unsafe extern "C" fn op_find_initial_pcm_offset(
     mut _og: *mut ogg_page,
 ) -> i32 {
     let mut og: ogg_page = ogg_page {
-        header: 0 as *mut u8,
+        header: std::ptr::null_mut(),
         header_len: 0,
-        body: 0 as *mut u8,
+        body: std::ptr::null_mut(),
         body_len: 0,
     };
     let mut page_offset: i64 = 0;
@@ -1737,15 +1737,15 @@ unsafe extern "C" fn op_bisect_forward_serialno(
     mut _cserialnos: *mut i32,
 ) -> i32 {
     let mut og: ogg_page = ogg_page {
-        header: 0 as *mut u8,
+        header: std::ptr::null_mut(),
         header_len: 0,
-        body: 0 as *mut u8,
+        body: std::ptr::null_mut(),
         body_len: 0,
     };
-    let mut links: *mut OggOpusLink = 0 as *mut OggOpusLink;
+    let mut links: *mut OggOpusLink = std::ptr::null_mut();
     let mut nlinks: i32 = 0;
     let mut clinks: i32 = 0;
-    let mut serialnos: *mut ogg_uint32_t = 0 as *mut ogg_uint32_t;
+    let mut serialnos: *mut ogg_uint32_t = std::ptr::null_mut();
     let mut nserialnos: i32 = 0;
     let mut total_duration: ogg_int64_t = 0;
     let mut nsr: i32 = 0;
@@ -1952,7 +1952,7 @@ unsafe extern "C" fn op_bisect_forward_serialno(
             _nserialnos,
             _cserialnos,
             if last != next {
-                0 as *mut ogg_page
+                std::ptr::null_mut()
             } else {
                 &mut og
             },
@@ -1966,7 +1966,7 @@ unsafe extern "C" fn op_bisect_forward_serialno(
         (*links.offset(nlinks as isize)).pcm_end = -(1 as i32) as ogg_int64_t;
         /*This might consume a page from the next link, however the next bisection
         always starts with a seek.*/
-        ret = op_find_initial_pcm_offset(_of, links.offset(nlinks as isize), 0 as *mut ogg_page);
+        ret = op_find_initial_pcm_offset(_of, links.offset(nlinks as isize), std::ptr::null_mut());
         if (ret < 0 as i32) as i32 as isize != 0 {
             return ret;
         }
@@ -2008,15 +2008,14 @@ unsafe extern "C" fn op_bisect_forward_serialno(
     }
     /*We also don't need these anymore.*/
     libc::free(*_serialnos as *mut libc::c_void);
-    *_serialnos = 0 as *mut ogg_uint32_t;
+    *_serialnos = std::ptr::null_mut();
     *_nserialnos = 0 as i32;
     *_cserialnos = *_nserialnos;
     return 0 as i32;
 }
 
 unsafe extern "C" fn op_update_gain(mut _of: *mut OggOpusFile) {
-    let mut head: *mut crate::src::opusfile_0_9::src::opusfile::OpusHead =
-        0 as *mut crate::src::opusfile_0_9::src::opusfile::OpusHead;
+    let mut head: *mut crate::src::opusfile_0_9::src::opusfile::OpusHead = std::ptr::null_mut();
     let mut gain_q8: opus_int32 = 0;
     let mut li: i32 = 0;
     /*If decode isn't ready, then we'll apply the gain when we initialize the
@@ -2080,8 +2079,7 @@ unsafe extern "C" fn op_update_gain(mut _of: *mut OggOpusFile) {
 }
 
 unsafe extern "C" fn op_make_decode_ready(mut _of: *mut OggOpusFile) -> i32 {
-    let mut head: *const crate::src::opusfile_0_9::src::opusfile::OpusHead =
-        0 as *const crate::src::opusfile_0_9::src::opusfile::OpusHead;
+    let mut head: *const crate::src::opusfile_0_9::src::opusfile::OpusHead = std::ptr::null();
     let mut li: i32 = 0;
     let mut stream_count: i32 = 0;
     let mut coupled_count: i32 = 0;
@@ -2213,7 +2211,7 @@ unsafe extern "C" fn op_open_seekable2_impl(mut _of: *mut OggOpusFile) -> i32 {
 
 unsafe extern "C" fn op_open_seekable2(mut _of: *mut OggOpusFile) -> i32 {
     let mut oy_start: ogg_sync_state = ogg_sync_state {
-        data: 0 as *mut u8,
+        data: std::ptr::null_mut(),
         storage: 0,
         fill: 0,
         returned: 0,
@@ -2222,12 +2220,12 @@ unsafe extern "C" fn op_open_seekable2(mut _of: *mut OggOpusFile) -> i32 {
         bodybytes: 0,
     };
     let mut os_start: ogg_stream_state = ogg_stream_state {
-        body_data: 0 as *mut u8,
+        body_data: std::ptr::null_mut(),
         body_storage: 0,
         body_fill: 0,
         body_returned: 0,
-        lacing_vals: 0 as *mut i32,
-        granule_vals: 0 as *mut ogg_int64_t,
+        lacing_vals: std::ptr::null_mut(),
+        granule_vals: std::ptr::null_mut(),
         lacing_storage: 0,
         lacing_fill: 0,
         lacing_packet: 0,
@@ -2241,7 +2239,7 @@ unsafe extern "C" fn op_open_seekable2(mut _of: *mut OggOpusFile) -> i32 {
         packetno: 0,
         granulepos: 0,
     };
-    let mut op_start: *mut ogg_packet = 0 as *mut ogg_packet;
+    let mut op_start: *mut ogg_packet = std::ptr::null_mut();
     let mut prev_page_offset: i64 = 0;
     let mut start_offset: i64 = 0;
     let mut start_op_count: i32 = 0;
@@ -2327,7 +2325,7 @@ unsafe extern "C" fn op_decode_clear(mut _of: *mut OggOpusFile) {
 }
 
 unsafe extern "C" fn op_clear(mut _of: *mut OggOpusFile) {
-    let mut links: *mut OggOpusLink = 0 as *mut OggOpusLink;
+    let mut links: *mut OggOpusLink = std::ptr::null_mut();
     libc::free((*_of).od_buffer as *mut libc::c_void);
     if !(*_of).od.is_null() {
         crate::src::opus_1_2_1::src::opus_multistream_decoder::opus_multistream_decoder_destroy(
@@ -2373,12 +2371,12 @@ unsafe extern "C" fn op_open1(
     mut _initial_bytes: size_t,
 ) -> i32 {
     let mut og: ogg_page = ogg_page {
-        header: 0 as *mut u8,
+        header: std::ptr::null_mut(),
         header_len: 0,
-        body: 0 as *mut u8,
+        body: std::ptr::null_mut(),
         body_len: 0,
     };
-    let mut pog: *mut ogg_page = 0 as *mut ogg_page;
+    let mut pog: *mut ogg_page = std::ptr::null_mut();
     let mut seekable: i32 = 0;
     let mut ret: i32 = 0;
     crate::stdlib::memset(
@@ -2406,7 +2404,7 @@ unsafe extern "C" fn op_open1(
      doesn't support seeking, so this is not a good mechanism to use for
      decoding entire files from RAM.*/
     if _initial_bytes > 0 as i32 as usize {
-        let mut buffer: *mut libc::c_char = 0 as *mut libc::c_char;
+        let mut buffer: *mut libc::c_char = std::ptr::null_mut();
         buffer = ogg_sync_buffer(
             &mut (*_of).oy as *mut _ as *mut ogg_sync_state,
             _initial_bytes as isize,
@@ -2451,7 +2449,7 @@ unsafe extern "C" fn op_open1(
         &mut (*_of).os as *mut _ as *mut ogg_stream_state,
         -(1 as i32),
     );
-    pog = 0 as *mut ogg_page;
+    pog = std::ptr::null_mut();
     loop {
         /*Fetch all BOS pages, store the Opus header and all seen serial numbers,
         and load subsequent Opus setup headers.*/
@@ -2527,7 +2525,7 @@ pub unsafe extern "C" fn op_test_callbacks(
     mut _initial_bytes: size_t,
     mut _error: *mut i32,
 ) -> *mut OggOpusFile {
-    let mut of: *mut OggOpusFile = 0 as *mut OggOpusFile;
+    let mut of: *mut OggOpusFile = std::ptr::null_mut();
     let mut ret: i32 = 0;
     of = crate::stdlib::malloc(::std::mem::size_of::<OggOpusFile>() as usize) as *mut OggOpusFile;
     ret = -(129 as i32);
@@ -2547,7 +2545,7 @@ pub unsafe extern "C" fn op_test_callbacks(
     if !_error.is_null() {
         *_error = ret
     }
-    return 0 as *mut OggOpusFile;
+    return std::ptr::null_mut();
 }
 #[no_mangle]
 
@@ -2558,7 +2556,7 @@ pub unsafe extern "C" fn op_open_callbacks(
     mut _initial_bytes: size_t,
     mut _error: *mut i32,
 ) -> *mut OggOpusFile {
-    let mut of: *mut OggOpusFile = 0 as *mut OggOpusFile;
+    let mut of: *mut OggOpusFile = std::ptr::null_mut();
     of = op_test_callbacks(_stream, _cb, _initial_data, _initial_bytes, _error);
     if !of.is_null() as i32 as isize != 0 {
         let mut ret: i32 = 0;
@@ -2571,7 +2569,7 @@ pub unsafe extern "C" fn op_open_callbacks(
         }
         libc::free(of as *mut libc::c_void);
     }
-    return 0 as *mut OggOpusFile;
+    return std::ptr::null_mut();
 }
 /*Convenience routine to clean up from failure for the open functions that
 create their own streams.*/
@@ -2581,14 +2579,14 @@ unsafe extern "C" fn op_open_close_on_failure(
     mut _cb: *const crate::src::opusfile_0_9::src::opusfile::OpusFileCallbacks,
     mut _error: *mut i32,
 ) -> *mut OggOpusFile {
-    let mut of: *mut OggOpusFile = 0 as *mut OggOpusFile;
+    let mut of: *mut OggOpusFile = std::ptr::null_mut();
     if _stream.is_null() as i32 as isize != 0 {
         if !_error.is_null() {
             *_error = -(129 as i32)
         }
-        return 0 as *mut OggOpusFile;
+        return std::ptr::null_mut();
     }
-    of = op_open_callbacks(_stream, _cb, 0 as *const u8, 0 as i32 as size_t, _error);
+    of = op_open_callbacks(_stream, _cb, std::ptr::null(), 0 as i32 as size_t, _error);
     if of.is_null() as i32 as isize != 0 {
         Some((*_cb).close.expect("non-null function pointer")).expect("non-null function pointer")(
             _stream,
@@ -2651,14 +2649,14 @@ unsafe extern "C" fn op_test_close_on_failure(
     mut _cb: *const crate::src::opusfile_0_9::src::opusfile::OpusFileCallbacks,
     mut _error: *mut i32,
 ) -> *mut OggOpusFile {
-    let mut of: *mut OggOpusFile = 0 as *mut OggOpusFile;
+    let mut of: *mut OggOpusFile = std::ptr::null_mut();
     if _stream.is_null() as i32 as isize != 0 {
         if !_error.is_null() {
             *_error = -(129 as i32)
         }
-        return 0 as *mut OggOpusFile;
+        return std::ptr::null_mut();
     }
-    of = op_test_callbacks(_stream, _cb, 0 as *const u8, 0 as i32 as size_t, _error);
+    of = op_test_callbacks(_stream, _cb, std::ptr::null(), 0 as i32 as size_t, _error);
     if of.is_null() as i32 as isize != 0 {
         Some((*_cb).close.expect("non-null function pointer")).expect("non-null function pointer")(
             _stream,
@@ -2794,7 +2792,7 @@ pub unsafe extern "C" fn op_raw_total(mut _of: *const OggOpusFile, mut _li: i32)
 #[no_mangle]
 
 pub unsafe extern "C" fn op_pcm_total(mut _of: *const OggOpusFile, mut _li: i32) -> ogg_int64_t {
-    let mut links: *mut OggOpusLink = 0 as *mut OggOpusLink;
+    let mut links: *mut OggOpusLink = std::ptr::null_mut();
     let mut pcm_total: ogg_int64_t = 0;
     let mut diff: ogg_int64_t = 0 as i32 as ogg_int64_t;
     let mut nlinks: i32 = 0;
@@ -2844,7 +2842,7 @@ pub unsafe extern "C" fn op_tags(
     }
     if (*_of).seekable == 0 {
         if (*_of).ready_state < 3 as i32 && (*_of).ready_state != 1 as i32 {
-            return 0 as *const crate::src::opusfile_0_9::src::opusfile::OpusTags;
+            return std::ptr::null();
         }
         _li = 0 as i32
     } else if _li < 0 as i32 {
@@ -2946,7 +2944,7 @@ unsafe extern "C" fn op_get_link_from_serialno(
     mut _page_offset: i64,
     mut _serialno: ogg_uint32_t,
 ) -> i32 {
-    let mut links: *const OggOpusLink = 0 as *const OggOpusLink;
+    let mut links: *const OggOpusLink = std::ptr::null();
     let mut nlinks: i32 = 0;
     let mut li_lo: i32 = 0;
     let mut li_hi: i32 = 0;
@@ -2994,7 +2992,7 @@ unsafe extern "C" fn op_fetch_and_process_page(
     mut _spanp: i32,
     mut _ignore_holes: i32,
 ) -> i32 {
-    let mut links: *mut OggOpusLink = 0 as *mut OggOpusLink;
+    let mut links: *mut OggOpusLink = std::ptr::null_mut();
     let mut cur_serialno: ogg_uint32_t = 0;
     let mut seekable: i32 = 0;
     let mut cur_link: i32 = 0;
@@ -3012,15 +3010,15 @@ unsafe extern "C" fn op_fetch_and_process_page(
     /*Handle one page.*/
     {
         let mut og: ogg_page = ogg_page {
-            header: 0 as *mut u8,
+            header: std::ptr::null_mut(),
             header_len: 0,
-            body: 0 as *mut u8,
+            body: std::ptr::null_mut(),
             body_len: 0,
         };
         /*If we were given a page to use, use it.*/
         if !_og.is_null() {
             og = *_og;
-            _og = 0 as *mut ogg_page
+            _og = std::ptr::null_mut()
         } else {
             /*Keep reading until we get a page with the correct serialno.*/
             _page_offset = op_get_next_page(_of, &mut og, (*_of).end)
@@ -3113,9 +3111,9 @@ unsafe extern "C" fn op_fetch_and_process_page(
                         _of,
                         &mut (*links.offset(0 as i32 as isize)).head,
                         &mut (*links.offset(0 as i32 as isize)).tags,
-                        0 as *mut *mut ogg_uint32_t,
-                        0 as *mut i32,
-                        0 as *mut i32,
+                        std::ptr::null_mut(),
+                        std::ptr::null_mut(),
+                        std::ptr::null_mut(),
                         &mut og,
                     );
                     if (ret < 0 as i32) as i32 as isize != 0 {
@@ -3373,7 +3371,7 @@ pub unsafe extern "C" fn op_raw_seek(mut _of: *mut OggOpusFile, mut _pos: i64) -
     }
     ret = op_fetch_and_process_page(
         _of,
-        0 as *mut ogg_page,
+        std::ptr::null_mut(),
         -(1 as i32) as i64,
         1 as i32,
         1 as i32,
@@ -3399,7 +3397,7 @@ unsafe extern "C" fn op_get_granulepos(
     mut _pcm_offset: ogg_int64_t,
     mut _li: *mut i32,
 ) -> ogg_int64_t {
-    let mut links: *const OggOpusLink = 0 as *const OggOpusLink;
+    let mut links: *const OggOpusLink = std::ptr::null();
     let mut duration: ogg_int64_t = 0 as i32 as ogg_int64_t;
     let mut pcm_start: ogg_int64_t = 0;
     let mut _pre_skip: opus_int32 = 0;
@@ -3471,7 +3469,7 @@ unsafe extern "C" fn op_page_continues(mut _og: *const ogg_page) -> i32 {
 
 unsafe extern "C" fn op_buffer_continued_data(mut _of: *mut OggOpusFile, mut _og: *mut ogg_page) {
     let mut op: ogg_packet = ogg_packet {
-        packet: 0 as *mut u8,
+        packet: std::ptr::null_mut(),
         bytes: 0,
         b_o_s: 0,
         e_o_s: 0,
@@ -3506,11 +3504,11 @@ unsafe extern "C" fn op_pcm_seek_page(
     mut _target_gp: ogg_int64_t,
     mut _li: i32,
 ) -> i32 {
-    let mut link: *const OggOpusLink = 0 as *const OggOpusLink;
+    let mut link: *const OggOpusLink = std::ptr::null();
     let mut og: ogg_page = ogg_page {
-        header: 0 as *mut u8,
+        header: std::ptr::null_mut(),
         header_len: 0,
-        body: 0 as *mut u8,
+        body: std::ptr::null_mut(),
         body_len: 0,
     };
     let mut pcm_pre_skip: ogg_int64_t = 0 as i32 as ogg_int64_t;
@@ -3885,7 +3883,7 @@ unsafe extern "C" fn op_pcm_seek_page(
     ret = op_fetch_and_process_page(
         _of,
         if page_offset < 0 as i32 as i64 {
-            0 as *mut ogg_page
+            std::ptr::null_mut()
         } else {
             &mut og
         },
@@ -3909,7 +3907,7 @@ pub unsafe extern "C" fn op_pcm_seek(
     mut _of: *mut OggOpusFile,
     mut _pcm_offset: ogg_int64_t,
 ) -> i32 {
-    let mut link: *const OggOpusLink = 0 as *const OggOpusLink;
+    let mut link: *const OggOpusLink = std::ptr::null();
     let mut pcm_start: ogg_int64_t = 0;
     let mut target_gp: ogg_int64_t = 0;
     let mut prev_packet_gp: ogg_int64_t = 0;
@@ -4006,7 +4004,7 @@ pub unsafe extern "C" fn op_pcm_seek(
         Fetch another.*/
         ret = op_fetch_and_process_page(
             _of,
-            0 as *mut ogg_page,
+            std::ptr::null_mut(),
             -(1 as i32) as i64,
             0 as i32,
             1 as i32,
@@ -4044,7 +4042,7 @@ unsafe extern "C" fn op_get_pcm_offset(
     mut _gp: ogg_int64_t,
     mut _li: i32,
 ) -> ogg_int64_t {
-    let mut links: *const OggOpusLink = 0 as *const OggOpusLink;
+    let mut links: *const OggOpusLink = std::ptr::null();
     let mut pcm_offset: ogg_int64_t = 0;
     links = (*_of).links;
     pcm_offset = (*links.offset(_li as isize)).pcm_file_offset;
@@ -4165,7 +4163,7 @@ This is done lazily, since if the user provides large enough buffers, we'll
 unsafe extern "C" fn op_init_buffer(mut _of: *mut OggOpusFile) -> i32 {
     let mut nchannels_max: i32 = 0;
     if (*_of).seekable != 0 {
-        let mut links: *const OggOpusLink = 0 as *const OggOpusLink;
+        let mut links: *const OggOpusLink = std::ptr::null();
         let mut nlinks: i32 = 0;
         let mut li: i32 = 0;
         links = (*_of).links;
@@ -4296,7 +4294,7 @@ unsafe extern "C" fn op_read_native(
             /*If we have buffered packets, decode one.*/
             op_pos = (*_of).op_pos;
             if (op_pos < (*_of).op_count) as i32 as isize != 0 {
-                let mut pop: *const ogg_packet = 0 as *const ogg_packet;
+                let mut pop: *const ogg_packet = std::ptr::null();
                 let mut diff: ogg_int64_t = 0;
                 let mut cur_discard_count: opus_int32 = 0;
                 let mut duration: i32 = 0;
@@ -4329,7 +4327,7 @@ unsafe extern "C" fn op_read_native(
                 }
                 (*_of).prev_packet_gp = (*pop).granulepos;
                 if (duration * nchannels > _buf_size) as i32 as isize != 0 {
-                    let mut buf: *mut op_sample = 0 as *mut op_sample;
+                    let mut buf: *mut op_sample = std::ptr::null_mut();
                     /*If the user's buffer is too small, decode into a scratch buffer.*/
                     buf = (*_of).od_buffer;
                     if buf.is_null() as i32 as isize != 0 {
@@ -4403,7 +4401,7 @@ unsafe extern "C" fn op_read_native(
         /*Suck in another page.*/
         ret = op_fetch_and_process_page(
             _of,
-            0 as *mut ogg_page,
+            std::ptr::null_mut(),
             -(1 as i32) as i64,
             1 as i32,
             0 as i32,
@@ -4431,7 +4429,7 @@ unsafe extern "C" fn op_filter_read_native(
 ) -> i32 {
     let mut ret: i32 = 0;
     /*Ensure we have some decoded samples in our buffer.*/
-    ret = op_read_native(_of, 0 as *mut op_sample, 0 as i32, _li);
+    ret = op_read_native(_of, std::ptr::null_mut(), 0 as i32, _li);
     /*Now apply the filter to them.*/
     if (ret >= 0 as i32) as i32 as isize != 0
         && ((*_of).ready_state >= 4 as i32) as i32 as isize != 0
@@ -4555,7 +4553,7 @@ unsafe extern "C" fn op_float2short_filter(
     mut _nsamples: i32,
     mut _nchannels: i32,
 ) -> i32 {
-    let mut dst: *mut opus_int16 = 0 as *mut opus_int16;
+    let mut dst: *mut opus_int16 = std::ptr::null_mut();
     let mut ci: i32 = 0;
     let mut i: i32 = 0;
     dst = _dst as *mut opus_int16;
@@ -4811,7 +4809,7 @@ unsafe extern "C" fn op_stereo_filter(
                 .wrapping_mul(::std::mem::size_of::<op_sample>() as usize),
         );
     } else {
-        let mut dst: *mut f32 = 0 as *mut f32;
+        let mut dst: *mut f32 = std::ptr::null_mut();
         let mut i: i32 = 0;
         dst = _dst as *mut f32;
         if _nchannels == 1 as i32 {
@@ -4857,7 +4855,7 @@ unsafe extern "C" fn op_float2short_stereo_filter(
     mut _nsamples: i32,
     mut _nchannels: i32,
 ) -> i32 {
-    let mut dst: *mut opus_int16 = 0 as *mut opus_int16;
+    let mut dst: *mut opus_int16 = std::ptr::null_mut();
     dst = _dst as *mut opus_int16;
     if _nchannels == 1 as i32 {
         let mut i: i32 = 0;
@@ -4929,7 +4927,7 @@ pub unsafe extern "C" fn op_read_stereo(
                     _: i32,
                 ) -> i32,
         ),
-        0 as *mut i32,
+        std::ptr::null_mut(),
     );
 }
 /* *Sets the packet decode callback function.
@@ -5286,6 +5284,6 @@ pub unsafe extern "C" fn op_read_float_stereo(
                     _: i32,
                 ) -> i32,
         ),
-        0 as *mut i32,
+        std::ptr::null_mut(),
     );
 }

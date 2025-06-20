@@ -620,7 +620,7 @@ Calculate origin2 so the target apogee will be hit
 #[no_mangle]
 
 pub unsafe extern "C" fn AimAtTarget(mut self_0: *mut gentity_t) {
-    let mut ent: *mut gentity_t = 0 as *mut gentity_t;
+    let mut ent: *mut gentity_t = std::ptr::null_mut();
     let mut origin: vec3_t = [0.; 3];
     let mut height: f32 = 0.;
     let mut gravity: f32 = 0.;
@@ -784,7 +784,7 @@ pub unsafe extern "C" fn trigger_teleporter_touch(
     mut other: *mut gentity_t,
     mut _trace: *mut trace_t,
 ) {
-    let mut dest: *mut gentity_t = 0 as *mut gentity_t;
+    let mut dest: *mut gentity_t = std::ptr::null_mut();
     if (*other).client.is_null() {
         return;
     }
@@ -908,8 +908,8 @@ pub unsafe extern "C" fn hurt_touch(
         other as *mut gentity_s,
         self_0 as *mut gentity_s,
         self_0 as *mut gentity_s,
-        0 as *mut vec_t,
-        0 as *mut vec_t,
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
         (*self_0).damage,
         dflags,
         MOD_TRIGGER_HURT as i32,

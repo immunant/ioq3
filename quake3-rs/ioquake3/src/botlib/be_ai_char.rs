@@ -97,7 +97,7 @@ pub unsafe extern "C" fn BotCharacterFromHandle(mut handle: i32) -> *mut bot_cha
                 as *mut libc::c_char,
             handle,
         ); //end if
-        return 0 as *mut bot_character_t;
+        return std::ptr::null_mut();
     } //end if
     if botcharacters[handle as usize].is_null() {
         crate::src::botlib::be_interface::botimport
@@ -107,7 +107,7 @@ pub unsafe extern "C" fn BotCharacterFromHandle(mut handle: i32) -> *mut bot_cha
             b"invalid character %d\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             handle,
         );
-        return 0 as *mut bot_character_t;
+        return std::ptr::null_mut();
     }
     return botcharacters[handle as usize];
 }
@@ -222,7 +222,7 @@ pub unsafe extern "C" fn BotFreeCharacter2(mut handle: i32) {
     }
     BotFreeCharacterStrings(botcharacters[handle as usize]);
     crate::src::botlib::l_memory::FreeMemory(botcharacters[handle as usize] as *mut libc::c_void);
-    botcharacters[handle as usize] = 0 as *mut bot_character_t;
+    botcharacters[handle as usize] = std::ptr::null_mut();
 }
 //frees a bot character
 //end of the function BotFreeCharacter2
@@ -313,19 +313,19 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
     let mut indent: i32 = 0;
     let mut index: i32 = 0;
     let mut foundcharacter: i32 = 0;
-    let mut ch: *mut bot_character_t = 0 as *mut bot_character_t;
-    let mut source: *mut source_t = 0 as *mut source_t;
+    let mut ch: *mut bot_character_t = std::ptr::null_mut();
+    let mut source: *mut source_t = std::ptr::null_mut();
     let mut token: token_t = token_t {
         string: [0; 1024],
         type_0: 0,
         subtype: 0,
         intvalue: 0,
         floatvalue: 0.,
-        whitespace_p: 0 as *mut libc::c_char,
-        endwhitespace_p: 0 as *mut libc::c_char,
+        whitespace_p: std::ptr::null_mut(),
+        endwhitespace_p: std::ptr::null_mut(),
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut token_s,
+        next: std::ptr::null_mut(),
     };
     foundcharacter = qfalse as i32;
     //a bot character is parsed in two phases
@@ -339,7 +339,7 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
             b"counldn\'t load %s\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             charfile,
         );
-        return 0 as *mut bot_character_t;
+        return std::ptr::null_mut();
     }
     ch = crate::src::botlib::l_memory::GetClearedMemory(
         (::std::mem::size_of::<bot_character_t>() as usize).wrapping_add(
@@ -370,7 +370,7 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
                 FreeSource(source as *mut source_s); //end if
                 BotFreeCharacterStrings(ch);
                 crate::src::botlib::l_memory::FreeMemory(ch as *mut libc::c_void);
-                return 0 as *mut bot_character_t;
+                return std::ptr::null_mut();
             }
             //end else
             if PC_ExpectTokenString(
@@ -381,7 +381,7 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
                 FreeSource(source as *mut source_s); //end if
                 BotFreeCharacterStrings(ch);
                 crate::src::botlib::l_memory::FreeMemory(ch as *mut libc::c_void);
-                return 0 as *mut bot_character_t;
+                return std::ptr::null_mut();
             }
             if skill < 0 as i32 || token.intvalue == skill as usize {
                 //if it's the correct skill
@@ -411,7 +411,7 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
                         FreeSource(source as *mut source_s); //end if
                         BotFreeCharacterStrings(ch); //end if
                         crate::src::botlib::l_memory::FreeMemory(ch as *mut libc::c_void); //end if
-                        return 0 as *mut bot_character_t;
+                        return std::ptr::null_mut();
                     } //end if
                     index = token.intvalue as i32;
                     if index < 0 as i32 || index > 80 as i32 {
@@ -425,7 +425,7 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
                         FreeSource(source as *mut source_s);
                         BotFreeCharacterStrings(ch);
                         crate::src::botlib::l_memory::FreeMemory(ch as *mut libc::c_void);
-                        return 0 as *mut bot_character_t;
+                        return std::ptr::null_mut();
                     }
                     if (*(*ch).c.as_mut_ptr().offset(index as isize)).type_0 != 0 {
                         SourceError(
@@ -438,7 +438,7 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
                         FreeSource(source as *mut source_s);
                         BotFreeCharacterStrings(ch);
                         crate::src::botlib::l_memory::FreeMemory(ch as *mut libc::c_void);
-                        return 0 as *mut bot_character_t;
+                        return std::ptr::null_mut();
                     }
                     if PC_ExpectAnyToken(
                         source as *mut source_s,
@@ -448,7 +448,7 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
                         FreeSource(source as *mut source_s);
                         BotFreeCharacterStrings(ch);
                         crate::src::botlib::l_memory::FreeMemory(ch as *mut libc::c_void);
-                        return 0 as *mut bot_character_t;
+                        return std::ptr::null_mut();
                     }
                     if token.type_0 == 3 as i32 {
                         if token.subtype & 0x800 as i32 != 0 {
@@ -488,7 +488,7 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
                         FreeSource(source as *mut source_s);
                         BotFreeCharacterStrings(ch);
                         crate::src::botlib::l_memory::FreeMemory(ch as *mut libc::c_void);
-                        return 0 as *mut bot_character_t;
+                        return std::ptr::null_mut();
                     }
                 }
                 break;
@@ -504,7 +504,7 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
                         FreeSource(source as *mut source_s); //end if
                         BotFreeCharacterStrings(ch);
                         crate::src::botlib::l_memory::FreeMemory(ch as *mut libc::c_void);
-                        return 0 as *mut bot_character_t;
+                        return std::ptr::null_mut();
                     }
                     if libc::strcmp(
                         token.string.as_mut_ptr(),
@@ -531,7 +531,7 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
             FreeSource(source as *mut source_s);
             BotFreeCharacterStrings(ch);
             crate::src::botlib::l_memory::FreeMemory(ch as *mut libc::c_void);
-            return 0 as *mut bot_character_t;
+            return std::ptr::null_mut();
         }
     }
     FreeSource(source as *mut source_s);
@@ -539,7 +539,7 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
     if foundcharacter == 0 {
         BotFreeCharacterStrings(ch); //end if
         crate::src::botlib::l_memory::FreeMemory(ch as *mut libc::c_void);
-        return 0 as *mut bot_character_t;
+        return std::ptr::null_mut();
     }
     return ch;
 }
@@ -594,7 +594,7 @@ pub unsafe extern "C" fn BotLoadCachedCharacter(
     let mut handle: i32 = 0;
     let mut cachedhandle: i32 = 0;
     let mut intskill: i32 = 0;
-    let mut ch: *mut bot_character_t = 0 as *mut bot_character_t;
+    let mut ch: *mut bot_character_t = std::ptr::null_mut();
     //DEBUG
     //find a free spot for a character
     handle = 1 as i32; //end for
@@ -828,9 +828,9 @@ pub unsafe extern "C" fn BotInterpolateCharacters(
     mut handle2: i32,
     mut desiredskill: f32,
 ) -> i32 {
-    let mut ch1: *mut bot_character_t = 0 as *mut bot_character_t;
-    let mut ch2: *mut bot_character_t = 0 as *mut bot_character_t;
-    let mut out: *mut bot_character_t = 0 as *mut bot_character_t;
+    let mut ch1: *mut bot_character_t = std::ptr::null_mut();
+    let mut ch2: *mut bot_character_t = std::ptr::null_mut();
+    let mut out: *mut bot_character_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut handle: i32 = 0;
     let mut scale: f32 = 0.;
@@ -1002,7 +1002,7 @@ pub unsafe extern "C" fn BotLoadCharacter(mut charfile: *mut libc::c_char, mut s
 #[no_mangle]
 
 pub unsafe extern "C" fn CheckCharacteristicIndex(mut character: i32, mut index: i32) -> i32 {
-    let mut ch: *mut bot_character_t = 0 as *mut bot_character_t; //end if
+    let mut ch: *mut bot_character_t = std::ptr::null_mut(); //end if
     ch = BotCharacterFromHandle(character); //end if
     if ch.is_null() {
         return qfalse as i32;
@@ -1042,7 +1042,7 @@ pub unsafe extern "C" fn CheckCharacteristicIndex(mut character: i32, mut index:
 #[no_mangle]
 
 pub unsafe extern "C" fn Characteristic_Float(mut character: i32, mut index: i32) -> f32 {
-    let mut ch: *mut bot_character_t = 0 as *mut bot_character_t;
+    let mut ch: *mut bot_character_t = std::ptr::null_mut();
     ch = BotCharacterFromHandle(character);
     if ch.is_null() {
         return 0 as i32 as f32;
@@ -1091,7 +1091,7 @@ pub unsafe extern "C" fn Characteristic_BFloat(
     mut max: f32,
 ) -> f32 {
     let mut value: f32 = 0.; //end if
-    let mut ch: *mut bot_character_t = 0 as *mut bot_character_t;
+    let mut ch: *mut bot_character_t = std::ptr::null_mut();
     ch = BotCharacterFromHandle(character);
     if ch.is_null() {
         return 0 as i32 as f32;
@@ -1129,7 +1129,7 @@ pub unsafe extern "C" fn Characteristic_BFloat(
 #[no_mangle]
 
 pub unsafe extern "C" fn Characteristic_Integer(mut character: i32, mut index: i32) -> i32 {
-    let mut ch: *mut bot_character_t = 0 as *mut bot_character_t;
+    let mut ch: *mut bot_character_t = std::ptr::null_mut();
     ch = BotCharacterFromHandle(character);
     if ch.is_null() {
         return 0 as i32;
@@ -1176,7 +1176,7 @@ pub unsafe extern "C" fn Characteristic_BInteger(
     mut max: i32,
 ) -> i32 {
     let mut value: i32 = 0; //end if
-    let mut ch: *mut bot_character_t = 0 as *mut bot_character_t;
+    let mut ch: *mut bot_character_t = std::ptr::null_mut();
     ch = BotCharacterFromHandle(character);
     if ch.is_null() {
         return 0 as i32;
@@ -1219,7 +1219,7 @@ pub unsafe extern "C" fn Characteristic_String(
     mut buf: *mut libc::c_char,
     mut size: i32,
 ) {
-    let mut ch: *mut bot_character_t = 0 as *mut bot_character_t;
+    let mut ch: *mut bot_character_t = std::ptr::null_mut();
     ch = BotCharacterFromHandle(character);
     if ch.is_null() {
         return;

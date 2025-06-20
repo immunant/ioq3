@@ -114,10 +114,10 @@ pub unsafe extern "C" fn opus_repacketizer_init(
 #[no_mangle]
 
 pub unsafe extern "C" fn opus_repacketizer_create() -> *mut OpusRepacketizer {
-    let mut rp: *mut OpusRepacketizer = 0 as *mut OpusRepacketizer;
+    let mut rp: *mut OpusRepacketizer = std::ptr::null_mut();
     rp = opus_alloc(opus_repacketizer_get_size() as size_t) as *mut OpusRepacketizer;
     if rp.is_null() {
-        return 0 as *mut OpusRepacketizer;
+        return std::ptr::null_mut();
     }
     return opus_repacketizer_init(rp);
 }
@@ -165,8 +165,8 @@ unsafe extern "C" fn opus_repacketizer_cat_impl(
         &mut tmp_toc,
         &mut *(*rp).frames.as_mut_ptr().offset((*rp).nb_frames as isize),
         &mut *(*rp).len.as_mut_ptr().offset((*rp).nb_frames as isize),
-        0 as *mut i32,
-        0 as *mut opus_int32,
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
     );
     if ret < 1 as i32 {
         return ret;
@@ -202,9 +202,9 @@ pub unsafe extern "C" fn opus_repacketizer_out_range_impl(
     let mut i: i32 = 0;
     let mut count: i32 = 0;
     let mut tot_size: opus_int32 = 0;
-    let mut len: *mut opus_int16 = 0 as *mut opus_int16;
-    let mut frames: *mut *const u8 = 0 as *mut *const u8;
-    let mut ptr: *mut u8 = 0 as *mut u8;
+    let mut len: *mut opus_int16 = std::ptr::null_mut();
+    let mut frames: *mut *const u8 = std::ptr::null_mut();
+    let mut ptr: *mut u8 = std::ptr::null_mut();
     if begin < 0 as i32 || begin >= end || end > (*rp).nb_frames {
         /*fprintf(stderr, "%d %d %d\n", begin, end, rp->nb_frames);*/
         return -(1 as i32);
@@ -405,7 +405,7 @@ pub unsafe extern "C" fn opus_packet_pad(
     let mut rp: OpusRepacketizer = OpusRepacketizer {
         toc: 0,
         nb_frames: 0,
-        frames: [0 as *const u8; 48],
+        frames: [std::ptr::null(); 48],
         len: [0; 48],
         framesize: 0,
     };
@@ -1065,7 +1065,7 @@ pub unsafe extern "C" fn opus_packet_unpad(mut data: *mut u8, mut len: opus_int3
     let mut rp: OpusRepacketizer = OpusRepacketizer {
         toc: 0,
         nb_frames: 0,
-        frames: [0 as *const u8; 48],
+        frames: [std::ptr::null(); 48],
         len: [0; 48],
         framesize: 0,
     };
@@ -1139,9 +1139,9 @@ pub unsafe extern "C" fn opus_multistream_packet_pad(
             len,
             1 as i32,
             &mut toc,
-            0 as *mut *const u8,
+            std::ptr::null_mut(),
             size.as_mut_ptr(),
-            0 as *mut i32,
+            std::ptr::null_mut(),
             &mut packet_offset,
         );
         if count < 0 as i32 {
@@ -1180,11 +1180,11 @@ pub unsafe extern "C" fn opus_multistream_packet_unpad(
     let mut rp: OpusRepacketizer = OpusRepacketizer {
         toc: 0,
         nb_frames: 0,
-        frames: [0 as *const u8; 48],
+        frames: [std::ptr::null(); 48],
         len: [0; 48],
         framesize: 0,
     };
-    let mut dst: *mut u8 = 0 as *mut u8;
+    let mut dst: *mut u8 = std::ptr::null_mut();
     let mut dst_len: opus_int32 = 0;
     if len < 1 as i32 {
         return -(1 as i32);
@@ -1205,9 +1205,9 @@ pub unsafe extern "C" fn opus_multistream_packet_unpad(
             len,
             self_delimited,
             &mut toc,
-            0 as *mut *const u8,
+            std::ptr::null_mut(),
             size.as_mut_ptr(),
-            0 as *mut i32,
+            std::ptr::null_mut(),
             &mut packet_offset,
         );
         if ret < 0 as i32 {

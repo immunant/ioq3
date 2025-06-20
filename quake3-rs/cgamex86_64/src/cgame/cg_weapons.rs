@@ -52,7 +52,7 @@ pub mod stdlib_h {
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return libc::strtol(
             __nptr,
-            0 as *mut libc::c_void as *mut *mut libc::c_char,
+            std::ptr::null_mut() as *mut *mut libc::c_char,
             10 as i32,
         ) as i32;
     }
@@ -422,8 +422,8 @@ CG_MachineGunEjectBrass
 */
 
 unsafe extern "C" fn CG_MachineGunEjectBrass(mut cent: *mut centity_t) {
-    let mut le: *mut localEntity_t = 0 as *mut localEntity_t;
-    let mut re: *mut refEntity_t = 0 as *mut refEntity_t;
+    let mut le: *mut localEntity_t = std::ptr::null_mut();
+    let mut re: *mut refEntity_t = std::ptr::null_mut();
     let mut velocity: vec3_t = [0.; 3];
     let mut xvelocity: vec3_t = [0.; 3];
     let mut offset: vec3_t = [0.; 3];
@@ -519,8 +519,8 @@ CG_ShotgunEjectBrass
 */
 
 unsafe extern "C" fn CG_ShotgunEjectBrass(mut cent: *mut centity_t) {
-    let mut le: *mut localEntity_t = 0 as *mut localEntity_t;
-    let mut re: *mut refEntity_t = 0 as *mut refEntity_t;
+    let mut le: *mut localEntity_t = std::ptr::null_mut();
+    let mut re: *mut refEntity_t = std::ptr::null_mut();
     let mut velocity: vec3_t = [0.; 3];
     let mut xvelocity: vec3_t = [0.; 3];
     let mut offset: vec3_t = [0.; 3];
@@ -651,8 +651,8 @@ pub unsafe extern "C" fn CG_RailTrail(
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut skip: i32 = 0;
-    let mut le: *mut localEntity_t = 0 as *mut localEntity_t;
-    let mut re: *mut refEntity_t = 0 as *mut refEntity_t;
+    let mut le: *mut localEntity_t = std::ptr::null_mut();
+    let mut re: *mut refEntity_t = std::ptr::null_mut();
     let ref mut fresh0 = *start.offset(2 as i32 as isize);
     *fresh0 -= 4 as i32 as f32;
     le = CG_AllocLocalEntity() as *mut localEntity_s;
@@ -789,9 +789,9 @@ unsafe extern "C" fn CG_RocketTrail(mut ent: *mut centity_t, mut wi: *const weap
     let mut startTime: i32 = 0;
     let mut contents: i32 = 0;
     let mut lastContents: i32 = 0;
-    let mut es: *mut entityState_t = 0 as *mut entityState_t;
+    let mut es: *mut entityState_t = std::ptr::null_mut();
     let mut up: vec3_t = [0.; 3];
-    let mut smoke: *mut localEntity_t = 0 as *mut localEntity_t;
+    let mut smoke: *mut localEntity_t = std::ptr::null_mut();
     if cg_noProjectileTrail.integer != 0 {
         return;
     }
@@ -858,9 +858,9 @@ CG_PlasmaTrail
 */
 
 unsafe extern "C" fn CG_PlasmaTrail(mut cent: *mut centity_t, mut wi: *const weaponInfo_t) {
-    let mut le: *mut localEntity_t = 0 as *mut localEntity_t;
-    let mut re: *mut refEntity_t = 0 as *mut refEntity_t;
-    let mut es: *mut entityState_t = 0 as *mut entityState_t;
+    let mut le: *mut localEntity_t = std::ptr::null_mut();
+    let mut re: *mut refEntity_t = std::ptr::null_mut();
+    let mut es: *mut entityState_t = std::ptr::null_mut();
     let mut velocity: vec3_t = [0.; 3];
     let mut xvelocity: vec3_t = [0.; 3];
     let mut origin: vec3_t = [0.; 3];
@@ -980,7 +980,7 @@ CG_GrappleTrail
 
 pub unsafe extern "C" fn CG_GrappleTrail(mut ent: *mut centity_t, mut _wi: *const weaponInfo_t) {
     let mut origin: vec3_t = [0.; 3];
-    let mut es: *mut entityState_t = 0 as *mut entityState_t;
+    let mut es: *mut entityState_t = std::ptr::null_mut();
     let mut forward: vec3_t = [0.; 3];
     let mut up: vec3_t = [0.; 3];
     let mut beam: refEntity_t = refEntity_t {
@@ -1030,7 +1030,7 @@ pub unsafe extern "C" fn CG_GrappleTrail(mut ent: *mut centity_t, mut _wi: *cons
             .lerpAngles
             .as_mut_ptr() as *const vec_t,
         forward.as_mut_ptr(),
-        0 as *mut vec_t,
+        std::ptr::null_mut(),
         up.as_mut_ptr(),
     );
     beam.origin[0 as i32 as usize] =
@@ -1077,9 +1077,9 @@ The server says this item is used on this level
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_RegisterWeapon(mut weaponNum: i32) {
-    let mut weaponInfo: *mut weaponInfo_t = 0 as *mut weaponInfo_t;
-    let mut item: *mut gitem_t = 0 as *mut gitem_t;
-    let mut ammo: *mut gitem_t = 0 as *mut gitem_t;
+    let mut weaponInfo: *mut weaponInfo_t = std::ptr::null_mut();
+    let mut item: *mut gitem_t = std::ptr::null_mut();
+    let mut ammo: *mut gitem_t = std::ptr::null_mut();
     let mut path: [libc::c_char; 64] = [0; 64];
     let mut mins: vec3_t = [0.; 3];
     let mut maxs: vec3_t = [0.; 3];
@@ -1420,8 +1420,8 @@ The server says this item is used on this level
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_RegisterItemVisuals(mut itemNum: i32) {
-    let mut itemInfo: *mut itemInfo_t = 0 as *mut itemInfo_t;
-    let mut item: *mut gitem_t = 0 as *mut gitem_t;
+    let mut itemInfo: *mut itemInfo_t = std::ptr::null_mut();
+    let mut item: *mut gitem_t = std::ptr::null_mut();
     if itemNum < 0 as i32 || itemNum >= bg_numItems {
         CG_Error(
             b"CG_RegisterItemVisuals: itemNum %d out of range [0-%d]\x00" as *const u8
@@ -1640,8 +1640,8 @@ unsafe extern "C" fn CG_LightningBolt(mut cent: *mut centity_t, mut origin: *mut
         AngleVectors(
             angle.as_mut_ptr() as *const vec_t,
             forward.as_mut_ptr(),
-            0 as *mut vec_t,
-            0 as *mut vec_t,
+            std::ptr::null_mut(),
+            std::ptr::null_mut(),
         );
         muzzlePoint[0 as i32 as usize] = (*cent).lerpOrigin[0 as i32 as usize];
         muzzlePoint[1 as i32 as usize] = (*cent).lerpOrigin[1 as i32 as usize];
@@ -1652,8 +1652,8 @@ unsafe extern "C" fn CG_LightningBolt(mut cent: *mut centity_t, mut origin: *mut
         AngleVectors(
             (*cent).lerpAngles.as_mut_ptr() as *const vec_t,
             forward.as_mut_ptr(),
-            0 as *mut vec_t,
-            0 as *mut vec_t,
+            std::ptr::null_mut(),
+            std::ptr::null_mut(),
         );
         muzzlePoint[0 as i32 as usize] = (*cent).lerpOrigin[0 as i32 as usize];
         muzzlePoint[1 as i32 as usize] = (*cent).lerpOrigin[1 as i32 as usize];
@@ -1862,8 +1862,8 @@ pub unsafe extern "C" fn CG_AddPlayerWeapon(
     };
     let mut angles: vec3_t = [0.; 3];
     let mut weaponNum: weapon_t = WP_NONE;
-    let mut weapon: *mut weaponInfo_t = 0 as *mut weaponInfo_t;
-    let mut nonPredictedCent: *mut centity_t = 0 as *mut centity_t;
+    let mut weapon: *mut weaponInfo_t = std::ptr::null_mut();
+    let mut nonPredictedCent: *mut centity_t = std::ptr::null_mut();
     let mut lerped: orientation_t = orientation_t {
         origin: [0.; 3],
         axis: [[0.; 3]; 3],
@@ -2055,7 +2055,7 @@ pub unsafe extern "C" fn CG_AddPlayerWeapon(
     AnglesToAxis(angles.as_mut_ptr() as *const vec_t, flash.axis.as_mut_ptr());
     // colorize the railgun blast
     if weaponNum as u32 == WP_RAILGUN as i32 as u32 {
-        let mut ci_0: *mut clientInfo_t = 0 as *mut clientInfo_t;
+        let mut ci_0: *mut clientInfo_t = std::ptr::null_mut();
         ci_0 = &mut *cgs
             .clientinfo
             .as_mut_ptr()
@@ -2126,11 +2126,11 @@ pub unsafe extern "C" fn CG_AddViewWeapon(mut ps: *mut playerState_t) {
         radius: 0.,
         rotation: 0.,
     };
-    let mut cent: *mut centity_t = 0 as *mut centity_t;
-    let mut ci: *mut clientInfo_t = 0 as *mut clientInfo_t;
+    let mut cent: *mut centity_t = std::ptr::null_mut();
+    let mut ci: *mut clientInfo_t = std::ptr::null_mut();
     let mut fovOffset: f32 = 0.;
     let mut angles: vec3_t = [0.; 3];
-    let mut weapon: *mut weaponInfo_t = 0 as *mut weaponInfo_t;
+    let mut weapon: *mut weaponInfo_t = std::ptr::null_mut();
     if (*ps).persistant[PERS_TEAM as i32 as usize] == TEAM_SPECTATOR as i32 {
         return;
     }
@@ -2249,8 +2249,8 @@ pub unsafe extern "C" fn CG_DrawWeaponSelect() {
     let mut x: i32 = 0;
     let mut y: i32 = 0;
     let mut w: i32 = 0;
-    let mut name: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut color: *mut f32 = 0 as *mut f32;
+    let mut name: *mut libc::c_char = std::ptr::null_mut();
+    let mut color: *mut f32 = std::ptr::null_mut();
     // don't display if dead
     if cg.predictedPlayerState.stats[STAT_HEALTH as i32 as usize] <= 0 as i32 {
         return;
@@ -2319,7 +2319,7 @@ pub unsafe extern "C" fn CG_DrawWeaponSelect() {
             CG_DrawBigStringColor(x, y - 22 as i32, name, color);
         }
     }
-    trap_R_SetColor(0 as *const f32);
+    trap_R_SetColor(std::ptr::null());
 }
 /*
 ===============
@@ -2473,9 +2473,9 @@ Caused by an EV_FIRE_WEAPON event
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_FireWeapon(mut cent: *mut centity_t) {
-    let mut ent: *mut entityState_t = 0 as *mut entityState_t;
+    let mut ent: *mut entityState_t = std::ptr::null_mut();
     let mut c: i32 = 0;
-    let mut weap: *mut weaponInfo_t = 0 as *mut weaponInfo_t;
+    let mut weap: *mut weaponInfo_t = std::ptr::null_mut();
     ent = &mut (*cent).currentState;
     if (*ent).weapon == WP_NONE as i32 {
         return;
@@ -2501,7 +2501,7 @@ pub unsafe extern "C" fn CG_FireWeapon(mut cent: *mut centity_t) {
     // play quad sound if needed
     if (*cent).currentState.powerups & (1 as i32) << PW_QUAD as i32 != 0 {
         trap_S_StartSound(
-            0 as *mut vec_t,
+            std::ptr::null_mut(),
             (*cent).currentState.number,
             CHAN_ITEM as i32,
             cgs.media.quadSound,
@@ -2519,7 +2519,7 @@ pub unsafe extern "C" fn CG_FireWeapon(mut cent: *mut centity_t) {
         c = rand() % c;
         if (*weap).flashSound[c as usize] != 0 {
             trap_S_StartSound(
-                0 as *mut vec_t,
+                std::ptr::null_mut(),
                 (*ent).number,
                 CHAN_WEAPON as i32,
                 (*weap).flashSound[c as usize],
@@ -2554,7 +2554,7 @@ pub unsafe extern "C" fn CG_MissileHitWall(
     let mut radius: f32 = 0.;
     let mut light: f32 = 0.;
     let mut lightColor: vec3_t = [0.; 3];
-    let mut le: *mut localEntity_t = 0 as *mut localEntity_t;
+    let mut le: *mut localEntity_t = std::ptr::null_mut();
     let mut r: i32 = 0;
     let mut alphaFade: qboolean = qfalse;
     let mut isSprite: qboolean = qfalse;
@@ -2710,7 +2710,7 @@ pub unsafe extern "C" fn CG_MissileHitWall(
     //
     alphaFade = (mark == cgs.media.energyMarkShader) as i32 as qboolean; // plasma fades alpha, all others fade color
     if weapon == WP_RAILGUN as i32 {
-        let mut color: *mut f32 = 0 as *mut f32;
+        let mut color: *mut f32 = std::ptr::null_mut();
         // colorize with client color
         color = cgs.clientinfo[clientNum as usize].color1.as_mut_ptr();
         CG_ImpactMark(
@@ -2804,8 +2804,8 @@ unsafe extern "C" fn CG_ShotgunPellet(
     CG_Trace(
         &mut tr as *mut _ as *mut trace_t,
         start as *const vec_t,
-        0 as *const vec_t,
-        0 as *const vec_t,
+        std::ptr::null(),
+        std::ptr::null(),
         end as *const vec_t,
         skipNum,
         1 as i32 | 0x2000000 as i32 | 0x4000000 as i32,
@@ -2838,8 +2838,8 @@ unsafe extern "C" fn CG_ShotgunPellet(
             &mut trace as *mut _ as *mut trace_t,
             end as *const vec_t,
             start as *const vec_t,
-            0 as *const vec_t,
-            0 as *const vec_t,
+            std::ptr::null(),
+            std::ptr::null(),
             0 as i32,
             32 as i32,
         );
@@ -2865,8 +2865,8 @@ unsafe extern "C" fn CG_ShotgunPellet(
             &mut trace_0 as *mut _ as *mut trace_t,
             start as *const vec_t,
             end as *const vec_t,
-            0 as *const vec_t,
-            0 as *const vec_t,
+            std::ptr::null(),
+            std::ptr::null(),
             0 as i32,
             32 as i32,
         );
@@ -3169,7 +3169,7 @@ CG_CalcMuzzlePoint
 
 unsafe extern "C" fn CG_CalcMuzzlePoint(mut entityNum: i32, mut muzzle: *mut vec_t) -> qboolean {
     let mut forward: vec3_t = [0.; 3];
-    let mut cent: *mut centity_t = 0 as *mut centity_t;
+    let mut cent: *mut centity_t = std::ptr::null_mut();
     let mut anim: i32 = 0;
     if entityNum == (*cg.snap).ps.clientNum {
         *muzzle.offset(0 as i32 as isize) = (*cg.snap).ps.origin[0 as i32 as usize];
@@ -3180,8 +3180,8 @@ unsafe extern "C" fn CG_CalcMuzzlePoint(mut entityNum: i32, mut muzzle: *mut vec
         AngleVectors(
             (*cg.snap).ps.viewangles.as_mut_ptr() as *const vec_t,
             forward.as_mut_ptr(),
-            0 as *mut vec_t,
-            0 as *mut vec_t,
+            std::ptr::null_mut(),
+            std::ptr::null_mut(),
         );
         *muzzle.offset(0 as i32 as isize) =
             *muzzle.offset(0 as i32 as isize) + forward[0 as i32 as usize] * 14 as i32 as f32;
@@ -3201,8 +3201,8 @@ unsafe extern "C" fn CG_CalcMuzzlePoint(mut entityNum: i32, mut muzzle: *mut vec
     AngleVectors(
         (*cent).currentState.apos.trBase.as_mut_ptr() as *const vec_t,
         forward.as_mut_ptr(),
-        0 as *mut vec_t,
-        0 as *mut vec_t,
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
     );
     anim = (*cent).currentState.legsAnim & !(128 as i32);
     if anim == LEGS_WALKCR as i32 || anim == LEGS_IDLECR as i32 {
@@ -3287,8 +3287,8 @@ pub unsafe extern "C" fn CG_Bullet(
                     &mut trace as *mut _ as *mut trace_t,
                     end as *const vec_t,
                     start.as_mut_ptr() as *const vec_t,
-                    0 as *const vec_t,
-                    0 as *const vec_t,
+                    std::ptr::null(),
+                    std::ptr::null(),
                     0 as i32,
                     32 as i32,
                 );
@@ -3302,8 +3302,8 @@ pub unsafe extern "C" fn CG_Bullet(
                     &mut trace as *mut _ as *mut trace_t,
                     start.as_mut_ptr() as *const vec_t,
                     end as *const vec_t,
-                    0 as *const vec_t,
-                    0 as *const vec_t,
+                    std::ptr::null(),
+                    std::ptr::null(),
                     0 as i32,
                     32 as i32,
                 );

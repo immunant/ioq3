@@ -279,8 +279,8 @@ pub unsafe extern "C" fn silk_A2NLSF(
     let mut den: opus_int32 = 0;
     let mut P: [opus_int32; 13] = [0; 13];
     let mut Q: [opus_int32; 13] = [0; 13];
-    let mut PQ: [*mut opus_int32; 2] = [0 as *mut opus_int32; 2];
-    let mut p: *mut opus_int32 = 0 as *mut opus_int32;
+    let mut PQ: [*mut opus_int32; 2] = [std::ptr::null_mut(); 2];
+    let mut p: *mut opus_int32 = std::ptr::null_mut();
     /* Store pointers to array */
     PQ[0 as i32 as usize] = P.as_mut_ptr();
     PQ[1 as i32 as usize] = Q.as_mut_ptr();

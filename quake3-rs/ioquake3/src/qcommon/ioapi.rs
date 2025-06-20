@@ -87,8 +87,8 @@ pub unsafe extern "C" fn fopen_file_func(
     mut filename: *const libc::c_char,
     mut mode: i32,
 ) -> voidpf {
-    let mut file: *mut FILE = 0 as *mut FILE;
-    let mut mode_fopen: *const libc::c_char = 0 as *const libc::c_char;
+    let mut file: *mut FILE = std::ptr::null_mut();
+    let mut mode_fopen: *const libc::c_char = std::ptr::null();
     if mode & 3 as i32 == 1 as i32 {
         mode_fopen = b"rb\x00" as *const u8 as *const libc::c_char
     } else if mode & 4 as i32 != 0 {
@@ -220,5 +220,5 @@ pub unsafe extern "C" fn fill_fopen_filefunc(
         unsafe extern "C" fn(_: voidpf, _: voidpf) -> i32,
         unsafe extern "C" fn() -> i32,
     >(ferror_file_func)));
-    (*pzlib_filefunc_def).opaque = 0 as *mut libc::c_void;
+    (*pzlib_filefunc_def).opaque = std::ptr::null_mut();
 }

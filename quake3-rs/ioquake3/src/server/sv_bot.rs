@@ -485,7 +485,7 @@ SV_BotAllocateClient
 
 pub unsafe extern "C" fn SV_BotAllocateClient() -> i32 {
     let mut i: i32 = 0;
-    let mut cl: *mut client_t = 0 as *mut client_t;
+    let mut cl: *mut client_t = std::ptr::null_mut();
     // find a client slot
     i = 0 as i32;
     cl = svs.clients;
@@ -515,7 +515,7 @@ SV_BotFreeClient
 #[no_mangle]
 
 pub unsafe extern "C" fn SV_BotFreeClient(mut clientNum: i32) {
-    let mut cl: *mut client_t = 0 as *mut client_t;
+    let mut cl: *mut client_t = std::ptr::null_mut();
     if clientNum < 0 as i32 || clientNum >= (*sv_maxclients).integer {
         Com_Error(
             ERR_DROP as i32,
@@ -545,7 +545,7 @@ pub unsafe extern "C" fn BotDrawDebugPolygons(
     static mut bot_groundonly: *mut cvar_t = std::ptr::null_mut();
     static mut bot_reachability: *mut cvar_t = std::ptr::null_mut();
     static mut bot_highlightarea: *mut cvar_t = std::ptr::null_mut();
-    let mut poly: *mut bot_debugpoly_t = 0 as *mut bot_debugpoly_t;
+    let mut poly: *mut bot_debugpoly_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut parm0: i32 = 0;
     if debugpolygons.is_null() {
@@ -605,7 +605,7 @@ pub unsafe extern "C" fn BotDrawDebugPolygons(
         );
         (*botlib_export).Test.expect("non-null function pointer")(
             parm0,
-            0 as *mut libc::c_char,
+            std::ptr::null_mut(),
             (*(*svs.clients.offset(0 as i32 as isize)).gentity)
                 .r
                 .currentOrigin
@@ -895,7 +895,7 @@ BotImport_GetMemory
 */
 
 unsafe extern "C" fn BotImport_GetMemory(mut size: i32) -> *mut libc::c_void {
-    let mut ptr: *mut libc::c_void = 0 as *mut libc::c_void;
+    let mut ptr: *mut libc::c_void = std::ptr::null_mut();
     ptr = Z_TagMalloc(size, TAG_BOTLIB as i32);
     return ptr;
 }
@@ -936,7 +936,7 @@ pub unsafe extern "C" fn BotImport_DebugPolygonCreate(
     mut numPoints: i32,
     mut points: *mut vec3_t,
 ) -> i32 {
-    let mut poly: *mut bot_debugpoly_t = 0 as *mut bot_debugpoly_t;
+    let mut poly: *mut bot_debugpoly_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     if debugpolygons.is_null() {
         return 0 as i32;
@@ -975,7 +975,7 @@ unsafe extern "C" fn BotImport_DebugPolygonShow(
     mut numPoints: i32,
     mut points: *mut vec3_t,
 ) {
-    let mut poly: *mut bot_debugpoly_t = 0 as *mut bot_debugpoly_t;
+    let mut poly: *mut bot_debugpoly_t = std::ptr::null_mut();
     if debugpolygons.is_null() {
         return;
     }
@@ -1509,7 +1509,7 @@ pub unsafe extern "C" fn SV_BotGetConsoleMessage(
     mut buf: *mut libc::c_char,
     mut size: i32,
 ) -> i32 {
-    let mut cl: *mut client_t = 0 as *mut client_t;
+    let mut cl: *mut client_t = std::ptr::null_mut();
     let mut index: i32 = 0;
     cl = &mut *svs.clients.offset(client as isize) as *mut client_t;
     (*cl).lastPacketTime = svs.time;
@@ -1681,8 +1681,8 @@ SV_BotGetSnapshotEntity
 #[no_mangle]
 
 pub unsafe extern "C" fn SV_BotGetSnapshotEntity(mut client: i32, mut sequence: i32) -> i32 {
-    let mut cl: *mut client_t = 0 as *mut client_t;
-    let mut frame: *mut clientSnapshot_t = 0 as *mut clientSnapshot_t;
+    let mut cl: *mut client_t = std::ptr::null_mut();
+    let mut frame: *mut clientSnapshot_t = std::ptr::null_mut();
     cl = &mut *svs.clients.offset(client as isize) as *mut client_t;
     frame = &mut *(*cl)
         .frames

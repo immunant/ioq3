@@ -466,7 +466,7 @@ pub static mut jpeg_std_message_table: [*const libc::c_char; 128] = [
         as *const libc::c_char,
     b"Invalid SOS parameters for sequential JPEG\x00" as *const u8 as *const libc::c_char,
     b"Application transferred too many scanlines\x00" as *const u8 as *const libc::c_char,
-    0 as *const libc::c_char,
+    std::ptr::null(),
 ];
 /*
  * Error exit handler: must not return to caller.
@@ -564,8 +564,8 @@ unsafe extern "C" fn emit_message(mut cinfo: j_common_ptr, mut msg_level: i32) {
 unsafe extern "C" fn format_message(mut cinfo: j_common_ptr, mut buffer: *mut libc::c_char) {
     let mut err: *mut jpeg_error_mgr = (*cinfo).err;
     let mut msg_code: i32 = (*err).msg_code;
-    let mut msgtext: *const libc::c_char = 0 as *const libc::c_char;
-    let mut msgptr: *const libc::c_char = 0 as *const libc::c_char;
+    let mut msgtext: *const libc::c_char = std::ptr::null();
+    let mut msgptr: *const libc::c_char = std::ptr::null();
     let mut ch: libc::c_char = 0;
     let mut isstring: boolean = 0;
     /* Look up message string in proper table */
@@ -670,7 +670,7 @@ pub unsafe extern "C" fn jpeg_std_error(mut err: *mut jpeg_error_mgr) -> *mut jp
     /* Initialize message table pointers */
     (*err).jpeg_message_table = jpeg_std_message_table.as_ptr(); /* for safety */
     (*err).last_jpeg_message = crate::src::jpeg_8c::jerror::JMSG_LASTMSGCODE as i32 - 1 as i32;
-    (*err).addon_message_table = 0 as *const *const libc::c_char;
+    (*err).addon_message_table = std::ptr::null();
     (*err).first_addon_message = 0 as i32;
     (*err).last_addon_message = 0 as i32;
     return err;

@@ -551,7 +551,7 @@ pub const RSERR_UNKNOWN: rserr_t = 3;
 pub const RSERR_OK: rserr_t = 0;
 #[no_mangle]
 
-pub static mut SDL_window: *mut SDL_Window = 0 as *mut SDL_Window;
+pub static mut SDL_window: *mut SDL_Window = std::ptr::null_mut();
 
 static mut SDL_glContext: SDL_GLContext = std::ptr::null_mut();
 #[no_mangle]
@@ -2157,14 +2157,14 @@ unsafe extern "C" fn GLimp_DetectAvailableModes() {
         0,
     ];
     let mut numSDLModes: i32 = 0;
-    let mut modes: *mut SDL_Rect = 0 as *mut SDL_Rect;
+    let mut modes: *mut SDL_Rect = std::ptr::null_mut();
     let mut numModes: i32 = 0 as i32;
     let mut windowMode: SDL_DisplayMode = SDL_DisplayMode {
         format: 0,
         w: 0,
         h: 0,
         refresh_rate: 0,
-        driverdata: 0 as *mut libc::c_void,
+        driverdata: std::ptr::null_mut(),
     };
     let mut display: i32 = SDL_GetWindowDisplayIndex(SDL_window);
     if display < 0 as i32 {
@@ -2209,7 +2209,7 @@ unsafe extern "C" fn GLimp_DetectAvailableModes() {
             w: 0,
             h: 0,
             refresh_rate: 0,
-            driverdata: 0 as *mut libc::c_void,
+            driverdata: std::ptr::null_mut(),
         };
         if !(SDL_GetDisplayMode(display, i, &mut mode) < 0 as i32) {
             if mode.w == 0 || mode.h == 0 {
@@ -6233,14 +6233,14 @@ unsafe extern "C" fn GLimp_SetMode(
     let mut stencilBits: i32 = 0;
     let mut samples: i32 = 0;
     let mut i: i32 = 0 as i32;
-    let mut icon: *mut SDL_Surface = 0 as *mut SDL_Surface;
+    let mut icon: *mut SDL_Surface = std::ptr::null_mut();
     let mut flags: Uint32 = (SDL_WINDOW_SHOWN as i32 | SDL_WINDOW_OPENGL as i32) as Uint32;
     let mut desktopMode: SDL_DisplayMode = SDL_DisplayMode {
         format: 0,
         w: 0,
         h: 0,
         refresh_rate: 0,
-        driverdata: 0 as *mut libc::c_void,
+        driverdata: std::ptr::null_mut(),
     };
     let mut display: i32 = 0 as i32;
     let mut x: i32 = (0x1fff0000 as u32 | 0 as i32 as u32) as i32;
@@ -6367,7 +6367,7 @@ unsafe extern "C" fn GLimp_SetMode(
     if !SDL_glContext.is_null() {
         GLimp_ClearProcAddresses();
         SDL_GL_DeleteContext(SDL_glContext);
-        SDL_glContext = 0 as *mut libc::c_void
+        SDL_glContext = std::ptr::null_mut()
     }
     if !SDL_window.is_null() {
         SDL_GetWindowPosition(SDL_window, &mut x, &mut y);
@@ -6381,7 +6381,7 @@ unsafe extern "C" fn GLimp_SetMode(
             y,
         );
         SDL_DestroyWindow(SDL_window);
-        SDL_window = 0 as *mut SDL_Window
+        SDL_window = std::ptr::null_mut()
     }
     if fullscreen as u64 != 0 {
         flags |= SDL_WINDOW_FULLSCREEN as i32 as u32;
@@ -6525,7 +6525,7 @@ unsafe extern "C" fn GLimp_SetMode(
                     w: 0,
                     h: 0,
                     refresh_rate: 0,
-                    driverdata: 0 as *mut libc::c_void,
+                    driverdata: std::ptr::null_mut(),
                 };
                 match testColorBits {
                     16 => {
@@ -6561,7 +6561,7 @@ unsafe extern "C" fn GLimp_SetMode(
                             );
                         mode_0.refresh_rate =
                             crate::src::renderergl1::tr_init::glConfig.displayFrequency;
-                        mode_0.driverdata = 0 as *mut libc::c_void;
+                        mode_0.driverdata = std::ptr::null_mut();
                         if SDL_SetWindowDisplayMode(SDL_window, &mut mode_0) < 0 as i32 {
                             crate::src::renderergl1::tr_main::ri
                                 .Printf
@@ -6673,14 +6673,14 @@ unsafe extern "C" fn GLimp_SetMode(
                                 }
                                 GLimp_ClearProcAddresses();
                                 SDL_GL_DeleteContext(SDL_glContext);
-                                SDL_glContext = 0 as *mut libc::c_void;
+                                SDL_glContext = std::ptr::null_mut();
                                 SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, profileMask);
                                 SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, majorVersion);
                                 SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, minorVersion);
                             }
                         }
                     } else {
-                        SDL_glContext = 0 as *mut libc::c_void
+                        SDL_glContext = std::ptr::null_mut()
                     }
                     if SDL_glContext.is_null() {
                         SDL_glContext = SDL_GL_CreateContext(SDL_window);
@@ -6694,7 +6694,7 @@ unsafe extern "C" fn GLimp_SetMode(
                                 crate::stdlib::SDL_GetError(),
                             );
                             SDL_DestroyWindow(SDL_window);
-                            SDL_window = 0 as *mut SDL_Window;
+                            SDL_window = std::ptr::null_mut();
                             current_block_184 = 5597585068398118923;
                         } else if GLimp_GetProcAddresses(fixedFunction) as u64 == 0 {
                             crate::src::renderergl1::tr_main::ri
@@ -6706,9 +6706,9 @@ unsafe extern "C" fn GLimp_SetMode(
                             );
                             GLimp_ClearProcAddresses();
                             SDL_GL_DeleteContext(SDL_glContext);
-                            SDL_glContext = 0 as *mut libc::c_void;
+                            SDL_glContext = std::ptr::null_mut();
                             SDL_DestroyWindow(SDL_window);
-                            SDL_window = 0 as *mut SDL_Window;
+                            SDL_window = std::ptr::null_mut();
                             current_block_184 = 5597585068398118923;
                         } else {
                             current_block_184 = 1953367063549441504;

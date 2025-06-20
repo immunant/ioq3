@@ -261,7 +261,7 @@ unsafe extern "C" fn SNDDMA_PrintAudiospec(
     mut spec: *const SDL_AudioSpec,
 ) {
     let mut i: i32 = 0;
-    let mut fmt: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut fmt: *mut libc::c_char = std::ptr::null_mut();
     Com_Printf(b"%s:\n\x00" as *const u8 as *const libc::c_char, str);
     i = 0 as i32;
     while i < formatToStringTableSize {
@@ -308,7 +308,7 @@ pub unsafe extern "C" fn SNDDMA_Init() -> qboolean {
         padding: 0,
         size: 0,
         callback: None,
-        userdata: 0 as *mut libc::c_void,
+        userdata: std::ptr::null_mut(),
     };
     let mut obtained: SDL_AudioSpec = SDL_AudioSpec {
         freq: 0,
@@ -319,7 +319,7 @@ pub unsafe extern "C" fn SNDDMA_Init() -> qboolean {
         padding: 0,
         size: 0,
         callback: None,
-        userdata: 0 as *mut libc::c_void,
+        userdata: std::ptr::null_mut(),
     };
     let mut tmp: i32 = 0;
     if snd_inited as u64 != 0 {
@@ -407,7 +407,7 @@ pub unsafe extern "C" fn SNDDMA_Init() -> qboolean {
             as unsafe extern "C" fn(_: *mut libc::c_void, _: *mut Uint8, _: i32) -> (),
     );
     sdlPlaybackDevice = SDL_OpenAudioDevice(
-        0 as *const libc::c_char,
+        std::ptr::null(),
         SDL_FALSE as i32,
         &mut desired,
         &mut obtained,
@@ -485,7 +485,7 @@ pub unsafe extern "C" fn SNDDMA_Init() -> qboolean {
             padding: 0,
             size: 0,
             callback: None,
-            userdata: 0 as *mut libc::c_void,
+            userdata: std::ptr::null_mut(),
         }; // start callback.
         SDL_memset(
             &mut spec as *mut SDL_AudioSpec as *mut libc::c_void,
@@ -497,10 +497,10 @@ pub unsafe extern "C" fn SNDDMA_Init() -> qboolean {
         spec.channels = 1 as i32 as Uint8;
         spec.samples = (20 as i32 * 48 as i32 * 3 as i32 * 4 as i32) as Uint16;
         sdlCaptureDevice = SDL_OpenAudioDevice(
-            0 as *const libc::c_char,
+            std::ptr::null(),
             SDL_TRUE as i32,
             &mut spec,
-            0 as *mut SDL_AudioSpec,
+            std::ptr::null_mut(),
             0 as i32,
         );
         Com_Printf(
@@ -556,7 +556,7 @@ pub unsafe extern "C" fn SNDDMA_Shutdown() {
     }
     crate::stdlib::SDL_QuitSubSystem(0x10 as u32);
     libc::free(dma.buffer as *mut libc::c_void);
-    dma.buffer = 0 as *mut byte;
+    dma.buffer = std::ptr::null_mut();
     dmasize = 0 as i32;
     dmapos = dmasize;
     snd_inited = qfalse;

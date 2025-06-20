@@ -7,7 +7,7 @@ pub mod stdlib_h {
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return libc::strtol(
             __nptr,
-            0 as *mut libc::c_void as *mut *mut libc::c_char,
+            std::ptr::null_mut() as *mut *mut libc::c_char,
             10 as i32,
         ) as i32;
     }
@@ -100,7 +100,7 @@ static mut addBotsMenuInfo: addBotsMenuInfo_t = addBotsMenuInfo_t {
     banner: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -122,7 +122,7 @@ static mut addBotsMenuInfo: addBotsMenuInfo_t = addBotsMenuInfo_t {
     background: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -148,7 +148,7 @@ static mut addBotsMenuInfo: addBotsMenuInfo_t = addBotsMenuInfo_t {
     arrows: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -174,7 +174,7 @@ static mut addBotsMenuInfo: addBotsMenuInfo_t = addBotsMenuInfo_t {
     up: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -200,7 +200,7 @@ static mut addBotsMenuInfo: addBotsMenuInfo_t = addBotsMenuInfo_t {
     down: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -226,7 +226,7 @@ static mut addBotsMenuInfo: addBotsMenuInfo_t = addBotsMenuInfo_t {
     bots: [menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -248,7 +248,7 @@ static mut addBotsMenuInfo: addBotsMenuInfo_t = addBotsMenuInfo_t {
     skill: menulist_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -276,7 +276,7 @@ static mut addBotsMenuInfo: addBotsMenuInfo_t = addBotsMenuInfo_t {
     team: menulist_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -304,7 +304,7 @@ static mut addBotsMenuInfo: addBotsMenuInfo_t = addBotsMenuInfo_t {
     go: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -330,7 +330,7 @@ static mut addBotsMenuInfo: addBotsMenuInfo_t = addBotsMenuInfo_t {
     back: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -367,7 +367,7 @@ UI_AddBotsMenu_FightEvent
 */
 
 unsafe extern "C" fn UI_AddBotsMenu_FightEvent(mut _ptr: *mut libc::c_void, mut event: i32) {
-    let mut team: *const libc::c_char = 0 as *const libc::c_char;
+    let mut team: *const libc::c_char = std::ptr::null();
     let mut skill: i32 = 0;
     if event != 3 as i32 {
         return;
@@ -423,7 +423,7 @@ UI_AddBotsMenu_SetBotNames
 
 unsafe extern "C" fn UI_AddBotsMenu_SetBotNames() {
     let mut n: i32 = 0;
-    let mut info: *const libc::c_char = 0 as *const libc::c_char;
+    let mut info: *const libc::c_char = std::ptr::null();
     n = 0 as i32;
     while n < 7 as i32 {
         info = UI_GetBotInfoByNumber(
@@ -479,10 +479,10 @@ unsafe extern "C" fn UI_AddBotsMenu_SortCompare(
 ) -> i32 {
     let mut num1: i32 = 0;
     let mut num2: i32 = 0;
-    let mut info1: *const libc::c_char = 0 as *const libc::c_char;
-    let mut info2: *const libc::c_char = 0 as *const libc::c_char;
-    let mut name1: *const libc::c_char = 0 as *const libc::c_char;
-    let mut name2: *const libc::c_char = 0 as *const libc::c_char;
+    let mut info1: *const libc::c_char = std::ptr::null();
+    let mut info2: *const libc::c_char = std::ptr::null();
+    let mut name1: *const libc::c_char = std::ptr::null();
+    let mut name2: *const libc::c_char = std::ptr::null();
     num1 = *(arg1 as *mut i32);
     num2 = *(arg2 as *mut i32);
     info1 = UI_GetBotInfoByNumber(num1);
@@ -522,18 +522,18 @@ static mut skillNames: [*const libc::c_char; 6] = [
     b"Hurt Me Plenty\x00" as *const u8 as *const libc::c_char,
     b"Hardcore\x00" as *const u8 as *const libc::c_char,
     b"Nightmare!\x00" as *const u8 as *const libc::c_char,
-    0 as *const libc::c_char,
+    std::ptr::null(),
 ];
 
 static mut teamNames1: [*const libc::c_char; 2] = [
     b"Free\x00" as *const u8 as *const libc::c_char,
-    0 as *const libc::c_char,
+    std::ptr::null(),
 ];
 
 static mut teamNames2: [*const libc::c_char; 3] = [
     b"Red\x00" as *const u8 as *const libc::c_char,
     b"Blue\x00" as *const u8 as *const libc::c_char,
-    0 as *const libc::c_char,
+    std::ptr::null(),
 ];
 
 unsafe extern "C" fn UI_AddBotsMenu_Init() {

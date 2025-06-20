@@ -53,9 +53,9 @@ unsafe extern "C" fn silk_resampler_private_down_FIR_INTERPOL(
 ) -> *mut opus_int16 {
     let mut index_Q16: opus_int32 = 0;
     let mut res_Q6: opus_int32 = 0;
-    let mut buf_ptr: *mut opus_int32 = 0 as *mut opus_int32;
+    let mut buf_ptr: *mut opus_int32 = std::ptr::null_mut();
     let mut interpol_ind: opus_int32 = 0;
-    let mut interpol_ptr: *const opus_int16 = 0 as *const opus_int16;
+    let mut interpol_ptr: *const opus_int16 = std::ptr::null();
     match FIR_Order {
         18 => {
             index_Q16 = 0 as i32;
@@ -397,8 +397,8 @@ pub unsafe extern "C" fn silk_resampler_private_down_FIR(
     let mut nSamplesIn: opus_int32 = 0;
     let mut max_index_Q16: opus_int32 = 0;
     let mut index_increment_Q16: opus_int32 = 0;
-    let mut buf: *mut opus_int32 = 0 as *mut opus_int32;
-    let mut FIR_Coefs: *const opus_int16 = 0 as *const opus_int16;
+    let mut buf: *mut opus_int32 = std::ptr::null_mut();
+    let mut FIR_Coefs: *const opus_int16 = std::ptr::null();
     let mut fresh3 = ::std::vec::from_elem(
         0,
         (::std::mem::size_of::<opus_int32>() as usize)

@@ -7,7 +7,7 @@ pub mod stdlib_h {
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return libc::strtol(
             __nptr,
-            0 as *mut libc::c_void as *mut *mut libc::c_char,
+            std::ptr::null_mut() as *mut *mut libc::c_char,
             10 as i32,
         ) as i32;
     }
@@ -215,17 +215,17 @@ Returns the player with player id or name from Cmd_Argv(1)
 */
 
 unsafe extern "C" fn SV_GetPlayerByHandle() -> *mut client_t {
-    let mut cl: *mut client_t = 0 as *mut client_t;
+    let mut cl: *mut client_t = std::ptr::null_mut();
     let mut i: i32 = 0;
-    let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut s: *mut libc::c_char = std::ptr::null_mut();
     let mut cleanName: [libc::c_char; 64] = [0; 64];
     // make sure server is running
     if (*com_sv_running).integer == 0 {
-        return 0 as *mut client_t;
+        return std::ptr::null_mut();
     }
     if Cmd_Argc() < 2 as i32 {
         Com_Printf(b"No player specified.\n\x00" as *const u8 as *const libc::c_char);
-        return 0 as *mut client_t;
+        return std::ptr::null_mut();
     }
     s = Cmd_Argv(1 as i32);
     // Check whether this is a numeric player handle
@@ -268,7 +268,7 @@ unsafe extern "C" fn SV_GetPlayerByHandle() -> *mut client_t {
         b"Player %s is not on the server\n\x00" as *const u8 as *const libc::c_char,
         s,
     );
-    return 0 as *mut client_t;
+    return std::ptr::null_mut();
 }
 /*
 ==================
@@ -279,17 +279,17 @@ Returns the player with idnum from Cmd_Argv(1)
 */
 
 unsafe extern "C" fn SV_GetPlayerByNum() -> *mut client_t {
-    let mut cl: *mut client_t = 0 as *mut client_t;
+    let mut cl: *mut client_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut idnum: i32 = 0;
-    let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut s: *mut libc::c_char = std::ptr::null_mut();
     // make sure server is running
     if (*com_sv_running).integer == 0 {
-        return 0 as *mut client_t;
+        return std::ptr::null_mut();
     }
     if Cmd_Argc() < 2 as i32 {
         Com_Printf(b"No player specified.\n\x00" as *const u8 as *const libc::c_char);
-        return 0 as *mut client_t;
+        return std::ptr::null_mut();
     }
     s = Cmd_Argv(1 as i32);
     i = 0 as i32;
@@ -300,7 +300,7 @@ unsafe extern "C" fn SV_GetPlayerByNum() -> *mut client_t {
                 b"Bad slot number: %s\n\x00" as *const u8 as *const libc::c_char,
                 s,
             );
-            return 0 as *mut client_t;
+            return std::ptr::null_mut();
         }
         i += 1
     }
@@ -310,7 +310,7 @@ unsafe extern "C" fn SV_GetPlayerByNum() -> *mut client_t {
             b"Bad client slot: %i\n\x00" as *const u8 as *const libc::c_char,
             idnum,
         );
-        return 0 as *mut client_t;
+        return std::ptr::null_mut();
     }
     cl = &mut *svs.clients.offset(idnum as isize) as *mut client_t;
     if (*cl).state as u64 == 0 {
@@ -318,7 +318,7 @@ unsafe extern "C" fn SV_GetPlayerByNum() -> *mut client_t {
             b"Client %i is not active\n\x00" as *const u8 as *const libc::c_char,
             idnum,
         );
-        return 0 as *mut client_t;
+        return std::ptr::null_mut();
     }
     return cl;
 }
@@ -332,8 +332,8 @@ Restart the server on a different map
 */
 
 unsafe extern "C" fn SV_Map_f() {
-    let mut cmd: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut map: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut cmd: *mut libc::c_char = std::ptr::null_mut();
+    let mut map: *mut libc::c_char = std::ptr::null_mut();
     let mut killBots: qboolean = qfalse;
     let mut cheat: qboolean = qfalse;
     let mut expanded: [libc::c_char; 64] = [0; 64];
@@ -350,7 +350,7 @@ unsafe extern "C" fn SV_Map_f() {
         b"maps/%s.bsp\x00" as *const u8 as *const libc::c_char,
         map,
     );
-    if FS_ReadFile(expanded.as_mut_ptr(), 0 as *mut *mut libc::c_void) == -(1 as i32) as isize {
+    if FS_ReadFile(expanded.as_mut_ptr(), std::ptr::null_mut()) == -(1 as i32) as isize {
         Com_Printf(
             b"Can\'t find map %s\n\x00" as *const u8 as *const libc::c_char,
             expanded.as_mut_ptr(),
@@ -437,8 +437,8 @@ This allows fair starts with variable load times.
 
 unsafe extern "C" fn SV_MapRestart_f() {
     let mut i: i32 = 0;
-    let mut client: *mut client_t = 0 as *mut client_t;
-    let mut denied: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut client: *mut client_t = std::ptr::null_mut();
+    let mut denied: *mut libc::c_char = std::ptr::null_mut();
     let mut isBot: qboolean = qfalse;
     let mut delay: i32 = 0;
     // make sure we aren't restarting twice in the same frame
@@ -571,7 +571,7 @@ unsafe extern "C" fn SV_MapRestart_f() {
                 // which is wrong obviously.
                 SV_ClientEnterWorld(
                     client as *mut client_s,
-                    0 as *mut usercmd_t as *mut usercmd_s,
+                    std::ptr::null_mut() as *mut usercmd_s,
                 );
             }
         }
@@ -592,7 +592,7 @@ Kick a user off of the server
 */
 
 unsafe extern "C" fn SV_Kick_f() {
-    let mut cl: *mut client_t = 0 as *mut client_t;
+    let mut cl: *mut client_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     // make sure server is running
     if (*com_sv_running).integer == 0 {
@@ -671,7 +671,7 @@ Kick all bots off of the server
 */
 
 unsafe extern "C" fn SV_KickBots_f() {
-    let mut cl: *mut client_t = 0 as *mut client_t;
+    let mut cl: *mut client_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     // make sure server is running
     if (*com_sv_running).integer == 0 {
@@ -704,7 +704,7 @@ Kick all users off of the server
 */
 
 unsafe extern "C" fn SV_KickAll_f() {
-    let mut cl: *mut client_t = 0 as *mut client_t;
+    let mut cl: *mut client_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     // make sure server is running
     if (*com_sv_running).integer == 0 {
@@ -737,7 +737,7 @@ Kick a user off of the server
 */
 
 unsafe extern "C" fn SV_KickNum_f() {
-    let mut cl: *mut client_t = 0 as *mut client_t;
+    let mut cl: *mut client_t = std::ptr::null_mut();
     // make sure server is running
     if (*com_sv_running).integer == 0 {
         Com_Printf(b"Server is not running.\n\x00" as *const u8 as *const libc::c_char);
@@ -776,7 +776,7 @@ server
 */
 
 unsafe extern "C" fn SV_Ban_f() {
-    let mut cl: *mut client_t = 0 as *mut client_t;
+    let mut cl: *mut client_t = std::ptr::null_mut();
     // make sure server is running
     if (*com_sv_running).integer == 0 {
         Com_Printf(b"Server is not running.\n\x00" as *const u8 as *const libc::c_char);
@@ -850,7 +850,7 @@ server
 */
 
 unsafe extern "C" fn SV_BanNum_f() {
-    let mut cl: *mut client_t = 0 as *mut client_t;
+    let mut cl: *mut client_t = std::ptr::null_mut();
     // make sure server is running
     if (*com_sv_running).integer == 0 {
         Com_Printf(b"Server is not running.\n\x00" as *const u8 as *const libc::c_char);
@@ -926,11 +926,11 @@ unsafe extern "C" fn SV_RehashBans_f() {
     let mut index: i32 = 0;
     let mut filelen: i32 = 0;
     let mut readfrom: fileHandle_t = 0;
-    let mut textbuf: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut curpos: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut maskpos: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut newlinepos: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut endpos: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut textbuf: *mut libc::c_char = std::ptr::null_mut();
+    let mut curpos: *mut libc::c_char = std::ptr::null_mut();
+    let mut maskpos: *mut libc::c_char = std::ptr::null_mut();
+    let mut newlinepos: *mut libc::c_char = std::ptr::null_mut();
+    let mut endpos: *mut libc::c_char = std::ptr::null_mut();
     let mut filepath: [libc::c_char; 64] = [0; 64];
     // make sure server is running
     if (*com_sv_running).integer == 0 {
@@ -1034,7 +1034,7 @@ unsafe extern "C" fn SV_WriteBans() {
     writeto = FS_SV_FOpenFileWrite(filepath.as_mut_ptr());
     if writeto != 0 {
         let mut writebuf: [libc::c_char; 128] = [0; 128];
-        let mut curban: *mut serverBan_t = 0 as *mut serverBan_t;
+        let mut curban: *mut serverBan_t = std::ptr::null_mut();
         index = 0 as i32;
         while index < serverBansCount {
             curban = &mut *serverBans.as_mut_ptr().offset(index as isize) as *mut serverBan_t;
@@ -1100,7 +1100,7 @@ unsafe extern "C" fn SV_ParseCIDRNotation(
     mut mask: *mut i32,
     mut adrstr: *mut libc::c_char,
 ) -> qboolean {
-    let mut suffix: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut suffix: *mut libc::c_char = std::ptr::null_mut();
     suffix = libc::strchr(adrstr, '/' as i32);
     if !suffix.is_null() {
         *suffix = '\u{0}' as i32 as libc::c_char;
@@ -1134,7 +1134,7 @@ Ban a user from being able to play on this server based on his ip address.
 */
 
 unsafe extern "C" fn SV_AddBanToList(mut isexception: qboolean) {
-    let mut banstring: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut banstring: *mut libc::c_char = std::ptr::null_mut();
     let mut addy2: [libc::c_char; 48] = [0; 48];
     let mut ip: netadr_t = netadr_t {
         type_0: NA_BAD,
@@ -1146,7 +1146,7 @@ unsafe extern "C" fn SV_AddBanToList(mut isexception: qboolean) {
     let mut index: i32 = 0;
     let mut argc: i32 = 0;
     let mut mask: i32 = 0;
-    let mut curban: *mut serverBan_t = 0 as *mut serverBan_t;
+    let mut curban: *mut serverBan_t = std::ptr::null_mut();
     // make sure server is running
     if (*com_sv_running).integer == 0 {
         Com_Printf(b"Server is not running.\n\x00" as *const u8 as *const libc::c_char);
@@ -1184,7 +1184,7 @@ unsafe extern "C" fn SV_AddBanToList(mut isexception: qboolean) {
             return;
         }
     } else {
-        let mut cl: *mut client_t = 0 as *mut client_t;
+        let mut cl: *mut client_t = std::ptr::null_mut();
         // client num.
         cl = SV_GetPlayerByNum();
         if cl.is_null() {
@@ -1341,7 +1341,7 @@ unsafe extern "C" fn SV_DelBanFromList(mut isexception: qboolean) {
         port: 0,
         scope_id: 0,
     };
-    let mut banstring: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut banstring: *mut libc::c_char = std::ptr::null_mut();
     // make sure server is running
     if (*com_sv_running).integer == 0 {
         Com_Printf(b"Server is not running.\n\x00" as *const u8 as *const libc::c_char);
@@ -1358,7 +1358,7 @@ unsafe extern "C" fn SV_DelBanFromList(mut isexception: qboolean) {
     if !libc::strchr(banstring, '.' as i32).is_null()
         || !libc::strchr(banstring, ':' as i32).is_null()
     {
-        let mut curban: *mut serverBan_t = 0 as *mut serverBan_t;
+        let mut curban: *mut serverBan_t = std::ptr::null_mut();
         if SV_ParseCIDRNotation(&mut ip, &mut mask, banstring) as u64 != 0 {
             Com_Printf(
                 b"Error: Invalid address %s\n\x00" as *const u8 as *const libc::c_char,
@@ -1432,7 +1432,7 @@ List all bans and exceptions on console
 unsafe extern "C" fn SV_ListBans_f() {
     let mut index: i32 = 0;
     let mut count: i32 = 0;
-    let mut ban: *mut serverBan_t = 0 as *mut serverBan_t;
+    let mut ban: *mut serverBan_t = std::ptr::null_mut();
     // make sure server is running
     if (*com_sv_running).integer == 0 {
         Com_Printf(b"Server is not running.\n\x00" as *const u8 as *const libc::c_char);
@@ -1535,9 +1535,9 @@ unsafe extern "C" fn SV_Status_f() {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut l: i32 = 0;
-    let mut cl: *mut client_t = 0 as *mut client_t;
-    let mut ps: *mut playerState_t = 0 as *mut playerState_t;
-    let mut s: *const libc::c_char = 0 as *const libc::c_char;
+    let mut cl: *mut client_t = std::ptr::null_mut();
+    let mut ps: *mut playerState_t = std::ptr::null_mut();
+    let mut s: *const libc::c_char = std::ptr::null();
     let mut ping: i32 = 0;
     // make sure server is running
     if (*com_sv_running).integer == 0 {
@@ -1618,7 +1618,7 @@ SV_ConSay_f
 */
 
 unsafe extern "C" fn SV_ConSay_f() {
-    let mut p: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut p: *mut libc::c_char = std::ptr::null_mut();
     let mut text: [libc::c_char; 1024] = [0; 1024];
     // make sure server is running
     if (*com_sv_running).integer == 0 {
@@ -1644,7 +1644,7 @@ unsafe extern "C" fn SV_ConSay_f() {
         text.as_mut_ptr(),
     );
     SV_SendServerCommand(
-        0 as *mut client_t as *mut client_s,
+        std::ptr::null_mut() as *mut client_s,
         b"chat \"%s\"\x00" as *const u8 as *const libc::c_char,
         text.as_mut_ptr(),
     );
@@ -1656,9 +1656,9 @@ SV_ConTell_f
 */
 
 unsafe extern "C" fn SV_ConTell_f() {
-    let mut p: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut p: *mut libc::c_char = std::ptr::null_mut();
     let mut text: [libc::c_char; 1024] = [0; 1024];
-    let mut cl: *mut client_t = 0 as *mut client_t;
+    let mut cl: *mut client_t = std::ptr::null_mut();
     // make sure server is running
     if (*com_sv_running).integer == 0 {
         Com_Printf(b"Server is not running.\n\x00" as *const u8 as *const libc::c_char);
@@ -1700,13 +1700,13 @@ SV_ConSayto_f
 */
 
 unsafe extern "C" fn SV_ConSayto_f() {
-    let mut p: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut p: *mut libc::c_char = std::ptr::null_mut();
     let mut text: [libc::c_char; 1024] = [0; 1024];
-    let mut cl: *mut client_t = 0 as *mut client_t;
-    let mut rawname: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut cl: *mut client_t = std::ptr::null_mut();
+    let mut rawname: *mut libc::c_char = std::ptr::null_mut();
     let mut name: [libc::c_char; 32] = [0; 32];
     let mut cleanName: [libc::c_char; 32] = [0; 32];
-    let mut saytocl: *mut client_t = 0 as *mut client_t;
+    let mut saytocl: *mut client_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     // make sure server is running
     if (*com_sv_running).integer == 0 {
@@ -1721,7 +1721,7 @@ unsafe extern "C" fn SV_ConSayto_f() {
     //allowing special characters in the console
     //with hex strings for player names
     Com_FieldStringToPlayerName(name.as_mut_ptr(), 32 as i32, rawname);
-    saytocl = 0 as *mut client_t;
+    saytocl = std::ptr::null_mut();
     i = 0 as i32;
     cl = svs.clients;
     while i < (*sv_maxclients).integer {
@@ -1832,7 +1832,7 @@ Examine all a users info strings
 */
 
 unsafe extern "C" fn SV_DumpUser_f() {
-    let mut cl: *mut client_t = 0 as *mut client_t;
+    let mut cl: *mut client_t = std::ptr::null_mut();
     // make sure server is running
     if (*com_sv_running).integer == 0 {
         Com_Printf(b"Server is not running.\n\x00" as *const u8 as *const libc::c_char);
@@ -1885,8 +1885,8 @@ SV_CompletePlayerName
 unsafe extern "C" fn SV_CompletePlayerName(mut _args: *mut libc::c_char, mut argNum: i32) {
     if argNum == 2 as i32 {
         let mut names: [[libc::c_char; 32]; 64] = [[0; 32]; 64];
-        let mut namesPtr: [*const libc::c_char; 64] = [0 as *const libc::c_char; 64];
-        let mut cl: *mut client_t = 0 as *mut client_t;
+        let mut namesPtr: [*const libc::c_char; 64] = [std::ptr::null(); 64];
+        let mut cl: *mut client_t = std::ptr::null_mut();
         let mut i: i32 = 0;
         let mut nameCount: i32 = 0;
         let mut clientCount: i32 = 0;

@@ -121,7 +121,7 @@ pub unsafe extern "C" fn silk_burg_modified_FLP(
     let mut Atmp: f64 = 0.;
     let mut tmp1: f64 = 0.;
     let mut tmp2: f64 = 0.;
-    let mut x_ptr: *const f32 = 0 as *const f32;
+    let mut x_ptr: *const f32 = std::ptr::null();
     let mut C_first_row: [f64; 24] = [0.; 24];
     let mut C_last_row: [f64; 24] = [0.; 24];
     let mut CAf: [f64; 25] = [0.; 25];

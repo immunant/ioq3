@@ -4,7 +4,7 @@ pub mod stdlib_float_h {
     #[inline]
 
     pub unsafe extern "C" fn atof(mut __nptr: *const libc::c_char) -> f64 {
-        return libc::strtod(__nptr, 0 as *mut libc::c_void as *mut *mut libc::c_char);
+        return libc::strtod(__nptr, std::ptr::null_mut() as *mut *mut libc::c_char);
     }
 }
 
@@ -14,7 +14,7 @@ pub mod stdlib_h {
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return libc::strtol(
             __nptr,
-            0 as *mut libc::c_void as *mut *mut libc::c_char,
+            std::ptr::null_mut() as *mut *mut libc::c_char,
             10 as i32,
         ) as i32;
     }
@@ -337,7 +337,7 @@ pub unsafe extern "C" fn AAS_BSPLinkEntity(
     mut _entnum: i32,
     mut _modelnum: i32,
 ) -> *mut bsp_link_t {
-    return 0 as *mut bsp_link_t;
+    return std::ptr::null_mut();
 }
 //end of the function AAS_BSPLinkEntity
 //===========================================================================
@@ -407,7 +407,7 @@ pub unsafe extern "C" fn AAS_ValueForBSPEpairKey(
     mut value: *mut libc::c_char,
     mut size: i32,
 ) -> i32 {
-    let mut epair: *mut bsp_epair_t = 0 as *mut bsp_epair_t; //end for
+    let mut epair: *mut bsp_epair_t = std::ptr::null_mut(); //end for
     *value.offset(0 as i32 as isize) = '\u{0}' as i32 as libc::c_char;
     if AAS_BSPEntityInRange(ent) == 0 {
         return qfalse as i32;
@@ -552,9 +552,9 @@ pub unsafe extern "C" fn AAS_IntForBSPEpairKey(
 
 pub unsafe extern "C" fn AAS_FreeBSPEntities() {
     let mut i: i32 = 0; //end for
-    let mut ent: *mut bsp_entity_t = 0 as *mut bsp_entity_t;
-    let mut epair: *mut bsp_epair_t = 0 as *mut bsp_epair_t;
-    let mut nextepair: *mut bsp_epair_t = 0 as *mut bsp_epair_t;
+    let mut ent: *mut bsp_entity_t = std::ptr::null_mut();
+    let mut epair: *mut bsp_epair_t = std::ptr::null_mut();
+    let mut nextepair: *mut bsp_epair_t = std::ptr::null_mut();
     i = 1 as i32;
     while i < bspworld.numentities {
         ent = &mut *bspworld.entities.as_mut_ptr().offset(i as isize) as *mut bsp_entity_t;
@@ -586,21 +586,21 @@ pub unsafe extern "C" fn AAS_FreeBSPEntities() {
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_ParseBSPEntities() {
-    let mut script: *mut script_t = 0 as *mut script_t; //SCFL_PRIMITIVE);
+    let mut script: *mut script_t = std::ptr::null_mut(); //SCFL_PRIMITIVE);
     let mut token: token_t = token_t {
         string: [0; 1024],
         type_0: 0,
         subtype: 0,
         intvalue: 0,
         floatvalue: 0.,
-        whitespace_p: 0 as *mut libc::c_char,
-        endwhitespace_p: 0 as *mut libc::c_char,
+        whitespace_p: std::ptr::null_mut(),
+        endwhitespace_p: std::ptr::null_mut(),
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut token_s,
+        next: std::ptr::null_mut(),
     };
-    let mut ent: *mut bsp_entity_t = 0 as *mut bsp_entity_t;
-    let mut epair: *mut bsp_epair_t = 0 as *mut bsp_epair_t;
+    let mut ent: *mut bsp_entity_t = std::ptr::null_mut();
+    let mut epair: *mut bsp_epair_t = std::ptr::null_mut();
     script = LoadScriptMemory(
         bspworld.dentdata,
         bspworld.entdatasize,
@@ -641,7 +641,7 @@ pub unsafe extern "C" fn AAS_ParseBSPEntities() {
                 .as_mut_ptr()
                 .offset(bspworld.numentities as isize) as *mut bsp_entity_t;
             bspworld.numentities += 1;
-            (*ent).epairs = 0 as *mut bsp_epair_t;
+            (*ent).epairs = std::ptr::null_mut();
             while PS_ReadToken(
                 script as *mut script_s,
                 &mut token as *mut _ as *mut token_s,
@@ -745,7 +745,7 @@ pub unsafe extern "C" fn AAS_DumpBSPData() {
     if !bspworld.dentdata.is_null() {
         crate::src::botlib::l_memory::FreeMemory(bspworld.dentdata as *mut libc::c_void);
     }
-    bspworld.dentdata = 0 as *mut libc::c_char;
+    bspworld.dentdata = std::ptr::null_mut();
     bspworld.entdatasize = 0 as i32;
     //
     bspworld.loaded = qfalse as i32;

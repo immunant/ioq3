@@ -9,7 +9,7 @@ static mut allocPoint: i32 = 0;
 #[no_mangle]
 
 pub unsafe extern "C" fn G_Alloc(mut size: i32) -> *mut libc::c_void {
-    let mut p: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut p: *mut libc::c_char = std::ptr::null_mut();
     if crate::src::game::g_main::g_debugAlloc.integer != 0 {
         crate::src::game::g_main::G_Printf(
             b"G_Alloc of %i bytes (%i left)\n\x00" as *const u8 as *const libc::c_char,

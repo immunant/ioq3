@@ -187,8 +187,8 @@ pub static mut numclusterareas: i32 = 0;
 pub unsafe extern "C" fn AAS_AltRoutingFloodCluster_r(mut areanum: i32) {
     let mut i: i32 = 0;
     let mut otherareanum: i32 = 0;
-    let mut area: *mut aas_area_t = 0 as *mut aas_area_t;
-    let mut face: *mut aas_face_t = 0 as *mut aas_face_t;
+    let mut area: *mut aas_area_t = std::ptr::null_mut();
+    let mut face: *mut aas_face_t = std::ptr::null_mut();
     //add the current area to the areas of the current cluster
     *clusterareas.offset(numclusterareas as isize) = areanum;
     numclusterareas += 1;
@@ -331,7 +331,7 @@ pub unsafe extern "C" fn AAS_AlternativeRouteGoals(
                             goaltime =
                                 crate::src::botlib::be_aas_route::AAS_AreaTravelTimeToGoalArea(
                                     i,
-                                    0 as *mut vec_t,
+                                    std::ptr::null_mut(),
                                     goalareanum,
                                     travelflags,
                                 );
@@ -559,11 +559,11 @@ pub unsafe extern "C" fn AAS_ShutdownAlternativeRouting() {
     if !midrangeareas.is_null() {
         crate::src::botlib::l_memory::FreeMemory(midrangeareas as *mut libc::c_void);
     }
-    midrangeareas = 0 as *mut midrangearea_t;
+    midrangeareas = std::ptr::null_mut();
     if !clusterareas.is_null() {
         crate::src::botlib::l_memory::FreeMemory(clusterareas as *mut libc::c_void);
     }
-    clusterareas = 0 as *mut i32;
+    clusterareas = std::ptr::null_mut();
     numclusterareas = 0 as i32;
 }
 //end of the function AAS_ShutdownAlternativeRouting

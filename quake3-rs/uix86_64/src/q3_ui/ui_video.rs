@@ -6,7 +6,7 @@ pub mod stdlib_h {
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return libc::strtol(
             __nptr,
-            0 as *mut libc::c_void as *mut *mut libc::c_char,
+            std::ptr::null_mut() as *mut *mut libc::c_char,
             10 as i32,
         ) as i32;
     }
@@ -155,7 +155,7 @@ static mut s_driverinfo: driverinfo_t = driverinfo_t {
     banner: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -177,7 +177,7 @@ static mut s_driverinfo: driverinfo_t = driverinfo_t {
     back: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -203,7 +203,7 @@ static mut s_driverinfo: driverinfo_t = driverinfo_t {
     framel: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -229,7 +229,7 @@ static mut s_driverinfo: driverinfo_t = driverinfo_t {
     framer: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -392,7 +392,7 @@ UI_DriverInfo_Menu
 */
 
 unsafe extern "C" fn UI_DriverInfo_Menu() {
-    let mut eptr: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut eptr: *mut libc::c_char = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut len: i32 = 0;
     // zero set all our globals
@@ -522,7 +522,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
     banner: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -544,7 +544,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
     framel: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -570,7 +570,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
     framer: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -596,7 +596,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
     graphics: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -618,7 +618,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
     display: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -640,7 +640,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
     sound: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -662,7 +662,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
     network: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -684,7 +684,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
     list: menulist_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -712,7 +712,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
     ratio: menulist_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -740,7 +740,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
     mode: menulist_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -768,7 +768,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
     driver: menulist_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -796,7 +796,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
     tq: menuslider_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -819,7 +819,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
     fs: menulist_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -847,7 +847,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
     lighting: menulist_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -875,7 +875,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
     allow_extensions: menulist_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -903,7 +903,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
     texturebits: menulist_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -931,7 +931,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
     colordepth: menulist_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -959,7 +959,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
     geometry: menulist_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -987,7 +987,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
     filter: menulist_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1015,7 +1015,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
     driverinfo: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1037,7 +1037,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
     apply: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1063,7 +1063,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
     back: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -1194,7 +1194,7 @@ static mut builtinResolutions: [*const libc::c_char; 13] = [
     b"1600x1200\x00" as *const u8 as *const libc::c_char,
     b"2048x1536\x00" as *const u8 as *const libc::c_char,
     b"856x480\x00" as *const u8 as *const libc::c_char,
-    0 as *const libc::c_char,
+    std::ptr::null(),
 ];
 
 static mut knownRatios: [[*const libc::c_char; 2]; 8] = [
@@ -1226,10 +1226,10 @@ static mut knownRatios: [[*const libc::c_char; 2]; 8] = [
         b"1.78:1\x00" as *const u8 as *const libc::c_char,
         b"16:9\x00" as *const u8 as *const libc::c_char,
     ],
-    [0 as *const libc::c_char, 0 as *const libc::c_char],
+    [std::ptr::null(), std::ptr::null()],
 ];
 
-static mut ratios: [*const libc::c_char; 32] = [0 as *const libc::c_char; 32];
+static mut ratios: [*const libc::c_char; 32] = [std::ptr::null(); 32];
 
 static mut ratioBuf: [[libc::c_char; 8]; 32] = [[0; 8]; 32];
 
@@ -1239,7 +1239,7 @@ static mut resToRatio: [i32; 32] = [0; 32];
 
 static mut resbuf: [libc::c_char; 1024] = [0; 1024];
 
-static mut detectedResolutions: [*const libc::c_char; 32] = [0 as *const libc::c_char; 32];
+static mut detectedResolutions: [*const libc::c_char; 32] = [std::ptr::null(); 32];
 
 static mut resolutions: *mut *const libc::c_char = unsafe { builtinResolutions.as_ptr() as *mut _ };
 
@@ -1312,7 +1312,7 @@ unsafe extern "C" fn GraphicsOptions_GetAspectRatios() {
     while !(*resolutions.offset(r as isize)).is_null() {
         let mut w: i32 = 0;
         let mut h: i32 = 0;
-        let mut x: *mut libc::c_char = 0 as *mut libc::c_char;
+        let mut x: *mut libc::c_char = std::ptr::null_mut();
         let mut str: [libc::c_char; 8] = [0; 8];
         // calculate resolution's aspect ratio
         x = libc::strchr(*resolutions.offset(r as isize), 'x' as i32).offset(1 as i32 as isize);
@@ -1364,7 +1364,7 @@ unsafe extern "C" fn GraphicsOptions_GetAspectRatios() {
         resToRatio[r as usize] = i;
         r += 1
     }
-    ratios[r as usize] = 0 as *const libc::c_char;
+    ratios[r as usize] = std::ptr::null();
 }
 /*
 =================
@@ -1415,7 +1415,7 @@ unsafe extern "C" fn GraphicsOptions_GetResolutions() {
                 *fresh3 = '\u{0}' as i32 as libc::c_char
             }
         }
-        detectedResolutions[i as usize] = 0 as *const libc::c_char;
+        detectedResolutions[i as usize] = std::ptr::null();
         if i > 0 as i32 as u32 {
             resolutions = detectedResolutions.as_mut_ptr();
             resolutionsDetected = qtrue
@@ -1723,7 +1723,7 @@ GraphicsOptions_Event
 */
 
 unsafe extern "C" fn GraphicsOptions_Event(mut ptr: *mut libc::c_void, mut event: i32) {
-    let mut ivo: *mut InitialVideoOptions_s = 0 as *mut InitialVideoOptions_s;
+    let mut ivo: *mut InitialVideoOptions_s = std::ptr::null_mut();
     if event != 3 as i32 {
         return;
     }
@@ -1954,13 +1954,13 @@ pub unsafe extern "C" fn GraphicsOptions_MenuInit() {
     static mut s_driver_names: [*const libc::c_char; 3] = [
         b"Default\x00" as *const u8 as *const libc::c_char,
         b"Voodoo\x00" as *const u8 as *const libc::c_char,
-        0 as *const libc::c_char,
+        std::ptr::null(),
     ];
     static mut tq_names: [*const libc::c_char; 4] = [
         b"Default\x00" as *const u8 as *const libc::c_char,
         b"16 bit\x00" as *const u8 as *const libc::c_char,
         b"32 bit\x00" as *const u8 as *const libc::c_char,
-        0 as *const libc::c_char,
+        std::ptr::null(),
     ];
     static mut s_graphics_options_names: [*const libc::c_char; 7] = [
         b"Very High Quality\x00" as *const u8 as *const libc::c_char,
@@ -1969,34 +1969,34 @@ pub unsafe extern "C" fn GraphicsOptions_MenuInit() {
         b"Fast\x00" as *const u8 as *const libc::c_char,
         b"Fastest\x00" as *const u8 as *const libc::c_char,
         b"Custom\x00" as *const u8 as *const libc::c_char,
-        0 as *const libc::c_char,
+        std::ptr::null(),
     ];
     static mut lighting_names: [*const libc::c_char; 3] = [
         b"Lightmap\x00" as *const u8 as *const libc::c_char,
         b"Vertex\x00" as *const u8 as *const libc::c_char,
-        0 as *const libc::c_char,
+        std::ptr::null(),
     ];
     static mut colordepth_names: [*const libc::c_char; 4] = [
         b"Default\x00" as *const u8 as *const libc::c_char,
         b"16 bit\x00" as *const u8 as *const libc::c_char,
         b"32 bit\x00" as *const u8 as *const libc::c_char,
-        0 as *const libc::c_char,
+        std::ptr::null(),
     ];
     static mut filter_names: [*const libc::c_char; 3] = [
         b"Bilinear\x00" as *const u8 as *const libc::c_char,
         b"Trilinear\x00" as *const u8 as *const libc::c_char,
-        0 as *const libc::c_char,
+        std::ptr::null(),
     ];
     static mut quality_names: [*const libc::c_char; 4] = [
         b"Low\x00" as *const u8 as *const libc::c_char,
         b"Medium\x00" as *const u8 as *const libc::c_char,
         b"High\x00" as *const u8 as *const libc::c_char,
-        0 as *const libc::c_char,
+        std::ptr::null(),
     ];
     static mut enabled_names: [*const libc::c_char; 3] = [
         b"Off\x00" as *const u8 as *const libc::c_char,
         b"On\x00" as *const u8 as *const libc::c_char,
-        0 as *const libc::c_char,
+        std::ptr::null(),
     ];
     let mut y: i32 = 0;
     // zero set all our globals

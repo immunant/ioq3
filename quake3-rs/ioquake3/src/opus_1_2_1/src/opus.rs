@@ -41,7 +41,7 @@ pub unsafe extern "C" fn opus_pcm_soft_clip(
 ) {
     let mut c: i32 = 0;
     let mut i: i32 = 0;
-    let mut x: *mut f32 = 0 as *mut f32;
+    let mut x: *mut f32 = std::ptr::null_mut();
     if C < 1 as i32 || N < 1 as i32 || _x.is_null() || declip_mem.is_null() {
         return;
     }
@@ -498,6 +498,6 @@ pub unsafe extern "C" fn opus_packet_parse(
         frames,
         size,
         payload_offset,
-        0 as *mut opus_int32,
+        std::ptr::null_mut(),
     );
 }

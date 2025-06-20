@@ -305,7 +305,7 @@ UpdateTournamentInfo
 
 pub unsafe extern "C" fn UpdateTournamentInfo() {
     let mut i: i32 = 0;
-    let mut player: *mut gentity_t = 0 as *mut gentity_t;
+    let mut player: *mut gentity_t = std::ptr::null_mut();
     let mut playerClientNum: i32 = 0;
     let mut n: i32 = 0;
     let mut accuracy: i32 = 0;
@@ -314,7 +314,7 @@ pub unsafe extern "C" fn UpdateTournamentInfo() {
     let mut buf: [libc::c_char; 32] = [0; 32];
     let mut msg: [libc::c_char; 1024] = [0; 1024];
     // find the real player
-    player = 0 as *mut gentity_t;
+    player = std::ptr::null_mut();
     i = 0 as i32;
     while i < level.maxclients {
         player = &mut *g_entities.as_mut_ptr().offset(i as isize) as *mut gentity_t;
@@ -402,7 +402,7 @@ unsafe extern "C" fn SpawnModelOnVictoryPad(
     mut ent: *mut gentity_t,
     mut place: i32,
 ) -> *mut gentity_t {
-    let mut body: *mut gentity_t = 0 as *mut gentity_t;
+    let mut body: *mut gentity_t = std::ptr::null_mut();
     let mut vec: vec3_t = [0.; 3];
     let mut f: vec3_t = [0.; 3];
     let mut r: vec3_t = [0.; 3];
@@ -410,7 +410,7 @@ unsafe extern "C" fn SpawnModelOnVictoryPad(
     body = G_Spawn() as *mut gentity_s;
     if body.is_null() {
         G_Printf(b"^1ERROR: out of gentities\n\x00" as *const u8 as *const libc::c_char);
-        return 0 as *mut gentity_t;
+        return std::ptr::null_mut();
     }
     (*body).classname = (*(*ent).client).pers.netname.as_mut_ptr();
     (*body).client = (*ent).client;
@@ -540,8 +540,8 @@ unsafe extern "C" fn PodiumPlacementThink(mut podium: *mut gentity_t) {
     AngleVectors(
         level.intermission_angle.as_mut_ptr() as *const vec_t,
         vec.as_mut_ptr(),
-        0 as *mut vec_t,
-        0 as *mut vec_t,
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
     );
     origin[0 as i32 as usize] = level.intermission_origin[0 as i32 as usize]
         + vec[0 as i32 as usize]
@@ -682,12 +682,12 @@ unsafe extern "C" fn PodiumPlacementThink(mut podium: *mut gentity_t) {
 }
 
 unsafe extern "C" fn SpawnPodium() -> *mut gentity_t {
-    let mut podium: *mut gentity_t = 0 as *mut gentity_t;
+    let mut podium: *mut gentity_t = std::ptr::null_mut();
     let mut vec: vec3_t = [0.; 3];
     let mut origin: vec3_t = [0.; 3];
     podium = G_Spawn() as *mut gentity_s;
     if podium.is_null() {
-        return 0 as *mut gentity_t;
+        return std::ptr::null_mut();
     }
     (*podium).classname = b"podium\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     (*podium).s.eType = ET_GENERAL as i32;
@@ -701,8 +701,8 @@ unsafe extern "C" fn SpawnPodium() -> *mut gentity_t {
     AngleVectors(
         level.intermission_angle.as_mut_ptr() as *const vec_t,
         vec.as_mut_ptr(),
-        0 as *mut vec_t,
-        0 as *mut vec_t,
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
     );
     origin[0 as i32 as usize] = level.intermission_origin[0 as i32 as usize]
         + vec[0 as i32 as usize]
@@ -743,11 +743,11 @@ SpawnModelsOnVictoryPads
 #[no_mangle]
 
 pub unsafe extern "C" fn SpawnModelsOnVictoryPads() {
-    let mut player: *mut gentity_t = 0 as *mut gentity_t;
-    let mut podium: *mut gentity_t = 0 as *mut gentity_t;
-    podium1 = 0 as *mut gentity_t;
-    podium2 = 0 as *mut gentity_t;
-    podium3 = 0 as *mut gentity_t;
+    let mut player: *mut gentity_t = std::ptr::null_mut();
+    let mut podium: *mut gentity_t = std::ptr::null_mut();
+    podium1 = std::ptr::null_mut();
+    podium2 = std::ptr::null_mut();
+    podium3 = std::ptr::null_mut();
     podium = SpawnPodium();
     player = SpawnModelOnVictoryPad(
         podium,

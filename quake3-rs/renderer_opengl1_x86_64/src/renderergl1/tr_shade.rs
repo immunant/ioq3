@@ -818,7 +818,7 @@ t1 = most downstream according to spec
 */
 
 unsafe extern "C" fn DrawMultitextured(mut input: *mut shaderCommands_t, mut stage: i32) {
-    let mut pStage: *mut shaderStage_t = 0 as *mut shaderStage_t;
+    let mut pStage: *mut shaderStage_t = std::ptr::null_mut();
     pStage = *tess.xstages.offset(stage as isize);
     GL_State((*pStage).stateBits as usize);
     // this is an ugly hack to work around a GeForce driver
@@ -878,8 +878,8 @@ unsafe extern "C" fn ProjectDlightTexture_scalar() {
     let mut i: i32 = 0;
     let mut l: i32 = 0;
     let mut origin: vec3_t = [0.; 3];
-    let mut texCoords: *mut f32 = 0 as *mut f32;
-    let mut colors: *mut byte = 0 as *mut byte;
+    let mut texCoords: *mut f32 = std::ptr::null_mut();
+    let mut colors: *mut byte = std::ptr::null_mut();
     let mut clipBits: [byte; 1000] = [0; 1000];
     let mut texCoordsArray: [[f32; 2]; 1000] = [[0.; 2]; 1000];
     let mut colorArray: [[byte; 4]; 1000] = [[0; 4]; 1000];
@@ -894,7 +894,7 @@ unsafe extern "C" fn ProjectDlightTexture_scalar() {
     }
     l = 0 as i32;
     while l < backEnd.refdef.num_dlights {
-        let mut dl: *mut dlight_t = 0 as *mut dlight_t;
+        let mut dl: *mut dlight_t = std::ptr::null_mut();
         if !(tess.dlightBits & (1 as i32) << l == 0) {
             texCoords = texCoordsArray[0 as i32 as usize].as_mut_ptr();
             colors = colorArray[0 as i32 as usize].as_mut_ptr();
@@ -1065,7 +1065,7 @@ Blends a fog texture on top of everything else
 */
 
 unsafe extern "C" fn RB_FogPass() {
-    let mut fog: *mut fog_t = 0 as *mut fog_t;
+    let mut fog: *mut fog_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     qglEnableClientState.expect("non-null function pointer")(0x8076 as i32 as GLenum);
     qglColorPointer.expect("non-null function pointer")(
@@ -1196,7 +1196,7 @@ unsafe extern "C" fn ComputeColors(mut pStage: *mut shaderStage_t) {
             }
         }
         10 => {
-            let mut fog: *mut fog_t = 0 as *mut fog_t;
+            let mut fog: *mut fog_t = std::ptr::null_mut();
             fog = (*tr.world).fogs.offset(tess.fogNum as isize);
             i = 0 as i32;
             while i < tess.numVertexes {
@@ -1591,8 +1591,8 @@ unsafe extern "C" fn RB_IterateStagesGeneric(mut input: *mut shaderCommands_t) {
 #[no_mangle]
 
 pub unsafe extern "C" fn RB_StageIteratorGeneric() {
-    let mut input: *mut shaderCommands_t = 0 as *mut shaderCommands_t;
-    let mut shader: *mut shader_t = 0 as *mut shader_t;
+    let mut input: *mut shaderCommands_t = std::ptr::null_mut();
+    let mut shader: *mut shader_t = std::ptr::null_mut();
     input = &mut tess;
     shader = (*input).shader;
     RB_DeformTessGeometry();
@@ -1710,8 +1710,8 @@ pub unsafe extern "C" fn RB_StageIteratorGeneric() {
 #[no_mangle]
 
 pub unsafe extern "C" fn RB_StageIteratorVertexLitTexture() {
-    let mut input: *mut shaderCommands_t = 0 as *mut shaderCommands_t;
-    let mut shader: *mut shader_t = 0 as *mut shader_t;
+    let mut input: *mut shaderCommands_t = std::ptr::null_mut();
+    let mut shader: *mut shader_t = std::ptr::null_mut();
     input = &mut tess;
     shader = (*input).shader;
     //
@@ -1800,8 +1800,8 @@ pub unsafe extern "C" fn RB_StageIteratorVertexLitTexture() {
 #[no_mangle]
 
 pub unsafe extern "C" fn RB_StageIteratorLightmappedMultitexture() {
-    let mut input: *mut shaderCommands_t = 0 as *mut shaderCommands_t;
-    let mut shader: *mut shader_t = 0 as *mut shader_t;
+    let mut input: *mut shaderCommands_t = std::ptr::null_mut();
+    let mut shader: *mut shader_t = std::ptr::null_mut();
     input = &mut tess;
     shader = (*input).shader;
     //
@@ -2252,7 +2252,7 @@ TESSELATOR/SHADER DECLARATIONS
 #[no_mangle]
 
 pub unsafe extern "C" fn RB_EndSurface() {
-    let mut input: *mut shaderCommands_t = 0 as *mut shaderCommands_t;
+    let mut input: *mut shaderCommands_t = std::ptr::null_mut();
     input = &mut tess;
     if (*input).numIndexes == 0 as i32 {
         return;

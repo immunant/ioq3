@@ -71,7 +71,7 @@ static mut s_preferences: preferences_t = preferences_t {
     banner: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -93,7 +93,7 @@ static mut s_preferences: preferences_t = preferences_t {
     framel: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -119,7 +119,7 @@ static mut s_preferences: preferences_t = preferences_t {
     framer: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -145,7 +145,7 @@ static mut s_preferences: preferences_t = preferences_t {
     crosshair: menulist_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -173,7 +173,7 @@ static mut s_preferences: preferences_t = preferences_t {
     simpleitems: menuradiobutton_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -193,7 +193,7 @@ static mut s_preferences: preferences_t = preferences_t {
     brass: menuradiobutton_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -213,7 +213,7 @@ static mut s_preferences: preferences_t = preferences_t {
     wallmarks: menuradiobutton_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -233,7 +233,7 @@ static mut s_preferences: preferences_t = preferences_t {
     dynamiclights: menuradiobutton_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -253,7 +253,7 @@ static mut s_preferences: preferences_t = preferences_t {
     identifytarget: menuradiobutton_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -273,7 +273,7 @@ static mut s_preferences: preferences_t = preferences_t {
     highqualitysky: menuradiobutton_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -293,7 +293,7 @@ static mut s_preferences: preferences_t = preferences_t {
     synceveryframe: menuradiobutton_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -313,7 +313,7 @@ static mut s_preferences: preferences_t = preferences_t {
     forcemodel: menuradiobutton_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -333,7 +333,7 @@ static mut s_preferences: preferences_t = preferences_t {
     drawteamoverlay: menulist_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -361,7 +361,7 @@ static mut s_preferences: preferences_t = preferences_t {
     allowdownload: menuradiobutton_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -381,7 +381,7 @@ static mut s_preferences: preferences_t = preferences_t {
     back: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -412,7 +412,7 @@ static mut teamoverlay_names: [*const libc::c_char; 5] = [
     b"upper right\x00" as *const u8 as *const libc::c_char,
     b"lower right\x00" as *const u8 as *const libc::c_char,
     b"lower left\x00" as *const u8 as *const libc::c_char,
-    0 as *const libc::c_char,
+    std::ptr::null(),
 ];
 
 unsafe extern "C" fn Preferences_SetMenuItems() {
@@ -545,8 +545,8 @@ Crosshair_Draw
 */
 
 unsafe extern "C" fn Crosshair_Draw(mut self_0: *mut libc::c_void) {
-    let mut s: *mut menulist_s = 0 as *mut menulist_s;
-    let mut color: *mut f32 = 0 as *mut f32;
+    let mut s: *mut menulist_s = std::ptr::null_mut();
+    let mut color: *mut f32 = std::ptr::null_mut();
     let mut x: i32 = 0;
     let mut y: i32 = 0;
     let mut style: i32 = 0;

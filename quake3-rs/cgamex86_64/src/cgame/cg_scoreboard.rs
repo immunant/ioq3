@@ -190,7 +190,7 @@ unsafe extern "C" fn CG_DrawClientScore(
 ) {
     let mut string: [libc::c_char; 1024] = [0; 1024];
     let mut headAngles: vec3_t = [0.; 3];
-    let mut ci: *mut clientInfo_t = 0 as *mut clientInfo_t;
+    let mut ci: *mut clientInfo_t = std::ptr::null_mut();
     let mut iconx: i32 = 0;
     let mut headx: i32 = 0;
     if (*score).client < 0 as i32 || (*score).client >= cgs.maxclients {
@@ -445,10 +445,10 @@ unsafe extern "C" fn CG_TeamScoreboard(
     mut lineHeight: i32,
 ) -> i32 {
     let mut i: i32 = 0;
-    let mut score: *mut score_t = 0 as *mut score_t;
+    let mut score: *mut score_t = std::ptr::null_mut();
     let mut color: [f32; 4] = [0.; 4];
     let mut count: i32 = 0;
-    let mut ci: *mut clientInfo_t = 0 as *mut clientInfo_t;
+    let mut ci: *mut clientInfo_t = std::ptr::null_mut();
     color[2 as i32 as usize] = 1.0f64 as f32;
     color[1 as i32 as usize] = color[2 as i32 as usize];
     color[0 as i32 as usize] = color[1 as i32 as usize];
@@ -490,8 +490,8 @@ pub unsafe extern "C" fn CG_DrawOldScoreboard() -> qboolean {
     let mut n1: i32 = 0;
     let mut n2: i32 = 0;
     let mut fade: f32 = 0.;
-    let mut fadeColor: *mut f32 = 0 as *mut f32;
-    let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut fadeColor: *mut f32 = std::ptr::null_mut();
+    let mut s: *mut libc::c_char = std::ptr::null_mut();
     let mut maxClients: i32 = 0;
     let mut lineHeight: i32 = 0;
     let mut topBorderSize: i32 = 0;
@@ -990,12 +990,12 @@ Draw the oversize scoreboard for tournements
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_DrawTourneyScoreboard() {
-    let mut s: *const libc::c_char = 0 as *const libc::c_char;
+    let mut s: *const libc::c_char = std::ptr::null();
     let mut color: vec4_t = [0.; 4];
     let mut min: i32 = 0;
     let mut tens: i32 = 0;
     let mut ones: i32 = 0;
-    let mut ci: *mut clientInfo_t = 0 as *mut clientInfo_t;
+    let mut ci: *mut clientInfo_t = std::ptr::null_mut();
     let mut y: i32 = 0;
     let mut i: i32 = 0;
     // request more scores regularly

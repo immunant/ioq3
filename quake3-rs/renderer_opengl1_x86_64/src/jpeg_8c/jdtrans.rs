@@ -272,7 +272,7 @@ pub unsafe extern "C" fn jpeg_read_coefficients(
             )
             .expect("non-null function pointer")(cinfo);
             if retcode == 0 as i32 {
-                return 0 as *mut jvirt_barray_ptr;
+                return std::ptr::null_mut();
             }
             if retcode == 2 as i32 {
                 break;
@@ -307,7 +307,7 @@ pub unsafe extern "C" fn jpeg_read_coefficients(
             .expect("non-null function pointer"),
     )
     .expect("non-null function pointer")(cinfo as j_common_ptr);
-    return 0 as *mut jvirt_barray_ptr;
+    return std::ptr::null_mut();
     /* keep compiler happy */
 }
 /*

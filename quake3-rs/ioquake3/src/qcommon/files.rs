@@ -7,7 +7,7 @@ pub mod stdlib_h {
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return libc::strtol(
             __nptr,
-            0 as *mut libc::c_void as *mut *mut libc::c_char,
+            std::ptr::null_mut() as *mut *mut libc::c_char,
             10 as i32,
         ) as i32;
     }
@@ -360,7 +360,7 @@ FS_Initialized
 #[no_mangle]
 
 pub unsafe extern "C" fn FS_Initialized() -> qboolean {
-    return (fs_searchpaths != 0 as *mut libc::c_void as *mut searchpath_t) as i32 as qboolean;
+    return (fs_searchpaths != std::ptr::null_mut() as *mut searchpath_t) as i32 as qboolean;
 }
 /*
 =================
@@ -487,9 +487,9 @@ unsafe extern "C" fn FS_FileForHandle(mut f: fileHandle_t) -> *mut FILE {
 #[no_mangle]
 
 pub unsafe extern "C" fn FS_ForceFlush(mut f: fileHandle_t) {
-    let mut file: *mut FILE = 0 as *mut FILE;
+    let mut file: *mut FILE = std::ptr::null_mut();
     file = FS_FileForHandle(f);
-    setvbuf(file, 0 as *mut libc::c_char, 2 as i32, 0 as i32 as size_t);
+    setvbuf(file, std::ptr::null_mut(), 2 as i32, 0 as i32 as size_t);
 }
 /*
 ================
@@ -519,7 +519,7 @@ size of the file.
 #[no_mangle]
 
 pub unsafe extern "C" fn FS_filelength(mut f: fileHandle_t) -> isize {
-    let mut h: *mut FILE = 0 as *mut FILE;
+    let mut h: *mut FILE = std::ptr::null_mut();
     h = FS_FileForHandle(f);
     if h.is_null() {
         return -(1 as i32) as isize;
@@ -536,7 +536,7 @@ Fix things up differently for win/unix/mac
 */
 
 unsafe extern "C" fn FS_ReplaceSeparators(mut path: *mut libc::c_char) {
-    let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut s: *mut libc::c_char = std::ptr::null_mut();
     let mut lastCharWasSep: qboolean = qfalse;
     s = path;
     while *s != 0 {
@@ -605,7 +605,7 @@ Creates any directories needed to store the given filename
 #[no_mangle]
 
 pub unsafe extern "C" fn FS_CreatePath(mut OSPath: *mut libc::c_char) -> qboolean {
-    let mut ofs: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut ofs: *mut libc::c_char = std::ptr::null_mut();
     let mut path: [libc::c_char; 4096] = [0; 4096];
     // make absolutely sure that it can't back up the path
     // FIXME: is c: allowed???
@@ -721,7 +721,7 @@ Tests if path and file exists
 #[no_mangle]
 
 pub unsafe extern "C" fn FS_FileInPathExists(mut testpath: *const libc::c_char) -> qboolean {
-    let mut filep: *mut FILE = 0 as *mut FILE;
+    let mut filep: *mut FILE = std::ptr::null_mut();
     filep = Sys_FOpen(testpath, b"rb\x00" as *const u8 as *const libc::c_char) as *mut _IO_FILE;
     if !filep.is_null() {
         fclose(filep);
@@ -758,7 +758,7 @@ Tests if the file exists
 #[no_mangle]
 
 pub unsafe extern "C" fn FS_SV_FileExists(mut file: *const libc::c_char) -> qboolean {
-    let mut testpath: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut testpath: *mut libc::c_char = std::ptr::null_mut();
     testpath = FS_BuildOSPath(
         (*fs_homepath).string,
         file,
@@ -777,7 +777,7 @@ FS_SV_FOpenFileWrite
 #[no_mangle]
 
 pub unsafe extern "C" fn FS_SV_FOpenFileWrite(mut filename: *const libc::c_char) -> fileHandle_t {
-    let mut ospath: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut ospath: *mut libc::c_char = std::ptr::null_mut();
     let mut f: fileHandle_t = 0;
     if fs_searchpaths.is_null() {
         Com_Error(
@@ -839,7 +839,7 @@ pub unsafe extern "C" fn FS_SV_FOpenFileRead(
     mut filename: *const libc::c_char,
     mut fp: *mut fileHandle_t,
 ) -> isize {
-    let mut ospath: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut ospath: *mut libc::c_char = std::ptr::null_mut();
     let mut f: fileHandle_t = 0 as i32;
     if fs_searchpaths.is_null() {
         Com_Error(
@@ -966,8 +966,8 @@ pub unsafe extern "C" fn FS_SV_Rename(
     mut to: *const libc::c_char,
     mut safe: qboolean,
 ) {
-    let mut from_ospath: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut to_ospath: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut from_ospath: *mut libc::c_char = std::ptr::null_mut();
+    let mut to_ospath: *mut libc::c_char = std::ptr::null_mut();
     if fs_searchpaths.is_null() {
         Com_Error(
             ERR_FATAL as i32,
@@ -1016,8 +1016,8 @@ FS_Rename
 #[no_mangle]
 
 pub unsafe extern "C" fn FS_Rename(mut from: *const libc::c_char, mut to: *const libc::c_char) {
-    let mut from_ospath: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut to_ospath: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut from_ospath: *mut libc::c_char = std::ptr::null_mut();
+    let mut to_ospath: *mut libc::c_char = std::ptr::null_mut();
     if fs_searchpaths.is_null() {
         Com_Error(
             ERR_FATAL as i32,
@@ -1091,7 +1091,7 @@ FS_FOpenFileWrite
 #[no_mangle]
 
 pub unsafe extern "C" fn FS_FOpenFileWrite(mut filename: *const libc::c_char) -> fileHandle_t {
-    let mut ospath: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut ospath: *mut libc::c_char = std::ptr::null_mut();
     let mut f: fileHandle_t = 0;
     if fs_searchpaths.is_null() {
         Com_Error(
@@ -1141,7 +1141,7 @@ FS_FOpenFileAppend
 #[no_mangle]
 
 pub unsafe extern "C" fn FS_FOpenFileAppend(mut filename: *const libc::c_char) -> fileHandle_t {
-    let mut ospath: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut ospath: *mut libc::c_char = std::ptr::null_mut();
     let mut f: fileHandle_t = 0;
     if fs_searchpaths.is_null() {
         Com_Error(
@@ -1190,8 +1190,8 @@ FS_FCreateOpenPipeFile
 #[no_mangle]
 
 pub unsafe extern "C" fn FS_FCreateOpenPipeFile(mut filename: *const libc::c_char) -> fileHandle_t {
-    let mut ospath: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut fifo: *mut FILE = 0 as *mut FILE;
+    let mut ospath: *mut libc::c_char = std::ptr::null_mut();
+    let mut fifo: *mut FILE = std::ptr::null_mut();
     let mut f: fileHandle_t = 0;
     if fs_searchpaths.is_null() {
         Com_Error(
@@ -1311,7 +1311,7 @@ pub unsafe extern "C" fn FS_IsDemoExt(
     mut filename: *const libc::c_char,
     mut _namelen: i32,
 ) -> qboolean {
-    let mut ext_test: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut ext_test: *mut libc::c_char = std::ptr::null_mut();
     let mut index: i32 = 0;
     let mut protocol: i32 = 0;
     ext_test = libc::strrchr(filename, '.' as i32);
@@ -1365,11 +1365,11 @@ pub unsafe extern "C" fn FS_FOpenFileReadDir(
     mut unpure: qboolean,
 ) -> isize {
     let mut hash: isize = 0;
-    let mut pak: *mut pack_t = 0 as *mut pack_t;
-    let mut pakFile: *mut fileInPack_t = 0 as *mut fileInPack_t;
-    let mut dir: *mut directory_t = 0 as *mut directory_t;
-    let mut netpath: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut filep: *mut FILE = 0 as *mut FILE;
+    let mut pak: *mut pack_t = std::ptr::null_mut();
+    let mut pakFile: *mut fileInPack_t = std::ptr::null_mut();
+    let mut dir: *mut directory_t = std::ptr::null_mut();
+    let mut netpath: *mut libc::c_char = std::ptr::null_mut();
+    let mut filep: *mut FILE = std::ptr::null_mut();
     let mut len: i32 = 0;
     if filename.is_null() {
         Com_Error(
@@ -1682,7 +1682,7 @@ pub unsafe extern "C" fn FS_FOpenFileRead(
     mut file: *mut fileHandle_t,
     mut uniqueFILE: qboolean,
 ) -> isize {
-    let mut search: *mut searchpath_t = 0 as *mut searchpath_t;
+    let mut search: *mut searchpath_t = std::ptr::null_mut();
     let mut len: isize = 0;
     let mut isLocalConfig: qboolean = qfalse;
     if fs_searchpaths.is_null() {
@@ -1748,13 +1748,13 @@ pub unsafe extern "C" fn FS_FindVM(
     mut name: *const libc::c_char,
     mut enableDll: i32,
 ) -> i32 {
-    let mut search: *mut searchpath_t = 0 as *mut searchpath_t;
-    let mut lastSearch: *mut searchpath_t = 0 as *mut searchpath_t;
-    let mut dir: *mut directory_t = 0 as *mut directory_t;
-    let mut pack: *mut pack_t = 0 as *mut pack_t;
+    let mut search: *mut searchpath_t = std::ptr::null_mut();
+    let mut lastSearch: *mut searchpath_t = std::ptr::null_mut();
+    let mut dir: *mut directory_t = std::ptr::null_mut();
+    let mut pack: *mut pack_t = std::ptr::null_mut();
     let mut dllName: [libc::c_char; 4096] = [0; 4096];
     let mut qvmName: [libc::c_char; 4096] = [0; 4096];
-    let mut netpath: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut netpath: *mut libc::c_char = std::ptr::null_mut();
     if fs_searchpaths.is_null() {
         Com_Error(
             ERR_FATAL as i32,
@@ -1799,7 +1799,7 @@ pub unsafe extern "C" fn FS_FindVM(
             if FS_FOpenFileReadDir(
                 qvmName.as_mut_ptr(),
                 search,
-                0 as *mut fileHandle_t,
+                std::ptr::null_mut(),
                 qfalse,
                 qfalse,
             ) > 0 as i32 as isize
@@ -1825,7 +1825,7 @@ pub unsafe extern "C" fn FS_FindVM(
             if FS_FOpenFileReadDir(
                 qvmName.as_mut_ptr(),
                 search,
-                0 as *mut fileHandle_t,
+                std::ptr::null_mut(),
                 qfalse,
                 qfalse,
             ) > 0 as i32 as isize
@@ -1855,7 +1855,7 @@ pub unsafe extern "C" fn FS_Read(
     let mut block: i32 = 0;
     let mut remaining: i32 = 0;
     let mut read: i32 = 0;
-    let mut buf: *mut byte = 0 as *mut byte;
+    let mut buf: *mut byte = std::ptr::null_mut();
     let mut tries: i32 = 0;
     if fs_searchpaths.is_null() {
         Com_Error(
@@ -1920,9 +1920,9 @@ pub unsafe extern "C" fn FS_Write(
     let mut block: i32 = 0;
     let mut remaining: i32 = 0;
     let mut written: i32 = 0;
-    let mut buf: *mut byte = 0 as *mut byte;
+    let mut buf: *mut byte = std::ptr::null_mut();
     let mut tries: i32 = 0;
-    let mut f: *mut FILE = 0 as *mut FILE;
+    let mut f: *mut FILE = std::ptr::null_mut();
     if fs_searchpaths.is_null() {
         Com_Error(
             ERR_FATAL as i32,
@@ -2051,7 +2051,7 @@ pub unsafe extern "C" fn FS_Seek(mut f: fileHandle_t, mut offset: isize, mut ori
         FS_Read(buffer.as_mut_ptr() as *mut libc::c_void, remainder, f);
         return offset as i32;
     } else {
-        let mut file: *mut FILE = 0 as *mut FILE;
+        let mut file: *mut FILE = std::ptr::null_mut();
         file = FS_FileForHandle(f);
         match origin {
             0 => _origin = 1 as i32,
@@ -2080,9 +2080,9 @@ pub unsafe extern "C" fn FS_FileIsInPAK(
     mut filename: *const libc::c_char,
     mut pChecksum: *mut i32,
 ) -> i32 {
-    let mut search: *mut searchpath_t = 0 as *mut searchpath_t;
-    let mut pak: *mut pack_t = 0 as *mut pack_t;
-    let mut pakFile: *mut fileInPack_t = 0 as *mut fileInPack_t;
+    let mut search: *mut searchpath_t = std::ptr::null_mut();
+    let mut pak: *mut pack_t = std::ptr::null_mut();
+    let mut pakFile: *mut fileInPack_t = std::ptr::null_mut();
     let mut hash: isize = 0 as i32 as isize;
     if fs_searchpaths.is_null() {
         Com_Error(
@@ -2166,8 +2166,8 @@ pub unsafe extern "C" fn FS_ReadFileDir(
     mut buffer: *mut *mut libc::c_void,
 ) -> isize {
     let mut h: fileHandle_t = 0; // quiet compiler warning
-    let mut search: *mut searchpath_t = 0 as *mut searchpath_t;
-    let mut buf: *mut byte = 0 as *mut byte;
+    let mut search: *mut searchpath_t = std::ptr::null_mut();
+    let mut buf: *mut byte = std::ptr::null_mut();
     let mut isConfig: qboolean = qfalse;
     let mut len: isize = 0;
     if fs_searchpaths.is_null() {
@@ -2182,7 +2182,7 @@ pub unsafe extern "C" fn FS_ReadFileDir(
             b"FS_ReadFile with empty name\x00" as *const u8 as *const libc::c_char,
         );
     }
-    buf = 0 as *mut byte;
+    buf = std::ptr::null_mut();
     // if this is a .cfg file and we are playing back a journal, read
     // it from the journal file
     if !libc::strstr(qpath, b".cfg\x00" as *const u8 as *const libc::c_char).is_null() {
@@ -2200,7 +2200,7 @@ pub unsafe extern "C" fn FS_ReadFileDir(
             );
             if r as usize != ::std::mem::size_of::<isize>() as usize {
                 if !buffer.is_null() {
-                    *buffer = 0 as *mut libc::c_void
+                    *buffer = std::ptr::null_mut()
                 }
                 return -(1 as i32) as isize;
             }
@@ -2210,7 +2210,7 @@ pub unsafe extern "C" fn FS_ReadFileDir(
                     return 1 as i32 as isize;
                     // hack for old journal files
                 }
-                *buffer = 0 as *mut libc::c_void;
+                *buffer = std::ptr::null_mut();
                 return -(1 as i32) as isize;
             }
             if buffer.is_null() {
@@ -2244,7 +2244,7 @@ pub unsafe extern "C" fn FS_ReadFileDir(
     }
     if h == 0 as i32 {
         if !buffer.is_null() {
-            *buffer = 0 as *mut libc::c_void
+            *buffer = std::ptr::null_mut()
         }
         // if we are journalling and it is a config file, write a zero to the journal file
         if isConfig as u32 != 0 && !com_journal.is_null() && (*com_journal).integer == 1 as i32 {
@@ -2316,7 +2316,7 @@ pub unsafe extern "C" fn FS_ReadFile(
     mut qpath: *const libc::c_char,
     mut buffer: *mut *mut libc::c_void,
 ) -> isize {
-    return FS_ReadFileDir(qpath, 0 as *mut libc::c_void, qfalse, buffer);
+    return FS_ReadFileDir(qpath, std::ptr::null_mut(), qfalse, buffer);
 }
 /*
 =============
@@ -2403,9 +2403,9 @@ unsafe extern "C" fn FS_LoadZipFile(
     mut zipfile: *const libc::c_char,
     mut basename: *const libc::c_char,
 ) -> *mut pack_t {
-    let mut buildBuffer: *mut fileInPack_t = 0 as *mut fileInPack_t;
-    let mut pack: *mut pack_t = 0 as *mut pack_t;
-    let mut uf: unzFile = 0 as *mut libc::c_void;
+    let mut buildBuffer: *mut fileInPack_t = std::ptr::null_mut();
+    let mut pack: *mut pack_t = std::ptr::null_mut();
+    let mut uf: unzFile = std::ptr::null_mut();
     let mut err: i32 = 0;
     let mut gi: unz_global_info = unz_global_info {
         number_entry: 0,
@@ -2440,13 +2440,13 @@ unsafe extern "C" fn FS_LoadZipFile(
     let mut len: i32 = 0;
     let mut hash: isize = 0;
     let mut fs_numHeaderLongs: i32 = 0;
-    let mut fs_headerLongs: *mut i32 = 0 as *mut i32;
-    let mut namePtr: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut fs_headerLongs: *mut i32 = std::ptr::null_mut();
+    let mut namePtr: *mut libc::c_char = std::ptr::null_mut();
     fs_numHeaderLongs = 0 as i32;
     uf = unzOpen(zipfile);
     err = unzGetGlobalInfo(uf, &mut gi as *mut _ as *mut unz_global_info_s);
     if err != 0 as i32 {
-        return 0 as *mut pack_t;
+        return std::ptr::null_mut();
     }
     len = 0 as i32;
     unzGoToFirstFile(uf);
@@ -2457,9 +2457,9 @@ unsafe extern "C" fn FS_LoadZipFile(
             &mut file_info as *mut _ as *mut unz_file_info_s,
             filename_inzip.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 256]>() as usize,
-            0 as *mut libc::c_void,
+            std::ptr::null_mut(),
             0 as i32 as uLong,
-            0 as *mut libc::c_char,
+            std::ptr::null_mut(),
             0 as i32 as uLong,
         );
         if err != 0 as i32 {
@@ -2507,7 +2507,7 @@ unsafe extern "C" fn FS_LoadZipFile(
     i = 0 as i32;
     while i < (*pack).hashSize {
         let ref mut fresh3 = *(*pack).hashTable.offset(i as isize);
-        *fresh3 = 0 as *mut fileInPack_t;
+        *fresh3 = std::ptr::null_mut();
         i += 1
     }
     Q_strncpyz(
@@ -2544,9 +2544,9 @@ unsafe extern "C" fn FS_LoadZipFile(
             &mut file_info as *mut _ as *mut unz_file_info_s,
             filename_inzip.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 256]>() as usize,
-            0 as *mut libc::c_void,
+            std::ptr::null_mut(),
             0 as i32 as uLong,
-            0 as *mut libc::c_char,
+            std::ptr::null_mut(),
             0 as i32 as uLong,
         );
         if err != 0 as i32 {
@@ -2617,7 +2617,7 @@ Compares whether the given pak file matches a referenced checksum
 #[no_mangle]
 
 pub unsafe extern "C" fn FS_CompareZipChecksum(mut zipfile: *const libc::c_char) -> qboolean {
-    let mut thepak: *mut pack_t = 0 as *mut pack_t;
+    let mut thepak: *mut pack_t = std::ptr::null_mut();
     let mut index: i32 = 0;
     let mut checksum: i32 = 0;
     thepak = FS_LoadZipFile(zipfile, b"\x00" as *const u8 as *const libc::c_char);
@@ -2708,17 +2708,17 @@ pub unsafe extern "C" fn FS_ListFilteredFiles(
     mut allowNonPureFilesOnDisk: qboolean,
 ) -> *mut *mut libc::c_char {
     let mut nfiles: i32 = 0;
-    let mut listCopy: *mut *mut libc::c_char = 0 as *mut *mut libc::c_char;
-    let mut list: [*mut libc::c_char; 4096] = [0 as *mut libc::c_char; 4096];
-    let mut search: *mut searchpath_t = 0 as *mut searchpath_t;
+    let mut listCopy: *mut *mut libc::c_char = std::ptr::null_mut();
+    let mut list: [*mut libc::c_char; 4096] = [std::ptr::null_mut(); 4096];
+    let mut search: *mut searchpath_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut pathLength: i32 = 0;
     let mut extensionLength: i32 = 0;
     let mut length: i32 = 0;
     let mut pathDepth: i32 = 0;
     let mut temp: i32 = 0;
-    let mut pak: *mut pack_t = 0 as *mut pack_t;
-    let mut buildBuffer: *mut fileInPack_t = 0 as *mut fileInPack_t;
+    let mut pak: *mut pack_t = std::ptr::null_mut();
+    let mut buildBuffer: *mut fileInPack_t = std::ptr::null_mut();
     let mut zpath: [libc::c_char; 256] = [0; 256];
     if fs_searchpaths.is_null() {
         Com_Error(
@@ -2728,7 +2728,7 @@ pub unsafe extern "C" fn FS_ListFilteredFiles(
     }
     if path.is_null() {
         *numfiles = 0 as i32;
-        return 0 as *mut *mut libc::c_char;
+        return std::ptr::null_mut();
     }
     if extension.is_null() {
         extension = b"\x00" as *const u8 as *const libc::c_char
@@ -2757,7 +2757,7 @@ pub unsafe extern "C" fn FS_ListFilteredFiles(
                 buildBuffer = (*pak).buildBuffer;
                 i = 0 as i32;
                 while i < (*pak).numfiles {
-                    let mut name: *mut libc::c_char = 0 as *mut libc::c_char;
+                    let mut name: *mut libc::c_char = std::ptr::null_mut();
                     let mut zpathLen: i32 = 0;
                     let mut depth: i32 = 0;
                     // check for directory match
@@ -2804,10 +2804,10 @@ pub unsafe extern "C" fn FS_ListFilteredFiles(
             }
         } else if !(*search).dir.is_null() {
             // scan for files in the filesystem
-            let mut netpath: *mut libc::c_char = 0 as *mut libc::c_char;
+            let mut netpath: *mut libc::c_char = std::ptr::null_mut();
             let mut numSysFiles: i32 = 0;
-            let mut sysFiles: *mut *mut libc::c_char = 0 as *mut *mut libc::c_char;
-            let mut name_0: *mut libc::c_char = 0 as *mut libc::c_char;
+            let mut sysFiles: *mut *mut libc::c_char = std::ptr::null_mut();
+            let mut name_0: *mut libc::c_char = std::ptr::null_mut();
             // don't scan directories for files if we are pure or restricted
             if !(fs_numServerPaks != 0 && allowNonPureFilesOnDisk as u64 == 0) {
                 netpath = FS_BuildOSPath(
@@ -2831,7 +2831,7 @@ pub unsafe extern "C" fn FS_ListFilteredFiles(
     // return a copy of the list
     *numfiles = nfiles;
     if nfiles == 0 {
-        return 0 as *mut *mut libc::c_char;
+        return std::ptr::null_mut();
     }
     listCopy = Z_Malloc(
         ((nfiles + 1 as i32) as usize)
@@ -2844,7 +2844,7 @@ pub unsafe extern "C" fn FS_ListFilteredFiles(
         i += 1
     }
     let ref mut fresh10 = *listCopy.offset(i as isize);
-    *fresh10 = 0 as *mut libc::c_char;
+    *fresh10 = std::ptr::null_mut();
     return listCopy;
 }
 /*
@@ -2859,7 +2859,7 @@ pub unsafe extern "C" fn FS_ListFiles(
     mut extension: *const libc::c_char,
     mut numfiles: *mut i32,
 ) -> *mut *mut libc::c_char {
-    return FS_ListFilteredFiles(path, extension, 0 as *mut libc::c_char, numfiles, qfalse);
+    return FS_ListFilteredFiles(path, extension, std::ptr::null_mut(), numfiles, qfalse);
 }
 /*
 =================
@@ -2903,7 +2903,7 @@ pub unsafe extern "C" fn FS_GetFileList(
     let mut i: i32 = 0;
     let mut nTotal: i32 = 0;
     let mut nLen: i32 = 0;
-    let mut pFiles: *mut *mut libc::c_char = 0 as *mut *mut libc::c_char;
+    let mut pFiles: *mut *mut libc::c_char = std::ptr::null_mut();
     *listbuf = 0 as i32 as libc::c_char;
     nFiles = 0 as i32;
     nTotal = 0 as i32;
@@ -2956,9 +2956,9 @@ unsafe extern "C" fn Sys_ConcatenateFileLists(
     mut list1: *mut *mut libc::c_char,
 ) -> *mut *mut libc::c_char {
     let mut totalLength: i32 = 0 as i32;
-    let mut cat: *mut *mut libc::c_char = 0 as *mut *mut libc::c_char;
-    let mut dst: *mut *mut libc::c_char = 0 as *mut *mut libc::c_char;
-    let mut src: *mut *mut libc::c_char = 0 as *mut *mut libc::c_char;
+    let mut cat: *mut *mut libc::c_char = std::ptr::null_mut();
+    let mut dst: *mut *mut libc::c_char = std::ptr::null_mut();
+    let mut src: *mut *mut libc::c_char = std::ptr::null_mut();
     totalLength = (totalLength as u32).wrapping_add(Sys_CountFileList(list0)) as i32;
     totalLength = (totalLength as u32).wrapping_add(Sys_CountFileList(list1)) as i32;
     /* Create new list. */
@@ -2985,7 +2985,7 @@ unsafe extern "C" fn Sys_ConcatenateFileLists(
         }
     }
     // Terminate the list
-    *dst = 0 as *mut libc::c_char;
+    *dst = std::ptr::null_mut();
     // Free our old lists.
     // NOTE: not freeing their content, it's been merged in dst and still being used
     if !list0.is_null() {
@@ -3011,7 +3011,7 @@ pub unsafe extern "C" fn FS_GetModDescription(
     let mut descHandle: fileHandle_t = 0;
     let mut descPath: [libc::c_char; 64] = [0; 64];
     let mut nDescLen: i32 = 0;
-    let mut file: *mut FILE = 0 as *mut FILE;
+    let mut file: *mut FILE = std::ptr::null_mut();
     Com_sprintf(
         descPath.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 64]>() as usize as i32,
@@ -3065,14 +3065,14 @@ pub unsafe extern "C" fn FS_GetModList(mut listbuf: *mut libc::c_char, mut bufsi
     let mut nPakDirs: i32 = 0;
     let mut nPotential: i32 = 0;
     let mut nDescLen: i32 = 0;
-    let mut pFiles: *mut *mut libc::c_char = 0 as *mut *mut libc::c_char;
-    let mut pPaks: *mut *mut libc::c_char = 0 as *mut *mut libc::c_char;
-    let mut pDirs: *mut *mut libc::c_char = 0 as *mut *mut libc::c_char;
-    let mut name: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut path: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut pFiles: *mut *mut libc::c_char = std::ptr::null_mut();
+    let mut pPaks: *mut *mut libc::c_char = std::ptr::null_mut();
+    let mut pDirs: *mut *mut libc::c_char = std::ptr::null_mut();
+    let mut name: *mut libc::c_char = std::ptr::null_mut();
+    let mut path: *mut libc::c_char = std::ptr::null_mut();
     let mut description: [libc::c_char; 4096] = [0; 4096];
     let mut dummy: i32 = 0;
-    let mut pFiles0: *mut *mut libc::c_char = 0 as *mut *mut libc::c_char;
+    let mut pFiles0: *mut *mut libc::c_char = std::ptr::null_mut();
     let mut bDrop: qboolean = qfalse;
     // paths to search for mods
     let paths: [*const libc::c_char; 4] = [
@@ -3092,8 +3092,8 @@ pub unsafe extern "C" fn FS_GetModList(mut listbuf: *mut libc::c_char, mut bufsi
     {
         pFiles0 = Sys_ListFiles(
             paths[i as usize],
-            0 as *const libc::c_char,
-            0 as *mut libc::c_char,
+            std::ptr::null(),
+            std::ptr::null_mut(),
             &mut dummy,
             qtrue,
         );
@@ -3144,14 +3144,14 @@ pub unsafe extern "C" fn FS_GetModList(mut listbuf: *mut libc::c_char, mut bufsi
                 pPaks = Sys_ListFiles(
                     path,
                     b".pk3\x00" as *const u8 as *const libc::c_char,
-                    0 as *mut libc::c_char,
+                    std::ptr::null_mut(),
                     &mut nPaks,
                     qfalse,
                 );
                 pDirs = Sys_ListFiles(
                     path,
                     b"/\x00" as *const u8 as *const libc::c_char,
-                    0 as *mut libc::c_char,
+                    std::ptr::null_mut(),
                     &mut nDirs,
                     qfalse,
                 );
@@ -3213,9 +3213,9 @@ FS_Dir_f
 #[no_mangle]
 
 pub unsafe extern "C" fn FS_Dir_f() {
-    let mut path: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut extension: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut dirnames: *mut *mut libc::c_char = 0 as *mut *mut libc::c_char;
+    let mut path: *mut libc::c_char = std::ptr::null_mut();
+    let mut extension: *mut libc::c_char = std::ptr::null_mut();
+    let mut dirnames: *mut *mut libc::c_char = std::ptr::null_mut();
     let mut ndirs: i32 = 0;
     let mut i: i32 = 0;
     if Cmd_Argc() < 2 as i32 || Cmd_Argc() > 3 as i32 {
@@ -3321,13 +3321,13 @@ pub unsafe extern "C" fn FS_SortFileList(mut filelist: *mut *mut libc::c_char, m
     let mut j: i32 = 0;
     let mut k: i32 = 0;
     let mut numsortedfiles: i32 = 0;
-    let mut sortedlist: *mut *mut libc::c_char = 0 as *mut *mut libc::c_char;
+    let mut sortedlist: *mut *mut libc::c_char = std::ptr::null_mut();
     sortedlist = Z_Malloc(
         ((numfiles + 1 as i32) as usize)
             .wrapping_mul(::std::mem::size_of::<*mut libc::c_char>() as usize) as i32,
     ) as *mut *mut libc::c_char;
     let ref mut fresh13 = *sortedlist.offset(0 as i32 as isize);
-    *fresh13 = 0 as *mut libc::c_char;
+    *fresh13 = std::ptr::null_mut();
     numsortedfiles = 0 as i32;
     i = 0 as i32;
     while i < numfiles {
@@ -3364,8 +3364,8 @@ FS_NewDir_f
 #[no_mangle]
 
 pub unsafe extern "C" fn FS_NewDir_f() {
-    let mut filter: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut dirnames: *mut *mut libc::c_char = 0 as *mut *mut libc::c_char;
+    let mut filter: *mut libc::c_char = std::ptr::null_mut();
+    let mut dirnames: *mut *mut libc::c_char = std::ptr::null_mut();
     let mut ndirs: i32 = 0;
     let mut i: i32 = 0;
     if Cmd_Argc() < 2 as i32 {
@@ -3407,7 +3407,7 @@ FS_Path_f
 #[no_mangle]
 
 pub unsafe extern "C" fn FS_Path_f() {
-    let mut s: *mut searchpath_t = 0 as *mut searchpath_t;
+    let mut s: *mut searchpath_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     Com_Printf(
         b"We are looking in the current search path:\n\x00" as *const u8 as *const libc::c_char,
@@ -3482,7 +3482,7 @@ pub unsafe extern "C" fn FS_Which(
     mut searchPath: *mut libc::c_void,
 ) -> qboolean {
     let mut search: *mut searchpath_t = searchPath as *mut searchpath_t;
-    if FS_FOpenFileReadDir(filename, search, 0 as *mut fileHandle_t, qfalse, qfalse)
+    if FS_FOpenFileReadDir(filename, search, std::ptr::null_mut(), qfalse, qfalse)
         > 0 as i32 as isize
     {
         if !(*search).pack.is_null() {
@@ -3513,8 +3513,8 @@ FS_Which_f
 #[no_mangle]
 
 pub unsafe extern "C" fn FS_Which_f() {
-    let mut search: *mut searchpath_t = 0 as *mut searchpath_t;
-    let mut filename: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut search: *mut searchpath_t = std::ptr::null_mut();
+    let mut filename: *mut libc::c_char = std::ptr::null_mut();
     filename = Cmd_Argv(1 as i32);
     if *filename.offset(0 as i32 as isize) == 0 {
         Com_Printf(b"Usage: which <file>\n\x00" as *const u8 as *const libc::c_char);
@@ -3542,8 +3542,8 @@ pub unsafe extern "C" fn FS_Which_f() {
 //===========================================================================
 
 unsafe extern "C" fn paksort(mut a: *const libc::c_void, mut b: *const libc::c_void) -> i32 {
-    let mut aa: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut bb: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut aa: *mut libc::c_char = std::ptr::null_mut();
+    let mut bb: *mut libc::c_char = std::ptr::null_mut();
     aa = *(a as *mut *mut libc::c_char);
     bb = *(b as *mut *mut libc::c_char);
     return FS_PathCmp(aa, bb);
@@ -3562,19 +3562,19 @@ pub unsafe extern "C" fn FS_AddGameDirectory(
     mut path: *const libc::c_char,
     mut dir: *const libc::c_char,
 ) {
-    let mut sp: *mut searchpath_t = 0 as *mut searchpath_t;
-    let mut search: *mut searchpath_t = 0 as *mut searchpath_t;
-    let mut pak: *mut pack_t = 0 as *mut pack_t;
+    let mut sp: *mut searchpath_t = std::ptr::null_mut();
+    let mut search: *mut searchpath_t = std::ptr::null_mut();
+    let mut pak: *mut pack_t = std::ptr::null_mut();
     let mut curpath: [libc::c_char; 4097] = [0; 4097];
-    let mut pakfile: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut pakfile: *mut libc::c_char = std::ptr::null_mut();
     let mut numfiles: i32 = 0;
-    let mut pakfiles: *mut *mut libc::c_char = 0 as *mut *mut libc::c_char;
+    let mut pakfiles: *mut *mut libc::c_char = std::ptr::null_mut();
     let mut pakfilesi: i32 = 0;
-    let mut pakfilestmp: *mut *mut libc::c_char = 0 as *mut *mut libc::c_char;
+    let mut pakfilestmp: *mut *mut libc::c_char = std::ptr::null_mut();
     let mut numdirs: i32 = 0;
-    let mut pakdirs: *mut *mut libc::c_char = 0 as *mut *mut libc::c_char;
+    let mut pakdirs: *mut *mut libc::c_char = std::ptr::null_mut();
     let mut pakdirsi: i32 = 0;
-    let mut pakdirstmp: *mut *mut libc::c_char = 0 as *mut *mut libc::c_char;
+    let mut pakdirstmp: *mut *mut libc::c_char = std::ptr::null_mut();
     let mut pakwhich: i32 = 0;
     let mut len: i32 = 0;
     // Unique
@@ -3606,7 +3606,7 @@ pub unsafe extern "C" fn FS_AddGameDirectory(
     pakfiles = Sys_ListFiles(
         curpath.as_mut_ptr(),
         b".pk3\x00" as *const u8 as *const libc::c_char,
-        0 as *mut libc::c_char,
+        std::ptr::null_mut(),
         &mut numfiles,
         qfalse,
     );
@@ -3620,13 +3620,13 @@ pub unsafe extern "C" fn FS_AddGameDirectory(
     );
     if fs_numServerPaks != 0 {
         numdirs = 0 as i32;
-        pakdirs = 0 as *mut *mut libc::c_char
+        pakdirs = std::ptr::null_mut()
     } else {
         // Get top level directories (we'll filter them later since the Sys_ListFiles filtering is terrible)
         pakdirs = Sys_ListFiles(
             curpath.as_mut_ptr(),
             b"/\x00" as *const u8 as *const libc::c_char,
-            0 as *mut libc::c_char,
+            std::ptr::null_mut(),
             &mut numdirs,
             qfalse,
         );
@@ -3860,7 +3860,7 @@ pub unsafe extern "C" fn FS_ComparePaks(
     mut len: i32,
     mut dlstring: qboolean,
 ) -> qboolean {
-    let mut sp: *mut searchpath_t = 0 as *mut searchpath_t; // Server didn't send any pack information along
+    let mut sp: *mut searchpath_t = std::ptr::null_mut(); // Server didn't send any pack information along
     let mut havepak: qboolean = qfalse;
     let mut origpos: *mut libc::c_char = neededpaks;
     let mut i: i32 = 0;
@@ -4015,8 +4015,8 @@ Frees all resources.
 #[no_mangle]
 
 pub unsafe extern "C" fn FS_Shutdown(mut _closemfp: qboolean) {
-    let mut p: *mut searchpath_t = 0 as *mut searchpath_t;
-    let mut next: *mut searchpath_t = 0 as *mut searchpath_t;
+    let mut p: *mut searchpath_t = std::ptr::null_mut();
+    let mut next: *mut searchpath_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     i = 0 as i32;
     while i < 64 as i32 {
@@ -4039,7 +4039,7 @@ pub unsafe extern "C" fn FS_Shutdown(mut _closemfp: qboolean) {
         p = next
     }
     // any FS_ calls will now be an error until reinitialized
-    fs_searchpaths = 0 as *mut searchpath_t;
+    fs_searchpaths = std::ptr::null_mut();
     Cmd_RemoveCommand(b"path\x00" as *const u8 as *const libc::c_char);
     Cmd_RemoveCommand(b"dir\x00" as *const u8 as *const libc::c_char);
     Cmd_RemoveCommand(b"fdir\x00" as *const u8 as *const libc::c_char);
@@ -4055,10 +4055,10 @@ NOTE TTimo: the reordering that happens here is not reflected in the cvars (\cva
 */
 
 unsafe extern "C" fn FS_ReorderPurePaks() {
-    let mut s: *mut searchpath_t = 0 as *mut searchpath_t; // when doing the scan
+    let mut s: *mut searchpath_t = std::ptr::null_mut(); // when doing the scan
     let mut i: i32 = 0;
-    let mut p_insert_index: *mut *mut searchpath_t = 0 as *mut *mut searchpath_t;
-    let mut p_previous: *mut *mut searchpath_t = 0 as *mut *mut searchpath_t;
+    let mut p_insert_index: *mut *mut searchpath_t = std::ptr::null_mut();
+    let mut p_previous: *mut *mut searchpath_t = std::ptr::null_mut();
     fs_reordered = qfalse;
     // only relevant when connected to pure server
     if fs_numServerPaks == 0 {
@@ -4096,7 +4096,7 @@ FS_Startup
 */
 
 unsafe extern "C" fn FS_Startup(mut gameName: *const libc::c_char) {
-    let mut homePath: *const libc::c_char = 0 as *const libc::c_char;
+    let mut homePath: *const libc::c_char = std::ptr::null();
     Com_Printf(b"----- FS_Startup -----\n\x00" as *const u8 as *const libc::c_char);
     fs_packFiles = 0 as i32;
     fs_debug = Cvar_Get(
@@ -4277,9 +4277,9 @@ STANDALONE in q_shared.h
 */
 
 unsafe extern "C" fn FS_CheckPak0() {
-    let mut path: *mut searchpath_t = 0 as *mut searchpath_t;
-    let mut curpack: *mut pack_t = 0 as *mut pack_t;
-    let mut pakBasename: *const libc::c_char = 0 as *const libc::c_char;
+    let mut path: *mut searchpath_t = std::ptr::null_mut();
+    let mut curpack: *mut pack_t = std::ptr::null_mut();
+    let mut pakBasename: *const libc::c_char = std::ptr::null();
     let mut founddemo: qboolean = qfalse;
     let mut foundPak: u32 = 0 as i32 as u32;
     let mut foundTA: u32 = 0 as i32 as u32;
@@ -4502,7 +4502,7 @@ Servers with sv_pure set will get this string and pass it to clients.
 
 pub unsafe extern "C" fn FS_LoadedPakChecksums() -> *const libc::c_char {
     static mut info: [libc::c_char; 8192] = [0; 8192];
-    let mut search: *mut searchpath_t = 0 as *mut searchpath_t;
+    let mut search: *mut searchpath_t = std::ptr::null_mut();
     info[0 as i32 as usize] = 0 as i32 as libc::c_char;
     search = fs_searchpaths;
     while !search.is_null() {
@@ -4533,7 +4533,7 @@ Servers with sv_pure set will get this string and pass it to clients.
 
 pub unsafe extern "C" fn FS_LoadedPakNames() -> *const libc::c_char {
     static mut info: [libc::c_char; 8192] = [0; 8192];
-    let mut search: *mut searchpath_t = 0 as *mut searchpath_t;
+    let mut search: *mut searchpath_t = std::ptr::null_mut();
     info[0 as i32 as usize] = 0 as i32 as libc::c_char;
     search = fs_searchpaths;
     while !search.is_null() {
@@ -4569,7 +4569,7 @@ back to the server.
 
 pub unsafe extern "C" fn FS_LoadedPakPureChecksums() -> *const libc::c_char {
     static mut info: [libc::c_char; 8192] = [0; 8192];
-    let mut search: *mut searchpath_t = 0 as *mut searchpath_t;
+    let mut search: *mut searchpath_t = std::ptr::null_mut();
     info[0 as i32 as usize] = 0 as i32 as libc::c_char;
     search = fs_searchpaths;
     while !search.is_null() {
@@ -4600,7 +4600,7 @@ The server will send this to the clients so they can check which files should be
 
 pub unsafe extern "C" fn FS_ReferencedPakChecksums() -> *const libc::c_char {
     static mut info: [libc::c_char; 8192] = [0; 8192];
-    let mut search: *mut searchpath_t = 0 as *mut searchpath_t;
+    let mut search: *mut searchpath_t = std::ptr::null_mut();
     info[0 as i32 as usize] = 0 as i32 as libc::c_char;
     search = fs_searchpaths;
     while !search.is_null() {
@@ -4641,7 +4641,7 @@ The string has a specific order, "cgame ui @ ref1 ref2 ref3 ..."
 
 pub unsafe extern "C" fn FS_ReferencedPakPureChecksums() -> *const libc::c_char {
     static mut info: [libc::c_char; 8192] = [0; 8192];
-    let mut search: *mut searchpath_t = 0 as *mut searchpath_t;
+    let mut search: *mut searchpath_t = std::ptr::null_mut();
     let mut nFlags: i32 = 0;
     let mut numPaks: i32 = 0;
     let mut checksum: i32 = 0;
@@ -4706,7 +4706,7 @@ The server will send this to the clients so they can check which files should be
 
 pub unsafe extern "C" fn FS_ReferencedPakNames() -> *const libc::c_char {
     static mut info: [libc::c_char; 8192] = [0; 8192];
-    let mut search: *mut searchpath_t = 0 as *mut searchpath_t;
+    let mut search: *mut searchpath_t = std::ptr::null_mut();
     info[0 as i32 as usize] = 0 as i32 as libc::c_char;
     // we want to return ALL pk3's from the fs_game path
     // and referenced one's from baseq3
@@ -4757,7 +4757,7 @@ FS_ClearPakReferences
 #[no_mangle]
 
 pub unsafe extern "C" fn FS_ClearPakReferences(mut flags: i32) {
-    let mut search: *mut searchpath_t = 0 as *mut searchpath_t;
+    let mut search: *mut searchpath_t = std::ptr::null_mut();
     if flags == 0 {
         flags = -(1 as i32)
     }
@@ -4814,7 +4814,7 @@ pub unsafe extern "C" fn FS_PureServerSetLoadedPaks(
         if !fs_serverPakNames[i as usize].is_null() {
             Z_Free(fs_serverPakNames[i as usize] as *mut libc::c_void);
         }
-        fs_serverPakNames[i as usize] = 0 as *mut libc::c_char;
+        fs_serverPakNames[i as usize] = std::ptr::null_mut();
         i += 1
     }
     if !pakNames.is_null() && *pakNames as i32 != 0 {
@@ -4866,7 +4866,7 @@ pub unsafe extern "C" fn FS_PureServerSetReferencedPaks(
         if !fs_serverReferencedPakNames[i as usize].is_null() {
             Z_Free(fs_serverReferencedPakNames[i as usize] as *mut libc::c_void);
         }
-        fs_serverReferencedPakNames[i as usize] = 0 as *mut libc::c_char;
+        fs_serverReferencedPakNames[i as usize] = std::ptr::null_mut();
         i += 1
     }
     if !pakNames.is_null() && *pakNames as i32 != 0 {
@@ -4924,7 +4924,7 @@ pub unsafe extern "C" fn FS_InitFilesystem() {
     // graphics screen when the font fails to load
     if FS_ReadFile(
         b"default.cfg\x00" as *const u8 as *const libc::c_char,
-        0 as *mut *mut libc::c_void,
+        std::ptr::null_mut(),
     ) <= 0 as i32 as isize
     {
         Com_Error(
@@ -4961,7 +4961,7 @@ FS_Restart
 #[no_mangle]
 
 pub unsafe extern "C" fn FS_Restart(mut checksumFeed: i32) {
-    let mut lastGameDir: *const libc::c_char = 0 as *const libc::c_char;
+    let mut lastGameDir: *const libc::c_char = std::ptr::null();
     // free anything we currently have loaded
     FS_Shutdown(qfalse);
     // set the checksum feed
@@ -4976,7 +4976,7 @@ pub unsafe extern "C" fn FS_Restart(mut checksumFeed: i32) {
     // graphics screen when the font fails to load
     if FS_ReadFile(
         b"default.cfg\x00" as *const u8 as *const libc::c_char,
-        0 as *mut *mut libc::c_void,
+        std::ptr::null_mut(),
     ) <= 0 as i32 as isize
     {
         // this might happen when connecting to a pure server not using BASEGAME/pak0.pk3
@@ -5175,14 +5175,14 @@ pub unsafe extern "C" fn FS_FilenameCompletion(
     mut callback: Option<unsafe extern "C" fn(_: *const libc::c_char) -> ()>,
     mut allowNonPureFilesOnDisk: qboolean,
 ) {
-    let mut filenames: *mut *mut libc::c_char = 0 as *mut *mut libc::c_char;
+    let mut filenames: *mut *mut libc::c_char = std::ptr::null_mut();
     let mut nfiles: i32 = 0;
     let mut i: i32 = 0;
     let mut filename: [libc::c_char; 1024] = [0; 1024];
     filenames = FS_ListFilteredFiles(
         dir,
         ext,
-        0 as *mut libc::c_char,
+        std::ptr::null_mut(),
         &mut nfiles,
         allowNonPureFilesOnDisk,
     );

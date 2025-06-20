@@ -77,7 +77,7 @@ pub mod rate_h {
         let mut i: i32 = 0;
         let mut lo: i32 = 0;
         let mut hi: i32 = 0;
-        let mut cache: *const u8 = 0 as *const u8;
+        let mut cache: *const u8 = std::ptr::null();
         LM += 1;
         cache = (*m).cache.bits.offset(
             *(*m)
@@ -120,7 +120,7 @@ pub mod rate_h {
         mut LM: i32,
         mut pulses: i32,
     ) -> i32 {
-        let mut cache: *const u8 = 0 as *const u8;
+        let mut cache: *const u8 = std::ptr::null();
         LM += 1;
         cache = (*m).cache.bits.offset(
             *(*m)
@@ -462,8 +462,8 @@ pub unsafe extern "C" fn denormalise_bands(
     let mut i: i32 = 0;
     let mut N: i32 = 0;
     let mut bound: i32 = 0;
-    let mut f: *mut celt_sig = 0 as *mut celt_sig;
-    let mut x: *const celt_norm = 0 as *const celt_norm;
+    let mut f: *mut celt_sig = std::ptr::null_mut();
+    let mut x: *const celt_norm = std::ptr::null();
     let mut eBands: *const opus_int16 = (*m).eBands;
     N = M * (*m).shortMdctSize;
     bound = M * *eBands.offset(end as isize) as i32;
@@ -561,7 +561,7 @@ pub unsafe extern "C" fn anti_collapse(
         sqrt_1 = 1.0f32 / crate::stdlib::sqrt((N0 << LM) as f64) as f32;
         c = 0 as i32;
         loop {
-            let mut X: *mut celt_norm = 0 as *mut celt_norm;
+            let mut X: *mut celt_norm = std::ptr::null_mut();
             let mut prev1: opus_val16 = 0.;
             let mut prev2: opus_val16 = 0.;
             let mut Ediff: opus_val32 = 0.;
@@ -891,7 +891,7 @@ unsafe extern "C" fn deinterleave_hadamard(
 ) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut tmp: *mut celt_norm = 0 as *mut celt_norm;
+    let mut tmp: *mut celt_norm = std::ptr::null_mut();
     let mut N: i32 = 0;
     N = N0 * stride;
     let mut fresh3 = ::std::vec::from_elem(
@@ -942,7 +942,7 @@ unsafe extern "C" fn interleave_hadamard(
 ) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut tmp: *mut celt_norm = 0 as *mut celt_norm;
+    let mut tmp: *mut celt_norm = std::ptr::null_mut();
     let mut N: i32 = 0;
     N = N0 * stride;
     let mut fresh4 = ::std::vec::from_elem(
@@ -1076,11 +1076,11 @@ unsafe extern "C" fn compute_theta(
     let mut tell: opus_int32 = 0;
     let mut inv: i32 = 0 as i32;
     let mut encode: i32 = 0;
-    let mut m: *const OpusCustomMode = 0 as *const OpusCustomMode;
+    let mut m: *const OpusCustomMode = std::ptr::null();
     let mut i: i32 = 0;
     let mut intensity: i32 = 0;
-    let mut ec: *mut ec_ctx = 0 as *mut ec_ctx;
-    let mut bandE: *const celt_ener = 0 as *const celt_ener;
+    let mut ec: *mut ec_ctx = std::ptr::null_mut();
+    let mut bandE: *const celt_ener = std::ptr::null();
     encode = (*ctx).encode;
     m = (*ctx).m;
     i = (*ctx).i;
@@ -1360,10 +1360,10 @@ unsafe extern "C" fn quant_band_n1(
     let mut stereo: i32 = 0;
     let mut x: *mut celt_norm = X;
     let mut encode: i32 = 0;
-    let mut ec: *mut ec_ctx = 0 as *mut ec_ctx;
+    let mut ec: *mut ec_ctx = std::ptr::null_mut();
     encode = (*ctx).encode;
     ec = (*ctx).ec;
-    stereo = (Y != 0 as *mut libc::c_void as *mut celt_norm) as i32;
+    stereo = (Y != std::ptr::null_mut() as *mut celt_norm) as i32;
     c = 0 as i32;
     loop {
         let mut sign: i32 = 0 as i32;
@@ -1414,7 +1414,7 @@ unsafe extern "C" fn quant_partition(
     mut gain: opus_val16,
     mut fill: i32,
 ) -> u32 {
-    let mut cache: *const u8 = 0 as *const u8;
+    let mut cache: *const u8 = std::ptr::null();
     let mut q: i32 = 0;
     let mut curr_bits: i32 = 0;
     let mut imid: i32 = 0 as i32;
@@ -1423,12 +1423,12 @@ unsafe extern "C" fn quant_partition(
     let mut mid: opus_val16 = 0 as i32 as opus_val16;
     let mut side: opus_val16 = 0 as i32 as opus_val16;
     let mut cm: u32 = 0 as i32 as u32;
-    let mut Y: *mut celt_norm = 0 as *mut celt_norm;
+    let mut Y: *mut celt_norm = std::ptr::null_mut();
     let mut encode: i32 = 0;
-    let mut m: *const OpusCustomMode = 0 as *const OpusCustomMode;
+    let mut m: *const OpusCustomMode = std::ptr::null();
     let mut i: i32 = 0;
     let mut spread: i32 = 0;
-    let mut ec: *mut ec_ctx = 0 as *mut ec_ctx;
+    let mut ec: *mut ec_ctx = std::ptr::null_mut();
     encode = (*ctx).encode;
     m = (*ctx).m;
     i = (*ctx).i;
@@ -1458,7 +1458,7 @@ unsafe extern "C" fn quant_partition(
             itheta: 0,
             qalloc: 0,
         };
-        let mut next_lowband2: *mut celt_norm = 0 as *mut celt_norm;
+        let mut next_lowband2: *mut celt_norm = std::ptr::null_mut();
         let mut rebalance: opus_int32 = 0;
         N >>= 1 as i32;
         Y = X.offset(N as isize);
@@ -1665,7 +1665,7 @@ unsafe extern "C" fn quant_band(
     N_B = celt_udiv(N_B as opus_uint32, B as opus_uint32) as i32;
     /* Special case for one sample */
     if N == 1 as i32 {
-        return quant_band_n1(ctx, X, 0 as *mut celt_norm, b, lowband_out);
+        return quant_band_n1(ctx, X, std::ptr::null_mut(), b, lowband_out);
     }
     if tf_change > 0 as i32 {
         recombine = tf_change
@@ -1837,7 +1837,7 @@ unsafe extern "C" fn quant_band_stereo(
     };
     let mut orig_fill: i32 = 0;
     let mut encode: i32 = 0;
-    let mut ec: *mut ec_ctx = 0 as *mut ec_ctx;
+    let mut ec: *mut ec_ctx = std::ptr::null_mut();
     encode = (*ctx).encode;
     ec = (*ctx).ec;
     /* Special case for one sample */
@@ -1862,8 +1862,8 @@ unsafe extern "C" fn quant_band_stereo(
     if N == 2 as i32 {
         let mut c: i32 = 0;
         let mut sign: i32 = 0 as i32;
-        let mut x2: *mut celt_norm = 0 as *mut celt_norm;
-        let mut y2: *mut celt_norm = 0 as *mut celt_norm;
+        let mut x2: *mut celt_norm = std::ptr::null_mut();
+        let mut y2: *mut celt_norm = std::ptr::null_mut();
         mbits = b;
         sbits = 0 as i32;
         /* Only need one bit for the side. */
@@ -1972,11 +1972,11 @@ unsafe extern "C" fn quant_band_stereo(
                 N,
                 sbits,
                 B,
-                0 as *mut celt_norm,
+                std::ptr::null_mut(),
                 LM,
-                0 as *mut celt_norm,
+                std::ptr::null_mut(),
                 side,
-                0 as *mut celt_norm,
+                std::ptr::null_mut(),
                 fill >> B,
             )
         } else {
@@ -1988,11 +1988,11 @@ unsafe extern "C" fn quant_band_stereo(
                 N,
                 sbits,
                 B,
-                0 as *mut celt_norm,
+                std::ptr::null_mut(),
                 LM,
-                0 as *mut celt_norm,
+                std::ptr::null_mut(),
                 side,
-                0 as *mut celt_norm,
+                std::ptr::null_mut(),
                 fill >> B,
             );
             rebalance = sbits - (rebalance - (*ctx).remaining_bits);
@@ -2178,17 +2178,17 @@ pub unsafe extern "C" fn quant_all_bands(
     let mut i: i32 = 0;
     let mut remaining_bits: opus_int32 = 0;
     let mut eBands: *const opus_int16 = (*m).eBands;
-    let mut norm: *mut celt_norm = 0 as *mut celt_norm;
-    let mut norm2: *mut celt_norm = 0 as *mut celt_norm;
-    let mut _norm: *mut celt_norm = 0 as *mut celt_norm;
-    let mut _lowband_scratch: *mut celt_norm = 0 as *mut celt_norm;
-    let mut X_save: *mut celt_norm = 0 as *mut celt_norm;
-    let mut Y_save: *mut celt_norm = 0 as *mut celt_norm;
-    let mut X_save2: *mut celt_norm = 0 as *mut celt_norm;
-    let mut Y_save2: *mut celt_norm = 0 as *mut celt_norm;
-    let mut norm_save2: *mut celt_norm = 0 as *mut celt_norm;
+    let mut norm: *mut celt_norm = std::ptr::null_mut();
+    let mut norm2: *mut celt_norm = std::ptr::null_mut();
+    let mut _norm: *mut celt_norm = std::ptr::null_mut();
+    let mut _lowband_scratch: *mut celt_norm = std::ptr::null_mut();
+    let mut X_save: *mut celt_norm = std::ptr::null_mut();
+    let mut Y_save: *mut celt_norm = std::ptr::null_mut();
+    let mut X_save2: *mut celt_norm = std::ptr::null_mut();
+    let mut Y_save2: *mut celt_norm = std::ptr::null_mut();
+    let mut norm_save2: *mut celt_norm = std::ptr::null_mut();
     let mut resynth_alloc: i32 = 0;
-    let mut lowband_scratch: *mut celt_norm = 0 as *mut celt_norm;
+    let mut lowband_scratch: *mut celt_norm = std::ptr::null_mut();
     let mut B: i32 = 0;
     let mut M: i32 = 0;
     let mut lowband_offset: i32 = 0;
@@ -2201,14 +2201,14 @@ pub unsafe extern "C" fn quant_all_bands(
     let mut ctx: band_ctx = band_ctx {
         encode: 0,
         resynth: 0,
-        m: 0 as *const OpusCustomMode,
+        m: std::ptr::null(),
         i: 0,
         intensity: 0,
         spread: 0,
         tf_change: 0,
-        ec: 0 as *mut ec_ctx,
+        ec: std::ptr::null_mut(),
         remaining_bits: 0,
-        bandE: 0 as *const celt_ener,
+        bandE: std::ptr::null(),
         seed: 0,
         arch: 0,
         theta_round: 0,
@@ -2299,8 +2299,8 @@ pub unsafe extern "C" fn quant_all_bands(
         let mut N: i32 = 0;
         let mut curr_balance: opus_int32 = 0;
         let mut effective_lowband: i32 = -(1 as i32);
-        let mut X: *mut celt_norm = 0 as *mut celt_norm;
-        let mut Y: *mut celt_norm = 0 as *mut celt_norm;
+        let mut X: *mut celt_norm = std::ptr::null_mut();
+        let mut Y: *mut celt_norm = std::ptr::null_mut();
         let mut tf_change: i32 = 0 as i32;
         let mut x_cm: u32 = 0;
         let mut y_cm: u32 = 0;
@@ -2311,7 +2311,7 @@ pub unsafe extern "C" fn quant_all_bands(
         if !Y_.is_null() {
             Y = Y_.offset((M * *eBands.offset(i as isize) as i32) as isize)
         } else {
-            Y = 0 as *mut celt_norm
+            Y = std::ptr::null_mut()
         }
         N = M * *eBands.offset((i + 1 as i32) as isize) as i32
             - M * *eBands.offset(i as isize) as i32;
@@ -2378,10 +2378,10 @@ pub unsafe extern "C" fn quant_all_bands(
             if !Y_.is_null() {
                 Y = norm
             }
-            lowband_scratch = 0 as *mut celt_norm
+            lowband_scratch = std::ptr::null_mut()
         }
         if last != 0 && theta_rdo == 0 {
-            lowband_scratch = 0 as *mut celt_norm
+            lowband_scratch = std::ptr::null_mut()
         }
         /* Get a conservative estimate of the collapse_mask's for the bands we're
         going to be folding from. */
@@ -2457,11 +2457,11 @@ pub unsafe extern "C" fn quant_all_bands(
                 if effective_lowband != -(1 as i32) {
                     norm.offset(effective_lowband as isize)
                 } else {
-                    0 as *mut celt_norm
+                    std::ptr::null_mut()
                 },
                 LM,
                 if last != 0 {
-                    0 as *mut celt_norm
+                    std::ptr::null_mut()
                 } else {
                     norm.offset((M * *eBands.offset(i as isize) as i32) as isize)
                         .offset(-(norm_offset as isize))
@@ -2479,11 +2479,11 @@ pub unsafe extern "C" fn quant_all_bands(
                 if effective_lowband != -(1 as i32) {
                     norm2.offset(effective_lowband as isize)
                 } else {
-                    0 as *mut celt_norm
+                    std::ptr::null_mut()
                 },
                 LM,
                 if last != 0 {
-                    0 as *mut celt_norm
+                    std::ptr::null_mut()
                 } else {
                     norm2
                         .offset((M * *eBands.offset(i as isize) as i32) as isize)
@@ -2497,7 +2497,7 @@ pub unsafe extern "C" fn quant_all_bands(
             if !Y.is_null() {
                 if theta_rdo != 0 && i < intensity {
                     let mut ec_save: ec_ctx = ec_ctx {
-                        buf: 0 as *mut u8,
+                        buf: std::ptr::null_mut(),
                         storage: 0,
                         end_offs: 0,
                         end_window: 0,
@@ -2511,7 +2511,7 @@ pub unsafe extern "C" fn quant_all_bands(
                         error: 0,
                     };
                     let mut ec_save2: ec_ctx = ec_ctx {
-                        buf: 0 as *mut u8,
+                        buf: std::ptr::null_mut(),
                         storage: 0,
                         end_offs: 0,
                         end_window: 0,
@@ -2527,14 +2527,14 @@ pub unsafe extern "C" fn quant_all_bands(
                     let mut ctx_save: band_ctx = band_ctx {
                         encode: 0,
                         resynth: 0,
-                        m: 0 as *const OpusCustomMode,
+                        m: std::ptr::null(),
                         i: 0,
                         intensity: 0,
                         spread: 0,
                         tf_change: 0,
-                        ec: 0 as *mut ec_ctx,
+                        ec: std::ptr::null_mut(),
                         remaining_bits: 0,
-                        bandE: 0 as *const celt_ener,
+                        bandE: std::ptr::null(),
                         seed: 0,
                         arch: 0,
                         theta_round: 0,
@@ -2544,14 +2544,14 @@ pub unsafe extern "C" fn quant_all_bands(
                     let mut ctx_save2: band_ctx = band_ctx {
                         encode: 0,
                         resynth: 0,
-                        m: 0 as *const OpusCustomMode,
+                        m: std::ptr::null(),
                         i: 0,
                         intensity: 0,
                         spread: 0,
                         tf_change: 0,
-                        ec: 0 as *mut ec_ctx,
+                        ec: std::ptr::null_mut(),
                         remaining_bits: 0,
-                        bandE: 0 as *const celt_ener,
+                        bandE: std::ptr::null(),
                         seed: 0,
                         arch: 0,
                         theta_round: 0,
@@ -2565,7 +2565,7 @@ pub unsafe extern "C" fn quant_all_bands(
                     let mut nstart_bytes: i32 = 0;
                     let mut nend_bytes: i32 = 0;
                     let mut save_bytes: i32 = 0;
-                    let mut bytes_buf: *mut u8 = 0 as *mut u8;
+                    let mut bytes_buf: *mut u8 = std::ptr::null_mut();
                     let mut bytes_save: [u8; 1275] = [0; 1275];
                     let mut w: [opus_val16; 2] = [0.; 2];
                     compute_channel_weights(
@@ -2607,11 +2607,11 @@ pub unsafe extern "C" fn quant_all_bands(
                         if effective_lowband != -(1 as i32) {
                             norm.offset(effective_lowband as isize)
                         } else {
-                            0 as *mut celt_norm
+                            std::ptr::null_mut()
                         },
                         LM,
                         if last != 0 {
-                            0 as *mut celt_norm
+                            std::ptr::null_mut()
                         } else {
                             norm.offset((M * *eBands.offset(i as isize) as i32) as isize)
                                 .offset(-(norm_offset as isize))
@@ -2713,11 +2713,11 @@ pub unsafe extern "C" fn quant_all_bands(
                         if effective_lowband != -(1 as i32) {
                             norm.offset(effective_lowband as isize)
                         } else {
-                            0 as *mut celt_norm
+                            std::ptr::null_mut()
                         },
                         LM,
                         if last != 0 {
-                            0 as *mut celt_norm
+                            std::ptr::null_mut()
                         } else {
                             norm.offset((M * *eBands.offset(i as isize) as i32) as isize)
                                 .offset(-(norm_offset as isize))
@@ -2795,11 +2795,11 @@ pub unsafe extern "C" fn quant_all_bands(
                         if effective_lowband != -(1 as i32) {
                             norm.offset(effective_lowband as isize)
                         } else {
-                            0 as *mut celt_norm
+                            std::ptr::null_mut()
                         },
                         LM,
                         if last != 0 {
-                            0 as *mut celt_norm
+                            std::ptr::null_mut()
                         } else {
                             norm.offset((M * *eBands.offset(i as isize) as i32) as isize)
                                 .offset(-(norm_offset as isize))
@@ -2818,11 +2818,11 @@ pub unsafe extern "C" fn quant_all_bands(
                     if effective_lowband != -(1 as i32) {
                         norm.offset(effective_lowband as isize)
                     } else {
-                        0 as *mut celt_norm
+                        std::ptr::null_mut()
                     },
                     LM,
                     if last != 0 {
-                        0 as *mut celt_norm
+                        std::ptr::null_mut()
                     } else {
                         norm.offset((M * *eBands.offset(i as isize) as i32) as isize)
                             .offset(-(norm_offset as isize))

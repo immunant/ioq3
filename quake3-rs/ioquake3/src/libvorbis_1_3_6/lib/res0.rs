@@ -326,7 +326,7 @@ pub unsafe extern "C" fn res0_unpack(
         }
     }
     res0_free_info(info as *mut libc::c_void);
-    return 0 as *mut libc::c_void;
+    return std::ptr::null_mut();
 }
 #[no_mangle]
 
@@ -1032,7 +1032,7 @@ pub unsafe extern "C" fn res1_class(
     if used != 0 {
         return _01class(vb, vl, in_0, used);
     } else {
-        return 0 as *mut *mut isize;
+        return std::ptr::null_mut();
     };
 }
 #[no_mangle]
@@ -1097,7 +1097,7 @@ pub unsafe extern "C" fn res2_class(
     if used != 0 {
         return _2class(vb, vl, in_0, ch);
     } else {
-        return 0 as *mut *mut isize;
+        return std::ptr::null_mut();
     };
 }
 /* res2 is slightly more different; all the channels are interleaved

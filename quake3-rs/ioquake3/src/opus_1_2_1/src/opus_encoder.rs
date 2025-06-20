@@ -626,9 +626,9 @@ pub unsafe extern "C" fn opus_encoder_init(
     mut channels: i32,
     mut application: i32,
 ) -> i32 {
-    let mut silk_enc: *mut libc::c_void = 0 as *mut libc::c_void;
+    let mut silk_enc: *mut libc::c_void = std::ptr::null_mut();
     let mut celt_enc: *mut crate::src::opus_1_2_1::celt::celt_encoder::OpusCustomEncoder =
-        0 as *mut crate::src::opus_1_2_1::celt::celt_encoder::OpusCustomEncoder;
+        std::ptr::null_mut();
     let mut err: i32 = 0;
     let mut ret: i32 = 0;
     let mut silkEncSizeBytes: i32 = 0;
@@ -1087,7 +1087,7 @@ pub unsafe extern "C" fn opus_encoder_create(
     mut error: *mut i32,
 ) -> *mut OpusEncoder {
     let mut ret: i32 = 0;
-    let mut st: *mut OpusEncoder = 0 as *mut OpusEncoder;
+    let mut st: *mut OpusEncoder = std::ptr::null_mut();
     if Fs != 48000 as i32
         && Fs != 24000 as i32
         && Fs != 16000 as i32
@@ -1099,14 +1099,14 @@ pub unsafe extern "C" fn opus_encoder_create(
         if !error.is_null() {
             *error = -(1 as i32)
         }
-        return 0 as *mut OpusEncoder;
+        return std::ptr::null_mut();
     }
     st = opus_alloc(opus_encoder_get_size(channels) as size_t) as *mut OpusEncoder;
     if st.is_null() {
         if !error.is_null() {
             *error = -(7 as i32)
         }
-        return 0 as *mut OpusEncoder;
+        return std::ptr::null_mut();
     }
     ret = opus_encoder_init(st, Fs, channels, application);
     if !error.is_null() {
@@ -1114,7 +1114,7 @@ pub unsafe extern "C" fn opus_encoder_create(
     }
     if ret != 0 as i32 {
         opus_free(st as *mut libc::c_void);
-        st = 0 as *mut OpusEncoder
+        st = std::ptr::null_mut()
     }
     return st;
 }
@@ -1146,7 +1146,7 @@ pub unsafe extern "C" fn downmix_float(
     mut c2: i32,
     mut C: i32,
 ) {
-    let mut x: *const f32 = 0 as *const f32;
+    let mut x: *const f32 = std::ptr::null();
     let mut j: i32 = 0;
     x = _x as *const f32;
     j = 0 as i32;
@@ -1186,7 +1186,7 @@ pub unsafe extern "C" fn downmix_int(
     mut c2: i32,
     mut C: i32,
 ) {
-    let mut x: *const opus_int16 = 0 as *const opus_int16;
+    let mut x: *const opus_int16 = std::ptr::null();
     let mut j: i32 = 0;
     x = _x as *const opus_int16;
     j = 0 as i32;
@@ -1638,12 +1638,12 @@ unsafe extern "C" fn encode_multiframe_packet(
 ) -> opus_int32 {
     let mut i: i32 = 0;
     let mut ret: i32 = 0 as i32;
-    let mut tmp_data: *mut u8 = 0 as *mut u8;
+    let mut tmp_data: *mut u8 = std::ptr::null_mut();
     let mut bak_mode: i32 = 0;
     let mut bak_bandwidth: i32 = 0;
     let mut bak_channels: i32 = 0;
     let mut bak_to_mono: i32 = 0;
-    let mut rp: *mut OpusRepacketizer = 0 as *mut OpusRepacketizer;
+    let mut rp: *mut OpusRepacketizer = std::ptr::null_mut();
     let mut max_header_bytes: i32 = 0;
     let mut bytes_per_frame: opus_int32 = 0;
     let mut cbr_bytes: opus_int32 = 0;
@@ -1716,7 +1716,7 @@ unsafe extern "C" fn encode_multiframe_packet(
             tmp_data.offset((i * bytes_per_frame) as isize),
             bytes_per_frame,
             lsb_depth,
-            0 as *const libc::c_void,
+            std::ptr::null(),
             0 as i32,
             0 as i32,
             0 as i32,
@@ -1814,14 +1814,14 @@ pub unsafe extern "C" fn opus_encode_native(
     mut downmix: downmix_func,
     mut float_api: i32,
 ) -> opus_int32 {
-    let mut silk_enc: *mut libc::c_void = 0 as *mut libc::c_void; /* Max bitrate we're allowed to use */
+    let mut silk_enc: *mut libc::c_void = std::ptr::null_mut(); /* Max bitrate we're allowed to use */
     let mut celt_enc: *mut crate::src::opus_1_2_1::celt::celt_encoder::OpusCustomEncoder =
-        0 as *mut crate::src::opus_1_2_1::celt::celt_encoder::OpusCustomEncoder; /* Max number of bytes we're allowed to use */
+        std::ptr::null_mut(); /* Max number of bytes we're allowed to use */
     let mut i: i32 = 0;
     let mut ret: i32 = 0 as i32;
     let mut nBytes: opus_int32 = 0;
     let mut enc: ec_enc = ec_enc {
-        buf: 0 as *mut u8,
+        buf: std::ptr::null_mut(),
         storage: 0,
         end_offs: 0,
         end_window: 0,
@@ -1840,7 +1840,7 @@ pub unsafe extern "C" fn opus_encode_native(
     let mut redundancy: i32 = 0 as i32;
     let mut redundancy_bytes: i32 = 0 as i32;
     let mut celt_to_silk: i32 = 0 as i32;
-    let mut pcm_buf: *mut opus_val16 = 0 as *mut opus_val16;
+    let mut pcm_buf: *mut opus_val16 = std::ptr::null_mut();
     let mut nb_compr_bytes: i32 = 0;
     let mut to_celt: i32 = 0 as i32;
     let mut redundant_rng: opus_uint32 = 0 as i32 as opus_uint32;
@@ -1856,7 +1856,7 @@ pub unsafe extern "C" fn opus_encode_native(
     let mut max_data_bytes: opus_int32 = 0;
     let mut total_buffer: i32 = 0;
     let mut stereo_width: opus_val16 = 0.;
-    let mut celt_mode: *const OpusCustomMode = 0 as *const OpusCustomMode;
+    let mut celt_mode: *const OpusCustomMode = std::ptr::null();
     let mut analysis_info: AnalysisInfo = AnalysisInfo {
         valid: 0,
         tonality: 0.,
@@ -1872,7 +1872,7 @@ pub unsafe extern "C" fn opus_encode_native(
     let mut analysis_read_pos_bak: i32 = -(1 as i32);
     let mut analysis_read_subframe_bak: i32 = -(1 as i32);
     let mut is_silence: i32 = 0 as i32;
-    let mut tmp_prefill: *mut opus_val16 = 0 as *mut opus_val16;
+    let mut tmp_prefill: *mut opus_val16 = std::ptr::null_mut();
     max_data_bytes = if (1276 as i32) < out_data_bytes {
         1276 as i32
     } else {
@@ -2283,8 +2283,8 @@ pub unsafe extern "C" fn opus_encode_native(
     }
     /* Automatic (rate-dependent) bandwidth selection */
     if (*st).mode == 1002 as i32 || (*st).first != 0 || (*st).silk_mode.allowBandwidthSwitch != 0 {
-        let mut voice_bandwidth_thresholds: *const opus_int32 = 0 as *const opus_int32;
-        let mut music_bandwidth_thresholds: *const opus_int32 = 0 as *const opus_int32;
+        let mut voice_bandwidth_thresholds: *const opus_int32 = std::ptr::null();
+        let mut music_bandwidth_thresholds: *const opus_int32 = std::ptr::null();
         let mut bandwidth_thresholds: [opus_int32; 8] = [0; 8];
         let mut bandwidth: i32 = 1105 as i32;
         if (*st).channels == 2 as i32 && (*st).force_channels != 1 as i32 {
@@ -2591,7 +2591,7 @@ pub unsafe extern "C" fn opus_encode_native(
     if (*st).mode != 1002 as i32 {
         let mut total_bitRate: opus_int32 = 0;
         let mut celt_rate: opus_int32 = 0;
-        let mut pcm_silk: *mut opus_int16 = 0 as *mut opus_int16;
+        let mut pcm_silk: *mut opus_int16 = std::ptr::null_mut();
         let mut fresh8 = ::std::vec::from_elem(
             0,
             (::std::mem::size_of::<opus_int16>() as usize)
@@ -2795,7 +2795,7 @@ pub unsafe extern "C" fn opus_encode_native(
                 &mut (*st).silk_mode as *mut _ as *mut silk_EncControlStruct,
                 pcm_silk,
                 (*st).encoder_buffer,
-                0 as *mut ec_enc as *mut ec_ctx,
+                std::ptr::null_mut() as *mut ec_ctx,
                 &mut zero,
                 1 as i32,
             );
@@ -3174,9 +3174,9 @@ pub unsafe extern "C" fn opus_encode_native(
         crate::src::opus_1_2_1::celt::celt_encoder::opus_custom_encoder_ctl(
             celt_enc,
             10028 as i32,
-            (0 as *mut libc::c_void as *mut SILKInfo).offset(
-                (0 as *mut libc::c_void as *mut SILKInfo)
-                    .offset_from(0 as *mut libc::c_void as *mut SILKInfo as *const SILKInfo)
+            (std::ptr::null_mut() as *mut SILKInfo).offset(
+                (std::ptr::null_mut() as *mut SILKInfo)
+                    .offset_from(std::ptr::null_mut() as *mut SILKInfo as *const SILKInfo)
                     as isize as isize,
             ),
         );
@@ -3205,7 +3205,7 @@ pub unsafe extern "C" fn opus_encode_native(
             (*st).Fs / 200 as i32,
             data.offset(nb_compr_bytes as isize),
             redundancy_bytes,
-            0 as *mut ec_enc as *mut ec_ctx,
+            std::ptr::null_mut() as *mut ec_ctx,
         );
         if err < 0 as i32 {
             return -(3 as i32);
@@ -3240,7 +3240,7 @@ pub unsafe extern "C" fn opus_encode_native(
                 (*st).Fs / 400 as i32,
                 dummy_0.as_mut_ptr(),
                 2 as i32,
-                0 as *mut ec_enc as *mut ec_ctx,
+                std::ptr::null_mut() as *mut ec_ctx,
             );
             crate::src::opus_1_2_1::celt::celt_encoder::opus_custom_encoder_ctl(
                 celt_enc,
@@ -3271,7 +3271,7 @@ pub unsafe extern "C" fn opus_encode_native(
                 celt_enc,
                 pcm_buf,
                 frame_size,
-                0 as *mut u8,
+                std::ptr::null_mut(),
                 nb_compr_bytes,
                 &mut enc as *mut _ as *mut ec_ctx,
             );
@@ -3345,7 +3345,7 @@ pub unsafe extern "C" fn opus_encode_native(
             N4,
             dummy_1.as_mut_ptr(),
             2 as i32,
-            0 as *mut ec_enc as *mut ec_ctx,
+            std::ptr::null_mut() as *mut ec_ctx,
         );
         err_0 = celt_encode_with_ec(
             celt_enc,
@@ -3353,7 +3353,7 @@ pub unsafe extern "C" fn opus_encode_native(
             N2,
             data.offset(nb_compr_bytes as isize),
             redundancy_bytes,
-            0 as *mut ec_enc as *mut ec_ctx,
+            std::ptr::null_mut() as *mut ec_ctx,
         );
         if err_0 < 0 as i32 {
             return -(3 as i32);
@@ -3480,7 +3480,7 @@ pub unsafe extern "C" fn opus_encode(
     let mut i: i32 = 0;
     let mut ret: i32 = 0;
     let mut frame_size: i32 = 0;
-    let mut in_0: *mut f32 = 0 as *mut f32;
+    let mut in_0: *mut f32 = std::ptr::null_mut();
     frame_size = frame_size_select(analysis_frame_size, (*st).variable_duration, (*st).Fs);
     if frame_size <= 0 as i32 {
         return -(1 as i32);
@@ -3617,7 +3617,7 @@ pub unsafe extern "C" fn opus_encoder_ctl(
     let mut current_block: u64;
     let mut ret: i32 = 0;
     let mut celt_enc: *mut crate::src::opus_1_2_1::celt::celt_encoder::OpusCustomEncoder =
-        0 as *mut crate::src::opus_1_2_1::celt::celt_encoder::OpusCustomEncoder;
+        std::ptr::null_mut();
     let mut ap: ::std::ffi::VaListImpl;
     ret = 0 as i32;
     ap = args.clone();
@@ -4027,7 +4027,7 @@ pub unsafe extern "C" fn opus_encoder_ctl(
             }
         }
         4028 => {
-            let mut silk_enc: *mut libc::c_void = 0 as *mut libc::c_void;
+            let mut silk_enc: *mut libc::c_void = std::ptr::null_mut();
             let mut dummy: silk_EncControlStruct = silk_EncControlStruct {
                 nChannelsAPI: 0,
                 nChannelsInternal: 0,
@@ -4055,7 +4055,7 @@ pub unsafe extern "C" fn opus_encoder_ctl(
                 signalType: 0,
                 offset: 0,
             };
-            let mut start: *mut libc::c_char = 0 as *mut libc::c_char;
+            let mut start: *mut libc::c_char = std::ptr::null_mut();
             silk_enc = (st as *mut libc::c_char).offset((*st).silk_enc_offset as isize)
                 as *mut libc::c_void;
             tonality_analysis_reset(&mut (*st).analysis as *mut _ as *mut TonalityAnalysisState);

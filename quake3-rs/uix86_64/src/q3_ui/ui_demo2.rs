@@ -308,7 +308,7 @@ static mut s_demos: demos_t = demos_t {
     banner: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -330,7 +330,7 @@ static mut s_demos: demos_t = demos_t {
     framel: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -356,7 +356,7 @@ static mut s_demos: demos_t = demos_t {
     framer: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -382,7 +382,7 @@ static mut s_demos: demos_t = demos_t {
     list: menulist_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -410,7 +410,7 @@ static mut s_demos: demos_t = demos_t {
     arrows: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -436,7 +436,7 @@ static mut s_demos: demos_t = demos_t {
     left: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -462,7 +462,7 @@ static mut s_demos: demos_t = demos_t {
     right: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -488,7 +488,7 @@ static mut s_demos: demos_t = demos_t {
     back: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -514,7 +514,7 @@ static mut s_demos: demos_t = demos_t {
     go: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -593,7 +593,7 @@ unsafe extern "C" fn Demos_MenuInit() {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut len: i32 = 0;
-    let mut demoname: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut demoname: *mut libc::c_char = std::ptr::null_mut();
     let mut extension: [libc::c_char; 32] = [0; 32];
     let mut protocol: i32 = 0;
     let mut protocolLegacy: i32 = 0;

@@ -299,7 +299,7 @@ unsafe extern "C" fn floor1_unpack(
                                 (*info).postlist[1 as i32 as usize] = (1 as i32) << rangebits;
                                 /* don't allow repeated values in post list as they'd result in
                                 zero-length segments */
-                                let mut sortpointer: [*mut i32; 65] = [0 as *mut i32; 65];
+                                let mut sortpointer: [*mut i32; 65] = [std::ptr::null_mut(); 65];
                                 j = 0 as i32;
                                 while j < count + 2 as i32 {
                                     sortpointer[j as usize] =
@@ -346,14 +346,14 @@ unsafe extern "C" fn floor1_unpack(
         _ => {}
     }
     floor1_free_info(info as *mut libc::c_void);
-    return 0 as *mut libc::c_void;
+    return std::ptr::null_mut();
 }
 
 unsafe extern "C" fn floor1_look(
     mut _vd: *mut vorbis_dsp_state,
     mut in_0: *mut libc::c_void,
 ) -> *mut libc::c_void {
-    let mut sortpointer: [*mut i32; 65] = [0 as *mut i32; 65];
+    let mut sortpointer: [*mut i32; 65] = [std::ptr::null_mut(); 65];
     let mut info: *mut vorbis_info_floor1 = in_0 as *mut vorbis_info_floor1;
     let mut look: *mut vorbis_look_floor1 = calloc(
         1 as i32 as usize,
@@ -1094,7 +1094,7 @@ pub unsafe extern "C" fn floor1_fit(
     let mut fit_valueB: [i32; 65] = [0; 65];
     let mut loneighbor: [i32; 65] = [0; 65];
     let mut hineighbor: [i32; 65] = [0; 65];
-    let mut output: *mut i32 = 0 as *mut i32;
+    let mut output: *mut i32 = std::ptr::null_mut();
     let mut memo: [i32; 65] = [0; 65];
     i = 0 as i32 as isize;
     while i < posts {
@@ -1298,7 +1298,7 @@ pub unsafe extern "C" fn floor1_interpolate_fit(
 ) -> *mut i32 {
     let mut i: isize = 0;
     let mut posts: isize = (*look).posts as isize;
-    let mut output: *mut i32 = 0 as *mut i32;
+    let mut output: *mut i32 = std::ptr::null_mut();
     if !A.is_null() && !B.is_null() {
         output = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
             vb as *mut vorbis_block,
@@ -1699,7 +1699,7 @@ unsafe extern "C" fn floor1_inverse1(
             }
         }
     }
-    return 0 as *mut libc::c_void;
+    return std::ptr::null_mut();
 }
 
 unsafe extern "C" fn floor1_inverse2(

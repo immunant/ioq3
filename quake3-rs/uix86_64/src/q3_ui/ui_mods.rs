@@ -63,7 +63,7 @@ static mut s_mods: mods_t = mods_t {
     banner: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -85,7 +85,7 @@ static mut s_mods: mods_t = mods_t {
     framel: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -111,7 +111,7 @@ static mut s_mods: mods_t = mods_t {
     framer: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -137,7 +137,7 @@ static mut s_mods: mods_t = mods_t {
     list: menulist_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -165,7 +165,7 @@ static mut s_mods: mods_t = mods_t {
     back: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -191,7 +191,7 @@ static mut s_mods: mods_t = mods_t {
     go: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -282,8 +282,8 @@ UI_Mods_LoadMods
 unsafe extern "C" fn UI_Mods_LoadMods() {
     let mut numdirs: i32 = 0;
     let mut dirlist: [libc::c_char; 2048] = [0; 2048];
-    let mut dirptr: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut descptr: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut dirptr: *mut libc::c_char = std::ptr::null_mut();
+    let mut descptr: *mut libc::c_char = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut dirlen: i32 = 0;
     s_mods.list.itemnames = s_mods.descriptionList.as_mut_ptr() as *mut *const libc::c_char;

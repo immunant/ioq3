@@ -182,7 +182,7 @@ pub unsafe extern "C" fn jpeg_destroy(mut cinfo: j_common_ptr) {
         )
         .expect("non-null function pointer")(cinfo); /* be safe if jpeg_destroy is called twice */
     }
-    (*cinfo).mem = 0 as *mut jpeg_memory_mgr;
+    (*cinfo).mem = std::ptr::null_mut();
     (*cinfo).global_state = 0 as i32;
     /* mark it destroyed */
 }
@@ -193,7 +193,7 @@ pub unsafe extern "C" fn jpeg_destroy(mut cinfo: j_common_ptr) {
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_alloc_quant_table(mut cinfo: j_common_ptr) -> *mut JQUANT_TBL {
-    let mut tbl: *mut JQUANT_TBL = 0 as *mut JQUANT_TBL; /* make sure this is false in any new table */
+    let mut tbl: *mut JQUANT_TBL = std::ptr::null_mut(); /* make sure this is false in any new table */
     tbl = Some(
         (*(*cinfo).mem)
             .alloc_small
@@ -238,7 +238,7 @@ pub unsafe extern "C" fn jpeg_alloc_quant_table(mut cinfo: j_common_ptr) -> *mut
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_alloc_huff_table(mut cinfo: j_common_ptr) -> *mut JHUFF_TBL {
-    let mut tbl: *mut JHUFF_TBL = 0 as *mut JHUFF_TBL; /* make sure this is false in any new table */
+    let mut tbl: *mut JHUFF_TBL = std::ptr::null_mut(); /* make sure this is false in any new table */
     tbl = Some(
         (*(*cinfo).mem)
             .alloc_small

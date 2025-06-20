@@ -4,7 +4,7 @@ pub mod stdlib_float_h {
     #[inline]
 
     pub unsafe extern "C" fn atof(mut __nptr: *const libc::c_char) -> f64 {
-        return libc::strtod(__nptr, 0 as *mut libc::c_void as *mut *mut libc::c_char);
+        return libc::strtod(__nptr, std::ptr::null_mut() as *mut *mut libc::c_char);
     }
 }
 
@@ -544,7 +544,7 @@ pub unsafe extern "C" fn Com_EndRedirect() {
     if rd_flush.is_some() {
         rd_flush.expect("non-null function pointer")(rd_buffer);
     }
-    rd_buffer = 0 as *mut libc::c_char;
+    rd_buffer = std::ptr::null_mut();
     rd_buffersize = 0 as i32;
     rd_flush = None;
 }
@@ -592,7 +592,7 @@ pub unsafe extern "C" fn Com_Printf(mut fmt: *const libc::c_char, mut args: ...)
         // TTimo: only open the qconsole.log if the filesystem is in an initialized state
         //   also, avoid recursing in the qconsole.log opening (i.e. if fs_debug is on)
         if logfile == 0 && FS_Initialized() as u32 != 0 && opening_qconsole as u64 == 0 {
-            let mut newtime: *mut tm = 0 as *mut tm;
+            let mut newtime: *mut tm = std::ptr::null_mut();
             let mut aclock: time_t = 0;
             opening_qconsole = qtrue;
             libc::time(&mut aclock as *mut time_t as *mut libc::c_long);
@@ -941,7 +941,7 @@ be after execing the config and default.
 
 pub unsafe extern "C" fn Com_StartupVariable(mut match_0: *const libc::c_char) {
     let mut i: i32 = 0;
-    let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut s: *mut libc::c_char = std::ptr::null_mut();
     i = 0 as i32;
     while i < com_numConsoleLines {
         Cmd_TokenizeString(com_consoleLines[i as usize]);
@@ -1007,7 +1007,7 @@ pub unsafe extern "C" fn Com_AddStartupCommands() -> qboolean {
 pub unsafe extern "C" fn Info_Print(mut s: *const libc::c_char) {
     let mut key: [libc::c_char; 8192] = [0; 8192];
     let mut value: [libc::c_char; 8192] = [0; 8192];
-    let mut o: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut o: *mut libc::c_char = std::ptr::null_mut();
     let mut l: i32 = 0;
     if *s as i32 == '\\' as i32 {
         s = s.offset(1)
@@ -1126,7 +1126,7 @@ pub unsafe extern "C" fn Com_StringContains(
         i += 1;
         str1 = str1.offset(1)
     }
-    return 0 as *mut libc::c_char;
+    return std::ptr::null_mut();
 }
 /*
 ============
@@ -1141,7 +1141,7 @@ pub unsafe extern "C" fn Com_Filter(
     mut casesensitive: i32,
 ) -> i32 {
     let mut buf: [libc::c_char; 1024] = [0; 1024];
-    let mut ptr: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut ptr: *mut libc::c_char = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut found: i32 = 0;
     while *filter != 0 {
@@ -1424,8 +1424,8 @@ Com_RealTime
 
 pub unsafe extern "C" fn Com_RealTime(mut qtime: *mut qtime_t) -> i32 {
     let mut t: time_t = 0;
-    let mut tms: *mut tm = 0 as *mut tm;
-    t = libc::time(0 as *mut libc::c_long) as time_t;
+    let mut tms: *mut tm = std::ptr::null_mut();
+    t = libc::time(std::ptr::null_mut()) as time_t;
     if qtime.is_null() {
         return t as i32;
     }
@@ -1457,7 +1457,7 @@ Z_ClearZone
 */
 
 unsafe extern "C" fn Z_ClearZone(mut zone: *mut memzone_t, mut size: i32) {
-    let mut block: *mut memblock_t = 0 as *mut memblock_t;
+    let mut block: *mut memblock_t = std::ptr::null_mut();
     // set the entire zone to one free block
     block = (zone as *mut byte).offset(::std::mem::size_of::<memzone_t>() as usize as isize)
         as *mut memblock_t; // in use block
@@ -1504,9 +1504,9 @@ Z_Free
 #[no_mangle]
 
 pub unsafe extern "C" fn Z_Free(mut ptr: *mut libc::c_void) {
-    let mut block: *mut memblock_t = 0 as *mut memblock_t;
-    let mut other: *mut memblock_t = 0 as *mut memblock_t;
-    let mut zone: *mut memzone_t = 0 as *mut memzone_t;
+    let mut block: *mut memblock_t = std::ptr::null_mut();
+    let mut other: *mut memblock_t = std::ptr::null_mut();
+    let mut zone: *mut memzone_t = std::ptr::null_mut();
     if ptr.is_null() {
         Com_Error(
             ERR_DROP as i32,
@@ -1584,7 +1584,7 @@ Z_FreeTags
 #[no_mangle]
 
 pub unsafe extern "C" fn Z_FreeTags(mut tag: i32) {
-    let mut zone: *mut memzone_t = 0 as *mut memzone_t;
+    let mut zone: *mut memzone_t = std::ptr::null_mut();
     if tag == TAG_SMALL as i32 {
         zone = smallzone
     } else {
@@ -1631,11 +1631,11 @@ Z_TagMalloc
 
 pub unsafe extern "C" fn Z_TagMalloc(mut size: i32, mut tag: i32) -> *mut libc::c_void {
     let mut extra: i32 = 0;
-    let mut start: *mut memblock_t = 0 as *mut memblock_t;
-    let mut rover: *mut memblock_t = 0 as *mut memblock_t;
-    let mut new: *mut memblock_t = 0 as *mut memblock_t;
-    let mut base: *mut memblock_t = 0 as *mut memblock_t;
-    let mut zone: *mut memzone_t = 0 as *mut memzone_t;
+    let mut start: *mut memblock_t = std::ptr::null_mut();
+    let mut rover: *mut memblock_t = std::ptr::null_mut();
+    let mut new: *mut memblock_t = std::ptr::null_mut();
+    let mut base: *mut memblock_t = std::ptr::null_mut();
+    let mut zone: *mut memzone_t = std::ptr::null_mut();
     if tag == 0 {
         Com_Error(
             ERR_FATAL as i32,
@@ -1722,7 +1722,7 @@ Z_Malloc
 #[no_mangle]
 
 pub unsafe extern "C" fn Z_Malloc(mut size: i32) -> *mut libc::c_void {
-    let mut buf: *mut libc::c_void = 0 as *mut libc::c_void;
+    let mut buf: *mut libc::c_void = std::ptr::null_mut();
     //Z_CheckHeap ();	// DEBUG
     buf = Z_TagMalloc(size, TAG_GENERAL as i32);
     crate::stdlib::memset(buf, 0 as i32, size as usize);
@@ -1741,7 +1741,7 @@ Z_CheckHeap
 */
 
 unsafe extern "C" fn Z_CheckHeap() {
-    let mut block: *mut memblock_t = 0 as *mut memblock_t;
+    let mut block: *mut memblock_t = std::ptr::null_mut();
     block = (*mainzone).blocklist.next;
     while !((*block).next == &mut (*mainzone).blocklist as *mut memblock_t) {
         if (block as *mut byte).offset((*block).size as isize) != (*block).next as *mut byte {
@@ -1775,7 +1775,7 @@ Z_LogZoneHeap
 #[no_mangle]
 
 pub unsafe extern "C" fn Z_LogZoneHeap(mut zone: *mut memzone_t, mut name: *mut libc::c_char) {
-    let mut block: *mut memblock_t = 0 as *mut memblock_t; // + 32 bit alignment
+    let mut block: *mut memblock_t = std::ptr::null_mut(); // + 32 bit alignment
     let mut buf: [libc::c_char; 4096] = [0; 4096];
     let mut size: i32 = 0;
     let mut allocSize: i32 = 0;
@@ -1887,7 +1887,7 @@ CopyString
 #[no_mangle]
 
 pub unsafe extern "C" fn CopyString(mut in_0: *const libc::c_char) -> *mut libc::c_char {
-    let mut out: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut out: *mut libc::c_char = std::ptr::null_mut();
     if *in_0.offset(0 as i32 as isize) == 0 {
         return (&mut emptystring as *mut memstatic_t as *mut libc::c_char)
             .offset(::std::mem::size_of::<memblock_t>() as usize as isize);
@@ -1945,7 +1945,7 @@ Com_Meminfo_f
 #[no_mangle]
 
 pub unsafe extern "C" fn Com_Meminfo_f() {
-    let mut block: *mut memblock_t = 0 as *mut memblock_t;
+    let mut block: *mut memblock_t = std::ptr::null_mut();
     let mut zoneBytes: i32 = 0;
     let mut zoneBlocks: i32 = 0;
     let mut smallZoneBytes: i32 = 0;
@@ -2108,7 +2108,7 @@ pub unsafe extern "C" fn Com_TouchMemory() {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut sum: u32 = 0;
-    let mut block: *mut memblock_t = 0 as *mut memblock_t;
+    let mut block: *mut memblock_t = std::ptr::null_mut();
     Z_CheckHeap();
     start = Sys_Milliseconds();
     sum = 0 as i32 as u32;
@@ -2172,7 +2172,7 @@ pub unsafe extern "C" fn Com_InitSmallZoneMemory() {
 #[no_mangle]
 
 pub unsafe extern "C" fn Com_InitZoneMemory() {
-    let mut cv: *mut cvar_t = 0 as *mut cvar_t;
+    let mut cv: *mut cvar_t = std::ptr::null_mut();
     // Please note: com_zoneMegs can only be set on the command line, and
     // not in q3config.cfg or Com_StartupVariable, as they haven't been
     // executed by this point. It's a chicken and egg problem. We need the
@@ -2207,7 +2207,7 @@ Hunk_Log
 #[no_mangle]
 
 pub unsafe extern "C" fn Hunk_Log() {
-    let mut block: *mut hunkblock_t = 0 as *mut hunkblock_t;
+    let mut block: *mut hunkblock_t = std::ptr::null_mut();
     let mut buf: [libc::c_char; 4096] = [0; 4096];
     let mut size: i32 = 0;
     let mut numBlocks: i32 = 0;
@@ -2264,8 +2264,8 @@ Hunk_SmallLog
 #[no_mangle]
 
 pub unsafe extern "C" fn Hunk_SmallLog() {
-    let mut block: *mut hunkblock_t = 0 as *mut hunkblock_t;
-    let mut block2: *mut hunkblock_t = 0 as *mut hunkblock_t;
+    let mut block: *mut hunkblock_t = std::ptr::null_mut();
+    let mut block2: *mut hunkblock_t = std::ptr::null_mut();
     let mut buf: [libc::c_char; 4096] = [0; 4096];
     let mut size: i32 = 0;
     let mut numBlocks: i32 = 0;
@@ -2339,9 +2339,9 @@ Com_InitHunkZoneMemory
 #[no_mangle]
 
 pub unsafe extern "C" fn Com_InitHunkMemory() {
-    let mut cv: *mut cvar_t = 0 as *mut cvar_t;
+    let mut cv: *mut cvar_t = std::ptr::null_mut();
     let mut nMinAlloc: i32 = 0;
-    let mut pMsg: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut pMsg: *mut libc::c_char = std::ptr::null_mut();
     // make sure the file system has allocated and "not" freed any temp blocks
     // this allows the config and product id files ( journal files too ) to be loaded
     // by the file system without redunant routines in the file system utilizing different
@@ -2488,7 +2488,7 @@ pub unsafe extern "C" fn Hunk_Clear() {
 }
 
 unsafe extern "C" fn Hunk_SwapBanks() {
-    let mut swap: *mut hunkUsed_t = 0 as *mut hunkUsed_t;
+    let mut swap: *mut hunkUsed_t = std::ptr::null_mut();
     // can't swap banks if there is any temp already allocated
     if (*hunk_temp).temp != (*hunk_temp).permanent {
         return;
@@ -2513,7 +2513,7 @@ Allocate permanent (until the hunk is cleared) memory
 #[no_mangle]
 
 pub unsafe extern "C" fn Hunk_Alloc(mut size: i32, mut preference: ha_pref) -> *mut libc::c_void {
-    let mut buf: *mut libc::c_void = 0 as *mut libc::c_void;
+    let mut buf: *mut libc::c_void = std::ptr::null_mut();
     if s_hunkData.is_null() {
         Com_Error(
             ERR_FATAL as i32,
@@ -2568,8 +2568,8 @@ When the files-in-use count reaches zero, all temp memory will be deleted
 #[no_mangle]
 
 pub unsafe extern "C" fn Hunk_AllocateTempMemory(mut size: i32) -> *mut libc::c_void {
-    let mut buf: *mut libc::c_void = 0 as *mut libc::c_void;
-    let mut hdr: *mut hunkHeader_t = 0 as *mut hunkHeader_t;
+    let mut buf: *mut libc::c_void = std::ptr::null_mut();
+    let mut hdr: *mut hunkHeader_t = std::ptr::null_mut();
     // return a Z_Malloc'd block if the hunk has not been initialized
     // this allows the config and product id files ( journal files too ) to be loaded
     // by the file system without redunant routines in the file system utilizing different
@@ -2617,7 +2617,7 @@ Hunk_FreeTempMemory
 #[no_mangle]
 
 pub unsafe extern "C" fn Hunk_FreeTempMemory(mut buf: *mut libc::c_void) {
-    let mut hdr: *mut hunkHeader_t = 0 as *mut hunkHeader_t;
+    let mut hdr: *mut hunkHeader_t = std::ptr::null_mut();
     // free with Z_Free if the hunk has not been initialized
     // this allows the config and product id files ( journal files too ) to be loaded
     // by the file system without redunant routines in the file system utilizing different
@@ -2769,7 +2769,7 @@ pub unsafe extern "C" fn Com_QueueEvent(
     mut ptrLength: i32,
     mut ptr: *mut libc::c_void,
 ) {
-    let mut ev: *mut sysEvent_t = 0 as *mut sysEvent_t;
+    let mut ev: *mut sysEvent_t = std::ptr::null_mut();
     // combine mouse movement with previous mouse event
     if type_0 as u32 == SE_MOUSE as i32 as u32 && eventHead != eventTail {
         ev = &mut *eventQueue
@@ -2821,7 +2821,7 @@ pub unsafe extern "C" fn Com_GetSystemEvent() -> sysEvent_t {
         evPtrLength: 0,
         evPtr: std::ptr::null_mut(),
     };
-    let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut s: *mut libc::c_char = std::ptr::null_mut();
     // return if we have data
     if eventHead > eventTail {
         eventTail += 1;
@@ -2830,7 +2830,7 @@ pub unsafe extern "C" fn Com_GetSystemEvent() -> sysEvent_t {
     // check for console commands
     s = Sys_ConsoleInput();
     if !s.is_null() {
-        let mut b: *mut libc::c_char = 0 as *mut libc::c_char;
+        let mut b: *mut libc::c_char = std::ptr::null_mut();
         let mut len: i32 = 0;
         len = crate::stdlib::strlen(s).wrapping_add(1 as i32 as usize) as i32;
         b = Z_Malloc(len) as *mut libc::c_char;
@@ -2954,7 +2954,7 @@ Com_PushEvent
 #[no_mangle]
 
 pub unsafe extern "C" fn Com_PushEvent(mut event: *mut sysEvent_t) {
-    let mut ev: *mut sysEvent_t = 0 as *mut sysEvent_t;
+    let mut ev: *mut sysEvent_t = std::ptr::null_mut();
     static mut printedWarning: i32 = 0 as i32;
     ev = &mut *com_pushedEvents
         .as_mut_ptr()
@@ -3053,7 +3053,7 @@ pub unsafe extern "C" fn Com_EventLoop() -> i32 {
         allowoverflow: qfalse,
         overflowed: qfalse,
         oob: qfalse,
-        data: 0 as *mut byte,
+        data: std::ptr::null_mut(),
         maxsize: 0,
         cursize: 0,
         readcount: 0,
@@ -3213,7 +3213,7 @@ A way to force a bus error for development reasons
 */
 
 unsafe extern "C" fn Com_Crash_f() {
-    ::std::ptr::write_volatile(0 as *mut i32, 0x12345678 as i32);
+    ::std::ptr::write_volatile(std::ptr::null_mut(), 0x12345678 as i32);
 }
 /*
 ==================
@@ -3378,7 +3378,7 @@ pub unsafe extern "C" fn Com_ReadCDKey(mut filename: *const libc::c_char) {
     );
     FS_Read(buffer.as_mut_ptr() as *mut libc::c_void, 16 as i32, f);
     FS_FCloseFile(f);
-    if CL_CDKeyValidate(buffer.as_mut_ptr(), 0 as *const libc::c_char) as u64 != 0 {
+    if CL_CDKeyValidate(buffer.as_mut_ptr(), std::ptr::null()) as u64 != 0 {
         Q_strncpyz(cl_cdkey.as_mut_ptr(), buffer.as_mut_ptr(), 17 as i32);
     } else {
         Q_strncpyz(
@@ -3421,7 +3421,7 @@ pub unsafe extern "C" fn Com_AppendCDKey(mut filename: *const libc::c_char) {
     );
     FS_Read(buffer.as_mut_ptr() as *mut libc::c_void, 16 as i32, f);
     FS_FCloseFile(f);
-    if CL_CDKeyValidate(buffer.as_mut_ptr(), 0 as *const libc::c_char) as u64 != 0 {
+    if CL_CDKeyValidate(buffer.as_mut_ptr(), std::ptr::null()) as u64 != 0 {
         libc::strcat(
             &mut *cl_cdkey.as_mut_ptr().offset(16 as i32 as isize),
             buffer.as_mut_ptr(),
@@ -3455,7 +3455,7 @@ unsafe extern "C" fn Com_WriteCDKey(
         filename,
     );
     Q_strncpyz(key.as_mut_ptr(), ikey, 17 as i32);
-    if CL_CDKeyValidate(key.as_mut_ptr(), 0 as *const libc::c_char) as u64 == 0 {
+    if CL_CDKeyValidate(key.as_mut_ptr(), std::ptr::null()) as u64 == 0 {
         return;
     }
     savedumask = libc::umask(0o77 as i32 as __mode_t);
@@ -3532,7 +3532,7 @@ unsafe extern "C" fn Com_InitRand() {
     {
         libc::srand(seed);
     } else {
-        libc::srand(libc::time(0 as *mut libc::c_long) as u32);
+        libc::srand(libc::time(std::ptr::null_mut()) as u32);
     };
 }
 // commandLine should not include the executable name (argv[0])
@@ -3544,7 +3544,7 @@ Com_Init
 #[no_mangle]
 
 pub unsafe extern "C" fn Com_Init(mut commandLine: *mut libc::c_char) {
-    let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut s: *mut libc::c_char = std::ptr::null_mut();
     let mut qport: i32 = 0;
     Com_Printf(
         b"%s %s %s\n\x00" as *const u8 as *const libc::c_char,
@@ -3575,7 +3575,7 @@ pub unsafe extern "C" fn Com_Init(mut commandLine: *mut libc::c_char) {
     Cbuf_Init();
     Com_DetectSSE();
     // override anything from the config files with command line args
-    Com_StartupVariable(0 as *const libc::c_char);
+    Com_StartupVariable(std::ptr::null());
     Com_InitZoneMemory();
     Cmd_Init();
     // get the developer cvar set as early as possible
@@ -3648,7 +3648,7 @@ pub unsafe extern "C" fn Com_Init(mut commandLine: *mut libc::c_char) {
     );
     Com_ExecuteCfg();
     // override anything from the config files with command line args
-    Com_StartupVariable(0 as *const libc::c_char);
+    Com_StartupVariable(std::ptr::null());
     // get dedicated here for proper hunk megs initialization
     com_dedicated = Cvar_Get(
         b"dedicated\x00" as *const u8 as *const libc::c_char,
@@ -3935,7 +3935,7 @@ pub unsafe extern "C" fn Com_ReadFromPipe() {
         if !(read > 0 as i32) {
             break;
         }
-        let mut brk: *mut libc::c_char = 0 as *mut libc::c_char;
+        let mut brk: *mut libc::c_char = std::ptr::null_mut();
         let mut i: i32 = 0;
         i = accu;
         while i < accu + read {
@@ -4013,7 +4013,7 @@ pub unsafe extern "C" fn Com_WriteConfiguration() {
     Com_WriteConfigToFile(b"q3config.cfg\x00" as *const u8 as *const libc::c_char);
     // not needed for dedicated or standalone
     if (*com_standalone).integer == 0 {
-        let mut gamedir: *const libc::c_char = 0 as *const libc::c_char;
+        let mut gamedir: *const libc::c_char = std::ptr::null();
         gamedir = Cvar_VariableString(b"fs_game\x00" as *const u8 as *const libc::c_char);
         if UI_usesUniqueCDKey() as u32 != 0 && *gamedir.offset(0 as i32 as isize) as i32 != 0 as i32
         {
@@ -4385,7 +4385,7 @@ pub unsafe extern "C" fn Field_Clear(mut edit: *mut field_t) {
     (*edit).scroll = 0 as i32;
 }
 
-static mut completionString: *const libc::c_char = 0 as *const libc::c_char;
+static mut completionString: *const libc::c_char = std::ptr::null();
 
 static mut shortestMatch: [libc::c_char; 1024] = [0; 1024];
 
@@ -4523,7 +4523,7 @@ unsafe extern "C" fn Field_FindFirstSeparator(mut s: *mut libc::c_char) -> *mut 
         }
         i += 1
     }
-    return 0 as *mut libc::c_char;
+    return std::ptr::null_mut();
 }
 /*
 ===============
@@ -4679,7 +4679,7 @@ pub unsafe extern "C" fn Field_CompleteCommand(
     }
     if completionArgument > 1 as i32 {
         let mut baseCmd: *const libc::c_char = Cmd_Argv(0 as i32);
-        let mut p: *mut libc::c_char = 0 as *mut libc::c_char;
+        let mut p: *mut libc::c_char = std::ptr::null_mut();
         // This should always be true
         if *baseCmd.offset(0 as i32 as isize) as i32 == '\\' as i32
             || *baseCmd.offset(0 as i32 as isize) as i32 == '/' as i32
@@ -4896,7 +4896,7 @@ pub unsafe extern "C" fn Com_PlayerNameToFieldString(
     mut length: i32,
     mut name: *const libc::c_char,
 ) -> qboolean {
-    let mut p: *const libc::c_char = 0 as *const libc::c_char;
+    let mut p: *const libc::c_char = std::ptr::null();
     let mut i: i32 = 0;
     let mut x1: i32 = 0;
     let mut x2: i32 = 0;
@@ -5029,8 +5029,8 @@ unsafe extern "C" fn run_static_initializers() {
                         .wrapping_add(3 as i32 as usize)
                         & !(3 as i32) as usize) as i32,
                     tag: TAG_STATIC as i32,
-                    next: 0 as *mut memblock_s,
-                    prev: 0 as *mut memblock_s,
+                    next: std::ptr::null_mut(),
+                    prev: std::ptr::null_mut(),
                     id: 0x1d4a11 as i32,
                 };
                 init
@@ -5048,8 +5048,8 @@ unsafe extern "C" fn run_static_initializers() {
                             .wrapping_add(3 as i32 as usize)
                             & !(3 as i32) as usize) as i32,
                         tag: TAG_STATIC as i32,
-                        next: 0 as *mut memblock_s,
-                        prev: 0 as *mut memblock_s,
+                        next: std::ptr::null_mut(),
+                        prev: std::ptr::null_mut(),
                         id: 0x1d4a11 as i32,
                     };
                     init
@@ -5066,8 +5066,8 @@ unsafe extern "C" fn run_static_initializers() {
                             .wrapping_add(3 as i32 as usize)
                             & !(3 as i32) as usize) as i32,
                         tag: TAG_STATIC as i32,
-                        next: 0 as *mut memblock_s,
-                        prev: 0 as *mut memblock_s,
+                        next: std::ptr::null_mut(),
+                        prev: std::ptr::null_mut(),
                         id: 0x1d4a11 as i32,
                     };
                     init
@@ -5084,8 +5084,8 @@ unsafe extern "C" fn run_static_initializers() {
                             .wrapping_add(3 as i32 as usize)
                             & !(3 as i32) as usize) as i32,
                         tag: TAG_STATIC as i32,
-                        next: 0 as *mut memblock_s,
-                        prev: 0 as *mut memblock_s,
+                        next: std::ptr::null_mut(),
+                        prev: std::ptr::null_mut(),
                         id: 0x1d4a11 as i32,
                     };
                     init
@@ -5102,8 +5102,8 @@ unsafe extern "C" fn run_static_initializers() {
                             .wrapping_add(3 as i32 as usize)
                             & !(3 as i32) as usize) as i32,
                         tag: TAG_STATIC as i32,
-                        next: 0 as *mut memblock_s,
-                        prev: 0 as *mut memblock_s,
+                        next: std::ptr::null_mut(),
+                        prev: std::ptr::null_mut(),
                         id: 0x1d4a11 as i32,
                     };
                     init
@@ -5120,8 +5120,8 @@ unsafe extern "C" fn run_static_initializers() {
                             .wrapping_add(3 as i32 as usize)
                             & !(3 as i32) as usize) as i32,
                         tag: TAG_STATIC as i32,
-                        next: 0 as *mut memblock_s,
-                        prev: 0 as *mut memblock_s,
+                        next: std::ptr::null_mut(),
+                        prev: std::ptr::null_mut(),
                         id: 0x1d4a11 as i32,
                     };
                     init
@@ -5138,8 +5138,8 @@ unsafe extern "C" fn run_static_initializers() {
                             .wrapping_add(3 as i32 as usize)
                             & !(3 as i32) as usize) as i32,
                         tag: TAG_STATIC as i32,
-                        next: 0 as *mut memblock_s,
-                        prev: 0 as *mut memblock_s,
+                        next: std::ptr::null_mut(),
+                        prev: std::ptr::null_mut(),
                         id: 0x1d4a11 as i32,
                     };
                     init
@@ -5156,8 +5156,8 @@ unsafe extern "C" fn run_static_initializers() {
                             .wrapping_add(3 as i32 as usize)
                             & !(3 as i32) as usize) as i32,
                         tag: TAG_STATIC as i32,
-                        next: 0 as *mut memblock_s,
-                        prev: 0 as *mut memblock_s,
+                        next: std::ptr::null_mut(),
+                        prev: std::ptr::null_mut(),
                         id: 0x1d4a11 as i32,
                     };
                     init
@@ -5174,8 +5174,8 @@ unsafe extern "C" fn run_static_initializers() {
                             .wrapping_add(3 as i32 as usize)
                             & !(3 as i32) as usize) as i32,
                         tag: TAG_STATIC as i32,
-                        next: 0 as *mut memblock_s,
-                        prev: 0 as *mut memblock_s,
+                        next: std::ptr::null_mut(),
+                        prev: std::ptr::null_mut(),
                         id: 0x1d4a11 as i32,
                     };
                     init
@@ -5192,8 +5192,8 @@ unsafe extern "C" fn run_static_initializers() {
                             .wrapping_add(3 as i32 as usize)
                             & !(3 as i32) as usize) as i32,
                         tag: TAG_STATIC as i32,
-                        next: 0 as *mut memblock_s,
-                        prev: 0 as *mut memblock_s,
+                        next: std::ptr::null_mut(),
+                        prev: std::ptr::null_mut(),
                         id: 0x1d4a11 as i32,
                     };
                     init
@@ -5210,8 +5210,8 @@ unsafe extern "C" fn run_static_initializers() {
                             .wrapping_add(3 as i32 as usize)
                             & !(3 as i32) as usize) as i32,
                         tag: TAG_STATIC as i32,
-                        next: 0 as *mut memblock_s,
-                        prev: 0 as *mut memblock_s,
+                        next: std::ptr::null_mut(),
+                        prev: std::ptr::null_mut(),
                         id: 0x1d4a11 as i32,
                     };
                     init

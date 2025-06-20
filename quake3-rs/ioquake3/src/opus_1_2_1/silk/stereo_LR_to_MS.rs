@@ -226,11 +226,11 @@ pub unsafe extern "C" fn silk_stereo_LR_to_MS(
     let mut width_Q14: opus_int32 = 0;
     let mut w_Q24: opus_int32 = 0;
     let mut deltaw_Q24: opus_int32 = 0;
-    let mut side: *mut opus_int16 = 0 as *mut opus_int16;
-    let mut LP_mid: *mut opus_int16 = 0 as *mut opus_int16;
-    let mut HP_mid: *mut opus_int16 = 0 as *mut opus_int16;
-    let mut LP_side: *mut opus_int16 = 0 as *mut opus_int16;
-    let mut HP_side: *mut opus_int16 = 0 as *mut opus_int16;
+    let mut side: *mut opus_int16 = std::ptr::null_mut();
+    let mut LP_mid: *mut opus_int16 = std::ptr::null_mut();
+    let mut HP_mid: *mut opus_int16 = std::ptr::null_mut();
+    let mut LP_side: *mut opus_int16 = std::ptr::null_mut();
+    let mut HP_side: *mut opus_int16 = std::ptr::null_mut();
     let mut mid: *mut opus_int16 = &mut *x1.offset(-(2 as i32) as isize) as *mut opus_int16;
     let mut fresh0 = ::std::vec::from_elem(
         0,

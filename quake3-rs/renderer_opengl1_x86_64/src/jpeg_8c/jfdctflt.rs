@@ -70,8 +70,8 @@ pub unsafe extern "C" fn jpeg_fdct_float(
     let mut z5: f32 = 0.;
     let mut z11: f32 = 0.;
     let mut z13: f32 = 0.;
-    let mut dataptr: *mut f32 = 0 as *mut f32;
-    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut dataptr: *mut f32 = std::ptr::null_mut();
+    let mut elemptr: JSAMPROW = std::ptr::null_mut();
     let mut ctr: i32 = 0;
     /* Pass 1: process rows. */
     dataptr = data;

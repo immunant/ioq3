@@ -401,10 +401,10 @@ unsafe extern "C" fn start_pass_fdctmgr(mut cinfo: j_compress_ptr) {
     let mut ci: i32 = 0;
     let mut qtblno: i32 = 0;
     let mut i: i32 = 0;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
     let mut method: i32 = 0 as i32;
-    let mut qtbl: *mut JQUANT_TBL = 0 as *mut JQUANT_TBL;
-    let mut dtbl: *mut DCTELEM = 0 as *mut DCTELEM;
+    let mut qtbl: *mut JQUANT_TBL = std::ptr::null_mut();
+    let mut dtbl: *mut DCTELEM = std::ptr::null_mut();
     ci = 0 as i32;
     compptr = (*cinfo).comp_info;
     while ci < (*cinfo).num_components {
@@ -980,7 +980,7 @@ unsafe extern "C" fn start_pass_fdctmgr(mut cinfo: j_compress_ptr) {
                  * What's actually stored is 1/divisor so that the inner loop can
                  * use a multiplication rather than a division.
                  */
-                let mut fdtbl: *mut f32 = 0 as *mut f32;
+                let mut fdtbl: *mut f32 = std::ptr::null_mut();
                 let mut row: i32 = 0;
                 let mut col: i32 = 0;
                 static mut aanscalefactor: [f64; 8] = [
@@ -1055,7 +1055,7 @@ unsafe extern "C" fn start_pass_fdctmgr(mut cinfo: j_compress_ptr) {
 #[no_mangle]
 
 pub unsafe extern "C" fn jinit_forward_dct(mut cinfo: j_compress_ptr) {
-    let mut fdct: my_fdct_ptr = 0 as *mut my_fdct_controller;
+    let mut fdct: my_fdct_ptr = std::ptr::null_mut();
     let mut i: i32 = 0;
     fdct = Some(
         (*(*cinfo).mem)
@@ -1073,8 +1073,8 @@ pub unsafe extern "C" fn jinit_forward_dct(mut cinfo: j_compress_ptr) {
     /* Mark divisor tables unallocated */
     i = 0 as i32;
     while i < 4 as i32 {
-        (*fdct).divisors[i as usize] = 0 as *mut DCTELEM;
-        (*fdct).float_divisors[i as usize] = 0 as *mut f32;
+        (*fdct).divisors[i as usize] = std::ptr::null_mut();
+        (*fdct).float_divisors[i as usize] = std::ptr::null_mut();
         i += 1
     }
 }

@@ -69,8 +69,8 @@ CM_PointLeafnum_r
 
 pub unsafe extern "C" fn CM_PointLeafnum_r(mut p: *const vec_t, mut num: i32) -> i32 {
     let mut d: f32 = 0.; // optimize counter
-    let mut node: *mut cNode_t = 0 as *mut cNode_t;
-    let mut plane: *mut cplane_t = 0 as *mut cplane_t;
+    let mut node: *mut cNode_t = std::ptr::null_mut();
+    let mut plane: *mut cplane_t = std::ptr::null_mut();
     while num >= 0 as i32 {
         node = cm.nodes.offset(num as isize);
         plane = (*node).plane;
@@ -131,8 +131,8 @@ pub unsafe extern "C" fn CM_StoreBrushes(mut ll: *mut leafList_t, mut nodenum: i
     let mut k: i32 = 0;
     let mut leafnum: i32 = 0;
     let mut brushnum: i32 = 0;
-    let mut leaf: *mut cLeaf_t = 0 as *mut cLeaf_t;
-    let mut b: *mut cbrush_t = 0 as *mut cbrush_t;
+    let mut leaf: *mut cLeaf_t = std::ptr::null_mut();
+    let mut b: *mut cbrush_t = std::ptr::null_mut();
     leafnum = -(1 as i32) - nodenum;
     leaf = &mut *cm.leafs.offset(leafnum as isize) as *mut cLeaf_t;
     k = 0 as i32;
@@ -177,8 +177,8 @@ Fills in a list of all the leafs touched
 #[no_mangle]
 
 pub unsafe extern "C" fn CM_BoxLeafnums_r(mut ll: *mut leafList_t, mut nodenum: i32) {
-    let mut plane: *mut cplane_t = 0 as *mut cplane_t;
-    let mut node: *mut cNode_t = 0 as *mut cNode_t;
+    let mut plane: *mut cplane_t = std::ptr::null_mut();
+    let mut node: *mut cNode_t = std::ptr::null_mut();
     let mut s: i32 = 0;
     loop {
         if nodenum < 0 as i32 {
@@ -221,7 +221,7 @@ pub unsafe extern "C" fn CM_BoxLeafnums(
         count: 0,
         maxcount: 0,
         overflowed: qfalse,
-        list: 0 as *mut i32,
+        list: std::ptr::null_mut(),
         bounds: [[0.; 3]; 2],
         lastLeaf: 0,
         storeLeafs: None,
@@ -260,7 +260,7 @@ pub unsafe extern "C" fn CM_BoxBrushes(
         count: 0,
         maxcount: 0,
         overflowed: qfalse,
-        list: 0 as *mut i32,
+        list: std::ptr::null_mut(),
         bounds: [[0.; 3]; 2],
         lastLeaf: 0,
         storeLeafs: None,
@@ -295,11 +295,11 @@ pub unsafe extern "C" fn CM_PointContents(mut p: *const vec_t, mut model: clipHa
     let mut i: i32 = 0;
     let mut k: i32 = 0;
     let mut brushnum: i32 = 0;
-    let mut leaf: *mut cLeaf_t = 0 as *mut cLeaf_t;
-    let mut b: *mut cbrush_t = 0 as *mut cbrush_t;
+    let mut leaf: *mut cLeaf_t = std::ptr::null_mut();
+    let mut b: *mut cbrush_t = std::ptr::null_mut();
     let mut contents: i32 = 0;
     let mut d: f32 = 0.;
-    let mut clipm: *mut cmodel_t = 0 as *mut cmodel_t;
+    let mut clipm: *mut cmodel_t = std::ptr::null_mut();
     if cm.numNodes == 0 {
         // map not loaded
         return 0 as i32;
@@ -425,8 +425,8 @@ AREAPORTALS
 
 pub unsafe extern "C" fn CM_FloodArea_r(mut areaNum: i32, mut floodnum: i32) {
     let mut i: i32 = 0;
-    let mut area: *mut cArea_t = 0 as *mut cArea_t;
-    let mut con: *mut i32 = 0 as *mut i32;
+    let mut area: *mut cArea_t = std::ptr::null_mut();
+    let mut con: *mut i32 = std::ptr::null_mut();
     area = &mut *cm.areas.offset(areaNum as isize) as *mut cArea_t;
     if (*area).floodvalid == cm.floodvalid {
         if (*area).floodnum == floodnum {
@@ -458,7 +458,7 @@ CM_FloodAreaConnections
 
 pub unsafe extern "C" fn CM_FloodAreaConnections() {
     let mut i: i32 = 0;
-    let mut area: *mut cArea_t = 0 as *mut cArea_t;
+    let mut area: *mut cArea_t = std::ptr::null_mut();
     let mut floodnum: i32 = 0;
     // all current floods are now invalid
     cm.floodvalid += 1;

@@ -62,7 +62,7 @@ static mut saveConfig: saveConfig_t = saveConfig_t {
     banner: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -84,7 +84,7 @@ static mut saveConfig: saveConfig_t = saveConfig_t {
     background: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -110,7 +110,7 @@ static mut saveConfig: saveConfig_t = saveConfig_t {
     savename: menufield_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -136,7 +136,7 @@ static mut saveConfig: saveConfig_t = saveConfig_t {
     back: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -162,7 +162,7 @@ static mut saveConfig: saveConfig_t = saveConfig_t {
     save: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -233,9 +233,9 @@ UI_SaveConfigMenu_SavenameDraw
 */
 
 unsafe extern "C" fn UI_SaveConfigMenu_SavenameDraw(mut self_0: *mut libc::c_void) {
-    let mut f: *mut menufield_s = 0 as *mut menufield_s;
+    let mut f: *mut menufield_s = std::ptr::null_mut();
     let mut style: i32 = 0;
-    let mut color: *mut f32 = 0 as *mut f32;
+    let mut color: *mut f32 = std::ptr::null_mut();
     f = self_0 as *mut menufield_s;
     if f == Menu_ItemAtCursor(&mut saveConfig.menu as *mut _ as *mut _tag_menuframework)
         as *mut menufield_s

@@ -373,6 +373,6 @@ pub unsafe extern "C" fn vorbis_bitrate_flushpacket(
         (*op).packetno = (*vb).sequence
         /* for sake of completeness */
     }
-    (*bm).vb = 0 as *mut vorbis_block;
+    (*bm).vb = std::ptr::null_mut();
     return 1 as i32;
 }

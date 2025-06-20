@@ -196,7 +196,7 @@ unsafe extern "C" fn merged_2v_upsample(
 /* 2:1 vertical sampling case: may need a spare row. */
 {
     let mut upsample: my_upsample_ptr = (*cinfo).upsample as my_upsample_ptr; /* number of rows returned to caller */
-    let mut work_ptrs: [JSAMPROW; 2] = [0 as *mut JSAMPLE; 2];
+    let mut work_ptrs: [JSAMPROW; 2] = [std::ptr::null_mut(); 2];
     let mut num_rows: JDIMENSION = 0;
     if (*upsample).spare_full != 0 {
         /* If we have a spare row saved from a previous cycle, just return it. */
@@ -300,10 +300,10 @@ unsafe extern "C" fn h2v1_merged_upsample(
     let mut cblue: i32 = 0;
     let mut cb: i32 = 0;
     let mut cr: i32 = 0;
-    let mut outptr: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut inptr0: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut inptr1: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut inptr2: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut outptr: JSAMPROW = std::ptr::null_mut();
+    let mut inptr0: JSAMPROW = std::ptr::null_mut();
+    let mut inptr1: JSAMPROW = std::ptr::null_mut();
+    let mut inptr2: JSAMPROW = std::ptr::null_mut();
     let mut col: JDIMENSION = 0;
     /* copy these pointers into registers if possible */
     let mut range_limit: *mut JSAMPLE = (*cinfo).sample_range_limit;
@@ -375,12 +375,12 @@ unsafe extern "C" fn h2v2_merged_upsample(
     let mut cblue: i32 = 0;
     let mut cb: i32 = 0;
     let mut cr: i32 = 0;
-    let mut outptr0: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut outptr1: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut inptr00: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut inptr01: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut inptr1: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut inptr2: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut outptr0: JSAMPROW = std::ptr::null_mut();
+    let mut outptr1: JSAMPROW = std::ptr::null_mut();
+    let mut inptr00: JSAMPROW = std::ptr::null_mut();
+    let mut inptr01: JSAMPROW = std::ptr::null_mut();
+    let mut inptr1: JSAMPROW = std::ptr::null_mut();
+    let mut inptr2: JSAMPROW = std::ptr::null_mut();
     let mut col: JDIMENSION = 0;
     /* copy these pointers into registers if possible */
     let mut range_limit: *mut JSAMPLE = (*cinfo).sample_range_limit;
@@ -489,7 +489,7 @@ unsafe extern "C" fn h2v2_merged_upsample(
 #[no_mangle]
 
 pub unsafe extern "C" fn jinit_merged_upsampler(mut cinfo: j_decompress_ptr) {
-    let mut upsample: my_upsample_ptr = 0 as *mut my_upsampler;
+    let mut upsample: my_upsample_ptr = std::ptr::null_mut();
     upsample = Some(
         (*(*cinfo).mem)
             .alloc_small

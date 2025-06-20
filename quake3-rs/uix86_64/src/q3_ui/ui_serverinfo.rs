@@ -68,7 +68,7 @@ static mut s_serverinfo: serverinfo_t = serverinfo_t {
     banner: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -90,7 +90,7 @@ static mut s_serverinfo: serverinfo_t = serverinfo_t {
     framel: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -116,7 +116,7 @@ static mut s_serverinfo: serverinfo_t = serverinfo_t {
     framer: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -142,7 +142,7 @@ static mut s_serverinfo: serverinfo_t = serverinfo_t {
     back: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -168,7 +168,7 @@ static mut s_serverinfo: serverinfo_t = serverinfo_t {
     add: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -272,7 +272,7 @@ ServerInfo_MenuDraw
 */
 
 unsafe extern "C" fn ServerInfo_MenuDraw() {
-    let mut s: *const libc::c_char = 0 as *const libc::c_char;
+    let mut s: *const libc::c_char = std::ptr::null();
     let mut key: [libc::c_char; 1024] = [0; 1024];
     let mut value: [libc::c_char; 1024] = [0; 1024];
     let mut i: i32 = 0 as i32;
@@ -445,7 +445,7 @@ UI_ServerInfoMenu
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_ServerInfoMenu() {
-    let mut s: *const libc::c_char = 0 as *const libc::c_char;
+    let mut s: *const libc::c_char = std::ptr::null();
     let mut key: [libc::c_char; 1024] = [0; 1024];
     let mut value: [libc::c_char; 1024] = [0; 1024];
     // zero set all our globals

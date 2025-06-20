@@ -233,7 +233,7 @@ pub unsafe extern "C" fn jpeg_CreateDecompress(
 ) {
     let mut i: i32 = 0;
     /* Guard against version mismatches between library and caller. */
-    (*cinfo).mem = 0 as *mut jpeg_memory_mgr; /* so jpeg_destroy knows mem mgr not called */
+    (*cinfo).mem = std::ptr::null_mut(); /* so jpeg_destroy knows mem mgr not called */
     if version != 80 as i32 {
         (*(*cinfo).err).msg_code = JERR_BAD_LIB_VERSION as i32;
         (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = 80 as i32;
@@ -276,17 +276,17 @@ pub unsafe extern "C" fn jpeg_CreateDecompress(
     /* Initialize a memory manager instance for this object */
     jinit_memory_mgr(cinfo as j_common_ptr as *mut jpeg_common_struct);
     /* Zero out pointers to permanent structures. */
-    (*cinfo).progress = 0 as *mut jpeg_progress_mgr;
-    (*cinfo).src = 0 as *mut jpeg_source_mgr;
+    (*cinfo).progress = std::ptr::null_mut();
+    (*cinfo).src = std::ptr::null_mut();
     i = 0 as i32;
     while i < 4 as i32 {
-        (*cinfo).quant_tbl_ptrs[i as usize] = 0 as *mut JQUANT_TBL;
+        (*cinfo).quant_tbl_ptrs[i as usize] = std::ptr::null_mut();
         i += 1
     }
     i = 0 as i32;
     while i < 4 as i32 {
-        (*cinfo).dc_huff_tbl_ptrs[i as usize] = 0 as *mut JHUFF_TBL;
-        (*cinfo).ac_huff_tbl_ptrs[i as usize] = 0 as *mut JHUFF_TBL;
+        (*cinfo).dc_huff_tbl_ptrs[i as usize] = std::ptr::null_mut();
+        (*cinfo).ac_huff_tbl_ptrs[i as usize] = std::ptr::null_mut();
         i += 1
     }
     /* Initialize marker processor so application can override methods

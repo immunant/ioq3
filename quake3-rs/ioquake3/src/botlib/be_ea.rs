@@ -213,7 +213,7 @@ pub unsafe extern "C" fn EA_DropInv(mut client: i32, mut inv: *mut libc::c_char)
 #[no_mangle]
 
 pub unsafe extern "C" fn EA_Gesture(mut client: i32) {
-    let mut bi: *mut bot_input_t = 0 as *mut bot_input_t;
+    let mut bi: *mut bot_input_t = std::ptr::null_mut();
     bi = &mut *botinputs.offset(client as isize) as *mut bot_input_t;
     (*bi).actionflags |= 0x20000 as i32;
 }
@@ -242,7 +242,7 @@ pub unsafe extern "C" fn EA_Command(mut client: i32, mut command: *mut libc::c_c
 #[no_mangle]
 
 pub unsafe extern "C" fn EA_SelectWeapon(mut client: i32, mut weapon: i32) {
-    let mut bi: *mut bot_input_t = 0 as *mut bot_input_t;
+    let mut bi: *mut bot_input_t = std::ptr::null_mut();
     bi = &mut *botinputs.offset(client as isize) as *mut bot_input_t;
     (*bi).weapon = weapon;
 }
@@ -256,7 +256,7 @@ pub unsafe extern "C" fn EA_SelectWeapon(mut client: i32, mut weapon: i32) {
 #[no_mangle]
 
 pub unsafe extern "C" fn EA_Attack(mut client: i32) {
-    let mut bi: *mut bot_input_t = 0 as *mut bot_input_t;
+    let mut bi: *mut bot_input_t = std::ptr::null_mut();
     bi = &mut *botinputs.offset(client as isize) as *mut bot_input_t;
     (*bi).actionflags |= 0x1 as i32;
 }
@@ -270,7 +270,7 @@ pub unsafe extern "C" fn EA_Attack(mut client: i32) {
 #[no_mangle]
 
 pub unsafe extern "C" fn EA_Talk(mut client: i32) {
-    let mut bi: *mut bot_input_t = 0 as *mut bot_input_t;
+    let mut bi: *mut bot_input_t = std::ptr::null_mut();
     bi = &mut *botinputs.offset(client as isize) as *mut bot_input_t;
     (*bi).actionflags |= 0x10000 as i32;
 }
@@ -284,7 +284,7 @@ pub unsafe extern "C" fn EA_Talk(mut client: i32) {
 #[no_mangle]
 
 pub unsafe extern "C" fn EA_Use(mut client: i32) {
-    let mut bi: *mut bot_input_t = 0 as *mut bot_input_t;
+    let mut bi: *mut bot_input_t = std::ptr::null_mut();
     bi = &mut *botinputs.offset(client as isize) as *mut bot_input_t;
     (*bi).actionflags |= 0x2 as i32;
 }
@@ -298,7 +298,7 @@ pub unsafe extern "C" fn EA_Use(mut client: i32) {
 #[no_mangle]
 
 pub unsafe extern "C" fn EA_Respawn(mut client: i32) {
-    let mut bi: *mut bot_input_t = 0 as *mut bot_input_t;
+    let mut bi: *mut bot_input_t = std::ptr::null_mut();
     bi = &mut *botinputs.offset(client as isize) as *mut bot_input_t;
     (*bi).actionflags |= 0x8 as i32;
 }
@@ -312,7 +312,7 @@ pub unsafe extern "C" fn EA_Respawn(mut client: i32) {
 #[no_mangle]
 
 pub unsafe extern "C" fn EA_Jump(mut client: i32) {
-    let mut bi: *mut bot_input_t = 0 as *mut bot_input_t; //end if
+    let mut bi: *mut bot_input_t = std::ptr::null_mut(); //end if
     bi = &mut *botinputs.offset(client as isize) as *mut bot_input_t;
     if (*bi).actionflags & 0x10000000 as i32 != 0 {
         (*bi).actionflags &= !(0x10 as i32)
@@ -331,7 +331,7 @@ pub unsafe extern "C" fn EA_Jump(mut client: i32) {
 #[no_mangle]
 
 pub unsafe extern "C" fn EA_DelayedJump(mut client: i32) {
-    let mut bi: *mut bot_input_t = 0 as *mut bot_input_t; //end if
+    let mut bi: *mut bot_input_t = std::ptr::null_mut(); //end if
     bi = &mut *botinputs.offset(client as isize) as *mut bot_input_t;
     if (*bi).actionflags & 0x10000000 as i32 != 0 {
         (*bi).actionflags &= !(0x8000 as i32)
@@ -350,7 +350,7 @@ pub unsafe extern "C" fn EA_DelayedJump(mut client: i32) {
 #[no_mangle]
 
 pub unsafe extern "C" fn EA_Crouch(mut client: i32) {
-    let mut bi: *mut bot_input_t = 0 as *mut bot_input_t;
+    let mut bi: *mut bot_input_t = std::ptr::null_mut();
     bi = &mut *botinputs.offset(client as isize) as *mut bot_input_t;
     (*bi).actionflags |= 0x80 as i32;
 }
@@ -364,7 +364,7 @@ pub unsafe extern "C" fn EA_Crouch(mut client: i32) {
 #[no_mangle]
 
 pub unsafe extern "C" fn EA_Walk(mut client: i32) {
-    let mut bi: *mut bot_input_t = 0 as *mut bot_input_t;
+    let mut bi: *mut bot_input_t = std::ptr::null_mut();
     bi = &mut *botinputs.offset(client as isize) as *mut bot_input_t;
     (*bi).actionflags |= 0x80000 as i32;
 }
@@ -378,7 +378,7 @@ pub unsafe extern "C" fn EA_Walk(mut client: i32) {
 #[no_mangle]
 
 pub unsafe extern "C" fn EA_Action(mut client: i32, mut action: i32) {
-    let mut bi: *mut bot_input_t = 0 as *mut bot_input_t;
+    let mut bi: *mut bot_input_t = std::ptr::null_mut();
     bi = &mut *botinputs.offset(client as isize) as *mut bot_input_t;
     (*bi).actionflags |= action;
 }
@@ -392,7 +392,7 @@ pub unsafe extern "C" fn EA_Action(mut client: i32, mut action: i32) {
 #[no_mangle]
 
 pub unsafe extern "C" fn EA_MoveUp(mut client: i32) {
-    let mut bi: *mut bot_input_t = 0 as *mut bot_input_t;
+    let mut bi: *mut bot_input_t = std::ptr::null_mut();
     bi = &mut *botinputs.offset(client as isize) as *mut bot_input_t;
     (*bi).actionflags |= 0x20 as i32;
 }
@@ -406,7 +406,7 @@ pub unsafe extern "C" fn EA_MoveUp(mut client: i32) {
 #[no_mangle]
 
 pub unsafe extern "C" fn EA_MoveDown(mut client: i32) {
-    let mut bi: *mut bot_input_t = 0 as *mut bot_input_t;
+    let mut bi: *mut bot_input_t = std::ptr::null_mut();
     bi = &mut *botinputs.offset(client as isize) as *mut bot_input_t;
     (*bi).actionflags |= 0x100 as i32;
 }
@@ -420,7 +420,7 @@ pub unsafe extern "C" fn EA_MoveDown(mut client: i32) {
 #[no_mangle]
 
 pub unsafe extern "C" fn EA_MoveForward(mut client: i32) {
-    let mut bi: *mut bot_input_t = 0 as *mut bot_input_t;
+    let mut bi: *mut bot_input_t = std::ptr::null_mut();
     bi = &mut *botinputs.offset(client as isize) as *mut bot_input_t;
     (*bi).actionflags |= 0x200 as i32;
 }
@@ -434,7 +434,7 @@ pub unsafe extern "C" fn EA_MoveForward(mut client: i32) {
 #[no_mangle]
 
 pub unsafe extern "C" fn EA_MoveBack(mut client: i32) {
-    let mut bi: *mut bot_input_t = 0 as *mut bot_input_t;
+    let mut bi: *mut bot_input_t = std::ptr::null_mut();
     bi = &mut *botinputs.offset(client as isize) as *mut bot_input_t;
     (*bi).actionflags |= 0x800 as i32;
 }
@@ -448,7 +448,7 @@ pub unsafe extern "C" fn EA_MoveBack(mut client: i32) {
 #[no_mangle]
 
 pub unsafe extern "C" fn EA_MoveLeft(mut client: i32) {
-    let mut bi: *mut bot_input_t = 0 as *mut bot_input_t;
+    let mut bi: *mut bot_input_t = std::ptr::null_mut();
     bi = &mut *botinputs.offset(client as isize) as *mut bot_input_t;
     (*bi).actionflags |= 0x1000 as i32;
 }
@@ -462,7 +462,7 @@ pub unsafe extern "C" fn EA_MoveLeft(mut client: i32) {
 #[no_mangle]
 
 pub unsafe extern "C" fn EA_MoveRight(mut client: i32) {
-    let mut bi: *mut bot_input_t = 0 as *mut bot_input_t;
+    let mut bi: *mut bot_input_t = std::ptr::null_mut();
     bi = &mut *botinputs.offset(client as isize) as *mut bot_input_t;
     (*bi).actionflags |= 0x2000 as i32;
 }
@@ -476,7 +476,7 @@ pub unsafe extern "C" fn EA_MoveRight(mut client: i32) {
 #[no_mangle]
 
 pub unsafe extern "C" fn EA_Move(mut client: i32, mut dir: *mut vec_t, mut speed: f32) {
-    let mut bi: *mut bot_input_t = 0 as *mut bot_input_t;
+    let mut bi: *mut bot_input_t = std::ptr::null_mut();
     bi = &mut *botinputs.offset(client as isize) as *mut bot_input_t;
     (*bi).dir[0 as i32 as usize] = *dir.offset(0 as i32 as isize);
     (*bi).dir[1 as i32 as usize] = *dir.offset(1 as i32 as isize);
@@ -499,7 +499,7 @@ pub unsafe extern "C" fn EA_Move(mut client: i32, mut dir: *mut vec_t, mut speed
 #[no_mangle]
 
 pub unsafe extern "C" fn EA_View(mut client: i32, mut viewangles: *mut vec_t) {
-    let mut bi: *mut bot_input_t = 0 as *mut bot_input_t;
+    let mut bi: *mut bot_input_t = std::ptr::null_mut();
     bi = &mut *botinputs.offset(client as isize) as *mut bot_input_t;
     (*bi).viewangles[0 as i32 as usize] = *viewangles.offset(0 as i32 as isize);
     (*bi).viewangles[1 as i32 as usize] = *viewangles.offset(1 as i32 as isize);
@@ -530,7 +530,7 @@ pub unsafe extern "C" fn EA_GetInput(
     mut thinktime: f32,
     mut input: *mut bot_input_t,
 ) {
-    let mut bi: *mut bot_input_t = 0 as *mut bot_input_t;
+    let mut bi: *mut bot_input_t = std::ptr::null_mut();
     bi = &mut *botinputs.offset(client as isize) as *mut bot_input_t;
     (*bi).thinktime = thinktime;
     crate::stdlib::memcpy(
@@ -549,7 +549,7 @@ pub unsafe extern "C" fn EA_GetInput(
 #[no_mangle]
 
 pub unsafe extern "C" fn EA_ResetInput(mut client: i32) {
-    let mut bi: *mut bot_input_t = 0 as *mut bot_input_t;
+    let mut bi: *mut bot_input_t = std::ptr::null_mut();
     let mut jumped: i32 = qfalse as i32;
     bi = &mut *botinputs.offset(client as isize) as *mut bot_input_t;
     (*bi).thinktime = 0 as i32 as f32;
@@ -592,6 +592,6 @@ pub unsafe extern "C" fn EA_Setup() -> i32 {
 
 pub unsafe extern "C" fn EA_Shutdown() {
     crate::src::botlib::l_memory::FreeMemory(botinputs as *mut libc::c_void);
-    botinputs = 0 as *mut bot_input_t;
+    botinputs = std::ptr::null_mut();
 }
 //end of the function EA_Shutdown

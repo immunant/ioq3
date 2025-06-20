@@ -165,8 +165,8 @@ pub unsafe extern "C" fn S_AdpcmEncode(
     mut len: i32,
     mut state: *mut adpcm_state,
 ) {
-    let mut inp: *mut i16 = 0 as *mut i16; /* Input buffer pointer */
-    let mut outp: *mut i8 = 0 as *mut i8; /* output buffer pointer */
+    let mut inp: *mut i16 = std::ptr::null_mut(); /* Input buffer pointer */
+    let mut outp: *mut i8 = std::ptr::null_mut(); /* output buffer pointer */
     let mut val: i32 = 0; /* Current input sample value */
     let mut sign: i32 = 0; /* Current adpcm sign bit */
     let mut delta: i32 = 0; /* Current adpcm output value */
@@ -272,7 +272,7 @@ pub unsafe extern "C" fn S_AdpcmDecode(
     mut len: i32,
     mut state: *mut adpcm_state,
 ) {
-    let mut inp: *mut i8 = 0 as *mut i8; /* Input buffer pointer */
+    let mut inp: *mut i8 = std::ptr::null_mut(); /* Input buffer pointer */
     let mut outp: i32 = 0; /* output buffer pointer */
     let mut sign: i32 = 0; /* Current adpcm sign bit */
     let mut delta: i32 = 0; /* Current adpcm output value */
@@ -390,7 +390,7 @@ pub unsafe extern "C" fn S_AdpcmGetSamples(mut chunk: *mut sndBuffer, mut to: *m
         sample: 0,
         index: 0,
     };
-    let mut out: *mut byte = 0 as *mut byte;
+    let mut out: *mut byte = std::ptr::null_mut();
     // get the starting state from the block header
     state.index = (*chunk).adpcm.index;
     state.sample = (*chunk).adpcm.sample;
@@ -478,14 +478,14 @@ pub unsafe extern "C" fn S_AdpcmEncodeSound(mut sfx: *mut sfx_t, mut samples: *m
     let mut inOffset: i32 = 0;
     let mut count: i32 = 0;
     let mut n: i32 = 0;
-    let mut newchunk: *mut sndBuffer = 0 as *mut sndBuffer;
-    let mut chunk: *mut sndBuffer = 0 as *mut sndBuffer;
-    let mut out: *mut byte = 0 as *mut byte;
+    let mut newchunk: *mut sndBuffer = std::ptr::null_mut();
+    let mut chunk: *mut sndBuffer = std::ptr::null_mut();
+    let mut out: *mut byte = std::ptr::null_mut();
     inOffset = 0 as i32;
     count = (*sfx).soundLength;
     state.index = 0 as i32 as libc::c_char;
     state.sample = *samples.offset(0 as i32 as isize);
-    chunk = 0 as *mut sndBuffer;
+    chunk = std::ptr::null_mut();
     while count != 0 {
         n = count;
         if n > 1024 as i32 * 2 as i32 * 2 as i32 {

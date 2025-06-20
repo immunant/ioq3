@@ -89,7 +89,7 @@ unsafe extern "C" fn get_bit(mut fin: *mut byte) -> i32 {
 }
 
 unsafe extern "C" fn get_ppnode(mut huff: *mut huff_t) -> *mut *mut node_t {
-    let mut tppnode: *mut *mut node_t = 0 as *mut *mut node_t;
+    let mut tppnode: *mut *mut node_t = std::ptr::null_mut();
     if (*huff).freelist.is_null() {
         let fresh2 = (*huff).blocPtrs;
         (*huff).blocPtrs = (*huff).blocPtrs + 1;
@@ -108,8 +108,8 @@ unsafe extern "C" fn free_ppnode(mut huff: *mut huff_t, mut ppnode: *mut *mut no
 /* Swap the location of these two nodes in the tree */
 
 unsafe extern "C" fn swap(mut huff: *mut huff_t, mut node1: *mut node_t, mut node2: *mut node_t) {
-    let mut par1: *mut node_t = 0 as *mut node_t;
-    let mut par2: *mut node_t = 0 as *mut node_t;
+    let mut par1: *mut node_t = std::ptr::null_mut();
+    let mut par2: *mut node_t = std::ptr::null_mut();
     par1 = (*node1).parent;
     par2 = (*node2).parent;
     if !par1.is_null() {
@@ -136,7 +136,7 @@ unsafe extern "C" fn swap(mut huff: *mut huff_t, mut node1: *mut node_t, mut nod
 /* Swap these two nodes in the linked list (update ranks) */
 
 unsafe extern "C" fn swaplist(mut node1: *mut node_t, mut node2: *mut node_t) {
-    let mut par1: *mut node_t = 0 as *mut node_t;
+    let mut par1: *mut node_t = std::ptr::null_mut();
     par1 = (*node1).next;
     (*node1).next = (*node2).next;
     (*node2).next = par1;
@@ -165,7 +165,7 @@ unsafe extern "C" fn swaplist(mut node1: *mut node_t, mut node2: *mut node_t) {
 /* Do the increments */
 
 unsafe extern "C" fn increment(mut huff: *mut huff_t, mut node: *mut node_t) {
-    let mut lnode: *mut node_t = 0 as *mut node_t;
+    let mut lnode: *mut node_t = std::ptr::null_mut();
     if node.is_null() {
         return;
     }
@@ -179,7 +179,7 @@ unsafe extern "C" fn increment(mut huff: *mut huff_t, mut node: *mut node_t) {
     if !(*node).prev.is_null() && (*(*node).prev).weight == (*node).weight {
         *(*node).head = (*node).prev
     } else {
-        *(*node).head = 0 as *mut nodetype;
+        *(*node).head = std::ptr::null_mut();
         free_ppnode(huff, (*node).head);
     }
     (*node).weight += 1;
@@ -202,8 +202,8 @@ unsafe extern "C" fn increment(mut huff: *mut huff_t, mut node: *mut node_t) {
 #[no_mangle]
 
 pub unsafe extern "C" fn Huff_addRef(mut huff: *mut huff_t, mut ch: byte) {
-    let mut tnode: *mut node_t = 0 as *mut node_t;
-    let mut tnode2: *mut node_t = 0 as *mut node_t;
+    let mut tnode: *mut node_t = std::ptr::null_mut();
+    let mut tnode2: *mut node_t = std::ptr::null_mut();
     if (*huff).loc[ch as usize].is_null() {
         /* if this is the first transmission of this node */
         let fresh3 = (*huff).blocNode;
@@ -248,7 +248,7 @@ pub unsafe extern "C" fn Huff_addRef(mut huff: *mut huff_t, mut ch: byte) {
         }
         (*(*huff).lhead).next = tnode;
         (*tnode).prev = (*huff).lhead;
-        (*tnode).right = 0 as *mut nodetype;
+        (*tnode).right = std::ptr::null_mut();
         (*tnode).left = (*tnode).right;
         if !(*(*huff).lhead).parent.is_null() {
             if (*(*(*huff).lhead).parent).left == (*huff).lhead {
@@ -366,7 +366,11 @@ pub unsafe extern "C" fn Huff_transmit(
             i -= 1
         }
     } else {
-        send((*huff).loc[ch as usize], 0 as *mut node_t, fout, maxoffset);
+        send((*huff).loc[ch as usize],
+            std::ptr::null_mut(),
+            fout,
+            maxoffset)
+        ;
     };
 }
 #[no_mangle]
@@ -379,7 +383,11 @@ pub unsafe extern "C" fn Huff_offsetTransmit(
     mut maxoffset: i32,
 ) {
     bloc = *offset;
-    send((*huff).loc[ch as usize], 0 as *mut node_t, fout, maxoffset);
+    send((*huff).loc[ch as usize],
+        std::ptr::null_mut(),
+        fout,
+        maxoffset)
+    ;
     *offset = bloc;
 }
 #[no_mangle]
@@ -391,26 +399,26 @@ pub unsafe extern "C" fn Huff_Decompress(mut mbuf: *mut msg_t, mut offset: i32) 
     let mut j: i32 = 0;
     let mut size: i32 = 0;
     let mut seq: [byte; 65536] = [0; 65536];
-    let mut buffer: *mut byte = 0 as *mut byte;
+    let mut buffer: *mut byte = std::ptr::null_mut();
     let mut huff: huff_t = huff_t {
         blocNode: 0,
         blocPtrs: 0,
-        tree: 0 as *mut node_t,
-        lhead: 0 as *mut node_t,
-        ltail: 0 as *mut node_t,
-        loc: [0 as *mut node_t; 257],
-        freelist: 0 as *mut *mut node_t,
+        tree: std::ptr::null_mut(),
+        lhead: std::ptr::null_mut(),
+        ltail: std::ptr::null_mut(),
+        loc: [std::ptr::null_mut(); 257],
+        freelist: std::ptr::null_mut(),
         nodeList: [node_t {
-            left: 0 as *mut nodetype,
-            right: 0 as *mut nodetype,
-            parent: 0 as *mut nodetype,
-            next: 0 as *mut nodetype,
-            prev: 0 as *mut nodetype,
-            head: 0 as *mut *mut nodetype,
+            left: std::ptr::null_mut(),
+            right: std::ptr::null_mut(),
+            parent: std::ptr::null_mut(),
+            next: std::ptr::null_mut(),
+            prev: std::ptr::null_mut(),
+            head: std::ptr::null_mut(),
             weight: 0,
             symbol: 0,
         }; 768],
-        nodePtrs: [0 as *mut node_t; 768],
+        nodePtrs: [std::ptr::null_mut(); 768],
     };
     size = (*mbuf).cursize - offset;
     buffer = (*mbuf).data.offset(offset as isize);
@@ -432,9 +440,9 @@ pub unsafe extern "C" fn Huff_Decompress(mut mbuf: *mut msg_t, mut offset: i32) 
     huff.tree = huff.lhead;
     (*huff.tree).symbol = 256 as i32;
     (*huff.tree).weight = 0 as i32;
-    (*huff.lhead).prev = 0 as *mut nodetype;
+    (*huff.lhead).prev = std::ptr::null_mut();
     (*huff.lhead).next = (*huff.lhead).prev;
-    (*huff.tree).right = 0 as *mut nodetype;
+    (*huff.tree).right = std::ptr::null_mut();
     (*huff.tree).left = (*huff.tree).right;
     (*huff.tree).parent = (*huff.tree).left;
     cch = *buffer.offset(0 as i32 as isize) as i32 * 256 as i32
@@ -483,26 +491,26 @@ pub unsafe extern "C" fn Huff_Compress(mut mbuf: *mut msg_t, mut offset: i32) {
     let mut ch: i32 = 0;
     let mut size: i32 = 0;
     let mut seq: [byte; 65536] = [0; 65536];
-    let mut buffer: *mut byte = 0 as *mut byte;
+    let mut buffer: *mut byte = std::ptr::null_mut();
     let mut huff: huff_t = huff_t {
         blocNode: 0,
         blocPtrs: 0,
-        tree: 0 as *mut node_t,
-        lhead: 0 as *mut node_t,
-        ltail: 0 as *mut node_t,
-        loc: [0 as *mut node_t; 257],
-        freelist: 0 as *mut *mut node_t,
+        tree: std::ptr::null_mut(),
+        lhead: std::ptr::null_mut(),
+        ltail: std::ptr::null_mut(),
+        loc: [std::ptr::null_mut(); 257],
+        freelist: std::ptr::null_mut(),
         nodeList: [node_t {
-            left: 0 as *mut nodetype,
-            right: 0 as *mut nodetype,
-            parent: 0 as *mut nodetype,
-            next: 0 as *mut nodetype,
-            prev: 0 as *mut nodetype,
-            head: 0 as *mut *mut nodetype,
+            left: std::ptr::null_mut(),
+            right: std::ptr::null_mut(),
+            parent: std::ptr::null_mut(),
+            next: std::ptr::null_mut(),
+            prev: std::ptr::null_mut(),
+            head: std::ptr::null_mut(),
             weight: 0,
             symbol: 0,
         }; 768],
-        nodePtrs: [0 as *mut node_t; 768],
+        nodePtrs: [std::ptr::null_mut(); 768],
     };
     size = (*mbuf).cursize - offset;
     buffer = (*mbuf).data.offset(offset as isize);
@@ -523,9 +531,9 @@ pub unsafe extern "C" fn Huff_Compress(mut mbuf: *mut msg_t, mut offset: i32) {
     huff.tree = huff.lhead;
     (*huff.tree).symbol = 256 as i32;
     (*huff.tree).weight = 0 as i32;
-    (*huff.lhead).prev = 0 as *mut nodetype;
+    (*huff.lhead).prev = std::ptr::null_mut();
     (*huff.lhead).next = (*huff.lhead).prev;
-    (*huff.tree).right = 0 as *mut nodetype;
+    (*huff.tree).right = std::ptr::null_mut();
     (*huff.tree).left = (*huff.tree).right;
     (*huff.tree).parent = (*huff.tree).left;
     seq[0 as i32 as usize] = (size >> 8 as i32) as byte;
@@ -581,9 +589,9 @@ pub unsafe extern "C" fn Huff_Init(mut huff: *mut huffman_t) {
     (*huff).decompressor.tree = (*huff).decompressor.lhead;
     (*(*huff).decompressor.tree).symbol = 256 as i32;
     (*(*huff).decompressor.tree).weight = 0 as i32;
-    (*(*huff).decompressor.lhead).prev = 0 as *mut nodetype;
+    (*(*huff).decompressor.lhead).prev = std::ptr::null_mut();
     (*(*huff).decompressor.lhead).next = (*(*huff).decompressor.lhead).prev;
-    (*(*huff).decompressor.tree).right = 0 as *mut nodetype;
+    (*(*huff).decompressor.tree).right = std::ptr::null_mut();
     (*(*huff).decompressor.tree).left = (*(*huff).decompressor.tree).right;
     (*(*huff).decompressor.tree).parent = (*(*huff).decompressor.tree).left;
     // Add the NYT (not yet transmitted) node into the tree/list */
@@ -598,9 +606,9 @@ pub unsafe extern "C" fn Huff_Init(mut huff: *mut huffman_t) {
     (*huff).compressor.tree = (*huff).compressor.lhead;
     (*(*huff).compressor.tree).symbol = 256 as i32;
     (*(*huff).compressor.tree).weight = 0 as i32;
-    (*(*huff).compressor.lhead).prev = 0 as *mut nodetype;
+    (*(*huff).compressor.lhead).prev = std::ptr::null_mut();
     (*(*huff).compressor.lhead).next = (*(*huff).compressor.lhead).prev;
-    (*(*huff).compressor.tree).right = 0 as *mut nodetype;
+    (*(*huff).compressor.tree).right = std::ptr::null_mut();
     (*(*huff).compressor.tree).left = (*(*huff).compressor.tree).right;
     (*(*huff).compressor.tree).parent = (*(*huff).compressor.tree).left;
 }

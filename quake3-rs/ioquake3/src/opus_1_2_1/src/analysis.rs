@@ -689,7 +689,7 @@ unsafe extern "C" fn downmix_and_resample(
     mut C: i32,
     mut Fs: i32,
 ) -> opus_val32 {
-    let mut tmp: *mut opus_val32 = 0 as *mut opus_val32;
+    let mut tmp: *mut opus_val32 = std::ptr::null_mut();
     let mut scale: opus_val32 = 0.;
     let mut j: i32 = 0;
     let mut ret: opus_val32 = 0 as i32 as opus_val32;
@@ -732,7 +732,7 @@ unsafe extern "C" fn downmix_and_resample(
                 .wrapping_add((0 as i32 as isize * y.offset_from(tmp) as isize) as usize),
         );
     } else if Fs == 16000 as i32 {
-        let mut tmp3x: *mut opus_val32 = 0 as *mut opus_val32;
+        let mut tmp3x: *mut opus_val32 = std::ptr::null_mut();
         let mut fresh2 = ::std::vec::from_elem(
             0,
             (::std::mem::size_of::<opus_val32>() as usize)
@@ -921,16 +921,16 @@ unsafe extern "C" fn tonality_analysis(
 ) {
     let mut i: i32 = 0;
     let mut b: i32 = 0;
-    let mut kfft: *const kiss_fft_state = 0 as *const kiss_fft_state;
-    let mut in_0: *mut kiss_fft_cpx = 0 as *mut kiss_fft_cpx;
-    let mut out: *mut kiss_fft_cpx = 0 as *mut kiss_fft_cpx;
+    let mut kfft: *const kiss_fft_state = std::ptr::null();
+    let mut in_0: *mut kiss_fft_cpx = std::ptr::null_mut();
+    let mut out: *mut kiss_fft_cpx = std::ptr::null_mut();
     let mut N: i32 = 480 as i32;
     let mut N2: i32 = 240 as i32;
     let mut A: *mut f32 = (*tonal).angle.as_mut_ptr();
     let mut dA: *mut f32 = (*tonal).d_angle.as_mut_ptr();
     let mut d2A: *mut f32 = (*tonal).d2_angle.as_mut_ptr();
-    let mut tonality: *mut f32 = 0 as *mut f32;
-    let mut noisiness: *mut f32 = 0 as *mut f32;
+    let mut tonality: *mut f32 = std::ptr::null_mut();
+    let mut noisiness: *mut f32 = std::ptr::null_mut();
     let mut band_tonality: [f32; 18] = [0.; 18];
     let mut logE: [f32; 18] = [0.; 18];
     let mut BFCC: [f32; 8] = [0.; 8];
@@ -956,7 +956,7 @@ unsafe extern "C" fn tonality_analysis(
     let mut maxE: f32 = 0 as i32 as f32;
     let mut noise_floor: f32 = 0.;
     let mut remaining: i32 = 0;
-    let mut info: *mut AnalysisInfo = 0 as *mut AnalysisInfo;
+    let mut info: *mut AnalysisInfo = std::ptr::null_mut();
     let mut hp_ener: f32 = 0.;
     let mut tonality2: [f32; 240] = [0.; 240];
     let mut midE: [f32; 8] = [0.; 8];

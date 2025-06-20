@@ -345,7 +345,7 @@ pub static mut passwordNeeded: qboolean = qtrue;
 pub static mut passwordField: menufield_s = menufield_s {
     generic: menucommon_s {
         type_0: 0,
-        name: 0 as *const libc::c_char,
+        name: std::ptr::null(),
         id: 0,
         x: 0,
         y: 0,
@@ -473,7 +473,7 @@ unsafe extern "C" fn UI_DisplayDownloadInfo(mut downloadName: *const libc::c_cha
     let mut width: i32 = 0;
     let mut leftWidth: i32 = 0;
     let mut style: i32 = 0 as i32 | 0x10 as i32 | 0x800 as i32;
-    let mut s: *const libc::c_char = 0 as *const libc::c_char;
+    let mut s: *const libc::c_char = std::ptr::null();
     downloadSize =
         trap_Cvar_VariableValue(b"cl_downloadSize\x00" as *const u8 as *const libc::c_char) as i32;
     downloadCount =
@@ -716,7 +716,7 @@ to prevent it from blinking away too rapidly on local or lan games.
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_DrawConnectScreen(mut overlay: qboolean) {
-    let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut s: *mut libc::c_char = std::ptr::null_mut();
     let mut cstate: uiClientState_t = uiClientState_t {
         connState: CA_UNINITIALIZED,
         connectPacketCount: 0,

@@ -126,12 +126,13 @@ pub unsafe extern "C" fn R_LoadBMP(
     let mut columns: i32 = 0;
     let mut rows: i32 = 0;
     let mut numPixels: u32 = 0;
-    let mut pixbuf: *mut byte = 0 as *mut byte;
+    let mut pixbuf: *mut byte = std::ptr::null_mut();
     let mut row: i32 = 0;
     let mut column: i32 = 0;
-    let mut buf_p: *mut byte = 0 as *mut byte;
-    let mut end: *mut byte = 0 as *mut byte;
-    let mut buffer: C2RustUnnamed_82 = C2RustUnnamed_82 { b: 0 as *mut byte };
+    let mut buf_p: *mut byte = std::ptr::null_mut();
+    let mut end: *mut byte = std::ptr::null_mut();
+    let mut buffer: C2RustUnnamed_82 = C2RustUnnamed_82 { b: std::ptr::null_mut()}
+    ;
     let mut length: i32 = 0;
     let mut bmpHeader: BMPHeader_t = BMPHeader_t {
         id: [0; 2],
@@ -151,8 +152,8 @@ pub unsafe extern "C" fn R_LoadBMP(
         importantColors: 0,
         palette: [[0; 4]; 256],
     };
-    let mut bmpRGBA: *mut byte = 0 as *mut byte;
-    *pic = 0 as *mut byte;
+    let mut bmpRGBA: *mut byte = std::ptr::null_mut();
+    *pic = std::ptr::null_mut();
     if !width.is_null() {
         *width = 0 as i32
     }

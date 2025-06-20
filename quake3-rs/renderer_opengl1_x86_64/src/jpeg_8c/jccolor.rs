@@ -216,7 +216,7 @@ pub struct my_color_converter {
 
 unsafe extern "C" fn rgb_ycc_start(mut cinfo: j_compress_ptr) {
     let mut cconvert: my_cconvert_ptr = (*cinfo).cconvert as my_cconvert_ptr;
-    let mut rgb_ycc_tab: *mut INT32 = 0 as *mut INT32;
+    let mut rgb_ycc_tab: *mut INT32 = std::ptr::null_mut();
     let mut i: INT32 = 0;
     /* Allocate and fill in the conversion tables. */
     rgb_ycc_tab = Some(
@@ -287,10 +287,10 @@ unsafe extern "C" fn rgb_ycc_convert(
     let mut g: i32 = 0;
     let mut b: i32 = 0;
     let mut ctab: *mut INT32 = (*cconvert).rgb_ycc_tab;
-    let mut inptr: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut outptr0: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut outptr1: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut outptr2: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut inptr: JSAMPROW = std::ptr::null_mut();
+    let mut outptr0: JSAMPROW = std::ptr::null_mut();
+    let mut outptr1: JSAMPROW = std::ptr::null_mut();
+    let mut outptr2: JSAMPROW = std::ptr::null_mut();
     let mut col: JDIMENSION = 0;
     let mut num_cols: JDIMENSION = (*cinfo).image_width;
     loop {
@@ -357,8 +357,8 @@ unsafe extern "C" fn rgb_gray_convert(
     let mut g: i32 = 0;
     let mut b: i32 = 0;
     let mut ctab: *mut INT32 = (*cconvert).rgb_ycc_tab;
-    let mut inptr: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut outptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut inptr: JSAMPROW = std::ptr::null_mut();
+    let mut outptr: JSAMPROW = std::ptr::null_mut();
     let mut col: JDIMENSION = 0;
     let mut num_cols: JDIMENSION = (*cinfo).image_width;
     loop {
@@ -406,11 +406,11 @@ unsafe extern "C" fn cmyk_ycck_convert(
     let mut g: i32 = 0;
     let mut b: i32 = 0;
     let mut ctab: *mut INT32 = (*cconvert).rgb_ycc_tab;
-    let mut inptr: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut outptr0: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut outptr1: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut outptr2: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut outptr3: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut inptr: JSAMPROW = std::ptr::null_mut();
+    let mut outptr0: JSAMPROW = std::ptr::null_mut();
+    let mut outptr1: JSAMPROW = std::ptr::null_mut();
+    let mut outptr2: JSAMPROW = std::ptr::null_mut();
+    let mut outptr3: JSAMPROW = std::ptr::null_mut();
     let mut col: JDIMENSION = 0;
     let mut num_cols: JDIMENSION = (*cinfo).image_width;
     loop {
@@ -473,8 +473,8 @@ unsafe extern "C" fn grayscale_convert(
     mut output_row: JDIMENSION,
     mut num_rows: i32,
 ) {
-    let mut inptr: JSAMPROW = 0 as *mut JSAMPLE; /* don't need GETJSAMPLE() here */
-    let mut outptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut inptr: JSAMPROW = std::ptr::null_mut(); /* don't need GETJSAMPLE() here */
+    let mut outptr: JSAMPROW = std::ptr::null_mut();
     let mut col: JDIMENSION = 0;
     let mut num_cols: JDIMENSION = (*cinfo).image_width;
     let mut instride: i32 = (*cinfo).input_components;
@@ -509,8 +509,8 @@ unsafe extern "C" fn null_convert(
     mut output_row: JDIMENSION,
     mut num_rows: i32,
 ) {
-    let mut inptr: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut outptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut inptr: JSAMPROW = std::ptr::null_mut();
+    let mut outptr: JSAMPROW = std::ptr::null_mut();
     let mut col: JDIMENSION = 0;
     let mut ci: i32 = 0;
     let mut nc: i32 = (*cinfo).num_components;
@@ -550,7 +550,7 @@ unsafe extern "C" fn null_method(mut _cinfo: j_compress_ptr) {
 #[no_mangle]
 
 pub unsafe extern "C" fn jinit_color_converter(mut cinfo: j_compress_ptr) {
-    let mut cconvert: my_cconvert_ptr = 0 as *mut my_color_converter;
+    let mut cconvert: my_cconvert_ptr = std::ptr::null_mut();
     cconvert = Some(
         (*(*cinfo).mem)
             .alloc_small

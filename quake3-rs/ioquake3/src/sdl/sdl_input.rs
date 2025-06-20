@@ -1115,9 +1115,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 static mut in_keyboardDebug: *mut cvar_t = std::ptr::null_mut();
 
-static mut gamepad: *mut SDL_GameController = 0 as *mut SDL_GameController;
+static mut gamepad: *mut SDL_GameController = std::ptr::null_mut();
 
-static mut stick: *mut SDL_Joystick = 0 as *mut SDL_Joystick;
+static mut stick: *mut SDL_Joystick = std::ptr::null_mut();
 
 static mut mouseAvailable: qboolean = qfalse;
 
@@ -1139,7 +1139,7 @@ static mut vidRestartTime: i32 = 0 as i32;
 
 static mut in_eventTime: i32 = 0 as i32;
 
-static mut SDL_window: *mut SDL_Window = 0 as *mut SDL_Window;
+static mut SDL_window: *mut SDL_Window = std::ptr::null_mut();
 /*
 ===============
 IN_PrintKey
@@ -1223,8 +1223,8 @@ unsafe extern "C" fn IN_IsConsoleKey(mut key: keyNum_t, mut character: i32) -> q
     let mut i: i32 = 0;
     // Only parse the variable when it changes
     if (*cl_consoleKeys).modified as u64 != 0 {
-        let mut text_p: *mut libc::c_char = 0 as *mut libc::c_char;
-        let mut token: *mut libc::c_char = 0 as *mut libc::c_char;
+        let mut text_p: *mut libc::c_char = std::ptr::null_mut();
+        let mut token: *mut libc::c_char = std::ptr::null_mut();
         (*cl_consoleKeys).modified = qfalse;
         text_p = (*cl_consoleKeys).string;
         numConsoleKeys = 0 as i32;
@@ -1550,8 +1550,8 @@ unsafe extern "C" fn IN_InitJoystick() {
     if !stick.is_null() {
         SDL_JoystickClose(stick);
     }
-    stick = 0 as *mut SDL_Joystick;
-    gamepad = 0 as *mut SDL_GameController;
+    stick = std::ptr::null_mut();
+    gamepad = std::ptr::null_mut();
     crate::stdlib::memset(
         &mut stick_state as *mut C2RustUnnamed_151 as *mut libc::c_void,
         '\u{0}' as i32,
@@ -1709,11 +1709,11 @@ unsafe extern "C" fn IN_ShutdownJoystick() {
     }
     if !gamepad.is_null() {
         SDL_GameControllerClose(gamepad);
-        gamepad = 0 as *mut SDL_GameController
+        gamepad = std::ptr::null_mut()
     }
     if !stick.is_null() {
         SDL_JoystickClose(stick);
-        stick = 0 as *mut SDL_Joystick
+        stick = std::ptr::null_mut()
     }
     crate::stdlib::SDL_QuitSubSystem(0x2000 as u32);
     crate::stdlib::SDL_QuitSubSystem(0x200 as u32);
@@ -1724,7 +1724,7 @@ unsafe extern "C" fn KeyToAxisAndSign(
     mut outAxis: *mut i32,
     mut outSign: *mut i32,
 ) -> qboolean {
-    let mut bind: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut bind: *mut libc::c_char = std::ptr::null_mut();
     if keynum == 0 {
         return qfalse;
     }
@@ -1831,7 +1831,7 @@ unsafe extern "C" fn IN_GamepadMove() {
                 K_PAD0_A as i32 + i,
                 pressed as i32,
                 0 as i32,
-                0 as *mut libc::c_void,
+                std::ptr::null_mut(),
             );
             stick_state.buttons[i as usize] = pressed
         }
@@ -1929,7 +1929,7 @@ unsafe extern "C" fn IN_GamepadMove() {
                     posKey,
                     qfalse as i32,
                     0 as i32,
-                    0 as *mut libc::c_void,
+                    std::ptr::null_mut(),
                 );
             }
             // negative to positive/neutral -> keyup
@@ -1940,7 +1940,7 @@ unsafe extern "C" fn IN_GamepadMove() {
                     negKey,
                     qfalse as i32,
                     0 as i32,
-                    0 as *mut libc::c_void,
+                    std::ptr::null_mut(),
                 );
             }
             // negative/neutral to positive -> keydown
@@ -1951,7 +1951,7 @@ unsafe extern "C" fn IN_GamepadMove() {
                     posKey,
                     qtrue as i32,
                     0 as i32,
-                    0 as *mut libc::c_void,
+                    std::ptr::null_mut(),
                 );
             }
             // positive/neutral to negative -> keydown
@@ -1962,7 +1962,7 @@ unsafe extern "C" fn IN_GamepadMove() {
                     negKey,
                     qtrue as i32,
                     0 as i32,
-                    0 as *mut libc::c_void,
+                    std::ptr::null_mut(),
                 );
             }
             stick_state.oldaaxes[i as usize] = axis
@@ -1980,7 +1980,7 @@ unsafe extern "C" fn IN_GamepadMove() {
                     i,
                     translatedAxes[i as usize],
                     0 as i32,
-                    0 as *mut libc::c_void,
+                    std::ptr::null_mut(),
                 );
             }
             i += 1
@@ -2035,7 +2035,7 @@ unsafe extern "C" fn IN_JoyMove() {
                 balldx,
                 balldy,
                 0 as i32,
-                0 as *mut libc::c_void,
+                std::ptr::null_mut(),
             );
         }
     }
@@ -2060,7 +2060,7 @@ unsafe extern "C" fn IN_JoyMove() {
                     K_JOY1 as i32 + i,
                     pressed as i32,
                     0 as i32,
-                    0 as *mut libc::c_void,
+                    std::ptr::null_mut(),
                 );
                 stick_state.buttons[i as usize] = pressed
             }
@@ -2098,7 +2098,7 @@ unsafe extern "C" fn IN_JoyMove() {
                             hat_keys[(4 as i32 * i + 0 as i32) as usize],
                             qfalse as i32,
                             0 as i32,
-                            0 as *mut libc::c_void,
+                            std::ptr::null_mut(),
                         );
                     }
                     2 => {
@@ -2108,7 +2108,7 @@ unsafe extern "C" fn IN_JoyMove() {
                             hat_keys[(4 as i32 * i + 1 as i32) as usize],
                             qfalse as i32,
                             0 as i32,
-                            0 as *mut libc::c_void,
+                            std::ptr::null_mut(),
                         );
                     }
                     4 => {
@@ -2118,7 +2118,7 @@ unsafe extern "C" fn IN_JoyMove() {
                             hat_keys[(4 as i32 * i + 2 as i32) as usize],
                             qfalse as i32,
                             0 as i32,
-                            0 as *mut libc::c_void,
+                            std::ptr::null_mut(),
                         );
                     }
                     8 => {
@@ -2128,7 +2128,7 @@ unsafe extern "C" fn IN_JoyMove() {
                             hat_keys[(4 as i32 * i + 3 as i32) as usize],
                             qfalse as i32,
                             0 as i32,
-                            0 as *mut libc::c_void,
+                            std::ptr::null_mut(),
                         );
                     }
                     3 => {
@@ -2138,7 +2138,7 @@ unsafe extern "C" fn IN_JoyMove() {
                             hat_keys[(4 as i32 * i + 0 as i32) as usize],
                             qfalse as i32,
                             0 as i32,
-                            0 as *mut libc::c_void,
+                            std::ptr::null_mut(),
                         );
                         Com_QueueEvent(
                             in_eventTime,
@@ -2146,7 +2146,7 @@ unsafe extern "C" fn IN_JoyMove() {
                             hat_keys[(4 as i32 * i + 1 as i32) as usize],
                             qfalse as i32,
                             0 as i32,
-                            0 as *mut libc::c_void,
+                            std::ptr::null_mut(),
                         );
                     }
                     6 => {
@@ -2156,7 +2156,7 @@ unsafe extern "C" fn IN_JoyMove() {
                             hat_keys[(4 as i32 * i + 2 as i32) as usize],
                             qfalse as i32,
                             0 as i32,
-                            0 as *mut libc::c_void,
+                            std::ptr::null_mut(),
                         );
                         Com_QueueEvent(
                             in_eventTime,
@@ -2164,7 +2164,7 @@ unsafe extern "C" fn IN_JoyMove() {
                             hat_keys[(4 as i32 * i + 1 as i32) as usize],
                             qfalse as i32,
                             0 as i32,
-                            0 as *mut libc::c_void,
+                            std::ptr::null_mut(),
                         );
                     }
                     9 => {
@@ -2174,7 +2174,7 @@ unsafe extern "C" fn IN_JoyMove() {
                             hat_keys[(4 as i32 * i + 0 as i32) as usize],
                             qfalse as i32,
                             0 as i32,
-                            0 as *mut libc::c_void,
+                            std::ptr::null_mut(),
                         );
                         Com_QueueEvent(
                             in_eventTime,
@@ -2182,7 +2182,7 @@ unsafe extern "C" fn IN_JoyMove() {
                             hat_keys[(4 as i32 * i + 3 as i32) as usize],
                             qfalse as i32,
                             0 as i32,
-                            0 as *mut libc::c_void,
+                            std::ptr::null_mut(),
                         );
                     }
                     12 => {
@@ -2192,7 +2192,7 @@ unsafe extern "C" fn IN_JoyMove() {
                             hat_keys[(4 as i32 * i + 2 as i32) as usize],
                             qfalse as i32,
                             0 as i32,
-                            0 as *mut libc::c_void,
+                            std::ptr::null_mut(),
                         );
                         Com_QueueEvent(
                             in_eventTime,
@@ -2200,7 +2200,7 @@ unsafe extern "C" fn IN_JoyMove() {
                             hat_keys[(4 as i32 * i + 3 as i32) as usize],
                             qfalse as i32,
                             0 as i32,
-                            0 as *mut libc::c_void,
+                            std::ptr::null_mut(),
                         );
                     }
                     _ => {}
@@ -2214,7 +2214,7 @@ unsafe extern "C" fn IN_JoyMove() {
                             hat_keys[(4 as i32 * i + 0 as i32) as usize],
                             qtrue as i32,
                             0 as i32,
-                            0 as *mut libc::c_void,
+                            std::ptr::null_mut(),
                         );
                     }
                     2 => {
@@ -2224,7 +2224,7 @@ unsafe extern "C" fn IN_JoyMove() {
                             hat_keys[(4 as i32 * i + 1 as i32) as usize],
                             qtrue as i32,
                             0 as i32,
-                            0 as *mut libc::c_void,
+                            std::ptr::null_mut(),
                         );
                     }
                     4 => {
@@ -2234,7 +2234,7 @@ unsafe extern "C" fn IN_JoyMove() {
                             hat_keys[(4 as i32 * i + 2 as i32) as usize],
                             qtrue as i32,
                             0 as i32,
-                            0 as *mut libc::c_void,
+                            std::ptr::null_mut(),
                         );
                     }
                     8 => {
@@ -2244,7 +2244,7 @@ unsafe extern "C" fn IN_JoyMove() {
                             hat_keys[(4 as i32 * i + 3 as i32) as usize],
                             qtrue as i32,
                             0 as i32,
-                            0 as *mut libc::c_void,
+                            std::ptr::null_mut(),
                         );
                     }
                     3 => {
@@ -2254,7 +2254,7 @@ unsafe extern "C" fn IN_JoyMove() {
                             hat_keys[(4 as i32 * i + 0 as i32) as usize],
                             qtrue as i32,
                             0 as i32,
-                            0 as *mut libc::c_void,
+                            std::ptr::null_mut(),
                         );
                         Com_QueueEvent(
                             in_eventTime,
@@ -2262,7 +2262,7 @@ unsafe extern "C" fn IN_JoyMove() {
                             hat_keys[(4 as i32 * i + 1 as i32) as usize],
                             qtrue as i32,
                             0 as i32,
-                            0 as *mut libc::c_void,
+                            std::ptr::null_mut(),
                         );
                     }
                     6 => {
@@ -2272,7 +2272,7 @@ unsafe extern "C" fn IN_JoyMove() {
                             hat_keys[(4 as i32 * i + 2 as i32) as usize],
                             qtrue as i32,
                             0 as i32,
-                            0 as *mut libc::c_void,
+                            std::ptr::null_mut(),
                         );
                         Com_QueueEvent(
                             in_eventTime,
@@ -2280,7 +2280,7 @@ unsafe extern "C" fn IN_JoyMove() {
                             hat_keys[(4 as i32 * i + 1 as i32) as usize],
                             qtrue as i32,
                             0 as i32,
-                            0 as *mut libc::c_void,
+                            std::ptr::null_mut(),
                         );
                     }
                     9 => {
@@ -2290,7 +2290,7 @@ unsafe extern "C" fn IN_JoyMove() {
                             hat_keys[(4 as i32 * i + 0 as i32) as usize],
                             qtrue as i32,
                             0 as i32,
-                            0 as *mut libc::c_void,
+                            std::ptr::null_mut(),
                         );
                         Com_QueueEvent(
                             in_eventTime,
@@ -2298,7 +2298,7 @@ unsafe extern "C" fn IN_JoyMove() {
                             hat_keys[(4 as i32 * i + 3 as i32) as usize],
                             qtrue as i32,
                             0 as i32,
-                            0 as *mut libc::c_void,
+                            std::ptr::null_mut(),
                         );
                     }
                     12 => {
@@ -2308,7 +2308,7 @@ unsafe extern "C" fn IN_JoyMove() {
                             hat_keys[(4 as i32 * i + 2 as i32) as usize],
                             qtrue as i32,
                             0 as i32,
-                            0 as *mut libc::c_void,
+                            std::ptr::null_mut(),
                         );
                         Com_QueueEvent(
                             in_eventTime,
@@ -2316,7 +2316,7 @@ unsafe extern "C" fn IN_JoyMove() {
                             hat_keys[(4 as i32 * i + 3 as i32) as usize],
                             qtrue as i32,
                             0 as i32,
-                            0 as *mut libc::c_void,
+                            std::ptr::null_mut(),
                         );
                     }
                     _ => {}
@@ -2348,7 +2348,7 @@ unsafe extern "C" fn IN_JoyMove() {
                         i,
                         axis as i32,
                         0 as i32,
-                        0 as *mut libc::c_void,
+                        std::ptr::null_mut(),
                     );
                     stick_state.oldaaxes[i as usize] = axis as i32
                 }
@@ -2384,7 +2384,7 @@ unsafe extern "C" fn IN_JoyMove() {
                     joy_keys[i as usize],
                     qtrue as i32,
                     0 as i32,
-                    0 as *mut libc::c_void,
+                    std::ptr::null_mut(),
                 );
             }
             if axes & ((1 as i32) << i) as u32 == 0
@@ -2396,7 +2396,7 @@ unsafe extern "C" fn IN_JoyMove() {
                     joy_keys[i as usize],
                     qfalse as i32,
                     0 as i32,
-                    0 as *mut libc::c_void,
+                    std::ptr::null_mut(),
                 );
             }
             i += 1
@@ -2430,7 +2430,7 @@ unsafe extern "C" fn IN_ProcessEvents() {
                             key as i32,
                             qtrue as i32,
                             0 as i32,
-                            0 as *mut libc::c_void,
+                            std::ptr::null_mut(),
                         );
                     }
                     if key as u32 == K_BACKSPACE as i32 as u32 {
@@ -2440,7 +2440,7 @@ unsafe extern "C" fn IN_ProcessEvents() {
                             'h' as i32 - 'a' as i32 + 1 as i32,
                             0 as i32,
                             0 as i32,
-                            0 as *mut libc::c_void,
+                            std::ptr::null_mut(),
                         );
                     } else if keys[K_CTRL as i32 as usize].down as u32 != 0
                         && key as u32 >= 'a' as i32 as u32
@@ -2454,7 +2454,7 @@ unsafe extern "C" fn IN_ProcessEvents() {
                                 .wrapping_add(1 as i32 as u32) as i32,
                             0 as i32,
                             0 as i32,
-                            0 as *mut libc::c_void,
+                            std::ptr::null_mut(),
                         );
                     }
                     lastKeyDown = key
@@ -2469,7 +2469,7 @@ unsafe extern "C" fn IN_ProcessEvents() {
                         key as i32,
                         qfalse as i32,
                         0 as i32,
-                        0 as *mut libc::c_void,
+                        std::ptr::null_mut(),
                     );
                 }
                 lastKeyDown = 0 as keyNum_t
@@ -2533,7 +2533,7 @@ unsafe extern "C" fn IN_ProcessEvents() {
                                     K_CONSOLE as i32,
                                     qtrue as i32,
                                     0 as i32,
-                                    0 as *mut libc::c_void,
+                                    std::ptr::null_mut(),
                                 );
                                 Com_QueueEvent(
                                     in_eventTime,
@@ -2541,7 +2541,7 @@ unsafe extern "C" fn IN_ProcessEvents() {
                                     K_CONSOLE as i32,
                                     qfalse as i32,
                                     0 as i32,
-                                    0 as *mut libc::c_void,
+                                    std::ptr::null_mut(),
                                 );
                             } else {
                                 Com_QueueEvent(
@@ -2550,7 +2550,7 @@ unsafe extern "C" fn IN_ProcessEvents() {
                                     utf32,
                                     0 as i32,
                                     0 as i32,
-                                    0 as *mut libc::c_void,
+                                    std::ptr::null_mut(),
                                 );
                             }
                         }
@@ -2566,7 +2566,7 @@ unsafe extern "C" fn IN_ProcessEvents() {
                             e.motion.xrel,
                             e.motion.yrel,
                             0 as i32,
-                            0 as *mut libc::c_void,
+                            std::ptr::null_mut(),
                         );
                     }
                 }
@@ -2594,7 +2594,7 @@ unsafe extern "C" fn IN_ProcessEvents() {
                         qfalse as i32
                     },
                     0 as i32,
-                    0 as *mut libc::c_void,
+                    std::ptr::null_mut(),
                 );
             }
             1027 => {
@@ -2605,7 +2605,7 @@ unsafe extern "C" fn IN_ProcessEvents() {
                         K_MWHEELUP as i32,
                         qtrue as i32,
                         0 as i32,
-                        0 as *mut libc::c_void,
+                        std::ptr::null_mut(),
                     );
                     Com_QueueEvent(
                         in_eventTime,
@@ -2613,7 +2613,7 @@ unsafe extern "C" fn IN_ProcessEvents() {
                         K_MWHEELUP as i32,
                         qfalse as i32,
                         0 as i32,
-                        0 as *mut libc::c_void,
+                        std::ptr::null_mut(),
                     );
                 } else if e.wheel.y < 0 as i32 {
                     Com_QueueEvent(
@@ -2622,7 +2622,7 @@ unsafe extern "C" fn IN_ProcessEvents() {
                         K_MWHEELDOWN as i32,
                         qtrue as i32,
                         0 as i32,
-                        0 as *mut libc::c_void,
+                        std::ptr::null_mut(),
                     );
                     Com_QueueEvent(
                         in_eventTime,
@@ -2630,7 +2630,7 @@ unsafe extern "C" fn IN_ProcessEvents() {
                         K_MWHEELDOWN as i32,
                         qfalse as i32,
                         0 as i32,
-                        0 as *mut libc::c_void,
+                        std::ptr::null_mut(),
                     );
                 }
             }
@@ -2824,7 +2824,7 @@ pub unsafe extern "C" fn IN_Shutdown() {
     );
     mouseAvailable = qfalse;
     IN_ShutdownJoystick();
-    SDL_window = 0 as *mut SDL_Window;
+    SDL_window = std::ptr::null_mut();
 }
 /*
 ===========================================================================

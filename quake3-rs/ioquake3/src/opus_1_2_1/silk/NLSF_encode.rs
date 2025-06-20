@@ -376,18 +376,18 @@ pub unsafe extern "C" fn silk_NLSF_encode(
     let mut bits_q7: i32 = 0;
     let mut W_tmp_Q9: opus_int32 = 0;
     let mut ret: opus_int32 = 0;
-    let mut err_Q24: *mut opus_int32 = 0 as *mut opus_int32;
-    let mut RD_Q25: *mut opus_int32 = 0 as *mut opus_int32;
-    let mut tempIndices1: *mut i32 = 0 as *mut i32;
-    let mut tempIndices2: *mut i8 = 0 as *mut i8;
+    let mut err_Q24: *mut opus_int32 = std::ptr::null_mut();
+    let mut RD_Q25: *mut opus_int32 = std::ptr::null_mut();
+    let mut tempIndices1: *mut i32 = std::ptr::null_mut();
+    let mut tempIndices2: *mut i8 = std::ptr::null_mut();
     let mut res_Q10: [opus_int16; 16] = [0; 16];
     let mut NLSF_tmp_Q15: [opus_int16; 16] = [0; 16];
     let mut W_adj_Q5: [opus_int16; 16] = [0; 16];
     let mut pred_Q8: [u8; 16] = [0; 16];
     let mut ec_ix: [opus_int16; 16] = [0; 16];
-    let mut pCB_element: *const u8 = 0 as *const u8;
-    let mut iCDF_ptr: *const u8 = 0 as *const u8;
-    let mut pCB_Wght_Q9: *const opus_int16 = 0 as *const opus_int16;
+    let mut pCB_element: *const u8 = std::ptr::null();
+    let mut iCDF_ptr: *const u8 = std::ptr::null();
+    let mut pCB_Wght_Q9: *const opus_int16 = std::ptr::null();
     /* NLSF stabilization */
     crate::src::opus_1_2_1::silk::NLSF_stabilize::silk_NLSF_stabilize(
         pNLSF_Q15,

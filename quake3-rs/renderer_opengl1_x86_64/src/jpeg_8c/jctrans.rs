@@ -293,11 +293,11 @@ pub unsafe extern "C" fn jpeg_copy_critical_parameters(
     mut srcinfo: j_decompress_ptr,
     mut dstinfo: j_compress_ptr,
 ) {
-    let mut qtblptr: *mut *mut JQUANT_TBL = 0 as *mut *mut JQUANT_TBL;
-    let mut incomp: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
-    let mut outcomp: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
-    let mut c_quant: *mut JQUANT_TBL = 0 as *mut JQUANT_TBL;
-    let mut slot_quant: *mut JQUANT_TBL = 0 as *mut JQUANT_TBL;
+    let mut qtblptr: *mut *mut JQUANT_TBL = std::ptr::null_mut();
+    let mut incomp: *mut jpeg_component_info = std::ptr::null_mut();
+    let mut outcomp: *mut jpeg_component_info = std::ptr::null_mut();
+    let mut c_quant: *mut JQUANT_TBL = std::ptr::null_mut();
+    let mut slot_quant: *mut JQUANT_TBL = std::ptr::null_mut();
     let mut tblno: i32 = 0;
     let mut ci: i32 = 0;
     let mut coefi: i32 = 0;
@@ -557,10 +557,10 @@ unsafe extern "C" fn compress_output(
     let mut yoffset: i32 = 0;
     let mut blockcnt: i32 = 0;
     let mut start_col: JDIMENSION = 0;
-    let mut buffer: [JBLOCKARRAY; 4] = [0 as *mut JBLOCKROW; 4];
-    let mut MCU_buffer: [JBLOCKROW; 10] = [0 as *mut JBLOCK; 10];
-    let mut buffer_ptr: JBLOCKROW = 0 as *mut JBLOCK;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
+    let mut buffer: [JBLOCKARRAY; 4] = [std::ptr::null_mut(); 4];
+    let mut MCU_buffer: [JBLOCKROW; 10] = [std::ptr::null_mut(); 10];
+    let mut buffer_ptr: JBLOCKROW = std::ptr::null_mut();
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
     /* Align the virtual buffers for the components used in this scan. */
     ci = 0 as i32;
     while ci < (*cinfo).comps_in_scan {
@@ -675,8 +675,8 @@ unsafe extern "C" fn transencode_coef_controller(
     mut cinfo: j_compress_ptr,
     mut coef_arrays: *mut jvirt_barray_ptr,
 ) {
-    let mut coef: my_coef_ptr = 0 as *mut my_coef_controller;
-    let mut buffer: JBLOCKROW = 0 as *mut JBLOCK;
+    let mut coef: my_coef_ptr = std::ptr::null_mut();
+    let mut buffer: JBLOCKROW = std::ptr::null_mut();
     let mut i: i32 = 0;
     coef = Some(
         (*(*cinfo).mem)

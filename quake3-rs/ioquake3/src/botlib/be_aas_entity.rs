@@ -162,7 +162,7 @@ pub unsafe extern "C" fn AAS_UpdateEntity(
     mut state: *mut bot_entitystate_t,
 ) -> i32 {
     let mut relink: i32 = 0; //end if
-    let mut ent: *mut aas_entity_t = 0 as *mut aas_entity_t;
+    let mut ent: *mut aas_entity_t = std::ptr::null_mut();
     let mut absmins: vec3_t = [0.; 3];
     let mut absmaxs: vec3_t = [0.; 3];
     if crate::src::botlib::be_aas_main::aasworld.loaded == 0 {
@@ -184,9 +184,9 @@ pub unsafe extern "C" fn AAS_UpdateEntity(
         //unlink the entity from the BSP leaves
         crate::src::botlib::be_aas_bspq3::AAS_UnlinkFromBSPLeaves((*ent).leaves as *mut bsp_link_s);
         //
-        (*ent).areas = 0 as *mut aas_link_t;
+        (*ent).areas = std::ptr::null_mut();
         //
-        (*ent).leaves = 0 as *mut bsp_link_t;
+        (*ent).leaves = std::ptr::null_mut();
         return 0 as i32;
     }
     (*ent).i.update_time = crate::src::botlib::be_aas_main::AAS_Time() - (*ent).i.ltime;
@@ -242,7 +242,7 @@ pub unsafe extern "C" fn AAS_UpdateEntity(
             (*ent).i.angles.as_mut_ptr(),
             (*ent).i.mins.as_mut_ptr(),
             (*ent).i.maxs.as_mut_ptr(),
-            0 as *mut vec_t,
+            std::ptr::null_mut(),
         );
     } else if (*ent).i.solid == SOLID_BBOX as i32 {
         //if the bounding box size changed
@@ -597,7 +597,7 @@ pub unsafe extern "C" fn AAS_OriginOfMoverWithModelNum(
     mut origin: *mut vec_t,
 ) -> i32 {
     let mut i: i32 = 0; //end for
-    let mut ent: *mut aas_entity_t = 0 as *mut aas_entity_t;
+    let mut ent: *mut aas_entity_t = std::ptr::null_mut();
     i = 0 as i32;
     while i < crate::src::botlib::be_aas_main::aasworld.maxentities {
         ent = &mut *crate::src::botlib::be_aas_main::aasworld
@@ -631,7 +631,7 @@ pub unsafe extern "C" fn AAS_EntitySize(
     mut mins: *mut vec_t,
     mut maxs: *mut vec_t,
 ) {
-    let mut ent: *mut aas_entity_t = 0 as *mut aas_entity_t; //end if
+    let mut ent: *mut aas_entity_t = std::ptr::null_mut(); //end if
     if crate::src::botlib::be_aas_main::aasworld.initialized == 0 {
         return;
     }
@@ -666,7 +666,7 @@ pub unsafe extern "C" fn AAS_EntitySize(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_EntityBSPData(mut entnum: i32, mut entdata: *mut bsp_entdata_t) {
-    let mut ent: *mut aas_entity_t = 0 as *mut aas_entity_t;
+    let mut ent: *mut aas_entity_t = std::ptr::null_mut();
     ent = &mut *crate::src::botlib::be_aas_main::aasworld
         .entities
         .offset(entnum as isize) as *mut aas_entity_t;
@@ -708,12 +708,12 @@ pub unsafe extern "C" fn AAS_ResetEntityLinks() {
             .entities
             .offset(i as isize))
         .areas;
-        *fresh2 = 0 as *mut aas_link_t;
+        *fresh2 = std::ptr::null_mut();
         let ref mut fresh3 = (*crate::src::botlib::be_aas_main::aasworld
             .entities
             .offset(i as isize))
         .leaves;
-        *fresh3 = 0 as *mut bsp_link_t;
+        *fresh3 = std::ptr::null_mut();
         i += 1
     }
     //end for
@@ -756,7 +756,7 @@ pub unsafe extern "C" fn AAS_InvalidateEntities() {
 
 pub unsafe extern "C" fn AAS_UnlinkInvalidEntities() {
     let mut i: i32 = 0;
-    let mut ent: *mut aas_entity_t = 0 as *mut aas_entity_t;
+    let mut ent: *mut aas_entity_t = std::ptr::null_mut();
     i = 0 as i32;
     while i < crate::src::botlib::be_aas_main::aasworld.maxentities {
         ent = &mut *crate::src::botlib::be_aas_main::aasworld
@@ -764,11 +764,11 @@ pub unsafe extern "C" fn AAS_UnlinkInvalidEntities() {
             .offset(i as isize) as *mut aas_entity_t;
         if (*ent).i.valid == 0 {
             crate::src::botlib::be_aas_sample::AAS_UnlinkFromAreas((*ent).areas as *mut aas_link_s);
-            (*ent).areas = 0 as *mut aas_link_t;
+            (*ent).areas = std::ptr::null_mut();
             crate::src::botlib::be_aas_bspq3::AAS_UnlinkFromBSPLeaves(
                 (*ent).leaves as *mut bsp_link_s,
             );
-            (*ent).leaves = 0 as *mut bsp_link_t
+            (*ent).leaves = std::ptr::null_mut()
         }
         i += 1
         //end for
@@ -789,7 +789,7 @@ pub unsafe extern "C" fn AAS_NearestEntity(mut origin: *mut vec_t, mut modelinde
     let mut bestentnum: i32 = 0;
     let mut dist: f32 = 0.;
     let mut bestdist: f32 = 0.;
-    let mut ent: *mut aas_entity_t = 0 as *mut aas_entity_t;
+    let mut ent: *mut aas_entity_t = std::ptr::null_mut();
     let mut dir: vec3_t = [0.; 3];
     bestentnum = 0 as i32;
     bestdist = 99999 as i32 as f32;
@@ -832,7 +832,7 @@ pub unsafe extern "C" fn AAS_NearestEntity(mut origin: *mut vec_t, mut modelinde
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_BestReachableEntityArea(mut entnum: i32) -> i32 {
-    let mut ent: *mut aas_entity_t = 0 as *mut aas_entity_t;
+    let mut ent: *mut aas_entity_t = std::ptr::null_mut();
     ent = &mut *crate::src::botlib::be_aas_main::aasworld
         .entities
         .offset(entnum as isize) as *mut aas_entity_t;

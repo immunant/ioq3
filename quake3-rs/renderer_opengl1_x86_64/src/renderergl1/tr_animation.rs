@@ -287,11 +287,11 @@ unsafe extern "C" fn R_MDRCullModel(
     mut ent: *mut trRefEntity_t,
 ) -> i32 {
     let mut bounds: [vec3_t; 2] = [[0.; 3]; 2];
-    let mut oldFrame: *mut mdrFrame_t = 0 as *mut mdrFrame_t;
-    let mut newFrame: *mut mdrFrame_t = 0 as *mut mdrFrame_t;
+    let mut oldFrame: *mut mdrFrame_t = std::ptr::null_mut();
+    let mut newFrame: *mut mdrFrame_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut frameSize: i32 = 0;
-    frameSize = &mut *(*(0 as *mut mdrFrame_t))
+    frameSize = &mut *(*(std::ptr::null_mut()))
         .bones
         .as_mut_ptr()
         .offset((*header).numBones as isize) as *mut mdrBone_t as size_t as i32;
@@ -398,14 +398,14 @@ pub unsafe extern "C" fn R_MDRComputeFogNum(
 ) -> i32 {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut fog: *mut fog_t = 0 as *mut fog_t;
-    let mut mdrFrame: *mut mdrFrame_t = 0 as *mut mdrFrame_t;
+    let mut fog: *mut fog_t = std::ptr::null_mut();
+    let mut mdrFrame: *mut mdrFrame_t = std::ptr::null_mut();
     let mut localOrigin: vec3_t = [0.; 3];
     let mut frameSize: i32 = 0;
     if tr.refdef.rdflags & 0x1 as i32 != 0 {
         return 0 as i32;
     }
-    frameSize = &mut *(*(0 as *mut mdrFrame_t))
+    frameSize = &mut *(*(std::ptr::null_mut()))
         .bones
         .as_mut_ptr()
         .offset((*header).numBones as isize) as *mut mdrBone_t as size_t as i32;
@@ -452,11 +452,11 @@ R_MDRAddAnimSurfaces
 #[no_mangle]
 
 pub unsafe extern "C" fn R_MDRAddAnimSurfaces(mut ent: *mut trRefEntity_t) {
-    let mut header: *mut mdrHeader_t = 0 as *mut mdrHeader_t;
-    let mut surface: *mut mdrSurface_t = 0 as *mut mdrSurface_t;
-    let mut lod: *mut mdrLOD_t = 0 as *mut mdrLOD_t;
-    let mut shader: *mut shader_t = 0 as *mut shader_t;
-    let mut skin: *mut skin_t = 0 as *mut skin_t;
+    let mut header: *mut mdrHeader_t = std::ptr::null_mut();
+    let mut surface: *mut mdrSurface_t = std::ptr::null_mut();
+    let mut lod: *mut mdrLOD_t = std::ptr::null_mut();
+    let mut shader: *mut shader_t = std::ptr::null_mut();
+    let mut skin: *mut skin_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut lodnum: i32 = 0 as i32;
@@ -610,20 +610,20 @@ pub unsafe extern "C" fn RB_MDRSurfaceAnim(mut surface: *mut mdrSurface_t) {
     let mut k: i32 = 0;
     let mut frontlerp: f32 = 0.;
     let mut backlerp: f32 = 0.;
-    let mut triangles: *mut i32 = 0 as *mut i32;
+    let mut triangles: *mut i32 = std::ptr::null_mut();
     let mut indexes: i32 = 0;
     let mut baseIndex: i32 = 0;
     let mut baseVertex: i32 = 0;
     let mut numVerts: i32 = 0;
-    let mut v: *mut mdrVertex_t = 0 as *mut mdrVertex_t;
-    let mut header: *mut mdrHeader_t = 0 as *mut mdrHeader_t;
-    let mut frame: *mut mdrFrame_t = 0 as *mut mdrFrame_t;
-    let mut oldFrame: *mut mdrFrame_t = 0 as *mut mdrFrame_t;
+    let mut v: *mut mdrVertex_t = std::ptr::null_mut();
+    let mut header: *mut mdrHeader_t = std::ptr::null_mut();
+    let mut frame: *mut mdrFrame_t = std::ptr::null_mut();
+    let mut oldFrame: *mut mdrFrame_t = std::ptr::null_mut();
     let mut bones: [mdrBone_t; 128] = [mdrBone_t {
         matrix: [[0.; 4]; 3],
     }; 128];
-    let mut bonePtr: *mut mdrBone_t = 0 as *mut mdrBone_t;
-    let mut bone: *mut mdrBone_t = 0 as *mut mdrBone_t;
+    let mut bonePtr: *mut mdrBone_t = std::ptr::null_mut();
+    let mut bone: *mut mdrBone_t = std::ptr::null_mut();
     let mut frameSize: i32 = 0;
     // don't lerp if lerping off, or this is the only frame, or the last frame...
     //
@@ -635,7 +635,7 @@ pub unsafe extern "C" fn RB_MDRSurfaceAnim(mut surface: *mut mdrSurface_t) {
         frontlerp = 1.0f32 - backlerp
     }
     header = (surface as *mut byte).offset((*surface).ofsHeader as isize) as *mut mdrHeader_t;
-    frameSize = &mut *(*(0 as *mut mdrFrame_t))
+    frameSize = &mut *(*(std::ptr::null_mut()))
         .bones
         .as_mut_ptr()
         .offset((*header).numBones as isize) as *mut mdrBone_t as size_t as i32;
@@ -689,7 +689,7 @@ pub unsafe extern "C" fn RB_MDRSurfaceAnim(mut surface: *mut mdrSurface_t) {
     while j < numVerts {
         let mut tempVert: vec3_t = [0.; 3];
         let mut tempNormal: vec3_t = [0.; 3];
-        let mut w: *mut mdrWeight_t = 0 as *mut mdrWeight_t;
+        let mut w: *mut mdrWeight_t = std::ptr::null_mut();
         tempVert[2 as i32 as usize] = 0 as i32 as vec_t;
         tempVert[1 as i32 as usize] = tempVert[2 as i32 as usize];
         tempVert[0 as i32 as usize] = tempVert[1 as i32 as usize];

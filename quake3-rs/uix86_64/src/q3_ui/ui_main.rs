@@ -1054,7 +1054,7 @@ UI_RegisterCvars
 
 pub unsafe extern "C" fn UI_RegisterCvars() {
     let mut i: i32 = 0;
-    let mut cv: *mut cvarTable_t = 0 as *mut cvarTable_t;
+    let mut cv: *mut cvarTable_t = std::ptr::null_mut();
     i = 0 as i32;
     cv = cvarTable.as_mut_ptr();
     while i < cvarTableSize {
@@ -1121,7 +1121,7 @@ UI_UpdateCvars
 
 pub unsafe extern "C" fn UI_UpdateCvars() {
     let mut i: i32 = 0;
-    let mut cv: *mut cvarTable_t = 0 as *mut cvarTable_t;
+    let mut cv: *mut cvarTable_t = std::ptr::null_mut();
     i = 0 as i32;
     cv = cvarTable.as_mut_ptr();
     while i < cvarTableSize {

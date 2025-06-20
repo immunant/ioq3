@@ -21,7 +21,7 @@ pub mod stdlib_h {
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return libc::strtol(
             __nptr,
-            0 as *mut libc::c_void as *mut *mut libc::c_char,
+            std::ptr::null_mut() as *mut *mut libc::c_char,
             10 as i32,
         ) as i32;
     }
@@ -453,7 +453,7 @@ pub unsafe extern "C" fn SV_NumForGentity(mut ent: *mut sharedEntity_t) -> i32 {
 #[no_mangle]
 
 pub unsafe extern "C" fn SV_GentityNum(mut num: i32) -> *mut sharedEntity_t {
-    let mut ent: *mut sharedEntity_t = 0 as *mut sharedEntity_t;
+    let mut ent: *mut sharedEntity_t = std::ptr::null_mut();
     ent =
         (sv.gentities as *mut byte).offset((sv.gentitySize * num) as isize) as *mut sharedEntity_t;
     return ent;
@@ -461,7 +461,7 @@ pub unsafe extern "C" fn SV_GentityNum(mut num: i32) -> *mut sharedEntity_t {
 #[no_mangle]
 
 pub unsafe extern "C" fn SV_GameClientNum(mut num: i32) -> *mut playerState_t {
-    let mut ps: *mut playerState_t = 0 as *mut playerState_t;
+    let mut ps: *mut playerState_t = std::ptr::null_mut();
     ps = (sv.gameClients as *mut byte).offset((sv.gameClientSize * num) as isize)
         as *mut playerState_t;
     return ps;
@@ -500,7 +500,7 @@ pub unsafe extern "C" fn SV_GameSendServerCommand(
 ) {
     if clientNum == -(1 as i32) {
         SV_SendServerCommand(
-            0 as *mut client_t as *mut client_s,
+            std::ptr::null_mut() as *mut client_s,
             b"%s\x00" as *const u8 as *const libc::c_char,
             text,
         );
@@ -590,7 +590,7 @@ pub unsafe extern "C" fn SV_inPVS(mut p1: *const vec_t, mut p2: *const vec_t) ->
     let mut cluster: i32 = 0;
     let mut area1: i32 = 0;
     let mut area2: i32 = 0;
-    let mut mask: *mut byte = 0 as *mut byte;
+    let mut mask: *mut byte = std::ptr::null_mut();
     leafnum = crate::src::qcommon::cm_test::CM_PointLeafnum(p1);
     cluster = crate::src::qcommon::cm_load::CM_LeafCluster(leafnum);
     area1 = crate::src::qcommon::cm_load::CM_LeafArea(leafnum);
@@ -624,7 +624,7 @@ pub unsafe extern "C" fn SV_inPVSIgnorePortals(
 ) -> qboolean {
     let mut leafnum: i32 = 0;
     let mut cluster: i32 = 0;
-    let mut mask: *mut byte = 0 as *mut byte;
+    let mut mask: *mut byte = std::ptr::null_mut();
     leafnum = crate::src::qcommon::cm_test::CM_PointLeafnum(p1);
     cluster = crate::src::qcommon::cm_load::CM_LeafCluster(leafnum);
     mask = crate::src::qcommon::cm_test::CM_ClusterPVS(cluster);
@@ -649,7 +649,7 @@ pub unsafe extern "C" fn SV_AdjustAreaPortalState(
     mut ent: *mut sharedEntity_t,
     mut open: qboolean,
 ) {
-    let mut svEnt: *mut svEntity_t = 0 as *mut svEntity_t;
+    let mut svEnt: *mut svEntity_t = std::ptr::null_mut();
     svEnt = SV_SvEntityForGentity(ent);
     if (*svEnt).areanum2 == -(1 as i32) {
         return;
@@ -673,8 +673,8 @@ pub unsafe extern "C" fn SV_EntityContact(
     mut gEnt: *const sharedEntity_t,
     mut capsule: i32,
 ) -> qboolean {
-    let mut origin: *const f32 = 0 as *const f32;
-    let mut angles: *const f32 = 0 as *const f32;
+    let mut origin: *const f32 = std::ptr::null();
+    let mut angles: *const f32 = std::ptr::null();
     let mut ch: clipHandle_t = 0;
     let mut trace: trace_t = trace_t {
         allsolid: qfalse,
@@ -1069,7 +1069,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(mut args: *mut intptr_t) -> intptr_t
             return 0 as i32 as intptr_t;
         }
         37 => {
-            let mut s: *const libc::c_char = 0 as *const libc::c_char;
+            let mut s: *const libc::c_char = std::ptr::null();
             s = COM_Parse(&mut sv.entityParsePoint);
             Q_strncpyz(
                 VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut libc::c_char,
@@ -2518,7 +2518,7 @@ pub unsafe extern "C" fn SV_ShutdownGameProgs() {
     }
     VM_Call(gvm, GAME_SHUTDOWN as i32, qfalse as i32);
     VM_Free(gvm);
-    gvm = 0 as *mut vm_t;
+    gvm = std::ptr::null_mut();
 }
 /*
 ==================
@@ -2539,7 +2539,7 @@ unsafe extern "C" fn SV_InitGameVM(mut restart: qboolean) {
     i = 0 as i32;
     while i < (*sv_maxclients).integer {
         let ref mut fresh0 = (*svs.clients.offset(i as isize)).gentity;
-        *fresh0 = 0 as *mut sharedEntity_t;
+        *fresh0 = std::ptr::null_mut();
         i += 1
     }
     // use the current msec count for a random seed
@@ -2728,7 +2728,7 @@ Called on a normal map change, not on a map_restart
 #[no_mangle]
 
 pub unsafe extern "C" fn SV_InitGameProgs() {
-    let mut var: *mut cvar_t = 0 as *mut cvar_t;
+    let mut var: *mut cvar_t = std::ptr::null_mut();
     //FIXME these are temp while I make bots run in vm
     extern "C" {
         #[no_mangle]

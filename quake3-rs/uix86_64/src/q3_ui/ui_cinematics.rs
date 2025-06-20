@@ -6,7 +6,7 @@ pub mod stdlib_h {
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return libc::strtol(
             __nptr,
-            0 as *mut libc::c_void as *mut *mut libc::c_char,
+            std::ptr::null_mut() as *mut *mut libc::c_char,
             10 as i32,
         ) as i32;
     }
@@ -96,7 +96,7 @@ static mut cinematicsMenuInfo: cinematicsMenuInfo_t = cinematicsMenuInfo_t {
     banner: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -118,7 +118,7 @@ static mut cinematicsMenuInfo: cinematicsMenuInfo_t = cinematicsMenuInfo_t {
     framel: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -144,7 +144,7 @@ static mut cinematicsMenuInfo: cinematicsMenuInfo_t = cinematicsMenuInfo_t {
     framer: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -170,7 +170,7 @@ static mut cinematicsMenuInfo: cinematicsMenuInfo_t = cinematicsMenuInfo_t {
     cin_idlogo: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -192,7 +192,7 @@ static mut cinematicsMenuInfo: cinematicsMenuInfo_t = cinematicsMenuInfo_t {
     cin_intro: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -214,7 +214,7 @@ static mut cinematicsMenuInfo: cinematicsMenuInfo_t = cinematicsMenuInfo_t {
     cin_tier1: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -236,7 +236,7 @@ static mut cinematicsMenuInfo: cinematicsMenuInfo_t = cinematicsMenuInfo_t {
     cin_tier2: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -258,7 +258,7 @@ static mut cinematicsMenuInfo: cinematicsMenuInfo_t = cinematicsMenuInfo_t {
     cin_tier3: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -280,7 +280,7 @@ static mut cinematicsMenuInfo: cinematicsMenuInfo_t = cinematicsMenuInfo_t {
     cin_tier4: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -302,7 +302,7 @@ static mut cinematicsMenuInfo: cinematicsMenuInfo_t = cinematicsMenuInfo_t {
     cin_tier5: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -324,7 +324,7 @@ static mut cinematicsMenuInfo: cinematicsMenuInfo_t = cinematicsMenuInfo_t {
     cin_tier6: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -346,7 +346,7 @@ static mut cinematicsMenuInfo: cinematicsMenuInfo_t = cinematicsMenuInfo_t {
     cin_tier7: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -368,7 +368,7 @@ static mut cinematicsMenuInfo: cinematicsMenuInfo_t = cinematicsMenuInfo_t {
     cin_end: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -390,7 +390,7 @@ static mut cinematicsMenuInfo: cinematicsMenuInfo_t = cinematicsMenuInfo_t {
     back: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,

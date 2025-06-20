@@ -274,7 +274,7 @@ unsafe extern "C" fn pre_process_data(
     let mut numrows: i32 = 0;
     let mut ci: i32 = 0;
     let mut inrows: JDIMENSION = 0;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
     while *in_row_ctr < in_rows_avail && *out_row_group_ctr < out_row_groups_avail {
         /* Do color conversion to fill the conversion buffer. */
         inrows = in_rows_avail.wrapping_sub(*in_row_ctr);
@@ -479,9 +479,9 @@ unsafe extern "C" fn create_context_buffer(mut cinfo: j_compress_ptr) {
     let mut rgroup_height: i32 = (*cinfo).max_v_samp_factor;
     let mut ci: i32 = 0;
     let mut i: i32 = 0;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
-    let mut true_buffer: JSAMPARRAY = 0 as *mut JSAMPROW;
-    let mut fake_buffer: JSAMPARRAY = 0 as *mut JSAMPROW;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
+    let mut true_buffer: JSAMPARRAY = std::ptr::null_mut();
+    let mut fake_buffer: JSAMPARRAY = std::ptr::null_mut();
     /* Grab enough space for fake row pointers for all the components;
      * we need five row groups' worth of pointers for each component.
      */
@@ -564,9 +564,9 @@ pub unsafe extern "C" fn jinit_c_prep_controller(
     mut cinfo: j_compress_ptr,
     mut need_full_buffer: boolean,
 ) {
-    let mut prep: my_prep_ptr = 0 as *mut my_prep_controller;
+    let mut prep: my_prep_ptr = std::ptr::null_mut();
     let mut ci: i32 = 0;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
     if need_full_buffer != 0 {
         /* safety check */
         (*(*cinfo).err).msg_code = JERR_BAD_BUFFER_MODE as i32;

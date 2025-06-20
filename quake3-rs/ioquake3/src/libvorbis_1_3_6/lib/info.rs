@@ -143,7 +143,7 @@ pub unsafe extern "C" fn vorbis_comment_add(
     );
     (*vc).comments += 1;
     let ref mut fresh5 = *(*vc).user_comments.offset((*vc).comments as isize);
-    *fresh5 = 0 as *mut libc::c_char;
+    *fresh5 = std::ptr::null_mut();
 }
 #[no_mangle]
 
@@ -243,7 +243,7 @@ pub unsafe extern "C" fn vorbis_comment_query(
         i += 1
     }
     libc::free(fulltag as *mut libc::c_void);
-    return 0 as *mut libc::c_char;
+    return std::ptr::null_mut();
     /* didn't find anything */
 }
 #[no_mangle]
@@ -868,8 +868,8 @@ pub unsafe extern "C" fn vorbis_synthesis_idheader(mut op: *mut ogg_packet) -> i
     let mut opb: oggpack_buffer = oggpack_buffer {
         endbyte: 0,
         endbit: 0,
-        buffer: 0 as *mut u8,
-        ptr: 0 as *mut u8,
+        buffer: std::ptr::null_mut(),
+        ptr: std::ptr::null_mut(),
         storage: 0,
     }; /* Not the initial packet */
     let mut buffer: [libc::c_char; 6] = [0; 6]; /* not an ID header */
@@ -917,8 +917,8 @@ pub unsafe extern "C" fn vorbis_synthesis_headerin(
     let mut opb: oggpack_buffer = oggpack_buffer {
         endbyte: 0,
         endbit: 0,
-        buffer: 0 as *mut u8,
-        ptr: 0 as *mut u8,
+        buffer: std::ptr::null_mut(),
+        ptr: std::ptr::null_mut(),
         storage: 0,
     };
     if !op.is_null() {
@@ -1284,8 +1284,8 @@ pub unsafe extern "C" fn vorbis_commentheader_out(
     let mut opb: oggpack_buffer = oggpack_buffer {
         endbyte: 0,
         endbit: 0,
-        buffer: 0 as *mut u8,
-        ptr: 0 as *mut u8,
+        buffer: std::ptr::null_mut(),
+        ptr: std::ptr::null_mut(),
         storage: 0,
     };
     oggpack_writeinit(&mut opb as *mut _ as *mut oggpack_buffer);
@@ -1323,13 +1323,13 @@ pub unsafe extern "C" fn vorbis_analysis_headerout(
     let mut opb: oggpack_buffer = oggpack_buffer {
         endbyte: 0,
         endbit: 0,
-        buffer: 0 as *mut u8,
-        ptr: 0 as *mut u8,
+        buffer: std::ptr::null_mut(),
+        ptr: std::ptr::null_mut(),
         storage: 0,
     };
     let mut b: *mut private_state = (*v).backend_state as *mut private_state;
     if b.is_null() || (*vi).channels <= 0 as i32 || (*vi).channels > 256 as i32 {
-        b = 0 as *mut private_state;
+        b = std::ptr::null_mut();
         ret = -(129 as i32)
     } else {
         /* first header packet **********************************************/
@@ -1427,9 +1427,9 @@ pub unsafe extern "C" fn vorbis_analysis_headerout(
         if !(*b).header2.is_null() {
             libc::free((*b).header2 as *mut libc::c_void);
         }
-        (*b).header = 0 as *mut u8;
-        (*b).header1 = 0 as *mut u8;
-        (*b).header2 = 0 as *mut u8
+        (*b).header = std::ptr::null_mut();
+        (*b).header1 = std::ptr::null_mut();
+        (*b).header2 = std::ptr::null_mut()
     }
     return ret;
 }

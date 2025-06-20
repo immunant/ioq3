@@ -440,9 +440,9 @@ Determine which dynamic lights may effect this bmodel
 pub unsafe extern "C" fn R_DlightBmodel(mut bmodel: *mut bmodel_t) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut dl: *mut dlight_t = 0 as *mut dlight_t;
+    let mut dl: *mut dlight_t = std::ptr::null_mut();
     let mut mask: i32 = 0;
-    let mut surf: *mut msurface_t = 0 as *mut msurface_t;
+    let mut surf: *mut msurface_t = std::ptr::null_mut();
     // transform all the lights
     R_TransformDlights(tr.refdef.num_dlights, tr.refdef.dlights, &mut tr.or);
     mask = 0 as i32;
@@ -497,7 +497,7 @@ unsafe extern "C" fn R_SetupEntityLightingGrid(mut ent: *mut trRefEntity_t) {
     let mut pos: [i32; 3] = [0; 3];
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut gridData: *mut byte = 0 as *mut byte;
+    let mut gridData: *mut byte = std::ptr::null_mut();
     let mut frac: [f32; 3] = [0.; 3];
     let mut gridStep: [i32; 3] = [0; 3];
     let mut direction: vec3_t = [0.; 3];
@@ -558,7 +558,7 @@ unsafe extern "C" fn R_SetupEntityLightingGrid(mut ent: *mut trRefEntity_t) {
     i = 0 as i32;
     while i < 8 as i32 {
         let mut factor: f32 = 0.;
-        let mut data: *mut byte = 0 as *mut byte;
+        let mut data: *mut byte = std::ptr::null_mut();
         let mut lat: i32 = 0;
         let mut lng: i32 = 0;
         let mut normal: vec3_t = [0.; 3];
@@ -698,7 +698,7 @@ pub unsafe extern "C" fn R_SetupEntityLighting(
     mut ent: *mut trRefEntity_t,
 ) {
     let mut i: i32 = 0;
-    let mut dl: *mut dlight_t = 0 as *mut dlight_t;
+    let mut dl: *mut dlight_t = std::ptr::null_mut();
     let mut power: f32 = 0.;
     let mut dir: vec3_t = [0.; 3];
     let mut d: f32 = 0.;

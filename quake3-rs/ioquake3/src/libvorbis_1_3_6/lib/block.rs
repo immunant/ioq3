@@ -76,7 +76,7 @@ pub unsafe extern "C" fn vorbis_block_init(
     );
     (*vb).vd = v;
     (*vb).localalloc = 0 as i32 as isize;
-    (*vb).localstore = 0 as *mut libc::c_void;
+    (*vb).localstore = std::ptr::null_mut();
     if (*v).analysisp != 0 {
         (*vb).internal = crate::stdlib::calloc(
             1 as i32 as usize,
@@ -171,7 +171,7 @@ pub unsafe extern "C" fn _vorbis_block_ripcord(mut vb: *mut vorbis_block) {
     }
     /* pull the ripcord */
     (*vb).localtop = 0 as i32 as isize;
-    (*vb).reap = 0 as *mut alloc_chain;
+    (*vb).reap = std::ptr::null_mut();
 }
 #[no_mangle]
 
@@ -212,7 +212,7 @@ unsafe extern "C" fn _vds_shared_init(
     let mut current_block: u64;
     let mut i: i32 = 0;
     let mut ci: *mut codec_setup_info = (*vi).codec_setup as *mut codec_setup_info;
-    let mut b: *mut private_state = 0 as *mut private_state;
+    let mut b: *mut private_state = std::ptr::null_mut();
     let mut hs: i32 = 0;
     if ci.is_null()
         || (*ci).modes <= 0 as i32
@@ -349,7 +349,7 @@ unsafe extern "C" fn _vds_shared_init(
             /* finish the codebooks */
             /* decode codebooks are now standalone after init */
             vorbis_staticbook_destroy((*ci).book_param[i as usize] as *mut static_codebook);
-            (*ci).book_param[i as usize] = 0 as *mut static_codebook;
+            (*ci).book_param[i as usize] = std::ptr::null_mut();
             i += 1
         }
         match current_block {
@@ -361,7 +361,7 @@ unsafe extern "C" fn _vds_shared_init(
                         vorbis_staticbook_destroy(
                             (*ci).book_param[i as usize] as *mut static_codebook,
                         );
-                        (*ci).book_param[i as usize] = 0 as *mut static_codebook
+                        (*ci).book_param[i as usize] = std::ptr::null_mut()
                     }
                     i += 1
                 }
@@ -435,7 +435,7 @@ pub unsafe extern "C" fn vorbis_analysis_init(
     mut v: *mut vorbis_dsp_state,
     mut vi: *mut vorbis_info,
 ) -> i32 {
-    let mut b: *mut private_state = 0 as *mut private_state;
+    let mut b: *mut private_state = std::ptr::null_mut();
     if _vds_shared_init(v, vi, 1 as i32) != 0 {
         return 1 as i32;
     }
@@ -465,7 +465,7 @@ pub unsafe extern "C" fn vorbis_dsp_clear(mut v: *mut vorbis_dsp_state) {
         let mut ci: *mut codec_setup_info = if !vi.is_null() {
             (*vi).codec_setup
         } else {
-            0 as *mut libc::c_void
+            std::ptr::null_mut()
         } as *mut codec_setup_info;
         let mut b: *mut private_state = (*v).backend_state as *mut private_state;
         if !b.is_null() {
@@ -588,15 +588,15 @@ pub unsafe extern "C" fn vorbis_analysis_buffer(
     if !(*b).header.is_null() {
         libc::free((*b).header as *mut libc::c_void);
     }
-    (*b).header = 0 as *mut u8;
+    (*b).header = std::ptr::null_mut();
     if !(*b).header1.is_null() {
         libc::free((*b).header1 as *mut libc::c_void);
     }
-    (*b).header1 = 0 as *mut u8;
+    (*b).header1 = std::ptr::null_mut();
     if !(*b).header2.is_null() {
         libc::free((*b).header2 as *mut libc::c_void);
     }
-    (*b).header2 = 0 as *mut u8;
+    (*b).header2 = std::ptr::null_mut();
     /* Do we have enough storage space for the requested buffer? If not,
     expand the PCM (and envelope) storage */
     if (*v).pcm_current + vals >= (*v).pcm_storage {
@@ -929,7 +929,7 @@ pub unsafe extern "C" fn vorbis_analysis_blockout(
 
 pub unsafe extern "C" fn vorbis_synthesis_restart(mut v: *mut vorbis_dsp_state) -> i32 {
     let mut vi: *mut vorbis_info = (*v).vi;
-    let mut ci: *mut codec_setup_info = 0 as *mut codec_setup_info;
+    let mut ci: *mut codec_setup_info = std::ptr::null_mut();
     let mut hs: i32 = 0;
     if (*v).backend_state.is_null() {
         return -(1 as i32);
@@ -1352,7 +1352,7 @@ pub unsafe extern "C" fn vorbis_window(mut v: *mut vorbis_dsp_state, mut W: i32)
     let mut hs: i32 = (*ci).halfrate_flag;
     let mut b: *mut private_state = (*v).backend_state as *mut private_state;
     if ((*b).window[W as usize] - 1 as i32) < 0 as i32 {
-        return 0 as *const f32;
+        return std::ptr::null();
     }
     return crate::src::libvorbis_1_3_6::lib::window::_vorbis_window_get(
         (*b).window[W as usize] - hs,

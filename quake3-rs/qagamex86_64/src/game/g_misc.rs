@@ -728,7 +728,7 @@ pub unsafe extern "C" fn TeleportPlayer(
     mut origin: *mut vec_t,
     mut angles: *mut vec_t,
 ) {
-    let mut tent: *mut gentity_t = 0 as *mut gentity_t;
+    let mut tent: *mut gentity_t = std::ptr::null_mut();
     let mut noAngles: qboolean = qfalse;
     noAngles = (*angles.offset(0 as i32 as isize) as f64 > 999999.0f64) as i32 as qboolean;
     // use temp events at source and destination to prevent the effect
@@ -753,8 +753,8 @@ pub unsafe extern "C" fn TeleportPlayer(
         AngleVectors(
             angles as *const vec_t,
             (*(*player).client).ps.velocity.as_mut_ptr(),
-            0 as *mut vec_t,
-            0 as *mut vec_t,
+            std::ptr::null_mut(),
+            std::ptr::null_mut(),
         ); // hold time
         (*(*player).client).ps.velocity[0 as i32 as usize] =
             (*(*player).client).ps.velocity[0 as i32 as usize] * 400 as i32 as f32;
@@ -809,8 +809,8 @@ pub unsafe extern "C" fn SP_misc_model(mut ent: *mut gentity_t) {
 
 pub unsafe extern "C" fn locateCamera(mut ent: *mut gentity_t) {
     let mut dir: vec3_t = [0.; 3];
-    let mut target: *mut gentity_t = 0 as *mut gentity_t;
-    let mut owner: *mut gentity_t = 0 as *mut gentity_t;
+    let mut target: *mut gentity_t = std::ptr::null_mut();
+    let mut owner: *mut gentity_t = std::ptr::null_mut();
     owner = G_PickTarget((*ent).target) as *mut gentity_s;
     if owner.is_null() {
         G_Printf(

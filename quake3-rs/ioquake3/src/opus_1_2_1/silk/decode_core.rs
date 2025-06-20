@@ -512,12 +512,12 @@ pub unsafe extern "C" fn silk_decode_core(
     let mut sLTP_buf_idx: i32 = 0;
     let mut NLSF_interpolation_flag: i32 = 0;
     let mut signalType: i32 = 0;
-    let mut A_Q12: *mut opus_int16 = 0 as *mut opus_int16;
-    let mut B_Q14: *mut opus_int16 = 0 as *mut opus_int16;
-    let mut pxq: *mut opus_int16 = 0 as *mut opus_int16;
+    let mut A_Q12: *mut opus_int16 = std::ptr::null_mut();
+    let mut B_Q14: *mut opus_int16 = std::ptr::null_mut();
+    let mut pxq: *mut opus_int16 = std::ptr::null_mut();
     let mut A_Q12_tmp: [opus_int16; 16] = [0; 16];
-    let mut sLTP: *mut opus_int16 = 0 as *mut opus_int16;
-    let mut sLTP_Q15: *mut opus_int32 = 0 as *mut opus_int32;
+    let mut sLTP: *mut opus_int16 = std::ptr::null_mut();
+    let mut sLTP_Q15: *mut opus_int32 = std::ptr::null_mut();
     let mut LTP_pred_Q13: opus_int32 = 0;
     let mut LPC_pred_Q10: opus_int32 = 0;
     let mut Gain_Q10: opus_int32 = 0;
@@ -525,11 +525,11 @@ pub unsafe extern "C" fn silk_decode_core(
     let mut gain_adj_Q16: opus_int32 = 0;
     let mut rand_seed: opus_int32 = 0;
     let mut offset_Q10: opus_int32 = 0;
-    let mut pred_lag_ptr: *mut opus_int32 = 0 as *mut opus_int32;
-    let mut pexc_Q14: *mut opus_int32 = 0 as *mut opus_int32;
-    let mut pres_Q14: *mut opus_int32 = 0 as *mut opus_int32;
-    let mut res_Q14: *mut opus_int32 = 0 as *mut opus_int32;
-    let mut sLPC_Q14: *mut opus_int32 = 0 as *mut opus_int32;
+    let mut pred_lag_ptr: *mut opus_int32 = std::ptr::null_mut();
+    let mut pexc_Q14: *mut opus_int32 = std::ptr::null_mut();
+    let mut pres_Q14: *mut opus_int32 = std::ptr::null_mut();
+    let mut res_Q14: *mut opus_int32 = std::ptr::null_mut();
+    let mut sLPC_Q14: *mut opus_int32 = std::ptr::null_mut();
     let mut fresh0 = ::std::vec::from_elem(
         0,
         (::std::mem::size_of::<opus_int16>() as usize)

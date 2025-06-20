@@ -63,7 +63,7 @@ pub mod stdlib_h {
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return libc::strtol(
             __nptr,
-            0 as *mut libc::c_void as *mut *mut libc::c_char,
+            std::ptr::null_mut() as *mut *mut libc::c_char,
             10 as i32,
         ) as i32;
     }
@@ -966,8 +966,8 @@ pub unsafe extern "C" fn BotSetLastOrderedTask(mut bs: *mut bot_state_t) -> i32 
         //
         if gametype == GT_CTF as i32 {
             if (*bs).ltgtype == 4 as i32 {
-                let mut tb: *mut bot_goal_t = 0 as *mut bot_goal_t;
-                let mut eb: *mut bot_goal_t = 0 as *mut bot_goal_t;
+                let mut tb: *mut bot_goal_t = std::ptr::null_mut();
+                let mut eb: *mut bot_goal_t = std::ptr::null_mut();
                 let mut tt: i32 = 0;
                 let mut et: i32 = 0;
                 tb = BotTeamFlag(bs);
@@ -1478,7 +1478,7 @@ pub unsafe extern "C" fn BotPointAreaNum(mut origin: *mut vec_t) -> i32 {
         origin,
         end.as_mut_ptr(),
         areas.as_mut_ptr(),
-        0 as *mut vec3_t,
+        std::ptr::null_mut(),
         10 as i32,
     );
     if numareas > 0 as i32 {
@@ -1697,7 +1697,7 @@ pub unsafe extern "C" fn stristr(
         }
         str = str.offset(1)
     }
-    return 0 as *mut libc::c_char;
+    return std::ptr::null_mut();
 }
 //returns a simplified client name
 /*
@@ -1713,9 +1713,9 @@ pub unsafe extern "C" fn EasyClientName(
     mut size: i32,
 ) -> *mut libc::c_char {
     let mut i: i32 = 0;
-    let mut str1: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut str2: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut ptr: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut str1: *mut libc::c_char = std::ptr::null_mut();
+    let mut str2: *mut libc::c_char = std::ptr::null_mut();
+    let mut ptr: *mut libc::c_char = std::ptr::null_mut();
     let mut c: libc::c_char = 0;
     let mut name: [libc::c_char; 128] = [
         0 as i32 as libc::c_char,
@@ -2307,7 +2307,7 @@ pub unsafe extern "C" fn BotCreateWayPoint(
     mut origin: *mut vec_t,
     mut areanum: i32,
 ) -> *mut bot_waypoint_t {
-    let mut wp: *mut bot_waypoint_t = 0 as *mut bot_waypoint_t;
+    let mut wp: *mut bot_waypoint_t = std::ptr::null_mut();
     let mut waypointmins: vec3_t = [
         -(8 as i32) as vec_t,
         -(8 as i32) as vec_t,
@@ -2321,7 +2321,7 @@ pub unsafe extern "C" fn BotCreateWayPoint(
             b"BotCreateWayPoint: Out of waypoints\n\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
         );
-        return 0 as *mut bot_waypoint_t;
+        return std::ptr::null_mut();
     }
     botai_freewaypoints = (*botai_freewaypoints).next;
     Q_strncpyz(
@@ -2339,8 +2339,8 @@ pub unsafe extern "C" fn BotCreateWayPoint(
     (*wp).goal.maxs[1 as i32 as usize] = waypointmaxs[1 as i32 as usize];
     (*wp).goal.maxs[2 as i32 as usize] = waypointmaxs[2 as i32 as usize];
     (*wp).goal.areanum = areanum;
-    (*wp).next = 0 as *mut bot_waypoint_s;
-    (*wp).prev = 0 as *mut bot_waypoint_s;
+    (*wp).next = std::ptr::null_mut();
+    (*wp).prev = std::ptr::null_mut();
     return wp;
 }
 //find a waypoint with the given name
@@ -2355,7 +2355,7 @@ pub unsafe extern "C" fn BotFindWayPoint(
     mut waypoints: *mut bot_waypoint_t,
     mut name: *mut libc::c_char,
 ) -> *mut bot_waypoint_t {
-    let mut wp: *mut bot_waypoint_t = 0 as *mut bot_waypoint_t;
+    let mut wp: *mut bot_waypoint_t = std::ptr::null_mut();
     wp = waypoints;
     while !wp.is_null() {
         if Q_stricmp((*wp).name.as_mut_ptr(), name) == 0 {
@@ -2363,7 +2363,7 @@ pub unsafe extern "C" fn BotFindWayPoint(
         }
         wp = (*wp).next
     }
-    return 0 as *mut bot_waypoint_t;
+    return std::ptr::null_mut();
 }
 //free waypoints
 /*
@@ -2374,7 +2374,7 @@ BotFreeWaypoints
 #[no_mangle]
 
 pub unsafe extern "C" fn BotFreeWaypoints(mut wp: *mut bot_waypoint_t) {
-    let mut nextwp: *mut bot_waypoint_t = 0 as *mut bot_waypoint_t;
+    let mut nextwp: *mut bot_waypoint_t = std::ptr::null_mut();
     while !wp.is_null() {
         nextwp = (*wp).next;
         (*wp).next = botai_freewaypoints;
@@ -2391,7 +2391,7 @@ BotInitWaypoints
 
 pub unsafe extern "C" fn BotInitWaypoints() {
     let mut i: i32 = 0;
-    botai_freewaypoints = 0 as *mut bot_waypoint_t;
+    botai_freewaypoints = std::ptr::null_mut();
     i = 0 as i32;
     while i < 128 as i32 {
         botai_waypoints[i as usize].next = botai_freewaypoints;
@@ -3050,8 +3050,8 @@ pub unsafe extern "C" fn BotRoamGoal(mut bs: *mut bot_state_t, mut goal: *mut ve
         BotAI_Trace(
             &mut trace as *mut _ as *mut bsp_trace_s,
             (*bs).origin.as_mut_ptr(),
-            0 as *mut vec_t,
-            0 as *mut vec_t,
+            std::ptr::null_mut(),
+            std::ptr::null_mut(),
             bestorg.as_mut_ptr(),
             (*bs).entitynum,
             1 as i32,
@@ -3080,8 +3080,8 @@ pub unsafe extern "C" fn BotRoamGoal(mut bs: *mut bot_state_t, mut goal: *mut ve
             BotAI_Trace(
                 &mut trace as *mut _ as *mut bsp_trace_s,
                 bestorg.as_mut_ptr(),
-                0 as *mut vec_t,
-                0 as *mut vec_t,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
                 belowbestorg.as_mut_ptr(),
                 (*bs).entitynum,
                 1 as i32,
@@ -3565,8 +3565,8 @@ pub unsafe extern "C" fn BotEntityVisible(
         BotAI_Trace(
             &mut trace as *mut _ as *mut bsp_trace_s,
             start.as_mut_ptr(),
-            0 as *mut vec_t,
-            0 as *mut vec_t,
+            std::ptr::null_mut(),
+            std::ptr::null_mut(),
             end.as_mut_ptr(),
             passent,
             contents_mask,
@@ -3581,8 +3581,8 @@ pub unsafe extern "C" fn BotEntityVisible(
             BotAI_Trace(
                 &mut trace as *mut _ as *mut bsp_trace_s,
                 trace.endpos.as_mut_ptr(),
-                0 as *mut vec_t,
-                0 as *mut vec_t,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
                 end.as_mut_ptr(),
                 passent,
                 contents_mask,
@@ -3609,8 +3609,8 @@ pub unsafe extern "C" fn BotEntityVisible(
                 BotAI_Trace(
                     &mut trace as *mut _ as *mut bsp_trace_s,
                     start.as_mut_ptr(),
-                    0 as *mut vec_t,
-                    0 as *mut vec_t,
+                    std::ptr::null_mut(),
+                    std::ptr::null_mut(),
                     eye,
                     viewer,
                     64 as i32,
@@ -3629,8 +3629,8 @@ pub unsafe extern "C" fn BotEntityVisible(
                 BotAI_Trace(
                     &mut trace as *mut _ as *mut bsp_trace_s,
                     eye,
-                    0 as *mut vec_t,
-                    0 as *mut vec_t,
+                    std::ptr::null_mut(),
+                    std::ptr::null_mut(),
                     end.as_mut_ptr(),
                     viewer,
                     64 as i32,
@@ -4743,8 +4743,8 @@ pub unsafe extern "C" fn BotAimAtEnemy(mut bs: *mut bot_state_t) {
                 BotAI_Trace(
                     &mut trace as *mut _ as *mut bsp_trace_s,
                     entinfo.origin.as_mut_ptr(),
-                    0 as *mut vec_t,
-                    0 as *mut vec_t,
+                    std::ptr::null_mut(),
+                    std::ptr::null_mut(),
                     end.as_mut_ptr(),
                     entinfo.number,
                     1 as i32 | 0x2000000 as i32 | 0x4000000 as i32,
@@ -4764,8 +4764,8 @@ pub unsafe extern "C" fn BotAimAtEnemy(mut bs: *mut bot_state_t) {
                 BotAI_Trace(
                     &mut trace as *mut _ as *mut bsp_trace_s,
                     start.as_mut_ptr(),
-                    0 as *mut vec_t,
-                    0 as *mut vec_t,
+                    std::ptr::null_mut(),
+                    std::ptr::null_mut(),
                     groundtarget.as_mut_ptr(),
                     (*bs).entitynum,
                     1 as i32 | 0x2000000 as i32 | 0x4000000 as i32,
@@ -4800,8 +4800,8 @@ pub unsafe extern "C" fn BotAimAtEnemy(mut bs: *mut bot_state_t) {
                             BotAI_Trace(
                                 &mut trace as *mut _ as *mut bsp_trace_s,
                                 trace.endpos.as_mut_ptr(),
-                                0 as *mut vec_t,
-                                0 as *mut vec_t,
+                                std::ptr::null_mut(),
+                                std::ptr::null_mut(),
                                 entinfo.origin.as_mut_ptr(),
                                 entinfo.number,
                                 1 as i32 | 0x2000000 as i32 | 0x4000000 as i32,
@@ -4906,8 +4906,8 @@ pub unsafe extern "C" fn BotAimAtEnemy(mut bs: *mut bot_state_t) {
         BotAI_Trace(
             &mut trace as *mut _ as *mut bsp_trace_s,
             (*bs).eye.as_mut_ptr(),
-            0 as *mut vec_t,
-            0 as *mut vec_t,
+            std::ptr::null_mut(),
+            std::ptr::null_mut(),
             bestorigin.as_mut_ptr(),
             (*bs).entitynum,
             1 as i32 | 0x2000000 as i32 | 0x4000000 as i32,
@@ -5183,8 +5183,8 @@ pub unsafe extern "C" fn BotCheckAttack(mut bs: *mut bot_state_t) {
     BotAI_Trace(
         &mut bsptrace as *mut _ as *mut bsp_trace_s,
         (*bs).eye.as_mut_ptr(),
-        0 as *mut vec_t,
-        0 as *mut vec_t,
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
         (*bs).aimtarget.as_mut_ptr(),
         (*bs).client,
         1 as i32 | 0x10000 as i32,
@@ -5207,7 +5207,7 @@ pub unsafe extern "C" fn BotCheckAttack(mut bs: *mut bot_state_t) {
         (*bs).viewangles.as_mut_ptr() as *const vec_t,
         forward.as_mut_ptr(),
         right.as_mut_ptr(),
-        0 as *mut vec_t,
+        std::ptr::null_mut(),
     );
     start[0 as i32 as usize] += forward[0 as i32 as usize] * wi.offset[0 as i32 as usize]
         + right[0 as i32 as usize] * wi.offset[1 as i32 as usize];
@@ -5496,8 +5496,8 @@ pub unsafe extern "C" fn BotSetMovedir(mut angles: *mut vec_t, mut movedir: *mut
         AngleVectors(
             angles as *const vec_t,
             movedir,
-            0 as *mut vec_t,
-            0 as *mut vec_t,
+            std::ptr::null_mut(),
+            std::ptr::null_mut(),
         );
     };
 }
@@ -5517,7 +5517,7 @@ pub unsafe extern "C" fn BotModelMinsMaxs(
     mut mins: *mut vec_t,
     mut maxs: *mut vec_t,
 ) -> i32 {
-    let mut ent: *mut gentity_t = 0 as *mut gentity_t;
+    let mut ent: *mut gentity_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     ent = &mut *g_entities.as_mut_ptr().offset(0 as i32 as isize) as *mut gentity_t;
     i = 0 as i32;
@@ -5719,8 +5719,8 @@ pub unsafe extern "C" fn BotFuncButtonActivateGoal(
         BotAI_Trace(
             &mut bsptrace as *mut _ as *mut bsp_trace_s,
             (*bs).eye.as_mut_ptr(),
-            0 as *mut vec_t,
-            0 as *mut vec_t,
+            std::ptr::null_mut(),
+            std::ptr::null_mut(),
             goalorigin.as_mut_ptr(),
             (*bs).entitynum,
             1 as i32 | 0x2000000 as i32 | 0x4000000 as i32,
@@ -5877,7 +5877,7 @@ pub unsafe extern "C" fn BotFuncButtonActivateGoal(
             start.as_mut_ptr(),
             end.as_mut_ptr(),
             areas.as_mut_ptr(),
-            0 as *mut vec3_t,
+            std::ptr::null_mut(),
             10 as i32,
         );
         //
@@ -6071,7 +6071,7 @@ pub unsafe extern "C" fn BotTriggerMultipleActivateGoal(
         start.as_mut_ptr(),
         end.as_mut_ptr(),
         areas.as_mut_ptr(),
-        0 as *mut vec3_t,
+        std::ptr::null_mut(),
         10 as i32,
     );
     //
@@ -6214,7 +6214,7 @@ pub unsafe extern "C" fn BotIsGoingToActivateEntity(
     mut bs: *mut bot_state_t,
     mut entitynum: i32,
 ) -> i32 {
-    let mut a: *mut bot_activategoal_t = 0 as *mut bot_activategoal_t;
+    let mut a: *mut bot_activategoal_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     a = (*bs).activatestack;
     while !a.is_null() {
@@ -6789,8 +6789,8 @@ pub unsafe extern "C" fn BotRandomMove(
     AngleVectors(
         angles.as_mut_ptr() as *const vec_t,
         dir.as_mut_ptr(),
-        0 as *mut vec_t,
-        0 as *mut vec_t,
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
     );
     trap_BotMoveInDirection((*bs).ms, dir.as_mut_ptr(), 400 as i32 as f32, 1 as i32);
     (*moveresult).failure = qfalse as i32;
@@ -6871,7 +6871,7 @@ pub unsafe extern "C" fn BotAIBlocked(
         areas: [0; 32],
         numareas: 0,
         areasdisabled: 0,
-        next: 0 as *mut bot_activategoal_s,
+        next: std::ptr::null_mut(),
     };
     // if the bot is not blocked by anything
     if (*moveresult).blocked == 0 {
@@ -6898,7 +6898,7 @@ pub unsafe extern "C" fn BotAIBlocked(
         if bspent != 0 {
             //
             if !(*bs).activatestack.is_null() && (*(*bs).activatestack).inuse == 0 {
-                (*bs).activatestack = 0 as *mut bot_activategoal_t
+                (*bs).activatestack = std::ptr::null_mut()
             }
             // if not already trying to activate this entity
             if BotIsGoingToActivateEntity(bs, activategoal.goal.entitynum) == 0 {
@@ -6930,8 +6930,8 @@ pub unsafe extern "C" fn BotAIBlocked(
         AngleVectors(
             angles.as_mut_ptr() as *const vec_t,
             hordir.as_mut_ptr(),
-            0 as *mut vec_t,
-            0 as *mut vec_t,
+            std::ptr::null_mut(),
+            std::ptr::null_mut(),
         );
     }
     //
@@ -7045,7 +7045,7 @@ pub unsafe extern "C" fn BotAIPredictObstacles(
         areas: [0; 32],
         numareas: 0,
         areasdisabled: 0,
-        next: 0 as *mut bot_activategoal_s,
+        next: std::ptr::null_mut(),
     };
     let mut route: aas_predictroute_t = aas_predictroute_t {
         endpos: [0.; 3],
@@ -7093,8 +7093,8 @@ pub unsafe extern "C" fn BotAIPredictObstacles(
                     modelnum,
                     ET_MOVER as i32,
                     0 as i32,
-                    0 as *mut vec_t,
-                    0 as *mut vec_t,
+                    std::ptr::null_mut(),
+                    std::ptr::null_mut(),
                 );
                 if entitynum != 0 {
                     //NOTE: BotGetActivateGoal already checks if the door is open or not
@@ -7102,7 +7102,7 @@ pub unsafe extern "C" fn BotAIPredictObstacles(
                     if bspent != 0 {
                         //
                         if !(*bs).activatestack.is_null() && (*(*bs).activatestack).inuse == 0 {
-                            (*bs).activatestack = 0 as *mut bot_activategoal_t
+                            (*bs).activatestack = std::ptr::null_mut()
                         }
                         // if not already trying to activate this entity
                         if BotIsGoingToActivateEntity(bs, activategoal.goal.entitynum) == 0 {
@@ -7135,7 +7135,7 @@ pub unsafe extern "C" fn BotCheckConsoleMessages(mut bs: *mut bot_state_t) {
     let mut botname: [libc::c_char; 36] = [0; 36];
     let mut message: [libc::c_char; 256] = [0; 256];
     let mut netname: [libc::c_char; 36] = [0; 36];
-    let mut ptr: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut ptr: *mut libc::c_char = std::ptr::null_mut();
     let mut chat_reply: f32 = 0.;
     let mut context: i32 = 0;
     let mut handle: i32 = 0;
@@ -7144,8 +7144,8 @@ pub unsafe extern "C" fn BotCheckConsoleMessages(mut bs: *mut bot_state_t) {
         time: 0.,
         type_0: 0,
         message: [0; 256],
-        prev: 0 as *mut bot_consolemessage_s,
-        next: 0 as *mut bot_consolemessage_s,
+        prev: std::ptr::null_mut(),
+        next: std::ptr::null_mut(),
     };
     let mut match_0: bot_match_t = bot_match_t {
         string: [0; 256],
@@ -7261,12 +7261,12 @@ pub unsafe extern "C" fn BotCheckConsoleMessages(mut bs: *mut bot_state_t) {
                                 message.as_mut_ptr(),
                                 context,
                                 16 as i32,
-                                0 as *mut libc::c_char,
-                                0 as *mut libc::c_char,
-                                0 as *mut libc::c_char,
-                                0 as *mut libc::c_char,
-                                0 as *mut libc::c_char,
-                                0 as *mut libc::c_char,
+                                std::ptr::null_mut(),
+                                std::ptr::null_mut(),
+                                std::ptr::null_mut(),
+                                std::ptr::null_mut(),
+                                std::ptr::null_mut(),
+                                std::ptr::null_mut(),
                                 botname.as_mut_ptr(),
                                 netname.as_mut_ptr(),
                             ) != 0
@@ -7313,12 +7313,12 @@ pub unsafe extern "C" fn BotCheckConsoleMessages(mut bs: *mut bot_state_t) {
                                     message.as_mut_ptr(),
                                     context,
                                     16 as i32,
-                                    0 as *mut libc::c_char,
-                                    0 as *mut libc::c_char,
-                                    0 as *mut libc::c_char,
-                                    0 as *mut libc::c_char,
-                                    0 as *mut libc::c_char,
-                                    0 as *mut libc::c_char,
+                                    std::ptr::null_mut(),
+                                    std::ptr::null_mut(),
+                                    std::ptr::null_mut(),
+                                    std::ptr::null_mut(),
+                                    std::ptr::null_mut(),
+                                    std::ptr::null_mut(),
                                     botname.as_mut_ptr(),
                                     netname.as_mut_ptr(),
                                 ) != 0
@@ -7700,8 +7700,8 @@ BotGetAlternateRouteGoal
 #[no_mangle]
 
 pub unsafe extern "C" fn BotGetAlternateRouteGoal(mut bs: *mut bot_state_t, mut base: i32) -> i32 {
-    let mut altroutegoals: *mut aas_altroutegoal_t = 0 as *mut aas_altroutegoal_t;
-    let mut goal: *mut bot_goal_t = 0 as *mut bot_goal_t;
+    let mut altroutegoals: *mut aas_altroutegoal_t = std::ptr::null_mut();
+    let mut goal: *mut bot_goal_t = std::ptr::null_mut();
     let mut numaltroutegoals: i32 = 0;
     let mut rnd: i32 = 0;
     if base == TEAM_RED as i32 {
@@ -7904,7 +7904,7 @@ pub unsafe extern "C" fn BotSetEntityNumForGoalWithModel(
     mut eType: i32,
     mut modelname: *mut libc::c_char,
 ) {
-    let mut ent: *mut gentity_t = 0 as *mut gentity_t;
+    let mut ent: *mut gentity_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut modelindex: i32 = 0;
     let mut dir: vec3_t = [0.; 3];
@@ -7945,7 +7945,7 @@ pub unsafe extern "C" fn BotSetEntityNumForGoal(
     mut goal: *mut bot_goal_t,
     mut classname: *mut libc::c_char,
 ) {
-    let mut ent: *mut gentity_t = 0 as *mut gentity_t;
+    let mut ent: *mut gentity_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut dir: vec3_t = [0.; 3];
     ent = &mut *g_entities.as_mut_ptr().offset(0 as i32 as isize) as *mut gentity_t;
@@ -7982,7 +7982,7 @@ pub unsafe extern "C" fn BotSetEntityNumForGoalWithActivator(
     mut goal: *mut bot_goal_t,
     mut classname: *mut libc::c_char,
 ) {
-    let mut ent: *mut gentity_t = 0 as *mut gentity_t;
+    let mut ent: *mut gentity_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut dir: vec3_t = [0.; 3];
     ent = &mut *g_entities.as_mut_ptr().offset(0 as i32 as isize) as *mut gentity_t;
@@ -8064,7 +8064,7 @@ pub unsafe extern "C" fn BotGoalForBSPEntity(
                     start.as_mut_ptr(),
                     end.as_mut_ptr(),
                     areas.as_mut_ptr(),
-                    0 as *mut vec3_t,
+                    std::ptr::null_mut(),
                     10 as i32,
                 );
                 if numareas == 0 {

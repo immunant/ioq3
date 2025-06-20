@@ -144,11 +144,11 @@ S_TransferPaintBuffer
 pub unsafe extern "C" fn S_TransferPaintBuffer(mut endtime: i32) {
     let mut out_idx: i32 = 0;
     let mut count: i32 = 0;
-    let mut p: *mut i32 = 0 as *mut i32;
+    let mut p: *mut i32 = std::ptr::null_mut();
     let mut step: i32 = 0;
     let mut val: i32 = 0;
     let mut i: i32 = 0;
-    let mut pbuf: *mut usize = 0 as *mut usize;
+    let mut pbuf: *mut usize = std::ptr::null_mut();
     pbuf = dma.buffer as *mut usize;
     if (*s_testsound).integer != 0 {
         // write a fixed sine wave
@@ -260,9 +260,9 @@ unsafe extern "C" fn S_PaintChannelFrom16_scalar(
     let mut rightvol: i32 = 0;
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut samp: *mut portable_samplepair_t = 0 as *mut portable_samplepair_t;
-    let mut chunk: *mut sndBuffer = 0 as *mut sndBuffer;
-    let mut samples: *mut i16 = 0 as *mut i16;
+    let mut samp: *mut portable_samplepair_t = std::ptr::null_mut();
+    let mut chunk: *mut sndBuffer = std::ptr::null_mut();
+    let mut samples: *mut i16 = std::ptr::null_mut();
     let mut ooff: f32 = 0.;
     let mut fdata: [f32; 2] = [0.; 2];
     let mut fdiv: f32 = 0.;
@@ -381,9 +381,9 @@ pub unsafe extern "C" fn S_PaintChannelFromWavelet(
     let mut leftvol: i32 = 0;
     let mut rightvol: i32 = 0;
     let mut i: i32 = 0;
-    let mut samp: *mut portable_samplepair_t = 0 as *mut portable_samplepair_t;
-    let mut chunk: *mut sndBuffer = 0 as *mut sndBuffer;
-    let mut samples: *mut i16 = 0 as *mut i16;
+    let mut samp: *mut portable_samplepair_t = std::ptr::null_mut();
+    let mut chunk: *mut sndBuffer = std::ptr::null_mut();
+    let mut samples: *mut i16 = std::ptr::null_mut();
     leftvol = (*ch).leftvol * snd_vol;
     rightvol = (*ch).rightvol * snd_vol;
     i = 0 as i32;
@@ -430,9 +430,9 @@ pub unsafe extern "C" fn S_PaintChannelFromADPCM(
     let mut leftvol: i32 = 0;
     let mut rightvol: i32 = 0;
     let mut i: i32 = 0;
-    let mut samp: *mut portable_samplepair_t = 0 as *mut portable_samplepair_t;
-    let mut chunk: *mut sndBuffer = 0 as *mut sndBuffer;
-    let mut samples: *mut i16 = 0 as *mut i16;
+    let mut samp: *mut portable_samplepair_t = std::ptr::null_mut();
+    let mut chunk: *mut sndBuffer = std::ptr::null_mut();
+    let mut samples: *mut i16 = std::ptr::null_mut();
     leftvol = (*ch).leftvol * snd_vol;
     rightvol = (*ch).rightvol * snd_vol;
     i = 0 as i32;
@@ -482,9 +482,9 @@ pub unsafe extern "C" fn S_PaintChannelFromMuLaw(
     let mut leftvol: i32 = 0;
     let mut rightvol: i32 = 0;
     let mut i: i32 = 0;
-    let mut samp: *mut portable_samplepair_t = 0 as *mut portable_samplepair_t;
-    let mut chunk: *mut sndBuffer = 0 as *mut sndBuffer;
-    let mut samples: *mut byte = 0 as *mut byte;
+    let mut samp: *mut portable_samplepair_t = std::ptr::null_mut();
+    let mut chunk: *mut sndBuffer = std::ptr::null_mut();
+    let mut samples: *mut byte = std::ptr::null_mut();
     let mut ooff: f32 = 0.;
     leftvol = (*ch).leftvol * snd_vol;
     rightvol = (*ch).rightvol * snd_vol;
@@ -548,8 +548,8 @@ pub unsafe extern "C" fn S_PaintChannels(mut endtime: i32) {
     let mut i: i32 = 0;
     let mut end: i32 = 0;
     let mut stream: i32 = 0;
-    let mut ch: *mut channel_t = 0 as *mut channel_t;
-    let mut sc: *mut sfx_t = 0 as *mut sfx_t;
+    let mut ch: *mut channel_t = std::ptr::null_mut();
+    let mut sc: *mut sfx_t = std::ptr::null_mut();
     let mut ltime: i32 = 0;
     let mut count: i32 = 0;
     let mut sampleOffset: i32 = 0;

@@ -431,7 +431,7 @@ unsafe extern "C" fn get_sof(
     let mut length: INT32 = 0;
     let mut c: i32 = 0;
     let mut ci: i32 = 0;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
     let mut datasrc: *mut jpeg_source_mgr = (*cinfo).src;
     let mut next_input_byte: *const JOCTET = (*datasrc).next_input_byte;
     let mut bytes_in_buffer: size_t = (*datasrc).bytes_in_buffer;
@@ -733,7 +733,7 @@ unsafe extern "C" fn get_sos(mut cinfo: j_decompress_ptr) -> boolean
     let mut n: i32 = 0;
     let mut c: i32 = 0;
     let mut cc: i32 = 0;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
     let mut datasrc: *mut jpeg_source_mgr = (*cinfo).src;
     let mut next_input_byte: *const JOCTET = (*datasrc).next_input_byte;
     let mut bytes_in_buffer: size_t = (*datasrc).bytes_in_buffer;
@@ -1133,7 +1133,7 @@ unsafe extern "C" fn get_dht(mut cinfo: j_decompress_ptr) -> boolean
     let mut i: i32 = 0;
     let mut index: i32 = 0;
     let mut count: i32 = 0;
-    let mut htblptr: *mut *mut JHUFF_TBL = 0 as *mut *mut JHUFF_TBL;
+    let mut htblptr: *mut *mut JHUFF_TBL = std::ptr::null_mut();
     let mut datasrc: *mut jpeg_source_mgr = (*cinfo).src;
     let mut next_input_byte: *const JOCTET = (*datasrc).next_input_byte;
     let mut bytes_in_buffer: size_t = (*datasrc).bytes_in_buffer;
@@ -1354,8 +1354,8 @@ unsafe extern "C" fn get_dqt(mut cinfo: j_decompress_ptr) -> boolean
     let mut n: i32 = 0;
     let mut prec: i32 = 0;
     let mut tmp: u32 = 0;
-    let mut quant_ptr: *mut JQUANT_TBL = 0 as *mut JQUANT_TBL;
-    let mut natural_order: *const i32 = 0 as *const i32;
+    let mut quant_ptr: *mut JQUANT_TBL = std::ptr::null_mut();
+    let mut natural_order: *const i32 = std::ptr::null();
     let mut datasrc: *mut jpeg_source_mgr = (*cinfo).src;
     let mut next_input_byte: *const JOCTET = (*datasrc).next_input_byte;
     let mut bytes_in_buffer: size_t = (*datasrc).bytes_in_buffer;
@@ -2027,7 +2027,7 @@ unsafe extern "C" fn save_marker(mut cinfo: j_decompress_ptr) -> boolean
     let mut cur_marker: jpeg_saved_marker_ptr = (*marker).cur_marker;
     let mut bytes_read: u32 = 0;
     let mut data_length: u32 = 0;
-    let mut data: *mut JOCTET = 0 as *mut JOCTET;
+    let mut data: *mut JOCTET = std::ptr::null_mut();
     let mut length: INT32 = 0 as i32 as INT32;
     let mut datasrc: *mut jpeg_source_mgr = (*cinfo).src;
     let mut next_input_byte: *const JOCTET = (*datasrc).next_input_byte;
@@ -2110,7 +2110,7 @@ unsafe extern "C" fn save_marker(mut cinfo: j_decompress_ptr) -> boolean
             /* deal with bogus length word */
             data_length = 0 as i32 as u32;
             bytes_read = data_length;
-            data = 0 as *mut JOCTET
+            data = std::ptr::null_mut()
         }
     } else {
         /* resume reading a marker */
@@ -2914,7 +2914,7 @@ pub unsafe extern "C" fn jpeg_resync_to_restart(
 
 unsafe extern "C" fn reset_marker_reader(mut cinfo: j_decompress_ptr) {
     let mut marker: my_marker_ptr = (*cinfo).marker as my_marker_ptr; /* until allocated by get_sof */
-    (*cinfo).comp_info = 0 as *mut jpeg_component_info; /* no SOS seen yet */
+    (*cinfo).comp_info = std::ptr::null_mut(); /* no SOS seen yet */
     (*cinfo).input_scan_number = 0 as i32; /* no pending marker */
     (*cinfo).unread_marker = 0 as i32; /* set internal state too */
     (*marker).pub_0.saw_SOI = 0 as i32;
@@ -3027,7 +3027,7 @@ unsafe extern "C" fn reset_marker_reader(mut cinfo: j_decompress_ptr) {
 #[no_mangle]
 
 pub unsafe extern "C" fn jinit_marker_reader(mut cinfo: j_decompress_ptr) {
-    let mut marker: my_marker_ptr = 0 as *mut my_marker_reader;
+    let mut marker: my_marker_ptr = std::ptr::null_mut();
     let mut i: i32 = 0;
     /* Create subobject in permanent pool */
     marker = Some(

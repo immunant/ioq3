@@ -218,7 +218,7 @@ unsafe extern "C" fn SV_SendConfigstring(mut client: *mut client_t, mut index: i
     if len >= maxChunkSize {
         let mut sent: i32 = 0 as i32;
         let mut remaining: i32 = len;
-        let mut cmd: *mut libc::c_char = 0 as *mut libc::c_char;
+        let mut cmd: *mut libc::c_char = std::ptr::null_mut();
         let mut buf: [libc::c_char; 1024] = [0; 1024];
         while remaining > 0 as i32 {
             if sent == 0 as i32 {
@@ -291,7 +291,7 @@ SV_SetConfigstring
 
 pub unsafe extern "C" fn SV_SetConfigstring(mut index: i32, mut val: *const libc::c_char) {
     let mut i: i32 = 0;
-    let mut client: *mut client_t = 0 as *mut client_t;
+    let mut client: *mut client_t = std::ptr::null_mut();
     if index < 0 as i32 || index >= 1024 as i32 {
         Com_Error(
             ERR_DROP as i32,
@@ -439,7 +439,7 @@ baseline will be transmitted
 */
 
 unsafe extern "C" fn SV_CreateBaseline() {
-    let mut svent: *mut sharedEntity_t = 0 as *mut sharedEntity_t;
+    let mut svent: *mut sharedEntity_t = std::ptr::null_mut();
     let mut entnum: i32 = 0;
     entnum = 1 as i32;
     while entnum < sv.num_entities {
@@ -542,7 +542,7 @@ SV_ChangeMaxClients
 pub unsafe extern "C" fn SV_ChangeMaxClients() {
     let mut oldMaxClients: i32 = 0;
     let mut i: i32 = 0;
-    let mut oldClients: *mut client_t = 0 as *mut client_t;
+    let mut oldClients: *mut client_t = std::ptr::null_mut();
     let mut count: i32 = 0;
     // get the highest client number in use
     count = 0 as i32;
@@ -664,7 +664,7 @@ pub unsafe extern "C" fn SV_SpawnServer(mut server: *mut libc::c_char, mut killB
     let mut checksum: i32 = 0;
     let mut isBot: qboolean = qfalse;
     let mut systemInfo: [libc::c_char; 16384] = [0; 16384];
-    let mut p: *const libc::c_char = 0 as *const libc::c_char;
+    let mut p: *const libc::c_char = std::ptr::null();
     // shut down the existing game if it is running
     SV_ShutdownGameProgs();
     Com_Printf(b"------ Server Initialization ------\n\x00" as *const u8 as *const libc::c_char);
@@ -786,7 +786,7 @@ pub unsafe extern "C" fn SV_SpawnServer(mut server: *mut libc::c_char, mut killB
     while i < (*sv_maxclients).integer {
         // send the new gamestate to all connected clients
         if (*svs.clients.offset(i as isize)).state as u32 >= CS_CONNECTED as i32 as u32 {
-            let mut denied: *mut libc::c_char = 0 as *mut libc::c_char;
+            let mut denied: *mut libc::c_char = std::ptr::null_mut();
             if (*svs.clients.offset(i as isize))
                 .netchan
                 .remoteAddress
@@ -833,8 +833,8 @@ pub unsafe extern "C" fn SV_SpawnServer(mut server: *mut libc::c_char, mut killB
                         // the new gamestate will be sent
                         (*svs.clients.offset(i as isize)).state = CS_CONNECTED
                     } else {
-                        let mut client: *mut client_t = 0 as *mut client_t; // generate a snapshot immediately
-                        let mut ent: *mut sharedEntity_t = 0 as *mut sharedEntity_t;
+                        let mut client: *mut client_t = std::ptr::null_mut(); // generate a snapshot immediately
+                        let mut ent: *mut sharedEntity_t = std::ptr::null_mut();
                         client = &mut *svs.clients.offset(i as isize) as *mut client_t;
                         (*client).state = CS_ACTIVE;
                         ent = SV_GentityNum(i) as *mut sharedEntity_t;
@@ -1325,7 +1325,7 @@ to totally exit after returning from this function.
 pub unsafe extern "C" fn SV_FinalMessage(mut message: *mut libc::c_char) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut cl: *mut client_t = 0 as *mut client_t;
+    let mut cl: *mut client_t = std::ptr::null_mut();
     // send it twice, ignoring rate
     j = 0 as i32;
     while j < 2 as i32 {

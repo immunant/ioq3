@@ -196,7 +196,7 @@ pub unsafe extern "C" fn silk_residual_energy_FLP(
 /* I    LPC order                                   */
 {
     let mut shift: i32 = 0;
-    let mut LPC_res_ptr: *mut f32 = 0 as *mut f32;
+    let mut LPC_res_ptr: *mut f32 = std::ptr::null_mut();
     let mut LPC_res: [f32; 192] = [0.; 192];
     LPC_res_ptr = LPC_res.as_mut_ptr().offset(LPC_order as isize);
     shift = LPC_order + subfr_length;

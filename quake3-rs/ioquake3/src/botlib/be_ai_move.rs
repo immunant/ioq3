@@ -74,7 +74,7 @@ pub mod stdlib_h {
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return libc::strtol(
             __nptr,
-            0 as *mut libc::c_void as *mut *mut libc::c_char,
+            std::ptr::null_mut() as *mut *mut libc::c_char,
             10 as i32,
         ) as i32;
     }
@@ -310,7 +310,7 @@ pub unsafe extern "C" fn BotFreeMoveState(mut handle: i32) {
         return;
     }
     crate::src::botlib::l_memory::FreeMemory(botmovestates[handle as usize] as *mut libc::c_void);
-    botmovestates[handle as usize] = 0 as *mut bot_movestate_t;
+    botmovestates[handle as usize] = std::ptr::null_mut();
 }
 //end of the function BotFreeMoveState
 //========================================================================
@@ -331,7 +331,7 @@ pub unsafe extern "C" fn BotMoveStateFromHandle(mut handle: i32) -> *mut bot_mov
                 as *mut libc::c_char,
             handle,
         ); //end if
-        return 0 as *mut bot_movestate_t;
+        return std::ptr::null_mut();
     } //end if
     if botmovestates[handle as usize].is_null() {
         crate::src::botlib::be_interface::botimport
@@ -341,7 +341,7 @@ pub unsafe extern "C" fn BotMoveStateFromHandle(mut handle: i32) -> *mut bot_mov
             b"invalid move state %d\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             handle,
         );
-        return 0 as *mut bot_movestate_t;
+        return std::ptr::null_mut();
     }
     return botmovestates[handle as usize];
 }
@@ -359,7 +359,7 @@ pub unsafe extern "C" fn BotInitMoveState(
     mut handle: i32,
     mut initmove: *mut crate::src::botlib::be_ai_move::bot_initmove_t,
 ) {
-    let mut ms: *mut bot_movestate_t = 0 as *mut bot_movestate_t;
+    let mut ms: *mut bot_movestate_t = std::ptr::null_mut();
     ms = BotMoveStateFromHandle(handle);
     if ms.is_null() {
         return;
@@ -802,7 +802,7 @@ pub unsafe extern "C" fn BotOnMover(
         angles.as_mut_ptr(),
         mins.as_mut_ptr(),
         maxs.as_mut_ptr(),
-        0 as *mut vec_t,
+        std::ptr::null_mut(),
     );
     //
     if crate::src::botlib::be_aas_entity::AAS_OriginOfMoverWithModelNum(
@@ -1302,7 +1302,7 @@ pub unsafe extern "C" fn BotAddAvoidSpot(
     mut radius: f32,
     mut type_0: i32,
 ) {
-    let mut ms: *mut bot_movestate_t = 0 as *mut bot_movestate_t; //end if
+    let mut ms: *mut bot_movestate_t = std::ptr::null_mut(); //end if
     ms = BotMoveStateFromHandle(movestate);
     if ms.is_null() {
         return;
@@ -1498,7 +1498,7 @@ pub unsafe extern "C" fn BotMovementViewTarget(
     };
     let mut reachnum: i32 = 0;
     let mut lastareanum: i32 = 0;
-    let mut ms: *mut bot_movestate_t = 0 as *mut bot_movestate_t;
+    let mut ms: *mut bot_movestate_t = std::ptr::null_mut();
     let mut end: vec3_t = [0.; 3];
     let mut dist: f32 = 0.;
     ms = BotMoveStateFromHandle(movestate);
@@ -1565,9 +1565,9 @@ pub unsafe extern "C" fn BotMovementViewTarget(
             (*ms).avoidreachtries.as_mut_ptr(),
             goal,
             travelflags,
-            0 as *mut crate::src::botlib::be_ai_move::bot_avoidspot_s,
+            std::ptr::null_mut(),
             0 as i32,
-            0 as *mut i32,
+            std::ptr::null_mut(),
         );
         end[0 as i32 as usize] = reach.end[0 as i32 as usize];
         end[1 as i32 as usize] = reach.end[1 as i32 as usize];
@@ -1629,8 +1629,8 @@ pub unsafe extern "C" fn BotVisible(
     };
     trace = crate::src::botlib::be_aas_bspq3::AAS_Trace(
         eye,
-        0 as *mut vec_t,
-        0 as *mut vec_t,
+        std::ptr::null_mut(),
+        std::ptr::null_mut(),
         target,
         ent,
         1 as i32 | 0x10000 as i32,
@@ -1710,9 +1710,9 @@ pub unsafe extern "C" fn BotPredictVisiblePosition(
             avoidreachtries.as_mut_ptr(),
             goal,
             travelflags,
-            0 as *mut crate::src::botlib::be_ai_move::bot_avoidspot_s,
+            std::ptr::null_mut(),
             0 as i32,
-            0 as *mut i32,
+            std::ptr::null_mut(),
         );
         if reachnum == 0 {
             return qfalse as i32;
@@ -2265,7 +2265,7 @@ pub unsafe extern "C" fn BotMoveInDirection(
     mut speed: f32,
     mut type_0: i32,
 ) -> i32 {
-    let mut ms: *mut bot_movestate_t = 0 as *mut bot_movestate_t;
+    let mut ms: *mut bot_movestate_t = std::ptr::null_mut();
     ms = BotMoveStateFromHandle(movestate);
     if ms.is_null() {
         return qfalse as i32;
@@ -3951,7 +3951,7 @@ pub unsafe extern "C" fn BotFuncBobStartEnd(
         angles.as_mut_ptr(),
         mins.as_mut_ptr(),
         maxs.as_mut_ptr(),
-        0 as *mut vec_t,
+        std::ptr::null_mut(),
     );
     mid[0 as i32 as usize] = mins[0 as i32 as usize] + maxs[0 as i32 as usize];
     mid[1 as i32 as usize] = mins[1 as i32 as usize] + maxs[1 as i32 as usize];
@@ -4622,8 +4622,8 @@ pub unsafe extern "C" fn BotTravel_Grapple(
                 (*ms).origin[2 as i32 as usize] + (*ms).viewoffset[2 as i32 as usize];
             trace = crate::src::botlib::be_aas_bspq3::AAS_Trace(
                 org.as_mut_ptr(),
-                0 as *mut vec_t,
-                0 as *mut vec_t,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
                 (*reach).end.as_mut_ptr(),
                 (*ms).entitynum,
                 1 as i32,
@@ -5199,7 +5199,7 @@ pub unsafe extern "C" fn BotMoveToGoal(
         traveltype: 0,
         traveltime: 0,
     };
-    let mut ms: *mut bot_movestate_t = 0 as *mut bot_movestate_t;
+    let mut ms: *mut bot_movestate_t = std::ptr::null_mut();
     //vec3_t mins, maxs, up = {0, 0, 1};
     //bsp_trace_t trace;
     //static int debugline;
@@ -5562,7 +5562,7 @@ pub unsafe extern "C" fn BotMoveToGoal(
             (*ms).origin.as_mut_ptr(),
             end.as_mut_ptr(),
             areas.as_mut_ptr(),
-            0 as *mut vec3_t,
+            std::ptr::null_mut(),
             16 as i32,
         );
         i = numareas - 1 as i32;
@@ -5584,7 +5584,7 @@ pub unsafe extern "C" fn BotMoveToGoal(
                     0x40000 as i32,
                     (*ms).avoidspots.as_mut_ptr(),
                     (*ms).numavoidspots,
-                    0 as *mut i32,
+                    std::ptr::null_mut(),
                 );
                 if lastreachnum != 0 {
                     //end else
@@ -5699,7 +5699,7 @@ pub unsafe extern "C" fn BotMoveToGoal(
 #[no_mangle]
 
 pub unsafe extern "C" fn BotResetAvoidReach(mut movestate: i32) {
-    let mut ms: *mut bot_movestate_t = 0 as *mut bot_movestate_t;
+    let mut ms: *mut bot_movestate_t = std::ptr::null_mut();
     ms = BotMoveStateFromHandle(movestate);
     if ms.is_null() {
         return;
@@ -5734,7 +5734,7 @@ pub unsafe extern "C" fn BotResetLastAvoidReach(mut movestate: i32) {
     let mut i: i32 = 0; //end for
     let mut latest: i32 = 0;
     let mut latesttime: f32 = 0.;
-    let mut ms: *mut bot_movestate_t = 0 as *mut bot_movestate_t;
+    let mut ms: *mut bot_movestate_t = std::ptr::null_mut();
     ms = BotMoveStateFromHandle(movestate);
     if ms.is_null() {
         return;
@@ -5769,7 +5769,7 @@ pub unsafe extern "C" fn BotResetLastAvoidReach(mut movestate: i32) {
 #[no_mangle]
 
 pub unsafe extern "C" fn BotResetMoveState(mut movestate: i32) {
-    let mut ms: *mut bot_movestate_t = 0 as *mut bot_movestate_t;
+    let mut ms: *mut bot_movestate_t = std::ptr::null_mut();
     ms = BotMoveStateFromHandle(movestate);
     if ms.is_null() {
         return;
@@ -5852,7 +5852,7 @@ pub unsafe extern "C" fn BotShutdownMoveAI() {
             crate::src::botlib::l_memory::FreeMemory(
                 botmovestates[i as usize] as *mut libc::c_void,
             );
-            botmovestates[i as usize] = 0 as *mut bot_movestate_t
+            botmovestates[i as usize] = std::ptr::null_mut()
         }
         i += 1
         //end if

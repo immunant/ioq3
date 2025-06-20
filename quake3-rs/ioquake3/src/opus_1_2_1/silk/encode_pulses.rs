@@ -179,14 +179,14 @@ pub unsafe extern "C" fn silk_encode_pulses(
     let mut abs_q: opus_int32 = 0;
     let mut minSumBits_Q5: opus_int32 = 0;
     let mut sumBits_Q5: opus_int32 = 0;
-    let mut abs_pulses: *mut i32 = 0 as *mut i32;
-    let mut sum_pulses: *mut i32 = 0 as *mut i32;
-    let mut nRshifts: *mut i32 = 0 as *mut i32;
+    let mut abs_pulses: *mut i32 = std::ptr::null_mut();
+    let mut sum_pulses: *mut i32 = std::ptr::null_mut();
+    let mut nRshifts: *mut i32 = std::ptr::null_mut();
     let mut pulses_comb: [i32; 8] = [0; 8];
-    let mut abs_pulses_ptr: *mut i32 = 0 as *mut i32;
-    let mut pulses_ptr: *const i8 = 0 as *const i8;
-    let mut cdf_ptr: *const u8 = 0 as *const u8;
-    let mut nBits_ptr: *const u8 = 0 as *const u8;
+    let mut abs_pulses_ptr: *mut i32 = std::ptr::null_mut();
+    let mut pulses_ptr: *const i8 = std::ptr::null();
+    let mut cdf_ptr: *const u8 = std::ptr::null();
+    let mut nBits_ptr: *const u8 = std::ptr::null();
     crate::stdlib::memset(
         pulses_comb.as_mut_ptr() as *mut libc::c_void,
         0 as i32,

@@ -6,7 +6,7 @@ pub mod stdlib_h {
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return libc::strtol(
             __nptr,
-            0 as *mut libc::c_void as *mut *mut libc::c_char,
+            std::ptr::null_mut() as *mut *mut libc::c_char,
             10 as i32,
         ) as i32;
     }
@@ -266,7 +266,7 @@ Cbuf_Execute
 
 pub unsafe extern "C" fn Cbuf_Execute() {
     let mut i: i32 = 0;
-    let mut text: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut text: *mut libc::c_char = std::ptr::null_mut();
     let mut line: [libc::c_char; 1024] = [0; 1024];
     let mut quotes: i32 = 0;
     // This will keep // style comments all on one line by not breaking on
@@ -375,7 +375,7 @@ Cmd_Exec_f
 pub unsafe extern "C" fn Cmd_Exec_f() {
     let mut quiet: qboolean = qfalse;
     let mut f: C2RustUnnamed_118 = C2RustUnnamed_118 {
-        c: 0 as *mut libc::c_char,
+        c: std::ptr::null_mut(),
     };
     let mut filename: [libc::c_char; 64] = [0; 64];
     quiet = (Q_stricmp(
@@ -436,7 +436,7 @@ Inserts the current value of a variable as command text
 #[no_mangle]
 
 pub unsafe extern "C" fn Cmd_Vstr_f() {
-    let mut v: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut v: *mut libc::c_char = std::ptr::null_mut();
     if Cmd_Argc() != 2 as i32 {
         Com_Printf(
             b"vstr <variablename> : execute a variable command\n\x00" as *const u8
@@ -642,8 +642,8 @@ unsafe extern "C" fn Cmd_TokenizeString2(
     mut text_in: *const libc::c_char,
     mut ignoreQuotes: qboolean,
 ) {
-    let mut text: *const libc::c_char = 0 as *const libc::c_char;
-    let mut textOut: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut text: *const libc::c_char = std::ptr::null();
+    let mut textOut: *mut libc::c_char = std::ptr::null_mut();
     // clear previous args
     cmd_argc = 0 as i32;
     if text_in.is_null() {
@@ -784,7 +784,7 @@ Cmd_FindCommand
 #[no_mangle]
 
 pub unsafe extern "C" fn Cmd_FindCommand(mut cmd_name: *const libc::c_char) -> *mut cmd_function_t {
-    let mut cmd: *mut cmd_function_t = 0 as *mut cmd_function_t;
+    let mut cmd: *mut cmd_function_t = std::ptr::null_mut();
     cmd = cmd_functions;
     while !cmd.is_null() {
         if Q_stricmp(cmd_name, (*cmd).name) == 0 {
@@ -792,7 +792,7 @@ pub unsafe extern "C" fn Cmd_FindCommand(mut cmd_name: *const libc::c_char) -> *
         }
         cmd = (*cmd).next
     }
-    return 0 as *mut cmd_function_t;
+    return std::ptr::null_mut();
 }
 /*
 ============
@@ -805,7 +805,7 @@ pub unsafe extern "C" fn Cmd_AddCommand(
     mut cmd_name: *const libc::c_char,
     mut function: xcommand_t,
 ) {
-    let mut cmd: *mut cmd_function_t = 0 as *mut cmd_function_t;
+    let mut cmd: *mut cmd_function_t = std::ptr::null_mut();
     // fail if the command already exists
     if !Cmd_FindCommand(cmd_name).is_null() {
         // allow completion-only commands to be silently doubled
@@ -837,7 +837,7 @@ pub unsafe extern "C" fn Cmd_SetCommandCompletionFunc(
     mut command: *const libc::c_char,
     mut complete: completionFunc_t,
 ) {
-    let mut cmd: *mut cmd_function_t = 0 as *mut cmd_function_t;
+    let mut cmd: *mut cmd_function_t = std::ptr::null_mut();
     cmd = cmd_functions;
     while !cmd.is_null() {
         if Q_stricmp(command, (*cmd).name) == 0 {
@@ -860,8 +860,8 @@ Cmd_RemoveCommand
 #[no_mangle]
 
 pub unsafe extern "C" fn Cmd_RemoveCommand(mut cmd_name: *const libc::c_char) {
-    let mut cmd: *mut cmd_function_t = 0 as *mut cmd_function_t;
-    let mut back: *mut *mut cmd_function_t = 0 as *mut *mut cmd_function_t;
+    let mut cmd: *mut cmd_function_t = std::ptr::null_mut();
+    let mut back: *mut *mut cmd_function_t = std::ptr::null_mut();
     back = &mut cmd_functions;
     loop {
         cmd = *back;
@@ -913,7 +913,7 @@ Cmd_CommandCompletion
 pub unsafe extern "C" fn Cmd_CommandCompletion(
     mut callback: Option<unsafe extern "C" fn(_: *const libc::c_char) -> ()>,
 ) {
-    let mut cmd: *mut cmd_function_t = 0 as *mut cmd_function_t;
+    let mut cmd: *mut cmd_function_t = std::ptr::null_mut();
     cmd = cmd_functions;
     while !cmd.is_null() {
         callback.expect("non-null function pointer")((*cmd).name);
@@ -932,7 +932,7 @@ pub unsafe extern "C" fn Cmd_CompleteArgument(
     mut args: *mut libc::c_char,
     mut argNum: i32,
 ) {
-    let mut cmd: *mut cmd_function_t = 0 as *mut cmd_function_t;
+    let mut cmd: *mut cmd_function_t = std::ptr::null_mut();
     cmd = cmd_functions;
     while !cmd.is_null() {
         if Q_stricmp(command, (*cmd).name) == 0 {
@@ -956,8 +956,8 @@ A complete command line has been parsed, so try to execute it
 #[no_mangle]
 
 pub unsafe extern "C" fn Cmd_ExecuteString(mut text: *const libc::c_char) {
-    let mut cmd: *mut cmd_function_t = 0 as *mut cmd_function_t;
-    let mut prev: *mut *mut cmd_function_t = 0 as *mut *mut cmd_function_t;
+    let mut cmd: *mut cmd_function_t = std::ptr::null_mut();
+    let mut prev: *mut *mut cmd_function_t = std::ptr::null_mut();
     // execute the command line
     Cmd_TokenizeString(text);
     if Cmd_Argc() == 0 {
@@ -1012,13 +1012,13 @@ Cmd_List_f
 #[no_mangle]
 
 pub unsafe extern "C" fn Cmd_List_f() {
-    let mut cmd: *mut cmd_function_t = 0 as *mut cmd_function_t;
+    let mut cmd: *mut cmd_function_t = std::ptr::null_mut();
     let mut i: i32 = 0;
-    let mut match_0: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut match_0: *mut libc::c_char = std::ptr::null_mut();
     if Cmd_Argc() > 1 as i32 {
         match_0 = Cmd_Argv(1 as i32)
     } else {
-        match_0 = 0 as *mut libc::c_char
+        match_0 = std::ptr::null_mut()
     }
     i = 0 as i32;
     cmd = cmd_functions;

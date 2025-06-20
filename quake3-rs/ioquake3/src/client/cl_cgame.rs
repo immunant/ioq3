@@ -21,7 +21,7 @@ pub mod stdlib_h {
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return libc::strtol(
             __nptr,
-            0 as *mut libc::c_void as *mut *mut libc::c_char,
+            std::ptr::null_mut() as *mut *mut libc::c_char,
             10 as i32,
         ) as i32;
     }
@@ -508,7 +508,7 @@ pub unsafe extern "C" fn CL_GetSnapshot(
     mut snapshotNumber: i32,
     mut snapshot: *mut snapshot_t,
 ) -> qboolean {
-    let mut clSnap: *mut clSnapshot_t = 0 as *mut clSnapshot_t;
+    let mut clSnap: *mut clSnapshot_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut count: i32 = 0;
     if snapshotNumber > cl.snap.messageNum {
@@ -595,11 +595,11 @@ CL_ConfigstringModified
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_ConfigstringModified() {
-    let mut old: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut old: *mut libc::c_char = std::ptr::null_mut();
+    let mut s: *mut libc::c_char = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut index: i32 = 0;
-    let mut dup: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut dup: *mut libc::c_char = std::ptr::null_mut();
     let mut oldGs: gameState_t = gameState_t {
         stringOffsets: [0; 1024],
         stringData: [0; 16000],
@@ -682,8 +682,8 @@ Set up argc/argv for the given command
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_GetServerCommand(mut serverCommandNumber: i32) -> qboolean {
-    let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut cmd: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut s: *mut libc::c_char = std::ptr::null_mut();
+    let mut cmd: *mut libc::c_char = std::ptr::null_mut();
     static mut bigConfigString: [libc::c_char; 8192] = [0; 8192];
     let mut argc: i32 = 0;
     // if we have irretrievably lost a reliable command, drop the connection
@@ -855,7 +855,7 @@ pub unsafe extern "C" fn CL_ShutdownCGame() {
     }
     VM_Call(cgvm, CG_SHUTDOWN as i32);
     VM_Free(cgvm);
-    cgvm = 0 as *mut vm_t;
+    cgvm = std::ptr::null_mut();
 }
 
 unsafe extern "C" fn FloatAsInt(mut f: f32) -> i32 {
@@ -1554,8 +1554,8 @@ Should only be called by CL_StartHunkUsers
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_InitCGame() {
-    let mut info: *const libc::c_char = 0 as *const libc::c_char;
-    let mut mapname: *const libc::c_char = 0 as *const libc::c_char;
+    let mut info: *const libc::c_char = std::ptr::null();
+    let mut mapname: *const libc::c_char = std::ptr::null();
     let mut t1: i32 = 0;
     let mut t2: i32 = 0;
     let mut interpret: vmInterpret_t = VMI_NATIVE;

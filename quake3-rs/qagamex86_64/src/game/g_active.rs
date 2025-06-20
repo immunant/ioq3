@@ -315,7 +315,7 @@ global pain sound events for all clients.
 #[no_mangle]
 
 pub unsafe extern "C" fn P_DamageFeedback(mut player: *mut gentity_t) {
-    let mut client: *mut gclient_t = 0 as *mut gclient_t;
+    let mut client: *mut gclient_t = std::ptr::null_mut();
     let mut count: f32 = 0.;
     let mut angles: vec3_t = [0.; 3];
     client = (*player).client;
@@ -403,10 +403,10 @@ pub unsafe extern "C" fn P_WorldEffects(mut ent: *mut gentity_t) {
                 (*ent).pain_debounce_time = level.time + 200 as i32;
                 G_Damage(
                     ent as *mut gentity_s,
-                    0 as *mut gentity_t as *mut gentity_s,
-                    0 as *mut gentity_t as *mut gentity_s,
-                    0 as *mut vec_t,
-                    0 as *mut vec_t,
+                    std::ptr::null_mut() as *mut gentity_s,
+                    std::ptr::null_mut() as *mut gentity_s,
+                    std::ptr::null_mut(),
+                    std::ptr::null_mut(),
                     (*ent).damage,
                     0x2 as i32,
                     MOD_WATER as i32,
@@ -432,10 +432,10 @@ pub unsafe extern "C" fn P_WorldEffects(mut ent: *mut gentity_t) {
                 if (*ent).watertype & 8 as i32 != 0 {
                     G_Damage(
                         ent as *mut gentity_s,
-                        0 as *mut gentity_t as *mut gentity_s,
-                        0 as *mut gentity_t as *mut gentity_s,
-                        0 as *mut vec_t,
-                        0 as *mut vec_t,
+                        std::ptr::null_mut() as *mut gentity_s,
+                        std::ptr::null_mut() as *mut gentity_s,
+                        std::ptr::null_mut(),
+                        std::ptr::null_mut(),
                         30 as i32 * waterlevel,
                         0 as i32,
                         MOD_LAVA as i32,
@@ -444,10 +444,10 @@ pub unsafe extern "C" fn P_WorldEffects(mut ent: *mut gentity_t) {
                 if (*ent).watertype & 16 as i32 != 0 {
                     G_Damage(
                         ent as *mut gentity_s,
-                        0 as *mut gentity_t as *mut gentity_s,
-                        0 as *mut gentity_t as *mut gentity_s,
-                        0 as *mut vec_t,
-                        0 as *mut vec_t,
+                        std::ptr::null_mut() as *mut gentity_s,
+                        std::ptr::null_mut() as *mut gentity_s,
+                        std::ptr::null_mut(),
+                        std::ptr::null_mut(),
                         10 as i32 * waterlevel,
                         0 as i32,
                         MOD_SLIME as i32,
@@ -498,7 +498,7 @@ pub unsafe extern "C" fn ClientImpacts(mut ent: *mut gentity_t, mut pm: *mut pmo
         contents: 0,
         entityNum: 0,
     };
-    let mut other: *mut gentity_t = 0 as *mut gentity_t;
+    let mut other: *mut gentity_t = std::ptr::null_mut();
     crate::stdlib::memset(
         &mut trace as *mut trace_t as *mut libc::c_void,
         0 as i32,
@@ -543,7 +543,7 @@ pub unsafe extern "C" fn G_TouchTriggers(mut ent: *mut gentity_t) {
     let mut i: i32 = 0;
     let mut num: i32 = 0;
     let mut touch: [i32; 1024] = [0; 1024];
-    let mut hit: *mut gentity_t = 0 as *mut gentity_t;
+    let mut hit: *mut gentity_t = std::ptr::null_mut();
     let mut trace: trace_t = trace_t {
         allsolid: qfalse,
         startsolid: qfalse,
@@ -701,7 +701,7 @@ SpectatorThink
 
 pub unsafe extern "C" fn SpectatorThink(mut ent: *mut gentity_t, mut ucmd: *mut usercmd_t) {
     let mut pm: pmove_t = pmove_t {
-        ps: 0 as *mut playerState_t,
+        ps: std::ptr::null_mut(),
         cmd: usercmd_t {
             serverTime: 0,
             angles: [0; 3],
@@ -728,7 +728,7 @@ pub unsafe extern "C" fn SpectatorThink(mut ent: *mut gentity_t, mut ucmd: *mut 
         trace: None,
         pointcontents: None,
     }; // faster than normal
-    let mut client: *mut gclient_t = 0 as *mut gclient_t;
+    let mut client: *mut gclient_t = std::ptr::null_mut();
     client = (*ent).client;
     if (*client).sess.spectatorState as u32 != SPECTATOR_FOLLOW as i32 as u32
         || (*client).ps.pm_flags & 4096 as i32 == 0
@@ -835,7 +835,7 @@ Actions that happen once a second
 #[no_mangle]
 
 pub unsafe extern "C" fn ClientTimerActions(mut ent: *mut gentity_t, mut msec: i32) {
-    let mut client: *mut gclient_t = 0 as *mut gclient_t;
+    let mut client: *mut gclient_t = std::ptr::null_mut();
     client = (*ent).client;
     (*client).timeResidual += msec;
     while (*client).timeResidual >= 1000 as i32 {
@@ -904,13 +904,13 @@ pub unsafe extern "C" fn ClientEvents(mut ent: *mut gentity_t, mut oldEventSeque
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut event: i32 = 0;
-    let mut client: *mut gclient_t = 0 as *mut gclient_t;
+    let mut client: *mut gclient_t = std::ptr::null_mut();
     let mut damage: i32 = 0;
     let mut origin: vec3_t = [0.; 3];
     let mut angles: vec3_t = [0.; 3];
     //	qboolean	fired;
-    let mut item: *mut gitem_t = 0 as *mut gitem_t; // no normal pain sound
-    let mut drop_0: *mut gentity_t = 0 as *mut gentity_t;
+    let mut item: *mut gitem_t = std::ptr::null_mut(); // no normal pain sound
+    let mut drop_0: *mut gentity_t = std::ptr::null_mut();
     client = (*ent).client;
     if oldEventSequence < (*client).ps.eventSequence - 2 as i32 {
         oldEventSequence = (*client).ps.eventSequence - 2 as i32
@@ -930,10 +930,10 @@ pub unsafe extern "C" fn ClientEvents(mut ent: *mut gentity_t, mut oldEventSeque
                         (*ent).pain_debounce_time = level.time + 200 as i32;
                         G_Damage(
                             ent as *mut gentity_s,
-                            0 as *mut gentity_t as *mut gentity_s,
-                            0 as *mut gentity_t as *mut gentity_s,
-                            0 as *mut vec_t,
-                            0 as *mut vec_t,
+                            std::ptr::null_mut() as *mut gentity_s,
+                            std::ptr::null_mut() as *mut gentity_s,
+                            std::ptr::null_mut(),
+                            std::ptr::null_mut(),
                             damage,
                             0 as i32,
                             MOD_FALLING as i32,
@@ -947,7 +947,7 @@ pub unsafe extern "C" fn ClientEvents(mut ent: *mut gentity_t, mut oldEventSeque
             25 => {
                 // teleporter
                 // drop flags in CTF
-                item = 0 as *mut gitem_t;
+                item = std::ptr::null_mut();
                 j = 0 as i32;
                 if (*(*ent).client).ps.powerups[PW_REDFLAG as i32 as usize] != 0 {
                     item = BG_FindItemForPowerup(PW_REDFLAG) as *mut gitem_s;
@@ -1001,7 +1001,7 @@ SendPendingPredictableEvents
 #[no_mangle]
 
 pub unsafe extern "C" fn SendPendingPredictableEvents(mut ps: *mut playerState_t) {
-    let mut t: *mut gentity_t = 0 as *mut gentity_t;
+    let mut t: *mut gentity_t = std::ptr::null_mut();
     let mut event: i32 = 0;
     let mut seq: i32 = 0;
     let mut extEvent: i32 = 0;
@@ -1048,9 +1048,9 @@ once for each server frame, which makes for smooth demo recording.
 #[no_mangle]
 
 pub unsafe extern "C" fn ClientThink_real(mut ent: *mut gentity_t) {
-    let mut client: *mut gclient_t = 0 as *mut gclient_t;
+    let mut client: *mut gclient_t = std::ptr::null_mut();
     let mut pm: pmove_t = pmove_t {
-        ps: 0 as *mut playerState_t,
+        ps: std::ptr::null_mut(),
         cmd: usercmd_t {
             serverTime: 0,
             angles: [0; 3],
@@ -1079,7 +1079,7 @@ pub unsafe extern "C" fn ClientThink_real(mut ent: *mut gentity_t) {
     };
     let mut oldEventSequence: i32 = 0;
     let mut msec: i32 = 0;
-    let mut ucmd: *mut usercmd_t = 0 as *mut usercmd_t;
+    let mut ucmd: *mut usercmd_t = std::ptr::null_mut();
     client = (*ent).client;
     // don't think if the client is not yet connected (and thus not yet spawned in)
     if (*client).pers.connected as u32 != CON_CONNECTED as i32 as u32 {
@@ -1313,7 +1313,7 @@ A new command has arrived from the client
 #[no_mangle]
 
 pub unsafe extern "C" fn ClientThink(mut clientNum: i32) {
-    let mut ent: *mut gentity_t = 0 as *mut gentity_t;
+    let mut ent: *mut gentity_t = std::ptr::null_mut();
     ent = g_entities.as_mut_ptr().offset(clientNum as isize);
     trap_GetUsercmd(
         clientNum,
@@ -1344,7 +1344,7 @@ SpectatorClientEndFrame
 #[no_mangle]
 
 pub unsafe extern "C" fn SpectatorClientEndFrame(mut ent: *mut gentity_t) {
-    let mut cl: *mut gclient_t = 0 as *mut gclient_t;
+    let mut cl: *mut gclient_t = std::ptr::null_mut();
     // if we are doing a chase cam or a remote view, grab the latest info
     if (*(*ent).client).sess.spectatorState as u32 == SPECTATOR_FOLLOW as i32 as u32 {
         let mut clientNum: i32 = 0;

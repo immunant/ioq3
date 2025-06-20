@@ -675,7 +675,7 @@ pub unsafe extern "C" fn G_Find(
     mut fieldofs: i32,
     mut match_0: *const libc::c_char,
 ) -> *mut gentity_t {
-    let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut s: *mut libc::c_char = std::ptr::null_mut();
     if from.is_null() {
         from = g_entities.as_mut_ptr()
     } else {
@@ -693,24 +693,24 @@ pub unsafe extern "C" fn G_Find(
         }
         from = from.offset(1)
     }
-    return 0 as *mut gentity_t;
+    return std::ptr::null_mut();
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn G_PickTarget(mut targetname: *mut libc::c_char) -> *mut gentity_t {
-    let mut ent: *mut gentity_t = 0 as *mut gentity_t;
+    let mut ent: *mut gentity_t = std::ptr::null_mut();
     let mut num_choices: i32 = 0 as i32;
-    let mut choice: [*mut gentity_t; 32] = [0 as *mut gentity_t; 32];
+    let mut choice: [*mut gentity_t; 32] = [std::ptr::null_mut(); 32];
     if targetname.is_null() {
         G_Printf(
             b"G_PickTarget called with NULL targetname\n\x00" as *const u8 as *const libc::c_char,
         );
-        return 0 as *mut gentity_t;
+        return std::ptr::null_mut();
     }
     loop {
         ent = G_Find(
             ent,
-            &mut (*(0 as *mut gentity_t)).targetname as *mut *mut libc::c_char as size_t as i32,
+            &mut (*(std::ptr::null_mut())).targetname as *mut *mut libc::c_char as size_t as i32,
             targetname,
         );
         if ent.is_null() {
@@ -728,7 +728,7 @@ pub unsafe extern "C" fn G_PickTarget(mut targetname: *mut libc::c_char) -> *mut
             b"G_PickTarget: target %s not found\n\x00" as *const u8 as *const libc::c_char,
             targetname,
         );
-        return 0 as *mut gentity_t;
+        return std::ptr::null_mut();
     }
     return choice[(libc::rand() % num_choices) as usize];
 }
@@ -746,7 +746,7 @@ match (string)self.target and call their .use function
 #[no_mangle]
 
 pub unsafe extern "C" fn G_UseTargets(mut ent: *mut gentity_t, mut activator: *mut gentity_t) {
-    let mut t: *mut gentity_t = 0 as *mut gentity_t;
+    let mut t: *mut gentity_t = std::ptr::null_mut();
     if ent.is_null() {
         return;
     }
@@ -758,11 +758,11 @@ pub unsafe extern "C" fn G_UseTargets(mut ent: *mut gentity_t, mut activator: *m
     if (*ent).target.is_null() {
         return;
     }
-    t = 0 as *mut gentity_t;
+    t = std::ptr::null_mut();
     loop {
         t = G_Find(
             t,
-            &mut (*(0 as *mut gentity_t)).targetname as *mut *mut libc::c_char as size_t as i32,
+            &mut (*(std::ptr::null_mut())).targetname as *mut *mut libc::c_char as size_t as i32,
             (*ent).target,
         );
         if t.is_null() {
@@ -794,7 +794,7 @@ for making temporary vectors for function calls
 pub unsafe extern "C" fn tv(mut x: f32, mut y: f32, mut z: f32) -> *mut f32 {
     static mut index: i32 = 0;
     static mut vecs: [vec3_t; 8] = [[0.; 3]; 8];
-    let mut v: *mut f32 = 0 as *mut f32;
+    let mut v: *mut f32 = std::ptr::null_mut();
     // use an array so that multiple tempvectors won't collide
     // for a while
     v = vecs[index as usize].as_mut_ptr();
@@ -817,7 +817,7 @@ for printing vectors
 pub unsafe extern "C" fn vtos(mut v: *const vec_t) -> *mut libc::c_char {
     static mut index: i32 = 0;
     static mut str: [[libc::c_char; 32]; 8] = [[0; 32]; 8];
-    let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut s: *mut libc::c_char = std::ptr::null_mut();
     // use an array so that multiple vtos won't collide
     s = str[index as usize].as_mut_ptr();
     index = index + 1 as i32 & 7 as i32;
@@ -864,8 +864,8 @@ pub unsafe extern "C" fn G_SetMovedir(mut angles: *mut vec_t, mut movedir: *mut 
         AngleVectors(
             angles as *const vec_t,
             movedir,
-            0 as *mut vec_t,
-            0 as *mut vec_t,
+            std::ptr::null_mut(),
+            std::ptr::null_mut(),
         );
     }
     let ref mut fresh1 = *angles.offset(2 as i32 as isize);
@@ -928,8 +928,8 @@ angles and bad trails.
 pub unsafe extern "C" fn G_Spawn() -> *mut gentity_t {
     let mut i: i32 = 0; // shut up warning
     let mut force: i32 = 0;
-    let mut e: *mut gentity_t = 0 as *mut gentity_t;
-    e = 0 as *mut gentity_t;
+    let mut e: *mut gentity_t = std::ptr::null_mut();
+    e = std::ptr::null_mut();
     force = 0 as i32;
     while force < 2 as i32 {
         // if we go through all entities and can't find one to free,
@@ -991,7 +991,7 @@ G_EntitiesFree
 
 pub unsafe extern "C" fn G_EntitiesFree() -> qboolean {
     let mut i: i32 = 0;
-    let mut e: *mut gentity_t = 0 as *mut gentity_t;
+    let mut e: *mut gentity_t = std::ptr::null_mut();
     if level.num_entities < ((1 as i32) << 10 as i32) - 2 as i32 {
         // can open a new slot if needed
         return qtrue;
@@ -1044,7 +1044,7 @@ must be taken if the origin is right on a surface (snap towards start vector fir
 #[no_mangle]
 
 pub unsafe extern "C" fn G_TempEntity(mut origin: *mut vec_t, mut event: i32) -> *mut gentity_t {
-    let mut e: *mut gentity_t = 0 as *mut gentity_t;
+    let mut e: *mut gentity_t = std::ptr::null_mut();
     let mut snapped: vec3_t = [0.; 3];
     e = G_Spawn();
     (*e).s.eType = ET_EVENTS as i32 + event;
@@ -1084,7 +1084,7 @@ pub unsafe extern "C" fn G_KillBox(mut ent: *mut gentity_t) {
     let mut i: i32 = 0;
     let mut num: i32 = 0;
     let mut touch: [i32; 1024] = [0; 1024];
-    let mut hit: *mut gentity_t = 0 as *mut gentity_t;
+    let mut hit: *mut gentity_t = std::ptr::null_mut();
     let mut mins: vec3_t = [0.; 3];
     let mut maxs: vec3_t = [0.; 3];
     mins[0 as i32 as usize] =
@@ -1117,8 +1117,8 @@ pub unsafe extern "C" fn G_KillBox(mut ent: *mut gentity_t) {
                 hit as *mut gentity_s,
                 ent as *mut gentity_s,
                 ent as *mut gentity_s,
-                0 as *mut vec_t,
-                0 as *mut vec_t,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
                 100000 as i32,
                 0x8 as i32,
                 MOD_TELEFRAG as i32,
@@ -1194,7 +1194,7 @@ G_Sound
 #[no_mangle]
 
 pub unsafe extern "C" fn G_Sound(mut ent: *mut gentity_t, mut _channel: i32, mut soundIndex: i32) {
-    let mut te: *mut gentity_t = 0 as *mut gentity_t;
+    let mut te: *mut gentity_t = std::ptr::null_mut();
     te = G_TempEntity((*ent).r.currentOrigin.as_mut_ptr(), EV_GENERAL_SOUND as i32);
     (*te).s.eventParm = soundIndex;
 }

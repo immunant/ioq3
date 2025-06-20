@@ -130,13 +130,13 @@ pub unsafe extern "C" fn silk_find_pitch_lags_FLP(
     let mut buf_len: i32 = 0;
     let mut thrhld: f32 = 0.;
     let mut res_nrg: f32 = 0.;
-    let mut x_buf_ptr: *const f32 = 0 as *const f32;
-    let mut x_buf: *const f32 = 0 as *const f32;
+    let mut x_buf_ptr: *const f32 = std::ptr::null();
+    let mut x_buf: *const f32 = std::ptr::null();
     let mut auto_corr: [f32; 17] = [0.; 17];
     let mut A: [f32; 16] = [0.; 16];
     let mut refl_coef: [f32; 16] = [0.; 16];
     let mut Wsig: [f32; 384] = [0.; 384];
-    let mut Wsig_ptr: *mut f32 = 0 as *mut f32;
+    let mut Wsig_ptr: *mut f32 = std::ptr::null_mut();
     /* *****************************************/
     /* Set up buffer lengths etc based on Fs  */
     /* *****************************************/

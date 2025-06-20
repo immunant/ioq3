@@ -257,11 +257,11 @@ pub unsafe extern "C" fn S_WAV_CodecLoad(
     mut info: *mut snd_info_t,
 ) -> *mut libc::c_void {
     let mut file: fileHandle_t = 0;
-    let mut buffer: *mut libc::c_void = 0 as *mut libc::c_void;
+    let mut buffer: *mut libc::c_void = std::ptr::null_mut();
     // Try to open the file
     crate::src::qcommon::files::FS_FOpenFileRead(filename, &mut file, qtrue);
     if file == 0 {
-        return 0 as *mut libc::c_void;
+        return std::ptr::null_mut();
     }
     // Read the RIFF header
     if S_ReadRIFFHeader(file, info) as u64 == 0 {
@@ -271,7 +271,7 @@ pub unsafe extern "C" fn S_WAV_CodecLoad(
                 as *const libc::c_char,
             filename,
         );
-        return 0 as *mut libc::c_void;
+        return std::ptr::null_mut();
     }
     // Allocate some memory
     buffer = crate::src::qcommon::common::Hunk_AllocateTempMemory((*info).size);
@@ -281,7 +281,7 @@ pub unsafe extern "C" fn S_WAV_CodecLoad(
             b"^1ERROR: Out of memory reading \"%s\"\n\x00" as *const u8 as *const libc::c_char,
             filename,
         );
-        return 0 as *mut libc::c_void;
+        return std::ptr::null_mut();
     }
     // Read, byteswap
     crate::src::qcommon::files::FS_Read(buffer, (*info).size, file);
@@ -305,17 +305,17 @@ S_WAV_CodecOpenStream
 pub unsafe extern "C" fn S_WAV_CodecOpenStream(
     mut filename: *const libc::c_char,
 ) -> *mut snd_stream_t {
-    let mut rv: *mut snd_stream_t = 0 as *mut snd_stream_t;
+    let mut rv: *mut snd_stream_t = std::ptr::null_mut();
     // Open
     rv = S_CodecUtilOpen(filename, &mut wav_codec as *mut _ as *mut snd_codec_s)
         as *mut snd_stream_s;
     if rv.is_null() {
-        return 0 as *mut snd_stream_t;
+        return std::ptr::null_mut();
     }
     // Read the RIFF header
     if S_ReadRIFFHeader((*rv).file, &mut (*rv).info) as u64 == 0 {
         S_CodecUtilClose(&mut rv as *mut _ as *mut *mut snd_stream_s);
-        return 0 as *mut snd_stream_t;
+        return std::ptr::null_mut();
     }
     return rv;
 }

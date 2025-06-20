@@ -12468,7 +12468,7 @@ Sys_DefaultHomePath
 #[no_mangle]
 
 pub unsafe extern "C" fn Sys_DefaultHomePath() -> *mut libc::c_char {
-    let mut p: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut p: *mut libc::c_char = std::ptr::null_mut();
     if *homePath.as_mut_ptr() == 0 && !com_homepath.is_null() {
         p = libc::getenv(b"HOME\x00" as *const u8 as *const libc::c_char);
         if !p.is_null() {
@@ -12545,7 +12545,7 @@ pub unsafe extern "C" fn Sys_Milliseconds() -> i32 {
         tv_sec: 0,
         tv_usec: 0,
     };
-    gettimeofday(&mut tp, 0 as *mut timezone);
+    gettimeofday(&mut tp, std::ptr::null_mut());
     if sys_timeBase == 0 {
         sys_timeBase = tp.tv_sec as usize;
         return (tp.tv_usec as isize / 1000) as i32;
@@ -12564,7 +12564,7 @@ Sys_RandomBytes
 #[no_mangle]
 
 pub unsafe extern "C" fn Sys_RandomBytes(mut string: *mut byte, mut len: i32) -> qboolean {
-    let mut fp: *mut FILE = 0 as *mut FILE; // don't buffer reads from /dev/urandom
+    let mut fp: *mut FILE = std::ptr::null_mut(); // don't buffer reads from /dev/urandom
     fp = fopen(
         b"/dev/urandom\x00" as *const u8 as *const libc::c_char,
         b"r\x00" as *const u8 as *const libc::c_char,
@@ -12572,7 +12572,7 @@ pub unsafe extern "C" fn Sys_RandomBytes(mut string: *mut byte, mut len: i32) ->
     if fp.is_null() {
         return qfalse;
     }
-    setvbuf(fp, 0 as *mut libc::c_char, 2 as i32, 0 as i32 as size_t);
+    setvbuf(fp, std::ptr::null_mut(), 2 as i32, 0 as i32 as size_t);
     if fread(
         string as *mut libc::c_void,
         ::std::mem::size_of::<byte>() as usize,
@@ -12594,7 +12594,7 @@ Sys_GetCurrentUser
 #[no_mangle]
 
 pub unsafe extern "C" fn Sys_GetCurrentUser() -> *mut libc::c_char {
-    let mut p: *mut passwd = 0 as *mut passwd;
+    let mut p: *mut passwd = std::ptr::null_mut();
     p = getpwuid(libc::getuid()) as *mut passwd;
     if p.is_null() {
         return b"player\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
@@ -12673,7 +12673,7 @@ pub unsafe extern "C" fn Sys_FOpen(
     // check if path exists and is a directory
     if stat(ospath, &mut buf) == 0 && buf.st_mode & 0o170000 as i32 as u32 == 0o40000 as i32 as u32
     {
-        return 0 as *mut FILE;
+        return std::ptr::null_mut();
     }
     return fopen(ospath, mode);
 }
@@ -12699,7 +12699,7 @@ Sys_Mkfifo
 #[no_mangle]
 
 pub unsafe extern "C" fn Sys_Mkfifo(mut ospath: *const libc::c_char) -> *mut FILE {
-    let mut fifo: *mut FILE = 0 as *mut FILE;
+    let mut fifo: *mut FILE = std::ptr::null_mut();
     let mut result: i32 = 0;
     let mut fn_0: i32 = 0;
     let mut buf: stat = stat {
@@ -12735,7 +12735,7 @@ pub unsafe extern "C" fn Sys_Mkfifo(mut ospath: *const libc::c_char) -> *mut FIL
     }
     result = mkfifo(ospath, 0o600 as i32 as __mode_t);
     if result != 0 as i32 {
-        return 0 as *mut FILE;
+        return std::ptr::null_mut();
     }
     fifo = fopen(ospath, b"w+\x00" as *const u8 as *const libc::c_char);
     if !fifo.is_null() {
@@ -12758,7 +12758,7 @@ pub unsafe extern "C" fn Sys_Cwd() -> *mut libc::c_char {
         (::std::mem::size_of::<[libc::c_char; 4096]>() as usize).wrapping_sub(1 as i32 as usize),
     );
     if result != cwd.as_mut_ptr() {
-        return 0 as *mut libc::c_char;
+        return std::ptr::null_mut();
     }
     cwd[(4096 as i32 - 1 as i32) as usize] = 0 as i32 as libc::c_char;
     return cwd.as_mut_ptr();
@@ -12780,8 +12780,8 @@ pub unsafe extern "C" fn Sys_ListFilteredFiles(
     let mut search: [libc::c_char; 4096] = [0; 4096];
     let mut newsubdirs: [libc::c_char; 4096] = [0; 4096];
     let mut filename: [libc::c_char; 4096] = [0; 4096];
-    let mut fdir: *mut DIR = 0 as *mut DIR;
-    let mut d: *mut dirent = 0 as *mut dirent;
+    let mut fdir: *mut DIR = std::ptr::null_mut();
+    let mut d: *mut dirent = std::ptr::null_mut();
     let mut st: stat = stat {
         st_dev: 0,
         st_ino: 0,
@@ -12908,13 +12908,13 @@ pub unsafe extern "C" fn Sys_ListFiles(
     mut numfiles: *mut i32,
     mut wantsubs: qboolean,
 ) -> *mut *mut libc::c_char {
-    let mut d: *mut dirent = 0 as *mut dirent;
-    let mut fdir: *mut DIR = 0 as *mut DIR;
+    let mut d: *mut dirent = std::ptr::null_mut();
+    let mut fdir: *mut DIR = std::ptr::null_mut();
     let mut dironly: qboolean = wantsubs;
     let mut search: [libc::c_char; 4096] = [0; 4096];
     let mut nfiles: i32 = 0;
-    let mut listCopy: *mut *mut libc::c_char = 0 as *mut *mut libc::c_char;
-    let mut list: [*mut libc::c_char; 4096] = [0 as *mut libc::c_char; 4096];
+    let mut listCopy: *mut *mut libc::c_char = std::ptr::null_mut();
+    let mut list: [*mut libc::c_char; 4096] = [std::ptr::null_mut(); 4096];
     let mut i: i32 = 0;
     let mut st: stat = stat {
         st_dev: 0,
@@ -12952,10 +12952,10 @@ pub unsafe extern "C" fn Sys_ListFiles(
             list.as_mut_ptr(),
             &mut nfiles,
         );
-        list[nfiles as usize] = 0 as *mut libc::c_char;
+        list[nfiles as usize] = std::ptr::null_mut();
         *numfiles = nfiles;
         if nfiles == 0 {
-            return 0 as *mut *mut libc::c_char;
+            return std::ptr::null_mut();
         }
         listCopy = Z_Malloc(
             ((nfiles + 1 as i32) as usize)
@@ -12969,7 +12969,7 @@ pub unsafe extern "C" fn Sys_ListFiles(
             i += 1
         }
         let ref mut fresh2 = *listCopy.offset(i as isize);
-        *fresh2 = 0 as *mut libc::c_char;
+        *fresh2 = std::ptr::null_mut();
         return listCopy;
     }
     if extension.is_null() {
@@ -12987,7 +12987,7 @@ pub unsafe extern "C" fn Sys_ListFiles(
     fdir = opendir(directory);
     if fdir.is_null() {
         *numfiles = 0 as i32;
-        return 0 as *mut *mut libc::c_char;
+        return std::ptr::null_mut();
     }
     loop {
         d = readdir(fdir);
@@ -13029,12 +13029,12 @@ pub unsafe extern "C" fn Sys_ListFiles(
         list[nfiles as usize] = CopyString((*d).d_name.as_mut_ptr());
         nfiles += 1
     }
-    list[nfiles as usize] = 0 as *mut libc::c_char;
+    list[nfiles as usize] = std::ptr::null_mut();
     closedir(fdir);
     // return a copy of the list
     *numfiles = nfiles;
     if nfiles == 0 {
-        return 0 as *mut *mut libc::c_char;
+        return std::ptr::null_mut();
     }
     listCopy = Z_Malloc(
         ((nfiles + 1 as i32) as usize)
@@ -13047,7 +13047,7 @@ pub unsafe extern "C" fn Sys_ListFiles(
         i += 1
     }
     let ref mut fresh4 = *listCopy.offset(i as isize);
-    *fresh4 = 0 as *mut libc::c_char;
+    *fresh4 = std::ptr::null_mut();
     return listCopy;
 }
 /*
@@ -13112,9 +13112,9 @@ pub unsafe extern "C" fn Sys_Sleep(mut msec: i32) {
             select(
                 0 as i32 + 1 as i32,
                 &mut fdset,
-                0 as *mut fd_set,
-                0 as *mut fd_set,
-                0 as *mut timeval,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
             );
         } else {
             let mut timeout: timeval = timeval {
@@ -13127,8 +13127,8 @@ pub unsafe extern "C" fn Sys_Sleep(mut msec: i32) {
             select(
                 0 as i32 + 1 as i32,
                 &mut fdset,
-                0 as *mut fd_set,
-                0 as *mut fd_set,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
                 &mut timeout,
             );
         }
@@ -13645,7 +13645,7 @@ Check if filename should be allowed to be loaded as a DLL.
 #[no_mangle]
 
 pub unsafe extern "C" fn Sys_DllExtension(mut name: *const libc::c_char) -> qboolean {
-    let mut p: *const libc::c_char = 0 as *const libc::c_char;
+    let mut p: *const libc::c_char = std::ptr::null();
     let mut c: libc::c_char = 0 as i32 as libc::c_char;
     if COM_CompareExtension(name, b".so\x00" as *const u8 as *const libc::c_char) as u64 != 0 {
         return qtrue;

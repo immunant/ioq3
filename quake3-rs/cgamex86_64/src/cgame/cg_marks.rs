@@ -263,7 +263,7 @@ Will allways succeed, even if it requires freeing an old active mark
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_AllocMark() -> *mut markPoly_t {
-    let mut le: *mut markPoly_t = 0 as *mut markPoly_t;
+    let mut le: *mut markPoly_t = std::ptr::null_mut();
     let mut time: i32 = 0;
     if cg_freeMarkPolys.is_null() {
         // no free entities, so free the one at the end of the chain
@@ -314,7 +314,7 @@ pub unsafe extern "C" fn CG_ImpactMark(
         firstPoint: 0,
         numPoints: 0,
     }; 128];
-    let mut mf: *mut markFragment_t = 0 as *mut markFragment_t;
+    let mut mf: *mut markFragment_t = std::ptr::null_mut();
     let mut markPoints: [vec3_t; 384] = [[0.; 3]; 384];
     let mut projection: vec3_t = [0.; 3];
     if cg_addMarks.integer == 0 {
@@ -381,13 +381,13 @@ pub unsafe extern "C" fn CG_ImpactMark(
     i = 0 as i32;
     mf = markFragments.as_mut_ptr();
     while i < numFragments {
-        let mut v: *mut polyVert_t = 0 as *mut polyVert_t;
+        let mut v: *mut polyVert_t = std::ptr::null_mut();
         let mut verts: [polyVert_t; 10] = [polyVert_t {
             xyz: [0.; 3],
             st: [0.; 2],
             modulate: [0; 4],
         }; 10];
-        let mut mark: *mut markPoly_t = 0 as *mut markPoly_t;
+        let mut mark: *mut markPoly_t = std::ptr::null_mut();
         // we have an upper limit on the complexity of polygons
         // that we store persistantly
         if (*mf).numPoints > 10 as i32 {
@@ -687,8 +687,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 pub unsafe extern "C" fn CG_AddMarks() {
     let mut j: i32 = 0;
-    let mut mp: *mut markPoly_t = 0 as *mut markPoly_t;
-    let mut next: *mut markPoly_t = 0 as *mut markPoly_t;
+    let mut mp: *mut markPoly_t = std::ptr::null_mut();
+    let mut next: *mut markPoly_t = std::ptr::null_mut();
     let mut t: i32 = 0;
     let mut fade: i32 = 0;
     if cg_addMarks.integer == 0 {

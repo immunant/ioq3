@@ -424,7 +424,7 @@ UI_PushMenu
 
 pub unsafe extern "C" fn UI_PushMenu(mut menu: *mut menuframework_s) {
     let mut i: i32 = 0;
-    let mut item: *mut menucommon_s = 0 as *mut menucommon_s;
+    let mut item: *mut menucommon_s = std::ptr::null_mut();
     // avoid stacking menus invoked by hotkeys
     i = 0 as i32;
     while i < uis.menusp {
@@ -488,7 +488,7 @@ pub unsafe extern "C" fn UI_PopMenu() {
 
 pub unsafe extern "C" fn UI_ForceMenuOff() {
     uis.menusp = 0 as i32;
-    uis.activemenu = 0 as *mut menuframework_s;
+    uis.activemenu = std::ptr::null_mut();
     trap_Key_SetCatcher(trap_Key_GetCatcher() & !(0x2 as i32));
     trap_Key_ClearStates();
     trap_Cvar_Set(
@@ -700,7 +700,7 @@ unsafe extern "C" fn UI_DrawBannerString2(
     mut str: *const libc::c_char,
     mut color: *mut vec_t,
 ) {
-    let mut s: *const libc::c_char = 0 as *const libc::c_char;
+    let mut s: *const libc::c_char = std::ptr::null();
     let mut ch: u8 = 0;
     let mut ax: f32 = 0.;
     let mut ay: f32 = 0.;
@@ -742,7 +742,7 @@ unsafe extern "C" fn UI_DrawBannerString2(
         }
         s = s.offset(1)
     }
-    trap_R_SetColor(0 as *const f32);
+    trap_R_SetColor(std::ptr::null());
 }
 #[no_mangle]
 
@@ -753,7 +753,7 @@ pub unsafe extern "C" fn UI_DrawBannerString(
     mut style: i32,
     mut color: *mut vec_t,
 ) {
-    let mut s: *const libc::c_char = 0 as *const libc::c_char;
+    let mut s: *const libc::c_char = std::ptr::null();
     let mut ch: i32 = 0;
     let mut width: i32 = 0;
     let mut drawcolor: vec4_t = [0.; 4];
@@ -787,7 +787,7 @@ pub unsafe extern "C" fn UI_DrawBannerString(
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_ProportionalStringWidth(mut str: *const libc::c_char) -> i32 {
-    let mut s: *const libc::c_char = 0 as *const libc::c_char;
+    let mut s: *const libc::c_char = std::ptr::null();
     let mut ch: i32 = 0;
     let mut charWidth: i32 = 0;
     let mut width: i32 = 0;
@@ -814,7 +814,7 @@ unsafe extern "C" fn UI_DrawProportionalString2(
     mut sizeScale: f32,
     mut charset: qhandle_t,
 ) {
-    let mut s: *const libc::c_char = 0 as *const libc::c_char;
+    let mut s: *const libc::c_char = std::ptr::null();
     let mut ch: u8 = 0;
     let mut ax: f32 = 0.;
     let mut ay: f32 = 0.;
@@ -855,7 +855,7 @@ unsafe extern "C" fn UI_DrawProportionalString2(
         ax += aw + 3 as i32 as f32 * uis.xscale * sizeScale;
         s = s.offset(1)
     }
-    trap_R_SetColor(0 as *const f32);
+    trap_R_SetColor(std::ptr::null());
 }
 /*
 =================
@@ -971,9 +971,9 @@ pub unsafe extern "C" fn UI_DrawProportionalString_AutoWrapped(
     mut color: *mut vec_t,
 ) {
     let mut width: i32 = 0;
-    let mut s1: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut s2: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut s3: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut s1: *mut libc::c_char = std::ptr::null_mut();
+    let mut s2: *mut libc::c_char = std::ptr::null_mut();
+    let mut s3: *mut libc::c_char = std::ptr::null_mut();
     let mut c_bcp: libc::c_char = 0;
     let mut buf: [libc::c_char; 1024] = [0; 1024];
     let mut sizeScale: f32 = 0.;
@@ -1049,7 +1049,7 @@ unsafe extern "C" fn UI_DrawString2(
     mut charw: i32,
     mut charh: i32,
 ) {
-    let mut s: *const libc::c_char = 0 as *const libc::c_char; //APSFIXME;
+    let mut s: *const libc::c_char = std::ptr::null(); //APSFIXME;
     let mut ch: libc::c_char = 0;
     let mut forceColor: i32 = qfalse as i32;
     let mut tempcolor: vec4_t = [0.; 4];
@@ -1105,7 +1105,7 @@ unsafe extern "C" fn UI_DrawString2(
             s = s.offset(1)
         }
     }
-    trap_R_SetColor(0 as *const f32);
+    trap_R_SetColor(std::ptr::null());
 }
 /*
 =================
@@ -1126,7 +1126,7 @@ pub unsafe extern "C" fn UI_DrawString(
     let mut charh: i32 = 0;
     let mut newcolor: vec4_t = [0.; 4];
     let mut lowlight: vec4_t = [0.; 4];
-    let mut drawcolor: *mut f32 = 0 as *mut f32;
+    let mut drawcolor: *mut f32 = std::ptr::null_mut();
     let mut dropcolor: vec4_t = [0.; 4];
     if str.is_null() {
         return;
@@ -1314,7 +1314,7 @@ UI_MouseEvent
 pub unsafe extern "C" fn UI_MouseEvent(mut dx: i32, mut dy: i32) {
     let mut i: i32 = 0;
     let mut bias: i32 = 0;
-    let mut m: *mut menucommon_s = 0 as *mut menucommon_s;
+    let mut m: *mut menucommon_s = std::ptr::null_mut();
     if uis.activemenu.is_null() {
         return;
     }
@@ -1445,7 +1445,7 @@ UI_ConsoleCommand
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_ConsoleCommand(mut realTime: i32) -> qboolean {
-    let mut cmd: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut cmd: *mut libc::c_char = std::ptr::null_mut();
     uis.frametime = realTime - uis.realtime;
     uis.realtime = realTime;
     cmd = UI_Argv(0 as i32);
@@ -1528,7 +1528,7 @@ pub unsafe extern "C" fn UI_Init() {
     }
     // initialize the menu system
     Menu_Cache();
-    uis.activemenu = 0 as *mut menuframework_s;
+    uis.activemenu = std::ptr::null_mut();
     uis.menusp = 0 as i32;
 }
 /*
@@ -1639,7 +1639,7 @@ pub unsafe extern "C" fn UI_FillRect(
         0 as i32 as f32,
         uis.whiteShader,
     );
-    trap_R_SetColor(0 as *const f32);
+    trap_R_SetColor(std::ptr::null());
 }
 /*
 ================
@@ -1703,7 +1703,7 @@ pub unsafe extern "C" fn UI_DrawRect(
         0 as i32 as f32,
         uis.whiteShader,
     );
-    trap_R_SetColor(0 as *const f32);
+    trap_R_SetColor(std::ptr::null());
 }
 #[no_mangle]
 
@@ -1761,7 +1761,7 @@ pub unsafe extern "C" fn UI_Refresh(mut realtime: i32) {
         }
     }
     // draw cursor
-    UI_SetColor(0 as *const f32);
+    UI_SetColor(std::ptr::null());
     UI_DrawHandlePic(
         (uis.cursorx - 16 as i32) as f32,
         (uis.cursory - 16 as i32) as f32,

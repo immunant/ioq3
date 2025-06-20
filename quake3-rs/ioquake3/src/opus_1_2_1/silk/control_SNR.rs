@@ -142,7 +142,7 @@ pub unsafe extern "C" fn silk_control_SNR(
     let mut k: i32 = 0;
     let mut ret: i32 = 0 as i32;
     let mut frac_Q6: opus_int32 = 0;
-    let mut rateTable: *const opus_int32 = 0 as *const opus_int32;
+    let mut rateTable: *const opus_int32 = std::ptr::null();
     /* Set bitrate/coding quality */
     TargetRate_bps = if 5000 as i32 > 80000 as i32 {
         if TargetRate_bps > 5000 as i32 {

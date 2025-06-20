@@ -48,7 +48,7 @@ unsafe extern "C" fn GetTickCount() -> int32_t {
         tv_sec: 0,
         tv_usec: 0,
     };
-    gettimeofday(&mut tv, 0 as *mut timezone);
+    gettimeofday(&mut tv, std::ptr::null_mut());
     return ((tv.tv_usec as isize / 1000) + tv.tv_sec as isize * 1000) as int32_t;
 }
 /* libmumblelink.h -- mumble link interface
@@ -95,7 +95,7 @@ pub unsafe extern "C" fn mumble_link(mut name: *const libc::c_char) -> i32 {
         return -(1 as i32);
     }
     lm = mmap(
-        0 as *mut libc::c_void,
+        std::ptr::null_mut(),
         ::std::mem::size_of::<LinkedMem>() as usize,
         0x1 as i32 | 0x2 as i32,
         0x1 as i32,
@@ -103,7 +103,7 @@ pub unsafe extern "C" fn mumble_link(mut name: *const libc::c_char) -> i32 {
         0 as i32 as __off_t,
     ) as *mut LinkedMem;
     if lm == -(1 as i32) as *mut libc::c_void as *mut LinkedMem {
-        lm = 0 as *mut LinkedMem;
+        lm = std::ptr::null_mut();
         libc::close(shmfd);
         return -(1 as i32);
     }
@@ -241,10 +241,10 @@ pub unsafe extern "C" fn mumble_unlink() {
         lm as *mut libc::c_void,
         ::std::mem::size_of::<LinkedMem>() as usize,
     );
-    lm = 0 as *mut LinkedMem;
+    lm = std::ptr::null_mut();
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn mumble_islinked() -> i32 {
-    return (lm != 0 as *mut libc::c_void as *mut LinkedMem) as i32;
+    return (lm != std::ptr::null_mut() as *mut LinkedMem) as i32;
 }

@@ -328,7 +328,7 @@ unsafe extern "C" fn compress_data(
     let mut blockcnt: i32 = 0;
     let mut ypos: JDIMENSION = 0;
     let mut xpos: JDIMENSION = 0;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
     let mut forward_DCT: forward_DCT_ptr = None;
     /* Loop to write as much as one whole iMCU row */
     yoffset = (*coef).MCU_vert_offset;
@@ -478,10 +478,10 @@ unsafe extern "C" fn compress_first_pass(
     let mut block_rows: i32 = 0;
     let mut ndummy: i32 = 0;
     let mut lastDC: JCOEF = 0;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
-    let mut buffer: JBLOCKARRAY = 0 as *mut JBLOCKROW;
-    let mut thisblockrow: JBLOCKROW = 0 as *mut JBLOCK;
-    let mut lastblockrow: JBLOCKROW = 0 as *mut JBLOCK;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
+    let mut buffer: JBLOCKARRAY = std::ptr::null_mut();
+    let mut thisblockrow: JBLOCKROW = std::ptr::null_mut();
+    let mut lastblockrow: JBLOCKROW = std::ptr::null_mut();
     let mut forward_DCT: forward_DCT_ptr = None;
     ci = 0 as i32;
     compptr = (*cinfo).comp_info;
@@ -617,9 +617,9 @@ unsafe extern "C" fn compress_output(
     let mut yindex: i32 = 0;
     let mut yoffset: i32 = 0;
     let mut start_col: JDIMENSION = 0;
-    let mut buffer: [JBLOCKARRAY; 4] = [0 as *mut JBLOCKROW; 4];
-    let mut buffer_ptr: JBLOCKROW = 0 as *mut JBLOCK;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
+    let mut buffer: [JBLOCKARRAY; 4] = [std::ptr::null_mut(); 4];
+    let mut buffer_ptr: JBLOCKROW = std::ptr::null_mut();
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
     /* Align the virtual buffers for the components used in this scan.
      * NB: during first pass, this is safe only because the buffers will
      * already be aligned properly, so jmemmgr.c won't need to do any I/O.
@@ -707,7 +707,7 @@ pub unsafe extern "C" fn jinit_c_coef_controller(
     mut cinfo: j_compress_ptr,
     mut need_full_buffer: boolean,
 ) {
-    let mut coef: my_coef_ptr = 0 as *mut my_coef_controller;
+    let mut coef: my_coef_ptr = std::ptr::null_mut();
     coef = Some(
         (*(*cinfo).mem)
             .alloc_small
@@ -726,7 +726,7 @@ pub unsafe extern "C" fn jinit_c_coef_controller(
         /* Allocate a full-image virtual array for each component, */
         /* padded to a multiple of samp_factor DCT blocks in each direction. */
         let mut ci: i32 = 0;
-        let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
+        let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
         ci = 0 as i32;
         compptr = (*cinfo).comp_info;
         while ci < (*cinfo).num_components {
@@ -754,7 +754,7 @@ pub unsafe extern "C" fn jinit_c_coef_controller(
         }
     } else {
         /* We only need a single-MCU buffer. */
-        let mut buffer: JBLOCKROW = 0 as *mut JBLOCK;
+        let mut buffer: JBLOCKROW = std::ptr::null_mut();
         let mut i: i32 = 0;
         buffer = Some(
             (*(*cinfo).mem)

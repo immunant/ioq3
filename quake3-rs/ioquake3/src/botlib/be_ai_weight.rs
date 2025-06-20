@@ -99,11 +99,11 @@ pub unsafe extern "C" fn ReadValue(mut source: *mut source_t, mut value: *mut f3
         subtype: 0,
         intvalue: 0,
         floatvalue: 0.,
-        whitespace_p: 0 as *mut libc::c_char,
-        endwhitespace_p: 0 as *mut libc::c_char,
+        whitespace_p: std::ptr::null_mut(),
+        endwhitespace_p: std::ptr::null_mut(),
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut token_s,
+        next: std::ptr::null_mut(),
     };
     if PC_ExpectAnyToken(
         source as *mut source_s,
@@ -311,27 +311,27 @@ pub unsafe extern "C" fn ReadFuzzySeperators_r(
         subtype: 0,
         intvalue: 0,
         floatvalue: 0.,
-        whitespace_p: 0 as *mut libc::c_char,
-        endwhitespace_p: 0 as *mut libc::c_char,
+        whitespace_p: std::ptr::null_mut(),
+        endwhitespace_p: std::ptr::null_mut(),
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut token_s,
+        next: std::ptr::null_mut(),
     };
     let mut fs: *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t =
-        0 as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t;
+        std::ptr::null_mut();
     let mut lastfs: *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t =
-        0 as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t;
+        std::ptr::null_mut();
     let mut firstfs: *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t =
-        0 as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t;
+        std::ptr::null_mut();
     founddefault = qfalse as i32;
-    firstfs = 0 as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t;
-    lastfs = 0 as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t;
+    firstfs = std::ptr::null_mut();
+    lastfs = std::ptr::null_mut();
     if PC_ExpectTokenString(
         source as *mut source_s,
         b"(\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
     ) == 0
     {
-        return 0 as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t;
+        return std::ptr::null_mut();
     }
     if PC_ExpectTokenType(
         source as *mut source_s,
@@ -340,7 +340,7 @@ pub unsafe extern "C" fn ReadFuzzySeperators_r(
         &mut token as *mut _ as *mut token_s,
     ) == 0
     {
-        return 0 as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t;
+        return std::ptr::null_mut();
     }
     index = token.intvalue as i32;
     if PC_ExpectTokenString(
@@ -348,21 +348,21 @@ pub unsafe extern "C" fn ReadFuzzySeperators_r(
         b")\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
     ) == 0
     {
-        return 0 as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t;
+        return std::ptr::null_mut();
     }
     if PC_ExpectTokenString(
         source as *mut source_s,
         b"{\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
     ) == 0
     {
-        return 0 as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t;
+        return std::ptr::null_mut();
     }
     if PC_ExpectAnyToken(
         source as *mut source_s,
         &mut token as *mut _ as *mut token_s,
     ) == 0
     {
-        return 0 as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t;
+        return std::ptr::null_mut();
     }
     loop {
         def = (libc::strcmp(
@@ -397,7 +397,7 @@ pub unsafe extern "C" fn ReadFuzzySeperators_r(
                             as *mut libc::c_char,
                     ); //end if
                     FreeFuzzySeperators_r(firstfs); //end if
-                    return 0 as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t;
+                    return std::ptr::null_mut();
                 } //end if
                 (*fs).value = 999999 as i32; //end if
                 founddefault = qtrue as i32
@@ -410,7 +410,7 @@ pub unsafe extern "C" fn ReadFuzzySeperators_r(
                 ) == 0
                 {
                     FreeFuzzySeperators_r(firstfs); //end if
-                    return 0 as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t;
+                    return std::ptr::null_mut();
                 }
                 (*fs).value = token.intvalue as i32
             }
@@ -424,7 +424,7 @@ pub unsafe extern "C" fn ReadFuzzySeperators_r(
                 ) == 0
             {
                 FreeFuzzySeperators_r(firstfs);
-                return 0 as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t;
+                return std::ptr::null_mut();
             }
             newindent = qfalse as i32;
             if libc::strcmp(
@@ -439,7 +439,7 @@ pub unsafe extern "C" fn ReadFuzzySeperators_r(
                 ) == 0
                 {
                     FreeFuzzySeperators_r(firstfs);
-                    return 0 as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t;
+                    return std::ptr::null_mut();
                 }
                 //end if
             } //end else
@@ -450,7 +450,7 @@ pub unsafe extern "C" fn ReadFuzzySeperators_r(
             {
                 if ReadFuzzyWeight(source, fs) == 0 {
                     FreeFuzzySeperators_r(firstfs);
-                    return 0 as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t;
+                    return std::ptr::null_mut();
                 }
             //end if
             } else if libc::strcmp(
@@ -461,7 +461,7 @@ pub unsafe extern "C" fn ReadFuzzySeperators_r(
                 (*fs).child = ReadFuzzySeperators_r(source);
                 if (*fs).child.is_null() {
                     FreeFuzzySeperators_r(firstfs);
-                    return 0 as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t;
+                    return std::ptr::null_mut();
                 }
             //end if
             } else {
@@ -470,7 +470,7 @@ pub unsafe extern "C" fn ReadFuzzySeperators_r(
                     b"invalid name %s\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     token.string.as_mut_ptr(),
                 );
-                return 0 as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t;
+                return std::ptr::null_mut();
             }
             if newindent != 0 {
                 if PC_ExpectTokenString(
@@ -479,7 +479,7 @@ pub unsafe extern "C" fn ReadFuzzySeperators_r(
                 ) == 0
                 {
                     FreeFuzzySeperators_r(firstfs);
-                    return 0 as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t;
+                    return std::ptr::null_mut();
                 }
                 //end if
             }
@@ -490,7 +490,7 @@ pub unsafe extern "C" fn ReadFuzzySeperators_r(
                 b"invalid name %s\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 token.string.as_mut_ptr(),
             );
-            return 0 as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t;
+            return std::ptr::null_mut();
         }
         if PC_ExpectAnyToken(
             source as *mut source_s,
@@ -498,7 +498,7 @@ pub unsafe extern "C" fn ReadFuzzySeperators_r(
         ) == 0
         {
             FreeFuzzySeperators_r(firstfs);
-            return 0 as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t;
+            return std::ptr::null_mut();
         }
         if !(libc::strcmp(
             token.string.as_mut_ptr(),
@@ -520,8 +520,8 @@ pub unsafe extern "C" fn ReadFuzzySeperators_r(
         (*fs).index = index;
         (*fs).value = 999999 as i32;
         (*fs).weight = 0 as i32 as f32;
-        (*fs).next = 0 as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_s;
-        (*fs).child = 0 as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_s;
+        (*fs).next = std::ptr::null_mut();
+        (*fs).child = std::ptr::null_mut();
         if !lastfs.is_null() {
             (*lastfs).next = fs
         } else {
@@ -553,17 +553,17 @@ pub unsafe extern "C" fn ReadWeightConfig(
         subtype: 0,
         intvalue: 0,
         floatvalue: 0.,
-        whitespace_p: 0 as *mut libc::c_char,
-        endwhitespace_p: 0 as *mut libc::c_char,
+        whitespace_p: std::ptr::null_mut(),
+        endwhitespace_p: std::ptr::null_mut(),
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut token_s,
+        next: std::ptr::null_mut(),
     };
-    let mut source: *mut source_t = 0 as *mut source_t;
+    let mut source: *mut source_t = std::ptr::null_mut();
     let mut fs: *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t =
-        0 as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t;
+        std::ptr::null_mut();
     let mut config: *mut crate::src::botlib::be_ai_weight::weightconfig_t =
-        0 as *mut crate::src::botlib::be_ai_weight::weightconfig_t;
+        std::ptr::null_mut();
     //DEBUG
     if crate::src::botlib::l_libvar::LibVarGetValue(
         b"bot_reloadcharacters\x00" as *const u8 as *const libc::c_char,
@@ -596,7 +596,7 @@ pub unsafe extern "C" fn ReadWeightConfig(
                     as *const libc::c_char as *mut libc::c_char,
                 filename,
             );
-            return 0 as *mut crate::src::botlib::be_ai_weight::weightconfig_t;
+            return std::ptr::null_mut();
         }
     }
     PC_SetBaseFolder(b"botfiles\x00" as *const u8 as *const libc::c_char as *mut libc::c_char);
@@ -609,7 +609,7 @@ pub unsafe extern "C" fn ReadWeightConfig(
             b"counldn\'t load %s\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             filename,
         );
-        return 0 as *mut crate::src::botlib::be_ai_weight::weightconfig_t;
+        return std::ptr::null_mut();
     }
     //
     config = crate::src::botlib::l_memory::GetClearedMemory(::std::mem::size_of::<
@@ -649,7 +649,7 @@ pub unsafe extern "C" fn ReadWeightConfig(
                 {
                     FreeWeightConfig(config); //end if
                     FreeSource(source as *mut source_s); //end if
-                    return 0 as *mut crate::src::botlib::be_ai_weight::weightconfig_t;
+                    return std::ptr::null_mut();
                 }
                 StripDoubleQuotes(token.string.as_mut_ptr());
                 (*config).weights[(*config).numweights as usize].name =
@@ -668,7 +668,7 @@ pub unsafe extern "C" fn ReadWeightConfig(
                 {
                     FreeWeightConfig(config);
                     FreeSource(source as *mut source_s);
-                    return 0 as *mut crate::src::botlib::be_ai_weight::weightconfig_t;
+                    return std::ptr::null_mut();
                 }
                 newindent = qfalse as i32;
                 if libc::strcmp(
@@ -684,7 +684,7 @@ pub unsafe extern "C" fn ReadWeightConfig(
                     {
                         FreeWeightConfig(config);
                         FreeSource(source as *mut source_s);
-                        return 0 as *mut crate::src::botlib::be_ai_weight::weightconfig_t;
+                        return std::ptr::null_mut();
                     }
                     //end if
                 } //end else
@@ -697,7 +697,7 @@ pub unsafe extern "C" fn ReadWeightConfig(
                     if fs.is_null() {
                         FreeWeightConfig(config); //end if
                         FreeSource(source as *mut source_s); //end else if
-                        return 0 as *mut crate::src::botlib::be_ai_weight::weightconfig_t;
+                        return std::ptr::null_mut();
                     } //end if
                     (*config).weights[(*config).numweights as usize].firstseperator = fs
                 } else if libc::strcmp(
@@ -712,13 +712,13 @@ pub unsafe extern "C" fn ReadWeightConfig(
                         as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t; //end if
                     (*fs).index = 0 as i32;
                     (*fs).value = 999999 as i32;
-                    (*fs).next = 0 as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_s;
-                    (*fs).child = 0 as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_s;
+                    (*fs).next = std::ptr::null_mut();
+                    (*fs).child = std::ptr::null_mut();
                     if ReadFuzzyWeight(source, fs) == 0 {
                         crate::src::botlib::l_memory::FreeMemory(fs as *mut libc::c_void);
                         FreeWeightConfig(config);
                         FreeSource(source as *mut source_s);
-                        return 0 as *mut crate::src::botlib::be_ai_weight::weightconfig_t;
+                        return std::ptr::null_mut();
                     }
                     (*config).weights[(*config).numweights as usize].firstseperator = fs
                 } else {
@@ -730,7 +730,7 @@ pub unsafe extern "C" fn ReadWeightConfig(
                     );
                     FreeWeightConfig(config);
                     FreeSource(source as *mut source_s);
-                    return 0 as *mut crate::src::botlib::be_ai_weight::weightconfig_t;
+                    return std::ptr::null_mut();
                 }
                 if newindent != 0 {
                     if PC_ExpectTokenString(
@@ -740,7 +740,7 @@ pub unsafe extern "C" fn ReadWeightConfig(
                     {
                         FreeWeightConfig(config);
                         FreeSource(source as *mut source_s);
-                        return 0 as *mut crate::src::botlib::be_ai_weight::weightconfig_t;
+                        return std::ptr::null_mut();
                     }
                     //end if
                 } //end if
@@ -754,7 +754,7 @@ pub unsafe extern "C" fn ReadWeightConfig(
             ); //end if
             FreeWeightConfig(config);
             FreeSource(source as *mut source_s);
-            return 0 as *mut crate::src::botlib::be_ai_weight::weightconfig_t;
+            return std::ptr::null_mut();
         }
         //end else
     }
@@ -1254,7 +1254,7 @@ pub unsafe extern "C" fn BotShutdownWeights() {
     while i < 128 as i32 {
         if !weightFileList[i as usize].is_null() {
             FreeWeightConfig2(weightFileList[i as usize]);
-            weightFileList[i as usize] = 0 as *mut crate::src::botlib::be_ai_weight::weightconfig_t
+            weightFileList[i as usize] = std::ptr::null_mut()
         }
         i += 1
         //end if

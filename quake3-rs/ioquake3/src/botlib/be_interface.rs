@@ -598,7 +598,7 @@ pub unsafe extern "C" fn Export_BotLibVarGet(
     mut value: *mut libc::c_char,
     mut size: i32,
 ) -> i32 {
-    let mut varvalue: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut varvalue: *mut libc::c_char = std::ptr::null_mut();
     varvalue = crate::src::botlib::l_libvar::LibVarGetString(var_name);
     crate::stdlib::strncpy(value, varvalue, (size - 1 as i32) as usize);
     *value.offset((size - 1 as i32) as isize) = '\u{0}' as i32 as libc::c_char;
@@ -1220,7 +1220,7 @@ pub unsafe extern "C" fn GetBotLibAPI(
             2 as i32,
             apiVersion,
         );
-        return 0 as *mut botlib_export_t;
+        return std::ptr::null_mut();
     }
     Init_AAS_Export(&mut be_botlib_export.aas);
     Init_EA_Export(&mut be_botlib_export.ea);

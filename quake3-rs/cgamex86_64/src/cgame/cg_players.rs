@@ -4,7 +4,7 @@ pub mod stdlib_float_h {
     #[inline]
 
     pub unsafe extern "C" fn atof(mut __nptr: *const libc::c_char) -> f64 {
-        return libc::strtod(__nptr, 0 as *mut libc::c_void as *mut *mut libc::c_char);
+        return libc::strtod(__nptr, std::ptr::null_mut() as *mut *mut libc::c_char);
     }
 }
 
@@ -14,7 +14,7 @@ pub mod stdlib_h {
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
         return libc::strtol(
             __nptr,
-            0 as *mut libc::c_void as *mut *mut libc::c_char,
+            std::ptr::null_mut() as *mut *mut libc::c_char,
             10 as i32,
         ) as i32;
     }
@@ -359,7 +359,7 @@ pub unsafe extern "C" fn CG_CustomSound(
     mut clientNum: i32,
     mut soundName: *const libc::c_char,
 ) -> sfxHandle_t {
-    let mut ci: *mut clientInfo_t = 0 as *mut clientInfo_t;
+    let mut ci: *mut clientInfo_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     if *soundName.offset(0 as i32 as isize) as i32 != '*' as i32 {
         return trap_S_RegisterSound(soundName, qfalse);
@@ -400,16 +400,16 @@ unsafe extern "C" fn CG_ParseAnimationFile(
     mut filename: *const libc::c_char,
     mut ci: *mut clientInfo_t,
 ) -> qboolean {
-    let mut text_p: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut prev: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut text_p: *mut libc::c_char = std::ptr::null_mut();
+    let mut prev: *mut libc::c_char = std::ptr::null_mut();
     let mut len: i32 = 0;
     let mut i: i32 = 0;
-    let mut token: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut token: *mut libc::c_char = std::ptr::null_mut();
     let mut fps: f32 = 0.;
     let mut skip: i32 = 0;
     let mut text: [libc::c_char; 20000] = [0; 20000];
     let mut f: fileHandle_t = 0;
-    let mut animations: *mut animation_t = 0 as *mut animation_t;
+    let mut animations: *mut animation_t = std::ptr::null_mut();
     animations = (*ci).animations.as_mut_ptr();
     // load the file
     len = trap_FS_FOpenFile(filename, &mut f, FS_READ);
@@ -641,7 +641,7 @@ CG_FileExists
 
 unsafe extern "C" fn CG_FileExists(mut filename: *const libc::c_char) -> qboolean {
     let mut len: i32 = 0;
-    len = trap_FS_FOpenFile(filename, 0 as *mut fileHandle_t, FS_READ);
+    len = trap_FS_FOpenFile(filename, std::ptr::null_mut(), FS_READ);
     if len > 0 as i32 {
         return qtrue;
     }
@@ -663,8 +663,8 @@ unsafe extern "C" fn CG_FindClientModelFile(
     mut base: *const libc::c_char,
     mut ext: *const libc::c_char,
 ) -> qboolean {
-    let mut team: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut charactersFolder: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut team: *mut libc::c_char = std::ptr::null_mut();
+    let mut charactersFolder: *mut libc::c_char = std::ptr::null_mut();
     let mut i: i32 = 0;
     if cgs.gametype as u32 >= GT_TEAM as i32 as u32 {
         match (*ci).team as u32 {
@@ -795,8 +795,8 @@ unsafe extern "C" fn CG_FindClientHeadFile(
     mut base: *const libc::c_char,
     mut ext: *const libc::c_char,
 ) -> qboolean {
-    let mut team: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut headsFolder: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut team: *mut libc::c_char = std::ptr::null_mut();
+    let mut headsFolder: *mut libc::c_char = std::ptr::null_mut();
     let mut i: i32 = 0;
     if cgs.gametype as u32 >= GT_TEAM as i32 as u32 {
         match (*ci).team as u32 {
@@ -1027,7 +1027,7 @@ unsafe extern "C" fn CG_RegisterClientModelname(
     mut teamName: *const libc::c_char,
 ) -> qboolean {
     let mut filename: [libc::c_char; 64] = [0; 64];
-    let mut headName: *const libc::c_char = 0 as *const libc::c_char;
+    let mut headName: *const libc::c_char = std::ptr::null();
     let mut newTeamName: [libc::c_char; 64] = [0; 64];
     if *headModelName.offset(0 as i32 as isize) as i32 == '\u{0}' as i32 {
         headName = modelName
@@ -1270,11 +1270,11 @@ This will usually be deferred to a safe time
 */
 
 unsafe extern "C" fn CG_LoadClientInfo(mut clientNum: i32, mut ci: *mut clientInfo_t) {
-    let mut dir: *const libc::c_char = 0 as *const libc::c_char;
-    let mut fallback: *const libc::c_char = 0 as *const libc::c_char;
+    let mut dir: *const libc::c_char = std::ptr::null();
+    let mut fallback: *const libc::c_char = std::ptr::null();
     let mut i: i32 = 0;
     let mut modelloaded: i32 = 0;
-    let mut s: *const libc::c_char = 0 as *const libc::c_char;
+    let mut s: *const libc::c_char = std::ptr::null();
     let mut teamname: [libc::c_char; 64] = [0; 64];
     teamname[0 as i32 as usize] = 0 as i32 as libc::c_char;
     modelloaded = qtrue as i32;
@@ -1462,7 +1462,7 @@ CG_ScanForExistingClientInfo
 
 unsafe extern "C" fn CG_ScanForExistingClientInfo(mut ci: *mut clientInfo_t) -> qboolean {
     let mut i: i32 = 0;
-    let mut match_0: *mut clientInfo_t = 0 as *mut clientInfo_t;
+    let mut match_0: *mut clientInfo_t = std::ptr::null_mut();
     i = 0 as i32;
     while i < cgs.maxclients {
         match_0 = &mut *cgs.clientinfo.as_mut_ptr().offset(i as isize) as *mut clientInfo_t;
@@ -1515,7 +1515,7 @@ client's info to use until we have some spare time.
 
 unsafe extern "C" fn CG_SetDeferredClientInfo(mut clientNum: i32, mut ci: *mut clientInfo_t) {
     let mut i: i32 = 0;
-    let mut match_0: *mut clientInfo_t = 0 as *mut clientInfo_t;
+    let mut match_0: *mut clientInfo_t = std::ptr::null_mut();
     // if someone else is already the same models and skins we
     // can just load the client info
     i = 0 as i32;
@@ -1593,7 +1593,7 @@ CG_NewClientInfo
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_NewClientInfo(mut clientNum: i32) {
-    let mut ci: *mut clientInfo_t = 0 as *mut clientInfo_t;
+    let mut ci: *mut clientInfo_t = std::ptr::null_mut();
     let mut newInfo: clientInfo_t = clientInfo_t {
         infoValid: qfalse,
         name: [0; 64],
@@ -1649,9 +1649,9 @@ pub unsafe extern "C" fn CG_NewClientInfo(mut clientNum: i32) {
         }; 37],
         sounds: [0; 32],
     };
-    let mut configstring: *const libc::c_char = 0 as *const libc::c_char;
-    let mut v: *const libc::c_char = 0 as *const libc::c_char;
-    let mut slash: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut configstring: *const libc::c_char = std::ptr::null();
+    let mut v: *const libc::c_char = std::ptr::null();
+    let mut slash: *mut libc::c_char = std::ptr::null_mut();
     ci = &mut *cgs.clientinfo.as_mut_ptr().offset(clientNum as isize) as *mut clientInfo_t;
     configstring = CG_ConfigString(clientNum + (32 as i32 + 256 as i32 + 256 as i32));
     if *configstring.offset(0 as i32 as isize) == 0 {
@@ -1739,7 +1739,7 @@ pub unsafe extern "C" fn CG_NewClientInfo(mut clientNum: i32) {
         // forcemodel makes everyone use a single model
         // to prevent load hitches
         let mut modelStr: [libc::c_char; 64] = [0; 64];
-        let mut skin: *mut libc::c_char = 0 as *mut libc::c_char;
+        let mut skin: *mut libc::c_char = std::ptr::null_mut();
         if cgs.gametype as u32 >= GT_TEAM as i32 as u32 {
             Q_strncpyz(
                 newInfo.modelName.as_mut_ptr(),
@@ -1820,7 +1820,7 @@ pub unsafe extern "C" fn CG_NewClientInfo(mut clientNum: i32) {
         // forcemodel makes everyone use a single model
         // to prevent load hitches
         let mut modelStr_0: [libc::c_char; 64] = [0; 64];
-        let mut skin_0: *mut libc::c_char = 0 as *mut libc::c_char;
+        let mut skin_0: *mut libc::c_char = std::ptr::null_mut();
         if cgs.gametype as u32 >= GT_TEAM as i32 as u32 {
             Q_strncpyz(
                 newInfo.headModelName.as_mut_ptr(),
@@ -1935,7 +1935,7 @@ so deferred players can be loaded
 
 pub unsafe extern "C" fn CG_LoadDeferredPlayers() {
     let mut i: i32 = 0;
-    let mut ci: *mut clientInfo_t = 0 as *mut clientInfo_t;
+    let mut ci: *mut clientInfo_t = std::ptr::null_mut();
     // scan for a deferred player to load
     i = 0 as i32;
     ci = cgs.clientinfo.as_mut_ptr();
@@ -1977,7 +1977,7 @@ unsafe extern "C" fn CG_SetLerpFrameAnimation(
     mut lf: *mut lerpFrame_t,
     mut newAnimation: i32,
 ) {
-    let mut anim: *mut animation_t = 0 as *mut animation_t;
+    let mut anim: *mut animation_t = std::ptr::null_mut();
     (*lf).animationNumber = newAnimation;
     newAnimation &= !(128 as i32);
     if newAnimation < 0 as i32 || newAnimation >= MAX_TOTALANIMATIONS as i32 {
@@ -2013,7 +2013,7 @@ unsafe extern "C" fn CG_RunLerpFrame(
 ) {
     let mut f: i32 = 0;
     let mut numFrames: i32 = 0;
-    let mut anim: *mut animation_t = 0 as *mut animation_t;
+    let mut anim: *mut animation_t = std::ptr::null_mut();
     // debugging tool to get no animations
     if cg_animSpeed.integer == 0 as i32 {
         (*lf).backlerp = 0 as i32 as f32;
@@ -2122,7 +2122,7 @@ unsafe extern "C" fn CG_PlayerAnimation(
     mut torso: *mut i32,
     mut torsoBackLerp: *mut f32,
 ) {
-    let mut ci: *mut clientInfo_t = 0 as *mut clientInfo_t;
+    let mut ci: *mut clientInfo_t = std::ptr::null_mut();
     let mut clientNum: i32 = 0;
     let mut speedScale: f32 = 0.;
     clientNum = (*cent).currentState.clientNum;
@@ -2295,7 +2295,7 @@ unsafe extern "C" fn CG_PlayerAngles(
     let mut speed: f32 = 0.;
     let mut dir: i32 = 0;
     let mut clientNum: i32 = 0;
-    let mut ci: *mut clientInfo_t = 0 as *mut clientInfo_t;
+    let mut ci: *mut clientInfo_t = std::ptr::null_mut();
     headAngles[0 as i32 as usize] = (*cent).lerpAngles[0 as i32 as usize];
     headAngles[1 as i32 as usize] = (*cent).lerpAngles[1 as i32 as usize];
     headAngles[2 as i32 as usize] = (*cent).lerpAngles[2 as i32 as usize];
@@ -2433,7 +2433,7 @@ CG_HasteTrail
 */
 
 unsafe extern "C" fn CG_HasteTrail(mut cent: *mut centity_t) {
-    let mut smoke: *mut localEntity_t = 0 as *mut localEntity_t;
+    let mut smoke: *mut localEntity_t = std::ptr::null_mut();
     let mut origin: vec3_t = [0.; 3];
     let mut anim: i32 = 0;
     if (*cent).trailTime > cg.time {
@@ -2533,7 +2533,7 @@ unsafe extern "C" fn CG_PlayerFlag(
     mut hSkin: qhandle_t,
     mut torso: *mut refEntity_t,
 ) {
-    let mut ci: *mut clientInfo_t = 0 as *mut clientInfo_t;
+    let mut ci: *mut clientInfo_t = std::ptr::null_mut();
     let mut pole: refEntity_t = refEntity_t {
         reType: RT_MODEL,
         renderfx: 0,
@@ -2729,7 +2729,7 @@ CG_PlayerPowerups
 
 unsafe extern "C" fn CG_PlayerPowerups(mut cent: *mut centity_t, mut torso: *mut refEntity_t) {
     let mut powerups: i32 = 0;
-    let mut ci: *mut clientInfo_t = 0 as *mut clientInfo_t;
+    let mut ci: *mut clientInfo_t = std::ptr::null_mut();
     powerups = (*cent).currentState.powerups;
     if powerups == 0 {
         return;
@@ -3060,8 +3060,8 @@ unsafe extern "C" fn CG_PlayerSplash(mut cent: *mut centity_t) {
         &mut trace as *mut _ as *mut trace_t,
         start.as_mut_ptr() as *const vec_t,
         end.as_mut_ptr() as *const vec_t,
-        0 as *const vec_t,
-        0 as *const vec_t,
+        std::ptr::null(),
+        std::ptr::null(),
         0 as i32,
         32 as i32 | 16 as i32 | 8 as i32,
     );
@@ -3239,7 +3239,7 @@ CG_Player
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_Player(mut cent: *mut centity_t) {
-    let mut ci: *mut clientInfo_t = 0 as *mut clientInfo_t;
+    let mut ci: *mut clientInfo_t = std::ptr::null_mut();
     let mut legs: refEntity_t = refEntity_t {
         reType: RT_MODEL,
         renderfx: 0,
@@ -3442,7 +3442,7 @@ pub unsafe extern "C" fn CG_Player(mut cent: *mut centity_t) {
     //
     CG_AddPlayerWeapon(
         &mut torso as *mut _ as *mut refEntity_t,
-        0 as *mut playerState_t as *mut playerState_s,
+        std::ptr::null_mut() as *mut playerState_s,
         cent as *mut centity_s,
         (*ci).team as i32,
     );

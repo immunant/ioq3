@@ -75,7 +75,7 @@ static mut displayOptionsInfo: displayOptionsInfo_t = displayOptionsInfo_t {
     banner: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -97,7 +97,7 @@ static mut displayOptionsInfo: displayOptionsInfo_t = displayOptionsInfo_t {
     framel: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -123,7 +123,7 @@ static mut displayOptionsInfo: displayOptionsInfo_t = displayOptionsInfo_t {
     framer: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -149,7 +149,7 @@ static mut displayOptionsInfo: displayOptionsInfo_t = displayOptionsInfo_t {
     graphics: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -171,7 +171,7 @@ static mut displayOptionsInfo: displayOptionsInfo_t = displayOptionsInfo_t {
     display: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -193,7 +193,7 @@ static mut displayOptionsInfo: displayOptionsInfo_t = displayOptionsInfo_t {
     sound: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -215,7 +215,7 @@ static mut displayOptionsInfo: displayOptionsInfo_t = displayOptionsInfo_t {
     network: menutext_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -237,7 +237,7 @@ static mut displayOptionsInfo: displayOptionsInfo_t = displayOptionsInfo_t {
     brightness: menuslider_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -260,7 +260,7 @@ static mut displayOptionsInfo: displayOptionsInfo_t = displayOptionsInfo_t {
     screensize: menuslider_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,
@@ -283,7 +283,7 @@ static mut displayOptionsInfo: displayOptionsInfo_t = displayOptionsInfo_t {
     back: menubitmap_s {
         generic: menucommon_s {
             type_0: 0,
-            name: 0 as *const libc::c_char,
+            name: std::ptr::null(),
             id: 0,
             x: 0,
             y: 0,

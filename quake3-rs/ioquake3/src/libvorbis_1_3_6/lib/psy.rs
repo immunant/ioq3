@@ -6890,8 +6890,8 @@ unsafe extern "C" fn seed_curve(
     let mut i: i32 = 0;
     let mut post1: i32 = 0;
     let mut seedptr: i32 = 0;
-    let mut posts: *const f32 = 0 as *const f32;
-    let mut curve: *const f32 = 0 as *const f32;
+    let mut posts: *const f32 = std::ptr::null();
+    let mut curve: *const f32 = std::ptr::null();
     let mut choice: i32 = (((amp + dBoffset) as f64 - 30.0f64) * 0.1f32 as f64) as i32;
     choice = if choice < 0 as i32 { 0 as i32 } else { choice };
     choice = if choice > 8 as i32 - 1 as i32 {
@@ -8076,7 +8076,7 @@ pub unsafe extern "C" fn _vp_couple_quantize_normalize(
                     *raw.offset(k as isize),
                     *quant.offset(k as isize),
                     *floor_0.offset(k as isize),
-                    0 as *mut i32,
+                    std::ptr::null_mut(),
                     *acc.offset(track as isize),
                     i,
                     jn,

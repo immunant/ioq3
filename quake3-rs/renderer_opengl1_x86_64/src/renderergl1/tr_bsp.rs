@@ -569,7 +569,7 @@ static mut s_worldData: world_t = world_t {
     lightGridData: std::ptr::null_mut(),
     numClusters: 0,
     clusterBytes: 0,
-    vis: 0 as *const byte,
+    vis: std::ptr::null(),
     novis: std::ptr::null_mut(),
     entityString: std::ptr::null_mut(),
     entityParsePoint: std::ptr::null_mut(),
@@ -664,8 +664,8 @@ unsafe extern "C" fn R_ColorShiftLightingBytes(mut in_0: *mut byte, mut out: *mu
 }
 
 unsafe extern "C" fn R_LoadLightmaps(mut l: *mut lump_t) {
-    let mut buf: *mut byte = 0 as *mut byte;
-    let mut buf_p: *mut byte = 0 as *mut byte;
+    let mut buf: *mut byte = std::ptr::null_mut();
+    let mut buf_p: *mut byte = std::ptr::null_mut();
     let mut len: i32 = 0;
     let mut image: [byte; 65536] = [0; 65536];
     let mut i: i32 = 0;
@@ -784,7 +784,7 @@ R_LoadVisibility
 
 unsafe extern "C" fn R_LoadVisibility(mut l: *mut lump_t) {
     let mut len: i32 = 0;
-    let mut buf: *mut byte = 0 as *mut byte;
+    let mut buf: *mut byte = std::ptr::null_mut();
     len = s_worldData.numClusters + 63 as i32 & !(63 as i32);
     s_worldData.novis = ri.Hunk_Alloc.expect("non-null function pointer")(len, h_low) as *mut byte;
     crate::stdlib::memset(
@@ -804,7 +804,7 @@ unsafe extern "C" fn R_LoadVisibility(mut l: *mut lump_t) {
     if !tr.externalVisData.is_null() {
         s_worldData.vis = tr.externalVisData
     } else {
-        let mut dest: *mut byte = 0 as *mut byte;
+        let mut dest: *mut byte = std::ptr::null_mut();
         dest =
             ri.Hunk_Alloc.expect("non-null function pointer")(len - 8 as i32, h_low) as *mut byte;
         crate::stdlib::memcpy(
@@ -823,8 +823,8 @@ ShaderForShaderNum
 */
 
 unsafe extern "C" fn ShaderForShaderNum(mut shaderNum: i32, mut lightmapNum: i32) -> *mut shader_t {
-    let mut shader: *mut shader_t = 0 as *mut shader_t;
-    let mut dsh: *mut dshader_t = 0 as *mut dshader_t;
+    let mut shader: *mut shader_t = std::ptr::null_mut();
+    let mut dsh: *mut dshader_t = std::ptr::null_mut();
     let mut _shaderNum: i32 = shaderNum;
     if _shaderNum < 0 as i32 || _shaderNum >= s_worldData.numShaders {
         ri.Error.expect("non-null function pointer")(
@@ -862,7 +862,7 @@ unsafe extern "C" fn ParseFace(
 ) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut cv: *mut srfSurfaceFace_t = 0 as *mut srfSurfaceFace_t;
+    let mut cv: *mut srfSurfaceFace_t = std::ptr::null_mut();
     let mut numPoints: i32 = 0;
     let mut numIndexes: i32 = 0;
     let mut lightmapNum: i32 = 0;
@@ -968,7 +968,7 @@ unsafe extern "C" fn ParseMesh(
     mut verts: *mut drawVert_t,
     mut surf: *mut msurface_t,
 ) {
-    let mut grid: *mut srfGridMesh_t = 0 as *mut srfGridMesh_t;
+    let mut grid: *mut srfGridMesh_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut width: i32 = 0;
@@ -1066,7 +1066,7 @@ unsafe extern "C" fn ParseTriSurf(
     mut surf: *mut msurface_t,
     mut indexes: *mut i32,
 ) {
-    let mut tri: *mut srfTriangles_t = 0 as *mut srfTriangles_t;
+    let mut tri: *mut srfTriangles_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut numVerts: i32 = 0;
@@ -1158,7 +1158,7 @@ unsafe extern "C" fn ParseFlare(
     mut surf: *mut msurface_t,
     mut _indexes: *mut i32,
 ) {
-    let mut flare: *mut srfFlare_t = 0 as *mut srfFlare_t;
+    let mut flare: *mut srfFlare_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     // get fog volume
     (*surf).fogIndex = (*ds).fogNum + 1 as i32;
@@ -1318,7 +1318,7 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
     let mut offset1: i32 = 0;
     let mut offset2: i32 = 0;
     let mut touch: i32 = 0;
-    let mut grid2: *mut srfGridMesh_t = 0 as *mut srfGridMesh_t;
+    let mut grid2: *mut srfGridMesh_t = std::ptr::null_mut();
     j = start;
     while j < s_worldData.numsurfaces {
         //
@@ -1764,7 +1764,7 @@ If this is not the case this function will still do its job but won't fix the hi
 
 pub unsafe extern "C" fn R_FixSharedVertexLodError() {
     let mut i: i32 = 0;
-    let mut grid1: *mut srfGridMesh_t = 0 as *mut srfGridMesh_t;
+    let mut grid1: *mut srfGridMesh_t = std::ptr::null_mut();
     i = 0 as i32;
     while i < s_worldData.numsurfaces {
         //
@@ -1790,10 +1790,10 @@ R_StitchPatches
 #[no_mangle]
 
 pub unsafe extern "C" fn R_StitchPatches(mut grid1num: i32, mut grid2num: i32) -> i32 {
-    let mut v1: *mut f32 = 0 as *mut f32;
-    let mut v2: *mut f32 = 0 as *mut f32;
-    let mut grid1: *mut srfGridMesh_t = 0 as *mut srfGridMesh_t;
-    let mut grid2: *mut srfGridMesh_t = 0 as *mut srfGridMesh_t;
+    let mut v1: *mut f32 = std::ptr::null_mut();
+    let mut v2: *mut f32 = std::ptr::null_mut();
+    let mut grid1: *mut srfGridMesh_t = std::ptr::null_mut();
+    let mut grid2: *mut srfGridMesh_t = std::ptr::null_mut();
     let mut k: i32 = 0;
     let mut l: i32 = 0;
     let mut m: i32 = 0;
@@ -2975,8 +2975,8 @@ might still appear at that side.
 pub unsafe extern "C" fn R_TryStitchingPatch(mut grid1num: i32) -> i32 {
     let mut j: i32 = 0;
     let mut numstitches: i32 = 0;
-    let mut grid1: *mut srfGridMesh_t = 0 as *mut srfGridMesh_t;
-    let mut grid2: *mut srfGridMesh_t = 0 as *mut srfGridMesh_t;
+    let mut grid1: *mut srfGridMesh_t = std::ptr::null_mut();
+    let mut grid2: *mut srfGridMesh_t = std::ptr::null_mut();
     numstitches = 0 as i32;
     grid1 = (*s_worldData.surfaces.offset(grid1num as isize)).data as *mut srfGridMesh_t;
     j = 0 as i32;
@@ -3020,7 +3020,7 @@ pub unsafe extern "C" fn R_StitchAllPatches() {
     let mut i: i32 = 0;
     let mut stitched: i32 = 0;
     let mut numstitches: i32 = 0;
-    let mut grid1: *mut srfGridMesh_t = 0 as *mut srfGridMesh_t;
+    let mut grid1: *mut srfGridMesh_t = std::ptr::null_mut();
     numstitches = 0 as i32;
     loop {
         stitched = qfalse as i32;
@@ -3061,8 +3061,8 @@ R_MovePatchSurfacesToHunk
 pub unsafe extern "C" fn R_MovePatchSurfacesToHunk() {
     let mut i: i32 = 0;
     let mut size: i32 = 0;
-    let mut grid: *mut srfGridMesh_t = 0 as *mut srfGridMesh_t;
-    let mut hunkgrid: *mut srfGridMesh_t = 0 as *mut srfGridMesh_t;
+    let mut grid: *mut srfGridMesh_t = std::ptr::null_mut();
+    let mut hunkgrid: *mut srfGridMesh_t = std::ptr::null_mut();
     i = 0 as i32;
     while i < s_worldData.numsurfaces {
         //
@@ -3115,10 +3115,10 @@ unsafe extern "C" fn R_LoadSurfaces(
     mut verts: *mut lump_t,
     mut indexLump: *mut lump_t,
 ) {
-    let mut in_0: *mut dsurface_t = 0 as *mut dsurface_t;
-    let mut out: *mut msurface_t = 0 as *mut msurface_t;
-    let mut dv: *mut drawVert_t = 0 as *mut drawVert_t;
-    let mut indexes: *mut i32 = 0 as *mut i32;
+    let mut in_0: *mut dsurface_t = std::ptr::null_mut();
+    let mut out: *mut msurface_t = std::ptr::null_mut();
+    let mut dv: *mut drawVert_t = std::ptr::null_mut();
+    let mut indexes: *mut i32 = std::ptr::null_mut();
     let mut count: i32 = 0;
     let mut numFaces: i32 = 0;
     let mut numMeshes: i32 = 0;
@@ -3211,8 +3211,8 @@ R_LoadSubmodels
 */
 
 unsafe extern "C" fn R_LoadSubmodels(mut l: *mut lump_t) {
-    let mut in_0: *mut dmodel_t = 0 as *mut dmodel_t;
-    let mut out: *mut bmodel_t = 0 as *mut bmodel_t;
+    let mut in_0: *mut dmodel_t = std::ptr::null_mut();
+    let mut out: *mut bmodel_t = std::ptr::null_mut();
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut count: i32 = 0;
@@ -3232,7 +3232,7 @@ unsafe extern "C" fn R_LoadSubmodels(mut l: *mut lump_t) {
     s_worldData.bmodels = out;
     i = 0 as i32;
     while i < count {
-        let mut model: *mut model_t = 0 as *mut model_t;
+        let mut model: *mut model_t = std::ptr::null_mut();
         model = R_AllocModel() as *mut model_s;
         // this should never happen
         if model.is_null() {
@@ -3287,9 +3287,9 @@ unsafe extern "C" fn R_LoadNodesAndLeafs(mut nodeLump: *mut lump_t, mut leafLump
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut p: i32 = 0;
-    let mut in_0: *mut dnode_t = 0 as *mut dnode_t;
-    let mut inLeaf: *mut dleaf_t = 0 as *mut dleaf_t;
-    let mut out: *mut mnode_t = 0 as *mut mnode_t;
+    let mut in_0: *mut dnode_t = std::ptr::null_mut();
+    let mut inLeaf: *mut dleaf_t = std::ptr::null_mut();
+    let mut out: *mut mnode_t = std::ptr::null_mut();
     let mut numNodes: i32 = 0;
     let mut numLeafs: i32 = 0;
     in_0 = fileBase.offset((*nodeLump).fileofs as isize) as *mut libc::c_void as *mut dnode_t;
@@ -3368,7 +3368,7 @@ unsafe extern "C" fn R_LoadNodesAndLeafs(mut nodeLump: *mut lump_t, mut leafLump
         out = out.offset(1)
     }
     // chain descendants
-    R_SetParent(s_worldData.nodes, 0 as *mut mnode_t);
+    R_SetParent(s_worldData.nodes, std::ptr::null_mut());
 }
 //=============================================================================
 /*
@@ -3380,8 +3380,8 @@ R_LoadShaders
 unsafe extern "C" fn R_LoadShaders(mut l: *mut lump_t) {
     let mut i: i32 = 0;
     let mut count: i32 = 0;
-    let mut in_0: *mut dshader_t = 0 as *mut dshader_t;
-    let mut out: *mut dshader_t = 0 as *mut dshader_t;
+    let mut in_0: *mut dshader_t = std::ptr::null_mut();
+    let mut out: *mut dshader_t = std::ptr::null_mut();
     in_0 = fileBase.offset((*l).fileofs as isize) as *mut libc::c_void as *mut dshader_t;
     if ((*l).filelen as usize).wrapping_rem(::std::mem::size_of::<dshader_t>() as usize) != 0 {
         ri.Error.expect("non-null function pointer")(
@@ -3420,8 +3420,8 @@ unsafe extern "C" fn R_LoadMarksurfaces(mut l: *mut lump_t) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut count: i32 = 0;
-    let mut in_0: *mut i32 = 0 as *mut i32;
-    let mut out: *mut *mut msurface_t = 0 as *mut *mut msurface_t;
+    let mut in_0: *mut i32 = std::ptr::null_mut();
+    let mut out: *mut *mut msurface_t = std::ptr::null_mut();
     in_0 = fileBase.offset((*l).fileofs as isize) as *mut libc::c_void as *mut i32;
     if ((*l).filelen as usize).wrapping_rem(::std::mem::size_of::<i32>() as usize) != 0 {
         ri.Error.expect("non-null function pointer")(
@@ -3454,8 +3454,8 @@ R_LoadPlanes
 unsafe extern "C" fn R_LoadPlanes(mut l: *mut lump_t) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut out: *mut cplane_t = 0 as *mut cplane_t;
-    let mut in_0: *mut dplane_t = 0 as *mut dplane_t;
+    let mut out: *mut cplane_t = std::ptr::null_mut();
+    let mut in_0: *mut dplane_t = std::ptr::null_mut();
     let mut count: i32 = 0;
     let mut bits: i32 = 0;
     in_0 = fileBase.offset((*l).fileofs as isize) as *mut libc::c_void as *mut dplane_t;
@@ -3514,17 +3514,17 @@ unsafe extern "C" fn R_LoadFogs(
     mut sidesLump: *mut lump_t,
 ) {
     let mut i: i32 = 0;
-    let mut out: *mut fog_t = 0 as *mut fog_t;
-    let mut fogs: *mut dfog_t = 0 as *mut dfog_t;
-    let mut brushes: *mut dbrush_t = 0 as *mut dbrush_t;
-    let mut brush: *mut dbrush_t = 0 as *mut dbrush_t;
-    let mut sides: *mut dbrushside_t = 0 as *mut dbrushside_t;
+    let mut out: *mut fog_t = std::ptr::null_mut();
+    let mut fogs: *mut dfog_t = std::ptr::null_mut();
+    let mut brushes: *mut dbrush_t = std::ptr::null_mut();
+    let mut brush: *mut dbrush_t = std::ptr::null_mut();
+    let mut sides: *mut dbrushside_t = std::ptr::null_mut();
     let mut count: i32 = 0;
     let mut brushesCount: i32 = 0;
     let mut sidesCount: i32 = 0;
     let mut sideNum: i32 = 0;
     let mut planeNum: i32 = 0;
-    let mut shader: *mut shader_t = 0 as *mut shader_t;
+    let mut shader: *mut shader_t = std::ptr::null_mut();
     let mut d: f32 = 0.;
     let mut firstSide: i32 = 0;
     fogs = fileBase.offset((*l).fileofs as isize) as *mut libc::c_void as *mut dfog_t;
@@ -3662,9 +3662,9 @@ pub unsafe extern "C" fn R_LoadLightGrid(mut l: *mut lump_t) {
     let mut i: i32 = 0;
     let mut maxs: vec3_t = [0.; 3];
     let mut numGridPoints: i32 = 0;
-    let mut w: *mut world_t = 0 as *mut world_t;
-    let mut wMins: *mut f32 = 0 as *mut f32;
-    let mut wMaxs: *mut f32 = 0 as *mut f32;
+    let mut w: *mut world_t = std::ptr::null_mut();
+    let mut wMins: *mut f32 = std::ptr::null_mut();
+    let mut wMaxs: *mut f32 = std::ptr::null_mut();
     w = &mut s_worldData;
     (*w).lightGridInverseSize[0 as i32 as usize] = 1.0f32 / (*w).lightGridSize[0 as i32 as usize];
     (*w).lightGridInverseSize[1 as i32 as usize] = 1.0f32 / (*w).lightGridSize[1 as i32 as usize];
@@ -3694,7 +3694,7 @@ pub unsafe extern "C" fn R_LoadLightGrid(mut l: *mut lump_t) {
             PRINT_WARNING as i32,
             b"WARNING: light grid mismatch\n\x00" as *const u8 as *const libc::c_char,
         );
-        (*w).lightGridData = 0 as *mut byte;
+        (*w).lightGridData = std::ptr::null_mut();
         return;
     }
     (*w).lightGridData =
@@ -3730,12 +3730,12 @@ R_LoadEntities
 #[no_mangle]
 
 pub unsafe extern "C" fn R_LoadEntities(mut l: *mut lump_t) {
-    let mut p: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut token: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut p: *mut libc::c_char = std::ptr::null_mut();
+    let mut token: *mut libc::c_char = std::ptr::null_mut();
+    let mut s: *mut libc::c_char = std::ptr::null_mut();
     let mut keyname: [libc::c_char; 1024] = [0; 1024];
     let mut value: [libc::c_char; 1024] = [0; 1024];
-    let mut w: *mut world_t = 0 as *mut world_t;
+    let mut w: *mut world_t = std::ptr::null_mut();
     w = &mut s_worldData;
     (*w).lightGridSize[0 as i32 as usize] = 64 as i32 as vec_t;
     (*w).lightGridSize[1 as i32 as usize] = 64 as i32 as vec_t;
@@ -3852,7 +3852,7 @@ pub unsafe extern "C" fn R_GetEntityToken(
     mut buffer: *mut libc::c_char,
     mut size: i32,
 ) -> qboolean {
-    let mut s: *const libc::c_char = 0 as *const libc::c_char;
+    let mut s: *const libc::c_char = std::ptr::null();
     s = COM_Parse(&mut s_worldData.entityParsePoint);
     Q_strncpyz(buffer, s, size);
     if s_worldData.entityParsePoint.is_null() && *s.offset(0 as i32 as isize) == 0 {
@@ -4191,9 +4191,10 @@ Called directly from cgame
 
 pub unsafe extern "C" fn RE_LoadWorldMap(mut name: *const libc::c_char) {
     let mut i: i32 = 0;
-    let mut header: *mut dheader_t = 0 as *mut dheader_t;
-    let mut buffer: C2RustUnnamed_102 = C2RustUnnamed_102 { b: 0 as *mut byte };
-    let mut startMarker: *mut byte = 0 as *mut byte;
+    let mut header: *mut dheader_t = std::ptr::null_mut();
+    let mut buffer: C2RustUnnamed_102 = C2RustUnnamed_102 { b: std::ptr::null_mut()}
+    ;
+    let mut startMarker: *mut byte = std::ptr::null_mut();
     if tr.worldMapLoaded as u64 != 0 {
         ri.Error.expect("non-null function pointer")(
             ERR_DROP as i32,
@@ -4219,7 +4220,7 @@ pub unsafe extern "C" fn RE_LoadWorldMap(mut name: *const libc::c_char) {
     }
     // clear tr.world so if the level fails to load, the next
     // try will not look at the partially loaded version
-    tr.world = 0 as *mut world_t;
+    tr.world = std::ptr::null_mut();
     crate::stdlib::memset(
         &mut s_worldData as *mut world_t as *mut libc::c_void,
         0 as i32,

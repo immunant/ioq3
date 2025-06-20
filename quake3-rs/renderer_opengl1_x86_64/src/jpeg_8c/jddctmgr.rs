@@ -263,10 +263,10 @@ unsafe extern "C" fn start_pass(mut cinfo: j_decompress_ptr) {
     let mut idct: my_idct_ptr = (*cinfo).idct as my_idct_ptr;
     let mut ci: i32 = 0;
     let mut i: i32 = 0;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
     let mut method: i32 = 0 as i32;
     let mut method_ptr: inverse_DCT_method_ptr = None;
-    let mut qtbl: *mut JQUANT_TBL = 0 as *mut JQUANT_TBL;
+    let mut qtbl: *mut JQUANT_TBL = std::ptr::null_mut();
     ci = 0 as i32;
     compptr = (*cinfo).comp_info;
     while ci < (*cinfo).num_components {
@@ -911,9 +911,9 @@ unsafe extern "C" fn start_pass(mut cinfo: j_decompress_ptr) {
 #[no_mangle]
 
 pub unsafe extern "C" fn jinit_inverse_dct(mut cinfo: j_decompress_ptr) {
-    let mut idct: my_idct_ptr = 0 as *mut my_idct_controller;
+    let mut idct: my_idct_ptr = std::ptr::null_mut();
     let mut ci: i32 = 0;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
     idct = Some(
         (*(*cinfo).mem)
             .alloc_small

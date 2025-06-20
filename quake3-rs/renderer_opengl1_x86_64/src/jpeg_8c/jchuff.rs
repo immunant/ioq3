@@ -253,8 +253,8 @@ unsafe extern "C" fn jpeg_make_c_derived_tbl(
     mut tblno: i32,
     mut pdtbl: *mut *mut c_derived_tbl,
 ) {
-    let mut htbl: *mut JHUFF_TBL = 0 as *mut JHUFF_TBL;
-    let mut dtbl: *mut c_derived_tbl = 0 as *mut c_derived_tbl;
+    let mut htbl: *mut JHUFF_TBL = std::ptr::null_mut();
+    let mut dtbl: *mut c_derived_tbl = std::ptr::null_mut();
     let mut p: i32 = 0;
     let mut i: i32 = 0;
     let mut l: i32 = 0;
@@ -761,8 +761,8 @@ unsafe extern "C" fn encode_mcu_DC_first(
     let mut blkn: i32 = 0;
     let mut ci: i32 = 0;
     let mut Al: i32 = (*cinfo).Al;
-    let mut block: JBLOCKROW = 0 as *mut JBLOCK;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
+    let mut block: JBLOCKROW = std::ptr::null_mut();
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
     (*entropy).next_output_byte = (*(*cinfo).dest).next_output_byte;
     (*entropy).free_in_buffer = (*(*cinfo).dest).free_in_buffer;
     /* Emit restart marker if needed */
@@ -850,8 +850,8 @@ unsafe extern "C" fn encode_mcu_AC_first(
     let mut k: i32 = 0;
     let mut Se: i32 = 0;
     let mut Al: i32 = 0;
-    let mut natural_order: *const i32 = 0 as *const i32;
-    let mut block: JBLOCKROW = 0 as *mut JBLOCK;
+    let mut natural_order: *const i32 = std::ptr::null();
+    let mut block: JBLOCKROW = std::ptr::null_mut();
     (*entropy).next_output_byte = (*(*cinfo).dest).next_output_byte;
     (*entropy).free_in_buffer = (*(*cinfo).dest).free_in_buffer;
     /* Emit restart marker if needed */
@@ -965,7 +965,7 @@ unsafe extern "C" fn encode_mcu_DC_refine(
     let mut temp: i32 = 0;
     let mut blkn: i32 = 0;
     let mut Al: i32 = (*cinfo).Al;
-    let mut block: JBLOCKROW = 0 as *mut JBLOCK;
+    let mut block: JBLOCKROW = std::ptr::null_mut();
     (*entropy).next_output_byte = (*(*cinfo).dest).next_output_byte;
     (*entropy).free_in_buffer = (*(*cinfo).dest).free_in_buffer;
     /* Emit restart marker if needed */
@@ -1009,12 +1009,12 @@ unsafe extern "C" fn encode_mcu_AC_refine(
     let mut r: i32 = 0;
     let mut k: i32 = 0;
     let mut EOB: i32 = 0;
-    let mut BR_buffer: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut BR_buffer: *mut libc::c_char = std::ptr::null_mut();
     let mut BR: u32 = 0;
     let mut Se: i32 = 0;
     let mut Al: i32 = 0;
-    let mut natural_order: *const i32 = 0 as *const i32;
-    let mut block: JBLOCKROW = 0 as *mut JBLOCK;
+    let mut natural_order: *const i32 = std::ptr::null();
+    let mut block: JBLOCKROW = std::ptr::null_mut();
     let mut absvalues: [i32; 64] = [0; 64];
     (*entropy).next_output_byte = (*(*cinfo).dest).next_output_byte;
     (*entropy).free_in_buffer = (*(*cinfo).dest).free_in_buffer;
@@ -1283,18 +1283,18 @@ unsafe extern "C" fn encode_mcu_huff(
 ) -> boolean {
     let mut entropy: huff_entropy_ptr = (*cinfo).entropy as huff_entropy_ptr;
     let mut state: working_state = working_state {
-        next_output_byte: 0 as *mut JOCTET,
+        next_output_byte: std::ptr::null_mut(),
         free_in_buffer: 0,
         cur: savable_state {
             put_buffer: 0,
             put_bits: 0,
             last_dc_val: [0; 4],
         },
-        cinfo: 0 as *mut jpeg_compress_struct,
+        cinfo: std::ptr::null_mut(),
     };
     let mut blkn: i32 = 0;
     let mut ci: i32 = 0;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
     /* Load up working state */
     state.next_output_byte = (*(*cinfo).dest).next_output_byte;
     state.free_in_buffer = (*(*cinfo).dest).free_in_buffer;
@@ -1351,14 +1351,14 @@ unsafe extern "C" fn encode_mcu_huff(
 unsafe extern "C" fn finish_pass_huff(mut cinfo: j_compress_ptr) {
     let mut entropy: huff_entropy_ptr = (*cinfo).entropy as huff_entropy_ptr;
     let mut state: working_state = working_state {
-        next_output_byte: 0 as *mut JOCTET,
+        next_output_byte: std::ptr::null_mut(),
         free_in_buffer: 0,
         cur: savable_state {
             put_buffer: 0,
             put_bits: 0,
             last_dc_val: [0; 4],
         },
-        cinfo: 0 as *mut jpeg_compress_struct,
+        cinfo: std::ptr::null_mut(),
     };
     if (*cinfo).progressive_mode != 0 {
         (*entropy).next_output_byte = (*(*cinfo).dest).next_output_byte;
@@ -1503,7 +1503,7 @@ unsafe extern "C" fn encode_mcu_gather(
     let mut entropy: huff_entropy_ptr = (*cinfo).entropy as huff_entropy_ptr;
     let mut blkn: i32 = 0;
     let mut ci: i32 = 0;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
     /* Take care of restart intervals if needed */
     if (*cinfo).restart_interval != 0 {
         if (*entropy).restarts_to_go == 0 as i32 as u32 {
@@ -1733,8 +1733,8 @@ unsafe extern "C" fn finish_pass_gather(mut cinfo: j_compress_ptr) {
     let mut entropy: huff_entropy_ptr = (*cinfo).entropy as huff_entropy_ptr;
     let mut ci: i32 = 0;
     let mut tbl: i32 = 0;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
-    let mut htblptr: *mut *mut JHUFF_TBL = 0 as *mut *mut JHUFF_TBL;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
+    let mut htblptr: *mut *mut JHUFF_TBL = std::ptr::null_mut();
     let mut did_dc: [boolean; 4] = [0; 4];
     let mut did_ac: [boolean; 4] = [0; 4];
     /* It's important not to apply jpeg_gen_optimal_table more than once
@@ -1800,7 +1800,7 @@ unsafe extern "C" fn start_pass_huff(mut cinfo: j_compress_ptr, mut gather_stati
     let mut entropy: huff_entropy_ptr = (*cinfo).entropy as huff_entropy_ptr;
     let mut ci: i32 = 0;
     let mut tbl: i32 = 0;
-    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = std::ptr::null_mut();
     if gather_statistics != 0 {
         (*entropy).pub_0.finish_pass =
             Some(finish_pass_gather as unsafe extern "C" fn(_: j_compress_ptr) -> ())
@@ -1971,7 +1971,7 @@ unsafe extern "C" fn start_pass_huff(mut cinfo: j_compress_ptr, mut gather_stati
 #[no_mangle]
 
 pub unsafe extern "C" fn jinit_huff_encoder(mut cinfo: j_compress_ptr) {
-    let mut entropy: huff_entropy_ptr = 0 as *mut huff_entropy_encoder;
+    let mut entropy: huff_entropy_ptr = std::ptr::null_mut();
     let mut i: i32 = 0;
     entropy = Some(
         (*(*cinfo).mem)
@@ -1989,14 +1989,14 @@ pub unsafe extern "C" fn jinit_huff_encoder(mut cinfo: j_compress_ptr) {
     /* Mark tables unallocated */
     i = 0 as i32;
     while i < 4 as i32 {
-        (*entropy).ac_derived_tbls[i as usize] = 0 as *mut c_derived_tbl;
+        (*entropy).ac_derived_tbls[i as usize] = std::ptr::null_mut();
         (*entropy).dc_derived_tbls[i as usize] = (*entropy).ac_derived_tbls[i as usize];
-        (*entropy).ac_count_ptrs[i as usize] = 0 as *mut isize;
+        (*entropy).ac_count_ptrs[i as usize] = std::ptr::null_mut();
         (*entropy).dc_count_ptrs[i as usize] = (*entropy).ac_count_ptrs[i as usize];
         i += 1
     }
     if (*cinfo).progressive_mode != 0 {
-        (*entropy).bit_buffer = 0 as *mut libc::c_char
+        (*entropy).bit_buffer = std::ptr::null_mut()
     };
     /* needed only in AC refinement scan */
 }

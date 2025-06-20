@@ -370,7 +370,7 @@ unsafe extern "C" fn mapping0_unpack(
         }
     }
     mapping0_free_info(info as *mut libc::c_void);
-    return 0 as *mut libc::c_void;
+    return std::ptr::null_mut();
 }
 
 unsafe extern "C" fn mapping0_forward(mut vb: *mut vorbis_block) -> i32 {
@@ -758,7 +758,7 @@ unsafe extern "C" fn mapping0_forward(mut vb: *mut vorbis_block) -> i32 {
         i = 0 as i32;
         while i < (*info).submaps {
             let mut ch_in_bundle: i32 = 0 as i32;
-            let mut classifications: *mut *mut isize = 0 as *mut *mut isize;
+            let mut classifications: *mut *mut isize = std::ptr::null_mut();
             let mut resnum: i32 = (*info).residuesubmap[i as usize];
             j = 0 as i32;
             while j < (*vi).channels {

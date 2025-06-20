@@ -468,7 +468,7 @@ GL_TextureMode
 
 pub unsafe extern "C" fn GL_TextureMode(mut string: *const libc::c_char) {
     let mut i: i32 = 0;
-    let mut glt: *mut image_t = 0 as *mut image_t;
+    let mut glt: *mut image_t = std::ptr::null_mut();
     i = 0 as i32;
     while i < 6 as i32 {
         if Q_stricmp(modes[i as usize].name, string) == 0 {
@@ -553,7 +553,7 @@ pub unsafe extern "C" fn R_ImageList_f() {
         let mut image: *mut image_t = tr.images[i as usize];
         let mut format: *mut libc::c_char =
             b"???? \x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-        let mut sizeSuffix: *mut libc::c_char = 0 as *mut libc::c_char;
+        let mut sizeSuffix: *mut libc::c_char = std::ptr::null_mut();
         let mut estSize: i32 = 0;
         let mut displaySize: i32 = 0;
         estSize = (*image).uploadHeight * (*image).uploadWidth;
@@ -688,16 +688,16 @@ unsafe extern "C" fn ResampleTexture(
 ) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut inrow: *mut u32 = 0 as *mut u32;
-    let mut inrow2: *mut u32 = 0 as *mut u32;
+    let mut inrow: *mut u32 = std::ptr::null_mut();
+    let mut inrow2: *mut u32 = std::ptr::null_mut();
     let mut frac: u32 = 0;
     let mut fracstep: u32 = 0;
     let mut p1: [u32; 2048] = [0; 2048];
     let mut p2: [u32; 2048] = [0; 2048];
-    let mut pix1: *mut byte = 0 as *mut byte;
-    let mut pix2: *mut byte = 0 as *mut byte;
-    let mut pix3: *mut byte = 0 as *mut byte;
-    let mut pix4: *mut byte = 0 as *mut byte;
+    let mut pix1: *mut byte = std::ptr::null_mut();
+    let mut pix2: *mut byte = std::ptr::null_mut();
+    let mut pix3: *mut byte = std::ptr::null_mut();
+    let mut pix4: *mut byte = std::ptr::null_mut();
     if outwidth > 2048 as i32 {
         ri.Error.expect("non-null function pointer")(
             ERR_DROP as i32,
@@ -783,7 +783,7 @@ pub unsafe extern "C" fn R_LightScaleTexture(
         if glConfig.deviceSupportsGamma as u64 == 0 {
             let mut i: i32 = 0;
             let mut c: i32 = 0;
-            let mut p: *mut byte = 0 as *mut byte;
+            let mut p: *mut byte = std::ptr::null_mut();
             p = in_0 as *mut byte;
             c = inwidth * inheight;
             i = 0 as i32;
@@ -798,7 +798,7 @@ pub unsafe extern "C" fn R_LightScaleTexture(
     } else {
         let mut i_0: i32 = 0;
         let mut c_0: i32 = 0;
-        let mut p_0: *mut byte = 0 as *mut byte;
+        let mut p_0: *mut byte = std::ptr::null_mut();
         p_0 = in_0 as *mut byte;
         c_0 = inwidth * inheight;
         if glConfig.deviceSupportsGamma as u64 != 0 {
@@ -841,13 +841,13 @@ unsafe extern "C" fn R_MipMap2(mut in_0: *mut u32, mut inWidth: i32, mut inHeigh
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut k: i32 = 0;
-    let mut outpix: *mut byte = 0 as *mut byte;
+    let mut outpix: *mut byte = std::ptr::null_mut();
     let mut inWidthMask: i32 = 0;
     let mut inHeightMask: i32 = 0;
     let mut total: i32 = 0;
     let mut outWidth: i32 = 0;
     let mut outHeight: i32 = 0;
-    let mut temp: *mut u32 = 0 as *mut u32;
+    let mut temp: *mut u32 = std::ptr::null_mut();
     outWidth = inWidth >> 1 as i32;
     outHeight = inHeight >> 1 as i32;
     temp = ri
@@ -999,7 +999,7 @@ Operates in place, quartering the size of the texture
 unsafe extern "C" fn R_MipMap(mut in_0: *mut byte, mut width: i32, mut height: i32) {
     let mut i: i32 = 0; // get largest
     let mut j: i32 = 0;
-    let mut out: *mut byte = 0 as *mut byte;
+    let mut out: *mut byte = std::ptr::null_mut();
     let mut row: i32 = 0;
     if (*r_simpleMipMaps).integer == 0 {
         R_MipMap2(in_0 as *mut u32, width, height);
@@ -1225,13 +1225,13 @@ unsafe extern "C" fn Upload32(
 ) {
     let mut current_block: u64;
     let mut samples: i32 = 0;
-    let mut scaledBuffer: *mut u32 = 0 as *mut u32;
-    let mut resampledBuffer: *mut u32 = 0 as *mut u32;
+    let mut scaledBuffer: *mut u32 = std::ptr::null_mut();
+    let mut resampledBuffer: *mut u32 = std::ptr::null_mut();
     let mut scaled_width: i32 = 0;
     let mut scaled_height: i32 = 0;
     let mut i: i32 = 0;
     let mut c: i32 = 0;
-    let mut scan: *mut byte = 0 as *mut byte;
+    let mut scan: *mut byte = std::ptr::null_mut();
     let mut internalFormat: GLenum = 0x1907 as i32 as GLenum;
     let mut rMax: f32 = 0 as i32 as f32;
     let mut gMax: f32 = 0 as i32 as f32;
@@ -1583,7 +1583,7 @@ pub unsafe extern "C" fn R_CreateImage(
     mut flags: imgFlags_t,
     mut _internalFormat: i32,
 ) -> *mut image_t {
-    let mut image: *mut image_t = 0 as *mut image_t;
+    let mut image: *mut image_t = std::ptr::null_mut();
     let mut isLightmap: qboolean = qfalse;
     let mut hash: isize = 0;
     let mut glWrapClampMode: i32 = 0;
@@ -1787,9 +1787,9 @@ pub unsafe extern "C" fn R_LoadImage(
     let mut orgLoader: i32 = -(1 as i32);
     let mut i: i32 = 0;
     let mut localName: [libc::c_char; 64] = [0; 64];
-    let mut ext: *const libc::c_char = 0 as *const libc::c_char;
-    let mut altName: *mut libc::c_char = 0 as *mut libc::c_char;
-    *pic = 0 as *mut byte;
+    let mut ext: *const libc::c_char = std::ptr::null();
+    let mut altName: *mut libc::c_char = std::ptr::null_mut();
+    *pic = std::ptr::null_mut();
     *width = 0 as i32;
     *height = 0 as i32;
     Q_strncpyz(localName.as_mut_ptr(), name, 64 as i32);
@@ -1925,13 +1925,13 @@ pub unsafe extern "C" fn R_FindImageFile(
     mut type_0: imgType_t,
     mut flags: imgFlags_t,
 ) -> *mut image_t {
-    let mut image: *mut image_t = 0 as *mut image_t;
+    let mut image: *mut image_t = std::ptr::null_mut();
     let mut width: i32 = 0;
     let mut height: i32 = 0;
-    let mut pic: *mut byte = 0 as *mut byte;
+    let mut pic: *mut byte = std::ptr::null_mut();
     let mut hash: isize = 0;
     if name.is_null() {
-        return 0 as *mut image_t;
+        return std::ptr::null_mut();
     }
     hash = generateHashValue(name);
     //
@@ -1962,7 +1962,7 @@ pub unsafe extern "C" fn R_FindImageFile(
     //
     R_LoadImage(name, &mut pic, &mut width, &mut height);
     if pic.is_null() {
-        return 0 as *mut image_t;
+        return std::ptr::null_mut();
     }
     image = R_CreateImage(
         name as *mut libc::c_char,
@@ -2075,7 +2075,7 @@ pub unsafe extern "C" fn R_FogFactor(mut s: f32, mut t: f32) -> f32 {
 unsafe extern "C" fn R_CreateFogImage() {
     let mut x: i32 = 0;
     let mut y: i32 = 0;
-    let mut data: *mut byte = 0 as *mut byte;
+    let mut data: *mut byte = std::ptr::null_mut();
     let mut d: f32 = 0.;
     data = ri
         .Hunk_AllocateTempMemory
@@ -2409,14 +2409,14 @@ compatible with our normal parsing rules.
 unsafe extern "C" fn CommaParse(mut data_p: *mut *mut libc::c_char) -> *mut libc::c_char {
     let mut c: i32 = 0 as i32;
     let mut len: i32 = 0;
-    let mut data: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut data: *mut libc::c_char = std::ptr::null_mut();
     static mut com_token: [libc::c_char; 1024] = [0; 1024];
     data = *data_p;
     len = 0 as i32;
     com_token[0 as i32 as usize] = 0 as i32 as libc::c_char;
     // make sure incoming data is valid
     if data.is_null() {
-        *data_p = 0 as *mut libc::c_char;
+        *data_p = std::ptr::null_mut();
         return com_token.as_mut_ptr();
     }
     loop {
@@ -2505,16 +2505,16 @@ RE_RegisterSkin
 pub unsafe extern "C" fn RE_RegisterSkin(mut name: *const libc::c_char) -> qhandle_t {
     let mut parseSurfaces: [skinSurface_t; 256] = [skinSurface_t {
         name: [0; 64],
-        shader: 0 as *mut shader_t,
+        shader: std::ptr::null_mut(),
     }; 256];
     let mut hSkin: qhandle_t = 0;
-    let mut skin: *mut skin_t = 0 as *mut skin_t;
-    let mut surf: *mut skinSurface_t = 0 as *mut skinSurface_t;
+    let mut skin: *mut skin_t = std::ptr::null_mut();
+    let mut surf: *mut skinSurface_t = std::ptr::null_mut();
     let mut text: C2RustUnnamed_108 = C2RustUnnamed_108 {
-        c: 0 as *mut libc::c_char,
+        c: std::ptr::null_mut(),
     };
-    let mut text_p: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut token: *mut libc::c_char = 0 as *mut libc::c_char;
+    let mut text_p: *mut libc::c_char = std::ptr::null_mut();
+    let mut token: *mut libc::c_char = std::ptr::null_mut();
     let mut surfName: [libc::c_char; 64] = [0; 64];
     let mut totalSurfaces: i32 = 0;
     if name.is_null() || *name.offset(0 as i32 as isize) == 0 {
@@ -2663,7 +2663,7 @@ R_InitSkins
 #[no_mangle]
 
 pub unsafe extern "C" fn R_InitSkins() {
-    let mut skin: *mut skin_t = 0 as *mut skin_t;
+    let mut skin: *mut skin_t = std::ptr::null_mut();
     tr.numSkins = 1 as i32;
     // make the default skin have all default shaders
     tr.skins[0 as i32 as usize] = ri.Hunk_Alloc.expect("non-null function pointer")(
@@ -3026,7 +3026,7 @@ R_SkinList_f
 pub unsafe extern "C" fn R_SkinList_f() {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut skin: *mut skin_t = 0 as *mut skin_t;
+    let mut skin: *mut skin_t = std::ptr::null_mut();
     ri.Printf.expect("non-null function pointer")(
         PRINT_ALL as i32,
         b"------------------\n\x00" as *const u8 as *const libc::c_char,
